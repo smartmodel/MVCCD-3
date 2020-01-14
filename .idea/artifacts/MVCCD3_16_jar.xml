@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MVCCD3-16:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MVCCD3_16_jar</output-path>
+    <root id="archive" name="MVCCD3-16.jar">
+      <element id="module-output" name="MVCCD3-16" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/directory/studio/org.apache.commons.io/2.4/org.apache.commons.io-2.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.4/commons-io-2.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/directory/studio/org.apache.commons.lang/2.6/org.apache.commons.lang-2.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
