@@ -61,8 +61,8 @@ public abstract class ButtonsContent extends PanelContent {
 
         Dimension dimensionBL = super.resizeContent();
 
-        ComponentService.changeWidth(messagesScroll, (int)panel.getWidth() -10 );
-        ComponentService.changePreferredWidth(messagesScroll, (int)panel.getWidth() -10 );
+        ComponentService.changeWidth(messagesScroll, panel.getWidth() -10 );
+        ComponentService.changePreferredWidth(messagesScroll, panel.getWidth() -10 );
 
         return dimensionBL;
     }
@@ -87,6 +87,7 @@ public abstract class ButtonsContent extends PanelContent {
     }
 
     public void clearMessages(){
+//        A tester
         messages.setText("");
      }
 }
