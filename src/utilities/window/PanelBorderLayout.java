@@ -1,6 +1,6 @@
 package utilities.window;
 
-import window.preferences.PrefEditor;
+import window.preferences.PrefInput;
 import preferences.Preferences;
 
 import javax.swing.*;
@@ -12,7 +12,7 @@ import java.awt.event.MouseListener;
 public abstract class PanelBorderLayout extends JPanel implements MouseListener, MouseInputListener{
 
     private boolean resizable = true;
-    private PrefEditor prefEditor;
+    private PrefInput prefInput;
     private String borderLayoutPosition;
     private PanelBorderLayoutResizer panelBLResizer;
     private PanelContent content;
@@ -52,7 +52,7 @@ public abstract class PanelBorderLayout extends JPanel implements MouseListener,
 
     public void  resizeContent(){
         content.resizeContent();
-    };
+    }
 
     public PanelContent getContent() {
         return content;
@@ -107,7 +107,7 @@ public abstract class PanelBorderLayout extends JPanel implements MouseListener,
     public int correctedMinimaleWidth(int delta){
         Dimension dim = this.getSize();
         if ((dim.width - delta) < (3 * Preferences.JPANEL_HGAP)){
-            return delta = dim.width -3 * Preferences.JPANEL_HGAP;
+            return dim.width -3 * Preferences.JPANEL_HGAP;
         } else {
             return delta;
         }
@@ -116,7 +116,7 @@ public abstract class PanelBorderLayout extends JPanel implements MouseListener,
     public int correctedMinimaleHeight(int delta){
         Dimension dim = this.getSize();
         if ((dim.height - delta) < (3 * Preferences.JPANEL_VGAP)){
-            return delta = dim.height -3 * Preferences.JPANEL_VGAP;
+            return dim.height -3 * Preferences.JPANEL_VGAP;
         } else {
             return delta;
         }

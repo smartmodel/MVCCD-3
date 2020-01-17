@@ -1,22 +1,17 @@
 package window.editor.project;
 
 import utilities.window.PanelBorderLayout;
+import utilities.window.editor.DialogEditor;
+import utilities.window.editor.IAccessDialogEditor;
+import utilities.window.editor.PanelButtons;
 
-public class ProjectButtons extends PanelBorderLayout {
+public class ProjectButtons extends PanelButtons {
 
-    private ProjectButtonsContent content;
-    private ProjectWindow projectWindow;
-
-    public ProjectButtons(ProjectWindow projectWindow) {
-        super();
-        this.projectWindow = projectWindow;
-        super.setResizable(false);
-        content = new ProjectButtonsContent(this);
-        super.setContent (content);
+        public ProjectButtons(ProjectEditor projectEditor) {
+        super(projectEditor);
+        ProjectButtonsContent buttonsContent = new ProjectButtonsContent(this);
+        super.setButtonsContent (buttonsContent);
     }
 
 
-    public ProjectWindow getProjectWindow() {
-        return projectWindow;
-    }
 }

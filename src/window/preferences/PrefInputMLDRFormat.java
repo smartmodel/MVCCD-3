@@ -5,7 +5,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
-public class PrefEditorMLDRFormat extends JPanel {
+public class PrefInputMLDRFormat extends JPanel {
 
     JTextField colFormat = new JTextField();
     JTextField colDerived = new JTextField();
@@ -42,7 +42,7 @@ public class PrefEditorMLDRFormat extends JPanel {
     JTextField orderColAssEndChildFormat = new JTextField();
     JTextField orderColAssEndNNFormat = new JTextField();
 
-    public PrefEditorMLDRFormat() {
+    public PrefInputMLDRFormat() {
 
         colFormat.setPreferredSize((new Dimension(300,20)));
         colDerived.setPreferredSize((new Dimension(60,20)));

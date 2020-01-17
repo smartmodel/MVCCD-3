@@ -1,22 +1,15 @@
 package window.editor.entity;
 
 import utilities.window.PanelBorderLayout;
+import utilities.window.editor.*;
 
-public class EntityButtons extends PanelBorderLayout {
+public class EntityButtons extends PanelButtons {
 
-    private EntityButtonsContent content;
-    private EntityWindow entityWindow;
 
-    public EntityButtons(EntityWindow entityWindow) {
-        super();
-        this.entityWindow = entityWindow;
-        super.setResizable(false);
-        content = new EntityButtonsContent(this);
-        super.setContent (content);
+    public EntityButtons(EntityEditor entityEditor) {
+        super(entityEditor);
+        EntityButtonsContent buttonContent = new EntityButtonsContent(this);
+        super.setButtonsContent (buttonContent);
     }
 
-
-    public EntityWindow getEntityWindow() {
-        return entityWindow;
-    }
 }

@@ -1,21 +1,35 @@
 package window.editor.project;
 
-import utilities.window.PanelBorderLayout;
+import preferences.Preferences;
+import utilities.window.editor.DialogEditor;
+import main.MVCCDWindow;
 
-public class ProjectEditor extends PanelBorderLayout {
+public class ProjectEditor extends DialogEditor {
 
-    private ProjectEditorContent content ;
-    private ProjectWindow projectWindow;
+    private ProjectInput editor;
+    private ProjectButtons buttons;
 
-    public ProjectEditor(ProjectWindow projectWindow) {
-        super();
-        this.projectWindow = projectWindow;
-        content = new ProjectEditorContent(this);
-        super.setContent(content);
+    public ProjectEditor(MVCCDWindow mvccdWindow)  {
+        super(mvccdWindow);
+
+        super.setTitle("Création d'un nouveau projet");
+        setSize(Preferences.PROJECT_WINDOW_WIDTH, Preferences.PROJECT_WINDOW_HEIGHT);
+
+        editor = new ProjectInput(this);
+        super.setInput(editor);
+        buttons = new ProjectButtons(this);
+        super.setButtons (buttons);
+
+        super.start();
     }
 
-    public ProjectWindow getProjectWindow() {
-        return projectWindow;
+    public ProjectInput getInput() {
+        return editor;
     }
+
+    public ProjectButtons getButtons() {
+        return buttons;
+    }
+
 
 }

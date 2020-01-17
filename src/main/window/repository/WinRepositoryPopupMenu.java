@@ -10,7 +10,7 @@ import mcd.services.MCDEntityService;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import utilities.window.DialogMessage;
-import window.editor.entity.EntityWindow;
+import window.editor.entity.EntityEditor;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -58,7 +58,7 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     System.out.println("Création d'une nouvelle entité");
-                    EntityWindow fen = showEditorEntity(mvccdWindow , node, EntityWindow.NEW);
+                    EntityEditor fen = showEditorEntity(mvccdWindow , node, EntityEditor.NEW);
                 }
             });
         }
@@ -71,7 +71,7 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     System.out.println("Modification de l'entité");
-                    EntityWindow fen = showEditorEntity(mvccdWindow , node, EntityWindow.UPDATE);
+                    EntityEditor fen = showEditorEntity(mvccdWindow , node, EntityEditor.UPDATE);
                 }
             });
 
@@ -88,19 +88,17 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
                         String message = MessagesBuilder.getMessagesProperty ("dialog.check.entity.error", new String[] {mcdEntity.getName()});
                         if (DialogMessage.showConfirmYesNo(mvccdWindow, message) == JOptionPane.YES_OPTION){
                             System.out.println("Correction de l'entité");
-                            EntityWindow fen = showEditorEntity(mvccdWindow , node, EntityWindow.UPDATE);
+                            EntityEditor fen = showEditorEntity(mvccdWindow , node, EntityEditor.UPDATE);
                         }
-
                     }
-
                 }
             });
 
         }
     }
 
-    private EntityWindow showEditorEntity(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String aNew) {
-        EntityWindow fen = new EntityWindow(mvccdWindow , node, EntityWindow.NEW);
+    private EntityEditor showEditorEntity(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String mode) {
+        EntityEditor fen = new EntityEditor(mvccdWindow , node, mode);
         fen.setVisible(true);
         return fen;
     }

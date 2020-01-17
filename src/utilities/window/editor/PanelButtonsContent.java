@@ -1,15 +1,16 @@
-package utilities.window;
+package utilities.window.editor;
 
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.window.PanelBorderLayout;
+import utilities.window.PanelContent;
 import utilities.window.services.ComponentService;
 
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class ButtonsContent extends PanelContent {
+public abstract class PanelButtonsContent extends PanelContent implements IAccessDialogEditor{
 
-    private PanelBorderLayout concreteButtonContent;
     private JPanel panel = new JPanel();
     private Box bHor;
     private JButton btnOk ;
@@ -17,15 +18,13 @@ public abstract class ButtonsContent extends PanelContent {
     private JButton btnApply ;
     private JTextArea messages ;
     private JScrollPane messagesScroll;
+    private PanelButtons panelButtons;
 
-    public ButtonsContent(PanelBorderLayout concreteButtonContent) {
-        super(concreteButtonContent);
-
-        this.concreteButtonContent = concreteButtonContent;
-
-        createContent();
+    public PanelButtonsContent(PanelButtons panelButtons) {
+        super(panelButtons);
         super.setContent(panel, false);
-        //super.setContent(panel);
+        this.panelButtons = panelButtons;
+        createContent();
 
     }
 
@@ -61,8 +60,8 @@ public abstract class ButtonsContent extends PanelContent {
 
         Dimension dimensionBL = super.resizeContent();
 
-        ComponentService.changeWidth(messagesScroll, (int)panel.getWidth() -10 );
-        ComponentService.changePreferredWidth(messagesScroll, (int)panel.getWidth() -10 );
+        ComponentService.changeWidth(messagesScroll, panel.getWidth() -10 );
+        ComponentService.changePreferredWidth(messagesScroll, panel.getWidth() -10 );
 
         return dimensionBL;
     }
@@ -89,4 +88,19 @@ public abstract class ButtonsContent extends PanelContent {
     public void clearMessages(){
         messages.setText("");
      }
+
+
+    public DialogEditor getEditor(){
+        return panelButtons.getEditor();
+    }
+
+    public PanelInput getInput(){
+        return getEditor().getInput();
+    }
+
+    public PanelInputContent getInputContent(){
+        return getInput().getInputContent();
+    }
+
+
 }

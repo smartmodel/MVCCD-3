@@ -1,21 +1,38 @@
 package window.editor.entity;
 
-import utilities.window.PanelBorderLayout;
+import main.MVCCDElement;
+import main.MVCCDWindow;
+import preferences.Preferences;
+import utilities.window.editor.DialogEditor;
 
-public class EntityEditor extends PanelBorderLayout {
+import javax.swing.tree.DefaultMutableTreeNode;
 
-    private EntityEditorContent content ;
-    private EntityWindow entityWindow;
+public class EntityEditor extends DialogEditor {
 
-    public EntityEditor(EntityWindow entityWindow) {
-        super();
-        this.entityWindow = entityWindow;
-        content = new EntityEditorContent(this);
-        super.setContent(content);
+    private EntityInput editor;
+    private EntityButtons buttons;
+
+
+
+    public EntityEditor(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String mode)  {
+        super(mvccdWindow);
+        super.setMode(mode);
+        super.setNode(node);
+        super.setMvccdElement ((MVCCDElement) node.getUserObject());
+        setSize(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
+        editor = new EntityInput(this);
+        super.setInput(editor);
+        buttons = new EntityButtons(this);
+        super.setButtons (buttons);
+
+        super.start();
     }
 
-    public EntityWindow getEntityWindow() {
-        return entityWindow;
+    public EntityInput getInput() {
+        return editor;
     }
 
+    public EntityButtons getButtons() {
+        return buttons;
+    }
 }

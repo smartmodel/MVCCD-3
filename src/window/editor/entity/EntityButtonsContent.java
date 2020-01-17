@@ -4,7 +4,7 @@ import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import mcd.MCDEntity;
 import preferences.Preferences;
-import utilities.window.ButtonsContent;
+import utilities.window.editor.PanelButtonsContent;
 import utilities.window.DialogMessage;
 
 import javax.swing.*;
@@ -14,7 +14,7 @@ import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class EntityButtonsContent extends ButtonsContent implements ActionListener {
+public class EntityButtonsContent extends PanelButtonsContent implements ActionListener {
 
     private EntityButtons entityButtons;
 
@@ -32,51 +32,50 @@ public class EntityButtonsContent extends ButtonsContent implements ActionListen
 
         if (source == super.getBtnOk()) {
             if (getEditorContent().checkDatas()) {
-                if (getEntityWindow().getMode().equals(EntityWindow.NEW)) {
+                if (getEditor().getMode().equals(EntityEditor.NEW)) {
                     createEntity();
-                    getEntityWindow().dispose();
+                    getEditor().dispose();
                 }
-                if (getEntityWindow().getMode().equals(EntityWindow.UPDATE)) {
+                if (getEditor().getMode().equals(EntityEditor.UPDATE)) {
                     updateEntity();
-                    getEntityWindow().dispose();
+                    getEditor().dispose();
                 }
             } else {
-                DialogMessage.showErrorEditor(entityButtons.getEntityWindow());
+                DialogMessage.showErrorEditor(entityButtons.getEditor());
             }
 
         }
         if (source == super.getBtnCancel()) {
-            getEntityWindow().dispose();
+            getEditor().dispose();
         }
     }
 
 
 
-    private EntityEditorContent getEditorContent(){
-        return  (EntityEditorContent) entityButtons.getEntityWindow().getEditor().getContent();
+    private EntityInputContent getEditorContent(){
+        return  (EntityInputContent) entityButtons.getEditor().getInput().getContent();
     }
     private void createEntity() {
         JTextField entityName = getEditorContent().getEntityName();
-        MCDEntity mcdEntity = MVCCDElementFactory.instance().createMCDEntity(getEntityWindow().getMvccdElement());
+        MCDEntity mcdEntity = MVCCDElementFactory.instance().createMCDEntity(getEditor().getMvccdElement());
         getEditorContent().saveDatas(mcdEntity);
-        DefaultMutableTreeNode node = MVCCDManager.instance().getRepository().addMVCCDElement(mcdEntity,getEntityWindow().getNode());
+        DefaultMutableTreeNode node = MVCCDManager.instance().getRepository().addMVCCDElement(mcdEntity,getEditor().getNode());
         // Affichage du nouveau noeud
         MVCCDManager.instance().getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
     }
 
     private void updateEntity() {
-        MCDEntity mcdEntity = (MCDEntity) getEntityWindow().getMvccdElement();
+        MCDEntity mcdEntity = (MCDEntity) getEditor().getMvccdElement();
         getEditorContent().saveDatas(mcdEntity);
         DefaultTreeModel defaultTreeModel = (DefaultTreeModel) MVCCDManager.instance().getWinRepositoryContent().getTree().getModel();
-        defaultTreeModel.nodeChanged(getEntityWindow().getNode());
+        defaultTreeModel.nodeChanged(getEditor().getNode());
     }
 
-    private EntityWindow getEntityWindow(){
-        return entityButtons.getEntityWindow();
-    }
 
     @Override
     public Integer getWidthWindow() {
         return Preferences.ENTITY_WINDOW_WIDTH;
     }
+
+
 }

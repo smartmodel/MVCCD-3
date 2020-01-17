@@ -3,7 +3,8 @@ package window.editor.project;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import utilities.window.DialogMessage;
-import utilities.window.EditorContent;
+import utilities.window.editor.PanelInputContent;
+import utilities.window.editor.DialogEditor;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -11,17 +12,17 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 
-public class ProjectEditorContent extends EditorContent implements DocumentListener, FocusListener {
+public class ProjectInputContent extends PanelInputContent implements DocumentListener, FocusListener {
 
-    private ProjectEditor projectEditor;
+    private ProjectInput projectInput;
     private JPanel panel = new JPanel();
     private JTextField projectName = new JTextField();
     private JComboBox<String> profile = new JComboBox<>();
 
 
-    public ProjectEditorContent(ProjectEditor projectEditor)     {
-        super(projectEditor);
-        this.projectEditor = projectEditor;
+    public ProjectInputContent(ProjectInput projectInput)     {
+        super(projectInput);
+        this.projectInput = projectInput;
         createContent();
         projectName.getDocument().addDocumentListener(this);
         projectName.addFocusListener(this);
@@ -99,9 +100,7 @@ public class ProjectEditorContent extends EditorContent implements DocumentListe
     }
 
     public boolean checkDatas(){
-        boolean resultat = checkProjectName(false, false);
-
-        return resultat;
+       return checkProjectName(false, false);
     }
 
     private boolean checkProjectName(boolean inDocument, boolean unitaire) {
@@ -122,7 +121,7 @@ public class ProjectEditorContent extends EditorContent implements DocumentListe
         if ( ! ok ){
             projectName.setBorder(BorderFactory.createLineBorder(Color.RED));
             if ((! inDocument) && unitaire){
-                DialogMessage.showError(projectEditor.getProjectWindow(), message);
+                DialogMessage.showError(projectInput.getEditor(), message);
             }
         } else {
             projectName.setBorder(BorderFactory.createLineBorder(Color.gray));
@@ -131,6 +130,7 @@ public class ProjectEditorContent extends EditorContent implements DocumentListe
 
         return ok;
     }
+
 
 
 }

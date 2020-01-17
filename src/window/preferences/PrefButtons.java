@@ -2,17 +2,18 @@ package window.preferences;
 
 import utilities.window.PanelBorderLayout;
 import utilities.window.PanelBorderLayoutResizer;
+import utilities.window.editor.DialogEditor;
+import utilities.window.editor.IAccessDialogEditor;
+import utilities.window.editor.PanelButtons;
 
-public class PrefButtons extends PanelBorderLayout {
+public class PrefButtons extends PanelButtons {
 
-    private PrefButtonsContent content;
-    public PrefButtons(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer) {
-        super();
-        super.setBorderLayoutPosition(borderLayoutPosition);
-        super.setPanelBLResizer(panelBLResizer);
-
-        content = new PrefButtonsContent(this);
-        super.setContent(content);
+    public PrefButtons(PrefEditor prefEditor) {
+        super(prefEditor);
+        PrefButtonsContent buttonsContent = new PrefButtonsContent(this);
+        super.setButtonsContent(buttonsContent);
 
     }
+
+
 }

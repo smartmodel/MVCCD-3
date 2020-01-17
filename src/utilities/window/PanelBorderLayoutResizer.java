@@ -388,8 +388,11 @@ public class PanelBorderLayoutResizer {
     }
 
     public void resizerContentPanels(){
+        System.out.println("Nombre de panneaux: " + panels.size());
         for (PanelBorderLayout panel : panels){
+            System.out.println(panel.toString());
             panel.resizeContent();
+            System.out.println("Passé");
         }
     }
 

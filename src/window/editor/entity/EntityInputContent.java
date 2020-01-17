@@ -2,9 +2,11 @@ package window.editor.entity;
 
 import mcd.MCDEntity;
 import mcd.services.MCDEntityService;
-import messages.MessagesBuilder;
 import preferences.Preferences;
 import utilities.window.*;
+import utilities.window.editor.PanelButtonsContent;
+import utilities.window.editor.PanelInputContent;
+import utilities.window.editor.DialogEditor;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -14,24 +16,28 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 
-public class EntityEditorContent extends EditorContent implements DocumentListener, FocusListener {
+public class EntityInputContent extends PanelInputContent implements DocumentListener, FocusListener {
 
-    private EntityEditor entityEditor;
+    private EntityInput entityInput;
     private JPanel panel = new JPanel();
     private STextField entityName = new STextField();
     private STextField entityShortName = new STextField();
     //private JComboBox<String> profile = new JComboBox<>();
 
 
-    public EntityEditorContent(EntityEditor entityEditor)     {
-        super(entityEditor);
-        this.entityEditor = entityEditor;
+    public EntityInputContent(EntityInput entityInput)     {
+        super(entityInput);
+        this.entityInput = entityInput;
         createContent();
+        System.out.println("Affectation de content!");
+        entityInput.setContent(this);
         super.setContent(panel);
-        if (getEntityWindow().getMode().equals(DialogEditor.UPDATE)){
+        System.out.println(getEditor().toString());
+        System.out.println("" + getEditor().getMode());
+        if (getEditor().getMode().equals(DialogEditor.UPDATE)){
             MCDEntity mcdEntity = null;
-            if (getEntityWindow().getMvccdElement() instanceof MCDEntity){
-                mcdEntity = (MCDEntity)getEntityWindow().getMvccdElement();
+            if (getEditor().getMvccdElement() instanceof MCDEntity){
+                mcdEntity = (MCDEntity)getEditor().getMvccdElement();
             }
             if (mcdEntity != null){
                 loadDatas(mcdEntity);
@@ -87,6 +93,7 @@ public class EntityEditorContent extends EditorContent implements DocumentListen
         gbc.gridx = 1;
         panel.add(entityShortName, gbc);
 
+        this.add(panel);
 
     }
 
@@ -120,6 +127,10 @@ public class EntityEditorContent extends EditorContent implements DocumentListen
 
     @Override
     public void focusGained(FocusEvent focusEvent) {
+        Object source = focusEvent.getSource();
+        if (source == entityName) {
+            checkEntityName(true);
+        }
 
     }
 
@@ -127,6 +138,7 @@ public class EntityEditorContent extends EditorContent implements DocumentListen
     public void focusLost(FocusEvent focusEvent) {
 
          Object source = focusEvent.getSource();
+            getButtonsContent().clearMessages();
             if (source == entityName) {
                 //checkEntityName(false, true);
             }
@@ -136,9 +148,7 @@ public class EntityEditorContent extends EditorContent implements DocumentListen
 
     public boolean checkDatas(){
         if (! Preferences.DEBUG_DEACTIVATE_EDITOR_CHECK_PANEL) {
-            boolean resultat = checkEntityName(false);
-
-            return resultat;
+            return checkEntityName(false);
         } else {
             return true;
         }
@@ -147,22 +157,15 @@ public class EntityEditorContent extends EditorContent implements DocumentListen
     private boolean checkEntityName(boolean unitaire) {
         ArrayList<String> messagesErrors = MCDEntityService.checkName(entityName.getText());
 
-        if ( messagesErrors.size() > 0 ){
-            entityName.setBorder(BorderFactory.createLineBorder(Color.RED));
-        } else {
-            entityName.setBorder(BorderFactory.createLineBorder(Color.gray));
-        }
-
-
         if (unitaire){
-
+            super.showCheckResultat(entityName, messagesErrors);
         }
         return messagesErrors.size() == 0;
     }
 
 
     private void loadDatas(MCDEntity mcdEntity) {
-        entityName.setText(mcdEntity.getName());
+        entityName.setText(mcdEntity.getName()) ;
         entityShortName.setText(mcdEntity.getShortName());
     }
 
@@ -176,13 +179,5 @@ public class EntityEditorContent extends EditorContent implements DocumentListen
             markChangeDatas();
         }
     }
-
-
-
-
-    private EntityWindow getEntityWindow(){
-        return entityEditor.getEntityWindow();
-    }
-
 
 }

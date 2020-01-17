@@ -1,6 +1,11 @@
-package utilities.window;
+package utilities.window.editor;
+
+import main.MVCCDElement;
+import utilities.window.PanelBorderLayout;
+import utilities.window.PanelBorderLayoutResizer;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -12,10 +17,14 @@ public class DialogEditor extends JDialog implements WindowListener {
     public static final String NEW = "new";
     public static final String UPDATE = "update";
 
-    private JPanel panel= new JPanel();;
+    private JPanel panel= new JPanel();
     private PanelBorderLayoutResizer panelBLResizer ;
-    private PanelBorderLayout editor ;
-    private PanelBorderLayout buttons ;
+    private PanelInput input;
+    private PanelButtons buttons ;
+    private String mode;  // Création ou modification
+    private DefaultMutableTreeNode node;   // Parent pour la création et lui-même pour la modification
+    private MVCCDElement mvccdElement;     // Parent pour la création et lui-même pour la modification
+
 
     public DialogEditor(Frame owner) {
         super(owner);
@@ -33,15 +42,15 @@ public class DialogEditor extends JDialog implements WindowListener {
         panel.setLayout(bl);
         String borderLayoutPositionEditor = BorderLayout.CENTER;
         String borderLayoutPositionButtons = BorderLayout.SOUTH;
-        editor.setBorderLayoutPosition(borderLayoutPositionEditor);
-        editor.setPanelBLResizer(panelBLResizer);
+        input.setBorderLayoutPosition(borderLayoutPositionEditor);
+        input.setPanelBLResizer(panelBLResizer);
         buttons.setBorderLayoutPosition(borderLayoutPositionButtons);
         buttons.setPanelBLResizer(panelBLResizer);
 
-        editor.start();
+        input.start();
         buttons.start();
 
-        panel.add(editor, borderLayoutPositionEditor);
+        panel.add(input, borderLayoutPositionEditor);
         panel.add(buttons, borderLayoutPositionButtons);
 
         this.addComponentListener(new ComponentAdapter() {
@@ -55,19 +64,19 @@ public class DialogEditor extends JDialog implements WindowListener {
 
     }
 
-    public PanelBorderLayout getEditor() {
-        return editor;
+    public PanelInput getInput() {
+        return input;
     }
 
-    public void setEditor(PanelBorderLayout editor) {
-        this.editor = editor;
+    public void setInput(PanelInput input) {
+        this.input = input;
     }
 
-    public PanelBorderLayout getButtons() {
+    public PanelButtons getButtons() {
         return buttons;
     }
 
-    public void setButtons(PanelBorderLayout buttons) {
+    public void setButtons(PanelButtons buttons) {
         this.buttons = buttons;
     }
 
@@ -111,5 +120,29 @@ public class DialogEditor extends JDialog implements WindowListener {
     @Override
     public void windowDeactivated(WindowEvent windowEvent) {
 
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    protected void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public DefaultMutableTreeNode getNode() {
+        return node;
+    }
+
+    public void setNode(DefaultMutableTreeNode node) {
+        this.node = node;
+    }
+
+    public MVCCDElement getMvccdElement() {
+        return mvccdElement;
+    }
+
+    public void setMvccdElement(MVCCDElement mvccdElement) {
+        this.mvccdElement = mvccdElement;
     }
 }

@@ -3,13 +3,12 @@ package main.window.menu;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import preferences.Preferences;
-import window.editor.project.ProjectWindow;
-import window.preferences.PreferencesWindow;
+import window.editor.project.ProjectEditor;
+import window.preferences.PrefEditor;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class WinMenuContent implements ActionListener {
 
@@ -94,7 +93,7 @@ public class WinMenuContent implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == projectNew) {
-            ProjectWindow fen = new ProjectWindow(mvccdWindow);
+            ProjectEditor fen = new ProjectEditor(mvccdWindow);
             fen.setVisible(true);
         }
         if (source == projectOpen) {
@@ -117,7 +116,7 @@ public class WinMenuContent implements ActionListener {
         }
 
         if (source == projectPreferences){
-            PreferencesWindow fen = new PreferencesWindow(mvccdWindow);
+            PrefEditor fen = new PrefEditor(mvccdWindow);
             fen.setVisible(true);
         }
     }

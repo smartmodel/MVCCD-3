@@ -52,7 +52,7 @@ public abstract class PanelContent extends JPanel {
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.add(component);
         panelBL.add(scroll);
-    };
+    }
 
 
     public Dimension resizeContent() {
@@ -113,5 +113,7 @@ public abstract class PanelContent extends JPanel {
     public PanelBorderLayout getPanelBL() {
         return panelBL;
     }
+
+
 
 }
