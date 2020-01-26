@@ -86,7 +86,7 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
                         DialogMessage.showOk(mvccdWindow, message);
                     } else {
                         String message = MessagesBuilder.getMessagesProperty ("dialog.check.entity.error", new String[] {mcdEntity.getName()});
-                        if (DialogMessage.showConfirmYesNo(mvccdWindow, message) == JOptionPane.YES_OPTION){
+                        if (DialogMessage.showConfirmYesNo_Yes(mvccdWindow, message) == JOptionPane.YES_OPTION){
                             System.out.println("Correction de l'entité");
                             EntityEditor fen = showEditorEntity(mvccdWindow , node, EntityEditor.UPDATE);
                         }

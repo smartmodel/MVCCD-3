@@ -13,7 +13,7 @@ public class ReserveContent extends PanelContent {
 
         content.add (new JLabel ("Réserve"));
 
-        super.setContent(content);
+        super.addContent(content);
 
     }
 }

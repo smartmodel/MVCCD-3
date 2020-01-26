@@ -16,7 +16,7 @@ public class Haut extends PanelBorderLayout {
 
         this.setResizable(false);
         content = new HautContent(this);
-        super.setContent(content);
+        super.setPanelContent(content);
 
 
     }
@@ -28,7 +28,7 @@ public class Haut extends PanelBorderLayout {
     }
 
     @Override
-    public PanelContent getContent() {
+    public PanelContent getPanelContent() {
         return null;
     }
 

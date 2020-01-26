@@ -16,7 +16,7 @@ public abstract class PanelContent extends JPanel {
     }
 
 
-    public void setContent(JPanel panel) {
+    public void addContent(JPanel panel) {
         scroll = new JScrollPane(panel);
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -24,43 +24,47 @@ public abstract class PanelContent extends JPanel {
         panelBL.add(this);
     }
 
-    public void setContent(JPanel panel, boolean scrollable ){
+
+    public void addContent(JPanel panel, boolean scrollable ){
        if (scrollable){
-           setContent(panel);
+           addContent(panel);
        } else {
            this.panel = panel;
            this.add(panel);
            panelBL.add(this);
        }
+       colorDebug();
     }
 
 
-    public void setContent(JTree tree) {
-        setContentInJPanel(tree);
+    public void addContent(JTree tree) {
+        addContentBase(tree);
     }
 
-    public void setContent(JTextArea text) {
-        setContentInJPanel(text);
+    public void addContent(JTextArea text) {
+        addContentBase(text);
     }
 
 
 
-    public void setContentInJPanel(Component component){
+    private void addContentBase(Component component){
         scrollInComponent = true;
         scroll = new JScrollPane(this);
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.add(component);
         panelBL.add(scroll);
+        colorDebug();
     }
 
 
     public Dimension resizeContent() {
+
         int widthBL = panelBL.getSize().width;
         int heightBL = panelBL.getSize().height;
 
         int width = widthBL - 2 * Preferences.JPANEL_HGAP;
-        int height = heightBL - 2 * Preferences.JPANEL_HGAP;
+        int height = heightBL - 2 * Preferences.JPANEL_VGAP;
 
         Dimension dimension = new Dimension(width, height);
 
@@ -69,51 +73,36 @@ public abstract class PanelContent extends JPanel {
         if (scroll != null) {
             scroll.setSize(dimension);
             scroll.setPreferredSize(dimension);
-        }
+         }
 
         if (panel != null){
             panel.setSize(dimension);
             panel.setPreferredSize(dimension);
+            //panel.setLocation(Preferences.JPANEL_HGAP, Preferences.JPANEL_VGAP);
+            panel.setLocation(0,0);
         }
         if (!scrollInComponent) {
             this.setPreferredSize(dimension);
+            if (scroll != null){
+                scroll.setLocation(0,0);
+            }
         }
 
         return dimension;
     }
 
-    /*
-    public void resizeContent() {
-        int width = panelBL.getSize().width;
-        int height = panelBL.getSize().height;
-
-
-            this.setSize(new Dimension(width - 2 * Preferences.JPANEL_HGAP,
-                    height - 2 * Preferences.JPANEL_HGAP));
-
-            if (scroll != null) {
-                scroll.setSize(new Dimension(width - 2 * Preferences.JPANEL_HGAP,
-                        height - 2 * Preferences.JPANEL_HGAP));
-            }
-
-            if (!scrollInComponent) {
-                if (scroll != null) {
-                    scroll.setPreferredSize(new Dimension(width - 2 * Preferences.JPANEL_HGAP,
-                            height - 2 * Preferences.JPANEL_HGAP));
-                }
-                this.setPreferredSize(new Dimension(width - 2 * Preferences.JPANEL_HGAP,
-                        height - 2 * Preferences.JPANEL_HGAP));
-            }
-
-
-    }
-
-*/
-
     public PanelBorderLayout getPanelBL() {
         return panelBL;
     }
 
+    private void colorDebug(){
+        if (Preferences.DEBUG_BACKGROUND_PANEL) {
+            this.setBackground(Color.CYAN);
+            if (scroll != null) {
+                scroll.setBackground(Color.orange);
+            }
+        }
+    }
 
 
 }

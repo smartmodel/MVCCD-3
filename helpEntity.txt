@@ -1,0 +1,4 @@
+Le nom de l'entité doit être renseigné et unique pour que la saisie puisse être validée.
+Tant que le nom n'est pas correctement saisi et unique, la zone de saisie du nom est rouge.
+Les autres zones de saisies sont bordées d'une ligne rouge si une donnée doit être saisie ou qu'elle n'est pas saisie correctement.
+En plaçant le curseur sur les zones de saisie affichées en rouge ou bordées de rouge, un ou des messages d'aide sont affichés dans la zone des boutons.

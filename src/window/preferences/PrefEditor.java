@@ -54,4 +54,8 @@ public class PrefEditor extends DialogEditor {
 
     }
 
- }
+    @Override
+    public void adjustTitle() {
+
+    }
+}

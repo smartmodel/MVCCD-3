@@ -14,7 +14,7 @@ public class Reserve extends PanelBorderLayout {
         start();
 
         content = new ReserveContent(this);
-        super.setContent(content);
+        super.setPanelContent(content);
     }
 
 }

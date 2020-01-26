@@ -5,7 +5,7 @@ import main.MVCCDManager;
 import preferences.Preferences;
 import utilities.files.UtilXML;
 
-public class MCDDiagrams extends MVCCDElement{
+public class MCDDiagrams extends MCDElement{
 
     private static final long serialVersionUID = 1000;
     public MCDDiagrams(MVCCDElement mvccdElement, String name) {

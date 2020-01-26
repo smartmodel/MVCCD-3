@@ -15,7 +15,7 @@ public abstract class PanelBorderLayout extends JPanel implements MouseListener,
     private PrefInput prefInput;
     private String borderLayoutPosition;
     private PanelBorderLayoutResizer panelBLResizer;
-    private PanelContent content;
+    private PanelContent panelContent;
 
     public PanelBorderLayout() {
    }
@@ -30,15 +30,16 @@ public abstract class PanelBorderLayout extends JPanel implements MouseListener,
     }
 
     protected  void colorBackground() {
-        Color color = Preferences.BACKGROUND_PANEL;
         if (Preferences.DEBUG_BACKGROUND_PANEL){
+            Color color ;
             if (this.borderLayoutPosition.equals(BorderLayout.NORTH)) color = Color.RED;
-            if (this.borderLayoutPosition.equals(BorderLayout.EAST)) color = Color.YELLOW;
-            if (this.borderLayoutPosition.equals(BorderLayout.CENTER)) color = Color.GREEN;
-            if (this.borderLayoutPosition.equals(BorderLayout.WEST)) color = Color.BLUE;
-            if (this.borderLayoutPosition.equals(BorderLayout.SOUTH)) color = Color.MAGENTA;
+            else if (this.borderLayoutPosition.equals(BorderLayout.EAST)) color = Color.YELLOW;
+            else if (this.borderLayoutPosition.equals(BorderLayout.CENTER)) color = Color.GREEN;
+            else if (this.borderLayoutPosition.equals(BorderLayout.WEST)) color = Color.BLUE;
+            else if (this.borderLayoutPosition.equals(BorderLayout.SOUTH)) color = Color.MAGENTA;
+            else color = Color.BLACK;
+            this.setBackground(color);
         }
-        this.setBackground(color);
     }
 
 
@@ -51,15 +52,15 @@ public abstract class PanelBorderLayout extends JPanel implements MouseListener,
     }
 
     public void  resizeContent(){
-        content.resizeContent();
+        panelContent.resizeContent();
     }
 
-    public PanelContent getContent() {
-        return content;
+    public PanelContent getPanelContent() {
+        return panelContent;
     }
 
-    public void setContent(PanelContent content) {
-        this.content = content;
+    public void setPanelContent(PanelContent panelContent) {
+        this.panelContent = panelContent;
     }
 
     public void setBorderLayoutPosition(String borderLayoutPosition) {

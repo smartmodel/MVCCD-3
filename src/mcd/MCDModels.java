@@ -5,7 +5,7 @@ import preferences.Preferences;
 import project.Project;
 import utilities.files.UtilXML;
 
-public class MCDModels extends MVCCDElement {
+public class MCDModels extends MCDElement {
 
     private static final long serialVersionUID = 1000;
 

@@ -39,17 +39,30 @@ public class Preferences {
     public static Integer FILES_RECENTS_MAX = 20;
     public static Integer FILES_RECENTS_AUTHORIZED = 20;
     public static String FILE_FILES_RECENTS_NAME = "recentFiles.dat";
+    public static String FILE_HELP_PROJECT_NAME ="helpProject.txt";
+    public static String FILE_HELP_PREFERENCES_NAME ="helpPreferences.txt";
+    public static String FILE_HELP_ENTITY_NAME ="helpEntity.txt";
 
-    public static Integer PANEL_BUTTONS_HEIGHT = 50;
+    public static String SYSTEM_LINE_SEPARATOR =System.getProperty("line.separator");
+    public static String CHARSET_FILES_TEXT = "UTF-8";
+
+
+    public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
     public static Integer PREF_WINDOW_WIDTH = 600;
     public static Integer PREF_WINDOW_HEIGHT = 300;
     public static Integer PROJECT_WINDOW_WIDTH = 600;
     public static Integer PROJECT_WINDOW_HEIGHT = 300;
     public static Integer ENTITY_WINDOW_WIDTH = 600;
     public static Integer ENTITY_WINDOW_HEIGHT = 300;
+    public static Integer HELP_WINDOW_WIDTH = 600;
+    public static Integer HELP_WINDOW_HEIGHT = 300;
 
-    public static Boolean DEBUG_BACKGROUND_PANEL = true;
-    public static Boolean DEBUG_DEACTIVATE_EDITOR_CHECK_PANEL = false;
+    public static Boolean DEBUG_BACKGROUND_PANEL = false;
+
+    public static Color EDITOR_SCOMPONENT_BACKGROUND_NORMAL = Color.WHITE;
+    public static Color EDITOR_SCOMPONENT_BACKGROUND_ERROR = Color.pink;
+    public static Color EDITOR_SCOMPONENT_LINEBORDER_NORMAL = Color.gray;
+    public static Color EDITOR_SCOMPONENT_LINEBORDER_ERROR = Color.RED;
 
 
 }

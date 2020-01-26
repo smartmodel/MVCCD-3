@@ -4,7 +4,7 @@ import main.MVCCDElement ;
 import preferences.Preferences;
 import utilities.files.UtilXML;
 
-public class MCDEntities extends MVCCDElement{
+public class MCDEntities extends MCDElement{
 
     private static final long serialVersionUID = 1000;
     public MCDEntities(MVCCDElement mvccdElement, String name) {

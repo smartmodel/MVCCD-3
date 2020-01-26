@@ -14,7 +14,7 @@ public class WinDiagram extends PanelBorderLayout {
         start();
 
         content = new WinDiagramContent(this);
-        super.setContent(content);
+        super.setPanelContent(content);
 
     }
 

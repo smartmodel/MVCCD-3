@@ -24,7 +24,7 @@ public class WinDiagramContent extends PanelContent implements ActionListener {
         content.add(btnAdd);
         btnAdd.addActionListener(this);
 
-        super.setContent(content);
+        super.addContent(content);
 
 
     }

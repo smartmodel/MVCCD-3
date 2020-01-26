@@ -7,12 +7,9 @@ import utilities.window.PanelBorderLayoutResizer;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 
-public class DialogEditor extends JDialog implements WindowListener {
+public abstract class DialogEditor extends JDialog implements WindowListener, FocusListener {
 
     public static final String NEW = "new";
     public static final String UPDATE = "update";
@@ -52,7 +49,6 @@ public class DialogEditor extends JDialog implements WindowListener {
 
         panel.add(input, borderLayoutPositionEditor);
         panel.add(buttons, borderLayoutPositionButtons);
-
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 // This is only called when the user releases the mouse button.
@@ -61,6 +57,10 @@ public class DialogEditor extends JDialog implements WindowListener {
         });
 
         this.addWindowListener(this);
+
+        // Pour que l'ajustement automatique de positionnement des boutons se fasse
+        setSize(getWidth(), getHeight() - 1);
+        setSize(getWidth(), getHeight() + 1);
 
     }
 
@@ -73,6 +73,7 @@ public class DialogEditor extends JDialog implements WindowListener {
     }
 
     public PanelButtons getButtons() {
+
         return buttons;
     }
 
@@ -122,6 +123,21 @@ public class DialogEditor extends JDialog implements WindowListener {
 
     }
 
+
+    @Override
+    public void focusGained(FocusEvent focusEvent) {
+        // Au cas où la fenêtre d'aide est présente
+        System.out.println( "Focus obtenu Dialog Editor");
+        //this.setAlwaysOnTop(true);
+        //this.toFront();
+        //this.setAlwaysOnTop(false);
+    }
+
+    @Override
+    public void focusLost(FocusEvent focusEvent) {
+    }
+
+
     public String getMode() {
         return mode;
     }
@@ -145,4 +161,6 @@ public class DialogEditor extends JDialog implements WindowListener {
     public void setMvccdElement(MVCCDElement mvccdElement) {
         this.mvccdElement = mvccdElement;
     }
+
+    public abstract void adjustTitle() ;
 }

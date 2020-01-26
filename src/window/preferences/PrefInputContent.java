@@ -11,7 +11,7 @@ public class PrefInputContent extends PanelContent {
         super(prefInput);
 
         panel = new PrefInputMLDRFormat();
-        super.setContent(panel);
+        super.addContent(panel);
 
     }
 

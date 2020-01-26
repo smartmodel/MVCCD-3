@@ -2,38 +2,29 @@ package window.editor.entity;
 
 import mcd.MCDEntity;
 import mcd.services.MCDEntityService;
-import preferences.Preferences;
 import utilities.window.*;
-import utilities.window.editor.PanelButtonsContent;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.editor.DialogEditor;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.ArrayList;
 
-public class EntityInputContent extends PanelInputContent implements DocumentListener, FocusListener {
+public class EntityInputContent extends PanelInputContent {
 
-    private EntityInput entityInput;
     private JPanel panel = new JPanel();
     private STextField entityName = new STextField();
     private STextField entityShortName = new STextField();
+
     //private JComboBox<String> profile = new JComboBox<>();
 
 
     public EntityInputContent(EntityInput entityInput)     {
         super(entityInput);
-        this.entityInput = entityInput;
+        entityInput.setPanelContent(this);
         createContent();
-        System.out.println("Affectation de content!");
-        entityInput.setContent(this);
-        super.setContent(panel);
-        System.out.println(getEditor().toString());
-        System.out.println("" + getEditor().getMode());
+        super.addContent(panel);
         if (getEditor().getMode().equals(DialogEditor.UPDATE)){
             MCDEntity mcdEntity = null;
             if (getEditor().getMvccdElement() instanceof MCDEntity){
@@ -43,7 +34,6 @@ public class EntityInputContent extends PanelInputContent implements DocumentLis
                 loadDatas(mcdEntity);
             }
         }
-        checkDatas();
 
     }
 
@@ -54,7 +44,7 @@ public class EntityInputContent extends PanelInputContent implements DocumentLis
 
         entityName.setPreferredSize((new Dimension(300,20)));
         entityName.setToolTipText("Nom de l'entité");
-
+        entityName.setCheckPreSave(true);
 
         entityName.getDocument().addDocumentListener(this);
         entityName.addFocusListener(this);
@@ -65,13 +55,11 @@ public class EntityInputContent extends PanelInputContent implements DocumentLis
         entityShortName.setPreferredSize((new Dimension(300,20)));
         entityShortName.setToolTipText("Nom court de l'entité utilisé pour nommer certaines contraintes et autres");
 
-        /*
-        entityName.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent jComponent) {
-                return false;
-            }
-        }); */
+        entityShortName.getDocument().addDocumentListener(this);
+        entityShortName.addFocusListener(this);
+
+        super.getsComponents().add(entityName);
+        super.getsComponents().add(entityShortName);
 
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -102,65 +90,47 @@ public class EntityInputContent extends PanelInputContent implements DocumentLis
     }
 
 
-    @Override
-    public void insertUpdate(DocumentEvent e) {
+
+    protected void changeField(DocumentEvent e) {
         if (entityName.getDocument() == e.getDocument()) {
             checkEntityName(true);
         }
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e) {
-        if (entityName.getDocument() == e.getDocument()) {
-            checkEntityName(true);
+        if (entityShortName.getDocument() == e.getDocument()) {
+            checkEntityShortName(true);
         }
-
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e) {
-        if (entityName.getDocument() == e.getDocument()) {
-            checkEntityName(true);
-        }
-
     }
 
     @Override
     public void focusGained(FocusEvent focusEvent) {
+        super.focusGained(focusEvent);
+        getButtonsContent().clearMessages();
         Object source = focusEvent.getSource();
         if (source == entityName) {
             checkEntityName(true);
         }
-
+        if (source == entityShortName) {
+            checkEntityShortName(true);
+        }
     }
 
     @Override
     public void focusLost(FocusEvent focusEvent) {
-
-         Object source = focusEvent.getSource();
-            getButtonsContent().clearMessages();
-            if (source == entityName) {
-                //checkEntityName(false, true);
-            }
-
-
     }
 
-    public boolean checkDatas(){
-        if (! Preferences.DEBUG_DEACTIVATE_EDITOR_CHECK_PANEL) {
-            return checkEntityName(false);
-        } else {
-            return true;
-        }
+
+
+    protected boolean checkDatas(){
+            boolean resultat = checkEntityName(false);
+            resultat =  checkEntityShortName(false)  && resultat ;
+            return resultat;
     }
 
     private boolean checkEntityName(boolean unitaire) {
-        ArrayList<String> messagesErrors = MCDEntityService.checkName(entityName.getText());
+        return super.checkInput(entityName, unitaire, MCDEntityService.checkName(entityName.getText()));
+    }
 
-        if (unitaire){
-            super.showCheckResultat(entityName, messagesErrors);
-        }
-        return messagesErrors.size() == 0;
+    private boolean checkEntityShortName(boolean unitaire) {
+        return super.checkInput(entityShortName, unitaire, MCDEntityService.checkShortName(entityShortName.getText()));
     }
 
 
@@ -170,14 +140,19 @@ public class EntityInputContent extends PanelInputContent implements DocumentLis
     }
 
     public void saveDatas(MCDEntity mcdEntity) {
-        if (entityName.isUpdated()){
+        System.out.println("save...");
+        if (entityName.checkIfUpdated()){
             mcdEntity.setName(entityName.getText());
-            markChangeDatas();
         }
-        if (entityShortName.isUpdated()){
-            mcdEntity.setName(entityName.getText());
-            markChangeDatas();
-        }
+        if (entityShortName.checkIfUpdated()){
+            mcdEntity.setShortName(entityShortName.getText());
+         }
     }
 
+
+    @Override
+    public boolean checkDatasPreSave() {
+        boolean resultat = checkEntityName(false);
+        return resultat;
+    }
 }

@@ -14,7 +14,7 @@ public class WinConsole extends PanelBorderLayout {
         start();
 
         content = new WinConsoleContent(this);
-        super.setContent(content);
+        super.setPanelContent(content);
 
     }
 

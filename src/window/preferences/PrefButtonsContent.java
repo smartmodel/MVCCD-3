@@ -1,5 +1,6 @@
 package window.preferences;
 
+import main.MVCCDElement;
 import preferences.Preferences;
 import utilities.window.editor.PanelButtonsContent;
 import utilities.window.editor.DialogEditor;
@@ -25,10 +26,25 @@ public class PrefButtonsContent extends PanelButtonsContent implements ActionLis
         }
     }
 
+    @Override
+    protected void updateMCDElement() {
+
+    }
+
+    @Override
+    protected MVCCDElement createMVCCDElement() {
+        return null;
+    }
+
 
     @Override
     public Integer getWidthWindow() {
         return Preferences.PREF_WINDOW_WIDTH;
+    }
+
+    @Override
+    protected String getHelpFileName() {
+        return Preferences.FILE_HELP_PREFERENCES_NAME;
     }
 
 

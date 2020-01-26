@@ -1,39 +1,34 @@
 package window.editor.project;
 
-import messages.MessagesBuilder;
+import mcd.services.MCDProjectService;
 import preferences.Preferences;
-import utilities.window.DialogMessage;
+import utilities.window.STextField;
 import utilities.window.editor.PanelInputContent;
-import utilities.window.editor.DialogEditor;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
-public class ProjectInputContent extends PanelInputContent implements DocumentListener, FocusListener {
+public class ProjectInputContent extends PanelInputContent  {
 
-    private ProjectInput projectInput;
     private JPanel panel = new JPanel();
-    private JTextField projectName = new JTextField();
+    private STextField projectName = new STextField();
     private JComboBox<String> profile = new JComboBox<>();
 
 
     public ProjectInputContent(ProjectInput projectInput)     {
         super(projectInput);
-        this.projectInput = projectInput;
         createContent();
-        projectName.getDocument().addDocumentListener(this);
-        projectName.addFocusListener(this);
-        super.setContent(panel);
-
-
+        super.addContent(panel);
     }
 
     private void createContent() {
 
         projectName.setPreferredSize((new Dimension(300,20)));
+        projectName.getDocument().addDocumentListener(this);
+        projectName.addFocusListener(this);
 
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -60,76 +55,47 @@ public class ProjectInputContent extends PanelInputContent implements DocumentLi
     }
 
 
-    @Override
-    public void insertUpdate(DocumentEvent e) {
+    protected void changeField(DocumentEvent e) {
         if (projectName.getDocument() == e.getDocument()) {
-            checkProjectName(true, true);
+            checkProjectName(true);
         }
     }
 
-    @Override
-    public void removeUpdate(DocumentEvent e) {
-        if (projectName.getDocument() == e.getDocument()) {
-            checkProjectName(true, true);
-        }
 
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e) {
-        if (projectName.getDocument() == e.getDocument()) {
-            checkProjectName(true, true);
-        }
-
-    }
 
     @Override
     public void focusGained(FocusEvent focusEvent) {
-
+        super.focusGained(focusEvent);
+        Object source = focusEvent.getSource();
+        if (source == projectName) {
+            checkProjectName(true);
+        }
     }
 
     @Override
     public void focusLost(FocusEvent focusEvent) {
 
-         Object source = focusEvent.getSource();
-            if (source == projectName) {
-                checkProjectName(false, true);
-            }
-
-
     }
+
+    @Override
+    public boolean checkDatasPreSave() {
+        return false;
+    }
+
 
     public boolean checkDatas(){
-       return checkProjectName(false, false);
+        return checkProjectName(false);
     }
 
-    private boolean checkProjectName(boolean inDocument, boolean unitaire) {
-        boolean ok = true;
-        String message = "";
-        String message1 = MessagesBuilder.getMessagesProperty("project.and.name");
-        if (!projectName.getText().matches(Preferences.NAME_REGEXPR)){
-            message = message + MessagesBuilder.getMessagesProperty("editor.format.error"
-                    , new String[] {message1, Preferences.NAME_REGEXPR});
-           ok = false;
-        }
-        if (projectName.getText().length() > Preferences.PROJECT_NAME_LENGTH){
-            message = message + "\r\n" +MessagesBuilder.getMessagesProperty("editor.length.error"
-                    , new String[] {message1, String.valueOf(Preferences.PROJECT_NAME_LENGTH)});
-            ok = false;
-        }
+    private boolean checkProjectName(boolean unitaire) {
+        ArrayList<String> messagesErrors = MCDProjectService.checkName(projectName.getText());
 
-        if ( ! ok ){
-            projectName.setBorder(BorderFactory.createLineBorder(Color.RED));
-            if ((! inDocument) && unitaire){
-                DialogMessage.showError(projectInput.getEditor(), message);
-            }
-        } else {
-            projectName.setBorder(BorderFactory.createLineBorder(Color.gray));
+        if (unitaire){
+            super.showCheckResultat(projectName, messagesErrors);
         }
-
-
-        return ok;
+        return messagesErrors.size() == 0;
     }
+
 
 
 

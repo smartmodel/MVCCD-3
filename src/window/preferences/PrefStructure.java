@@ -12,7 +12,7 @@ public class PrefStructure extends PanelBorderLayout {
         super.setBorderLayoutPosition(borderLayoutPosition);
         super.setPanelBLResizer(panelBLResizer);
         content = new PrefStructureContent(this);
-        super.setContent(content);
+        super.setPanelContent(content);
     }
 
 }

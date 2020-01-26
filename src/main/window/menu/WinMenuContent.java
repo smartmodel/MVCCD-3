@@ -2,7 +2,11 @@ package main.window.menu;
 
 import main.MVCCDManager;
 import main.MVCCDWindow;
+import messages.MessagesBuilder;
 import preferences.Preferences;
+import utilities.window.DialogMessage;
+import utilities.window.editor.DialogEditor;
+import window.editor.entity.EntityEditor;
 import window.editor.project.ProjectEditor;
 import window.preferences.PrefEditor;
 
@@ -67,11 +71,13 @@ public class WinMenuContent implements ActionListener {
 
         projectClose = new JMenuItem("Fermer");
         projectClose.addActionListener(this);
+        projectClose.setEnabled(false);
         project.add(projectClose);
 
         project.addSeparator();
         projectSave = new JMenuItem("Sauver");
         projectSave.addActionListener(this);
+        projectSave.setEnabled(false);
         project.add(projectSave);
         projectSaveAs = new JMenuItem("Sauver comme copie");
         projectSaveAs.addActionListener(this);
@@ -93,7 +99,7 @@ public class WinMenuContent implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == projectNew) {
-            ProjectEditor fen = new ProjectEditor(mvccdWindow);
+            ProjectEditor fen = new ProjectEditor(mvccdWindow, DialogEditor.NEW);
             fen.setVisible(true);
         }
         if (source == projectOpen) {
@@ -106,7 +112,14 @@ public class WinMenuContent implements ActionListener {
         }
 
         if (source == projectClose){
-            MVCCDManager.instance().closeProject();
+            boolean confirmClose = true;
+            if (MVCCDManager.instance().isDatasChanged()){
+                String message = MessagesBuilder.getMessagesProperty ("window.close.change.not.saved");
+                confirmClose = DialogMessage.showConfirmYesNo_No(mvccdWindow, message) == JOptionPane.YES_OPTION;
+            }
+            if (confirmClose) {
+                MVCCDManager.instance().closeProject();
+            }
         }
         if (source == projectSave){
             MVCCDManager.instance().saveProject();
@@ -121,10 +134,6 @@ public class WinMenuContent implements ActionListener {
         }
     }
 
-    public void setSaveEnable(Boolean enable){
-        projectSave.setEnabled(enable);
-        projectSaveAs.setEnabled(enable);
-    }
 
     public void activateProjectOpenRecentsItem(int i, String text) {
         projectOpenRecentsItems[i].setText(text);
@@ -138,5 +147,13 @@ public class WinMenuContent implements ActionListener {
             projectOpenRecentsItems[i].setVisible(false);
         }
         projectOpenRecents.setEnabled(false);
+    }
+
+    public JMenuItem getProjectSave() {
+        return projectSave;
+    }
+
+    public JMenuItem getProjectClose() {
+        return projectClose;
     }
 }

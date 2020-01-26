@@ -14,7 +14,7 @@ public class WinRepository extends PanelBorderLayout {
         start();
 
         content = new WinRepositoryContent(this);
-        super.setContent(content);
+        super.setPanelContent(content);
 
     }
 

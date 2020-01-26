@@ -1,10 +1,11 @@
 package mcd;
 
 import main.MVCCDElement;
+import main.MVCCDManager;
 import preferences.Preferences;
 import utilities.files.UtilXML;
 
-public class MCDEntity extends MVCCDElement{
+public class MCDEntity extends MCDElement{
 
     private String shortName ;
 
@@ -37,4 +38,5 @@ public class MCDEntity extends MVCCDElement{
     public void setShortName(String shortName) {
         this.shortName = shortName;
     }
+
 }

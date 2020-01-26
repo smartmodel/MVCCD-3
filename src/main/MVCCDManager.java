@@ -3,22 +3,16 @@ package main;
 import console.Console;
 import main.window.menu.WinMenuContent;
 import project.*;
-import main.window.console.WinConsole;
 import main.window.console.WinConsoleContent;
 import main.window.diagram.WinDiagram;
 import main.window.diagram.WinDiagramContent;
 import messages.LoadMessages;
-import messages.MessagesBuilder;
-import preferences.Preferences;
 import repository.Repository;
 import main.window.repository.WinRepository;
 import main.window.repository.WinRepositoryContent;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
-import java.util.ArrayList;
 
 public class MVCCDManager {
 
@@ -30,8 +24,7 @@ public class MVCCDManager {
     private Console console;
     private ProjectsRecents projectsRecents = null;
     private File fileProjectCurrent = null;
-    private boolean projectChange = false;
-    private boolean datasChange = false;
+    private boolean datasChanged = false;
 
 
     public static synchronized MVCCDManager instance(){
@@ -59,15 +52,14 @@ public class MVCCDManager {
         mvccdWindow = new MVCCDWindow();
         mvccdWindow.setVisible(true);
         mvccdWindow.getPanelBLResizer().resizerContentPanels();
-        mvccdWindow.getMenuContent().setSaveEnable(false);
     }
 
-    public void createProject(String name){
+    public Project createProject(String name){
         project = MVCCDFactory.instance().createProject(name);
         projectToRepository();
         mvccdWindow.adjustPanelRepository();
-
-        mvccdWindow.getMenuContent().setSaveEnable(true);
+        setFileProjectCurrent(null);
+        return project;
     }
 
     public void  openProject() {
@@ -90,7 +82,7 @@ public class MVCCDManager {
 
     private void openProjectBase(File file){
         if (file != null){
-            fileProjectCurrent = file ;
+            setFileProjectCurrent(file) ;
             project = new LoaderSerializable().load(fileProjectCurrent);
         }
         if (project != null) {
@@ -99,16 +91,13 @@ public class MVCCDManager {
             projectsRecents.add(fileProjectCurrent);
             changeActivateProjectOpenRecentsItems();
             mvccdWindow.adjustPanelRepository();
-
-            // plus tard, à valider seulement en cas de changement effectif
-            mvccdWindow.getMenuContent().setSaveEnable(true);
-
         }
     }
 
     public void saveProject() {
         if (fileProjectCurrent != null) {
             new SaverSerializable().save(fileProjectCurrent);
+            setDatasChanged(false);
         } else {
             saveAsProject();
         }
@@ -122,6 +111,7 @@ public class MVCCDManager {
             new SaverSerializable().save(fileProjectCurrent);
             projectsRecents.add(fileProjectCurrent);
             changeActivateProjectOpenRecentsItems();
+            setDatasChanged(false);
         }
     }
 
@@ -129,7 +119,7 @@ public class MVCCDManager {
         project = null;
         repository = null;
         MVCCDManager.instance().getWinRepositoryContent().getTree().changeModel(null);
-        mvccdWindow.getMenuContent().setSaveEnable(false);
+        setFileProjectCurrent(null);
     }
 
 
@@ -162,7 +152,7 @@ public class MVCCDManager {
     }
 
     public WinRepositoryContent getWinRepositoryContent(){
-        return (WinRepositoryContent) mvccdWindow.getRepository().getContent();
+        return (WinRepositoryContent) mvccdWindow.getRepository().getPanelContent();
     }
 
     public WinDiagram getWinDiagram(){
@@ -170,7 +160,7 @@ public class MVCCDManager {
     }
 
     public WinDiagramContent getWinDiagramContent(){
-        return (WinDiagramContent) mvccdWindow.getDiagram().getContent();
+        return (WinDiagramContent) mvccdWindow.getDiagram().getPanelContent();
     }
 
 
@@ -179,7 +169,7 @@ public class MVCCDManager {
     }
 
     public WinConsoleContent getWinConsoleContent(){
-        return (WinConsoleContent) mvccdWindow.getConsole().getContent();
+        return (WinConsoleContent) mvccdWindow.getConsole().getPanelContent();
     }
     public Repository getRepository() {
         return repository;
@@ -202,6 +192,13 @@ public class MVCCDManager {
     }
 
     public void setFileProjectCurrent(File fileProjectCurrent) {
+        if (fileProjectCurrent != null){
+            mvccdWindow.getMenuContent().getProjectSave().setEnabled(false);
+            mvccdWindow.getMenuContent().getProjectClose().setEnabled(true);
+        }else {
+            mvccdWindow.getMenuContent().getProjectSave().setEnabled(false);
+            mvccdWindow.getMenuContent().getProjectClose().setEnabled(false);
+        }
         this.fileProjectCurrent = fileProjectCurrent;
     }
 
@@ -213,19 +210,12 @@ public class MVCCDManager {
         this.projectsRecents = projectsRecents;
     }
 
-    public boolean isProjectChange() {
-        return projectChange;
+    public boolean isDatasChanged() {
+        return datasChanged;
     }
 
-    public void setProjectChange(boolean projectChange) {
-        this.projectChange = projectChange;
-    }
-
-    public boolean isDatasChange() {
-        return datasChange;
-    }
-
-    public void setDatasChange(boolean datasChange) {
-        this.datasChange = datasChange;
+    public void setDatasChanged(boolean datasChanged) {
+        getWinMenuContent().getProjectSave().setEnabled(datasChanged);
+        this.datasChanged = datasChanged;
     }
 }

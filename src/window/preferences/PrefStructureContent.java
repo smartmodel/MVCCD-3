@@ -17,7 +17,7 @@ public class PrefStructureContent extends PanelContent {
         createNodes(top);
         tree = new JTree(top);
 
-        super.setContent(tree);
+        super.addContent(tree);
 
     }
 

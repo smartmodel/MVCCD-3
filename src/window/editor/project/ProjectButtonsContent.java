@@ -1,7 +1,9 @@
 package window.editor.project;
 
+import main.MVCCDElement;
 import main.MVCCDManager;
 import preferences.Preferences;
+import project.Project;
 import utilities.window.editor.PanelButtonsContent;
 import utilities.window.DialogMessage;
 
@@ -11,52 +13,37 @@ import java.awt.event.ActionListener;
 
 public class ProjectButtonsContent extends PanelButtonsContent implements ActionListener {
 
-    private ProjectButtons projectButtons;
-    /*private JPanel panel = new JPanel();
-    private Box bHor;
-    private JButton btnOk ;
-    private JButton btnCancel ;
-    private JButton btnApply ; */
 
     public ProjectButtonsContent(ProjectButtons projectButtons) {
         super(projectButtons);
-        this.projectButtons = projectButtons;
-        getBtnOk().addActionListener(this);
-        //getBtnOk().setEnabled(false);
-        getBtnCancel().addActionListener(this);
     }
-
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
+    protected void updateMCDElement() {
 
-        if (source == super.getBtnOk()) {
-            if (getEditorContent().checkDatas()) {
-                createProject();
-                getEditor().dispose();
-            } else {
-                DialogMessage.showErrorEditor(projectButtons.getEditor());
-            }
-        }
-        if (source == super.getBtnCancel()) {
-            getEditor().dispose();
-        }
     }
+
+    @Override
+    protected MVCCDElement createMVCCDElement() {
+        JTextField projectName = getEditorContent().getProjectName();
+        Project project = MVCCDManager.instance().createProject(projectName.getText());
+
+        return null;
+    }
+
 
     private ProjectInputContent getEditorContent(){
-        return  (ProjectInputContent) projectButtons.getEditor().getInput().getContent();
+        return  (ProjectInputContent) getEditor().getInput().getPanelContent();
     }
-    private void createProject() {
-        System.out.println("Dans create (depuis Btn)");
-        JTextField projectName = getEditorContent().getProjectName();
-        MVCCDManager.instance().createProject(projectName.getText());
-    }
-
 
     @Override
     public Integer getWidthWindow() {
         return Preferences.PROJECT_WINDOW_WIDTH;
+    }
+
+    @Override
+    protected String getHelpFileName() {
+        return Preferences.FILE_HELP_PROJECT_NAME;
     }
 
 

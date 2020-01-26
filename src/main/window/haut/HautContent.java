@@ -14,6 +14,6 @@ public class HautContent  extends PanelContent {
         JButton btnAdd = new JButton("Haut");
         content.add(btnAdd);
 
-        super.setContent(content);
+        super.addContent(content);
     }
 }
