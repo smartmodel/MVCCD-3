@@ -1,7 +1,11 @@
 package window.editor.project;
 
+import main.MVCCDElement;
+import mcd.MCDEntity;
+import mcd.services.MCDEntityService;
 import mcd.services.MCDProjectService;
 import preferences.Preferences;
+import project.Project;
 import utilities.window.STextField;
 import utilities.window.editor.PanelInputContent;
 
@@ -27,8 +31,13 @@ public class ProjectInputContent extends PanelInputContent  {
     private void createContent() {
 
         projectName.setPreferredSize((new Dimension(300,20)));
+        projectName.setCheckPreSave(true);
+        //projectName.setText("");
+
         projectName.getDocument().addDocumentListener(this);
         projectName.addFocusListener(this);
+
+        super.getsComponents().add(projectName);
 
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -79,7 +88,8 @@ public class ProjectInputContent extends PanelInputContent  {
 
     @Override
     public boolean checkDatasPreSave() {
-        return false;
+        boolean resultat = checkProjectName(false);
+        return resultat;
     }
 
 
@@ -88,15 +98,20 @@ public class ProjectInputContent extends PanelInputContent  {
     }
 
     private boolean checkProjectName(boolean unitaire) {
-        ArrayList<String> messagesErrors = MCDProjectService.checkName(projectName.getText());
-
-        if (unitaire){
-            super.showCheckResultat(projectName, messagesErrors);
-        }
-        return messagesErrors.size() == 0;
+        return super.checkInput(projectName, unitaire, MCDEntityService.checkName(projectName.getText()));
     }
 
+    @Override
+    public void saveDatas(MVCCDElement mvccdElement) {
+        saveDatas((Project) mvccdElement);
+    }
 
+    public void saveDatas(Project project) {
+        System.out.println("save...");
+        if (projectName.checkIfUpdated()){
+            project.setName(projectName.getText());
+        }
+    }
 
 
 }

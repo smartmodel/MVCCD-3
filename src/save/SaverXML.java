@@ -37,7 +37,7 @@ public class SaverXML {
             writer.write(Preferences.XML_ENTETE_FICHIER + lineSeparator);
 
             // Parcours de l'arbre du référentiel
-            saveNode(MVCCDManager.instance().getRepository().getRootNode(), 0);
+            saveNode(MVCCDManager.instance().getRepository().getNodeProject(), 0);
 
             // Quittance de fin
             DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(),"Le projet a été sauvegardé");

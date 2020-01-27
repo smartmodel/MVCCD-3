@@ -1,5 +1,7 @@
 package utilities.window.editor;
 
+import main.MVCCDElement;
+import mcd.MCDEntity;
 import preferences.Preferences;
 import utilities.window.PanelContent;
 import utilities.window.SComponent;
@@ -31,8 +33,12 @@ public abstract class PanelInputContent
 
     protected abstract void changeField(DocumentEvent e);
 
-    @Override
+    public abstract void saveDatas(MVCCDElement mmvccdElement) ;
+
+
+        @Override
     public void insertUpdate(DocumentEvent e) {
+        System.out.println("insertUpdate");
         changeField(e);
         if (alreadyFocusGained) {enabledButtons();}
     }
@@ -120,6 +126,7 @@ public abstract class PanelInputContent
     public void focusGained(FocusEvent focusEvent) {
         // pour remettre la fenêtre au premier plan si l'aide est affichée
         getEditor().focusGained(focusEvent);
+        getButtonsContent().clearMessages();
         if (! alreadyFocusGained){
             System.out.println("! already focus...");
             checkDatas();

@@ -1,5 +1,6 @@
 package window.editor.entity;
 
+import main.MVCCDElement;
 import mcd.MCDEntity;
 import mcd.services.MCDEntityService;
 import utilities.window.*;
@@ -103,7 +104,6 @@ public class EntityInputContent extends PanelInputContent {
     @Override
     public void focusGained(FocusEvent focusEvent) {
         super.focusGained(focusEvent);
-        getButtonsContent().clearMessages();
         Object source = focusEvent.getSource();
         if (source == entityName) {
             checkEntityName(true);
@@ -137,6 +137,11 @@ public class EntityInputContent extends PanelInputContent {
     private void loadDatas(MCDEntity mcdEntity) {
         entityName.setText(mcdEntity.getName()) ;
         entityShortName.setText(mcdEntity.getShortName());
+    }
+
+    @Override
+    public void saveDatas(MVCCDElement mvccdElement) {
+        saveDatas((MCDEntity) mvccdElement);
     }
 
     public void saveDatas(MCDEntity mcdEntity) {

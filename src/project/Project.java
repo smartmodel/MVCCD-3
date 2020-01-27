@@ -1,19 +1,23 @@
 package project;
 
 import main.MVCCDElement;
+import main.MVCCDElementSerializable;
 import main.MVCCDManager;
 import preferences.Preferences;
 import utilities.files.UtilXML;
 
-public class Project extends MVCCDElement {
+public class Project extends MVCCDElementSerializable {
 
     private static final long serialVersionUID = 1000;
+
     public Project(String name) {
+
         super(null, name);
     }
 
 
     public Project(MVCCDElement parent) {
+
         super(parent);
     }
 

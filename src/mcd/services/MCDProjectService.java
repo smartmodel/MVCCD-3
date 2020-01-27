@@ -4,15 +4,16 @@ import mcd.MCDEntity;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import project.Project;
 
 import java.util.ArrayList;
 
 public class MCDProjectService {
 
 
-    public static ArrayList<String> check(MCDEntity mcdEntity) {
+    public static ArrayList<String> check(Project project) {
         ArrayList<String> messages = new ArrayList<String>();
-        messages.addAll(checkName(mcdEntity.getName()));
+        messages.addAll(checkName(project.getName()));
         return messages;
     }
 

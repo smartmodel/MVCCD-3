@@ -213,6 +213,9 @@ public abstract class PanelButtonsContent extends PanelContent
             // Affichage du nouveau noeud
             MVCCDManager.instance().getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
         }
+        if (mvccdElement instanceof Project ) {
+            // Le projet est possé dans l'arbre visuel par MVCCDManager lors de l'appel createMVCCDElement
+         }
     }
 
 

@@ -1,7 +1,9 @@
 package window.editor.project;
 
 import main.MVCCDElement;
+import main.MVCCDElementFactory;
 import main.MVCCDManager;
+import mcd.MCDEntity;
 import preferences.Preferences;
 import project.Project;
 import utilities.window.editor.PanelButtonsContent;
@@ -27,8 +29,8 @@ public class ProjectButtonsContent extends PanelButtonsContent implements Action
     protected MVCCDElement createMVCCDElement() {
         JTextField projectName = getEditorContent().getProjectName();
         Project project = MVCCDManager.instance().createProject(projectName.getText());
-
-        return null;
+        getEditorContent().saveDatas(project);
+        return project;
     }
 
 

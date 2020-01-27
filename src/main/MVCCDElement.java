@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class MVCCDElement implements Serializable {
+public abstract class MVCCDElement {
 
     private MVCCDElement parent;
     private String name;

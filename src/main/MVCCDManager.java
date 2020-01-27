@@ -10,6 +10,7 @@ import messages.LoadMessages;
 import repository.Repository;
 import main.window.repository.WinRepository;
 import main.window.repository.WinRepositoryContent;
+import repository.RepositoryRoot;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
@@ -38,13 +39,25 @@ public class MVCCDManager {
         LoadMessages.main();
         startMVCCDWindow();
         startConsole();
+        startRepository();
+        mvccdWindow.adjustPanelRepository();
+
         projectsRecents = new ProjectsRecentsLoader().load();
         changeActivateProjectOpenRecentsItems();
         openLastProject();
     }
 
+    private void startRepository() {
+        MVCCDElement rootMVCCDElement = new RepositoryRoot();
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootMVCCDElement);
+        repository = new Repository(rootNode, rootMVCCDElement);
+        getWinRepositoryContent().getTree().changeModel(repository);
+
+    }
+
 
     private void startConsole() {
+
         console = new Console();
     }
 
@@ -70,6 +83,7 @@ public class MVCCDManager {
 
     public void openProjectRecent(String filePath) {
         File file = new File(filePath);
+        System.out.println(filePath);
         openProjectBase(file);
      }
 
@@ -117,8 +131,9 @@ public class MVCCDManager {
 
     public void closeProject() {
         project = null;
-        repository = null;
-        MVCCDManager.instance().getWinRepositoryContent().getTree().changeModel(null);
+        //repository = null;
+        //MVCCDManager.instance().getWinRepositoryContent().getTree().changeModel(null);
+        repository.removeProject();
         setFileProjectCurrent(null);
     }
 
@@ -137,9 +152,16 @@ public class MVCCDManager {
     }
 
     private void projectToRepository() {
+        /*
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(project);
         repository = new Repository(rootNode, project);
         getWinRepositoryContent().getTree().changeModel(repository);
+
+         */
+        repository.removeProject();
+        repository.addProject(project);
+        getWinRepositoryContent().getTree().changeModel(repository);
+
     }
 
 

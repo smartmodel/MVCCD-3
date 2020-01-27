@@ -2,6 +2,7 @@ package project;
 
 import exceptions.CodeApplException;
 import main.MVCCDElement;
+import main.MVCCDElementSerializable;
 import main.MVCCDManager;
 import preferences.Preferences;
 import utilities.window.DialogMessage;
@@ -17,7 +18,7 @@ public class SaverSerializable {
 
         try {
             writer = new ObjectOutputStream(new FileOutputStream(file));
-            saveNode(MVCCDManager.instance().getRepository().getRootNode(), 0);
+            saveNode(MVCCDManager.instance().getRepository().getNodeProject(), 0);
 
             // Quittance de fin
             DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(),"Le projet a été sauvegardé");
@@ -34,9 +35,14 @@ public class SaverSerializable {
 
     private void saveNode(DefaultMutableTreeNode node, int level) throws IOException {
         try{
-            if (node.getUserObject() instanceof MVCCDElement) {
-                MVCCDElement mcdElement = (MVCCDElement) node.getUserObject();
-                writer.writeObject(mcdElement);
+            if (node.getUserObject() instanceof MVCCDElementSerializable) {
+                MVCCDElementSerializable  mcdElementSerializable= (MVCCDElementSerializable) node.getUserObject();
+                writer.writeObject(mcdElementSerializable);
+                System.out.print(mcdElementSerializable.getName() + "   " );
+                if (mcdElementSerializable.getParent() != null){
+                    System.out.print(mcdElementSerializable.getParent().getName());
+                }
+                System.out.println("");
                 if (node.getChildCount() > 0){
                     int levelChild = level + 1 ;
                     for (int i=0 ; i< node.getChildCount(); i++){
