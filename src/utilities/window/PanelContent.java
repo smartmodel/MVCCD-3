@@ -1,6 +1,7 @@
 package utilities.window;
 
 import preferences.Preferences;
+import preferences.PreferencesManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -96,10 +97,12 @@ public abstract class PanelContent extends JPanel {
     }
 
     private void colorDebug(){
-        if (Preferences.DEBUG_BACKGROUND_PANEL) {
-            this.setBackground(Color.CYAN);
-            if (scroll != null) {
-                scroll.setBackground(Color.orange);
+        if (PreferencesManager.instance().preferences().getDEBUG()) {
+            if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
+                this.setBackground(Color.CYAN);
+                if (scroll != null) {
+                    scroll.setBackground(Color.orange);
+                }
             }
         }
     }

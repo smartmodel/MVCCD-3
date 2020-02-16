@@ -67,8 +67,6 @@ public class SaverXML {
                 writer.write(tabsLevel(level) + mcdElement.baliseXMLEnd() + lineSeparator);
             }
         } catch(Exception e){
-            System.out.println(e.getMessage());
-            System.out.println("Erreur IO");
             throw (new CodeApplException(e));	// L'erreur est renvoyée
         }
     }

@@ -48,8 +48,6 @@ class XmlTreeModel  {
         if (mvccdElement != null) {
             builtAttributes (root,mvccdElement);
             dmtNode = new DefaultMutableTreeNode(mvccdElement);
-            System.out.println(root.getNodeName());
-            System.out.println(dmtNode.getUserObject());
             NodeList nodeList = root.getChildNodes();
             for (int count = 0; count < nodeList.getLength(); count++) {
                 Node childNode = nodeList.item(count);
@@ -73,7 +71,6 @@ class XmlTreeModel  {
         NamedNodeMap attributes = node.getAttributes();
         for (int i = 0 ; i < attributes.getLength(); i++){
             Node nodeAttribute = attributes.item(i);
-            System.out.println("Attribute : " + node.getNodeName() + " " + attributes.item(i).getNodeName() + " " + attributes.item(i).getNodeValue() );
             if (nodeAttribute.getNodeName().equals(Preferences.XML_ATTRIBUTE_NAME)) {
                 mvccdElement.setName(nodeAttribute.getNodeValue());
             } else if (nodeAttribute.getNodeName().equals(Preferences.XML_ATTRIBUTE_SHORTNAME)) {
@@ -85,7 +82,6 @@ class XmlTreeModel  {
                 String message = MessagesBuilder.getMessagesProperty("load.xml.attribute.unknow", new String[] {
                         mvccdElement.getClass().getName(), mvccdElement.getName(), nodeAttribute.getNodeName() });
                 MVCCDManager.instance().getConsole().printMessage(message);
-                System.out.println("Attribut inconnu");
             }
         }
     }

@@ -7,6 +7,8 @@ public abstract class PanelButtons extends PanelBorderLayout implements IAccessD
     private DialogEditor dialogEditor;
     private PanelButtonsContent buttonsContent;
 
+    private boolean readOnly = false;
+
     public PanelButtons(DialogEditor dialogEditor) {
         this.dialogEditor = dialogEditor;
         super.setResizable(false);
@@ -31,5 +33,16 @@ public abstract class PanelButtons extends PanelBorderLayout implements IAccessD
 
     public PanelInputContent getInputContent(){
         return getInput().getInputContent();
+    }
+
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+        if (readOnly){
+            buttonsContent.setReadOnly(readOnly);
+        }
     }
 }

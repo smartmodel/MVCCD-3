@@ -2,6 +2,7 @@ package utilities.files;
 
 import exceptions.CodeApplException;
 import main.MVCCDManager;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 
@@ -25,6 +26,22 @@ public class UtilFiles {
         return new File(getStrDirectory(file));
     }
 
+    public static Boolean hasExtension(String fileName, String extension) {
+        if (StringUtils.isNotEmpty(fileName)  && StringUtils.isNotEmpty(extension)) {
+            return extension.equals(FilenameUtils.getExtension(fileName));
+        } else {
+            return null;
+        }
+    }
+
+    public static boolean isFileProfil(String fileName) {
+        if (hasExtension(fileName, Preferences.FILE_PROFILE_EXTENSION) ){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static String filePath(String directory, String fileName){
         StringBuilder filePath = new StringBuilder(directory);
         filePath.append(System.getProperty("path.separator")).append(fileName);
@@ -40,7 +57,6 @@ public class UtilFiles {
         try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
             String line = null;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
                 if (StringUtils.isNotEmpty(content)) {
                     content = content + Preferences.SYSTEM_LINE_SEPARATOR ;
                 }

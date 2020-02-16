@@ -8,6 +8,10 @@ import utilities.files.UtilXML;
 public class MCDEntity extends MCDElement{
 
     private String shortName ;
+    private boolean entAbstract = false;
+    private boolean ordered = false;
+    private boolean journal = false;
+    private boolean audit = false;
 
     private static final long serialVersionUID = 1000;
 
@@ -39,4 +43,35 @@ public class MCDEntity extends MCDElement{
         this.shortName = shortName;
     }
 
+    public boolean isEntAbstract() {
+        return entAbstract;
+    }
+
+    public void setEntAbstract(boolean entAbstract) {
+        this.entAbstract = entAbstract;
+    }
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
+    }
+
+    public boolean isJournal() {
+        return journal;
+    }
+
+    public void setJournal(boolean journal) {
+        this.journal = journal;
+    }
+
+    public boolean isAudit() {
+        return audit;
+    }
+
+    public void setAudit(boolean audit) {
+        this.audit = audit;
+    }
 }

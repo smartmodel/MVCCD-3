@@ -27,7 +27,6 @@ public class ComponentService {
             return true;
         } else {
             for (Component componentChild : components) {
-                System.out.println(componentChild.toString());
                 if (mouseEvent.getComponent() == componentChild) {
                     return true;
                 }

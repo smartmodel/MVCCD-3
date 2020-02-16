@@ -18,23 +18,21 @@ public class ProjectsRecentsLoader {
         try {
             File file = new File(Preferences.FILE_FILES_RECENTS_NAME);
             FileInputStream fileInputStream = new FileInputStream(file);
-            if (fileInputStream != null) {
-                reader = new ObjectInputStream(fileInputStream);
-                boolean eof = false;
-                while (!eof) {
-                    try {
-                        projectsRecents = (ProjectsRecents) reader.readObject();
-                    } catch (EOFException e) {
-                        eof = true;
-                    }
-                }
-            } else {
-                // Absence de fichier
-                projectsRecents = new ProjectsRecents();
-            }
-       } catch (Exception e){
+             reader = new ObjectInputStream(fileInputStream);
+             boolean eof = false;
+             while (!eof) {
+                 try {
+                     projectsRecents = (ProjectsRecents) reader.readObject();
+                 } catch (EOFException e) {
+                     eof = true;
+                 }
+             }
+
+        } catch (FileNotFoundException e ){
+            projectsRecents = new ProjectsRecents();
+        } catch (Exception e){
             throw (new CodeApplException(e));	// L'erreur est renvoyée
-       } finally {
+        } finally {
             if (reader != null) {
                 try {
                     reader.close();

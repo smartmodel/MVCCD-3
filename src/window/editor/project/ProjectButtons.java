@@ -9,8 +9,7 @@ public class ProjectButtons extends PanelButtons {
 
     public ProjectButtons(ProjectEditor projectEditor) {
         super(projectEditor);
-        ProjectButtonsContent buttonsContent = new ProjectButtonsContent(this);
-        super.setButtonsContent (buttonsContent);
+        super.setButtonsContent (new ProjectButtonsContent(this));
     }
 
 

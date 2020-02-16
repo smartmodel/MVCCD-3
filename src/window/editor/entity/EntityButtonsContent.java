@@ -5,15 +5,11 @@ import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import mcd.MCDEntity;
 import preferences.Preferences;
+import project.Project;
 import utilities.window.editor.PanelButtonsContent;
-import utilities.window.DialogMessage;
 
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class EntityButtonsContent extends PanelButtonsContent  {
 
@@ -22,25 +18,32 @@ public class EntityButtonsContent extends PanelButtonsContent  {
         super(entityButtons);
     }
 
+    /*
     @Override
     protected void updateMCDElement() {
         MCDEntity mcdEntity = (MCDEntity) getEditor().getMvccdElement();
-        getEditorContent().saveDatas(mcdEntity);
+        getEditor().getInput().getInputContent().saveDatas(mcdEntity);
     }
+    */
 
     @Override
-    protected MVCCDElement createMVCCDElement() {
-        JTextField entityName = getEditorContent().getEntityName();
+    protected MVCCDElement createNewMVCCDElement() {
+        //JTextField entityName = getEditorContent().getEntityName();
         MCDEntity mcdEntity = MVCCDElementFactory.instance().createMCDEntity(getEditor().getMvccdElement());
-        getEditorContent().saveDatas(mcdEntity);
+        saveDatas(mcdEntity);
         return mcdEntity;
     }
 
+    @Override
+    protected void completeNewMVCCDElement(MVCCDElement mvccdElement) {
+        MVCCDManager.instance().showNewMVCCDElementInRepository(mvccdElement, getEditor());
+     }
 
-    private EntityInputContent getEditorContent(){
-        return  (EntityInputContent) getEditor().getInput().getPanelContent();
+/*
+    private PrefMCDInputContent getEditorContent(){
+        return  (PrefMCDInputContent) getEditor().getInput().getPanelContent();
     }
-
+*/
 
     @Override
     public Integer getWidthWindow() {

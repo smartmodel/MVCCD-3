@@ -4,13 +4,13 @@ import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import preferences.Preferences;
+import utilities.Debug;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
-import window.editor.entity.EntityEditor;
 import window.editor.project.ProjectEditor;
-import window.preferences.PrefEditor;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,6 +24,7 @@ public class WinMenuContent implements ActionListener {
     private JMenu help;
 
     private JMenuItem projectNew;
+    private JMenuItem projectEdit;
     private JMenuItem projectOpen;
     private JMenu projectOpenRecents;
     private JMenuItem[] projectOpenRecentsItems;
@@ -32,10 +33,16 @@ public class WinMenuContent implements ActionListener {
     private JMenuItem projectClose;
     private JMenuItem projectSave;
     private JMenuItem projectSaveAs;
-    private JMenuItem projectPreferences;
+    /*
+    private JMenu projectPreferences;
+    private JMenuItem projectPreferencesDeveloper;
+    private JMenuItem projectPreferencesGeneral;
+    private JMenuItem projectPreferencesMCD;
     private JMenuItem projectProfile;
 
     private JMenuItem profileCreate;
+    */
+
 
     public WinMenuContent(MVCCDWindow mvccdWindow, JMenuBar menuBar) {
         this.mvccdWindow = mvccdWindow;
@@ -45,14 +52,20 @@ public class WinMenuContent implements ActionListener {
         menuBar.add(project);
         edit = new JMenu("Edition");
         menuBar.add(edit);
+        /*
         profile = new JMenu("Profil");
         menuBar.add(profile);
+        */
+
         help = new JMenu("Aide");
         menuBar.add(help);
 
         projectNew = new JMenuItem("Nouveau");
         projectNew.addActionListener(this);
         project.add(projectNew);
+        projectEdit = new JMenuItem("Propriétés");
+        projectEdit.addActionListener(this);
+        project.add(projectEdit);
         projectOpen = new JMenuItem("Ouvrir...");
         projectOpen.addActionListener(this);
         project.add(projectOpen);
@@ -71,49 +84,67 @@ public class WinMenuContent implements ActionListener {
 
         projectClose = new JMenuItem("Fermer");
         projectClose.addActionListener(this);
-        projectClose.setEnabled(false);
+        projectClose.setEnabled(true);
         project.add(projectClose);
 
         project.addSeparator();
         projectSave = new JMenuItem("Sauver");
         projectSave.addActionListener(this);
-        projectSave.setEnabled(false);
+        projectSave.setEnabled(true);
         project.add(projectSave);
         projectSaveAs = new JMenuItem("Sauver comme copie");
         projectSaveAs.addActionListener(this);
+        projectSaveAs.setEnabled(true);
         project.add(projectSaveAs);
 
         project.addSeparator();
-        projectPreferences = new JMenuItem("Préférences");
+
+        /*
+        projectPreferences = new JMenu("Préférences");
         projectPreferences.addActionListener(this);
+        projectPreferencesDeveloper = new JMenuItem("Développeur");
+        projectPreferencesDeveloper.addActionListener(this);
+        projectPreferences.add(projectPreferencesDeveloper);
+        projectPreferencesGeneral = new JMenuItem("Général");
+        projectPreferencesGeneral.addActionListener(this);
+        projectPreferences.add(projectPreferencesGeneral);
+        projectPreferencesMCD = new JMenuItem("MCD");
+        projectPreferencesMCD.addActionListener(this);
+        projectPreferences.add(projectPreferencesMCD);
         project.add(projectPreferences);
+
         projectProfile = new JMenuItem("Profil");
         project.add(projectProfile);
 
         profileCreate = new JMenuItem("Créer/Modifier");
         profile.add(profileCreate);
-
+*/
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == projectNew) {
-            ProjectEditor fen = new ProjectEditor(mvccdWindow, DialogEditor.NEW);
+            newProject();
+        }
+        if (source == projectEdit) {
+            ProjectEditor fen = new ProjectEditor(mvccdWindow,
+                    MVCCDManager.instance().getRepository().getNodeProject(),
+                    DialogEditor.UPDATE);
             fen.setVisible(true);
         }
         if (source == projectOpen) {
-            MVCCDManager.instance().openProject();
-        }
+            openProject();
+         }
         for (int i = 0; i < Preferences.FILES_RECENTS_AUTHORIZED; i++) {
             if (source == projectOpenRecentsItems[i]) {
-                MVCCDManager.instance().openProjectRecent(projectOpenRecentsItems[i].getText());
+                openProjectRecent(projectOpenRecentsItems[i].getText());
             }
         }
 
         if (source == projectClose){
             boolean confirmClose = true;
-            if (MVCCDManager.instance().isDatasChanged()){
+            if (MVCCDManager.instance().isDatasProjectChanged()){
                 String message = MessagesBuilder.getMessagesProperty ("window.close.change.not.saved");
                 confirmClose = DialogMessage.showConfirmYesNo_No(mvccdWindow, message) == JOptionPane.YES_OPTION;
             }
@@ -128,12 +159,43 @@ public class WinMenuContent implements ActionListener {
             MVCCDManager.instance().saveAsProject();
         }
 
-        if (source == projectPreferences){
-            PrefEditor fen = new PrefEditor(mvccdWindow);
+
+    }
+
+
+
+
+    private void newProject() {
+        if (MVCCDManager.instance().getProject() == null) {
+            ProjectEditor fen = new ProjectEditor(mvccdWindow,
+                    (DefaultMutableTreeNode) MVCCDManager.instance().getRepository().getRoot(),
+                    DialogEditor.NEW);
             fen.setVisible(true);
+        } else {
+            String message = MessagesBuilder.getMessagesProperty ("project.new.not.close");
+            DialogMessage.showOk(mvccdWindow,message);
         }
     }
 
+    private void openProject() {
+        if (MVCCDManager.instance().getProject() == null) {
+            MVCCDManager.instance().openProject();
+        } else {
+            String message = MessagesBuilder.getMessagesProperty ("project.open.not.close");
+            DialogMessage.showOk(mvccdWindow,message);
+        }
+    }
+
+    private void openProjectRecent(String fileName) {
+        if (MVCCDManager.instance().getProject() == null) {
+            MVCCDManager.instance().openProjectRecent(fileName);
+
+        } else {
+            String message = MessagesBuilder.getMessagesProperty ("project.open.not.close");
+            DialogMessage.showOk(mvccdWindow,message);
+        }
+
+    }
 
     public void activateProjectOpenRecentsItem(int i, String text) {
         projectOpenRecentsItems[i].setText(text);
@@ -149,7 +211,10 @@ public class WinMenuContent implements ActionListener {
         projectOpenRecents.setEnabled(false);
     }
 
-    public JMenuItem getProjectSave() {
+    public JMenuItem getProjectSaveAs() {
+        return projectSaveAs;
+
+    }public JMenuItem getProjectSave() {
         return projectSave;
     }
 

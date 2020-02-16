@@ -2,6 +2,7 @@ package window.help;
 
 import main.MVCCDManager;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import utilities.window.PanelBorderLayoutResizer;
 import utilities.window.editor.DialogEditor;
 
@@ -89,9 +90,11 @@ public class HelpWindow extends JDialog implements ActionListener {
 
 
     private  void colorBackground() {
-        if (Preferences.DEBUG_BACKGROUND_PANEL){
-            panelHelp.setBackground(Color.GREEN);
-            panelButtons.setBackground(Color.MAGENTA);
+        if (PreferencesManager.instance().preferences().getDEBUG()) {
+            if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
+                panelHelp.setBackground(Color.GREEN);
+                panelButtons.setBackground(Color.MAGENTA);
+            }
         }
     }
 

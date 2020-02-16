@@ -47,10 +47,7 @@ public class LoadMessages {
 	public static void main(){
 		try {
 			//Load messages.properties
-			System.out.println("main() -1");
 			messagesProperties.clear();
-			System.out.println("main() -2");
-
 			messagesProperties = loadProperties("messages");
 		}	
 		catch (CodeApplException e ) {
@@ -76,12 +73,10 @@ public class LoadMessages {
 		ResourceBundle bundle = null;
 		String language = Preferences.LANGUAGE;
 		if(language!= null){ //if plugin.properties
-System.out.println(fileName);
 			bundle = ResourceBundle.getBundle(fileName, new Locale(language));
 		}else{
 			throw new CodeApplException(crtClass + " - " + messageExceptionLanguage);
 		}
-		System.out.println("Sorti");
 
 		//Store properties to the map
 		for(String key : bundle.keySet()){

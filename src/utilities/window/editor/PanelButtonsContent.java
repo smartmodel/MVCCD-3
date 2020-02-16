@@ -4,9 +4,12 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.Project;
 import utilities.files.UtilFiles;
 import utilities.window.PanelContent;
+import utilities.window.SButton;
+import utilities.window.SComponent;
 import utilities.window.services.ComponentService;
 import window.editor.entity.EntityEditor;
 import window.help.HelpWindow;
@@ -23,16 +26,18 @@ public abstract class PanelButtonsContent extends PanelContent
         implements IAccessDialogEditor, ActionListener {
 
     private JPanel panel = new JPanel();
-    private JButton btnOk ;
-    private JButton btnCancel ;
-    private JButton btnApply ;
-    private JButton btnReset ;
-    private JButton btnHelp ;
+    private SButton btnOk ;
+    private SButton btnCancel ;
+    private SButton btnApply ;
+    private SButton btnUndo;
+    private SButton btnHelp ;
     private JTextArea messages ;
     private JScrollPane messagesScroll;
     private PanelButtons panelButtons;
     private Box bVer ;
     private Box btns ;
+
+    private boolean readOnly = false;
 
     public PanelButtonsContent(PanelButtons panelButtons) {
         super(panelButtons);
@@ -60,26 +65,33 @@ public abstract class PanelButtonsContent extends PanelContent
         bVer.add(Box.createVerticalStrut(Preferences.JPANEL_VGAP));
         btns = Box.createHorizontalBox();
 
-        btnReset = new JButton("Réinitialiser");
-        btnReset.addActionListener(this);
-        btns.add(btnReset);
+        btnUndo = new SButton("Annuler");
+        btnUndo.addActionListener(this);
+        btnUndo.setToolTipText("Annuler la saisie effectuée depuis le dernier enregistrement");
+        btnUndo.setEnabled(false);
+        btns.add(btnUndo);
         btns.add(Box.createGlue());
-        btnOk = new JButton("Valider");
+        btnOk = new SButton("Ok");
         btnOk.addActionListener(this);
+        btnOk.setToolTipText("Enregistrer la saisie et fermer la fenêtre");
+        btnOk.setEnabled(false);
         btns.add(btnOk);
         btns.add(Box.createHorizontalStrut(Preferences.JPANEL_HGAP));
-        btnCancel = new JButton("Annuler");
+        btnCancel = new SButton("Fermer");
         btnCancel.addActionListener(this);
+        btnCancel.setToolTipText("Fermer la fenêtre sans enregistrer la saisie effectuée depuis le dernier enregistrement");
         btns.add(btnCancel);
         btns.add(Box.createHorizontalStrut(Preferences.JPANEL_HGAP));
-        btnApply = new JButton("Appliquer");
+        btnApply = new SButton("Appliquer");
         btnApply.addActionListener(this);
+        btnApply.setToolTipText("Enregistrer la saisie et garder la fenêtre ouverte");
         if (getEditor().getMode().equals(DialogEditor.NEW)){
             btnApply.setVisible(false);
         }
+        btnApply.setEnabled(false);
         btns.add(btnApply);
         btns.add(Box.createGlue());
-        btnHelp = new JButton("Aide");
+        btnHelp = new SButton("Aide");
         btnHelp.addActionListener(this);
         btns.add(btnHelp);
 
@@ -110,8 +122,8 @@ public abstract class PanelButtonsContent extends PanelContent
         return dimensionBL;
     }
 
-    public JButton getBtnReset() {
-        return btnReset;
+    public JButton getBtnUndo() {
+        return btnUndo;
     }
 
     public JButton getBtnOk() {
@@ -168,7 +180,7 @@ public abstract class PanelButtonsContent extends PanelContent
             // Seulement en update
             treatUpdate();
         }
-        if (source == btnReset) {
+        if (source == btnUndo) {
             // Seulement en update
             treatReset();
         }
@@ -197,7 +209,7 @@ public abstract class PanelButtonsContent extends PanelContent
     }
 
     private void treatUpdate(){
-        updateMCDElement();
+        saveDatas(getEditor().getMvccdElement());
         DefaultTreeModel defaultTreeModel = (DefaultTreeModel) MVCCDManager.instance().getWinRepositoryContent().getTree().getModel();
         defaultTreeModel.nodeChanged(getEditor().getNode());
         getInputContent().restartChange();
@@ -206,34 +218,45 @@ public abstract class PanelButtonsContent extends PanelContent
     }
 
     private void treatCreate(){
-        MVCCDElement mvccdElement = createMVCCDElement();
-        // Provisoire
-        if (! (mvccdElement instanceof Project) ) {
-            DefaultMutableTreeNode node = MVCCDManager.instance().getRepository().addMVCCDElement(mvccdElement, getEditor().getNode());
-            // Affichage du nouveau noeud
-            MVCCDManager.instance().getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
-        }
-        if (mvccdElement instanceof Project ) {
-            // Le projet est possé dans l'arbre visuel par MVCCDManager lors de l'appel createMVCCDElement
-         }
+        MVCCDElement mvccdElement = createNewMVCCDElement();
+        saveDatas(mvccdElement);
+        completeNewMVCCDElement(mvccdElement);
     }
 
 
-    protected abstract void updateMCDElement();
 
-    protected abstract MVCCDElement createMVCCDElement();
+    protected void saveDatas(MVCCDElement mvccdElement) {
+        getEditor().getInput().getInputContent().saveDatas(mvccdElement);
+    }
+
+    protected abstract MVCCDElement createNewMVCCDElement();
+
+    protected abstract void completeNewMVCCDElement(MVCCDElement mvccdElement);
 
     private void colorDebug(){
-        if (Preferences.DEBUG_BACKGROUND_PANEL) {
+        if (PreferencesManager.instance().preferences().getDEBUG()) {
+            if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
+                btns.setOpaque(true);
+                btns.setBackground(Color.BLACK);
 
-            btns.setOpaque(true);
-            btns.setBackground(Color.BLACK);
+                bVer.setOpaque(true);
+                bVer.setBackground(Color.YELLOW);
 
-            bVer.setOpaque(true);
-            bVer.setBackground(Color.YELLOW);
-
-            panel.setBackground(Color.BLUE);
+                panel.setBackground(Color.BLUE);
+            }
         }
     }
 
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+        if (readOnly){
+            btnOk.setReadOnly(readOnly);
+            btnApply.setReadOnly(readOnly);
+            btnUndo.setReadOnly(readOnly);
+         }
+    }
 }

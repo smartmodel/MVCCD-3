@@ -2,6 +2,7 @@ package main;
 
 import console.Console;
 import main.window.menu.WinMenuContent;
+import preferences.PreferencesManager;
 import project.*;
 import main.window.console.WinConsoleContent;
 import main.window.diagram.WinDiagram;
@@ -10,9 +11,10 @@ import messages.LoadMessages;
 import repository.Repository;
 import main.window.repository.WinRepository;
 import main.window.repository.WinRepositoryContent;
-import repository.RepositoryRoot;
+import utilities.window.editor.DialogEditor;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import java.io.File;
 
 public class MVCCDManager {
@@ -21,11 +23,13 @@ public class MVCCDManager {
 
     private MVCCDWindow mvccdWindow ;
     private Repository repository;
+    private MVCCDElement rootMVCCDElement;
     private Project project;
     private Console console;
     private ProjectsRecents projectsRecents = null;
     private File fileProjectCurrent = null;
-    private boolean datasChanged = false;
+    private boolean datasProjectChanged = false;
+    private boolean datasProjectEdited = true;
 
 
     public static synchronized MVCCDManager instance(){
@@ -37,6 +41,7 @@ public class MVCCDManager {
 
     public void start(){
         LoadMessages.main();
+        PreferencesManager.instance().loadOrCreateFileApplicationPreferences();
         startMVCCDWindow();
         startConsole();
         startRepository();
@@ -48,7 +53,8 @@ public class MVCCDManager {
     }
 
     private void startRepository() {
-        MVCCDElement rootMVCCDElement = new RepositoryRoot();
+        //MVCCDElement rootMVCCDElement = new MVCCDElementRepositoryRoot();
+        MVCCDElement rootMVCCDElement = MVCCDFactory.instance().createRepositoryRoot();
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootMVCCDElement);
         repository = new Repository(rootNode, rootMVCCDElement);
         getWinRepositoryContent().getTree().changeModel(repository);
@@ -67,12 +73,20 @@ public class MVCCDManager {
         mvccdWindow.getPanelBLResizer().resizerContentPanels();
     }
 
-    public Project createProject(String name){
-        project = MVCCDFactory.instance().createProject(name);
+    public void completeNewProject(Project project){
+        this.project = project;
+        PreferencesManager.instance().setProjectPref(project.getPreferences());
+        project.adjustProfile();
         projectToRepository();
         mvccdWindow.adjustPanelRepository();
         setFileProjectCurrent(null);
-        return project;
+    }
+
+    public void showNewMVCCDElementInRepository(MVCCDElement mvccdElement, DialogEditor editor) {
+        DefaultMutableTreeNode node = MVCCDManager.instance().getRepository().addMVCCDElement(mvccdElement, editor.getNode());
+        // Affichage du nouveau noeud
+        MVCCDManager.instance().getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
+
     }
 
     public void  openProject() {
@@ -83,7 +97,6 @@ public class MVCCDManager {
 
     public void openProjectRecent(String filePath) {
         File file = new File(filePath);
-        System.out.println(filePath);
         openProjectBase(file);
      }
 
@@ -95,23 +108,29 @@ public class MVCCDManager {
      }
 
     private void openProjectBase(File file){
+        setFileProjectCurrent(file) ;
         if (file != null){
-            setFileProjectCurrent(file) ;
+            //setFileProjectCurrent(file) ;
             project = new LoaderSerializable().load(fileProjectCurrent);
+            PreferencesManager.instance().setProjectPref(project.getPreferences());
         }
         if (project != null) {
+            //project.includeProfile();
+            project.adjustProfile();
             projectToRepository();
-            project.testCheckLoadDeep(); //Provisoire pour le test de sérialisation/déséralisation
+            project.debugCheckLoadDeep(); //Provisoire pour le test de sérialisation/déséralisation
             projectsRecents.add(fileProjectCurrent);
             changeActivateProjectOpenRecentsItems();
             mvccdWindow.adjustPanelRepository();
         }
     }
 
+
+
     public void saveProject() {
         if (fileProjectCurrent != null) {
             new SaverSerializable().save(fileProjectCurrent);
-            setDatasChanged(false);
+            setDatasProjectChanged(false);
         } else {
             saveAsProject();
         }
@@ -125,15 +144,15 @@ public class MVCCDManager {
             new SaverSerializable().save(fileProjectCurrent);
             projectsRecents.add(fileProjectCurrent);
             changeActivateProjectOpenRecentsItems();
-            setDatasChanged(false);
+            setDatasProjectChanged(false);
         }
     }
 
     public void closeProject() {
         project = null;
-        //repository = null;
-        //MVCCDManager.instance().getWinRepositoryContent().getTree().changeModel(null);
         repository.removeProject();
+        PreferencesManager.instance().setProfilePref(null);
+        repository.removeProfile();
         setFileProjectCurrent(null);
     }
 
@@ -152,16 +171,18 @@ public class MVCCDManager {
     }
 
     private void projectToRepository() {
-        /*
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(project);
-        repository = new Repository(rootNode, project);
-        getWinRepositoryContent().getTree().changeModel(repository);
-
-         */
         repository.removeProject();
         repository.addProject(project);
+        profileToRepository();
         getWinRepositoryContent().getTree().changeModel(repository);
+    }
 
+    public void profileToRepository() {
+        repository.removeProfile();
+        if (project.getProfile() != null) {
+            repository.addProfile(project.getProfile());
+        }
+        getWinRepositoryContent().getTree().changeModel(repository);
     }
 
 
@@ -214,13 +235,12 @@ public class MVCCDManager {
     }
 
     public void setFileProjectCurrent(File fileProjectCurrent) {
-        if (fileProjectCurrent != null){
+        if (datasProjectChanged){
+           //
+        } else {
             mvccdWindow.getMenuContent().getProjectSave().setEnabled(false);
-            mvccdWindow.getMenuContent().getProjectClose().setEnabled(true);
-        }else {
-            mvccdWindow.getMenuContent().getProjectSave().setEnabled(false);
-            mvccdWindow.getMenuContent().getProjectClose().setEnabled(false);
         }
+
         this.fileProjectCurrent = fileProjectCurrent;
     }
 
@@ -232,12 +252,37 @@ public class MVCCDManager {
         this.projectsRecents = projectsRecents;
     }
 
-    public boolean isDatasChanged() {
-        return datasChanged;
+    public boolean isDatasProjectChanged() {
+        return datasProjectChanged;
     }
 
-    public void setDatasChanged(boolean datasChanged) {
-        getWinMenuContent().getProjectSave().setEnabled(datasChanged);
-        this.datasChanged = datasChanged;
+    public void setDatasProjectChanged(boolean datasProjectChanged) {
+        getWinMenuContent().getProjectSave().setEnabled(datasProjectChanged);
+        this.datasProjectChanged = datasProjectChanged;
     }
+
+    public boolean isDatasProjectEdited() {
+        return datasProjectEdited;
+    }
+
+
+
+    public void setDatasProjectEdited(boolean datasProjectEdited) {
+        this.datasProjectEdited = datasProjectEdited;
+    }
+
+    public void datasProjectChangedFromEditor(){
+        if (isDatasProjectEdited()){
+            setDatasProjectChanged(true);
+        }
+    }
+    public MVCCDElement getRootMVCCDElement() {
+        return rootMVCCDElement;
+    }
+
+    public void setRootMVCCDElement(MVCCDElement rootMVCCDElement) {
+        this.rootMVCCDElement = rootMVCCDElement;
+    }
+
+
 }

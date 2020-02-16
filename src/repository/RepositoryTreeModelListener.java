@@ -32,15 +32,12 @@ public class RepositoryTreeModelListener implements TreeModelListener {
                     (node.getChildAt(index));
         } catch (NullPointerException exc) {}
 
-        System.out.println("The user has finished editing the node.");
-        System.out.println("New value: " + node.getUserObject());
         //defaultTreeModel.nodeChanged(node);
 
     }
 
     @Override
     public void treeNodesInserted(TreeModelEvent treeModelEvent) {
-        System.out.println("Ajout détecté");
     }
 
     @Override
@@ -50,6 +47,5 @@ public class RepositoryTreeModelListener implements TreeModelListener {
 
     @Override
     public void treeStructureChanged(TreeModelEvent treeModelEvent) {
-        System.out.println("Changement dans le modèle...");
     }
 }

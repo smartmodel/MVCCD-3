@@ -21,26 +21,7 @@ public class MCDEntityService {
     }
 
     public static ArrayList<String> checkName(String name) {
-        ArrayList<String> messages = new ArrayList<String>();
-        String message1 = MessagesBuilder.getMessagesProperty("entity.and.name");
-
-        MCDUtilService.isEmpty(messages, name, message1);
-        /*
-        if (StringUtils.isEmpty(name)){
-            messages.add ( MessagesBuilder.getMessagesProperty("editor.mandatory.error"
-                    , new String[] {message1}));
-        }
-        */
-
-        if (!name.matches(Preferences.NAME_REGEXPR)){
-            messages.add ( MessagesBuilder.getMessagesProperty("editor.format.error"
-                    , new String[] {message1, Preferences.NAME_REGEXPR}));
-        }
-        if (name.length() > Preferences.ENTITY_NAME_LENGTH){
-            messages.add( MessagesBuilder.getMessagesProperty("editor.length.error"
-                    , new String[] {message1, String.valueOf(Preferences.ENTITY_NAME_LENGTH)}));
-        }
-        return messages;
+        return MCDUtilService.checkName(name, Preferences.ENTITY_NAME_LENGTH, "entity.and.name");
     }
 
     public static ArrayList<String> checkShortName(String shortName) {

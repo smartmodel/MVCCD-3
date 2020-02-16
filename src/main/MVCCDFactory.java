@@ -1,14 +1,17 @@
 package main;
 
 import mcd.*;
-import messages.MessagesBuilder;
 import preferences.Preferences;
+import preferences.PreferencesManager;
+import profile.Profile;
+import profile.ProfileManager;
 import project.Project;
 
 public class MVCCDFactory {
 
     private static MVCCDFactory instance;
 
+    MVCCDElementProfileEntry profileEntry ;  // L'entrée du profil doit être mémorisée
 
     public static synchronized MVCCDFactory instance() {
         if (instance == null) {
@@ -19,11 +22,12 @@ public class MVCCDFactory {
 
 
     public Project createProject(String name){
-        System.out.println ("Manager nom de projet: " + name);
         Project project = MVCCDElementFactory.instance().createProject(name);
+        Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME);
         MCDModels mcdModels = MVCCDElementFactory.instance().createMCDModels(project, Preferences.REPOSITORY_MCD_MODELS_NAME);
         if (!Preferences.REPOSITORY_MCD_MODELS_MANY) {
-            if (Preferences.REPOSITORY_MCD_PACKAGES_EXISTS) {
+
+            if (Preferences.REPOSITORY_MCD_PACKAGES_AUTHORIZEDS) {
                 MCDPackages mcdPackages = MVCCDElementFactory.instance().createMCDPackages(mcdModels, Preferences.REPOSITORY_MCD_PACKAGES_NAME);
             }
             MCDDiagrams mcdDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(mcdModels,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
@@ -32,5 +36,24 @@ public class MVCCDFactory {
         }
         return project;
     }
+
+
+    public Profile createProfile(String profileFileName) {
+
+        Profile profile = new Profile(profileEntry , profileFileName);
+        return profile;
+    }
+
+
+
+
+    public MVCCDElementRepositoryRoot createRepositoryRoot(){
+        MVCCDElementRepositoryRoot repositoryRoot = new MVCCDElementRepositoryRoot();
+        MVCCDElementRepositoryGlobal repositoryGlobal = new MVCCDElementRepositoryGlobal(repositoryRoot);
+        MVCCDElementApplicationPreferences applicationPref = new MVCCDElementApplicationPreferences(repositoryGlobal);
+        profileEntry = new MVCCDElementProfileEntry (repositoryRoot);
+        return repositoryRoot;
+    }
+
 
 }

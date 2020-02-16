@@ -1,22 +1,30 @@
 package window.editor.entity;
 
 import main.MVCCDElement;
+import main.MVCCDManager;
 import mcd.MCDEntity;
 import mcd.services.MCDEntityService;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import utilities.window.*;
 import utilities.window.editor.PanelInputContent;
-import utilities.window.editor.DialogEditor;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
 
 public class EntityInputContent extends PanelInputContent {
 
     private JPanel panel = new JPanel();
     private STextField entityName = new STextField();
     private STextField entityShortName = new STextField();
+    private SCheckBox entityOrdered  = new SCheckBox();
+    private SCheckBox entityAbstract  = new SCheckBox();
+    private SCheckBox entityAudit  = new SCheckBox();
+    private SCheckBox entityJournal  = new SCheckBox();
 
     //private JComboBox<String> profile = new JComboBox<>();
 
@@ -26,41 +34,51 @@ public class EntityInputContent extends PanelInputContent {
         entityInput.setPanelContent(this);
         createContent();
         super.addContent(panel);
-        if (getEditor().getMode().equals(DialogEditor.UPDATE)){
-            MCDEntity mcdEntity = null;
-            if (getEditor().getMvccdElement() instanceof MCDEntity){
-                mcdEntity = (MCDEntity)getEditor().getMvccdElement();
-            }
-            if (mcdEntity != null){
-                loadDatas(mcdEntity);
-            }
-        }
-
-    }
+        super.initOrLoadDatas();
+        enabledContent();
+     }
 
 
 
 
     private void createContent() {
 
-        entityName.setPreferredSize((new Dimension(300,20)));
+        entityName.setPreferredSize((new Dimension(100,20)));
         entityName.setToolTipText("Nom de l'entité");
         entityName.setCheckPreSave(true);
-
         entityName.getDocument().addDocumentListener(this);
         entityName.addFocusListener(this);
 
         //entityName.addActionListener((ActionListener) this);
 
 
-        entityShortName.setPreferredSize((new Dimension(300,20)));
+        entityShortName.setPreferredSize((new Dimension(50,20)));
         entityShortName.setToolTipText("Nom court de l'entité utilisé pour nommer certaines contraintes et autres");
-
         entityShortName.getDocument().addDocumentListener(this);
         entityShortName.addFocusListener(this);
 
+        entityOrdered.setToolTipText("Ordonnancement des enregistrements");
+        entityOrdered.addChangeListener(this);
+        entityOrdered.addFocusListener(this);
+
+        entityAbstract.setToolTipText("Entité abstraite (si elle est source de spécialisations)");
+        entityAbstract.addChangeListener(this);
+        entityAbstract.addFocusListener(this);
+
+        entityJournal.setToolTipText("Création d'une table de journalisation");
+        entityJournal.addChangeListener(this);
+        entityJournal.addFocusListener(this);
+
+        entityAudit.setToolTipText("Création de colonnes d'audit");
+        entityAudit.addChangeListener(this);
+        entityAudit.addFocusListener(this);
+
         super.getsComponents().add(entityName);
         super.getsComponents().add(entityShortName);
+        super.getsComponents().add(entityOrdered);
+        super.getsComponents().add(entityAbstract);
+        //super.getsComponents().add(entityJournal);
+        //super.getsComponents().add(entityAudit);
 
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -75,12 +93,35 @@ public class EntityInputContent extends PanelInputContent {
         gbc.gridx = 1;
         panel.add(entityName, gbc);
 
-
         gbc.gridx = 0;
         gbc.gridy++;
         panel.add(new JLabel("Nom court : "), gbc);
         gbc.gridx = 1;
         panel.add(entityShortName, gbc);
+
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("Enreg. ordonnés :"),gbc);
+        gbc.gridx = 1;
+        panel.add(entityOrdered, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("Entité abstraite :"),gbc);
+        gbc.gridx = 1;
+        panel.add(entityAbstract, gbc);
+
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("Journalisation :"),gbc);
+        gbc.gridx++;
+        panel.add(entityJournal, gbc);
+        gbc.gridx++;
+        panel.add(new JLabel("Audit :"),gbc);
+        gbc.gridx++;
+        panel.add(entityAudit, gbc);
 
         this.add(panel);
 
@@ -99,6 +140,16 @@ public class EntityInputContent extends PanelInputContent {
         if (entityShortName.getDocument() == e.getDocument()) {
             checkEntityShortName(true);
         }
+    }
+
+    @Override
+    protected void changeField(ChangeEvent e) {
+
+    }
+
+    @Override
+    protected void changeField(ItemEvent e) {
+
     }
 
     @Override
@@ -133,31 +184,58 @@ public class EntityInputContent extends PanelInputContent {
         return super.checkInput(entityShortName, unitaire, MCDEntityService.checkShortName(entityShortName.getText()));
     }
 
-
-    private void loadDatas(MCDEntity mcdEntity) {
+    @Override
+    public void loadDatas(MVCCDElement mvccdElement) {
+        MCDEntity mcdEntity = (MCDEntity) mvccdElement;
         entityName.setText(mcdEntity.getName()) ;
         entityShortName.setText(mcdEntity.getShortName());
+        entityOrdered.setSelected(mcdEntity.isOrdered());
+        entityAbstract.setSelected(mcdEntity.isEntAbstract());
+        entityJournal.setSelected(mcdEntity.isJournal());
+        entityAudit.setSelected(mcdEntity.isAudit());
+    }
+
+    @Override
+    protected void initDatas(MVCCDElement mvccdElement) {
+        Preferences preferences = PreferencesManager.instance().preferences();
+        entityJournal.setSelected(preferences.getMCD_JOURNALIZATION());
+        entityAudit.setSelected(preferences.getMCD_AUDIT());
     }
 
     @Override
     public void saveDatas(MVCCDElement mvccdElement) {
-        saveDatas((MCDEntity) mvccdElement);
-    }
-
-    public void saveDatas(MCDEntity mcdEntity) {
-        System.out.println("save...");
+        MCDEntity mcdEntity = (MCDEntity) mvccdElement;
         if (entityName.checkIfUpdated()){
             mcdEntity.setName(entityName.getText());
         }
         if (entityShortName.checkIfUpdated()){
             mcdEntity.setShortName(entityShortName.getText());
-         }
+        }
+        if (entityOrdered.checkIfUpdated()){
+            mcdEntity.setOrdered(entityOrdered.isSelected());
+        }
+        if (entityAbstract.checkIfUpdated()){
+            mcdEntity.setEntAbstract(entityAbstract.isSelected());
+        }
+        if (entityJournal.checkIfUpdated()){
+            mcdEntity.setJournal(entityJournal.isSelected());
+        }
+        if (entityAudit.checkIfUpdated()){
+            mcdEntity.setAudit(entityAudit.isSelected());
+        }
     }
+
 
 
     @Override
     public boolean checkDatasPreSave() {
         boolean resultat = checkEntityName(false);
         return resultat;
+    }
+
+    private void enabledContent() {
+        Preferences preferences = PreferencesManager.instance().preferences();
+        entityJournal.setEnabled(preferences.getMCD_JOURNALIZATION_EXCEPTION());
+        entityAudit.setEnabled(preferences.getMCD_AUDIT_EXCEPTION());
     }
 }

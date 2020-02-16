@@ -30,13 +30,8 @@ public class WinRepositoryTree extends JTree {
                     return;
 
                 tree.setSelectionPath(path);
-                System.out.println("Path:  "  + path.toString());
-
                 DefaultMutableTreeNode rightClickedNode =
                         (DefaultMutableTreeNode)path.getLastPathComponent();
-
-                System.out.println("Node:  "  + rightClickedNode.toString());
-
                 if(rightClickedNode != null){
                     WinRepositoryPopupMenu popup = new WinRepositoryPopupMenu (rightClickedNode);
                     popup.show(tree, x, y);
@@ -76,10 +71,8 @@ public class WinRepositoryTree extends JTree {
 
         treeModel.insertNodeInto(childNode, parent,
                 parent.getChildCount());
-        System.out.println("Ajout fait");
         //Make sure the user can see the lovely new node.
         if (shouldBeVisible) {
-            System.out.println("Rendre visible...");
             this.scrollPathToVisible(new TreePath(childNode.getPath()));
         }
 

@@ -7,16 +7,7 @@ import java.awt.*;
 
 public class DialogMessage {
 
-    /*
-    private static DialogMessage instance ;
 
-    public static synchronized DialogMessage instance(){
-        if(instance == null){
-            instance = new DialogMessage();
-        }
-        return instance;
-    }
-*/
     public static void showError(Window owner, String message){
         String title = MessagesBuilder.getMessagesProperty("dialog.error");
         JOptionPane.showMessageDialog(owner, message, title, JOptionPane.ERROR_MESSAGE);
@@ -45,5 +36,6 @@ public class DialogMessage {
         return JOptionPane.showOptionDialog(owner, message, title, JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, options, options[1] );
     }
+
 
 }

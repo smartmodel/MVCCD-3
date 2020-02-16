@@ -2,7 +2,7 @@ package utilities.window;
 
 import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
-import preferences.Preferences;
+import preferences.PreferencesManager;
 
 import javax.swing.*;
 
@@ -11,10 +11,13 @@ public class STextField extends JTextField implements SComponent{
     private String oldText ;
     private boolean firstAffectation = true;
     private boolean checkPreSave = false;
+    boolean readOnly = false;
 
     public STextField() {
-        setBorder(BorderFactory.createLineBorder(Preferences.EDITOR_SCOMPONENT_LINEBORDER_NORMAL));
-        setBackground(Preferences.EDITOR_SCOMPONENT_BACKGROUND_NORMAL);
+        setBorder(BorderFactory.createLineBorder(
+                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_NORMAL));
+        setBackground(
+                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_NORMAL);
     }
 
     // Surcharge de la méthode JTextField
@@ -50,7 +53,7 @@ public class STextField extends JTextField implements SComponent{
             updated =  StringUtils.isNotEmpty(oldText);
         }
         if (updated) {
-            MVCCDManager.instance().setDatasChanged(true);
+            MVCCDManager.instance().datasProjectChangedFromEditor();
         }
         return updated;
     }
@@ -65,5 +68,25 @@ public class STextField extends JTextField implements SComponent{
         setText(oldText);
     }
 
+    @Override
+    public void setReadOnly(boolean readOnly) {
+      this.readOnly = readOnly;
+      if (readOnly) {
+          super.setEnabled(false);
+      }
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setEnabled(boolean enabled){
+        if (! isReadOnly()){
+            super.setEnabled(enabled);
+        } else{
+            super.setEnabled(false);
+        }
+    }
 
 }

@@ -2,13 +2,16 @@ package project;
 
 import exceptions.CodeApplException;
 import main.MVCCDElement;
-import main.MVCCDElementSerializable;
 import main.MVCCDManager;
+import messages.MessagesBuilder;
 import preferences.Preferences;
 import utilities.window.DialogMessage;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class SaverSerializable {
     private ObjectOutputStream writer ;
@@ -21,7 +24,10 @@ public class SaverSerializable {
             saveNode(MVCCDManager.instance().getRepository().getNodeProject(), 0);
 
             // Quittance de fin
-            DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(),"Le projet a été sauvegardé");
+            String message = MessagesBuilder.getMessagesProperty ("project.saved",
+                    new String[] {MVCCDManager.instance().getProject().getName() });
+            DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(),message);
+
         } catch (Exception  ex) {
                 throw(new CodeApplException(ex));	// L'erreur est renvoyée
         } finally{
@@ -35,14 +41,9 @@ public class SaverSerializable {
 
     private void saveNode(DefaultMutableTreeNode node, int level) throws IOException {
         try{
-            if (node.getUserObject() instanceof MVCCDElementSerializable) {
-                MVCCDElementSerializable  mcdElementSerializable= (MVCCDElementSerializable) node.getUserObject();
-                writer.writeObject(mcdElementSerializable);
-                System.out.print(mcdElementSerializable.getName() + "   " );
-                if (mcdElementSerializable.getParent() != null){
-                    System.out.print(mcdElementSerializable.getParent().getName());
-                }
-                System.out.println("");
+            if (node.getUserObject() instanceof MVCCDElement) {
+                MVCCDElement mcdElement= (MVCCDElement) node.getUserObject();
+                writer.writeObject(mcdElement);
                 if (node.getChildCount() > 0){
                     int levelChild = level + 1 ;
                     for (int i=0 ; i< node.getChildCount(); i++){
@@ -51,8 +52,6 @@ public class SaverSerializable {
                 }
             }
         } catch(Exception e){
-            System.out.println(e.getMessage());
-            System.out.println("Erreur IO");
             throw (new CodeApplException(e));	// L'erreur est renvoyée
         }
     }

@@ -4,14 +4,14 @@ import preferences.Preferences;
 import utilities.window.editor.DialogEditor;
 import main.MVCCDWindow;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 public class ProjectEditor extends DialogEditor {
 
 
-    public ProjectEditor(MVCCDWindow mvccdWindow, String mode)  {
-        super(mvccdWindow);
-        super.setMode(mode);
+    public ProjectEditor(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String mode)  {
+        super(mvccdWindow, node, mode);
 
-        super.setTitle("Création d'un nouveau projet");
         super.setSize(Preferences.PROJECT_WINDOW_WIDTH, Preferences.PROJECT_WINDOW_HEIGHT);
 
         super.setInput(new ProjectInput(this));
@@ -24,4 +24,16 @@ public class ProjectEditor extends DialogEditor {
     public void adjustTitle() {
 
     }
+
+
+    @Override
+    protected String getPropertyTitleNew() {
+        return "project.entity.new";
+    }
+
+    @Override
+    protected String getPropertyTitleUpdate() {
+        return "project.entity.update";
+    }
+
 }

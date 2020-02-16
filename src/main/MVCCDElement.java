@@ -1,11 +1,14 @@
 package main;
 
 import org.apache.commons.lang.StringUtils;
+import preferences.PreferencesManager;
+import utilities.Debug;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class MVCCDElement {
+public abstract class MVCCDElement implements Serializable{
 
     private MVCCDElement parent;
     private String name;
@@ -35,6 +38,7 @@ public abstract class MVCCDElement {
 
     public void setParent(MVCCDElement parent) {
         this.parent = parent;
+        parent.getChilds().add(this);
     }
 
     public String getName() {
@@ -62,28 +66,37 @@ public abstract class MVCCDElement {
     public abstract String baliseXMLEnd();
 
 
-    public void testCheckLoad(){
-        String childsToString = "";
-        for (MVCCDElement child : childs){
-            if (! StringUtils.isEmpty(childsToString)) {
-                childsToString = childsToString +  ", ";
+    public void debugCheckLoad(){
+        if (PreferencesManager.instance().preferences().getDEBUG()) {
+            if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
+                String childsToString = "";
+                for (MVCCDElement child : childs) {
+                    if (!StringUtils.isEmpty(childsToString)) {
+                        childsToString = childsToString + ", ";
+                    }
+                    childsToString = childsToString + " " + child.getName();
+                }
+                String parent;
+                if (getParent() != null) {
+                    parent = getParent().getName();
+                } else {
+                    parent = "-";
+                }
+                Debug.println("Element :" + name + "  | Parent : " + parent + " | Childs : " + childsToString);
             }
-            childsToString = childsToString +  " " + child.getName();
         }
-        String parent ;
-        if (getParent() != null){
-            parent = getParent().getName();
-        } else {
-            parent = "-";
-        }
-
-        System.out.println("Element :"  + name + "  | Parent : " + parent + " | Childs : " + childsToString);
     }
 
-    public void testCheckLoadDeep(){
-       testCheckLoad();
-       for (MVCCDElement child : childs){
-           child.testCheckLoadDeep();
+    public void debugCheckLoadDeep(){
+        if (PreferencesManager.instance().preferences().getDEBUG()) {
+            if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
+                debugCheckLoad();
+                for (MVCCDElement child : childs) {
+                    child.debugCheckLoadDeep();
+                }
+            }
        }
     }
+
+
 }

@@ -1,7 +1,9 @@
 package utilities.window.editor;
 
 import main.MVCCDElement;
-import utilities.window.PanelBorderLayout;
+import main.MVCCDManager;
+import mcd.MCDEntity;
+import messages.MessagesBuilder;
 import utilities.window.PanelBorderLayoutResizer;
 
 import javax.swing.*;
@@ -22,15 +24,22 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     private DefaultMutableTreeNode node;   // Parent pour la création et lui-même pour la modification
     private MVCCDElement mvccdElement;     // Parent pour la création et lui-même pour la modification
 
+    private boolean readOnly = false;
 
-    public DialogEditor(Frame owner) {
+    public DialogEditor(Frame owner, DefaultMutableTreeNode node, String mode) {
         super(owner);
+        this.mode = mode;
+        this.node = node;
+        setMvccdElement((MVCCDElement) node.getUserObject());
+
         setModal(true);
         setLocation(100,100);
+        setTitle (getTitleByMode(mode));
 
         getContentPane().add(panel);
 
     }
+
 
     public void start(){
 
@@ -116,7 +125,8 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     @Override
     public void windowActivated(WindowEvent windowEvent) {
-     }
+        MVCCDManager.instance().setDatasProjectEdited(true);
+    }
 
     @Override
     public void windowDeactivated(WindowEvent windowEvent) {
@@ -126,11 +136,6 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     @Override
     public void focusGained(FocusEvent focusEvent) {
-        // Au cas où la fenêtre d'aide est présente
-        System.out.println( "Focus obtenu Dialog Editor");
-        //this.setAlwaysOnTop(true);
-        //this.toFront();
-        //this.setAlwaysOnTop(false);
     }
 
     @Override
@@ -162,5 +167,37 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         this.mvccdElement = mvccdElement;
     }
 
-    public abstract void adjustTitle() ;
+    public void adjustTitle() {
+       String title = MessagesBuilder.getMessagesProperty(getPropertyTitleUpdate(), new String[]{
+                getMvccdElement().getName()});
+        super.setTitle(title);
+    }
+
+    private String getTitleByMode(String mode) {
+        String title="";
+        if (mode.equals(DialogEditor.NEW)){
+            title = MessagesBuilder.getMessagesProperty(getPropertyTitleNew());
+        }
+        if (mode.equals(DialogEditor.UPDATE)){
+            title = MessagesBuilder.getMessagesProperty(getPropertyTitleUpdate(), new String[]{
+                    getMvccdElement().getName() });
+        }
+        return title;
+    }
+
+    protected abstract String getPropertyTitleNew();
+
+    protected abstract String getPropertyTitleUpdate();
+
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+        if (readOnly){
+            input.setReadOnly(readOnly);
+            buttons.setReadOnly(readOnly);
+        }
+    }
 }

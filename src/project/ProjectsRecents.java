@@ -30,9 +30,6 @@ public class ProjectsRecents implements Serializable {
             recents.add(0, project);
         }
         dropOldsProjects();
-        for (File file : recents){
-            System.out.println(file.getPath());
-        }
     }
 
     private int indexProject(File project){

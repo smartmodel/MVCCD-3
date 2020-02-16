@@ -8,6 +8,7 @@ import mcd.*;
 import messages.LoadMessages;
 import messages.MessagesBuilder;
 import preferences.Preferences;
+import profile.Profile;
 import project.Project;
 import utilities.window.services.ComponentService;
 
@@ -23,12 +24,14 @@ public class MVCCDElementFactory {
         return instance;
     }
 
+
     public Project createProject(String name){
 
         return new Project(name);
     }
 
     public MCDModels createMCDModels(Project project, String name){
+        
         return new MCDModels(project, name);
     }
 
@@ -48,8 +51,14 @@ public class MVCCDElementFactory {
         return new MCDEntity(mvccdElement);
     }
 
+    public Preferences createPreferences(MVCCDElement mvccdElement, String name) {
+        return new Preferences(mvccdElement, name);
+    }
+
+
+
+
     public MVCCDElement createMVCCDElementFromXML(String baliseName, MVCCDElement ancestor){
-        System.out.println("Balise:  " + baliseName);
         if (baliseName.equals(Preferences.XML_BALISE_PROJECT)) {
             return new Project(ancestor);
         } else if (baliseName.equals(Preferences.XML_BALISE_MODELS)) {
@@ -64,7 +73,6 @@ public class MVCCDElementFactory {
             String message = MessagesBuilder.getMessagesProperty("load.xml.balise.unknow", new String[] {
                     baliseName, ancestor.getName(), ancestor.getClass().getName()});
             MVCCDManager.instance().getConsole().printMessage(message);
-            System.out.println(message);
             return null;
         }
     }

@@ -154,7 +154,6 @@ public class PanelBorderLayoutResizer {
                 int xDelta = Math.abs(subPanelEnter.getxOnScreen() - xOnScreenCurrent);
                 if (xDelta > Preferences.JPANEL_HGAP) {
                     // Curseur trop éloigné de la zone de jointure des 2 panneaux
-                    System.out.println("Réinitialisation du curseur   :" + xDelta);
                     reinitialisation();
                 }
             }

@@ -1,7 +1,9 @@
 package repository;
 
 import main.MVCCDElement;
+import main.MVCCDElementProfileEntry;
 import main.MVCCDManager;
+import profile.Profile;
 import project.Project;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -11,6 +13,8 @@ public class Repository extends DefaultTreeModel{
 
     //private DefaultMutableTreeNode rootNode;
     private DefaultMutableTreeNode nodeProject = null;
+    private DefaultMutableTreeNode nodeProfileEntry = null;
+    private DefaultMutableTreeNode nodeProfile = null;
 
     public Repository(DefaultMutableTreeNode rootNode, MVCCDElement rootMvccdElement){
         super(rootNode);
@@ -21,8 +25,10 @@ public class Repository extends DefaultTreeModel{
 
     public void addChildsNodes(DefaultMutableTreeNode nodeParent, MVCCDElement mvccdElementParent) {
         for ( MVCCDElement mvccdElement : mvccdElementParent.getChilds()){
-            System.out.println(mvccdElement.toString());
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(mvccdElement);
+            if (mvccdElement instanceof MVCCDElementProfileEntry){
+                nodeProfileEntry = node ;
+            }
             nodeParent.add (node);
             if (mvccdElement.getChilds().size()>0){
                 addChildsNodes(node, mvccdElement);
@@ -58,6 +64,24 @@ public class Repository extends DefaultTreeModel{
         }
     }
 
+
+    public void addProfile(Profile profile) {
+        nodeProfile = addNodeAndChilds(nodeProfileEntry, profile);
+        this.reload();
+    }
+
+    public void removeProfile(){
+        if (nodeProfileEntry != null) {
+            if (nodeProfileEntry.getChildCount()> 0) {
+                DefaultMutableTreeNode nodeProfile = (DefaultMutableTreeNode) getChild(nodeProfileEntry, 0);
+                if (nodeProfile != null) {
+                    removeNodeFromParent(nodeProfile);
+                }
+                this.reload();
+                nodeProfile = null;
+            }
+        }
+    }
     /*
     public void removeProject(DefaultMutableTreeNode node){
         int nbChilds = getChildCount(node);
@@ -95,5 +119,10 @@ public class Repository extends DefaultTreeModel{
 
     public DefaultMutableTreeNode getNodeProject() {
         return nodeProject;
+    }
+
+    @Override
+    public Object getRoot() {
+        return (DefaultMutableTreeNode) super.getRoot();
     }
 }

@@ -9,8 +9,7 @@ public class EntityInput extends PanelInput  {
 
     public EntityInput(EntityEditor entityEditor) {
         super(entityEditor);
-        EntityInputContent inputContent = new EntityInputContent(this);
-        super.setInputContent(inputContent);
+        super.setInputContent( new EntityInputContent(this));
     }
 
 

@@ -34,8 +34,6 @@ public class ProjectFileChooser extends JFileChooser {
             btnApprovedText = MessagesBuilder.getMessagesProperty("window.open.btn.text");
         }
 
-        System.out.println(title);
-
         File directory;
         File file;
 
@@ -48,40 +46,24 @@ public class ProjectFileChooser extends JFileChooser {
         }
 
         if (mode.equals(SAVE)) {
-            if (lastUsedFile != null) {
+            if (MVCCDManager.instance().getFileProjectCurrent() != null){
+            //if (lastUsedFile != null) {
                 file = new File(lastUsedFile.getName());
             } else {
                 file = new File(MVCCDManager.instance().getProject().getName() +
                         Preferences.FILE_DOT + Preferences.FILE_PROJECT_EXTENSION);
             }
-           setSelectedFile(file);
-        }
-
-        /*
-        if (mode.equals(SAVE)) {
-            if (MVCCDManager.instance().getFileProjectCurrent() != null) {
-                directory = UtilFiles.getDirectory(MVCCDManager.instance().getFileProjectCurrent());
-                file = new File(MVCCDManager.instance().getFileProjectCurrent().getName());
-            } else {
-                directory = new File("C:" + System.getProperty("file.separator") + "temp");
-                file = new File(MVCCDManager.instance().getProject().getName() +
-                        Preferences.FILE_DOT + Preferences.FILE_PROJECT_EXTENSION);
-            }
-            setCurrentDirectory(directory);
             setSelectedFile(file);
         }
 
-         */
-
-
-        //System.out.println(directory.getPath());
 
         setDialogTitle(title);
         setApproveButtonText(btnApprovedText);
         setAcceptAllFileFilterUsed(false);
         setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileNameExtensionFilter extFilter = new FileNameExtensionFilter(
-                MessagesBuilder.getMessagesProperty("file.project.extension.descriptif"),
+                MessagesBuilder.getMessagesProperty("file.project.extension.descriptif",
+                        new String[] {Preferences.FILE_PROJECT_EXTENSION }),
                 Preferences.FILE_PROJECT_EXTENSION );
         addChoosableFileFilter(extFilter);
         int returnVal = showOpenDialog(MVCCDManager.instance().getMvccdWindow());

@@ -15,24 +15,8 @@ public class EntityEditor extends DialogEditor {
 
 
     public EntityEditor(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String mode)  {
-        super(mvccdWindow);
-        String title="";
-        super.setMode(mode);
-        super.setNode(node);
-        // Formulaire en modification (depuis une entité)
-        if ( node.getUserObject() instanceof MCDEntity) {
-            MCDEntity mcdEntity = (MCDEntity) node.getUserObject();
-            super.setMvccdElement(mcdEntity);
-            title = MessagesBuilder.getMessagesProperty("editor.entity.update", new String[]{
-                    mcdEntity.getName()});
-        }
-        // Formulaire en création (depuis une racine d'entités)
-        if ( node.getUserObject() instanceof MCDEntities) {
-            MCDEntities mcdEntities = (MCDEntities) node.getUserObject();
-            super.setMvccdElement(mcdEntities);
-            title = MessagesBuilder.getMessagesProperty("editor.entity.new");
-        }
-        super.setTitle(title);
+        super(mvccdWindow, node, mode);
+
         super.setSize(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
         super.setInput(new EntityInput(this));
         super.setButtons (new EntityButtons(this));
@@ -41,10 +25,12 @@ public class EntityEditor extends DialogEditor {
     }
 
     @Override
-    public void adjustTitle() {
-        MCDEntity mcdEntity = (MCDEntity) super.getNode().getUserObject();
-        String title = MessagesBuilder.getMessagesProperty("editor.entity.update", new String[]{
-                mcdEntity.getName()});
-        super.setTitle(title);
+    protected String getPropertyTitleNew() {
+        return "editor.entity.new";
+    }
+
+    @Override
+    protected String getPropertyTitleUpdate() {
+        return "editor.entity.update";
     }
 }

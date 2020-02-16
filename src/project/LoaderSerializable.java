@@ -2,7 +2,6 @@ package project;
 
 import exceptions.CodeApplException;
 import main.MVCCDElement;
-import main.MVCCDElementSerializable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import project.Project;
@@ -27,9 +26,9 @@ public class LoaderSerializable {
                 boolean eof = false;
                 while (!eof) {
                     try {
-                        MVCCDElementSerializable mvccdElementSerializable = (MVCCDElementSerializable) reader.readObject();
-                        if (mvccdElementSerializable instanceof Project) {
-                            project = (Project) mvccdElementSerializable;
+                        MVCCDElement mvccdElement = (MVCCDElement) reader.readObject();
+                        if (mvccdElement instanceof Project) {
+                            project = (Project) mvccdElement;
                         }
                     } catch (EOFException e) {
                         eof = true;

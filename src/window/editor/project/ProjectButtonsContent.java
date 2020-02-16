@@ -1,36 +1,34 @@
 package window.editor.project;
 
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
+import main.MVCCDFactory;
 import main.MVCCDManager;
-import mcd.MCDEntity;
 import preferences.Preferences;
 import project.Project;
 import utilities.window.editor.PanelButtonsContent;
-import utilities.window.DialogMessage;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ProjectButtonsContent extends PanelButtonsContent implements ActionListener {
 
 
     public ProjectButtonsContent(ProjectButtons projectButtons) {
+
         super(projectButtons);
     }
 
-    @Override
-    protected void updateMCDElement() {
 
+    @Override
+    protected MVCCDElement createNewMVCCDElement() {
+        JTextField projectName = getEditorContent().getProjectName();
+        Project project = MVCCDFactory.instance().createProject(projectName.getText());
+        return project;
     }
 
     @Override
-    protected MVCCDElement createMVCCDElement() {
-        JTextField projectName = getEditorContent().getProjectName();
-        Project project = MVCCDManager.instance().createProject(projectName.getText());
-        getEditorContent().saveDatas(project);
-        return project;
+    protected void completeNewMVCCDElement(MVCCDElement mvccdElement) {
+        MVCCDManager.instance().completeNewProject((Project) mvccdElement);
     }
 
 

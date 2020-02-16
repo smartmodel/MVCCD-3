@@ -1,6 +1,7 @@
 package main.window.repository;
 
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import utilities.window.PanelContent;
 
 import javax.swing.tree.TreeSelectionModel;
@@ -16,15 +17,21 @@ public class WinRepositoryContent extends PanelContent implements ActionListener
         super(winRepository);
 
         tree = new WinRepositoryTree(null);
-        if ( Preferences.DEBUG_BACKGROUND_PANEL){
-            tree.setBackground(Color.RED);
-        }
+        colorBackground();
         tree.setEditable(false);
         tree.getSelectionModel().setSelectionMode
                 (TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setShowsRootHandles(true);
 
         super.addContent(tree);
+    }
+
+    private void colorBackground() {
+        if (PreferencesManager.instance().preferences().getDEBUG()) {
+            if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
+                tree.setBackground(Color.RED);
+            }
+        }
     }
 
     @Override

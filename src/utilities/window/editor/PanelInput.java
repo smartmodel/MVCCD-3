@@ -7,6 +7,8 @@ public abstract class PanelInput extends PanelBorderLayout implements IAccessDia
     private DialogEditor dialogEditor;
     private PanelInputContent inputContent;
 
+    private boolean readOnly = false;
+
     public PanelInput(DialogEditor dialogEditor) {
         this.dialogEditor = dialogEditor;
     }
@@ -29,5 +31,16 @@ public abstract class PanelInput extends PanelBorderLayout implements IAccessDia
 
     public PanelButtonsContent getButtonsContent(){
         return getButtons().getButtonsContent();
+    }
+
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+        if (readOnly){
+            inputContent.setReadOnly(readOnly);
+        }
     }
 }

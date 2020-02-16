@@ -1,6 +1,7 @@
 package utilities.window;
 
-import window.preferences.PrefInput;
+import preferences.PreferencesManager;
+import window.editor.preferences.MCD.PrefMCDInput;
 import preferences.Preferences;
 
 import javax.swing.*;
@@ -12,7 +13,7 @@ import java.awt.event.MouseListener;
 public abstract class PanelBorderLayout extends JPanel implements MouseListener, MouseInputListener{
 
     private boolean resizable = true;
-    private PrefInput prefInput;
+    private PrefMCDInput prefMCDInput;
     private String borderLayoutPosition;
     private PanelBorderLayoutResizer panelBLResizer;
     private PanelContent panelContent;
@@ -30,15 +31,17 @@ public abstract class PanelBorderLayout extends JPanel implements MouseListener,
     }
 
     protected  void colorBackground() {
-        if (Preferences.DEBUG_BACKGROUND_PANEL){
-            Color color ;
-            if (this.borderLayoutPosition.equals(BorderLayout.NORTH)) color = Color.RED;
-            else if (this.borderLayoutPosition.equals(BorderLayout.EAST)) color = Color.YELLOW;
-            else if (this.borderLayoutPosition.equals(BorderLayout.CENTER)) color = Color.GREEN;
-            else if (this.borderLayoutPosition.equals(BorderLayout.WEST)) color = Color.BLUE;
-            else if (this.borderLayoutPosition.equals(BorderLayout.SOUTH)) color = Color.MAGENTA;
-            else color = Color.BLACK;
-            this.setBackground(color);
+        if (PreferencesManager.instance().preferences().getDEBUG()) {
+            if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
+                Color color;
+                if (this.borderLayoutPosition.equals(BorderLayout.NORTH)) color = Color.RED;
+                else if (this.borderLayoutPosition.equals(BorderLayout.EAST)) color = Color.YELLOW;
+                else if (this.borderLayoutPosition.equals(BorderLayout.CENTER)) color = Color.GREEN;
+                else if (this.borderLayoutPosition.equals(BorderLayout.WEST)) color = Color.BLUE;
+                else if (this.borderLayoutPosition.equals(BorderLayout.SOUTH)) color = Color.MAGENTA;
+                else color = Color.BLACK;
+                this.setBackground(color);
+            }
         }
     }
 
