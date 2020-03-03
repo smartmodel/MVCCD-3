@@ -5,10 +5,10 @@ import main.MVCCDManager;
 import mcd.services.MCDProjectService;
 import profile.ProfileManager;
 import project.Project;
-import utilities.window.STextField;
+import utilities.window.scomponents.STextField;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import utilities.window.SComboBox;
+import utilities.window.scomponents.SComboBox;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -103,10 +103,7 @@ public class ProjectInputContent extends PanelInputContent  {
         }
     }
 
-    @Override
-    protected void changeField(ChangeEvent e) {
 
-    }
 
     @Override
     protected void changeField(ItemEvent e) {
@@ -148,9 +145,7 @@ public class ProjectInputContent extends PanelInputContent  {
     public void loadDatas(MVCCDElement mvccdElement) {
         Project project = (Project) mvccdElement;
         projectName.setText(project.getName());
-        System.out.println("load  " + project.getProfileFileName());
         if (project.getProfileFileName() != null) {
-            System.out.println("setSelectedItem(project.getProfileFileName()  " + project.getProfileFileName());
             profileFileName.setSelectedItem(project.getProfileFileName());
         } else {
             profileFileName.setSelectedItem(SComboBox.LIGNEVIDE);

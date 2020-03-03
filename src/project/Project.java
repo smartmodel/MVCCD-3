@@ -9,11 +9,24 @@ import profile.Profile;
 import profile.ProfileManager;
 import utilities.files.UtilXML;
 
-public class Project extends MVCCDElement {
+public class Project extends ProjectElement {
 
     private static final long serialVersionUID = 1000;
 
     private String profileFileName ;
+    private Profile profile;
+    private int idElementSequence = 0;
+
+    public Project(String name) {
+
+        super(null, name);
+    }
+
+
+
+    public String getProfileFileName() {
+        return profileFileName;
+    }
 
     public Profile getProfile() {
         return profile;
@@ -23,21 +36,6 @@ public class Project extends MVCCDElement {
         this.profile = profile;
     }
 
-    private Profile profile;
-
-    public Project(String name) {
-
-        super(null, name);
-    }
-
-
-    public Project(MVCCDElement parent) {
-        super(parent);
-    }
-
-    public String getProfileFileName() {
-        return profileFileName;
-    }
 
     public void setProfileFileName(String profileFileName) {
         this.profileFileName = profileFileName;
@@ -46,10 +44,8 @@ public class Project extends MVCCDElement {
      public  Profile adjustProfile(){
          if (this.getProfileFileName() != null) {
              profile = MVCCDFactory.instance().createProfile(this.getProfileFileName());
-             System.out.println("project.setProfile(profile);");
              Preferences profilePref = ProfileManager.instance().loadFileProfile(
                       Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR +this.getProfileFileName());
-             System.out.println("Préf Profile"  +  profilePref);
              if (profilePref != null){
                  profilePref.setParent(profile);
                  profilePref.setName(Preferences.REPOSITORY_PREFERENCES_PROFILE_NAME);
@@ -74,17 +70,9 @@ public class Project extends MVCCDElement {
         return null;
      }
 
-    @Override
-    public String baliseXMLBegin() {
-        String richBalise = Preferences.XML_BALISE_PROJECT + " " +
-                UtilXML.attributName(getName());
-        return UtilXML.baliseBegin(richBalise);
 
+    public int getNextIdElementSequence(){
+        idElementSequence++ ;
+        return idElementSequence;
     }
-
-    @Override
-    public String baliseXMLEnd() {
-        return UtilXML.baliseEnd(Preferences.XML_BALISE_PROJECT);
-    }
-
 }

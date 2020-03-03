@@ -1,0 +1,371 @@
+package window.editor.mcddatatype;
+
+import datatypes.MCDDatatype;
+import datatypes.MDDatatypeService;
+import main.MVCCDElement;
+import preferences.Preferences;
+import utilities.UtilDivers;
+import utilities.window.editor.PanelInputContent;
+import utilities.window.scomponents.SCheckBox;
+import utilities.window.scomponents.STextField;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
+
+public class MCDDatatypeInputContent extends PanelInputContent {
+
+    private JPanel panel = new JPanel();
+    private STextField mcdDatatypeName = new STextField();
+    private SCheckBox abstrait = new SCheckBox();
+    private STextField lienProg = new STextField();
+
+    private JPanel panelSize = new JPanel ();
+    private STextField sizeMandatory = new STextField();
+    private STextField sizeMandatoryInheritFrom = new STextField();
+    private STextField sizeDefault = new STextField();
+    private STextField sizeDefaultInheritFrom = new STextField();
+    private STextField sizeMin = new STextField();
+    private STextField sizeMinInheritFrom = new STextField();
+    private STextField sizeMax = new STextField();
+    private STextField sizeMaxInheritFrom = new STextField();
+
+
+    private JPanel panelScale = new JPanel ();
+    private STextField scaleMandatory = new STextField();
+    private STextField scaleMandatoryInheritFrom = new STextField();
+    private STextField scaleDefault = new STextField();
+    private STextField scaleDefaultInheritFrom = new STextField();
+    private STextField scaleMin = new STextField();
+    private STextField scaleMinInheritFrom = new STextField();
+    private STextField scaleMax = new STextField();
+    private STextField scaleMaxInheritFrom = new STextField();
+
+
+    private int showNull = UtilDivers.NULL;
+
+
+    public MCDDatatypeInputContent(MCDDatatypeInput entityInput)     {
+        super(entityInput);
+        entityInput.setPanelContent(this);
+        createContent();
+        super.addContent(panel);
+        super.initOrLoadDatas();
+        enabledContent();
+     }
+
+
+
+
+    private void createContent() {
+
+        mcdDatatypeName.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        mcdDatatypeName.setToolTipText("Nom de type");
+
+        abstrait.setToolTipText("Type de donnée abstrait ou concret");
+
+        lienProg.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        lienProg.setToolTipText("Lien de programmation");
+
+        createSize();
+        createScale();
+
+        super.getsComponents().add(mcdDatatypeName);
+        super.getsComponents().add(abstrait);
+        super.getsComponents().add(lienProg);
+        super.getsComponents().add(sizeMandatory);
+        super.getsComponents().add(sizeMandatoryInheritFrom);
+        super.getsComponents().add(sizeDefault);
+        super.getsComponents().add(sizeDefaultInheritFrom);
+        super.getsComponents().add(sizeMin);
+        super.getsComponents().add(sizeMinInheritFrom);
+        super.getsComponents().add(sizeMax);
+        super.getsComponents().add(sizeMaxInheritFrom);
+        super.getsComponents().add(scaleMandatory);
+        super.getsComponents().add(scaleMandatoryInheritFrom);
+        super.getsComponents().add(scaleDefault);
+        super.getsComponents().add(scaleDefaultInheritFrom);
+        super.getsComponents().add(scaleMin);
+        super.getsComponents().add(scaleMinInheritFrom);
+        super.getsComponents().add(scaleMax);
+        super.getsComponents().add(scaleMaxInheritFrom);
+
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(10, 10, 0, 0);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        panel.add(new JLabel("Nom : "), gbc);
+        gbc.gridx = 1;
+        panel.add(mcdDatatypeName, gbc);
+
+        gbc.gridx++;
+        panel.add(new JLabel("Abstrait : "), gbc);
+        gbc.gridx++;
+        panel.add(abstrait, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("Lien prog. :"),gbc);
+        gbc.gridx = 1;
+        panel.add(lienProg, gbc);
+
+        Border border = BorderFactory.createLineBorder(Color.black);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 4;
+
+        createPanelSize(border);
+        panel.add(panelSize, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        createPanelScale(border);
+
+        panel.add(panelScale, gbc);
+        this.add(panel);
+
+    }
+
+    private void createPanelScale(Border border) {
+
+        TitledBorder panelScaleBorder = BorderFactory.createTitledBorder(border, "Scale");
+        panelScale.setBorder(panelScaleBorder);
+
+        panelScale.setLayout(new GridBagLayout());
+        GridBagConstraints gbcScale = new GridBagConstraints();
+        gbcScale.anchor= GridBagConstraints.NORTHWEST;
+        gbcScale.insets = new Insets(10,10,0,0);
+
+
+        gbcScale.gridx = 0;
+        gbcScale.gridy = 0;
+        gbcScale.gridwidth = 1;
+        gbcScale.gridheight = 1;
+        panelScale.add(new JLabel("Obligatoire : "), gbcScale);
+        gbcScale.gridx = 1;
+        panelScale.add(scaleMandatory, gbcScale);
+
+        gbcScale.gridx++;
+        panelScale.add(new JLabel("Hérité : "), gbcScale);
+        gbcScale.gridx++;
+        panelScale.add(scaleMandatoryInheritFrom, gbcScale);
+
+        gbcScale.gridx = 0;
+        gbcScale.gridy++;
+        panelScale.add(new JLabel("Défaut :"),gbcScale);
+        gbcScale.gridx = 1;
+        panelScale.add(scaleDefault, gbcScale);
+
+        gbcScale.gridx++;
+        panelScale.add(new JLabel("Hérité : "), gbcScale);
+        gbcScale.gridx++;
+        panelScale.add(scaleDefaultInheritFrom, gbcScale);
+
+        gbcScale.gridx = 0;
+        gbcScale.gridy++;
+        panelScale.add(new JLabel("Minimum :"),gbcScale);
+        gbcScale.gridx = 1;
+        panelScale.add(scaleMin, gbcScale);
+
+        gbcScale.gridx++;
+        panelScale.add(new JLabel("Hérité : "), gbcScale);
+        gbcScale.gridx++;
+        panelScale.add(scaleMinInheritFrom, gbcScale);
+
+        gbcScale.gridx = 0;
+        gbcScale.gridy++;
+        panelScale.add(new JLabel("Maximum :"),gbcScale);
+        gbcScale.gridx = 1;
+        panelScale.add(scaleMax, gbcScale);
+
+        gbcScale.gridx++;
+        panelScale.add(new JLabel("Hérité : "), gbcScale);
+        gbcScale.gridx++;
+        panelScale.add(scaleMaxInheritFrom, gbcScale);
+
+
+    }
+
+    private void createPanelSize(Border border) {
+        TitledBorder panelSizeBorder = BorderFactory.createTitledBorder(border, "Size");
+        panelSize.setBorder(panelSizeBorder);
+
+        panelSize.setLayout(new GridBagLayout());
+        GridBagConstraints gbcSize = new GridBagConstraints();
+        gbcSize.anchor= GridBagConstraints.NORTHWEST;
+        gbcSize.insets = new Insets(10,10,0,0);
+
+        gbcSize.gridx = 0;
+        gbcSize.gridy = 0;
+        gbcSize.gridwidth = 1;
+        gbcSize.gridheight = 1;
+        panelSize.add(new JLabel("Obligatoire : "), gbcSize);
+        gbcSize.gridx = 1;
+        panelSize.add(sizeMandatory, gbcSize);
+
+        gbcSize.gridx++;
+        panelSize.add(new JLabel("Hérité : "), gbcSize);
+        gbcSize.gridx++;
+        panelSize.add(sizeMandatoryInheritFrom, gbcSize);
+
+        gbcSize.gridx = 0;
+        gbcSize.gridy++;
+        panelSize.add(new JLabel("Défaut :"),gbcSize);
+        gbcSize.gridx = 1;
+        panelSize.add(sizeDefault, gbcSize);
+
+        gbcSize.gridx++;
+        panelSize.add(new JLabel("Hérité : "), gbcSize);
+        gbcSize.gridx++;
+        panelSize.add(sizeDefaultInheritFrom, gbcSize);
+
+        gbcSize.gridx = 0;
+        gbcSize.gridy++;
+        panelSize.add(new JLabel("Minimum :"),gbcSize);
+        gbcSize.gridx = 1;
+        panelSize.add(sizeMin, gbcSize);
+
+        gbcSize.gridx++;
+        panelSize.add(new JLabel("Hérité : "), gbcSize);
+        gbcSize.gridx++;
+        panelSize.add(sizeMinInheritFrom, gbcSize);
+
+        gbcSize.gridx = 0;
+        gbcSize.gridy++;
+        panelSize.add(new JLabel("Maximum :"),gbcSize);
+        gbcSize.gridx = 1;
+        panelSize.add(sizeMax, gbcSize);
+
+        gbcSize.gridx++;
+        panelSize.add(new JLabel("Hérité : "), gbcSize);
+        gbcSize.gridx++;
+        panelSize.add(sizeMaxInheritFrom, gbcSize);
+
+    }
+
+    private void createScale() {
+
+        scaleMandatory.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        scaleMandatory.setToolTipText("Scale obligatoire");
+        scaleMandatoryInheritFrom.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        scaleMandatoryInheritFrom.setToolTipText("Hérité de");
+
+        scaleDefault.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        scaleDefault.setToolTipText("Valeur par défaut");
+        scaleDefaultInheritFrom.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        scaleDefaultInheritFrom.setToolTipText("Hérité de");
+
+        scaleMin.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        scaleMin.setToolTipText("Scale minimale");
+        scaleMinInheritFrom.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        scaleMinInheritFrom.setToolTipText("Hérité de");
+
+        scaleMax.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        scaleMax.setToolTipText("Scale maximale");
+        scaleMaxInheritFrom.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        scaleMaxInheritFrom.setToolTipText("Hérité de");
+    }
+
+    private void createSize() {
+
+        sizeMandatory.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        sizeMandatory.setToolTipText("Size obligatoire");
+        sizeMandatoryInheritFrom.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        sizeMandatoryInheritFrom.setToolTipText("Hérité de");
+
+        sizeDefault.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        sizeDefault.setToolTipText("Valeur par défaut");
+        sizeDefaultInheritFrom.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        sizeDefaultInheritFrom.setToolTipText("Hérité de");
+
+        sizeMin.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        sizeMin.setToolTipText("Size minimale");
+        sizeMinInheritFrom.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        sizeMinInheritFrom.setToolTipText("Hérité de");
+
+        sizeMax.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        sizeMax.setToolTipText("Size maximale");
+        sizeMaxInheritFrom.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
+        sizeMaxInheritFrom.setToolTipText("Hérité de");
+    }
+
+
+    protected void changeField(DocumentEvent e) {
+     }
+
+    @Override
+    protected void changeField(ItemEvent e) {
+
+    }
+
+    @Override
+    public void focusGained(FocusEvent focusEvent) {
+    }
+
+    @Override
+    public void focusLost(FocusEvent focusEvent) {
+    }
+
+
+
+    protected boolean checkDatas(){
+            return true;
+    }
+
+
+
+    @Override
+    public void loadDatas(MVCCDElement mvccdElement) {
+        MCDDatatype mcdDatatype = (MCDDatatype) mvccdElement;
+        mcdDatatypeName.setText(mcdDatatype.getName()) ;
+        abstrait.setSelected(mcdDatatype.isAbstrait());
+        lienProg.setText(mcdDatatype.getLienProg());
+
+        sizeMandatory.setText(MDDatatypeService.getSizeMandatoryWithInheritInString(mcdDatatype, showNull));
+        sizeMandatoryInheritFrom.setText(MDDatatypeService.getSizeMandatoryFrom(mcdDatatype, showNull));
+        sizeDefault.setText(MDDatatypeService.getSizeDefaultWithInheritInString(mcdDatatype, showNull));
+        sizeDefaultInheritFrom.setText(MDDatatypeService.getSizeDefaultFrom(mcdDatatype, showNull));
+        sizeMin.setText(MDDatatypeService.getSizeMinWithInheritInString(mcdDatatype, showNull));
+        sizeMinInheritFrom.setText(MDDatatypeService.getSizeMinFrom(mcdDatatype, showNull));
+        sizeMax.setText(MDDatatypeService.getSizeMaxWithInheritInString(mcdDatatype, showNull));
+        sizeMaxInheritFrom.setText(MDDatatypeService.getSizeMaxFrom(mcdDatatype, showNull));
+
+        scaleMandatory.setText(MDDatatypeService.getScaleMandatoryWithInheritInString(mcdDatatype, showNull));
+        scaleMandatoryInheritFrom.setText(MDDatatypeService.getScaleMandatoryFrom(mcdDatatype, showNull));
+        scaleDefault.setText(MDDatatypeService.getScaleDefaultWithInheritInString(mcdDatatype, showNull));
+        scaleDefaultInheritFrom.setText(MDDatatypeService.getScaleDefaultFrom(mcdDatatype, showNull));
+        scaleMin.setText(MDDatatypeService.getScaleMinWithInheritInString(mcdDatatype, showNull));
+        scaleMinInheritFrom.setText(MDDatatypeService.getScaleMinFrom(mcdDatatype, showNull));
+        scaleMax.setText(MDDatatypeService.getScaleMaxWithInheritInString(mcdDatatype, showNull));
+        scaleMaxInheritFrom.setText(MDDatatypeService.getScaleMaxFrom(mcdDatatype, showNull));
+
+    }
+
+    @Override
+    protected void initDatas(MVCCDElement mvccdElement) {
+    }
+
+    @Override
+    public void saveDatas(MVCCDElement mvccdElement) {
+    }
+
+
+
+    @Override
+    public boolean checkDatasPreSave() {
+        return true;
+    }
+
+    private void enabledContent() {
+    }
+}

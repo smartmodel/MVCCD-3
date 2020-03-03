@@ -1,12 +1,14 @@
-package utilities.window;
+package utilities.window.scomponents;
 
 import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.window.scomponents.SComponent;
 
 import javax.swing.*;
 
-public class STextField extends JTextField implements SComponent{
+public class STextField extends JTextField implements SComponent {
 
     private String oldText ;
     private boolean firstAffectation = true;
@@ -86,6 +88,13 @@ public class STextField extends JTextField implements SComponent{
             super.setEnabled(enabled);
         } else{
             super.setEnabled(false);
+        }
+    }
+
+    public void setIndirectInput(boolean indirect){
+        if (indirect) {
+            setEnabled(false);
+            setForeground(Preferences.SCOMPONENT_INDIRECT_INPUT_FOREGROUND);
         }
     }
 

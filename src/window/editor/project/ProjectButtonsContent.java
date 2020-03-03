@@ -28,7 +28,11 @@ public class ProjectButtonsContent extends PanelButtonsContent implements Action
 
     @Override
     protected void completeNewMVCCDElement(MVCCDElement mvccdElement) {
-        MVCCDManager.instance().completeNewProject((Project) mvccdElement);
+        Project project = (Project) mvccdElement;
+        MVCCDManager.instance().setProject(project);
+        MVCCDFactory.instance().completeProject(project);
+        MVCCDManager.instance().completeNewProject();
+
     }
 
 

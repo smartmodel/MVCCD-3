@@ -8,13 +8,5 @@ public class MVCCDElementProfileEntry extends MVCCDElement {
         super(parent, MessagesBuilder.getMessagesProperty("profile.entry.name"));
     }
 
-    @Override
-    public String baliseXMLBegin() {
-        return null;
-    }
 
-    @Override
-    public String baliseXMLEnd() {
-        return null;
-    }
 }

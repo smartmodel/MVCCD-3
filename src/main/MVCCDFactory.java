@@ -1,5 +1,7 @@
 package main;
 
+import datatypes.MDDatatype;
+import datatypes.MDDatatypesManager;
 import mcd.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -23,6 +25,11 @@ public class MVCCDFactory {
 
     public Project createProject(String name){
         Project project = MVCCDElementFactory.instance().createProject(name);
+        return project;
+    }
+
+
+    public void completeProject(Project project) {
         Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME);
         MCDModels mcdModels = MVCCDElementFactory.instance().createMCDModels(project, Preferences.REPOSITORY_MCD_MODELS_NAME);
         if (!Preferences.REPOSITORY_MCD_MODELS_MANY) {
@@ -34,7 +41,6 @@ public class MVCCDFactory {
             MCDEntities mcdEntities = MVCCDElementFactory.instance().createMCDEntities(mcdModels,Preferences.REPOSITORY_MCD_ENTITIES_NAME);
 
         }
-        return project;
     }
 
 
@@ -51,9 +57,9 @@ public class MVCCDFactory {
         MVCCDElementRepositoryRoot repositoryRoot = new MVCCDElementRepositoryRoot();
         MVCCDElementRepositoryGlobal repositoryGlobal = new MVCCDElementRepositoryGlobal(repositoryRoot);
         MVCCDElementApplicationPreferences applicationPref = new MVCCDElementApplicationPreferences(repositoryGlobal);
+        MVCCDElementApplicationMDDatatypes applicationMDDatatype = new MVCCDElementApplicationMDDatatypes(repositoryGlobal);
         profileEntry = new MVCCDElementProfileEntry (repositoryRoot);
         return repositoryRoot;
     }
-
 
 }

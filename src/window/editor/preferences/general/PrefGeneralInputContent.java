@@ -50,10 +50,6 @@ public class PrefGeneralInputContent extends PanelInputContent {
 
     }
 
-    @Override
-    protected void changeField(ChangeEvent e) {
-
-    }
 
     @Override
     protected void changeField(ItemEvent e) {

@@ -1,8 +1,7 @@
-package utilities.window;
+package utilities.window.scomponents;
 
 import main.MVCCDManager;
 import preferences.PreferencesManager;
-import utilities.window.SComponent;
 
 import javax.swing.*;
 
@@ -60,8 +59,7 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         boolean updated;
         updated = (getSelectedIndex() != oldIndex);
 
-        System.out.println (oldIndex  + "  " + getSelectedIndex() + "  " + updated);
-        if (updated) {
+       if (updated) {
             MVCCDManager.instance().datasProjectChangedFromEditor();
         }
         return updated;

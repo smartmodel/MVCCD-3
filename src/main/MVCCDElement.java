@@ -61,11 +61,6 @@ public abstract class MVCCDElement implements Serializable{
         }
     }
 
-    public abstract String baliseXMLBegin();
-
-    public abstract String baliseXMLEnd();
-
-
     public void debugCheckLoad(){
         if (PreferencesManager.instance().preferences().getDEBUG()) {
             if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
@@ -97,6 +92,4 @@ public abstract class MVCCDElement implements Serializable{
             }
        }
     }
-
-
 }

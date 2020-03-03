@@ -23,6 +23,7 @@ public class Preferences extends MVCCDElement {
     public static String REPOSITORY_MCD_PACKAGES_NAME = "Paquetages";
     public static String REPOSITORY_MCD_DIAGRAMS_NAME = "Diagrammes";
     public static String REPOSITORY_MCD_ENTITIES_NAME = "Entités";
+    public static String REPOSITORY_MCD_ATTRIBUTES_NAME = "Attributs";
     public static Boolean REPOSITORY_MCD_MODELS_MANY = false;
     public static Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = false;
     public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
@@ -55,6 +56,7 @@ public class Preferences extends MVCCDElement {
     public static String FILE_HELP_PROJECT_NAME ="helpProject.txt";
     public static String FILE_HELP_PREFERENCES_NAME ="helpPreferences.txt";
     public static String FILE_HELP_ENTITY_NAME = "helpEntity.txt";
+    public static String FILE_HELP_MCDDATATYPE_NAME = "helpMCDDatatpe.txt";
 
     public static String DIRECTORY_PROFILE_NAME = "profiles";
 
@@ -72,12 +74,142 @@ public class Preferences extends MVCCDElement {
     public static Integer HELP_WINDOW_HEIGHT = 300;
     public static Integer PREFERENCES_WINDOW_WIDTH = 600;
     public static Integer PREFERENCES_WINDOW_HEIGHT = 300;
+    public static Integer MCDDATATYPE_WINDOW_WIDTH = 800;
+    public static Integer MCDDATATYPE_WINDOW_HEIGHT = 600;
+
+    public static Integer EDITOR_FIELD_HEIGHT = 20;
+    public static Integer EDITOR_TABLE_ROW_HEIGHT = 20;
+
+    public static Color EDITOR_SCOMPONENT_BACKGROUND_NORMAL = Color.WHITE;
+    public static Color EDITOR_SCOMPONENT_BACKGROUND_ERROR = Color.pink;
+    public static Color EDITOR_SCOMPONENT_LINEBORDER_NORMAL = Color.gray;
+    public static Color EDITOR_SCOMPONENT_LINEBORDER_ERROR = Color.RED;
+
+    public static Color SCOMPONENT_INDIRECT_INPUT_FOREGROUND = Color.RED;
+
+    public static String STEREOTYPE_MCDATTRIBUTE_AID_NAME = "AID";
+    public static String STEREOTYPE_MCDATTRIBUTE_AID_LIENPROG = "AID";
+    public static String STEREOTYPE_MCDATTRIBUTE_M_NAME = "M";
+    public static String STEREOTYPE_MCDATTRIBUTE_M_LIENPROG = "M";
+    public static String STEREOTYPE_MCDATTRIBUTE_L_NAME = "L";
+    public static String STEREOTYPE_MCDATTRIBUTE_L_LIENPROG = "L";
+
+    public static String CONSTRAINT_MCDATTRIBUTE_ORDERED_NAME = "ordered";
+    public static String CONSTRAINT_MCDATTRIBUTE_ORDERED_LIENPROG = "ordered";
+
+    public static String MCDDATATYPE_ROOT_NAME = "MCD";
+    public static String MCDDATATYPE_ROOT_LIENPROG = "MCD";
+
+    public static String MCDDATATYPE_BOOLEAN_NAME = "boolean";
+    public static String MCDDATATYPE_BOOLEAN_LIENPROG = "boolean";
+
+    public static String MCDDATATYPE_TEXT_NAME = "text";
+    public static String MCDDATATYPE_TEXT_LIENPROG = "text";
+    public static Integer MCDDATATYPE_TEXT_SIZEMIN = 1;
+    public static String MCDDATATYPE_STRING_NAME = "string";
+    public static String MCDDATATYPE_STRING_LIENPROG = "string";
+    public static Integer MCDDATATYPE_STRING_SIZEMAX = 1000000000;
+    public static Integer MCDDATATYPE_STRING_SIZEDEFAULT = 2000;
+    public static String MCDDATATYPE_NORMALIZEDSTRING_NAME = "normalizedString";
+    public static String MCDDATATYPE_NORMALIZEDSTRING_LIENPROG = "normalizedString";
+    public static Integer MCDDATATYPE_NORMALIZEDSTRING_SIZEMAX = 100000;
+    public static Integer MCDDATATYPE_NORMALIZEDSTRING_SIZEDEFAULT = 100;
+    public static String MCDDATATYPE_TOKEN_NAME = "token";
+    public static String MCDDATATYPE_TOKEN_LIENPROG = "token";
+    public static Integer MCDDATATYPE_TOKEN_SIZEMAX = 10000;
+    public static Integer MCDDATATYPE_TOKEN_SIZEDEFAULT = 50;
+    public static String MCDDATATYPE_WORD_NAME = "word";
+    public static String MCDDATATYPE_WORD_LIENPROG = "word";
+    public static Integer MCDDATATYPE_WORD_SIZEMAX = 1000;
+    public static Integer MCDDATATYPE_WORD_SIZEDEFAULT = 10;
+    public static String MCDDATATYPE_EMAIL_NAME = "email";
+    public static String MCDDATATYPE_EMAIL_LIENPROG = "email";
+    public static Integer MCDDATATYPE_EMAIL_SIZEMIN = 5;
+    public static Integer MCDDATATYPE_EMAIL_SIZEMAX = 200;
+    public static Integer MCDDATATYPE_EMAIL_SIZEDEFAULT = 100;
+    public static String MCDDATATYPE_HTTPURL_NAME = "httpURL";
+    public static String MCDDATATYPE_HTTPURL_LIENPROG = "httpURL";
+    public static Integer MCDDATATYPE_HTTPURL_SIZEMIN = 5;
+    public static Integer MCDDATATYPE_HTTPURL_SIZEMAX = 2000;
+    public static Integer MCDDATATYPE_HTTPURL_SIZEDEFAULT = 1000;
+    public static String MCDDATATYPE_XML_NAME = "xml";
+    public static String MCDDATATYPE_XML_LIENPROG = "xml";
 
 
-    public Color EDITOR_SCOMPONENT_BACKGROUND_NORMAL = Color.WHITE;
-    public Color EDITOR_SCOMPONENT_BACKGROUND_ERROR = Color.pink;
-    public Color EDITOR_SCOMPONENT_LINEBORDER_NORMAL = Color.gray;
-    public Color EDITOR_SCOMPONENT_LINEBORDER_ERROR = Color.RED;
+    public static String MCDDATATYPE_NUMBER_NAME = "number";
+    public static String MCDDATATYPE_NUMBER_LIENPROG = "number";
+    public static Integer MCDDATATYPE_NUMBER_SIZEMIN = 1;
+
+    public static String MCDDATATYPE_DECIMAL_NAME = "decimal";
+    public static String MCDDATATYPE_DECIMAL_LIENPROG = "decimal";
+    public static Integer MCDDATATYPE_DECIMAL_SIZEMAX = 30;
+    public static Integer MCDDATATYPE_DECIMAL_SIZEDEFAULT = 10;
+    public static Integer MCDDATATYPE_DECIMAL_SCALEMIN = 0;
+    public static Integer MCDDATATYPE_DECIMAL_SCALEMAX = 30;
+    public static Integer MCDDATATYPE_DECIMAL_SCALEDEFAULT = 2;
+    public static String MCDDATATYPE_NONPOSITIVEDECIMAL_NAME = "nonPositiveDecimal";
+    public static String MCDDATATYPE_NONPOSITIVEDECIMAL_LIENPROG = "nonPositiveDecimal";
+    public static String MCDDATATYPE_NEGATIVEDECIMAL_NAME = "negativeDecimal";
+    public static String MCDDATATYPE_NEGATIVEDECIMAL_LIENPROG = "negativeDecimal";
+    public static String MCDDATATYPE_NONNEGATIVEDECIMAL_NAME = "nonNegativeDecimal";
+    public static String MCDDATATYPE_NONNEGATIVEDECIMAL_LIENPROG = "nonNegativeDecimal";
+    public static String MCDDATATYPE_POSITIVEDECIMAL_NAME = "postiveDecimal";
+    public static String MCDDATATYPE_POSITIVEDECIMAL_LIENPROG = "positiveDecimal";
+
+    public static String MCDDATATYPE_INTEGER_NAME = "integer";
+    public static String MCDDATATYPE_INTEGER_LIENPROG = "integer";
+    public static Integer MCDDATATYPE_INTEGER_SIZEMAX = 30;
+    public static Integer MCDDATATYPE_INTEGER_SIZEDEFAULT = 8;
+    public static String MCDDATATYPE_NONPOSITIVEINTEGER_NAME = "nonPositiveInteger";
+    public static String MCDDATATYPE_NONPOSITIVEINTEGER_LIENPROG = "nonPositiveInteger";
+    public static String MCDDATATYPE_NEGATIVEINTEGER_NAME = "negativeInteger";
+    public static String MCDDATATYPE_NEGATIVEINTEGER_LIENPROG = "negativeInteger";
+    public static String MCDDATATYPE_NONNEGATIVEINTEGER_NAME = "nonNegativeInteger";
+    public static String MCDDATATYPE_NONNEGATIVEINTEGER_LIENPROG = "nonNegativeInteger";
+    public static String MCDDATATYPE_POSITIVEINTEGER_NAME = "postiveInteger";
+    public static String MCDDATATYPE_POSITIVEINTEGER_LIENPROG = "positiveInteger";
+    public static String MCDDATATYPE_AID_NAME = "aid";
+    public static String MCDDATATYPE_AID_LIENPROG = "aid";
+
+    public static String MCDDATATYPE_MONEY_NAME = "money";
+    public static String MCDDATATYPE_MONEY_LIENPROG = "money";
+    public static Integer MCDDATATYPE_MONEY_SIZEMAX = 30;
+    public static Integer MCDDATATYPE_MONEY_SIZEDEFAULT = 12;
+    public static Integer MCDDATATYPE_MONEY_SCALEMIN = 0;
+    public static Integer MCDDATATYPE_MONEY_SCALEMAX = 30;
+    public static Integer MCDDATATYPE_MONEY_SCALEDEFAULT = 2;
+    public static String MCDDATATYPE_NONPOSITIVEMONEY_NAME = "nonPositiveMoney";
+    public static String MCDDATATYPE_NONPOSITIVEMONEY_LIENPROG = "nonPositiveMoney";
+    public static String MCDDATATYPE_NEGATIVEMONEY_NAME = "negativeMoney";
+    public static String MCDDATATYPE_NEGATIVEMONEY_LIENPROG = "negativeMoney";
+    public static String MCDDATATYPE_NONNEGATIVEMONEY_NAME = "nonNegativeMoney";
+    public static String MCDDATATYPE_NONNEGATIVEMONEY_LIENPROG = "nonNegativeMoney";
+    public static String MCDDATATYPE_POSITIVEMONEY_NAME = "postiveMoney";
+    public static String MCDDATATYPE_POSITIVEMONEY_LIENPROG = "positiveMoney";
+
+    public static String MCDDATATYPE_TEMPORAL_NAME = "temporal";
+    public static String MCDDATATYPE_TEMPORAL_LIENPROG = "temporal";
+
+    public static String MCDDATATYPE_DURATION_NAME = "duration";
+    public static String MCDDATATYPE_DURATION_LIENPROG = "duration";
+    public static String MCDDATATYPE_DATETIME_NAME = "dateTime";
+    public static String MCDDATATYPE_DATETIME_LIENPROG = "dateTime";
+    public static String MCDDATATYPE_DATE_NAME = "date";
+    public static String MCDDATATYPE_DATE_LIENPROG = "date";
+    public static String MCDDATATYPE_TIME_NAME = "time";
+    public static String MCDDATATYPE_TIME_LIENPROG = "time";
+    public static String MCDDATATYPE_GYEARMONTH_NAME = "gYearMonth";
+    public static String MCDDATATYPE_GYEARMONTH_LIENPROG = "gYearMonth";
+    public static String MCDDATATYPE_GYEAR_NAME = "gYear";
+    public static String MCDDATATYPE_GYEAR_LIENPROG = "gYear";
+    public static String MCDDATATYPE_GMONTHDAY_NAME = "gMonthDay";
+    public static String MCDDATATYPE_GMONTHDAY_LIENPROG = "gMonthDay";
+    public static String MCDDATATYPE_GDAY_NAME = "gDay";
+    public static String MCDDATATYPE_GDAY_LIENPROG = "gDay";
+    public static String MCDDATATYPE_GMONTH_NAME = "gMonth";
+    public static String MCDDATATYPE_GMONTH_LIENPROG = "gMonth";
+
+
 
     // Modification Application
     private Boolean DEBUG = false;
@@ -96,26 +228,6 @@ public class Preferences extends MVCCDElement {
         super(parent, name);
 
     }
-
-    @Override
-    public String baliseXMLBegin() {
-        return null;
-    }
-
-    @Override
-    public String baliseXMLEnd() {
-        return null;
-    }
-
-    /*
-    public PreferencesDisplay getGENERAL_PREFERENCES_DISPLAY() {
-        return GENERAL_PREFERENCES_DISPLAY;
-    }
-
-    public void setGENERAL_PREFERENCES_DISPLAY(PreferencesDisplay GENERAL_PREFERENCES_DISPLAY) {
-        this.GENERAL_PREFERENCES_DISPLAY = GENERAL_PREFERENCES_DISPLAY;
-    }
-    */
 
 
     public Boolean getDEBUG() {

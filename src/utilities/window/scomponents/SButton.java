@@ -1,8 +1,8 @@
-package utilities.window;
+package utilities.window.scomponents;
 
 import javax.swing.*;
 
-public class SButton extends JButton implements SComponent{
+public class SButton extends JButton implements SComponent {
 
     public SButton(String text){
         super(text);

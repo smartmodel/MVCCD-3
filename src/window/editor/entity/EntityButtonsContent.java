@@ -3,13 +3,11 @@ package window.editor.entity;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
+import mcd.MCDContAttributes;
 import mcd.MCDEntity;
 import preferences.Preferences;
-import project.Project;
+import project.ProjectElement;
 import utilities.window.editor.PanelButtonsContent;
-
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 public class EntityButtonsContent extends PanelButtonsContent  {
 
@@ -29,14 +27,18 @@ public class EntityButtonsContent extends PanelButtonsContent  {
     @Override
     protected MVCCDElement createNewMVCCDElement() {
         //JTextField entityName = getEditorContent().getEntityName();
-        MCDEntity mcdEntity = MVCCDElementFactory.instance().createMCDEntity(getEditor().getMvccdElement());
+        ProjectElement projectElement = (ProjectElement) getEditor().getMvccdElement();
+        MCDEntity mcdEntity = MVCCDElementFactory.instance().createMCDEntity(projectElement);
         saveDatas(mcdEntity);
         return mcdEntity;
     }
 
     @Override
     protected void completeNewMVCCDElement(MVCCDElement mvccdElement) {
-        MVCCDManager.instance().showNewMVCCDElementInRepository(mvccdElement, getEditor());
+        MCDEntity mcdEntity = (MCDEntity) mvccdElement;
+        MCDContAttributes mcdContAttributes = MVCCDElementFactory.instance().createMCDAttributes(mcdEntity,
+                Preferences.REPOSITORY_MCD_ATTRIBUTES_NAME);
+        MVCCDManager.instance().showNewMVCCDElementInRepository(mcdEntity, getEditor());
      }
 
 /*

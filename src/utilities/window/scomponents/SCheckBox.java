@@ -1,11 +1,11 @@
-package utilities.window;
+package utilities.window.scomponents;
 
 import main.MVCCDManager;
 import preferences.PreferencesManager;
 
 import javax.swing.*;
 
-public class SCheckBox extends JCheckBox implements SComponent{
+public class SCheckBox extends JCheckBox implements SComponent {
 
     private Boolean oldSelected ;
     private boolean firstAffectation = true;
@@ -36,9 +36,7 @@ public class SCheckBox extends JCheckBox implements SComponent{
     public void setSelected(boolean selected) {
         super.setSelected(selected);
         if (firstAffectation) {
-            System.out.println("1 firstAffectation" + oldSelected);
             oldSelected = selected;
-            System.out.println("2 firstAffectation" + oldSelected);
         }
         firstAffectation = false;
     }

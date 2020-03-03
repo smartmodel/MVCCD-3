@@ -19,4 +19,25 @@ public class MVCCDElementService {
         return resultat;
     }
 
+    public static <T> ArrayList<String> convertArrayMVCCDElementsToNames (ArrayList<T> mvccdElements){
+        ArrayList<String> resultat = new  ArrayList<String>();
+        for (T mvccdElement : mvccdElements){
+            resultat.add(((MVCCDElement) mvccdElement).getName());
+        }
+        return resultat;
+    }
+
+    public static MVCCDElement getUniqueInstanceByClassName(MVCCDElement mvccdElementParent, String className) {
+        MVCCDElement resultat = null;
+        for (MVCCDElement mvccdElement : mvccdElementParent.getChilds()) {
+            if (mvccdElement.getClass().getName().equals(className)) {
+                resultat = mvccdElement;
+            } else {
+                if (resultat == null) {
+                    resultat = getUniqueInstanceByClassName(mvccdElement, className);
+                }
+            }
+        }
+        return resultat;
+    }
 }

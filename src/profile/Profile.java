@@ -13,13 +13,4 @@ public class Profile extends MVCCDElement {
         super(parent, name);
     }
 
-    @Override
-    public String baliseXMLBegin() {
-        return null;
-    }
-
-    @Override
-    public String baliseXMLEnd() {
-        return null;
-    }
 }

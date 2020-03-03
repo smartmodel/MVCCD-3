@@ -6,7 +6,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import preferences.PreferencesSaver;
 import utilities.window.DialogMessage;
-import utilities.window.SCheckBox;
+import utilities.window.scomponents.SCheckBox;
 import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
@@ -37,11 +37,11 @@ public class PrefApplicationInputContent extends PanelInputContent  {
 
         debug.setSubPanel(debugSubPanel);
         debug.setRootSubPanel(true);
-        debug.addChangeListener(this);
+        debug.addItemListener(this);
         debug.addFocusListener(this);
-        debugPrintMVCCDElement.addChangeListener(this);
+        debugPrintMVCCDElement.addItemListener(this);
         debugPrintMVCCDElement.addFocusListener(this);
-        debugBackgroundPanel.addChangeListener(this);
+        debugBackgroundPanel.addItemListener(this);
         debugBackgroundPanel.addFocusListener(this);
 
         //debugBackgroundPanel.addChangeListener(this);
@@ -98,10 +98,6 @@ public class PrefApplicationInputContent extends PanelInputContent  {
 
     }
 
-    @Override
-    protected void changeField(ChangeEvent e) {
-
-    }
 
     @Override
     protected void changeField(ItemEvent e) {

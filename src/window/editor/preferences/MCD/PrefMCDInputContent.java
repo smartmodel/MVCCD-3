@@ -5,7 +5,7 @@ import main.MVCCDManager;
 import preferences.Preferences;
 import project.Project;
 import project.ProjectAdjustPref;
-import utilities.window.SCheckBox;
+import utilities.window.scomponents.SCheckBox;
 import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
@@ -33,19 +33,19 @@ public class PrefMCDInputContent extends PanelInputContent {
 
         mcdJournalization.setToolTipText("Journalisation des manipulations de l'entité");
         //entityName.getDocument().addDocumentListener(this);
-        mcdJournalization.addChangeListener(this);
+        mcdJournalization.addItemListener(this);
         mcdJournalization.addFocusListener(this);
 
         mcdJournalizationException.setToolTipText("Exception de journalisation autorisée");
-        mcdJournalizationException.addChangeListener(this);
+        mcdJournalizationException.addItemListener(this);
         mcdJournalizationException.addFocusListener(this);
 
         mcdAudit.setToolTipText("Audit des ajouts et modifications de l'entité");
-        mcdAudit.addChangeListener(this);
+        mcdAudit.addItemListener(this);
         mcdAudit.addFocusListener(this);
 
         mcdAuditException.setToolTipText("Exception de l'audit autorisée");
-        mcdAuditException.addChangeListener(this);
+        mcdAuditException.addItemListener(this);
         mcdAuditException.addFocusListener(this);
 
         super.getsComponents().add(mcdJournalization);
@@ -89,10 +89,6 @@ public class PrefMCDInputContent extends PanelInputContent {
 
     }
 
-    @Override
-    protected void changeField(ChangeEvent e) {
-
-    }
 
     @Override
     protected void changeField(ItemEvent e) {

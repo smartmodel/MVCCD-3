@@ -1,11 +1,13 @@
 package mcd;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
-import preferences.Preferences;
-import utilities.files.UtilXML;
+import project.ProjectElement;
+
+import java.util.ArrayList;
 
 public class MCDEntity extends MCDElement{
+
+    private static final long serialVersionUID = 1000;
 
     private String shortName ;
     private boolean entAbstract = false;
@@ -13,26 +15,13 @@ public class MCDEntity extends MCDElement{
     private boolean journal = false;
     private boolean audit = false;
 
-    private static final long serialVersionUID = 1000;
 
-    public MCDEntity(MVCCDElement mvccdElement, String name) {
-        super(mvccdElement,name);
+    public MCDEntity(ProjectElement parent, String name) {
+        super(parent,name);
     }
 
-    public MCDEntity(MVCCDElement parent) {
+    public MCDEntity(ProjectElement parent) {
         super (parent);
-    }
-    @Override
-    public String baliseXMLBegin() {
-        String richBalise = Preferences.XML_BALISE_ENTITY + " " +
-                UtilXML.attributName(getName());
-        return  UtilXML.baliseBegin (richBalise);
-
-    }
-
-    @Override
-    public String baliseXMLEnd() {
-        return UtilXML.baliseEnd(Preferences.XML_BALISE_ENTITY);
     }
 
     public String getShortName() {
@@ -73,5 +62,15 @@ public class MCDEntity extends MCDElement{
 
     public void setAudit(boolean audit) {
         this.audit = audit;
+    }
+
+    public ArrayList<MCDAttribute> getMcdAttributes() {
+        for (MVCCDElement mvccdElement : getChilds()){
+           if (mvccdElement instanceof MCDContAttributes) {
+               MCDContAttributes mcdContAttributes = (MCDContAttributes) mvccdElement;
+               return mcdContAttributes.getMCDAttributes();
+           }
+        }
+        return null;
     }
 }

@@ -1,6 +1,7 @@
 package main;
 
 import console.Console;
+import datatypes.MDDatatypesManager;
 import main.window.menu.WinMenuContent;
 import preferences.PreferencesManager;
 import project.*;
@@ -11,6 +12,8 @@ import messages.LoadMessages;
 import repository.Repository;
 import main.window.repository.WinRepository;
 import main.window.repository.WinRepositoryContent;
+import repository.RepositoryService;
+import stereotypes.StereotypesManager;
 import utilities.window.editor.DialogEditor;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -50,11 +53,14 @@ public class MVCCDManager {
         projectsRecents = new ProjectsRecentsLoader().load();
         changeActivateProjectOpenRecentsItems();
         openLastProject();
+        //StereotypesManager.instance().stereotypes();
+
     }
 
     private void startRepository() {
         //MVCCDElement rootMVCCDElement = new MVCCDElementRepositoryRoot();
-        MVCCDElement rootMVCCDElement = MVCCDFactory.instance().createRepositoryRoot();
+        rootMVCCDElement = MVCCDFactory.instance().createRepositoryRoot();
+        MDDatatypesManager.instance().mdDatatypes();
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootMVCCDElement);
         repository = new Repository(rootNode, rootMVCCDElement);
         getWinRepositoryContent().getTree().changeModel(repository);
@@ -73,8 +79,8 @@ public class MVCCDManager {
         mvccdWindow.getPanelBLResizer().resizerContentPanels();
     }
 
-    public void completeNewProject(Project project){
-        this.project = project;
+    public void completeNewProject(){
+        //this.project = project;
         PreferencesManager.instance().setProjectPref(project.getPreferences());
         project.adjustProfile();
         projectToRepository();
@@ -83,9 +89,11 @@ public class MVCCDManager {
     }
 
     public void showNewMVCCDElementInRepository(MVCCDElement mvccdElement, DialogEditor editor) {
-        DefaultMutableTreeNode node = MVCCDManager.instance().getRepository().addMVCCDElement(mvccdElement, editor.getNode());
+        DefaultMutableTreeNode node = MVCCDManager.instance().getRepository().addMVCCDElement(editor.getNode(), mvccdElement);
+        //DefaultMutableTreeNode node = MVCCDManager.instance().getRepository().addNodeAndChilds(editor.getNode(), mvccdElement);
         // Affichage du nouveau noeud
-        MVCCDManager.instance().getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
+        getWinRepositoryContent().getTree().changeModel(repository);
+        getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
 
     }
 
@@ -154,6 +162,7 @@ public class MVCCDManager {
         PreferencesManager.instance().setProfilePref(null);
         repository.removeProfile();
         setFileProjectCurrent(null);
+
     }
 
 
@@ -284,5 +293,15 @@ public class MVCCDManager {
         this.rootMVCCDElement = rootMVCCDElement;
     }
 
+
+    public MVCCDElementApplicationMDDatatypes  getMDDatatypesRoot(){
+        MVCCDElement mvccdElement = MVCCDElementService.getUniqueInstanceByClassName(rootMVCCDElement,
+                MVCCDElementApplicationMDDatatypes.class.getName());
+        if (mvccdElement != null){
+            return (MVCCDElementApplicationMDDatatypes) mvccdElement;
+        } else {
+            return null;
+        }
+    }
 
 }

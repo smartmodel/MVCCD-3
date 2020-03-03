@@ -3,10 +3,10 @@ package utilities.window.editor;
 import main.MVCCDElement;
 import preferences.PreferencesManager;
 import utilities.window.PanelContent;
-import utilities.window.SCheckBox;
-import utilities.window.SComponent;
-import utilities.window.STextField;
-import utilities.window.SComboBox;
+import utilities.window.scomponents.SCheckBox;
+import utilities.window.scomponents.SComponent;
+import utilities.window.scomponents.STextField;
+import utilities.window.scomponents.SComboBox;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public abstract class PanelInputContent
         extends PanelContent
-        implements IAccessDialogEditor, FocusListener, DocumentListener, ChangeListener, ItemListener {
+        implements IAccessDialogEditor, FocusListener, DocumentListener,  ItemListener {
 
     private PanelInput panelInput;
     private boolean alreadyFocusGained = false;
@@ -40,7 +40,6 @@ public abstract class PanelInputContent
 
     protected abstract void changeField(DocumentEvent e);
 
-    protected abstract void changeField(ChangeEvent e);
 
     protected abstract void changeField(ItemEvent e);
 
@@ -75,27 +74,16 @@ public abstract class PanelInputContent
         }
     }
 
+
+
     @Override
-    public void stateChanged(ChangeEvent e) {
+    public void itemStateChanged(ItemEvent e) {
         changeField(e);
         if (e.getSource() instanceof SCheckBox) {
             SCheckBox checkBox = (SCheckBox) e.getSource();
             enableSubPanels(checkBox);
         }
         if (e.getSource() instanceof SComboBox) {
-            System.out.println("Chage profile fileName");
-        }
-
-        if (alreadyFocusGained) {
-            enabledButtons();
-        }
-    }
-
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-        changeField(e);
-        if (e.getSource() instanceof SComboBox) {
-            System.out.println("Chage profile fileName");
         }
 
         if (alreadyFocusGained) {
@@ -103,10 +91,7 @@ public abstract class PanelInputContent
         }
     }
     protected void enabledButtons() {
-        System.out.println("enabledButtons()");
         if (datasChangedNow()) {
-            System.out.println("datasChangedNow()");
-
             if (checkDatasPreSave()) {
                 getButtonsContent().getBtnOk().setEnabled(true);
                 getButtonsContent().getBtnApply().setEnabled(true);
@@ -197,7 +182,6 @@ public abstract class PanelInputContent
     public boolean datasChangedNow() {
         boolean resultat = false;
         for (SComponent sComponent : sComponents) {
-            System.out.println(sComponent.toString());
             resultat = resultat || sComponent.checkIfUpdated();
         }
         return resultat;

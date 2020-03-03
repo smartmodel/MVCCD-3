@@ -1,13 +1,13 @@
 package window.editor.entity;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
 import mcd.MCDEntity;
 import mcd.services.MCDEntityService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.window.*;
 import utilities.window.editor.PanelInputContent;
+import utilities.window.scomponents.SCheckBox;
+import utilities.window.scomponents.STextField;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -43,7 +43,7 @@ public class EntityInputContent extends PanelInputContent {
 
     private void createContent() {
 
-        entityName.setPreferredSize((new Dimension(100,20)));
+        entityName.setPreferredSize((new Dimension(100,Preferences.EDITOR_FIELD_HEIGHT)));
         entityName.setToolTipText("Nom de l'entité");
         entityName.setCheckPreSave(true);
         entityName.getDocument().addDocumentListener(this);
@@ -52,33 +52,33 @@ public class EntityInputContent extends PanelInputContent {
         //entityName.addActionListener((ActionListener) this);
 
 
-        entityShortName.setPreferredSize((new Dimension(50,20)));
+        entityShortName.setPreferredSize((new Dimension(50,Preferences.EDITOR_FIELD_HEIGHT)));
         entityShortName.setToolTipText("Nom court de l'entité utilisé pour nommer certaines contraintes et autres");
         entityShortName.getDocument().addDocumentListener(this);
         entityShortName.addFocusListener(this);
 
         entityOrdered.setToolTipText("Ordonnancement des enregistrements");
-        entityOrdered.addChangeListener(this);
+        entityOrdered.addItemListener(this);
         entityOrdered.addFocusListener(this);
 
         entityAbstract.setToolTipText("Entité abstraite (si elle est source de spécialisations)");
-        entityAbstract.addChangeListener(this);
+        entityAbstract.addItemListener(this);
         entityAbstract.addFocusListener(this);
 
         entityJournal.setToolTipText("Création d'une table de journalisation");
-        entityJournal.addChangeListener(this);
+        entityJournal.addItemListener(this);
         entityJournal.addFocusListener(this);
 
         entityAudit.setToolTipText("Création de colonnes d'audit");
-        entityAudit.addChangeListener(this);
+        entityAudit.addItemListener(this);
         entityAudit.addFocusListener(this);
 
         super.getsComponents().add(entityName);
         super.getsComponents().add(entityShortName);
         super.getsComponents().add(entityOrdered);
         super.getsComponents().add(entityAbstract);
-        //super.getsComponents().add(entityJournal);
-        //super.getsComponents().add(entityAudit);
+        super.getsComponents().add(entityJournal);
+        super.getsComponents().add(entityAudit);
 
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -140,11 +140,6 @@ public class EntityInputContent extends PanelInputContent {
         if (entityShortName.getDocument() == e.getDocument()) {
             checkEntityShortName(true);
         }
-    }
-
-    @Override
-    protected void changeField(ChangeEvent e) {
-
     }
 
     @Override

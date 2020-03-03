@@ -1,16 +1,11 @@
 package main;
 
-import main.window.diagram.WinDiagram;
-import main.window.diagram.WinDiagramContent;
-import main.window.repository.WinRepository;
-import main.window.repository.WinRepositoryContent;
 import mcd.*;
-import messages.LoadMessages;
+import mcd.MCDContAttributes;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import profile.Profile;
 import project.Project;
-import utilities.window.services.ComponentService;
+import project.ProjectElement;
 
 public class MVCCDElementFactory {
 
@@ -35,32 +30,42 @@ public class MVCCDElementFactory {
         return new MCDModels(project, name);
     }
 
-    public MCDPackages createMCDPackages(MVCCDElement mvccdElement, String name){
-        return new MCDPackages(mvccdElement, name);
+    public MCDPackages createMCDPackages(ProjectElement parent, String name){
+        return new MCDPackages(parent, name);
     }
 
-    public MCDDiagrams createMCDDiagrams(MVCCDElement mvccdElement, String name){
-        return new MCDDiagrams(mvccdElement, name);
+    public Preferences createPreferences(ProjectElement parent, String name) {
+        return new Preferences(parent, name);
     }
 
-    public MCDEntities createMCDEntities(MVCCDElement mvccdElement, String name){
-        return new MCDEntities(mvccdElement, name);
+    public MCDDiagrams createMCDDiagrams(ProjectElement parent, String name){
+        return new MCDDiagrams(parent, name);
     }
 
-    public MCDEntity createMCDEntity(MVCCDElement mvccdElement){
-        return new MCDEntity(mvccdElement);
+    public MCDEntities createMCDEntities(ProjectElement parent, String name){
+        MCDEntities mcdEntities = new MCDEntities(parent, name);
+         return mcdEntities;
     }
 
-    public Preferences createPreferences(MVCCDElement mvccdElement, String name) {
-        return new Preferences(mvccdElement, name);
+    public MCDEntity createMCDEntity(ProjectElement parent){
+        MCDEntity mcdEntity = new MCDEntity(parent);
+        return mcdEntity;
+    }
+
+    public MCDContAttributes createMCDAttributes(MCDEntity parent, String name){
+        return new MCDContAttributes(parent, name);
+    }
+
+    public MCDAttribute createMCDAttribute(MCDContAttributes parent){
+        return new MCDAttribute(parent);
     }
 
 
 
 
-    public MVCCDElement createMVCCDElementFromXML(String baliseName, MVCCDElement ancestor){
+    public ProjectElement createMVCCDElementFromXML(String baliseName, ProjectElement ancestor){
         if (baliseName.equals(Preferences.XML_BALISE_PROJECT)) {
-            return new Project(ancestor);
+            return new Project(null);
         } else if (baliseName.equals(Preferences.XML_BALISE_MODELS)) {
             return new MCDModels(ancestor);
         } else if (baliseName.equals(Preferences.XML_BALISE_DIAGRAMS)) {
