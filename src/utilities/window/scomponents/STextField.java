@@ -4,6 +4,7 @@ import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SComponent;
 
 import javax.swing.*;
@@ -11,11 +12,13 @@ import javax.swing.*;
 public class STextField extends JTextField implements SComponent {
 
     private String oldText ;
-    private boolean firstAffectation = true;
+    //private boolean firstAffectation = true;
     private boolean checkPreSave = false;
-    boolean readOnly = false;
+    private boolean readOnly = false;
+    private PanelInputContent panel;
 
-    public STextField() {
+    public STextField(PanelInputContent panel) {
+        this.panel = panel;
         setBorder(BorderFactory.createLineBorder(
                 PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_NORMAL));
         setBackground(
@@ -25,11 +28,24 @@ public class STextField extends JTextField implements SComponent {
     // Surcharge de la méthode JTextField
     public void setText(String text) {
         super.setText(text);
-        if (firstAffectation) {
+        if (! panel.isDataInitialized()) {
             oldText = text;
         }
-        firstAffectation = false;
+        //firstAffectation = false;
     }
+
+
+    public void setText(Integer integer) {
+        if (integer != null){
+            setText(String.valueOf(integer));
+        } else {
+            setText("");
+        }
+
+    }
+
+
+
     public String getOldText() {
         return oldText;
     }

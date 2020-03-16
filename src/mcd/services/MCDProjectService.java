@@ -18,7 +18,8 @@ public class MCDProjectService {
     }
 
     public static ArrayList<String> checkName(String name) {
-        return MCDUtilService.checkName(name, Preferences.PROJECT_NAME_LENGTH, "project.and.name");
+        return MCDUtilService.checkString(name, true, Preferences.PROJECT_NAME_LENGTH,
+                Preferences.NAME_REGEXPR, "project.and.name");
     }
 
 }

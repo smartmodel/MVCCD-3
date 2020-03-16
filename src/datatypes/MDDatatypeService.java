@@ -1,6 +1,9 @@
 package datatypes;
 
+import main.MVCCDElement;
 import utilities.UtilDivers;
+
+import java.util.ArrayList;
 
 public class MDDatatypeService {
 
@@ -10,7 +13,7 @@ public class MDDatatypeService {
     }
 
     public static String getSizeMandatoryWithInheritInString(MDDatatype mdDatatype , int showNull) {
-        Boolean sizeMandatory = mdDatatype.getSizeMandatoryWithInherit();
+        Boolean sizeMandatory = mdDatatype.isSizeMandatoryWithInherit();
         return UtilDivers.fromBooleanToString(sizeMandatory, showNull);
     }
 
@@ -72,7 +75,7 @@ public class MDDatatypeService {
     }
 
     public static String getScaleMandatoryWithInheritInString(MDDatatype mdDatatype , int showNull) {
-        Boolean scaleMandatory = mdDatatype.getScaleMandatoryWithInherit();
+        Boolean scaleMandatory = mdDatatype.isScaleMandatoryWithInherit();
         return UtilDivers.fromBooleanToString(scaleMandatory, showNull);
     }
 
@@ -135,5 +138,43 @@ public class MDDatatypeService {
         }
     }
 
+    public static ArrayList<MDDatatype> getChilds(MDDatatype mdDatatype){
+        ArrayList<MDDatatype> resultat = new ArrayList<MDDatatype>();
+        for (MVCCDElement mvccdElement : mdDatatype.getChilds()){
+            if (mvccdElement instanceof MDDatatype){
+                resultat.add ((MDDatatype) mvccdElement);
+            }
+        }
+        return resultat;
+    }
 
+
+
+    public static MCDDatatype getMCDDatatypeByName(String name){
+        for (MCDDatatype mcdDatatype : MDDatatypesManager.instance().getMCDDatatypes(MDDatatypesManager.BOTH)){
+            if (mcdDatatype.getName().equals(name)){
+                return mcdDatatype;
+            }
+        }
+        return null;
+    }
+
+    public static MCDDatatype getMCDDatatypeByLienProg(String lienProg){
+        for (MCDDatatype mcdDatatype : MDDatatypesManager.instance().getMCDDatatypes(MDDatatypesManager.BOTH)){
+            if (mcdDatatype.getLienProg().equals(lienProg)){
+                return mcdDatatype;
+            }
+        }
+        return null;
+    }
+
+    public static String convertNameToLienProg(String name){
+        MCDDatatype mcdDatatype = getMCDDatatypeByName(name);
+        return mcdDatatype.getLienProg();
+    }
+
+    public static String convertLienProgToName(String lienProg){
+        MCDDatatype mcdDatatype = getMCDDatatypeByName(lienProg);
+        return mcdDatatype.getName();
+    }
 }

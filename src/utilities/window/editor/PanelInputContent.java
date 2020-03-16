@@ -28,6 +28,7 @@ public abstract class PanelInputContent
     private boolean alreadyFocusGained = false;
     private ArrayList<SComponent> sComponents = new ArrayList<SComponent>();
     private boolean readOnly = false;
+    private boolean dataInitialized = false;
 
     public PanelInputContent(PanelInput panelInput) {
         super(panelInput);
@@ -41,7 +42,9 @@ public abstract class PanelInputContent
     protected abstract void changeField(DocumentEvent e);
 
 
-    protected abstract void changeField(ItemEvent e);
+    protected abstract void changeFieldSelected(ItemEvent e);
+
+    protected abstract void changeFieldDeSelected(ItemEvent e);
 
     public abstract void loadDatas(MVCCDElement mvccdElement);
 
@@ -78,17 +81,24 @@ public abstract class PanelInputContent
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        changeField(e);
+
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            changeFieldSelected(e);
+        }
+        if (e.getStateChange() == ItemEvent.DESELECTED) {
+            changeFieldDeSelected(e);
+        }
         if (e.getSource() instanceof SCheckBox) {
-            SCheckBox checkBox = (SCheckBox) e.getSource();
-            enableSubPanels(checkBox);
+                SCheckBox checkBox = (SCheckBox) e.getSource();
+                enableSubPanels(checkBox);
         }
         if (e.getSource() instanceof SComboBox) {
         }
 
         if (alreadyFocusGained) {
-            enabledButtons();
+                enabledButtons();
         }
+
     }
     protected void enabledButtons() {
         if (datasChangedNow()) {
@@ -110,7 +120,7 @@ public abstract class PanelInputContent
 
     public boolean checkInput(STextField field, boolean unitaire, ArrayList<String> messagesErrors) {
         if (unitaire) {
-            showCheckResultat(field, messagesErrors);
+            showCheckResultat(messagesErrors);
         }
         if (messagesErrors.size() == 0) {
             field.setBorder(BorderFactory.createLineBorder(
@@ -131,9 +141,18 @@ public abstract class PanelInputContent
         return messagesErrors.size() == 0;
     }
 
+    public void reInitField(STextField field){
+        field.setBorder(BorderFactory.createLineBorder(
+                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_NORMAL));
+        field.setBackground(
+                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_NORMAL);
+    }
 
-    protected void showCheckResultat(STextField field, ArrayList<String> messagesErrors) {
+
+    protected void showCheckResultat(ArrayList<String> messagesErrors) {
         // Si le panneau des boutons est chargé
+
+        /*
         if (getEditor().getButtons() != null) {
             PanelButtonsContent buttonsContent = (PanelButtonsContent) getEditor().getButtons().getPanelContent();
             if (messagesErrors.size() > 0) {
@@ -144,6 +163,17 @@ public abstract class PanelInputContent
                 buttonsContent.clearMessages();
             }
         }
+
+         */
+
+        if (getEditor().getButtons() != null) {
+            PanelButtonsContent buttonsContent = (PanelButtonsContent) getEditor().getButtons().getPanelContent();
+            buttonsContent.clearMessages();
+            for (String message : messagesErrors) {
+                buttonsContent.addIfNotExistMessage(message);
+            }
+        }
+
     }
 
 
@@ -210,8 +240,12 @@ public abstract class PanelInputContent
         if (getEditor().getMode().equals(DialogEditor.NEW)) {
             initDatas(getEditor().getMvccdElement());
         }
+        dataInitialized = true;
     }
 
+    public boolean isDataInitialized() {
+        return dataInitialized;
+    }
 
     protected void enableSubPanels(SCheckBox sCheckBox) {
         if (sCheckBox.getSubPanel() != null) {

@@ -2,22 +2,25 @@ package utilities.window.scomponents;
 
 import main.MVCCDManager;
 import preferences.PreferencesManager;
+import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
 
 public class SComboBox<S> extends JComboBox<S> implements SComponent {
 
-    public static final String LIGNEVIDE = "---";
+    public static final String LIGNETIRET = "---";
+    public static final String LIGNEVIDE = "";
 
     //private S oldSelected = null;
     private int oldIndex = -1 ;
-    private boolean firstAffectation = true;
     private boolean checkPreSave = false;
 
     private boolean readOnly = false;
+    private PanelInputContent panel;
 
 
-    public SComboBox() {
+    public SComboBox(PanelInputContent panel) {
+        this.panel = panel ;
         setBorder(BorderFactory.createLineBorder(
                 PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_NORMAL));
         setBackground(
@@ -43,11 +46,10 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
     };
 
     private void setSelectedBase(int i) {
-        if (firstAffectation) {
+        if (! panel.isDataInitialized()) {
             //oldSelected = getItemAt(i);
             oldIndex = i ;
         }
-        firstAffectation = false;
     }
 
     public Integer getOldIndex() {

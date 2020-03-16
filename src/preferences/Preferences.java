@@ -28,8 +28,10 @@ public class Preferences extends MVCCDElement {
     public static Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = false;
     public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
     public static String NAME_REGEXPR = "[a-zA-Z]{1,1}[a-zA-Z0-9_]*";
-    public static Integer PROJECT_NAME_LENGTH = 5;
-    public static Integer ENTITY_NAME_LENGTH = 5;
+    public static Integer PROJECT_NAME_LENGTH = 10;
+    public static Integer ENTITY_NAME_LENGTH = 10;
+    public static Integer ATTRIBUTE_NAME_LENGTH = 10;
+    public static String INTEGER_REGEXPR = "([0])|([1-9]{1,1}[0-9]*)";
     //public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"windows-1252\"?>";
 
@@ -72,8 +74,8 @@ public class Preferences extends MVCCDElement {
     public static Integer ENTITY_WINDOW_HEIGHT = 600;
     public static Integer HELP_WINDOW_WIDTH = 600;
     public static Integer HELP_WINDOW_HEIGHT = 300;
-    public static Integer PREFERENCES_WINDOW_WIDTH = 600;
-    public static Integer PREFERENCES_WINDOW_HEIGHT = 300;
+    public static Integer PREFERENCES_WINDOW_WIDTH = 800;
+    public static Integer PREFERENCES_WINDOW_HEIGHT = 600;
     public static Integer MCDDATATYPE_WINDOW_WIDTH = 800;
     public static Integer MCDDATATYPE_WINDOW_HEIGHT = 600;
 
@@ -145,7 +147,7 @@ public class Preferences extends MVCCDElement {
     public static Integer MCDDATATYPE_DECIMAL_SIZEMAX = 30;
     public static Integer MCDDATATYPE_DECIMAL_SIZEDEFAULT = 10;
     public static Integer MCDDATATYPE_DECIMAL_SCALEMIN = 0;
-    public static Integer MCDDATATYPE_DECIMAL_SCALEMAX = 30;
+    public static Integer MCDDATATYPE_DECIMAL_SCALEMAX = 10;
     public static Integer MCDDATATYPE_DECIMAL_SCALEDEFAULT = 2;
     public static String MCDDATATYPE_NONPOSITIVEDECIMAL_NAME = "nonPositiveDecimal";
     public static String MCDDATATYPE_NONPOSITIVEDECIMAL_LIENPROG = "nonPositiveDecimal";
@@ -168,15 +170,19 @@ public class Preferences extends MVCCDElement {
     public static String MCDDATATYPE_NONNEGATIVEINTEGER_LIENPROG = "nonNegativeInteger";
     public static String MCDDATATYPE_POSITIVEINTEGER_NAME = "postiveInteger";
     public static String MCDDATATYPE_POSITIVEINTEGER_LIENPROG = "positiveInteger";
-    public static String MCDDATATYPE_AID_NAME = "aid";
-    public static String MCDDATATYPE_AID_LIENPROG = "aid";
+
+    public static String MCDDOMAIN_AID_NAME = "aid";
+    public static String MCDDOMAIN_AID_LIENPROG = "aid";
+    public static Integer MCDDOMAIN_AID_SIZEMIN = 9;
+    public static Integer MCDDOMAIN_AID_SIZEMAX = 9;
+    public static Integer MCDDOMAIN_AID_SIZEDEFAULT = 9;
 
     public static String MCDDATATYPE_MONEY_NAME = "money";
     public static String MCDDATATYPE_MONEY_LIENPROG = "money";
     public static Integer MCDDATATYPE_MONEY_SIZEMAX = 30;
     public static Integer MCDDATATYPE_MONEY_SIZEDEFAULT = 12;
     public static Integer MCDDATATYPE_MONEY_SCALEMIN = 0;
-    public static Integer MCDDATATYPE_MONEY_SCALEMAX = 30;
+    public static Integer MCDDATATYPE_MONEY_SCALEMAX = 10;
     public static Integer MCDDATATYPE_MONEY_SCALEDEFAULT = 2;
     public static String MCDDATATYPE_NONPOSITIVEMONEY_NAME = "nonPositiveMoney";
     public static String MCDDATATYPE_NONPOSITIVEMONEY_LIENPROG = "nonPositiveMoney";
@@ -209,6 +215,11 @@ public class Preferences extends MVCCDElement {
     public static String MCDDATATYPE_GMONTH_NAME = "gMonth";
     public static String MCDDATATYPE_GMONTH_LIENPROG = "gMonth";
 
+    public static String MCDDATATYPE_NUMBER_SIZE_PRECISION = "mcddatatype.number.size.precision";
+    public static String MCDDATATYPE_NUMBER_SIZE_INTEGER_PORTION_ONLY = "mcddatatype.number.size.integer.portion.only";
+
+    public static String MCD_AID_IND_COLUMN_NAME_DEFAULT = "num";
+    public static String MCD_AID_DEP_COLUMN_NAME_DEFAULT = "numDep";
 
 
     // Modification Application
@@ -222,6 +233,11 @@ public class Preferences extends MVCCDElement {
     private Boolean MCD_JOURNALIZATION_EXCEPTION = true;
     private Boolean MCD_AUDIT = false;
     private Boolean MCD_AUDIT_EXCEPTION = true;
+    private String MCD_AID_DATATYPE_LIENPROG = null;
+    private String MCDDATATYPE_NUMBER_SIZE_MODE = null;
+    private String MCD_AID_IND_COLUMN_NAME = null;
+    private String MCD_AID_DEP_COLUMN_NAME = null;
+    private Boolean MCD_AID_WITH_DEP = true;
 
 
     public Preferences(MVCCDElement parent, String name) {
@@ -284,4 +300,54 @@ public class Preferences extends MVCCDElement {
         this.MCD_AUDIT_EXCEPTION = MCD_AUDIT_EXCEPTION;
     }
 
+    public String getMCD_AID_DATATYPE_LIENPROG() {
+        if (MCD_AID_DATATYPE_LIENPROG == null){
+            MCD_AID_DATATYPE_LIENPROG = MCDDOMAIN_AID_LIENPROG;
+        }
+        return MCD_AID_DATATYPE_LIENPROG;
+    }
+
+    public void setMCD_AID_DATATYPE_LIENPROG(String MCD_AID_DATATYPE_LIENPROG) {
+        this.MCD_AID_DATATYPE_LIENPROG = MCD_AID_DATATYPE_LIENPROG;
+    }
+
+    public String getMCDDATATYPE_NUMBER_SIZE_MODE() {
+        if (MCDDATATYPE_NUMBER_SIZE_MODE == null){
+            MCDDATATYPE_NUMBER_SIZE_MODE = MCDDATATYPE_NUMBER_SIZE_PRECISION;
+        }
+        return MCDDATATYPE_NUMBER_SIZE_MODE;
+    }
+
+    public void setMCDDATATYPE_NUMBER_SIZE_MODE(String MCDDATATYPE_NUMBER_SIZE_MODE) {
+        this.MCDDATATYPE_NUMBER_SIZE_MODE = MCDDATATYPE_NUMBER_SIZE_MODE;
+    }
+
+    public String getMCD_AID_IND_COLUMN_NAME() {
+        if (MCD_AID_IND_COLUMN_NAME == null){
+            MCD_AID_IND_COLUMN_NAME = MCD_AID_IND_COLUMN_NAME_DEFAULT;
+        }
+        return MCD_AID_IND_COLUMN_NAME;
+    }
+
+    public void setMCD_AID_IND_COLUMN_NAME(String MCD_AID_IND_COLUMN_NAME) {
+        this.MCD_AID_IND_COLUMN_NAME = MCD_AID_IND_COLUMN_NAME;
+    }
+
+    public String getMCD_AID_DEP_COLUMN_NAME() {
+        if (MCD_AID_DEP_COLUMN_NAME == null){
+            MCD_AID_DEP_COLUMN_NAME = MCD_AID_DEP_COLUMN_NAME_DEFAULT;
+        }return MCD_AID_DEP_COLUMN_NAME;
+    }
+
+    public void setMCD_AID_DEP_COLUMN_NAME(String MCD_AID_DEP_COLUMN_NAME) {
+        this.MCD_AID_DEP_COLUMN_NAME = MCD_AID_DEP_COLUMN_NAME;
+    }
+
+    public Boolean getMCD_AID_WITH_DEP() {
+        return MCD_AID_WITH_DEP;
+    }
+
+    public void setMCD_AID_WITH_DEP(Boolean MCD_AID_WITH_DEP) {
+        this.MCD_AID_WITH_DEP = MCD_AID_WITH_DEP;
+    }
 }

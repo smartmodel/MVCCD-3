@@ -4,6 +4,8 @@ import exceptions.CodeApplException;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 
+import java.util.ArrayList;
+
 public abstract class MDDatatype extends MVCCDElement {
 
     public static final int SIZEMANDATORY = 10;
@@ -56,7 +58,7 @@ public abstract class MDDatatype extends MVCCDElement {
         return sizeMandatory;
     }
 
-    public Boolean getSizeMandatoryWithInherit(){
+    public Boolean isSizeMandatoryWithInherit(){
         return (Boolean) getPropertyWithInherit(SIZEMANDATORY);
     }
 
@@ -90,7 +92,7 @@ public abstract class MDDatatype extends MVCCDElement {
         return scaleMandatory;
     }
 
-    public Boolean getScaleMandatoryWithInherit(){
+    public Boolean isScaleMandatoryWithInherit(){
         return (Boolean) getPropertyWithInherit(SCALEMANDATORY);
     }
 
@@ -312,4 +314,26 @@ public abstract class MDDatatype extends MVCCDElement {
         }
     }
 
+    public boolean isDescendantOf(MDDatatype ancestor){
+        boolean resultat = false;
+        if (getParent() != null){
+            if (getParent() instanceof MDDatatype) {
+                MDDatatype parent = (MDDatatype) getParent();
+                if (parent == ancestor) {
+                    resultat = true;
+                } else {
+                    resultat = parent.isDescendantOf(ancestor);
+                }
+            }
+        }
+        return resultat;
+    }
+
+    public boolean isSelfOrDescendantOf(MDDatatype ancestor){
+        if (this == ancestor){
+            return true;
+        } else {
+            return isDescendantOf(ancestor);
+        }
+    }
 }

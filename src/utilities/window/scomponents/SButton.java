@@ -1,8 +1,11 @@
 package utilities.window.scomponents;
 
+import window.editor.attribute.AttributeInputContent;
+
 import javax.swing.*;
 
 public class SButton extends JButton implements SComponent {
+
 
     public SButton(String text){
         super(text);
@@ -44,4 +47,5 @@ public class SButton extends JButton implements SComponent {
             super.setEnabled(false);
         }
     }
+
 }

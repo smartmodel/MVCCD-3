@@ -11,7 +11,6 @@ import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SComboBox;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.*;
@@ -20,8 +19,8 @@ import java.util.ArrayList;
 public class ProjectInputContent extends PanelInputContent  {
 
     private JPanel panel = new JPanel();
-    private STextField projectName = new STextField();
-    private SComboBox<String> profileFileName = new SComboBox<>();
+    private STextField projectName = new STextField(this);
+    private SComboBox<String> profileFileName = new SComboBox<>(this);
     //private STextField profileFile = new STextField();
     //private JButton profileChoice = new JButton ("...");
 
@@ -47,7 +46,7 @@ public class ProjectInputContent extends PanelInputContent  {
         projectName.addFocusListener(this);
 
         ArrayList<String> filesProfile = ProfileManager.instance().filesProfile();
-        profileFileName.addItem(SComboBox.LIGNEVIDE);
+        profileFileName.addItem(SComboBox.LIGNETIRET);
         for (String fileProfile : filesProfile){
             profileFileName.addItem(fileProfile);
         }
@@ -103,12 +102,18 @@ public class ProjectInputContent extends PanelInputContent  {
         }
     }
 
-
-
     @Override
-    protected void changeField(ItemEvent e) {
+    protected void changeFieldSelected(ItemEvent e) {
 
     }
+
+    @Override
+    protected void changeFieldDeSelected(ItemEvent e) {
+
+    }
+
+
+
 
 
     @Override
@@ -148,13 +153,13 @@ public class ProjectInputContent extends PanelInputContent  {
         if (project.getProfileFileName() != null) {
             profileFileName.setSelectedItem(project.getProfileFileName());
         } else {
-            profileFileName.setSelectedItem(SComboBox.LIGNEVIDE);
+            profileFileName.setSelectedItem(SComboBox.LIGNETIRET);
         }
     }
 
     @Override
     protected void initDatas(MVCCDElement mvccdElement) {
-        profileFileName.setSelectedItem(SComboBox.LIGNEVIDE);
+        profileFileName.setSelectedItem(SComboBox.LIGNETIRET);
      }
 
     @Override
@@ -164,7 +169,7 @@ public class ProjectInputContent extends PanelInputContent  {
             project.setName(projectName.getText());
         }
         if (profileFileName.checkIfUpdated()){
-            if (! profileFileName.getSelectedItem().equals(SComboBox.LIGNEVIDE)){
+            if (! profileFileName.getSelectedItem().equals(SComboBox.LIGNETIRET)){
                 project.setProfileFileName((String) profileFileName.getSelectedItem());
             } else {
                 project.setProfileFileName(null);

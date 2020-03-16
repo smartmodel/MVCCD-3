@@ -80,6 +80,7 @@ public class PreferencesManager {
      }
 
     private void copyPref(Preferences from, Preferences to) {
+        to.setMCD_AID_DATATYPE_LIENPROG(from.getMCD_AID_DATATYPE_LIENPROG());
         to.setMCD_JOURNALIZATION(from.getMCD_JOURNALIZATION());
         to.setMCD_JOURNALIZATION_EXCEPTION(from.getMCD_JOURNALIZATION_EXCEPTION());
         to.setMCD_AUDIT(from.getMCD_AUDIT());

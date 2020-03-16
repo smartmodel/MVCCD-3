@@ -3,6 +3,7 @@ package datatypes;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationMDDatatypes;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 
 public class MCDDatatypesCreateDefault {
 
@@ -150,13 +151,30 @@ public class MCDDatatypesCreateDefault {
                 Preferences.MCDDATATYPE_POSITIVEINTEGER_NAME,
                 Preferences.MCDDATATYPE_POSITIVEINTEGER_LIENPROG,
                 false);
-
+/*
         MCDDatatype aid = createMCDDatatype(
                 positiveInteger,
                 Preferences.MCDDATATYPE_AID_NAME,
                 Preferences.MCDDATATYPE_AID_LIENPROG,
                 false);
+        aid.setSizeDefault(Preferences.MCDDATATYPE_AID_SIZEDEFAULT);
+        aid.setSizeMin(Preferences.MCDDATATYPE_AID_SIZEMIN);
+        aid.setSizeMax(Preferences.MCDDATATYPE_AID_SIZEMAX);
 
+ */
+        MCDDomainSubtype aid = createMCDDomainSubtype(
+                positiveInteger,
+                Preferences.MCDDOMAIN_AID_NAME,
+                Preferences.MCDDOMAIN_AID_LIENPROG,
+                false);
+        aid.setSizeDefault(Preferences.MCDDOMAIN_AID_SIZEDEFAULT);
+        aid.setSizeMin(Preferences.MCDDOMAIN_AID_SIZEMIN);
+        aid.setSizeMax(Preferences.MCDDOMAIN_AID_SIZEMAX);
+/*
+        if (PreferencesManager.instance().preferences().getMCD_AID_DATATYPE_LIENPROG() == null){
+            PreferencesManager.instance().preferences().setMCD_AID_DATATYPE_LIENPROG(aid.getLienProg());
+        }
+*/
     }
 
     private void createDecimal(MCDDatatype number) {
@@ -212,6 +230,7 @@ public class MCDDatatypesCreateDefault {
         money.setScaleMandatory(true);
         money.setScaleDefault(Preferences.MCDDATATYPE_MONEY_SCALEDEFAULT);
         money.setScaleMin(Preferences.MCDDATATYPE_MONEY_SCALEMIN);
+        money.setScaleMax(Preferences.MCDDATATYPE_MONEY_SCALEMAX);
 
         MCDDatatype nonPositiveMoney = createMCDDatatype(
                 money,
@@ -314,6 +333,12 @@ public class MCDDatatypesCreateDefault {
         // Vérifier l'unicité  à faire !
         MCDDatatype  mcdDatatype = new MCDDatatype(parent, name, lienProg, abstrait);
         return mcdDatatype;
+    }
+
+    private MCDDomainSubtype createMCDDomainSubtype (MVCCDElement parent , String name, String lienProg, boolean abstrait){
+        // Vérifier l'unicité  à faire !
+        MCDDomainSubtype  mcdDomainSubtype = new MCDDomainSubtype(parent, name, lienProg, abstrait);
+        return mcdDomainSubtype;
     }
 
 }

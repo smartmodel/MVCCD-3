@@ -19,11 +19,11 @@ import java.io.File;
 public class PrefApplicationInputContent extends PanelInputContent  {
     private JPanel panel = new JPanel();
 
-    private SCheckBox debug = new SCheckBox("Debug");
+    private SCheckBox debug = new SCheckBox(this,"Debug");
     private JPanel debugSubPanel = new JPanel();
 
-    private SCheckBox debugPrintMVCCDElement = new SCheckBox("MVCCD Element");
-    private SCheckBox debugBackgroundPanel = new SCheckBox("Background Panel");
+    private SCheckBox debugPrintMVCCDElement = new SCheckBox(this,"MVCCD Element");
+    private SCheckBox debugBackgroundPanel = new SCheckBox(this, "Background Panel");
 
     public PrefApplicationInputContent(PrefApplicationInput prefApplicationInput) {
         super(prefApplicationInput);
@@ -98,11 +98,18 @@ public class PrefApplicationInputContent extends PanelInputContent  {
 
     }
 
-
     @Override
-    protected void changeField(ItemEvent e) {
+    protected void changeFieldSelected(ItemEvent e) {
 
     }
+
+    @Override
+    protected void changeFieldDeSelected(ItemEvent e) {
+
+    }
+
+
+
 
 
     @Override

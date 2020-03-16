@@ -21,7 +21,9 @@ public class MCDEntityService {
     }
 
     public static ArrayList<String> checkName(String name) {
-        return MCDUtilService.checkName(name, Preferences.ENTITY_NAME_LENGTH, "entity.and.name");
+        return MCDUtilService.checkString(name, true, Preferences.ENTITY_NAME_LENGTH,
+                Preferences.NAME_REGEXPR, "entity.and.name");
+
     }
 
     public static ArrayList<String> checkShortName(String shortName) {

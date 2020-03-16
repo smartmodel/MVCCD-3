@@ -20,30 +20,30 @@ import java.awt.event.ItemEvent;
 public class MCDDatatypeInputContent extends PanelInputContent {
 
     private JPanel panel = new JPanel();
-    private STextField mcdDatatypeName = new STextField();
-    private SCheckBox abstrait = new SCheckBox();
-    private STextField lienProg = new STextField();
+    private STextField mcdDatatypeName = new STextField(this);
+    private SCheckBox abstrait = new SCheckBox(this);
+    private STextField lienProg = new STextField(this);
 
     private JPanel panelSize = new JPanel ();
-    private STextField sizeMandatory = new STextField();
-    private STextField sizeMandatoryInheritFrom = new STextField();
-    private STextField sizeDefault = new STextField();
-    private STextField sizeDefaultInheritFrom = new STextField();
-    private STextField sizeMin = new STextField();
-    private STextField sizeMinInheritFrom = new STextField();
-    private STextField sizeMax = new STextField();
-    private STextField sizeMaxInheritFrom = new STextField();
+    private STextField sizeMandatory = new STextField(this);
+    private STextField sizeMandatoryInheritFrom = new STextField(this);
+    private STextField sizeDefault = new STextField(this);
+    private STextField sizeDefaultInheritFrom = new STextField(this);
+    private STextField sizeMin = new STextField(this);
+    private STextField sizeMinInheritFrom = new STextField(this);
+    private STextField sizeMax = new STextField(this);
+    private STextField sizeMaxInheritFrom = new STextField(this);
 
 
     private JPanel panelScale = new JPanel ();
-    private STextField scaleMandatory = new STextField();
-    private STextField scaleMandatoryInheritFrom = new STextField();
-    private STextField scaleDefault = new STextField();
-    private STextField scaleDefaultInheritFrom = new STextField();
-    private STextField scaleMin = new STextField();
-    private STextField scaleMinInheritFrom = new STextField();
-    private STextField scaleMax = new STextField();
-    private STextField scaleMaxInheritFrom = new STextField();
+    private STextField scaleMandatory = new STextField(this);
+    private STextField scaleMandatoryInheritFrom = new STextField(this);
+    private STextField scaleDefault = new STextField(this);
+    private STextField scaleDefaultInheritFrom = new STextField(this);
+    private STextField scaleMin = new STextField(this);
+    private STextField scaleMinInheritFrom = new STextField(this);
+    private STextField scaleMax = new STextField(this);
+    private STextField scaleMaxInheritFrom = new STextField(this);
 
 
     private int showNull = UtilDivers.NULL;
@@ -304,9 +304,15 @@ public class MCDDatatypeInputContent extends PanelInputContent {
      }
 
     @Override
-    protected void changeField(ItemEvent e) {
+    protected void changeFieldSelected(ItemEvent e) {
 
     }
+
+    @Override
+    protected void changeFieldDeSelected(ItemEvent e) {
+
+    }
+
 
     @Override
     public void focusGained(FocusEvent focusEvent) {

@@ -2,29 +2,31 @@ package utilities.window.scomponents;
 
 import main.MVCCDManager;
 import preferences.PreferencesManager;
+import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
 
 public class SCheckBox extends JCheckBox implements SComponent {
 
-    private Boolean oldSelected ;
-    private boolean firstAffectation = true;
+    private Boolean oldSelected = null;
     private boolean checkPreSave = false;
     private JPanel subPanel;  // Si la case à cocher doit valider/invalider un panneau dépendant
     private boolean rootSubPanel = false ; //Si la case à cocher est la racine d'un arbre de panneaux dépendants
 
     private boolean readOnly = false;
+    private PanelInputContent panel;
 
-    public SCheckBox(){
+    public SCheckBox(PanelInputContent panel){
         super();
-        init();
+        init(panel);
     }
-    public SCheckBox(String label) {
+    public SCheckBox(PanelInputContent panel, String label) {
         super(label);
-        init();
+        init(panel);
     }
 
-    private void init(){
+    private void init(PanelInputContent panel){
+        this.panel = panel;
         setBorder(BorderFactory.createLineBorder(
                 PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_NORMAL));
         setBackground(
@@ -35,10 +37,9 @@ public class SCheckBox extends JCheckBox implements SComponent {
     // Surcharge de la méthode JCheckBox
     public void setSelected(boolean selected) {
         super.setSelected(selected);
-        if (firstAffectation) {
+        if (! panel.isDataInitialized()) {
             oldSelected = selected;
         }
-        firstAffectation = false;
     }
 
     public Boolean getOldSelected() {

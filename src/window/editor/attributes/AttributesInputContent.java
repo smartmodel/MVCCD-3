@@ -2,6 +2,8 @@ package window.editor.attributes;
 
 import constraints.Constraint;
 import constraints.ConstraintService;
+import datatypes.MCDDatatype;
+import datatypes.MDDatatypeService;
 import main.MVCCDElement;
 import mcd.MCDAttribute;
 import mcd.MCDContAttributes;
@@ -109,6 +111,12 @@ public class AttributesInputContent extends PanelInputContent {
             ArrayList<Constraint> constraints =  attribute.getToConstraints();
             ArrayList<String> constraintsUMLNames = ConstraintService.getUMLNamesByConstraints(constraints);
 
+            String textForDatatype = "";
+            if(attribute.getDatatypeLienProg() != null) {
+                MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(attribute.getDatatypeLienProg());
+                textForDatatype = mcdDatatype.getName();
+            }
+
             col = AttributesTableColumn.ID.getPosition();
             data[line][col] = attribute.getId();
 
@@ -118,8 +126,9 @@ public class AttributesInputContent extends PanelInputContent {
             col = AttributesTableColumn.NAME.getPosition();
             data[line][col] = attribute.getName();
 
+
             col = AttributesTableColumn.DATATYPE.getPosition();
-            data[line][col] = "";
+            data[line][col] = textForDatatype;
 
             col = AttributesTableColumn.DATASIZE.getPosition();
             data[line][col] = attribute.getSize();
@@ -177,6 +186,10 @@ public class AttributesInputContent extends PanelInputContent {
         table.getColumnModel().getColumn(col).setCellEditor(new AttributeStereotypesEditorForJTable(table));
 
         col = AttributesTableColumn.NAME.getPosition();
+        table.getColumnModel().getColumn(col).setPreferredWidth(100);
+        table.getColumnModel().getColumn(col).setMinWidth(100);
+
+        col = AttributesTableColumn.DATATYPE.getPosition();
         table.getColumnModel().getColumn(col).setPreferredWidth(100);
         table.getColumnModel().getColumn(col).setMinWidth(100);
 
@@ -296,12 +309,18 @@ public class AttributesInputContent extends PanelInputContent {
     protected void changeField(DocumentEvent e) {
     }
 
-
-
     @Override
-    protected void changeField(ItemEvent e) {
+    protected void changeFieldSelected(ItemEvent e) {
 
     }
+
+    @Override
+    protected void changeFieldDeSelected(ItemEvent e) {
+
+    }
+
+
+
 
     @Override
     public void focusGained(FocusEvent focusEvent) {

@@ -50,11 +50,16 @@ public class PrefGeneralInputContent extends PanelInputContent {
 
     }
 
-
     @Override
-    protected void changeField(ItemEvent e) {
+    protected void changeFieldSelected(ItemEvent e) {
 
     }
+
+    @Override
+    protected void changeFieldDeSelected(ItemEvent e) {
+
+    }
+
 
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {

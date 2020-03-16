@@ -19,12 +19,12 @@ import java.awt.event.ItemEvent;
 public class EntityInputContent extends PanelInputContent {
 
     private JPanel panel = new JPanel();
-    private STextField entityName = new STextField();
-    private STextField entityShortName = new STextField();
-    private SCheckBox entityOrdered  = new SCheckBox();
-    private SCheckBox entityAbstract  = new SCheckBox();
-    private SCheckBox entityAudit  = new SCheckBox();
-    private SCheckBox entityJournal  = new SCheckBox();
+    private STextField entityName = new STextField(this);
+    private STextField entityShortName = new STextField(this);
+    private SCheckBox entityOrdered  = new SCheckBox(this);
+    private SCheckBox entityAbstract  = new SCheckBox(this);
+    private SCheckBox entityAudit  = new SCheckBox(this);
+    private SCheckBox entityJournal  = new SCheckBox(this);
 
     //private JComboBox<String> profile = new JComboBox<>();
 
@@ -143,9 +143,15 @@ public class EntityInputContent extends PanelInputContent {
     }
 
     @Override
-    protected void changeField(ItemEvent e) {
+    protected void changeFieldSelected(ItemEvent e) {
 
     }
+
+    @Override
+    protected void changeFieldDeSelected(ItemEvent e) {
+
+    }
+
 
     @Override
     public void focusGained(FocusEvent focusEvent) {

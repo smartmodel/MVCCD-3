@@ -1,9 +1,17 @@
 package datatypes;
 
 import main.MVCCDElementApplicationMDDatatypes;
+import main.MVCCDElementService;
 import main.MVCCDManager;
 
+import java.util.ArrayList;
+
 public class MDDatatypesManager {
+
+    public static final int ABSTRAIT = 1;
+    public static final int CONCRET = 2;
+    public static final int BOTH = 3;
+
 
     private static MDDatatypesManager instance ;
 
@@ -107,5 +115,28 @@ public class MDDatatypesManager {
     }
 */
 
+    public ArrayList<String> getMCDDatatypesNames (int treatAbstrait){
+        ArrayList<MCDDatatype> mcdDatatypes =  getMCDDatatypes(treatAbstrait);
+        return MVCCDElementService.convertArrayMVCCDElementsToNames(mcdDatatypes);
+    }
 
-}
+    public ArrayList<MCDDatatype> getMCDDatatypes (int treatAbstrait){
+        return getMCDDatatypesByRoot(mcdDatatypeRoot(), treatAbstrait);
+    }
+
+    public ArrayList<MCDDatatype> getMCDDatatypesByRoot(MCDDatatype root, int treatAbstrait){
+        ArrayList<MCDDatatype> resultat = new ArrayList<MCDDatatype>();
+        boolean r1 = treatAbstrait == BOTH;
+        boolean r2 = (treatAbstrait == CONCRET) && (!root.isAbstrait());
+        boolean r3 = (treatAbstrait == ABSTRAIT) && root.isAbstrait();
+        if (r1 || r2 || r3) {
+            resultat.add(root);
+        }
+        for (MDDatatype mdDatatype : MDDatatypeService.getChilds(root)){
+            if (mdDatatype instanceof MCDDatatype){
+                resultat.addAll(getMCDDatatypesByRoot((MCDDatatype) mdDatatype, treatAbstrait));
+            }
+        }
+        return resultat;
+    }
+ }
