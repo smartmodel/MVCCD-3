@@ -131,14 +131,16 @@ public class ProjectInputContent extends PanelInputContent  {
     }
 
     @Override
-    public boolean checkDatasPreSave() {
-        boolean resultat = checkProjectName(false);
-        return resultat;
+    public boolean checkDatasPreSave(boolean unitaire) {
+        boolean ok = checkProjectName(unitaire);
+        return ok;
     }
 
 
     public boolean checkDatas(){
-        return checkProjectName(false);
+         boolean ok = checkDatasPreSave(false);
+        // Autres attributs
+        return ok;
     }
 
     private boolean checkProjectName(boolean unitaire) {

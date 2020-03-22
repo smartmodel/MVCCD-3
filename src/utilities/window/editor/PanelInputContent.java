@@ -37,7 +37,7 @@ public abstract class PanelInputContent
 
     protected abstract boolean checkDatas();
 
-    public abstract boolean checkDatasPreSave();
+    public abstract boolean checkDatasPreSave(boolean unitaire);
 
     protected abstract void changeField(DocumentEvent e);
 
@@ -63,6 +63,11 @@ public abstract class PanelInputContent
 
     @Override
     public void removeUpdate(DocumentEvent e) {
+        /*
+        if (e.getDocument() instanceof  STextField){
+            STextField sTextField = (STextField) e.getDocument();
+            sTextField.setColorNormal();
+        } */
         changeField(e);
         if (alreadyFocusGained) {
             enabledButtons();
@@ -101,8 +106,11 @@ public abstract class PanelInputContent
 
     }
     protected void enabledButtons() {
+        // Le check doit être fait au début pour remettre l'affichage normal
+        // de champs testés ensemble
+        boolean datasChecked = checkDatasPreSave(true);
         if (datasChangedNow()) {
-            if (checkDatasPreSave()) {
+            if (datasChecked) {
                 getButtonsContent().getBtnOk().setEnabled(true);
                 getButtonsContent().getBtnApply().setEnabled(true);
             } else {
@@ -123,29 +131,19 @@ public abstract class PanelInputContent
             showCheckResultat(messagesErrors);
         }
         if (messagesErrors.size() == 0) {
-            field.setBorder(BorderFactory.createLineBorder(
-                    PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_NORMAL));
-            if (field.isCheckPreSave()) {
-                field.setBackground(
-                        PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_NORMAL);
-            }
+            field.setColorNormal();
         } else {
-            field.setBorder(BorderFactory.createLineBorder(
-                    PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_ERROR));
             if (field.isCheckPreSave()) {
-                field.setBackground(
-                        PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_ERROR);
+                field.setColorError();
+            } else{
+                field.setColorWarning();
             }
-
         }
         return messagesErrors.size() == 0;
     }
 
     public void reInitField(STextField field){
-        field.setBorder(BorderFactory.createLineBorder(
-                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_NORMAL));
-        field.setBackground(
-                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_NORMAL);
+        field.setColorNormal();
     }
 
 
@@ -196,7 +194,7 @@ public abstract class PanelInputContent
         getButtonsContent().clearMessages();
         if (!alreadyFocusGained) {
             checkDatas();
-            checkDatasPreSave();
+            checkDatasPreSave(true);
             enabledButtons();
             alreadyFocusGained = true;
         }

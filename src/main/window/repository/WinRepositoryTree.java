@@ -85,5 +85,7 @@ public class WinRepositoryTree extends JTree {
        this.treeModel = treeModel;
     }
 
-
+    public DefaultTreeModel getTreeModel() {
+        return treeModel;
+    }
 }

@@ -12,6 +12,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
 import project.Project;
+import repository.Repository;
 import utilities.Debug;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
@@ -26,13 +27,16 @@ import window.editor.project.ProjectEditor;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class WinRepositoryPopupMenu extends JPopupMenu{
     private DefaultMutableTreeNode node ;
+    private DefaultTreeModel treeModel ;
 
     public WinRepositoryPopupMenu(DefaultMutableTreeNode node) {
+        this.treeModel = treeModel;
         this.node = node;
         init();
     }
@@ -132,10 +136,22 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
         mcdAttributeEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Debug.println("Edition d'un attribut");
                 AttributeEditor fen = showEditorAttribute(mvccdWindow , node, DialogEditor.UPDATE);
             }
         });
+
+        JMenuItem mcdAttributeDelete = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.delete.attribute"));
+        this.add(mcdAttributeDelete);
+        mcdAttributeDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Debug.println("Suppression d'un attribut");
+                DefaultTreeModel treeModel =  MVCCDManager.instance().getWinRepositoryContent().getTree().getTreeModel();
+                treeModel.removeNodeFromParent(node);
+            }
+        });
+
+
 
     }
 
@@ -146,6 +162,7 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Debug.println("Edition des attributs de l'entité");
+                System.out.println("Entré");
                 AttributesEditor fen = new AttributesEditor(mvccdWindow ,
                         (DefaultMutableTreeNode) node, DialogEditor.UPDATE);
                 fen.setVisible(true);

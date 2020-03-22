@@ -52,4 +52,32 @@ public class ProjectAdjustPref {
         mcdJournalisation(preferences.getMCD_JOURNALIZATION());
         mcdAudit((preferences.getMCD_AUDIT()));
     }
+
+    public void mcdAIDIndColumnName(String text) {
+        // A rajouter le test si isAidDep est correct après consolidation
+
+        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(project);
+        for (MCDEntity mcdEntity : mcdEntities){
+            for (MCDAttribute mcdAttribute : mcdEntity.getMcdAttributes()){
+                if (mcdAttribute.isAid()  && (! mcdAttribute.isAidDep())){
+                    mcdAttribute.setName(text);
+                }
+            }
+
+        }
+    }
+
+    public void mcdAIDDepColumnName(String text) {
+        // A rajouter le test si isAidDep est correct après consolidation
+
+        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(project);
+        for (MCDEntity mcdEntity : mcdEntities){
+            for (MCDAttribute mcdAttribute : mcdEntity.getMcdAttributes()){
+                if (mcdAttribute.isAid()  && mcdAttribute.isAidDep()){
+                    mcdAttribute.setName(text);
+                }
+            }
+
+        }
+    }
 }

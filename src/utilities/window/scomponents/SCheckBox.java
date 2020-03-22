@@ -1,8 +1,8 @@
 package utilities.window.scomponents;
 
 import main.MVCCDManager;
-import preferences.PreferencesManager;
 import utilities.window.editor.PanelInputContent;
+import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;
 
@@ -27,10 +27,7 @@ public class SCheckBox extends JCheckBox implements SComponent {
 
     private void init(PanelInputContent panel){
         this.panel = panel;
-        setBorder(BorderFactory.createLineBorder(
-                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_NORMAL));
-        setBackground(
-                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_NORMAL);
+        this.setColorNormal();
     }
 
 
@@ -121,5 +118,20 @@ public class SCheckBox extends JCheckBox implements SComponent {
         }
     }
 
+
+    @Override
+    public void setColorError() {
+        SComponentService.colorError(this);
+    }
+
+    @Override
+    public void setColorWarning() {
+        SComponentService.colorWarning(this);
+    }
+
+    @Override
+    public void setColorNormal() {
+        SComponentService.colorNormal(this);
+    }
 
 }

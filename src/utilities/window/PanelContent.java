@@ -97,8 +97,8 @@ public abstract class PanelContent extends JPanel {
     }
 
     private void colorDebug(){
-        if (PreferencesManager.instance().preferences().getDEBUG()) {
-            if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
+        if (PreferencesManager.instance().preferences().isDEBUG()) {
+            if (PreferencesManager.instance().preferences().isDEBUG_BACKGROUND_PANEL()) {
                 this.setBackground(Color.CYAN);
                 if (scroll != null) {
                     scroll.setBackground(Color.orange);

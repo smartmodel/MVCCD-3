@@ -3,9 +3,8 @@ package utilities.window.scomponents;
 import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 import utilities.window.editor.PanelInputContent;
-import utilities.window.scomponents.SComponent;
+import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;
 
@@ -19,10 +18,7 @@ public class STextField extends JTextField implements SComponent {
 
     public STextField(PanelInputContent panel) {
         this.panel = panel;
-        setBorder(BorderFactory.createLineBorder(
-                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_NORMAL));
-        setBackground(
-                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_NORMAL);
+        this.setColorNormal();
     }
 
     // Surcharge de la méthode JTextField
@@ -99,6 +95,8 @@ public class STextField extends JTextField implements SComponent {
         return readOnly;
     }
 
+
+
     public void setEnabled(boolean enabled){
         if (! isReadOnly()){
             super.setEnabled(enabled);
@@ -112,6 +110,21 @@ public class STextField extends JTextField implements SComponent {
             setEnabled(false);
             setForeground(Preferences.SCOMPONENT_INDIRECT_INPUT_FOREGROUND);
         }
+    }
+
+    @Override
+    public void setColorError() {
+        SComponentService.colorError(this);
+    }
+
+    @Override
+    public void setColorWarning() {
+        SComponentService.colorWarning(this);
+    }
+
+    @Override
+    public void setColorNormal() {
+        SComponentService.colorNormal(this);
     }
 
 }

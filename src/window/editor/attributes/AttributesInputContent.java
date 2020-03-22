@@ -5,20 +5,30 @@ import constraints.ConstraintService;
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import main.MVCCDElement;
+import main.MVCCDElementService;
+import main.MVCCDManager;
 import mcd.MCDAttribute;
 import mcd.MCDContAttributes;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import preferences.PreferencesManager;
+import project.Project;
+import project.ProjectElement;
+import repository.RepositoryService;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import utilities.UtilDivers;
 import utilities.window.ReadTableModel;
+import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
+import window.editor.attribute.AttributeEditor;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -29,6 +39,8 @@ public class AttributesInputContent extends PanelInputContent {
     private JTable table;
     private DefaultTableModel model;
     private JButton buttonAdd;
+    private JButton buttonAddAID;
+    private JButton buttonEdit;
     private JButton buttonRemove;
     private JButton buttonUp;
     private JButton buttonDown;
@@ -69,6 +81,7 @@ public class AttributesInputContent extends PanelInputContent {
 
         panelButtons.add(Box.createHorizontalGlue());
         panelButtons.add(buttonAdd);
+        panelButtons.add(buttonEdit);
         panelButtons.add(buttonRemove);
         panelButtons.add(Box.createHorizontalGlue());
 
@@ -84,6 +97,7 @@ public class AttributesInputContent extends PanelInputContent {
     private void makeTable(){
         String[] columnNames = {
                 AttributesTableColumn.ID.getLabel(),
+                AttributesTableColumn.ORDER.getLabel(),
                 AttributesTableColumn.STEREOTYPES.getLabel(),
                 AttributesTableColumn.NAME.getLabel(),
                 AttributesTableColumn.DATATYPE.getLabel(),
@@ -103,57 +117,7 @@ public class AttributesInputContent extends PanelInputContent {
         int col;
         for (MCDAttribute attribute:mcdAttributes){
             line++;
-
-
-            ArrayList<Stereotype> stereotypes =  attribute.getToStereotypes();
-            ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
-
-            ArrayList<Constraint> constraints =  attribute.getToConstraints();
-            ArrayList<String> constraintsUMLNames = ConstraintService.getUMLNamesByConstraints(constraints);
-
-            String textForDatatype = "";
-            if(attribute.getDatatypeLienProg() != null) {
-                MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(attribute.getDatatypeLienProg());
-                textForDatatype = mcdDatatype.getName();
-            }
-
-            col = AttributesTableColumn.ID.getPosition();
-            data[line][col] = attribute.getId();
-
-            col = AttributesTableColumn.STEREOTYPES.getPosition();
-            data[line][col] = UtilDivers.ArrayStringToString(stereotypesUMLNames, "");
-
-            col = AttributesTableColumn.NAME.getPosition();
-            data[line][col] = attribute.getName();
-
-
-            col = AttributesTableColumn.DATATYPE.getPosition();
-            data[line][col] = textForDatatype;
-
-            col = AttributesTableColumn.DATASIZE.getPosition();
-            data[line][col] = attribute.getSize();
-
-            col = AttributesTableColumn.DATASCALE.getPosition();
-            data[line][col] = attribute.getScale();
-
-            col = AttributesTableColumn.UPPERCASE.getPosition();
-            data[line][col] = attribute.isUppercase();
-
-            col = AttributesTableColumn.CONSTRAINTS.getPosition();
-            data[line][col] = UtilDivers.ArrayStringToString(constraintsUMLNames, "");;
-
-            col = AttributesTableColumn.DERIVED.getPosition();
-            data[line][col] = attribute.isDerived();
-
-            col = AttributesTableColumn.DEFAULTVALUE.getPosition();
-            String defaultValue = "";
-            if (attribute.getInitValue() != null){
-                defaultValue = attribute.getInitValue();
-            }
-            if (attribute.getDerivedValue() != null){
-                defaultValue = attribute.getDerivedValue();
-            }
-            data[line][col] = defaultValue;
+            putValueInRow(attribute, data[line]);
         }
 
 
@@ -162,23 +126,30 @@ public class AttributesInputContent extends PanelInputContent {
 
         table = new JTable();
         table.setModel(model);
-        //table.setEnabled(false);
+
 
         table.setRowHeight(Preferences.EDITOR_TABLE_ROW_HEIGHT);
-
-        //TODO-2 PAS Reprendre le formattage numérique
-        //table.setDefaultEditor(Integer.class,  new IntegerEditor(0, 100000));
-
 
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         //table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         //table.getColumnModel().setColumnSelectionAllowed(false);
 
+        int sizeDebug = 0;
+        if (PreferencesManager.instance().preferences().isDEBUG() &&
+            PreferencesManager.instance().preferences().isDEBUG_SHOW_TABLE_COL_HIDDEN()){
+            sizeDebug = 20;
+        }
+        
         col = AttributesTableColumn.ID.getPosition();
-        table.getColumnModel().getColumn(col).setPreferredWidth(20);
-        table.getColumnModel().getColumn(col).setMinWidth(20);
-        table.getColumnModel().getColumn(col).setMaxWidth(20);
+        table.getColumnModel().getColumn(col).setPreferredWidth(sizeDebug);
+        table.getColumnModel().getColumn(col).setMinWidth(sizeDebug);
+        table.getColumnModel().getColumn(col).setMaxWidth(sizeDebug);
+
+        col = AttributesTableColumn.ORDER.getPosition();
+        table.getColumnModel().getColumn(col).setPreferredWidth(sizeDebug);
+        table.getColumnModel().getColumn(col).setMinWidth(sizeDebug);
+        table.getColumnModel().getColumn(col).setMaxWidth(sizeDebug);
 
         col = AttributesTableColumn.STEREOTYPES.getPosition();
         //table.getColumnModel().getColumn(col).setPreferredWidth(100);
@@ -220,57 +191,98 @@ public class AttributesInputContent extends PanelInputContent {
 
 
         table.setFillsViewportHeight(true);
-
         table.addMouseListener(new MouseListener() {
-
             @Override
-            public void mouseClicked(MouseEvent arg0) {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                // ce ne sont pas les boutons standards mais ceux ceux spécifiques à la table
+                enabledContent();
             }
 
             @Override
-            public void mouseEntered(MouseEvent arg0) {
-                //component.getHandler().datasInEdition(table.isEditing());
+            public void mousePressed(MouseEvent mouseEvent) {
+
             }
 
             @Override
-            public void mouseExited(MouseEvent arg0) {
-                //component.getHandler().datasInEdition(table.isEditing());
+            public void mouseReleased(MouseEvent mouseEvent) {
+
             }
 
             @Override
-            public void mousePressed(MouseEvent arg0) {
+            public void mouseEntered(MouseEvent mouseEvent) {
+
             }
 
             @Override
-            public void mouseReleased(MouseEvent arg0) {
+            public void mouseExited(MouseEvent mouseEvent) {
+
             }
         });
-
-
     }
+
+    
 
     private void  makeButtons(){
         buttonAdd = new JButton("Ajouter");
         buttonAdd.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                model.addRow(newRow());
-
+                AttributeEditor fen = new AttributeEditor(getEditor() , getEditor().getNode(),
+                        DialogEditor.NEW);
+                fen.setVisible(true);
+                MCDAttribute mcdAttribute = (MCDAttribute) fen.getButtons().getButtonsContent().getNewMVCCDElement();
+                if (mcdAttribute != null) {
+                    Object[] row = newRow(mcdAttribute);
+                    model.addRow(row);
+                    table.setRowSelectionInterval(table.getRowCount()-1 , table.getRowCount()-1);
+                    enabledContent();
+                }
             }
         });
 
         buttonRemove = new JButton("Supprimer");
-        buttonRemove.addActionListener(new ActionListener() {
-
+        buttonRemove.setEnabled(false);
+        buttonRemove.addActionListener(new ActionListener()
+        {
             public void actionPerformed(ActionEvent e) {
                 int posActual = table.getSelectedRow();
                 if (posActual >= 0){
+                    DefaultMutableTreeNode nodeAttribute = getNodeAttribute(posActual);
+                    DefaultTreeModel treeModel =  MVCCDManager.instance().getWinRepositoryContent().getTree().getTreeModel();
+                    treeModel.removeNodeFromParent(nodeAttribute);
                     model.removeRow(posActual);
+                    enabledContent();
+                }
+            }
+        });
+
+        buttonEdit = new JButton("Editer");
+        buttonEdit.setEnabled(false);
+        buttonEdit.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e) {
+                int posActual = table.getSelectedRow();
+                if (posActual >= 0){
+                    int posId = AttributesTableColumn.ID.getPosition();
+                    Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
+
+                    DefaultMutableTreeNode nodeActual = RepositoryService.instance().getNodeInChildsByIdElement(
+                            getEditor().getNode(), idActual);
+
+                    AttributeEditor fen = new AttributeEditor(getEditor() , nodeActual,
+                            DialogEditor.UPDATE);
+                    fen.setVisible(true);
+
+                    MCDAttribute mcdAttributeActual = (MCDAttribute) nodeActual.getUserObject();
+
+                    updateRow(mcdAttributeActual, table.getSelectedRow());
+                    enabledContent();
                 }
             }
         });
 
         buttonUp = new JButton("^");
+        buttonUp.setEnabled(false);
         buttonUp.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -279,26 +291,29 @@ public class AttributesInputContent extends PanelInputContent {
                 if (posActual > 0){
                     model.moveRow(posActual, posActual, posActual-1);
                     table.setRowSelectionInterval(posActual-1, posActual-1);
+                    permuteOrder(posActual, posActual - 1);
                 }
+                enabledContent();
 
             }
         });
 
         buttonDown = new JButton("v");
+        buttonDown.setEnabled(false);
         buttonDown.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-
                 int posActual = table.getSelectedRow();
-                int posFuture;
                 if (posActual < table.getRowCount()-1){
-                    //table.setEnabled(true);
                     model.moveRow(posActual, posActual, posActual+1);
                     table.setRowSelectionInterval(posActual+1, posActual+1);
-                    //table.setEnabled(false);
+                    permuteOrder(posActual, posActual + 1);
                 }
+                enabledContent();
 
             }
+
+
         });
 
 
@@ -334,6 +349,12 @@ public class AttributesInputContent extends PanelInputContent {
     }
 
 
+    @Override
+    public boolean checkDatasPreSave(boolean unitaire) {
+
+        return true;
+    }
+
 
     protected boolean checkDatas(){
             return true;
@@ -355,17 +376,166 @@ public class AttributesInputContent extends PanelInputContent {
 
 
 
-    @Override
-    public boolean checkDatasPreSave() {
-        return true;
-    }
-
     private void enabledContent() {
+        int pos = table.getSelectedRow();
+        if (pos >= 0){
+            buttonRemove.setEnabled(true);
+            buttonEdit.setEnabled(true);
+            if (pos > 0){
+                buttonUp.setEnabled(true);
+            } else {
+                buttonUp.setEnabled(false);
+            }
+            if (pos == table.getRowCount()-1){
+                buttonDown.setEnabled(false);
+            } else{
+                buttonDown.setEnabled(true);
+            }
+        } else {
+            buttonRemove.setEnabled(false);
+            buttonEdit.setEnabled(false);
+            buttonUp.setEnabled(false);
+            buttonDown.setEnabled(false);
+        }
     }
 
-    private Object[] newRow(){
+    private void updateRow(MCDAttribute mcdAttributeSelected, int selectedRow) {
 
-        Object[] dataEmpty = new Object [AttributesTableColumn.getNbColumns()];
-        return dataEmpty;
+        Object[] row = new Object [AttributesTableColumn.getNbColumns()];
+        putValueInRow(mcdAttributeSelected, row);
+        UtilDivers.putValueRowInTable(table, selectedRow, row);
+
     }
+
+    private Object[] newRow(MCDAttribute mcdAttribute){
+
+        Object[] row = new Object [AttributesTableColumn.getNbColumns()];
+        putValueInRow(mcdAttribute, row);
+        return row;
+    }
+
+    private void putValueInRow(MCDAttribute attribute, Object[] row) {
+        ArrayList<Stereotype> stereotypes =  attribute.getToStereotypes();
+        ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
+
+        ArrayList<Constraint> constraints =  attribute.getToConstraints();
+        ArrayList<String> constraintsUMLNames = ConstraintService.getUMLNamesByConstraints(constraints);
+
+        String textForDatatype = "";
+        if(attribute.getDatatypeLienProg() != null) {
+            MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(attribute.getDatatypeLienProg());
+            textForDatatype = mcdDatatype.getName();
+        }
+        
+        int col;
+        
+        col = AttributesTableColumn.ID.getPosition();
+        row[col] = attribute.getId();
+
+        col = AttributesTableColumn.ORDER.getPosition();
+        row[col] = attribute.getOrder();
+
+        col = AttributesTableColumn.STEREOTYPES.getPosition();
+        row[col] = UtilDivers.ArrayStringToString(stereotypesUMLNames, "");
+
+        col = AttributesTableColumn.NAME.getPosition();
+        row[col] = attribute.getName();
+
+
+        col = AttributesTableColumn.DATATYPE.getPosition();
+        row[col] = textForDatatype;
+
+        col = AttributesTableColumn.DATASIZE.getPosition();
+        row[col] = attribute.getSize();
+
+        col = AttributesTableColumn.DATASCALE.getPosition();
+        row[col] = attribute.getScale();
+
+        col = AttributesTableColumn.UPPERCASE.getPosition();
+        row[col] = attribute.isUppercase();
+
+        col = AttributesTableColumn.CONSTRAINTS.getPosition();
+        row[col] = UtilDivers.ArrayStringToString(constraintsUMLNames, "");;
+
+        col = AttributesTableColumn.DERIVED.getPosition();
+        row[col] = attribute.isDerived();
+
+        col = AttributesTableColumn.DEFAULTVALUE.getPosition();
+        String defaultValue = "";
+        if (attribute.getInitValue() != null){
+            defaultValue = attribute.getInitValue();
+        }
+        if (attribute.getDerivedValue() != null){
+            defaultValue = attribute.getDerivedValue();
+        }
+        row[col] = defaultValue;
+    }
+
+
+    private DefaultMutableTreeNode getNodeAttribute(int posActual) {
+        int noCol = AttributesTableColumn.ID.getPosition();
+        Integer idSelected = (Integer) table.getModel().getValueAt(posActual, noCol);
+
+        DefaultMutableTreeNode nodeContAttributes = getEditor().getNode();
+        DefaultMutableTreeNode nodeAttribute = RepositoryService.instance().getNodeInChildsByIdElement(nodeContAttributes, idSelected);
+        return nodeAttribute;
+    }
+
+    private void permuteOrder(int posActual, int posNew) {
+
+        int posOrder = AttributesTableColumn.ORDER.getPosition();
+        Integer orderActual = (Integer) table.getModel().getValueAt(posActual, posOrder);
+        Integer orderNew = (Integer) table.getModel().getValueAt(posNew, posOrder);
+
+        int posId = AttributesTableColumn.ID.getPosition();
+        Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
+        Integer idOther = (Integer) table.getModel().getValueAt(posNew, posId);
+
+        System.out.println("idActual"   +idActual);
+        System.out.println("idNew"   +idOther);
+
+        // Permutation dans la table
+        table.getModel().setValueAt(orderNew, posActual, posOrder);
+        table.getModel().setValueAt(orderActual, posNew, posOrder);
+
+        // Permutation dans les 2 instances de descendants de ProjectElement
+        updateOrderINProjectElement(idActual, orderNew);
+        updateOrderINProjectElement(idOther, orderActual);
+
+        MVCCDManager.instance().setDatasProjectChanged(true);
+
+        // Mise à jour de l'affichage du référentiel
+        swapNodes(idActual, idOther);
+
+
+
+    }
+
+
+    private void updateOrderINProjectElement(Integer id, Integer order) {
+        Project project = MVCCDManager.instance().getProject();
+        ProjectElement projectElement = project.getElementById(id);
+        projectElement.setOrder(order);
+    }
+
+    private void swapNodes(Integer idA, Integer idB) {
+
+        DefaultMutableTreeNode nodeParent =  getEditor().getNode();
+
+        DefaultMutableTreeNode nodeA = RepositoryService.instance().getNodeInChildsByIdElement(
+               nodeParent, idA);
+        int indexA = nodeParent.getIndex(nodeA);
+
+
+        DefaultMutableTreeNode nodeB = RepositoryService.instance().getNodeInChildsByIdElement(
+                getEditor().getNode(), idB);
+        int indexB = nodeParent.getIndex(nodeB);
+
+        nodeParent.insert(nodeA, indexB);
+        nodeParent.insert(nodeB, indexA);
+
+        MVCCDManager.instance().showNewNodeInRepository(nodeB);
+
+    }
+
 }

@@ -324,6 +324,13 @@ public class MCDDatatypeInputContent extends PanelInputContent {
 
 
 
+    @Override
+    public boolean checkDatasPreSave(boolean unitaire) {
+
+        return true;
+    }
+
+
     protected boolean checkDatas(){
             return true;
     }
@@ -365,12 +372,6 @@ public class MCDDatatypeInputContent extends PanelInputContent {
     public void saveDatas(MVCCDElement mvccdElement) {
     }
 
-
-
-    @Override
-    public boolean checkDatasPreSave() {
-        return true;
-    }
 
     private void enabledContent() {
     }

@@ -226,6 +226,7 @@ public class Preferences extends MVCCDElement {
     private Boolean DEBUG = false;
     private Boolean DEBUG_BACKGROUND_PANEL = false;
     private Boolean DEBUG_PRINT_MVCCDELEMENT = false;
+    private Boolean DEBUG_SHOW_TABLE_COL_HIDDEN = false;
     //private PreferencesDisplay GENERAL_PREFERENCES_DISPLAY = PreferencesDisplay.REPOSITORY;
 
     // Modification User/Custom
@@ -245,8 +246,8 @@ public class Preferences extends MVCCDElement {
 
     }
 
-
-    public Boolean getDEBUG() {
+    // Application
+    public Boolean isDEBUG() {
         return DEBUG;
     }
 
@@ -254,7 +255,7 @@ public class Preferences extends MVCCDElement {
         this.DEBUG = DEBUG;
     }
 
-    public Boolean getDEBUG_BACKGROUND_PANEL() {
+    public Boolean isDEBUG_BACKGROUND_PANEL() {
         return DEBUG_BACKGROUND_PANEL;
     }
 
@@ -262,14 +263,25 @@ public class Preferences extends MVCCDElement {
         this.DEBUG_BACKGROUND_PANEL = DEBUG_BACKGROUND_PANEL;
     }
 
-    public Boolean getDEBUG_PRINT_MVCCDELEMENT() {
+    public Boolean isDEBUG_PRINT_MVCCDELEMENT() {
         return DEBUG_PRINT_MVCCDELEMENT;
     }
+    
 
     public void setDEBUG_PRINT_MVCCDELEMENT(Boolean DEBUG_PRINT_MVCCDELEMENT) {
         this.DEBUG_PRINT_MVCCDELEMENT = DEBUG_PRINT_MVCCDELEMENT;
     }
 
+    public Boolean isDEBUG_SHOW_TABLE_COL_HIDDEN() {
+        return DEBUG_SHOW_TABLE_COL_HIDDEN;
+    }
+
+    public void setDEBUG_SHOW_TABLE_COL_HIDDEN(Boolean DEBUG_SHOW_TABLE_COL_HIDDEN) {
+        this.DEBUG_SHOW_TABLE_COL_HIDDEN = DEBUG_SHOW_TABLE_COL_HIDDEN;
+    }
+    
+    
+    // Project
     public Boolean getMCD_JOURNALIZATION() {
         return MCD_JOURNALIZATION;
     }
@@ -343,7 +355,7 @@ public class Preferences extends MVCCDElement {
         this.MCD_AID_DEP_COLUMN_NAME = MCD_AID_DEP_COLUMN_NAME;
     }
 
-    public Boolean getMCD_AID_WITH_DEP() {
+    public Boolean isMCD_AID_WITH_DEP() {
         return MCD_AID_WITH_DEP;
     }
 

@@ -97,6 +97,15 @@ public class MVCCDManager {
 
     }
 
+    public void showNewNodeInRepository(DefaultMutableTreeNode node) {
+        // Affichage du noeud
+        System.out.println("Reaffiche  " + node.getUserObject().toString());
+        //getWinRepositoryContent().getTree().changeModel(repository);
+        getWinRepositoryContent().getTree().getTreeModel().reload();
+        getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
+
+    }
+
     public void  openProject() {
         ProjectFileChooser fileChooser = new ProjectFileChooser(ProjectFileChooser.OPEN);
         File fileChoose = fileChooser.fileChoose();

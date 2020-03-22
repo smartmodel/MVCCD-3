@@ -3,6 +3,7 @@ package utilities;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class UtilDivers {
@@ -100,5 +101,13 @@ public class UtilDivers {
             return "";
         }
         return null;
+    }
+
+    public static void putValueRowInTable(JTable table, int selectedRow, Object[] row) {
+        if (row.length >= 1) {
+            for (int i = 0; i < row.length - 1; i++) {
+                table.setValueAt(row[i], selectedRow, i);
+            }
+        }
     }
 }

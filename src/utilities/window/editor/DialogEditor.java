@@ -26,7 +26,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     private boolean readOnly = false;
 
-    public DialogEditor(Frame owner, DefaultMutableTreeNode node, String mode) {
+    public DialogEditor(Window owner, DefaultMutableTreeNode node, String mode) {
         super(owner);
         this.mode = mode;
         this.node = node;
@@ -200,4 +200,6 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
             buttons.setReadOnly(readOnly);
         }
     }
+
+
 }

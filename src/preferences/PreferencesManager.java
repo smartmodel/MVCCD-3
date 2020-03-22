@@ -37,6 +37,16 @@ public class PreferencesManager {
         }
     }
 
+    public Preferences profileOrDefault (){
+        if (profilePref != null){
+            return profilePref;
+        } else  if (defaultPref != null){
+            return defaultPref;
+        } else {
+            return null;
+        }
+    }
+
     public Preferences getDefaultPref() {
         return defaultPref;
     }
@@ -66,21 +76,30 @@ public class PreferencesManager {
     }
 
     public void copyApplicationPref() {
-        projectPref.setDEBUG(applicationPref.getDEBUG());
-        projectPref.setDEBUG_PRINT_MVCCDELEMENT(applicationPref.getDEBUG_PRINT_MVCCDELEMENT());
-        projectPref.setDEBUG_BACKGROUND_PANEL(applicationPref.getDEBUG_BACKGROUND_PANEL());
+        projectPref.setDEBUG(applicationPref.isDEBUG());
+        projectPref.setDEBUG_PRINT_MVCCDELEMENT(applicationPref.isDEBUG_PRINT_MVCCDELEMENT());
+        projectPref.setDEBUG_BACKGROUND_PANEL(applicationPref.isDEBUG_BACKGROUND_PANEL());
+        projectPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(applicationPref.isDEBUG_SHOW_TABLE_COL_HIDDEN());
     }
 
     public void copyProfilePref() {
         copyPref(profilePref, projectPref);
     }
 
+    /*
     public void copyDefaultPref() {
         copyPref(defaultPref, projectPref);
      }
 
+     */
+
     private void copyPref(Preferences from, Preferences to) {
+        // MCD
+        to.setMCD_AID_IND_COLUMN_NAME(from.getMCD_AID_IND_COLUMN_NAME());
+        to.setMCD_AID_WITH_DEP(from.isMCD_AID_WITH_DEP());
+        to.setMCD_AID_DEP_COLUMN_NAME(from.getMCD_AID_DEP_COLUMN_NAME());
         to.setMCD_AID_DATATYPE_LIENPROG(from.getMCD_AID_DATATYPE_LIENPROG());
+        to.setMCDDATATYPE_NUMBER_SIZE_MODE(from.getMCDDATATYPE_NUMBER_SIZE_MODE());
         to.setMCD_JOURNALIZATION(from.getMCD_JOURNALIZATION());
         to.setMCD_JOURNALIZATION_EXCEPTION(from.getMCD_JOURNALIZATION_EXCEPTION());
         to.setMCD_AUDIT(from.getMCD_AUDIT());

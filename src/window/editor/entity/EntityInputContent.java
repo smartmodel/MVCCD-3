@@ -134,9 +134,7 @@ public class EntityInputContent extends PanelInputContent {
 
 
     protected void changeField(DocumentEvent e) {
-        if (entityName.getDocument() == e.getDocument()) {
-            checkEntityName(true);
-        }
+        // Les champs obligatoires sont testés sur la procédure checkDatasPreSave()
         if (entityShortName.getDocument() == e.getDocument()) {
             checkEntityShortName(true);
         }
@@ -171,11 +169,6 @@ public class EntityInputContent extends PanelInputContent {
 
 
 
-    protected boolean checkDatas(){
-            boolean resultat = checkEntityName(false);
-            resultat =  checkEntityShortName(false)  && resultat ;
-            return resultat;
-    }
 
     private boolean checkEntityName(boolean unitaire) {
         return super.checkInput(entityName, unitaire, MCDEntityService.checkName(entityName.getText()));
@@ -229,10 +222,19 @@ public class EntityInputContent extends PanelInputContent {
 
 
     @Override
-    public boolean checkDatasPreSave() {
-        boolean resultat = checkEntityName(false);
-        return resultat;
+    public boolean checkDatasPreSave(boolean unitaire) {
+        boolean ok = checkEntityName(unitaire);
+        return ok;
     }
+
+    protected boolean checkDatas(){
+        boolean ok = checkDatasPreSave(false);
+        // Autres attributs
+
+        ok =  checkEntityShortName(false)  && ok ;
+        return ok ;
+    }
+
 
     private void enabledContent() {
         Preferences preferences = PreferencesManager.instance().preferences();

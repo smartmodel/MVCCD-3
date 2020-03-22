@@ -1,8 +1,8 @@
 package utilities.window.scomponents;
 
 import main.MVCCDManager;
-import preferences.PreferencesManager;
 import utilities.window.editor.PanelInputContent;
+import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;
 
@@ -21,10 +21,7 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
 
     public SComboBox(PanelInputContent panel) {
         this.panel = panel ;
-        setBorder(BorderFactory.createLineBorder(
-                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_NORMAL));
-        setBackground(
-                PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_NORMAL);
+        this.setColorNormal();
     }
 
     public void setSelectedItem(Object item) {
@@ -97,6 +94,21 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         } else{
             super.setEnabled(false);
         }
+    }
+
+    @Override
+    public void setColorError() {
+        SComponentService.colorError(this);
+    }
+
+    @Override
+    public void setColorWarning() {
+        SComponentService.colorWarning(this);
+    }
+
+    @Override
+    public void setColorNormal() {
+        SComponentService.colorNormal(this);
     }
 
 }

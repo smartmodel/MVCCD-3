@@ -19,6 +19,7 @@ import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.STextField;
 import utilities.window.editor.PanelInputContent;
+import utilities.window.scomponents.services.SComboBoxService;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -37,6 +38,7 @@ public class AttributeInputContent extends PanelInputContent  {
 
     private JPanel panel = new JPanel();
     private STextField attributeName = new STextField(this);
+    private SComboBox attributeNameAID = new SComboBox(this);
 
     private JPanel panelDatatype = new JPanel ();
     private SComboBox<String> datatypeName = new SComboBox<String>(this);
@@ -77,6 +79,13 @@ public class AttributeInputContent extends PanelInputContent  {
 
 
     private void createContent() {
+
+        attributeNameAID.addItem(PreferencesManager.instance().preferences().getMCD_AID_IND_COLUMN_NAME());
+        if (PreferencesManager.instance().preferences().isMCD_AID_WITH_DEP()) {
+            attributeNameAID.addItem(PreferencesManager.instance().preferences().getMCD_AID_DEP_COLUMN_NAME());
+        }
+        attributeNameAID.addItemListener(this);
+        attributeNameAID.addFocusListener(this);
 
         attributeName.setPreferredSize((new Dimension(100,Preferences.EDITOR_FIELD_HEIGHT)));
         attributeName.setToolTipText("Nom de l'attribut");
@@ -173,6 +182,7 @@ public class AttributeInputContent extends PanelInputContent  {
         initValue.getDocument().addDocumentListener(this);
         initValue.addFocusListener(this);
 
+        super.getsComponents().add(attributeNameAID);
         super.getsComponents().add(attributeName);
         super.getsComponents().add(datatypeName);
         super.getsComponents().add(btnDatatypeTree);
@@ -190,6 +200,8 @@ public class AttributeInputContent extends PanelInputContent  {
         super.getsComponents().add(derivedValue);
         super.getsComponents().add(initValue);
 
+        enabledOrVisibleFalse();
+
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -199,18 +211,17 @@ public class AttributeInputContent extends PanelInputContent  {
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        panel.add(new JLabel("Nom : "), gbc);
-        gbc.gridx++;
-        panel.add(attributeName, gbc);
-
-
-        gbc.gridx++;
         panel.add(new JLabel("Id. artificiel : "), gbc);
         gbc.gridx++;
         panel.add(aid, gbc);
 
-
-
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("Nom : "), gbc);
+        gbc.gridx++;
+        panel.add(attributeName, gbc);
+        gbc.gridx++;
+        panel.add(attributeNameAID, gbc);
 
         Border border = BorderFactory.createLineBorder(Color.black);
         gbc.gridx = 0;
@@ -218,7 +229,6 @@ public class AttributeInputContent extends PanelInputContent  {
         gbc.gridwidth = 4;
         createPanelDatatype(border);
         panel.add(panelDatatype, gbc);
-
         gbc.gridwidth = 1;
 
         gbc.gridx = 0;
@@ -278,6 +288,10 @@ public class AttributeInputContent extends PanelInputContent  {
 
     }
 
+    private void enabledOrVisibleFalse() {
+        attributeNameAID.setEnabled(false);
+    }
+
 
     private void createPanelDatatype(Border border) {
         TitledBorder panelDataypeBorder = BorderFactory.createTitledBorder(border, "Type de données");
@@ -323,17 +337,7 @@ public class AttributeInputContent extends PanelInputContent  {
 
 
     protected void changeField(DocumentEvent e) {
-        if ( e.getDocument()  == attributeName.getDocument()) {
-            checkAttributeName(true);
-        }
-        if ( e.getDocument()  == datatypeSize.getDocument()) {
-            boolean ok = checkDatatypeSize(true);
-            checkSizeAndScale(ok);
-        }
-        if ( e.getDocument()  == datatypeScale.getDocument()) {
-            boolean ok = checkDatatypeScale(true);
-            checkSizeAndScale(ok);
-        }
+        // Les champs obligatoires sont testés sur la procédure checkDatasPreSave()
 
     }
 
@@ -347,7 +351,11 @@ public class AttributeInputContent extends PanelInputContent  {
             if (source == aid) {
                 changeFieldSelectedAid();
             }
-            if (source == list) {
+            if (source == attributeNameAID) {
+                //changeFieldSelectedList();
+                changeFieldSelectedAttributeNameAID();
+            }
+                if (source == list) {
                 changeFieldSelectedList();
             }
             if (source == datatypeName) {
@@ -364,6 +372,9 @@ public class AttributeInputContent extends PanelInputContent  {
             }
 
     }
+
+
+
     @Override
     protected void changeFieldDeSelected(ItemEvent e) {
         Object source = e.getSource();
@@ -388,13 +399,17 @@ public class AttributeInputContent extends PanelInputContent  {
 
     }
 
+    private void changeFieldSelectedAttributeNameAID() {
+        String nameSelected = (String) attributeNameAID.getSelectedItem();
+        attributeName.setText(nameSelected);
+    }
+
     private void changeFieldSelectedDatatypeName() {
         String nameSelected = (String) datatypeName.getSelectedItem();
         mcdDatatypeSelected = MDDatatypeService.getMCDDatatypeByName(nameSelected);
         //reInitField(datatypeSize);
         if (mcdDatatypeSelected != null) {
             labelDatatypeSize.setText(MCDAttributeService.getTextLabelSize(mcdDatatypeSelected));
-            System.out.println("Datatype :  " + mcdDatatypeSelected.getName());
             if (mcdDatatypeSelected instanceof MCDDomain) {
                 datatypeSize.setEnabled(true);
                 datatypeSize.setText(mcdDatatypeSelected.getSizeDefault());
@@ -472,7 +487,6 @@ public class AttributeInputContent extends PanelInputContent  {
 
     /*
     private void changeFieldAid() {
-        System.out.println("changeFieldAid");
         if (aid.isSelected()){
             datatypeNameSelect(MDDatatypeService.convertLienProgToName(
                     PreferencesManager.instance().preferences().getMCD_AID_DATATYPE_LIENPROG()));
@@ -504,14 +518,19 @@ public class AttributeInputContent extends PanelInputContent  {
      */
 
     private void changeFieldSelectedAid() {
-            datatypeNameSelect(MDDatatypeService.convertLienProgToName(
-                    PreferencesManager.instance().preferences().getMCD_AID_DATATYPE_LIENPROG()));
+        attributeName.setEnabled(false);
+        attributeName.setText((String) attributeNameAID.getItemAt(0));
+        attributeNameAID.setEnabled(PreferencesManager.instance().preferences().isMCD_AID_WITH_DEP());
+        SComboBoxService.selectByText(datatypeName,
+                    PreferencesManager.instance().preferences().getMCD_AID_DATATYPE_LIENPROG());
             datatypeName.setEnabled(false);
             mandatory.setSelected(true);
             mandatory.setEnabled(false);
-            list.setSelected(false);
-            list.setEnabled(false);
-            frozen.setSelected(true);
+        list.setSelected(false);
+        list.setEnabled(false);
+        ordered.setSelected(false);
+        ordered.setEnabled(false);
+        frozen.setSelected(true);
             frozen.setEnabled(false);
             derivedValue.setText("");
             derivedValue.setEnabled(false);
@@ -520,16 +539,21 @@ public class AttributeInputContent extends PanelInputContent  {
     }
 
     private void changeFieldDeSelectedAid() {
+        attributeName.setEnabled(true);
+        attributeName.setText("");
+        attributeNameAID.setEnabled(false);
             datatypeName.setSelectedIndex(0);
             datatypeName.setEnabled(true);
             mandatory.setSelected(false);
             mandatory.setEnabled(true);
-            list.setSelected(false);
-            list.setEnabled(true);
-            frozen.setSelected(false);
-            frozen.setEnabled(true);
-            derivedValue.setEnabled(true);
-            initValue.setEnabled(true);
+        list.setSelected(false);
+        list.setEnabled(true);
+        ordered.setSelected(false);
+        ordered.setEnabled(true);
+        frozen.setSelected(false);
+        frozen.setEnabled(true);
+        derivedValue.setEnabled(true);
+        initValue.setEnabled(true);
     }
 
 
@@ -557,16 +581,25 @@ public class AttributeInputContent extends PanelInputContent  {
 
 
 
-    protected boolean checkDatas(){
-            boolean resultat = checkAttributeName(false);
-            resultat =  checkDatatypeSize(false)  && resultat;
-            resultat =  checkDatatypeScale(false)  && resultat;
-            if (resultat){
-                resultat =  checkSizeAndScale(false)  && resultat;
-            }
-        return resultat;
+    @Override
+    public boolean checkDatasPreSave(boolean unitaire) {
+        datatypeSize.setColorNormal();
+        datatypeScale.setColorNormal();
+        boolean ok = checkAttributeName(unitaire) ;
+        ok = checkDatatypeSize(unitaire && ok) && ok;
+        ok = checkDatatypeScale(unitaire && ok) && ok;
+        if (ok){
+            ok =  checkSizeAndScale(unitaire && ok)  && ok;
+        }
+        return ok;
     }
 
+
+    protected boolean checkDatas(){
+        boolean ok = checkDatasPreSave(false);
+        // Autre attributs
+        return ok;
+    }
     private boolean checkSizeAndScale(boolean unitaire) {
         if (mcdDatatypeSelected != null) {
             boolean c1a = mcdDatatypeSelected.isSelfOrDescendantOf(
@@ -595,8 +628,8 @@ public class AttributeInputContent extends PanelInputContent  {
 
 
             if (r1) {
-                ArrayList<String> messagesErrors = new ArrayList<String>();
                 if (unitaire) {
+                    ArrayList<String> messagesErrors = new ArrayList<String>();
                     String message = "";
                     if (c1a) {
                         message = MessagesBuilder.getMessagesProperty("mcddatatype.decimal.size.and.scale.error",
@@ -608,15 +641,8 @@ public class AttributeInputContent extends PanelInputContent  {
                     }
                     messagesErrors.add(message);
 
-                    datatypeSize.setBorder(BorderFactory.createLineBorder(
-                            PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_ERROR));
-                    datatypeSize.setBackground(
-                            PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_ERROR);
-
-                    datatypeScale.setBorder(BorderFactory.createLineBorder(
-                            PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_LINEBORDER_ERROR));
-                    datatypeScale.setBackground(
-                            PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_ERROR);
+                    datatypeSize.setColorError();
+                    datatypeScale.setColorError();
 
                     showCheckResultat(messagesErrors);
                 }
@@ -684,11 +710,19 @@ public class AttributeInputContent extends PanelInputContent  {
         // du général (aid) au particulier (list)
 
         MCDAttribute mcdAttribute = (MCDAttribute) mvccdElement;
+
+        aid.setSelected(mcdAttribute.isAid());
         attributeName.setText(mcdAttribute.getName());
+
+        if (mcdAttribute.isAid()) {
+            // redondance entre les 2 champs attributeName et attributeNameAID
+            SComboBoxService.selectByText(attributeNameAID, attributeName.getName());
+        }
+
 
         if (mcdAttribute.getDatatypeLienProg() != null) {
             MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(mcdAttribute.getDatatypeLienProg());
-            datatypeNameSelect(mcdDatatype.getName());
+            SComboBoxService.selectByText(datatypeName, mcdDatatype.getName());
         } else {
             datatypeName.setSelectedIndex(0);
         }
@@ -696,7 +730,6 @@ public class AttributeInputContent extends PanelInputContent  {
 
 
         mandatory.setSelected(mcdAttribute.isMandatory());
-        aid.setSelected(mcdAttribute.isAid());
         list.setSelected(mcdAttribute.isList());
         frozen.setSelected(mcdAttribute.isFrozen());
         ordered.setSelected(mcdAttribute.isOrdered());
@@ -737,6 +770,11 @@ public class AttributeInputContent extends PanelInputContent  {
     @Override
     public void saveDatas(MVCCDElement mvccdElement) {
         MCDAttribute mcdAttribute= (MCDAttribute) mvccdElement;
+
+        if (aid.checkIfUpdated()){
+            mcdAttribute.setAid(aid.isSelected());
+        }
+
         if (attributeName.checkIfUpdated()){
             mcdAttribute.setName(attributeName.getText());
         }
@@ -754,9 +792,7 @@ public class AttributeInputContent extends PanelInputContent  {
             mcdAttribute.setMandatory(mandatory.isSelected());
         }
 
-        if (aid.checkIfUpdated()){
-            mcdAttribute.setAid(aid.isSelected());
-        }
+
 
         if (list.checkIfUpdated()){
             mcdAttribute.setList(list.isSelected());
@@ -831,19 +867,6 @@ public class AttributeInputContent extends PanelInputContent  {
     }
 
 
-    @Override
-    public boolean checkDatasPreSave() {
-        boolean ok = checkAttributeName(true);
-        ok = checkDatatypeSize(ok) && ok;
-        ok = checkDatatypeScale(ok) && ok;
-        if (ok){
-            ok =  checkSizeAndScale(ok)  && ok;
-        }
-        if (!ok){
-
-        }
-        return ok;
-    }
 
     private void enabledContent() {
         Preferences preferences = PreferencesManager.instance().preferences();
@@ -864,7 +887,7 @@ public class AttributeInputContent extends PanelInputContent  {
        MDDatatype mdDatatypeSelected = MDDatatypeTreeDialog.getSelectedMDDatatype();
        if (mdDatatypeSelected != null){
            MCDDatatype mcdDatatypeSelected = (MCDDatatype) mdDatatypeSelected;
-           datatypeNameSelect(mcdDatatypeSelected.getName());
+           SComboBoxService.selectByText(datatypeName, mcdDatatypeSelected.getName());
        }
    }
 
@@ -881,6 +904,7 @@ public class AttributeInputContent extends PanelInputContent  {
         }
     }
 
+    /*
     private void datatypeNameSelect(String name) {
         for (int i=0 ; i < datatypeName.getItemCount(); i++){
             if (datatypeName.getItemAt(i).equals(name)){
@@ -888,6 +912,8 @@ public class AttributeInputContent extends PanelInputContent  {
             }
         }
     }
+
+     */
 
     private boolean integerPortionOnly(MCDDatatype mcdDatatype){
 

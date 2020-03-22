@@ -31,8 +31,8 @@ public abstract class PanelBorderLayout extends JPanel implements MouseListener,
     }
 
     protected  void colorBackground() {
-        if (PreferencesManager.instance().preferences().getDEBUG()) {
-            if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
+        if (PreferencesManager.instance().preferences().isDEBUG()) {
+            if (PreferencesManager.instance().preferences().isDEBUG_BACKGROUND_PANEL()) {
                 Color color;
                 if (this.borderLayoutPosition.equals(BorderLayout.NORTH)) color = Color.RED;
                 else if (this.borderLayoutPosition.equals(BorderLayout.EAST)) color = Color.YELLOW;

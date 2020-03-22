@@ -19,6 +19,7 @@ public class MCDAttribute extends MCDElement {
     private static final long serialVersionUID = 1000;
 
     private boolean aid = false;
+    private boolean aidDep = false;
     private boolean mandatory = false ;
     private boolean list = false;
 
@@ -126,6 +127,14 @@ public class MCDAttribute extends MCDElement {
 
     public void setAid(boolean aid) {
         this.aid = aid;
+    }
+
+    public boolean isAidDep() {
+        return aidDep;
+    }
+
+    public void setAidDep(boolean aidDep) {
+        this.aidDep = aidDep;
     }
 
     public boolean isMandatory() {

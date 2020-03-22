@@ -1,6 +1,6 @@
 package utilities.window.scomponents;
 
-import window.editor.attribute.AttributeInputContent;
+import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;
 
@@ -46,6 +46,22 @@ public class SButton extends JButton implements SComponent {
         } else{
             super.setEnabled(false);
         }
+    }
+
+
+    @Override
+    public void setColorError() {
+        SComponentService.colorError(this);
+    }
+
+    @Override
+    public void setColorWarning() {
+        SComponentService.colorWarning(this);
+    }
+
+    @Override
+    public void setColorNormal() {
+        SComponentService.colorNormal(this);
     }
 
 }

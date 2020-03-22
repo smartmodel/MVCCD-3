@@ -4,6 +4,7 @@ import main.MVCCDElement;
 import project.ProjectElement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MCDContAttributes extends MCDElement{
 
@@ -19,6 +20,11 @@ public class MCDContAttributes extends MCDElement{
             resultat.add((MCDAttribute) mvccdElement);
         }
         return resultat;
+    }
+
+    public boolean removeAttribute(MCDAttribute mcdAttribute){
+
+        return getMCDAttributes().remove(mcdAttribute);
     }
 
 }

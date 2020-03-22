@@ -7,13 +7,14 @@ import window.editor.entity.EntityButtons;
 import window.editor.entity.EntityInput;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
 
 public class AttributeEditor extends DialogEditor {
 
 
 
-    public AttributeEditor(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String mode)  {
-        super(mvccdWindow, node, mode);
+    public AttributeEditor(Window owner, DefaultMutableTreeNode node, String mode)  {
+        super(owner, node, mode);
 
         super.setSize(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
         super.setInput(new AttributeInput(this));

@@ -32,6 +32,7 @@ public abstract class PanelButtonsContent extends PanelContent
     private PanelButtons panelButtons;
     private Box bVer ;
     private Box btns ;
+    private MVCCDElement newMVCCDElement ;
 
     private boolean readOnly = false;
 
@@ -40,6 +41,7 @@ public abstract class PanelButtonsContent extends PanelContent
         this.panelButtons = panelButtons;
         createContent();
         super.addContent(panel, false);
+
 
     }
 
@@ -166,7 +168,7 @@ public abstract class PanelButtonsContent extends PanelContent
         if (source == btnOk) {
             if (getEditor().getMode().equals(DialogEditor.NEW)) {
                 treatCreate();
-            }
+             }
             if (getEditor().getMode().equals(EntityEditor.UPDATE)) {
                 treatUpdate();
             }
@@ -213,10 +215,10 @@ public abstract class PanelButtonsContent extends PanelContent
         getEditor().adjustTitle();
     }
 
-    private void treatCreate(){
-        MVCCDElement mvccdElement = createNewMVCCDElement();
-        saveDatas(mvccdElement);
-        completeNewMVCCDElement(mvccdElement);
+    private void  treatCreate(){
+        newMVCCDElement = createNewMVCCDElement();
+        saveDatas(newMVCCDElement);
+        completeNewMVCCDElement(newMVCCDElement);
     }
 
 
@@ -230,8 +232,8 @@ public abstract class PanelButtonsContent extends PanelContent
     protected abstract void completeNewMVCCDElement(MVCCDElement mvccdElement);
 
     private void colorDebug(){
-        if (PreferencesManager.instance().preferences().getDEBUG()) {
-            if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
+        if (PreferencesManager.instance().preferences().isDEBUG()) {
+            if (PreferencesManager.instance().preferences().isDEBUG_BACKGROUND_PANEL()) {
                 btns.setOpaque(true);
                 btns.setBackground(Color.BLACK);
 
@@ -254,5 +256,9 @@ public abstract class PanelButtonsContent extends PanelContent
             btnApply.setReadOnly(readOnly);
             btnUndo.setReadOnly(readOnly);
          }
+    }
+
+    public MVCCDElement getNewMVCCDElement() {
+        return newMVCCDElement;
     }
 }

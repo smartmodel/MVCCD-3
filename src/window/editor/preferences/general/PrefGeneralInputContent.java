@@ -36,14 +36,17 @@ public class PrefGeneralInputContent extends PanelInputContent {
     }
 
     @Override
-    protected boolean checkDatas() {
+    public boolean checkDatasPreSave(boolean unitaire) {
+
         return true;
     }
 
     @Override
-    public boolean checkDatasPreSave() {
+    protected boolean checkDatas() {
+
         return true;
     }
+
 
     @Override
     protected void changeField(DocumentEvent e) {

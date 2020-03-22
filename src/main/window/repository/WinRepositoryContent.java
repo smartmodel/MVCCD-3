@@ -1,6 +1,5 @@
 package main.window.repository;
 
-import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.PanelContent;
 
@@ -27,8 +26,8 @@ public class WinRepositoryContent extends PanelContent implements ActionListener
     }
 
     private void colorBackground() {
-        if (PreferencesManager.instance().preferences().getDEBUG()) {
-            if (PreferencesManager.instance().preferences().getDEBUG_BACKGROUND_PANEL()) {
+        if (PreferencesManager.instance().preferences().isDEBUG()) {
+            if (PreferencesManager.instance().preferences().isDEBUG_BACKGROUND_PANEL()) {
                 tree.setBackground(Color.RED);
             }
         }

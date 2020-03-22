@@ -9,6 +9,8 @@ public interface  SComponent {
     void reset();
     void setReadOnly(boolean readOnly);
     boolean isReadOnly();
-
+    void setColorError();
+    void setColorWarning();
+    void setColorNormal();
 
 }

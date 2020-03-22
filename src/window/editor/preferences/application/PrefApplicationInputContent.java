@@ -10,7 +10,6 @@ import utilities.window.scomponents.SCheckBox;
 import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -19,11 +18,12 @@ import java.io.File;
 public class PrefApplicationInputContent extends PanelInputContent  {
     private JPanel panel = new JPanel();
 
-    private SCheckBox debug = new SCheckBox(this,"Debug");
+    private SCheckBox debug = new SCheckBox(this);
     private JPanel debugSubPanel = new JPanel();
 
-    private SCheckBox debugPrintMVCCDElement = new SCheckBox(this,"MVCCD Element");
-    private SCheckBox debugBackgroundPanel = new SCheckBox(this, "Background Panel");
+    private SCheckBox debugPrintMVCCDElement = new SCheckBox(this);
+    private SCheckBox debugBackgroundPanel = new SCheckBox(this );
+    private SCheckBox debugJTableShowHidden = new SCheckBox(this );
 
     public PrefApplicationInputContent(PrefApplicationInput prefApplicationInput) {
         super(prefApplicationInput);
@@ -43,22 +43,29 @@ public class PrefApplicationInputContent extends PanelInputContent  {
         debugPrintMVCCDElement.addFocusListener(this);
         debugBackgroundPanel.addItemListener(this);
         debugBackgroundPanel.addFocusListener(this);
+        debugJTableShowHidden.addItemListener(this);
+        debugJTableShowHidden.addFocusListener(this);
 
         //debugBackgroundPanel.addChangeListener(this);
 
         super.getsComponents().add(debug);
         super.getsComponents().add(debugPrintMVCCDElement);
         super.getsComponents().add(debugBackgroundPanel);
+        super.getsComponents().add(debugJTableShowHidden);
+        //panel.setAlignmentX(LEFT_ALIGNMENT);
+        //panel.setAlignmentY(TOP_ALIGNMENT);
 
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.anchor = GridBagConstraints.BELOW_BASELINE;
         gbc.insets = new Insets(10, 10, 0, 0);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
+        panel.add(new JLabel ("Debug"));
+        gbc.gridx++;
         panel.add(debug ,gbc);
         gbc.gridx++;
         panel.add(debugSubPanel, gbc);
@@ -77,19 +84,31 @@ public class PrefApplicationInputContent extends PanelInputContent  {
         gbcDebug.insets = new Insets(5,5,5,5);
 
 
+        debugSubPanel.add(new JLabel ("MVCCD Element"), gbcDebug);
+        gbcDebug.gridx++;
         debugSubPanel.add(debugPrintMVCCDElement, gbcDebug);
-        gbcDebug.gridy++;
+
+        gbcDebug.gridy++ ;
+        gbcDebug.gridx = 0;
+        debugSubPanel.add(new JLabel ("Background Panel"), gbcDebug);
+        gbcDebug.gridx++;
         debugSubPanel.add(debugBackgroundPanel, gbcDebug);
+
+        gbcDebug.gridy++ ;
+        gbcDebug.gridx = 0;
+        debugSubPanel.add(new JLabel ("Id et Order dans JTable"), gbcDebug);
+        gbcDebug.gridx++;
+        debugSubPanel.add(debugJTableShowHidden, gbcDebug);
 
     }
 
     @Override
-    protected boolean checkDatas() {
+    public boolean checkDatasPreSave(boolean unitaire) {
         return true;
     }
 
     @Override
-    public boolean checkDatasPreSave() {
+    protected boolean checkDatas() {
         return true;
     }
 
@@ -115,9 +134,10 @@ public class PrefApplicationInputContent extends PanelInputContent  {
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
         Preferences preferences = PreferencesManager.instance().getApplicationPref();
-        debug.setSelected(preferences.getDEBUG());
-        debugPrintMVCCDElement.setSelected(preferences.getDEBUG_PRINT_MVCCDELEMENT());
-        debugBackgroundPanel.setSelected(preferences.getDEBUG_BACKGROUND_PANEL());
+        debug.setSelected(preferences.isDEBUG());
+        debugPrintMVCCDElement.setSelected(preferences.isDEBUG_PRINT_MVCCDELEMENT());
+        debugBackgroundPanel.setSelected(preferences.isDEBUG_BACKGROUND_PANEL());
+        debugJTableShowHidden.setSelected(preferences.isDEBUG_SHOW_TABLE_COL_HIDDEN());
 
         super.enableSubPanels();
     }
@@ -139,10 +159,15 @@ public class PrefApplicationInputContent extends PanelInputContent  {
         if (debugBackgroundPanel.checkIfUpdated()){
             applicationPref.setDEBUG_BACKGROUND_PANEL(debugBackgroundPanel.isSelected());
         }
+        if (debugJTableShowHidden.checkIfUpdated()){
+            applicationPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(debugJTableShowHidden.isSelected());
+        }
+
         // Copie danms les préférences de pojet
         if (PreferencesManager.instance().getProjectPref() != null) {
             PreferencesManager.instance().copyApplicationPref();
         }
+
         // Sauvegarde (fichier) des préférences d'application
         PreferencesSaver saver = new PreferencesSaver();
         saver.save(new File(Preferences.FILE_APPLICATION_PREF_NAME), applicationPref);
