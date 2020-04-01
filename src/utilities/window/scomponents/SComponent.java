@@ -12,5 +12,6 @@ public interface  SComponent {
     void setColorError();
     void setColorWarning();
     void setColorNormal();
+    boolean isCheckPreSave();
 
 }

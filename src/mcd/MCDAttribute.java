@@ -205,5 +205,8 @@ public class MCDAttribute extends MCDElement {
     }
 
 
-
+    @Override
+    public String getNameTree() {
+        return null;
     }
+}

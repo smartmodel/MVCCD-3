@@ -1,12 +1,13 @@
 package mcd;
 
 import main.MVCCDElement;
+import mcd.interfaces.IMCDModel;
 import preferences.Preferences;
 import project.Project;
 import project.ProjectElement;
 import utilities.files.UtilXML;
 
-public class MCDModels extends MCDElement {
+public class MCDModels extends MCDElement implements IMCDModel {
 
     private static final long serialVersionUID = 1000;
 
@@ -19,4 +20,8 @@ public class MCDModels extends MCDElement {
     }
 
 
+    @Override
+    public String getNameTree() {
+        return null;
+    }
 }

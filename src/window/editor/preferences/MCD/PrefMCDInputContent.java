@@ -5,15 +5,15 @@ import datatypes.MDDatatypeService;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
+import newEditor.PanelInputContent;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import preferences.services.PrefMCDService;
 import project.Project;
-import project.ProjectAdjustPref;
+import mcd.services.MCDAdjustPref;
 import utilities.window.scomponents.SButton;
 import utilities.window.scomponents.SCheckBox;
-import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.STextField;
 import utilities.window.scomponents.services.SComboBoxService;
@@ -47,6 +47,9 @@ public class PrefMCDInputContent extends PanelInputContent {
     private JPanel panelAudit = new JPanel ();
     private SCheckBox mcdAudit = new SCheckBox(this);
     private SCheckBox mcdAuditException = new SCheckBox(this);
+
+    private JPanel panelTreeNaming = new JPanel ();
+    private SComboBox fieldTreeNamingAssociation = new SComboBox(this);
 
     public PrefMCDInputContent(PrefMCDInput prefMCDInput) {
         super(prefMCDInput);
@@ -102,11 +105,11 @@ public class PrefMCDInputContent extends PanelInputContent {
         mcdAIDDatatype.addItemListener(this);
         mcdAIDDatatype.addFocusListener(this);
 
-        //String sizePrecision = MessagesBuilder.getMessagesProperty("mcddatatype.number.size.précision");
         String sizePrecision = MessagesBuilder.getMessagesProperty(
                 Preferences.MCDDATATYPE_NUMBER_SIZE_PRECISION);
         mcdDatatypeSizeMode.addItem(sizePrecision);
-        String sizeOnlyInteger = MessagesBuilder.getMessagesProperty("mcddatatype.number.size.integer.portion.only");
+        String sizeOnlyInteger = MessagesBuilder.getMessagesProperty(
+                Preferences.MCDDATATYPE_NUMBER_SIZE_INTEGER_PORTION_ONLY);
         mcdDatatypeSizeMode.addItem(sizeOnlyInteger);
 
         mcdDatatypeSizeMode.addItemListener(this);
@@ -129,6 +132,17 @@ public class PrefMCDInputContent extends PanelInputContent {
         mcdAuditException.addItemListener(this);
         mcdAuditException.addFocusListener(this);
 
+        String textName = MessagesBuilder.getMessagesProperty(
+                Preferences.MCD_NAMING_NAME);
+        fieldTreeNamingAssociation.addItem(textName);
+        String textShortName = MessagesBuilder.getMessagesProperty(
+                Preferences.MCD_NAMING_SHORT_NAME);
+        fieldTreeNamingAssociation.addItem(textShortName);
+
+        fieldTreeNamingAssociation.addItemListener(this);
+        fieldTreeNamingAssociation.addFocusListener(this);
+
+
         super.getsComponents().add(mcdAIDIndName);
         super.getsComponents().add(mcdAIDWithDep);
         super.getsComponents().add(mcdAIDDepName);
@@ -138,6 +152,7 @@ public class PrefMCDInputContent extends PanelInputContent {
         super.getsComponents().add(mcdJournalizationException);
         super.getsComponents().add(mcdAudit);
         super.getsComponents().add(mcdAuditException);
+        super.getsComponents().add(fieldTreeNamingAssociation);
 
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -188,10 +203,14 @@ public class PrefMCDInputContent extends PanelInputContent {
         createPanelJournalization(border);
         panel.add(panelJournalization, gbc);
 
-
         gbc.gridx++;
         createPanelAudit(border);
         panel.add(panelAudit, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        createPanelTreeNaming(border);
+        panel.add(panelTreeNaming, gbc);
 
     }
 
@@ -236,6 +255,25 @@ public class PrefMCDInputContent extends PanelInputContent {
         gbcJ.gridx++ ;
         panelJournalization.add(mcdJournalizationException, gbcJ);
 
+    }
+
+    private void createPanelTreeNaming(Border border) {
+        TitledBorder titleBorder = BorderFactory.createTitledBorder(border, "Nommage des noeuds du référentiel");
+        panelTreeNaming.setBorder(titleBorder);
+
+        panelTreeNaming.setLayout(new GridBagLayout());
+        GridBagConstraints gbcJ = new GridBagConstraints();
+        gbcJ.anchor = GridBagConstraints.NORTHWEST;
+        gbcJ.insets = new Insets(10, 10, 0, 0);
+
+        gbcJ.gridx = 0;
+        gbcJ.gridy = 0;
+        gbcJ.gridwidth = 1;
+        gbcJ.gridheight = 1;
+
+        panelTreeNaming.add(new JLabel("Associations : "), gbcJ);
+        gbcJ.gridx++;
+        panelTreeNaming.add(fieldTreeNamingAssociation, gbcJ);
     }
 
     private void createPanelAIDWithDep(Border border) {
@@ -359,21 +397,24 @@ public class PrefMCDInputContent extends PanelInputContent {
         mcdAIDDepName.setText(preferences.getMCD_AID_DEP_COLUMN_NAME());
 
         MCDDatatype mcdDatatypeForAID = MDDatatypeService.getMCDDatatypeByLienProg(preferences.getMCD_AID_DATATYPE_LIENPROG());
-        //datatypeNameSelect( mcdDatatypeForAID.getName());
         SComboBoxService.selectByText(mcdAIDDatatype, mcdDatatypeForAID.getName() );
 
         String mcdSizeMode = MessagesBuilder.getMessagesProperty(preferences.getMCDDATATYPE_NUMBER_SIZE_MODE());
-        //datatypeSizeModeSelect(mcdSizeMode);
         SComboBoxService.selectByText(mcdDatatypeSizeMode, mcdSizeMode);
 
         mcdJournalization.setSelected(preferences.getMCD_JOURNALIZATION()); ;
         mcdJournalizationException.setSelected(preferences.getMCD_JOURNALIZATION_EXCEPTION()); ;
         mcdAudit.setSelected(preferences.getMCD_AUDIT()); ;
         mcdAuditException.setSelected(preferences.getMCD_AUDIT_EXCEPTION()); ;
+
+        String namingAssociation = MessagesBuilder.getMessagesProperty(preferences.getMCD_TREE_NAMING_ASSOCIATION());
+        SComboBoxService.selectByText(fieldTreeNamingAssociation, namingAssociation);
     }
 
+
+
     @Override
-    protected void initDatas(MVCCDElement mvccdElement) {
+    protected void initDatas() {
         // Pas d'ajout seulement en modification
     }
 
@@ -381,11 +422,11 @@ public class PrefMCDInputContent extends PanelInputContent {
     public void saveDatas(MVCCDElement mvccdElement) {
         Preferences preferences = (Preferences) mvccdElement;
         Project project = MVCCDManager.instance().getProject();
-        ProjectAdjustPref projectAdjustPref = new ProjectAdjustPref(project);
+        MCDAdjustPref MCDAdjustPref = new MCDAdjustPref(project);
 
         if (mcdAIDIndName.checkIfUpdated()){
             preferences.setMCD_AID_IND_COLUMN_NAME(mcdAIDIndName.getText());
-            projectAdjustPref.mcdAIDIndColumnName(mcdAIDIndName.getText());
+            MCDAdjustPref.mcdAIDIndColumnName(mcdAIDIndName.getText());
         }
 
         if (mcdAIDWithDep.checkIfUpdated()){
@@ -395,7 +436,7 @@ public class PrefMCDInputContent extends PanelInputContent {
         if (mcdAIDDepName.checkIfUpdated()){
             preferences.setMCD_AID_DEP_COLUMN_NAME(mcdAIDDepName.getText());
             if (mcdAIDWithDep.isSelected()) {
-                projectAdjustPref.mcdAIDDepColumnName(mcdAIDDepName.getText());
+                MCDAdjustPref.mcdAIDDepColumnName(mcdAIDDepName.getText());
             }
         }
 
@@ -403,7 +444,7 @@ public class PrefMCDInputContent extends PanelInputContent {
             String text = (String) mcdAIDDatatype.getSelectedItem();
             MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByName(text);
             preferences.setMCD_AID_DATATYPE_LIENPROG(mcdDatatype.getLienProg());
-            projectAdjustPref.mcdAIDDatatype(mcdDatatype.getLienProg());
+            MCDAdjustPref.mcdAIDDatatype(mcdDatatype.getLienProg());
         }
 
         if(mcdDatatypeSizeMode.checkIfUpdated()){
@@ -425,18 +466,40 @@ public class PrefMCDInputContent extends PanelInputContent {
 
         if (mcdJournalization.checkIfUpdated()){
             preferences.setMCD_JOURNALIZATION(mcdJournalization.isSelected());
-            projectAdjustPref.mcdJournalisation(mcdJournalization.isSelected());
+            MCDAdjustPref.mcdJournalisation(mcdJournalization.isSelected());
         }
         if (mcdJournalizationException.checkIfUpdated()){
             preferences.setMCD_JOURNALIZATION_EXCEPTION(mcdJournalizationException.isSelected());
         }
         if (mcdAudit.checkIfUpdated()){
             preferences.setMCD_AUDIT(mcdAudit.isSelected());
-            projectAdjustPref.mcdAudit(mcdAudit.isSelected());
+            MCDAdjustPref.mcdAudit(mcdAudit.isSelected());
         }
         if (mcdAuditException.checkIfUpdated()){
             preferences.setMCD_AUDIT_EXCEPTION(mcdAuditException.isSelected());
         }
+
+
+        if(fieldTreeNamingAssociation.checkIfUpdated()){
+            String text = (String) fieldTreeNamingAssociation.getSelectedItem();
+
+            String namingName = MessagesBuilder.getMessagesProperty(
+                    Preferences.MCD_NAMING_NAME);
+            String namingShortName = MessagesBuilder.getMessagesProperty(
+                    Preferences.MCD_NAMING_SHORT_NAME);
+
+            if (text.equals(namingName)){
+                preferences.setMCD_TREE_NAMING_ASSOCIATION(Preferences.MCD_NAMING_NAME);
+            }
+            if (text.equals(namingShortName)){
+                preferences.setMCD_TREE_NAMING_ASSOCIATION(Preferences.MCD_NAMING_SHORT_NAME);
+            }
+
+            //TODO-0 A affiner - remettre l'arbre en l'état
+            MVCCDManager.instance().getWinRepositoryContent().getTree().getTreeModel().reload();
+
+        }
+
     }
 
 

@@ -21,7 +21,7 @@ public abstract class PanelBorderLayout extends JPanel implements MouseListener,
     public PanelBorderLayout() {
    }
 
-    public void start(){
+    public void startLayout(){
         panelBLResizer.getPanels().add(this);
         addMouseListener(this);
         addMouseMotionListener(this);

@@ -14,18 +14,18 @@ public class SCheckBox extends JCheckBox implements SComponent {
     private boolean rootSubPanel = false ; //Si la case à cocher est la racine d'un arbre de panneaux dépendants
 
     private boolean readOnly = false;
-    private PanelInputContent panel;
+    private IPanelInputContent panel;
 
-    public SCheckBox(PanelInputContent panel){
+    public SCheckBox(IPanelInputContent panel){
         super();
         init(panel);
     }
-    public SCheckBox(PanelInputContent panel, String label) {
+    public SCheckBox(IPanelInputContent panel, String label) {
         super(label);
         init(panel);
     }
 
-    private void init(PanelInputContent panel){
+    private void init(IPanelInputContent panel){
         this.panel = panel;
         this.setColorNormal();
     }

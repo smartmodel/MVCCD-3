@@ -24,7 +24,7 @@ public class HelpWindow extends JDialog implements ActionListener {
 
 
 
-    public HelpWindow(DialogEditor owner) {
+    public HelpWindow(Window owner) {
         super(owner);
         setModal(false);
         setLocation(200,200);

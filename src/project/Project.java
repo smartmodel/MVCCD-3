@@ -3,18 +3,25 @@ package project;
 import main.MVCCDElement;
 import main.MVCCDFactory;
 import main.MVCCDManager;
+import mcd.services.MCDAdjustPref;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
 import profile.ProfileManager;
-import utilities.files.UtilXML;
 
 public class Project extends ProjectElement {
 
     private static final long serialVersionUID = 1000;
 
+    public static final int NEW = 1 ;
+    public static final int EXISTING = 2 ;
+
+
     private String profileFileName ;
     private Profile profile;
+    private boolean modelsMany;
+    private boolean packagesAutorizeds;
+
     private int idElementSequence = 0;
 
     public Project(String name) {
@@ -58,7 +65,8 @@ public class Project extends ProjectElement {
              // A priori c'est une erreur!
              //PreferencesManager.instance().copyDefaultPref();
          }
-         new ProjectAdjustPref(this).changeProfile();
+         new MCDAdjustPref(this).changeProfile();
+         MVCCDManager.instance().profileToRepository();
          return profile;
      }
 
@@ -77,25 +85,24 @@ public class Project extends ProjectElement {
         return idElementSequence;
     }
 
-    public  ProjectElement getElementById (int id) {
-        return getElementById(this, id);
+    public boolean isModelsMany() {
+        return modelsMany;
     }
 
-    public  ProjectElement getElementById (ProjectElement projectElement, int id) {
-        ProjectElement resultat = null;
-        for (MVCCDElement mvccdElement : projectElement.getChilds()) {
-            if (mvccdElement instanceof ProjectElement) {
-                ProjectElement child = (ProjectElement) mvccdElement;
-                if (child.getId() == id) {
-                    resultat = child;
-                } else {
-                    if (resultat == null) {
-                        resultat = getElementById(child, id);
-                    }
-                }
-            }
-        }
-        return resultat;
+    public void setModelsMany(boolean modelsMany) {
+        this.modelsMany = modelsMany;
     }
 
+    public boolean isPackagesAutorizeds() {
+        return packagesAutorizeds;
+    }
+
+    public void setPackagesAutorizeds(boolean packagesAutorizeds) {
+        this.packagesAutorizeds = packagesAutorizeds;
+    }
+
+    @Override
+    public String getNameTree() {
+        return null;
+    }
 }

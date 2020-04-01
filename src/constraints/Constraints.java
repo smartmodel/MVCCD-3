@@ -13,6 +13,11 @@ public class Constraints extends MVCCDElement {
         super(parent, name);
     }
 
+    @Override
+    public String getNameTree() {
+        return null;
+    }
+
     public ArrayList<Constraint> getConstraintsByClassName(String className){
         ArrayList<Constraint> resultat = new  ArrayList<Constraint>();
         for (MVCCDElement mvccdElement : this.getChilds()){

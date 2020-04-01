@@ -1,14 +1,14 @@
 package mcd.services;
 
+import mcd.MCDElement;
 import mcd.MCDEntity;
+import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
-import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.window.DialogMessage;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MCDEntityService {
 
@@ -33,4 +33,48 @@ public class MCDEntityService {
         MCDUtilService.isEmpty(messages, shortName, message1);
         return messages;
     }
+
+    public static void sortNameAsc(ArrayList<MCDEntity> entities){
+
+        Collections.sort(entities, NAME_ASC);
+    }
+
+    static final Comparator<MCDEntity> NAME_ASC =
+            new Comparator<MCDEntity>() {
+                public int compare(MCDEntity e1, MCDEntity e2) {
+                    return e1.getName().compareTo(e2.getName());
+                }
+    };
+
+    public static ArrayList<MCDEntity> getMCDEntitiesByClassName(IMCDModel iMCDModel,
+                                                                 String className) {
+        ArrayList<MCDEntity> resultat =  new ArrayList<MCDEntity>();
+        for (MCDElement element :  IMCDModelService.getMCDElementsByClassName(
+                iMCDModel, className)){
+            resultat.add((MCDEntity) element);
+        }
+        return resultat;
+    }
+
+    public static MCDEntity getMCDEntityByNamePath(IMCDModel model,
+                                                    String namePath){
+        return (MCDEntity) IMCDModelService.getMCDElementByClassAndNamePath(model,
+                MCDEntity.class.getName(), namePath);
+    }
+
+
+
+
+
+
+    /* Intégré direcement dans Factory
+    public static void completeNew(MCDEntity mvccdElement) {
+        MCDEntity mcdEntity = (MCDEntity) mvccdElement;
+        MCDContAttributes mcdContAttributes = MVCCDElementFactory.instance().createMCDAttributes(mcdEntity,
+                Preferences.REPOSITORY_MCD_ATTRIBUTES_NAME);
+        MCDContEndRels mcdContEndRels = MVCCDElementFactory.instance().createMCDRelations(mcdEntity,
+                Preferences.REPOSITORY_MCD_RELATIONS_NAME);
+    }
+
+     */
 }

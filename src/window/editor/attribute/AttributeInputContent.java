@@ -5,6 +5,7 @@ import main.MVCCDElement;
 import mcd.MCDAttribute;
 import mcd.services.MCDAttributeService;
 import messages.MessagesBuilder;
+import newEditor.PanelInputContent;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -18,7 +19,6 @@ import utilities.window.scomponents.SButton;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.STextField;
-import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.services.SComboBoxService;
 
 import javax.swing.*;
@@ -34,7 +34,7 @@ import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class AttributeInputContent extends PanelInputContent  {
+public class AttributeInputContent extends PanelInputContent {
 
     private JPanel panel = new JPanel();
     private STextField attributeName = new STextField(this);
@@ -97,7 +97,7 @@ public class AttributeInputContent extends PanelInputContent  {
                 MDDatatypesManager.CONCRET);
         Collections.sort(mcdDatatypesNames);
 
-        datatypeName.addItem(SComboBox.LIGNEVIDE);
+        datatypeName.addItem(SComboBox.LINEWHITE);
         for (String mcdDatatypeName : mcdDatatypesNames){
             datatypeName.addItem(mcdDatatypeName);
         }
@@ -519,7 +519,7 @@ public class AttributeInputContent extends PanelInputContent  {
 
     private void changeFieldSelectedAid() {
         attributeName.setEnabled(false);
-        attributeName.setText((String) attributeNameAID.getItemAt(0));
+        attributeName.setText((String) attributeNameAID.getFirstItem());
         attributeNameAID.setEnabled(PreferencesManager.instance().preferences().isMCD_AID_WITH_DEP());
         SComboBoxService.selectByText(datatypeName,
                     PreferencesManager.instance().preferences().getMCD_AID_DATATYPE_LIENPROG());
@@ -542,7 +542,7 @@ public class AttributeInputContent extends PanelInputContent  {
         attributeName.setEnabled(true);
         attributeName.setText("");
         attributeNameAID.setEnabled(false);
-            datatypeName.setSelectedIndex(0);
+            datatypeName.setSelectedFirst();
             datatypeName.setEnabled(true);
             mandatory.setSelected(false);
             mandatory.setEnabled(true);
@@ -681,13 +681,13 @@ public class AttributeInputContent extends PanelInputContent  {
 
 
     @Override
-    protected void initDatas(MVCCDElement mvccdElement) {
+    protected void initDatas() {
         // L'ordre d'appel est important pour que les initialisations se fassent
         // du général (aid) au particulier (list)
 
         Preferences preferences = PreferencesManager.instance().preferences();
         attributeName.setText("");
-        datatypeName.setSelectedIndex(0);
+        datatypeName.setSelectedFirst();
         datatypeSize.setText("");
         datatypeScale.setText("");
         aid.setSelected(false);
@@ -724,7 +724,7 @@ public class AttributeInputContent extends PanelInputContent  {
             MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(mcdAttribute.getDatatypeLienProg());
             SComboBoxService.selectByText(datatypeName, mcdDatatype.getName());
         } else {
-            datatypeName.setSelectedIndex(0);
+            datatypeName.setSelectedFirst();
         }
         loadSizeAndScale(mcdAttribute);
 
@@ -742,6 +742,8 @@ public class AttributeInputContent extends PanelInputContent  {
         stereotypesStringUML.setText(UtilDivers.ArrayStringToString(stereotypesUMLNames, ""));
 
     }
+
+
 
     private void loadSizeAndScale(MCDAttribute mcdAttribute) {
 

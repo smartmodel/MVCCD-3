@@ -1,19 +1,23 @@
 package window.editor.mcddatatype;
 
+import datatypes.MCDDatatype;
+import main.MVCCDElement;
 import main.MVCCDWindow;
+import newEditor.DialogEditor;
 import preferences.Preferences;
-import utilities.window.editor.DialogEditor;
-import window.editor.entity.EntityButtons;
-import window.editor.entity.EntityInput;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
 
 public class MCDDatatypeEditor extends DialogEditor {
 
 
 
-    public MCDDatatypeEditor(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String mode)  {
-        super(mvccdWindow, node, mode);
+    public MCDDatatypeEditor(Window owner,
+                             MVCCDElement parent,
+                             MCDDatatype mcdDatatype,
+                             String mode)  {
+        super(owner, parent, mcdDatatype, mode);
 
         super.setSize(Preferences.MCDDATATYPE_WINDOW_WIDTH, Preferences.MCDDATATYPE_WINDOW_HEIGHT);
         super.setInput(new MCDDatatypeInput(this));

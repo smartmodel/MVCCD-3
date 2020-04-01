@@ -2,7 +2,6 @@ package utilities.window.editor;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDEntity;
 import messages.MessagesBuilder;
 import utilities.window.PanelBorderLayoutResizer;
 
@@ -18,6 +17,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     private JPanel panel= new JPanel();
     private PanelBorderLayoutResizer panelBLResizer ;
+    private int widthInit; // Largeur initiale utile à dimensionner la boite des messages
     private PanelInput input;
     private PanelButtons buttons ;
     private String mode;  // Création ou modification
@@ -53,8 +53,8 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         buttons.setBorderLayoutPosition(borderLayoutPositionButtons);
         buttons.setPanelBLResizer(panelBLResizer);
 
-        input.start();
-        buttons.start();
+        input.startLayout();
+        buttons.startLayout();
 
         panel.add(input, borderLayoutPositionEditor);
         panel.add(buttons, borderLayoutPositionButtons);
@@ -201,5 +201,12 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         }
     }
 
+    public void setSize(int width, int height ) {
+        this.widthInit = width;
+        super.setSize(width, height);
+    }
 
+    public int getWidthInit() {
+        return widthInit;
+    }
 }

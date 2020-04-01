@@ -10,4 +10,9 @@ public class MCDDatatype extends MDDatatype {
     public MCDDatatype(MVCCDElement parent, String name, String lienProg, boolean abstrait) {
         super(parent, name, lienProg, abstrait);
     }
+
+    @Override
+    public String getNameTree() {
+        return null;
+    }
 }

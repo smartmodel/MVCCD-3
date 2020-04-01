@@ -11,7 +11,7 @@ public class WinDiagram extends PanelBorderLayout {
         super();
         super.setBorderLayoutPosition(borderLayoutPosition);
         super.setPanelBLResizer(panelBLResizer);
-        start();
+        startLayout();
 
         content = new WinDiagramContent(this);
         super.setPanelContent(content);

@@ -16,4 +16,8 @@ public class MCDEntities extends MCDElement{
         super (parent);
     }
 
+    @Override
+    public String getNameTree() {
+        return null;
+    }
 }

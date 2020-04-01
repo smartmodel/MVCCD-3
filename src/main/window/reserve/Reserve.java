@@ -11,7 +11,7 @@ public class Reserve extends PanelBorderLayout {
         super();
         super.setBorderLayoutPosition(borderLayoutPosition);
         super.setPanelBLResizer(panelBLResizer);
-        start();
+        startLayout();
 
         content = new ReserveContent(this);
         super.setPanelContent(content);

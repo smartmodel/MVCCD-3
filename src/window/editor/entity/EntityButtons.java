@@ -1,7 +1,7 @@
 package window.editor.entity;
 
-import utilities.window.PanelBorderLayout;
-import utilities.window.editor.*;
+
+import newEditor.PanelButtons;
 
 public class EntityButtons extends PanelButtons {
 

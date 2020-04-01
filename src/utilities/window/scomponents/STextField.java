@@ -14,9 +14,9 @@ public class STextField extends JTextField implements SComponent {
     //private boolean firstAffectation = true;
     private boolean checkPreSave = false;
     private boolean readOnly = false;
-    private PanelInputContent panel;
+    private IPanelInputContent panel;
 
-    public STextField(PanelInputContent panel) {
+    public STextField(IPanelInputContent panel) {
         this.panel = panel;
         this.setColorNormal();
     }

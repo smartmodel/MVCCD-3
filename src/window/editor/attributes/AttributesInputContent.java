@@ -9,19 +9,21 @@ import main.MVCCDElementService;
 import main.MVCCDManager;
 import mcd.MCDAttribute;
 import mcd.MCDContAttributes;
+import newEditor.DialogEditor;
+import newEditor.PanelInputContent;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
+import project.ProjectManager;
+import project.ProjectService;
 import repository.RepositoryService;
+import repository.editingTreat.MCDAttributeEditingTreat;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import utilities.UtilDivers;
 import utilities.window.ReadTableModel;
-import utilities.window.editor.DialogEditor;
-import utilities.window.editor.PanelInputContent;
-import window.editor.attribute.AttributeEditor;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -109,7 +111,7 @@ public class AttributesInputContent extends PanelInputContent {
                 AttributesTableColumn.DEFAULTVALUE.getLabel()
         };
 
-        MCDContAttributes mcdContAttributes = (MCDContAttributes) getEditor().getMvccdElement();
+        MCDContAttributes mcdContAttributes = (MCDContAttributes) getEditor().getMvccdElementCrt();
         ArrayList<MCDAttribute> mcdAttributes= mcdContAttributes.getMCDAttributes();
 
         Object[][] data = new Object[mcdAttributes.size()][AttributesTableColumn.getNbColumns()];
@@ -227,10 +229,10 @@ public class AttributesInputContent extends PanelInputContent {
         buttonAdd.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                AttributeEditor fen = new AttributeEditor(getEditor() , getEditor().getNode(),
-                        DialogEditor.NEW);
-                fen.setVisible(true);
-                MCDAttribute mcdAttribute = (MCDAttribute) fen.getButtons().getButtonsContent().getNewMVCCDElement();
+
+                MCDAttribute mcdAttribute = MCDAttributeEditingTreat.treatNew( getEditor(),
+                        (MCDContAttributes) getEditor().getMvccdElementCrt());
+
                 if (mcdAttribute != null) {
                     Object[] row = newRow(mcdAttribute);
                     model.addRow(row);
@@ -247,7 +249,9 @@ public class AttributesInputContent extends PanelInputContent {
             public void actionPerformed(ActionEvent e) {
                 int posActual = table.getSelectedRow();
                 if (posActual >= 0){
-                    DefaultMutableTreeNode nodeAttribute = getNodeAttribute(posActual);
+
+                    //TODO-0 Faire appel treatDelete
+                    DefaultMutableTreeNode nodeAttribute = ProjectService.getNodeById(posActual);
                     DefaultTreeModel treeModel =  MVCCDManager.instance().getWinRepositoryContent().getTree().getTreeModel();
                     treeModel.removeNodeFromParent(nodeAttribute);
                     model.removeRow(posActual);
@@ -265,15 +269,8 @@ public class AttributesInputContent extends PanelInputContent {
                 if (posActual >= 0){
                     int posId = AttributesTableColumn.ID.getPosition();
                     Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
-
-                    DefaultMutableTreeNode nodeActual = RepositoryService.instance().getNodeInChildsByIdElement(
-                            getEditor().getNode(), idActual);
-
-                    AttributeEditor fen = new AttributeEditor(getEditor() , nodeActual,
-                            DialogEditor.UPDATE);
-                    fen.setVisible(true);
-
-                    MCDAttribute mcdAttributeActual = (MCDAttribute) nodeActual.getUserObject();
+                    MCDAttribute mcdAttributeActual = (MCDAttribute) ProjectService.getElementById(idActual);
+                    MCDAttributeEditingTreat.treatUpdate( getEditor(), mcdAttributeActual);
 
                     updateRow(mcdAttributeActual, table.getSelectedRow());
                     enabledContent();
@@ -366,8 +363,10 @@ public class AttributesInputContent extends PanelInputContent {
     public void loadDatas(MVCCDElement mvccdElement) {
     }
 
+
+
     @Override
-    protected void initDatas(MVCCDElement mvccdElement) {
+    protected void initDatas() {
     }
 
     @Override
@@ -472,15 +471,6 @@ public class AttributesInputContent extends PanelInputContent {
     }
 
 
-    private DefaultMutableTreeNode getNodeAttribute(int posActual) {
-        int noCol = AttributesTableColumn.ID.getPosition();
-        Integer idSelected = (Integer) table.getModel().getValueAt(posActual, noCol);
-
-        DefaultMutableTreeNode nodeContAttributes = getEditor().getNode();
-        DefaultMutableTreeNode nodeAttribute = RepositoryService.instance().getNodeInChildsByIdElement(nodeContAttributes, idSelected);
-        return nodeAttribute;
-    }
-
     private void permuteOrder(int posActual, int posNew) {
 
         int posOrder = AttributesTableColumn.ORDER.getPosition();
@@ -513,14 +503,19 @@ public class AttributesInputContent extends PanelInputContent {
 
 
     private void updateOrderINProjectElement(Integer id, Integer order) {
+        /*
         Project project = MVCCDManager.instance().getProject();
         ProjectElement projectElement = project.getElementById(id);
+
+         */
+        ProjectElement projectElement = ProjectService.getElementById(id);
         projectElement.setOrder(order);
     }
 
     private void swapNodes(Integer idA, Integer idB) {
 
-        DefaultMutableTreeNode nodeParent =  getEditor().getNode();
+        DefaultMutableTreeNode nodeParent =  ProjectService.getNodeById(
+                ((ProjectElement) getEditor().getMvccdElementCrt()).getId());
 
         DefaultMutableTreeNode nodeA = RepositoryService.instance().getNodeInChildsByIdElement(
                nodeParent, idA);
@@ -528,7 +523,7 @@ public class AttributesInputContent extends PanelInputContent {
 
 
         DefaultMutableTreeNode nodeB = RepositoryService.instance().getNodeInChildsByIdElement(
-                getEditor().getNode(), idB);
+                nodeParent, idB);
         int indexB = nodeParent.getIndex(nodeB);
 
         nodeParent.insert(nodeA, indexB);

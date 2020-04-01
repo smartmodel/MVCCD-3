@@ -18,5 +18,8 @@ public class MCDDiagrams extends MCDElement{
     }
 
 
-
+    @Override
+    public String getNameTree() {
+        return null;
+    }
 }

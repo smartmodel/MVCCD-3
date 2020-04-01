@@ -1,8 +1,7 @@
 package window.editor.preferences.general;
 
-import utilities.window.editor.PanelInput;
-import window.editor.preferences.general.PrefGeneralEditor;
-import window.editor.preferences.general.PrefGeneralInputContent;
+
+import newEditor.PanelInput;
 
 public class PrefGeneralInput extends PanelInput {
 

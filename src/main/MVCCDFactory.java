@@ -28,21 +28,21 @@ public class MVCCDFactory {
         return project;
     }
 
-
+/*
     public void completeProject(Project project) {
         Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME);
         MCDModels mcdModels = MVCCDElementFactory.instance().createMCDModels(project, Preferences.REPOSITORY_MCD_MODELS_NAME);
-        if (!Preferences.REPOSITORY_MCD_MODELS_MANY) {
+        if (!PreferencesManager.instance().preferences().getREPOSITORY_MCD_MODELS_MANY()) {
 
-            if (Preferences.REPOSITORY_MCD_PACKAGES_AUTHORIZEDS) {
+            if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()) {
                 MCDPackages mcdPackages = MVCCDElementFactory.instance().createMCDPackages(mcdModels, Preferences.REPOSITORY_MCD_PACKAGES_NAME);
             }
             MCDDiagrams mcdDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(mcdModels,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
             MCDEntities mcdEntities = MVCCDElementFactory.instance().createMCDEntities(mcdModels,Preferences.REPOSITORY_MCD_ENTITIES_NAME);
-
+            MCDRelations mcdRelations = MVCCDElementFactory.instance().createMCDRelations(mcdModels,Preferences.REPOSITORY_MCD_RELATIONS_NAME);
         }
     }
-
+*/
 
     public Profile createProfile(String profileFileName) {
 

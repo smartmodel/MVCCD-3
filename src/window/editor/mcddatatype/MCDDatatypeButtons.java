@@ -1,8 +1,6 @@
 package window.editor.mcddatatype;
 
-import utilities.window.editor.PanelButtons;
-import window.editor.entity.EntityButtonsContent;
-import window.editor.entity.EntityEditor;
+import newEditor.PanelButtons;
 
 public class MCDDatatypeButtons extends PanelButtons {
 

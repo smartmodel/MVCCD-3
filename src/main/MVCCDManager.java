@@ -82,12 +82,15 @@ public class MVCCDManager {
     public void completeNewProject(){
         //this.project = project;
         PreferencesManager.instance().setProjectPref(project.getPreferences());
+        PreferencesManager.instance().copyApplicationPref(Project.NEW);
         project.adjustProfile();
         projectToRepository();
         mvccdWindow.adjustPanelRepository();
         setFileProjectCurrent(null);
     }
 
+    // A supprimer lorsque tous les éditeurs seront migrés
+    // Remplacé par addMVCCDElementInRepository
     public void showNewMVCCDElementInRepository(MVCCDElement mvccdElement, DialogEditor editor) {
         DefaultMutableTreeNode node = MVCCDManager.instance().getRepository().addMVCCDElement(editor.getNode(), mvccdElement);
         //DefaultMutableTreeNode node = MVCCDManager.instance().getRepository().addNodeAndChilds(editor.getNode(), mvccdElement);
@@ -97,9 +100,15 @@ public class MVCCDManager {
 
     }
 
+    public void addNewMVCCDElementInRepository(MVCCDElement mvccdElementNew, DefaultMutableTreeNode nodeParent) {
+        DefaultMutableTreeNode nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
+        getWinRepositoryContent().getTree().changeModel(repository);
+        getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(nodeNew.getPath()));
+        setDatasProjectChanged(true);
+    }
+
     public void showNewNodeInRepository(DefaultMutableTreeNode node) {
         // Affichage du noeud
-        System.out.println("Reaffiche  " + node.getUserObject().toString());
         //getWinRepositoryContent().getTree().changeModel(repository);
         getWinRepositoryContent().getTree().getTreeModel().reload();
         getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
@@ -130,6 +139,8 @@ public class MVCCDManager {
             //setFileProjectCurrent(file) ;
             project = new LoaderSerializable().load(fileProjectCurrent);
             PreferencesManager.instance().setProjectPref(project.getPreferences());
+            PreferencesManager.instance().copyApplicationPref(Project.EXISTING);
+
         }
         if (project != null) {
             //project.includeProfile();

@@ -1,6 +1,6 @@
 package window.editor.attribute;
 
-import utilities.window.editor.PanelButtons;
+import newEditor.PanelButtons;
 import window.editor.entity.EntityButtonsContent;
 import window.editor.entity.EntityEditor;
 

@@ -5,10 +5,10 @@ import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import mcd.MCDAttribute;
 import mcd.MCDContAttributes;
+import newEditor.PanelButtonsContent;
 import preferences.Preferences;
-import utilities.window.editor.PanelButtonsContent;
 
-public class AttributeButtonsContent extends PanelButtonsContent  {
+public class AttributeButtonsContent extends PanelButtonsContent {
 
 
     public AttributeButtonsContent(AttributeButtons attributeButtons) {
@@ -20,17 +20,10 @@ public class AttributeButtonsContent extends PanelButtonsContent  {
     @Override
     protected MVCCDElement createNewMVCCDElement() {
         //JTextField entityName = getEditorContent().getEntityName();
-        MCDContAttributes mcdContAttributes = (MCDContAttributes) getEditor().getMvccdElement();
+        MCDContAttributes mcdContAttributes = (MCDContAttributes) getEditor().getMvccdElementParent();
         MCDAttribute mcdAttribute = MVCCDElementFactory.instance().createMCDAttribute(mcdContAttributes);
-        saveDatas(mcdAttribute);
         return mcdAttribute;
     }
-
-    @Override
-    protected void completeNewMVCCDElement(MVCCDElement mvccdElement) {
-        MCDAttribute mcdAttribute = (MCDAttribute) mvccdElement;
-        MVCCDManager.instance().showNewMVCCDElementInRepository(mcdAttribute, getEditor());
-     }
 
 /*
     private PrefMCDInputContent getEditorContent(){
@@ -38,10 +31,6 @@ public class AttributeButtonsContent extends PanelButtonsContent  {
     }
 */
 
-    @Override
-    public Integer getWidthWindow() {
-        return Preferences.ENTITY_WINDOW_WIDTH;
-    }
 
     @Override
     protected String getHelpFileName() {

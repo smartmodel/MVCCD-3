@@ -5,17 +5,21 @@ import main.MVCCDWindow;
 import mcd.MCDEntities;
 import mcd.MCDEntity;
 import messages.MessagesBuilder;
+import newEditor.DialogEditor;
 import preferences.Preferences;
-import utilities.window.editor.DialogEditor;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
 
 public class EntityEditor extends DialogEditor {
 
 
 
-    public EntityEditor(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String mode)  {
-        super(mvccdWindow, node, mode);
+    public EntityEditor(Window owner,
+                        MCDEntities parent,
+                        MCDEntity mcdEntity,
+                        String mode)  {
+        super(owner, parent, mcdEntity, mode);
 
         super.setSize(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
         super.setInput(new EntityInput(this));

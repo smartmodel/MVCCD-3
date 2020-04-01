@@ -1,10 +1,8 @@
 package window.editor.mcddatatype;
 
-import utilities.window.editor.PanelInput;
-import window.editor.entity.EntityEditor;
-import window.editor.entity.EntityInputContent;
+import newEditor.PanelInput;
 
-public class MCDDatatypeInput extends PanelInput  {
+public class MCDDatatypeInput extends PanelInput {
 
     public MCDDatatypeInput(MCDDatatypeEditor mcdDatatypeEditor) {
         super(mcdDatatypeEditor);

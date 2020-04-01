@@ -1,6 +1,7 @@
 package window.editor.preferences.application;
 
-import utilities.window.editor.PanelButtons;
+
+import newEditor.PanelButtons;
 
 public class PrefApplicationButtons extends PanelButtons {
 

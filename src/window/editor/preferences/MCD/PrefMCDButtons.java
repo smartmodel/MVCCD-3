@@ -1,6 +1,7 @@
 package window.editor.preferences.MCD;
 
-import utilities.window.editor.PanelButtons;
+
+import newEditor.PanelButtons;
 
 public class PrefMCDButtons extends PanelButtons {
 

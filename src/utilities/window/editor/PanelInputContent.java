@@ -3,10 +3,7 @@ package utilities.window.editor;
 import main.MVCCDElement;
 import preferences.PreferencesManager;
 import utilities.window.PanelContent;
-import utilities.window.scomponents.SCheckBox;
-import utilities.window.scomponents.SComponent;
-import utilities.window.scomponents.STextField;
-import utilities.window.scomponents.SComboBox;
+import utilities.window.scomponents.*;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -22,7 +19,8 @@ import java.util.ArrayList;
 
 public abstract class PanelInputContent
         extends PanelContent
-        implements IAccessDialogEditor, FocusListener, DocumentListener,  ItemListener {
+        implements IAccessDialogEditor, IPanelInputContent,
+                    FocusListener, DocumentListener,  ItemListener {
 
     private PanelInput panelInput;
     private boolean alreadyFocusGained = false;
@@ -37,7 +35,7 @@ public abstract class PanelInputContent
 
     protected abstract boolean checkDatas();
 
-    public abstract boolean checkDatasPreSave(boolean unitaire);
+    protected abstract boolean checkDatasPreSave(boolean unitaire);
 
     protected abstract void changeField(DocumentEvent e);
 
@@ -46,11 +44,11 @@ public abstract class PanelInputContent
 
     protected abstract void changeFieldDeSelected(ItemEvent e);
 
-    public abstract void loadDatas(MVCCDElement mvccdElement);
+    protected abstract void loadDatas(MVCCDElement mvccdElement);
 
     protected abstract void initDatas(MVCCDElement mvccdElement);
 
-    public abstract void saveDatas(MVCCDElement mvccdElement);
+    protected abstract void saveDatas(MVCCDElement mvccdElement);
 
 
     @Override
@@ -126,7 +124,7 @@ public abstract class PanelInputContent
 
     }
 
-    public boolean checkInput(STextField field, boolean unitaire, ArrayList<String> messagesErrors) {
+    public boolean checkInput(SComponent field, boolean unitaire, ArrayList<String> messagesErrors) {
         if (unitaire) {
             showCheckResultat(messagesErrors);
         }
@@ -148,30 +146,13 @@ public abstract class PanelInputContent
 
 
     protected void showCheckResultat(ArrayList<String> messagesErrors) {
-        // Si le panneau des boutons est chargé
-
-        /*
-        if (getEditor().getButtons() != null) {
-            PanelButtonsContent buttonsContent = (PanelButtonsContent) getEditor().getButtons().getPanelContent();
-            if (messagesErrors.size() > 0) {
-                for (String message : messagesErrors) {
-                    buttonsContent.addIfNotExistMessage(message);
-                }
-            } else {
-                buttonsContent.clearMessages();
-            }
-        }
-
-         */
-
-        if (getEditor().getButtons() != null) {
+       if (getEditor().getButtons() != null) {
             PanelButtonsContent buttonsContent = (PanelButtonsContent) getEditor().getButtons().getPanelContent();
             buttonsContent.clearMessages();
             for (String message : messagesErrors) {
                 buttonsContent.addIfNotExistMessage(message);
             }
         }
-
     }
 
 
@@ -237,6 +218,7 @@ public abstract class PanelInputContent
         }
         if (getEditor().getMode().equals(DialogEditor.NEW)) {
             initDatas(getEditor().getMvccdElement());
+            //initDatas();
         }
         dataInitialized = true;
     }

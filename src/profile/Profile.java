@@ -13,4 +13,9 @@ public class Profile extends MVCCDElement {
         super(parent, name);
     }
 
+    @Override
+    public String getNameTree() {
+        return null;
+    }
+
 }

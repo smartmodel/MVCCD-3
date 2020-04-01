@@ -6,28 +6,24 @@ import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import mcd.*;
-import mcd.services.MCDEntityService;
 import messages.MessagesBuilder;
+import newEditor.DialogEditor;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
 import project.Project;
-import repository.Repository;
+import repository.editingTreat.*;
 import utilities.Debug;
-import utilities.window.DialogMessage;
-import utilities.window.editor.DialogEditor;
 import window.editor.attributes.AttributesEditor;
 import window.editor.attribute.AttributeEditor;
-import window.editor.entity.EntityEditor;
-import window.editor.mcddatatype.MCDDatatypeEditor;
 import window.editor.preferences.MCD.PrefMCDEditor;
-import window.editor.preferences.application.PrefApplicationEditor;
 import window.editor.preferences.general.PrefGeneralEditor;
-import window.editor.project.ProjectEditor;
+import window.editor.relation.association.AssociationEditor;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -60,39 +56,23 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
         }
 
         if (node.getUserObject() instanceof MCDModels) {
-            if (Preferences.REPOSITORY_MCD_MODELS_MANY) {
-                final JMenuItem mcdModelsCreate = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.model"));
-                this.add(mcdModelsCreate);
-                mcdModelsCreate.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        Debug.println("Création d'un nouveau modèle");
-                    }
-                });
-            }
+            treatModels(mvccdWindow);
+        }
+
+        if (node.getUserObject() instanceof MCDModel) {
+            treatModel(mvccdWindow);
+        }
+
+        if (node.getUserObject() instanceof MCDPackage) {
+            treatPackage(mvccdWindow);
         }
 
         if (node.getUserObject() instanceof MCDDiagrams) {
-            JMenuItem mcdDiagramsNewDiagram = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.diagram"));
-            this.add(mcdDiagramsNewDiagram);
-            mcdDiagramsNewDiagram.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    Debug.println("Création d'un nouveau diagramme");
-                }
-            });
+            treatDiagrams(mvccdWindow);
         }
 
         if (node.getUserObject() instanceof MCDEntities) {
-            JMenuItem mcdEntitiesNewEntity = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.entity"));
-            this.add(mcdEntitiesNewEntity);
-            mcdEntitiesNewEntity.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    Debug.println("Création d'une nouvelle entité");
-                    EntityEditor fen = showEditorEntity(mvccdWindow , node, EntityEditor.NEW);
-                }
-            });
+            treatEntities (mvccdWindow);
         }
 
         if (node.getUserObject() instanceof MCDEntity) {
@@ -110,137 +90,51 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
 
         }
 
-    }
+        if (node.getUserObject() instanceof MCDContEndRels) {
 
-    private void treatMCDDatatype(MVCCDWindow mvccdWindow) {
-        if(node.getUserObject() != MDDatatypesManager.instance().getDefaultMCDDatatypeRoot()) {
-            JMenuItem mcdDatatypeEdit = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.mcddatatype"));
-            this.add(mcdDatatypeEdit);
-            mcdDatatypeEdit.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    Debug.println("Edition d'un type de données");
-                    MCDDatatypeEditor fen = new MCDDatatypeEditor(mvccdWindow , node, DialogEditor.UPDATE);
-                    fen.setReadOnly(true);
-                    fen.setVisible(true);
-                }
-            });
+
         }
 
-    }
+        if (node.getUserObject() instanceof MCDRelations) {
+            treatRelations(mvccdWindow);
 
-    private void treatAttribute(MVCCDWindow mvccdWindow) {
+        }
 
-        JMenuItem mcdAttributeEdit = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.attribute"));
-        this.add(mcdAttributeEdit);
-        mcdAttributeEdit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                AttributeEditor fen = showEditorAttribute(mvccdWindow , node, DialogEditor.UPDATE);
-            }
-        });
-
-        JMenuItem mcdAttributeDelete = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.delete.attribute"));
-        this.add(mcdAttributeDelete);
-        mcdAttributeDelete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Debug.println("Suppression d'un attribut");
-                DefaultTreeModel treeModel =  MVCCDManager.instance().getWinRepositoryContent().getTree().getTreeModel();
-                treeModel.removeNodeFromParent(node);
-            }
-        });
-
-
-
-    }
-
-    private void treatAttributes(MVCCDWindow mvccdWindow) {
-        JMenuItem mcdAttributesEdit = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.attributes.entity"));
-        this.add(mcdAttributesEdit);
-        mcdAttributesEdit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Debug.println("Edition des attributs de l'entité");
-                System.out.println("Entré");
-                AttributesEditor fen = new AttributesEditor(mvccdWindow ,
-                        (DefaultMutableTreeNode) node, DialogEditor.UPDATE);
-                fen.setVisible(true);
-            }
-        });
-
-        JMenuItem mcdAttributesNewAttribute = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.attribute"));
-        this.add(mcdAttributesNewAttribute);
-        mcdAttributesNewAttribute.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    Debug.println("Création d'un nouvel attribut");
-                    AttributeEditor fen = showEditorAttribute(mvccdWindow , node, DialogEditor.NEW);
-                }
-        });
-
+        //TODO-0 Mise à jour de l'arbre
     }
 
 
-    private void treatEntity(MVCCDWindow mvccdWindow) {
-        MCDEntity mcdEntity = (MCDEntity) node.getUserObject();
-        JMenuItem mcdEntityEdit = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.entity"));
-        this.add(mcdEntityEdit);
-        mcdEntityEdit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Debug.println("Modification de l'entité");
-                EntityEditor fen = showEditorEntity(mvccdWindow , node, EntityEditor.UPDATE);
-            }
-        });
-
-        JMenuItem mcdEntityCheck = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.check.entity"));
-        this.add(mcdEntityCheck);
-        mcdEntityCheck.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Debug.println("Contrôle de conformité de l'entité");
-                if (MCDEntityService.check(mcdEntity).size() == 0){
-                    String message = MessagesBuilder.getMessagesProperty ("dialog.check.entity.ok", new String[] {mcdEntity.getName()});
-                    DialogMessage.showOk(mvccdWindow, message);
-                } else {
-                    String message = MessagesBuilder.getMessagesProperty ("dialog.check.entity.error", new String[] {mcdEntity.getName()});
-                    if (DialogMessage.showConfirmYesNo_Yes(mvccdWindow, message) == JOptionPane.YES_OPTION){
-                        Debug.println("Correction de l'entité");
-                        EntityEditor fen = showEditorEntity(mvccdWindow , node, EntityEditor.UPDATE);
-                    }
-                }
-            }
-        });
-
-    }
-
-    private void treatProject(MVCCDWindow mvccdWindow) {
-        JMenuItem editProject = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.project"));
-        this.add(editProject);
-        editProject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                ProjectEditor fen = new ProjectEditor(mvccdWindow, node, DialogEditor.UPDATE);
-                fen.setVisible(true);
-            }
-        });
-
-
-    }
 
     private void treatApplicationPref(MVCCDWindow mvccdWindow) {
         Preferences preferences = PreferencesManager.instance().getApplicationPref();
         JMenuItem preferencesApplication = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.application.preferences"));
         this.add(preferencesApplication);
+        MVCCDElementApplicationPreferences applPref = (MVCCDElementApplicationPreferences) node.getUserObject();
         preferencesApplication.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                PrefApplicationEditor fen = new PrefApplicationEditor(mvccdWindow , node, DialogEditor.UPDATE);
-                fen.setVisible(true);
+                PrefApplEditingTreat.treatUpdate(mvccdWindow, applPref);
             }
         });
     }
+
+
+    private void treatMCDDatatype(MVCCDWindow mvccdWindow) {
+        if(node.getUserObject() != MDDatatypesManager.instance().getDefaultMCDDatatypeRoot()) {
+            JMenuItem mcdDatatypeEdit = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.mcddatatype"));
+            this.add(mcdDatatypeEdit);
+            MCDDatatype mcdDatatype = (MCDDatatype) node.getUserObject();
+            mcdDatatypeEdit.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    Debug.println("Edition d'un type de données");
+                    MCDDatatypeEditingTreat.treatRead(mvccdWindow, mcdDatatype);
+                 }
+            });
+        }
+
+    }
+
 
 
     private void treatPreferences(MVCCDWindow mvccdWindow) {
@@ -269,27 +163,29 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
         preferencesEditGeneral.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                PrefGeneralEditor fen = new PrefGeneralEditor(mvccdWindow , node, DialogEditor.UPDATE);
+                PrefGeneralEditingTreat.treatUpdate(mvccdWindow, preferences);
+
+                PrefGeneralEditor fen = new PrefGeneralEditor(mvccdWindow , null , preferences, DialogEditor.UPDATE);
                 if (finalEditProfile){
-                   fen.setTitle(MessagesBuilder.getMessagesProperty("preferences.profile.general.read"));
-                   fen.setReadOnly(true);
+                    fen.setTitle(MessagesBuilder.getMessagesProperty("preferences.profile.general.read"));
+                    fen.setReadOnly(true);
                 }
-               fen.setVisible(true);
+                fen.setVisible(true);
             }
         });
 
         JMenuItem preferencesEditMCD = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.mcd.preferences"));
-            preferencesEdit.add(preferencesEditMCD);
-            preferencesEditMCD.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    PrefMCDEditor fen = new PrefMCDEditor(mvccdWindow, node, DialogEditor.UPDATE);
-                    if (finalEditProfile) {
-                        fen.setTitle(MessagesBuilder.getMessagesProperty("preferences.profile.mcd.read"));
-                        fen.setReadOnly(true);
-                    }
-                    fen.setVisible(true);
+        preferencesEdit.add(preferencesEditMCD);
+        preferencesEditMCD.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                PrefMCDEditor fen = new PrefMCDEditor(mvccdWindow, null, preferences, DialogEditor.UPDATE);
+                if (finalEditProfile) {
+                    fen.setTitle(MessagesBuilder.getMessagesProperty("preferences.profile.mcd.read"));
+                    fen.setReadOnly(true);
                 }
+                fen.setVisible(true);
+            }
         });
 
         if (editProject) {
@@ -306,17 +202,218 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
     }
 
 
-    private EntityEditor showEditorEntity(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String mode) {
-        EntityEditor fen = new EntityEditor(mvccdWindow , node, mode);
-        fen.setVisible(true);
-        return fen;
+    private void treatProject(MVCCDWindow mvccdWindow) {
+        JMenuItem editProject = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.project"));
+        this.add(editProject);
+        editProject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                ProjectEditingTreat.treatUpdate(mvccdWindow);
+            }
+        });
+    }
+
+    private void treatModels(MVCCDWindow mvccdWindow) {
+        MCDModels mcdModels = (MCDModels) node.getUserObject();
+        if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_MODELS_MANY()) {
+            final JMenuItem mcdModelCreate = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.model"));
+            this.add(mcdModelCreate);
+            mcdModelCreate.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    MCDModelEditingTreat.treatNew(mvccdWindow, mcdModels, node);
+                }
+            });
+        } else {
+            packageNew(mvccdWindow, mcdModels,true);
+        }
+    }
+
+    private void treatModel(MVCCDWindow mvccdWindow) {
+        final JMenuItem mcdModelEdit= new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.model"));
+        this.add(mcdModelEdit);
+        MCDModel mcdModel = (MCDModel) node.getUserObject();
+        mcdModelEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MCDModelEditingTreat.treatUpdate(mvccdWindow, mcdModel);
+            }
+        });
+
+        packageNew(mvccdWindow, mcdModel, true);
+    }
+
+    private void treatPackage(MVCCDWindow mvccdWindow) {
+        MCDPackage mcdPackage = (MCDPackage) node.getUserObject();
+
+        final JMenuItem mcdPackageEdit= new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.package"));
+        this.add(mcdPackageEdit);
+        mcdPackageEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MCDPackageEditingTreat.treatUpdate(mvccdWindow, mcdPackage);
+            }
+        });
+        packageNew(mvccdWindow, mcdPackage, false);
+
+
     }
 
 
-    private AttributeEditor showEditorAttribute(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String mode) {
-        AttributeEditor fen = new AttributeEditor(mvccdWindow , node, mode);
-        fen.setVisible(true);
-        return fen;
+    private void treatDiagrams(MVCCDWindow mvccdWindow) {
+        JMenuItem mcdDiagramsNewDiagram = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.diagram"));
+        this.add(mcdDiagramsNewDiagram);
+         mcdDiagramsNewDiagram.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Debug.println("Création d'un nouveau diagramme");
+            }
+        });
+    }
+
+
+    private void treatEntities(MVCCDWindow mvccdWindow) {
+        JMenuItem mcdEntitiesNewEntity = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.entity"));
+        this.add(mcdEntitiesNewEntity);
+        MCDEntities mcdEntities = (MCDEntities) node.getUserObject();
+        mcdEntitiesNewEntity.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Debug.println("Création d'une nouvelle entité");
+                MCDEntityEditingTreat.treatNew(mvccdWindow, mcdEntities, node);
+            }
+        });
+    }
+
+    private void treatEntity(MVCCDWindow mvccdWindow) {
+        JMenuItem mcdEntityEdit = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.entity"));
+        this.add(mcdEntityEdit);
+        MCDEntity mcdEntity = (MCDEntity) node.getUserObject();
+        mcdEntityEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Debug.println("Modification de l'entité");
+                MCDEntityEditingTreat.treatUpdate(mvccdWindow, mcdEntity);
+             }
+        });
+
+        JMenuItem mcdEntityCheck = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.check.entity"));
+        this.add(mcdEntityCheck);
+        mcdEntityCheck.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Debug.println("Contrôle de conformité de l'entité");
+                MCDEntityEditingTreat.treatCompliant(mvccdWindow, mcdEntity);
+            }
+        });
 
     }
+
+    private void treatAttributes(MVCCDWindow mvccdWindow) {
+        MCDContAttributes mcdContAttributes = (MCDContAttributes) node.getUserObject();
+        JMenuItem mcdAttributesEdit = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.attributes.entity"));
+        this.add(mcdAttributesEdit);
+        mcdAttributesEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MCDAttributesEditingTreat.treatEdit(mvccdWindow, mcdContAttributes);
+            }
+        });
+
+        JMenuItem mcdAttributesNewAttribute = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.attribute"));
+        this.add(mcdAttributesNewAttribute);
+        mcdAttributesNewAttribute.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Debug.println("Création d'un nouvel attribut");
+                MCDAttributeEditingTreat.treatNew(mvccdWindow, mcdContAttributes);
+            }
+        });
+
+    }
+
+    private void treatAttribute(MVCCDWindow mvccdWindow) {
+
+        JMenuItem mcdAttributeEdit = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.attribute"));
+        this.add(mcdAttributeEdit);
+        MCDAttribute mcdAttribute = (MCDAttribute) node.getUserObject();
+        mcdAttributeEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MCDAttributeEditingTreat.treatUpdate(mvccdWindow , mcdAttribute);
+            }
+        });
+
+        JMenuItem mcdAttributeDelete = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.delete.attribute"));
+        this.add(mcdAttributeDelete);
+        mcdAttributeDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Debug.println("Suppression d'un attribut");
+                DefaultTreeModel treeModel =  MVCCDManager.instance().getWinRepositoryContent().getTree().getTreeModel();
+                treeModel.removeNodeFromParent(node);
+            }
+        });
+
+    }
+
+    private void treatRelations(MVCCDWindow mvccdWindow) {
+        MCDRelations mcdRelations = (MCDRelations) node.getUserObject();
+
+        JMenuItem mcdRelationsNewAssociation = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.association"));
+        this.add(mcdRelationsNewAssociation);
+        mcdRelationsNewAssociation.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.out.println ("Création d'une nouvelle association   " + node.getUserObject().toString());
+                MCDAssociationEditingTreat.treatNew(mvccdWindow, mcdRelations);
+
+            }
+        });
+
+        JMenuItem mcdRelationsNewGenSpec = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.gen.spec"));
+        this.add(mcdRelationsNewGenSpec);
+        mcdRelationsNewGenSpec.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+            }
+        });
+
+        JMenuItem mcdRelationsNewLink = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.link"));
+        this.add(mcdRelationsNewLink);
+        mcdRelationsNewLink.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+            }
+        });
+
+        JMenuItem mcdRelationsNewAnchor = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.anchor"));
+        this.add(mcdRelationsNewAnchor);
+        mcdRelationsNewAnchor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+            }
+        });
+
+    }
+
+    private void packageNew(Window owner, MCDElement parent, boolean top) {
+        if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()) {
+            String propertyMessage = "";
+            if (top){
+                propertyMessage= "menu.new.package";
+            } else {
+                propertyMessage = "menu.new.subpackage";
+            }
+            final JMenuItem mcdPackageCreate = new JMenuItem(MessagesBuilder.getMessagesProperty(propertyMessage));
+            this.add(mcdPackageCreate);
+            mcdPackageCreate.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    MCDPackageEditingTreat.treatNew(owner, parent, node);
+                }
+            });
+        }
+    }
+
 }

@@ -1,26 +1,28 @@
-package project;
+package mcd.services;
 
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import main.MVCCDElementService;
 import mcd.MCDAttribute;
 import mcd.MCDEntity;
+import mcd.interfaces.IMCDTraceability;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public class ProjectAdjustPref {
+public class MCDAdjustPref {
 
-    private Project project ;
+    private ProjectElement mcdContainer;
 
-    public ProjectAdjustPref (Project project){
-        this.project = project;
+    public MCDAdjustPref(ProjectElement mcdContainer){
+        this.mcdContainer = mcdContainer;
     }
 
 
     public void mcdAIDDatatype(String lienProg) {
-        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(project);
+        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(mcdContainer);
         for (MCDEntity mcdEntity : mcdEntities) {
             for (MCDAttribute mcdAttribute : mcdEntity.getMcdAttributes()) {
                 if (mcdAttribute.isAid()) {
@@ -33,17 +35,26 @@ public class ProjectAdjustPref {
     }
 
     public void mcdJournalisation(boolean selected) {
-        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(project);
+        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(mcdContainer);
         for (MCDEntity mcdEntity : mcdEntities){
             mcdEntity.setJournal(selected);
+        }
+        ArrayList<IMCDTraceability> iMCDTraceabilities = MVCCDElementService.getAllITraceabilities(mcdContainer);
+        for (IMCDTraceability imcdTraceability : iMCDTraceabilities){
+            imcdTraceability.setMcdJournalization(selected);
         }
     }
 
     public void mcdAudit(boolean selected) {
-        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(project);
+        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(mcdContainer);
         for (MCDEntity mcdEntity : mcdEntities){
             mcdEntity.setAudit(selected);
         }
+        ArrayList<IMCDTraceability> iMCDTraceabilities = MVCCDElementService.getAllITraceabilities(mcdContainer);
+        for (IMCDTraceability imcdTraceability : iMCDTraceabilities){
+            imcdTraceability.setMcdAudit(selected);
+        }
+
     }
 
     public void changeProfile() {
@@ -56,7 +67,7 @@ public class ProjectAdjustPref {
     public void mcdAIDIndColumnName(String text) {
         // A rajouter le test si isAidDep est correct après consolidation
 
-        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(project);
+        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(mcdContainer);
         for (MCDEntity mcdEntity : mcdEntities){
             for (MCDAttribute mcdAttribute : mcdEntity.getMcdAttributes()){
                 if (mcdAttribute.isAid()  && (! mcdAttribute.isAidDep())){
@@ -70,7 +81,7 @@ public class ProjectAdjustPref {
     public void mcdAIDDepColumnName(String text) {
         // A rajouter le test si isAidDep est correct après consolidation
 
-        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(project);
+        ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(mcdContainer);
         for (MCDEntity mcdEntity : mcdEntities){
             for (MCDAttribute mcdAttribute : mcdEntity.getMcdAttributes()){
                 if (mcdAttribute.isAid()  && mcdAttribute.isAidDep()){

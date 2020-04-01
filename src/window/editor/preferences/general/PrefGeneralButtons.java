@@ -1,6 +1,6 @@
 package window.editor.preferences.general;
 
-import utilities.window.editor.PanelButtons;
+import newEditor.PanelButtons;
 import window.editor.preferences.MCD.PrefMCDButtonsContent;
 import window.editor.preferences.MCD.PrefMCDEditor;
 

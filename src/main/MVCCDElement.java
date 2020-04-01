@@ -12,6 +12,7 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
 
     private MVCCDElement parent;
     private String name;
+    private String shortName;
     private int order;
     private int firstValueOrder = 10;
     private int intervalOrder = 10;
@@ -66,8 +67,17 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
         this.name = name;
     }
 
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
+
     public ArrayList<MVCCDElement> getChilds() {
-        Collections.sort(childs);
+        Collections.sort(childs, MVCCDElement::compareTo);
         return childs;
     }
 
@@ -79,11 +89,18 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
         return order;
     }
 
+    // Doit être surchargé par les descendants
+    public abstract String getNameTree() ;
+
     public String toString(){
-        if (name != null){
-            return name;
+       if (StringUtils.isNotEmpty(getNameTree())){
+            return getNameTree();
         } else {
-            return "Sans nom";
+            if (StringUtils.isNotEmpty(name)) {
+                return name;
+            } else {
+                return "Sans nom";
+            }
         }
     }
 
@@ -129,6 +146,5 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
             return -1;
         }
     }
-
 
 }

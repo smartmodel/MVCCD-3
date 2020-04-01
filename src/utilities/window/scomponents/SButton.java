@@ -6,8 +6,10 @@ import javax.swing.*;
 
 public class SButton extends JButton implements SComponent {
 
+    private boolean checkPreSave = false;
 
     public SButton(String text){
+
         super(text);
     }
 
@@ -64,4 +66,8 @@ public class SButton extends JButton implements SComponent {
         SComponentService.colorNormal(this);
     }
 
+    @Override
+    public boolean isCheckPreSave() {
+        return checkPreSave;
+    }
 }

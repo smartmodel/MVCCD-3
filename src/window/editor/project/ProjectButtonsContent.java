@@ -3,9 +3,9 @@ package window.editor.project;
 import main.MVCCDElement;
 import main.MVCCDFactory;
 import main.MVCCDManager;
+import newEditor.PanelButtonsContent;
 import preferences.Preferences;
 import project.Project;
-import utilities.window.editor.PanelButtonsContent;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -26,24 +26,10 @@ public class ProjectButtonsContent extends PanelButtonsContent implements Action
         return project;
     }
 
-    @Override
-    protected void completeNewMVCCDElement(MVCCDElement mvccdElement) {
-        Project project = (Project) mvccdElement;
-        MVCCDManager.instance().setProject(project);
-        MVCCDFactory.instance().completeProject(project);
-        MVCCDManager.instance().completeNewProject();
-
-    }
-
-
     private ProjectInputContent getEditorContent(){
         return  (ProjectInputContent) getEditor().getInput().getPanelContent();
     }
 
-    @Override
-    public Integer getWidthWindow() {
-        return Preferences.PROJECT_WINDOW_WIDTH;
-    }
 
     @Override
     protected String getHelpFileName() {

@@ -12,7 +12,7 @@ public class Haut extends PanelBorderLayout {
         super();
         super.setBorderLayoutPosition(borderLayoutPosition);
         super.setPanelBLResizer(panelBLResizer);
-        super.start();
+        super.startLayout();
 
         this.setResizable(false);
         content = new HautContent(this);

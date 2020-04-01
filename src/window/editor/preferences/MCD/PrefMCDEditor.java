@@ -1,15 +1,22 @@
 package window.editor.preferences.MCD;
 
+import main.MVCCDElement;
+import main.MVCCDElementApplicationPreferences;
 import main.MVCCDWindow;
+import newEditor.DialogEditor;
 import preferences.Preferences;
-import utilities.window.editor.DialogEditor;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
 
 public class PrefMCDEditor extends DialogEditor {
 
-    public PrefMCDEditor(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String mode)  {
-        super(mvccdWindow, node, mode);
+    public PrefMCDEditor(
+            Window owner,
+            MVCCDElement parent,
+            Preferences preferences,
+            String mode)  {
+        super(owner, parent, preferences, mode);
 
         super.setSize(Preferences.PREFERENCES_WINDOW_WIDTH, Preferences.PREFERENCES_WINDOW_HEIGHT);
         super.setInput(new PrefMCDInput(this));

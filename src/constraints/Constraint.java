@@ -40,4 +40,8 @@ public class Constraint extends MVCCDElement {
     }
 
 
+    @Override
+    public String getNameTree() {
+        return null;
+    }
 }

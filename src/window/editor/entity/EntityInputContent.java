@@ -3,24 +3,21 @@ package window.editor.entity;
 import main.MVCCDElement;
 import mcd.MCDEntity;
 import mcd.services.MCDEntityService;
+import newEditor.PanelInputContentId;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
-import utilities.window.scomponents.STextField;
+import utilities.window.services.PanelService;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 
-public class EntityInputContent extends PanelInputContent {
+public class EntityInputContent extends PanelInputContentId {
 
     private JPanel panel = new JPanel();
-    private STextField entityName = new STextField(this);
-    private STextField entityShortName = new STextField(this);
     private SCheckBox entityOrdered  = new SCheckBox(this);
     private SCheckBox entityAbstract  = new SCheckBox(this);
     private SCheckBox entityAudit  = new SCheckBox(this);
@@ -43,19 +40,10 @@ public class EntityInputContent extends PanelInputContent {
 
     private void createContent() {
 
-        entityName.setPreferredSize((new Dimension(100,Preferences.EDITOR_FIELD_HEIGHT)));
-        entityName.setToolTipText("Nom de l'entité");
-        entityName.setCheckPreSave(true);
-        entityName.getDocument().addDocumentListener(this);
-        entityName.addFocusListener(this);
-
-        //entityName.addActionListener((ActionListener) this);
+        super.createContentId();
+        fieldShortName.setToolTipText("Nom de l'entité");
 
 
-        entityShortName.setPreferredSize((new Dimension(50,Preferences.EDITOR_FIELD_HEIGHT)));
-        entityShortName.setToolTipText("Nom court de l'entité utilisé pour nommer certaines contraintes et autres");
-        entityShortName.getDocument().addDocumentListener(this);
-        entityShortName.addFocusListener(this);
 
         entityOrdered.setToolTipText("Ordonnancement des enregistrements");
         entityOrdered.addItemListener(this);
@@ -73,32 +61,23 @@ public class EntityInputContent extends PanelInputContent {
         entityAudit.addItemListener(this);
         entityAudit.addFocusListener(this);
 
-        super.getsComponents().add(entityName);
-        super.getsComponents().add(entityShortName);
         super.getsComponents().add(entityOrdered);
         super.getsComponents().add(entityAbstract);
         super.getsComponents().add(entityJournal);
         super.getsComponents().add(entityAudit);
 
-        panel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = new Insets(10, 10, 0, 0);
+        createPanelMaster();
+    }
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+    private void createPanelMaster() {
+        GridBagConstraints gbc = PanelService.createGridBagConstraints(panel);
+
+        gbc.gridwidth = 4;
+
+        super.createPanelId();
+        panel.add(panelId, gbc);
+
         gbc.gridwidth = 1;
-        gbc.gridheight = 1;
-        panel.add(new JLabel("Nom : "), gbc);
-        gbc.gridx = 1;
-        panel.add(entityName, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        panel.add(new JLabel("Nom court : "), gbc);
-        gbc.gridx = 1;
-        panel.add(entityShortName, gbc);
-
 
         gbc.gridx = 0;
         gbc.gridy++;
@@ -127,17 +106,12 @@ public class EntityInputContent extends PanelInputContent {
 
     }
 
-    public JTextField getEntityName() {
-        return entityName;
-    }
 
 
 
     protected void changeField(DocumentEvent e) {
         // Les champs obligatoires sont testés sur la procédure checkDatasPreSave()
-        if (entityShortName.getDocument() == e.getDocument()) {
-            checkEntityShortName(true);
-        }
+
     }
 
     @Override
@@ -154,13 +128,6 @@ public class EntityInputContent extends PanelInputContent {
     @Override
     public void focusGained(FocusEvent focusEvent) {
         super.focusGained(focusEvent);
-        Object source = focusEvent.getSource();
-        if (source == entityName) {
-            checkEntityName(true);
-        }
-        if (source == entityShortName) {
-            checkEntityShortName(true);
-        }
     }
 
     @Override
@@ -169,20 +136,20 @@ public class EntityInputContent extends PanelInputContent {
 
 
 
-
-    private boolean checkEntityName(boolean unitaire) {
-        return super.checkInput(entityName, unitaire, MCDEntityService.checkName(entityName.getText()));
-    }
-
-    private boolean checkEntityShortName(boolean unitaire) {
-        return super.checkInput(entityShortName, unitaire, MCDEntityService.checkShortName(entityShortName.getText()));
+    @Override
+    protected boolean checkName(boolean unitaire) {
+        return super.checkInput(fieldName, unitaire, MCDEntityService.checkName(fieldName.getText()));
     }
 
     @Override
-    public void loadDatas(MVCCDElement mvccdElement) {
-        MCDEntity mcdEntity = (MCDEntity) mvccdElement;
-        entityName.setText(mcdEntity.getName()) ;
-        entityShortName.setText(mcdEntity.getShortName());
+    protected boolean checkShortName(boolean unitaire) {
+        return super.checkInput(fieldShortName, unitaire, MCDEntityService.checkShortName(fieldShortName.getText()));
+    }
+
+    @Override
+    public void loadDatas(MVCCDElement mvccdElementCrt) {
+        MCDEntity mcdEntity = (MCDEntity) mvccdElementCrt;
+        super.loadDatasId(mcdEntity);
         entityOrdered.setSelected(mcdEntity.isOrdered());
         entityAbstract.setSelected(mcdEntity.isEntAbstract());
         entityJournal.setSelected(mcdEntity.isJournal());
@@ -190,7 +157,7 @@ public class EntityInputContent extends PanelInputContent {
     }
 
     @Override
-    protected void initDatas(MVCCDElement mvccdElement) {
+    protected void initDatas() {
         Preferences preferences = PreferencesManager.instance().preferences();
         entityJournal.setSelected(preferences.getMCD_JOURNALIZATION());
         entityAudit.setSelected(preferences.getMCD_AUDIT());
@@ -199,12 +166,8 @@ public class EntityInputContent extends PanelInputContent {
     @Override
     public void saveDatas(MVCCDElement mvccdElement) {
         MCDEntity mcdEntity = (MCDEntity) mvccdElement;
-        if (entityName.checkIfUpdated()){
-            mcdEntity.setName(entityName.getText());
-        }
-        if (entityShortName.checkIfUpdated()){
-            mcdEntity.setShortName(entityShortName.getText());
-        }
+        super.saveDatasId(mcdEntity);
+
         if (entityOrdered.checkIfUpdated()){
             mcdEntity.setOrdered(entityOrdered.isSelected());
         }
@@ -223,15 +186,15 @@ public class EntityInputContent extends PanelInputContent {
 
     @Override
     public boolean checkDatasPreSave(boolean unitaire) {
-        boolean ok = checkEntityName(unitaire);
+        boolean ok = super.checkDatasPreSaveId(unitaire);
         return ok;
     }
 
     protected boolean checkDatas(){
-        boolean ok = checkDatasPreSave(false);
+        boolean ok = checkDatasId();
         // Autres attributs
 
-        ok =  checkEntityShortName(false)  && ok ;
+        //ok =  checkEntityShortName(false)  && ok ;
         return ok ;
     }
 

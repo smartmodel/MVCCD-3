@@ -1,9 +1,8 @@
 package window.editor.preferences.MCD;
 
 import main.MVCCDElement;
+import newEditor.PanelButtonsContent;
 import preferences.Preferences;
-import utilities.window.editor.PanelButtonsContent;
-import utilities.window.editor.DialogEditor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,10 +15,6 @@ public class PrefMCDButtonsContent extends PanelButtonsContent implements Action
         super(prefMCDButtons);
     }
 
-    @Override
-    public Integer getWidthWindow() {
-        return Preferences.PREFERENCES_WINDOW_WIDTH;
-    }
 
     @Override
     protected String getHelpFileName() {
@@ -30,10 +25,5 @@ public class PrefMCDButtonsContent extends PanelButtonsContent implements Action
     @Override
     protected MVCCDElement createNewMVCCDElement() {
         return null;
-    }
-
-    @Override
-    protected void completeNewMVCCDElement(MVCCDElement mvccdElement) {
-
     }
 }

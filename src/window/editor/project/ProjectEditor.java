@@ -1,16 +1,22 @@
 package window.editor.project;
 
+import mcd.MCDEntities;
+import mcd.MCDEntity;
+import newEditor.DialogEditor;
 import preferences.Preferences;
-import utilities.window.editor.DialogEditor;
 import main.MVCCDWindow;
+import project.Project;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
 
 public class ProjectEditor extends DialogEditor {
 
 
-    public ProjectEditor(MVCCDWindow mvccdWindow, DefaultMutableTreeNode node, String mode)  {
-        super(mvccdWindow, node, mode);
+    public ProjectEditor(Window owner,
+                         Project project,
+                         String mode            )  {
+        super(owner, null, project, mode);
 
         super.setSize(Preferences.PROJECT_WINDOW_WIDTH, Preferences.PROJECT_WINDOW_HEIGHT);
 

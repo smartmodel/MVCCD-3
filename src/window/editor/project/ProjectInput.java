@@ -1,6 +1,7 @@
 package window.editor.project;
 
-import utilities.window.editor.PanelInput;
+
+import newEditor.PanelInput;
 
 public class ProjectInput extends PanelInput {
 

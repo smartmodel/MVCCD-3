@@ -4,13 +4,10 @@ import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import utilities.Debug;
+import repository.editingTreat.ProjectEditingTreat;
 import utilities.window.DialogMessage;
-import utilities.window.editor.DialogEditor;
-import window.editor.project.ProjectEditor;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -128,10 +125,7 @@ public class WinMenuContent implements ActionListener {
             newProject();
         }
         if (source == projectEdit) {
-            ProjectEditor fen = new ProjectEditor(mvccdWindow,
-                    MVCCDManager.instance().getRepository().getNodeProject(),
-                    DialogEditor.UPDATE);
-            fen.setVisible(true);
+            ProjectEditingTreat.treatUpdate(mvccdWindow);
         }
         if (source == projectOpen) {
             openProject();
@@ -167,10 +161,8 @@ public class WinMenuContent implements ActionListener {
 
     private void newProject() {
         if (MVCCDManager.instance().getProject() == null) {
-            ProjectEditor fen = new ProjectEditor(mvccdWindow,
-                    (DefaultMutableTreeNode) MVCCDManager.instance().getRepository().getRoot(),
-                    DialogEditor.NEW);
-            fen.setVisible(true);
+            ProjectEditingTreat.treatNew(mvccdWindow);
+
         } else {
             String message = MessagesBuilder.getMessagesProperty ("project.new.not.close");
             DialogMessage.showOk(mvccdWindow,message);

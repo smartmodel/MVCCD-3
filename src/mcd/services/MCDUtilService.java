@@ -3,6 +3,7 @@ package mcd.services;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.window.scomponents.SComboBox;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,7 @@ public class MCDUtilService {
         return messages;
     }
 
+
     public static ArrayList<String> checkInteger(String integerInText,
                                                  boolean mandatory,
                                                  Integer min,
@@ -74,6 +76,23 @@ public class MCDUtilService {
 
         if (mandatory){
             if (StringUtils.isEmpty(integerInText)  || error) {
+                messages.add(0, MessagesBuilder.getMessagesProperty("editor.mandatory.error"
+                        , new String[]{message1}));
+            }
+        }
+        return messages;
+    }
+
+
+    public static ArrayList<String> checkEmptyComboBox(SComboBox comboBox,
+                                                       boolean mandatory,
+                                                       String contextMessage) {
+
+        ArrayList<String> messages = new ArrayList<String>();
+        String message1 = MessagesBuilder.getMessagesProperty(contextMessage);
+
+        if (mandatory){
+            if (comboBox.isSelectedEmpty()) {
                 messages.add(0, MessagesBuilder.getMessagesProperty("editor.mandatory.error"
                         , new String[]{message1}));
             }

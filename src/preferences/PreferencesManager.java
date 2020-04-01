@@ -1,6 +1,8 @@
 package preferences;
 
+import main.MVCCDManager;
 import profile.ProfileFileChooser;
+import project.Project;
 import project.ProjectFileChooser;
 
 import java.io.*;
@@ -71,15 +73,21 @@ public class PreferencesManager {
 
     public void setProjectPref(Preferences projectPref) {
         this.projectPref = projectPref;
-        // Toujours recopier de la dernière version des préférences d'application
-        copyApplicationPref();
     }
 
-    public void copyApplicationPref() {
+    public void copyApplicationPref(int projectState) {
         projectPref.setDEBUG(applicationPref.isDEBUG());
         projectPref.setDEBUG_PRINT_MVCCDELEMENT(applicationPref.isDEBUG_PRINT_MVCCDELEMENT());
         projectPref.setDEBUG_BACKGROUND_PANEL(applicationPref.isDEBUG_BACKGROUND_PANEL());
         projectPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(applicationPref.isDEBUG_SHOW_TABLE_COL_HIDDEN());
+
+        // Pour le moment pas de changement possible pour un projet existant
+        // A analyser et reprendre plus tard
+        if (projectState == Project.NEW) {
+            projectPref.setREPOSITORY_MCD_MODELS_MANY(applicationPref.getREPOSITORY_MCD_MODELS_MANY());
+        }
+
+        projectPref.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
     }
 
     public void copyProfilePref() {
@@ -104,6 +112,7 @@ public class PreferencesManager {
         to.setMCD_JOURNALIZATION_EXCEPTION(from.getMCD_JOURNALIZATION_EXCEPTION());
         to.setMCD_AUDIT(from.getMCD_AUDIT());
         to.setMCD_AUDIT_EXCEPTION(from.getMCD_AUDIT_EXCEPTION());
+        to.setMCD_TREE_NAMING_ASSOCIATION(from.getMCD_TREE_NAMING_ASSOCIATION());
     }
 
     public void loadOrCreateFileApplicationPreferences() {

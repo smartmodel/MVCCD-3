@@ -20,15 +20,18 @@ public class Preferences extends MVCCDElement {
     public static String REPOSITORY_PREFERENCES_NAME = "Préférences de projet";  //Project
     public static String REPOSITORY_PREFERENCES_APPLICATION_NAME = "PréférencesApplication";  //Project
     public static String REPOSITORY_MCD_MODELS_NAME = "MCD";
-    public static String REPOSITORY_MCD_PACKAGES_NAME = "Paquetages";
+    public static String REPOSITORY_MCD_PACKAGE_NAME = "Paquetage";
     public static String REPOSITORY_MCD_DIAGRAMS_NAME = "Diagrammes";
     public static String REPOSITORY_MCD_ENTITIES_NAME = "Entités";
+    public static String REPOSITORY_MCD_RELATIONS_NAME = "Relations";
     public static String REPOSITORY_MCD_ATTRIBUTES_NAME = "Attributs";
-    public static Boolean REPOSITORY_MCD_MODELS_MANY = false;
-    public static Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = false;
     public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
     public static String NAME_REGEXPR = "[a-zA-Z]{1,1}[a-zA-Z0-9_]*";
     public static Integer PROJECT_NAME_LENGTH = 10;
+    public static Integer MODEL_NAME_LENGTH = 10;
+    public static Integer MODEL_SHORT_NAME_LENGTH = 5;
+    public static Integer PACKAGE_NAME_LENGTH = 10;
+    public static Integer PACKAGE_SHORT_NAME_LENGTH = 5;
     public static Integer ENTITY_NAME_LENGTH = 10;
     public static Integer ATTRIBUTE_NAME_LENGTH = 10;
     public static String INTEGER_REGEXPR = "([0])|([1-9]{1,1}[0-9]*)";
@@ -57,7 +60,10 @@ public class Preferences extends MVCCDElement {
     public static String FILE_APPLICATION_PREF_NAME = "application.pref";
     public static String FILE_HELP_PROJECT_NAME ="helpProject.txt";
     public static String FILE_HELP_PREFERENCES_NAME ="helpPreferences.txt";
+    public static String FILE_HELP_MODEL_NAME = "helpModel.txt";
     public static String FILE_HELP_ENTITY_NAME = "helpEntity.txt";
+    public static String FILE_HELP_ASSOCIATION_NAME = "helpAssociation.txt";
+    public static String FILE_HELP_ANCHOR_NAME = "helpAnchor.txt";
     public static String FILE_HELP_MCDDATATYPE_NAME = "helpMCDDatatpe.txt";
 
     public static String DIRECTORY_PROFILE_NAME = "profiles";
@@ -66,12 +72,25 @@ public class Preferences extends MVCCDElement {
     public static String SYSTEM_FILE_SEPARATOR =System.getProperty("file.separator");
     public static String CHARSET_FILES_TEXT = "UTF-8";
 
+    public static String MODEL_NAME_PATH_SEPARATOR = ".";
 
     public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
     public static Integer PROJECT_WINDOW_WIDTH = 600;
     public static Integer PROJECT_WINDOW_HEIGHT = 300;
+    public static Integer MODEL_WINDOW_WIDTH = 800;
+    public static Integer MODEL_WINDOW_HEIGHT = 600;
     public static Integer ENTITY_WINDOW_WIDTH = 800;
     public static Integer ENTITY_WINDOW_HEIGHT = 600;
+    public static Integer ATTRIBUTE_WINDOW_WIDTH = 800;
+    public static Integer ATTRIBUTE_WINDOW_HEIGHT = 600;
+    public static Integer ASSOCIATION_WINDOW_WIDTH = 800;
+    public static Integer ASSOCIATION_WINDOW_HEIGHT = 600;
+    public static Integer ANCHOR_WINDOW_WIDTH = 800;
+    public static Integer ANCHOR_WINDOW_HEIGHT = 600;
+    public static Integer GENSPEC_WINDOW_WIDTH = 800;
+    public static Integer GENSPEC_WINDOW_HEIGHT = 600;
+    public static Integer LINK_WINDOW_WIDTH = 800;
+    public static Integer LINK_WINDOW_HEIGHT = 600;
     public static Integer HELP_WINDOW_WIDTH = 600;
     public static Integer HELP_WINDOW_HEIGHT = 300;
     public static Integer PREFERENCES_WINDOW_WIDTH = 800;
@@ -221,12 +240,21 @@ public class Preferences extends MVCCDElement {
     public static String MCD_AID_IND_COLUMN_NAME_DEFAULT = "num";
     public static String MCD_AID_DEP_COLUMN_NAME_DEFAULT = "numDep";
 
+    public static String MCD_NAMING_NAME="mcd.naming.name";
+    public static String MCD_NAMING_SHORT_NAME="mcd.naming.short.name";
+
+    public static String MCD_NAMING_ASSOCIATION_SEPARATOR = " ... ";
+
 
     // Modification Application
     private Boolean DEBUG = false;
     private Boolean DEBUG_BACKGROUND_PANEL = false;
     private Boolean DEBUG_PRINT_MVCCDELEMENT = false;
     private Boolean DEBUG_SHOW_TABLE_COL_HIDDEN = false;
+    private Boolean REPOSITORY_MCD_MODELS_MANY = false;
+    private Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = false;
+
+
     //private PreferencesDisplay GENERAL_PREFERENCES_DISPLAY = PreferencesDisplay.REPOSITORY;
 
     // Modification User/Custom
@@ -239,11 +267,18 @@ public class Preferences extends MVCCDElement {
     private String MCD_AID_IND_COLUMN_NAME = null;
     private String MCD_AID_DEP_COLUMN_NAME = null;
     private Boolean MCD_AID_WITH_DEP = true;
+    private String MCD_TREE_NAMING_ASSOCIATION = null;
+
 
 
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);
 
+    }
+
+    @Override
+    public String getNameTree() {
+        return null;
     }
 
     // Application
@@ -279,8 +314,23 @@ public class Preferences extends MVCCDElement {
     public void setDEBUG_SHOW_TABLE_COL_HIDDEN(Boolean DEBUG_SHOW_TABLE_COL_HIDDEN) {
         this.DEBUG_SHOW_TABLE_COL_HIDDEN = DEBUG_SHOW_TABLE_COL_HIDDEN;
     }
-    
-    
+
+    public Boolean getREPOSITORY_MCD_MODELS_MANY() {
+        return REPOSITORY_MCD_MODELS_MANY;
+    }
+
+    public void setREPOSITORY_MCD_MODELS_MANY(Boolean REPOSITORY_MCD_MODELS_MANY) {
+        this.REPOSITORY_MCD_MODELS_MANY = REPOSITORY_MCD_MODELS_MANY;
+    }
+
+    public Boolean getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS() {
+        return REPOSITORY_MCD_PACKAGES_AUTHORIZEDS;
+    }
+
+    public void setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS) {
+        this.REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = REPOSITORY_MCD_PACKAGES_AUTHORIZEDS;
+    }
+
     // Project
     public Boolean getMCD_JOURNALIZATION() {
         return MCD_JOURNALIZATION;
@@ -362,4 +412,18 @@ public class Preferences extends MVCCDElement {
     public void setMCD_AID_WITH_DEP(Boolean MCD_AID_WITH_DEP) {
         this.MCD_AID_WITH_DEP = MCD_AID_WITH_DEP;
     }
+
+
+    public String getMCD_TREE_NAMING_ASSOCIATION() {
+        if(MCD_TREE_NAMING_ASSOCIATION  == null){
+            MCD_TREE_NAMING_ASSOCIATION = MCD_NAMING_NAME;
+        }
+        return MCD_TREE_NAMING_ASSOCIATION;
+    }
+
+    public void setMCD_TREE_NAMING_ASSOCIATION(String MCD_TREE_NAMING_ASSOCIATION) {
+        this.MCD_TREE_NAMING_ASSOCIATION = MCD_TREE_NAMING_ASSOCIATION;
+    }
+
+
 }

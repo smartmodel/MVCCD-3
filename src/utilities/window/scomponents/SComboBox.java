@@ -8,18 +8,20 @@ import javax.swing.*;
 
 public class SComboBox<S> extends JComboBox<S> implements SComponent {
 
-    public static final String LIGNETIRET = "---";
-    public static final String LIGNEVIDE = "";
+    public static final String LINEDASH = "---";
+    public static final String LINEWHITE = "";
+
+    public static final int INDEXOUTBOUND = -1;
 
     //private S oldSelected = null;
     private int oldIndex = -1 ;
     private boolean checkPreSave = false;
 
     private boolean readOnly = false;
-    private PanelInputContent panel;
+    private IPanelInputContent panel;
 
 
-    public SComboBox(PanelInputContent panel) {
+    public SComboBox(IPanelInputContent panel) {
         this.panel = panel ;
         this.setColorNormal();
     }
@@ -111,4 +113,38 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         SComponentService.colorNormal(this);
     }
 
+    @Override
+    public boolean isCheckPreSave() {
+        return checkPreSave;
+    }
+
+    public boolean isSelectedEmpty(){
+        String content = (String) this.getSelectedItem();
+        return  (content.equals(LINEDASH) || content.equals(LINEWHITE)) ;
+    }
+
+    public int getItemEmptyIndex(){
+        for (int i = 0; i < getItemCount(); i++) {
+            if (getItemAt(i).equals(LINEWHITE) || getItemAt(i).equals(LINEDASH)){
+                return INDEXOUTBOUND;
+            }
+        }
+        return -1 ;
+    }
+
+    public void setSelectedEmpty(){
+        for (int i = 0; i < getItemCount(); i++) {
+            if (getItemAt(i).equals(LINEWHITE) || getItemAt(i).equals(LINEDASH)){
+                super.setSelectedIndex(i);
+            }
+        }
+    }
+
+    public String getFirstItem(){
+        return (String) super.getItemAt(0);
+    }
+
+    public void setSelectedFirst() {
+        super.setSelectedIndex(0);
+    }
 }

@@ -3,9 +3,9 @@ package window.editor.mcddatatype;
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import main.MVCCDElement;
+import newEditor.PanelInputContent;
 import preferences.Preferences;
 import utilities.UtilDivers;
-import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.STextField;
 
@@ -315,16 +315,6 @@ public class MCDDatatypeInputContent extends PanelInputContent {
 
 
     @Override
-    public void focusGained(FocusEvent focusEvent) {
-    }
-
-    @Override
-    public void focusLost(FocusEvent focusEvent) {
-    }
-
-
-
-    @Override
     public boolean checkDatasPreSave(boolean unitaire) {
 
         return true;
@@ -365,7 +355,7 @@ public class MCDDatatypeInputContent extends PanelInputContent {
     }
 
     @Override
-    protected void initDatas(MVCCDElement mvccdElement) {
+    protected void initDatas() {
     }
 
     @Override

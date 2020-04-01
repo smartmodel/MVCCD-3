@@ -57,7 +57,9 @@ public abstract class PanelButtonsContent extends PanelContent
         messagesScroll = new JScrollPane(messages);
         messagesScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         messagesScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        messagesScroll.setPreferredSize( new Dimension(getWidthWindow(), Preferences.PANEL_BUTTONS_MESSAGES_HEIGHT));
+        //messagesScroll.setPreferredSize( new Dimension(getWidthWindow(), Preferences.PANEL_BUTTONS_MESSAGES_HEIGHT));
+        messagesScroll.setPreferredSize(
+                new Dimension(getEditor().getWidthInit(), Preferences.PANEL_BUTTONS_MESSAGES_HEIGHT));
 
         bVer.add(messagesScroll);
         bVer.add(Box.createVerticalStrut(Preferences.JPANEL_VGAP));
@@ -102,7 +104,7 @@ public abstract class PanelButtonsContent extends PanelContent
         colorDebug();
     }
 
-    public abstract Integer getWidthWindow() ;
+    //public abstract Integer getWidthWindow() ;
 
     protected abstract String getHelpFileName();
 
@@ -225,6 +227,7 @@ public abstract class PanelButtonsContent extends PanelContent
 
     protected void saveDatas(MVCCDElement mvccdElement) {
         getEditor().getInput().getInputContent().saveDatas(mvccdElement);
+
     }
 
     protected abstract MVCCDElement createNewMVCCDElement();

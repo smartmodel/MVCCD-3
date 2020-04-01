@@ -7,4 +7,9 @@ public class MDDatatypes extends MVCCDElement {
     public MDDatatypes(MVCCDElement parent, String name) {
         super(parent, name);
     }
+
+    @Override
+    public String getNameTree() {
+        return null;
+    }
 }

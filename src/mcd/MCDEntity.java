@@ -1,15 +1,16 @@
 package mcd;
 
 import main.MVCCDElement;
+import mcd.interfaces.IMCDNamePathParent;
 import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public class MCDEntity extends MCDElement{
+public class MCDEntity extends MCDElement implements IMCDNamePathParent {
 
     private static final long serialVersionUID = 1000;
 
-    private String shortName ;
+    //private String shortName ;
     private boolean entAbstract = false;
     private boolean ordered = false;
     private boolean journal = false;
@@ -24,13 +25,7 @@ public class MCDEntity extends MCDElement{
         super (parent);
     }
 
-    public String getShortName() {
-        return shortName;
-    }
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
 
     public boolean isEntAbstract() {
         return entAbstract;
@@ -71,6 +66,20 @@ public class MCDEntity extends MCDElement{
                return mcdContAttributes.getMCDAttributes();
            }
         }
+        return new ArrayList<MCDAttribute>();
+    }
+
+    public MCDContEndRels getMCDContRelations() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MCDContEndRels) {
+                return (MCDContEndRels) mvccdElement;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getNameTree() {
         return null;
     }
 }
