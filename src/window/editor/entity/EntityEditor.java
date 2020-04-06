@@ -1,14 +1,10 @@
 package window.editor.entity;
 
-import main.MVCCDElement;
-import main.MVCCDWindow;
 import mcd.MCDEntities;
 import mcd.MCDEntity;
-import messages.MessagesBuilder;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
 public class EntityEditor extends DialogEditor {

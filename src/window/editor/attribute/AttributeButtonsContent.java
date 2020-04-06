@@ -2,10 +2,9 @@ package window.editor.attribute;
 
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
-import main.MVCCDManager;
 import mcd.MCDAttribute;
 import mcd.MCDContAttributes;
-import newEditor.PanelButtonsContent;
+import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
 
 public class AttributeButtonsContent extends PanelButtonsContent {

@@ -1,13 +1,10 @@
 package window.editor.relation.link;
 
-import mcd.MCDEntities;
-import mcd.MCDEntity;
 import mcd.MCDRelations;
 import mcd.services.MCDLink;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
 public class LinkEditor extends DialogEditor {

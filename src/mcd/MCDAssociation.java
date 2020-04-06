@@ -1,6 +1,7 @@
 package mcd;
 
 import main.MVCCDElement;
+import mcd.services.MCDElementService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -44,6 +45,8 @@ public class MCDAssociation extends MCDRelation{
         MCDEntity entityTo = getTo().getMcdEntity();
 
         MVCCDElement containerAssociation = this.getParent().getParent();
+
+
         MVCCDElement containerEntityFrom = entityFrom.getParent().getParent();
         MVCCDElement containerEntityTo = entityTo.getParent().getParent();
 
@@ -54,7 +57,6 @@ public class MCDAssociation extends MCDRelation{
         boolean c3 = treeNaming.equals(Preferences.MCD_NAMING_NAME);
         boolean c4 = treeNaming.equals(Preferences.MCD_NAMING_SHORT_NAME);
 
-        System.out.println(treeNaming);
         boolean r1 = c1 && c3;
         boolean r2 = c1 && c4;
         boolean r3 = (!c1) && c3;
@@ -69,38 +71,34 @@ public class MCDAssociation extends MCDRelation{
         }
         
         if (r2){
-            if (StringUtils.isNotEmpty(entityFrom.getShortName())){
-                nameEntityFrom = entityFrom.getShortName();
-            } else{
-                nameEntityFrom = entityFrom.getName();
-            }
-            if (StringUtils.isNotEmpty(entityTo.getShortName())){
-                nameEntityTo = entityTo.getShortName();
-            } else{
-                nameEntityTo = entityTo.getName();
-            }
+            nameEntityFrom = entityFrom.getShortNameSmart();
+            nameEntityTo = entityTo.getShortNameSmart();
         }
 
         if (r3){
-            nameEntityFrom = entityFrom.getNamePath();
-            nameEntityTo = entityTo.getNamePath();
+            nameEntityFrom = entityFrom.getNamePath(MCDElementService.PATHSHORTNAME);
+            nameEntityTo = entityTo.getNamePath(MCDElementService.PATHSHORTNAME);
         }
 
         if (r4){
-            if (StringUtils.isNotEmpty(entityFrom.getShortNamePath())){
-                nameEntityFrom = entityFrom.getShortNamePath();
-            } else{
-                nameEntityFrom = entityFrom.getNamePath();
-            }
-            if (StringUtils.isNotEmpty(entityTo.getShortNamePath())){
-                nameEntityTo = entityTo.getShortNamePath();
-            } else{
-                nameEntityTo = entityTo.getNamePath();
-            }
+           nameEntityFrom = entityFrom.getShortNameSmartPath();
+           nameEntityTo = entityTo.getShortNameSmartPath();
         }
 
-
-        resultat = nameEntityFrom + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR + nameEntityTo;
+        String namingAssociation ;
+        if ((getFrom().getName() != null ) && (getTo().getName() != null)){
+            namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT +
+                    getFrom().getName() +
+                    Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR  +
+                    getTo().getName() +
+                    Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT;
+        } else {
+            namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
+                    this.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
+        }
+        resultat = nameEntityFrom + namingAssociation + nameEntityTo;
         return resultat;
     }
+
+
 }

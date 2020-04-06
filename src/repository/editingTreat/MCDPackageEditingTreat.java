@@ -2,11 +2,8 @@ package repository.editingTreat;
 
 import main.MVCCDManager;
 import mcd.MCDElement;
-import mcd.MCDModel;
-import mcd.MCDModels;
 import mcd.MCDPackage;
-import mcd.interfaces.IMCDModel;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import window.editor.model.ModelEditor;
 
 import javax.swing.tree.DefaultMutableTreeNode;

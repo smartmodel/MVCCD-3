@@ -1,7 +1,7 @@
 package window.editor.attributes;
 
 
-import newEditor.PanelInput;
+import utilities.window.editor.PanelInput;
 
 public class AttributesInput extends PanelInput {
 

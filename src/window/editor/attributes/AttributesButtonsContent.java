@@ -1,12 +1,7 @@
 package window.editor.attributes;
 
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
-import main.MVCCDManager;
-import mcd.MCDEntity;
-import newEditor.PanelButtonsContent;
-import preferences.Preferences;
-import window.editor.entity.EntityButtons;
+import utilities.window.editor.PanelButtonsContent;
 
 public class AttributesButtonsContent extends PanelButtonsContent {
 

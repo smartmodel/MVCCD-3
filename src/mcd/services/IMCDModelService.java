@@ -40,9 +40,9 @@ public class IMCDModelService {
         return resultat;
     }
 
-    public static MCDElement getMCDElementByClassAndNamePath(IMCDModel model, String className, String namePath){
+    public static MCDElement getMCDElementByClassAndNamePath(IMCDModel model, String className, int pathMode, String namePath){
         for (MCDElement mcdElement: getMCDElementsByClassName(model, className)){
-            if (mcdElement.getNamePath().equals(namePath)){
+            if (mcdElement.getNamePath(pathMode).equals(namePath)){
                 return mcdElement;
             }
         }

@@ -1,10 +1,15 @@
 package mcd;
 
+import m.MRelEnd;
 import project.ProjectElement;
 
-public abstract class MCDRelEnd extends MCDElement{
+public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
 
     private static final long serialVersionUID = 1000;
+
+    //public static final int FROM = 1 ;
+    //public static final int TO = 2 ;
+
 
     private MCDRelation mcdRelation;
     private MCDElement mcdElement ;

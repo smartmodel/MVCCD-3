@@ -3,7 +3,7 @@ package window.editor.entity;
 import main.MVCCDElement;
 import mcd.MCDEntity;
 import mcd.services.MCDEntityService;
-import newEditor.PanelInputContentId;
+import utilities.window.editor.PanelInputContentId;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.scomponents.SCheckBox;
@@ -11,6 +11,7 @@ import utilities.window.services.PanelService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
@@ -110,7 +111,13 @@ public class EntityInputContent extends PanelInputContentId {
 
 
     protected void changeField(DocumentEvent e) {
-        // Les champs obligatoires sont testés sur la procédure checkDatasPreSave()
+        // Les champs impératifs sont testés sur la procédure checkDatasPreSave()
+
+        Document doc = e.getDocument();
+
+        if (doc == fieldShortName.getDocument()) {
+            checkShortName(true);
+        }
 
     }
 
@@ -147,6 +154,17 @@ public class EntityInputContent extends PanelInputContentId {
     }
 
     @Override
+    protected void initDatas() {
+        Preferences preferences = PreferencesManager.instance().preferences();
+        super.initDatasId();
+        entityAbstract.setSelected(false);
+        entityOrdered.setSelected(false);
+        entityJournal.setSelected(preferences.getMCD_JOURNALIZATION());
+        entityAudit.setSelected(preferences.getMCD_AUDIT());
+
+    }
+
+    @Override
     public void loadDatas(MVCCDElement mvccdElementCrt) {
         MCDEntity mcdEntity = (MCDEntity) mvccdElementCrt;
         super.loadDatasId(mcdEntity);
@@ -154,13 +172,6 @@ public class EntityInputContent extends PanelInputContentId {
         entityAbstract.setSelected(mcdEntity.isEntAbstract());
         entityJournal.setSelected(mcdEntity.isJournal());
         entityAudit.setSelected(mcdEntity.isAudit());
-    }
-
-    @Override
-    protected void initDatas() {
-        Preferences preferences = PreferencesManager.instance().preferences();
-        entityJournal.setSelected(preferences.getMCD_JOURNALIZATION());
-        entityAudit.setSelected(preferences.getMCD_AUDIT());
     }
 
     @Override
@@ -192,9 +203,9 @@ public class EntityInputContent extends PanelInputContentId {
 
     protected boolean checkDatas(){
         boolean ok = checkDatasId();
+
         // Autres attributs
 
-        //ok =  checkEntityShortName(false)  && ok ;
         return ok ;
     }
 

@@ -3,13 +3,10 @@ package window.editor.preferences.application;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
-import main.MVCCDWindow;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 
 public class PrefApplicationEditor extends DialogEditor {

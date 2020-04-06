@@ -1,7 +1,7 @@
 package window.editor.reserve;
 
 
-import newEditor.PanelInput;
+import utilities.window.editor.PanelInput;
 
 public class LinkInput extends PanelInput {
 

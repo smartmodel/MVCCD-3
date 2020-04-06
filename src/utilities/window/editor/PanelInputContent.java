@@ -1,13 +1,9 @@
 package utilities.window.editor;
 
 import main.MVCCDElement;
-import preferences.PreferencesManager;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -25,7 +21,7 @@ public abstract class PanelInputContent
     private PanelInput panelInput;
     private boolean alreadyFocusGained = false;
     private ArrayList<SComponent> sComponents = new ArrayList<SComponent>();
-    private boolean readOnly = false;
+    //private boolean readOnly = false;
     private boolean dataInitialized = false;
 
     public PanelInputContent(PanelInput panelInput) {
@@ -35,7 +31,7 @@ public abstract class PanelInputContent
 
     protected abstract boolean checkDatas();
 
-    protected abstract boolean checkDatasPreSave(boolean unitaire);
+    public abstract boolean checkDatasPreSave(boolean unitaire);
 
     protected abstract void changeField(DocumentEvent e);
 
@@ -44,11 +40,12 @@ public abstract class PanelInputContent
 
     protected abstract void changeFieldDeSelected(ItemEvent e);
 
-    protected abstract void loadDatas(MVCCDElement mvccdElement);
+    public abstract void loadDatas(MVCCDElement mvccdElementCrt);
 
-    protected abstract void initDatas(MVCCDElement mvccdElement);
+    //protected abstract void initDatas(MVCCDElement mvccdElementParent);
+    protected abstract void initDatas();
 
-    protected abstract void saveDatas(MVCCDElement mvccdElement);
+    public abstract void saveDatas(MVCCDElement mvccdElement);
 
 
     @Override
@@ -213,12 +210,11 @@ public abstract class PanelInputContent
     }
 
     protected void initOrLoadDatas() {
-        if (getEditor().getMode().equals(DialogEditor.UPDATE)) {
-            loadDatas(getEditor().getMvccdElement());
-        }
         if (getEditor().getMode().equals(DialogEditor.NEW)) {
-            initDatas(getEditor().getMvccdElement());
-            //initDatas();
+            //initDatas(getEditor().getMvccdElementParent());
+            initDatas();
+        } else {
+            loadDatas(getEditor().getMvccdElementCrt());
         }
         dataInitialized = true;
     }
@@ -263,16 +259,11 @@ public abstract class PanelInputContent
         return resultat;
     }
 
-    public boolean isReadOnly() {
-        return readOnly;
-    }
-
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
-        if (readOnly){
+    public void setComponentsReadOnly(boolean readOnly) {
             for (SComponent sComponent : sComponents) {
                 sComponent.setReadOnly(readOnly);
             }
-        }
     }
+
+
 }

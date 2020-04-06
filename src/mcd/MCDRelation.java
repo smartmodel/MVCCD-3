@@ -1,8 +1,9 @@
 package mcd;
 
+import m.MRelation;
 import project.ProjectElement;
 
-public abstract class MCDRelation extends MCDElement{
+public abstract class MCDRelation extends MCDElement implements MRelation {
 
     private  static final long serialVersionUID = 1000;
 

@@ -1,7 +1,7 @@
 package window.editor.reserve;
 
 import main.MVCCDElement;
-import newEditor.PanelButtonsContent;
+import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
 
 public class LinkButtonsContent extends PanelButtonsContent {

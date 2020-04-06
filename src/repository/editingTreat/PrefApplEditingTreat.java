@@ -2,17 +2,9 @@ package repository.editingTreat;
 
 import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
-import mcd.MCDElement;
-import mcd.MCDEntity;
-import mcd.services.MCDEntityService;
-import messages.MessagesBuilder;
-import newEditor.DialogEditor;
-import utilities.Debug;
-import utilities.window.DialogMessage;
-import window.editor.entity.EntityEditor;
+import utilities.window.editor.DialogEditor;
 import window.editor.preferences.application.PrefApplicationEditor;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class PrefApplEditingTreat {

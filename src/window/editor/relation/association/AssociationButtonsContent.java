@@ -2,10 +2,8 @@ package window.editor.relation.association;
 
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
-import main.MVCCDManager;
 import mcd.*;
-import newEditor.PanelButtonsContent;
-import org.apache.commons.lang.StringUtils;
+import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
 
 public class AssociationButtonsContent extends PanelButtonsContent {
@@ -26,11 +24,9 @@ public class AssociationButtonsContent extends PanelButtonsContent {
 
         MCDEntity mcdEntityFrom = inputContent.getMCDEntityFrom();
         MCDContEndRels mcdContEndRelsFrom = mcdEntityFrom.getMCDContRelations();
-        System.out.println(mcdEntityFrom.getName());
 
         MCDEntity mcdEntityTo = inputContent.getMCDEntityTo();
         MCDContEndRels mcdContEndRelsTo = mcdEntityTo.getMCDContRelations();
-        System.out.println(mcdEntityTo.getName());
 
         MCDAssociation mcdAssociation = MVCCDElementFactory.instance().createMCDAssociation(
                 mcdRelations, mcdContEndRelsFrom, mcdContEndRelsTo);

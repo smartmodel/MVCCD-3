@@ -3,7 +3,7 @@ package window.editor.mcddatatype;
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import main.MVCCDElement;
-import newEditor.PanelInputContent;
+import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import utilities.UtilDivers;
 import utilities.window.scomponents.SCheckBox;
@@ -14,7 +14,6 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
-import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 
 public class MCDDatatypeInputContent extends PanelInputContent {

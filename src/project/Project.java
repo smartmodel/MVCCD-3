@@ -3,6 +3,7 @@ package project;
 import main.MVCCDElement;
 import main.MVCCDFactory;
 import main.MVCCDManager;
+import main.window.repository.WinRepositoryTree;
 import mcd.services.MCDAdjustPref;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -16,13 +17,17 @@ public class Project extends ProjectElement {
     public static final int NEW = 1 ;
     public static final int EXISTING = 2 ;
 
-
     private String profileFileName ;
     private Profile profile;
     private boolean modelsMany;
     private boolean packagesAutorizeds;
 
     private int idElementSequence = 0;
+
+    // Sauvegarde de l'état du projet
+    private ProjectElement lastWinRepositoryProjectElement = null;
+    private boolean lastWinRepositoryExpand = false;
+
 
     public Project(String name) {
 
@@ -104,5 +109,24 @@ public class Project extends ProjectElement {
     @Override
     public String getNameTree() {
         return null;
+    }
+
+    // Sauvegarde de l'état du projet
+
+
+    public ProjectElement getLastWinRepositoryProjectElement() {
+        return lastWinRepositoryProjectElement;
+    }
+
+    public void setLastWinRepositoryProjectElement(ProjectElement lastWinRepositoryProjectElement) {
+        this.lastWinRepositoryProjectElement = lastWinRepositoryProjectElement;
+    }
+
+    public boolean isLastWinRepositoryExpand() {
+        return lastWinRepositoryExpand;
+    }
+
+    public void setLastWinRepositoryExpand(boolean lastWinRepositoryExpand) {
+        this.lastWinRepositoryExpand = lastWinRepositoryExpand;
     }
 }

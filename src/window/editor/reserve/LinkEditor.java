@@ -2,7 +2,7 @@ package window.editor.reserve;
 
 import mcd.MCDRelations;
 import mcd.services.MCDLink;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 
 import java.awt.*;

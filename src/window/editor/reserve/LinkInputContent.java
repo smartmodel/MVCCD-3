@@ -1,7 +1,7 @@
 package window.editor.reserve;
 
 import main.MVCCDElement;
-import newEditor.PanelInputContent;
+import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 

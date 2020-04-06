@@ -1,7 +1,7 @@
 package window.editor.model;
 
 
-import newEditor.PanelButtons;
+import utilities.window.editor.PanelButtons;
 
 public class ModelButtons extends PanelButtons {
 

@@ -1,8 +1,6 @@
 package window.editor.attribute;
 
-import newEditor.PanelInput;
-import window.editor.entity.EntityEditor;
-import window.editor.entity.EntityInputContent;
+import utilities.window.editor.PanelInput;
 
 public class AttributeInput extends PanelInput {
 

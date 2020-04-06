@@ -27,11 +27,16 @@ public class MCDEntityService {
     }
 
     public static ArrayList<String> checkShortName(String shortName) {
+        return MCDUtilService.checkString(shortName, true, Preferences.ENTITY_SHORT_NAME_LENGTH,
+                Preferences.NAME_REGEXPR, "entity.and.name");
+/*
         ArrayList<String> messages = new ArrayList<String>();
         String message1 = MessagesBuilder.getMessagesProperty("entity.and.shortname");
 
         MCDUtilService.isEmpty(messages, shortName, message1);
         return messages;
+
+ */
     }
 
     public static void sortNameAsc(ArrayList<MCDEntity> entities){
@@ -57,9 +62,10 @@ public class MCDEntityService {
     }
 
     public static MCDEntity getMCDEntityByNamePath(IMCDModel model,
+                                                   int pathMode,
                                                     String namePath){
         return (MCDEntity) IMCDModelService.getMCDElementByClassAndNamePath(model,
-                MCDEntity.class.getName(), namePath);
+                MCDEntity.class.getName(), pathMode, namePath);
     }
 
 

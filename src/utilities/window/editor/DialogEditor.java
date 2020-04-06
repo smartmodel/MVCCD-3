@@ -6,7 +6,6 @@ import messages.MessagesBuilder;
 import utilities.window.PanelBorderLayoutResizer;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -14,6 +13,8 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     public static final String NEW = "new";
     public static final String UPDATE = "update";
+    public static final String READ = "read";
+    public static final String DELETE = "delete";
 
     private JPanel panel= new JPanel();
     private PanelBorderLayoutResizer panelBLResizer ;
@@ -21,27 +22,37 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     private PanelInput input;
     private PanelButtons buttons ;
     private String mode;  // Création ou modification
-    private DefaultMutableTreeNode node;   // Parent pour la création et lui-même pour la modification
-    private MVCCDElement mvccdElement;     // Parent pour la création et lui-même pour la modification
+    private MVCCDElement mvccdElementParent = null;     // Parent pour la création
+    private MVCCDElement mvccdElementCrt = null;     // lui-même pour la modification, suppression, lecture
+    private MVCCDElement mvccdElementNew = null;     // lui-même pour la modification
+    private boolean datasChanged = false;     // données modifiées
 
     private boolean readOnly = false;
 
-    public DialogEditor(Window owner, DefaultMutableTreeNode node, String mode) {
+    public DialogEditor(Window owner, MVCCDElement mvccdElementParent, MVCCDElement mvccdElementCrt, String mode) {
         super(owner);
         this.mode = mode;
-        this.node = node;
-        setMvccdElement((MVCCDElement) node.getUserObject());
+        this.mvccdElementParent = mvccdElementParent;
+        this.mvccdElementCrt = mvccdElementCrt;
+
+        if (mode.equals(DialogEditor.READ)){
+            this.setReadOnly(true);
+        }
+        if (mode.equals(DialogEditor.DELETE)){
+            this.setReadOnly(true);
+        }
 
         setModal(true);
         setLocation(100,100);
-        setTitle (getTitleByMode(mode));
 
         getContentPane().add(panel);
 
     }
 
 
+
     public void start(){
+        setTitle (getTitleByMode(mode));
 
         panelBLResizer = new PanelBorderLayoutResizer();
         BorderLayout bl = new BorderLayout(0,0);
@@ -55,6 +66,9 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
         input.startLayout();
         buttons.startLayout();
+        input.getInputContent().setComponentsReadOnly(readOnly);
+        buttons.getButtonsContent().setButtonsReadOnly(readOnly);
+
 
         panel.add(input, borderLayoutPositionEditor);
         panel.add(buttons, borderLayoutPositionButtons);
@@ -70,6 +84,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         // Pour que l'ajustement automatique de positionnement des boutons se fasse
         setSize(getWidth(), getHeight() - 1);
         setSize(getWidth(), getHeight() + 1);
+
 
     }
 
@@ -151,25 +166,41 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         this.mode = mode;
     }
 
-    public DefaultMutableTreeNode getNode() {
-        return node;
+    public MVCCDElement getMvccdElementParent() {
+        return mvccdElementParent;
     }
 
-    public void setNode(DefaultMutableTreeNode node) {
-        this.node = node;
+    public void setMvccdElementParent(MVCCDElement mvccdElementParent) {
+        this.mvccdElementParent = mvccdElementParent;
     }
 
-    public MVCCDElement getMvccdElement() {
-        return mvccdElement;
+    public MVCCDElement getMvccdElementCrt() {
+        return mvccdElementCrt;
     }
 
-    public void setMvccdElement(MVCCDElement mvccdElement) {
-        this.mvccdElement = mvccdElement;
+    public void setMvccdElementCrt(MVCCDElement mvccdElementCrt) {
+        this.mvccdElementCrt = mvccdElementCrt;
+    }
+
+    public MVCCDElement getMvccdElementNew() {
+        return mvccdElementNew;
+    }
+
+    public void setMvccdElementNew(MVCCDElement mvccdElementNew) {
+        this.mvccdElementNew = mvccdElementNew;
+    }
+
+    public boolean isDatasChanged() {
+        return datasChanged;
+    }
+
+    public void setDatasChanged(boolean datasChanged) {
+        this.datasChanged = datasChanged;
     }
 
     public void adjustTitle() {
        String title = MessagesBuilder.getMessagesProperty(getPropertyTitleUpdate(), new String[]{
-                getMvccdElement().getName()});
+                getMvccdElementCrt().getName()});
         super.setTitle(title);
     }
 
@@ -178,9 +209,11 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         if (mode.equals(DialogEditor.NEW)){
             title = MessagesBuilder.getMessagesProperty(getPropertyTitleNew());
         }
-        if (mode.equals(DialogEditor.UPDATE)){
+        if (mode.equals(DialogEditor.UPDATE) ||
+                mode.equals(DialogEditor.READ) ||
+                mode.equals(DialogEditor.DELETE) ){
             title = MessagesBuilder.getMessagesProperty(getPropertyTitleUpdate(), new String[]{
-                    getMvccdElement().getName() });
+                    getMvccdElementCrt().getName() });
         }
         return title;
     }
@@ -195,11 +228,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
-        if (readOnly){
-            input.setReadOnly(readOnly);
-            buttons.setReadOnly(readOnly);
-        }
-    }
+     }
 
     public void setSize(int width, int height ) {
         this.widthInit = width;

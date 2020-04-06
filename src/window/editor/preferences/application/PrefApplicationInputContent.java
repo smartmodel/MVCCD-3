@@ -2,7 +2,7 @@ package window.editor.preferences.application;
 
 import main.MVCCDElement;
 import messages.MessagesBuilder;
-import newEditor.PanelInputContent;
+import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import preferences.PreferencesSaver;

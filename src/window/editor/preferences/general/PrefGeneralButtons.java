@@ -1,8 +1,6 @@
 package window.editor.preferences.general;
 
-import newEditor.PanelButtons;
-import window.editor.preferences.MCD.PrefMCDButtonsContent;
-import window.editor.preferences.MCD.PrefMCDEditor;
+import utilities.window.editor.PanelButtons;
 
 public class PrefGeneralButtons extends PanelButtons {
 

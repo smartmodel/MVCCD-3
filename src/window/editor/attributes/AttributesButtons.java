@@ -1,8 +1,6 @@
 package window.editor.attributes;
 
-import newEditor.PanelButtons;
-import window.editor.entity.EntityButtonsContent;
-import window.editor.entity.EntityEditor;
+import utilities.window.editor.PanelButtons;
 
 public class AttributesButtons extends PanelButtons {
 

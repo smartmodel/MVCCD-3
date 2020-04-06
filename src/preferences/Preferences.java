@@ -27,13 +27,14 @@ public class Preferences extends MVCCDElement {
     public static String REPOSITORY_MCD_ATTRIBUTES_NAME = "Attributs";
     public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
     public static String NAME_REGEXPR = "[a-zA-Z]{1,1}[a-zA-Z0-9_]*";
-    public static Integer PROJECT_NAME_LENGTH = 10;
-    public static Integer MODEL_NAME_LENGTH = 10;
+    public static Integer PROJECT_NAME_LENGTH = 50;
+    public static Integer MODEL_NAME_LENGTH = 20;
     public static Integer MODEL_SHORT_NAME_LENGTH = 5;
-    public static Integer PACKAGE_NAME_LENGTH = 10;
+    public static Integer PACKAGE_NAME_LENGTH = 20;
     public static Integer PACKAGE_SHORT_NAME_LENGTH = 5;
-    public static Integer ENTITY_NAME_LENGTH = 10;
-    public static Integer ATTRIBUTE_NAME_LENGTH = 10;
+    public static Integer ENTITY_NAME_LENGTH = 20;
+    public static Integer ENTITY_SHORT_NAME_LENGTH = 5;
+    public static Integer ATTRIBUTE_NAME_LENGTH = 20;
     public static String INTEGER_REGEXPR = "([0])|([1-9]{1,1}[0-9]*)";
     //public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"windows-1252\"?>";
@@ -244,6 +245,8 @@ public class Preferences extends MVCCDElement {
     public static String MCD_NAMING_SHORT_NAME="mcd.naming.short.name";
 
     public static String MCD_NAMING_ASSOCIATION_SEPARATOR = " ... ";
+    public static String MCD_NAMING_ASSOCIATION_ARROW_RIGHT = " -> ";
+    public static String MCD_NAMING_ASSOCIATION_ARROW_LEFT = " <- ";
 
 
     // Modification Application

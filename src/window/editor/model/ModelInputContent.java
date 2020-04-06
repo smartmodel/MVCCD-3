@@ -10,7 +10,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import mcd.services.MCDAdjustPref;
-import newEditor.PanelInputContentId;
+import utilities.window.editor.PanelInputContentId;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.services.PanelService;
 

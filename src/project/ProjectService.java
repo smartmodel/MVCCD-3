@@ -1,8 +1,8 @@
 package project;
 
 import main.MVCCDElement;
-import main.MVCCDElementService;
 import main.MVCCDManager;
+import mcd.MCDElement;
 import mcd.MCDEntity;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -45,6 +45,7 @@ public class ProjectService {
         return resultat;
     }
 
+    //TODO-1 Déplacer dans RepositoryService ?
     public static DefaultMutableTreeNode getNodeById(int id) {
 
         DefaultMutableTreeNode rootProject = MVCCDManager.instance().getRepository().getNodeProject();
@@ -53,20 +54,14 @@ public class ProjectService {
 
     public static DefaultMutableTreeNode getNodeById(DefaultMutableTreeNode root, int id) {
         DefaultMutableTreeNode resultat = null;
-        System.out.println(root.getUserObject().toString());
         if (root.getUserObject() instanceof ProjectElement) {
-            System.out.println(((ProjectElement) root.getUserObject()).getName() + "  " + ((ProjectElement) root.getUserObject()).getId());
             ProjectElement projectElement = (ProjectElement) root.getUserObject();
-
-            System.out.println("Nb childs   " + root.getChildCount());
             if (projectElement.getId() == id) {
-                System.out.println("Egalité");
                 resultat = root;
             }
         }
         if (resultat == null){
             for (int i = 0; i < root.getChildCount(); i++) {
-                System.out.println("¬ ProjectElement");
                 if (resultat == null) {
                     resultat = getNodeById((DefaultMutableTreeNode) root.getChildAt(i), id);
                 }
@@ -74,5 +69,55 @@ public class ProjectService {
         }
         return resultat;
     }
+
+
+    public static ArrayList<ProjectElement> getAllProjectElements() {
+        Project project = MVCCDManager.instance().getProject();
+        return  getAllProjectElements(project);
+    }
+
+    public static ArrayList<ProjectElement> getAllProjectElements(ProjectElement parentProjectElement) {
+        ArrayList<ProjectElement> resultat = new ArrayList<ProjectElement>();
+        resultat.add(parentProjectElement);
+        for (MVCCDElement mvccdElement : parentProjectElement.getChilds()){
+            if (mvccdElement instanceof ProjectElement){
+                ProjectElement childProjectElement  = (ProjectElement) mvccdElement;
+                resultat.addAll(getAllProjectElements(childProjectElement));
+            }
+        }
+        return resultat;
+    }
+
+
+    public static ArrayList<MCDElement> getAllMCDElements() {
+        ArrayList<MCDElement> resultat = new ArrayList<MCDElement>();
+        for (ProjectElement projectElement : getAllProjectElements()){
+            if (projectElement instanceof MCDElement){
+                resultat.add((MCDElement)projectElement);
+            }
+        }
+        return resultat;
+    }
+
+
+    public static ArrayList<MCDElement> getAllMCDElementsByNamePath(int pathMode, String namePath){
+        ArrayList<MCDElement>  resultat = new ArrayList<MCDElement>() ;
+        for (MCDElement mcdElement : getAllMCDElements()){
+            if (mcdElement.getNamePath(pathMode).equals(namePath)){
+                resultat.add(mcdElement);
+            }
+        }
+        return resultat;
+    }
+
+    public static MCDEntity getMCDEntityByNamePath(int pathMode, String namePath){
+        for (MCDElement mcdElement : getAllMCDElementsByNamePath(pathMode, namePath)){
+           if (mcdElement instanceof MCDEntity){
+                return (MCDEntity) mcdElement;
+            }
+        }
+        return null;
+    }
+ 
 }
 

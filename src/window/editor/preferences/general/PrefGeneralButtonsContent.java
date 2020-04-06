@@ -1,9 +1,7 @@
 package window.editor.preferences.general;
 
 import main.MVCCDElement;
-import newEditor.PanelButtonsContent;
-import preferences.Preferences;
-import window.editor.preferences.MCD.PrefMCDButtons;
+import utilities.window.editor.PanelButtonsContent;
 
 import java.awt.event.ActionListener;
 

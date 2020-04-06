@@ -1,8 +1,6 @@
 package window.editor.relation.association;
 
-import newEditor.PanelInput;
-import window.editor.attribute.AttributeEditor;
-import window.editor.attribute.AttributeInputContent;
+import utilities.window.editor.PanelInput;
 
 public class AssociationInput extends PanelInput {
 

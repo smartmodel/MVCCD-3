@@ -3,7 +3,6 @@ package window.help;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.PanelBorderLayoutResizer;
-import utilities.window.editor.DialogEditor;
 
 import javax.swing.*;
 import java.awt.*;

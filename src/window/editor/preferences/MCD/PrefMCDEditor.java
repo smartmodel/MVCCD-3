@@ -1,12 +1,9 @@
 package window.editor.preferences.MCD;
 
 import main.MVCCDElement;
-import main.MVCCDElementApplicationPreferences;
-import main.MVCCDWindow;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
 public class PrefMCDEditor extends DialogEditor {

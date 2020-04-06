@@ -35,6 +35,7 @@ public class MCDAssEnd extends MCDRelEnd{
 
     @Override
     public String getNameTree() {
-        return null;
+        //TODO-0 A finaliser
+        return " ... " ;
     }
 }

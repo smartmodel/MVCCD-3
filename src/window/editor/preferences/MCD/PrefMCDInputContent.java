@@ -5,7 +5,7 @@ import datatypes.MDDatatypeService;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
-import newEditor.PanelInputContent;
+import utilities.window.editor.PanelInputContent;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;

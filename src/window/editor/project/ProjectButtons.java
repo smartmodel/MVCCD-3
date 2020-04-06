@@ -1,9 +1,6 @@
 package window.editor.project;
 
-import newEditor.PanelButtons;
-import utilities.window.PanelBorderLayout;
-import utilities.window.editor.DialogEditor;
-import utilities.window.editor.IAccessDialogEditor;
+import utilities.window.editor.PanelButtons;
 
 public class ProjectButtons extends PanelButtons {
 

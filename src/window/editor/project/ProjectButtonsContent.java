@@ -2,8 +2,7 @@ package window.editor.project;
 
 import main.MVCCDElement;
 import main.MVCCDFactory;
-import main.MVCCDManager;
-import newEditor.PanelButtonsContent;
+import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
 import project.Project;
 

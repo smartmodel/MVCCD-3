@@ -5,18 +5,13 @@ import constraints.ConstraintService;
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import main.MVCCDElement;
-import main.MVCCDElementService;
 import main.MVCCDManager;
 import mcd.MCDAttribute;
 import mcd.MCDContAttributes;
-import newEditor.DialogEditor;
-import newEditor.PanelInputContent;
-import org.apache.commons.lang.StringUtils;
+import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import project.Project;
 import project.ProjectElement;
-import project.ProjectManager;
 import project.ProjectService;
 import repository.RepositoryService;
 import repository.editingTreat.MCDAttributeEditingTreat;
@@ -26,7 +21,6 @@ import utilities.UtilDivers;
 import utilities.window.ReadTableModel;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -268,6 +262,7 @@ public class AttributesInputContent extends PanelInputContent {
                 int posActual = table.getSelectedRow();
                 if (posActual >= 0){
                     int posId = AttributesTableColumn.ID.getPosition();
+                    //TODO-0 Faire appel treatEdit
                     Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
                     MCDAttribute mcdAttributeActual = (MCDAttribute) ProjectService.getElementById(idActual);
                     MCDAttributeEditingTreat.treatUpdate( getEditor(), mcdAttributeActual);
@@ -480,9 +475,6 @@ public class AttributesInputContent extends PanelInputContent {
         int posId = AttributesTableColumn.ID.getPosition();
         Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
         Integer idOther = (Integer) table.getModel().getValueAt(posNew, posId);
-
-        System.out.println("idActual"   +idActual);
-        System.out.println("idNew"   +idOther);
 
         // Permutation dans la table
         table.getModel().setValueAt(orderNew, posActual, posOrder);

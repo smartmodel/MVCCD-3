@@ -1,10 +1,7 @@
 package window.editor.model;
 
 import mcd.MCDElement;
-import mcd.MCDModel;
-import mcd.MCDModels;
-import mcd.interfaces.IMCDTraceability;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 
 import java.awt.*;
@@ -23,8 +20,6 @@ public class ModelEditor extends DialogEditor {
         super(owner, parent, mcdElement, mode);
         this.scope = scope;
 
-        System.out.println("Initialisation de scope :  " + scope);
-
         super.setSize(Preferences.MODEL_WINDOW_WIDTH, Preferences.MODEL_WINDOW_HEIGHT);
         super.setInput(new ModelInput(this));
         super.setButtons (new ModelButtons(this));
@@ -34,7 +29,6 @@ public class ModelEditor extends DialogEditor {
 
     @Override
     protected String getPropertyTitleNew() {
-        System.out.println(scope);
         if (scope == MODEL) {
             return "editor.model.new";
         }

@@ -1,7 +1,7 @@
 package window.editor.relation.link;
 
 
-import newEditor.PanelButtons;
+import utilities.window.editor.PanelButtons;
 
 public class LinkButtons extends PanelButtons {
 

@@ -2,12 +2,8 @@ package window.editor.entity;
 
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
-import main.MVCCDManager;
-import mcd.MCDContAttributes;
-import mcd.MCDContEndRels;
 import mcd.MCDEntity;
-import mcd.services.MCDEntityService;
-import newEditor.PanelButtonsContent;
+import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
 import project.ProjectElement;
 

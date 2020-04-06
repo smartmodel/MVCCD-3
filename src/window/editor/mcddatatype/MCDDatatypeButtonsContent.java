@@ -1,13 +1,8 @@
 package window.editor.mcddatatype;
 
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
-import main.MVCCDManager;
-import mcd.MCDContAttributes;
-import mcd.MCDEntity;
-import newEditor.PanelButtonsContent;
+import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
-import project.ProjectElement;
 
 public class MCDDatatypeButtonsContent extends PanelButtonsContent {
 

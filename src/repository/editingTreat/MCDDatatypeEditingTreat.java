@@ -1,18 +1,9 @@
 package repository.editingTreat;
 
 import datatypes.MCDDatatype;
-import main.MVCCDElementApplicationPreferences;
-import main.MVCCDManager;
-import mcd.MCDElement;
-import mcd.MCDEntity;
-import mcd.services.MCDEntityService;
-import messages.MessagesBuilder;
-import newEditor.DialogEditor;
-import utilities.Debug;
-import utilities.window.DialogMessage;
+import utilities.window.editor.DialogEditor;
 import window.editor.mcddatatype.MCDDatatypeEditor;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class MCDDatatypeEditingTreat {

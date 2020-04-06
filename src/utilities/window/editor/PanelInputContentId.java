@@ -1,4 +1,4 @@
-package newEditor;
+package utilities.window.editor;
 
 import main.MVCCDElement;
 import preferences.Preferences;
@@ -22,7 +22,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
     protected void createContentId() {
 
-        fieldName.setPreferredSize((new Dimension(300, 20)));
+        fieldName.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldName.setCheckPreSave(true);
         fieldName.getDocument().addDocumentListener(this);
         fieldName.addFocusListener(this);
@@ -38,7 +38,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
     }
 
 
-    protected void createPanelId() {
+    protected GridBagConstraints createPanelId() {
         GridBagConstraints gbc = PanelService.createSubPanelGridBagConstraints(panelId, "Identification");
 
         panelId.add(new JLabel("Nom : "), gbc);
@@ -48,6 +48,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
         panelId.add(new JLabel("Nom court : "), gbc);
         gbc.gridx++;
         panelId.add(fieldShortName, gbc);
+        return gbc;
     }
 
     protected abstract boolean checkName(boolean unitaire);

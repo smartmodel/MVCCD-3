@@ -3,6 +3,8 @@ package project;
 import main.MVCCDElement;
 import main.MVCCDManager;
 
+import java.util.ArrayList;
+
 public abstract class ProjectElement extends MVCCDElement {
 
     private int id;
@@ -44,4 +46,5 @@ public abstract class ProjectElement extends MVCCDElement {
     public int getId() {
         return id;
     }
+
 }

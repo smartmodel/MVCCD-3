@@ -3,7 +3,6 @@ package utilities.window.scomponents;
 import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;
@@ -23,6 +22,9 @@ public class STextField extends JTextField implements SComponent {
 
     // Surcharge de la méthode JTextField
     public void setText(String text) {
+        if (text == null){
+            text = "";
+        }
         super.setText(text);
         if (! panel.isDataInitialized()) {
             oldText = text;

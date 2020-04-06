@@ -1,7 +1,7 @@
 package window.editor.relation.link;
 
 
-import newEditor.PanelInput;
+import utilities.window.editor.PanelInput;
 
 public class LinkInput extends PanelInput {
 

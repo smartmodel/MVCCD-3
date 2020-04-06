@@ -2,11 +2,9 @@ package window.editor.mcddatatype;
 
 import datatypes.MCDDatatype;
 import main.MVCCDElement;
-import main.MVCCDWindow;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
 public class MCDDatatypeEditor extends DialogEditor {

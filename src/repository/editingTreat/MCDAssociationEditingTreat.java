@@ -2,17 +2,12 @@ package repository.editingTreat;
 
 import main.MVCCDManager;
 import mcd.MCDAssociation;
-import mcd.MCDAttribute;
-import mcd.MCDContAttributes;
 import mcd.MCDRelations;
 import mcd.services.MCDAssociationService;
-import mcd.services.MCDAttributeService;
 import messages.MessagesBuilder;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import project.ProjectService;
-import utilities.Debug;
 import utilities.window.DialogMessage;
-import window.editor.attribute.AttributeEditor;
 import window.editor.entity.EntityEditor;
 import window.editor.relation.association.AssociationEditor;
 
@@ -26,10 +21,8 @@ public class MCDAssociationEditingTreat {
     public static MCDAssociation treatNew(Window owner,
                                           MCDRelations parent) {
 
-        System.out.println("MCDRelations :  " + parent.getName()  +    "  " + parent.getId() );
         DefaultMutableTreeNode nodeParent = ProjectService.getNodeById((int) parent.getId());
-        System.out.println("MCDRelations :  " + nodeParent.getUserObject().toString());
-                AssociationEditor fen = MCDAssociationEditingTreat.showEditorAssociation(owner, parent, null, DialogEditor.NEW);
+        AssociationEditor fen = MCDAssociationEditingTreat.showEditorAssociation(owner, parent, null, DialogEditor.NEW);
         MCDAssociation mcdAssociationNew = (MCDAssociation) fen.getMvccdElementNew();
         if (mcdAssociationNew != null) {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mcdAssociationNew, nodeParent);
@@ -41,8 +34,8 @@ public class MCDAssociationEditingTreat {
 
     public static void treatUpdate(Window owner,
                                    MCDAssociation element) {
-
-        AssociationEditor fen = showEditorAssociation(owner , (MCDRelations) element.getParent(), element, EntityEditor.UPDATE);
+        System.out.println("association :   " + element.getName() +   "   " + element.getNameTree() );
+        AssociationEditor fen = showEditorAssociation(owner , (MCDRelations) element.getParent(), element, DialogEditor.UPDATE);
         if (fen.isDatasChanged()){
             MVCCDManager.instance().setDatasProjectChanged(true);
         }

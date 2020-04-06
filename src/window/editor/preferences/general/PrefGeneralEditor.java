@@ -1,11 +1,9 @@
 package window.editor.preferences.general;
 
 import main.MVCCDElement;
-import main.MVCCDWindow;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
 public class PrefGeneralEditor extends DialogEditor {

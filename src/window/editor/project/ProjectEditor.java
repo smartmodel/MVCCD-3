@@ -1,13 +1,9 @@
 package window.editor.project;
 
-import mcd.MCDEntities;
-import mcd.MCDEntity;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
-import main.MVCCDWindow;
 import project.Project;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
 public class ProjectEditor extends DialogEditor {

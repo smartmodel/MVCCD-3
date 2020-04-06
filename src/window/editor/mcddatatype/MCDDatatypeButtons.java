@@ -1,6 +1,6 @@
 package window.editor.mcddatatype;
 
-import newEditor.PanelButtons;
+import utilities.window.editor.PanelButtons;
 
 public class MCDDatatypeButtons extends PanelButtons {
 

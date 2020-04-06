@@ -1,7 +1,7 @@
 package window.editor.entity;
 
 
-import newEditor.PanelInput;
+import utilities.window.editor.PanelInput;
 
 public class EntityInput extends PanelInput {
 

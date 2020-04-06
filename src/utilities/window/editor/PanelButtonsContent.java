@@ -1,7 +1,6 @@
 package utilities.window.editor;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -9,11 +8,9 @@ import utilities.files.UtilFiles;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.SButton;
 import utilities.window.services.ComponentService;
-import window.editor.entity.EntityEditor;
 import window.help.HelpWindow;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,9 +29,7 @@ public abstract class PanelButtonsContent extends PanelContent
     private PanelButtons panelButtons;
     private Box bVer ;
     private Box btns ;
-    private MVCCDElement newMVCCDElement ;
 
-    private boolean readOnly = false;
 
     public PanelButtonsContent(PanelButtons panelButtons) {
         super(panelButtons);
@@ -171,7 +166,7 @@ public abstract class PanelButtonsContent extends PanelContent
             if (getEditor().getMode().equals(DialogEditor.NEW)) {
                 treatCreate();
              }
-            if (getEditor().getMode().equals(EntityEditor.UPDATE)) {
+            if (getEditor().getMode().equals(DialogEditor.UPDATE)) {
                 treatUpdate();
             }
             getEditor().dispose();
@@ -209,19 +204,19 @@ public abstract class PanelButtonsContent extends PanelContent
     }
 
     private void treatUpdate(){
-        saveDatas(getEditor().getMvccdElement());
-        DefaultTreeModel defaultTreeModel = (DefaultTreeModel) MVCCDManager.instance().getWinRepositoryContent().getTree().getModel();
-        defaultTreeModel.nodeChanged(getEditor().getNode());
+        saveDatas(getEditor().getMvccdElementCrt());
+        getEditor().setDatasChanged(true);
         getInputContent().restartChange();
         getInputContent().enabledButtons();
         getEditor().adjustTitle();
     }
 
     private void  treatCreate(){
-        newMVCCDElement = createNewMVCCDElement();
+        MVCCDElement newMVCCDElement = createNewMVCCDElement();
         saveDatas(newMVCCDElement);
-        completeNewMVCCDElement(newMVCCDElement);
-    }
+        getEditor().setMvccdElementNew(newMVCCDElement);
+        getEditor().setDatasChanged(true);
+     }
 
 
 
@@ -232,7 +227,6 @@ public abstract class PanelButtonsContent extends PanelContent
 
     protected abstract MVCCDElement createNewMVCCDElement();
 
-    protected abstract void completeNewMVCCDElement(MVCCDElement mvccdElement);
 
     private void colorDebug(){
         if (PreferencesManager.instance().preferences().isDEBUG()) {
@@ -248,20 +242,12 @@ public abstract class PanelButtonsContent extends PanelContent
         }
     }
 
-    public boolean isReadOnly() {
-        return readOnly;
-    }
 
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
+    public void setButtonsReadOnly(boolean readOnly) {
         if (readOnly){
             btnOk.setReadOnly(readOnly);
             btnApply.setReadOnly(readOnly);
             btnUndo.setReadOnly(readOnly);
          }
-    }
-
-    public MVCCDElement getNewMVCCDElement() {
-        return newMVCCDElement;
     }
 }

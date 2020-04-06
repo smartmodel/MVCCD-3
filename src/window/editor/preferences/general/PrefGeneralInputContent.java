@@ -1,13 +1,11 @@
 package window.editor.preferences.general;
 
 import main.MVCCDElement;
-import newEditor.PanelInputContent;
+import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.window.scomponents.SCheckBox;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;

@@ -1,20 +1,15 @@
 package window.editor.relation.association;
 
 import mcd.MCDAssociation;
-import mcd.MCDEntities;
 import mcd.MCDRelations;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
-import window.editor.attribute.AttributeButtons;
-import window.editor.attribute.AttributeInput;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
 public class AssociationEditor extends DialogEditor {
 
 
-    //TODO-0 Passer à la nouvelle librairie + Id auto
     public AssociationEditor(
             Window owner,
             MCDRelations mcdRelations,

@@ -1,17 +1,12 @@
 package window.editor.attribute;
 
-import main.MVCCDWindow;
 import mcd.MCDAttribute;
 import mcd.MCDContAttributes;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
-import window.editor.entity.EntityButtons;
-import window.editor.entity.EntityInput;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
-//TODO-0  Id auto
 public class AttributeEditor extends DialogEditor {
 
 

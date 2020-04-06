@@ -75,6 +75,14 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
         this.shortName = shortName;
     }
 
+    public String getShortNameSmart() {
+        if (shortName != null) {
+            return shortName;
+        } else {
+            return name;
+        }
+    }
+
 
     public ArrayList<MVCCDElement> getChilds() {
         Collections.sort(childs, MVCCDElement::compareTo);
@@ -89,7 +97,7 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
         return order;
     }
 
-    // Doit être surchargé par les descendants
+    // Peut être surchargé par les descendants si nécessaire (p.exemple, les relations
     public abstract String getNameTree() ;
 
     public String toString(){
@@ -99,7 +107,8 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
             if (StringUtils.isNotEmpty(name)) {
                 return name;
             } else {
-                return "Sans nom";
+                //TODO-1 A voir s'il faut enlever getClass() lorsque le produit sera stable
+                return "Sans nom  " + getClass().getName();
             }
         }
     }

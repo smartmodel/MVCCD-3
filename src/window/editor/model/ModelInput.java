@@ -1,7 +1,7 @@
 package window.editor.model;
 
 
-import newEditor.PanelInput;
+import utilities.window.editor.PanelInput;
 
 public class ModelInput extends PanelInput {
 

@@ -3,9 +3,8 @@ package window.editor.model;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import mcd.*;
-import newEditor.PanelButtonsContent;
+import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
-import project.ProjectElement;
 
 public class ModelButtonsContent extends PanelButtonsContent {
 

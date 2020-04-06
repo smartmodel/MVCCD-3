@@ -1,7 +1,7 @@
 package window.editor.preferences.MCD;
 
 
-import newEditor.PanelInput;
+import utilities.window.editor.PanelInput;
 
 public class PrefMCDInput extends PanelInput {
 

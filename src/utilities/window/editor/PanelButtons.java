@@ -1,13 +1,12 @@
 package utilities.window.editor;
 
+
 import utilities.window.PanelBorderLayout;
 
-public abstract class PanelButtons extends PanelBorderLayout implements IAccessDialogEditor{
+public abstract class PanelButtons extends PanelBorderLayout implements IAccessDialogEditor {
 
     private DialogEditor dialogEditor;
     private PanelButtonsContent buttonsContent;
-
-    private boolean readOnly = false;
 
     public PanelButtons(DialogEditor dialogEditor) {
         this.dialogEditor = dialogEditor;
@@ -35,14 +34,4 @@ public abstract class PanelButtons extends PanelBorderLayout implements IAccessD
         return getInput().getInputContent();
     }
 
-    public boolean isReadOnly() {
-        return readOnly;
-    }
-
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
-        if (readOnly){
-            buttonsContent.setReadOnly(readOnly);
-        }
-    }
 }

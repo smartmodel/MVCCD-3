@@ -1,10 +1,8 @@
 package window.editor.preferences.MCD;
 
 import main.MVCCDElement;
-import newEditor.PanelButtonsContent;
-import preferences.Preferences;
+import utilities.window.editor.PanelButtonsContent;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class PrefMCDButtonsContent extends PanelButtonsContent implements ActionListener {

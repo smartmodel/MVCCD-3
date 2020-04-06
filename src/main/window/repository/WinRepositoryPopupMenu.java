@@ -7,18 +7,15 @@ import main.MVCCDManager;
 import main.MVCCDWindow;
 import mcd.*;
 import messages.MessagesBuilder;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
 import project.Project;
 import repository.editingTreat.*;
 import utilities.Debug;
-import window.editor.attributes.AttributesEditor;
-import window.editor.attribute.AttributeEditor;
 import window.editor.preferences.MCD.PrefMCDEditor;
 import window.editor.preferences.general.PrefGeneralEditor;
-import window.editor.relation.association.AssociationEditor;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -100,8 +97,14 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
 
         }
 
+        if (node.getUserObject() instanceof MCDAssociation) {
+            treatAssociation(mvccdWindow);
+
+        }
+
         //TODO-0 Mise à jour de l'arbre
     }
+
 
 
 
@@ -365,9 +368,7 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
         mcdRelationsNewAssociation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println ("Création d'une nouvelle association   " + node.getUserObject().toString());
-                MCDAssociationEditingTreat.treatNew(mvccdWindow, mcdRelations);
-
+                 MCDAssociationEditingTreat.treatNew(mvccdWindow, mcdRelations);
             }
         });
 
@@ -394,8 +395,22 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
             public void actionPerformed(ActionEvent actionEvent) {
             }
         });
+    }
+
+    private void treatAssociation(MVCCDWindow mvccdWindow) {
+        JMenuItem mcdAssociationEdit = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.association"));
+        this.add(mcdAssociationEdit);
+        MCDAssociation mcdAssociation = (MCDAssociation) node.getUserObject();
+        System.out.println(node.getUserObject().getClass().getName());
+        mcdAssociationEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MCDAssociationEditingTreat.treatUpdate(mvccdWindow , mcdAssociation);
+            }
+        });
 
     }
+
 
     private void packageNew(Window owner, MCDElement parent, boolean top) {
         if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()) {

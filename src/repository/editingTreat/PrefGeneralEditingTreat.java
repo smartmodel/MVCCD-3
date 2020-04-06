@@ -1,10 +1,8 @@
 package repository.editingTreat;
 
-import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
-import window.editor.preferences.application.PrefApplicationEditor;
 import window.editor.preferences.general.PrefGeneralEditor;
 
 import java.awt.*;

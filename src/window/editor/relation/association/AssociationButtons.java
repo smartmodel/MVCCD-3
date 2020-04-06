@@ -1,8 +1,6 @@
 package window.editor.relation.association;
 
-import newEditor.PanelButtons;
-import window.editor.attribute.AttributeButtonsContent;
-import window.editor.attribute.AttributeEditor;
+import utilities.window.editor.PanelButtons;
 
 public class AssociationButtons extends PanelButtons {
 

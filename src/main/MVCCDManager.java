@@ -3,6 +3,7 @@ package main;
 import console.Console;
 import datatypes.MDDatatypesManager;
 import main.window.menu.WinMenuContent;
+import main.window.repository.WinRepositoryTree;
 import preferences.PreferencesManager;
 import project.*;
 import main.window.console.WinConsoleContent;
@@ -12,9 +13,6 @@ import messages.LoadMessages;
 import repository.Repository;
 import main.window.repository.WinRepository;
 import main.window.repository.WinRepositoryContent;
-import repository.RepositoryService;
-import stereotypes.StereotypesManager;
-import utilities.window.editor.DialogEditor;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -89,16 +87,6 @@ public class MVCCDManager {
         setFileProjectCurrent(null);
     }
 
-    // A supprimer lorsque tous les éditeurs seront migrés
-    // Remplacé par addMVCCDElementInRepository
-    public void showNewMVCCDElementInRepository(MVCCDElement mvccdElement, DialogEditor editor) {
-        DefaultMutableTreeNode node = MVCCDManager.instance().getRepository().addMVCCDElement(editor.getNode(), mvccdElement);
-        //DefaultMutableTreeNode node = MVCCDManager.instance().getRepository().addNodeAndChilds(editor.getNode(), mvccdElement);
-        // Affichage du nouveau noeud
-        getWinRepositoryContent().getTree().changeModel(repository);
-        getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
-
-    }
 
     public void addNewMVCCDElementInRepository(MVCCDElement mvccdElementNew, DefaultMutableTreeNode nodeParent) {
         DefaultMutableTreeNode nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
@@ -203,7 +191,9 @@ public class MVCCDManager {
         repository.removeProject();
         repository.addProject(project);
         profileToRepository();
-        getWinRepositoryContent().getTree().changeModel(repository);
+        WinRepositoryTree tree = getWinRepositoryContent().getTree();
+        tree.changeModel(repository);
+        tree.showLastPath(project);
     }
 
     public void profileToRepository() {

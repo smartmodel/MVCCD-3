@@ -1,6 +1,6 @@
 package window.editor.mcddatatype;
 
-import newEditor.PanelInput;
+import utilities.window.editor.PanelInput;
 
 public class MCDDatatypeInput extends PanelInput {
 

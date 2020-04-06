@@ -1,15 +1,11 @@
 package repository.editingTreat;
 
-import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.MCDAttribute;
 import mcd.MCDContAttributes;
-import mcd.MCDEntities;
-import mcd.MCDEntity;
 import mcd.services.MCDAttributeService;
-import mcd.services.MCDEntityService;
 import messages.MessagesBuilder;
-import newEditor.DialogEditor;
+import utilities.window.editor.DialogEditor;
 import project.ProjectService;
 import utilities.Debug;
 import utilities.window.DialogMessage;
@@ -27,10 +23,8 @@ public class MCDAttributeEditingTreat  {
     public static MCDAttribute treatNew(Window owner,
                                         MCDContAttributes parent) {
 
-        System.out.println("MCDContAttributes :  " + parent.getName()  +    "  " + parent.getId() );
         DefaultMutableTreeNode nodeParent = ProjectService.getNodeById((int) parent.getId());
-        System.out.println("MCDContAttributes :  " + nodeParent.getUserObject().toString());
-                AttributeEditor fen = MCDAttributeEditingTreat.showEditorAttribute(owner, parent, null, DialogEditor.NEW);
+        AttributeEditor fen = MCDAttributeEditingTreat.showEditorAttribute(owner, parent, null, DialogEditor.NEW);
         MCDAttribute mcdAttributeNew = (MCDAttribute) fen.getMvccdElementNew();
         if (mcdAttributeNew != null) {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mcdAttributeNew, nodeParent);

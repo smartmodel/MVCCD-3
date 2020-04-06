@@ -1,10 +1,9 @@
 package window.editor.project;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
 import mcd.services.MCDProjectService;
-import newEditor.DialogEditor;
-import newEditor.PanelInputContent;
+import utilities.window.editor.DialogEditor;
+import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.ProfileManager;

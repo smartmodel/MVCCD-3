@@ -16,6 +16,7 @@ public class MCDAttributeService {
     public static ArrayList<String> check(MCDAttribute mcdAttribute) {
         ArrayList<String> messages = new ArrayList<String>();
         messages.addAll(checkName(mcdAttribute.getName()));
+        messages.addAll(checkShortName(mcdAttribute.getShortName()));
         // suite à faire si nécessaire...
         return messages;
     }
@@ -24,6 +25,16 @@ public class MCDAttributeService {
         return MCDUtilService.checkString(name, true, Preferences.ATTRIBUTE_NAME_LENGTH,
                 Preferences.NAME_REGEXPR, "attribute.and.name");
      }
+
+
+    public static ArrayList<String> checkShortName(String shortName) {
+        ArrayList<String> messages = new ArrayList<String>();
+        String message1 = MessagesBuilder.getMessagesProperty("attribute.and.shortname");
+
+        //TODO-0 Mettre une préférence de choix
+        MCDUtilService.isEmpty(messages, shortName, message1);
+        return messages;
+    }
 
     public static ArrayList<String> checkDatatypeSize(String integerInText, MCDDatatype mcdDatatype) {
         Integer  min = mcdDatatype.getSizeMinWithInherit();

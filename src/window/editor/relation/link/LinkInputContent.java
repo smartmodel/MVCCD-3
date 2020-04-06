@@ -1,7 +1,7 @@
 package window.editor.relation.link;
 
 import main.MVCCDElement;
-import newEditor.PanelInputContent;
+import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 

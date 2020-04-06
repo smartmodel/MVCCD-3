@@ -8,6 +8,9 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public abstract class MCDElement extends MDElement {
 
 
@@ -21,8 +24,8 @@ public abstract class MCDElement extends MDElement {
         super(parent, name);
     }
 
-    public String getNamePath() {
-        String path = MCDElementService.getPath(this, MCDElementService.PATHNAME);
+    public String getNamePath(int pathMode) {
+        String path = MCDElementService.getPath(this, pathMode);
         if (path !=null){
             return path + getName();
         } else {
@@ -30,13 +33,14 @@ public abstract class MCDElement extends MDElement {
         }
     }
 
-    public String getShortNamePath() {
+    public String getShortNameSmartPath() {
         String path = MCDElementService.getPath(this, MCDElementService.PATHSHORTNAME);
         if (path !=null){
-            return path + getShortName();
+            return path + getShortNameSmart();
         } else {
-            return getShortName();
+            return getShortNameSmart();
         }
     }
+
 
 }
