@@ -17,18 +17,10 @@ public class AttributeButtonsContent extends PanelButtonsContent {
 
 
     @Override
-    protected MVCCDElement createNewMVCCDElement() {
-        //JTextField entityName = getEditorContent().getEntityName();
-        MCDContAttributes mcdContAttributes = (MCDContAttributes) getEditor().getMvccdElementParent();
-        MCDAttribute mcdAttribute = MVCCDElementFactory.instance().createMCDAttribute(mcdContAttributes);
+    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
+        MCDAttribute mcdAttribute = MVCCDElementFactory.instance().createMCDAttribute((MCDContAttributes) parent);
         return mcdAttribute;
     }
-
-/*
-    private PrefMCDInputContent getEditorContent(){
-        return  (PrefMCDInputContent) getEditor().getInput().getPanelContent();
-    }
-*/
 
 
     @Override

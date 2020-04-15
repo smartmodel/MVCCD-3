@@ -1,10 +1,12 @@
 package mcd.services;
 
 import mcd.MCDElement;
+import mcd.MCDContEntities;
 import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
-import messages.MessagesBuilder;
 import preferences.Preferences;
+import preferences.PreferencesManager;
+import project.ProjectService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,29 +17,10 @@ public class MCDEntityService {
 
     public static ArrayList<String> check(MCDEntity mcdEntity) {
         ArrayList<String> messages = new ArrayList<String>();
-        messages.addAll(checkName(mcdEntity.getName()));
-        messages.addAll(checkShortName(mcdEntity.getShortName()));
         return messages;
     }
 
-    public static ArrayList<String> checkName(String name) {
-        return MCDUtilService.checkString(name, true, Preferences.ENTITY_NAME_LENGTH,
-                Preferences.NAME_REGEXPR, "entity.and.name");
 
-    }
-
-    public static ArrayList<String> checkShortName(String shortName) {
-        return MCDUtilService.checkString(shortName, true, Preferences.ENTITY_SHORT_NAME_LENGTH,
-                Preferences.NAME_REGEXPR, "entity.and.name");
-/*
-        ArrayList<String> messages = new ArrayList<String>();
-        String message1 = MessagesBuilder.getMessagesProperty("entity.and.shortname");
-
-        MCDUtilService.isEmpty(messages, shortName, message1);
-        return messages;
-
- */
-    }
 
     public static void sortNameAsc(ArrayList<MCDEntity> entities){
 
@@ -51,11 +34,10 @@ public class MCDEntityService {
                 }
     };
 
-    public static ArrayList<MCDEntity> getMCDEntitiesByClassName(IMCDModel iMCDModel,
-                                                                 String className) {
+    public static ArrayList<MCDEntity> getMCDEntitiesInIModel(IMCDModel iMCDModel) {
         ArrayList<MCDEntity> resultat =  new ArrayList<MCDEntity>();
         for (MCDElement element :  IMCDModelService.getMCDElementsByClassName(
-                iMCDModel, className)){
+                iMCDModel, false, MCDEntity.class.getName())){
             resultat.add((MCDEntity) element);
         }
         return resultat;
@@ -64,23 +46,18 @@ public class MCDEntityService {
     public static MCDEntity getMCDEntityByNamePath(IMCDModel model,
                                                    int pathMode,
                                                     String namePath){
-        return (MCDEntity) IMCDModelService.getMCDElementByClassAndNamePath(model,
+        return (MCDEntity) IMCDModelService.getMCDElementByClassAndNamePath(model, false,
                 MCDEntity.class.getName(), pathMode, namePath);
     }
 
 
-
-
-
-
-    /* Intégré direcement dans Factory
-    public static void completeNew(MCDEntity mvccdElement) {
-        MCDEntity mcdEntity = (MCDEntity) mvccdElement;
-        MCDContAttributes mcdContAttributes = MVCCDElementFactory.instance().createMCDAttributes(mcdEntity,
-                Preferences.REPOSITORY_MCD_ATTRIBUTES_NAME);
-        MCDContEndRels mcdContEndRels = MVCCDElementFactory.instance().createMCDRelations(mcdEntity,
-                Preferences.REPOSITORY_MCD_RELATIONS_NAME);
+    public static MCDEntity getMCDEntityByNamePath(int pathMode, String namePath){
+        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){
+            if (mcdElement instanceof MCDEntity){
+                return (MCDEntity) mcdElement;
+            }
+        }
+        return null;
     }
 
-     */
 }

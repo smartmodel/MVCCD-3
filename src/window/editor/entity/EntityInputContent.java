@@ -1,12 +1,18 @@
 package window.editor.entity;
 
 import main.MVCCDElement;
+import mcd.MCDContEntities;
+import mcd.MCDElement;
 import mcd.MCDEntity;
+import mcd.interfaces.IMCDModel;
+import mcd.services.MCDContEntitiesService;
 import mcd.services.MCDEntityService;
+import mcd.services.MCDUtilService;
 import utilities.window.editor.PanelInputContentId;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.scomponents.SCheckBox;
+import utilities.window.scomponents.SComponent;
 import utilities.window.services.PanelService;
 
 import javax.swing.*;
@@ -15,6 +21,7 @@ import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 
 public class EntityInputContent extends PanelInputContentId {
 
@@ -29,19 +36,27 @@ public class EntityInputContent extends PanelInputContentId {
 
     public EntityInputContent(EntityInput entityInput)     {
         super(entityInput);
+        /*
         entityInput.setPanelContent(this);
         createContent();
         super.addContent(panel);
         super.initOrLoadDatas();
         enabledContent();
+
+         */
      }
 
 
 
+    @Override
+    protected JPanel getPanelCustom() {
+        return panel;
+    }
 
-    private void createContent() {
+    @Override
+    protected void createContentIdCustom() {
 
-        super.createContentId();
+        //super.createContentId();
         fieldShortName.setToolTipText("Nom de l'entité");
 
 
@@ -110,19 +125,25 @@ public class EntityInputContent extends PanelInputContentId {
 
 
 
-    protected void changeField(DocumentEvent e) {
+    protected SComponent changeField(DocumentEvent e) {
+        SComponent sComponent = super.changeField(e);
         // Les champs impératifs sont testés sur la procédure checkDatasPreSave()
 
-        Document doc = e.getDocument();
 
-        if (doc == fieldShortName.getDocument()) {
-            checkShortName(true);
-        }
+            Document doc = e.getDocument();
 
+            // Autres champs que les champs Id
+            return sComponent;
     }
 
     @Override
     protected void changeFieldSelected(ItemEvent e) {
+       super.changeFieldSelected(e);
+        // Les champs impératifs sont testés sur la procédure checkDatasPreSave()
+
+
+
+        // Autres champs que les champs Id
 
     }
 
@@ -134,6 +155,7 @@ public class EntityInputContent extends PanelInputContentId {
 
     @Override
     public void focusGained(FocusEvent focusEvent) {
+
         super.focusGained(focusEvent);
     }
 
@@ -142,21 +164,61 @@ public class EntityInputContent extends PanelInputContentId {
     }
 
 
+    @Override
+    protected int getLengthMax(int naming) {
+        if (naming == MVCCDElement.SCOPENAME) {
+            return Preferences.ENTITY_NAME_LENGTH;
+        }
+        if (naming == MVCCDElement.SCOPESHORTNAME) {
+            return Preferences.ENTITY_SHORT_NAME_LENGTH;
+        }
+        if (naming == MVCCDElement.SCOPELONGNAME) {
+            return Preferences.ENTITY_LONG_NAME_LENGTH;
+        }
+
+        return -1;
+    }
+
+   @Override
+    protected String getElementAndNaming(int naming) {
+        if (naming == MVCCDElement.SCOPENAME) {
+            return "entity.and.name";
+        }
+        if (naming == MVCCDElement.SCOPESHORTNAME) {
+            return "entity.and.short.name";
+        }
+        if (naming == MVCCDElement.SCOPELONGNAME) {
+            return "entity.and.long.name";
+        }
+
+        return null;
+    }
+
 
     @Override
-    protected boolean checkName(boolean unitaire) {
-        return super.checkInput(fieldName, unitaire, MCDEntityService.checkName(fieldName.getText()));
+    protected String getNamingAndBrothersElements(int naming) {
+        if (naming == MVCCDElement.SCOPENAME) {
+            return "naming.a.sister.entity";
+        }
+        return "naming.sister.entity";
+    }
+
+
+    @Override
+    protected ArrayList<MCDElement> getParentCandidates(IMCDModel iMCDModelContainer) {
+        ArrayList<MCDContEntities> mcdContEntities = MCDContEntitiesService.getMCDContEntitiesInIModel(iMCDModelContainer);
+        return MCDContEntitiesService.toMCDElements(mcdContEntities);
     }
 
     @Override
-    protected boolean checkShortName(boolean unitaire) {
-        return super.checkInput(fieldShortName, unitaire, MCDEntityService.checkShortName(fieldShortName.getText()));
+    protected MCDElement getParentByNamePath(int pathname, String text) {
+        return null;
     }
 
     @Override
     protected void initDatas() {
         Preferences preferences = PreferencesManager.instance().preferences();
-        super.initDatasId();
+        super.initDatas();
         entityAbstract.setSelected(false);
         entityOrdered.setSelected(false);
         entityJournal.setSelected(preferences.getMCD_JOURNALIZATION());
@@ -167,7 +229,7 @@ public class EntityInputContent extends PanelInputContentId {
     @Override
     public void loadDatas(MVCCDElement mvccdElementCrt) {
         MCDEntity mcdEntity = (MCDEntity) mvccdElementCrt;
-        super.loadDatasId(mcdEntity);
+        super.loadDatas(mcdEntity);
         entityOrdered.setSelected(mcdEntity.isOrdered());
         entityAbstract.setSelected(mcdEntity.isEntAbstract());
         entityJournal.setSelected(mcdEntity.isJournal());
@@ -175,9 +237,9 @@ public class EntityInputContent extends PanelInputContentId {
     }
 
     @Override
-    public void saveDatas(MVCCDElement mvccdElement) {
+    protected void saveDatas(MVCCDElement mvccdElement) {
         MCDEntity mcdEntity = (MCDEntity) mvccdElement;
-        super.saveDatasId(mcdEntity);
+        super.saveDatas(mcdEntity);
 
         if (entityOrdered.checkIfUpdated()){
             mcdEntity.setOrdered(entityOrdered.isSelected());
@@ -197,12 +259,14 @@ public class EntityInputContent extends PanelInputContentId {
 
     @Override
     public boolean checkDatasPreSave(boolean unitaire) {
-        boolean ok = super.checkDatasPreSaveId(unitaire);
-        return ok;
+
+        return true;
     }
 
+
+
     protected boolean checkDatas(){
-        boolean ok = checkDatasId();
+        boolean ok = checkDatasPreSave(false);
 
         // Autres attributs
 
@@ -210,7 +274,9 @@ public class EntityInputContent extends PanelInputContentId {
     }
 
 
-    private void enabledContent() {
+
+    @Override
+    protected void enabledContentCustom() {
         Preferences preferences = PreferencesManager.instance().preferences();
         entityJournal.setEnabled(preferences.getMCD_JOURNALIZATION_EXCEPTION());
         entityAudit.setEnabled(preferences.getMCD_AUDIT_EXCEPTION());

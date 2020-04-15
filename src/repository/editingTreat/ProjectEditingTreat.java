@@ -15,6 +15,7 @@ public class ProjectEditingTreat {
 
         Project project = (Project) fen.getMvccdElementNew();
         MVCCDManager.instance().setProject(project);
+        //TODO-0 Traiter le cas où la saisie d'un nouveau projet est abandonné. A priori dans l'éditeur
         MVCCDManager.instance().completeNewProject();
     }
 

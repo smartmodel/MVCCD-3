@@ -27,22 +27,22 @@ public class MVCCDElementFactory {
         Project project = new Project(name);
 
         Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME);
-        MCDModels mcdModels = MVCCDElementFactory.instance().createMCDModels(project, Preferences.REPOSITORY_MCD_MODELS_NAME);
+        MCDContModels mcdContModels = MVCCDElementFactory.instance().createMCDModels(project, Preferences.REPOSITORY_MCD_MODELS_NAME);
 
         // Les préférences de projets ne sont pas encore mises à jour...
         if (!PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY()) {
-                createContentModel(mcdModels);
+                createContentModel(mcdContModels);
         }
         return project;
     }
 
 
-    public MCDModels createMCDModels(Project project, String name){
-        return new MCDModels(project, name);
+    public MCDContModels createMCDModels(Project project, String name){
+        return new MCDContModels(project, name);
     }
 
-    public MCDModel createMCDModel(MCDModels mcdModels){
-        MCDModel mcdModel = new MCDModel(mcdModels);
+    public MCDModel createMCDModel(MCDContModels mcdContModels){
+        MCDModel mcdModel = new MCDModel(mcdContModels);
         createContentModel(mcdModel);
         return mcdModel;
     }
@@ -61,14 +61,14 @@ public class MVCCDElementFactory {
         return new MCDDiagrams(parent, name);
     }
 
-    public MCDEntities createMCDEntities(ProjectElement parent, String name){
-        MCDEntities mcdEntities = new MCDEntities(parent, name);
-        return mcdEntities;
+    public MCDContEntities createMCDEntities(ProjectElement parent, String name){
+        MCDContEntities mcdContEntities = new MCDContEntities(parent, name);
+        return mcdContEntities;
     }
 
-    public MCDRelations createMCDRelations(ProjectElement parent, String name){
-        MCDRelations mcdRelations = new MCDRelations(parent, name);
-        return mcdRelations;
+    public MCDContRelations createMCDRelations(ProjectElement parent, String name){
+        MCDContRelations mcdContRelations = new MCDContRelations(parent, name);
+        return mcdContRelations;
     }
 
     public MCDEntity createMCDEntity(ProjectElement parent){
@@ -94,10 +94,10 @@ public class MVCCDElementFactory {
     }
 
 
-    public MCDAssociation createMCDAssociation( MCDRelations mcdRelations,
+    public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
                 MCDContEndRels mcdContEndRelsFrom, MCDContEndRels mcdContEndRelsTo) {
 
-        MCDAssociation mcdAssociation = new MCDAssociation(mcdRelations) ;
+        MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations) ;
 
         MCDEntity mcdEntityFrom = (MCDEntity) mcdContEndRelsFrom.getParent();
         MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdEntityFrom) ;
@@ -124,8 +124,8 @@ public class MVCCDElementFactory {
 
     private void createContentPackage(MCDElement parent) {
         MCDDiagrams mcdDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(parent,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
-        MCDEntities mcdEntities = MVCCDElementFactory.instance().createMCDEntities(parent,Preferences.REPOSITORY_MCD_ENTITIES_NAME);
-        MCDRelations mcdRelations = MVCCDElementFactory.instance().createMCDRelations(parent,Preferences.REPOSITORY_MCD_RELATIONS_NAME);
+        MCDContEntities mcdContEntities = MVCCDElementFactory.instance().createMCDEntities(parent,Preferences.REPOSITORY_MCD_ENTITIES_NAME);
+        MCDContRelations mcdContRelations = MVCCDElementFactory.instance().createMCDRelations(parent,Preferences.REPOSITORY_MCD_RELATIONS_NAME);
     }
 
 
@@ -133,11 +133,11 @@ public class MVCCDElementFactory {
         if (baliseName.equals(Preferences.XML_BALISE_PROJECT)) {
             return new Project(null);
         } else if (baliseName.equals(Preferences.XML_BALISE_MODELS)) {
-            return new MCDModels(ancestor);
+            return new MCDContModels(ancestor);
         } else if (baliseName.equals(Preferences.XML_BALISE_DIAGRAMS)) {
             return new MCDDiagrams(ancestor);
         } else if (baliseName.equals(Preferences.XML_BALISE_ENTITIES)) {
-            return new MCDEntities(ancestor);
+            return new MCDContEntities(ancestor);
         } else if (baliseName.equals(Preferences.XML_BALISE_ENTITY)) {
             return new MCDEntity(ancestor);
         } else {

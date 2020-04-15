@@ -1,6 +1,7 @@
 package mcd.services;
 
 import main.MVCCDElement;
+import mcd.MCDContEntities;
 import mcd.MCDElement;
 import mcd.interfaces.IMCDModel;
 
@@ -20,18 +21,39 @@ public class IMCDModelService {
     }
 
 
-    public static  ArrayList<MCDElement> getMCDElementsByClassName(IMCDModel model,
-                                                                           String className){
-        return getMCDElementsByClassNameInternal((MCDElement) model, className);
 
+    public static  ArrayList<MCDElement> getMCDElementsByClassName(IMCDModel model,
+                                                                   boolean withModel,
+                                                                   String className){
+
+        ArrayList<MCDElement> resultat = new ArrayList<MCDElement>();
+        if (withModel){
+            /*
+            if (model.getClass().getName().equals(className)){
+                resultat.add((MCDElement) model);
+            } else if (((MVCCDElement)model).implementsInterface(className)){
+                resultat.add((MCDElement) model);
+            }
+
+             */
+            if (((MVCCDElement)model).implementsInterface(IMCDModel.class.getName())) {
+                resultat.add((MCDElement) model);
+            }
+        }
+        resultat.addAll(getMCDElementsByClassNameInternal((MCDElement) model, className));
+        return resultat;
     }
 
-    private static  ArrayList<MCDElement> getMCDElementsByClassNameInternal(MCDElement racine,
+
+    private static  ArrayList<MCDElement> getMCDElementsByClassNameInternal(MCDElement root,
                                                                             String className){
         ArrayList<MCDElement> resultat = new ArrayList<MCDElement>();
-        for (MVCCDElement element :  racine.getChilds()){
+
+        for (MVCCDElement element :  root.getChilds()){
             if (element instanceof MCDElement){
                 if (element.getClass().getName().equals(className)){
+                    resultat.add((MCDElement) element);
+                } else if (element.implementsInterface(className)){
                     resultat.add((MCDElement) element);
                 }
                 resultat.addAll(getMCDElementsByClassNameInternal((MCDElement) element, className));
@@ -40,8 +62,8 @@ public class IMCDModelService {
         return resultat;
     }
 
-    public static MCDElement getMCDElementByClassAndNamePath(IMCDModel model, String className, int pathMode, String namePath){
-        for (MCDElement mcdElement: getMCDElementsByClassName(model, className)){
+    public static MCDElement getMCDElementByClassAndNamePath(IMCDModel model, boolean withModel, String className, int pathMode, String namePath){
+        for (MCDElement mcdElement: getMCDElementsByClassName(model, withModel, className)){
             if (mcdElement.getNamePath(pathMode).equals(namePath)){
                 return mcdElement;
             }

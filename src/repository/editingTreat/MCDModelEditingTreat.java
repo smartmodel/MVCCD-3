@@ -2,7 +2,7 @@ package repository.editingTreat;
 
 import main.MVCCDManager;
 import mcd.MCDModel;
-import mcd.MCDModels;
+import mcd.MCDContModels;
 import utilities.window.editor.DialogEditor;
 import window.editor.model.ModelEditor;
 
@@ -11,9 +11,9 @@ import java.awt.*;
 
 public class MCDModelEditingTreat {
 
-    public static void treatNew(Window owner, MCDModels mcdModels, DefaultMutableTreeNode node) {
+    public static void treatNew(Window owner, MCDContModels mcdContModels, DefaultMutableTreeNode node) {
 
-        ModelEditor fen = new ModelEditor(owner, mcdModels, null,
+        ModelEditor fen = new ModelEditor(owner, mcdContModels, null,
                 DialogEditor.NEW, ModelEditor.MODEL);
         fen.setVisible(true);
 
@@ -26,7 +26,7 @@ public class MCDModelEditingTreat {
 
     public static void treatUpdate(Window owner,
                                    MCDModel mcdModel) {
-        ModelEditor fen = new ModelEditor(owner , (MCDModels) mcdModel.getParent(), mcdModel,
+        ModelEditor fen = new ModelEditor(owner , (MCDContModels) mcdModel.getParent(), mcdModel,
                 DialogEditor.UPDATE, ModelEditor.MODEL);
         fen.setVisible(true);
         if (fen.isDatasChanged()){

@@ -12,15 +12,16 @@ public class MCDDatatypeButtonsContent extends PanelButtonsContent {
     }
 
 
-    @Override
-    protected MVCCDElement createNewMVCCDElement() {
-        return null;
-    }
 
 
     @Override
     protected String getHelpFileName() {
         return Preferences.FILE_HELP_MCDDATATYPE_NAME;
+    }
+
+    @Override
+    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
+        return null;
     }
 
 

@@ -26,14 +26,21 @@ public class Preferences extends MVCCDElement {
     public static String REPOSITORY_MCD_RELATIONS_NAME = "Relations";
     public static String REPOSITORY_MCD_ATTRIBUTES_NAME = "Attributs";
     public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
-    public static String NAME_REGEXPR = "[a-zA-Z]{1,1}[a-zA-Z0-9_]*";
+    public static String REGEXPR_FIRSTCAR = "[a-zA-Z]{1,1}";
+    public static String REGEXPR_NOFREE = "[a-zA-Z0-9_]*";
+    public static String REGEXPR_FREE="([ ]{0,1}[a-zA-Z0-9_àâäçéèêëòöùûü]+)*";
+    public static String NAME_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_NOFREE;
+    public static String NAME_FREE_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_FREE ;
     public static Integer PROJECT_NAME_LENGTH = 50;
     public static Integer MODEL_NAME_LENGTH = 20;
     public static Integer MODEL_SHORT_NAME_LENGTH = 5;
+    public static Integer MODEL_LONG_NAME_LENGTH = 50;
     public static Integer PACKAGE_NAME_LENGTH = 20;
     public static Integer PACKAGE_SHORT_NAME_LENGTH = 5;
+    public static Integer PACKAGE_LONG_NAME_LENGTH = 50;
     public static Integer ENTITY_NAME_LENGTH = 20;
     public static Integer ENTITY_SHORT_NAME_LENGTH = 5;
+    public static Integer ENTITY_LONG_NAME_LENGTH = 50;
     public static Integer ATTRIBUTE_NAME_LENGTH = 20;
     public static String INTEGER_REGEXPR = "([0])|([1-9]{1,1}[0-9]*)";
     //public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -249,6 +256,14 @@ public class Preferences extends MVCCDElement {
     public static String MCD_NAMING_ASSOCIATION_ARROW_LEFT = " <- ";
 
 
+    public static String OPTION_ALWAYS = "option.always";
+    public static String OPTION_NEVER = "option.never";
+    public static String OPTION_YES = "option.yes";
+    public static String OPTION_NO = "option.no";
+    public static String OPTION_FREE = "option.free";
+
+    public static String MCD_MODE_NAMING_SHORT_NAME = OPTION_YES;
+
     // Modification Application
     private Boolean DEBUG = false;
     private Boolean DEBUG_BACKGROUND_PANEL = false;
@@ -271,6 +286,7 @@ public class Preferences extends MVCCDElement {
     private String MCD_AID_DEP_COLUMN_NAME = null;
     private Boolean MCD_AID_WITH_DEP = true;
     private String MCD_TREE_NAMING_ASSOCIATION = null;
+    private String MCD_MODE_NAMING_LONG_NAME = null;
 
 
 
@@ -428,5 +444,14 @@ public class Preferences extends MVCCDElement {
         this.MCD_TREE_NAMING_ASSOCIATION = MCD_TREE_NAMING_ASSOCIATION;
     }
 
+    public String getMCD_MODE_NAMING_LONG_NAME() {
+        if (MCD_MODE_NAMING_LONG_NAME == null){
+            MCD_MODE_NAMING_LONG_NAME = OPTION_NO;
+        }
+        return MCD_MODE_NAMING_LONG_NAME;
+    }
 
+    public void setMCD_MODE_NAMING_LONG_NAME(String MCD_MODE_NAMING_LONG_NAME) {
+        this.MCD_MODE_NAMING_LONG_NAME = MCD_MODE_NAMING_LONG_NAME;
+    }
 }

@@ -1,10 +1,9 @@
 package mcd.services;
 
 import mcd.MCDElement;
-import mcd.interfaces.IMCDModel;
+import mcd.MCDContModels;
 import mcd.interfaces.IMCDNamePathParent;
 import preferences.Preferences;
-import project.Project;
 
 public class MCDElementService {
 
@@ -14,8 +13,16 @@ public class MCDElementService {
     public static String getPath(MCDElement mcdElement, int pathMode){
         String path = "";
         // Reculer jusqu'à la racine
+        /*
         if (!(mcdElement.getParent() instanceof IMCDModel)){
             if (!(mcdElement instanceof IMCDModel)) {
+                path = getPath((MCDElement) mcdElement.getParent(), pathMode);
+            }
+        }
+
+         */
+        if (!(mcdElement.getParent() instanceof MCDContModels)){
+            if (!(mcdElement instanceof MCDContModels)) {
                 path = getPath((MCDElement) mcdElement.getParent(), pathMode);
             }
         }

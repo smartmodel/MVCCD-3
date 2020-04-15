@@ -4,6 +4,7 @@ import main.MVCCDElement;
 import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.window.scomponents.SComponent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -49,15 +50,29 @@ public class PrefGeneralInputContent extends PanelInputContent {
     }
 
     @Override
+    protected void enabledContentCustom() {
+
+    }
+
+    @Override
+    protected JPanel getPanelCustom() {
+        return null;
+    }
+
+    @Override
+    protected void createContentCustom() {
+
+    }
+
+    @Override
     protected boolean checkDatas() {
 
         return true;
     }
 
-
     @Override
-    protected void changeField(DocumentEvent e) {
-
+    protected SComponent changeField(DocumentEvent e) {
+        return null;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package main;
 
+import mcd.MCDElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
 import utilities.Debug;
@@ -10,12 +11,21 @@ import java.util.Collections;
 
 public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElement>{
 
+    private static final long serialVersionUID = 1000;
+
+    public static final int SCOPENAME = 1;
+    public static final int SCOPESHORTNAME = 2;
+    public static final int SCOPELONGNAME = 3;
+    public static final int SCOPENOTNAME = 4;
+
     private MVCCDElement parent;
     private String name;
     private String shortName;
+    private String longName;
     private int order;
     private int firstValueOrder = 10;
     private int intervalOrder = 10;
+    //private boolean uniqueInParent = true;
 
     private ArrayList<MVCCDElement> childs = new ArrayList<MVCCDElement>();
 
@@ -54,7 +64,10 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
         return parent;
     }
 
-    public void setParent(MVCCDElement parent) {
+    public void setOrChangeParent(MVCCDElement parent) {
+        if (this.getParent() != null){
+            this.getParent().getChilds().remove(this);
+        }
         this.parent = parent;
         parent.getChilds().add(this);
     }
@@ -83,11 +96,38 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
         }
     }
 
+    public String getLongName() {
+        return longName;
+    }
+
+    public void setLongName(String longName) {
+        this.longName = longName;
+    }
+
+
+    public String getLongNameSmart() {
+        if (longName != null) {
+            return longName;
+        } else {
+            return name;
+        }
+    }
 
     public ArrayList<MVCCDElement> getChilds() {
         Collections.sort(childs, MVCCDElement::compareTo);
         return childs;
     }
+
+    public ArrayList<MVCCDElement> getChildsWithout(MVCCDElement child) {
+        ArrayList<MVCCDElement> resultat = new ArrayList<MVCCDElement>() ;
+        for (MVCCDElement aChild : getChilds()){
+            if (aChild != child){
+                resultat.add(aChild);
+            }
+        }
+        return resultat;
+    }
+
 
     public void setOrder(int order) {
         this.order = order;
@@ -154,6 +194,17 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
         } else {
             return -1;
         }
+    }
+
+    public boolean implementsInterface(String className) {
+        for (Class anInterface : this.getClass().getInterfaces()) {
+            //System.out.println(anInterface.getName() + "   -    " + className);
+
+            if (anInterface.getName().equals(className)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

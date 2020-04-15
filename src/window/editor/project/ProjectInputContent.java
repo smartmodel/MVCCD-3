@@ -9,6 +9,7 @@ import preferences.PreferencesManager;
 import profile.ProfileManager;
 import project.Project;
 import utilities.window.scomponents.SCheckBox;
+import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 import utilities.window.scomponents.SComboBox;
 
@@ -66,6 +67,7 @@ public class ProjectInputContent extends PanelInputContent {
         fieldPackagesAutorizeds.addFocusListener(this);
 
         // Pas de modification pour l'instant Modèles et paquetages
+        //TODO-1 A gérer complétement l'autorisation, son retrait et les conséquences
         if(getEditor().getMode().equals(DialogEditor.UPDATE)){
             fieldModelsMany.setEnabled(false);
             fieldPackagesAutorizeds.setEnabled(false);
@@ -129,16 +131,19 @@ public class ProjectInputContent extends PanelInputContent {
     }
 
 
-    protected void changeField(DocumentEvent e) {
+    protected SComponent changeField(DocumentEvent e) {
         if (projectName.getDocument() == e.getDocument()) {
-            checkProjectName(true);
+            checkDatasPreSave(true);
+            return projectName;
         }
+        return null;
     }
 
     @Override
     protected void changeFieldSelected(ItemEvent e) {
 
     }
+
 
     @Override
     protected void changeFieldDeSelected(ItemEvent e) {
@@ -154,7 +159,7 @@ public class ProjectInputContent extends PanelInputContent {
         super.focusGained(focusEvent);
         Object source = focusEvent.getSource();
         if (source == projectName) {
-            checkProjectName(true);
+            checkDatasPreSave(true);
         }
     }
 
@@ -166,15 +171,33 @@ public class ProjectInputContent extends PanelInputContent {
     @Override
     public boolean checkDatasPreSave(boolean unitaire) {
         boolean ok = checkProjectName(unitaire);
+        super.setPreSaveOk(ok);
         return ok;
     }
 
+
+    @Override
+    protected void enabledContentCustom() {
+
+    }
+
+    @Override
+    protected JPanel getPanelCustom() {
+        return null;
+    }
+
+    @Override
+    protected void createContentCustom() {
+
+    }
 
     public boolean checkDatas(){
          boolean ok = checkDatasPreSave(false);
         // Autres attributs
         return ok;
     }
+
+
 
     private boolean checkProjectName(boolean unitaire) {
         return super.checkInput(projectName, unitaire, MCDProjectService.checkName(projectName.getText()));

@@ -19,6 +19,7 @@ import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import utilities.UtilDivers;
 import utilities.window.ReadTableModel;
+import utilities.window.scomponents.SComponent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -313,7 +314,8 @@ public class AttributesInputContent extends PanelInputContent {
 
 
 
-    protected void changeField(DocumentEvent e) {
+    protected SComponent changeField(DocumentEvent e) {
+        return null;
     }
 
     @Override
@@ -348,11 +350,24 @@ public class AttributesInputContent extends PanelInputContent {
     }
 
 
+    @Override
+    protected void enabledContentCustom() {
+
+    }
+
+    @Override
+    protected JPanel getPanelCustom() {
+        return null;
+    }
+
+    @Override
+    protected void createContentCustom() {
+
+    }
+
     protected boolean checkDatas(){
             return true;
     }
-
-
 
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {

@@ -2,10 +2,7 @@ package mcd.services;
 
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
-import mcd.MCDContAttributes;
-import mcd.MCDContEndRels;
-import mcd.MCDEntity;
-import mcd.MCDModel;
+import mcd.*;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import project.ProjectElement;
@@ -19,20 +16,30 @@ public class MCDModelService {
 
     public static ArrayList<String> check(MCDModel mcdModel) {
         ArrayList<String> messages = new ArrayList<String>();
-        messages.addAll(checkName(mcdModel.getName()));
         return messages;
     }
 
-    public static ArrayList<String> checkName(String name) {
-        return MCDUtilService.checkString(name, true, Preferences.MODEL_NAME_LENGTH,
+    public static ArrayList<String> checkName(MCDContModels parent, MCDModel child, String name) {
+        ArrayList<String> messages = MCDUtilService.checkString(name, true, Preferences.MODEL_NAME_LENGTH,
                 Preferences.NAME_REGEXPR, "modele.and.name");
-
+        if (messages.size() == 0) {
+            messages.addAll(MCDUtilService.checkExistNameInChilds(parent, child, name, true,"naming.brother.model"));
+        }
+        return messages;
     }
 
-    public static ArrayList<String> checkShortName(String name) {
-        return MCDUtilService.checkString(name, true, Preferences.MODEL_SHORT_NAME_LENGTH,
+    public static ArrayList<String> checkShortName(MCDContModels parent, MCDModel child, String shortName) {
+        ArrayList<String> messages = MCDUtilService.checkString(shortName, true, Preferences.MODEL_SHORT_NAME_LENGTH,
                 Preferences.NAME_REGEXPR, "modele.and.short.name");
-
+        if (messages.size() == 0) {
+            messages.addAll(MCDUtilService.checkExistShortNameInChilds(parent, child, shortName, true,"naming.brother.model"));
+        }
+        if (messages.size() == 0) {
+            messages.addAll(MCDUtilService.namingExistNameInChilds(parent, child,
+                    "naming.short.name",shortName, true,
+                    "naming.brother.model"));
+        }
+        return messages;
     }
 
 

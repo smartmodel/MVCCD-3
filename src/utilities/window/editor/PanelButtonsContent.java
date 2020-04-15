@@ -34,11 +34,19 @@ public abstract class PanelButtonsContent extends PanelContent
     public PanelButtonsContent(PanelButtons panelButtons) {
         super(panelButtons);
         this.panelButtons = panelButtons;
+
+        //TODO-0 à adapter pour la customization
         createContent();
         super.addContent(panel, false);
 
 
     }
+    /*
+    protected void start(){
+        createContent();
+    }
+
+     */
 
     private void createContent() {
 
@@ -212,7 +220,7 @@ public abstract class PanelButtonsContent extends PanelContent
     }
 
     private void  treatCreate(){
-        MVCCDElement newMVCCDElement = createNewMVCCDElement();
+        MVCCDElement newMVCCDElement = createNewMVCCDElement(getEditor().getMvccdElementParentChoosed());
         saveDatas(newMVCCDElement);
         getEditor().setMvccdElementNew(newMVCCDElement);
         getEditor().setDatasChanged(true);
@@ -225,7 +233,7 @@ public abstract class PanelButtonsContent extends PanelContent
 
     }
 
-    protected abstract MVCCDElement createNewMVCCDElement();
+    protected abstract MVCCDElement createNewMVCCDElement(MVCCDElement parent);
 
 
     private void colorDebug(){

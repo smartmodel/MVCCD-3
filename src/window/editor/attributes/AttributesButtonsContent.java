@@ -10,13 +10,10 @@ public class AttributesButtonsContent extends PanelButtonsContent {
         super(attributesButtons);
     }
 
-
     @Override
-    protected MVCCDElement createNewMVCCDElement() {
+    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         return null;
     }
-
-
 
     @Override
     protected String getHelpFileName() {

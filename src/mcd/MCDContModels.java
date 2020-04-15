@@ -1,21 +1,23 @@
 package mcd;
 
 import main.MVCCDElement;
+import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
+import mcd.interfaces.IMCDNamePathParent;
 import preferences.Preferences;
 import project.Project;
 import project.ProjectElement;
 import utilities.files.UtilXML;
 
-public class MCDModels extends MCDElement implements IMCDModel {
+public class MCDContModels extends MCDElement implements IMCDModel, IMCDNamePathParent, IMCDContPackages {
 
     private static final long serialVersionUID = 1000;
 
-    public MCDModels(ProjectElement parent, String name) {
+    public MCDContModels(ProjectElement parent, String name) {
         super(parent, name);
     }
 
-    public MCDModels(ProjectElement parent) {
+    public MCDContModels(ProjectElement parent) {
         super (parent);
     }
 

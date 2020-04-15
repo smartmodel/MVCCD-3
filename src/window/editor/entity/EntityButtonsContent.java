@@ -16,12 +16,8 @@ public class EntityButtonsContent extends PanelButtonsContent {
 
 
     @Override
-    protected MVCCDElement createNewMVCCDElement() {
-        //JTextField entityName = getEditorContent().getEntityName();
-        ProjectElement projectElement = (ProjectElement) getEditor().getMvccdElementParent();
-        MCDEntity mcdEntity = MVCCDElementFactory.instance().createMCDEntity(projectElement);
-        // saveDatas(mcdEntity);
-        return mcdEntity;
+    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
+        return MVCCDElementFactory.instance().createMCDEntity((ProjectElement)parent);
     }
 
 

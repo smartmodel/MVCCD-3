@@ -25,6 +25,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     private MVCCDElement mvccdElementParent = null;     // Parent pour la création
     private MVCCDElement mvccdElementCrt = null;     // lui-même pour la modification, suppression, lecture
     private MVCCDElement mvccdElementNew = null;     // lui-même pour la modification
+    private MVCCDElement mvccdElementParentChoosed = null;     // la parent effectivement choisi lors de la saisie
     private boolean datasChanged = false;     // données modifiées
 
     private boolean readOnly = false;
@@ -34,6 +35,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         this.mode = mode;
         this.mvccdElementParent = mvccdElementParent;
         this.mvccdElementCrt = mvccdElementCrt;
+        this.mvccdElementParentChoosed = mvccdElementParent;  // valeur par défaut
 
         if (mode.equals(DialogEditor.READ)){
             this.setReadOnly(true);
@@ -47,8 +49,19 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
         getContentPane().add(panel);
 
+        setSize(getSizeCustom());
+        setInput(getInputCustom());
+        setButtons(getButtonsCustom());
+
+        start();
+
     }
 
+    protected abstract PanelButtons getButtonsCustom();
+
+    protected abstract PanelInput getInputCustom();
+
+    protected abstract Dimension getSizeCustom();
 
 
     public void start(){
@@ -237,5 +250,13 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     public int getWidthInit() {
         return widthInit;
+    }
+
+    public MVCCDElement getMvccdElementParentChoosed() {
+        return mvccdElementParentChoosed;
+    }
+
+    public void setMvccdElementParentChoosed(MVCCDElement mvccdElementParentChoosed) {
+        this.mvccdElementParentChoosed = mvccdElementParentChoosed;
     }
 }

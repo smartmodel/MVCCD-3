@@ -19,9 +19,8 @@ public class PrefGeneralButtonsContent extends PanelButtonsContent implements Ac
         return null;
     }
 
-
     @Override
-    protected MVCCDElement createNewMVCCDElement() {
+    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         return null;
     }
 

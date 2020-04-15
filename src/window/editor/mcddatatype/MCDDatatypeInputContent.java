@@ -7,6 +7,7 @@ import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import utilities.UtilDivers;
 import utilities.window.scomponents.SCheckBox;
+import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 
 import javax.swing.*;
@@ -16,7 +17,7 @@ import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
-public class MCDDatatypeInputContent extends PanelInputContent {
+public class MCDDatatypeInputContent extends PanelInputContent{
 
     private JPanel panel = new JPanel();
     private STextField mcdDatatypeName = new STextField(this);
@@ -299,7 +300,8 @@ public class MCDDatatypeInputContent extends PanelInputContent {
     }
 
 
-    protected void changeField(DocumentEvent e) {
+    protected SComponent changeField(DocumentEvent e) {
+        return null;
      }
 
     @Override
@@ -320,10 +322,24 @@ public class MCDDatatypeInputContent extends PanelInputContent {
     }
 
 
+    @Override
+    protected void enabledContentCustom() {
+
+    }
+
+    @Override
+    protected JPanel getPanelCustom() {
+        return null;
+    }
+
+    @Override
+    protected void createContentCustom() {
+
+    }
+
     protected boolean checkDatas(){
             return true;
     }
-
 
 
     @Override

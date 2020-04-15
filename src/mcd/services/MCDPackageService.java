@@ -1,9 +1,13 @@
 package mcd.services;
 
+import mcd.MCDElement;
 import mcd.MCDEntity;
 import mcd.MCDModel;
 import mcd.MCDPackage;
+import mcd.interfaces.IMCDContPackages;
+import mcd.interfaces.IMCDModel;
 import preferences.Preferences;
+import project.ProjectService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +34,23 @@ public class MCDPackageService {
 
     }
 
+    public static ArrayList<IMCDContPackages> getIMCDContPackagesInIModel(IMCDModel iMCDModel) {
+        ArrayList<IMCDContPackages> resultat =  new ArrayList<IMCDContPackages>();
+        for (MCDElement element :  IMCDModelService.getMCDElementsByClassName(
+                iMCDModel, true, IMCDContPackages.class.getName())){
+            resultat.add((IMCDContPackages) element);
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDElement> toMCDElements(ArrayList<IMCDContPackages> imcdContPackages) {
+        ArrayList<MCDElement> resultat = new ArrayList<MCDElement>();
+        for (IMCDContPackages imcdContPackage : imcdContPackages){
+            resultat.add((MCDElement) imcdContPackage);
+        }
+        return resultat;
+    }
+
 
     public static void sortNameAsc(ArrayList<MCDPackage> packages){
         Collections.sort(packages, NAME_ASC);
@@ -41,4 +62,15 @@ public class MCDPackageService {
                     return e1.getName().compareTo(e2.getName());
                 }
     };
+
+
+    public static MCDPackage getMCDPackageByNamePath(int pathMode, String namePath){
+        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){
+            if (mcdElement instanceof MCDPackage){
+                return (MCDPackage) mcdElement;
+            }
+        }
+        return null;
+    }
+
 }

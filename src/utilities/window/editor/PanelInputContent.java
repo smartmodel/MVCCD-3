@@ -4,8 +4,10 @@ import main.MVCCDElement;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.Element;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -19,38 +21,67 @@ public abstract class PanelInputContent
                     FocusListener, DocumentListener,  ItemListener {
 
     private PanelInput panelInput;
-    private boolean alreadyFocusGained = false;
+    protected boolean alreadyFocusGained = false;
     private ArrayList<SComponent> sComponents = new ArrayList<SComponent>();
     //private boolean readOnly = false;
     private boolean dataInitialized = false;
 
+    protected boolean preSaveOk = false;
+
     public PanelInputContent(PanelInput panelInput) {
         super(panelInput);
         this.panelInput = panelInput;
+/*
+        entityInput.setPanelContent(this);
+        createContent();
+        super.addContent(panel);
+        super.initOrLoadDatas();
+        enabledContent();
+*/
+        panelInput.setPanelContent(this);
     }
 
+    protected void start(){
+        createContentCustom();
+        addContent(getPanelCustom());
+        initOrLoadDatas();
+        enabledContentCustom();
+    }
+
+    protected abstract void enabledContentCustom();
+
+    protected abstract JPanel getPanelCustom();
+
+    protected abstract void createContentCustom();
+
     protected abstract boolean checkDatas();
+    //protected abstract boolean checkDatasId();
 
     public abstract boolean checkDatasPreSave(boolean unitaire);
+    //public abstract boolean checkDatasPreSaveId(boolean unitaire);
 
-    protected abstract void changeField(DocumentEvent e);
+    protected abstract SComponent changeField(DocumentEvent e);
+    //protected abstract SComponent changeFieldId(DocumentEvent e);
 
 
     protected abstract void changeFieldSelected(ItemEvent e);
+    //protected abstract void changeFieldIdSelected(ItemEvent e);
 
     protected abstract void changeFieldDeSelected(ItemEvent e);
 
-    public abstract void loadDatas(MVCCDElement mvccdElementCrt);
+    protected abstract void loadDatas(MVCCDElement mvccdElementCrt);
 
     //protected abstract void initDatas(MVCCDElement mvccdElementParent);
     protected abstract void initDatas();
 
-    public abstract void saveDatas(MVCCDElement mvccdElement);
+    protected abstract void saveDatas(MVCCDElement mvccdElement);
 
 
     @Override
     public void insertUpdate(DocumentEvent e) {
-        changeField(e);
+        //SComponent sComponent = changeFieldId(e);
+        //sComponent = changeField(e);
+        SComponent sComponent = changeField(e);
         if (alreadyFocusGained) {
             enabledButtons();
         }
@@ -63,7 +94,9 @@ public abstract class PanelInputContent
             STextField sTextField = (STextField) e.getDocument();
             sTextField.setColorNormal();
         } */
-        changeField(e);
+        //SComponent sComponent = changeFieldId(e);
+        //sComponent = changeField(e);
+        SComponent sComponent = changeField(e);
         if (alreadyFocusGained) {
             enabledButtons();
         }
@@ -71,7 +104,9 @@ public abstract class PanelInputContent
 
     @Override
     public void changedUpdate(DocumentEvent e) {
-        changeField(e);
+        //SComponent sComponent = changeFieldId(e);
+        //sComponent = changeField(e);
+        SComponent sComponent = changeField(e);
         if (alreadyFocusGained) {
             enabledButtons();
         }
@@ -83,6 +118,7 @@ public abstract class PanelInputContent
     public void itemStateChanged(ItemEvent e) {
 
         if (e.getStateChange() == ItemEvent.SELECTED) {
+            //changeFieldIdSelected(e);
             changeFieldSelected(e);
         }
         if (e.getStateChange() == ItemEvent.DESELECTED) {
@@ -101,11 +137,12 @@ public abstract class PanelInputContent
 
     }
     protected void enabledButtons() {
-        // Le check doit être fait au début pour remettre l'affichage normal
+
+       // Le check doit être fait au début pour remettre l'affichage normal
         // de champs testés ensemble
-        boolean datasChecked = checkDatasPreSave(true);
+
         if (datasChangedNow()) {
-            if (datasChecked) {
+            if (preSaveOk) {
                 getButtonsContent().getBtnOk().setEnabled(true);
                 getButtonsContent().getBtnApply().setEnabled(true);
             } else {
@@ -118,7 +155,6 @@ public abstract class PanelInputContent
             getButtonsContent().getBtnOk().setEnabled(false);
             getButtonsContent().getBtnApply().setEnabled(false);
         }
-
     }
 
     public boolean checkInput(SComponent field, boolean unitaire, ArrayList<String> messagesErrors) {
@@ -171,7 +207,10 @@ public abstract class PanelInputContent
         getEditor().focusGained(focusEvent);
         getButtonsContent().clearMessages();
         if (!alreadyFocusGained) {
+            //checkDatasId();
             checkDatas();
+            //boolean ok = checkDatasPreSaveId(true);
+            //checkDatasPreSave(ok);
             checkDatasPreSave(true);
             enabledButtons();
             alreadyFocusGained = true;
@@ -217,6 +256,9 @@ public abstract class PanelInputContent
             loadDatas(getEditor().getMvccdElementCrt());
         }
         dataInitialized = true;
+        preSaveOk = checkDatasPreSave(false);
+        //preSaveOk = checkDatasPreSaveId(false);
+        //preSaveOk = checkDatasPreSave(false)  && preSaveOk;
     }
 
     public boolean isDataInitialized() {
@@ -265,5 +307,11 @@ public abstract class PanelInputContent
             }
     }
 
+    public boolean isPreSaveOk() {
+        return preSaveOk;
+    }
 
+    public void setPreSaveOk(boolean preSaveOk) {
+        this.preSaveOk = preSaveOk;
+    }
 }

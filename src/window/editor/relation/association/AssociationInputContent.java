@@ -1,7 +1,5 @@
 package window.editor.relation.association;
 
-import datatypes.MCDDatatype;
-import datatypes.MDDatatypeService;
 import m.MRelEnd;
 import main.MVCCDElement;
 import mcd.*;
@@ -9,16 +7,17 @@ import mcd.interfaces.IMCDModel;
 import mcd.services.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import project.ProjectManager;
 import project.ProjectService;
 import utilities.window.editor.PanelInputContentId;
 import utilities.window.scomponents.SComboBox;
+import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
@@ -54,25 +53,29 @@ public class AssociationInputContent extends PanelInputContentId {
 
     public AssociationInputContent(AssociationInput associationInput)     {
         super(associationInput);
-        associationInput.setPanelContent(this);
         if ((MCDElement) getEditor().getMvccdElementParent() != null) {
             iMCDModelContainer = IMCDModelService.getIModelContainer((MCDElement) getEditor().getMvccdElementParent());
         } else {
             iMCDModelContainer = IMCDModelService.getIModelContainer((MCDElement) getEditor().getMvccdElementCrt());
         }
+        /*
+        associationInput.setPanelContent(this);
+
         createContent();
         super.addContent(panel);
         super.initOrLoadDatas();
         enabledContent();
 
+         */
+
     }
 
 
 
+    @Override
+    protected void createContentIdCustom() {
 
-    private void createContent() {
-
-        super.createContentId();
+        //super.createContentId();
 
         fieldName.setToolTipText("Nom de l'association");
         fieldName.setCheckPreSave(false);
@@ -80,38 +83,13 @@ public class AssociationInputContent extends PanelInputContentId {
         createContentAssEnd(MCDRelEnd.FROM);
         createContentAssEnd(MCDRelEnd.TO);
 
-        /*
-        ArrayList<MCDEntity> mcdEntities = MCDEntityService.getMCDEntitiesByClassName(
-                iMCDModelContainer, MCDEntity.class.getName());
-        MCDEntityService.sortNameAsc(mcdEntities);
-
-
-        fieldToEntity.addItem(SComboBox.LINEWHITE);
-        fieldFromEntity.addItem(SComboBox.LINEWHITE);
-        //fieldFromEntity.addItem(SComboBox.LIGNEVIDE);
-        for (MCDEntity mcdEntity : mcdEntities) {
-            fieldFromEntity.addItem(mcdEntity.getNamePath());
-            fieldToEntity.addItem(mcdEntity.getNamePath());
-        }
-
-        fieldFromEntity.addItemListener(this);
-        fieldFromEntity.addFocusListener(this);
-        fieldToEntity.addItemListener(this);
-        fieldToEntity.addFocusListener(this);
-
-        super.getsComponents().add(fieldFromEntity);
-        super.getsComponents().add(fieldToEntity);
-
-         */
-
         //enabledOrVisibleFalse();
 
         createPanelMaster();
     }
 
     private void createContentAssEnd(int direction) {
-        ArrayList<MCDEntity> mcdEntities = MCDEntityService.getMCDEntitiesByClassName(
-                iMCDModelContainer, MCDEntity.class.getName());
+        ArrayList<MCDEntity> mcdEntities = MCDEntityService.getMCDEntitiesInIModel(iMCDModelContainer);
         MCDEntityService.sortNameAsc(mcdEntities);
 
         factorizeAssEnd(direction);
@@ -237,9 +215,13 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
 
-    protected void changeField(DocumentEvent e) {
-        // Les champs obligatoires sont testés sur la procédure checkDatasPreSave()
+    protected SComponent changeField(DocumentEvent e) {
 
+
+            Document doc = e.getDocument();
+
+            // Autres champs que les champs Id
+            return null;
     }
 
 
@@ -282,8 +264,23 @@ public class AssociationInputContent extends PanelInputContentId {
         return ok;
     }
 
+    @Override
+    protected void enabledContentCustom() {
+
+    }
+
+    @Override
+    protected JPanel getPanelCustom() {
+        return null;
+    }
+
+    @Override
+    protected void createContentCustom() {
+
+    }
+
     protected boolean checkDatas(){
-        //boolean ok = checkDatasPreSave(false);
+        boolean ok = checkDatasPreSave(false);
         // Autre attributs
 
         return true;
@@ -296,8 +293,38 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
     @Override
+    protected String getElementAndNaming(int naming) {
+        return null;
+    }
+
+    @Override
+    protected String getNamingAndBrothersElements(int naming) {
+        return null;
+    }
+
+    @Override
     protected boolean checkShortName(boolean unitaire) {
         return true;
+    }
+
+    @Override
+    protected boolean checkLongName(boolean unitaire) {
+        return true;
+    }
+
+    @Override
+    protected int getLengthMax(int naming) {
+        return 0;
+    }
+
+    @Override
+    protected ArrayList<MCDElement> getParentCandidates(IMCDModel iMCDModelContainer) {
+        return null;
+    }
+
+    @Override
+    protected MCDElement getParentByNamePath(int pathname, String text) {
+        return null;
     }
 
 
@@ -332,7 +359,7 @@ public class AssociationInputContent extends PanelInputContentId {
 
         SComboBoxService.selectByText(fieldFromEntity, mcdEntityFrom.getName());
         */
-        super.initDatasId();
+        super.initDatas();
         fieldFromEntity.setSelectedEmpty();
         fieldToEntity.setSelectedEmpty();
 
@@ -361,9 +388,8 @@ public class AssociationInputContent extends PanelInputContentId {
     public void loadDatas(MVCCDElement mvccdElement) {
         MCDAssociation mcdAssociation = (MCDAssociation) mvccdElement;
 
-        System.out.println("Association:   " + mcdAssociation.getName()  + mcdAssociation.getNameTree());
-        // Au niveau de l'association
-        super.loadDatasId(mcdAssociation);
+       // Au niveau de l'association
+        super.loadDatas(mcdAssociation);
 
 
         // Au niveau de chacune des 2 extrémités
@@ -386,7 +412,7 @@ public class AssociationInputContent extends PanelInputContentId {
         MCDAssociation mcdAssociation = (MCDAssociation) mvccdElement;
 
         // Au niveau de l'association
-        super.saveDatasId(mcdAssociation);
+        super.saveDatas(mcdAssociation);
 
         // Au niveau de chacune des 2 extémités
         MCDAssEnd  mcdAssEndFrom = mcdAssociation.getFrom();
@@ -401,7 +427,7 @@ public class AssociationInputContent extends PanelInputContentId {
         factorizeAssEnd(direction);
 
         String text = (String) factorizeFieldEntity.getSelectedItem();
-        MCDEntity mcdEntity = ProjectService.getMCDEntityByNamePath(MCDElementService.PATHNAME, text);
+        MCDEntity mcdEntity = MCDEntityService.getMCDEntityByNamePath(MCDElementService.PATHNAME, text);
         if (fieldFromEntity.checkIfUpdated()) {
             mcdAssEnd.setMcdEntity(mcdEntity);
         }

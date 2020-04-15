@@ -2,23 +2,28 @@ package window.editor.model;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDModel;
+import mcd.*;
+import mcd.interfaces.IMCDContPackages;
+import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDTraceability;
-import mcd.services.MCDModelService;
-import mcd.services.MCDPackageService;
+import mcd.services.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
-import mcd.services.MCDAdjustPref;
+import project.ProjectManager;
+import project.ProjectService;
 import utilities.window.editor.PanelInputContentId;
 import utilities.window.scomponents.SCheckBox;
+import utilities.window.scomponents.SComponent;
 import utilities.window.services.PanelService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 
 public class ModelInputContent extends PanelInputContentId {
 
@@ -42,15 +47,24 @@ public class ModelInputContent extends PanelInputContentId {
 
     public ModelInputContent(ModelInput modelInput)     {
         super(modelInput);
+        /*
         modelInput.setPanelContent(this);
         createContent();
         super.addContent(panel);
         super.initOrLoadDatas();
         enabledContent();
+
+         */
     }
 
-    private void createContent() {
-        super.createContentId();
+    @Override
+    protected void createContentIdCustom() {
+        //super.createContentId();
+
+        if (getScope() == ModelEditor.MODEL) {
+          fieldParent.setEnabled(false);
+        }
+
         fieldShortName.setToolTipText("Nom court de l'entité utilisé pour nommer certaines contraintes et autres");
 
         Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
@@ -60,7 +74,7 @@ public class ModelInputContent extends PanelInputContentId {
 
 
         fieldJournalization.setToolTipText("Journalisation des manipulations de l'entité");
-        //entityName.getDocument().addDocumentListener(this);
+        //MODELName.getDocument().addDocumentListener(this);
         fieldJournalization.addItemListener(this);
         fieldJournalization.addFocusListener(this);
 
@@ -138,16 +152,19 @@ public class ModelInputContent extends PanelInputContentId {
         panelAudit.add(fieldAuditException, gbc);
     }
 
-    protected void changeField(DocumentEvent e) {
-        super.changeField(e);
+    protected SComponent changeField(DocumentEvent e) {
 
+            Document doc = e.getDocument();
+
+            // Autres champs que les champs Id
+            return null;
     }
 
 
 
     @Override
     protected void changeFieldSelected(ItemEvent e) {
-            Object source = e.getSource();
+        Object source = e.getSource();
 
     }
 
@@ -175,62 +192,143 @@ public class ModelInputContent extends PanelInputContentId {
 
     @Override
     public boolean checkDatasPreSave(boolean unitaire) {
-        boolean ok = super.checkDatasPreSaveId(unitaire);
-
-        return ok;
+        return true;
     }
 
 
+    @Override
+    protected void enabledContentCustom() {
+
+    }
+
+    @Override
+    protected JPanel getPanelCustom() {
+        return null;
+    }
+
+    @Override
+    protected void createContentCustom() {
+
+    }
 
     @Override
     protected boolean checkDatas(){
-        boolean ok = super.checkDatasId();
+        boolean ok = checkDatasPreSave(false);
         // Autre attributs
         return ok ;
     }
 
-    @Override
-    protected boolean checkName(boolean unitaire) {
-        if (getScope() == ModelEditor.MODEL) {
-            return checkModelName(unitaire);
-        }
-        if (getScope() == ModelEditor.PACKAGE) {
-            return checkPackageName(unitaire);
-        }
-        return true;
-    }
-
-    private boolean checkModelName(boolean unitaire) {
-        return super.checkInput(fieldName, unitaire, MCDModelService.checkName(fieldName.getText()));
-    }
-
-    private boolean checkPackageName(boolean unitaire) {
-        return super.checkInput(fieldName, unitaire, MCDPackageService.checkName(fieldName.getText()));
-    }
 
     @Override
-    protected boolean checkShortName(boolean unitaire) {
+    protected int getLengthMax(int naming) {
         if (getScope() == ModelEditor.MODEL) {
-            return checkModelShortName(unitaire);
+            if (naming == MVCCDElement.SCOPENAME) {
+                return Preferences.MODEL_NAME_LENGTH;
+            }
+            if (naming == MVCCDElement.SCOPESHORTNAME) {
+                return Preferences.MODEL_SHORT_NAME_LENGTH;
+            }
+            if (naming == MVCCDElement.SCOPELONGNAME) {
+                return Preferences.MODEL_LONG_NAME_LENGTH;
+            }
         }
         if (getScope() == ModelEditor.PACKAGE) {
-            return checkPackageShortName(unitaire);
+            if (naming == MVCCDElement.SCOPENAME) {
+                return Preferences.PACKAGE_NAME_LENGTH;
+            }
+            if (naming == MVCCDElement.SCOPESHORTNAME) {
+                return Preferences.PACKAGE_SHORT_NAME_LENGTH;
+            }
+            if (naming == MVCCDElement.SCOPELONGNAME) {
+                return Preferences.PACKAGE_LONG_NAME_LENGTH;
+            }
         }
-        return true;
+        return -1;
+    }
+    @Override
+    protected String getElementAndNaming(int naming) {
+
+        if (getScope() == ModelEditor.MODEL) {
+            if (naming == MVCCDElement.SCOPENAME) {
+                return "model.and.name";
+            }
+            if (naming == MVCCDElement.SCOPESHORTNAME) {
+                return "model.and.short.name";
+            }
+            if (naming == MVCCDElement.SCOPELONGNAME) {
+                return "model.and.long.name";
+            }
+        }
+        if (getScope() == ModelEditor.PACKAGE) {
+            if (naming == MVCCDElement.SCOPENAME) {
+                return "package.and.name";
+            }
+            if (naming == MVCCDElement.SCOPESHORTNAME) {
+                return "package.and.short.name";
+            }
+            if (naming == MVCCDElement.SCOPELONGNAME) {
+                return "package.and.long.name";
+            }
+        }
+        return null;
+
     }
 
-    private boolean checkModelShortName(boolean unitaire) {
-        return super.checkInput(fieldShortName, unitaire, MCDModelService.checkShortName(fieldShortName.getText()));
+    @Override
+    protected String getNamingAndBrothersElements(int naming) {
+        if (getScope() == ModelEditor.MODEL) {
+            if (naming == MVCCDElement.SCOPENAME) {
+                return "naming.a.brother.model";
+            } else{
+                return "naming.brother.model";
+            }
+        }
+        if (getScope() == ModelEditor.PACKAGE) {
+            if (naming == MVCCDElement.SCOPENAME) {
+                return "naming.a.brother.package";
+            } else{
+                return "naming.brother.package";
+            }
+        }
+        return null;
     }
 
-    private boolean checkPackageShortName(boolean unitaire) {
-        return super.checkInput(fieldShortName, unitaire, MCDPackageService.checkShortName(fieldShortName.getText()));
+    @Override
+    protected ArrayList<MCDElement> getParentCandidates(IMCDModel iMCDModelContainer) {
+        if (getScope() == ModelEditor.PACKAGE) {
+            ArrayList<IMCDContPackages> iMCDContPackages = MCDPackageService.getIMCDContPackagesInIModel(iMCDModelContainer);
+            // Supprimer l'élément lui-même qui ne peut être son propre conteneur
+            if (getEditor().getMvccdElementCrt() != null){
+                iMCDContPackages.remove(getEditor().getMvccdElementCrt());
+            }
+            return MCDPackageService.toMCDElements(iMCDContPackages);
+        }
+
+        if (getScope() == ModelEditor.MODEL) {
+            ArrayList<MCDElement> mcdContModels = new ArrayList<MCDElement>();
+            mcdContModels.add(ProjectService.getMCDContModels());
+            return mcdContModels;
+        }
+
+        return null;
+    }
+
+    @Override
+    protected MCDElement getParentByNamePath(int pathname, String text) {
+        if (getScope() == ModelEditor.PACKAGE) {
+            return (MCDElement) IMCDContPackages.getIMCDContPackagesByNamePath(MCDElementService.PATHNAME, text);
+        }
+        if (getScope() == ModelEditor.MODEL) {
+            return (MCDElement) getEditor().getMvccdElementParent();
+        }
+
+        return null;
     }
 
 
     @Override
     protected void initDatas() {
-        super.initDatasId();
+        super.initDatas();
 
         Preferences preferences = PreferencesManager.instance().preferences();
 
@@ -271,7 +369,7 @@ public class ModelInputContent extends PanelInputContentId {
 
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
-        super.loadDatasId(mvccdElement);
+        super.loadDatas(mvccdElement);
         IMCDTraceability iMCDTraceablity = (IMCDTraceability)  mvccdElement;
         fieldJournalization.setSelected(iMCDTraceablity.isMcdJournalization());
         fieldJournalizationException.setSelected(iMCDTraceablity.isMcdJournalizationException());
@@ -292,7 +390,7 @@ public class ModelInputContent extends PanelInputContentId {
     @Override
     public void saveDatas(MVCCDElement mvccdElement) {
 
-        super.saveDatasId(mvccdElement);
+        super.saveDatas(mvccdElement);
         Project project = MVCCDManager.instance().getProject();
         MCDAdjustPref MCDAdjustPref = new MCDAdjustPref(project);
 
@@ -325,7 +423,7 @@ public class ModelInputContent extends PanelInputContentId {
 
     private void enabledContent() {
         Preferences preferences = PreferencesManager.instance().preferences();
-        //entityJournal.setEnabled(preferences.getMCD_JOURNALIZATION_EXCEPTION());
+        //MODELJournal.setEnabled(preferences.getMCD_JOURNALIZATION_EXCEPTION());
     }
 
     private int getScope(){

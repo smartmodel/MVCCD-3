@@ -17,9 +17,7 @@ public class AssociationButtonsContent extends PanelButtonsContent {
 
 
     @Override
-    protected MVCCDElement createNewMVCCDElement() {
-        MCDRelations mcdRelations = (MCDRelations) getEditor().getMvccdElementParent();
-
+    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         AssociationInputContent inputContent = (AssociationInputContent)  getEditor().getInput().getInputContent();
 
         MCDEntity mcdEntityFrom = inputContent.getMCDEntityFrom();
@@ -29,7 +27,7 @@ public class AssociationButtonsContent extends PanelButtonsContent {
         MCDContEndRels mcdContEndRelsTo = mcdEntityTo.getMCDContRelations();
 
         MCDAssociation mcdAssociation = MVCCDElementFactory.instance().createMCDAssociation(
-                mcdRelations, mcdContEndRelsFrom, mcdContEndRelsTo);
+                (MCDContRelations)parent, mcdContEndRelsFrom, mcdContEndRelsTo);
         return mcdAssociation;
     }
 
@@ -39,6 +37,8 @@ public class AssociationButtonsContent extends PanelButtonsContent {
     protected String getHelpFileName() {
         return Preferences.FILE_HELP_ASSOCIATION_NAME;
     }
+
+
 
 
 }

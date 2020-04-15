@@ -3,6 +3,8 @@ package window.editor.attribute;
 import datatypes.*;
 import main.MVCCDElement;
 import mcd.MCDAttribute;
+import mcd.MCDElement;
+import mcd.interfaces.IMCDModel;
 import mcd.services.MCDAttributeService;
 import mcd.services.MCDEntityService;
 import messages.MessagesBuilder;
@@ -17,10 +19,7 @@ import stereotypes.StereotypesManager;
 import utilities.UtilDivers;
 import utilities.window.editor.MDDatatypeTreeDialog;
 import utilities.window.editor.PanelInputContentId;
-import utilities.window.scomponents.SButton;
-import utilities.window.scomponents.SCheckBox;
-import utilities.window.scomponents.SComboBox;
-import utilities.window.scomponents.STextField;
+import utilities.window.scomponents.*;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
 
@@ -28,6 +27,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.Document;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -69,20 +69,23 @@ public class AttributeInputContent extends PanelInputContentId {
 
     public AttributeInputContent(AttributeInput attributeInput)     {
         super(attributeInput);
+        /*
         attributeInput.setPanelContent(this);
         createContent();
         super.addContent(panel);
         super.initOrLoadDatas();
         enabledContent();
 
+         */
+
     }
 
 
 
+    @Override
+    protected void createContentIdCustom() {
 
-    private void createContent() {
-
-        createContentId();
+        //createContentId();
 
         //attributeNameAID.setPreferredSize((new Dimension(50, Preferences.EDITOR_FIELD_HEIGHT)));
 
@@ -341,9 +344,13 @@ public class AttributeInputContent extends PanelInputContentId {
     }
 
 
-    protected void changeField(DocumentEvent e) {
-        // Les champs obligatoires sont testés sur la procédure checkDatasPreSave()
+    protected SComponent changeField(DocumentEvent e) {
 
+
+            Document doc = e.getDocument();
+
+            // Autres champs que les champs Id
+            return null;
     }
 
 
@@ -588,8 +595,8 @@ public class AttributeInputContent extends PanelInputContentId {
     public boolean checkDatasPreSave(boolean unitaire) {
         datatypeSize.setColorNormal();
         datatypeScale.setColorNormal();
-        boolean ok = super.checkDatasPreSaveId(unitaire);
-        ok = checkDatatypeSize(unitaire && ok) && ok;
+        boolean ok ;
+        ok = checkDatatypeSize(unitaire) ;
         ok = checkDatatypeScale(unitaire && ok) && ok;
         if (ok){
             ok =  checkSizeAndScale(unitaire && ok)  && ok;
@@ -598,8 +605,23 @@ public class AttributeInputContent extends PanelInputContentId {
     }
 
 
+    @Override
+    protected void enabledContentCustom() {
+
+    }
+
+    @Override
+    protected JPanel getPanelCustom() {
+        return null;
+    }
+
+    @Override
+    protected void createContentCustom() {
+
+    }
+
     protected boolean checkDatas(){
-        boolean ok = checkDatasId();
+        boolean ok = checkDatasPreSave(false);
         // Autre attributs
         return ok;
     }
@@ -661,8 +683,40 @@ public class AttributeInputContent extends PanelInputContentId {
     }
 
     @Override
+    protected String getElementAndNaming(int naming) {
+        return null;
+    }
+
+    @Override
+    protected String getNamingAndBrothersElements(int naming) {
+        return null;
+    }
+
+    @Override
     protected boolean checkShortName(boolean unitaire) {
         return super.checkInput(fieldShortName, unitaire, MCDAttributeService.checkShortName(fieldShortName.getText()));
+    }
+
+
+
+    @Override
+    protected boolean checkLongName(boolean unitaire) {
+        return true;
+    }
+
+    @Override
+    protected int getLengthMax(int naming) {
+        return 0;
+    }
+
+    @Override
+    protected ArrayList<MCDElement> getParentCandidates(IMCDModel iMCDModelContainer) {
+        return null;
+    }
+
+    @Override
+    protected MCDElement getParentByNamePath(int pathname, String text) {
+        return null;
     }
 
     private boolean checkDatatypeSize(boolean unitaire) {
@@ -696,7 +750,7 @@ public class AttributeInputContent extends PanelInputContentId {
 
         aid.setSelected(false);
 
-        super.initDatasId();
+        super.initDatas();
         Preferences preferences = PreferencesManager.instance().preferences();
         datatypeName.setSelectedFirst();
         datatypeSize.setText("");
@@ -723,7 +777,7 @@ public class AttributeInputContent extends PanelInputContentId {
 
         aid.setSelected(mcdAttribute.isAid());
 
-        super.loadDatasId(mcdAttribute);
+        super.loadDatas(mcdAttribute);
 
         if (mcdAttribute.isAid()) {
             // redondance entre les 2 champs attributeName et attributeNameAID
@@ -788,7 +842,7 @@ public class AttributeInputContent extends PanelInputContentId {
             mcdAttribute.setAid(aid.isSelected());
         }
 
-        super.saveDatasId(mcdAttribute);
+        super.saveDatas(mcdAttribute);
 
 
         String text = (String) datatypeName.getSelectedItem();

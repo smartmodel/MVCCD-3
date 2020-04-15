@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public abstract class ProjectElement extends MVCCDElement {
 
+    private static final long serialVersionUID = 1000;
+
     private int id;
 
     public ProjectElement(ProjectElement parent) {

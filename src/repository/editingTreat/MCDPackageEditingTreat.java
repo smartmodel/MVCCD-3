@@ -9,8 +9,9 @@ import window.editor.model.ModelEditor;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
-public class MCDPackageEditingTreat {
+public class MCDPackageEditingTreat extends EditingTreat{
 
+    /*
     public static void treatNew(Window owner, MCDElement parent, DefaultMutableTreeNode node) {
 
         ModelEditor fen = new ModelEditor(owner, parent, null,
@@ -23,15 +24,28 @@ public class MCDPackageEditingTreat {
         }
     }
 
+     */
 
+/*
     public static void treatUpdate(Window owner,
                                    MCDPackage mcdPackage) {
+        MCDElement parentBefore = (MCDElement) mcdPackage.getParent();
         ModelEditor fen = new ModelEditor(owner , (MCDElement) mcdPackage.getParent(), mcdPackage,
                 DialogEditor.UPDATE, ModelEditor.PACKAGE);
         fen.setVisible(true);
         if (fen.isDatasChanged()){
             MVCCDManager.instance().setDatasProjectChanged(true);
         }
+        MCDElement parentAfter =  (MCDElement) mcdPackage.getParent();
+        if (parentBefore != parentAfter){
+            parentBefore.getChilds().remove(mcdPackage);
+            MVCCDManager.instance().changeParentMVCCDElementInRepository(mcdPackage, parentBefore );
+        }
     }
-
+*/
+    @Override
+    protected DialogEditor getDialogEditor(Window owner, MCDElement parent, MCDElement mcdElement, String mode) {
+        return new ModelEditor(owner , parent, mcdElement,
+                mode, ModelEditor.PACKAGE);
+    }
 }

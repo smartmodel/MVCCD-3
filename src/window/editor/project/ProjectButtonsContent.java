@@ -19,7 +19,7 @@ public class ProjectButtonsContent extends PanelButtonsContent implements Action
 
 
     @Override
-    protected MVCCDElement createNewMVCCDElement() {
+    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         JTextField projectName = getEditorContent().getProjectName();
         Project project = MVCCDFactory.instance().createProject(projectName.getText());
         return project;

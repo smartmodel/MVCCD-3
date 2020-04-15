@@ -113,6 +113,7 @@ public class PreferencesManager {
         to.setMCD_AUDIT(from.getMCD_AUDIT());
         to.setMCD_AUDIT_EXCEPTION(from.getMCD_AUDIT_EXCEPTION());
         to.setMCD_TREE_NAMING_ASSOCIATION(from.getMCD_TREE_NAMING_ASSOCIATION());
+        to.setMCD_MODE_NAMING_LONG_NAME(from.getMCD_MODE_NAMING_LONG_NAME());
     }
 
     public void loadOrCreateFileApplicationPreferences() {

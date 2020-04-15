@@ -52,7 +52,7 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
             treatProject(mvccdWindow);
         }
 
-        if (node.getUserObject() instanceof MCDModels) {
+        if (node.getUserObject() instanceof MCDContModels) {
             treatModels(mvccdWindow);
         }
 
@@ -68,7 +68,7 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
             treatDiagrams(mvccdWindow);
         }
 
-        if (node.getUserObject() instanceof MCDEntities) {
+        if (node.getUserObject() instanceof MCDContEntities) {
             treatEntities (mvccdWindow);
         }
 
@@ -92,7 +92,7 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
 
         }
 
-        if (node.getUserObject() instanceof MCDRelations) {
+        if (node.getUserObject() instanceof MCDContRelations) {
             treatRelations(mvccdWindow);
 
         }
@@ -217,18 +217,18 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
     }
 
     private void treatModels(MVCCDWindow mvccdWindow) {
-        MCDModels mcdModels = (MCDModels) node.getUserObject();
+        MCDContModels mcdContModels = (MCDContModels) node.getUserObject();
         if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_MODELS_MANY()) {
             final JMenuItem mcdModelCreate = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.model"));
             this.add(mcdModelCreate);
             mcdModelCreate.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    MCDModelEditingTreat.treatNew(mvccdWindow, mcdModels, node);
+                    MCDModelEditingTreat.treatNew(mvccdWindow, mcdContModels, node);
                 }
             });
         } else {
-            packageNew(mvccdWindow, mcdModels,true);
+            packageNew(mvccdWindow, mcdContModels,true);
         }
     }
 
@@ -254,9 +254,10 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
         mcdPackageEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                MCDPackageEditingTreat.treatUpdate(mvccdWindow, mcdPackage);
+                new MCDPackageEditingTreat().treatUpdate(mvccdWindow, mcdPackage);
             }
         });
+
         packageNew(mvccdWindow, mcdPackage, false);
 
 
@@ -278,12 +279,12 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
     private void treatEntities(MVCCDWindow mvccdWindow) {
         JMenuItem mcdEntitiesNewEntity = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.entity"));
         this.add(mcdEntitiesNewEntity);
-        MCDEntities mcdEntities = (MCDEntities) node.getUserObject();
+        MCDContEntities mcdContEntities = (MCDContEntities) node.getUserObject();
         mcdEntitiesNewEntity.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Debug.println("Création d'une nouvelle entité");
-                MCDEntityEditingTreat.treatNew(mvccdWindow, mcdEntities, node);
+                MCDEntityEditingTreat.treatNew(mvccdWindow, mcdContEntities, node);
             }
         });
     }
@@ -361,14 +362,14 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
     }
 
     private void treatRelations(MVCCDWindow mvccdWindow) {
-        MCDRelations mcdRelations = (MCDRelations) node.getUserObject();
+        MCDContRelations mcdContRelations = (MCDContRelations) node.getUserObject();
 
         JMenuItem mcdRelationsNewAssociation = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new.association"));
         this.add(mcdRelationsNewAssociation);
         mcdRelationsNewAssociation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                 MCDAssociationEditingTreat.treatNew(mvccdWindow, mcdRelations);
+                 MCDAssociationEditingTreat.treatNew(mvccdWindow, mcdContRelations);
             }
         });
 
@@ -401,7 +402,6 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
         JMenuItem mcdAssociationEdit = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.edit.association"));
         this.add(mcdAssociationEdit);
         MCDAssociation mcdAssociation = (MCDAssociation) node.getUserObject();
-        System.out.println(node.getUserObject().getClass().getName());
         mcdAssociationEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -425,7 +425,7 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
             mcdPackageCreate.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    MCDPackageEditingTreat.treatNew(owner, parent, node);
+                    new MCDPackageEditingTreat().treatNew(owner, parent);
                 }
             });
         }

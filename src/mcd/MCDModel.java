@@ -1,14 +1,12 @@
 package mcd;
 
+import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDNamePathParent;
 import mcd.interfaces.IMCDTraceability;
-import project.ProjectElement;
-import utilities.window.scomponents.SCheckBox;
 
-import javax.swing.*;
-
-public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability, IMCDNamePathParent {
+public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
+        IMCDNamePathParent, IMCDContPackages {
 
     private static final long serialVersionUID = 1000;
 
@@ -19,12 +17,12 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
     private boolean mcdAuditException = false;
 
 
-    public MCDModel(MCDModels parent, String name) {
+    public MCDModel(MCDContModels parent, String name) {
 
         super(parent, name);
     }
 
-    public MCDModel(MCDModels parent) {
+    public MCDModel(MCDContModels parent) {
 
         super (parent);
     }

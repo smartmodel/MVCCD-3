@@ -59,7 +59,7 @@ public class Project extends ProjectElement {
              Preferences profilePref = ProfileManager.instance().loadFileProfile(
                       Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR +this.getProfileFileName());
              if (profilePref != null){
-                 profilePref.setParent(profile);
+                 profilePref.setOrChangeParent(profile);
                  profilePref.setName(Preferences.REPOSITORY_PREFERENCES_PROFILE_NAME);
                  PreferencesManager.instance().setProfilePref(profilePref);
                  PreferencesManager.instance().copyProfilePref();

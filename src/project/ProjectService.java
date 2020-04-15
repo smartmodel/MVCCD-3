@@ -2,6 +2,7 @@ package project;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
+import mcd.MCDContModels;
 import mcd.MCDElement;
 import mcd.MCDEntity;
 
@@ -110,14 +111,13 @@ public class ProjectService {
         return resultat;
     }
 
-    public static MCDEntity getMCDEntityByNamePath(int pathMode, String namePath){
-        for (MCDElement mcdElement : getAllMCDElementsByNamePath(pathMode, namePath)){
-           if (mcdElement instanceof MCDEntity){
-                return (MCDEntity) mcdElement;
+    public static MCDContModels getMCDContModels() {
+        for (MVCCDElement mvccdElement : getAllProjectElements()) {
+            if (mvccdElement instanceof MCDContModels) {
+                return (MCDContModels) mvccdElement;
             }
         }
         return null;
     }
- 
 }
 

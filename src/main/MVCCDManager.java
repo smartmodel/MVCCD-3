@@ -87,12 +87,35 @@ public class MVCCDManager {
         setFileProjectCurrent(null);
     }
 
-
+    //TODO-0  A remplacer par même méthode sans nodeParent
     public void addNewMVCCDElementInRepository(MVCCDElement mvccdElementNew, DefaultMutableTreeNode nodeParent) {
         DefaultMutableTreeNode nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
         getWinRepositoryContent().getTree().changeModel(repository);
         getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(nodeNew.getPath()));
         setDatasProjectChanged(true);
+    }
+
+    public void addNewMVCCDElementInRepository(MVCCDElement mvccdElementNew) {
+        ProjectElement parent = (ProjectElement) mvccdElementNew.getParent();
+        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(parent.getId());
+        DefaultMutableTreeNode nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
+        getWinRepositoryContent().getTree().changeModel(repository);
+        getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(nodeNew.getPath()));
+        setDatasProjectChanged(true);
+    }
+
+    public void removeMVCCDElementInRepository(MVCCDElement mvccdElementToRemove, MVCCDElement parent) {
+        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(((ProjectElement)parent).getId());
+        ProjectElement child = (ProjectElement) mvccdElementToRemove;
+        DefaultMutableTreeNode nodeChild= ProjectService.getNodeById(child.getId());
+        MVCCDManager.instance().getRepository().removeNodeFromParent(nodeChild);
+        getWinRepositoryContent().getTree().changeModel(repository);
+        setDatasProjectChanged(true);
+    }
+
+    public void changeParentMVCCDElementInRepository(MVCCDElement mvccdElementChanged, MVCCDElement oldParent) {
+        removeMVCCDElementInRepository(mvccdElementChanged, oldParent);
+        addNewMVCCDElementInRepository(mvccdElementChanged);
     }
 
     public void showNewNodeInRepository(DefaultMutableTreeNode node) {

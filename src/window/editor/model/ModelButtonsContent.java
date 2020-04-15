@@ -17,16 +17,14 @@ public class ModelButtonsContent extends PanelButtonsContent {
 
 
     @Override
-    protected MVCCDElement createNewMVCCDElement() {
+    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         int scope = ((ModelEditor) getEditor()).getScope();
         if (scope == ModelEditor.MODEL) {
-            MCDModels parent = (MCDModels) getEditor().getMvccdElementParent();
-            MCDModel mcdModel = MVCCDElementFactory.instance().createMCDModel(parent);
+            MCDModel mcdModel = MVCCDElementFactory.instance().createMCDModel((MCDContModels) parent);
             return mcdModel;
         }
         if (scope == ModelEditor.PACKAGE) {
-            MCDElement parent = (MCDElement) getEditor().getMvccdElementParent();
-            MCDPackage mcdPackage = MVCCDElementFactory.instance().createMCDPackage(parent);
+            MCDPackage mcdPackage = MVCCDElementFactory.instance().createMCDPackage((MCDElement) parent);
             return mcdPackage;
         }
 
@@ -38,6 +36,8 @@ public class ModelButtonsContent extends PanelButtonsContent {
     protected String getHelpFileName() {
         return Preferences.FILE_HELP_ASSOCIATION_NAME;
     }
+
+
 
 
 }

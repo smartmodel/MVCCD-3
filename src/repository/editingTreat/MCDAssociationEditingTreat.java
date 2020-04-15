@@ -2,13 +2,12 @@ package repository.editingTreat;
 
 import main.MVCCDManager;
 import mcd.MCDAssociation;
-import mcd.MCDRelations;
+import mcd.MCDContRelations;
 import mcd.services.MCDAssociationService;
 import messages.MessagesBuilder;
 import utilities.window.editor.DialogEditor;
 import project.ProjectService;
 import utilities.window.DialogMessage;
-import window.editor.entity.EntityEditor;
 import window.editor.relation.association.AssociationEditor;
 
 import javax.swing.*;
@@ -19,7 +18,7 @@ public class MCDAssociationEditingTreat {
 
 
     public static MCDAssociation treatNew(Window owner,
-                                          MCDRelations parent) {
+                                          MCDContRelations parent) {
 
         DefaultMutableTreeNode nodeParent = ProjectService.getNodeById((int) parent.getId());
         AssociationEditor fen = MCDAssociationEditingTreat.showEditorAssociation(owner, parent, null, DialogEditor.NEW);
@@ -34,8 +33,7 @@ public class MCDAssociationEditingTreat {
 
     public static void treatUpdate(Window owner,
                                    MCDAssociation element) {
-        System.out.println("association :   " + element.getName() +   "   " + element.getNameTree() );
-        AssociationEditor fen = showEditorAssociation(owner , (MCDRelations) element.getParent(), element, DialogEditor.UPDATE);
+        AssociationEditor fen = showEditorAssociation(owner , (MCDContRelations) element.getParent(), element, DialogEditor.UPDATE);
         if (fen.isDatasChanged()){
             MVCCDManager.instance().setDatasProjectChanged(true);
         }
@@ -53,7 +51,7 @@ public class MCDAssociationEditingTreat {
         } else {
             String message = MessagesBuilder.getMessagesProperty ("dialog.check.association.error", new String[] {element.getName()});
             if (DialogMessage.showConfirmYesNo_Yes(window, message) == JOptionPane.YES_OPTION){
-                AssociationEditor fen = showEditorAssociation(window, (MCDRelations) element.getParent(), element, DialogEditor.UPDATE);
+                AssociationEditor fen = showEditorAssociation(window, (MCDContRelations) element.getParent(), element, DialogEditor.UPDATE);
             }
         }
     }
@@ -61,7 +59,7 @@ public class MCDAssociationEditingTreat {
 
 
     public static AssociationEditor showEditorAssociation(Window owner,
-                                                      MCDRelations parent,
+                                                      MCDContRelations parent,
                                                       MCDAssociation mcdAssociation,
                                                       String mode) {
         AssociationEditor fen = new AssociationEditor(owner , parent, mcdAssociation, mode);

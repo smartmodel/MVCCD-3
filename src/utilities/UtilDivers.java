@@ -110,4 +110,26 @@ public class UtilDivers {
             }
         }
     }
+
+    public static String toNoFree(String str){
+        String noFree = "";
+        if (StringUtils.isNotEmpty(str)) {
+            noFree = StringUtils.remove(str, ' ');
+
+            noFree = noFree.replace('à', 'a');
+            noFree = noFree.replace('â', 'a');
+            noFree = noFree.replace('ä', 'a');
+            noFree = noFree.replace('ç', 'c');
+            noFree = noFree.replace('é', 'e');
+            noFree = noFree.replace('è', 'e');
+            noFree = noFree.replace('ê', 'e');
+            noFree = noFree.replace('ë', 'e');
+            noFree = noFree.replace('ò', 'o');
+            noFree = noFree.replace('ö', 'o');
+            noFree = noFree.replace('ù', 'u');
+            noFree = noFree.replace('û', 'u');
+            noFree = noFree.replace('ü', 'u');
+        }
+        return noFree;
+    }
 }

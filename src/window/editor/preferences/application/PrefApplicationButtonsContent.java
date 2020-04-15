@@ -19,11 +19,9 @@ public class PrefApplicationButtonsContent extends PanelButtonsContent implement
         return null;
     }
 
-
     @Override
-    protected MVCCDElement createNewMVCCDElement() {
+    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         return null;
     }
-
 
 }

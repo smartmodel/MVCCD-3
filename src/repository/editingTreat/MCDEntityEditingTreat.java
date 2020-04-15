@@ -1,7 +1,7 @@
 package repository.editingTreat;
 
 import main.MVCCDManager;
-import mcd.MCDEntities;
+import mcd.MCDContEntities;
 import mcd.MCDEntity;
 import mcd.services.MCDEntityService;
 import messages.MessagesBuilder;
@@ -17,10 +17,10 @@ public class MCDEntityEditingTreat {
 
 
     public static void treatNew(Window owner,
-                                MCDEntities mcdEntities,
+                                MCDContEntities mcdContEntities,
                                 DefaultMutableTreeNode nodeEntities) {
 
-        EntityEditor fen = MCDEntityEditingTreat.showEditorEntity(owner, mcdEntities, null, EntityEditor.NEW);
+        EntityEditor fen = MCDEntityEditingTreat.showEditorEntity(owner, mcdContEntities, null, EntityEditor.NEW);
         MCDEntity mcdEntityNew = (MCDEntity) fen.getMvccdElementNew();
         if (mcdEntityNew != null) {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mcdEntityNew, nodeEntities);
@@ -32,7 +32,7 @@ public class MCDEntityEditingTreat {
     public static void treatUpdate(Window owner,
                                    MCDEntity mcdEntity) {
 
-        EntityEditor fen = showEditorEntity(owner , (MCDEntities) mcdEntity.getParent(), mcdEntity, EntityEditor.UPDATE);
+        EntityEditor fen = showEditorEntity(owner , (MCDContEntities) mcdEntity.getParent(), mcdEntity, EntityEditor.UPDATE);
         if (fen.isDatasChanged()){
             MVCCDManager.instance().setDatasProjectChanged(true);
         }
@@ -46,7 +46,7 @@ public class MCDEntityEditingTreat {
             String message = MessagesBuilder.getMessagesProperty ("dialog.check.entity.error", new String[] {mcdEntity.getName()});
             if (DialogMessage.showConfirmYesNo_Yes(window, message) == JOptionPane.YES_OPTION){
                 Debug.println("Correction de l'entité");
-                EntityEditor fen = showEditorEntity(window, (MCDEntities) mcdEntity.getParent(), mcdEntity, EntityEditor.UPDATE);
+                EntityEditor fen = showEditorEntity(window, (MCDContEntities) mcdEntity.getParent(), mcdEntity, EntityEditor.UPDATE);
             }
         }
     }
@@ -54,7 +54,7 @@ public class MCDEntityEditingTreat {
 
 
     public static EntityEditor showEditorEntity(Window owner,
-                                          MCDEntities parent,
+                                          MCDContEntities parent,
                                           MCDEntity mcdEntity,
                                           String mode) {
         EntityEditor fen = new EntityEditor(owner , parent, mcdEntity, mode);

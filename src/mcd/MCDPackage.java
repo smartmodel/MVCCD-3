@@ -1,13 +1,14 @@
 package mcd;
 
 import main.MVCCDElement;
+import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDNamePathParent;
 import mcd.interfaces.IMCDTraceability;
 import preferences.Preferences;
 import project.ProjectElement;
 import utilities.files.UtilXML;
 
-public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDNamePathParent {
+public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDNamePathParent, IMCDContPackages {
 
     private static final long serialVersionUID = 1000;
 

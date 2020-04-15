@@ -19,9 +19,9 @@ public class PrefMCDButtonsContent extends PanelButtonsContent implements Action
         return null;
     }
 
-
     @Override
-    protected MVCCDElement createNewMVCCDElement() {
+    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         return null;
     }
+
 }

@@ -9,6 +9,7 @@ import preferences.PreferencesSaver;
 import project.Project;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.SCheckBox;
+import utilities.window.scomponents.SComponent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -136,13 +137,28 @@ public class PrefApplicationInputContent extends PanelInputContent {
     }
 
     @Override
+    protected void enabledContentCustom() {
+
+    }
+
+    @Override
+    protected JPanel getPanelCustom() {
+        return null;
+    }
+
+    @Override
+    protected void createContentCustom() {
+
+    }
+
+    @Override
     protected boolean checkDatas() {
         return true;
     }
 
     @Override
-    protected void changeField(DocumentEvent e) {
-
+    protected SComponent changeField(DocumentEvent e) {
+        return null;
     }
 
     @Override
