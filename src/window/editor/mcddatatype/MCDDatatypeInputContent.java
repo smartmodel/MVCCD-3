@@ -19,7 +19,7 @@ import java.awt.event.ItemEvent;
 
 public class MCDDatatypeInputContent extends PanelInputContent{
 
-    private JPanel panel = new JPanel();
+    //private JPanel panel = new JPanel();
     private STextField mcdDatatypeName = new STextField(this);
     private SCheckBox abstrait = new SCheckBox(this);
     private STextField lienProg = new STextField(this);
@@ -51,17 +51,20 @@ public class MCDDatatypeInputContent extends PanelInputContent{
 
     public MCDDatatypeInputContent(MCDDatatypeInput entityInput)     {
         super(entityInput);
+        /*
         entityInput.setPanelContent(this);
         createContent();
         super.addContent(panel);
         super.initOrLoadDatas();
         enabledContent();
+
+         */
      }
 
 
 
 
-    private void createContent() {
+    protected void createContentCustom() {
 
         mcdDatatypeName.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
         mcdDatatypeName.setToolTipText("Nom de type");
@@ -94,7 +97,7 @@ public class MCDDatatypeInputContent extends PanelInputContent{
         super.getsComponents().add(scaleMax);
         super.getsComponents().add(scaleMaxInheritFrom);
 
-        panel.setLayout(new GridBagLayout());
+        panelInputContentCustom.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(10, 10, 0, 0);
@@ -103,20 +106,20 @@ public class MCDDatatypeInputContent extends PanelInputContent{
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        panel.add(new JLabel("Nom : "), gbc);
+        panelInputContentCustom.add(new JLabel("Nom : "), gbc);
         gbc.gridx = 1;
-        panel.add(mcdDatatypeName, gbc);
+        panelInputContentCustom.add(mcdDatatypeName, gbc);
 
         gbc.gridx++;
-        panel.add(new JLabel("Abstrait : "), gbc);
+        panelInputContentCustom.add(new JLabel("Abstrait : "), gbc);
         gbc.gridx++;
-        panel.add(abstrait, gbc);
+        panelInputContentCustom.add(abstrait, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Lien prog. :"),gbc);
+        panelInputContentCustom.add(new JLabel("Lien prog. :"),gbc);
         gbc.gridx = 1;
-        panel.add(lienProg, gbc);
+        panelInputContentCustom.add(lienProg, gbc);
 
         Border border = BorderFactory.createLineBorder(Color.black);
 
@@ -125,14 +128,14 @@ public class MCDDatatypeInputContent extends PanelInputContent{
         gbc.gridwidth = 4;
 
         createPanelSize(border);
-        panel.add(panelSize, gbc);
+        panelInputContentCustom.add(panelSize, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
         createPanelScale(border);
 
-        panel.add(panelScale, gbc);
-        this.add(panel);
+        panelInputContentCustom.add(panelScale, gbc);
+        this.add(panelInputContentCustom);
 
     }
 
@@ -327,15 +330,6 @@ public class MCDDatatypeInputContent extends PanelInputContent{
 
     }
 
-    @Override
-    protected JPanel getPanelCustom() {
-        return null;
-    }
-
-    @Override
-    protected void createContentCustom() {
-
-    }
 
     protected boolean checkDatas(){
             return true;

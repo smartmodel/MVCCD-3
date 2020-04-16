@@ -3,6 +3,7 @@ package mcd.services;
 import mcd.MCDContEntities;
 import mcd.MCDElement;
 import mcd.MCDEntity;
+import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
 
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ public class MCDContEntitiesService {
         ArrayList<MCDContEntities> resultat =  new ArrayList<MCDContEntities>();
         for (MCDElement element :  IMCDModelService.getMCDElementsByClassName(
                 iMCDModel, false,MCDContEntities.class.getName())){
+            resultat.add((MCDContEntities) element);
+
         }
         return resultat;
     }

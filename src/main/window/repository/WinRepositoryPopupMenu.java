@@ -36,6 +36,12 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
 
     private void init() {
         MVCCDWindow mvccdWindow = MVCCDManager.instance().getMvccdWindow();
+
+        if(PreferencesManager.instance().getApplicationPref().isDEBUG()){
+            if(PreferencesManager.instance().getApplicationPref().getDEBUG_INSPECT_OBJECT_IN_TREE()) {
+                treatInspectObject();
+            }
+        }
         if(node.getUserObject() instanceof MVCCDElementApplicationPreferences){
             treatApplicationPref(mvccdWindow);
         }
@@ -105,7 +111,17 @@ public class WinRepositoryPopupMenu extends JPopupMenu{
         //TODO-0 Mise à jour de l'arbre
     }
 
+    private void treatInspectObject() {
+        JMenuItem inspecter = new JMenuItem("Inpecter l'objet --> Résultat dans la console!");
+        this.add(inspecter);
+        inspecter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.out.println(node.getUserObject().getClass().getName());
+            }
+        });
 
+    }
 
 
     private void treatApplicationPref(MVCCDWindow mvccdWindow) {

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class ProjectInputContent extends PanelInputContent {
 
-    private JPanel panel = new JPanel();
+    //private JPanel panel = new JPanel();
     private STextField projectName = new STextField(this);
     private SComboBox<String> profileFileName = new SComboBox<>(this);
     private SCheckBox fieldModelsMany = new SCheckBox(this);
@@ -32,15 +32,18 @@ public class ProjectInputContent extends PanelInputContent {
 
     public ProjectInputContent(ProjectInput projectInput)     {
         super(projectInput);
+        /*
         projectInput.setPanelContent(this);
         createContent();
         super.addContent(panel);
         super.initOrLoadDatas();
+
+         */
     }
 
 
 
-    private void createContent() {
+    protected void createContentCustom() {
         Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
 
         projectName.setPreferredSize((new Dimension(300,20)));
@@ -79,7 +82,7 @@ public class ProjectInputContent extends PanelInputContent {
         super.getsComponents().add(fieldPackagesAutorizeds);
 
 
-        panel.setLayout(new GridBagLayout());
+        panelInputContentCustom.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(10, 10, 0, 0);
@@ -88,16 +91,16 @@ public class ProjectInputContent extends PanelInputContent {
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        panel.add(new JLabel("Nom : "), gbc);
+        panelInputContentCustom.add(new JLabel("Nom : "), gbc);
         gbc.gridx = 1;
-        panel.add(projectName, gbc);
+        panelInputContentCustom.add(projectName, gbc);
 
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Profil : "), gbc);
+        panelInputContentCustom.add(new JLabel("Profil : "), gbc);
         gbc.gridx = 1;
-        panel.add(profileFileName, gbc);
+        panelInputContentCustom.add(profileFileName, gbc);
 
 /*
         gbc.gridx = 0;
@@ -112,15 +115,15 @@ public class ProjectInputContent extends PanelInputContent {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Multiples modèles MCD : "), gbc);
+        panelInputContentCustom.add(new JLabel("Multiples modèles MCD : "), gbc);
         gbc.gridx ++;
-        panel.add(fieldModelsMany, gbc);
+        panelInputContentCustom.add(fieldModelsMany, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Paquetages MCD autorisés: "), gbc);
+        panelInputContentCustom.add(new JLabel("Paquetages MCD autorisés: "), gbc);
         gbc.gridx ++;
-        panel.add(fieldPackagesAutorizeds, gbc);
+        panelInputContentCustom.add(fieldPackagesAutorizeds, gbc);
 
     }
 
@@ -181,15 +184,7 @@ public class ProjectInputContent extends PanelInputContent {
 
     }
 
-    @Override
-    protected JPanel getPanelCustom() {
-        return null;
-    }
 
-    @Override
-    protected void createContentCustom() {
-
-    }
 
     public boolean checkDatas(){
          boolean ok = checkDatasPreSave(false);

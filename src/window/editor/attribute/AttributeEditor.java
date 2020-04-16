@@ -17,7 +17,7 @@ public class AttributeEditor extends DialogEditor {
                            MCDContAttributes parent,
                            MCDAttribute mcdAttribut,
                            String mode)  {
-        super(owner, parent, mcdAttribut, mode);
+        super(owner, parent, mcdAttribut, mode, DialogEditor.NOTHING);
 
         /*
         super.setSize(Preferences.ATTRIBUTE_WINDOW_WIDTH, Preferences.ATTRIBUTE_WINDOW_HEIGHT);

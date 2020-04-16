@@ -1,5 +1,6 @@
 package mcd.services;
 
+import mcd.MCDAssEnd;
 import mcd.MCDAssociation;
 import mcd.MCDElement;
 import mcd.MCDEntity;
@@ -19,4 +20,5 @@ public class MCDAssociationService {
        return messages;
     }
 
- }
+
+}

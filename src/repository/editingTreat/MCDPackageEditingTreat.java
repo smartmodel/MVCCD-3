@@ -46,6 +46,6 @@ public class MCDPackageEditingTreat extends EditingTreat{
     @Override
     protected DialogEditor getDialogEditor(Window owner, MCDElement parent, MCDElement mcdElement, String mode) {
         return new ModelEditor(owner , parent, mcdElement,
-                mode, ModelEditor.PACKAGE);
+                mode, DialogEditor.PACKAGE);
     }
 }

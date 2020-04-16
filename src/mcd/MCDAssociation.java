@@ -1,5 +1,6 @@
 package mcd;
 
+import exceptions.CodeApplException;
 import main.MVCCDElement;
 import mcd.services.MCDElementService;
 import org.apache.commons.lang.StringUtils;
@@ -22,11 +23,13 @@ public class MCDAssociation extends MCDRelation{
     }
 
     public MCDAssEnd getFrom() {
+
         return (MCDAssEnd) super.getA();
     }
 
     public void setFrom(MCDAssEnd from) {
         super.setA(from);
+        from.setDrawingDirection(MCDAssEnd.FROM);
     }
 
     public MCDAssEnd getTo() {
@@ -35,6 +38,7 @@ public class MCDAssociation extends MCDRelation{
 
     public void setTo(MCDAssEnd to) {
         super.setB(to);
+        to.setDrawingDirection(MCDAssEnd.TO);
     }
 
     @Override
@@ -100,5 +104,15 @@ public class MCDAssociation extends MCDRelation{
         return resultat;
     }
 
+    public MCDAssEnd getMCDAssEndOpposite(MCDAssEnd mcdAssEnd) {
+        if (this.getFrom() == mcdAssEnd){
+            return this.getTo();
+        }
+        if (this.getTo() == mcdAssEnd){
+            return this.getFrom();
+        }
 
+        throw new CodeApplException("L'extrémité d'association passée en paramètre n'existe pas pour cette association ");
+
+    }
 }

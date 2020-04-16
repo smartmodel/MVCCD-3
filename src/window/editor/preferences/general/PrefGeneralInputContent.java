@@ -6,30 +6,30 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.scomponents.SComponent;
 
-import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
 public class PrefGeneralInputContent extends PanelInputContent {
-    private JPanel panel = new JPanel();
-
-
+    //private JPanel panel = new JPanel();
 
 
     public PrefGeneralInputContent(PrefGeneralInput prefGeneralInput) {
         super(prefGeneralInput);
+        /*
         prefGeneralInput.setPanelContent(this);
         createContent();
         super.addContent(panel);
         super.initOrLoadDatas();
+
+         */
     }
 
-    private void createContent() {
+    protected void createContentCustom() {
 
 
 
-        panel.setLayout(new GridBagLayout());
+        panelInputContentCustom.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(10, 10, 0, 0);
@@ -38,8 +38,6 @@ public class PrefGeneralInputContent extends PanelInputContent {
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-
-
 
     }
 
@@ -54,15 +52,6 @@ public class PrefGeneralInputContent extends PanelInputContent {
 
     }
 
-    @Override
-    protected JPanel getPanelCustom() {
-        return null;
-    }
-
-    @Override
-    protected void createContentCustom() {
-
-    }
 
     @Override
     protected boolean checkDatas() {

@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 public class AttributesInputContent extends PanelInputContent {
 
-    private JPanel panel = new JPanel();
+    //private JPanel panel = new JPanel();
     private JTable table;
     private DefaultTableModel model;
     private JButton buttonAdd;
@@ -45,17 +45,20 @@ public class AttributesInputContent extends PanelInputContent {
 
     public AttributesInputContent(AttributesInput attributesInput)    {
         super(attributesInput);
+        /*
         attributesInput.setPanelContent(this);
         createContent();
         super.addContent(panel, false);
         super.initOrLoadDatas();
         enabledContent();
+
+         */
      }
 
 
 
 
-    private void createContent() {
+    protected void createContentCustom() {
         makeTable();
         makeButtons();
         makeLayout();
@@ -84,10 +87,10 @@ public class AttributesInputContent extends PanelInputContent {
 
 
         BorderLayout bl = new BorderLayout(5,5);
-        panel.setLayout(bl);
-        panel.add(panelTable, BorderLayout.CENTER);
-        panel.add(panelButtons, BorderLayout.SOUTH);
-        panel.add(panelMove, BorderLayout.EAST);
+        panelInputContentCustom.setLayout(bl);
+        panelInputContentCustom.add(panelTable, BorderLayout.CENTER);
+        panelInputContentCustom.add(panelButtons, BorderLayout.SOUTH);
+        panelInputContentCustom.add(panelMove, BorderLayout.EAST);
 
     }
 
@@ -355,15 +358,6 @@ public class AttributesInputContent extends PanelInputContent {
 
     }
 
-    @Override
-    protected JPanel getPanelCustom() {
-        return null;
-    }
-
-    @Override
-    protected void createContentCustom() {
-
-    }
 
     protected boolean checkDatas(){
             return true;

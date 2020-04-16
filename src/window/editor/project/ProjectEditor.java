@@ -14,7 +14,7 @@ public class ProjectEditor extends DialogEditor {
     public ProjectEditor(Window owner,
                          Project project,
                          String mode            )  {
-        super(owner, null, project, mode);
+        super(owner, null, project, mode, DialogEditor.NOTHING);
 /*
         super.setSize(Preferences.PROJECT_WINDOW_WIDTH, Preferences.PROJECT_WINDOW_HEIGHT);
 

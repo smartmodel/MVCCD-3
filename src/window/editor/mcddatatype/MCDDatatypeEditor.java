@@ -17,7 +17,7 @@ public class MCDDatatypeEditor extends DialogEditor {
                              MVCCDElement parent,
                              MCDDatatype mcdDatatype,
                              String mode)  {
-        super(owner, parent, mcdDatatype, mode);
+        super(owner, parent, mcdDatatype, mode, DialogEditor.NOTHING);
 /*
         super.setSize(Preferences.MCDDATATYPE_WINDOW_WIDTH, Preferences.MCDDATATYPE_WINDOW_HEIGHT);
         super.setInput(new MCDDatatypeInput(this));

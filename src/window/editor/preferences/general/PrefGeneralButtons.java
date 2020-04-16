@@ -13,7 +13,7 @@ public class PrefGeneralButtons extends PanelButtons {
 
 
     @Override
-    protected PanelButtonsContent getButtonsContentCustom() {
+    protected PanelButtonsContent createButtonsContentCustom() {
         return new PrefGeneralButtonsContent(this);
     }
 }

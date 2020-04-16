@@ -7,7 +7,6 @@ import utilities.window.scomponents.*;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.Element;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -21,6 +20,10 @@ public abstract class PanelInputContent
                     FocusListener, DocumentListener,  ItemListener {
 
     private PanelInput panelInput;
+
+    //TODO-1 Avoir si panel ne peut pas être la classe elle-même
+    protected JPanel panelInputContentCustom = new JPanel();
+
     protected boolean alreadyFocusGained = false;
     private ArrayList<SComponent> sComponents = new ArrayList<SComponent>();
     //private boolean readOnly = false;
@@ -43,14 +46,14 @@ public abstract class PanelInputContent
 
     protected void start(){
         createContentCustom();
-        addContent(getPanelCustom());
+        addContent(panelInputContentCustom);
+
         initOrLoadDatas();
         enabledContentCustom();
     }
 
     protected abstract void enabledContentCustom();
 
-    protected abstract JPanel getPanelCustom();
 
     protected abstract void createContentCustom();
 

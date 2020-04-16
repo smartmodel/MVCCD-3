@@ -1,8 +1,10 @@
 package mcd;
 
 import main.MVCCDElement ;
+import mcd.interfaces.IMCDContPackages;
 import preferences.Preferences;
 import project.ProjectElement;
+import project.ProjectService;
 import utilities.files.UtilXML;
 
 public class MCDContEntities extends MCDElement{
@@ -20,4 +22,14 @@ public class MCDContEntities extends MCDElement{
     public String getNameTree() {
         return null;
     }
+
+    public static MCDContEntities getMCDContEntitiesByNamePath(int pathMode, String namePath){
+        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){
+            if (mcdElement instanceof MCDContEntities){
+                return (MCDContEntities) mcdElement;
+            }
+        }
+        return null;
+    }
+
 }

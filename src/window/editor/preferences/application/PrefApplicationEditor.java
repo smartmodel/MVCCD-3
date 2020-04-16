@@ -17,7 +17,7 @@ public class PrefApplicationEditor extends DialogEditor {
                                  MVCCDElement parent,
                                  MVCCDElementApplicationPreferences applPref,
                                  String mode)  {
-        super(owner, parent, applPref, mode);
+        super(owner, parent, applPref, mode, DialogEditor.NOTHING);
 
         /*
         super.setSize(Preferences.PREFERENCES_WINDOW_WIDTH, Preferences.PREFERENCES_WINDOW_HEIGHT);

@@ -16,6 +16,11 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     public static final String READ = "read";
     public static final String DELETE = "delete";
 
+    public static final int NOTHING = 1 ;
+    public static final int MODEL = 2 ;
+    public static final int PACKAGE = 3 ;
+
+
     private JPanel panel= new JPanel();
     private PanelBorderLayoutResizer panelBLResizer ;
     private int widthInit; // Largeur initiale utile à dimensionner la boite des messages
@@ -30,12 +35,16 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     private boolean readOnly = false;
 
-    public DialogEditor(Window owner, MVCCDElement mvccdElementParent, MVCCDElement mvccdElementCrt, String mode) {
+    protected int scope;
+
+
+    public DialogEditor(Window owner, MVCCDElement mvccdElementParent, MVCCDElement mvccdElementCrt, String mode, int scope) {
         super(owner);
         this.mode = mode;
         this.mvccdElementParent = mvccdElementParent;
         this.mvccdElementCrt = mvccdElementCrt;
         this.mvccdElementParentChoosed = mvccdElementParent;  // valeur par défaut
+        this.scope = scope ;
 
         if (mode.equals(DialogEditor.READ)){
             this.setReadOnly(true);
@@ -259,4 +268,9 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     public void setMvccdElementParentChoosed(MVCCDElement mvccdElementParentChoosed) {
         this.mvccdElementParentChoosed = mvccdElementParentChoosed;
     }
+
+    public int getScope() {
+        return scope;
+    }
+
 }

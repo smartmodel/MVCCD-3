@@ -17,7 +17,7 @@ public class EntityEditor extends DialogEditor {
                         MCDContEntities parent,
                         MCDEntity mcdEntity,
                         String mode)  {
-        super(owner, parent, mcdEntity, mode);
+        super(owner, parent, mcdEntity, mode, DialogEditor.NOTHING);
 /*
         super.setSize(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
         super.setInput(new EntityInput(this));

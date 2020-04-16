@@ -1,16 +1,13 @@
 package utilities.window.editor;
 
 import main.MVCCDElement;
-import mcd.MCDContEntities;
 import mcd.MCDElement;
-import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
 import mcd.services.MCDElementService;
 import mcd.services.MCDUtilService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import project.ProjectService;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;

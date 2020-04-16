@@ -9,18 +9,13 @@ import utilities.window.editor.PanelInput;
 import java.awt.*;
 
 public class ModelEditor extends DialogEditor {
-    public static final int MODEL = 1 ;
-    public static final int PACKAGE = 2 ;
-
-    private int scope;
 
     public ModelEditor(Window owner,
                        MCDElement parent,
                        MCDElement mcdElement,
                        String mode,
                        int scope            )  {
-        super(owner, parent, mcdElement, mode);
-        this.scope = scope;
+        super(owner, parent, mcdElement, mode, scope);
 /*
         super.setSize(Preferences.MODEL_WINDOW_WIDTH, Preferences.MODEL_WINDOW_HEIGHT);
         super.setInput(new ModelInput(this));
@@ -33,6 +28,7 @@ public class ModelEditor extends DialogEditor {
 
     @Override
     protected PanelButtons getButtonsCustom() {
+
         return new ModelButtons(this);
     }
 
@@ -48,10 +44,10 @@ public class ModelEditor extends DialogEditor {
 
     @Override
     protected String getPropertyTitleNew() {
-        if (scope == MODEL) {
+        if (scope == DialogEditor.MODEL) {
             return "editor.model.new";
         }
-        if (scope == PACKAGE) {
+        if (scope == DialogEditor.PACKAGE) {
             return "editor.package.new";
         }
 
@@ -60,20 +56,12 @@ public class ModelEditor extends DialogEditor {
 
     @Override
     protected String getPropertyTitleUpdate() {
-        if (scope == MODEL) {
+        if (scope == DialogEditor.MODEL) {
             return "editor.model.update";
         }
-        if (scope == PACKAGE) {
+        if (scope == DialogEditor.PACKAGE) {
             return "editor.package.update";
         }
         return null;
-    }
-
-    public int getScope() {
-        return scope;
-    }
-
-    public void setScope(int scope) {
-        this.scope = scope;
     }
 }

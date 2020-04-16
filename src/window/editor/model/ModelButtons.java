@@ -13,7 +13,7 @@ public class ModelButtons extends PanelButtons {
     }
 
     @Override
-    protected PanelButtonsContent getButtonsContentCustom() {
+    protected PanelButtonsContent createButtonsContentCustom() {
         return new ModelButtonsContent(this);
     }
 }

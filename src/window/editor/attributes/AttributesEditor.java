@@ -16,7 +16,7 @@ public class AttributesEditor extends DialogEditor {
             MCDEntity parent,
             MCDContAttributes mcdContAttributes,
             String mode)  {
-        super(owner, parent, mcdContAttributes, mode);
+        super(owner, parent, mcdContAttributes, mode, DialogEditor.NOTHING);
 /*
         super.setSize(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
         super.setInput(new AttributesInput(this));

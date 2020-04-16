@@ -17,7 +17,7 @@ public class AssociationEditor extends DialogEditor {
             MCDContRelations mcdContRelations,
             MCDAssociation mcdAssociation,
             String mode)  {
-        super(owner, mcdContRelations, mcdAssociation, mode);
+        super(owner, mcdContRelations, mcdAssociation, mode, DialogEditor.NOTHING);
 
         /*
         super.setSize(Preferences.ASSOCIATION_WINDOW_WIDTH, Preferences.ASSOCIATION_WINDOW_HEIGHT);

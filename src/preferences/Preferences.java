@@ -269,6 +269,7 @@ public class Preferences extends MVCCDElement {
     private Boolean DEBUG_BACKGROUND_PANEL = false;
     private Boolean DEBUG_PRINT_MVCCDELEMENT = false;
     private Boolean DEBUG_SHOW_TABLE_COL_HIDDEN = false;
+    private Boolean DEBUG_INSPECT_OBJECT_IN_TREE = false;
     private Boolean REPOSITORY_MCD_MODELS_MANY = false;
     private Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = false;
 
@@ -332,6 +333,14 @@ public class Preferences extends MVCCDElement {
 
     public void setDEBUG_SHOW_TABLE_COL_HIDDEN(Boolean DEBUG_SHOW_TABLE_COL_HIDDEN) {
         this.DEBUG_SHOW_TABLE_COL_HIDDEN = DEBUG_SHOW_TABLE_COL_HIDDEN;
+    }
+
+    public Boolean getDEBUG_INSPECT_OBJECT_IN_TREE() {
+        return DEBUG_INSPECT_OBJECT_IN_TREE;
+    }
+
+    public void setDEBUG_INSPECT_OBJECT_IN_TREE(Boolean DEBUG_INSPECT_OBJECT_IN_TREE) {
+        this.DEBUG_INSPECT_OBJECT_IN_TREE = DEBUG_INSPECT_OBJECT_IN_TREE;
     }
 
     public Boolean getREPOSITORY_MCD_MODELS_MANY() {

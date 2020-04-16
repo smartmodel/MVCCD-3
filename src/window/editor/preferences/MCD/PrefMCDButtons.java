@@ -14,7 +14,7 @@ public class PrefMCDButtons extends PanelButtons {
 
 
     @Override
-    protected PanelButtonsContent getButtonsContentCustom() {
+    protected PanelButtonsContent createButtonsContentCustom() {
         return new PrefMCDButtonsContent(this);
     }
 }

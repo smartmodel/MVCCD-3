@@ -6,8 +6,7 @@ import mcd.MCDElement;
 import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDContEntitiesService;
-import mcd.services.MCDEntityService;
-import mcd.services.MCDUtilService;
+import mcd.services.MCDElementService;
 import utilities.window.editor.PanelInputContentId;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 
 public class EntityInputContent extends PanelInputContentId {
 
-    private JPanel panel = new JPanel();
     private SCheckBox entityOrdered  = new SCheckBox(this);
     private SCheckBox entityAbstract  = new SCheckBox(this);
     private SCheckBox entityAudit  = new SCheckBox(this);
@@ -48,10 +46,7 @@ public class EntityInputContent extends PanelInputContentId {
 
 
 
-    @Override
-    protected JPanel getPanelCustom() {
-        return panel;
-    }
+
 
     @Override
     protected void createContentIdCustom() {
@@ -86,39 +81,39 @@ public class EntityInputContent extends PanelInputContentId {
     }
 
     private void createPanelMaster() {
-        GridBagConstraints gbc = PanelService.createGridBagConstraints(panel);
+        GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
         gbc.gridwidth = 4;
 
         super.createPanelId();
-        panel.add(panelId, gbc);
+        panelInputContentCustom.add(panelId, gbc);
 
         gbc.gridwidth = 1;
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Enreg. ordonnés :"),gbc);
+        panelInputContentCustom.add(new JLabel("Enreg. ordonnés :"),gbc);
         gbc.gridx = 1;
-        panel.add(entityOrdered, gbc);
+        panelInputContentCustom.add(entityOrdered, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Entité abstraite :"),gbc);
+        panelInputContentCustom.add(new JLabel("Entité abstraite :"),gbc);
         gbc.gridx = 1;
-        panel.add(entityAbstract, gbc);
+        panelInputContentCustom.add(entityAbstract, gbc);
 
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Journalisation :"),gbc);
+        panelInputContentCustom.add(new JLabel("Journalisation :"),gbc);
         gbc.gridx++;
-        panel.add(entityJournal, gbc);
+        panelInputContentCustom.add(entityJournal, gbc);
         gbc.gridx++;
-        panel.add(new JLabel("Audit :"),gbc);
+        panelInputContentCustom.add(new JLabel("Audit :"),gbc);
         gbc.gridx++;
-        panel.add(entityAudit, gbc);
+        panelInputContentCustom.add(entityAudit, gbc);
 
-        this.add(panel);
+        this.add(panelInputContentCustom);
 
     }
 
@@ -212,7 +207,7 @@ public class EntityInputContent extends PanelInputContentId {
 
     @Override
     protected MCDElement getParentByNamePath(int pathname, String text) {
-        return null;
+        return (MCDElement) MCDContEntities.getMCDContEntitiesByNamePath(MCDElementService.PATHNAME, text);
     }
 
     @Override

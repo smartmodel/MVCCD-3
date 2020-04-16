@@ -12,7 +12,7 @@ public class AttributesButtons extends PanelButtons {
     }
 
     @Override
-    protected PanelButtonsContent getButtonsContentCustom() {
+    protected PanelButtonsContent createButtonsContentCustom() {
         return new AttributesButtonsContent(this);
     }
 }

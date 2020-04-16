@@ -7,7 +7,6 @@ import mcd.interfaces.IMCDModel;
 import mcd.services.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import project.ProjectService;
 import utilities.window.editor.PanelInputContentId;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
@@ -25,9 +24,9 @@ import java.util.ArrayList;
 
 public class AssociationInputContent extends PanelInputContentId {
 
-    private JPanel panel = new JPanel();
-    private JPanel panelFrom = new JPanel();
+    //private JPanel panelFrom = new JPanel();
     private SComboBox fieldFromEntity = new SComboBox(this);
+    private JPanel panelFrom = new JPanel();
     private JPanel panelFromRole = new JPanel();
     private STextField fieldFromRoleName = new STextField(this);
     private STextField fieldFromRoleShortName = new STextField(this);
@@ -119,27 +118,27 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
     private void createPanelMaster(){
-        GridBagConstraints gbc = PanelService.createGridBagConstraints(panel);
+        GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
         gbc.gridwidth = 4;
         super.createPanelId();
-        panel.add(panelId, gbc);
+        panelInputContentCustom.add(panelId, gbc);
         gbc.gridwidth = 1;
 
 
         gbc.gridx = 0;
         gbc.gridy++;
         createPanelAssEnd(MCDRelEnd.FROM);
-        panel.add(panelFrom,gbc);
+        panelInputContentCustom.add(panelFrom,gbc);
 
 
         gbc.gridx++;
         createPanelAssEnd(MCDRelEnd.TO);
-        panel.add(panelTo,gbc);
+        panelInputContentCustom.add(panelTo,gbc);
 
 
 
-        this.add(panel);
+        this.add(panelInputContentCustom);
 
     }
 
@@ -266,16 +265,6 @@ public class AssociationInputContent extends PanelInputContentId {
 
     @Override
     protected void enabledContentCustom() {
-
-    }
-
-    @Override
-    protected JPanel getPanelCustom() {
-        return null;
-    }
-
-    @Override
-    protected void createContentCustom() {
 
     }
 

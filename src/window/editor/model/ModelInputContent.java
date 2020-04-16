@@ -10,7 +10,6 @@ import mcd.services.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
-import project.ProjectManager;
 import project.ProjectService;
 import utilities.window.editor.PanelInputContentId;
 import utilities.window.scomponents.SCheckBox;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 
 public class ModelInputContent extends PanelInputContentId {
 
-    private JPanel panel = new JPanel();
+    //private JPanel panel = new JPanel();
 
     /*private JPanel panelIdentification = new JPanel ();
     private STextField fieldMCDElementName = new STextField(this);
@@ -59,8 +58,6 @@ public class ModelInputContent extends PanelInputContentId {
 
     @Override
     protected void createContentIdCustom() {
-        //super.createContentId();
-
         if (getScope() == ModelEditor.MODEL) {
           fieldParent.setEnabled(false);
         }
@@ -102,33 +99,33 @@ public class ModelInputContent extends PanelInputContentId {
     }
 
     private void createPanelMaster() {
-        GridBagConstraints gbc = PanelService.createGridBagConstraints(panel);
+        GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
         gbc.gridwidth = 4;
 
         super.createPanelId();
-        panel.add(panelId, gbc);
+        panelInputContentCustom.add(panelId, gbc);
 
         gbc.gridwidth = 1;
 
         if (getScope() == ModelEditor.MODEL) {
             gbc.gridx = 0;
             gbc.gridy++;
-            panel.add(new JLabel("Paquetages autorisés: "), gbc);
+            panelInputContentCustom.add(new JLabel("Paquetages autorisés: "), gbc);
             gbc.gridx++;
-            panel.add(fieldPackagesAutorizeds, gbc);
+            panelInputContentCustom.add(fieldPackagesAutorizeds, gbc);
         }
 
         gbc.gridx = 0;
         gbc.gridy++;
         createPanelJournalization();
-        panel.add(panelJournalization, gbc);
+        panelInputContentCustom.add(panelJournalization, gbc);
 
         gbc.gridx++;
         createPanelAudit();
-        panel.add(panelAudit, gbc);
+        panelInputContentCustom.add(panelAudit, gbc);
 
-        this.add(panel);
+        this.add(panelInputContentCustom);
     }
 
 
@@ -153,17 +150,20 @@ public class ModelInputContent extends PanelInputContentId {
     }
 
     protected SComponent changeField(DocumentEvent e) {
+        SComponent sComponent = super.changeField(e);
 
-            Document doc = e.getDocument();
+        Document doc = e.getDocument();
 
             // Autres champs que les champs Id
-            return null;
+            return sComponent;
     }
 
 
 
     @Override
     protected void changeFieldSelected(ItemEvent e) {
+        super.changeFieldSelected(e);
+
         Object source = e.getSource();
 
     }
@@ -179,6 +179,7 @@ public class ModelInputContent extends PanelInputContentId {
 
     @Override
     public void focusGained(FocusEvent focusEvent) {
+
         super.focusGained(focusEvent);
     }
 
@@ -192,6 +193,7 @@ public class ModelInputContent extends PanelInputContentId {
 
     @Override
     public boolean checkDatasPreSave(boolean unitaire) {
+
         return true;
     }
 
@@ -201,15 +203,14 @@ public class ModelInputContent extends PanelInputContentId {
 
     }
 
-    @Override
-    protected JPanel getPanelCustom() {
-        return null;
-    }
-
+    /*
     @Override
     protected void createContentCustom() {
 
     }
+
+     */
+
 
     @Override
     protected boolean checkDatas(){
@@ -217,7 +218,6 @@ public class ModelInputContent extends PanelInputContentId {
         // Autre attributs
         return ok ;
     }
-
 
     @Override
     protected int getLengthMax(int naming) {
@@ -243,6 +243,7 @@ public class ModelInputContent extends PanelInputContentId {
                 return Preferences.PACKAGE_LONG_NAME_LENGTH;
             }
         }
+
         return -1;
     }
     @Override
@@ -426,7 +427,7 @@ public class ModelInputContent extends PanelInputContentId {
         //MODELJournal.setEnabled(preferences.getMCD_JOURNALIZATION_EXCEPTION());
     }
 
-    private int getScope(){
+   private int getScope(){
         return ((ModelEditor) getEditor()).getScope();
     }
 }

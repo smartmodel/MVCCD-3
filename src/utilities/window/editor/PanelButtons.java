@@ -10,11 +10,11 @@ public abstract class PanelButtons extends PanelBorderLayout implements IAccessD
 
     public PanelButtons(DialogEditor dialogEditor) {
         this.dialogEditor = dialogEditor;
-        setButtonsContent (getButtonsContentCustom());
+        setButtonsContent (createButtonsContentCustom());
         super.setResizable(false);
     }
 
-    protected abstract PanelButtonsContent getButtonsContentCustom();
+    protected abstract PanelButtonsContent createButtonsContentCustom();
 
     public PanelButtonsContent getButtonsContent() {
         return buttonsContent;

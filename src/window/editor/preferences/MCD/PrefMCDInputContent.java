@@ -28,7 +28,7 @@ import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 
 public class PrefMCDInputContent extends PanelInputContent {
-    private JPanel panel = new JPanel();
+    //private JPanel panel = new JPanel();
     private STextField fieldAIDIndName = new STextField(this);
     private SButton btnAIDIndNameDefault;
     private SCheckBox fieldAIDWithDep = new SCheckBox(this);
@@ -53,13 +53,16 @@ public class PrefMCDInputContent extends PanelInputContent {
 
     public PrefMCDInputContent(PrefMCDInput prefMCDInput) {
         super(prefMCDInput);
+        /*
         prefMCDInput.setPanelContent(this);
         createContent();
         super.addContent(panel);
         super.initOrLoadDatas();
+
+         */
     }
 
-    private void createContent() {
+    protected void createContentCustom() {
         fieldAIDIndName.setPreferredSize((new Dimension(100,Preferences.EDITOR_FIELD_HEIGHT)));
         fieldAIDIndName.setToolTipText("Nom de l'attribut AID");
         fieldAIDIndName.setCheckPreSave(true);
@@ -158,7 +161,7 @@ public class PrefMCDInputContent extends PanelInputContent {
         super.getsComponents().add(fieldTreeNamingAssociation);
         super.getsComponents().add(fieldNamingLongName);
 
-        panel.setLayout(new GridBagLayout());
+        panelInputContentCustom.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(10, 10, 0, 0);
@@ -168,59 +171,59 @@ public class PrefMCDInputContent extends PanelInputContent {
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.weightx = 1;
-        panel.add(new JLabel("Nom d'attribut AID : "), gbc);
+        panelInputContentCustom.add(new JLabel("Nom d'attribut AID : "), gbc);
         gbc.gridx++;
-        panel.add(fieldAIDIndName, gbc);
+        panelInputContentCustom.add(fieldAIDIndName, gbc);
         gbc.gridx++;
-        panel.add(btnAIDIndNameDefault, gbc);
+        panelInputContentCustom.add(btnAIDIndNameDefault, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Attribut AID dép. : "), gbc);
+        panelInputContentCustom.add(new JLabel("Attribut AID dép. : "), gbc);
         gbc.gridx++;
-        panel.add(fieldAIDWithDep, gbc);
+        panelInputContentCustom.add(fieldAIDWithDep, gbc);
 
 
         Border border = BorderFactory.createLineBorder(Color.black);
         gbc.gridx++;
 
         createPanelAIDWithDep(border);
-        panel.add(panelAIDWithDep, gbc);
+        panelInputContentCustom.add(panelAIDWithDep, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Type de donnée AID : "), gbc);
+        panelInputContentCustom.add(new JLabel("Type de donnée AID : "), gbc);
         gbc.gridx++;
-        panel.add(fieldAIDDatatype, gbc);
+        panelInputContentCustom.add(fieldAIDDatatype, gbc);
 
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Taille des types de données numériques : "), gbc);
+        panelInputContentCustom.add(new JLabel("Taille des types de données numériques : "), gbc);
         gbc.gridx++;
         gbc.gridwidth = 2;
-        panel.add(fieldDatatypeSizeMode, gbc);
+        panelInputContentCustom.add(fieldDatatypeSizeMode, gbc);
         gbc.gridwidth = 1;
 
         gbc.gridx = 0;
         gbc.gridy++;
         createPanelJournalization(border);
-        panel.add(panelJournalization, gbc);
+        panelInputContentCustom.add(panelJournalization, gbc);
 
         gbc.gridx++;
         createPanelAudit(border);
-        panel.add(panelAudit, gbc);
+        panelInputContentCustom.add(panelAudit, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
         createPanelTreeNaming(border);
-        panel.add(panelTreeNaming, gbc);
+        panelInputContentCustom.add(panelTreeNaming, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Nom long : "), gbc);
+        panelInputContentCustom.add(new JLabel("Nom long : "), gbc);
         gbc.gridx++;
-        panel.add(fieldNamingLongName, gbc);
+        panelInputContentCustom.add(fieldNamingLongName, gbc);
 
     }
 
@@ -327,15 +330,6 @@ public class PrefMCDInputContent extends PanelInputContent {
 
     }
 
-    @Override
-    protected JPanel getPanelCustom() {
-        return null;
-    }
-
-    @Override
-    protected void createContentCustom() {
-
-    }
 
     @Override
     protected boolean checkDatas() {

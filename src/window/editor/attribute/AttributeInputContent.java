@@ -6,9 +6,7 @@ import mcd.MCDAttribute;
 import mcd.MCDElement;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDAttributeService;
-import mcd.services.MCDEntityService;
 import messages.MessagesBuilder;
-import utilities.window.editor.PanelInputContent;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -39,7 +37,7 @@ import java.util.Collections;
 
 public class AttributeInputContent extends PanelInputContentId {
 
-    private JPanel panel = new JPanel();
+    //private JPanel panel = new JPanel();
     private SComboBox attributeNameAID = new SComboBox(this);
 
     private JPanel panelDatatype = new JPanel ();
@@ -206,21 +204,20 @@ public class AttributeInputContent extends PanelInputContentId {
         createPanelMaster();
 
         enabledOrVisibleFalse();
-
     }
 
     private void createPanelMaster() {
-        GridBagConstraints gbc = PanelService.createGridBagConstraints(panel);
+        GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
-        panel.add(new JLabel("Id. artificiel : "), gbc);
+        panelInputContentCustom.add(new JLabel("Id. artificiel : "), gbc);
         gbc.gridx++;
-        panel.add(aid, gbc);
+        panelInputContentCustom.add(aid, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 5;
         createPanelId();
-        panel.add(panelId, gbc);
+        panelInputContentCustom.add(panelId, gbc);
         gbc.gridwidth = 1;
 
         Border border = BorderFactory.createLineBorder(Color.black);
@@ -228,50 +225,50 @@ public class AttributeInputContent extends PanelInputContentId {
         gbc.gridy++;
         gbc.gridwidth = 5;
         createPanelDatatype(border);
-        panel.add(panelDatatype, gbc);
+        panelInputContentCustom.add(panelDatatype, gbc);
         gbc.gridwidth = 1;
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Obligatoire : "), gbc);
+        panelInputContentCustom.add(new JLabel("Obligatoire : "), gbc);
         gbc.gridx++;
-        panel.add(mandatory, gbc);
+        panelInputContentCustom.add(mandatory, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Liste : "), gbc);
+        panelInputContentCustom.add(new JLabel("Liste : "), gbc);
         gbc.gridx++;
-        panel.add(list, gbc);
+        panelInputContentCustom.add(list, gbc);
 
         gbc.gridx++;
-        panel.add(new JLabel("Ordonnacement : "), gbc);
+        panelInputContentCustom.add(new JLabel("Ordonnacement : "), gbc);
         gbc.gridx++;
-        panel.add(ordered, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        panel.add(new JLabel("Non mod. : "), gbc);
-        gbc.gridx++;
-        panel.add(frozen, gbc);
+        panelInputContentCustom.add(ordered, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Maj. : "), gbc);
+        panelInputContentCustom.add(new JLabel("Non mod. : "), gbc);
         gbc.gridx++;
-        panel.add(uppercase, gbc);
+        panelInputContentCustom.add(frozen, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Valeur initiale : "), gbc);
+        panelInputContentCustom.add(new JLabel("Maj. : "), gbc);
         gbc.gridx++;
-        panel.add(initValue, gbc);
+        panelInputContentCustom.add(uppercase, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(new JLabel("Valeur initiale : "), gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(initValue, gbc);
 
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel.add(new JLabel("Dérivation : "), gbc);
+        panelInputContentCustom.add(new JLabel("Dérivation : "), gbc);
         gbc.gridx++;
-        panel.add(derivedValue, gbc);
+        panelInputContentCustom.add(derivedValue, gbc);
 
 
 /*
@@ -283,7 +280,7 @@ public class AttributeInputContent extends PanelInputContentId {
 
  */
 
-        this.add(panel);
+        this.add(panelInputContentCustom);
 
     }
 
@@ -345,18 +342,19 @@ public class AttributeInputContent extends PanelInputContentId {
 
 
     protected SComponent changeField(DocumentEvent e) {
-
+            SComponent sComponent = super.changeField(e);
 
             Document doc = e.getDocument();
 
             // Autres champs que les champs Id
-            return null;
+            return sComponent;
     }
 
 
 
     @Override
     protected void changeFieldSelected(ItemEvent e) {
+        super.changeFieldSelected(e);
             Object source = e.getSource();
 
 
@@ -610,15 +608,6 @@ public class AttributeInputContent extends PanelInputContentId {
 
     }
 
-    @Override
-    protected JPanel getPanelCustom() {
-        return null;
-    }
-
-    @Override
-    protected void createContentCustom() {
-
-    }
 
     protected boolean checkDatas(){
         boolean ok = checkDatasPreSave(false);

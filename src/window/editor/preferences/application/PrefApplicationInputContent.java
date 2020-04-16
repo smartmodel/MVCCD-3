@@ -18,7 +18,7 @@ import java.awt.event.ItemEvent;
 import java.io.File;
 
 public class PrefApplicationInputContent extends PanelInputContent {
-    private JPanel panel = new JPanel();
+    //private JPanel panel = new JPanel();
 
     private SCheckBox debug = new SCheckBox(this);
     private JPanel debugSubPanel = new JPanel();
@@ -26,6 +26,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
     private SCheckBox debugPrintMVCCDElement = new SCheckBox(this);
     private SCheckBox debugBackgroundPanel = new SCheckBox(this );
     private SCheckBox debugJTableShowHidden = new SCheckBox(this );
+    private SCheckBox debugJTreeInspectObject = new SCheckBox(this );
 
     private SCheckBox fieldRepMCDModelsMany = new SCheckBox(this);
     private SCheckBox fieldRepMCDPackagesAuthorizeds = new SCheckBox(this );
@@ -34,13 +35,16 @@ public class PrefApplicationInputContent extends PanelInputContent {
 
     public PrefApplicationInputContent(PrefApplicationInput prefApplicationInput) {
         super(prefApplicationInput);
+        /*
         prefApplicationInput.setPanelContent(this);
         createContent();
         super.addContent(panel);
         super.initOrLoadDatas();
+
+         */
     }
 
-    private void createContent() {
+    protected void createContentCustom() {
 
         debug.setSubPanel(debugSubPanel);
         debug.setRootSubPanel(true);
@@ -52,6 +56,9 @@ public class PrefApplicationInputContent extends PanelInputContent {
         debugBackgroundPanel.addFocusListener(this);
         debugJTableShowHidden.addItemListener(this);
         debugJTableShowHidden.addFocusListener(this);
+        debugJTreeInspectObject.addItemListener(this);
+        debugJTreeInspectObject.addFocusListener(this);
+
         fieldRepMCDModelsMany.addItemListener(this);
         fieldRepMCDModelsMany.addFocusListener(this);
         fieldRepMCDPackagesAuthorizeds.addItemListener(this);
@@ -66,27 +73,28 @@ public class PrefApplicationInputContent extends PanelInputContent {
         super.getsComponents().add(debugPrintMVCCDElement);
         super.getsComponents().add(debugBackgroundPanel);
         super.getsComponents().add(debugJTableShowHidden);
+        super.getsComponents().add(debugJTreeInspectObject);
         super.getsComponents().add(fieldRepMCDModelsMany);
         super.getsComponents().add(fieldRepMCDPackagesAuthorizeds);
 
 
-        panel.setLayout(new GridBagLayout());
+        panelInputContentCustom.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         //gbc.anchor = GridBagConstraints.BELOW_BASELINE;
         gbc.insets = new Insets(10, 10, 0, 0);
 
-        panel.setAlignmentX(LEFT_ALIGNMENT);
-        panel.setAlignmentY(TOP_ALIGNMENT);
+        panelInputContentCustom.setAlignmentX(LEFT_ALIGNMENT);
+        panelInputContentCustom.setAlignmentY(TOP_ALIGNMENT);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-        panel.add(new JLabel ("Debug"));
+        panelInputContentCustom.add(new JLabel ("Debug"));
         gbc.gridx++;
-        panel.add(debug ,gbc);
+        panelInputContentCustom.add(debug ,gbc);
         gbc.gridx++;
-        panel.add(debugSubPanel, gbc);
+        panelInputContentCustom.add(debugSubPanel, gbc);
 
         debugSubPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         debugSubPanel.setAlignmentX(LEFT_ALIGNMENT);
@@ -118,17 +126,23 @@ public class PrefApplicationInputContent extends PanelInputContent {
         gbcDebug.gridx++;
         debugSubPanel.add(debugJTableShowHidden, gbcDebug);
 
-        gbc.gridy++ ;
-        gbc.gridx = 0;
-        panel.add(new JLabel ("Modèles multiples autorisés"), gbc);
-        gbc.gridx++;
-        panel.add(fieldRepMCDModelsMany, gbc);
+        gbcDebug.gridy++ ;
+        gbcDebug.gridx = 0;
+        debugSubPanel.add(new JLabel ("Inspecteur objet dans JTree"), gbcDebug);
+        gbcDebug.gridx++;
+        debugSubPanel.add(debugJTreeInspectObject, gbcDebug);
 
         gbc.gridy++ ;
         gbc.gridx = 0;
-        panel.add(new JLabel ("Paquetages autorisés"), gbc);
+        panelInputContentCustom.add(new JLabel ("Modèles multiples autorisés"), gbc);
         gbc.gridx++;
-        panel.add(fieldRepMCDPackagesAuthorizeds, gbc);
+        panelInputContentCustom.add(fieldRepMCDModelsMany, gbc);
+
+        gbc.gridy++ ;
+        gbc.gridx = 0;
+        panelInputContentCustom.add(new JLabel ("Paquetages autorisés"), gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldRepMCDPackagesAuthorizeds, gbc);
     }
 
     @Override
@@ -141,15 +155,8 @@ public class PrefApplicationInputContent extends PanelInputContent {
 
     }
 
-    @Override
-    protected JPanel getPanelCustom() {
-        return null;
-    }
 
-    @Override
-    protected void createContentCustom() {
 
-    }
 
     @Override
     protected boolean checkDatas() {
@@ -182,6 +189,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
         debugPrintMVCCDElement.setSelected(preferences.isDEBUG_PRINT_MVCCDELEMENT());
         debugBackgroundPanel.setSelected(preferences.isDEBUG_BACKGROUND_PANEL());
         debugJTableShowHidden.setSelected(preferences.isDEBUG_SHOW_TABLE_COL_HIDDEN());
+        debugJTreeInspectObject.setSelected(preferences.getDEBUG_INSPECT_OBJECT_IN_TREE());
         fieldRepMCDModelsMany.setSelected(preferences.getREPOSITORY_MCD_MODELS_MANY());
         fieldRepMCDPackagesAuthorizeds.setSelected(preferences.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
     }
@@ -208,6 +216,9 @@ public class PrefApplicationInputContent extends PanelInputContent {
         }
         if (debugJTableShowHidden.checkIfUpdated()){
             applicationPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(debugJTableShowHidden.isSelected());
+        }
+        if (debugJTreeInspectObject.checkIfUpdated()){
+            applicationPref.setDEBUG_INSPECT_OBJECT_IN_TREE(debugJTreeInspectObject.isSelected());
         }
 
         // Copie dans les préférences de pojet

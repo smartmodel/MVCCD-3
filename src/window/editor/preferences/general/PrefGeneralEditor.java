@@ -16,7 +16,7 @@ public class PrefGeneralEditor extends DialogEditor {
                              MVCCDElement parent,
                              Preferences preferences,
                              String mode)  {
-        super(owner, parent, preferences, mode);
+        super(owner, parent, preferences, mode, DialogEditor.NOTHING);
         /*
         super.setSize(Preferences.PREFERENCES_WINDOW_WIDTH, Preferences.PREFERENCES_WINDOW_HEIGHT);
         super.setInput(new PrefGeneralInput(this));

@@ -14,7 +14,7 @@ public class MCDModelEditingTreat {
     public static void treatNew(Window owner, MCDContModels mcdContModels, DefaultMutableTreeNode node) {
 
         ModelEditor fen = new ModelEditor(owner, mcdContModels, null,
-                DialogEditor.NEW, ModelEditor.MODEL);
+                DialogEditor.NEW, DialogEditor.MODEL);
         fen.setVisible(true);
 
         MCDModel mcdModelNew = (MCDModel) fen.getMvccdElementNew();
@@ -27,7 +27,7 @@ public class MCDModelEditingTreat {
     public static void treatUpdate(Window owner,
                                    MCDModel mcdModel) {
         ModelEditor fen = new ModelEditor(owner , (MCDContModels) mcdModel.getParent(), mcdModel,
-                DialogEditor.UPDATE, ModelEditor.MODEL);
+                DialogEditor.UPDATE, DialogEditor.MODEL);
         fen.setVisible(true);
         if (fen.isDatasChanged()){
             MVCCDManager.instance().setDatasProjectChanged(true);

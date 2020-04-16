@@ -12,7 +12,7 @@ public class AssociationButtons extends PanelButtons {
     }
 
     @Override
-    protected PanelButtonsContent getButtonsContentCustom() {
+    protected PanelButtonsContent createButtonsContentCustom() {
         return new AssociationButtonsContent(this);
     }
 }

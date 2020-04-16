@@ -3,6 +3,7 @@ package window.editor.model;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import mcd.*;
+import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
 
@@ -19,11 +20,11 @@ public class ModelButtonsContent extends PanelButtonsContent {
     @Override
     protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         int scope = ((ModelEditor) getEditor()).getScope();
-        if (scope == ModelEditor.MODEL) {
+        if (scope == DialogEditor.MODEL) {
             MCDModel mcdModel = MVCCDElementFactory.instance().createMCDModel((MCDContModels) parent);
             return mcdModel;
         }
-        if (scope == ModelEditor.PACKAGE) {
+        if (scope == DialogEditor.PACKAGE) {
             MCDPackage mcdPackage = MVCCDElementFactory.instance().createMCDPackage((MCDElement) parent);
             return mcdPackage;
         }

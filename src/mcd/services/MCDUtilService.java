@@ -1,5 +1,6 @@
 package mcd.services;
 
+import exceptions.CodeApplException;
 import main.MVCCDElement;
 import main.MVCCDElementService;
 import mcd.MCDContEntities;
@@ -221,6 +222,18 @@ public class MCDUtilService {
                                                 String elementAndNaming,
                                                 String namingAndBrothersElementsSelf,
                                                 String namingAndBrothersElementsOther) {
+        if (lengthMax == -1){
+            throw new CodeApplException("La méthode getLengthMax() ne rend pas de valeur ");
+        }
+        if (elementAndNaming == null){
+            throw new CodeApplException("La méthode getElementAndNaming() ne rend pas de valeur ");
+        }
+        if (namingAndBrothersElementsSelf == null){
+            throw new CodeApplException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
+        }
+        if (namingAndBrothersElementsOther == null){
+            throw new CodeApplException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
+        }
         ArrayList<String> messages = MCDUtilService.checkString(name, true, lengthMax,
                 Preferences.NAME_REGEXPR, elementAndNaming);
         if (messages.size() == 0) {
@@ -246,6 +259,18 @@ public class MCDUtilService {
                                                      int lengthMax,
                                                      String elementAndNaming,
                                                      String namingAndBrothersElements) {
+
+        if (lengthMax == -1){
+            throw new CodeApplException("La méthode getLengthMax() ne rend pas de valeur ");
+        }
+        if (elementAndNaming == null){
+            throw new CodeApplException("La méthode getElementAndNaming() ne rend pas de valeur ");
+        }
+        if (namingAndBrothersElements == null){
+            throw new CodeApplException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
+        }
+
+
         boolean mandatory = Preferences.MCD_MODE_NAMING_SHORT_NAME.equals(Preferences.OPTION_YES);
         ArrayList<String> messages = MCDUtilService.checkString(shortName, mandatory, lengthMax,
                 Preferences.NAME_REGEXPR, elementAndNaming);
@@ -266,6 +291,15 @@ public class MCDUtilService {
                                                     int lengthMax,
                                                     String elementAndNaming,
                                                     String namingAndBrothersElements) {
+        if (lengthMax == -1){
+            throw new CodeApplException("La méthode getLengthMax() ne rend pas de valeur ");
+        }
+        if (elementAndNaming == null){
+            throw new CodeApplException("La méthode getElementAndNaming() ne rend pas de valeur ");
+        }
+        if (namingAndBrothersElements == null){
+            throw new CodeApplException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
+        }
 
         boolean mandatory = PreferencesManager.instance().preferences().getMCD_MODE_NAMING_LONG_NAME().equals(Preferences.OPTION_YES);
         ArrayList<String> messages = MCDUtilService.checkString(longName, mandatory, lengthMax,

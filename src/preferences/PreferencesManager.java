@@ -1,6 +1,5 @@
 package preferences;
 
-import main.MVCCDManager;
 import profile.ProfileFileChooser;
 import project.Project;
 import project.ProjectFileChooser;
@@ -80,6 +79,7 @@ public class PreferencesManager {
         projectPref.setDEBUG_PRINT_MVCCDELEMENT(applicationPref.isDEBUG_PRINT_MVCCDELEMENT());
         projectPref.setDEBUG_BACKGROUND_PANEL(applicationPref.isDEBUG_BACKGROUND_PANEL());
         projectPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(applicationPref.isDEBUG_SHOW_TABLE_COL_HIDDEN());
+        projectPref.setDEBUG_INSPECT_OBJECT_IN_TREE(applicationPref.getDEBUG_INSPECT_OBJECT_IN_TREE());
 
         // Pour le moment pas de changement possible pour un projet existant
         // A analyser et reprendre plus tard

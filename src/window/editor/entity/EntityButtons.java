@@ -13,7 +13,7 @@ public class EntityButtons extends PanelButtons {
     }
 
     @Override
-    protected PanelButtonsContent getButtonsContentCustom() {
+    protected PanelButtonsContent createButtonsContentCustom() {
         return new EntityButtonsContent(this);
     }
 }
