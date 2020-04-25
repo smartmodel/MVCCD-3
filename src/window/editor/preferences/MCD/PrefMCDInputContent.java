@@ -62,7 +62,7 @@ public class PrefMCDInputContent extends PanelInputContent {
          */
     }
 
-    protected void createContentCustom() {
+    public void createContentCustom() {
         fieldAIDIndName.setPreferredSize((new Dimension(100,Preferences.EDITOR_FIELD_HEIGHT)));
         fieldAIDIndName.setToolTipText("Nom de l'attribut AID");
         fieldAIDIndName.setCheckPreSave(true);
@@ -332,7 +332,7 @@ public class PrefMCDInputContent extends PanelInputContent {
 
 
     @Override
-    protected boolean checkDatas() {
+    public boolean checkDatas() {
         boolean ok = checkDatasPreSave(false);
         // Autres attributs
         return ok;

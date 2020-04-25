@@ -35,6 +35,7 @@ public class EntityEditor extends DialogEditor {
 
     @Override
     protected PanelInput getInputCustom() {
+
         return new EntityInput(this);
     }
 

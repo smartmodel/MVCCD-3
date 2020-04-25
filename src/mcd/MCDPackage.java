@@ -1,14 +1,11 @@
 package mcd;
 
-import main.MVCCDElement;
-import mcd.interfaces.IMCDContPackages;
-import mcd.interfaces.IMCDNamePathParent;
-import mcd.interfaces.IMCDTraceability;
-import preferences.Preferences;
+import m.IMCompliant;
+import mcd.interfaces.*;
 import project.ProjectElement;
-import utilities.files.UtilXML;
 
-public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDNamePathParent, IMCDContPackages {
+public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDNamePathParent,
+        IMCDContPackages, IMCDContContainer, IMCDContainer, IMCompliant {
 
     private static final long serialVersionUID = 1000;
 
@@ -63,4 +60,5 @@ public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDName
     public String getNameTree() {
         return null;
     }
+
 }

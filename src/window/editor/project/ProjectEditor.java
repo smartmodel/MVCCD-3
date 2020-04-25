@@ -1,5 +1,6 @@
 package window.editor.project;
 
+import main.MVCCDElement;
 import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import project.Project;

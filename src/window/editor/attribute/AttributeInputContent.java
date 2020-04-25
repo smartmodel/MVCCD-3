@@ -67,17 +67,13 @@ public class AttributeInputContent extends PanelInputContentId {
 
     public AttributeInputContent(AttributeInput attributeInput)     {
         super(attributeInput);
-        /*
-        attributeInput.setPanelContent(this);
-        createContent();
-        super.addContent(panel);
-        super.initOrLoadDatas();
-        enabledContent();
+      }
 
-         */
 
+    public AttributeInputContent(MVCCDElement element)     {
+        super(null);
+        elementForCheckInput = element;
     }
-
 
 
     @Override
@@ -342,11 +338,18 @@ public class AttributeInputContent extends PanelInputContentId {
 
 
     protected SComponent changeField(DocumentEvent e) {
-            SComponent sComponent = super.changeField(e);
+        SComponent sComponent = super.changeField(e);
+        Document doc = e.getDocument();
+        if (doc == datatypeSize.getDocument()){
+            sComponent = datatypeSize;
+            checkDatasPreSave(panelInput != null);
+        }
+        if (doc == datatypeScale.getDocument()){
+            sComponent = datatypeScale;
+            checkDatasPreSave(panelInput != null);
+        }
 
-            Document doc = e.getDocument();
-
-            // Autres champs que les champs Id
+        // Autres champs que les champs Id
             return sComponent;
     }
 
@@ -371,6 +374,7 @@ public class AttributeInputContent extends PanelInputContentId {
             if (source == datatypeName) {
                 //changeFieldSelectedList();
                 changeFieldSelectedDatatypeName();
+                checkDatasPreSave(true);
             }
             if (source == mandatory) {
             }
@@ -588,17 +592,23 @@ public class AttributeInputContent extends PanelInputContentId {
     }
 
 
+    public boolean checkDatas(){
+        boolean ok = super.checkDatas();
+        // Autre attributs
+        return ok;
+    }
 
     @Override
     public boolean checkDatasPreSave(boolean unitaire) {
         datatypeSize.setColorNormal();
         datatypeScale.setColorNormal();
-        boolean ok ;
+        boolean ok = super.checkDatasPreSave(unitaire);
         ok = checkDatatypeSize(unitaire) ;
         ok = checkDatatypeScale(unitaire && ok) && ok;
         if (ok){
             ok =  checkSizeAndScale(unitaire && ok)  && ok;
         }
+        setPreSaveOk(ok);
         return ok;
     }
 
@@ -609,11 +619,7 @@ public class AttributeInputContent extends PanelInputContentId {
     }
 
 
-    protected boolean checkDatas(){
-        boolean ok = checkDatasPreSave(false);
-        // Autre attributs
-        return ok;
-    }
+
     private boolean checkSizeAndScale(boolean unitaire) {
         if (mcdDatatypeSelected != null) {
             boolean c1a = mcdDatatypeSelected.isSelfOrDescendantOf(
@@ -666,36 +672,40 @@ public class AttributeInputContent extends PanelInputContentId {
         return true;
     }
 
-    @Override
-    protected boolean checkName(boolean unitaire) {
-        return super.checkInput(fieldName, unitaire, MCDAttributeService.checkName(fieldName.getText()));
-    }
 
-    @Override
-    protected String getElementAndNaming(int naming) {
-        return null;
-    }
+
 
     @Override
     protected String getNamingAndBrothersElements(int naming) {
-        return null;
-    }
-
-    @Override
-    protected boolean checkShortName(boolean unitaire) {
-        return super.checkInput(fieldShortName, unitaire, MCDAttributeService.checkShortName(fieldShortName.getText()));
-    }
-
-
-
-    @Override
-    protected boolean checkLongName(boolean unitaire) {
-        return true;
+        if (naming == MVCCDElement.SCOPENAME) {
+            return "naming.a.brother.attribute";
+        } else{
+            return "naming.brother.attribute";
+        }
     }
 
     @Override
     protected int getLengthMax(int naming) {
-        return 0;
+        if (naming == MVCCDElement.SCOPENAME) {
+            return Preferences.ATTRIBUTE_NAME_LENGTH;
+        }
+        if (naming == MVCCDElement.SCOPESHORTNAME) {
+            return Preferences.ATTRIBUTE_SHORT_NAME_LENGTH;
+        }
+        if (naming == MVCCDElement.SCOPELONGNAME) {
+            return Preferences.ATTRIBUTE_LONG_NAME_LENGTH;
+        }
+
+        return -1;
+
+
+    }
+
+
+
+    @Override
+    protected String getElement(int naming) {
+        return "of.attribute";
     }
 
     @Override

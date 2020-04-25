@@ -3,6 +3,8 @@ package main;
 import mcd.MCDElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
+import project.ProjectElement;
+import project.ProjectService;
 import utilities.Debug;
 
 import java.io.Serializable;
@@ -113,6 +115,7 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
         }
     }
 
+
     public ArrayList<MVCCDElement> getChilds() {
         Collections.sort(childs, MVCCDElement::compareTo);
         return childs;
@@ -128,6 +131,21 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
         return resultat;
     }
 
+    public ArrayList<MVCCDElement> getDescendants(){
+        return MVCCDElementService.getDescendants(this);
+    }
+
+    public ArrayList<MVCCDElement> getDescendantsWithout(MVCCDElement child) {
+        ArrayList<MVCCDElement> resultat = new ArrayList<MVCCDElement>() ;
+        for (MVCCDElement aChild : getDescendants()){
+            if (aChild != child){
+                resultat.add(aChild);
+            }
+        }
+        return resultat;
+    }
+
+
 
     public void setOrder(int order) {
         this.order = order;
@@ -138,6 +156,7 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
     }
 
     // Peut être surchargé par les descendants si nécessaire (p.exemple, les relations
+    // est utilisé par toString()
     public abstract String getNameTree() ;
 
     public String toString(){
@@ -205,6 +224,18 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
             }
         }
         return false;
+    }
+
+    public String getNameId() {
+        return getName();
+    }
+
+    public String getShortNameId() {
+        return getShortName();
+    }
+
+    public String getLongNameId() {
+        return getLongName();
     }
 
 }

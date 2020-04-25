@@ -14,13 +14,20 @@ import java.util.Comparator;
 
 public class MCDEntityService {
 
-
-    public static ArrayList<String> check(MCDEntity mcdEntity) {
-        ArrayList<String> messages = new ArrayList<String>();
-        return messages;
+/*
+    public static ArrayList<String> checkInput(MCDEntity mcdEntity) {
+        return MCDUtilService.checkNamingIdBatch(mcdEntity,
+                PreferencesManager.instance().preferences().ENTITY_NAME_LENGTH,
+                PreferencesManager.instance().preferences().ENTITY_SHORT_NAME_LENGTH,
+                PreferencesManager.instance().preferences().ENTITY_SHORT_NAME_LENGTH);
     }
 
 
+    public static ArrayList<String> checkCompliant(MCDEntity mcdEntity) {
+
+        return checkInput(mcdEntity);
+    }
+*/
 
     public static void sortNameAsc(ArrayList<MCDEntity> entities){
 

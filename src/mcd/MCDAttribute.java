@@ -3,7 +3,7 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import main.MVCCDElement;
+import m.IMCompliant;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -14,7 +14,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MCDAttribute extends MCDElement {
+public class MCDAttribute extends MCDElement implements IMCompliant {
 
     private static final long serialVersionUID = 1000;
 
@@ -209,4 +209,5 @@ public class MCDAttribute extends MCDElement {
     public String getNameTree() {
         return null;
     }
+
 }

@@ -1,12 +1,13 @@
 package mcd;
 
+import m.IMCompliant;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDNamePathParent;
 import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public class MCDEntity extends MCDElement implements IMCDNamePathParent {
+public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompliant {
 
     private static final long serialVersionUID = 1000;
 
@@ -69,7 +70,7 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent {
         return new ArrayList<MCDAttribute>();
     }
 
-    public MCDContEndRels getMCDContRelations() {
+    public MCDContEndRels getMCDContEndRels() {
         for (MVCCDElement mvccdElement : getChilds()){
             if (mvccdElement instanceof MCDContEndRels) {
                 return (MCDContEndRels) mvccdElement;
@@ -82,4 +83,6 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent {
     public String getNameTree() {
         return null;
     }
+
+
 }

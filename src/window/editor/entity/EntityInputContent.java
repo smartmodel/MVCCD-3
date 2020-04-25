@@ -34,21 +34,19 @@ public class EntityInputContent extends PanelInputContentId {
 
     public EntityInputContent(EntityInput entityInput)     {
         super(entityInput);
-        /*
-        entityInput.setPanelContent(this);
-        createContent();
-        super.addContent(panel);
-        super.initOrLoadDatas();
-        enabledContent();
+    }
 
-         */
-     }
+    public EntityInputContent(MVCCDElement element)     {
+        super(null);
+        elementForCheckInput = element;
+    }
 
 
 
 
 
-    @Override
+
+        @Override
     protected void createContentIdCustom() {
 
         //super.createContentId();
@@ -174,21 +172,10 @@ public class EntityInputContent extends PanelInputContentId {
         return -1;
     }
 
-   @Override
-    protected String getElementAndNaming(int naming) {
-        if (naming == MVCCDElement.SCOPENAME) {
-            return "entity.and.name";
-        }
-        if (naming == MVCCDElement.SCOPESHORTNAME) {
-            return "entity.and.short.name";
-        }
-        if (naming == MVCCDElement.SCOPELONGNAME) {
-            return "entity.and.long.name";
-        }
-
-        return null;
+    @Override
+    protected String getElement(int naming) {
+        return "of.entity";
     }
-
 
     @Override
     protected String getNamingAndBrothersElements(int naming) {
@@ -224,6 +211,7 @@ public class EntityInputContent extends PanelInputContentId {
     @Override
     public void loadDatas(MVCCDElement mvccdElementCrt) {
         MCDEntity mcdEntity = (MCDEntity) mvccdElementCrt;
+        System.out.println("Load... " + mcdEntity.getName());
         super.loadDatas(mcdEntity);
         entityOrdered.setSelected(mcdEntity.isOrdered());
         entityAbstract.setSelected(mcdEntity.isEntAbstract());
@@ -254,15 +242,17 @@ public class EntityInputContent extends PanelInputContentId {
 
     @Override
     public boolean checkDatasPreSave(boolean unitaire) {
+        boolean ok = super.checkDatasPreSave(unitaire);
+        // Autres attributs
 
-        return true;
+        setPreSaveOk(ok);
+        return ok;
     }
 
 
 
-    protected boolean checkDatas(){
-        boolean ok = checkDatasPreSave(false);
-
+    public boolean checkDatas(){
+        boolean ok = super.checkDatas();
         // Autres attributs
 
         return ok ;

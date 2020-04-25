@@ -1,15 +1,8 @@
 package mcd;
 
-import main.MVCCDElement;
-import mcd.interfaces.IMCDNamePathParent;
 import mcd.services.MCDElementService;
 import md.MDElement;
-import org.apache.commons.lang.StringUtils;
-import preferences.Preferences;
 import project.ProjectElement;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public abstract class MCDElement extends MDElement {
 
@@ -42,6 +35,5 @@ public abstract class MCDElement extends MDElement {
             return getShortNameSmart();
         }
     }
-
 
 }

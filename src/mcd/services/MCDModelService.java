@@ -1,24 +1,30 @@
 package mcd.services;
 
-import main.MVCCDElement;
-import main.MVCCDElementFactory;
+import m.MElement;
 import mcd.*;
-import messages.MessagesBuilder;
 import preferences.Preferences;
-import project.ProjectElement;
+import preferences.PreferencesManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class MCDModelService {
+public class MCDModelService  {
+
+/*
+    public static ArrayList<String> checkInput(MCDModel mcdModel) {
+        System.out.println("Check Input Model");
+        return MCDUtilService.checkNamingIdBatch(mcdModel,
+                PreferencesManager.instance().preferences().MODEL_NAME_LENGTH,
+                PreferencesManager.instance().preferences().MODEL_SHORT_NAME_LENGTH,
+                PreferencesManager.instance().preferences().MODEL_SHORT_NAME_LENGTH);
 
 
-    public static ArrayList<String> check(MCDModel mcdModel) {
-        ArrayList<String> messages = new ArrayList<String>();
-        return messages;
     }
+    */
 
+
+/*
     public static ArrayList<String> checkName(MCDContModels parent, MCDModel child, String name) {
         ArrayList<String> messages = MCDUtilService.checkString(name, true, Preferences.MODEL_NAME_LENGTH,
                 Preferences.NAME_REGEXPR, "modele.and.name");
@@ -41,7 +47,7 @@ public class MCDModelService {
         }
         return messages;
     }
-
+*/
 
     public static void sortNameAsc(ArrayList<MCDModel> models){
         Collections.sort(models, NAME_ASC);
@@ -55,4 +61,4 @@ public class MCDModelService {
     };
 
 
-}
+ }

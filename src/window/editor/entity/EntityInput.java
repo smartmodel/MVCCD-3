@@ -16,4 +16,5 @@ public class EntityInput extends PanelInput {
     protected PanelInputContent createInputContentCustom() {
         return new EntityInputContent(this);
     }
+
 }

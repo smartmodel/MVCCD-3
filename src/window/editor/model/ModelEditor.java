@@ -1,6 +1,10 @@
 package window.editor.model;
 
+import m.MElement;
+import main.MVCCDElement;
 import mcd.MCDElement;
+import mcd.interfaces.IMCDContContainer;
+import mcd.interfaces.IMCDContainer;
 import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import utilities.window.editor.PanelButtons;
@@ -11,11 +15,11 @@ import java.awt.*;
 public class ModelEditor extends DialogEditor {
 
     public ModelEditor(Window owner,
-                       MCDElement parent,
-                       MCDElement mcdElement,
+                       IMCDContContainer parent,
+                       IMCDContainer element,
                        String mode,
                        int scope            )  {
-        super(owner, parent, mcdElement, mode, scope);
+        super(owner, (MVCCDElement) parent, (MVCCDElement) element, mode, scope);
 /*
         super.setSize(Preferences.MODEL_WINDOW_WIDTH, Preferences.MODEL_WINDOW_HEIGHT);
         super.setInput(new ModelInput(this));

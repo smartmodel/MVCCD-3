@@ -25,7 +25,7 @@ public class PrefGeneralInputContent extends PanelInputContent {
          */
     }
 
-    protected void createContentCustom() {
+    public void createContentCustom() {
 
 
 
@@ -54,7 +54,7 @@ public class PrefGeneralInputContent extends PanelInputContent {
 
 
     @Override
-    protected boolean checkDatas() {
+    public boolean checkDatas() {
 
         return true;
     }

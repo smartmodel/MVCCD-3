@@ -100,10 +100,12 @@ public class MVCCDElementFactory {
         MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations) ;
 
         MCDEntity mcdEntityFrom = (MCDEntity) mcdContEndRelsFrom.getParent();
-        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdEntityFrom) ;
+        MCDContEndRels mcdContEndRelsEntityFrom = mcdEntityFrom.getMCDContEndRels();
+        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdContEndRelsEntityFrom) ;
 
         MCDEntity mcdEntityTo = (MCDEntity) mcdContEndRelsTo.getParent();
-        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdEntityTo) ;
+        MCDContEndRels mcdContEndRelsEntityTo = mcdEntityTo.getMCDContEndRels();
+        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdContEndRelsEntityTo) ;
 
         mcdAssociation.setFrom(mcdAssEndFrom);
         mcdAssociation.setTo(mcdAssEndTo);

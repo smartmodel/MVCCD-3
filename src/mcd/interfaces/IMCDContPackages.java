@@ -4,6 +4,7 @@ import mcd.MCDElement;
 import mcd.MCDPackage;
 import project.ProjectService;
 
+// Implémentée par les classes qui peuvent contenir des paquetages
 public interface IMCDContPackages {
 
 

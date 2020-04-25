@@ -9,13 +9,24 @@ public abstract class PanelInput extends PanelBorderLayout implements IAccessDia
 
 
     public PanelInput(DialogEditor dialogEditor) {
-        
+
         this.dialogEditor = dialogEditor;
         PanelInputContent panelInputContent = createInputContentCustom();
         setInputContent( panelInputContent);
         panelInputContent.start();
 
     }
+/*
+    public PanelInput(DialogEditor dialogEditor, PanelInputContent panelInputContent) {
+
+        this.dialogEditor = dialogEditor;
+        //PanelInputContent panelInputContent = createInputContentCustom();
+        setInputContent( panelInputContent);
+        panelInputContent.start();
+
+    }
+
+ */
 
     protected abstract PanelInputContent createInputContentCustom();
 

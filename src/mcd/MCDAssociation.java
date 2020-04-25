@@ -1,13 +1,14 @@
 package mcd;
 
 import exceptions.CodeApplException;
+import m.IMCompliant;
 import main.MVCCDElement;
+import mcd.services.MCDAssociationService;
 import mcd.services.MCDElementService;
-import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
-public class MCDAssociation extends MCDRelation{
+public class MCDAssociation extends MCDRelation implements IMCompliant {
 
     private  static final long serialVersionUID = 1000;
 
@@ -39,6 +40,19 @@ public class MCDAssociation extends MCDRelation{
     public void setTo(MCDAssEnd to) {
         super.setB(to);
         to.setDrawingDirection(MCDAssEnd.TO);
+    }
+
+    public String getNameId(){
+        System.out.println("MCDAssociation :  " + MCDAssociationService.buildNameId(getFrom().getMcdEntity(), getTo().getMcdEntity(), this.getName()));
+        return MCDAssociationService.buildNameId(getFrom().getMcdEntity(), getTo().getMcdEntity(), this.getName());
+    }
+
+   public String getShortNameId() {
+        return null;
+    }
+
+   public String getLongNameId() {
+        return null;
     }
 
     @Override
@@ -115,4 +129,5 @@ public class MCDAssociation extends MCDRelation{
         throw new CodeApplException("L'extrémité d'association passée en paramètre n'existe pas pour cette association ");
 
     }
+
 }

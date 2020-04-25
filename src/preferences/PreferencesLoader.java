@@ -11,6 +11,7 @@ public class PreferencesLoader {
         Preferences preferences = null;
         ObjectInputStream reader = null;
         //Preferences applicationPref = null;
+        System.out.println(file.getPath());
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
             if (fileInputStream != null) {

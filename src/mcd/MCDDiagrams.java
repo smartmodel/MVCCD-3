@@ -1,12 +1,8 @@
 package mcd;
 
-import main.MVCCDElement;
-import main.MVCCDManager;
-import preferences.Preferences;
 import project.ProjectElement;
-import utilities.files.UtilXML;
 
-public class MCDDiagrams extends MCDElement{
+public class MCDDiagrams extends MCDElement {
 
     private static final long serialVersionUID = 1000;
     public MCDDiagrams(ProjectElement parent, String name) {
@@ -22,4 +18,5 @@ public class MCDDiagrams extends MCDElement{
     public String getNameTree() {
         return null;
     }
+
 }

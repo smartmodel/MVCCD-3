@@ -42,6 +42,11 @@ public class Preferences extends MVCCDElement {
     public static Integer ENTITY_SHORT_NAME_LENGTH = 5;
     public static Integer ENTITY_LONG_NAME_LENGTH = 50;
     public static Integer ATTRIBUTE_NAME_LENGTH = 20;
+    public static Integer ATTRIBUTE_SHORT_NAME_LENGTH = 10;
+    public static Integer ATTRIBUTE_LONG_NAME_LENGTH = 50;
+    public static Integer ASSOCIATION_NAME_LENGTH = 20;
+    public static Integer ASSOCIATION_SHORT_NAME_LENGTH = 5;
+    public static Integer ASSOCIATION_LONG_NAME_LENGTH = 50;
     public static String INTEGER_REGEXPR = "([0])|([1-9]{1,1}[0-9]*)";
     //public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"windows-1252\"?>";

@@ -43,7 +43,7 @@ public class ProjectInputContent extends PanelInputContent {
 
 
 
-    protected void createContentCustom() {
+    public void createContentCustom() {
         Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
 
         projectName.setPreferredSize((new Dimension(300,20)));

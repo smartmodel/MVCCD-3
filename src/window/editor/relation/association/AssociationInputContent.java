@@ -5,6 +5,8 @@ import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.services.*;
+import messages.MessagesBuilder;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.editor.PanelInputContentId;
@@ -35,7 +37,7 @@ public class AssociationInputContent extends PanelInputContentId {
     private JPanel panelToRole = new JPanel();
     private STextField fieldToRoleName = new STextField(this);
     private STextField fieldToRoleShortName = new STextField(this);
-    private IMCDModel iMCDModelContainer;
+    //private IMCDModel iMCDModelContainer;
 
 
     //TODO-0 MCDElementService.PATHNAME , remplacer par SHORT et mettre une constante
@@ -52,28 +54,25 @@ public class AssociationInputContent extends PanelInputContentId {
 
     public AssociationInputContent(AssociationInput associationInput)     {
         super(associationInput);
+        /*
         if ((MCDElement) getEditor().getMvccdElementParent() != null) {
             iMCDModelContainer = IMCDModelService.getIModelContainer((MCDElement) getEditor().getMvccdElementParent());
         } else {
             iMCDModelContainer = IMCDModelService.getIModelContainer((MCDElement) getEditor().getMvccdElementCrt());
         }
-        /*
-        associationInput.setPanelContent(this);
-
-        createContent();
-        super.addContent(panel);
-        super.initOrLoadDatas();
-        enabledContent();
 
          */
-
     }
 
-
+    public AssociationInputContent(MVCCDElement elementCrt)     {
+        super(null);
+        elementForCheckInput = elementCrt;
+    }
 
     @Override
     protected void createContentIdCustom() {
 
+        System.out.println("createContentIdCustom()");
         //super.createContentId();
 
         fieldName.setToolTipText("Nom de l'association");
@@ -96,6 +95,7 @@ public class AssociationInputContent extends PanelInputContentId {
         factorizeFieldEntity.addItem(SComboBox.LINEWHITE);
         for (MCDEntity mcdEntity : mcdEntities) {
             factorizeFieldEntity.addItem(mcdEntity.getNamePath(MCDElementService.PATHNAME));
+            System.out.println("addItem   " + mcdEntity.getNamePath(MCDElementService.PATHNAME));
         }
         factorizeFieldEntity.addFocusListener(this);
         factorizeFieldEntity.addItemListener(this);
@@ -215,12 +215,25 @@ public class AssociationInputContent extends PanelInputContentId {
 
 
     protected SComponent changeField(DocumentEvent e) {
+        //SComponent sComponent = super.changeField(e);
+        SComponent sComponent=null;
+        Document doc = e.getDocument();
 
+        // Autres champs que les champs Id
+        if ( doc == fieldName.getDocument()){
+            sComponent = fieldName;
+            checkDatasPreSave(panelInput != null);
+        }
+        if ( doc == fieldFromRoleName.getDocument()){
+            sComponent = fieldFromRoleName;
+            checkDatasPreSave(panelInput != null);
+        }
+        if ( doc == fieldToRoleName.getDocument()){
+            sComponent = fieldToRoleName;
+            checkDatasPreSave(panelInput != null);
+        }
 
-            Document doc = e.getDocument();
-
-            // Autres champs que les champs Id
-            return null;
+        return sComponent;
     }
 
 
@@ -228,6 +241,16 @@ public class AssociationInputContent extends PanelInputContentId {
     @Override
     protected void changeFieldSelected(ItemEvent e) {
             Object source = e.getSource();
+
+        // panelInput != null Pour ne pas lancer les messages lors de l'appel du formulaire seul
+        // en preSave
+        if (source == fieldFromEntity){
+            checkDatasPreSave(panelInput != null);
+        }
+
+        if (source == fieldToEntity){
+            checkDatasPreSave(panelInput != null);
+        }
 
     }
 
@@ -254,13 +277,32 @@ public class AssociationInputContent extends PanelInputContentId {
 
     @Override
     public boolean checkDatasPreSave(boolean unitaire) {
+        System.out.println("checkDatasPreSave in Association" );
         // ! Le non d'association n'est pas impératif!
-        //boolean ok = super.checkDatasPreSaveId(unitaire);
+        //boolean ok = super.checkDatasPreSave(unitaire);
+        fieldName.setColorNormal();
+        fieldFromRoleName.setColorNormal();
+        fieldToRoleName.setColorNormal();
 
-        boolean ok =   checkAssociationFrom(unitaire);
+        boolean ok =   checkName(unitaire) ;
+        ok = checkShortName(unitaire && ok) && ok;
+        ok = checkLongName(unitaire && ok) && ok;
+        ok = checkAssociationFrom(unitaire && ok) && ok;
         ok = checkAssociationTo(unitaire && ok) && ok;
+        ok = checkNameOrRoles(unitaire && ok) && ok;
 
+        setPreSaveOk(ok);
         return ok;
+    }
+
+
+
+    @Override
+    public boolean checkDatas(){
+        boolean ok = super.checkDatas();
+        // Autre attributs
+
+        return true;
     }
 
     @Override
@@ -268,30 +310,42 @@ public class AssociationInputContent extends PanelInputContentId {
 
     }
 
-    protected boolean checkDatas(){
-        boolean ok = checkDatasPreSave(false);
-        // Autre attributs
-
-        return true;
-    }
 
 
     @Override
     protected boolean checkName(boolean unitaire) {
-        return true;
+        boolean ok = true;
+        if ((getMCDEntityFrom() != null) && (getMCDEntityTo() != null)) {
+            String nameId = MCDAssociationService.buildNameId(getMCDEntityFrom(), getMCDEntityTo(), fieldName.getText());
+            System.out.println("Dans checkName()  " + fieldName.getText() + "    " + nameId);
+
+            ok = checkNameOneWay(unitaire, fieldName.getText(), nameId);
+            nameId = MCDAssociationService.buildNameId(getMCDEntityTo(), getMCDEntityFrom(), fieldName.getText());
+            if (ok) {
+                ok = checkNameOneWay(unitaire, fieldName.getText(), nameId);
+            }
+        }
+        return ok;
+     }
+
+    protected boolean checkNameOneWay(boolean unitaire, String name, String nameId) {
+        return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
+                (MCDElement) iMCDModelContainer,
+                getChildForCheck(),
+                true,
+                name,
+                nameId,
+                false,
+                getLengthMax(MVCCDElement.SCOPENAME),
+                getNaming(MVCCDElement.SCOPENAME),
+                getElement(MVCCDElement.SCOPENAME),
+                getNamingAndBrothersElements(MVCCDElement.SCOPENAME),
+                getNamingAndBrothersElements(MVCCDElement.SCOPENOTNAME)));
     }
 
-    @Override
-    protected String getElementAndNaming(int naming) {
-        return null;
-    }
 
-    @Override
-    protected String getNamingAndBrothersElements(int naming) {
-        return null;
-    }
 
-    @Override
+        @Override
     protected boolean checkShortName(boolean unitaire) {
         return true;
     }
@@ -301,19 +355,44 @@ public class AssociationInputContent extends PanelInputContentId {
         return true;
     }
 
+
+
+    @Override
+    protected String getNamingAndBrothersElements(int naming) {
+        if (naming == MVCCDElement.SCOPENAME) {
+            return "naming.a.sister.association";
+        }
+        return "naming.sister.association";
+    }
+
     @Override
     protected int getLengthMax(int naming) {
-        return 0;
+        if (naming == MVCCDElement.SCOPENAME) {
+            return Preferences.ASSOCIATION_NAME_LENGTH;
+        }
+        if (naming == MVCCDElement.SCOPESHORTNAME) {
+            return Preferences.ASSOCIATION_SHORT_NAME_LENGTH;
+        }
+        if (naming == MVCCDElement.SCOPELONGNAME) {
+            return Preferences.ASSOCIATION_LONG_NAME_LENGTH;
+        }
+
+        return -1;    }
+
+    @Override
+    protected String getElement(int naming) {
+        return "of.association";
     }
 
     @Override
     protected ArrayList<MCDElement> getParentCandidates(IMCDModel iMCDModelContainer) {
-        return null;
+        ArrayList<MCDContRelations> mcdContRelations = MCDContRelationsService.getMCDContRelationsInIModel(iMCDModelContainer);
+        return MCDContRelationsService.toMCDElements(mcdContRelations);
     }
 
     @Override
     protected MCDElement getParentByNamePath(int pathname, String text) {
-        return null;
+        return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(MCDElementService.PATHNAME, text);
     }
 
 
@@ -321,7 +400,8 @@ public class AssociationInputContent extends PanelInputContentId {
         ArrayList<String> messages = MCDUtilService.checkEmptyComboBox(
                 fieldFromEntity,
                 true,
-                "entity.from.and.name" );
+                "of.entity.from",
+                "of.association");
 
         return super.checkInput(fieldFromEntity, unitaire, messages);
 
@@ -331,10 +411,37 @@ public class AssociationInputContent extends PanelInputContentId {
         ArrayList<String> messages = MCDUtilService.checkEmptyComboBox(
                 fieldToEntity,
                 true,
-                "entity.to.and.name" );
+                "of.entity.to",
+                "of.association" );
 
         return super.checkInput(fieldToEntity, unitaire, messages);
 
+    }
+
+    private boolean checkNameOrRoles(boolean unitaire) {
+
+        boolean c1 = StringUtils.isNotEmpty(fieldName.getText());
+        boolean c2 = StringUtils.isNotEmpty(fieldFromRoleName.getText())  &&
+                        StringUtils.isNotEmpty(fieldToRoleName.getText()) ;
+
+        if ( !(c1 || c2) ) {
+            System.out.println("pas de nommage association");
+            if (unitaire) {
+                ArrayList<String> messagesErrors = new ArrayList<String>();
+                String message =
+                    message = MessagesBuilder.getMessagesProperty("association.name.or.name.error");
+
+                messagesErrors.add(message);
+
+                fieldName.setColorError();
+                fieldFromRoleName.setColorError();
+                fieldToRoleName.setColorError();
+
+                showCheckResultat(messagesErrors);
+            }
+            return false;
+        }
+        return true;
     }
 
 
@@ -375,6 +482,8 @@ public class AssociationInputContent extends PanelInputContentId {
 
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
+
+        System.out.println("loadDatas");
         MCDAssociation mcdAssociation = (MCDAssociation) mvccdElement;
 
        // Au niveau de l'association
@@ -391,9 +500,11 @@ public class AssociationInputContent extends PanelInputContentId {
 
     private void loadDatasAssEnd(int direction, MCDAssEnd mcdAssEnd) {
         factorizeAssEnd(direction);
+        System.out.println("loadDatas from  " + mcdAssEnd.getMcdEntity().getNamePath(MCDElementService.PATHNAME));
         SComboBoxService.selectByText(factorizeFieldEntity, mcdAssEnd.getMcdEntity().getNamePath(MCDElementService.PATHNAME));
         factorizeFieldRoleName.setText(mcdAssEnd.getName());
         factorizeFieldRoleShortName.setText(mcdAssEnd.getShortName());
+        System.out.println ("from  " + factorizeFieldEntity.getSelectedItem().toString());
     }
 
     @Override
@@ -460,4 +571,6 @@ public class AssociationInputContent extends PanelInputContentId {
            factorizeFieldRoleShortName = fieldToRoleShortName;
        }
    }
+
+
 }

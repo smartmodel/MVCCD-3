@@ -14,7 +14,7 @@ import preferences.PreferencesManager;
 import project.ProjectElement;
 import project.ProjectService;
 import repository.RepositoryService;
-import repository.editingTreat.MCDAttributeEditingTreat;
+import repository.editingTreat.mcd.MCDAttributeEditingTreat;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import utilities.UtilDivers;
@@ -58,7 +58,7 @@ public class AttributesInputContent extends PanelInputContent {
 
 
 
-    protected void createContentCustom() {
+    public void createContentCustom() {
         makeTable();
         makeButtons();
         makeLayout();
@@ -228,7 +228,7 @@ public class AttributesInputContent extends PanelInputContent {
 
             public void actionPerformed(ActionEvent e) {
 
-                MCDAttribute mcdAttribute = MCDAttributeEditingTreat.treatNew( getEditor(),
+                MCDAttribute mcdAttribute = (MCDAttribute) new MCDAttributeEditingTreat().treatNew( getEditor(),
                         (MCDContAttributes) getEditor().getMvccdElementCrt());
 
                 if (mcdAttribute != null) {
@@ -269,7 +269,7 @@ public class AttributesInputContent extends PanelInputContent {
                     //TODO-0 Faire appel treatEdit
                     Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
                     MCDAttribute mcdAttributeActual = (MCDAttribute) ProjectService.getElementById(idActual);
-                    MCDAttributeEditingTreat.treatUpdate( getEditor(), mcdAttributeActual);
+                    new MCDAttributeEditingTreat().treatUpdate( getEditor(), mcdAttributeActual);
 
                     updateRow(mcdAttributeActual, table.getSelectedRow());
                     enabledContent();
@@ -359,7 +359,7 @@ public class AttributesInputContent extends PanelInputContent {
     }
 
 
-    protected boolean checkDatas(){
+    public boolean checkDatas(){
             return true;
     }
 

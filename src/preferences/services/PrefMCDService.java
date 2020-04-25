@@ -9,13 +9,13 @@ public class PrefMCDService {
 
     public static ArrayList<String> checkAIDIndName(String name) {
         return MCDUtilService.checkString(name, true, Preferences.ATTRIBUTE_NAME_LENGTH,
-                Preferences.NAME_REGEXPR, "pref.mcd.aid.ind.name");
+                Preferences.NAME_REGEXPR, "naming.of.name.AID","of.entity.ind");
 
     }
 
     public static ArrayList<String> checkAIDDepName(String name) {
         return MCDUtilService.checkString(name, true, Preferences.ATTRIBUTE_NAME_LENGTH,
-                Preferences.NAME_REGEXPR, "pref.mcd.aid.dep.name");
+                Preferences.NAME_REGEXPR, "naming.of.name.AID","of.entity.dep");
 
     }
 }

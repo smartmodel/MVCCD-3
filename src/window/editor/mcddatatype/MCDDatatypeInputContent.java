@@ -64,7 +64,7 @@ public class MCDDatatypeInputContent extends PanelInputContent{
 
 
 
-    protected void createContentCustom() {
+    public void createContentCustom() {
 
         mcdDatatypeName.setPreferredSize((new Dimension(150,Preferences.EDITOR_FIELD_HEIGHT)));
         mcdDatatypeName.setToolTipText("Nom de type");
@@ -331,7 +331,7 @@ public class MCDDatatypeInputContent extends PanelInputContent{
     }
 
 
-    protected boolean checkDatas(){
+    public boolean checkDatas(){
             return true;
     }
 

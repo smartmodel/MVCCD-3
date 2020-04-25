@@ -19,7 +19,8 @@ public abstract class PanelInputContent
         implements IAccessDialogEditor, IPanelInputContent,
                     FocusListener, DocumentListener,  ItemListener {
 
-    private PanelInput panelInput;
+    protected PanelInput panelInput;
+    protected MVCCDElement elementForCheckInput ;
 
     //TODO-1 Avoir si panel ne peut pas être la classe elle-même
     protected JPanel panelInputContentCustom = new JPanel();
@@ -41,27 +42,31 @@ public abstract class PanelInputContent
         super.initOrLoadDatas();
         enabledContent();
 */
-        panelInput.setPanelContent(this);
+        // Pour utilisation  uniquement checkDatas
+        if (panelInput != null) {
+            panelInput.setPanelContent(this);
+        }
     }
 
     protected void start(){
         createContentCustom();
         addContent(panelInputContentCustom);
 
-        initOrLoadDatas();
+        // Pour utilisation  uniquement checkDatas
+        if (panelInput != null) {
+            initOrLoadDatas();
+        }
         enabledContentCustom();
     }
 
     protected abstract void enabledContentCustom();
 
 
-    protected abstract void createContentCustom();
+    public abstract void createContentCustom();
 
-    protected abstract boolean checkDatas();
-    //protected abstract boolean checkDatasId();
+    public abstract boolean checkDatas();
 
     public abstract boolean checkDatasPreSave(boolean unitaire);
-    //public abstract boolean checkDatasPreSaveId(boolean unitaire);
 
     protected abstract SComponent changeField(DocumentEvent e);
     //protected abstract SComponent changeFieldId(DocumentEvent e);
@@ -72,7 +77,7 @@ public abstract class PanelInputContent
 
     protected abstract void changeFieldDeSelected(ItemEvent e);
 
-    protected abstract void loadDatas(MVCCDElement mvccdElementCrt);
+    public abstract void loadDatas(MVCCDElement mvccdElementCrt);
 
     //protected abstract void initDatas(MVCCDElement mvccdElementParent);
     protected abstract void initDatas();
@@ -84,8 +89,9 @@ public abstract class PanelInputContent
     public void insertUpdate(DocumentEvent e) {
         //SComponent sComponent = changeFieldId(e);
         //sComponent = changeField(e);
-        SComponent sComponent = changeField(e);
+        //SComponent sComponent = changeField(e);
         if (alreadyFocusGained) {
+            SComponent sComponent = changeField(e);
             enabledButtons();
         }
     }
@@ -99,8 +105,9 @@ public abstract class PanelInputContent
         } */
         //SComponent sComponent = changeFieldId(e);
         //sComponent = changeField(e);
-        SComponent sComponent = changeField(e);
+        //SComponent sComponent = changeField(e);
         if (alreadyFocusGained) {
+            SComponent sComponent = changeField(e);
             enabledButtons();
         }
     }
@@ -109,8 +116,9 @@ public abstract class PanelInputContent
     public void changedUpdate(DocumentEvent e) {
         //SComponent sComponent = changeFieldId(e);
         //sComponent = changeField(e);
-        SComponent sComponent = changeField(e);
+        //SComponent sComponent = changeField(e);
         if (alreadyFocusGained) {
+            SComponent sComponent = changeField(e);
             enabledButtons();
         }
     }
@@ -120,21 +128,21 @@ public abstract class PanelInputContent
     @Override
     public void itemStateChanged(ItemEvent e) {
 
-        if (e.getStateChange() == ItemEvent.SELECTED) {
-            //changeFieldIdSelected(e);
-            changeFieldSelected(e);
-        }
-        if (e.getStateChange() == ItemEvent.DESELECTED) {
-            changeFieldDeSelected(e);
-        }
-        if (e.getSource() instanceof SCheckBox) {
-                SCheckBox checkBox = (SCheckBox) e.getSource();
-                enableSubPanels(checkBox);
-        }
-        if (e.getSource() instanceof SComboBox) {
-        }
 
         if (alreadyFocusGained) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                //changeFieldIdSelected(e);
+                changeFieldSelected(e);
+            }
+            if (e.getStateChange() == ItemEvent.DESELECTED) {
+                changeFieldDeSelected(e);
+            }
+            if (e.getSource() instanceof SCheckBox) {
+                SCheckBox checkBox = (SCheckBox) e.getSource();
+                enableSubPanels(checkBox);
+            }
+            if (e.getSource() instanceof SComboBox) {
+            }
                 enabledButtons();
         }
 
@@ -193,7 +201,11 @@ public abstract class PanelInputContent
 
 
     public DialogEditor getEditor() {
-        return panelInput.getEditor();
+        // Pour utilisation  uniquement checkDatas
+        if (panelInput != null) {
+            return panelInput.getEditor();
+        }
+        return null;
     }
 
     public PanelButtons getButtons() {
@@ -210,10 +222,7 @@ public abstract class PanelInputContent
         getEditor().focusGained(focusEvent);
         getButtonsContent().clearMessages();
         if (!alreadyFocusGained) {
-            //checkDatasId();
             checkDatas();
-            //boolean ok = checkDatasPreSaveId(true);
-            //checkDatasPreSave(ok);
             checkDatasPreSave(true);
             enabledButtons();
             alreadyFocusGained = true;
@@ -253,15 +262,13 @@ public abstract class PanelInputContent
 
     protected void initOrLoadDatas() {
         if (getEditor().getMode().equals(DialogEditor.NEW)) {
-            //initDatas(getEditor().getMvccdElementParent());
             initDatas();
         } else {
             loadDatas(getEditor().getMvccdElementCrt());
         }
         dataInitialized = true;
         preSaveOk = checkDatasPreSave(false);
-        //preSaveOk = checkDatasPreSaveId(false);
-        //preSaveOk = checkDatasPreSave(false)  && preSaveOk;
+        System.out.println("preSaveOk   " + preSaveOk);
     }
 
     public boolean isDataInitialized() {

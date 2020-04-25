@@ -43,6 +43,9 @@ public class ModelInputContent extends PanelInputContentId {
     private SCheckBox fieldAudit = new SCheckBox(this);
     private SCheckBox fieldAuditException = new SCheckBox(this);
 
+    //TODO-1 Mettre une constante globale int = -1
+    private int scopeForCheckInput = -1;
+
 
     public ModelInputContent(ModelInput modelInput)     {
         super(modelInput);
@@ -54,6 +57,12 @@ public class ModelInputContent extends PanelInputContentId {
         enabledContent();
 
          */
+    }
+
+    public ModelInputContent(MVCCDElement element, int scopeForCheckInput)     {
+        super(null);
+        elementForCheckInput = element;
+        this.scopeForCheckInput =  scopeForCheckInput;
     }
 
     @Override
@@ -191,11 +200,7 @@ public class ModelInputContent extends PanelInputContentId {
 
 
 
-    @Override
-    public boolean checkDatasPreSave(boolean unitaire) {
 
-        return true;
-    }
 
 
     @Override
@@ -203,21 +208,24 @@ public class ModelInputContent extends PanelInputContentId {
 
     }
 
-    /*
     @Override
-    protected void createContentCustom() {
+    public boolean checkDatasPreSave(boolean unitaire) {
+        boolean ok = super.checkDatasPreSave(unitaire);
+        // Autres attributs
 
+        setPreSaveOk(ok);
+        return ok;
     }
 
-     */
 
 
-    @Override
-    protected boolean checkDatas(){
-        boolean ok = checkDatasPreSave(false);
-        // Autre attributs
+    public boolean checkDatas(){
+        boolean ok = super.checkDatas();
+        // Autres attributs
+
         return ok ;
     }
+
 
     @Override
     protected int getLengthMax(int naming) {
@@ -246,34 +254,19 @@ public class ModelInputContent extends PanelInputContentId {
 
         return -1;
     }
+
     @Override
-    protected String getElementAndNaming(int naming) {
+    protected String getElement(int naming) {
 
         if (getScope() == ModelEditor.MODEL) {
-            if (naming == MVCCDElement.SCOPENAME) {
-                return "model.and.name";
-            }
-            if (naming == MVCCDElement.SCOPESHORTNAME) {
-                return "model.and.short.name";
-            }
-            if (naming == MVCCDElement.SCOPELONGNAME) {
-                return "model.and.long.name";
-            }
-        }
+            return "of.model";
+         }
         if (getScope() == ModelEditor.PACKAGE) {
-            if (naming == MVCCDElement.SCOPENAME) {
-                return "package.and.name";
-            }
-            if (naming == MVCCDElement.SCOPESHORTNAME) {
-                return "package.and.short.name";
-            }
-            if (naming == MVCCDElement.SCOPELONGNAME) {
-                return "package.and.long.name";
-            }
+            return "of.package";
         }
         return null;
-
     }
+
 
     @Override
     protected String getNamingAndBrothersElements(int naming) {
@@ -427,7 +420,11 @@ public class ModelInputContent extends PanelInputContentId {
         //MODELJournal.setEnabled(preferences.getMCD_JOURNALIZATION_EXCEPTION());
     }
 
-   private int getScope(){
-        return ((ModelEditor) getEditor()).getScope();
-    }
+   private int getScope() {
+       if (scopeForCheckInput == -1) {
+           return ((ModelEditor) getEditor()).getScope();
+       } else {
+           return scopeForCheckInput;
+       }
+   }
 }

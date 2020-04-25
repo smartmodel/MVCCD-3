@@ -74,16 +74,16 @@ public class ProjectService {
 
     public static ArrayList<ProjectElement> getAllProjectElements() {
         Project project = MVCCDManager.instance().getProject();
-        return  getAllProjectElements(project);
+        return  getAllProjectElementsByParent(project);
     }
 
-    public static ArrayList<ProjectElement> getAllProjectElements(ProjectElement parentProjectElement) {
+    public static ArrayList<ProjectElement> getAllProjectElementsByParent(ProjectElement parentProjectElement) {
         ArrayList<ProjectElement> resultat = new ArrayList<ProjectElement>();
         resultat.add(parentProjectElement);
         for (MVCCDElement mvccdElement : parentProjectElement.getChilds()){
             if (mvccdElement instanceof ProjectElement){
                 ProjectElement childProjectElement  = (ProjectElement) mvccdElement;
-                resultat.addAll(getAllProjectElements(childProjectElement));
+                resultat.addAll(getAllProjectElementsByParent(childProjectElement));
             }
         }
         return resultat;

@@ -1,6 +1,7 @@
 package mcd;
 
 import main.MVCCDElement;
+import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDNamePathParent;
@@ -9,7 +10,8 @@ import project.Project;
 import project.ProjectElement;
 import utilities.files.UtilXML;
 
-public class MCDContModels extends MCDElement implements IMCDModel, IMCDNamePathParent, IMCDContPackages {
+public class MCDContModels extends MCDElement implements IMCDModel, IMCDNamePathParent, IMCDContPackages,
+        IMCDContContainer {
 
     private static final long serialVersionUID = 1000;
 
@@ -24,6 +26,8 @@ public class MCDContModels extends MCDElement implements IMCDModel, IMCDNamePath
 
     @Override
     public String getNameTree() {
+
         return null;
     }
+
 }

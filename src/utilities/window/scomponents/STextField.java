@@ -60,6 +60,7 @@ public class STextField extends JTextField implements SComponent {
     }
 
 
+
     @Override
     public boolean checkIfUpdated(){
         boolean updated;

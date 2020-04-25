@@ -1,12 +1,11 @@
 package mcd;
 
 import main.MVCCDElement;
-import mcd.services.MCDAssociationService;
 import mcd.services.MCDElementService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
-public class MCDAssEnd extends MCDRelEnd{
+public class MCDAssEnd extends MCDRelEnd {
 
     private static final long serialVersionUID = 1000;
 
@@ -107,11 +106,13 @@ public class MCDAssEnd extends MCDRelEnd{
                         mcdEntityOpposite.getName();
             }
         } else {
-            namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
+            namingAssociation = /*Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +*/
                     mcdAssociation.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
         }
 
         resultat = namingAssociation + nameEntityOpposite;
         return resultat;
     }
+
+
 }

@@ -44,7 +44,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
          */
     }
 
-    protected void createContentCustom() {
+    public void createContentCustom() {
 
         debug.setSubPanel(debugSubPanel);
         debug.setRootSubPanel(true);
@@ -159,7 +159,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
 
 
     @Override
-    protected boolean checkDatas() {
+    public boolean checkDatas() {
         return true;
     }
 

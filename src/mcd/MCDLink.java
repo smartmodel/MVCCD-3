@@ -1,11 +1,6 @@
-package mcd.services;
+package mcd;
 
-import mcd.MCDAssEnd;
-import mcd.MCDElement;
-import mcd.MCDRelEnd;
-import mcd.MCDRelation;
-
-public class MCDLink extends MCDRelation{
+public class MCDLink extends MCDRelation {
 
     private  static final long serialVersionUID = 1000;
 
@@ -40,4 +35,6 @@ public class MCDLink extends MCDRelation{
     public String getNameTree() {
         return null;
     }
+
+
 }

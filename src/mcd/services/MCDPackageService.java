@@ -18,20 +18,7 @@ public class MCDPackageService {
 
     public static ArrayList<String> check(MCDPackage mcdPackage) {
         ArrayList<String> messages = new ArrayList<String>();
-        messages.addAll(checkName(mcdPackage.getName()));
         return messages;
-    }
-
-    public static ArrayList<String> checkName(String name) {
-        return MCDUtilService.checkString(name, true, Preferences.PACKAGE_NAME_LENGTH,
-                Preferences.NAME_REGEXPR, "package.and.name");
-
-    }
-
-    public static ArrayList<String> checkShortName(String name) {
-        return MCDUtilService.checkString(name, true, Preferences.PACKAGE_SHORT_NAME_LENGTH,
-                Preferences.NAME_REGEXPR, "package.and.short.name");
-
     }
 
     public static ArrayList<IMCDContPackages> getIMCDContPackagesInIModel(IMCDModel iMCDModel) {

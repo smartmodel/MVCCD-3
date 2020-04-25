@@ -1,7 +1,9 @@
 package window.editor.relation.association;
 
+import m.MElement;
 import mcd.MCDAssociation;
 import mcd.MCDContRelations;
+import mcd.MCDElement;
 import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import utilities.window.editor.PanelButtons;

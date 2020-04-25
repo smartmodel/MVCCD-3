@@ -1,5 +1,6 @@
 package window.editor.attributes;
 
+import main.MVCCDElement;
 import mcd.MCDContAttributes;
 import mcd.MCDEntity;
 import utilities.window.editor.DialogEditor;
@@ -13,7 +14,7 @@ public class AttributesEditor extends DialogEditor {
 
      public AttributesEditor(
             Window owner,
-            MCDEntity parent,
+            MVCCDElement parent,
             MCDContAttributes mcdContAttributes,
             String mode)  {
         super(owner, parent, mcdContAttributes, mode, DialogEditor.NOTHING);

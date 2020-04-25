@@ -19,7 +19,7 @@ public class MCDProjectService {
 
     public static ArrayList<String> checkName(String name) {
         return MCDUtilService.checkString(name, true, Preferences.PROJECT_NAME_LENGTH,
-                Preferences.NAME_REGEXPR, "project.and.name");
+                Preferences.NAME_REGEXPR, "naming.of.name", "of.project");
     }
 
 }
