@@ -181,7 +181,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
     private void treatModels(ISMenu menu) {
         if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_MODELS_MANY()) {
-            treatGenericNew( menu, new PrefGeneralEditingTreat(),
+            treatGenericNew( menu, new MCDModelEditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.new.model"));
        } else {
             packageNew(menu, true);
@@ -212,7 +212,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             } else {
                 propertyMessage = "menu.new.subpackage";
             }
-            treatGenericNew( menu, new PrefGeneralEditingTreat(),
+            treatGenericNew( menu, new MCDPackageEditingTreat(),
                     MessagesBuilder.getMessagesProperty(propertyMessage));
          }
     }

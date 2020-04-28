@@ -27,15 +27,16 @@ public class MCDAssociationService {
         return check(mcdAssociation);
     }
 
-    public static String buildNameId(MCDEntity entityFrom, MCDEntity entityTo, String name) {
+    public static String buildNamingId(MCDEntity entityFrom, MCDEntity entityTo, String naming) {
 
-        System.out.println(entityFrom.getName());
         return  entityFrom.getNamePath(MCDElementService.PATHNAME) +
                 Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
-                name +
+                naming +
                 Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
                 entityTo.getNamePath(MCDElementService.PATHNAME);
 
     }
+
+
 
 }

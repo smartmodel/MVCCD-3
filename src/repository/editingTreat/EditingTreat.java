@@ -87,7 +87,7 @@ public abstract class EditingTreat {
         PanelInputContent panelInputContent = getPanelInputContent((MVCCDElement) element);
         panelInputContent.createContentCustom();
         panelInputContent.loadDatas((MVCCDElement) element);
-        boolean ok = panelInputContent.checkDatasPreSave(false);
+        boolean ok = panelInputContent.checkDatasPreSave();
         if (ok){
             ok = panelInputContent.checkDatas();
         }

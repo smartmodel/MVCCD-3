@@ -9,7 +9,6 @@ import preferences.PreferencesSaver;
 import project.Project;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.SCheckBox;
-import utilities.window.scomponents.SComponent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -146,7 +145,8 @@ public class PrefApplicationInputContent extends PanelInputContent {
     }
 
     @Override
-    public boolean checkDatasPreSave(boolean unitaire) {
+    public boolean checkDatasPreSave() {
+
         return true;
     }
 
@@ -160,12 +160,13 @@ public class PrefApplicationInputContent extends PanelInputContent {
 
     @Override
     public boolean checkDatas() {
+
         return true;
     }
 
     @Override
-    protected SComponent changeField(DocumentEvent e) {
-        return null;
+    protected boolean changeField(DocumentEvent e) {
+        return true;
     }
 
     @Override

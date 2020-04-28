@@ -7,6 +7,9 @@ import javax.swing.*;
 public class SButton extends JButton implements SComponent {
 
     private boolean checkPreSave = false;
+    private int color;
+    private boolean errorInput = false;
+
 
     public SButton(String text){
 
@@ -51,19 +54,41 @@ public class SButton extends JButton implements SComponent {
     }
 
 
+
+
     @Override
-    public void setColorError() {
-        SComponentService.colorError(this);
+    public void setColor(int color) {
+        this.color = color;
+        if (color == SComponent.COLORNORMAL){
+            SComponentService.colorNormal(this);
+        }
+        if (color == SComponent.COLORWARNING){
+            SComponentService.colorWarning(this);
+        }
+        if (color == SComponent.COLORERROR){
+            SComponentService.colorError(this);
+        }
     }
 
     @Override
-    public void setColorWarning() {
-        SComponentService.colorWarning(this);
+    public int getColor() {
+        return color;
     }
 
     @Override
-    public void setColorNormal() {
-        SComponentService.colorNormal(this);
+    public void setErrorInput(boolean errorInput) {
+        this.errorInput = errorInput;
+    }
+
+    @Override
+    public boolean isErrorInput() {
+        return errorInput;
+    }
+
+
+    @Override
+    public void setCheckPreSave(boolean checkPreSave) {
+
     }
 
     @Override

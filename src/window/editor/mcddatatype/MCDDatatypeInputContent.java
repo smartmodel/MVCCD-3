@@ -7,7 +7,6 @@ import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import utilities.UtilDivers;
 import utilities.window.scomponents.SCheckBox;
-import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 
 import javax.swing.*;
@@ -303,8 +302,8 @@ public class MCDDatatypeInputContent extends PanelInputContent{
     }
 
 
-    protected SComponent changeField(DocumentEvent e) {
-        return null;
+    protected boolean changeField(DocumentEvent e) {
+        return true;
      }
 
     @Override
@@ -319,7 +318,7 @@ public class MCDDatatypeInputContent extends PanelInputContent{
 
 
     @Override
-    public boolean checkDatasPreSave(boolean unitaire) {
+    public boolean checkDatasPreSave() {
 
         return true;
     }

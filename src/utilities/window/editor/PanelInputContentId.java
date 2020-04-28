@@ -9,7 +9,6 @@ import mcd.services.MCDUtilService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.scomponents.SComboBox;
-import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
@@ -32,8 +31,8 @@ public abstract class PanelInputContentId extends PanelInputContent {
     protected STextField fieldShortName = new STextField(this);
     protected STextField fieldLongName = new STextField(this);
 
-    private String shortNameMode;
-    private String longNameMode;
+    protected String shortNameMode;
+    protected String longNameMode;
 
     protected IMCDModel iMCDModelContainer ;
 
@@ -167,10 +166,12 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
     protected boolean checkShortName(boolean unitaire){
 
+
         return super.checkInput(fieldShortName, unitaire, MCDUtilService.checkShortNameId(
                 getParentForCheck(),
                 getChildForCheck(),
                 false,
+                fieldShortName.getText(),
                 fieldShortName.getText(),
                 Preferences.MCD_MODE_NAMING_SHORT_NAME.equals(Preferences.OPTION_YES),
                 getLengthMax(MVCCDElement.SCOPESHORTNAME),
@@ -185,6 +186,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
                 getParentForCheck(),
                 getChildForCheck(),
                 false,
+                fieldLongName.getText(),
                 fieldLongName.getText(),
                 PreferencesManager.instance().preferences().getMCD_MODE_NAMING_LONG_NAME().equals(Preferences.OPTION_YES),
                 getLengthMax(MVCCDElement.SCOPELONGNAME),
@@ -216,29 +218,33 @@ public abstract class PanelInputContentId extends PanelInputContent {
         return null;
     }
 
-    protected SComponent changeField(DocumentEvent e) {
+    protected boolean changeField(DocumentEvent e) {
+
+        System.out.println("Entré dans change doc Id");
 
         Document doc = e.getDocument();
 
         // panelInput != null Pour ne pas lancer les messages lors de l'appel du formulaire seul
         // en preSave
+
+
         if (doc == fieldName.getDocument()) {
-            checkDatasPreSave(panelInput != null);
-            return fieldName;
+            boolean ok = checkName(panelInput != null);
+            checkDatasPreSave();
+            return ok;
         }
 
         if (doc == fieldShortName.getDocument()) {
-            checkShortName(true);
-            return fieldShortName;
+            boolean ok = checkShortName(panelInput != null);
+            return ok;
         }
 
         if (doc == fieldLongName.getDocument()) {
-            checkLongName(true);
-            return fieldLongName;
+            boolean ok = checkLongName(panelInput != null);
+            return ok;
         }
 
-        //TODO-1 Mettre un contròle pour éviter de renvoyer null
-        return null;
+        return true;
     }
 
     protected  void changeFieldSelected(ItemEvent e){
@@ -252,6 +258,9 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
     }
 
+    protected void focusGainedByPass(FocusEvent focusEvent){
+        super.focusGained(focusEvent);
+    }
 
     @Override
     public void focusGained(FocusEvent focusEvent) {
@@ -262,40 +271,35 @@ public abstract class PanelInputContentId extends PanelInputContent {
         }
 
          */
+        System.out.println("Entré dans focus Id");
         super.focusGained(focusEvent);
         Object source = focusEvent.getSource();
 
         if (source == fieldName) {
-            boolean ok = checkDatasPreSave(true);
-        }
+            checkName(panelInput != null);
+            checkDatasPreSave();
+       }
         if (source == fieldShortName) {
-            checkShortName(true);
+            checkShortName(panelInput != null);
         }
         if (source == fieldLongName) {
-            checkLongName(true);
+            checkLongName(panelInput != null);
         }
     }
 
-    public boolean checkDatasPreSave(boolean unitaire) {
-        boolean ok = true;
-        ok = checkName(unitaire);
+    public boolean checkDatasPreSave() {
+        boolean ok = checkName(false);
         setPreSaveOk(ok);
-        System.out.println("checkName  " + fieldName.getText() + "  " + ok);
         return ok;
     }
 
     public boolean checkDatas(){
-        //boolean ok = checkDatasPreSave(false);
         boolean ok = true;
         if (!shortNameMode.equals(Preferences.OPTION_NO)) {
-            ok = checkShortName(false);
-            System.out.println("shortName  " + ok);
-
+            ok = checkShortName(false) ;
         }
         if (!longNameMode.equals(Preferences.OPTION_NO)) {
             ok = checkLongName(false) && ok;
-            System.out.println("longName  " + ok);
-
         }return ok ;
     }
 

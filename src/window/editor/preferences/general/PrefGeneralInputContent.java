@@ -4,7 +4,6 @@ import main.MVCCDElement;
 import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.window.scomponents.SComponent;
 
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
@@ -42,7 +41,7 @@ public class PrefGeneralInputContent extends PanelInputContent {
     }
 
     @Override
-    public boolean checkDatasPreSave(boolean unitaire) {
+    public boolean checkDatasPreSave() {
 
         return true;
     }
@@ -60,8 +59,8 @@ public class PrefGeneralInputContent extends PanelInputContent {
     }
 
     @Override
-    protected SComponent changeField(DocumentEvent e) {
-        return null;
+    protected boolean changeField(DocumentEvent e) {
+        return true;
     }
 
     @Override

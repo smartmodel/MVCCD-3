@@ -14,6 +14,9 @@ public class SCheckBox extends JCheckBox implements SComponent {
 
     private boolean readOnly = false;
     private IPanelInputContent panel;
+    private int color;
+    private boolean errorInput = false;
+
 
     public SCheckBox(IPanelInputContent panel){
         super();
@@ -26,7 +29,7 @@ public class SCheckBox extends JCheckBox implements SComponent {
 
     private void init(IPanelInputContent panel){
         this.panel = panel;
-        this.setColorNormal();
+        this.setColor(SComponent.COLORNORMAL);
     }
 
 
@@ -118,19 +121,37 @@ public class SCheckBox extends JCheckBox implements SComponent {
     }
 
 
+
+
     @Override
-    public void setColorError() {
-        SComponentService.colorError(this);
+    public void setColor(int color) {
+        this.color = color;
+        if (color == SComponent.COLORNORMAL){
+            SComponentService.colorNormal(this);
+        }
+        if (color == SComponent.COLORWARNING){
+            SComponentService.colorWarning(this);
+        }
+        if (color == SComponent.COLORERROR){
+            SComponentService.colorError(this);
+        }
+    }
+
+
+    @Override
+    public int getColor() {
+        return color;
     }
 
     @Override
-    public void setColorWarning() {
-        SComponentService.colorWarning(this);
+    public void setErrorInput(boolean errorInput) {
+        this.errorInput = errorInput;
     }
 
     @Override
-    public void setColorNormal() {
-        SComponentService.colorNormal(this);
+    public boolean isErrorInput() {
+        return errorInput;
     }
+
 
 }

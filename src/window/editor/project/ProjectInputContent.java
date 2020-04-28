@@ -9,7 +9,6 @@ import preferences.PreferencesManager;
 import profile.ProfileManager;
 import project.Project;
 import utilities.window.scomponents.SCheckBox;
-import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 import utilities.window.scomponents.SComboBox;
 
@@ -134,12 +133,13 @@ public class ProjectInputContent extends PanelInputContent {
     }
 
 
-    protected SComponent changeField(DocumentEvent e) {
+    protected boolean changeField(DocumentEvent e) {
+        boolean ok = true;
         if (projectName.getDocument() == e.getDocument()) {
-            checkDatasPreSave(true);
-            return projectName;
+            ok = checkProjectName(panelInput != null);
+            checkDatasPreSave();
         }
-        return null;
+        return ok;
     }
 
     @Override
@@ -162,7 +162,8 @@ public class ProjectInputContent extends PanelInputContent {
         super.focusGained(focusEvent);
         Object source = focusEvent.getSource();
         if (source == projectName) {
-            checkDatasPreSave(true);
+            checkProjectName(panelInput != null);
+
         }
     }
 
@@ -172,8 +173,8 @@ public class ProjectInputContent extends PanelInputContent {
     }
 
     @Override
-    public boolean checkDatasPreSave(boolean unitaire) {
-        boolean ok = checkProjectName(unitaire);
+    public boolean checkDatasPreSave() {
+        boolean ok = checkProjectName(panelInput != null);
         super.setPreSaveOk(ok);
         return ok;
     }
@@ -187,9 +188,8 @@ public class ProjectInputContent extends PanelInputContent {
 
 
     public boolean checkDatas(){
-         boolean ok = checkDatasPreSave(false);
-        // Autres attributs
-        return ok;
+
+        return true;
     }
 
 

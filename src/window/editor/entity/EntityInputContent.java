@@ -118,15 +118,15 @@ public class EntityInputContent extends PanelInputContentId {
 
 
 
-    protected SComponent changeField(DocumentEvent e) {
-        SComponent sComponent = super.changeField(e);
-        // Les champs impératifs sont testés sur la procédure checkDatasPreSave()
+    protected boolean changeField(DocumentEvent e) {
+        boolean ok = super.changeField(e);
+        SComponent sComponent = null;
 
+        Document doc = e.getDocument();
 
-            Document doc = e.getDocument();
+        // Autres champs que les champs Id
+        return ok;
 
-            // Autres champs que les champs Id
-            return sComponent;
     }
 
     @Override
@@ -211,7 +211,6 @@ public class EntityInputContent extends PanelInputContentId {
     @Override
     public void loadDatas(MVCCDElement mvccdElementCrt) {
         MCDEntity mcdEntity = (MCDEntity) mvccdElementCrt;
-        System.out.println("Load... " + mcdEntity.getName());
         super.loadDatas(mcdEntity);
         entityOrdered.setSelected(mcdEntity.isOrdered());
         entityAbstract.setSelected(mcdEntity.isEntAbstract());
@@ -241,11 +240,10 @@ public class EntityInputContent extends PanelInputContentId {
 
 
     @Override
-    public boolean checkDatasPreSave(boolean unitaire) {
-        boolean ok = super.checkDatasPreSave(unitaire);
+    public boolean checkDatasPreSave() {
+        boolean ok = super.checkDatasPreSave();
         // Autres attributs
 
-        setPreSaveOk(ok);
         return ok;
     }
 

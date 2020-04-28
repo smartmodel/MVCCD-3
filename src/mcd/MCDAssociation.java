@@ -43,16 +43,15 @@ public class MCDAssociation extends MCDRelation implements IMCompliant {
     }
 
     public String getNameId(){
-        System.out.println("MCDAssociation :  " + MCDAssociationService.buildNameId(getFrom().getMcdEntity(), getTo().getMcdEntity(), this.getName()));
-        return MCDAssociationService.buildNameId(getFrom().getMcdEntity(), getTo().getMcdEntity(), this.getName());
+        return MCDAssociationService.buildNamingId(getFrom().getMcdEntity(), getTo().getMcdEntity(), this.getName());
     }
 
    public String getShortNameId() {
-        return null;
+       return MCDAssociationService.buildNamingId(getFrom().getMcdEntity(), getTo().getMcdEntity(), this.getShortName());
     }
 
    public String getLongNameId() {
-        return null;
+       return MCDAssociationService.buildNamingId(getFrom().getMcdEntity(), getTo().getMcdEntity(), this.getLongName());
     }
 
     @Override

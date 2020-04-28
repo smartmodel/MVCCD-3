@@ -19,7 +19,6 @@ import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import utilities.UtilDivers;
 import utilities.window.ReadTableModel;
-import utilities.window.scomponents.SComponent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -317,8 +316,8 @@ public class AttributesInputContent extends PanelInputContent {
 
 
 
-    protected SComponent changeField(DocumentEvent e) {
-        return null;
+    protected boolean changeField(DocumentEvent e) {
+        return true;
     }
 
     @Override
@@ -347,7 +346,7 @@ public class AttributesInputContent extends PanelInputContent {
 
 
     @Override
-    public boolean checkDatasPreSave(boolean unitaire) {
+    public boolean checkDatasPreSave() {
 
         return true;
     }

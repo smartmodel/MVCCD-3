@@ -131,8 +131,7 @@ public class MVCCDElementService {
                 String childNaming = "";
                 if (namingScope == MVCCDElement.SCOPENAME) {
                     if (aChild.getName() != null) {
-                        System.out.println("Dans namingExist aChild.getNameId():  " + aChild.getNameId() );
-                        childNaming = UtilDivers.toNoFree(aChild.getNameId());
+                       childNaming = UtilDivers.toNoFree(aChild.getNameId());
                     }
                 }
                 if (namingScope == MVCCDElement.SCOPESHORTNAME) {
@@ -150,7 +149,6 @@ public class MVCCDElementService {
                     childNaming = childNaming.toUpperCase();
                 }
 
-                System.out.println(childNaming + "  -  " + namingToCheck);
                 if (StringUtils.isNotEmpty(childNaming) && StringUtils.isNotEmpty(namingToCheck)) {
                     if (childNaming.equals(namingToCheck)) {
                         return aChild;
@@ -167,11 +165,18 @@ public class MVCCDElementService {
 
     public static MVCCDElement namingExistNameInOthersChilds(MVCCDElement parent,
                                                      MVCCDElement child,
+                                                     boolean deep,
                                                      String namingValue,
                                                      boolean uppercase){
 
-        for (MVCCDElement aChild : parent.getChildsWithout(child)) {
-               String namingToCheck = UtilDivers.toNoFree(namingValue);
+        ArrayList<MVCCDElement> childs ;
+        if (deep) {
+            childs = parent.getDescendantsWithout(child);
+        } else {
+            childs = parent.getChildsWithout(child);
+        }
+        for (MVCCDElement aChild : childs) {
+                String namingToCheck = UtilDivers.toNoFree(namingValue);
                 String childNaming = UtilDivers.toNoFree(aChild.getNameId());
                 if (uppercase) {
                     namingToCheck = namingToCheck.toUpperCase();
@@ -188,10 +193,19 @@ public class MVCCDElementService {
         return null;
     }
 
+    //TODO-1 Reprendre le paramétrage de cette méthode et des 2 autres précédents pour passer
+    // directement un ArrayList<MVCCDElement> childs
     public static MVCCDElement nameExistNamingInOthersChilds(MVCCDElement parent, MVCCDElement child,
+                                                        boolean deep,
                                                         int scopeNaming, String namingValue, boolean uppercase) {
-        for (MVCCDElement aChild : parent.getChildsWithout(child)) {
-                 String namingToCheck = UtilDivers.toNoFree(namingValue);
+        ArrayList<MVCCDElement> childs ;
+        if (deep) {
+            childs = parent.getDescendantsWithout(child);
+        } else {
+            childs = parent.getChildsWithout(child);
+        }
+        for (MVCCDElement aChild : childs) {
+            String namingToCheck = UtilDivers.toNoFree(namingValue);
                 String childNaming = "";
                 if (scopeNaming == MCDElement.SCOPESHORTNAME) {
                     childNaming = UtilDivers.toNoFree(aChild.getShortNameId());

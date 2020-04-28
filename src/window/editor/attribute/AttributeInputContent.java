@@ -337,20 +337,23 @@ public class AttributeInputContent extends PanelInputContentId {
     }
 
 
-    protected SComponent changeField(DocumentEvent e) {
-        SComponent sComponent = super.changeField(e);
+    protected boolean changeField(DocumentEvent e) {
+        boolean ok = super.changeField(e);
+        SComponent sComponent = null;
         Document doc = e.getDocument();
         if (doc == datatypeSize.getDocument()){
             sComponent = datatypeSize;
-            checkDatasPreSave(panelInput != null);
+            ok = checkDatatypeSize(panelInput != null);
+            checkDatasPreSave();
         }
         if (doc == datatypeScale.getDocument()){
             sComponent = datatypeScale;
-            checkDatasPreSave(panelInput != null);
+            ok =checkDatatypeSize(panelInput != null);
+            checkDatasPreSave();
         }
 
         // Autres champs que les champs Id
-            return sComponent;
+            return ok;
     }
 
 
@@ -374,7 +377,7 @@ public class AttributeInputContent extends PanelInputContentId {
             if (source == datatypeName) {
                 //changeFieldSelectedList();
                 changeFieldSelectedDatatypeName();
-                checkDatasPreSave(true);
+                checkDatasPreSave();
             }
             if (source == mandatory) {
             }
@@ -494,6 +497,7 @@ public class AttributeInputContent extends PanelInputContentId {
     }
 
     private void changeFieldDeSelectedList() {
+            ordered.setEnabled(false);
             ordered.setSelected(false);
             derivedValue.setEnabled(true);
             initValue.setEnabled(true);
@@ -579,11 +583,13 @@ public class AttributeInputContent extends PanelInputContentId {
         super.focusGained(focusEvent);
         if (source == datatypeSize) {
             boolean ok = checkDatatypeSize(true);
-            checkSizeAndScale(ok);
+            //checkSizeAndScale(ok);
+            checkDatasPreSave();
         }
         if (source == datatypeScale) {
             boolean ok = checkDatatypeScale(true);
-            checkSizeAndScale(ok);
+            //checkSizeAndScale(ok);
+            checkDatasPreSave();
         }
     }
 
@@ -599,15 +605,12 @@ public class AttributeInputContent extends PanelInputContentId {
     }
 
     @Override
-    public boolean checkDatasPreSave(boolean unitaire) {
-        datatypeSize.setColorNormal();
-        datatypeScale.setColorNormal();
-        boolean ok = super.checkDatasPreSave(unitaire);
-        ok = checkDatatypeSize(unitaire) ;
-        ok = checkDatatypeScale(unitaire && ok) && ok;
-        if (ok){
-            ok =  checkSizeAndScale(unitaire && ok)  && ok;
-        }
+    public boolean checkDatasPreSave() {
+        boolean ok = super.checkDatasPreSave();
+        ok = checkDatatypeSize(false) ;
+        ok = checkDatatypeScale(false) && ok;
+        ok = checkSizeAndScale((panelInput != null) && ok)  && ok;
+
         setPreSaveOk(ok);
         return ok;
     }
@@ -621,6 +624,7 @@ public class AttributeInputContent extends PanelInputContentId {
 
 
     private boolean checkSizeAndScale(boolean unitaire) {
+
         if (mcdDatatypeSelected != null) {
             boolean c1a = mcdDatatypeSelected.isSelfOrDescendantOf(
                     MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_DECIMAL_LIENPROG));
@@ -661,14 +665,22 @@ public class AttributeInputContent extends PanelInputContentId {
                     }
                     messagesErrors.add(message);
 
-                    datatypeSize.setColorError();
-                    datatypeScale.setColorError();
+                    datatypeSize.setColor(SComponent.COLORERROR);
+                    datatypeScale.setColor(SComponent.COLORERROR);
 
                     showCheckResultat(messagesErrors);
                 }
                 return false;
             }
         }
+        if (datatypeSize.isErrorInput()){
+            datatypeSize.setColor(SComponent.COLORWARNING);
+        }else {
+            datatypeSize.setColor(SComponent.COLORNORMAL);
+        }
+
+        datatypeScale.setColor(SComponent.COLORNORMAL);
+
         return true;
     }
 

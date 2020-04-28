@@ -1,6 +1,7 @@
 package utilities.window.scomponents.services;
 
 import preferences.PreferencesManager;
+import utilities.window.scomponents.SComponent;
 
 import javax.swing.*;
 
@@ -28,5 +29,4 @@ public class SComponentService {
         component.setBackground(
                 PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_ERROR);
     }
-
 }

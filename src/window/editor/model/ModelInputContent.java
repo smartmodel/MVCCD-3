@@ -158,13 +158,14 @@ public class ModelInputContent extends PanelInputContentId {
         panelAudit.add(fieldAuditException, gbc);
     }
 
-    protected SComponent changeField(DocumentEvent e) {
-        SComponent sComponent = super.changeField(e);
+    protected boolean changeField(DocumentEvent e) {
+        boolean ok = super.changeField(e);
+        SComponent sComponent = null;
 
         Document doc = e.getDocument();
 
-            // Autres champs que les champs Id
-            return sComponent;
+        // Autres champs que les champs Id
+        return ok;
     }
 
 
@@ -209,11 +210,11 @@ public class ModelInputContent extends PanelInputContentId {
     }
 
     @Override
-    public boolean checkDatasPreSave(boolean unitaire) {
-        boolean ok = super.checkDatasPreSave(unitaire);
+    public boolean checkDatasPreSave() {
+        boolean ok = super.checkDatasPreSave();
         // Autres attributs
 
-        setPreSaveOk(ok);
+
         return ok;
     }
 

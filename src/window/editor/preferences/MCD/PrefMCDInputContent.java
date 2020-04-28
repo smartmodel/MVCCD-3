@@ -20,6 +20,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -311,18 +312,15 @@ public class PrefMCDInputContent extends PanelInputContent {
     }
 
     @Override
-    public boolean checkDatasPreSave(boolean unitaire) {
-        fieldAIDIndName.setColorNormal();
-        fieldAIDDepName.setColorNormal();
-
-        boolean ok = checkAIDIndName(unitaire);
+    public boolean checkDatasPreSave() {
+        boolean ok = checkAIDIndName(false);
         if ( fieldAIDWithDep.isSelected()){
-            ok =  checkAIDDepName(unitaire && ok)  && ok ;
-            if (ok) {
-                ok = checkAIDIndAndDepName(unitaire && ok) && ok;
-            }
+            ok = checkAIDDepName(false)  && ok ;
+            ok = checkAIDIndAndDepName(true && ok ) && ok;
         }
+        setPreSaveOk(ok);
         return ok;
+
     }
 
     @Override
@@ -333,9 +331,7 @@ public class PrefMCDInputContent extends PanelInputContent {
 
     @Override
     public boolean checkDatas() {
-        boolean ok = checkDatasPreSave(false);
-        // Autres attributs
-        return ok;
+        return true;
     }
 
     private boolean checkAIDIndName(boolean unitaire) {
@@ -356,31 +352,64 @@ public class PrefMCDInputContent extends PanelInputContent {
                 String message = MessagesBuilder.getMessagesProperty("pref.mcd.aid.ind.dep.name");
                 messagesErrors.add(message);
 
-                fieldAIDIndName.setColorError();
-                fieldAIDDepName.setColorError();
+                fieldAIDIndName.setColor(SComponent.COLORERROR);
+                fieldAIDDepName.setColor(SComponent.COLORERROR);
                 showCheckResultat(messagesErrors);
 
             }
             return false;
         }
+        if (fieldAIDIndName.isErrorInput()){
+            fieldAIDIndName.setColor(SComponent.COLORWARNING);
+        } else{
+            fieldAIDIndName.setColor(SComponent.COLORNORMAL);
+        }
+
+        if (fieldAIDDepName.isErrorInput()){
+            fieldAIDDepName.setColor(SComponent.COLORWARNING);
+        } else{
+            fieldAIDDepName.setColor(SComponent.COLORNORMAL);
+        }
         return true;
     }
 
     @Override
-    protected SComponent changeField(DocumentEvent e) {
-        // Les champs obligatoires sont testés sur la procédure checkDatasPreSave()
-        return null;
+    protected boolean changeField(DocumentEvent e) {
+        Document doc = e.getDocument();
+        boolean ok = true;
+        SComponent sComponent = null;
+        if (doc == fieldAIDDepName.getDocument() ){
+            sComponent = fieldAIDDepName;
+            ok =checkAIDDepName(panelInput != null);
+            checkDatasPreSave();
+        }
+        if (doc == fieldAIDIndName.getDocument() ){
+            sComponent = fieldAIDIndName;
+            ok = checkAIDIndName(panelInput != null);
+            checkDatasPreSave();
+        }
+        return ok;
 
     }
 
     @Override
     protected void changeFieldSelected(ItemEvent e) {
+        Object source = e.getSource();
+
+        if (source == fieldAIDWithDep){
+            checkDatasPreSave();
+        }
 
     }
 
 
     @Override
     protected void changeFieldDeSelected(ItemEvent e) {
+        Object source = e.getSource();
+
+        if (source == fieldAIDWithDep){
+            checkDatasPreSave();
+        }
 
     }
 
@@ -389,12 +418,14 @@ public class PrefMCDInputContent extends PanelInputContent {
         super.focusGained(focusEvent);
         Object source = focusEvent.getSource();
         if (source == fieldAIDIndName) {
-            boolean ok = checkAIDIndName(true);
-            checkAIDIndAndDepName(ok);
+            boolean ok = checkAIDIndName(panelInput != null);
+            //checkAIDIndAndDepName(ok);
+            checkDatasPreSave();
         }
         if (source == fieldAIDDepName) {
-            boolean ok = checkAIDDepName(true);
-            checkAIDIndAndDepName(ok);
+            boolean ok = checkAIDDepName(panelInput != null);
+            //checkAIDIndAndDepName(ok);
+            checkDatasPreSave();
         }
 
     }

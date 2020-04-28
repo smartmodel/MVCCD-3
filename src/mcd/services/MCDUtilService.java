@@ -166,12 +166,14 @@ public class MCDUtilService {
 
     public static ArrayList<String> namingExistNameInChilds(MVCCDElement parent,
                                                             MVCCDElement child,
+                                                            boolean deep,
                                                             String typeNaming,
                                                             String naming,
                                                             boolean uppercase,
                                                             String contextMessage) {
 
-        MCDElement elementConflict = (MCDElement) MVCCDElementService.namingExistNameInOthersChilds(parent, child, naming, uppercase);
+        MCDElement elementConflict = (MCDElement) MVCCDElementService.namingExistNameInOthersChilds(
+                parent, child, deep, naming, uppercase);
         if (elementConflict != null) {
             return messagesExistNaming(naming, uppercase, "naming.exist.name.element",
                     contextMessage, typeNaming, elementConflict.getName());
@@ -182,12 +184,14 @@ public class MCDUtilService {
 
     public static ArrayList<String> nameExistNamingInChilds(MVCCDElement parent,
                                                             MVCCDElement child,
+                                                            boolean deep,
                                                             int scopeNaming,
                                                             String naming,
                                                             boolean uppercase,
                                                             String contextMessage) {
 
-        MCDElement elementConflict = (MCDElement) MVCCDElementService.nameExistNamingInOthersChilds(parent, child, scopeNaming, naming, uppercase);
+        MCDElement elementConflict = (MCDElement) MVCCDElementService.nameExistNamingInOthersChilds(
+                parent, child, deep, scopeNaming, naming, uppercase);
         if (elementConflict != null) {
             String typeNaming = "";
             if (scopeNaming == MCDElement.SCOPESHORTNAME) {
@@ -257,11 +261,11 @@ public class MCDUtilService {
                     namingAndBrothersElementsSelf));
         }
         if (messages.size() == 0) {
-            messages.addAll(MCDUtilService.nameExistNamingInChilds(parent, child, MCDElement.SCOPESHORTNAME,
+            messages.addAll(MCDUtilService.nameExistNamingInChilds(parent, child, deep, MCDElement.SCOPESHORTNAME,
                     nameId, true, namingAndBrothersElementsOther));
         }
         if (messages.size() == 0) {
-            messages.addAll(MCDUtilService.nameExistNamingInChilds(parent, child, MCDElement.SCOPELONGNAME,
+            messages.addAll(MCDUtilService.nameExistNamingInChilds(parent, child, deep, MCDElement.SCOPELONGNAME,
                     nameId, true, namingAndBrothersElementsOther));
         }
 
@@ -291,6 +295,7 @@ public class MCDUtilService {
                                                      MCDElement child,
                                                      boolean deep,
                                                      String shortName,
+                                                     String shortNameId,
                                                      boolean mandatory,
                                                      int lengthMax,
                                                      String naming,
@@ -314,11 +319,12 @@ public class MCDUtilService {
         ArrayList<String> messages = MCDUtilService.checkString(shortName, mandatory, lengthMax,
                 Preferences.NAME_REGEXPR, naming, element);
         if (messages.size() == 0) {
-            messages.addAll(MCDUtilService.checkExistShortNameInChilds(parent, child, deep, shortName, true,"naming.sister.entity"));
+            messages.addAll(MCDUtilService.checkExistShortNameInChilds(parent, child, deep, shortNameId, true, namingAndBrothersElements));
         }
         if (messages.size() == 0) {
             messages.addAll(MCDUtilService.namingExistNameInChilds(parent, child,
-                    "naming.short.name",shortName, true,
+                    deep,
+                    "naming.short.name",shortNameId, true,
                     namingAndBrothersElements));
         }
         return messages;
@@ -344,8 +350,9 @@ public class MCDUtilService {
         public static ArrayList<String> checkLongNameId(MCDElement parent,
                                                     MCDElement child,
                                                     boolean deep,
-                                                    String longName,
-                                                    boolean mandatory,
+                                                        String longName,
+                                                        String longNameId,
+                                                        boolean mandatory,
                                                     int lengthMax,
                                                     String naming,
                                                     String element,
@@ -366,11 +373,12 @@ public class MCDUtilService {
         ArrayList<String> messages = MCDUtilService.checkString(longName, mandatory, lengthMax,
                 Preferences.NAME_FREE_REGEXPR, element,naming);
         if (messages.size() == 0) {
-            messages.addAll(MCDUtilService.checkExistLongNameInChilds(parent, child, deep, longName, true,namingAndBrothersElements));
+            messages.addAll(MCDUtilService.checkExistLongNameInChilds(parent, child, deep, longNameId, true,namingAndBrothersElements));
         }
         if (messages.size() == 0) {
             messages.addAll(MCDUtilService.namingExistNameInChilds(parent, child,
-                    "naming.long.name",longName, true,
+                    deep,
+                    "naming.long.name",longNameId, true,
                     namingAndBrothersElements));
         }
         return messages;

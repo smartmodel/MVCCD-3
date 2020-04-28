@@ -66,9 +66,9 @@ public abstract class PanelInputContent
 
     public abstract boolean checkDatas();
 
-    public abstract boolean checkDatasPreSave(boolean unitaire);
+    public abstract boolean checkDatasPreSave();
 
-    protected abstract SComponent changeField(DocumentEvent e);
+    protected abstract boolean changeField(DocumentEvent e);
     //protected abstract SComponent changeFieldId(DocumentEvent e);
 
 
@@ -91,7 +91,7 @@ public abstract class PanelInputContent
         //sComponent = changeField(e);
         //SComponent sComponent = changeField(e);
         if (alreadyFocusGained) {
-            SComponent sComponent = changeField(e);
+            changeField(e);
             enabledButtons();
         }
     }
@@ -107,7 +107,7 @@ public abstract class PanelInputContent
         //sComponent = changeField(e);
         //SComponent sComponent = changeField(e);
         if (alreadyFocusGained) {
-            SComponent sComponent = changeField(e);
+            changeField(e);
             enabledButtons();
         }
     }
@@ -118,7 +118,7 @@ public abstract class PanelInputContent
         //sComponent = changeField(e);
         //SComponent sComponent = changeField(e);
         if (alreadyFocusGained) {
-            SComponent sComponent = changeField(e);
+            changeField(e);
             enabledButtons();
         }
     }
@@ -172,24 +172,25 @@ public abstract class PanelInputContent
         if (unitaire) {
             showCheckResultat(messagesErrors);
         }
+        field.setErrorInput(messagesErrors.size() > 0);
         if (messagesErrors.size() == 0) {
-            field.setColorNormal();
+            field.setColor(SComponent.COLORNORMAL);
         } else {
             if (field.isCheckPreSave()) {
-                field.setColorError();
+                field.setColor(SComponent.COLORERROR);
             } else{
-                field.setColorWarning();
+                field.setColor(SComponent.COLORWARNING);
             }
         }
         return messagesErrors.size() == 0;
     }
 
     public void reInitField(STextField field){
-        field.setColorNormal();
+        field.setColor(SComponent.COLORNORMAL);
     }
 
 
-    protected void showCheckResultat(ArrayList<String> messagesErrors) {
+    public void showCheckResultat(ArrayList<String> messagesErrors) {
        if (getEditor().getButtons() != null) {
             PanelButtonsContent buttonsContent = (PanelButtonsContent) getEditor().getButtons().getPanelContent();
             buttonsContent.clearMessages();
@@ -222,8 +223,8 @@ public abstract class PanelInputContent
         getEditor().focusGained(focusEvent);
         getButtonsContent().clearMessages();
         if (!alreadyFocusGained) {
+            checkDatasPreSave();
             checkDatas();
-            checkDatasPreSave(true);
             enabledButtons();
             alreadyFocusGained = true;
         }
@@ -267,8 +268,7 @@ public abstract class PanelInputContent
             loadDatas(getEditor().getMvccdElementCrt());
         }
         dataInitialized = true;
-        preSaveOk = checkDatasPreSave(false);
-        System.out.println("preSaveOk   " + preSaveOk);
+        preSaveOk = checkDatasPreSave();
     }
 
     public boolean isDataInitialized() {
