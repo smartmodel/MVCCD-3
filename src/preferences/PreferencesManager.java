@@ -6,6 +6,7 @@ import project.ProjectFileChooser;
 
 import java.io.*;
 
+
 public class PreferencesManager {
 
     private static PreferencesManager instance ;
@@ -114,6 +115,7 @@ public class PreferencesManager {
         to.setMCD_AUDIT_EXCEPTION(from.getMCD_AUDIT_EXCEPTION());
         to.setMCD_TREE_NAMING_ASSOCIATION(from.getMCD_TREE_NAMING_ASSOCIATION());
         to.setMCD_MODE_NAMING_LONG_NAME(from.getMCD_MODE_NAMING_LONG_NAME());
+        to.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(from.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME());
     }
 
     public void loadOrCreateFileApplicationPreferences() {

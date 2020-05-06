@@ -4,7 +4,6 @@ import mcd.MCDElement;
 import mcd.MCDEntity;
 import mcd.interfaces.IMCDTraceability;
 import org.apache.commons.lang.StringUtils;
-import project.ProjectElement;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;
@@ -87,145 +86,117 @@ public class MVCCDElementService {
 
 
 
-    public static MVCCDElement nameExistInOthersChilds(MVCCDElement parent,
-                                                       MVCCDElement child,
-                                                       boolean deep,
+    public static MVCCDElement nameExistInOthersChilds(ArrayList<MVCCDElement> brothers,
                                                        String name,
                                                        boolean uppercase){
-        return namingExistInOthersChilds(parent, child, deep, MVCCDElement.SCOPENAME, name, uppercase);
+        return namingExistInOthersBrothers(brothers, MVCCDElement.SCOPENAME, name, uppercase);
     }
 
-    public static MVCCDElement shortNameExistInOthersChilds(MVCCDElement parent,
-                                                       MVCCDElement child,
-                                                       boolean deep,
+    public static MVCCDElement shortNameExistInOthersChilds(ArrayList<MVCCDElement> brothers,
                                                        String shortName,
                                                        boolean uppercase){
-        return namingExistInOthersChilds(parent, child, deep, MVCCDElement.SCOPESHORTNAME, shortName, uppercase);
+        return namingExistInOthersBrothers(brothers, MVCCDElement.SCOPESHORTNAME, shortName, uppercase);
     }
 
-    public static MVCCDElement longNameExistInOthersChilds(MVCCDElement parent,
-                                                       MVCCDElement child,
-                                                       boolean deep,
+    public static MVCCDElement longNameExistInOthersChilds(ArrayList<MVCCDElement> brothers,
                                                        String longName,
                                                        boolean uppercase){
-        return namingExistInOthersChilds(parent, child, deep, MVCCDElement.SCOPELONGNAME, longName, uppercase);
+        return namingExistInOthersBrothers(brothers, MVCCDElement.SCOPELONGNAME, longName, uppercase);
     }
 
 
-    // Child peut être null lors de la saisie d'un nouvel enregistrement!
-    private static MVCCDElement namingExistInOthersChilds(MVCCDElement parent,
-                                                          MVCCDElement child,
-                                                          boolean deep,
-                                                          int namingScope,
-                                                          String namingValue,
-                                                          boolean uppercase){
-        ArrayList<MVCCDElement> childs ;
-        if (deep) {
-            childs = parent.getDescendantsWithout(child);
-        } else {
-            childs = parent.getChildsWithout(child);
-        }
+    public static MVCCDElement namingExistInOthersBrothers(ArrayList<MVCCDElement> brothers,
+                                                           int namingScope,
+                                                           String namingValue,
+                                                           boolean uppercase){
 
-        for (MVCCDElement aChild : childs) {
-                String namingToCheck = UtilDivers.toNoFree(namingValue);
-                String childNaming = "";
-                if (namingScope == MVCCDElement.SCOPENAME) {
-                    if (aChild.getName() != null) {
-                       childNaming = UtilDivers.toNoFree(aChild.getNameId());
-                    }
+        for (MVCCDElement brother : brothers) {
+            String namingToCheck = UtilDivers.toNoFree(namingValue);
+            String childNaming = "";
+            if (namingScope == MVCCDElement.SCOPENAME) {
+                if (brother.getName() != null) {
+                    childNaming = UtilDivers.toNoFree(brother.getNameId());
                 }
-                if (namingScope == MVCCDElement.SCOPESHORTNAME) {
-                    if (aChild.getShortName() != null) {
-                        childNaming = UtilDivers.toNoFree(aChild.getShortNameId());
-                    }
+            }
+            if (namingScope == MVCCDElement.SCOPESHORTNAME) {
+                if (brother.getShortName() != null) {
+                    childNaming = UtilDivers.toNoFree(brother.getShortNameId());
                 }
-                if (namingScope == MVCCDElement.SCOPELONGNAME) {
-                    if (aChild.getLongName() != null) {
-                        childNaming = UtilDivers.toNoFree(aChild.getLongNameId());
-                    }
+            }
+            if (namingScope == MVCCDElement.SCOPELONGNAME) {
+                if (brother.getLongName() != null) {
+                    childNaming = UtilDivers.toNoFree(brother.getLongNameId());
                 }
-                if (uppercase) {
-                    namingToCheck = namingToCheck.toUpperCase();
-                    childNaming = childNaming.toUpperCase();
-                }
+            }
+            if (uppercase) {
+                namingToCheck = namingToCheck.toUpperCase();
+                childNaming = childNaming.toUpperCase();
+            }
 
-                if (StringUtils.isNotEmpty(childNaming) && StringUtils.isNotEmpty(namingToCheck)) {
-                    if (childNaming.equals(namingToCheck)) {
-                        return aChild;
-                    }
+            if (StringUtils.isNotEmpty(childNaming) && StringUtils.isNotEmpty(namingToCheck)) {
+                if (childNaming.equals(namingToCheck)) {
+                    return brother;
                 }
             }
 
+        }
+
         return null;
     }
-
 
     // Vérifie qu'il n'y ait pas deux frères dont un porte le nom
     // utilisé par l'autre comme shortName ou longName
 
-    public static MVCCDElement namingExistNameInOthersChilds(MVCCDElement parent,
-                                                     MVCCDElement child,
-                                                     boolean deep,
-                                                     String namingValue,
-                                                     boolean uppercase){
+    public static MVCCDElement namingExistNameInOthersBrothers(ArrayList<MVCCDElement> brothers,
+                                                             String namingValue,
+                                                             boolean uppercase){
 
-        ArrayList<MVCCDElement> childs ;
-        if (deep) {
-            childs = parent.getDescendantsWithout(child);
-        } else {
-            childs = parent.getChildsWithout(child);
-        }
-        for (MVCCDElement aChild : childs) {
-                String namingToCheck = UtilDivers.toNoFree(namingValue);
-                String childNaming = UtilDivers.toNoFree(aChild.getNameId());
-                if (uppercase) {
-                    namingToCheck = namingToCheck.toUpperCase();
-                    childNaming = childNaming.toUpperCase();
-                }
-
-                if (StringUtils.isNotEmpty(childNaming) && StringUtils.isNotEmpty(namingToCheck)) {
-                    if (childNaming.equals(namingToCheck)) {
-                        return aChild;
-                    }
-                }
-
-        }
-        return null;
-    }
-
-    //TODO-1 Reprendre le paramétrage de cette méthode et des 2 autres précédents pour passer
-    // directement un ArrayList<MVCCDElement> childs
-    public static MVCCDElement nameExistNamingInOthersChilds(MVCCDElement parent, MVCCDElement child,
-                                                        boolean deep,
-                                                        int scopeNaming, String namingValue, boolean uppercase) {
-        ArrayList<MVCCDElement> childs ;
-        if (deep) {
-            childs = parent.getDescendantsWithout(child);
-        } else {
-            childs = parent.getChildsWithout(child);
-        }
-        for (MVCCDElement aChild : childs) {
+        for (MVCCDElement aBrother : brothers) {
             String namingToCheck = UtilDivers.toNoFree(namingValue);
-                String childNaming = "";
-                if (scopeNaming == MCDElement.SCOPESHORTNAME) {
-                    childNaming = UtilDivers.toNoFree(aChild.getShortNameId());
-                }
-                if (scopeNaming == MCDElement.SCOPELONGNAME) {
-                    childNaming = UtilDivers.toNoFree(aChild.getLongNameId());
-                }
-                if (uppercase) {
-                    namingToCheck = namingToCheck.toUpperCase();
-                    childNaming = childNaming.toUpperCase();
-                }
+            String childNaming = UtilDivers.toNoFree(aBrother.getNameId());
+            if (uppercase) {
+                namingToCheck = namingToCheck.toUpperCase();
+                childNaming = childNaming.toUpperCase();
+            }
 
-                if (StringUtils.isNotEmpty(childNaming) && StringUtils.isNotEmpty(namingToCheck)) {
-                    if (childNaming.equals(namingToCheck)) {
-                        return aChild;
-                    }
+            if (StringUtils.isNotEmpty(childNaming) && StringUtils.isNotEmpty(namingToCheck)) {
+                if (childNaming.equals(namingToCheck)) {
+                    return aBrother;
                 }
+            }
+
         }
         return null;
-
-
     }
+
+
+
+    public static MVCCDElement nameExistNamingInOthersBrothers(ArrayList<MVCCDElement> brothers,
+                                                               int scopeNaming, String namingValue,
+                                                               boolean uppercase) {
+
+
+        for (MVCCDElement aBrother : brothers) {
+            String namingToCheck = UtilDivers.toNoFree(namingValue);
+            String childNaming = "";
+            if (scopeNaming == MCDElement.SCOPESHORTNAME) {
+                childNaming = UtilDivers.toNoFree(aBrother.getShortNameId());
+            }
+            if (scopeNaming == MCDElement.SCOPELONGNAME) {
+                childNaming = UtilDivers.toNoFree(aBrother.getLongNameId());
+            }
+            if (uppercase) {
+                namingToCheck = namingToCheck.toUpperCase();
+                childNaming = childNaming.toUpperCase();
+            }
+
+            if (StringUtils.isNotEmpty(childNaming) && StringUtils.isNotEmpty(namingToCheck)) {
+                if (childNaming.equals(namingToCheck)) {
+                    return aBrother;
+                }
+            }
+        }
+        return null;
+    }
+
 }

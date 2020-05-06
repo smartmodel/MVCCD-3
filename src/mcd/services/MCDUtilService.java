@@ -3,13 +3,10 @@ package mcd.services;
 import exceptions.CodeApplException;
 import main.MVCCDElement;
 import main.MVCCDElementService;
-import mcd.MCDContEntities;
 import mcd.MCDElement;
-import mcd.MCDEntity;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 import utilities.window.scomponents.SComboBox;
 
 import java.util.ArrayList;
@@ -41,10 +38,12 @@ public class MCDUtilService {
                         , new String[]{message1, message2, regularExpr}));
                 error = true;
             }
-            if (text.length() > lengthMax) {
-                messages.add(MessagesBuilder.getMessagesProperty("editor.length.error"
-                        , new String[]{message1, message2, String.valueOf(lengthMax)}));
-                error = true;
+            if (lengthMax != null) {
+                if (text.length() > lengthMax) {
+                    messages.add(MessagesBuilder.getMessagesProperty("editor.length.error"
+                            , new String[]{message1, message2, String.valueOf(lengthMax)}));
+                    error = true;
+                }
             }
         }
 
@@ -114,14 +113,12 @@ public class MCDUtilService {
         return messages;
     }
 
-    public static ArrayList<String> checkExistNameInChilds(MVCCDElement parent,
-                                                           MVCCDElement child,
-                                                           boolean deep,
+    public static ArrayList<String> checkExistNameInChilds(ArrayList<MVCCDElement> brothers,
                                                            String name,
                                                            boolean uppercase,
                                                            String contextMessage) {
 
-        MCDElement elementConflict = (MCDElement) MVCCDElementService.nameExistInOthersChilds(parent, child, deep,
+        MCDElement elementConflict = (MCDElement) MVCCDElementService.nameExistInOthersChilds(brothers,
                 name, uppercase);
         if (elementConflict != null) {
             return messagesExistNaming(name, uppercase, "naming.exist.element",
@@ -132,14 +129,12 @@ public class MCDUtilService {
         return new ArrayList<String>();
     }
 
-    public static ArrayList<String> checkExistShortNameInChilds(MVCCDElement parent,
-                                                                MVCCDElement child,
-                                                                boolean deep,
+    public static ArrayList<String> checkExistShortNameInChilds(ArrayList<MVCCDElement> brothers,
                                                                 String shortName,
                                                                 boolean uppercase,
                                                                 String contextMessage) {
 
-        MCDElement elementConflict = (MCDElement) MVCCDElementService.shortNameExistInOthersChilds(parent, child, deep, shortName, uppercase);
+        MCDElement elementConflict = (MCDElement) MVCCDElementService.shortNameExistInOthersChilds(brothers, shortName, uppercase);
         if (elementConflict != null) {
             return messagesExistNaming(shortName, uppercase, "naming.exist.element",
                     contextMessage, "naming.short.name", elementConflict.getName());
@@ -148,14 +143,12 @@ public class MCDUtilService {
         return new ArrayList<String>();
     }
 
-    public static ArrayList<String> checkExistLongNameInChilds(MVCCDElement parent,
-                                                               MVCCDElement child,
-                                                               boolean deep,
+    public static ArrayList<String> checkExistLongNameInChilds(ArrayList<MVCCDElement> brothers,
                                                                String longName,
                                                                boolean uppercase,
                                                                String contextMessage) {
 
-        MCDElement elementConflict = (MCDElement) MVCCDElementService.longNameExistInOthersChilds(parent, child, deep, longName, uppercase);
+        MCDElement elementConflict = (MCDElement) MVCCDElementService.longNameExistInOthersChilds(brothers, longName, uppercase);
         if (elementConflict != null) {
             return messagesExistNaming(longName, uppercase, "naming.exist.element",
                     contextMessage, "naming.long.name", elementConflict.getName());
@@ -164,16 +157,14 @@ public class MCDUtilService {
         return new ArrayList<String>();
     }
 
-    public static ArrayList<String> namingExistNameInChilds(MVCCDElement parent,
-                                                            MVCCDElement child,
-                                                            boolean deep,
+    public static ArrayList<String> namingExistNameInChilds(ArrayList<MVCCDElement> brothers,
                                                             String typeNaming,
                                                             String naming,
                                                             boolean uppercase,
                                                             String contextMessage) {
 
-        MCDElement elementConflict = (MCDElement) MVCCDElementService.namingExistNameInOthersChilds(
-                parent, child, deep, naming, uppercase);
+        MCDElement elementConflict = (MCDElement) MVCCDElementService.namingExistNameInOthersBrothers(
+                brothers, naming, uppercase);
         if (elementConflict != null) {
             return messagesExistNaming(naming, uppercase, "naming.exist.name.element",
                     contextMessage, typeNaming, elementConflict.getName());
@@ -182,16 +173,14 @@ public class MCDUtilService {
         return new ArrayList<String>();
     }
 
-    public static ArrayList<String> nameExistNamingInChilds(MVCCDElement parent,
-                                                            MVCCDElement child,
-                                                            boolean deep,
+    public static ArrayList<String> nameExistNamingInChilds(ArrayList<MVCCDElement> brothers,
                                                             int scopeNaming,
                                                             String naming,
                                                             boolean uppercase,
                                                             String contextMessage) {
 
-        MCDElement elementConflict = (MCDElement) MVCCDElementService.nameExistNamingInOthersChilds(
-                parent, child, deep, scopeNaming, naming, uppercase);
+        MCDElement elementConflict = (MCDElement) MVCCDElementService.nameExistNamingInOthersBrothers(
+                brothers, scopeNaming, naming, uppercase);
         if (elementConflict != null) {
             String typeNaming = "";
             if (scopeNaming == MCDElement.SCOPESHORTNAME) {
@@ -207,7 +196,7 @@ public class MCDUtilService {
         return new ArrayList<String>();
     }
 
-    private static ArrayList<String> messagesExistNaming(String naming,
+    public static ArrayList<String> messagesExistNaming(String naming,
                                                          boolean uppercase,
                                                          String bodyMessage,
                                                          String contextMessage,
@@ -228,9 +217,7 @@ public class MCDUtilService {
         return messages;
     }
 
-    public static ArrayList<String> checkNameId(MCDElement parent,
-                                                MCDElement child,
-                                                boolean deep,
+    public static ArrayList<String> checkNameId(ArrayList<MVCCDElement> brothers,
                                                 String name,
                                                 String nameId,
                                                 boolean mandatory,
@@ -256,44 +243,28 @@ public class MCDUtilService {
         }
         ArrayList<String> messages = MCDUtilService.checkString(name, mandatory, lengthMax,
                 Preferences.NAME_REGEXPR, naming, element);
+
+
+
+
         if (messages.size() == 0) {
-            messages.addAll(MCDUtilService.checkExistNameInChilds(parent, child, deep, nameId, true,
+            messages.addAll(MCDUtilService.checkExistNameInChilds(brothers, nameId, true,
                     namingAndBrothersElementsSelf));
         }
         if (messages.size() == 0) {
-            messages.addAll(MCDUtilService.nameExistNamingInChilds(parent, child, deep, MCDElement.SCOPESHORTNAME,
+            messages.addAll(MCDUtilService.nameExistNamingInChilds(brothers, MCDElement.SCOPESHORTNAME,
                     nameId, true, namingAndBrothersElementsOther));
         }
         if (messages.size() == 0) {
-            messages.addAll(MCDUtilService.nameExistNamingInChilds(parent, child, deep, MCDElement.SCOPELONGNAME,
+            messages.addAll(MCDUtilService.nameExistNamingInChilds(brothers, MCDElement.SCOPELONGNAME,
                     nameId, true, namingAndBrothersElementsOther));
         }
 
         return messages;
     }
 
-/*
-    public static ArrayList<String> checkNameIdBatch(MCDElement child,
-                                                     boolean mandatory,
-                                                     int lengthMax ) {
 
-        return checkNameId((MCDElement) child.getParent(),
-                child,
-                child.getName(),
-                mandatory,
-                lengthMax,
-                "naming.for.batch",
-                "naming.for.batch",
-                "naming.for.batch",
-                "naming.for.batch");
-    }
-*/
-
-
-
-    public static ArrayList<String> checkShortNameId(MCDElement parent,
-                                                     MCDElement child,
-                                                     boolean deep,
+    public static ArrayList<String> checkShortNameId(ArrayList<MVCCDElement> brothers,
                                                      String shortName,
                                                      String shortNameId,
                                                      boolean mandatory,
@@ -319,37 +290,17 @@ public class MCDUtilService {
         ArrayList<String> messages = MCDUtilService.checkString(shortName, mandatory, lengthMax,
                 Preferences.NAME_REGEXPR, naming, element);
         if (messages.size() == 0) {
-            messages.addAll(MCDUtilService.checkExistShortNameInChilds(parent, child, deep, shortNameId, true, namingAndBrothersElements));
+            messages.addAll(MCDUtilService.checkExistShortNameInChilds(brothers, shortNameId, true, namingAndBrothersElements));
         }
         if (messages.size() == 0) {
-            messages.addAll(MCDUtilService.namingExistNameInChilds(parent, child,
-                    deep,
+            messages.addAll(MCDUtilService.namingExistNameInChilds(brothers,
                     "naming.short.name",shortNameId, true,
                     namingAndBrothersElements));
         }
         return messages;
     }
 
-    /*
-    public static ArrayList<String> checkShortNameIdBatch(MCDElement child, boolean mandatory, int lengthMax) {
-
-        return checkShortNameId((MCDElement) child.getParent(),
-                child,
-                child.getShortName(),
-                mandatory,
-                lengthMax,
-                "naming.for.batch",
-                "naming.for.batch",
-                "naming.for.batch");
-
-    }
-
-     */
-
-
-        public static ArrayList<String> checkLongNameId(MCDElement parent,
-                                                    MCDElement child,
-                                                    boolean deep,
+    public static ArrayList<String> checkLongNameId(ArrayList<MVCCDElement> brothers,
                                                         String longName,
                                                         String longNameId,
                                                         boolean mandatory,
@@ -373,49 +324,13 @@ public class MCDUtilService {
         ArrayList<String> messages = MCDUtilService.checkString(longName, mandatory, lengthMax,
                 Preferences.NAME_FREE_REGEXPR, element,naming);
         if (messages.size() == 0) {
-            messages.addAll(MCDUtilService.checkExistLongNameInChilds(parent, child, deep, longNameId, true,namingAndBrothersElements));
+            messages.addAll(MCDUtilService.checkExistLongNameInChilds(brothers, longNameId, true,namingAndBrothersElements));
         }
         if (messages.size() == 0) {
-            messages.addAll(MCDUtilService.namingExistNameInChilds(parent, child,
-                    deep,
+            messages.addAll(MCDUtilService.namingExistNameInChilds(brothers,
                     "naming.long.name",longNameId, true,
                     namingAndBrothersElements));
         }
         return messages;
     }
-
-/*
-    public static ArrayList<String> checkLongNameIdBatch(MCDElement child, boolean mandatory, int lengthMax) {
-
-        return checkLongNameId((MCDElement) child.getParent(),
-                child,
-                child.getLongName(),
-                mandatory,
-                lengthMax,
-                "naming.for.batch",
-                "naming.for.batch",
-                "naming.for.batch");
-
-    }
-
- */
-
-    /*
-    public static ArrayList<String> checkNamingIdBatch(MCDElement child,
-                                                       int nameLengthMax,
-                                                       int shortNameLengthMax,
-                                                       int longNameLengthMax ) {
-
-        boolean mandatory = true;
-        ArrayList<String> resultat = checkNameIdBatch(child, true, nameLengthMax );
-        mandatory = Preferences.MCD_MODE_NAMING_SHORT_NAME.equals(Preferences.OPTION_YES);
-        resultat.addAll(checkShortNameIdBatch(child, mandatory, shortNameLengthMax ));
-        mandatory = PreferencesManager.instance().preferences().getMCD_MODE_NAMING_LONG_NAME().equals(Preferences.OPTION_YES);
-        resultat.addAll(checkLongNameIdBatch(child, mandatory, longNameLengthMax ));
-        System.out.println(resultat.size());
-        return resultat;
-    }
-
-     */
-
 }

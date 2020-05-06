@@ -18,6 +18,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
@@ -46,10 +47,11 @@ public class EntityInputContent extends PanelInputContentId {
 
 
 
-        @Override
-    protected void createContentIdCustom() {
 
-        //super.createContentId();
+    @Override
+    public void createContentCustom() {
+
+        super.createContentCustom();
         fieldShortName.setToolTipText("Nom de l'entité");
 
 
@@ -239,27 +241,9 @@ public class EntityInputContent extends PanelInputContentId {
 
 
 
-    @Override
-    public boolean checkDatasPreSave() {
-        boolean ok = super.checkDatasPreSave();
-        // Autres attributs
-
-        return ok;
-    }
-
-
-
-    public boolean checkDatas(){
-        boolean ok = super.checkDatas();
-        // Autres attributs
-
-        return ok ;
-    }
-
-
 
     @Override
-    protected void enabledContentCustom() {
+    protected void enabledContent() {
         Preferences preferences = PreferencesManager.instance().preferences();
         entityJournal.setEnabled(preferences.getMCD_JOURNALIZATION_EXCEPTION());
         entityAudit.setEnabled(preferences.getMCD_AUDIT_EXCEPTION());

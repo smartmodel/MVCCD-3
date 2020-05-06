@@ -172,6 +172,7 @@ public abstract class PanelButtonsContent extends PanelContent
         Object source = e.getSource();
         if (source == btnOk) {
             if (getEditor().getMode().equals(DialogEditor.NEW)) {
+
                 treatCreate();
              }
             if (getEditor().getMode().equals(DialogEditor.UPDATE)) {

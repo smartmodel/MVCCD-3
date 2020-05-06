@@ -28,6 +28,16 @@ public class PanelInputService {
         sComboBox.addItem(text);
     }
 
+    public static  void createComboBoxYesNoWhite(SComboBox sComboBox) {
+        sComboBox.addItem(SComboBox.LINEWHITE);
+        String text = MessagesBuilder.getMessagesProperty(
+                Preferences.OPTION_YES);
+        sComboBox.addItem(text);
+        text = MessagesBuilder.getMessagesProperty(
+                Preferences.OPTION_NO);
+        sComboBox.addItem(text);
+    }
+
     public static String prefComboBoxOption(SComboBox sComboBox){
         String text = (String) sComboBox.getSelectedItem();
 
@@ -47,5 +57,22 @@ public class PanelInputService {
             return Preferences.OPTION_NEVER;
         }
         return null;
+    }
+
+    public static Boolean getBooleanFromText(SComboBox sComboBox) {
+        if (sComboBox.isSelectedEmpty()){
+            return null;
+        } else {
+            String text = (String) sComboBox.getSelectedItem();
+            return text.equals(Preferences.OPTION_YES);
+        }
+    }
+
+        public static String getTextFromBoolean(boolean value){
+        if (value){
+            return Preferences.OPTION_YES;
+        } else {
+            return Preferences.OPTION_NO;
+        }
     }
 }

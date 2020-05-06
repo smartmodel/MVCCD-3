@@ -51,6 +51,7 @@ public class PrefMCDInputContent extends PanelInputContent {
     private SComboBox fieldTreeNamingAssociation = new SComboBox(this);
 
     private SComboBox fieldNamingLongName = new SComboBox(this);
+    private SComboBox fieldNamingAttributeShortName = new SComboBox(this);
 
     public PrefMCDInputContent(PrefMCDInput prefMCDInput) {
         super(prefMCDInput);
@@ -150,6 +151,10 @@ public class PrefMCDInputContent extends PanelInputContent {
         fieldNamingLongName.addItemListener(this);
         fieldNamingLongName.addFocusListener(this);
 
+        PanelInputService.createComboBoxYesNo(fieldNamingAttributeShortName);
+        fieldNamingAttributeShortName.addItemListener(this);
+        fieldNamingAttributeShortName.addFocusListener(this);
+
         super.getsComponents().add(fieldAIDIndName);
         super.getsComponents().add(fieldAIDWithDep);
         super.getsComponents().add(fieldAIDDepName);
@@ -161,6 +166,7 @@ public class PrefMCDInputContent extends PanelInputContent {
         super.getsComponents().add(fieldAuditException);
         super.getsComponents().add(fieldTreeNamingAssociation);
         super.getsComponents().add(fieldNamingLongName);
+        super.getsComponents().add(fieldNamingAttributeShortName);
 
         panelInputContentCustom.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -225,6 +231,11 @@ public class PrefMCDInputContent extends PanelInputContent {
         panelInputContentCustom.add(new JLabel("Nom long : "), gbc);
         gbc.gridx++;
         panelInputContentCustom.add(fieldNamingLongName, gbc);
+
+        gbc.gridx++;
+        panelInputContentCustom.add(new JLabel("Nom court (Attribut) : "), gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldNamingAttributeShortName, gbc);
 
     }
 
@@ -311,12 +322,37 @@ public class PrefMCDInputContent extends PanelInputContent {
 
     }
 
-    @Override
-    public boolean checkDatasPreSave() {
-        boolean ok = checkAIDIndName(false);
+
+    public boolean checkDatas(SComponent sComponent) {
+        boolean ok = super.checkDatas(sComponent);
+
+        if (ok) {
+            boolean notBatch = panelInput != null;
+            boolean unitaire;
+
+            // Autre attributs
+        }
+
+        return ok;
+    }
+
+    public boolean checkDatasPreSave(SComponent sComponent) {
+
+        boolean notBatch = panelInput != null;
+        boolean unitaire;
+        boolean ok = true;
+
         if ( fieldAIDWithDep.isSelected()){
-            ok = checkAIDDepName(false)  && ok ;
-            ok = checkAIDIndAndDepName(true && ok ) && ok;
+
+            unitaire = notBatch && (sComponent == fieldAIDIndName);
+            ok = checkAIDIndName(unitaire) && ok ;
+
+            unitaire = notBatch && (sComponent == fieldAIDDepName);
+            ok =  checkAIDDepName(unitaire) && ok ;
+
+            unitaire = notBatch && ( (sComponent == fieldAIDIndName) ||
+                    (sComponent == fieldAIDDepName));
+            ok = checkAIDIndAndDepName(unitaire ) && ok;
         }
         setPreSaveOk(ok);
         return ok;
@@ -324,14 +360,7 @@ public class PrefMCDInputContent extends PanelInputContent {
     }
 
     @Override
-    protected void enabledContentCustom() {
-
-    }
-
-
-    @Override
-    public boolean checkDatas() {
-        return true;
+    protected void enabledContent() {
     }
 
     private boolean checkAIDIndName(boolean unitaire) {
@@ -359,17 +388,6 @@ public class PrefMCDInputContent extends PanelInputContent {
             }
             return false;
         }
-        if (fieldAIDIndName.isErrorInput()){
-            fieldAIDIndName.setColor(SComponent.COLORWARNING);
-        } else{
-            fieldAIDIndName.setColor(SComponent.COLORNORMAL);
-        }
-
-        if (fieldAIDDepName.isErrorInput()){
-            fieldAIDDepName.setColor(SComponent.COLORWARNING);
-        } else{
-            fieldAIDDepName.setColor(SComponent.COLORNORMAL);
-        }
         return true;
     }
 
@@ -377,17 +395,14 @@ public class PrefMCDInputContent extends PanelInputContent {
     protected boolean changeField(DocumentEvent e) {
         Document doc = e.getDocument();
         boolean ok = true;
-        SComponent sComponent = null;
-        if (doc == fieldAIDDepName.getDocument() ){
-            sComponent = fieldAIDDepName;
-            ok =checkAIDDepName(panelInput != null);
-            checkDatasPreSave();
-        }
+
         if (doc == fieldAIDIndName.getDocument() ){
-            sComponent = fieldAIDIndName;
-            ok = checkAIDIndName(panelInput != null);
-            checkDatasPreSave();
+            checkDatas(fieldAIDIndName);
         }
+        if (doc == fieldAIDDepName.getDocument() ){
+            checkDatas(fieldAIDDepName);
+        }
+
         return ok;
 
     }
@@ -397,7 +412,7 @@ public class PrefMCDInputContent extends PanelInputContent {
         Object source = e.getSource();
 
         if (source == fieldAIDWithDep){
-            checkDatasPreSave();
+            checkDatas(fieldAIDWithDep);
         }
 
     }
@@ -408,7 +423,7 @@ public class PrefMCDInputContent extends PanelInputContent {
         Object source = e.getSource();
 
         if (source == fieldAIDWithDep){
-            checkDatasPreSave();
+            checkDatas(fieldAIDWithDep);
         }
 
     }
@@ -418,14 +433,10 @@ public class PrefMCDInputContent extends PanelInputContent {
         super.focusGained(focusEvent);
         Object source = focusEvent.getSource();
         if (source == fieldAIDIndName) {
-            boolean ok = checkAIDIndName(panelInput != null);
-            //checkAIDIndAndDepName(ok);
-            checkDatasPreSave();
+            checkDatas(fieldAIDIndName);
         }
         if (source == fieldAIDDepName) {
-            boolean ok = checkAIDDepName(panelInput != null);
-            //checkAIDIndAndDepName(ok);
-            checkDatasPreSave();
+            checkDatas(fieldAIDDepName);
         }
 
     }
@@ -462,6 +473,9 @@ public class PrefMCDInputContent extends PanelInputContent {
 
         String namingLongName = MessagesBuilder.getMessagesProperty(preferences.getMCD_MODE_NAMING_LONG_NAME());
         SComboBoxService.selectByText(fieldNamingLongName, namingLongName);
+
+        String namingAttributeShortName = MessagesBuilder.getMessagesProperty(preferences.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME());
+        SComboBoxService.selectByText(fieldNamingAttributeShortName, namingAttributeShortName);
     }
 
 
@@ -553,7 +567,12 @@ public class PrefMCDInputContent extends PanelInputContent {
         }
 
         if (fieldNamingLongName.checkIfUpdated()){
-             preferences.setMCD_MODE_NAMING_LONG_NAME( PanelInputService.prefComboBoxOption(fieldNamingLongName));
+            preferences.setMCD_MODE_NAMING_LONG_NAME( PanelInputService.prefComboBoxOption(fieldNamingLongName));
+        }
+
+
+        if (fieldNamingAttributeShortName.checkIfUpdated()){
+            preferences.setMCD_MODE_NAMING_LONG_NAME( PanelInputService.prefComboBoxOption(fieldNamingAttributeShortName));
         }
 
     }

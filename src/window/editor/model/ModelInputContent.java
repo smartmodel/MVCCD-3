@@ -20,6 +20,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
@@ -49,14 +50,6 @@ public class ModelInputContent extends PanelInputContentId {
 
     public ModelInputContent(ModelInput modelInput)     {
         super(modelInput);
-        /*
-        modelInput.setPanelContent(this);
-        createContent();
-        super.addContent(panel);
-        super.initOrLoadDatas();
-        enabledContent();
-
-         */
     }
 
     public ModelInputContent(MVCCDElement element, int scopeForCheckInput)     {
@@ -66,7 +59,8 @@ public class ModelInputContent extends PanelInputContentId {
     }
 
     @Override
-    protected void createContentIdCustom() {
+    public void createContentCustom() {
+        super.createContentCustom();
         if (getScope() == ModelEditor.MODEL) {
           fieldParent.setEnabled(false);
         }
@@ -197,34 +191,6 @@ public class ModelInputContent extends PanelInputContentId {
 
     @Override
     public void focusLost(FocusEvent focusEvent) {
-    }
-
-
-
-
-
-
-    @Override
-    protected void enabledContentCustom() {
-
-    }
-
-    @Override
-    public boolean checkDatasPreSave() {
-        boolean ok = super.checkDatasPreSave();
-        // Autres attributs
-
-
-        return ok;
-    }
-
-
-
-    public boolean checkDatas(){
-        boolean ok = super.checkDatas();
-        // Autres attributs
-
-        return ok ;
     }
 
 
@@ -416,7 +382,8 @@ public class ModelInputContent extends PanelInputContentId {
     }
 
 
-    private void enabledContent() {
+    @Override
+    protected void enabledContent() {
         Preferences preferences = PreferencesManager.instance().preferences();
         //MODELJournal.setEnabled(preferences.getMCD_JOURNALIZATION_EXCEPTION());
     }

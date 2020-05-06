@@ -13,6 +13,7 @@ import utilities.window.scomponents.SCheckBox;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
 
@@ -144,24 +145,10 @@ public class PrefApplicationInputContent extends PanelInputContent {
         panelInputContentCustom.add(fieldRepMCDPackagesAuthorizeds, gbc);
     }
 
-    @Override
-    public boolean checkDatasPreSave() {
-
-        return true;
-    }
 
     @Override
-    protected void enabledContentCustom() {
+    protected void enabledContent() {
 
-    }
-
-
-
-
-    @Override
-    public boolean checkDatas() {
-
-        return true;
     }
 
     @Override
@@ -254,6 +241,8 @@ public class PrefApplicationInputContent extends PanelInputContent {
 
         new DialogMessage().showOk(getEditor(), message);
     }
+
+
 
 
 }

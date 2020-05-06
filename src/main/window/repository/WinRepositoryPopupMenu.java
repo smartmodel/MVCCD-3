@@ -113,7 +113,15 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         if (node.getUserObject() instanceof MCDAssociation) {
             treatGeneric(this, new MCDAssociationEditingTreat());
+            //TODO-0 Mettre à jour les AssEnd apès changement
         }
+
+        if (node.getUserObject() instanceof MCDAssEnd) {
+            mvccdElement = ((MCDAssEnd) node.getUserObject()).getMcdAssociation();
+            treatGeneric(this, new MCDAssociationEditingTreat());
+            //TODO-0 Mettre à jour l'Assocition et l'AssEnd opposé apès changement
+        }
+
 
     }
 
@@ -203,6 +211,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         treatGenericNew(this, new MCDAssociationEditingTreat(),
                 MessagesBuilder.getMessagesProperty("menu.new.association"));
     }
+
 
     private void packageNew(ISMenu menu, boolean top) {
         if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()) {

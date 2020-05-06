@@ -31,6 +31,10 @@ public class Preferences extends MVCCDElement {
     public static String REGEXPR_FREE="([ ]{0,1}[a-zA-Z0-9_àâäçéèêëòöùûü]+)*";
     public static String NAME_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_NOFREE;
     public static String NAME_FREE_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_FREE ;
+    public static String REGEXPR_1_99 ="[1-9]{1}[0-9]{0,1}";
+    public static String MULTI_MERISE_N = "n";
+    public static String MULTI_OCL_SP = "\\.\\.";
+    public static String MULTI_CUSTOM_REGEXPR ="((0|" + REGEXPR_1_99 + ")" + MULTI_OCL_SP+ "("+ REGEXPR_1_99 + "|\\*|n))|1|\\*";
     public static Integer PROJECT_NAME_LENGTH = 50;
     public static Integer MODEL_NAME_LENGTH = 20;
     public static Integer MODEL_SHORT_NAME_LENGTH = 5;
@@ -98,7 +102,7 @@ public class Preferences extends MVCCDElement {
     public static Integer ENTITY_WINDOW_HEIGHT = 600;
     public static Integer ATTRIBUTE_WINDOW_WIDTH = 800;
     public static Integer ATTRIBUTE_WINDOW_HEIGHT = 600;
-    public static Integer ASSOCIATION_WINDOW_WIDTH = 800;
+    public static Integer ASSOCIATION_WINDOW_WIDTH = 1000;
     public static Integer ASSOCIATION_WINDOW_HEIGHT = 600;
     public static Integer ANCHOR_WINDOW_WIDTH = 800;
     public static Integer ANCHOR_WINDOW_HEIGHT = 600;
@@ -271,6 +275,12 @@ public class Preferences extends MVCCDElement {
 
     public static String MCD_MODE_NAMING_SHORT_NAME = OPTION_YES;
 
+    public static String MCD_ASSOCIATION_NATURE_NO_ID = "mcd.association.nature.no.id";
+    public static String MCD_ASSOCIATION_NATURE_ID_NATURAL = "mcd.association.nature.no.natural";
+    public static String MCD_ASSOCIATION_NATURE_ID_COMP = "mcd.association.nature.no.comp";
+    public static String MCD_ASSOCIATION_NATURE_SIM_CP = "mcd.association.nature.sim.cp";
+
+
     // Modification Application
     private Boolean DEBUG = false;
     private Boolean DEBUG_BACKGROUND_PANEL = false;
@@ -295,6 +305,7 @@ public class Preferences extends MVCCDElement {
     private Boolean MCD_AID_WITH_DEP = true;
     private String MCD_TREE_NAMING_ASSOCIATION = null;
     private String MCD_MODE_NAMING_LONG_NAME = null;
+    private String MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = null;
 
 
 
@@ -469,5 +480,15 @@ public class Preferences extends MVCCDElement {
 
     public void setMCD_MODE_NAMING_LONG_NAME(String MCD_MODE_NAMING_LONG_NAME) {
         this.MCD_MODE_NAMING_LONG_NAME = MCD_MODE_NAMING_LONG_NAME;
+    }
+
+    public String getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME() {
+        if (MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME == null){
+            MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = OPTION_NO;
+        }return MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME;
+    }
+
+    public void setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(String MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME) {
+        this.MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME;
     }
 }

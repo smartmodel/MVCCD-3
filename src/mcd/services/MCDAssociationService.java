@@ -1,14 +1,15 @@
 package mcd.services;
 
+import m.*;
+import m.services.MRelEndService;
 import main.MVCCDElement;
-import mcd.MCDAssEnd;
-import mcd.MCDAssociation;
-import mcd.MCDElement;
-import mcd.MCDEntity;
+import mcd.*;
 import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.window.scomponents.SComboBox;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,5 +39,83 @@ public class MCDAssociationService {
     }
 
 
+    public static ArrayList<String> checkNature(SComboBox fieldNature,
+                                                SComboBox fieldFromEntity,
+                                                SComboBox fieldToEntity,
+                                                SComboBox fieldFromMulti,
+                                                SComboBox fieldToMulti) {
 
+        ArrayList<String> messages = new ArrayList<String>();
+
+        String multiFrom = (String) fieldFromMulti.getSelectedItem();
+        String multiTo = (String) fieldToMulti.getSelectedItem();
+
+        System.out.println(multiFrom + "   -    " + multiTo);
+        if (StringUtils.isNotEmpty(multiFrom)  && StringUtils.isNotEmpty(multiTo)) {
+            MRelEndMultiPart multiMinFromStd = MRelEndService.computeMultiMinStd(multiFrom);
+            MRelEndMultiPart multiMinToStd = MRelEndService.computeMultiMinStd(multiTo);
+            MRelEndMultiPart multiMaxFromStd = MRelEndService.computeMultiMaxStd(multiFrom);
+            MRelEndMultiPart multiMaxToStd = MRelEndService.computeMultiMaxStd(multiTo);
+            MRelEndMulti multiFromStd = MRelEndService.computeMultiStd(multiFrom);
+            MRelEndMulti multiToStd = MRelEndService.computeMultiStd(multiTo);
+
+            System.out.println(multiFrom + "  - " + multiMinFromStd.getText() + "  - " + multiMaxFromStd.getText() + "  - " + multiFromStd.getText());
+            System.out.println(multiTo + "  - " + multiMinToStd.getText() + "  - " + multiMaxToStd.getText() + "  - " + multiToStd.getText());
+            MCDAssociationNature nature = MCDAssociationNature.findByText((String) fieldNature.getSelectedItem());
+
+            System.out.println(nature.getText());
+
+            if ((nature == MCDAssociationNature.IDCOMP) || (nature == MCDAssociationNature.CP)) {
+                String contextMessage = "";
+                if (nature == MCDAssociationNature.IDCOMP) {
+                    contextMessage = MessagesBuilder.getMessagesProperty("qualif.association.idcomp");
+                }
+                if (nature == MCDAssociationNature.CP) {
+                    contextMessage = MessagesBuilder.getMessagesProperty("qualif.association.idcomp");
+                }
+                if ((fieldFromEntity !=null) && (fieldToEntity != null) &&
+                        (fieldFromEntity.getSelectedIndex() == fieldToEntity.getSelectedIndex())){
+                    messages.add(MessagesBuilder.getMessagesProperty("editor.association.nature.reflexive.error",
+                            new String[]{contextMessage}));
+                } else {
+                    boolean c1a = multiFromStd == MRelEndMulti.MULTI_ONE_ONE;
+                    boolean c1b = multiToStd == MRelEndMulti.MULTI_ONE_ONE;
+                    boolean c2a = multiMaxToStd == MRelEndMultiPart.MULTI_MANY;
+                    boolean c2b = multiMaxFromStd == MRelEndMultiPart.MULTI_MANY;
+
+                    System.out.println(c1a + " - " + c1b + " - " + c2a + " - " + c2b + " - ");
+
+                    boolean ok = (c1a && c2a) || (c1b && c2b);
+                    if (!ok) {
+                        messages.add(MessagesBuilder.getMessagesProperty("editor.association.nature.id.pc.multi.error",
+                                new String[]{contextMessage}));
+                    }
+                }
+            }
+            if (nature == MCDAssociationNature.IDNATURAL) {
+                boolean c1a = (multiFromStd == MRelEndMulti.MULTI_ZERO_ONE) ||
+                        (multiFromStd == MRelEndMulti.MULTI_ONE_ONE);
+                boolean c1b = (multiToStd == MRelEndMulti.MULTI_ZERO_ONE) ||
+                        (multiToStd == MRelEndMulti.MULTI_ONE_ONE);
+                boolean c2a = multiMaxToStd == MRelEndMultiPart.MULTI_MANY;
+                boolean c2b = multiMaxFromStd == MRelEndMultiPart.MULTI_MANY;
+                boolean ok = (c1a && c2a) || (c1b && c2b);
+                if (!ok) {
+                    messages.add(MessagesBuilder.getMessagesProperty("editor.association.nature.idnat.multi.error"));
+                }
+            }
+        }
+        return messages;
+    }
+
+
+    public static ArrayList<String> checkOriented(SComboBox fieldOriented,
+                                                  boolean recursif) {
+
+        ArrayList<String> messages = new ArrayList<String>();
+        if (fieldOriented.isSelectedEmpty()){
+            messages.add(MessagesBuilder.getMessagesProperty("editor.association.nature.reflexive.oriented.error"));
+        }
+        return messages;
+    }
 }

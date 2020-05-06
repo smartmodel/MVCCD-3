@@ -1,8 +1,12 @@
 package window.editor.relation.association;
 
 import main.MVCCDElement;
+import main.MVCCDElementService;
 import mcd.MCDAssEnd;
+import mcd.MCDContEntities;
 import mcd.MCDElement;
+import mcd.MCDEntity;
+import mcd.services.MCDAssEndService;
 import mcd.services.MCDUtilService;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
@@ -12,21 +16,49 @@ import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class AssEndInputContent  {
 
 
-    public boolean checkRoleName(PanelInputContent panelInputContent,
+    public boolean checkRoleName(AssociationInputContent panelInputContent,
                                  STextField fieldRoleName,
+                                 MCDEntity mcdEntity,
+                                 MCDAssEnd mcdAssEnd,
+                                 MCDEntity mcdEntityOpposite,
                                  boolean unitaire,
                                  int direction) {
-       return panelInputContent.checkInput(fieldRoleName, unitaire, MCDUtilService.checkString(
+
+        return panelInputContent.checkInput(fieldRoleName, unitaire, MCDAssEndService.checkRoleNameId(
+                mcdEntity,
+                mcdAssEnd,
+                mcdEntityOpposite,
                 fieldRoleName.getText(),
                 false,
                 Preferences.ASSEND_ROLE_NAME_LENGTH,
-                Preferences.NAME_FREE_REGEXPR,
-                "naming.of.name",
                 buildContextMessage(direction)));
+
+
+    }
+
+    public boolean checkRoleShortName(AssociationInputContent panelInputContent,
+                                 STextField fieldRoleShortName,
+                                 MCDEntity mcdEntity,
+                                 MCDAssEnd mcdAssEnd,
+                                 MCDEntity mcdEntityOpposite,
+                                 boolean unitaire,
+                                 int direction) {
+
+        return panelInputContent.checkInput(fieldRoleShortName, unitaire, MCDAssEndService.checkRoleShortNameId(
+                mcdEntity,
+                mcdAssEnd,
+                mcdEntityOpposite,
+                fieldRoleShortName.getText(),
+                false,
+                Preferences.ASSEND_ROLE_NAME_LENGTH,
+                buildContextMessage(direction)));
+
+
     }
 
     public boolean checkRoleShortName(PanelInputContent panelInputContent,
@@ -48,15 +80,15 @@ public class AssEndInputContent  {
                                    boolean unitaire, int from) {
 
 
-        boolean c1 = StringUtils.isEmpty(fieldRoleShortName.getText());
-        boolean c2 = StringUtils.isEmpty(fieldRoleName.getText());
+        boolean c1 = StringUtils.isEmpty(fieldRoleName.getText());
+        boolean c2 = StringUtils.isEmpty(fieldRoleShortName.getText());
         ArrayList<String> messagesErrors = new ArrayList<String>();
         if ( !c1 && c2 ){
                  String message = MessagesBuilder.getMessagesProperty("association.role.name.and.short.name.error");
                 messagesErrors.add(message);
         }
         if ( c1 && !c2 ){
-                 String message = MessagesBuilder.getMessagesProperty("association.role.name.only.error");
+                 String message = MessagesBuilder.getMessagesProperty("association.role.short.name.only.error");
                 messagesErrors.add(message);
         }
         if (unitaire) {
@@ -64,9 +96,9 @@ public class AssEndInputContent  {
         }
 
         if (messagesErrors.size() != 0){
-            fieldRoleName.setColor(SComponent.COLORWARNING);
+            fieldRoleShortName.setColor(SComponent.COLORWARNING);
         } else {
-            fieldRoleName.setColor(SComponent.COLORNORMAL);
+            fieldRoleShortName.setColor(SComponent.COLORNORMAL);
         }
 
         return messagesErrors.size() == 0;
@@ -83,6 +115,5 @@ public class AssEndInputContent  {
         }
         return null;
     }
-
 
 }

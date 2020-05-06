@@ -1,7 +1,11 @@
 package mcd;
 
+import m.MRelEndMulti;
+import m.MRelEndMultiPart;
+import m.services.MRelEndService;
 import main.MVCCDElement;
 import mcd.services.MCDElementService;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
@@ -9,13 +13,14 @@ public class MCDAssEnd extends MCDRelEnd {
 
     private static final long serialVersionUID = 1000;
 
-    public static final int FROM = 1 ;  //drawingDirection
-    public static final int TO = 2 ;  //drawingDirection
+    //public static final int FROM = 1 ;  //drawingDirection
+    //public static final int TO = 2 ;  //drawingDirection
 
     private MCDAssociation mcdAssociation;
     private MCDEntity mcdEntity ;
     private int drawingDirection ;
-
+    private boolean ordered = false;
+    private String multiStr;
 
 
     public MCDAssEnd(MCDElement parent) {
@@ -49,6 +54,45 @@ public class MCDAssEnd extends MCDRelEnd {
     public void setDrawingDirection(int drawingDirection) {
         this.drawingDirection = drawingDirection;
     }
+
+    public String getMultiStr() {
+        return multiStr;
+    }
+
+    public void setMultiStr(String multiStr) {
+        this.multiStr = multiStr;
+    }
+
+
+    public MRelEndMultiPart getMultiMinStd() {
+        return MRelEndService.computeMultiMinStd(multiStr);
+    }
+
+    public Integer getMultiMinCustom() {
+        return MRelEndService.computeMultiMinCustom(multiStr);
+    }
+
+    public MRelEndMultiPart getMultiMaxStd() {
+        return MRelEndService.computeMultiMaxStd(multiStr);
+    }
+
+    public Integer getMultiMaxCustom() {
+        return MRelEndService.computeMultiMaxCustom(multiStr);
+    }
+
+    public MRelEndMulti getMulti(){
+        return MRelEndService.computeMultiStd(multiStr) ;
+    }
+
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
+    }
+
 
     @Override
     public String getNameTree() {
@@ -95,16 +139,17 @@ public class MCDAssEnd extends MCDRelEnd {
             nameEntityOpposite = mcdEntityOpposite.getShortNameSmartPath();
         }
 
-
         String namingAssociation ;
-        if ((this.getName() != null) && (mcdAssEndOpposite.getName() != null)){
+        if (StringUtils.isNotEmpty(this.getName()) && StringUtils.isNotEmpty(mcdAssEndOpposite.getName())){
+            namingAssociation = this.getName();
             if (this.getDrawingDirection() == MCDAssEnd.FROM){
-                namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT +
-                        mcdEntityOpposite.getName();
+                namingAssociation = namingAssociation +
+                                Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT ;
+
             } else {
-                namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT +
-                        mcdEntityOpposite.getName();
-            }
+                namingAssociation = namingAssociation  +
+                        Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT ;
+             }
         } else {
             namingAssociation = /*Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +*/
                     mcdAssociation.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
@@ -112,6 +157,12 @@ public class MCDAssEnd extends MCDRelEnd {
 
         resultat = namingAssociation + nameEntityOpposite;
         return resultat;
+    }
+
+
+    public MCDAssEnd getMCDAssEndOpposite() {
+        MCDAssociation mcdAssociation = getMcdAssociation();
+        return mcdAssociation.getMCDAssEndOpposite(this);
     }
 
 

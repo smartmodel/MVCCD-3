@@ -7,6 +7,8 @@ import project.ProjectElement;
 import project.ProjectService;
 import utilities.files.UtilXML;
 
+import java.util.ArrayList;
+
 public class MCDContEntities extends MCDElement{
 
     private static final long serialVersionUID = 1000;
@@ -31,5 +33,14 @@ public class MCDContEntities extends MCDElement{
         }
         return null;
     }
+
+    public ArrayList<MCDEntity> getMCDEntities(){
+        ArrayList<MCDEntity> resultat = new ArrayList<MCDEntity>();
+        for (MVCCDElement mvccdElement: getChilds()){
+            resultat.add((MCDEntity) mvccdElement);
+        }
+        return resultat;
+    }
+    
 
 }

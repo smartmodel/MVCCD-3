@@ -7,6 +7,7 @@ import preferences.PreferencesManager;
 
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
 public class PrefGeneralInputContent extends PanelInputContent {
@@ -40,23 +41,12 @@ public class PrefGeneralInputContent extends PanelInputContent {
 
     }
 
-    @Override
-    public boolean checkDatasPreSave() {
-
-        return true;
-    }
 
     @Override
-    protected void enabledContentCustom() {
+    protected void enabledContent() {
 
     }
 
-
-    @Override
-    public boolean checkDatas() {
-
-        return true;
-    }
 
     @Override
     protected boolean changeField(DocumentEvent e) {
@@ -91,6 +81,8 @@ public class PrefGeneralInputContent extends PanelInputContent {
     public void saveDatas(MVCCDElement mvccdElement) {
         Preferences preferences = PreferencesManager.instance().preferences();
     }
+
+
 
 
 }

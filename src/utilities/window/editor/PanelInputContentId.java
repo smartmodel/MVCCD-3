@@ -9,6 +9,7 @@ import mcd.services.MCDUtilService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.scomponents.SComboBox;
+import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
@@ -89,11 +90,11 @@ public abstract class PanelInputContentId extends PanelInputContent {
             super.getsComponents().add(fieldLongName);
         }
         
-        createContentIdCustom();
+        //createContentIdCustom();
 
     }
 
-    protected abstract void createContentIdCustom();
+    //protected abstract void createContentIdCustom();
 
 
     protected GridBagConstraints createPanelId() {
@@ -136,7 +137,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
             return (MCDElement) elementForCheckInput.getParent();
         }
     }
-    protected MCDElement getChildForCheck(){
+    protected MCDElement getElementForCheck(){
         // Pour utilisation  uniquement checkDatas
         if (panelInput != null) {
             return (MCDElement) getEditor().getMvccdElementCrt();
@@ -145,17 +146,18 @@ public abstract class PanelInputContentId extends PanelInputContent {
         }
     }
 
-
     protected boolean checkName(boolean unitaire){
+       return checkName(unitaire, true);
+    }
 
 
-            return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
-                getParentForCheck(),
-                getChildForCheck(),
-                false,
+    protected boolean checkName(boolean unitaire, boolean mandatory){
+
+        return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
+                getBrothers(),
                 fieldName.getText(),
                     fieldName.getText(),
-                true,
+                mandatory,
                 getLengthMax(MVCCDElement.SCOPENAME),
                 getNaming(MVCCDElement.SCOPENAME),
                 getElement(MVCCDElement.SCOPENAME),
@@ -163,17 +165,20 @@ public abstract class PanelInputContentId extends PanelInputContent {
                 getNamingAndBrothersElements(MVCCDElement.SCOPENOTNAME)));
     }
 
-
     protected boolean checkShortName(boolean unitaire){
+       return checkShortName(unitaire, Preferences.MCD_MODE_NAMING_SHORT_NAME.equals(Preferences.OPTION_YES));
+    }
 
+
+    protected boolean checkShortName(boolean unitaire, boolean mandatory){
+
+        ArrayList<MVCCDElement> brothers = getParentForCheck().getChildsWithout(getElementForCheck());
 
         return super.checkInput(fieldShortName, unitaire, MCDUtilService.checkShortNameId(
-                getParentForCheck(),
-                getChildForCheck(),
-                false,
+                getBrothers(),
                 fieldShortName.getText(),
                 fieldShortName.getText(),
-                Preferences.MCD_MODE_NAMING_SHORT_NAME.equals(Preferences.OPTION_YES),
+                mandatory,
                 getLengthMax(MVCCDElement.SCOPESHORTNAME),
                 getNaming(MVCCDElement.SCOPESHORTNAME),
                 getElement(MVCCDElement.SCOPESHORTNAME),
@@ -183,9 +188,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
     protected boolean checkLongName(boolean unitaire){
 
         return super.checkInput(fieldLongName, unitaire, MCDUtilService.checkLongNameId(
-                getParentForCheck(),
-                getChildForCheck(),
-                false,
+                getBrothers(),
                 fieldLongName.getText(),
                 fieldLongName.getText(),
                 PreferencesManager.instance().preferences().getMCD_MODE_NAMING_LONG_NAME().equals(Preferences.OPTION_YES),
@@ -220,8 +223,6 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
     protected boolean changeField(DocumentEvent e) {
 
-        System.out.println("Entré dans change doc Id");
-
         Document doc = e.getDocument();
 
         // panelInput != null Pour ne pas lancer les messages lors de l'appel du formulaire seul
@@ -229,19 +230,15 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
 
         if (doc == fieldName.getDocument()) {
-            boolean ok = checkName(panelInput != null);
-            checkDatasPreSave();
-            return ok;
+            return checkDatas(fieldName);
         }
 
         if (doc == fieldShortName.getDocument()) {
-            boolean ok = checkShortName(panelInput != null);
-            return ok;
+            checkDatas(fieldShortName);
         }
 
         if (doc == fieldLongName.getDocument()) {
-            boolean ok = checkLongName(panelInput != null);
-            return ok;
+            checkDatas(fieldLongName);
         }
 
         return true;
@@ -271,36 +268,49 @@ public abstract class PanelInputContentId extends PanelInputContent {
         }
 
          */
-        System.out.println("Entré dans focus Id");
         super.focusGained(focusEvent);
         Object source = focusEvent.getSource();
 
         if (source == fieldName) {
-            checkName(panelInput != null);
-            checkDatasPreSave();
+            checkDatas(fieldName);
        }
         if (source == fieldShortName) {
-            checkShortName(panelInput != null);
+            checkDatas(fieldShortName);
         }
         if (source == fieldLongName) {
-            checkLongName(panelInput != null);
+            checkDatas(fieldLongName);
         }
     }
 
-    public boolean checkDatasPreSave() {
-        boolean ok = checkName(false);
+    @Override
+    public boolean checkDatasPreSave(SComponent sComponent) {
+
+        boolean notBatch = panelInput != null;
+        boolean unitaire = notBatch && (sComponent == fieldName);
+        boolean ok = checkName(unitaire)   ;
+
         setPreSaveOk(ok);
         return ok;
     }
 
-    public boolean checkDatas(){
-        boolean ok = true;
-        if (!shortNameMode.equals(Preferences.OPTION_NO)) {
-            ok = checkShortName(false) ;
+    @Override
+    public boolean checkDatas(SComponent sComponent){
+        boolean ok = super.checkDatas(sComponent);
+
+        if (ok) {
+            boolean notBatch = panelInput != null;
+
+            boolean unitaire = notBatch && (sComponent == fieldShortName);
+            if (!shortNameMode.equals(Preferences.OPTION_NO)) {
+                ok = checkShortName(unitaire) && ok;
+            }
+
+            unitaire = notBatch && (sComponent == fieldLongName);
+            if (!longNameMode.equals(Preferences.OPTION_NO)) {
+                ok = checkLongName(unitaire) && ok;
+            }
         }
-        if (!longNameMode.equals(Preferences.OPTION_NO)) {
-            ok = checkLongName(false) && ok;
-        }return ok ;
+        return ok ;
     }
 
 
@@ -331,7 +341,6 @@ public abstract class PanelInputContentId extends PanelInputContent {
     }
 
     protected void saveDatas(MVCCDElement mvccdElement) {
-
         if (fieldParent.checkIfUpdated()){
              MCDElement parentChoosed = getParentChoosed();
 
@@ -377,11 +386,9 @@ public abstract class PanelInputContentId extends PanelInputContent {
         this.longNameMode = longNameMode;
     }
 
-    /*
-    protected void initOrLoadDatas() {
-        super.initOrLoadDatas();
-        preSaveOk = checkDatasPreSaveId(false);
-     }
-*/
+
+    private ArrayList<MVCCDElement> getBrothers(){
+        return getParentForCheck().getChildsWithout(getElementForCheck());
+    }
 
 }

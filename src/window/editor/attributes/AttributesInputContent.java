@@ -44,14 +44,6 @@ public class AttributesInputContent extends PanelInputContent {
 
     public AttributesInputContent(AttributesInput attributesInput)    {
         super(attributesInput);
-        /*
-        attributesInput.setPanelContent(this);
-        createContent();
-        super.addContent(panel, false);
-        super.initOrLoadDatas();
-        enabledContent();
-
-         */
      }
 
 
@@ -289,6 +281,9 @@ public class AttributesInputContent extends PanelInputContent {
                     permuteOrder(posActual, posActual - 1);
                 }
                 enabledContent();
+                //TODO-1 Vérfier un changement effectif
+                //Détecter un changement au niveau de la table JTable --> STable et ensuite déclenechement automatique
+                enabledButtons();
 
             }
         });
@@ -305,13 +300,11 @@ public class AttributesInputContent extends PanelInputContent {
                     permuteOrder(posActual, posActual + 1);
                 }
                 enabledContent();
-
+                //TODO-1 Vérfier un changement effectif
+                //Détecter un changement au niveau de la table JTable --> STable et ensuite déclenechement automatique
+                enabledButtons();
             }
-
-
         });
-
-
     }
 
 
@@ -345,22 +338,7 @@ public class AttributesInputContent extends PanelInputContent {
     }
 
 
-    @Override
-    public boolean checkDatasPreSave() {
 
-        return true;
-    }
-
-
-    @Override
-    protected void enabledContentCustom() {
-
-    }
-
-
-    public boolean checkDatas(){
-            return true;
-    }
 
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
@@ -378,7 +356,9 @@ public class AttributesInputContent extends PanelInputContent {
 
 
 
-    private void enabledContent() {
+
+    @Override
+    protected void enabledContent() {
         int pos = table.getSelectedRow();
         if (pos >= 0){
             buttonRemove.setEnabled(true);

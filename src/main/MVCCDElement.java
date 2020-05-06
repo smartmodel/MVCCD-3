@@ -217,8 +217,6 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
 
     public boolean implementsInterface(String className) {
         for (Class anInterface : this.getClass().getInterfaces()) {
-            //System.out.println(anInterface.getName() + "   -    " + className);
-
             if (anInterface.getName().equals(className)) {
                 return true;
             }

@@ -1,6 +1,10 @@
 package mcd;
 
 import m.MRelEnd;
+import m.MRelEndMulti;
+import m.MRelEndMultiPart;
+import m.services.MRelEndService;
+import mcd.services.MCDAssEndService;
 import project.ProjectElement;
 
 public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
@@ -13,8 +17,6 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
 
     private MCDRelation mcdRelation;
     private MCDElement mcdElement ;
-
-
 
     public MCDRelEnd(MCDElement parent) {
         super(parent);
@@ -43,4 +45,6 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
     public void setMcdElement(MCDElement mcdElement) {
         this.mcdElement = mcdElement;
     }
+
+
 }

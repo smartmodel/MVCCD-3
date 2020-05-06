@@ -14,6 +14,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
 public class MCDDatatypeInputContent extends PanelInputContent{
@@ -50,14 +51,6 @@ public class MCDDatatypeInputContent extends PanelInputContent{
 
     public MCDDatatypeInputContent(MCDDatatypeInput entityInput)     {
         super(entityInput);
-        /*
-        entityInput.setPanelContent(this);
-        createContent();
-        super.addContent(panel);
-        super.initOrLoadDatas();
-        enabledContent();
-
-         */
      }
 
 
@@ -316,25 +309,6 @@ public class MCDDatatypeInputContent extends PanelInputContent{
 
     }
 
-
-    @Override
-    public boolean checkDatasPreSave() {
-
-        return true;
-    }
-
-
-    @Override
-    protected void enabledContentCustom() {
-
-    }
-
-
-    public boolean checkDatas(){
-            return true;
-    }
-
-
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
         MCDDatatype mcdDatatype = (MCDDatatype) mvccdElement;
@@ -371,6 +345,10 @@ public class MCDDatatypeInputContent extends PanelInputContent{
     }
 
 
-    private void enabledContent() {
+
+
+    @Override
+    protected void enabledContent() {
+
     }
 }

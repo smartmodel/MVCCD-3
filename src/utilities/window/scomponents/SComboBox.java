@@ -14,6 +14,7 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
 
     //private S oldSelected = null;
     private int oldIndex = -1 ;
+    private Object oldObject = null;
     private boolean checkPreSave = false;
 
     private boolean readOnly = false;
@@ -51,6 +52,7 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         if (! panel.isDataInitialized()) {
             //oldSelected = getItemAt(i);
             oldIndex = i ;
+            oldObject = getItemAt(i);
         }
     }
 
@@ -61,7 +63,8 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
     @Override
     public boolean checkIfUpdated() {
         boolean updated;
-        updated = (getSelectedIndex() != oldIndex);
+        updated = (getSelectedIndex() != oldIndex) || (getSelectedItem() != oldObject);
+
 
        if (updated) {
             MVCCDManager.instance().datasProjectChangedFromEditor();
@@ -72,6 +75,7 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
     @Override
     public void restartChange() {
         oldIndex = getSelectedIndex();
+        oldObject = getSelectedItem();
     }
 
     @Override

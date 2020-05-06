@@ -77,8 +77,9 @@ public class AttributeInputContent extends PanelInputContentId {
 
 
     @Override
-    protected void createContentIdCustom() {
+    public void createContentCustom() {
 
+        super.createContentCustom();
         //createContentId();
 
         //attributeNameAID.setPreferredSize((new Dimension(50, Preferences.EDITOR_FIELD_HEIGHT)));
@@ -343,17 +344,15 @@ public class AttributeInputContent extends PanelInputContentId {
         Document doc = e.getDocument();
         if (doc == datatypeSize.getDocument()){
             sComponent = datatypeSize;
-            ok = checkDatatypeSize(panelInput != null);
-            checkDatasPreSave();
+            checkDatas(datatypeSize);
         }
         if (doc == datatypeScale.getDocument()){
             sComponent = datatypeScale;
-            ok =checkDatatypeSize(panelInput != null);
-            checkDatasPreSave();
+            checkDatas(datatypeScale);
         }
 
         // Autres champs que les champs Id
-            return ok;
+        return ok;
     }
 
 
@@ -377,7 +376,7 @@ public class AttributeInputContent extends PanelInputContentId {
             if (source == datatypeName) {
                 //changeFieldSelectedList();
                 changeFieldSelectedDatatypeName();
-                checkDatasPreSave();
+                checkDatas(datatypeName);
             }
             if (source == mandatory) {
             }
@@ -404,6 +403,7 @@ public class AttributeInputContent extends PanelInputContentId {
             changeFieldDeSelectedList();
         }
         if (source == datatypeName) {
+            checkDatas(datatypeName);
         }
         if (source == mandatory) {
         }
@@ -580,16 +580,11 @@ public class AttributeInputContent extends PanelInputContentId {
     public void focusGained(FocusEvent focusEvent) {
         super.focusGained(focusEvent);
         Object source = focusEvent.getSource();
-        super.focusGained(focusEvent);
         if (source == datatypeSize) {
-            boolean ok = checkDatatypeSize(true);
-            //checkSizeAndScale(ok);
-            checkDatasPreSave();
+            checkDatas(datatypeSize);
         }
         if (source == datatypeScale) {
-            boolean ok = checkDatatypeScale(true);
-            //checkSizeAndScale(ok);
-            checkDatasPreSave();
+            checkDatas(datatypeScale);
         }
     }
 
@@ -598,29 +593,52 @@ public class AttributeInputContent extends PanelInputContentId {
     }
 
 
-    public boolean checkDatas(){
-        boolean ok = super.checkDatas();
-        // Autre attributs
+    @Override
+    public boolean checkDatas(SComponent sComponent){
+        boolean ok = super.checkDatas(sComponent);
+
+
+        if (ok) {
+            boolean notBatch = panelInput != null;
+            boolean unitaire;
+
+            // Autre attributs
+        }
+
         return ok;
     }
 
-    @Override
-    public boolean checkDatasPreSave() {
-        boolean ok = super.checkDatasPreSave();
-        ok = checkDatatypeSize(false) ;
-        ok = checkDatatypeScale(false) && ok;
-        ok = checkSizeAndScale((panelInput != null) && ok)  && ok;
+    public boolean checkDatasPreSave(SComponent sComponent) {
+
+        boolean notBatch = panelInput != null;
+        boolean unitaire;
+
+        boolean ok = true;
+
+
+        unitaire = notBatch && (sComponent == datatypeSize);
+        ok = checkDatatypeSize(unitaire)  && ok;
+
+        unitaire = notBatch && (sComponent == datatypeScale);
+        ok = checkDatatypeScale(unitaire) && ok;
+
+        unitaire = notBatch && ((sComponent == datatypeSize) ||
+                (sComponent == datatypeScale));
+        ok = checkSizeAndScale(unitaire)  && ok;
+
 
         setPreSaveOk(ok);
         return ok;
     }
 
 
-    @Override
-    protected void enabledContentCustom() {
 
+
+    protected boolean checkShortName(boolean unitaire){
+        return checkShortName(unitaire,
+                PreferencesManager.instance().preferences().getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME().equals(
+                        Preferences.OPTION_YES));
     }
-
 
 
     private boolean checkSizeAndScale(boolean unitaire) {
@@ -665,14 +683,15 @@ public class AttributeInputContent extends PanelInputContentId {
                     }
                     messagesErrors.add(message);
 
-                    datatypeSize.setColor(SComponent.COLORERROR);
-                    datatypeScale.setColor(SComponent.COLORERROR);
-
                     showCheckResultat(messagesErrors);
                 }
+                datatypeSize.setColor(SComponent.COLORERROR);
+                datatypeScale.setColor(SComponent.COLORERROR);
+
                 return false;
             }
         }
+        /*
         if (datatypeSize.isErrorInput()){
             datatypeSize.setColor(SComponent.COLORWARNING);
         }else {
@@ -680,6 +699,8 @@ public class AttributeInputContent extends PanelInputContentId {
         }
 
         datatypeScale.setColor(SComponent.COLORNORMAL);
+
+         */
 
         return true;
     }
@@ -799,6 +820,7 @@ public class AttributeInputContent extends PanelInputContentId {
         if (mcdAttribute.getDatatypeLienProg() != null) {
             MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(mcdAttribute.getDatatypeLienProg());
             SComboBoxService.selectByText(datatypeName, mcdDatatype.getName());
+            mcdDatatypeSelected = MDDatatypeService.getMCDDatatypeByName(mcdDatatype.getName());
         } else {
             datatypeName.setSelectedFirst();
         }
@@ -907,6 +929,8 @@ public class AttributeInputContent extends PanelInputContentId {
 
     }
 
+
+
     private void saveSizeAndScale(MCDAttribute mcdAttribute, MCDDatatype mcdDatatype) {
 
         if (mcdDatatype != null) {
@@ -944,9 +968,11 @@ public class AttributeInputContent extends PanelInputContentId {
     }
 
 
-
-    private void enabledContent() {
+    @Override
+    protected void enabledContent() {
         Preferences preferences = PreferencesManager.instance().preferences();
+        fieldShortName.setEnabled(
+                !preferences.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME().equals(Preferences.OPTION_NO));
         //entityJournal.setEnabled(preferences.getMCD_JOURNALIZATION_EXCEPTION());
     }
 

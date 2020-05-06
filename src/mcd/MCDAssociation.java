@@ -2,9 +2,12 @@ package mcd;
 
 import exceptions.CodeApplException;
 import m.IMCompliant;
+import m.MRelationDegree;
+import m.services.MRelationService;
 import main.MVCCDElement;
 import mcd.services.MCDAssociationService;
 import mcd.services.MCDElementService;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
@@ -12,11 +15,16 @@ public class MCDAssociation extends MCDRelation implements IMCompliant {
 
     private  static final long serialVersionUID = 1000;
 
+    private MCDAssociationNature nature ;
+    private boolean frozen = false;
+    private boolean deleteCascade = false;
+    private Boolean oriented = null;
 
     public MCDAssociation(MCDElement parent) {
 
         super(parent);
     }
+
 
     public MCDAssociation(MCDElement parent, String name) {
 
@@ -103,7 +111,7 @@ public class MCDAssociation extends MCDRelation implements IMCompliant {
         }
 
         String namingAssociation ;
-        if ((getFrom().getName() != null ) && (getTo().getName() != null)){
+        if (StringUtils.isNotEmpty(getFrom().getName())  && StringUtils.isNotEmpty(getTo().getName())){
             namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT +
                     getFrom().getName() +
                     Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR  +
@@ -127,6 +135,71 @@ public class MCDAssociation extends MCDRelation implements IMCompliant {
 
         throw new CodeApplException("L'extrémité d'association passée en paramètre n'existe pas pour cette association ");
 
+    }
+
+    public MCDAssociationNature getNature() {
+        return nature;
+    }
+
+    public void setNature(MCDAssociationNature nature) {
+        this.nature = nature;
+    }
+
+    public boolean isFrozen() {
+        return frozen;
+    }
+
+    public void setFrozen(boolean frozen) {
+        this.frozen = frozen;
+    }
+
+    public boolean isDeleteCascade() {
+        return deleteCascade;
+    }
+
+    public void setDeleteCascade(boolean deleteCascade) {
+        this.deleteCascade = deleteCascade;
+    }
+
+    public Boolean getOriented() {
+        return oriented;
+    }
+
+    public void setOriented(Boolean oriented) {
+        this.oriented = oriented;
+    }
+
+    public boolean isNoId(){
+        if (nature != null){
+            return nature == MCDAssociationNature.NOID;
+        }
+        return false;
+    }
+
+
+    public boolean isIdNatural(){
+        if (nature != null){
+            return nature == MCDAssociationNature.IDNATURAL;
+        }
+        return false;
+    }
+
+    public boolean isIdComp(){
+        if (nature != null){
+            return nature == MCDAssociationNature.IDCOMP;
+        }
+        return false;
+    }
+
+    public boolean isCP(){
+        if (nature != null){
+            return nature == MCDAssociationNature.CP;
+        }
+        return false;
+    }
+
+    public MRelationDegree getDegree(){
+        return MRelationService.computeDegree(getFrom().getMultiMaxStd(), getTo().getMultiMaxStd());
     }
 
 }

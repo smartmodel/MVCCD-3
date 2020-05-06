@@ -1,6 +1,11 @@
 package window.editor.relation.association;
 
 import m.MRelEnd;
+import m.MRelEndMultiPart;
+import m.MRelEndMultiStr;
+import m.MRelationDegree;
+import m.services.MRelEndService;
+import m.services.MRelationService;
 import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
@@ -9,7 +14,10 @@ import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentId;
+import utilities.window.editor.services.PanelInputService;
+import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
@@ -20,50 +28,54 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class AssociationInputContent extends PanelInputContentId {
 
     //private JPanel panelFrom = new JPanel();
-    private SComboBox fieldFromEntity = new SComboBox(this);
+    private JPanel panelProperties = new JPanel();
+    private SComboBox fieldNature = new SComboBox(this);
+    private SCheckBox fieldFrozen = new SCheckBox(this);
+    private SCheckBox fieldDeleteCascade = new SCheckBox(this);
+    private SComboBox fieldOriented = new SComboBox(this);
+
+
     private JPanel panelFrom = new JPanel();
+    private SComboBox fieldFromEntity = new SComboBox(this);
     private JPanel panelFromRole = new JPanel();
     private STextField fieldFromRoleName = new STextField(this);
     private STextField fieldFromRoleShortName = new STextField(this);
+    private SComboBox fieldFromMulti = new SComboBox(this);
+    private SCheckBox fieldFromOrdered = new SCheckBox(this);
+
     private JPanel panelTo = new JPanel();
     private SComboBox fieldToEntity = new SComboBox(this);
     private JPanel panelToRole = new JPanel();
     private STextField fieldToRoleName = new STextField(this);
     private STextField fieldToRoleShortName = new STextField(this);
-    //private IMCDModel iMCDModelContainer;
+    private SComboBox fieldToMulti = new SComboBox(this);
+    private SCheckBox fieldToOrdered = new SCheckBox(this);
 
     private AssEndInputContent assEndInputContent = new AssEndInputContent();
 
-    //TODO-0 MCDElementService.PATHNAME , remplacer par SHORT et mettre une constante
+    //TODO-0 MCDElementService.PATHNAME , remplacer par SHORT
+    private int modePathName =  MCDElementService.PATHNAME;
 
     // Pour la factorisation des 2 extrémités
-    String factorizeTitle = "";
-    JPanel factorizePanelEndAss = null;
-    SComboBox factorizeFieldEntity = null;
-    JPanel factorizePanelRole = null;
-    STextField factorizeFieldRoleName = null;
-    STextField factorizeFieldRoleShortName = null;
-
+    private String factorizeTitle = "";
+    private JPanel factorizePanelEndAss = null;
+    private SComboBox factorizeFieldEntity = null;
+    private JPanel factorizePanelRole = null;
+    private STextField factorizeFieldRoleName = null;
+    private STextField factorizeFieldRoleShortName = null;
+    private SComboBox factorizeFieldMulti = null;
+    private SCheckBox factorizeFieldOrdered = null;
 
 
     public AssociationInputContent(AssociationInput associationInput)     {
         super(associationInput);
-        /*
-        if ((MCDElement) getEditor().getMvccdElementParent() != null) {
-            iMCDModelContainer = IMCDModelService.getIModelContainer((MCDElement) getEditor().getMvccdElementParent());
-        } else {
-            iMCDModelContainer = IMCDModelService.getIModelContainer((MCDElement) getEditor().getMvccdElementCrt());
-        }
-
-         */
-    }
+     }
 
     public AssociationInputContent(MVCCDElement elementCrt)     {
         super(null);
@@ -71,20 +83,80 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
     @Override
-    protected void createContentIdCustom() {
+    public void createContentCustom() {
+        super.createContentCustom();
 
         fieldName.setToolTipText("Nom de l'association");
         fieldName.setCheckPreSave(false);
+
+        for (MCDAssociationNature nature : MCDAssociationNature.values()){
+            fieldNature.addItem(nature.getText());
+        }
+        fieldNature.addFocusListener(this);
+        fieldNature.addItemListener(this);
+
+        fieldFrozen.addFocusListener(this);
+        fieldFrozen.addItemListener(this);
+        fieldDeleteCascade.addFocusListener(this);
+        fieldDeleteCascade.addItemListener(this);
+
+        PanelInputService.createComboBoxYesNoWhite(fieldOriented);
+        fieldOriented.addFocusListener(this);
+        fieldOriented.addItemListener(this);
+
+
+
+        super.getsComponents().add(fieldNature);
+        super.getsComponents().add(fieldFrozen);
+        super.getsComponents().add(fieldDeleteCascade);
+        super.getsComponents().add(fieldOriented);
+
+
+
         fieldFromEntity.setCheckPreSave(true);
         fieldToEntity.setCheckPreSave(true);
+        fieldFromRoleName.setCheckPreSave(true);
+        fieldToRoleName.setCheckPreSave(true);
 
         createContentAssEnd(MCDRelEnd.FROM);
+
+        fieldFromMulti.getEditor().getEditorComponent().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+             }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                fieldFromMulti.setColor(SComponent.COLORNORMAL);
+                checkMulti(fieldFromMulti, (String) fieldFromMulti.getEditor().getItem(), MCDAssEnd.FROM, true);
+            }
+        });
+
         createContentAssEnd(MCDRelEnd.TO);
 
-        //enabledOrVisibleFalse();
+        fieldToMulti.getEditor().getEditorComponent().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                fieldToMulti.setColor(SComponent.COLORNORMAL);
+                checkMulti(fieldToMulti, (String) fieldToMulti.getEditor().getItem(), MCDAssEnd.TO, true);
+            }
+        });
 
         createPanelMaster();
     }
+
 
     private void createContentAssEnd(int direction) {
         ArrayList<MCDEntity> mcdEntities = MCDEntityService.getMCDEntitiesInIModel(iMCDModelContainer);
@@ -94,12 +166,10 @@ public class AssociationInputContent extends PanelInputContentId {
 
         factorizeFieldEntity.addItem(SComboBox.LINEWHITE);
         for (MCDEntity mcdEntity : mcdEntities) {
-            factorizeFieldEntity.addItem(mcdEntity.getNamePath(MCDElementService.PATHNAME));
+            factorizeFieldEntity.addItem(mcdEntity.getNamePath(modePathName));
         }
         factorizeFieldEntity.addFocusListener(this);
         factorizeFieldEntity.addItemListener(this);
-
-
 
         factorizeFieldRoleName.setPreferredSize((new Dimension(100, Preferences.EDITOR_FIELD_HEIGHT)));
         factorizeFieldRoleName.getDocument().addDocumentListener(this);
@@ -110,16 +180,48 @@ public class AssociationInputContent extends PanelInputContentId {
         factorizeFieldRoleShortName.getDocument().addDocumentListener(this);
         factorizeFieldRoleShortName.addFocusListener(this);
 
+        //factorizeFieldMulti.setEditable(true);
+        factorizeFieldMulti.addItem(SComboBox.LINEWHITE);
+        for (MRelEndMultiStr multi : MRelEndMultiStr.values()){
+            factorizeFieldMulti.addItem(multi.getText());
+        }
+        factorizeFieldMulti.setCheckPreSave(true);
+        factorizeFieldMulti.setPreferredSize((new Dimension(70, Preferences.EDITOR_FIELD_HEIGHT)));
+        factorizeFieldMulti.addFocusListener(this);
+        factorizeFieldMulti.addItemListener(this);
+        /*
+        factorizeFieldMulti.getEditor().getEditorComponent().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                factorizeFieldMulti.setColor(SComponent.COLORNORMAL);
+                checkMulti(factorizeFieldMulti, (String) factorizeFieldMulti.getEditor().getItem(), direction, true);
+            }
+        });
+
+         */
+
+        factorizeFieldOrdered.addFocusListener(this);
+        factorizeFieldOrdered.addItemListener(this);
+
         super.getsComponents().add(factorizeFieldEntity);
         super.getsComponents().add(factorizeFieldRoleName);
         super.getsComponents().add(factorizeFieldRoleShortName);
-
+        super.getsComponents().add(factorizeFieldMulti);
+        super.getsComponents().add(factorizeFieldOrdered);
     }
 
     private void createPanelMaster(){
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
-        gbc.gridwidth = 4;
+        gbc.gridwidth = 6;
         super.createPanelId();
         panelInputContentCustom.add(panelId, gbc);
         gbc.gridwidth = 1;
@@ -129,6 +231,10 @@ public class AssociationInputContent extends PanelInputContentId {
         gbc.gridy++;
         createPanelAssEnd(MCDRelEnd.FROM);
         panelInputContentCustom.add(panelFrom,gbc);
+
+        gbc.gridx++;
+        createPanelProperties();
+        panelInputContentCustom.add(panelProperties,gbc);
 
 
         gbc.gridx++;
@@ -141,29 +247,34 @@ public class AssociationInputContent extends PanelInputContentId {
 
     }
 
+    private void createPanelProperties() {
+        GridBagConstraints gbc = PanelService.createSubPanelGridBagConstraints(panelProperties, "Propriétés");
+
+        panelProperties.add(new JLabel("Nature :"), gbc);
+        gbc.gridx++;
+        panelProperties.add(fieldNature, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelProperties.add(new JLabel("Gelée {frozen} :"), gbc);
+        gbc.gridx++;
+        panelProperties.add(fieldFrozen, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelProperties.add(new JLabel("Suppr. cascade :"), gbc);
+        gbc.gridx++;
+        panelProperties.add(fieldDeleteCascade, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelProperties.add(new JLabel("Orientée :"), gbc);
+        gbc.gridx++;
+        panelProperties.add(fieldOriented, gbc);
+    }
+
     private void createPanelAssEnd(int direction) {
-        /*
-        String title = "";
-        JPanel panelEndAss = null;
-        SComboBox fieldEntity = null;
-        JPanel panelRole = null;
-
-        if (direction == MCDRelEnd.FROM) {
-            title = "Tracée depuis";
-            panelEndAss = panelFrom;
-            fieldEntity = fieldFromEntity;
-            panelRole = panelFromRole;
-       }
-        if (direction == MCDRelEnd.TO) {
-            title = "Tracée vers";
-            panelEndAss = panelTo;
-            fieldEntity = fieldToEntity;
-            panelRole = panelToRole;
-        }
-
-         */
-
-        factorizeAssEnd(direction);
+         factorizeAssEnd(direction);
 
         GridBagConstraints gbc = PanelService.createSubPanelGridBagConstraints(factorizePanelEndAss, factorizeTitle);
 
@@ -182,21 +293,6 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
     private void createPanelRole(int direction, JPanel panelRole) {
-        /*
-        STextField fieldRoleName = null;
-        STextField fieldRoleShortName = null;
-
-        if (direction == MCDRelEnd.FROM) {
-            fieldRoleName = fieldFromRoleName;
-            fieldRoleShortName = fieldFromRoleShortName;
-        }
-        if (direction == MCDRelEnd.TO) {
-            fieldRoleName = fieldToRoleName;
-            fieldRoleShortName = fieldToRoleShortName;
-        }
-
-         */
-
         factorizeAssEnd(direction);
         GridBagConstraints gbc = PanelService.createSubPanelGridBagConstraints(panelRole, "Rôle");
 
@@ -210,11 +306,23 @@ public class AssociationInputContent extends PanelInputContentId {
         gbc.gridx++;
         panelRole.add(factorizeFieldRoleShortName, gbc);
 
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelRole.add(new JLabel("Multiplicity :"), gbc);
+        gbc.gridx++;
+        panelRole.add(factorizeFieldMulti, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelRole.add(new JLabel("Enreg. ordonnés :"), gbc);
+        gbc.gridx++;
+        panelRole.add(factorizeFieldOrdered, gbc);
+
     }
 
 
     protected boolean changeField(DocumentEvent e) {
-        boolean ok =  true;
+        boolean ok = true ;
 
 
         SComponent sComponent = null;
@@ -224,7 +332,6 @@ public class AssociationInputContent extends PanelInputContentId {
         if (doc == fieldName.getDocument()) {
             sComponent = fieldName;
         }
-
         if (doc == fieldShortName.getDocument()) {
             sComponent = fieldShortName;
         }
@@ -233,68 +340,107 @@ public class AssociationInputContent extends PanelInputContentId {
         }
 
 
+        if ( doc == fieldFromRoleName.getDocument()){
+            sComponent = fieldFromRoleName;
+        }
         if ( doc == fieldFromRoleShortName.getDocument()){
             sComponent = fieldFromRoleShortName;
-       }
+        }
+
+        if ( doc == fieldToRoleName.getDocument()){
+            sComponent = fieldToRoleName;
+        }
         if ( doc == fieldToRoleShortName.getDocument()){
             sComponent = fieldToRoleShortName;
         }
 
-        if ( doc == fieldFromRoleName.getDocument()){
-            sComponent = fieldFromRoleName;
-         }
-        if ( doc == fieldToRoleName.getDocument()){
-            sComponent = fieldToRoleName;
-        }
+
 
         if (sComponent != null) {
-            ok = checkField(sComponent, panelInput != null) && ok;
+            ok = treatField(sComponent) ;
         }
 
         return ok;
     }
 
 
-
-
     @Override
     protected void changeFieldSelected(ItemEvent e) {
-            Object source = e.getSource();
+        Object source = e.getSource();
 
-        // panelInput != null Pour ne pas lancer les messages lors de l'appel du formulaire seul
-        // en preSave
-        if (source == fieldFromEntity){
-            checkDatasPreSave();
-        }
-
-        if (source == fieldToEntity){
-            checkDatasPreSave();
+        if (source instanceof SComponent){
+            treatField( (SComponent) source);
         }
 
     }
+
 
 
 
     @Override
     protected void changeFieldDeSelected(ItemEvent e) {
         Object source = e.getSource();
-        if (source == fieldFromEntity){
-            checkDatasPreSave();
+
+        if (source instanceof SComponent){
+            treatField( (SComponent) source);
         }
 
-        if (source == fieldToEntity){
-            checkDatasPreSave();
+    }
+
+    private void treatFieldNature() {
+        MCDAssociationNature nature = MCDAssociationNature.findByText((String) fieldNature.getSelectedItem());
+
+        // {frozen}
+        if ((nature == MCDAssociationNature.NOID) || (nature == MCDAssociationNature.IDNATURAL)) {
+            fieldFrozen.setEnabled(true);
+        } else {
+            fieldFrozen.setEnabled(false);
+            fieldFrozen.setSelected(false);
+        }
+
+        // {deletecascade}
+        if (nature == MCDAssociationNature.IDCOMP) {
+            fieldDeleteCascade.setEnabled(true);
+        } else {
+            fieldDeleteCascade.setEnabled(false);
+            fieldDeleteCascade.setSelected(false);
+        }
+
+        // {oriented} {nonorented}
+        if (isRecursif()) {
+            System.out.println("récursif");
+            String multiA = (String)fieldFromMulti.getSelectedItem();
+            String multiB = (String)fieldToMulti.getSelectedItem();
+            if (StringUtils.isNotEmpty(multiA) && StringUtils.isNotEmpty(multiB) ) {
+                System.out.println("multi A et B saisis");
+                MRelEndMultiPart maxFrom = MRelEndService.computeMultiMaxStd((String) fieldFromMulti.getSelectedItem());
+                MRelEndMultiPart maxTo = MRelEndService.computeMultiMaxStd((String) fieldToMulti.getSelectedItem());
+                MRelationDegree degree = MRelationService.computeDegree(maxFrom, maxTo);
+                System.out.println("Degree   " + degree.getText());
+                boolean degreeNot1n = (degree == MRelationDegree.DEGREE_ONE_ONE) ||
+                        (degree == MRelationDegree.DEGREE_MANY_MANY);
+                System.out.println("degreeNot1n   " + degreeNot1n);
+                if (degreeNot1n) {
+                    fieldOriented.setEnabled(true);
+                } else {
+                    fieldOriented.setEnabled(false);
+                    fieldOriented.setSelectedEmpty();
+                }
+            }
         }
     }
 
     @Override
     public void focusGained(FocusEvent focusEvent) {
-        // Ne pas donner la main à PanelInputContentId
-        super.focusGainedByPass(focusEvent);
+        if (panelInput != null) {
+            // Ne pas donner la main à PanelInputContentId car l'identification est surchargée
+            super.focusGainedByPass(focusEvent);
+        }
+
         Object source = focusEvent.getSource();
 
         if (source instanceof SComponent) {
-            checkField((SComponent) source, panelInput != null);
+            treatField((SComponent) source);
         }
     }
 
@@ -303,132 +449,123 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
 
-    private boolean checkField(SComponent sComponent, boolean unitaire) {
+    private boolean treatField(SComponent sComponent) {
 
-        boolean ok = true;
-        if (sComponent == fieldName) {
-            ok = checkFieldName(unitaire);
-        }
-        if (sComponent == fieldShortName) {
-            ok = checkFieldShortName(unitaire);
-        }
-        if (sComponent == fieldLongName) {
-            ok = checkFieldLongName(unitaire);
-        }
-        if (sComponent == fieldFromRoleShortName){
-            ok = checkFieldFromRoleShortName(unitaire);
-        }
-        if (sComponent == fieldToRoleShortName){
-            ok = checkFieldToRoleShortName(unitaire);
-        }
-        if (sComponent == fieldFromRoleName){
-            ok = checkFieldFromRoleName(unitaire);
-        }
-        if (sComponent == fieldFromRoleName){
-            ok = checkFieldToRoleName(unitaire);
+        if ((sComponent == fieldFromMulti) || (sComponent == fieldToMulti)) {
+            SComboBox fieldMulti = (SComboBox) sComponent;
+            fieldMulti.setEditable(fieldMulti.getSelectedIndex() == 0);
         }
 
-        //if (ok){
-        if (checkDatasPreSave()) {
-            checkDatas();
-        }
-        //}
-        
-        return ok;
+        return checkDatas(sComponent);
     }
 
-
-
-    private boolean checkFieldName(boolean unitaire) {
-        boolean ok = checkName(unitaire);
-        if (ok){
-            ok = checkNameOrRoles(unitaire && ok) && ok;
-        }
-        return ok;
-    }
-
-    private boolean checkFieldShortName(boolean unitaire) {
-        boolean ok = checkShortName(unitaire);
-        return ok;
-    }
-
-    private boolean checkFieldLongName(boolean unitaire) {
-        boolean ok = checkLongName(unitaire);
-        return ok;
-    }
-
-    boolean checkFieldFromRoleShortName(boolean unitaire){
-        boolean ok = checkFromRoleShortName(unitaire);
-        if (ok){
-            ok = checkNameOrRoles(unitaire && ok) && ok;
-        }
-        return ok;
-    }
-
-    boolean checkFieldToRoleShortName(boolean unitaire){
-        boolean ok = checkToRoleShortName(unitaire);
-        if (ok){
-            ok = checkNameOrRoles(unitaire && ok) && ok;
-        }
-        return ok;
-    }
-
-    boolean checkFieldFromRoleName(boolean unitaire){
-        boolean ok = checkFromRoleName(unitaire);
-        if (ok){
-            ok = checkFromRoleNaming(unitaire && ok) && ok;
-        }
-        return ok;
-    }
-
-    boolean checkFieldToRoleName(boolean unitaire){
-        boolean ok = checkToRoleName(unitaire);
-        if (ok){
-            ok = checkToRoleNaming(unitaire && ok) && ok;
-        }
-        return ok;
-    }
 
     @Override
-    public boolean checkDatasPreSave() {
-        // ! Le non d'association n'est pas impératif!
+    public boolean checkDatasPreSave(SComponent sComponent) {
+        boolean notBatch = panelInput != null;
+        boolean unitaire;
 
+        unitaire = notBatch && (sComponent == fieldFromEntity);
+        boolean ok = checkAssociationFrom(unitaire);
 
-        boolean ok = checkAssociationFrom(false);
-        ok = checkAssociationTo(false) && ok;
-        if (ok){
-            ok = checkNameOrRoles(false) && ok;
-        }
-        /*
+        unitaire = notBatch && (sComponent == fieldToEntity);
+        ok = checkAssociationTo(unitaire ) && ok;
+
         if (ok) {
-            ok = checkFromRoleShortName(false) && ok;
-            ok = checkToRoleShortName(false) && ok;
+
+
+            unitaire = notBatch && (
+                    (sComponent == fieldName) ||
+                            (sComponent == fieldFromRoleName) ||
+                            (sComponent == fieldToRoleName));
+            ok = checkNameOrRoles(unitaire) && ok;
+
+
+            unitaire = notBatch && (sComponent == fieldName);
+            boolean okCheckName = checkName(unitaire);
+            ok = okCheckName && ok;
+            if (unitaire) {
+                if (okCheckName) {
+                    checkNameOrRoles(unitaire);
+                }
+            }
+
+            unitaire = notBatch && (sComponent == fieldFromRoleName);
+            boolean okCheckFromRoleName = checkFromRoleName(unitaire);
+            ok = okCheckFromRoleName && ok;
+            if (unitaire) {
+                if (okCheckFromRoleName) {
+                    checkNameOrRoles(unitaire);
+                }
+            }
+
+            unitaire = notBatch && (sComponent == fieldToRoleName);
+            boolean okCheckToRoleName = checkToRoleName(unitaire);
+            ok = okCheckToRoleName && ok;
+            if (unitaire) {
+                if (okCheckToRoleName) {
+                    checkNameOrRoles(unitaire);
+                }
+            }
+
+
+            unitaire = notBatch && (sComponent == fieldFromMulti);
+            ok = checkMulti(fieldFromMulti, null, MCDAssEnd.FROM, unitaire) && ok;
+
+            unitaire = notBatch && (sComponent == fieldToMulti);
+            ok = checkMulti(fieldToMulti, null, MCDAssEnd.TO, unitaire) & ok;
+
+        }
+        setPreSaveOk(ok);
+
+        return ok;
+    }
+
+    @Override
+    public boolean checkDatas(SComponent sComponent){
+        boolean ok = super.checkDatas(sComponent);
+
+        if (ok) {
+            boolean notBatch = panelInput != null;
+            boolean unitaire;
+
+            unitaire = notBatch && (sComponent == fieldShortName);
+            ok = checkShortName(unitaire) && ok;
+
+            unitaire = notBatch && (sComponent == fieldLongName);
+            ok = checkLongName(unitaire) && ok;
+
+            unitaire = notBatch && (sComponent == fieldFromRoleShortName);
+            boolean okCheckFromRoleShortName = checkFromRoleShortName(unitaire) ;
+            ok = okCheckFromRoleShortName && ok;
+            if (unitaire) {
+                if (okCheckFromRoleShortName) {
+                    checkFromRoleNaming(unitaire);
+                }
+            }
+
+            unitaire = notBatch && (sComponent == fieldToRoleShortName);
+            boolean okCheckToRoleShortName = checkToRoleShortName(unitaire) ;
+            ok = okCheckToRoleShortName && ok;
+            if (unitaire) {
+                if (okCheckToRoleShortName) {
+                    checkToRoleNaming(unitaire);
+                }
+            }
+
+            unitaire = notBatch && (sComponent == fieldNature);
+            ok = checkNature(fieldNature, unitaire) && ok;
+
+            // enable ou non les champs dépendants
+            treatFieldNature();
+
+            unitaire = notBatch && (sComponent == fieldOriented);
+            ok = checkOriented(fieldOriented, unitaire) && ok;
+
         }
 
-         */
-        setPreSaveOk(ok);
         return ok;
     }
-
-
-
-    @Override
-    public boolean checkDatas(){
-        boolean ok = checkShortName(false);
-        ok = checkLongName(false) && ok;
-        ok = checkFromRoleName(false) && ok;
-        ok = checkToRoleName(false) && ok;
-        ok = checkFromRoleNaming(false) && ok;
-        ok = checkToRoleNaming(false) && ok;
-
-        return ok;
-    }
-
-    @Override
-    protected void enabledContentCustom() {
-
-    }
-
 
 
     @Override
@@ -443,7 +580,7 @@ public class AssociationInputContent extends PanelInputContentId {
                 ok = checkNameOneWay(unitaire, fieldName.getText(), nameId);
             }
         }else {
-            checkInput(fieldName,
+            return checkInput(fieldName,
                     unitaire,
                     MCDUtilService.checkString(
                             fieldName.getText(), false,
@@ -456,10 +593,9 @@ public class AssociationInputContent extends PanelInputContentId {
      }
 
     protected boolean checkNameOneWay(boolean unitaire, String name, String nameId) {
+
         return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
-                (MCDElement) iMCDModelContainer,
-                getChildForCheck(),
-                true,
+                getBrothers(),
                 name,
                 nameId,
                 false,
@@ -484,7 +620,7 @@ public class AssociationInputContent extends PanelInputContentId {
                     ok = checkShortNameOneWay(unitaire, fieldShortName.getText(), shortNameId);
                 }
             } else {
-                checkInput(fieldShortName,
+                return checkInput(fieldShortName,
                         unitaire,
                         MCDUtilService.checkString(
                         fieldShortName.getText(), false,
@@ -498,13 +634,12 @@ public class AssociationInputContent extends PanelInputContentId {
 
 
     protected boolean checkShortNameOneWay(boolean unitaire, String shortName, String shortNameId) {
+
         return super.checkInput(fieldShortName, unitaire, MCDUtilService.checkShortNameId(
-                (MCDElement) iMCDModelContainer,
-                getChildForCheck(),
-                true,
+                getBrothers(),
                 shortName,
                 shortNameId,
-                false,
+                Preferences.MCD_MODE_NAMING_SHORT_NAME.equals(Preferences.OPTION_YES),
                 getLengthMax(MVCCDElement.SCOPESHORTNAME),
                 getNaming(MVCCDElement.SCOPESHORTNAME),
                 getElement(MVCCDElement.SCOPESHORTNAME),
@@ -524,7 +659,7 @@ public class AssociationInputContent extends PanelInputContentId {
                 ok = checkLongNameOneWay(unitaire, fieldLongName.getText(), longNameId);
             }
         }else {
-            checkInput(fieldLongName,
+            return checkInput(fieldLongName,
                     unitaire,
                     MCDUtilService.checkString(
                             fieldLongName.getText(), false,
@@ -539,9 +674,7 @@ public class AssociationInputContent extends PanelInputContentId {
 
     protected boolean checkLongNameOneWay(boolean unitaire, String longName, String longNameId) {
         return super.checkInput(fieldLongName, unitaire, MCDUtilService.checkLongNameId(
-                (MCDElement) iMCDModelContainer,
-                getChildForCheck(),
-                true,
+                getBrothers(),
                 longName,
                 longNameId,
                 false,
@@ -551,27 +684,81 @@ public class AssociationInputContent extends PanelInputContentId {
                 getNamingAndBrothersElements(MVCCDElement.SCOPELONGNAME)));
     }
 
+
     private boolean checkFromRoleName(boolean unitaire) {
-        return assEndInputContent.checkRoleName(
-                this, fieldFromRoleName, unitaire, MCDAssEnd.FROM);
-    }
-
-
-    private boolean checkToRoleName(boolean unitaire) {
-        return assEndInputContent.checkRoleName(
-                this, fieldToRoleName, unitaire, MCDAssEnd.TO);
+        return checkFromRoleScopeNaming(unitaire, MVCCDElement.SCOPENAME);
     }
 
     private boolean checkFromRoleShortName(boolean unitaire) {
-        return assEndInputContent.checkRoleShortName(
-                this, fieldFromRoleShortName, unitaire, MCDAssEnd.FROM);
+        return checkFromRoleScopeNaming(unitaire, MVCCDElement.SCOPESHORTNAME);
+    }
+
+    private boolean checkFromRoleScopeNaming(boolean unitaire, int scopeNaming) {
+        String text = (String) fieldFromEntity.getSelectedItem();
+        MCDEntity mcdEntity = MCDEntityService.getMCDEntityByNamePath(modePathName, text);
+        text = (String) fieldToEntity.getSelectedItem();
+        MCDEntity mcdEntityOpposite = MCDEntityService.getMCDEntityByNamePath(modePathName, text);
+
+        MCDAssociation mcdAssociation = (MCDAssociation)  getElementForCheck();
+        MCDAssEnd mcdAssEnd = null;
+        if (mcdAssociation != null){
+            mcdAssEnd = mcdAssociation.getFrom();
+        }
+
+        if (scopeNaming == MVCCDElement.SCOPENAME) {
+            return assEndInputContent.checkRoleName(this,
+                    fieldFromRoleName, mcdEntity, mcdAssEnd, mcdEntityOpposite,
+                    unitaire, MCDAssEnd.FROM);
+        }
+        if (scopeNaming == MVCCDElement.SCOPESHORTNAME) {
+            return assEndInputContent.checkRoleShortName(this,
+                    fieldFromRoleShortName, mcdEntity, mcdAssEnd, mcdEntityOpposite,
+                    unitaire, MCDAssEnd.FROM);
+        }
+
+        return false;
+
+    }
+
+    private boolean checkToRoleName(boolean unitaire) {
+        return checkToRoleScopeNaming(unitaire, MVCCDElement.SCOPENAME);
     }
 
 
     private boolean checkToRoleShortName(boolean unitaire) {
-        return assEndInputContent.checkRoleShortName(
-                this, fieldToRoleShortName, unitaire, MCDAssEnd.TO);
+        return checkToRoleScopeNaming(unitaire, MVCCDElement.SCOPESHORTNAME);
     }
+
+
+    private boolean checkToRoleScopeNaming(boolean unitaire, int scopeNaming) {
+        String text = (String) fieldToEntity.getSelectedItem();
+        MCDEntity mcdEntity = MCDEntityService.getMCDEntityByNamePath(modePathName, text);
+        text = (String) fieldFromEntity.getSelectedItem();
+        MCDEntity mcdEntityOpposite = MCDEntityService.getMCDEntityByNamePath(modePathName, text);
+
+
+        MCDAssociation mcdAssociation = (MCDAssociation)  getElementForCheck();
+        MCDAssEnd mcdAssEnd= null;
+        if (mcdAssociation != null){
+            mcdAssEnd = mcdAssociation.getTo();
+        }
+
+        if (scopeNaming == MVCCDElement.SCOPENAME) {
+            return assEndInputContent.checkRoleName(this,
+                    fieldToRoleName, mcdEntity, mcdAssEnd, mcdEntityOpposite,
+                    unitaire, MCDAssEnd.TO);
+        }
+
+        if (scopeNaming == MVCCDElement.SCOPESHORTNAME) {
+            return assEndInputContent.checkRoleShortName(this,
+                    fieldToRoleShortName, mcdEntity, mcdAssEnd, mcdEntityOpposite,
+                    unitaire, MCDAssEnd.TO);
+        }
+
+        return false;
+    }
+
+
 
     private boolean checkFromRoleNaming(boolean unitaire) {
         return assEndInputContent.checkRoleNaming(
@@ -582,6 +769,47 @@ public class AssociationInputContent extends PanelInputContentId {
         return assEndInputContent.checkRoleNaming(
                 this, fieldToRoleName, fieldToRoleShortName,unitaire, MCDAssEnd.TO);
     }
+
+    private boolean checkMulti(SComboBox fieldMulti, String inputEditor, int direction, boolean unitaire) {
+
+        ArrayList<String> messages = MCDAssEndService.checkMulti(fieldMulti, inputEditor, direction);
+        if ((messages.size() == 0) && StringUtils.isNotEmpty((String) fieldMulti.getSelectedItem())) {
+            changeFieldMulti(fieldMulti, direction);
+        }
+        return checkInput(fieldMulti, unitaire, messages);
+    }
+
+    private void changeFieldMulti(SComboBox fieldMulti, int direction) {
+        SCheckBox ordered = null;
+        if (direction == MCDAssEnd.FROM){
+            ordered = fieldFromOrdered;
+        }
+        if (direction == MCDAssEnd.TO){
+            ordered = fieldToOrdered;
+        }
+        MRelEndMultiPart multiMax = MRelEndService.computeMultiMaxStd((String) fieldMulti.getSelectedItem());
+        if (multiMax == MRelEndMultiPart.MULTI_MANY){
+            ordered.setEnabled(true);
+        } else{
+            ordered.setEnabled(false);
+            ordered.setSelected(false);
+        }
+    }
+
+    private boolean checkNature(SComboBox fieldNature, boolean unitaire) {
+        return checkInput(fieldNature,
+                unitaire,
+                MCDAssociationService.checkNature(fieldNature, fieldFromEntity, fieldToEntity,
+                        fieldFromMulti, fieldToMulti));
+    }
+
+    private boolean checkOriented(SComboBox fieldOriented, boolean unitaire) {
+        return checkInput(fieldOriented,
+                unitaire,
+                MCDAssociationService.checkOriented(fieldOriented, isRecursif()));
+    }
+
+
 
     @Override
     protected String getNamingAndBrothersElements(int naming) {
@@ -618,7 +846,7 @@ public class AssociationInputContent extends PanelInputContentId {
 
     @Override
     protected MCDElement getParentByNamePath(int pathname, String text) {
-        return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(MCDElementService.PATHNAME, text);
+        return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
     }
 
 
@@ -647,8 +875,8 @@ public class AssociationInputContent extends PanelInputContentId {
     private boolean checkNameOrRoles(boolean unitaire) {
 
         boolean c1 = StringUtils.isEmpty(fieldName.getText());
-        boolean c2 = StringUtils.isEmpty(fieldFromRoleShortName.getText());
-        boolean c3 = StringUtils.isEmpty(fieldToRoleShortName.getText()) ;
+        boolean c2 = StringUtils.isEmpty(fieldFromRoleName.getText());
+        boolean c3 = StringUtils.isEmpty(fieldToRoleName.getText()) ;
 
         boolean r1 = c1 && c2 && c3;
         boolean r2a = !c1 && !c2;
@@ -662,47 +890,26 @@ public class AssociationInputContent extends PanelInputContentId {
         if ( r1 ) {
             message = MessagesBuilder.getMessagesProperty("association.name.or.role.short.name.error");
             fieldName.setColor(SComponent.COLORERROR);
-            fieldFromRoleShortName.setColor(SComponent.COLORERROR);
-            fieldToRoleShortName.setColor(SComponent.COLORERROR);
+            fieldFromRoleName.setColor(SComponent.COLORERROR);
+            fieldToRoleName.setColor(SComponent.COLORERROR);
         }
 
         if ( r2 ) {
             message = MessagesBuilder.getMessagesProperty("association.name.and.role.short.name.error");
             fieldName.setColor(SComponent.COLORERROR);
-            fieldFromRoleShortName.setColor(SComponent.COLORERROR);
-            fieldToRoleShortName.setColor(SComponent.COLORERROR);
+            fieldFromRoleName.setColor(SComponent.COLORERROR);
+            fieldToRoleName.setColor(SComponent.COLORERROR);
          }
 
         if ( r3 ) {
             message = MessagesBuilder.getMessagesProperty("association.role.short.name.error");
-            fieldFromRoleShortName.setColor(SComponent.COLORERROR);
-            fieldToRoleShortName.setColor(SComponent.COLORERROR);
+            fieldFromRoleName.setColor(SComponent.COLORERROR);
+            fieldToRoleName.setColor(SComponent.COLORERROR);
         }
 
-        System.out.println("checkNameOrRoles  " + message);
         if (StringUtils.isNotEmpty(message)) {
             showNameOrRolesMessage(unitaire, message);
-        } else {
-            System.out.println("checkNameOrRoles  sans erreur " + message);
-
-            if (fieldName.isErrorInput()) {
-                fieldName.setColor(SComponent.COLORWARNING);
-            } else {
-                fieldName.setColor(SComponent.COLORNORMAL);
-            }
-
-            if (fieldFromRoleShortName.isErrorInput()) {
-                fieldFromRoleShortName.setColor(SComponent.COLORWARNING);
-            } else {
-                fieldFromRoleShortName.setColor(SComponent.COLORNORMAL);
-            }
-
-            if (fieldToRoleShortName.isErrorInput()) {
-                fieldToRoleShortName.setColor(SComponent.COLORWARNING);
-            } else {
-                fieldToRoleShortName.setColor(SComponent.COLORNORMAL);
-            }
-        }
+        } 
 
         return StringUtils.isEmpty(message);
     }
@@ -725,6 +932,12 @@ public class AssociationInputContent extends PanelInputContentId {
         SComboBoxService.selectByText(fieldFromEntity, mcdEntityFrom.getName());
         */
         super.initDatas();
+
+        SComboBoxService.selectByText(fieldNature, MCDAssociationNature.NOID.getText());
+        fieldFrozen.setSelected(false);
+        fieldDeleteCascade.setSelected(false);
+        fieldOriented.setSelectedEmpty();
+
         fieldFromEntity.setSelectedEmpty();
         fieldToEntity.setSelectedEmpty();
 
@@ -746,6 +959,10 @@ public class AssociationInputContent extends PanelInputContentId {
 
         factorizeFieldRoleName.setText("");
         factorizeFieldRoleShortName.setText("");
+        //factorizeFieldMulti.removeItemAt(0);
+        //factorizeFieldMulti.insertItemAt(SComboBox.LINEWHITE,0);
+        factorizeFieldMulti.setSelectedEmpty();
+        factorizeFieldOrdered.setSelected(false);
     }
 
 
@@ -755,6 +972,19 @@ public class AssociationInputContent extends PanelInputContentId {
 
        // Au niveau de l'association
         super.loadDatas(mcdAssociation);
+
+        if (mcdAssociation.getNature() != null) {
+            SComboBoxService.selectByText(fieldNature, mcdAssociation.getNature().getText());
+        }
+        fieldFrozen.setSelected(mcdAssociation.isFrozen());
+        fieldDeleteCascade.setSelected(mcdAssociation.isDeleteCascade());
+
+        if (mcdAssociation.getOriented() != null) {
+            SComboBoxService.selectByText(fieldOriented,
+                    PanelInputService.getTextFromBoolean(mcdAssociation.getOriented().booleanValue()));
+        } else {
+            fieldOriented.setSelectedEmpty();
+        }
 
 
         // Au niveau de chacune des 2 extrémités
@@ -767,9 +997,13 @@ public class AssociationInputContent extends PanelInputContentId {
 
     private void loadDatasAssEnd(int direction, MCDAssEnd mcdAssEnd) {
         factorizeAssEnd(direction);
-        SComboBoxService.selectByText(factorizeFieldEntity, mcdAssEnd.getMcdEntity().getNamePath(MCDElementService.PATHNAME));
+        SComboBoxService.selectByText(factorizeFieldEntity, mcdAssEnd.getMcdEntity().getNamePath(modePathName));
         factorizeFieldRoleName.setText(mcdAssEnd.getName());
         factorizeFieldRoleShortName.setText(mcdAssEnd.getShortName());
+        factorizeFieldMulti.removeItemAt(0);
+        factorizeFieldMulti.insertItemAt(SComboBox.LINEWHITE,0);
+        SComboBoxService.selectByTextEditable(factorizeFieldMulti, mcdAssEnd.getMultiStr());
+        factorizeFieldOrdered.setSelected(mcdAssEnd.isOrdered());
      }
 
     @Override
@@ -778,6 +1012,21 @@ public class AssociationInputContent extends PanelInputContentId {
 
         // Au niveau de l'association
         super.saveDatas(mcdAssociation);
+
+        if (fieldNature.checkIfUpdated()) {
+            String textNature = (String) fieldNature.getSelectedItem();
+            mcdAssociation.setNature(MCDAssociationNature.findByText(textNature));
+        }
+
+        if (fieldFrozen.checkIfUpdated()){
+            mcdAssociation.setFrozen(fieldFrozen.isSelected());
+        }
+        if (fieldDeleteCascade.checkIfUpdated()){
+            mcdAssociation.setFrozen(fieldDeleteCascade.isSelected());
+        }
+        if (fieldOriented.checkIfUpdated()){
+            mcdAssociation.setFrozen(PanelInputService.getBooleanFromText(fieldOriented));
+        }
 
         // Au niveau de chacune des 2 extémités
         MCDAssEnd  mcdAssEndFrom = mcdAssociation.getFrom();
@@ -788,34 +1037,52 @@ public class AssociationInputContent extends PanelInputContentId {
 
      }
 
+
+
     private void saveDatasAssEnd(int direction, MCDAssEnd mcdAssEnd){
         factorizeAssEnd(direction);
 
-        String text = (String) factorizeFieldEntity.getSelectedItem();
-        MCDEntity mcdEntity = MCDEntityService.getMCDEntityByNamePath(MCDElementService.PATHNAME, text);
-        if (fieldFromEntity.checkIfUpdated()) {
+        /*
+        // Si changement --> à faire des 2 côtés!
+        if (factorizeFieldEntity.checkIfUpdated()) {
+            String text = (String) factorizeFieldEntity.getSelectedItem();
+            MCDEntity mcdEntity = MCDEntityService.getMCDEntityByNamePath(modePathName, text);
             mcdAssEnd.setMcdEntity(mcdEntity);
         }
+         */
+
         if (factorizeFieldRoleName.checkIfUpdated()) {
             mcdAssEnd.setName(factorizeFieldRoleName.getText());
         }
         if (factorizeFieldRoleShortName.checkIfUpdated()) {
             mcdAssEnd.setShortName(factorizeFieldRoleShortName.getText());
         }
+        if (factorizeFieldMulti.checkIfUpdated()) {
+            mcdAssEnd.setMultiStr((String) factorizeFieldMulti.getSelectedItem());
+        }
+        if (factorizeFieldOrdered.checkIfUpdated()){
+            mcdAssEnd.setOrdered(factorizeFieldOrdered.isSelected());
+        }
     }
 
-    private void enabledContent() {
+    @Override
+    protected void enabledContent() {
         Preferences preferences = PreferencesManager.instance().preferences();
+
+        if ( ! getEditor().getMode().equals(DialogEditor.NEW)){
+            fieldFromEntity.setEnabled(false);
+            fieldToEntity.setEnabled(false);
+        }
    }
 
     public MCDEntity getMCDEntityTo(){
         return MCDEntityService.getMCDEntityByNamePath(
-                iMCDModelContainer, MCDElementService.PATHNAME, (String) fieldToEntity.getSelectedItem());
+                iMCDModelContainer, modePathName, (String) fieldToEntity.getSelectedItem());
     }
 
     public MCDEntity getMCDEntityFrom(){
         return MCDEntityService.getMCDEntityByNamePath(
-                iMCDModelContainer, MCDElementService.PATHNAME, (String) fieldFromEntity.getSelectedItem());
+                iMCDModelContainer, modePathName, (String) fieldFromEntity.getSelectedItem());
    }
 
    public void factorizeAssEnd(int direction){
@@ -826,6 +1093,8 @@ public class AssociationInputContent extends PanelInputContentId {
            factorizePanelRole = panelFromRole;
            factorizeFieldRoleName = fieldFromRoleName;
            factorizeFieldRoleShortName = fieldFromRoleShortName;
+           factorizeFieldMulti = fieldFromMulti;
+           factorizeFieldOrdered = fieldFromOrdered;
        }
        if (direction == MCDRelEnd.TO){
            factorizeTitle = "Tracée vers";
@@ -834,8 +1103,20 @@ public class AssociationInputContent extends PanelInputContentId {
            factorizePanelRole = panelToRole;
            factorizeFieldRoleName = fieldToRoleName;
            factorizeFieldRoleShortName = fieldToRoleShortName;
+           factorizeFieldMulti = fieldToMulti;
+           factorizeFieldOrdered = fieldToOrdered;
        }
    }
 
+
+    public ArrayList<MVCCDElement> getBrothers() {
+        return ((MVCCDElement) iMCDModelContainer).getDescendantsWithout(getElementForCheck());
+    }
+
+    public boolean isRecursif(){
+        return (fieldFromEntity != null) && (fieldToEntity != null) &&
+                (fieldFromEntity.getSelectedIndex() == fieldToEntity.getSelectedIndex());
+
+    }
 
 }
