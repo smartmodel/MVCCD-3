@@ -19,7 +19,7 @@ public abstract class PanelInputContent
     protected PanelInput panelInput;
     protected MVCCDElement elementForCheckInput ;
 
-    //TODO-1 Avoir si panel ne peut pas être la classe elle-même
+    //TODO-1 A voir si panel ne peut pas être la classe elle-même
     protected JPanel panelInputContentCustom = new JPanel();
 
     protected boolean alreadyFocusGained = false;
@@ -167,6 +167,14 @@ public abstract class PanelInputContent
             getButtonsContent().getBtnUndo().setEnabled(false);
             getButtonsContent().getBtnOk().setEnabled(false);
             getButtonsContent().getBtnApply().setEnabled(false);
+        }
+
+        System.out.println("enabledButtons");
+        if (getEditor() instanceof DialogEditorNav){
+            DialogEditorNav editor = (DialogEditorNav) getEditor();
+            if (! editor.getMode().equals(DialogEditor.NEW)){
+                editor.getNav().getTabbedContent().enabledButtons(!datasChangedNow());
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package utilities.window.editor;
 
 import main.MVCCDElement;
+import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -19,9 +20,9 @@ public abstract class PanelButtonsContent extends PanelContent
         implements IAccessDialogEditor, ActionListener {
 
     private JPanel panel = new JPanel();
-    private SButton btnOk ;
+    protected SButton btnOk ;
     private SButton btnCancel ;
-    private SButton btnApply ;
+    protected SButton btnApply ;
     private SButton btnUndo;
     private SButton btnHelp ;
     private JTextArea messages ;
@@ -41,14 +42,8 @@ public abstract class PanelButtonsContent extends PanelContent
 
 
     }
-    /*
-    protected void start(){
-        createContent();
-    }
 
-     */
-
-    private void createContent() {
+    protected void createContent() {
 
         bVer = Box.createVerticalBox();
         //colorBVer();
@@ -88,9 +83,12 @@ public abstract class PanelButtonsContent extends PanelContent
         btnApply = new SButton("Appliquer");
         btnApply.addActionListener(this);
         btnApply.setToolTipText("Enregistrer la saisie et garder la fenêtre ouverte");
+
         if (getEditor().getMode().equals(DialogEditor.NEW)){
             btnApply.setVisible(false);
         }
+
+
         btnApply.setEnabled(false);
         btns.add(btnApply);
         btns.add(Box.createGlue());
@@ -172,7 +170,6 @@ public abstract class PanelButtonsContent extends PanelContent
         Object source = e.getSource();
         if (source == btnOk) {
             if (getEditor().getMode().equals(DialogEditor.NEW)) {
-
                 treatCreate();
              }
             if (getEditor().getMode().equals(DialogEditor.UPDATE)) {
@@ -181,8 +178,13 @@ public abstract class PanelButtonsContent extends PanelContent
             getEditor().dispose();
         }
         if (source == btnApply) {
-            // Seulement en update
-            treatUpdate();
+            if (getEditor().getMode().equals(DialogEditor.NEW)) {
+                treatCreate();
+                getEditor().dispose();
+            }
+            if (getEditor().getMode().equals(DialogEditor.UPDATE)) {
+                treatUpdate();
+            }
         }
         if (source == btnUndo) {
             // Seulement en update
@@ -218,6 +220,17 @@ public abstract class PanelButtonsContent extends PanelContent
         getInputContent().restartChange();
         getInputContent().enabledButtons();
         getEditor().adjustTitle();
+
+        if (getEditor().isDatasChanged()) {
+            MVCCDManager.instance().setDatasProjectChanged(true);
+        }
+
+        MVCCDElement parentBefore = getEditor().getMvccdElementParent();
+        MVCCDElement parentAfter = getEditor().getMvccdElementCrt().getParent();
+        if (parentBefore != parentAfter) {
+            MVCCDManager.instance().changeParentMVCCDElementInRepository(getEditor().getMvccdElementCrt(),
+                    parentBefore);
+        }
     }
 
     private void  treatCreate(){
@@ -225,9 +238,8 @@ public abstract class PanelButtonsContent extends PanelContent
         saveDatas(newMVCCDElement);
         getEditor().setMvccdElementNew(newMVCCDElement);
         getEditor().setDatasChanged(true);
-     }
-
-
+        MVCCDManager.instance().addNewMVCCDElementInRepository(newMVCCDElement);
+    }
 
     protected void saveDatas(MVCCDElement mvccdElement) {
         getEditor().getInput().getInputContent().saveDatas(mvccdElement);

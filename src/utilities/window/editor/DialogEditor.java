@@ -20,6 +20,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     public static final int MODEL = 2 ;
     public static final int PACKAGE = 3 ;
 
+    private Window owner;
 
     private JPanel panel= new JPanel();
     private PanelBorderLayoutResizer panelBLResizer ;
@@ -40,6 +41,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     public DialogEditor(Window owner, MVCCDElement mvccdElementParent, MVCCDElement mvccdElementCrt, String mode, int scope) {
         super(owner);
+        this.owner = owner ;
         this.mode = mode;
         this.mvccdElementParent = mvccdElementParent;
         this.mvccdElementCrt = mvccdElementCrt;
@@ -94,6 +96,17 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
         panel.add(input, borderLayoutPositionEditor);
         panel.add(buttons, borderLayoutPositionButtons);
+
+        startExtended();
+        initialResize();
+
+    }
+
+    protected void startExtended(){
+
+    }
+
+    public void initialResize(){
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 // This is only called when the user releases the mouse button.
@@ -106,8 +119,11 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         // Pour que l'ajustement automatique de positionnement des boutons se fasse
         setSize(getWidth(), getHeight() - 1);
         setSize(getWidth(), getHeight() + 1);
+    }
 
-
+    @Override
+    public Window getOwner() {
+        return owner;
     }
 
     public PanelInput getInput() {
@@ -235,7 +251,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
                 mode.equals(DialogEditor.READ) ||
                 mode.equals(DialogEditor.DELETE) ){
             title = MessagesBuilder.getMessagesProperty(getPropertyTitleUpdate(), new String[]{
-                    getMvccdElementCrt().getName() });
+                    getElementNameTitle() });
         }
         return title;
     }
@@ -243,6 +259,10 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     protected abstract String getPropertyTitleNew();
 
     protected abstract String getPropertyTitleUpdate();
+
+    protected String getElementNameTitle(){
+        return getMvccdElementCrt().getName();
+    }
 
     public boolean isReadOnly() {
         return readOnly;
@@ -273,4 +293,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         return scope;
     }
 
+    public JPanel getPanel() {
+        return panel;
+    }
 }

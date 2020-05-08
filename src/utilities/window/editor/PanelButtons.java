@@ -14,6 +14,7 @@ public abstract class PanelButtons extends PanelBorderLayout implements IAccessD
         super.setResizable(false);
     }
 
+
     protected abstract PanelButtonsContent createButtonsContentCustom();
 
     public PanelButtonsContent getButtonsContent() {

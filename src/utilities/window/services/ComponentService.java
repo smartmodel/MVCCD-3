@@ -72,9 +72,19 @@ public class ComponentService {
         component.setMinimumSize(new Dimension(width, dim.height));
     }
 
-    public static void increaseHeight(Component component, int delta){
+    public static void increaseHeight(Component component, int delta) {
         Dimension dim = component.getSize();
         component.setSize(dim.width, dim.height + delta);
+    }
+
+    public static void changeHeight(Component component, int height){
+        Dimension dim = component.getSize();
+        component.setSize(dim.width, height);
+    }
+
+    public static void changePreferredHeight(Component component, int height){
+        Dimension dim = component.getSize();
+        component.setPreferredSize(new Dimension(dim.width, height));
     }
 
 

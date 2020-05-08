@@ -7,6 +7,7 @@ import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDContEntitiesService;
 import mcd.services.MCDElementService;
+import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentId;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -41,12 +42,6 @@ public class EntityInputContent extends PanelInputContentId {
         super(null);
         elementForCheckInput = element;
     }
-
-
-
-
-
-
 
     @Override
     public void createContentCustom() {
@@ -248,4 +243,7 @@ public class EntityInputContent extends PanelInputContentId {
         entityJournal.setEnabled(preferences.getMCD_JOURNALIZATION_EXCEPTION());
         entityAudit.setEnabled(preferences.getMCD_AUDIT_EXCEPTION());
     }
+
+
+
 }

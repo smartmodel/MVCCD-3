@@ -2,15 +2,12 @@ package window.editor.attributes;
 
 import main.MVCCDElement;
 import mcd.MCDContAttributes;
-import mcd.MCDEntity;
-import utilities.window.editor.DialogEditor;
+import utilities.window.editor.*;
 import preferences.Preferences;
-import utilities.window.editor.PanelButtons;
-import utilities.window.editor.PanelInput;
 
 import java.awt.*;
 
-public class AttributesEditor extends DialogEditor {
+public class AttributesEditor extends DialogEditorNav {
 
      public AttributesEditor(
             Window owner,
@@ -39,6 +36,11 @@ public class AttributesEditor extends DialogEditor {
     }
 
     @Override
+    protected PanelNav getNavCustom() {
+        return new AttributesNav(this);
+    }
+
+    @Override
     protected Dimension getSizeCustom() {
         return new Dimension(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
     }
@@ -51,5 +53,9 @@ public class AttributesEditor extends DialogEditor {
     @Override
     protected String getPropertyTitleUpdate() {
         return "attributes.entity.update";
+    }
+
+    protected String getElementNameTitle(){
+        return getMvccdElementCrt().getParent().getName();
     }
 }

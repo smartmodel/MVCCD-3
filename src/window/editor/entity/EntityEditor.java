@@ -2,14 +2,12 @@ package window.editor.entity;
 
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
-import utilities.window.editor.DialogEditor;
+import utilities.window.editor.*;
 import preferences.Preferences;
-import utilities.window.editor.PanelButtons;
-import utilities.window.editor.PanelInput;
 
 import java.awt.*;
 
-public class EntityEditor extends DialogEditor {
+public class EntityEditor extends DialogEditorNav {
 
 
 
@@ -40,6 +38,11 @@ public class EntityEditor extends DialogEditor {
     }
 
     @Override
+    protected PanelNav getNavCustom() {
+        return new EntityNav(this);
+    }
+
+    @Override
     protected Dimension getSizeCustom() {
         return new Dimension(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
     }
@@ -53,4 +56,6 @@ public class EntityEditor extends DialogEditor {
     protected String getPropertyTitleUpdate() {
         return "editor.entity.update";
     }
+
+
 }

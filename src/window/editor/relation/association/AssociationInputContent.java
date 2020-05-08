@@ -408,18 +408,14 @@ public class AssociationInputContent extends PanelInputContentId {
 
         // {oriented} {nonorented}
         if (isRecursif()) {
-            System.out.println("récursif");
             String multiA = (String)fieldFromMulti.getSelectedItem();
             String multiB = (String)fieldToMulti.getSelectedItem();
             if (StringUtils.isNotEmpty(multiA) && StringUtils.isNotEmpty(multiB) ) {
-                System.out.println("multi A et B saisis");
                 MRelEndMultiPart maxFrom = MRelEndService.computeMultiMaxStd((String) fieldFromMulti.getSelectedItem());
                 MRelEndMultiPart maxTo = MRelEndService.computeMultiMaxStd((String) fieldToMulti.getSelectedItem());
                 MRelationDegree degree = MRelationService.computeDegree(maxFrom, maxTo);
-                System.out.println("Degree   " + degree.getText());
                 boolean degreeNot1n = (degree == MRelationDegree.DEGREE_ONE_ONE) ||
                         (degree == MRelationDegree.DEGREE_MANY_MANY);
-                System.out.println("degreeNot1n   " + degreeNot1n);
                 if (degreeNot1n) {
                     fieldOriented.setEnabled(true);
                 } else {

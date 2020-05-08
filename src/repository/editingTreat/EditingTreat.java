@@ -21,28 +21,27 @@ public abstract class EditingTreat {
 
         DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW);
         fen.setVisible(true);
-
         MVCCDElement newElement = fen.getMvccdElementNew();
-        if (newElement != null) {
-            ProjectElement parentChooseByUser = (ProjectElement) newElement.getParent();
-            DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(parentChooseByUser.getId());
-            MVCCDManager.instance().addNewMVCCDElementInRepository(newElement, nodeParent);
-        }
         return newElement;
     }
 
-    public boolean treatUpdate(Window owner, MVCCDElement element) {
+
+
+
+
+        public boolean treatUpdate(Window owner, MVCCDElement element) {
         MVCCDElement parentBefore = element.getParent();
         DialogEditor fen = getDialogEditor(owner, element.getParent(), element, DialogEditor.UPDATE);
         fen.setVisible(true);
-        if (fen.isDatasChanged()) {
-            MVCCDManager.instance().setDatasProjectChanged(true);
-        }
+
+        /* L'éventuel changement de parent se fait lors de la clotûre définitive
+           de la fenêtre d'édition et non à chaque sauvegarde car le code est probablement
+           inutilement compliqué pour un cas rare (le changement dans l'éditeur) */
         MVCCDElement parentAfter = element.getParent();
         if (parentBefore != parentAfter) {
-            //parentBefore.getChilds().remove(mcdElement);  Réalisé par save de l'éditeur
             MVCCDManager.instance().changeParentMVCCDElementInRepository(element, parentBefore);
         }
+
         return fen.isDatasChanged();
     }
 

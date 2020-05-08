@@ -264,6 +264,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
                 editingTreat.treatRead(mvccdWindow, mvccdElement);
             }
         });

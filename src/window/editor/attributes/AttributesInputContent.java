@@ -19,6 +19,7 @@ import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import utilities.UtilDivers;
 import utilities.window.ReadTableModel;
+import utilities.window.services.ComponentService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -33,7 +34,9 @@ public class AttributesInputContent extends PanelInputContent {
 
     //private JPanel panel = new JPanel();
     private JTable table;
+    private JScrollPane panelTable;
     private DefaultTableModel model;
+    private JPanel panelButtons;
     private JButton buttonAdd;
     private JButton buttonAddAID;
     private JButton buttonEdit;
@@ -56,17 +59,33 @@ public class AttributesInputContent extends PanelInputContent {
     }
 
     private void  makeLayout(){
-        JScrollPane panelTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        panelTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        System.out.println(panelInputContentCustom.getHeight());
+        System.out.println(panelTable.getHeight());
+//        System.out.println(panelButtons.getHeight());
+
+        //panelTable.setPreferredSize(
+        //        new Dimension(1000, 100));
+        //panelTable.setMaximumSize(
+        //        new Dimension(400,100));
+
 
         JPanel panelMove = new JPanel();
         panelMove.setLayout(new BoxLayout(panelMove, BoxLayout.Y_AXIS));
         panelMove.add(Box.createVerticalGlue());
         panelMove.add(buttonUp);
+/*
+        panelMove.add(buttonAdd);
+        panelMove.add(buttonEdit);
+        panelMove.add(buttonUp);
+
+ */
         panelMove.add(buttonDown);
         panelMove.add(Box.createVerticalGlue());
 
 
-        JPanel panelButtons= new JPanel();
+        panelButtons= new JPanel();
         panelButtons.setLayout(new BoxLayout(panelButtons, BoxLayout.X_AXIS));
         //panelButtons.setMaximumSize(ApplicationManager.instance().getViewManager().getScaledDimension(new Dimension(800, 10)));
 
@@ -82,6 +101,7 @@ public class AttributesInputContent extends PanelInputContent {
         panelInputContentCustom.add(panelTable, BorderLayout.CENTER);
         panelInputContentCustom.add(panelButtons, BorderLayout.SOUTH);
         panelInputContentCustom.add(panelMove, BorderLayout.EAST);
+
 
     }
 
@@ -219,6 +239,9 @@ public class AttributesInputContent extends PanelInputContent {
 
             public void actionPerformed(ActionEvent e) {
 
+                //Dimension dim = panelTable.getSize();
+
+                System.out.println(getEditor().getMvccdElementCrt().getName());
                 MCDAttribute mcdAttribute = (MCDAttribute) new MCDAttributeEditingTreat().treatNew( getEditor(),
                         (MCDContAttributes) getEditor().getMvccdElementCrt());
 
@@ -227,6 +250,8 @@ public class AttributesInputContent extends PanelInputContent {
                     model.addRow(row);
                     table.setRowSelectionInterval(table.getRowCount()-1 , table.getRowCount()-1);
                     enabledContent();
+
+                    //panelTable.setPreferredSize(dim);
                 }
             }
         });
@@ -303,7 +328,8 @@ public class AttributesInputContent extends PanelInputContent {
                 //TODO-1 Vérfier un changement effectif
                 //Détecter un changement au niveau de la table JTable --> STable et ensuite déclenechement automatique
                 enabledButtons();
-            }
+
+                           }
         });
     }
 
@@ -511,6 +537,20 @@ public class AttributesInputContent extends PanelInputContent {
 
         MVCCDManager.instance().showNewNodeInRepository(nodeB);
 
+    }
+
+
+    public Dimension resizeContent(){
+
+        Dimension dimensionBL = super.resizeContent();
+
+        //TODO-1 A chercher comment déterminer la hauteur effective (est-ce juste 4* le gap ?)
+        //System.out.println(panelInputContentCustom.getHeight() + " -  " + panelButtons.getHeight());
+        int  heightUtile = panelInputContentCustom.getHeight() - panelButtons.getHeight()- (4 *Preferences.JPANEL_HGAP) - 40 ;
+        ComponentService.changeHeight(panelTable, heightUtile /*- 2 *Preferences.JPANEL_HGAP */);
+        ComponentService.changePreferredHeight(panelTable, heightUtile /*- 2 *Preferences.JPANEL_VGAP */);
+
+        return dimensionBL;
     }
 
 }

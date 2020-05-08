@@ -79,6 +79,15 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return null;
     }
 
+    public MCDContAttributes getMCDContAttributes() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MCDContAttributes) {
+                return (MCDContAttributes) mvccdElement;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String getNameTree() {
         return null;

@@ -50,7 +50,6 @@ public class MCDAssociationService {
         String multiFrom = (String) fieldFromMulti.getSelectedItem();
         String multiTo = (String) fieldToMulti.getSelectedItem();
 
-        System.out.println(multiFrom + "   -    " + multiTo);
         if (StringUtils.isNotEmpty(multiFrom)  && StringUtils.isNotEmpty(multiTo)) {
             MRelEndMultiPart multiMinFromStd = MRelEndService.computeMultiMinStd(multiFrom);
             MRelEndMultiPart multiMinToStd = MRelEndService.computeMultiMinStd(multiTo);
@@ -59,11 +58,7 @@ public class MCDAssociationService {
             MRelEndMulti multiFromStd = MRelEndService.computeMultiStd(multiFrom);
             MRelEndMulti multiToStd = MRelEndService.computeMultiStd(multiTo);
 
-            System.out.println(multiFrom + "  - " + multiMinFromStd.getText() + "  - " + multiMaxFromStd.getText() + "  - " + multiFromStd.getText());
-            System.out.println(multiTo + "  - " + multiMinToStd.getText() + "  - " + multiMaxToStd.getText() + "  - " + multiToStd.getText());
             MCDAssociationNature nature = MCDAssociationNature.findByText((String) fieldNature.getSelectedItem());
-
-            System.out.println(nature.getText());
 
             if ((nature == MCDAssociationNature.IDCOMP) || (nature == MCDAssociationNature.CP)) {
                 String contextMessage = "";
@@ -82,8 +77,6 @@ public class MCDAssociationService {
                     boolean c1b = multiToStd == MRelEndMulti.MULTI_ONE_ONE;
                     boolean c2a = multiMaxToStd == MRelEndMultiPart.MULTI_MANY;
                     boolean c2b = multiMaxFromStd == MRelEndMultiPart.MULTI_MANY;
-
-                    System.out.println(c1a + " - " + c1b + " - " + c2a + " - " + c2b + " - ");
 
                     boolean ok = (c1a && c2a) || (c1b && c2b);
                     if (!ok) {
