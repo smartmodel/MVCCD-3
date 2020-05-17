@@ -3,6 +3,8 @@ package window.editor.preferences.application;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
+import repository.editingTreat.EditingTreat;
+import repository.editingTreat.preferences.PrefApplEditingTreat;
 import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import utilities.window.editor.PanelButtons;
@@ -16,8 +18,9 @@ public class PrefApplicationEditor extends DialogEditor {
     public PrefApplicationEditor(Window owner,
                                  MVCCDElement parent,
                                  MVCCDElementApplicationPreferences applPref,
-                                 String mode)  {
-        super(owner, parent, applPref, mode, DialogEditor.NOTHING);
+                                 String mode,
+                                 EditingTreat editingTreat)  {
+        super(owner, parent, applPref, mode, DialogEditor.SCOPE_NOTHING, new PrefApplEditingTreat());
 
         /*
         super.setSize(Preferences.PREFERENCES_WINDOW_WIDTH, Preferences.PREFERENCES_WINDOW_HEIGHT);
@@ -52,6 +55,21 @@ public class PrefApplicationEditor extends DialogEditor {
     @Override
     protected Dimension getSizeCustom() {
         return new Dimension(Preferences.PREFERENCES_WINDOW_WIDTH, Preferences.PREFERENCES_WINDOW_HEIGHT);
+    }
+
+    @Override
+    protected void setSizeCustom(Dimension dimension) {
+
+    }
+
+    @Override
+    protected Point getLocationCustom() {
+        return null;
+    }
+
+    @Override
+    protected void setLocationCustom(Point point) {
+
     }
 
     @Override

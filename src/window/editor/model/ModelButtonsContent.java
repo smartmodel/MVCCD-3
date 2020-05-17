@@ -20,11 +20,11 @@ public class ModelButtonsContent extends PanelButtonsContent {
     @Override
     protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         int scope = ((ModelEditor) getEditor()).getScope();
-        if (scope == DialogEditor.MODEL) {
+        if (scope == ModelEditor.MODEL) {
             MCDModel mcdModel = MVCCDElementFactory.instance().createMCDModel((MCDContModels) parent);
             return mcdModel;
         }
-        if (scope == DialogEditor.PACKAGE) {
+        if (scope == ModelEditor.PACKAGE) {
             MCDPackage mcdPackage = MVCCDElementFactory.instance().createMCDPackage((MCDElement) parent);
             return mcdPackage;
         }

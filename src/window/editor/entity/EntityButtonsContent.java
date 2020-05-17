@@ -37,11 +37,13 @@ public class EntityButtonsContent extends PanelButtonsContent {
         btnApply.setVisible(true);
     }
 
+    /*
     @Override
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
         Object source = e.getSource();
         if (source == btnApply) {
+            System.out.println("Dans entityButton");
             if (getEditor().getMode().equals(DialogEditor.NEW)) {
                 new MCDEntityEditingTreat().treatUpdate(getEditor().getOwner(),
                         getEditor().getMvccdElementNew());
@@ -49,4 +51,6 @@ public class EntityButtonsContent extends PanelButtonsContent {
         }
 
     }
+
+     */
 }

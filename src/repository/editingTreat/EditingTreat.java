@@ -34,9 +34,6 @@ public abstract class EditingTreat {
         DialogEditor fen = getDialogEditor(owner, element.getParent(), element, DialogEditor.UPDATE);
         fen.setVisible(true);
 
-        /* L'éventuel changement de parent se fait lors de la clotûre définitive
-           de la fenêtre d'édition et non à chaque sauvegarde car le code est probablement
-           inutilement compliqué pour un cas rare (le changement dans l'éditeur) */
         MVCCDElement parentAfter = element.getParent();
         if (parentBefore != parentAfter) {
             MVCCDManager.instance().changeParentMVCCDElementInRepository(element, parentBefore);

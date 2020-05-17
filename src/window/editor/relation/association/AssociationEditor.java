@@ -4,6 +4,7 @@ import m.MElement;
 import mcd.MCDAssociation;
 import mcd.MCDContRelations;
 import mcd.MCDElement;
+import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import utilities.window.editor.PanelButtons;
@@ -18,17 +19,11 @@ public class AssociationEditor extends DialogEditor {
             Window owner,
             MCDContRelations mcdContRelations,
             MCDAssociation mcdAssociation,
-            String mode)  {
-        super(owner, mcdContRelations, mcdAssociation, mode, DialogEditor.NOTHING);
+            String mode,
+            EditingTreat editingTreat)  {
+        super(owner, mcdContRelations, mcdAssociation, mode, DialogEditor.SCOPE_NOTHING,
+                editingTreat);
 
-        /*
-        super.setSize(Preferences.ASSOCIATION_WINDOW_WIDTH, Preferences.ASSOCIATION_WINDOW_HEIGHT);
-        super.setInput(new AssociationInput(this));
-        super.setButtons (new AssociationButtons(this));
-
-        super.start();
-
-         */
     }
 
     @Override
@@ -44,6 +39,21 @@ public class AssociationEditor extends DialogEditor {
     @Override
     protected Dimension getSizeCustom() {
         return new Dimension(Preferences.ASSOCIATION_WINDOW_WIDTH, Preferences.ASSOCIATION_WINDOW_HEIGHT);
+    }
+
+    @Override
+    protected void setSizeCustom(Dimension dimension) {
+
+    }
+
+    @Override
+    protected Point getLocationCustom() {
+        return null;
+    }
+
+    @Override
+    protected void setLocationCustom(Point point) {
+
     }
 
     @Override

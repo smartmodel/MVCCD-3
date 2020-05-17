@@ -5,6 +5,7 @@ import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContainer;
+import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import utilities.window.editor.PanelButtons;
@@ -14,20 +15,18 @@ import java.awt.*;
 
 public class ModelEditor extends DialogEditor {
 
+    public static final int MODEL = 1 ;
+    public static final int PACKAGE = 2 ;
+
+
     public ModelEditor(Window owner,
                        IMCDContContainer parent,
                        IMCDContainer element,
                        String mode,
-                       int scope            )  {
-        super(owner, (MVCCDElement) parent, (MVCCDElement) element, mode, scope);
-/*
-        super.setSize(Preferences.MODEL_WINDOW_WIDTH, Preferences.MODEL_WINDOW_HEIGHT);
-        super.setInput(new ModelInput(this));
-        super.setButtons (new ModelButtons(this));
+                       int scope,
+                       EditingTreat editingTreat)  {
+        super(owner, (MVCCDElement) parent, (MVCCDElement) element, mode, scope, editingTreat);
 
-        super.start();
-
- */
     }
 
     @Override
@@ -47,11 +46,26 @@ public class ModelEditor extends DialogEditor {
     }
 
     @Override
+    protected void setSizeCustom(Dimension dimension) {
+
+    }
+
+    @Override
+    protected Point getLocationCustom() {
+        return null;
+    }
+
+    @Override
+    protected void setLocationCustom(Point point) {
+
+    }
+
+    @Override
     protected String getPropertyTitleNew() {
-        if (scope == DialogEditor.MODEL) {
+        if (scope == ModelEditor.MODEL) {
             return "editor.model.new";
         }
-        if (scope == DialogEditor.PACKAGE) {
+        if (scope == ModelEditor.PACKAGE) {
             return "editor.package.new";
         }
 
@@ -60,10 +74,10 @@ public class ModelEditor extends DialogEditor {
 
     @Override
     protected String getPropertyTitleUpdate() {
-        if (scope == DialogEditor.MODEL) {
+        if (scope == ModelEditor.MODEL) {
             return "editor.model.update";
         }
-        if (scope == DialogEditor.PACKAGE) {
+        if (scope == ModelEditor.PACKAGE) {
             return "editor.package.update";
         }
         return null;

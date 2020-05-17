@@ -21,7 +21,8 @@ public class PrefMCDEditingTreat extends EditingTreat {
 
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
-        return new PrefMCDEditor(owner , null, (Preferences) element, mode);
+        return new PrefMCDEditor(owner , null, (Preferences) element,
+                mode, new PrefMCDEditingTreat());
     }
 
     @Override

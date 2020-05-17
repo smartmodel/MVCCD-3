@@ -71,12 +71,19 @@ public class MVCCDElementFactory {
         return mcdContRelations;
     }
 
+    public MCDContConstraints createMCDConstraints(ProjectElement parent, String name){
+        MCDContConstraints mcdContConstraints = new MCDContConstraints(parent, name);
+        return mcdContConstraints;
+    }
+
     public MCDEntity createMCDEntity(ProjectElement parent){
         MCDEntity mcdEntity = new MCDEntity(parent);
         MCDContAttributes mcdContAttributes = MVCCDElementFactory.instance().createMCDAttributes(mcdEntity,
                 Preferences.REPOSITORY_MCD_ATTRIBUTES_NAME);
         MCDContEndRels mcdContEndRels = MVCCDElementFactory.instance().createMCDRelations(mcdEntity,
                 Preferences.REPOSITORY_MCD_RELATIONS_NAME);
+        MCDContConstraints mcdContConstraints = MVCCDElementFactory.instance().createMCDConstraints(mcdEntity,
+                Preferences.REPOSITORY_MCD_CONSTRAINTS_NAME);
 
         return mcdEntity;
     }
@@ -92,7 +99,19 @@ public class MVCCDElementFactory {
 
         return new MCDAttribute(parent);
     }
+    public MCDUnique createMCDUnique(MCDContConstraints parent){
 
+        return new MCDUnique(parent);
+    }
+
+    public MCDNID createMCDNID(MCDContConstraints parent){
+
+        return new MCDNID(parent);
+    }
+
+    public MCDParameter createMCDParameter(ProjectElement parent) {
+        return new MCDParameter(parent);
+    }
 
     public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
                 MCDContEndRels mcdContEndRelsFrom, MCDContEndRels mcdContEndRelsTo) {
@@ -149,4 +168,6 @@ public class MVCCDElementFactory {
             return null;
         }
     }
+
+
 }

@@ -31,4 +31,8 @@ public class MCDContAttributes extends MCDElement{
     public String getNameTree() {
         return null;
     }
+
+    public static String getClassShortNameUI() {
+        return "Conteneur d'attributs";
+    }
 }

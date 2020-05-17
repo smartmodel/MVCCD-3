@@ -64,15 +64,15 @@ public class PanelInputService {
             return null;
         } else {
             String text = (String) sComboBox.getSelectedItem();
-            return text.equals(Preferences.OPTION_YES);
+            return text.equals(MessagesBuilder.getMessagesProperty(Preferences.OPTION_YES));
         }
     }
 
         public static String getTextFromBoolean(boolean value){
         if (value){
-            return Preferences.OPTION_YES;
+            return MessagesBuilder.getMessagesProperty(Preferences.OPTION_YES);
         } else {
-            return Preferences.OPTION_NO;
+            return MessagesBuilder.getMessagesProperty(Preferences.OPTION_NO);
         }
     }
 }

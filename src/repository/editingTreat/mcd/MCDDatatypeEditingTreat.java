@@ -19,9 +19,12 @@ public class MCDDatatypeEditingTreat extends EditingTreat {
     }
 
     @Override
-    protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
+    protected DialogEditor getDialogEditor(Window owner,
+                                           MVCCDElement parent,
+                                           MVCCDElement element,
+                                           String mode) {
         return new MCDDatatypeEditor(owner , null,
-                (MCDDatatype) element, mode);
+                (MCDDatatype) element, mode, new MCDDatatypeEditingTreat());
     }
 
     @Override

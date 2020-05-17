@@ -25,6 +25,7 @@ public class Preferences extends MVCCDElement {
     public static String REPOSITORY_MCD_ENTITIES_NAME = "Entités";
     public static String REPOSITORY_MCD_RELATIONS_NAME = "Relations";
     public static String REPOSITORY_MCD_ATTRIBUTES_NAME = "Attributs";
+    public static String REPOSITORY_MCD_CONSTRAINTS_NAME = "Contraintes";
     public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
     public static String REGEXPR_FIRSTCAR = "[a-zA-Z]{1,1}";
     public static String REGEXPR_NOFREE = "[a-zA-Z0-9_]*";
@@ -53,6 +54,10 @@ public class Preferences extends MVCCDElement {
     public static Integer ASSOCIATION_LONG_NAME_LENGTH = 50;
     public static Integer ASSEND_ROLE_NAME_LENGTH = 20;
     public static Integer ASSEND_ROLE_SHORT_NAME_LENGTH = 5;
+    public static Integer UNIQUE_NAME_LENGTH = 20;
+    public static Integer UNIQUE_SHORT_NAME_LENGTH = 5;
+    public static Integer UNIQUE_LONG_NAME_LENGTH = 50;
+
     public static String INTEGER_REGEXPR = "([0])|([1-9]{1,1}[0-9]*)";
     //public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"windows-1252\"?>";
@@ -82,6 +87,8 @@ public class Preferences extends MVCCDElement {
     public static String FILE_HELP_MODEL_NAME = "helpModel.txt";
     public static String FILE_HELP_ENTITY_NAME = "helpEntity.txt";
     public static String FILE_HELP_ASSOCIATION_NAME = "helpAssociation.txt";
+    public static String FILE_HELP_PARAMETER_NAME ="helpParameter.txt";
+
     public static String FILE_HELP_ANCHOR_NAME = "helpAnchor.txt";
     public static String FILE_HELP_MCDDATATYPE_NAME = "helpMCDDatatpe.txt";
 
@@ -104,6 +111,10 @@ public class Preferences extends MVCCDElement {
     public static Integer ATTRIBUTE_WINDOW_HEIGHT = 600;
     public static Integer ASSOCIATION_WINDOW_WIDTH = 1000;
     public static Integer ASSOCIATION_WINDOW_HEIGHT = 600;
+    public static Integer UNIQUE_WINDOW_WIDTH = 1000;
+    public static Integer UNIQUE_WINDOW_HEIGHT = 600;
+    public static Integer PARAMETER_WINDOW_WIDTH = 400;
+    public static Integer PARAMETER_WINDOW_HEIGHT = 300;
     public static Integer ANCHOR_WINDOW_WIDTH = 800;
     public static Integer ANCHOR_WINDOW_HEIGHT = 600;
     public static Integer GENSPEC_WINDOW_WIDTH = 800;
@@ -280,6 +291,8 @@ public class Preferences extends MVCCDElement {
     public static String MCD_ASSOCIATION_NATURE_ID_COMP = "mcd.association.nature.no.comp";
     public static String MCD_ASSOCIATION_NATURE_SIM_CP = "mcd.association.nature.sim.cp";
 
+    public static String MCD_UNIQUE_NATURE_NO_ID = "mcd.unique.nature.no.id";
+    public static String MCD_UNIQUE_NATURE_NID = "mcd.unique.nature.nid";
 
     // Modification Application
     private Boolean DEBUG = false;
@@ -306,6 +319,10 @@ public class Preferences extends MVCCDElement {
     private String MCD_TREE_NAMING_ASSOCIATION = null;
     private String MCD_MODE_NAMING_LONG_NAME = null;
     private String MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = null;
+
+    private Dimension ENTITY_WINDOW_SIZE_CUSTOM = null;
+    private Point ENTITY_WINDOW_LOCATION_ONSCREEN = null;
+
 
 
 
@@ -490,5 +507,24 @@ public class Preferences extends MVCCDElement {
 
     public void setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(String MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME) {
         this.MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME;
+    }
+
+    public Dimension getENTITY_WINDOW_SIZE_CUSTOM() {
+        if (ENTITY_WINDOW_SIZE_CUSTOM == null){
+            ENTITY_WINDOW_SIZE_CUSTOM = new Dimension( ENTITY_WINDOW_WIDTH, ENTITY_WINDOW_HEIGHT );
+        }
+        return ENTITY_WINDOW_SIZE_CUSTOM;
+    }
+
+    public void setENTITY_WINDOW_SIZE_CUSTOM(Dimension ENTITY_WINDOW_SIZE_CUSTOM) {
+        this.ENTITY_WINDOW_SIZE_CUSTOM = ENTITY_WINDOW_SIZE_CUSTOM;
+    }
+
+    public Point getENTITY_WINDOW_LOCATION_ONSCREEN() {
+        return ENTITY_WINDOW_LOCATION_ONSCREEN;
+    }
+
+    public void setENTITY_WINDOW_LOCATION_ONSCREEN(Point ENTITY_WINDOW_LOCATION_ONSCREEN) {
+        this.ENTITY_WINDOW_LOCATION_ONSCREEN = ENTITY_WINDOW_LOCATION_ONSCREEN;
     }
 }

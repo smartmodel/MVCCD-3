@@ -4,6 +4,7 @@ import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import m.IMCompliant;
+import mcd.interfaces.IMCDParameter;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -14,9 +15,11 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MCDAttribute extends MCDElement implements IMCompliant {
+public class MCDAttribute extends MCDElement implements IMCompliant, IMCDParameter {
 
     private static final long serialVersionUID = 1000;
+
+    public static final String CLASSSHORTNAMEUI = "Attribute";
 
     private boolean aid = false;
     private boolean aidDep = false;
@@ -210,4 +213,8 @@ public class MCDAttribute extends MCDElement implements IMCompliant {
         return null;
     }
 
+    @Override
+    public  String getClassShortNameUI() {
+        return CLASSSHORTNAMEUI;
+    }
 }

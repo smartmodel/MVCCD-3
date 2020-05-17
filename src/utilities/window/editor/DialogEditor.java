@@ -3,6 +3,7 @@ package utilities.window.editor;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
+import repository.editingTreat.EditingTreat;
 import utilities.window.PanelBorderLayoutResizer;
 
 import javax.swing.*;
@@ -16,9 +17,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     public static final String READ = "read";
     public static final String DELETE = "delete";
 
-    public static final int NOTHING = 1 ;
-    public static final int MODEL = 2 ;
-    public static final int PACKAGE = 3 ;
+    public static final int SCOPE_NOTHING = 0;
 
     private Window owner;
 
@@ -37,9 +36,54 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     private boolean readOnly = false;
 
     protected int scope;
+    private EditingTreat editingTreat = null;
 
 
-    public DialogEditor(Window owner, MVCCDElement mvccdElementParent, MVCCDElement mvccdElementCrt, String mode, int scope) {
+    public DialogEditor(Window owner,
+                        MVCCDElement mvccdElementParent,
+                        MVCCDElement mvccdElementCrt,
+                        String mode,
+                        int scope,
+                        EditingTreat editingTreat) {
+
+
+        super(owner);
+        this.owner = owner ;
+        this.mode = mode;
+        this.mvccdElementParent = mvccdElementParent;
+        this.mvccdElementCrt = mvccdElementCrt;
+        this.mvccdElementParentChoosed = mvccdElementParent;  // valeur par défaut
+        this.scope = scope ;
+        this.editingTreat = editingTreat;
+
+        if (mode.equals(DialogEditor.READ)){
+            this.setReadOnly(true);
+        }
+        if (mode.equals(DialogEditor.DELETE)){
+            this.setReadOnly(true);
+        }
+
+        setModal(true);
+        setLocation(100,100);
+
+        getContentPane().add(panel);
+
+        setSize(getSizeCustom());
+        if (getLocationCustom() != null){
+            setLocation(getLocationCustom());
+        }
+        setInput(getInputCustom());
+        setButtons(getButtonsCustom());
+
+        start();
+    }
+
+/*
+    public DialogEditor(Window owner,
+                        MVCCDElement mvccdElementParent,
+                        MVCCDElement mvccdElementCrt,
+                        String mode,
+                        int scope) {
         super(owner);
         this.owner = owner ;
         this.mode = mode;
@@ -68,11 +112,18 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     }
 
+ */
+
+
+
     protected abstract PanelButtons getButtonsCustom();
 
     protected abstract PanelInput getInputCustom();
 
     protected abstract Dimension getSizeCustom();
+    protected abstract void setSizeCustom(Dimension dimension);
+    protected abstract Point getLocationCustom();
+    protected abstract void setLocationCustom(Point point);
 
 
     public void start(){
@@ -93,6 +144,12 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         input.getInputContent().setComponentsReadOnly(readOnly);
         buttons.getButtonsContent().setButtonsReadOnly(readOnly);
 
+        //TODO-1 A voir pour une spécialisation
+        if ( input.getInputContent() instanceof PanelInputContentTable){
+            buttons.getButtonsContent().btnUndo.setVisible(false);
+            buttons.getButtonsContent().btnApply.setVisible(false);
+            buttons.getButtonsContent().btnOk.setVisible(false);
+        }
 
         panel.add(input, borderLayoutPositionEditor);
         panel.add(buttons, borderLayoutPositionButtons);
@@ -158,12 +215,12 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
-        this.dispose();
+        //this.dispose();
     }
 
     @Override
     public void windowClosed(WindowEvent windowEvent) {
-        this.dispose();
+        //this.dispose();
     }
 
     @Override
@@ -183,8 +240,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     @Override
     public void windowDeactivated(WindowEvent windowEvent) {
-
-    }
+     }
 
 
     @Override
@@ -289,11 +345,24 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         this.mvccdElementParentChoosed = mvccdElementParentChoosed;
     }
 
+
     public int getScope() {
         return scope;
     }
 
+
+
     public JPanel getPanel() {
         return panel;
+    }
+
+    public EditingTreat getEditingTreat() {
+        return editingTreat;
+    }
+
+    public void dispose(){
+        setLocationCustom(getLocationOnScreen());
+        setSizeCustom(getSize());
+        super.dispose();
     }
 }

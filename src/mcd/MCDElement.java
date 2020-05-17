@@ -8,6 +8,7 @@ public abstract class MCDElement extends MDElement {
 
     private static final long serialVersionUID = 1000;
 
+
     public MCDElement(ProjectElement parent) {
 
         super(parent);

@@ -4,10 +4,16 @@ import constraints.Constraint;
 import constraints.ConstraintService;
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
+import m.MElement;
 import main.MVCCDElement;
+import main.MVCCDElementFactory;
 import main.MVCCDManager;
-import mcd.MCDAttribute;
-import mcd.MCDContAttributes;
+import mcd.*;
+import mcd.interfaces.IMCDParameter;
+import mcd.services.MCDParameterService;
+import repository.editingTreat.mcd.MCDNIDParameterEditingTreat;
+import repository.editingTreat.mcd.MCDUniqueParameterEditingTreat;
+import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -19,7 +25,17 @@ import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import utilities.UtilDivers;
 import utilities.window.ReadTableModel;
+import utilities.window.editor.PanelInputContentIdTable;
+import utilities.window.editor.PanelInputContentTable;
+import utilities.window.scomponents.SCheckBox;
 import utilities.window.services.ComponentService;
+import utilities.window.services.PanelService;
+import window.editor.attribute.AttributeEditor;
+import window.editor.attribute.AttributeTransientEditor;
+import window.editor.operation.OperationParamTableColumn;
+import window.editor.operation.constraint.unique.UniqueEditor;
+import window.editor.operation.parameter.ParameterEditor;
+import window.editor.operation.parameter.ParameterTransientEditor;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -30,85 +46,57 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class AttributesInputContent extends PanelInputContent {
-
-    //private JPanel panel = new JPanel();
-    private JTable table;
-    private JScrollPane panelTable;
-    private DefaultTableModel model;
-    private JPanel panelButtons;
-    private JButton buttonAdd;
-    private JButton buttonAddAID;
-    private JButton buttonEdit;
-    private JButton buttonRemove;
-    private JButton buttonUp;
-    private JButton buttonDown;
+public class AttributesInputContent extends PanelInputContentTable {
 
 
     public AttributesInputContent(AttributesInput attributesInput)    {
+
         super(attributesInput);
      }
 
-
-
-
+    @Override
     public void createContentCustom() {
-        makeTable();
-        makeButtons();
-        makeLayout();
+
+        super.createContentCustom();
+
+        createPanelMaster();
     }
 
-    private void  makeLayout(){
-        panelTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        System.out.println(panelInputContentCustom.getHeight());
-        System.out.println(panelTable.getHeight());
-//        System.out.println(panelButtons.getHeight());
-
-        //panelTable.setPreferredSize(
-        //        new Dimension(1000, 100));
-        //panelTable.setMaximumSize(
-        //        new Dimension(400,100));
 
 
-        JPanel panelMove = new JPanel();
-        panelMove.setLayout(new BoxLayout(panelMove, BoxLayout.Y_AXIS));
-        panelMove.add(Box.createVerticalGlue());
-        panelMove.add(buttonUp);
-/*
-        panelMove.add(buttonAdd);
-        panelMove.add(buttonEdit);
-        panelMove.add(buttonUp);
+    private void createPanelMaster() {
+        GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
+        panelInputContentCustom.add(panelTableComplete, gbc);
 
- */
-        panelMove.add(buttonDown);
-        panelMove.add(Box.createVerticalGlue());
+        this.add(panelInputContentCustom);
+    }
 
 
-        panelButtons= new JPanel();
-        panelButtons.setLayout(new BoxLayout(panelButtons, BoxLayout.X_AXIS));
-        //panelButtons.setMaximumSize(ApplicationManager.instance().getViewManager().getScaledDimension(new Dimension(800, 10)));
+    @Override
+    protected void specificColumnsDisplay() {
 
-        panelButtons.add(Box.createHorizontalGlue());
-        panelButtons.add(buttonAdd);
-        panelButtons.add(buttonEdit);
-        panelButtons.add(buttonRemove);
-        panelButtons.add(Box.createHorizontalGlue());
+    }
 
+    @Override
+    protected void specificInitOrLoadTable() {
 
-        BorderLayout bl = new BorderLayout(5,5);
-        panelInputContentCustom.setLayout(bl);
-        panelInputContentCustom.add(panelTable, BorderLayout.CENTER);
-        panelInputContentCustom.add(panelButtons, BorderLayout.SOUTH);
-        panelInputContentCustom.add(panelMove, BorderLayout.EAST);
+        MCDContAttributes mcdContAttributes = (MCDContAttributes) getEditor().getMvccdElementCrt();
+        ArrayList<MCDAttribute> mcdAttributes= mcdContAttributes.getMCDAttributes();
+
+        datas = new Object[mcdAttributes.size()][AttributesTableColumn.getNbColumns()];
+        int line=-1;
+        int col;
+        for (MCDAttribute attribute:mcdAttributes){
+            line++;
+            putValueInRow(attribute, datas[line]);
+        }
 
 
     }
 
-    private void makeTable(){
-        String[] columnNames = {
-                AttributesTableColumn.ID.getLabel(),
-                AttributesTableColumn.ORDER.getLabel(),
+    @Override
+    protected String[] specificColumnsNames() {
+        return  new String[]{
                 AttributesTableColumn.STEREOTYPES.getLabel(),
                 AttributesTableColumn.NAME.getLabel(),
                 AttributesTableColumn.DATATYPE.getLabel(),
@@ -119,310 +107,32 @@ public class AttributesInputContent extends PanelInputContent {
                 AttributesTableColumn.DERIVED.getLabel(),
                 AttributesTableColumn.DEFAULTVALUE.getLabel()
         };
-
-        MCDContAttributes mcdContAttributes = (MCDContAttributes) getEditor().getMvccdElementCrt();
-        ArrayList<MCDAttribute> mcdAttributes= mcdContAttributes.getMCDAttributes();
-
-        Object[][] data = new Object[mcdAttributes.size()][AttributesTableColumn.getNbColumns()];
-        int line=-1;
-        int col;
-        for (MCDAttribute attribute:mcdAttributes){
-            line++;
-            putValueInRow(attribute, data[line]);
-        }
-
-
-
-        model = new ReadTableModel(data, columnNames);
-
-        table = new JTable();
-        table.setModel(model);
-
-
-        table.setRowHeight(Preferences.EDITOR_TABLE_ROW_HEIGHT);
-
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        //table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-        //table.getColumnModel().setColumnSelectionAllowed(false);
-
-        int sizeDebug = 0;
-        if (PreferencesManager.instance().preferences().isDEBUG() &&
-            PreferencesManager.instance().preferences().isDEBUG_SHOW_TABLE_COL_HIDDEN()){
-            sizeDebug = 20;
-        }
-        
-        col = AttributesTableColumn.ID.getPosition();
-        table.getColumnModel().getColumn(col).setPreferredWidth(sizeDebug);
-        table.getColumnModel().getColumn(col).setMinWidth(sizeDebug);
-        table.getColumnModel().getColumn(col).setMaxWidth(sizeDebug);
-
-        col = AttributesTableColumn.ORDER.getPosition();
-        table.getColumnModel().getColumn(col).setPreferredWidth(sizeDebug);
-        table.getColumnModel().getColumn(col).setMinWidth(sizeDebug);
-        table.getColumnModel().getColumn(col).setMaxWidth(sizeDebug);
-
-        col = AttributesTableColumn.STEREOTYPES.getPosition();
-        //table.getColumnModel().getColumn(col).setPreferredWidth(100);
-        table.getColumnModel().getColumn(col).setPreferredWidth(50);
-        table.getColumnModel().getColumn(col).setCellEditor(new AttributeStereotypesEditorForJTable(table));
-
-        col = AttributesTableColumn.NAME.getPosition();
-        table.getColumnModel().getColumn(col).setPreferredWidth(100);
-        table.getColumnModel().getColumn(col).setMinWidth(100);
-
-        col = AttributesTableColumn.DATATYPE.getPosition();
-        table.getColumnModel().getColumn(col).setPreferredWidth(100);
-        table.getColumnModel().getColumn(col).setMinWidth(100);
-
-        col = AttributesTableColumn.DATASIZE.getPosition();
-        table.getColumnModel().getColumn(col).setMinWidth(40);
-        table.getColumnModel().getColumn(col).setMaxWidth(40);
-
-
-        col = AttributesTableColumn.DATASCALE.getPosition();
-        table.getColumnModel().getColumn(col).setMinWidth(60);
-        table.getColumnModel().getColumn(col).setMaxWidth(60);
-
-        col = AttributesTableColumn.UPPERCASE.getPosition();
-        table.getColumnModel().getColumn(col).setCellRenderer(table.getDefaultRenderer(Boolean.class));
-        table.getColumnModel().getColumn(col).setCellEditor(table.getDefaultEditor(Boolean.class));
-        table.getColumnModel().getColumn(col).setMinWidth(70);
-        table.getColumnModel().getColumn(col).setMaxWidth(70);
-
-        col = AttributesTableColumn.DERIVED.getPosition();
-        table.getColumnModel().getColumn(col).setCellRenderer(table.getDefaultRenderer(Boolean.class));
-        table.getColumnModel().getColumn(col).setCellEditor(table.getDefaultEditor(Boolean.class));
-        table.getColumnModel().getColumn(col).setMinWidth(50);
-        table.getColumnModel().getColumn(col).setMaxWidth(50);
-
-        col = AttributesTableColumn.DEFAULTVALUE.getPosition();
-        //table.getColumnModel().getColumn(col).setPreferredWidth(100);
-        table.getColumnModel().getColumn(col).setPreferredWidth(50);
-
-
-        table.setFillsViewportHeight(true);
-        table.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                // ce ne sont pas les boutons standards mais ceux ceux spécifiques à la table
-                enabledContent();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-
-            }
-        });
     }
-
-    
-
-    private void  makeButtons(){
-        buttonAdd = new JButton("Ajouter");
-        buttonAdd.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-                //Dimension dim = panelTable.getSize();
-
-                System.out.println(getEditor().getMvccdElementCrt().getName());
-                MCDAttribute mcdAttribute = (MCDAttribute) new MCDAttributeEditingTreat().treatNew( getEditor(),
-                        (MCDContAttributes) getEditor().getMvccdElementCrt());
-
-                if (mcdAttribute != null) {
-                    Object[] row = newRow(mcdAttribute);
-                    model.addRow(row);
-                    table.setRowSelectionInterval(table.getRowCount()-1 , table.getRowCount()-1);
-                    enabledContent();
-
-                    //panelTable.setPreferredSize(dim);
-                }
-            }
-        });
-
-        buttonRemove = new JButton("Supprimer");
-        buttonRemove.setEnabled(false);
-        buttonRemove.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e) {
-                int posActual = table.getSelectedRow();
-                if (posActual >= 0){
-
-                    //TODO-0 Faire appel treatDelete
-                    DefaultMutableTreeNode nodeAttribute = ProjectService.getNodeById(posActual);
-                    DefaultTreeModel treeModel =  MVCCDManager.instance().getWinRepositoryContent().getTree().getTreeModel();
-                    treeModel.removeNodeFromParent(nodeAttribute);
-                    model.removeRow(posActual);
-                    enabledContent();
-                }
-            }
-        });
-
-        buttonEdit = new JButton("Editer");
-        buttonEdit.setEnabled(false);
-        buttonEdit.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e) {
-                int posActual = table.getSelectedRow();
-                if (posActual >= 0){
-                    int posId = AttributesTableColumn.ID.getPosition();
-                    //TODO-0 Faire appel treatEdit
-                    Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
-                    MCDAttribute mcdAttributeActual = (MCDAttribute) ProjectService.getElementById(idActual);
-                    new MCDAttributeEditingTreat().treatUpdate( getEditor(), mcdAttributeActual);
-
-                    updateRow(mcdAttributeActual, table.getSelectedRow());
-                    enabledContent();
-                }
-            }
-        });
-
-        buttonUp = new JButton("^");
-        buttonUp.setEnabled(false);
-        buttonUp.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-                int posActual = table.getSelectedRow();
-                if (posActual > 0){
-                    model.moveRow(posActual, posActual, posActual-1);
-                    table.setRowSelectionInterval(posActual-1, posActual-1);
-                    permuteOrder(posActual, posActual - 1);
-                }
-                enabledContent();
-                //TODO-1 Vérfier un changement effectif
-                //Détecter un changement au niveau de la table JTable --> STable et ensuite déclenechement automatique
-                enabledButtons();
-
-            }
-        });
-
-        buttonDown = new JButton("v");
-        buttonDown.setEnabled(false);
-        buttonDown.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                int posActual = table.getSelectedRow();
-                if (posActual < table.getRowCount()-1){
-                    model.moveRow(posActual, posActual, posActual+1);
-                    table.setRowSelectionInterval(posActual+1, posActual+1);
-                    permuteOrder(posActual, posActual + 1);
-                }
-                enabledContent();
-                //TODO-1 Vérfier un changement effectif
-                //Détecter un changement au niveau de la table JTable --> STable et ensuite déclenechement automatique
-                enabledButtons();
-
-                           }
-        });
-    }
-
-
-
-    protected boolean changeField(DocumentEvent e) {
-        return true;
-    }
-
-    @Override
-    protected void changeFieldSelected(ItemEvent e) {
-
-    }
-
-    @Override
-    protected void changeFieldDeSelected(ItemEvent e) {
-
-    }
-
-
 
 
     @Override
-    public void focusGained(FocusEvent focusEvent) {
-        super.focusGained(focusEvent);
-        Object source = focusEvent.getSource();
-
-    }
-
-    @Override
-    public void focusLost(FocusEvent focusEvent) {
-    }
-
-
-
-
-    @Override
-    public void loadDatas(MVCCDElement mvccdElement) {
-    }
-
-
-
-    @Override
-    protected void initDatas() {
-    }
-
-    @Override
-    public void saveDatas(MVCCDElement mvccdElement) {
-    }
-
-
-
-
-    @Override
-    protected void enabledContent() {
-        int pos = table.getSelectedRow();
-        if (pos >= 0){
-            buttonRemove.setEnabled(true);
-            buttonEdit.setEnabled(true);
-            if (pos > 0){
-                buttonUp.setEnabled(true);
-            } else {
-                buttonUp.setEnabled(false);
-            }
-            if (pos == table.getRowCount()-1){
-                buttonDown.setEnabled(false);
-            } else{
-                buttonDown.setEnabled(true);
-            }
-        } else {
-            buttonRemove.setEnabled(false);
-            buttonEdit.setEnabled(false);
-            buttonUp.setEnabled(false);
-            buttonDown.setEnabled(false);
-        }
-    }
-
-    private void updateRow(MCDAttribute mcdAttributeSelected, int selectedRow) {
-
+    protected Object[] getNewRow(MElement mElement) {
         Object[] row = new Object [AttributesTableColumn.getNbColumns()];
-        putValueInRow(mcdAttributeSelected, row);
-        UtilDivers.putValueRowInTable(table, selectedRow, row);
-
-    }
-
-    private Object[] newRow(MCDAttribute mcdAttribute){
-
-        Object[] row = new Object [AttributesTableColumn.getNbColumns()];
-        putValueInRow(mcdAttribute, row);
+        putValueInRow(mElement, row);
         return row;
     }
 
-    private void putValueInRow(MCDAttribute attribute, Object[] row) {
+    @Override
+    protected MElement getNewElement() {
+        DialogEditor fen = null;
+        MCDContAttributes mcdContAttribute = (MCDContAttributes) getEditor().getMvccdElementCrt();
+
+        fen = new AttributeEditor(getEditor(), mcdContAttribute, null,
+                    DialogEditor.NEW, new MCDAttributeEditingTreat());
+
+        fen.setVisible(true);
+        MVCCDElement newElement = fen.getMvccdElementNew();
+        return (MElement) newElement;
+    }
+
+    @Override
+    protected void putValueInRow(MElement mElement, Object[] row) {
+        MCDAttribute attribute = (MCDAttribute) mElement;
         ArrayList<Stereotype> stereotypes =  attribute.getToStereotypes();
         ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
 
@@ -434,11 +144,14 @@ public class AttributesInputContent extends PanelInputContent {
             MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(attribute.getDatatypeLienProg());
             textForDatatype = mcdDatatype.getName();
         }
-        
+
         int col;
-        
+
         col = AttributesTableColumn.ID.getPosition();
         row[col] = attribute.getId();
+
+        col = AttributesTableColumn.TRANSITORY.getPosition();
+        row[col] = attribute.isTransitory();
 
         col = AttributesTableColumn.ORDER.getPosition();
         row[col] = attribute.getOrder();
@@ -479,78 +192,5 @@ public class AttributesInputContent extends PanelInputContent {
         row[col] = defaultValue;
     }
 
-
-    private void permuteOrder(int posActual, int posNew) {
-
-        int posOrder = AttributesTableColumn.ORDER.getPosition();
-        Integer orderActual = (Integer) table.getModel().getValueAt(posActual, posOrder);
-        Integer orderNew = (Integer) table.getModel().getValueAt(posNew, posOrder);
-
-        int posId = AttributesTableColumn.ID.getPosition();
-        Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
-        Integer idOther = (Integer) table.getModel().getValueAt(posNew, posId);
-
-        // Permutation dans la table
-        table.getModel().setValueAt(orderNew, posActual, posOrder);
-        table.getModel().setValueAt(orderActual, posNew, posOrder);
-
-        // Permutation dans les 2 instances de descendants de ProjectElement
-        updateOrderINProjectElement(idActual, orderNew);
-        updateOrderINProjectElement(idOther, orderActual);
-
-        MVCCDManager.instance().setDatasProjectChanged(true);
-
-        // Mise à jour de l'affichage du référentiel
-        swapNodes(idActual, idOther);
-
-
-
-    }
-
-
-    private void updateOrderINProjectElement(Integer id, Integer order) {
-        /*
-        Project project = MVCCDManager.instance().getProject();
-        ProjectElement projectElement = project.getElementById(id);
-
-         */
-        ProjectElement projectElement = ProjectService.getElementById(id);
-        projectElement.setOrder(order);
-    }
-
-    private void swapNodes(Integer idA, Integer idB) {
-
-        DefaultMutableTreeNode nodeParent =  ProjectService.getNodeById(
-                ((ProjectElement) getEditor().getMvccdElementCrt()).getId());
-
-        DefaultMutableTreeNode nodeA = RepositoryService.instance().getNodeInChildsByIdElement(
-               nodeParent, idA);
-        int indexA = nodeParent.getIndex(nodeA);
-
-
-        DefaultMutableTreeNode nodeB = RepositoryService.instance().getNodeInChildsByIdElement(
-                nodeParent, idB);
-        int indexB = nodeParent.getIndex(nodeB);
-
-        nodeParent.insert(nodeA, indexB);
-        nodeParent.insert(nodeB, indexA);
-
-        MVCCDManager.instance().showNewNodeInRepository(nodeB);
-
-    }
-
-
-    public Dimension resizeContent(){
-
-        Dimension dimensionBL = super.resizeContent();
-
-        //TODO-1 A chercher comment déterminer la hauteur effective (est-ce juste 4* le gap ?)
-        //System.out.println(panelInputContentCustom.getHeight() + " -  " + panelButtons.getHeight());
-        int  heightUtile = panelInputContentCustom.getHeight() - panelButtons.getHeight()- (4 *Preferences.JPANEL_HGAP) - 40 ;
-        ComponentService.changeHeight(panelTable, heightUtile /*- 2 *Preferences.JPANEL_HGAP */);
-        ComponentService.changePreferredHeight(panelTable, heightUtile /*- 2 *Preferences.JPANEL_VGAP */);
-
-        return dimensionBL;
-    }
 
 }

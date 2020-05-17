@@ -27,7 +27,8 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
 
     protected JPanel panelId = new JPanel ();
-    protected SComboBox fieldParent = new SComboBox(this);
+    protected JLabel labelParent = new JLabel("Conteneur: ");
+    protected SComboBox fieldParent = new SComboBox(this, labelParent);
     protected STextField fieldName = new STextField(this);
     protected STextField fieldShortName = new STextField(this);
     protected STextField fieldLongName = new STextField(this);
@@ -60,11 +61,8 @@ public abstract class PanelInputContentId extends PanelInputContent {
             iMCDModelContainer = IMCDModelService.getIModelContainer((MCDElement) elementForCheckInput);
         }
 
-        //TODO-0 -Pendant la mise au point
         if (getParentCandidates(iMCDModelContainer) != null) {
-            System.out.println("------------");
             for (MCDElement parentCandidate : getParentCandidates(iMCDModelContainer)) {
-                System.out.println(parentCandidate.getNamePath(MCDElementService.PATHNAME));
                 fieldParent.addItem(parentCandidate.getNamePath(MCDElementService.PATHNAME));
             }
         }
@@ -100,9 +98,9 @@ public abstract class PanelInputContentId extends PanelInputContent {
     protected GridBagConstraints createPanelId() {
         GridBagConstraints gbc = PanelService.createSubPanelGridBagConstraints(panelId, "Identification");
 
-        panelId.add(new JLabel("Conteneur(s) : "), gbc);
+        panelId.add(labelParent, gbc);
         gbc.gridx++;
-        gbc.gridwidth=3;
+        gbc.gridwidth=4;
         panelId.add(fieldParent, gbc);
         gbc.gridwidth=1;
         gbc.gridx = 0;
@@ -122,7 +120,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
             gbc.gridy++;
             panelId.add(new JLabel("Nom long : "), gbc);
             gbc.gridx++;
-            gbc.gridwidth=3;
+            gbc.gridwidth=4;
             panelId.add(fieldLongName, gbc);
             gbc.gridwidth=1;
         }
@@ -152,8 +150,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
 
     protected boolean checkName(boolean unitaire, boolean mandatory){
-
-        return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
+return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
                 getBrothers(),
                 fieldName.getText(),
                     fieldName.getText(),
@@ -284,10 +281,11 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
     @Override
     public boolean checkDatasPreSave(SComponent sComponent) {
+        boolean  ok = super.checkDatasPreSave(sComponent);
 
         boolean notBatch = panelInput != null;
         boolean unitaire = notBatch && (sComponent == fieldName);
-        boolean ok = checkName(unitaire)   ;
+        ok = checkName(unitaire) && ok   ;
 
         setPreSaveOk(ok);
         return ok;

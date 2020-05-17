@@ -6,6 +6,7 @@ import javax.swing.*;
 
 public class SButton extends JButton implements SComponent {
 
+
     private boolean checkPreSave = false;
     private int color;
     private boolean errorInput = false;
@@ -94,5 +95,10 @@ public class SButton extends JButton implements SComponent {
     @Override
     public boolean isCheckPreSave() {
         return checkPreSave;
+    }
+
+    @Override
+    public JLabel getJLabel() {
+        return null;
     }
 }

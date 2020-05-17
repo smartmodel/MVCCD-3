@@ -9,7 +9,12 @@ public abstract class ProjectElement extends MVCCDElement {
 
     private static final long serialVersionUID = 1000;
 
+    //public static final int IDTRANSIENT = -1;
+
     private int id;
+    private boolean transitory = false;
+
+
 
     public ProjectElement(ProjectElement parent) {
         super(parent);
@@ -26,27 +31,33 @@ public abstract class ProjectElement extends MVCCDElement {
             // Le projet lui-même
             this.id = 0;
         } else {
-            this.id = ProjectService.getProjectRoot(this).getNextIdElementSequence();
-            /*
-            if (MVCCDManager.instance().getProject() != null){
-                this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
-            } else {
-                // Le projet est en cours de création et n'est pas référencé
-                ((Project) parent).getNextIdElementSequence();
+            //this.id = ProjectService.getProjectRoot(this).getNextIdElementSequence();
+            this.id= MVCCDManager.instance().getProject().getNextIdElementSequence();
+            if ( parent == null) {
+                transitory = true;
             }
-            if ( parent instanceof Project){
-                // Le projet est en cours de création et n'est pas référencé
-                ((Project) parent).getNextIdElementSequence();
+/*
+            // pas d'Id pour les éléments transients dont le parent est null (et non Project)
+            if ( parent != null) {
+                this.id = ProjectService.getProjectRoot(this).getNextIdElementSequence();
             } else {
-                this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
+                //this.id = IDTRANSIENT;
             }
 
-             */
+ */
         }
     }
+
 
     public int getId() {
         return id;
     }
 
+    public boolean isTransitory() {
+        return transitory;
+    }
+
+    public void setTransitory(boolean transitory) {
+        this.transitory = transitory;
+    }
 }

@@ -236,4 +236,7 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
         return getLongName();
     }
 
+    public void setParent(MVCCDElement parent) {
+        this.parent = parent;
+    }
 }

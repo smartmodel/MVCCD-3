@@ -32,8 +32,8 @@ public class MCDEntityEditingTreat extends EditingTreat {
 
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
-        return new EntityEditor(owner, (MCDContEntities) parent, (MCDEntity) element, mode);
-
+        return new EntityEditor(owner, (MCDContEntities) parent, (MCDEntity) element, mode,
+                new MCDEntityEditingTreat());
     }
 
     @Override

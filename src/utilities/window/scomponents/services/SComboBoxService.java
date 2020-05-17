@@ -1,6 +1,7 @@
 package utilities.window.scomponents.services;
 
 import org.apache.commons.lang.StringUtils;
+import utilities.window.editor.services.PanelInputService;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.STextField;
 
@@ -33,6 +34,13 @@ public class SComboBoxService {
     }
 
 
-
+    public static void selectByBoolean(SComboBox sComboBox, Boolean aBoolean) {
+        if (aBoolean != null) {
+            SComboBoxService.selectByText(sComboBox,
+                    PanelInputService.getTextFromBoolean(aBoolean.booleanValue()));
+        } else {
+            sComboBox.setSelectedEmpty();
+        }
+    }
 }
 

@@ -27,13 +27,6 @@ import java.util.ArrayList;
 
 public class ModelInputContent extends PanelInputContentId {
 
-    //private JPanel panel = new JPanel();
-
-    /*private JPanel panelIdentification = new JPanel ();
-    private STextField fieldMCDElementName = new STextField(this);
-    private STextField fieldMCDElementShortName = new STextField(this);
-
-     */
 
     private SCheckBox fieldPackagesAutorizeds = new SCheckBox(this);
 

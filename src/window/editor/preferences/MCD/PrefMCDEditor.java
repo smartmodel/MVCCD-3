@@ -1,6 +1,7 @@
 package window.editor.preferences.MCD;
 
 import main.MVCCDElement;
+import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import utilities.window.editor.PanelButtons;
@@ -14,8 +15,9 @@ public class PrefMCDEditor extends DialogEditor {
             Window owner,
             MVCCDElement parent,
             Preferences preferences,
-            String mode)  {
-        super(owner, parent, preferences, mode, DialogEditor.NOTHING);
+            String mode,
+            EditingTreat editingTreat)  {
+        super(owner, parent, preferences, mode, DialogEditor.SCOPE_NOTHING, editingTreat);
 /*
         super.setSize(Preferences.PREFERENCES_WINDOW_WIDTH, Preferences.PREFERENCES_WINDOW_HEIGHT);
         super.setInput(new PrefMCDInput(this));
@@ -39,6 +41,21 @@ public class PrefMCDEditor extends DialogEditor {
     @Override
     protected Dimension getSizeCustom() {
         return new Dimension(Preferences.PREFERENCES_WINDOW_WIDTH, Preferences.PREFERENCES_WINDOW_HEIGHT);
+    }
+
+    @Override
+    protected void setSizeCustom(Dimension dimension) {
+
+    }
+
+    @Override
+    protected Point getLocationCustom() {
+        return null;
+    }
+
+    @Override
+    protected void setLocationCustom(Point point) {
+
     }
 
     @Override

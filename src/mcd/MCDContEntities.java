@@ -41,6 +41,6 @@ public class MCDContEntities extends MCDElement{
         }
         return resultat;
     }
-    
+
 
 }

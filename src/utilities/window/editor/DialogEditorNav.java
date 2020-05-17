@@ -1,6 +1,7 @@
 package utilities.window.editor;
 
 import main.MVCCDElement;
+import repository.editingTreat.EditingTreat;
 
 import java.awt.*;
 
@@ -8,9 +9,14 @@ public abstract class DialogEditorNav extends DialogEditor{
 
     private PanelNav nav;
 
-    public DialogEditorNav(Window owner, MVCCDElement mvccdElementParent, MVCCDElement mvccdElementCrt, String mode, int scope) {
-        super(owner, mvccdElementParent, mvccdElementCrt, mode, scope);
+    public DialogEditorNav(Window owner,
+                           MVCCDElement mvccdElementParent,
+                           MVCCDElement mvccdElementCrt,
+                           String mode,
+                           EditingTreat editingTreat) {
+        super(owner, mvccdElementParent, mvccdElementCrt, mode, DialogEditor.SCOPE_NOTHING, editingTreat);
     }
+
 
     protected abstract PanelNav getNavCustom();
 

@@ -29,4 +29,6 @@ public class SComponentService {
         component.setBackground(
                 PreferencesManager.instance().preferences().EDITOR_SCOMPONENT_BACKGROUND_ERROR);
     }
+
+
 }

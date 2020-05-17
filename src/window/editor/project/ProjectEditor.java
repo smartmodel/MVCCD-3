@@ -1,6 +1,7 @@
 package window.editor.project;
 
 import main.MVCCDElement;
+import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import project.Project;
@@ -14,17 +15,9 @@ public class ProjectEditor extends DialogEditor {
 
     public ProjectEditor(Window owner,
                          Project project,
-                         String mode            )  {
-        super(owner, null, project, mode, DialogEditor.NOTHING);
-/*
-        super.setSize(Preferences.PROJECT_WINDOW_WIDTH, Preferences.PROJECT_WINDOW_HEIGHT);
-
-        super.setInput(new ProjectInput(this));
-        super.setButtons (new ProjectButtons(this));
-
-        super.start();
-
- */
+                         String mode ,
+                         EditingTreat editingTreat)  {
+        super(owner, null, project, mode, DialogEditor.SCOPE_NOTHING, editingTreat);
     }
 
     @Override
@@ -43,6 +36,21 @@ public class ProjectEditor extends DialogEditor {
     }
 
     @Override
+    protected void setSizeCustom(Dimension dimension) {
+
+    }
+
+    @Override
+    protected Point getLocationCustom() {
+        return null;
+    }
+
+    @Override
+    protected void setLocationCustom(Point point) {
+
+    }
+
+    @Override
     public void adjustTitle() {
 
     }
@@ -50,12 +58,12 @@ public class ProjectEditor extends DialogEditor {
 
     @Override
     protected String getPropertyTitleNew() {
-        return "project.entity.new";
+        return "editor.project.new";
     }
 
     @Override
     protected String getPropertyTitleUpdate() {
-        return "project.entity.update";
+        return "editor.project.update";
     }
 
 }

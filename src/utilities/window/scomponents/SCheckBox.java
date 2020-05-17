@@ -1,6 +1,7 @@
 package utilities.window.scomponents;
 
 import main.MVCCDManager;
+import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;
@@ -17,19 +18,26 @@ public class SCheckBox extends JCheckBox implements SComponent {
     private int color;
     private boolean errorInput = false;
 
+    private JLabel label;
+
 
     public SCheckBox(IPanelInputContent panel){
         super();
         init(panel);
     }
-    public SCheckBox(IPanelInputContent panel, String label) {
-        super(label);
-        init(panel);
+    public SCheckBox(IPanelInputContent panel, JLabel label) {
+        super();
+        init(panel, label);
     }
 
     private void init(IPanelInputContent panel){
         this.panel = panel;
         this.setColor(SComponent.COLORNORMAL);
+    }
+
+    private void init(IPanelInputContent panel, JLabel label){
+        init(panel);
+        this.label = label;
     }
 
 
@@ -48,7 +56,13 @@ public class SCheckBox extends JCheckBox implements SComponent {
 
 
     public boolean isCheckPreSave() {
+
         return checkPreSave;
+    }
+
+    @Override
+    public JLabel getJLabel() {
+        return null;
     }
 
 
@@ -65,6 +79,11 @@ public class SCheckBox extends JCheckBox implements SComponent {
         } else {
             updated = true;
         }
+
+        if (panel.getEditor().getMode().equals(DialogEditor.NEW)){
+            updated = true;
+        }
+
         if (updated) {
             MVCCDManager.instance().datasProjectChangedFromEditor();
         }
@@ -112,12 +131,21 @@ public class SCheckBox extends JCheckBox implements SComponent {
         return readOnly;
     }
 
+
     public void setEnabled(boolean enabled){
         if (! isReadOnly()){
             super.setEnabled(enabled);
+            if (label != null) label.setEnabled(enabled);
         } else{
             super.setEnabled(false);
+            if (label != null) label.setEnabled(false);
         }
+    }
+
+
+    public void setVisible(boolean visible){
+        super.setVisible(visible);
+        if (label != null) label.setVisible(visible);
     }
 
 
@@ -145,11 +173,13 @@ public class SCheckBox extends JCheckBox implements SComponent {
 
     @Override
     public void setErrorInput(boolean errorInput) {
+
         this.errorInput = errorInput;
     }
 
     @Override
     public boolean isErrorInput() {
+
         return errorInput;
     }
 

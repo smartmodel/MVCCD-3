@@ -21,7 +21,8 @@ public class PrefApplEditingTreat extends EditingTreat {
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
         return new PrefApplicationEditor(owner , null,
-                ( MVCCDElementApplicationPreferences) element, DialogEditor.UPDATE);
+                ( MVCCDElementApplicationPreferences) element, DialogEditor.UPDATE,
+                new PrefApplEditingTreat());
 
     }
 

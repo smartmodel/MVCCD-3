@@ -14,24 +14,6 @@ import java.util.ArrayList;
 
 public class MCDAttributesEditingTreat extends EditingTreat {
 
-
-
-/*
-
-
-    public static void treatEdit(Window owner,
-                                   MCDContAttributes element) {
-
-        AttributesEditor fen = new AttributesEditor(owner , (MCDEntity) element.getParent(),
-                element, DialogEditor.READ);
-        fen.setVisible(true);
-        if (fen.isDatasChanged()){
-            MVCCDManager.instance().setDatasProjectChanged(true);
-        }
-    }
-
-*/
-
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
         return null;
@@ -39,7 +21,8 @@ public class MCDAttributesEditingTreat extends EditingTreat {
 
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
-        return new AttributesEditor(owner , parent, (MCDContAttributes)element, mode);
+        return new AttributesEditor(owner , parent, (MCDContAttributes)element, mode,
+                new MCDAttributeEditingTreat());
     }
 
     @Override

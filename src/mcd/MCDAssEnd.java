@@ -4,14 +4,16 @@ import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.services.MRelEndService;
 import main.MVCCDElement;
+import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDElementService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
-public class MCDAssEnd extends MCDRelEnd {
+public class MCDAssEnd extends MCDRelEnd  {
 
     private static final long serialVersionUID = 1000;
+
 
     //public static final int FROM = 1 ;  //drawingDirection
     //public static final int TO = 2 ;  //drawingDirection
@@ -164,6 +166,7 @@ public class MCDAssEnd extends MCDRelEnd {
         MCDAssociation mcdAssociation = getMcdAssociation();
         return mcdAssociation.getMCDAssEndOpposite(this);
     }
+
 
 
 }

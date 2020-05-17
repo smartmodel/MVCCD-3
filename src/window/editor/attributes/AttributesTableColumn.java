@@ -4,6 +4,7 @@ public enum AttributesTableColumn {
 
 
     ID("Id"),
+    TRANSITORY("Trans."),
     ORDER("Ordre"),
     STEREOTYPES("Stéréotypes"),
     NAME("Nom"),

@@ -21,7 +21,8 @@ public class PrefGeneralEditingTreat extends EditingTreat {
 
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
-        return new PrefGeneralEditor(owner , null, (Preferences) element, mode);
+        return new PrefGeneralEditor(owner , null, (Preferences) element,
+                mode, new PrefGeneralEditingTreat());
     }
 
     @Override

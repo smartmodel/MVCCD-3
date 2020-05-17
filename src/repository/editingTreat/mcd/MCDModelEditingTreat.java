@@ -19,13 +19,13 @@ public class MCDModelEditingTreat extends EditingTreat {
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
 
-        return new ModelInputContent(element, DialogEditor.MODEL);
+        return new ModelInputContent(element, ModelEditor.MODEL);
     }
 
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
         return new ModelEditor(owner , (IMCDContContainer) parent, (IMCDContainer) element,
-                mode, DialogEditor.MODEL);
+                mode, ModelEditor.MODEL, new MCDModelEditingTreat());
     }
 
     @Override

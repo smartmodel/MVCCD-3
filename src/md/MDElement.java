@@ -5,6 +5,9 @@ import main.MVCCDElement;
 import project.ProjectElement;
 
 public abstract class MDElement extends MElement {
+
+
+
     public MDElement(ProjectElement parent) {
         super(parent);
     }

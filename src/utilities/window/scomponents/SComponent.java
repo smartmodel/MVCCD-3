@@ -21,5 +21,6 @@ public interface  SComponent {
     boolean isErrorInput();
     void setCheckPreSave(boolean checkPreSave);
     boolean isCheckPreSave();
+    JLabel getJLabel();
 
 }

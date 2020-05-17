@@ -338,9 +338,11 @@ public class PrefMCDInputContent extends PanelInputContent {
 
     public boolean checkDatasPreSave(SComponent sComponent) {
 
+        boolean ok = super.checkDatasPreSave(sComponent);
+
         boolean notBatch = panelInput != null;
         boolean unitaire;
-        boolean ok = true;
+
 
         if ( fieldAIDWithDep.isSelected()){
 

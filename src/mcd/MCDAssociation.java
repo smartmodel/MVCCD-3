@@ -5,15 +5,19 @@ import m.IMCompliant;
 import m.MRelationDegree;
 import m.services.MRelationService;
 import main.MVCCDElement;
+import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAssociationService;
 import mcd.services.MCDElementService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
-public class MCDAssociation extends MCDRelation implements IMCompliant {
+public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDParameter {
 
     private  static final long serialVersionUID = 1000;
+
+    public static final String CLASSSHORTNAMEUI = "Association";
+
 
     private MCDAssociationNature nature ;
     private boolean frozen = false;
@@ -202,4 +206,9 @@ public class MCDAssociation extends MCDRelation implements IMCompliant {
         return MRelationService.computeDegree(getFrom().getMultiMaxStd(), getTo().getMultiMaxStd());
     }
 
+
+    @Override
+    public String getClassShortNameUI() {
+        return CLASSSHORTNAMEUI;
+    }
 }

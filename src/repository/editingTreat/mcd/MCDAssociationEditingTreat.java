@@ -72,8 +72,12 @@ public class MCDAssociationEditingTreat extends EditingTreat {
     }
 
     @Override
-    protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
-        return new AssociationEditor(owner, (MCDContRelations) parent, (MCDAssociation) element, mode);
+    protected DialogEditor getDialogEditor(Window owner,
+                                           MVCCDElement parent,
+                                           MVCCDElement element,
+                                           String mode) {
+        return new AssociationEditor(owner, (MCDContRelations) parent, (MCDAssociation) element,
+                mode, new MCDAssociationEditingTreat());
     }
 
     @Override

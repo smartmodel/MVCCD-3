@@ -5,6 +5,8 @@ import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import project.Project;
+import repository.editingTreat.mcd.MCDEntityEditingTreat;
 import utilities.files.UtilFiles;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.SButton;
@@ -21,9 +23,9 @@ public abstract class PanelButtonsContent extends PanelContent
 
     private JPanel panel = new JPanel();
     protected SButton btnOk ;
-    private SButton btnCancel ;
+    protected SButton btnCancel ;
     protected SButton btnApply ;
-    private SButton btnUndo;
+    protected SButton btnUndo;
     private SButton btnHelp ;
     private JTextArea messages ;
     private JScrollPane messagesScroll;
@@ -84,9 +86,12 @@ public abstract class PanelButtonsContent extends PanelContent
         btnApply.addActionListener(this);
         btnApply.setToolTipText("Enregistrer la saisie et garder la fenêtre ouverte");
 
+        /*
         if (getEditor().getMode().equals(DialogEditor.NEW)){
             btnApply.setVisible(false);
         }
+
+         */
 
 
         btnApply.setEnabled(false);
@@ -178,12 +183,18 @@ public abstract class PanelButtonsContent extends PanelContent
             getEditor().dispose();
         }
         if (source == btnApply) {
+            MVCCDElement mvccdElementForUpate = null;
             if (getEditor().getMode().equals(DialogEditor.NEW)) {
                 treatCreate();
-                getEditor().dispose();
+                mvccdElementForUpate = getEditor().getMvccdElementNew();
             }
             if (getEditor().getMode().equals(DialogEditor.UPDATE)) {
                 treatUpdate();
+                mvccdElementForUpate = getEditor().getMvccdElementCrt();
+            }
+            getEditor().dispose();
+            if (getEditor().getEditingTreat() != null){
+                getEditor().getEditingTreat().treatUpdate(getEditor().getOwner(), mvccdElementForUpate);
             }
         }
         if (source == btnUndo) {
@@ -224,21 +235,19 @@ public abstract class PanelButtonsContent extends PanelContent
         if (getEditor().isDatasChanged()) {
             MVCCDManager.instance().setDatasProjectChanged(true);
         }
-
-        MVCCDElement parentBefore = getEditor().getMvccdElementParent();
-        MVCCDElement parentAfter = getEditor().getMvccdElementCrt().getParent();
-        if (parentBefore != parentAfter) {
-            MVCCDManager.instance().changeParentMVCCDElementInRepository(getEditor().getMvccdElementCrt(),
-                    parentBefore);
-        }
     }
 
-    private void  treatCreate(){
+    public void  treatCreate() {
         MVCCDElement newMVCCDElement = createNewMVCCDElement(getEditor().getMvccdElementParentChoosed());
         saveDatas(newMVCCDElement);
         getEditor().setMvccdElementNew(newMVCCDElement);
         getEditor().setDatasChanged(true);
-        MVCCDManager.instance().addNewMVCCDElementInRepository(newMVCCDElement);
+
+       if (!(newMVCCDElement instanceof Project)){
+           // L'ajout doit se faire ici car si l'ajout est réalisé par Apply
+           // le module appelant (editingTreat) ne reprend pas la main et la mise à jour n'est pas faite.
+            MVCCDManager.instance().addNewMVCCDElementInRepository(newMVCCDElement);
+        }
     }
 
     protected void saveDatas(MVCCDElement mvccdElement) {

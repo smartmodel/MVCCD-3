@@ -1,6 +1,7 @@
 package utilities.window.scomponents;
 
 import main.MVCCDManager;
+import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;
@@ -21,12 +22,18 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
     private IPanelInputContent panel;
     private int color;
     private boolean errorInput = false;
-
+    private  JLabel label = null;
 
 
 
     public SComboBox(IPanelInputContent panel) {
         this.panel = panel ;
+        this.setColor(SComponent.COLORNORMAL);
+    }
+
+    public SComboBox(IPanelInputContent panel, JLabel label) {
+        this.panel = panel ;
+        this.label = label;
         this.setColor(SComponent.COLORNORMAL);
     }
 
@@ -65,6 +72,9 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         boolean updated;
         updated = (getSelectedIndex() != oldIndex) || (getSelectedItem() != oldObject);
 
+        if (panel.getEditor().getMode().equals(DialogEditor.NEW)){
+            updated = true;
+        }
 
        if (updated) {
             MVCCDManager.instance().datasProjectChangedFromEditor();
@@ -97,14 +107,22 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         return readOnly;
     }
 
+
     public void setEnabled(boolean enabled){
         if (! isReadOnly()){
             super.setEnabled(enabled);
+            if (label != null) label.setEnabled(enabled);
         } else{
             super.setEnabled(false);
+            if (label != null) label.setEnabled(false);
         }
     }
 
+
+    public void setVisible(boolean visible){
+        super.setVisible(visible);
+        if (label != null) label.setVisible(visible);
+    }
 
 
     @Override
@@ -146,6 +164,11 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
     @Override
     public boolean isCheckPreSave() {
         return checkPreSave;
+    }
+
+    @Override
+    public JLabel getJLabel() {
+        return label;
     }
 
     public boolean isSelectedEmpty(){

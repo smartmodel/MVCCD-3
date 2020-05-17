@@ -2,6 +2,7 @@ package window.editor.mcddatatype;
 
 import datatypes.MCDDatatype;
 import main.MVCCDElement;
+import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import utilities.window.editor.PanelButtons;
@@ -16,16 +17,10 @@ public class MCDDatatypeEditor extends DialogEditor {
     public MCDDatatypeEditor(Window owner,
                              MVCCDElement parent,
                              MCDDatatype mcdDatatype,
-                             String mode)  {
-        super(owner, parent, mcdDatatype, mode, DialogEditor.NOTHING);
-/*
-        super.setSize(Preferences.MCDDATATYPE_WINDOW_WIDTH, Preferences.MCDDATATYPE_WINDOW_HEIGHT);
-        super.setInput(new MCDDatatypeInput(this));
-        super.setButtons (new MCDDatatypeButtons(this));
+                             String mode,
+                             EditingTreat editingTreat)  {
+        super(owner, parent, mcdDatatype, mode, DialogEditor.SCOPE_NOTHING, editingTreat);
 
-        super.start();
-
- */
     }
 
     @Override
@@ -41,6 +36,21 @@ public class MCDDatatypeEditor extends DialogEditor {
     @Override
     protected Dimension getSizeCustom() {
         return new Dimension(Preferences.MCDDATATYPE_WINDOW_WIDTH, Preferences.MCDDATATYPE_WINDOW_HEIGHT);
+    }
+
+    @Override
+    protected void setSizeCustom(Dimension dimension) {
+
+    }
+
+    @Override
+    protected Point getLocationCustom() {
+        return null;
+    }
+
+    @Override
+    protected void setLocationCustom(Point point) {
+
     }
 
     @Override

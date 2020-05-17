@@ -159,6 +159,7 @@ public class MVCCDElementService {
                 childNaming = childNaming.toUpperCase();
             }
 
+            System.out.println(childNaming + "  -  " + namingToCheck);
             if (StringUtils.isNotEmpty(childNaming) && StringUtils.isNotEmpty(namingToCheck)) {
                 if (childNaming.equals(namingToCheck)) {
                     return aBrother;

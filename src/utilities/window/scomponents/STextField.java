@@ -3,6 +3,7 @@ package utilities.window.scomponents;
 import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;
@@ -16,10 +17,19 @@ public class STextField extends JTextField implements SComponent {
     private IPanelInputContent panel;
     private int color;
     private boolean errorInput = false;
+    private  JLabel label;
 
     public STextField(IPanelInputContent panel) {
+        super();
         this.panel = panel;
         this.setColor(SComponent.COLORNORMAL);
+    }
+
+    public STextField(IPanelInputContent panel, JLabel label) {
+        super();
+        this.panel = panel;
+        this.setColor(SComponent.COLORNORMAL);
+        this.label = label;
     }
 
     // Surcharge de la méthode JTextField
@@ -71,6 +81,10 @@ public class STextField extends JTextField implements SComponent {
         } else {
             updated =  StringUtils.isNotEmpty(oldText);
         }
+
+        if (panel.getEditor().getMode().equals(DialogEditor.NEW)){
+            updated = true;
+        }
         if (updated) {
             MVCCDManager.instance().datasProjectChangedFromEditor();
         }
@@ -101,14 +115,23 @@ public class STextField extends JTextField implements SComponent {
     }
 
 
-
     public void setEnabled(boolean enabled){
         if (! isReadOnly()){
             super.setEnabled(enabled);
+            if (label != null) label.setEnabled(enabled);
         } else{
             super.setEnabled(false);
+            if (label != null) label.setEnabled(false);
         }
     }
+
+
+    public void setVisible(boolean visible){
+        super.setVisible(visible);
+        if (label != null) label.setVisible(visible);
+    }
+
+
 
     public void setIndirectInput(boolean indirect){
         if (indirect) {
@@ -149,4 +172,7 @@ public class STextField extends JTextField implements SComponent {
         return errorInput;
     }
 
+    public JLabel getJLabel() {
+        return label;
+    }
 }

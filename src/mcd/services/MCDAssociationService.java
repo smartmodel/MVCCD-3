@@ -63,10 +63,10 @@ public class MCDAssociationService {
             if ((nature == MCDAssociationNature.IDCOMP) || (nature == MCDAssociationNature.CP)) {
                 String contextMessage = "";
                 if (nature == MCDAssociationNature.IDCOMP) {
-                    contextMessage = MessagesBuilder.getMessagesProperty("qualif.association.idcomp");
+                    contextMessage = MessagesBuilder.getMessagesProperty("mcd.association.nature.no.comp");
                 }
                 if (nature == MCDAssociationNature.CP) {
-                    contextMessage = MessagesBuilder.getMessagesProperty("qualif.association.idcomp");
+                    contextMessage = MessagesBuilder.getMessagesProperty("mcd.association.nature.sim.cp");
                 }
                 if ((fieldFromEntity !=null) && (fieldToEntity != null) &&
                         (fieldFromEntity.getSelectedIndex() == fieldToEntity.getSelectedIndex())){

@@ -279,7 +279,7 @@ public class MCDDatatypesCreateDefault {
         string.setSizeDefault(Preferences.MCDDATATYPE_STRING_SIZEDEFAULT);
 
         MCDDatatype normalizedString = createMCDDatatype(
-                text,
+                string,
                 Preferences.MCDDATATYPE_NORMALIZEDSTRING_NAME,
                 Preferences.MCDDATATYPE_NORMALIZEDSTRING_LIENPROG,
                 false);
@@ -287,7 +287,7 @@ public class MCDDatatypesCreateDefault {
         normalizedString.setSizeDefault(Preferences.MCDDATATYPE_NORMALIZEDSTRING_SIZEDEFAULT);
 
         MCDDatatype token = createMCDDatatype(
-                text,
+                normalizedString,
                 Preferences.MCDDATATYPE_TOKEN_NAME,
                 Preferences.MCDDATATYPE_TOKEN_LIENPROG,
                 false);
@@ -295,7 +295,7 @@ public class MCDDatatypesCreateDefault {
         token.setSizeDefault(Preferences.MCDDATATYPE_TOKEN_SIZEDEFAULT);
 
         MCDDatatype word = createMCDDatatype(
-                text,
+                token,
                 Preferences.MCDDATATYPE_WORD_NAME,
                 Preferences.MCDDATATYPE_WORD_LIENPROG,
                 false);

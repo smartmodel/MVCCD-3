@@ -100,6 +100,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             treatGenericRead( this, new MCDAttributesEditingTreat());
         }
 
+        if (node.getUserObject() instanceof MCDContConstraints) {
+            treatConstraints( this);
+        }
+
         if (node.getUserObject() instanceof MCDAttribute) {
             treatGeneric(this, new MCDAttributeEditingTreat());
         }
@@ -109,6 +113,19 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         if (node.getUserObject() instanceof MCDContRelations) {
             treatRelations(this);
+        }
+
+        if ( (node.getUserObject() instanceof MCDUnique) &&
+                (!(node.getUserObject() instanceof MCDNID))){
+            treatGenericNew( this, new MCDUniqueParameterEditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.new.operation.parameter"));
+            treatGeneric(this, new MCDUniqueEditingTreat());
+        }
+
+        if (node.getUserObject() instanceof MCDNID) {
+            treatGenericNew( this, new MCDNIDParameterEditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.new.operation.parameter"));
+            treatGeneric(this, new MCDNIDEditingTreat());
         }
 
         if (node.getUserObject() instanceof MCDAssociation) {
@@ -212,6 +229,12 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 MessagesBuilder.getMessagesProperty("menu.new.association"));
     }
 
+    private void treatConstraints(ISMenu menu) {
+        treatGenericNew(this, new MCDNIDEditingTreat(),
+                MessagesBuilder.getMessagesProperty("menu.new.constraint.nid"));
+        treatGenericNew(this, new MCDUniqueEditingTreat(),
+                MessagesBuilder.getMessagesProperty("menu.new.constraint.unique"));
+    }
 
     private void packageNew(ISMenu menu, boolean top) {
         if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()) {

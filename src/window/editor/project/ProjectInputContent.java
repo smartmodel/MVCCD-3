@@ -174,11 +174,13 @@ public class ProjectInputContent extends PanelInputContent {
     @Override
     public boolean checkDatasPreSave(SComponent sComponent) {
 
+        boolean  ok = super.checkDatasPreSave(sComponent);
         boolean notBatch = panelInput != null;
         boolean unitaire;
 
         unitaire = notBatch && (sComponent == projectName);
-        boolean ok = checkProjectName(unitaire) ;
+        ok = checkProjectName(unitaire) && ok ;
+
 
         super.setPreSaveOk(ok);
         return ok;

@@ -2,6 +2,8 @@ package window.editor.attributes;
 
 import main.MVCCDElement;
 import mcd.MCDContAttributes;
+import preferences.PreferencesManager;
+import repository.editingTreat.EditingTreat;
 import utilities.window.editor.*;
 import preferences.Preferences;
 
@@ -13,8 +15,9 @@ public class AttributesEditor extends DialogEditorNav {
             Window owner,
             MVCCDElement parent,
             MCDContAttributes mcdContAttributes,
-            String mode)  {
-        super(owner, parent, mcdContAttributes, mode, DialogEditor.NOTHING);
+            String mode,
+            EditingTreat editingTreat)  {
+        super(owner, parent, mcdContAttributes, mode, editingTreat);
 /*
         super.setSize(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
         super.setInput(new AttributesInput(this));
@@ -42,7 +45,24 @@ public class AttributesEditor extends DialogEditorNav {
 
     @Override
     protected Dimension getSizeCustom() {
-        return new Dimension(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
+        return PreferencesManager.instance().preferences().getENTITY_WINDOW_SIZE_CUSTOM();
+        //return new Dimension(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
+    }
+
+    @Override
+    protected void setSizeCustom(Dimension dimension) {
+        PreferencesManager.instance().preferences().setENTITY_WINDOW_SIZE_CUSTOM(getSize());
+    }
+
+    @Override
+    protected Point getLocationCustom() {
+        return PreferencesManager.instance().preferences().getENTITY_WINDOW_LOCATION_ONSCREEN();
+
+    }
+
+    @Override
+    protected void setLocationCustom(Point point) {
+        PreferencesManager.instance().preferences().setENTITY_WINDOW_LOCATION_ONSCREEN(getLocationOnScreen());
     }
 
     @Override

@@ -365,6 +365,7 @@ public class AttributeInputContent extends PanelInputContentId {
 
             if (source == aid) {
                 changeFieldSelectedAid();
+                checkDatas(aid);
             }
             if (source == attributeNameAID) {
                 //changeFieldSelectedList();
@@ -398,6 +399,7 @@ public class AttributeInputContent extends PanelInputContentId {
 
         if (source == aid) {
             changeFieldDeSelectedAid();
+            checkDatas(aid);
         }
         if (source == list) {
             changeFieldDeSelectedList();
@@ -595,26 +597,17 @@ public class AttributeInputContent extends PanelInputContentId {
 
     @Override
     public boolean checkDatas(SComponent sComponent){
-        boolean ok = super.checkDatas(sComponent);
-
-
-        if (ok) {
-            boolean notBatch = panelInput != null;
-            boolean unitaire;
-
-            // Autre attributs
-        }
+        boolean ok = super.checkDatas(sComponent) ;
+        boolean notBatch = panelInput != null;
+        boolean unitaire;
 
         return ok;
     }
 
     public boolean checkDatasPreSave(SComponent sComponent) {
-
+        boolean ok = super.checkDatasPreSave(sComponent);
         boolean notBatch = panelInput != null;
         boolean unitaire;
-
-        boolean ok = true;
-
 
         unitaire = notBatch && (sComponent == datatypeSize);
         ok = checkDatatypeSize(unitaire)  && ok;

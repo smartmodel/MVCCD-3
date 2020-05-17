@@ -975,12 +975,7 @@ public class AssociationInputContent extends PanelInputContentId {
         fieldFrozen.setSelected(mcdAssociation.isFrozen());
         fieldDeleteCascade.setSelected(mcdAssociation.isDeleteCascade());
 
-        if (mcdAssociation.getOriented() != null) {
-            SComboBoxService.selectByText(fieldOriented,
-                    PanelInputService.getTextFromBoolean(mcdAssociation.getOriented().booleanValue()));
-        } else {
-            fieldOriented.setSelectedEmpty();
-        }
+        SComboBoxService.selectByBoolean(fieldOriented, mcdAssociation.getOriented());
 
 
         // Au niveau de chacune des 2 extrémités
@@ -1018,10 +1013,10 @@ public class AssociationInputContent extends PanelInputContentId {
             mcdAssociation.setFrozen(fieldFrozen.isSelected());
         }
         if (fieldDeleteCascade.checkIfUpdated()){
-            mcdAssociation.setFrozen(fieldDeleteCascade.isSelected());
+            mcdAssociation.setDeleteCascade(fieldDeleteCascade.isSelected());
         }
         if (fieldOriented.checkIfUpdated()){
-            mcdAssociation.setFrozen(PanelInputService.getBooleanFromText(fieldOriented));
+            mcdAssociation.setOriented(PanelInputService.getBooleanFromText(fieldOriented));
         }
 
         // Au niveau de chacune des 2 extémités

@@ -103,4 +103,8 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         }
         return resultat;
     }
+
+    public static String getClassShortNameUI() {
+        return "Entité";
+    }
 }

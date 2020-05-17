@@ -169,7 +169,6 @@ public abstract class PanelInputContent
             getButtonsContent().getBtnApply().setEnabled(false);
         }
 
-        System.out.println("enabledButtons");
         if (getEditor() instanceof DialogEditorNav){
             DialogEditorNav editor = (DialogEditorNav) getEditor();
             if (! editor.getMode().equals(DialogEditor.NEW)){
