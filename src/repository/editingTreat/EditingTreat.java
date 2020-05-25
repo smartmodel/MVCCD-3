@@ -4,6 +4,7 @@ import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
+import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
 import project.ProjectService;
 import utilities.window.DialogMessage;
@@ -15,9 +16,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static org.apache.commons.lang.StringUtils.lowerCase;
+
 public abstract class EditingTreat {
 
     public MVCCDElement treatNew(Window owner, MVCCDElement parent) {
+
 
         DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW);
         fen.setVisible(true);
@@ -29,7 +33,7 @@ public abstract class EditingTreat {
 
 
 
-        public boolean treatUpdate(Window owner, MVCCDElement element) {
+    public boolean treatUpdate(Window owner, MVCCDElement element) {
         MVCCDElement parentBefore = element.getParent();
         DialogEditor fen = getDialogEditor(owner, element.getParent(), element, DialogEditor.UPDATE);
         fen.setVisible(true);
@@ -38,7 +42,6 @@ public abstract class EditingTreat {
         if (parentBefore != parentAfter) {
             MVCCDManager.instance().changeParentMVCCDElementInRepository(element, parentBefore);
         }
-
         return fen.isDatasChanged();
     }
 
@@ -46,6 +49,20 @@ public abstract class EditingTreat {
         DialogEditor fen = getDialogEditor(owner, element.getParent(), element, DialogEditor.READ);
         fen.setVisible(true);
         return fen;
+    }
+
+
+    public boolean treatDelete (Window owner, MVCCDElement element) {
+        String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
+        String message = MessagesBuilder.getMessagesProperty ("editor.delete.confirm",
+                new String[] { messageTheElement, element.getName()});
+        boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
+        if (confirmDelete){
+                MVCCDManager.instance().removeMVCCDElementInRepository(element, element.getParent());
+                element.removeInParent();
+                element = null;
+        }
+        return element == null;
     }
 
     public void treatCompliant(Window owner, MVCCDElement mvccdElement) {

@@ -24,13 +24,13 @@ public class Repository extends DefaultTreeModel{
     }
 
     public void addChildsNodes(DefaultMutableTreeNode nodeParent, MVCCDElement mvccdElementParent) {
-        for ( MVCCDElement mvccdElement : mvccdElementParent.getChilds()){
+        for ( MVCCDElement mvccdElement : mvccdElementParent.getChildsRepository()){
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(mvccdElement);
              if (mvccdElement instanceof MVCCDElementProfileEntry){
                 nodeProfileEntry = node ;
             }
             nodeParent.add (node);
-            if (mvccdElement.getChilds().size()>0){
+            if (mvccdElement.getChildsRepository().size()>0){
                 addChildsNodes(node, mvccdElement);
             }
         }
@@ -112,7 +112,18 @@ public class Repository extends DefaultTreeModel{
 
     public DefaultMutableTreeNode addMVCCDElement(DefaultMutableTreeNode nodeParent, MVCCDElement mvccdElement)  {
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(mvccdElement);
-        insertNodeInto(node, nodeParent, nodeParent.getChildCount());
+        int index = 0;
+        if (mvccdElement.getParent() != null) {
+            for (MVCCDElement child : mvccdElement.getParent().getChildsRepository()) {
+                if (child == mvccdElement) {
+                    break;
+                }
+                index++;
+            }
+        }
+
+        //insertNodeInto(node, nodeParent, nodeParent.getChildCount());
+        insertNodeInto(node, nodeParent, index);
         if (mvccdElement.getChilds().size()>0){
             for (int i = 0 ; i < mvccdElement.getChilds().size(); i++ ){
                 addMVCCDElement(node, mvccdElement.getChilds().get(i));

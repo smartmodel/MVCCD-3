@@ -5,6 +5,7 @@ import constraints.Constraints;
 import constraints.ConstraintsManager;
 import m.IMCompliant;
 import mcd.interfaces.IMCDParameter;
+import mcd.services.MCDAttributeService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -164,15 +165,21 @@ public class MCDAttribute extends MCDElement implements IMCompliant, IMCDParamet
 
         if (aid){
             resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
-                    preferences.STEREOTYPE_MCDATTRIBUTE_AID_LIENPROG));
+                    preferences.STEREOTYPE_AID_LIENPROG));
         }
         if (mandatory){
             resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
-                    preferences.STEREOTYPE_MCDATTRIBUTE_M_LIENPROG));
+                    preferences.STEREOTYPE_M_LIENPROG));
         }
         if (list){
             resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
-                    preferences.STEREOTYPE_MCDATTRIBUTE_L_LIENPROG));
+                    preferences.STEREOTYPE_L_LIENPROG));
+        }
+
+        if (partOfNIds().size()> 0){
+            for (MCDNID nid : partOfNIds()){
+                resultat.add(nid.getDefaultStereotype());
+            }
         }
 
         return resultat;
@@ -186,7 +193,7 @@ public class MCDAttribute extends MCDElement implements IMCompliant, IMCDParamet
 
         if (ordered){
             resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
-                    preferences.CONSTRAINT_MCDATTRIBUTE_ORDERED_LIENPROG));
+                    preferences.CONSTRAINT_ORDERED_LIENPROG));
         }
 
         return resultat;
@@ -198,10 +205,10 @@ public class MCDAttribute extends MCDElement implements IMCompliant, IMCDParamet
         Preferences preferences = PreferencesManager.instance().preferences();
 
         for (Stereotype stereotype : stereotypes){
-            if (stereotype.getLienProg().equals(preferences.STEREOTYPE_MCDATTRIBUTE_AID_LIENPROG)){
+            if (stereotype.getLienProg().equals(preferences.STEREOTYPE_AID_LIENPROG)){
                 aid = true;
             }
-            if (stereotype.getLienProg().equals(preferences.STEREOTYPE_MCDATTRIBUTE_M_LIENPROG)){
+            if (stereotype.getLienProg().equals(preferences.STEREOTYPE_M_LIENPROG)){
                 mandatory = true;
             }
         }
@@ -216,5 +223,12 @@ public class MCDAttribute extends MCDElement implements IMCompliant, IMCDParamet
     @Override
     public  String getClassShortNameUI() {
         return CLASSSHORTNAMEUI;
+    }
+
+    public MCDEntity getEntityParent(){
+        return (MCDEntity) getParent().getParent();
+    }
+    public ArrayList<MCDNID> partOfNIds(){
+        return MCDAttributeService.partOfNIds(this);
     }
 }

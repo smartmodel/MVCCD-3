@@ -84,6 +84,15 @@ public class MVCCDElementService {
         return resultat;
     }
 
+    public static MVCCDElement getBrotherByClassName (MVCCDElement mvccdElement, String className){
+        for (MVCCDElement aBrother : getBrothers( mvccdElement)){
+            if ( aBrother.getClass().getName().equals(className)){
+               return aBrother;
+            }
+        }
+        return null;
+    }
+
 
 
     public static MVCCDElement nameExistInOthersChilds(ArrayList<MVCCDElement> brothers,
@@ -159,7 +168,6 @@ public class MVCCDElementService {
                 childNaming = childNaming.toUpperCase();
             }
 
-            System.out.println(childNaming + "  -  " + namingToCheck);
             if (StringUtils.isNotEmpty(childNaming) && StringUtils.isNotEmpty(namingToCheck)) {
                 if (childNaming.equals(namingToCheck)) {
                     return aBrother;
@@ -199,5 +207,6 @@ public class MVCCDElementService {
         }
         return null;
     }
+
 
 }

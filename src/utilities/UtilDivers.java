@@ -105,7 +105,7 @@ public class UtilDivers {
 
     public static void putValueRowInTable(JTable table, int selectedRow, Object[] row) {
         if (row.length >= 1) {
-            for (int i = 0; i < row.length - 1; i++) {
+            for (int i = 0; i < row.length ; i++) {
                 table.setValueAt(row[i], selectedRow, i);
             }
         }

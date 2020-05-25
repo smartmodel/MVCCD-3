@@ -6,44 +6,18 @@ import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import m.MElement;
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
-import main.MVCCDManager;
 import mcd.*;
-import mcd.interfaces.IMCDParameter;
-import mcd.services.MCDParameterService;
-import repository.editingTreat.mcd.MCDNIDParameterEditingTreat;
-import repository.editingTreat.mcd.MCDUniqueParameterEditingTreat;
 import utilities.window.editor.DialogEditor;
-import utilities.window.editor.PanelInputContent;
-import preferences.Preferences;
-import preferences.PreferencesManager;
-import project.ProjectElement;
-import project.ProjectService;
-import repository.RepositoryService;
 import repository.editingTreat.mcd.MCDAttributeEditingTreat;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import utilities.UtilDivers;
-import utilities.window.ReadTableModel;
-import utilities.window.editor.PanelInputContentIdTable;
 import utilities.window.editor.PanelInputContentTable;
-import utilities.window.scomponents.SCheckBox;
-import utilities.window.services.ComponentService;
+import utilities.window.scomponents.services.STableService;
 import utilities.window.services.PanelService;
 import window.editor.attribute.AttributeEditor;
-import window.editor.attribute.AttributeTransientEditor;
-import window.editor.operation.OperationParamTableColumn;
-import window.editor.operation.constraint.unique.UniqueEditor;
-import window.editor.operation.parameter.ParameterEditor;
-import window.editor.operation.parameter.ParameterTransientEditor;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
 
 public class AttributesInputContent extends PanelInputContentTable {
@@ -109,25 +83,45 @@ public class AttributesInputContent extends PanelInputContentTable {
         };
     }
 
+    @Override
+    protected boolean specificRefreshRow() {
+        return false;
+    }
+
 
     @Override
-    protected Object[] getNewRow(MElement mElement) {
+    protected MElement newElement() {
+        DialogEditor fen = null;
+        MCDContAttributes mcdContAttribute = (MCDContAttributes) getEditor().getMvccdElementCrt();
+
+        fen = new AttributeEditor(getEditor(), mcdContAttribute, null,
+                DialogEditor.NEW, new MCDAttributeEditingTreat());
+
+        fen.setVisible(true);
+        MVCCDElement newElement = fen.getMvccdElementNew();
+        return (MElement) newElement;
+    }
+
+
+
+    @Override
+    protected Object[] newRow(MElement mElement) {
         Object[] row = new Object [AttributesTableColumn.getNbColumns()];
         putValueInRow(mElement, row);
         return row;
     }
 
     @Override
-    protected MElement getNewElement() {
-        DialogEditor fen = null;
-        MCDContAttributes mcdContAttribute = (MCDContAttributes) getEditor().getMvccdElementCrt();
-
-        fen = new AttributeEditor(getEditor(), mcdContAttribute, null,
-                    DialogEditor.NEW, new MCDAttributeEditingTreat());
-
+    protected void updateElement(MElement mElement) {
+        DialogEditor fen = new AttributeEditor(getEditor(), (MCDContAttributes) mElement.getParent(),
+                (MCDAttribute) mElement,
+                DialogEditor.UPDATE, new MCDAttributeEditingTreat());
         fen.setVisible(true);
-        MVCCDElement newElement = fen.getMvccdElementNew();
-        return (MElement) newElement;
+    }
+
+    @Override
+    protected boolean deleteElement(MElement mElement) {
+        return new MCDAttributeEditingTreat().treatDelete(getEditor(), mElement);
     }
 
     @Override

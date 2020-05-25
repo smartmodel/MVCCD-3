@@ -3,10 +3,12 @@ package mcd.services;
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import exceptions.CodeApplException;
+import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import mcd.MCDAttribute;
 import mcd.MCDEntity;
+import mcd.MCDParameter;
 import mcd.interfaces.IMCDParameter;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
@@ -17,8 +19,12 @@ import java.util.ArrayList;
 
 public class MCDParameterService {
 
-    public static ArrayList<String> checkTarget(String selectedItem, int scope, IMCDParameter iMCDParameterTarget) {
+    public static ArrayList<String> checkTarget(IMCDParameter iMCDParameterTarget,
+                                                String selectedItem,
+                                                int scope) {
         ArrayList<String> messages = new ArrayList<String>();
+
+        //TODO-2 A terme (Opérations de service le nom d'un paramètre pourra être saisi!
         if (StringUtils.isNotEmpty(selectedItem) && (iMCDParameterTarget == null)){
             messages.add(MessagesBuilder.getMessagesProperty( "editor.unique.parameter.target.unknow.error"));
         }
@@ -33,11 +39,14 @@ public class MCDParameterService {
                 }
 
         }
+        if (messages.size() == 0){
+
+        }
         return messages;
     }
 
 
-    public static ArrayList<MCDAttribute> createTargetsAttributesUnique(MCDEntity mcdEntity) {
+    public static ArrayList<MCDAttribute> createTargetsAttributesUnique(MCDEntity mcdEntity, ArrayList<MCDParameter> parameters) {
         ArrayList<MCDAttribute> resultat = new ArrayList<MCDAttribute>();
         ArrayList<MVCCDElement> targetsPotential = MVCCDElementConvert.to(mcdEntity.getMcdAttributes());
         for (MVCCDElement targetPotential : targetsPotential){
@@ -57,7 +66,8 @@ public class MCDParameterService {
                             mcdDatatype.isSelfOrDescendantOf(integer)||
                             mcdDatatype.isDescendantOf(temporal)));
                 }
-                if ( ! (c1 || c2 || c3 || c4 || c5)){
+                boolean c6 = existTargetInParameters( parameters, attributePotential);
+                if ( ! (c1 || c2 || c3 || c4 || c5 || c6)){
                     resultat.add(attributePotential);
                 }
             }
@@ -65,9 +75,9 @@ public class MCDParameterService {
         return resultat;
     }
 
-    public static ArrayList<MCDAttribute> createTargetsAttributesNID(MCDEntity mcdEntity) {
+    public static ArrayList<MCDAttribute> createTargetsAttributesNID(MCDEntity mcdEntity, ArrayList<MCDParameter> parameters) {
         ArrayList<MCDAttribute> resultat = new  ArrayList<MCDAttribute>();
-        ArrayList<MCDAttribute> targetsPotential = createTargetsAttributesUnique(mcdEntity);
+        ArrayList<MCDAttribute> targetsPotential = createTargetsAttributesUnique(mcdEntity, parameters);
         for (MVCCDElement targetPotential : targetsPotential) {
             if (targetPotential instanceof MCDAttribute) {
                 MCDAttribute attributePotential = (MCDAttribute) targetPotential;
@@ -95,5 +105,16 @@ public class MCDParameterService {
                 type + " et de nom " + name + "pour l'entité " + mcdEntity.getName());
     }
 
+    public static boolean existTargetInParameters(ArrayList<MCDParameter> parameters,
+                                                  MElement target){
+        for (MCDParameter parameter : parameters) {
+            if (parameter.getTarget() != null) {
+                if (parameter.getTarget() == target) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

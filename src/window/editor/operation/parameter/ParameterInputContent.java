@@ -71,11 +71,13 @@ public class ParameterInputContent extends PanelInputContent {
 
         if (getEditor().getScope() == ParameterEditor.UNIQUE){
             targetsPotential = MVCCDElementConvert.to(
-                    MCDParameterService.createTargetsAttributesUnique(mcdEntity));
+                    MCDParameterService.createTargetsAttributesUnique(mcdEntity,
+                            mcdOperation.getParameters()));
         }
         if (getEditor().getScope() == ParameterEditor.NID){
             targetsPotential = MVCCDElementConvert.to(
-                    MCDParameterService.createTargetsAttributesNID(mcdEntity));
+                    MCDParameterService.createTargetsAttributesNID(mcdEntity,
+                            mcdOperation.getParameters()));
         }
 
     }
@@ -184,9 +186,12 @@ public class ParameterInputContent extends PanelInputContent {
 
     private boolean checkTarget(boolean unitaire) {
         IMCDParameter iMCDParameterTarget = getTargetByName((String) fieldTarget.getSelectedItem());
+        
         return super.checkInput(fieldTarget, unitaire,
-                MCDParameterService.checkTarget((String) fieldTarget.getSelectedItem(),
-                        getScope(), iMCDParameterTarget));
+                MCDParameterService.checkTarget(
+                        iMCDParameterTarget,
+                        (String) fieldTarget.getSelectedItem(),
+                        getScope()));
     }
 
 

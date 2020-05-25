@@ -3,27 +3,23 @@ package utilities.window.editor;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDAttribute;
+import mcd.MCDConstraint;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 import project.ProjectElement;
 import project.ProjectService;
 import repository.RepositoryService;
-import repository.editingTreat.mcd.MCDAttributeEditingTreat;
 import utilities.UtilDivers;
-import utilities.window.DialogMessage;
 import utilities.window.ReadTableModel;
 import utilities.window.editor.services.PanelInputContentTableService;
+import utilities.window.scomponents.services.STableService;
 import window.editor.attributes.AttributesTableColumn;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Arrays;
 
 public abstract class PanelInputContentTable extends PanelInputContent {
 
@@ -113,6 +109,21 @@ public abstract class PanelInputContentTable extends PanelInputContent {
 
     protected abstract String[] specificColumnsNames();
 
+    protected abstract boolean specificRefreshRow();
+
+
+    protected void refreshRow(int selectedRow){
+        int idElementSelected = (int) table.getValueAt(selectedRow, STableService.IDINDEX);
+        MElement mElementSelected = (MElement) ProjectService.getElementById(idElementSelected);
+
+        MCDConstraint constraint = (MCDConstraint) mElementSelected;
+
+        Object[] row = STableService.getRecord(table, selectedRow);
+
+        putValueInRow(mElementSelected, row);
+        UtilDivers.putValueRowInTable(table, selectedRow, row);
+    };
+
     protected void  makeButtons(){
         btnAdd = new JButton("Ajouter");
         btnAdd.addActionListener(new ActionListener() {
@@ -120,16 +131,33 @@ public abstract class PanelInputContentTable extends PanelInputContent {
             public void actionPerformed(ActionEvent e) {
 
 
-                    MElement mElement = getNewElement();
+                    MElement mElement = newElement();
                     if (mElement != null) {
-                        Object[] row = getNewRow(mElement);
+                        Object[] row = newRow(mElement);
                         model.addRow(row);
                         table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
                         enabledContent();
-
-                        //panelTable.setPreferredSize(dim);
                     }
 
+            }
+        });
+
+
+        btnEdit = new JButton("Editer");
+        btnEdit.setEnabled(false);
+        btnEdit.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e) {
+                int posActual = table.getSelectedRow();
+                if (posActual >= 0){
+                    int idElementSelected = (int) table.getValueAt(posActual, STableService.IDINDEX);
+
+                    MElement mElementActual = (MElement) ProjectService.getElementById(idElementSelected);
+                    updateElement(mElementActual);
+
+                    updateRow(mElementActual, table.getSelectedRow());
+                    enabledContent();
+                }
             }
         });
 
@@ -141,33 +169,16 @@ public abstract class PanelInputContentTable extends PanelInputContent {
                 int posActual = table.getSelectedRow();
                 if (posActual >= 0){
 
-                    //TODO-0 Faire appel treatDelete
-                    DefaultMutableTreeNode nodeAttribute = ProjectService.getNodeById(posActual);
-                    DefaultTreeModel treeModel =  MVCCDManager.instance().getWinRepositoryContent().getTree().getTreeModel();
-                    treeModel.removeNodeFromParent(nodeAttribute);
-                    model.removeRow(posActual);
-                    enabledContent();
+                    int idElementSelected = (int) table.getValueAt(posActual, STableService.IDINDEX);
+                    MElement mElementActual = (MElement) ProjectService.getElementById(idElementSelected);
+
+                    if (deleteElement(mElementActual)) {
+                        model.removeRow(posActual);
+                        enabledContent();
+                    }
                 }
             }
-        });
 
-        btnEdit = new JButton("Editer");
-        btnEdit.setEnabled(false);
-        btnEdit.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e) {
-                int posActual = table.getSelectedRow();
-                if (posActual >= 0){
-                    int posId = AttributesTableColumn.ID.getPosition();
-                    //TODO-0 Faire appel treatEdit
-                    Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
-                    MCDAttribute mcdAttributeActual = (MCDAttribute) ProjectService.getElementById(idActual);
-                    new MCDAttributeEditingTreat().treatUpdate( getEditor(), mcdAttributeActual);
-
-                    updateRow(mcdAttributeActual, table.getSelectedRow());
-                    enabledContent();
-                }
-            }
         });
 
         btnUp = new JButton("^");
@@ -181,6 +192,11 @@ public abstract class PanelInputContentTable extends PanelInputContent {
                     model.moveRow(posActual, posActual, posActual-1);
                     table.setRowSelectionInterval(posActual-1, posActual-1);
                     permuteOrder(posActual, posActual - 1);
+                    // pour la mise à jour des  champs calculés comme les stéréotypes d'unicité
+                    if (specificRefreshRow()) {
+                        refreshRow(posActual);
+                        refreshRow(posActual - 1);
+                    }
                 }
                 enabledContent();
                 //TODO-1 Vérfier un changement effectif
@@ -200,6 +216,11 @@ public abstract class PanelInputContentTable extends PanelInputContent {
                     model.moveRow(posActual, posActual, posActual+1);
                     table.setRowSelectionInterval(posActual+1, posActual+1);
                     permuteOrder(posActual, posActual + 1);
+                    // pour la mise à jour des  champs calculés comme les stéréotypes d'unicité
+                    if (specificRefreshRow()) {
+                        refreshRow(posActual);
+                        refreshRow(posActual + 1);
+                    }
                 }
                 enabledContent();
                 //TODO-1 Vérfier un changement effectif
@@ -210,9 +231,21 @@ public abstract class PanelInputContentTable extends PanelInputContent {
         });
     }
 
-    protected abstract Object[] getNewRow(MElement mElement);
 
-    protected abstract MElement getNewElement();
+    protected abstract MElement newElement();
+
+    protected abstract Object[] newRow(MElement mElement);
+
+    protected abstract void updateElement(MElement mElement);
+
+    protected void updateRow(MElement mElement, int selectedRow) {
+
+        Object[] row = STableService.getRecord(table, selectedRow);
+        putValueInRow(mElement, row);
+        UtilDivers.putValueRowInTable(table, selectedRow, row);
+    }
+
+    protected abstract boolean deleteElement(MElement mElement);
 
 
     private void  makeLayout(){
@@ -249,20 +282,7 @@ public abstract class PanelInputContentTable extends PanelInputContent {
     }
 
 
-
-    private void updateRow(MElement mElementSelected, int selectedRow) {
-
-        Object[] row = new Object [AttributesTableColumn.getNbColumns()];
-        putValueInRow(mElementSelected, row);
-        UtilDivers.putValueRowInTable(table, selectedRow, row);
-
-    }
-
-
-
     protected abstract void putValueInRow(MElement mElement, Object[] row);
-
-
 
 
     @Override
@@ -294,7 +314,7 @@ public abstract class PanelInputContentTable extends PanelInputContent {
 
     private void permuteOrder(int posActual, int posNew) {
 
-        int posOrder = AttributesTableColumn.ORDER.getPosition();
+        int posOrder = STableService.ORDERINDEX;
         Integer orderActual = (Integer) table.getModel().getValueAt(posActual, posOrder);
         Integer orderNew = (Integer) table.getModel().getValueAt(posNew, posOrder);
 

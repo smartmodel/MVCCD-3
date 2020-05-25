@@ -60,7 +60,7 @@ public class MCDAssociationEditingTreat extends EditingTreat {
     }
 */
 
-    @Override
+       @Override
     protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
         ArrayList<String> resultat = new ArrayList<String>();
         return resultat;

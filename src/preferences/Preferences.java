@@ -138,15 +138,30 @@ public class Preferences extends MVCCDElement {
 
     public static Color SCOMPONENT_INDIRECT_INPUT_FOREGROUND = Color.RED;
 
-    public static String STEREOTYPE_MCDATTRIBUTE_AID_NAME = "AID";
-    public static String STEREOTYPE_MCDATTRIBUTE_AID_LIENPROG = "AID";
-    public static String STEREOTYPE_MCDATTRIBUTE_M_NAME = "M";
-    public static String STEREOTYPE_MCDATTRIBUTE_M_LIENPROG = "M";
-    public static String STEREOTYPE_MCDATTRIBUTE_L_NAME = "L";
-    public static String STEREOTYPE_MCDATTRIBUTE_L_LIENPROG = "L";
+    public static String STEREOTYPE_SEPARATOR = "-";
 
-    public static String CONSTRAINT_MCDATTRIBUTE_ORDERED_NAME = "ordered";
-    public static String CONSTRAINT_MCDATTRIBUTE_ORDERED_LIENPROG = "ordered";
+    public static String STEREOTYPE_AID_NAME = "AID";
+    public static String STEREOTYPE_AID_LIENPROG = "AID";
+    public static String STEREOTYPE_M_NAME = "M";
+    public static String STEREOTYPE_M_LIENPROG = "M";
+    public static String STEREOTYPE_L_NAME = "L";
+    public static String STEREOTYPE_L_LIENPROG = "L";
+    public static String STEREOTYPE_LP_NAME = "LP";
+    public static String STEREOTYPE_LP_LIENPROG = "LP";
+
+    public static int STEREOTYPE_NID_MAX = 5;
+    public static String STEREOTYPE_NID_BASE_NAME = "NID";
+    public static String STEREOTYPE_NID_BASE_LIENPROG = "NID";
+
+    public static int STEREOTYPE_U_MAX = 10;
+    public static String STEREOTYPE_U_BASE_NAME = "U";
+    public static String STEREOTYPE_U_BASE_LIENPROG = "U";
+
+    public static String CONSTRAINT_ORDERED_NAME = "ordered";
+    public static String CONSTRAINT_ORDERED_LIENPROG = "ordered";
+
+    public static String CONSTRAINT_ABSOLUTE_NAME = "absolute";
+    public static String CONSTRAINT_ABSOLUTE_LIENPROG = "absolute";
 
     public static String MCDDATATYPE_ROOT_NAME = "MCD";
     public static String MCDDATATYPE_ROOT_LIENPROG = "MCD";

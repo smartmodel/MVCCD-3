@@ -340,18 +340,24 @@ public class AttributeInputContent extends PanelInputContentId {
 
     protected boolean changeField(DocumentEvent e) {
         boolean ok = super.changeField(e);
+
         SComponent sComponent = null;
         Document doc = e.getDocument();
         if (doc == datatypeSize.getDocument()){
             sComponent = datatypeSize;
-            checkDatas(datatypeSize);
         }
         if (doc == datatypeScale.getDocument()){
             sComponent = datatypeScale;
-            checkDatas(datatypeScale);
         }
 
-        // Autres champs que les champs Id
+        if (sComponent == attributeNameAID) {
+            changeFieldSelectedAttributeNameAID();
+        }
+
+        if (sComponent != null) {
+            ok = treatField(sComponent) ;
+        }
+
         return ok;
     }
 
@@ -362,32 +368,22 @@ public class AttributeInputContent extends PanelInputContentId {
         super.changeFieldSelected(e);
             Object source = e.getSource();
 
+        if (source == aid) {
+            changeFieldSelectedAid();
+        }
+        if (source == list) {
+            changeFieldSelectedList();
+        }
+        if (source == attributeNameAID) {
+            changeFieldSelectedAttributeNameAID();
+        }
+        if (source == datatypeName) {
+            changeFieldSelectedDatatypeName();
+        }
 
-            if (source == aid) {
-                changeFieldSelectedAid();
-                checkDatas(aid);
-            }
-            if (source == attributeNameAID) {
-                //changeFieldSelectedList();
-                changeFieldSelectedAttributeNameAID();
-            }
-                if (source == list) {
-                changeFieldSelectedList();
-            }
-            if (source == datatypeName) {
-                //changeFieldSelectedList();
-                changeFieldSelectedDatatypeName();
-                checkDatas(datatypeName);
-            }
-            if (source == mandatory) {
-            }
-            if (source == uppercase) {
-            }
-            if (source == frozen) {
-            }
-            if (source == ordered) {
-            }
-
+        if (source instanceof SComponent){
+            treatField( (SComponent) source);
+        }
     }
 
 
@@ -396,24 +392,16 @@ public class AttributeInputContent extends PanelInputContentId {
     protected void changeFieldDeSelected(ItemEvent e) {
         Object source = e.getSource();
 
-
         if (source == aid) {
             changeFieldDeSelectedAid();
-            checkDatas(aid);
         }
         if (source == list) {
             changeFieldDeSelectedList();
         }
-        if (source == datatypeName) {
-            checkDatas(datatypeName);
-        }
-        if (source == mandatory) {
-        }
-        if (source == uppercase) {
-        }
-        if (source == frozen) {
-        }
-        if (source == ordered) {
+
+
+        if (source instanceof SComponent){
+            treatField( (SComponent) source);
         }
 
     }
@@ -580,14 +568,21 @@ public class AttributeInputContent extends PanelInputContentId {
 
     @Override
     public void focusGained(FocusEvent focusEvent) {
-        super.focusGained(focusEvent);
+        if (panelInput != null) {
+            // Ne pas donner la main à PanelInputContentId car l'identification est surchargée
+            super.focusGainedByPass(focusEvent);
+        }
+
         Object source = focusEvent.getSource();
-        if (source == datatypeSize) {
-            checkDatas(datatypeSize);
+
+        if (source instanceof SComponent) {
+            treatField((SComponent) source);
         }
-        if (source == datatypeScale) {
-            checkDatas(datatypeScale);
-        }
+
+    }
+
+    private boolean treatField(SComponent sComponent) {
+        return checkDatas(sComponent);
     }
 
     @Override
@@ -618,8 +613,6 @@ public class AttributeInputContent extends PanelInputContentId {
         unitaire = notBatch && ((sComponent == datatypeSize) ||
                 (sComponent == datatypeScale));
         ok = checkSizeAndScale(unitaire)  && ok;
-
-
         setPreSaveOk(ok);
         return ok;
     }
@@ -780,6 +773,7 @@ public class AttributeInputContent extends PanelInputContentId {
         datatypeName.setSelectedFirst();
         datatypeSize.setText("");
         datatypeScale.setText("");
+        aid.setSelected(false);
         mandatory.setSelected(false);
         list.setSelected(false);
         ordered.setSelected(false);
@@ -807,6 +801,8 @@ public class AttributeInputContent extends PanelInputContentId {
         if (mcdAttribute.isAid()) {
             // redondance entre les 2 champs attributeName et attributeNameAID
             SComboBoxService.selectByText(attributeNameAID, fieldName.getName());
+        } else {
+            attributeNameAID.setSelectedFirst();
         }
 
 
@@ -831,7 +827,6 @@ public class AttributeInputContent extends PanelInputContentId {
         ArrayList<Stereotype> stereotypes =  mcdAttribute.getToStereotypes();
         ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
         stereotypesStringUML.setText(UtilDivers.ArrayStringToString(stereotypesUMLNames, ""));
-
     }
 
 
@@ -879,6 +874,10 @@ public class AttributeInputContent extends PanelInputContentId {
         }
 
         saveSizeAndScale(mcdAttribute, mcdDatatype);
+
+        if (aid.checkIfUpdated()){
+            mcdAttribute.setMandatory(mandatory.isSelected());
+        }
 
         if (mandatory.checkIfUpdated()){
             mcdAttribute.setMandatory(mandatory.isSelected());

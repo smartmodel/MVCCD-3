@@ -1,17 +1,15 @@
 package main;
 
-import mcd.MCDElement;
+import datatypes.MDDatatype;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
-import project.ProjectElement;
-import project.ProjectService;
 import utilities.Debug;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElement>{
+public abstract class MVCCDElement implements Serializable {
 
     private static final long serialVersionUID = 1000;
 
@@ -19,15 +17,16 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
     public static final int SCOPESHORTNAME = 2;
     public static final int SCOPELONGNAME = 3;
     public static final int SCOPENOTNAME = 4;
+    public static int FIRSTVALUEORDER = 10;
+    public static int INTERVALORDER = 10;
+
 
     private MVCCDElement parent;
     private String name;
     private String shortName;
     private String longName;
     private int order;
-    private int firstValueOrder = 10;
-    private int intervalOrder = 10;
-    //private boolean uniqueInParent = true;
+     //private boolean uniqueInParent = true;
 
     private ArrayList<MVCCDElement> childs = new ArrayList<MVCCDElement>();
 
@@ -46,7 +45,7 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
     private void init(){
         if (parent != null) {
             if (parent.getChilds().size() == 0){
-                order = firstValueOrder;
+                order = FIRSTVALUEORDER;
             } else {
                 int valueMax = 0 ;
                 for (MVCCDElement child : parent.getChilds()){
@@ -54,11 +53,11 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
                         valueMax = child.getOrder();
                     }
                 }
-                order = valueMax + intervalOrder;
+                order = valueMax + INTERVALORDER;
             }
             parent.getChilds().add(this);
         } else {
-            order = firstValueOrder;
+            order = FIRSTVALUEORDER;
         }
     }
 
@@ -117,7 +116,7 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
 
 
     public ArrayList<MVCCDElement> getChilds() {
-        Collections.sort(childs, MVCCDElement::compareTo);
+        Collections.sort(childs, MVCCDElement::compareToOrder);
         return childs;
     }
 
@@ -129,6 +128,48 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
             }
         }
         return resultat;
+    }
+
+    public ArrayList<MVCCDElement> getChildsRepository() {
+        Collections.sort(childs, MVCCDElement::compareToOrder);
+        return childs;
+    }
+
+    public int getChildOrderIndex(MVCCDElement child){
+        int index = -1 ;
+        for (MVCCDElement aChild : getChilds()){
+            index ++;
+            if (aChild == child){
+               return index;
+            }
+        }
+        return index;
+    }
+
+    public int getChildOrderIndexSameClass(MVCCDElement child){
+        int index = -1 ;
+        for (MVCCDElement aChild : getChilds()){
+            if (aChild.getClass() == child.getClass()) {
+                index++;
+                if (aChild == child) {
+                    return index;
+                }
+            }
+        }
+        return index;
+    }
+
+
+    public MVCCDElement getBrotherByClassName (String className){
+        return MVCCDElementService.getBrotherByClassName(this, className);
+    }
+
+    public int getOrderIndexInParent(){
+        return getParent().getChildOrderIndex(this);
+    }
+
+    public int getOrderIndexInParentSameClass(){
+        return getParent().getChildOrderIndexSameClass(this);
     }
 
     public ArrayList<MVCCDElement> getDescendants(){
@@ -143,6 +184,48 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
             }
         }
         return resultat;
+    }
+
+
+    public boolean isDescendantOf(MVCCDElement ancestor){
+        boolean resultat = false;
+        if (getParent() != null){
+            if (parent == ancestor) {
+                resultat = true;
+            } else {
+                resultat = parent.isDescendantOf(ancestor);
+            }
+        }
+        return resultat;
+    }
+
+    public boolean isSelfOrDescendantOf(MVCCDElement ancestor){
+        if (this == ancestor){
+            return true;
+        } else {
+            return isDescendantOf(ancestor);
+        }
+    }
+
+
+    public boolean isDescendantOf(String ancestorClassName){
+        boolean resultat = false;
+        if (getParent() != null){
+            if (parent.getClass().getName().equals(ancestorClassName)) {
+                resultat = true;
+            } else {
+                resultat = parent.isDescendantOf(ancestorClassName);
+            }
+        }
+        return resultat;
+    }
+
+    public boolean isSelfOrDescendantOf(String ancestorClassName){
+        if (this.getClass().getName().equals(ancestorClassName)){
+            return true;
+        } else {
+            return isDescendantOf(ancestorClassName);
+        }
     }
 
 
@@ -205,7 +288,7 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
        }
     }
 
-    public int compareTo(MVCCDElement o) {
+    public int compareToOrder(MVCCDElement o) {
         if ( this.getOrder() > o.getOrder()){
             return 1;
         } else if (this.getOrder() == o.getOrder()){
@@ -213,6 +296,11 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
         } else {
             return -1;
         }
+    }
+
+    public  int compareToName(MVCCDElement o) {
+        return this.getName().compareTo(o.getName());
+        //return o.getName().compareToIgnoreCase(this.getName());
     }
 
     public boolean implementsInterface(String className) {
@@ -238,5 +326,14 @@ public abstract class MVCCDElement implements Serializable, Comparable<MVCCDElem
 
     public void setParent(MVCCDElement parent) {
         this.parent = parent;
+        parent.getChilds().add(this);
     }
+
+    public void removeInParent(){
+        if (this.getParent() != null){
+            this.getParent().getChilds().remove(this);
+        }
+   }
+
+
 }

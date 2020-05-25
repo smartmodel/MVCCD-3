@@ -1,13 +1,16 @@
 package mcd.services;
 
 import exceptions.CodeApplException;
+import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDElementService;
 import mcd.MCDElement;
+import mcd.MCDParameter;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.window.scomponents.SComboBox;
+import utilities.window.scomponents.STable;
 
 import java.util.ArrayList;
 
@@ -264,6 +267,8 @@ public class MCDUtilService {
     }
 
 
+
+
     public static ArrayList<String> checkShortNameId(ArrayList<MVCCDElement> brothers,
                                                      String shortName,
                                                      String shortNameId,
@@ -333,4 +338,24 @@ public class MCDUtilService {
         }
         return messages;
     }
+
+    public static ArrayList<String> checkRows(STable table,
+                                              Integer minRows,
+                                              Integer maxRows,
+                                              String contextProperty,
+                                              String rowContextProperty){
+
+        ArrayList<String> messages = new ArrayList<String>();
+        String contextMessage = MessagesBuilder.getMessagesProperty(contextProperty);
+        String rowContextMessage = MessagesBuilder.getMessagesProperty(rowContextProperty);
+        if (minRows != null) {
+            if (table.getRowCount() < minRows) {
+                messages.add(MessagesBuilder.getMessagesProperty("editor.table.row.min"
+                        , new String[]{contextMessage , minRows.toString() , rowContextMessage}));
+            }
+        }
+        return messages;
+    }
+
+
 }

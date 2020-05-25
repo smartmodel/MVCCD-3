@@ -4,6 +4,7 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
+import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 
 import javax.swing.*;
@@ -77,6 +78,8 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
         start();
     }
+
+
 
 /*
     public DialogEditor(Window owner,
@@ -156,6 +159,8 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
         startExtended();
         initialResize();
+
+
 
     }
 
@@ -360,9 +365,12 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         return editingTreat;
     }
 
-    public void dispose(){
+    //TOD=-2 J'ai du écrire de mon propre dispose et nons surcharger car j'avais un appel parasite!
+    public void myDispose(){
         setLocationCustom(getLocationOnScreen());
         setSizeCustom(getSize());
         super.dispose();
     }
+
+
 }

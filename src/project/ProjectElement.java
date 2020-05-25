@@ -31,20 +31,14 @@ public abstract class ProjectElement extends MVCCDElement {
             // Le projet lui-même
             this.id = 0;
         } else {
-            //this.id = ProjectService.getProjectRoot(this).getNextIdElementSequence();
-            this.id= MVCCDManager.instance().getProject().getNextIdElementSequence();
+            if (parent instanceof Project){
+                this.id = ProjectService.getProjectRoot(this).getNextIdElementSequence();
+            } else {
+                this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
+            }
             if ( parent == null) {
                 transitory = true;
             }
-/*
-            // pas d'Id pour les éléments transients dont le parent est null (et non Project)
-            if ( parent != null) {
-                this.id = ProjectService.getProjectRoot(this).getNextIdElementSequence();
-            } else {
-                //this.id = IDTRANSIENT;
-            }
-
- */
         }
     }
 

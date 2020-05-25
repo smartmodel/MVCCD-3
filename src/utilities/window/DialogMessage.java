@@ -37,5 +37,9 @@ public class DialogMessage {
                 JOptionPane.QUESTION_MESSAGE, null, options, options[1] );
     }
 
-
+    public static int showOptions(Window owner, String message, Object[] options, Object optionSelected) {
+        String title = MessagesBuilder.getMessagesProperty("dialog.option");
+        return JOptionPane.showOptionDialog(owner, message, title, JOptionPane.CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, options, optionSelected );
+    }
 }

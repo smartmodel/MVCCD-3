@@ -1,6 +1,7 @@
 package stereotypes;
 
 import main.MVCCDElement;
+import preferences.Preferences;
 
 import java.util.ArrayList;
 
@@ -39,6 +40,14 @@ public class Stereotypes extends MVCCDElement {
             }
         }
         return null;
+    }
+
+    public Stereotype getStereotypeByLienProg(String className, String lienProgBase, int position){
+        return getStereotypeByLienProg( className,
+                getLienProgByPosition(lienProgBase, position));
+    }
+    public String getLienProgByPosition(String lienProgBase, int position){
+        return lienProgBase + Preferences.STEREOTYPE_SEPARATOR + position;
     }
 
     public ArrayList<Stereotype> getStereotypeByClassNameAndNames( String className,

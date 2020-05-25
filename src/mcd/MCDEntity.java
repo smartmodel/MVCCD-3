@@ -6,6 +6,7 @@ import mcd.interfaces.IMCDNamePathParent;
 import project.ProjectElement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompliant {
 
@@ -88,6 +89,15 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return null;
     }
 
+    public MCDContConstraints getMCDContConstraints() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MCDContConstraints) {
+                return (MCDContConstraints) mvccdElement;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String getNameTree() {
         return null;
@@ -107,4 +117,6 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
     public static String getClassShortNameUI() {
         return "Entité";
     }
+
+
 }

@@ -6,25 +6,23 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
-import mcd.interfaces.IMCDParameter;
-import mcd.services.MCDParameterService;
+import mcd.services.MCDUtilService;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 import project.ProjectElement;
 import project.ProjectService;
 import repository.RepositoryService;
-import repository.editingTreat.mcd.MCDAttributeEditingTreat;
 import utilities.UtilDivers;
 import utilities.window.DialogMessage;
 import utilities.window.ReadTableModel;
 import utilities.window.editor.services.PanelInputContentTableService;
+import utilities.window.scomponents.SComponent;
+import utilities.window.scomponents.STable;
+import utilities.window.scomponents.services.STableService;
 import window.editor.attributes.AttributesTableColumn;
-import window.editor.operation.OperationParamTableColumn;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -33,7 +31,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     protected JPanel panelIdTable = new JPanel();
 
-    protected JTable table;
+    protected STable table;
     String[] columnsNames;
     protected DefaultTableModel model;
     protected Object[][] datas;
@@ -70,21 +68,26 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
     protected void makeTable() {
 
         columnsNames = PanelInputContentTableService.columnsNames(specificColumnsNames());
-
-        specificInitOrLoadTable();
+        if (getEditor().getMode().equals(DialogEditor.NEW)){
+            specificInit();
+        } else {
+            specificLoad();
+        }
         oldDatas = datas;
 
         model = new ReadTableModel(datas, columnsNames);
 
-
-        table = new JTable();
+        table = new STable(this, null);
         table.setModel(model);
         table.setRowHeight(Preferences.EDITOR_TABLE_ROW_HEIGHT);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table.setFillsViewportHeight(true);
+        table.addFocusListener(this);
 
         PanelInputContentTableService.genericColumnsDisplay(table);
         specificColumnsDisplay();
+
+        super.getsComponents().add(table);
 
 
         table.addMouseListener(new MouseListener() {
@@ -92,6 +95,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
             public void mouseClicked(MouseEvent mouseEvent) {
                 // ce ne sont pas les boutons standards mais ceux ceux spécifiques à la table
                 enabledContent();
+                checkDatas(table);
             }
 
             @Override
@@ -118,7 +122,6 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     protected abstract void specificColumnsDisplay();
 
-    protected abstract void specificInitOrLoadTable();
 
     protected abstract String[] specificColumnsNames();
 
@@ -129,7 +132,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
             public void actionPerformed(ActionEvent e) {
 
                 if (getEditor().getMode().equals(DialogEditor.NEW)) {
-                    
+                    // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas confirmé
                     if (DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageAdd()) == JOptionPane.YES_OPTION) {
                         getActionApply();
                      }
@@ -139,9 +142,8 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
                         Object[] row = getNewRow(mElement);
                         model.addRow(row);
                         table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
-                        enabledContent();
                         newTransitoryElements.add(mElement);
-                        //panelTable.setPreferredSize(dim);
+                        tableContentChanged();
                     }
                 }
             }
@@ -154,19 +156,17 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
             public void actionPerformed(ActionEvent e) {
                 int posActual = table.getSelectedRow();
                 if (posActual >= 0){
-
-                    //TODO-0 Faire appel treatDelete
-                    DefaultMutableTreeNode nodeAttribute = ProjectService.getNodeById(posActual);
-                    DefaultTreeModel treeModel =  MVCCDManager.instance().getWinRepositoryContent().getTree().getTreeModel();
-                    treeModel.removeNodeFromParent(nodeAttribute);
                     model.removeRow(posActual);
-                    enabledContent();
+                    tableContentChanged();
                 }
             }
         });
 
         btnEdit = new JButton("Editer");
         btnEdit.setEnabled(false);
+        //TODO-1 Inactif tant que la modification n''est pas traitée
+        // A priori, lorsqu'il qu'il y aura des paramètres personnaliés dans les opérations de service
+        btnEdit.setVisible(false);
         btnEdit.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e) {
@@ -174,12 +174,9 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
                 if (posActual >= 0){
                     int posId = AttributesTableColumn.ID.getPosition();
                     //TODO-0 Faire appel treatEdit
-                    Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
-                    MCDAttribute mcdAttributeActual = (MCDAttribute) ProjectService.getElementById(idActual);
-                    new MCDAttributeEditingTreat().treatUpdate( getEditor(), mcdAttributeActual);
 
-                    updateRow(mcdAttributeActual, table.getSelectedRow());
-                    enabledContent();
+                    //updateRow(mcdAttributeActual, table.getSelectedRow());
+                    tableContentChanged();
                 }
             }
         });
@@ -195,13 +192,9 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
                     model.moveRow(posActual, posActual, posActual-1);
                     table.setRowSelectionInterval(posActual-1, posActual-1);
                     permuteOrder(posActual, posActual - 1);
+                    tableContentChanged();
                 }
-                enabledContent();
-                //TODO-1 Vérfier un changement effectif
-                //Détecter un changement au niveau de la table JTable --> STable et ensuite déclenechement automatique
-                enabledButtons();
-
-            }
+             }
         });
 
         btnDown = new JButton("v");
@@ -214,14 +207,17 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
                     model.moveRow(posActual, posActual, posActual+1);
                     table.setRowSelectionInterval(posActual+1, posActual+1);
                     permuteOrder(posActual, posActual + 1);
+                    tableContentChanged();
                 }
-                enabledContent();
-                //TODO-1 Vérfier un changement effectif
-                //Détecter un changement au niveau de la table JTable --> STable et ensuite déclenechement automatique
-                enabledButtons();
-
             }
         });
+    }
+
+    protected void tableContentChanged(){
+        table.actionChangeActivated();
+        enabledContent();
+        enabledButtons();
+        checkDatas(table);
     }
 
     protected abstract void getActionApply();
@@ -312,6 +308,26 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     @Override
     protected void enabledContent() {
+        int pos = table.getSelectedRow();
+        if (pos >= 0){
+            btnRemove.setEnabled(true);
+            btnEdit.setEnabled(true);
+            if (pos > 0){
+                btnUp.setEnabled(true);
+            } else {
+                btnUp.setEnabled(false);
+            }
+            if (pos == table.getRowCount()-1){
+                btnDown.setEnabled(false);
+            } else{
+                btnDown.setEnabled(true);
+            }
+        } else {
+            btnRemove.setEnabled(false);
+            btnEdit.setEnabled(false);
+            btnUp.setEnabled(false);
+            btnDown.setEnabled(false);
+        }
 
     }
 
@@ -323,60 +339,64 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     @Override
     protected void initDatas() {
-        Preferences preferences = PreferencesManager.instance().preferences();
         super.initDatas();
-
     }
+
+    protected abstract void specificInit();
 
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
         super.loadDatas(mvccdElement);
 
-        //MCDUnique mcdUnique = (MCDUnique) mvccdElementCrt;
-
     }
+
+    protected abstract void specificLoad();
 
     @Override
     protected void saveDatas(MVCCDElement mvccdElement) {
         super.saveDatas(mvccdElement);
-
-        if (oldDatas.length > 0){
-            for (int i = 0; i < oldDatas.length; i++){
-                if ( deleted(oldDatas[i])){
-                    getEditor().setDatasChanged(true);
+        if (table.checkIfUpdated()){
+            deleteNoUsedRecord(mvccdElement);
+            if (model.getRowCount()> 0){
+                for (int i = 0; i < model.getRowCount() ; i++){
+                    if ((boolean) model.getValueAt(i, 1)) {
+                        appendNewRecord(i);
+                    }
                 }
             }
-
+            getEditor().setDatasChanged(true);
         }
+     }
 
-        //Ajout
-        if (model.getRowCount()> 0){
-            for (int i = 0; i < model.getRowCount() ; i++){
-                if (  ((boolean) model.getValueAt(i,1))){
-                    appendNewRecord(i);
-                    getEditor().setDatasChanged(true);
-                }
-            }
+    private void deleteNoUsedRecord(MVCCDElement mvccdElement) {
+        for (int i = mvccdElement.getChilds().size() - 1; i >= 0; i--) {
+            ProjectElement projectChildElement = (project.ProjectElement) mvccdElement.getChilds().get(i);
+            if (!STableService.existRecordById(table, projectChildElement.getId())) {
+                MVCCDManager.instance().removeMVCCDElementInRepository(projectChildElement, projectChildElement.getParent());
+                projectChildElement.removeInParent();
+                projectChildElement = null;
+             }
         }
-
-        //Reordonnacement
     }
 
-    private void appendNewRecord(int i) {
 
-        int idNewRecord = (int) model.getValueAt(i, OperationParamTableColumn.ID.getPosition());
+
+    private void appendNewRecord(int i) {
+        int idNewRecord = (int) model.getValueAt(i, STableService.IDINDEX);
         MElement newElement = getNewTransitoryElementById(idNewRecord);
 
         newElement.setParent(getEditor().getMvccdElementCrt());
         newElement.setTransitory(false);
 
-        specificAppendNewRecord(i, newElement);
+        int order = STable.getOrderByLine(i);
+        newElement.setOrder(order);
+        specificSaveCompleteRecord(i, newElement);
 
         MVCCDManager.instance().addNewMVCCDElementInRepository(newElement);
     }
 
 
-    protected abstract void specificAppendNewRecord(int line, MElement mElement);
+    protected abstract void specificSaveCompleteRecord(int line, MElement mElement);
 
 
     protected  boolean deleted(Object[] oldData){
@@ -443,5 +463,32 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         }
         throw new CodeApplException("L'id >" + id + "< n'a pas été trouvé dans les éléments transitoires" );
     }
+
+    public boolean checkDatas(SComponent sComponent){
+        boolean ok = super.checkDatas(sComponent);
+        boolean notBatch = panelInput != null;
+
+        boolean unitaire = notBatch && (sComponent == table);
+        ok = checkDetails(unitaire);
+        return ok;
+    }
+
+    protected boolean checkDetails(boolean unitaire) {
+        return super.checkInput(table, unitaire, MCDUtilService.checkRows(
+                table,
+                getMinRows(),
+                getMaxRows(),
+                getContextProperty(),
+                getRowContextProperty(getMinRows())));
+    }
+
+
+    protected abstract Integer getMinRows();
+
+    protected abstract Integer getMaxRows();
+
+    protected abstract String getContextProperty();
+
+    protected abstract String getRowContextProperty(Integer minRows);
 
 }

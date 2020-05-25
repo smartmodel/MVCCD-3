@@ -2,26 +2,20 @@ package window.editor.operation.constraint.unique;
 
 import m.MElement;
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
-import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDParameter;
+import mcd.services.MCDOperationService;
 import mcd.services.MCDParameterService;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import preferences.PreferencesManager;
-import project.Project;
-import project.ProjectElement;
-import project.ProjectService;
-import repository.editingTreat.mcd.MCDAttributeEditingTreat;
-import repository.editingTreat.mcd.MCDNIDParameterEditingTreat;
-import repository.editingTreat.mcd.MCDUniqueParameterEditingTreat;
-import utilities.window.ReadTableModel;
+import repository.editingTreat.mcd.*;
+import stereotypes.Stereotype;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentIdTable;
 import utilities.window.scomponents.SCheckBox;
-import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
@@ -42,6 +36,8 @@ public class UniqueInputContent extends PanelInputContentIdTable {
     private SCheckBox fieldLienProg ;
     private JLabel labelAbsolute ;
     private SCheckBox fieldAbsolute ;
+    private JLabel labelStereotype ;
+    private STextField fieldStereotype ;
 
 
     //TODO-1 Mettre une constante globale int = -1
@@ -86,6 +82,12 @@ public class UniqueInputContent extends PanelInputContentIdTable {
             super.getsComponents().add(fieldAbsolute);
         }
 
+        labelStereotype = new JLabel("Stéréotype");
+        fieldStereotype = new STextField(this, labelStereotype);
+        fieldStereotype.setPreferredSize((new Dimension(50, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldStereotype.setEnabled(false);
+        super.getsComponents().add(fieldStereotype);
+
 
         //super.getsComponents().add(fieldNature);
 
@@ -108,22 +110,6 @@ public class UniqueInputContent extends PanelInputContentIdTable {
         table.getColumnModel().getColumn(col).setMinWidth(80);
     }
 
-    @Override
-    protected void specificInitOrLoadTable() {
-
-        if (getEditor().getMode().equals(DialogEditor.NEW)) {
-            datas = new Object[0][OperationParamTableColumn.getNbColumns()];
-        } else {
-            MCDUnicity mcdUnicity = (MCDUnicity) getEditor().getMvccdElementCrt();
-            ArrayList<MCDParameter> parameters = mcdUnicity.getParameters();
-            datas = new Object[parameters.size()][OperationParamTableColumn.getNbColumns()];
-            int line=-1;
-            for (MCDParameter parameter:parameters){
-                line++;
-                putValueInRow((MElement) parameter, datas[line]);
-            }
-        }
-    }
 
     protected void makeButtons() {
         super.makeButtons();
@@ -133,7 +119,7 @@ public class UniqueInputContent extends PanelInputContentIdTable {
     @Override
     protected void getActionApply() {
         getEditor().getButtons().getButtonsContent().treatCreate();
-        getEditor().dispose();
+        getEditor().myDispose();
         ((UniqueButtonsContent)getEditor().getButtons().getButtonsContent()).actionApply();
     }
 
@@ -244,6 +230,12 @@ public class UniqueInputContent extends PanelInputContentIdTable {
             panelInputContentCustom.add(fieldAbsolute, gbc);
         }
 
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(labelStereotype, gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldStereotype, gbc);
+
         gbc.gridwidth = 4;
         gbc.gridx = 0;
         gbc.gridy++;
@@ -309,11 +301,8 @@ public class UniqueInputContent extends PanelInputContentIdTable {
 */
         super.setPreSaveOk(ok);
 
-        if (ok){
-            btnAdd.setEnabled(true);
-        } else {
-            btnAdd.setEnabled(false);
-        }
+        btnAdd.setEnabled(ok);
+
         return ok;
     }
 
@@ -321,7 +310,71 @@ public class UniqueInputContent extends PanelInputContentIdTable {
 
     public boolean checkDatas(SComponent sComponent){
         boolean ok = super.checkDatas(sComponent);
+
         return ok;
+    }
+
+
+    protected boolean checkDetails(boolean unitaire) {
+        boolean ok = super.checkDetails(unitaire);
+        if (ok) {
+            ok = super.checkInput(table, unitaire, MCDOperationService.checkTargets(
+                    table,
+                    getContextProperty(),
+                    getRowTargetProperty()));
+        }
+        return ok;
+    }
+
+
+    @Override
+    protected Integer getMinRows() {
+        return 1;
+    }
+
+    @Override
+    protected Integer getMaxRows() {
+        return null;
+    }
+
+    @Override
+    protected String getContextProperty() {
+        if (getScope() == UniqueEditor.NID) {
+            return "the.constraint.nid";
+        }
+        if (getScope() == UniqueEditor.UNIQUE) {
+            return "the.constraint.unique";
+        }
+        return null;
+    }
+
+    @Override
+    protected String getRowContextProperty(Integer minRows) {
+        if (getScope() == UniqueEditor.NID) {
+            if (minRows > 1) {
+                return "attribute.plural";
+            } else {
+                return "attribute";
+            }
+        }
+        if (getScope() == UniqueEditor.UNIQUE) {
+            if (minRows > 1) {
+                return "attribute.or.association.plural";
+            } else {
+                return "attribute.or.association";
+            }
+        }
+        return null;
+    }
+
+    protected String getRowTargetProperty() {
+        if (getScope() == UniqueEditor.NID) {
+            return "attribute.redondant";
+        }
+        if (getScope() == UniqueEditor.UNIQUE) {
+            return "attribute.or.association.redondant";
+        }
+        return null;
     }
 
     @Override
@@ -383,22 +436,93 @@ public class UniqueInputContent extends PanelInputContentIdTable {
     @Override
     protected void initDatas() {
         super.initDatas();
+        if (getScope() == UniqueEditor.NID) {
+            fieldLienProg.setSelected(false);
+        }
+        if (getScope() == UniqueEditor.UNIQUE) {
+            fieldAbsolute.setSelected(false);
+        }
+
+        fieldStereotype.setText(computeStereotype().getName());
+
+    }
+
+    @Override
+    protected void specificInit() {
+        datas = new Object[0][OperationParamTableColumn.getNbColumns()];
     }
 
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
+
         super.loadDatas(mvccdElement);
+
+
+        if (getScope() == UniqueEditor.UNIQUE) {
+            MCDUnique mcdUnique = (MCDUnique) mvccdElement;
+            fieldAbsolute.setSelected(mcdUnique.isAbsolute());
+        }
+        if (getScope() == UniqueEditor.NID) {
+            MCDNID mcdNID = (MCDNID) mvccdElement;
+            fieldLienProg.setSelected(mcdNID.isLienProg());
+        }
+
+        fieldStereotype.setText(computeStereotype().getName());
+
+    }
+
+    @Override
+    protected void specificLoad() {
+        MCDUnicity mcdUnicity = (MCDUnicity) getEditor().getMvccdElementCrt();
+        ArrayList<MCDParameter> parameters = mcdUnicity.getParameters();
+        datas = new Object[parameters.size()][OperationParamTableColumn.getNbColumns()];
+        int line=-1;
+        for (MCDParameter parameter:parameters){
+            line++;
+            putValueInRow((MElement) parameter, datas[line]);
+        }
+    }
+
+    private Stereotype computeStereotype(){
+        MCDContConstraints mcdContConstraints = (MCDContConstraints) getEditor().getMvccdElementParent();
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Stereotype stereotype = null;
+        if (getEditor().getMode() == DialogEditor.NEW){
+            if (getScope() == UniqueEditor.NID) {
+                stereotype = stereotypes.getStereotypeByLienProg(MCDNID.class.getName(),
+                        Preferences.STEREOTYPE_NID_BASE_LIENPROG, mcdContConstraints.getMCDNIDs().size() + 1);
+            }
+            if (getScope() == UniqueEditor.UNIQUE){
+                stereotype = stereotypes.getStereotypeByLienProg(MCDUnique.class.getName(),
+                        Preferences.STEREOTYPE_U_BASE_LIENPROG, mcdContConstraints.getMCDUniques().size() +1);
+            }
+        } else {
+                stereotype = ((MCDUnicity) getEditor().getMvccdElementCrt()).getDefaultStereotype();;
+        }
+        return stereotype;
     }
 
     @Override
     protected void saveDatas(MVCCDElement mvccdElement) {
+
         super.saveDatas(mvccdElement);
+        if (getScope() == UniqueEditor.UNIQUE) {
+            MCDUnique mcdUnique = (MCDUnique) mvccdElement;
+            if (fieldAbsolute.checkIfUpdated()) {
+                mcdUnique.setAbsolute(fieldAbsolute.isSelected());
+            }
+        }
+        if (getScope() == UniqueEditor.NID) {
+            MCDNID mcdNID = (MCDNID) mvccdElement;
+            if (fieldLienProg.checkIfUpdated()) {
+                mcdNID.setLienProg(fieldLienProg.isSelected());
+            }
+        }
     }
 
 
-
     @Override
-    protected void specificAppendNewRecord(int line, MElement newElement) {
+    protected void specificSaveCompleteRecord(int line, MElement newElement) {
 
         MCDParameter newParameter = (MCDParameter) newElement;
 
@@ -414,6 +538,7 @@ public class UniqueInputContent extends PanelInputContentIdTable {
 
     @Override
     protected void enabledContent() {
+        super.enabledContent();
     }
 
     private int getScope() {
@@ -423,5 +548,4 @@ public class UniqueInputContent extends PanelInputContentIdTable {
                 return scopeForCheckInput;
             }
     }
-
 }

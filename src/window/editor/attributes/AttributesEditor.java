@@ -72,7 +72,7 @@ public class AttributesEditor extends DialogEditorNav {
 
     @Override
     protected String getPropertyTitleUpdate() {
-        return "attributes.entity.update";
+        return "editor.entity.attributes.update";
     }
 
     protected String getElementNameTitle(){

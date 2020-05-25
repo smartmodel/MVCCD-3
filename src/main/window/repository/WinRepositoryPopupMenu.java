@@ -1,6 +1,7 @@
 package main.window.repository;
 
 import datatypes.MCDDatatype;
+import diagram.mcd.MCDDiagram;
 import m.IMCompliant;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationPreferences;
@@ -8,6 +9,7 @@ import main.MVCCDManager;
 import main.MVCCDWindow;
 import mcd.*;
 import messages.MessagesBuilder;
+import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.*;
 import repository.editingTreat.preferences.PrefApplEditingTreat;
 import repository.editingTreat.preferences.PrefGeneralEditingTreat;
@@ -17,7 +19,6 @@ import preferences.PreferencesManager;
 import profile.Profile;
 import project.Project;
 import repository.editingTreat.*;
-import utilities.Debug;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
 import utilities.window.scomponents.SPopupMenu;
@@ -83,8 +84,12 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             packageNew(this, false);
         }
 
-        if (node.getUserObject() instanceof MCDDiagrams) {
-            treatDiagrams(this);
+        if (node.getUserObject() instanceof MCDContDiagrams) {
+            treatGenericNew(this, new MCDDiagramEditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.new.diagram"));
+        }
+        if (node.getUserObject() instanceof MCDDiagram) {
+            treatGeneric(this, new MCDDiagramEditingTreat());
         }
 
         if (node.getUserObject() instanceof MCDContEntities) {
@@ -213,16 +218,6 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         }
     }
 
-    private void treatDiagrams(ISMenu menu) {
-        JMenuItem mcdDiagramsNewDiagram = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.new"));
-        this.add(mcdDiagramsNewDiagram);
-        mcdDiagramsNewDiagram.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Debug.println("Création d'un nouveau diagramme");
-            }
-        });
-    }
 
     private void treatRelations(ISMenu menu) {
         treatGenericNew(this, new MCDAssociationEditingTreat(),
@@ -234,6 +229,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 MessagesBuilder.getMessagesProperty("menu.new.constraint.nid"));
         treatGenericNew(this, new MCDUniqueEditingTreat(),
                 MessagesBuilder.getMessagesProperty("menu.new.constraint.unique"));
+        treatGenericRead( this, new MCDConstraintsEditingTreat());
+
     }
 
     private void packageNew(ISMenu menu, boolean top) {
@@ -253,6 +250,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
     private void treatGeneric(ISMenu menu, EditingTreat editingTreat) {
         treatGenericRead(menu, editingTreat);
         treatGenericUpdate(menu, editingTreat);
+        treatGenericDelete(menu, editingTreat);
 
         if (mvccdElement instanceof IMCompliant) {
             treatGenericCompliant(menu, editingTreat);
@@ -305,6 +303,22 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 editingTreat.treatUpdate(mvccdWindow, mvccdElement);
+            }
+        });
+    }
+
+    private void treatGenericDelete(ISMenu menu, EditingTreat editingTreat) {
+        String textMenu = MessagesBuilder.getMessagesProperty("menu.delete");
+        treatGenericDelete(menu, editingTreat, textMenu);
+    }
+
+    private void treatGenericDelete(ISMenu menu, EditingTreat editingTreat, String textMenu) {
+        JMenuItem menuItem = new JMenuItem(textMenu);
+        addItem(menu, menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                editingTreat.treatDelete(mvccdWindow, mvccdElement);
             }
         });
     }

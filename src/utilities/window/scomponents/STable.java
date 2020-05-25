@@ -1,5 +1,6 @@
 package utilities.window.scomponents;
 
+import main.MVCCDElement;
 import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;
@@ -19,6 +20,7 @@ public class STable extends JTable implements SComponent {
         this.label = label;
         this.setColor(SComponent.COLORNORMAL);
     }
+
 
 
 
@@ -117,5 +119,13 @@ public class STable extends JTable implements SComponent {
     @Override
     public JLabel getJLabel() {
         return label;
+    }
+
+    public static int getOrderByLine(int i) {
+        if ( i== 0){
+            return MVCCDElement.FIRSTVALUEORDER;
+        } else {
+            return MVCCDElement.FIRSTVALUEORDER + (i * MVCCDElement.INTERVALORDER);
+        }
     }
 }

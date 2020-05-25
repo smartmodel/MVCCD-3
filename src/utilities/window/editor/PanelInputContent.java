@@ -153,7 +153,6 @@ public abstract class PanelInputContent
 
        // Le check doit être fait au début pour remettre l'affichage normal
         // de champs testés ensemble
-
         if (datasChangedNow()) {
             if (preSaveOk) {
                 getButtonsContent().getBtnOk().setEnabled(true);
@@ -249,7 +248,7 @@ public abstract class PanelInputContent
         boolean resultat = false;
         for (SComponent sComponent : sComponents) {
             resultat = resultat || sComponent.checkIfUpdated();
-        }
+         }
         return resultat;
     }
 

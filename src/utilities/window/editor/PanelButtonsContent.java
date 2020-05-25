@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
-import repository.editingTreat.mcd.MCDEntityEditingTreat;
+import project.ProjectService;
 import utilities.files.UtilFiles;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.SButton;
@@ -14,6 +14,8 @@ import utilities.window.services.ComponentService;
 import window.help.HelpWindow;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -180,7 +182,7 @@ public abstract class PanelButtonsContent extends PanelContent
             if (getEditor().getMode().equals(DialogEditor.UPDATE)) {
                 treatUpdate();
             }
-            getEditor().dispose();
+            getEditor().myDispose();
         }
         if (source == btnApply) {
             MVCCDElement mvccdElementForUpate = null;
@@ -192,7 +194,7 @@ public abstract class PanelButtonsContent extends PanelContent
                 treatUpdate();
                 mvccdElementForUpate = getEditor().getMvccdElementCrt();
             }
-            getEditor().dispose();
+            getEditor().myDispose();
             if (getEditor().getEditingTreat() != null){
                 getEditor().getEditingTreat().treatUpdate(getEditor().getOwner(), mvccdElementForUpate);
             }
@@ -202,7 +204,7 @@ public abstract class PanelButtonsContent extends PanelContent
             treatReset();
         }
         if (source == btnCancel) {
-            getEditor().dispose();
+            getEditor().myDispose();
         }
         if (source == btnHelp) {
             treatHelp();
@@ -231,6 +233,7 @@ public abstract class PanelButtonsContent extends PanelContent
         getInputContent().restartChange();
         getInputContent().enabledButtons();
         getEditor().adjustTitle();
+        MVCCDManager.instance().showMVCCDElementInRepository(getEditor().getMvccdElementCrt());
 
         if (getEditor().isDatasChanged()) {
             MVCCDManager.instance().setDatasProjectChanged(true);

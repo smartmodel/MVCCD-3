@@ -49,14 +49,6 @@ public class UniqueButtonsContent extends PanelButtonsContent {
         btnApply.setVisible(true);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        super.actionPerformed(e);
-        Object source = e.getSource();
-        if (source == btnApply) {
-            actionApply();
-        }
-    }
 
     public void actionApply(){
         if (getEditor().getMode().equals(DialogEditor.NEW)) {
@@ -70,4 +62,5 @@ public class UniqueButtonsContent extends PanelButtonsContent {
             }
         }
     }
+
 }

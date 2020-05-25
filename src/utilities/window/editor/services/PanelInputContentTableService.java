@@ -1,6 +1,7 @@
 package utilities.window.editor.services;
 
 import preferences.PreferencesManager;
+import utilities.window.scomponents.services.STableService;
 import window.editor.operation.OperationParamTableColumn;
 
 import javax.swing.*;
@@ -12,23 +13,23 @@ public class PanelInputContentTableService {
         int sizeDebug = 0;
         if (PreferencesManager.instance().preferences().isDEBUG() &&
                 PreferencesManager.instance().preferences().isDEBUG_SHOW_TABLE_COL_HIDDEN()) {
-            sizeDebug = 20;
+            sizeDebug = 30;
         }
 
         //Id
-        table.getColumnModel().getColumn(0).setPreferredWidth(sizeDebug);
-        table.getColumnModel().getColumn(0).setMinWidth(sizeDebug);
-        table.getColumnModel().getColumn(0).setMaxWidth(sizeDebug);
+        table.getColumnModel().getColumn(STableService.IDINDEX).setPreferredWidth(sizeDebug);
+        table.getColumnModel().getColumn(STableService.IDINDEX).setMinWidth(sizeDebug);
+        table.getColumnModel().getColumn(STableService.IDINDEX).setMaxWidth(sizeDebug);
 
         //Transitory
-        table.getColumnModel().getColumn(1).setPreferredWidth(sizeDebug);
-        table.getColumnModel().getColumn(1).setMinWidth(sizeDebug);
-        table.getColumnModel().getColumn(1).setMaxWidth(sizeDebug);
+        table.getColumnModel().getColumn(STableService.TRANSITORYINDEX).setPreferredWidth(sizeDebug);
+        table.getColumnModel().getColumn(STableService.TRANSITORYINDEX).setMinWidth(sizeDebug);
+        table.getColumnModel().getColumn(STableService.TRANSITORYINDEX).setMaxWidth(sizeDebug);
 
         //Order
-        table.getColumnModel().getColumn(2).setPreferredWidth(sizeDebug);
-        table.getColumnModel().getColumn(2).setMinWidth(sizeDebug);
-        table.getColumnModel().getColumn(2).setMaxWidth(sizeDebug);
+        table.getColumnModel().getColumn(STableService.ORDERINDEX).setPreferredWidth(sizeDebug);
+        table.getColumnModel().getColumn(STableService.ORDERINDEX).setMinWidth(sizeDebug);
+        table.getColumnModel().getColumn(STableService.ORDERINDEX).setMaxWidth(sizeDebug);
 
     }
 

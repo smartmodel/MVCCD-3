@@ -8,6 +8,7 @@ import project.ProjectService;
 import utilities.files.UtilXML;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MCDContEntities extends MCDElement{
 
@@ -42,5 +43,11 @@ public class MCDContEntities extends MCDElement{
         return resultat;
     }
 
+    public ArrayList<MVCCDElement> getChildsRepository() {
+        ArrayList<MVCCDElement> childs = getChilds();
+        Collections.sort(childs, MVCCDElement::compareToName);
 
+
+        return childs;
+    }
 }

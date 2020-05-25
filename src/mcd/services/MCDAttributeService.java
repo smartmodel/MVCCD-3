@@ -2,11 +2,15 @@ package mcd.services;
 
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
+import main.MVCCDElement;
 import mcd.MCDAttribute;
 import mcd.MCDEntity;
+import mcd.MCDNID;
+import mcd.MCDParameter;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import project.ProjectElement;
 
 import java.util.ArrayList;
 
@@ -50,5 +54,20 @@ public class MCDAttributeService {
             }
         }
         return label ;
+    }
+
+    public static ArrayList<MCDNID> partOfNIds(MCDAttribute mcdAttribute) {
+        ArrayList<MCDNID> resultat = new ArrayList<MCDNID>();
+        MCDEntity mcdEntity = mcdAttribute.getEntityParent();
+        ArrayList<MCDNID>  allNIDs = mcdEntity.getMCDContConstraints().getMCDNIDs();
+        for (MCDNID aNID : allNIDs){
+            System.out.println(aNID.getName());
+            for (MCDParameter parameter : aNID.getMcdParameters()){
+                if ( parameter.getTarget() == mcdAttribute){
+                    resultat.add(aNID);
+                }
+            }
+        }
+        return resultat;
     }
 }

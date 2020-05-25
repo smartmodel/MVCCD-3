@@ -2,14 +2,14 @@ package mcd;
 
 import project.ProjectElement;
 
-public class MCDDiagrams extends MCDElement {
+public class MCDContDiagrams extends MCDElement {
 
     private static final long serialVersionUID = 1000;
-    public MCDDiagrams(ProjectElement parent, String name) {
+    public MCDContDiagrams(ProjectElement parent, String name) {
         super(parent,name);
     }
 
-    public MCDDiagrams(ProjectElement parent) {
+    public MCDContDiagrams(ProjectElement parent) {
         super (parent);
     }
 

@@ -1,5 +1,6 @@
 package main;
 
+import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.MCDContAttributes;
 import messages.MessagesBuilder;
@@ -57,8 +58,16 @@ public class MVCCDElementFactory {
         return new Preferences(parent, name);
     }
 
-    public MCDDiagrams createMCDDiagrams(ProjectElement parent, String name){
-        return new MCDDiagrams(parent, name);
+    public MCDContDiagrams createMCDDiagrams(ProjectElement parent, String name){
+        return new MCDContDiagrams(parent, name);
+    }
+
+    public MCDDiagram createMCDDiagram(ProjectElement parent, String name){
+        return new MCDDiagram(parent, name);
+    }
+
+    public MCDDiagram createMCDDiagram(ProjectElement parent){
+        return new MCDDiagram(parent);
     }
 
     public MCDContEntities createMCDEntities(ProjectElement parent, String name){
@@ -144,7 +153,7 @@ public class MVCCDElementFactory {
     }
 
     private void createContentPackage(MCDElement parent) {
-        MCDDiagrams mcdDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(parent,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+        MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(parent,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
         MCDContEntities mcdContEntities = MVCCDElementFactory.instance().createMCDEntities(parent,Preferences.REPOSITORY_MCD_ENTITIES_NAME);
         MCDContRelations mcdContRelations = MVCCDElementFactory.instance().createMCDRelations(parent,Preferences.REPOSITORY_MCD_RELATIONS_NAME);
     }
@@ -156,7 +165,7 @@ public class MVCCDElementFactory {
         } else if (baliseName.equals(Preferences.XML_BALISE_MODELS)) {
             return new MCDContModels(ancestor);
         } else if (baliseName.equals(Preferences.XML_BALISE_DIAGRAMS)) {
-            return new MCDDiagrams(ancestor);
+            return new MCDContDiagrams(ancestor);
         } else if (baliseName.equals(Preferences.XML_BALISE_ENTITIES)) {
             return new MCDContEntities(ancestor);
         } else if (baliseName.equals(Preferences.XML_BALISE_ENTITY)) {
