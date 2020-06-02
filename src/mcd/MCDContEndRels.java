@@ -25,10 +25,7 @@ public class MCDContEndRels extends MCDElement{
         return getMCDRelations().remove(mcdRelation);
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
+
 
 
 }

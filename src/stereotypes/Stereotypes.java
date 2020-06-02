@@ -14,11 +14,6 @@ public class Stereotypes extends MVCCDElement {
         super(parent, name);
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
-
     public ArrayList<Stereotype> getStereotypesByClassName(String className){
         ArrayList<Stereotype> resultat = new  ArrayList<Stereotype>();
         for (MVCCDElement mvccdElement : this.getChilds()){

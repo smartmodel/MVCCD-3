@@ -9,8 +9,5 @@ public class MVCCDElementApplicationPreferences extends MVCCDElement {
         super(parent, MessagesBuilder.getMessagesProperty("application.preferences.name"));
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
+
 }

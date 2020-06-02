@@ -26,11 +26,4 @@ public class MCDContModels extends MCDElement implements IMCDModel, IMCDNamePath
     }
 
 
-    @Override
-    public String getNameTree() {
-
-        return null;
-    }
-
-
 }

@@ -3,6 +3,7 @@ package repository.editingTreat;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
+import mcd.MCDAttribute;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
@@ -38,6 +39,7 @@ public abstract class EditingTreat {
         DialogEditor fen = getDialogEditor(owner, element.getParent(), element, DialogEditor.UPDATE);
         fen.setVisible(true);
 
+
         MVCCDElement parentAfter = element.getParent();
         if (parentBefore != parentAfter) {
             MVCCDManager.instance().changeParentMVCCDElementInRepository(element, parentBefore);
@@ -68,24 +70,38 @@ public abstract class EditingTreat {
     public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
         //MVCCDElement mvccdElement = (MElement) element;
 
+
+        PanelInputContent panelInputContent = loadPanelInput(mvccdElement);
+
         String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
-        if (!checkInput(mvccdElement)) {
-            String message = MessagesBuilder.getMessagesProperty("dialog.input.error",
-                    new String[]{messageElement, mvccdElement.getNameTree()});
+
+        if (datasAdjusted( panelInputContent)) {
+            String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.compliant");
+            String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
+                    new String[] {messageMode});
             if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
                 DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
                 fen.setVisible(true);
             }
         } else {
-            ArrayList<String> messagesCompliant = checkCompliant(mvccdElement);
-            if (messagesCompliant.size() == 0) {
-                String message = MessagesBuilder.getMessagesProperty("dialog.compliant.ok",
+            if (!checkInput( panelInputContent)) {
+                String message = MessagesBuilder.getMessagesProperty("dialog.input.error",
                         new String[]{messageElement, mvccdElement.getNameTree()});
-                DialogMessage.showOk(owner, message);
+                if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
+                    DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
+                    fen.setVisible(true);
+                }
             } else {
-                String message = MessagesBuilder.getMessagesProperty("dialog.compliant.error",
-                        new String[]{messageElement, mvccdElement.getNameTree()});
-                DialogMessage.showError(owner, message);
+                ArrayList<String> messagesCompliant = checkCompliant(mvccdElement);
+                if (messagesCompliant.size() == 0) {
+                    String message = MessagesBuilder.getMessagesProperty("dialog.compliant.ok",
+                            new String[]{messageElement, mvccdElement.getNameTree()});
+                    DialogMessage.showOk(owner, message);
+                } else {
+                    String message = MessagesBuilder.getMessagesProperty("dialog.compliant.error",
+                            new String[]{messageElement, mvccdElement.getNameTree()});
+                    DialogMessage.showError(owner, message);
+                }
             }
         }
     }
@@ -94,14 +110,23 @@ public abstract class EditingTreat {
 
 
 
-
-
-    public boolean checkInput(MVCCDElement element){
+    public PanelInputContent loadPanelInput(MVCCDElement element){
         PanelInputContent panelInputContent = getPanelInputContent((MVCCDElement) element);
         panelInputContent.createContentCustom();
         panelInputContent.loadDatas((MVCCDElement) element);
+        panelInputContent.setDataInitialized(true);
+        panelInputContent.loadSimulationChange((MVCCDElement) element);
 
-        return panelInputContent.checkDatas(null);
+        return panelInputContent;
+    }
+
+
+    public boolean checkInput(PanelInputContent panelInputContent){
+         return panelInputContent.checkDatas(null);
+    }
+
+    public boolean datasAdjusted(PanelInputContent panelInputContent){
+        return panelInputContent.datasChangedNow();
     }
 
     protected abstract PanelInputContent getPanelInputContent(MVCCDElement element);
@@ -109,7 +134,5 @@ public abstract class EditingTreat {
     protected abstract DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) ;
 
     protected abstract String getPropertyTheElement();
-
-
 
 }

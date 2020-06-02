@@ -1,6 +1,8 @@
 package utilities.window.editor;
 
 import main.MVCCDElement;
+import messages.MessagesBuilder;
+import utilities.window.DialogMessage;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 
@@ -17,7 +19,7 @@ public abstract class PanelInputContent
                     FocusListener, DocumentListener,  ItemListener {
 
     protected PanelInput panelInput;
-    protected MVCCDElement elementForCheckInput ;
+    protected MVCCDElement elementForCheckInput;
 
     //TODO-1 A voir si panel ne peut pas être la classe elle-même
     protected JPanel panelInputContentCustom = new JPanel();
@@ -39,7 +41,7 @@ public abstract class PanelInputContent
         }
     }
 
-    protected void start(){
+    protected void start() {
         createContentCustom();
         addContent(panelInputContentCustom);
 
@@ -55,17 +57,21 @@ public abstract class PanelInputContent
 
     public abstract void createContentCustom();
 
-    public boolean checkDatas(SComponent sComponent){
+    public boolean checkDatas(SComponent sComponent) {
         resetColorSComponents();
         boolean ok = checkDatasPreSave(sComponent);
         return ok;
-    };
+    }
 
-    public boolean checkDatasPreSave(SComponent sComponent){
+    ;
+
+    public boolean checkDatasPreSave(SComponent sComponent) {
         boolean ok = true;
         setPreSaveOk(ok);
         return ok;
-    };
+    }
+
+    ;
 
     protected abstract boolean changeField(DocumentEvent e);
     //protected abstract SComponent changeFieldId(DocumentEvent e);
@@ -92,6 +98,7 @@ public abstract class PanelInputContent
         if (alreadyFocusGained) {
             changeField(e);
             enabledButtons();
+            enabledContent();
         }
     }
 
@@ -108,6 +115,7 @@ public abstract class PanelInputContent
         if (alreadyFocusGained) {
             changeField(e);
             enabledButtons();
+            enabledContent();
         }
     }
 
@@ -119,9 +127,9 @@ public abstract class PanelInputContent
         if (alreadyFocusGained) {
             changeField(e);
             enabledButtons();
+            enabledContent();
         }
     }
-
 
 
     @Override
@@ -142,16 +150,16 @@ public abstract class PanelInputContent
             }
             if (e.getSource() instanceof SComboBox) {
             }
-                enabledButtons();
+            enabledButtons();
+            enabledContent();
         }
 
     }
 
 
-
     protected void enabledButtons() {
 
-       // Le check doit être fait au début pour remettre l'affichage normal
+        // Le check doit être fait au début pour remettre l'affichage normal
         // de champs testés ensemble
         if (datasChangedNow()) {
             if (preSaveOk) {
@@ -168,9 +176,9 @@ public abstract class PanelInputContent
             getButtonsContent().getBtnApply().setEnabled(false);
         }
 
-        if (getEditor() instanceof DialogEditorNav){
+        if (getEditor() instanceof DialogEditorNav) {
             DialogEditorNav editor = (DialogEditorNav) getEditor();
-            if (! editor.getMode().equals(DialogEditor.NEW)){
+            if (!editor.getMode().equals(DialogEditor.NEW)) {
                 editor.getNav().getTabbedContent().enabledButtons(!datasChangedNow());
             }
         }
@@ -184,7 +192,7 @@ public abstract class PanelInputContent
         if (messagesErrors.size() != 0) {
             if (field.isCheckPreSave()) {
                 field.setColor(SComponent.COLORERROR);
-            } else{
+            } else {
                 if (field.getColor() != SComponent.COLORERROR) {
                     field.setColor(SComponent.COLORWARNING);
                 }
@@ -193,13 +201,13 @@ public abstract class PanelInputContent
         return messagesErrors.size() == 0;
     }
 
-    public void reInitField(STextField field){
+    public void reInitField(STextField field) {
         field.setColor(SComponent.COLORNORMAL);
     }
 
 
     public void showCheckResultat(ArrayList<String> messagesErrors) {
-       if (getEditor().getButtons() != null) {
+        if (getEditor().getButtons() != null) {
             PanelButtonsContent buttonsContent = (PanelButtonsContent) getEditor().getButtons().getPanelContent();
             buttonsContent.clearMessages();
             for (String message : messagesErrors) {
@@ -247,8 +255,14 @@ public abstract class PanelInputContent
     public boolean datasChangedNow() {
         boolean resultat = false;
         for (SComponent sComponent : sComponents) {
+            /*
+            if (sComponent.checkIfUpdated()){
+                System.out.println(sComponent);
+            }
+
+             */
             resultat = resultat || sComponent.checkIfUpdated();
-         }
+        }
         return resultat;
     }
 
@@ -268,18 +282,34 @@ public abstract class PanelInputContent
         return sComponents;
     }
 
-    protected void initOrLoadDatas() {
+    public void initOrLoadDatas() {
         if (getEditor().getMode().equals(DialogEditor.NEW)) {
             initDatas();
         } else {
             loadDatas(getEditor().getMvccdElementCrt());
         }
+
         dataInitialized = true;
+
+        // Les données peuvent être ajustées par les méthodes changeXXX de l'éditeur
+        if (! getEditor().getMode().equals(DialogEditor.NEW)) {
+            loadSimulationChange(getEditor().getMvccdElementCrt());
+        }
+
+
+        checkDatas(null);
         preSaveOk = checkDatasPreSave(null);
     }
 
+    public abstract void loadSimulationChange(MVCCDElement mvccdElementCrt);
+
+
     public boolean isDataInitialized() {
         return dataInitialized;
+    }
+
+    public void setDataInitialized(boolean dataInitialized) {
+        this.dataInitialized = dataInitialized;
     }
 
     protected void enableSubPanels(SCheckBox sCheckBox) {
@@ -339,4 +369,6 @@ public abstract class PanelInputContent
             }
         }
     }
+
+
 }

@@ -27,10 +27,6 @@ public class MCDContAttributes extends MCDElement{
         return getMCDAttributes().remove(mcdAttribute);
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
 
     public static String getClassShortNameUI() {
         return "Conteneur d'attributs";

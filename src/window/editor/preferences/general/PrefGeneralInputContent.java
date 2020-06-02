@@ -82,7 +82,10 @@ public class PrefGeneralInputContent extends PanelInputContent {
         Preferences preferences = PreferencesManager.instance().preferences();
     }
 
+    @Override
+    public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
 
+    }
 
 
 }

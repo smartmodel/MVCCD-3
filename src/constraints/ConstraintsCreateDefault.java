@@ -19,6 +19,11 @@ public class ConstraintsCreateDefault {
                 MCDAttribute.class.getName());
 
         createConstraint(
+                Preferences.CONSTRAINT_FROZEN_NAME,
+                Preferences.CONSTRAINT_FROZEN_LIENPROG,
+                MCDAttribute.class.getName());
+
+        createConstraint(
                 Preferences.CONSTRAINT_ABSOLUTE_NAME,
                 Preferences.CONSTRAINT_ABSOLUTE_LIENPROG,
                 MCDUnique.class.getName());

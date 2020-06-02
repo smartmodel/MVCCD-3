@@ -172,6 +172,11 @@ public class ProjectInputContent extends PanelInputContent {
     }
 
     @Override
+    public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
+
+    }
+
+    @Override
     public boolean checkDatasPreSave(SComponent sComponent) {
 
         boolean  ok = super.checkDatasPreSave(sComponent);
@@ -206,6 +211,17 @@ public class ProjectInputContent extends PanelInputContent {
         return super.checkInput(projectName, unitaire, MCDProjectService.checkName(projectName.getText()));
     }
 
+    @Override
+    protected void initDatas() {
+        Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
+
+        // Initialisation sans passer par un objet transitoire car la création d'un projet
+        // déclenche trop d'automatisme qu'il est certainement difficile de stopper pour un objet transitoire
+        fieldModelsMany.setSelected(applicationPref.getREPOSITORY_MCD_MODELS_MANY());
+        fieldPackagesAutorizeds.setSelected(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
+        profileFileName.setSelectedEmpty();
+    }
+
 
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
@@ -219,15 +235,6 @@ public class ProjectInputContent extends PanelInputContent {
         fieldModelsMany.setSelected(project.isModelsMany());
         fieldPackagesAutorizeds.setSelected(project.isPackagesAutorizeds());
     }
-
-    @Override
-    protected void initDatas() {
-        Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
-
-        fieldModelsMany.setSelected(applicationPref.getREPOSITORY_MCD_MODELS_MANY());
-        fieldPackagesAutorizeds.setSelected(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
-        profileFileName.setSelectedEmpty();
-     }
 
     @Override
     public void saveDatas(MVCCDElement mvccdElement) {

@@ -103,11 +103,22 @@ public class MCDAssociationService {
 
 
     public static ArrayList<String> checkOriented(SComboBox fieldOriented,
-                                                  boolean recursif) {
+                                                  boolean recursif,
+                                                  MRelationDegree degree) {
 
         ArrayList<String> messages = new ArrayList<String>();
-        if (fieldOriented.isSelectedEmpty()){
-            messages.add(MessagesBuilder.getMessagesProperty("editor.association.nature.reflexive.oriented.error"));
+        if (recursif){
+            if (fieldOriented.isSelectedEmpty()){
+                if (degree != MRelationDegree.DEGREE_ONE_MANY) {
+                    messages.add(MessagesBuilder.getMessagesProperty("editor.association.nature.reflexive.oriented.error",
+                            degree.getText()));
+                }
+            }
+        } else {
+            if (fieldOriented.isNotSelectedEmpty()) {
+                messages.add(MessagesBuilder.getMessagesProperty("editor.association.nature.not.reflexive.oriented.error"));
+            }
+
         }
         return messages;
     }

@@ -2,10 +2,7 @@ package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDAssEnd;
-import mcd.MCDAssociation;
-import mcd.MCDContEndRels;
-import mcd.MCDContRelations;
+import mcd.*;
 import mcd.services.MCDAssociationService;
 import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
@@ -13,6 +10,7 @@ import utilities.window.editor.DialogEditor;
 import project.ProjectService;
 import utilities.window.DialogMessage;
 import utilities.window.editor.PanelInputContent;
+import utilities.window.scomponents.services.SComboBoxService;
 import window.editor.entity.EntityInputContent;
 import window.editor.relation.association.AssociationEditor;
 import window.editor.relation.association.AssociationInputContent;
@@ -26,9 +24,38 @@ public class MCDAssociationEditingTreat extends EditingTreat {
 
 
     public  MCDAssociation treatNew(Window owner,
-                                          MCDContRelations parent) {
+                                    MCDContRelations parent) {
 
         MCDAssociation mcdAssociationNew = (MCDAssociation) super.treatNew( owner, parent);
+
+        if (mcdAssociationNew != null) {
+            addAssEndInRepository(mcdAssociationNew.getFrom());
+            addAssEndInRepository(mcdAssociationNew.getTo());
+        }
+        return mcdAssociationNew;
+    }
+
+    public  MCDAssociation treatNew(Window owner,
+                                    MCDContRelations parent,
+                                    MCDEntity entityFrom,
+                                    MCDEntity entityTo,
+                                    MCDAssociationNature nature) {
+
+        DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW);
+        AssociationInputContent content = (AssociationInputContent) fen.getInput().getInputContent();
+
+        if (entityFrom  != null){
+            SComboBoxService.selectByText(content.getFieldFromEntity(), entityFrom.getNamePath(content.getModePathName()));
+        }
+        if (entityTo  != null) {
+            SComboBoxService.selectByText(content.getFieldToEntity(), entityTo.getNamePath(content.getModePathName()));
+        }
+        if (nature  != null) {
+            SComboBoxService.selectByText(content.getFieldNature(), nature.getText());
+        }
+
+        fen.setVisible(true);
+        MCDAssociation mcdAssociationNew = (MCDAssociation)  fen.getMvccdElementNew();
 
         if (mcdAssociationNew != null) {
             addAssEndInRepository(mcdAssociationNew.getFrom());

@@ -2,6 +2,7 @@ package utilities.window.editor;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
+import mcd.MCDAttribute;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;

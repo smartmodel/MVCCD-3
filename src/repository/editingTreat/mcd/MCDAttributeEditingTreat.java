@@ -36,7 +36,14 @@ public class MCDAttributeEditingTreat extends EditingTreat {
                 new MCDAttributeEditingTreat());
     }
 
-    @Override
+    public boolean treatUpdate(Window owner, MVCCDElement element) {
+        // Pour tester le contrôle d'ajustement
+        //MCDAttribute mcdAttribute = (MCDAttribute) element;
+        //mcdAttribute.setList(true);
+        return super.treatUpdate(owner, element);
+    }
+
+        @Override
     protected String getPropertyTheElement() {
         return "the.attribute";
     }

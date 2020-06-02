@@ -17,10 +17,6 @@ public class MCDParameter extends MCDElement {
         super(parent, name);
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
 
     public IMCDParameter getTarget() {
         return target;

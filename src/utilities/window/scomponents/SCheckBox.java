@@ -80,8 +80,11 @@ public class SCheckBox extends JCheckBox implements SComponent {
             updated = true;
         }
 
-        if (panel.getEditor().getMode().equals(DialogEditor.NEW)){
-            updated = true;
+        // Si ce n'est pas un appel directement pour le contrôle de conformité
+        if (panel.getEditor() != null) {
+            if (panel.getEditor().getMode().equals(DialogEditor.NEW)) {
+                updated = true;
+            }
         }
 
         if (updated) {

@@ -11,8 +11,5 @@ public class MCDDatatype extends MDDatatype {
         super(parent, name, lienProg, abstrait);
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
+
 }

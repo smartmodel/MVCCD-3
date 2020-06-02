@@ -56,10 +56,6 @@ public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDName
         this.mcdAuditException = mcdAuditException;
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
 
 
 }

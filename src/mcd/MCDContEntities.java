@@ -21,10 +21,6 @@ public class MCDContEntities extends MCDElement{
         super (parent);
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
 
     public static MCDContEntities getMCDContEntitiesByNamePath(int pathMode, String namePath){
         for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){

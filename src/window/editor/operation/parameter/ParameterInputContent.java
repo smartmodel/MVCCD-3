@@ -3,6 +3,7 @@ package window.editor.operation.parameter;
 import exceptions.CodeApplException;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
+import main.MVCCDElementFactory;
 import mcd.*;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDParameterService;
@@ -149,6 +150,11 @@ public class ParameterInputContent extends PanelInputContent {
 
     }
 
+    @Override
+    public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
+
+    }
+
     private boolean treatField(SComponent sComponent) {
 
         return checkDatas(sComponent);
@@ -199,7 +205,11 @@ public class ParameterInputContent extends PanelInputContent {
 
     @Override
     protected void initDatas() {
-        fieldTarget.setSelectedEmpty();
+        MCDParameter forInitParameter = MVCCDElementFactory.instance().createMCDParameter(
+                (MCDConstraint) getEditor().getMvccdElementParent());
+        loadDatas(forInitParameter);
+        forInitParameter.removeInParent();
+        forInitParameter = null;
      }
 
     @Override
@@ -208,6 +218,8 @@ public class ParameterInputContent extends PanelInputContent {
 
         if (mcdParameter.getTarget() != null) {
             SComboBoxService.selectByText(fieldTarget, mcdParameter.getTarget().getName());
+        } else {
+            fieldTarget.setSelectedEmpty();
         }
     }
 

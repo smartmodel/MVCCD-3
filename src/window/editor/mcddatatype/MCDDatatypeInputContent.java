@@ -344,7 +344,10 @@ public class MCDDatatypeInputContent extends PanelInputContent{
     public void saveDatas(MVCCDElement mvccdElement) {
     }
 
+    @Override
+    public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
 
+    }
 
 
     @Override

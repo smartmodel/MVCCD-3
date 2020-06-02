@@ -31,11 +31,6 @@ public class MCDLink extends MCDRelation {
         super.setB(association);
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
-
 
 
 }

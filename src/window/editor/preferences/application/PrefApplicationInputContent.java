@@ -242,7 +242,10 @@ public class PrefApplicationInputContent extends PanelInputContent {
         new DialogMessage().showOk(getEditor(), message);
     }
 
+    @Override
+    public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
 
+    }
 
 
 }

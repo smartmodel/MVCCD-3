@@ -10,8 +10,5 @@ public class MVCCDElementRepositoryRoot extends MVCCDElement {
         super(null, MessagesBuilder.getMessagesProperty("repository.root.name"));
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
+
 }

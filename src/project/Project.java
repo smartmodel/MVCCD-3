@@ -106,10 +106,6 @@ public class Project extends ProjectElement {
         this.packagesAutorizeds = packagesAutorizeds;
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
 
     // Sauvegarde de l'état du projet
 

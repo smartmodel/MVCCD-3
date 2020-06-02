@@ -2,6 +2,7 @@ package window.editor.operation.constraint.unique;
 
 import m.MElement;
 import main.MVCCDElement;
+import main.MVCCDElementFactory;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDParameter;
@@ -286,6 +287,10 @@ public class UniqueInputContent extends PanelInputContentIdTable {
     public void focusLost(FocusEvent focusEvent) {
     }
 
+    @Override
+    public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
+
+    }
 
 
     @Override
@@ -436,14 +441,21 @@ public class UniqueInputContent extends PanelInputContentIdTable {
     @Override
     protected void initDatas() {
         super.initDatas();
+        MCDUnicity forInitUnicity= null;
         if (getScope() == UniqueEditor.NID) {
-            fieldLienProg.setSelected(false);
+            forInitUnicity = MVCCDElementFactory.instance().createMCDNID(
+                    (MCDContConstraints) getEditor().getMvccdElementParent());
         }
         if (getScope() == UniqueEditor.UNIQUE) {
-            fieldAbsolute.setSelected(false);
+            forInitUnicity = MVCCDElementFactory.instance().createMCDUnique(
+                    (MCDContConstraints) getEditor().getMvccdElementParent());
         }
 
-        fieldStereotype.setText(computeStereotype().getName());
+        loadDatas(forInitUnicity);
+        forInitUnicity.removeInParent();
+        forInitUnicity = null;
+
+        //fieldStereotype.setText(computeStereotype().getName());
 
     }
 
@@ -488,13 +500,15 @@ public class UniqueInputContent extends PanelInputContentIdTable {
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
         Stereotype stereotype = null;
         if (getEditor().getMode() == DialogEditor.NEW){
+            // Attention !
+            // Le parent contient l'objet transitoire !
             if (getScope() == UniqueEditor.NID) {
                 stereotype = stereotypes.getStereotypeByLienProg(MCDNID.class.getName(),
-                        Preferences.STEREOTYPE_NID_BASE_LIENPROG, mcdContConstraints.getMCDNIDs().size() + 1);
+                        Preferences.STEREOTYPE_NID_BASE_LIENPROG, mcdContConstraints.getMCDNIDs().size() );
             }
             if (getScope() == UniqueEditor.UNIQUE){
                 stereotype = stereotypes.getStereotypeByLienProg(MCDUnique.class.getName(),
-                        Preferences.STEREOTYPE_U_BASE_LIENPROG, mcdContConstraints.getMCDUniques().size() +1);
+                        Preferences.STEREOTYPE_U_BASE_LIENPROG, mcdContConstraints.getMCDUniques().size());
             }
         } else {
                 stereotype = ((MCDUnicity) getEditor().getMvccdElementCrt()).getDefaultStereotype();;

@@ -368,6 +368,21 @@ public class AssociationInputContent extends PanelInputContentId {
     protected void changeFieldSelected(ItemEvent e) {
         Object source = e.getSource();
 
+        if (source == fieldFromEntity) {
+            changeFieldSelectedEntity(MCDAssEnd.FROM);
+        }
+        if (source == fieldToEntity) {
+            changeFieldSelectedEntity(MCDAssEnd.TO);
+        }
+        if (source == fieldFromMulti) {
+            changeFieldSelectedMulti(fieldFromMulti, MCDAssEnd.FROM);
+        }
+        if (source == fieldToMulti) {
+            changeFieldSelectedMulti(fieldToMulti, MCDAssEnd.TO);
+        }
+        if (source == fieldNature){
+            changeFieldSelectedNature();
+        }
         if (source instanceof SComponent){
             treatField( (SComponent) source);
         }
@@ -376,6 +391,51 @@ public class AssociationInputContent extends PanelInputContentId {
 
 
 
+    private void changeFieldSelectedEntity(int direction) {
+        if (isNotReflexive()){
+            fieldOriented.setSelectedEmpty();
+        }
+    }
+
+
+    private void changeFieldSelectedMulti(SComboBox fieldMulti, int direction) {
+        SCheckBox ordered = null;
+        if (direction == MCDAssEnd.FROM){
+            ordered = fieldFromOrdered;
+        }
+        if (direction == MCDAssEnd.TO){
+            ordered = fieldToOrdered;
+        }
+        MRelEndMultiPart multiMax = MRelEndService.computeMultiMaxStd((String) fieldMulti.getSelectedItem());
+        if (!multiMax.equals(MRelEndMultiPart.MULTI_MANY)){
+            ordered.setSelected(false);
+        }
+
+        fieldOriented.setEnabled(false);
+        try {
+            if (isNotReflexive()){
+                fieldOriented.setSelectedEmpty();
+            } else if (getDegree() == MRelationDegree.DEGREE_ONE_MANY){
+                fieldOriented.setSelectedEmpty();
+            }
+        } catch(Exception e ){
+            // les 2 multiplicités ne sont pas saisies
+        }
+    }
+
+    private void changeFieldSelectedNature() {
+        MCDAssociationNature nature = MCDAssociationNature.findByText((String) fieldNature.getSelectedItem());
+
+        // {frozen}
+        if ((nature != MCDAssociationNature.NOID) && (nature != MCDAssociationNature.IDNATURAL)) {
+            fieldFrozen.setSelected(false);
+        }
+
+        // {deletecascade}
+        if (nature != MCDAssociationNature.IDCOMP) {
+            fieldDeleteCascade.setSelected(false);
+        }
+    }
 
     @Override
     protected void changeFieldDeSelected(ItemEvent e) {
@@ -387,44 +447,7 @@ public class AssociationInputContent extends PanelInputContentId {
 
     }
 
-    private void treatFieldNature() {
-        MCDAssociationNature nature = MCDAssociationNature.findByText((String) fieldNature.getSelectedItem());
 
-        // {frozen}
-        if ((nature == MCDAssociationNature.NOID) || (nature == MCDAssociationNature.IDNATURAL)) {
-            fieldFrozen.setEnabled(true);
-        } else {
-            fieldFrozen.setEnabled(false);
-            fieldFrozen.setSelected(false);
-        }
-
-        // {deletecascade}
-        if (nature == MCDAssociationNature.IDCOMP) {
-            fieldDeleteCascade.setEnabled(true);
-        } else {
-            fieldDeleteCascade.setEnabled(false);
-            fieldDeleteCascade.setSelected(false);
-        }
-
-        // {oriented} {nonorented}
-        if (isRecursif()) {
-            String multiA = (String)fieldFromMulti.getSelectedItem();
-            String multiB = (String)fieldToMulti.getSelectedItem();
-            if (StringUtils.isNotEmpty(multiA) && StringUtils.isNotEmpty(multiB) ) {
-                MRelEndMultiPart maxFrom = MRelEndService.computeMultiMaxStd((String) fieldFromMulti.getSelectedItem());
-                MRelEndMultiPart maxTo = MRelEndService.computeMultiMaxStd((String) fieldToMulti.getSelectedItem());
-                MRelationDegree degree = MRelationService.computeDegree(maxFrom, maxTo);
-                boolean degreeNot1n = (degree == MRelationDegree.DEGREE_ONE_ONE) ||
-                        (degree == MRelationDegree.DEGREE_MANY_MANY);
-                if (degreeNot1n) {
-                    fieldOriented.setEnabled(true);
-                } else {
-                    fieldOriented.setEnabled(false);
-                    fieldOriented.setSelectedEmpty();
-                }
-            }
-        }
-    }
 
     @Override
     public void focusGained(FocusEvent focusEvent) {
@@ -442,6 +465,11 @@ public class AssociationInputContent extends PanelInputContentId {
 
     @Override
     public void focusLost(FocusEvent focusEvent) {
+    }
+
+    @Override
+    public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
+
     }
 
 
@@ -552,8 +580,6 @@ public class AssociationInputContent extends PanelInputContentId {
             unitaire = notBatch && (sComponent == fieldNature);
             ok = checkNature(fieldNature, unitaire) && ok;
 
-            // enable ou non les champs dépendants
-            treatFieldNature();
 
             unitaire = notBatch && (sComponent == fieldOriented);
             ok = checkOriented(fieldOriented, unitaire) && ok;
@@ -769,28 +795,11 @@ public class AssociationInputContent extends PanelInputContentId {
     private boolean checkMulti(SComboBox fieldMulti, String inputEditor, int direction, boolean unitaire) {
 
         ArrayList<String> messages = MCDAssEndService.checkMulti(fieldMulti, inputEditor, direction);
-        if ((messages.size() == 0) && StringUtils.isNotEmpty((String) fieldMulti.getSelectedItem())) {
-            changeFieldMulti(fieldMulti, direction);
-        }
+
         return checkInput(fieldMulti, unitaire, messages);
     }
 
-    private void changeFieldMulti(SComboBox fieldMulti, int direction) {
-        SCheckBox ordered = null;
-        if (direction == MCDAssEnd.FROM){
-            ordered = fieldFromOrdered;
-        }
-        if (direction == MCDAssEnd.TO){
-            ordered = fieldToOrdered;
-        }
-        MRelEndMultiPart multiMax = MRelEndService.computeMultiMaxStd((String) fieldMulti.getSelectedItem());
-        if (multiMax == MRelEndMultiPart.MULTI_MANY){
-            ordered.setEnabled(true);
-        } else{
-            ordered.setEnabled(false);
-            ordered.setSelected(false);
-        }
-    }
+
 
     private boolean checkNature(SComboBox fieldNature, boolean unitaire) {
         return checkInput(fieldNature,
@@ -799,10 +808,11 @@ public class AssociationInputContent extends PanelInputContentId {
                         fieldFromMulti, fieldToMulti));
     }
 
+
     private boolean checkOriented(SComboBox fieldOriented, boolean unitaire) {
         return checkInput(fieldOriented,
                 unitaire,
-                MCDAssociationService.checkOriented(fieldOriented, isRecursif()));
+                MCDAssociationService.checkOriented(fieldOriented, isReflexive(), getDegree()));
     }
 
 
@@ -921,14 +931,22 @@ public class AssociationInputContent extends PanelInputContentId {
 
     @Override
     protected void initDatas() {
-        /*
-        MCDContEndRels mcdContEndRels = (MCDContEndRels) mvccdElement;
-        MCDEntity mcdEntityFrom = (MCDEntity) mcdContEndRels.getParent();
 
-        SComboBoxService.selectByText(fieldFromEntity, mcdEntityFrom.getName());
-        */
         super.initDatas();
+/*
+        MCDContRelations mcdContRelations = (MCDContRelations) getEditor().getMvccdElementParent();
+        MCDContEntities mcdContEntities = (MCDContEntities) mcdContRelations.getParent().
+        MCDEntity mcdEntityFrom =
+        MCDAssociation forInitAssociation = MVCCDElementFactory.instance().createMCDAssociation(
+                (MCDContRelations) getEditor().getMvccdElementParent());
 
+ */
+        MCDAssociation forInitAssociation = new MCDAssociation((MCDContRelations) getEditor().getMvccdElementParent());
+        loadDatas(forInitAssociation);
+        forInitAssociation.removeInParent();
+        forInitAssociation = null;
+
+        /*
         SComboBoxService.selectByText(fieldNature, MCDAssociationNature.NOID.getText());
         fieldFrozen.setSelected(false);
         fieldDeleteCascade.setSelected(false);
@@ -939,17 +957,11 @@ public class AssociationInputContent extends PanelInputContentId {
 
         initDatas (MRelEnd.FROM);
         initDatas (MRelEnd.TO);
-/*
-        fieldFromRoleName.setText("");
-        fieldToRoleName.setText("");
-        fieldFromRoleShortName.setText("");
-        fieldToRoleShortName.setText("");
 
- */
-
-
+         */
     }
 
+    /*
     private void initDatas(int direction) {
         factorizeAssEnd(direction);
 
@@ -960,6 +972,8 @@ public class AssociationInputContent extends PanelInputContentId {
         factorizeFieldMulti.setSelectedEmpty();
         factorizeFieldOrdered.setSelected(false);
     }
+
+     */
 
 
     @Override
@@ -979,21 +993,39 @@ public class AssociationInputContent extends PanelInputContentId {
 
 
         // Au niveau de chacune des 2 extrémités
-        MCDAssEnd  mcdAssEndFrom = mcdAssociation.getFrom();
+        MCDAssEnd  mcdAssEndFrom = null;
+        if (mcdAssociation.getFrom() != null) {
+            mcdAssEndFrom = mcdAssociation.getFrom();
+        } else {
+            // null dans le cas de l'initialisation
+            mcdAssEndFrom = new MCDAssEnd(null);
+        }
         loadDatasAssEnd(MRelEnd.FROM, mcdAssEndFrom);
 
-        MCDAssEnd  mcdAssEndTo = mcdAssociation.getTo();
+        MCDAssEnd  mcdAssEndTo = null;
+        if (mcdAssociation.getTo() != null) {
+            mcdAssEndTo = mcdAssociation.getTo();
+        } else {
+            // null dans le cas de l'initialisation
+            mcdAssEndTo = new MCDAssEnd(null);
+        }
         loadDatasAssEnd(MRelEnd.TO, mcdAssEndTo);
     }
 
     private void loadDatasAssEnd(int direction, MCDAssEnd mcdAssEnd) {
         factorizeAssEnd(direction);
-        SComboBoxService.selectByText(factorizeFieldEntity, mcdAssEnd.getMcdEntity().getNamePath(modePathName));
+        if (mcdAssEnd.getMcdEntity() != null) {
+            SComboBoxService.selectByText(factorizeFieldEntity, mcdAssEnd.getMcdEntity().getNamePath(modePathName));
+        }
         factorizeFieldRoleName.setText(mcdAssEnd.getName());
         factorizeFieldRoleShortName.setText(mcdAssEnd.getShortName());
         factorizeFieldMulti.removeItemAt(0);
         factorizeFieldMulti.insertItemAt(SComboBox.LINEWHITE,0);
-        SComboBoxService.selectByTextEditable(factorizeFieldMulti, mcdAssEnd.getMultiStr());
+        if (mcdAssEnd.getMultiStr() != null) {
+            SComboBoxService.selectByTextEditable(factorizeFieldMulti, mcdAssEnd.getMultiStr());
+        } else {
+            factorizeFieldMulti.setSelectedEmpty();
+        }
         factorizeFieldOrdered.setSelected(mcdAssEnd.isOrdered());
      }
 
@@ -1064,7 +1096,45 @@ public class AssociationInputContent extends PanelInputContentId {
             fieldFromEntity.setEnabled(false);
             fieldToEntity.setEnabled(false);
         }
-   }
+
+        enabledContentMulti(MCDAssEnd.FROM);
+        enabledContentMulti(MCDAssEnd.TO);
+
+        fieldOriented.setEnabled(false);
+        try {
+            fieldOriented.setEnabled(isReflexive() && (getDegree() != MRelationDegree.DEGREE_ONE_MANY));
+        } catch(Exception e ){
+            // les multiplicités ne sont pas saisies
+        }
+
+        MCDAssociationNature nature = MCDAssociationNature.findByText((String) fieldNature.getSelectedItem());
+
+        // {frozen}
+        fieldFrozen.setEnabled((nature == MCDAssociationNature.NOID) || (nature == MCDAssociationNature.IDNATURAL));
+
+        // {deletecascade}
+        fieldDeleteCascade.setEnabled(nature == MCDAssociationNature.IDCOMP);
+
+    }
+
+    private void enabledContentMulti(int direction) {
+        SCheckBox ordered = null;
+        SComboBox fieldMulti = null;
+        if (direction == MCDAssEnd.FROM){
+            ordered = fieldFromOrdered;
+            fieldMulti = fieldFromMulti;
+        }
+        if (direction == MCDAssEnd.TO){
+            ordered = fieldToOrdered;
+            fieldMulti = fieldToMulti;
+        }
+        if (! fieldMulti.isSelectedEmpty()){
+            MRelEndMultiPart multiMax = MRelEndService.computeMultiMaxStd((String) fieldMulti.getSelectedItem());
+            ordered.setEnabled(multiMax.equals(MRelEndMultiPart.MULTI_MANY));
+        } else {
+            ordered.setEnabled(false);
+        }
+    }
 
     public MCDEntity getMCDEntityTo(){
         return MCDEntityService.getMCDEntityByNamePath(
@@ -1104,10 +1174,35 @@ public class AssociationInputContent extends PanelInputContentId {
         return ((MVCCDElement) iMCDModelContainer).getDescendantsWithout(getElementForCheck());
     }
 
-    public boolean isRecursif(){
-        return (fieldFromEntity != null) && (fieldToEntity != null) &&
+    public boolean isReflexive(){
+        return (fieldFromEntity.isNotSelectedEmpty() && fieldToEntity.isNotSelectedEmpty()) &&
                 (fieldFromEntity.getSelectedIndex() == fieldToEntity.getSelectedIndex());
-
     }
 
+    public boolean isNotReflexive(){
+        return ! isReflexive();
+    }
+
+    public MRelationDegree getDegree() {
+
+        MRelEndMultiPart multiFrom = MRelEndService.computeMultiMaxStd((String) fieldFromMulti.getSelectedItem());
+        MRelEndMultiPart multiTo = MRelEndService.computeMultiMaxStd((String) fieldToMulti.getSelectedItem());
+        return MRelationService.computeDegree( multiFrom,  multiTo);
+    }
+
+    public SComboBox getFieldFromEntity() {
+        return fieldFromEntity;
+    }
+
+    public SComboBox getFieldToEntity() {
+        return fieldToEntity;
+    }
+
+    public SComboBox getFieldNature() {
+        return fieldNature;
+    }
+
+    public int getModePathName() {
+        return modePathName;
+    }
 }

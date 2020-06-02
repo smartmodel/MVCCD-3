@@ -324,11 +324,16 @@ return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
     public void loadDatas(MVCCDElement mvccdElement) {
         // Pour utilisation  uniquement checkDatas
         MCDElement parent ;
+        /*
         if (panelInput != null) {
             parent = (MCDElement) getEditor().getMvccdElementCrt().getParent() ;
         } else {
             parent = (MCDElement) mvccdElement.getParent();
         }
+
+         */
+        parent = (MCDElement) mvccdElement.getParent();
+
 
         SComboBoxService.selectByText(fieldParent, parent.getNamePath(MCDElementService.PATHNAME));
 

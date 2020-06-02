@@ -61,7 +61,6 @@ public class MCDAttributeService {
         MCDEntity mcdEntity = mcdAttribute.getEntityParent();
         ArrayList<MCDNID>  allNIDs = mcdEntity.getMCDContConstraints().getMCDNIDs();
         for (MCDNID aNID : allNIDs){
-            System.out.println(aNID.getName());
             for (MCDParameter parameter : aNID.getMcdParameters()){
                 if ( parameter.getTarget() == mcdAttribute){
                     resultat.add(aNID);

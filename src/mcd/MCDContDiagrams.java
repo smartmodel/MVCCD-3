@@ -14,9 +14,4 @@ public class MCDContDiagrams extends MCDElement {
     }
 
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
-
 }

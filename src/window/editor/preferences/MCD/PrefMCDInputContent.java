@@ -449,6 +449,10 @@ public class PrefMCDInputContent extends PanelInputContent {
     public void focusLost(FocusEvent focusEvent) {
     }
 
+    @Override
+    public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
+
+    }
 
 
     @Override

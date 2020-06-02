@@ -3,6 +3,7 @@ package main;
 import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.MCDContAttributes;
+import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -123,7 +124,7 @@ public class MVCCDElementFactory {
     }
 
     public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
-                MCDContEndRels mcdContEndRelsFrom, MCDContEndRels mcdContEndRelsTo) {
+                                                MCDContEndRels mcdContEndRelsFrom, MCDContEndRels mcdContEndRelsTo) {
 
         MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations) ;
 

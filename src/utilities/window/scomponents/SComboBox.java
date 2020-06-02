@@ -50,7 +50,7 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         for (int i = 0; i < getItemCount(); i++) {
             if (index == i ){
                 super.setSelectedIndex(index);
-                setSelectedBase(i);
+                setSelectedBase(index);
             }
         }
     };
@@ -60,7 +60,7 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
             //oldSelected = getItemAt(i);
             oldIndex = i ;
             oldObject = getItemAt(i);
-        }
+         }
     }
 
     public Integer getOldIndex() {
@@ -72,8 +72,11 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         boolean updated;
         updated = (getSelectedIndex() != oldIndex) || (getSelectedItem() != oldObject);
 
-        if (panel.getEditor().getMode().equals(DialogEditor.NEW)){
-            updated = true;
+        // Si ce n'est pas un appel directement pour le contrôle de conformité
+        if (panel.getEditor() != null) {
+            if (panel.getEditor().getMode().equals(DialogEditor.NEW)) {
+                updated = true;
+            }
         }
 
        if (updated) {
@@ -176,6 +179,10 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         return  (content.equals(LINEDASH) || content.equals(LINEWHITE)) ;
     }
 
+    public boolean isNotSelectedEmpty(){
+        return  ! isSelectedEmpty() ;
+    }
+
     public int getItemEmptyIndex(){
         for (int i = 0; i < getItemCount(); i++) {
             if (getItemAt(i).equals(LINEWHITE) || getItemAt(i).equals(LINEDASH)){
@@ -189,6 +196,7 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         for (int i = 0; i < getItemCount(); i++) {
             if (getItemAt(i).equals(LINEWHITE) || getItemAt(i).equals(LINEDASH)){
                 super.setSelectedIndex(i);
+                setSelectedBase(i);
             }
         }
     }
@@ -199,5 +207,6 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
 
     public void setSelectedFirst() {
         super.setSelectedIndex(0);
+        setSelectedBase(0);
     }
 }

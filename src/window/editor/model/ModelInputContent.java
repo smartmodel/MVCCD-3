@@ -1,6 +1,7 @@
 package window.editor.model;
 
 import main.MVCCDElement;
+import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDContPackages;
@@ -186,6 +187,11 @@ public class ModelInputContent extends PanelInputContentId {
     public void focusLost(FocusEvent focusEvent) {
     }
 
+    @Override
+    public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
+
+    }
+
 
     @Override
     protected int getLengthMax(int naming) {
@@ -285,6 +291,8 @@ public class ModelInputContent extends PanelInputContentId {
         super.initDatas();
 
         Preferences preferences = PreferencesManager.instance().preferences();
+
+        // Pas de création d'objet transitoire pour initialiser Modèle ou package
 
         // Initialisé par défaut dans les 2 cas avec les préférences d'application
         fieldJournalization.setSelected(preferences.getMCD_JOURNALIZATION()); ;

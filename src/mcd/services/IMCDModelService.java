@@ -3,6 +3,7 @@ package mcd.services;
 import main.MVCCDElement;
 import mcd.MCDContEntities;
 import mcd.MCDElement;
+import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ public class IMCDModelService {
     public static  ArrayList<MCDElement> getMCDElementsByClassName(IMCDModel model,
                                                                    boolean withModel,
                                                                    String className){
-
         ArrayList<MCDElement> resultat = new ArrayList<MCDElement>();
         if (withModel){
             /*
@@ -41,6 +41,14 @@ public class IMCDModelService {
             }
         }
         resultat.addAll(getMCDElementsByClassNameInternal((MCDElement) model, className));
+        return resultat;
+    }
+
+    public static ArrayList<MCDEntity> getAllEntitiesInIModel(IMCDModel model){
+        ArrayList<MCDEntity> resultat = new ArrayList<MCDEntity>();
+        for (MCDElement mcdElement : getMCDElementsByClassName(model, false, MCDEntity.class.getName())){
+               resultat.add ((MCDEntity) mcdElement);
+        }
         return resultat;
     }
 

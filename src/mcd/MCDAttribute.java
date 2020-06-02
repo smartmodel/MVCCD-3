@@ -196,29 +196,15 @@ public class MCDAttribute extends MCDElement implements IMCompliant, IMCDParamet
                     preferences.CONSTRAINT_ORDERED_LIENPROG));
         }
 
+        if (frozen){
+            resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                    preferences.CONSTRAINT_FROZEN_LIENPROG));
+        }
+
         return resultat;
     }
 
-    public void setFromStereotypes(ArrayList<Stereotype> stereotypes){
-        aid = false;
-        mandatory = false;
-        Preferences preferences = PreferencesManager.instance().preferences();
 
-        for (Stereotype stereotype : stereotypes){
-            if (stereotype.getLienProg().equals(preferences.STEREOTYPE_AID_LIENPROG)){
-                aid = true;
-            }
-            if (stereotype.getLienProg().equals(preferences.STEREOTYPE_M_LIENPROG)){
-                mandatory = true;
-            }
-        }
-    }
-
-
-    @Override
-    public String getNameTree() {
-        return null;
-    }
 
     @Override
     public  String getClassShortNameUI() {

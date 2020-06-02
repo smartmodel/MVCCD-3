@@ -22,9 +22,9 @@ public abstract class MVCCDElement implements Serializable {
 
 
     private MVCCDElement parent;
-    private String name;
-    private String shortName;
-    private String longName;
+    private String name = "";
+    private String shortName = "";
+    private String longName = "";
     private int order;
      //private boolean uniqueInParent = true;
 
@@ -240,19 +240,19 @@ public abstract class MVCCDElement implements Serializable {
 
     // Peut être surchargé par les descendants si nécessaire (p.exemple, les relations
     // est utilisé par toString()
-    public abstract String getNameTree() ;
+    public String getNameTree(){
+        return getName();
+    } ;
 
     public String toString(){
-       if (StringUtils.isNotEmpty(getNameTree())){
-            return getNameTree();
-        } else {
-            if (StringUtils.isNotEmpty(name)) {
-                return name;
+
+            if (StringUtils.isNotEmpty(getNameTree())) {
+                return getNameTree();
             } else {
                 //TODO-1 A voir s'il faut enlever getClass() lorsque le produit sera stable
                 return "Sans nom  " + getClass().getName();
             }
-        }
+
     }
 
 

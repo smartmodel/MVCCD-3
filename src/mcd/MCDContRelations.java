@@ -14,12 +14,6 @@ public class MCDContRelations extends MCDElement{
         super (parent);
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
-
-
     public static MCDContRelations getMCDContRelationsByNamePath(int pathMode, String namePath){
         for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){
             if (mcdElement instanceof MCDContRelations){

@@ -159,6 +159,8 @@ public class Preferences extends MVCCDElement {
 
     public static String CONSTRAINT_ORDERED_NAME = "ordered";
     public static String CONSTRAINT_ORDERED_LIENPROG = "ordered";
+    public static String CONSTRAINT_FROZEN_NAME = "frozen";
+    public static String CONSTRAINT_FROZEN_LIENPROG = "frozen";
 
     public static String CONSTRAINT_ABSOLUTE_NAME = "absolute";
     public static String CONSTRAINT_ABSOLUTE_LIENPROG = "absolute";
@@ -344,11 +346,6 @@ public class Preferences extends MVCCDElement {
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);
 
-    }
-
-    @Override
-    public String getNameTree() {
-        return null;
     }
 
     // Application

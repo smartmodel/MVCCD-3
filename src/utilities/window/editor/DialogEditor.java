@@ -160,8 +160,6 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         startExtended();
         initialResize();
 
-
-
     }
 
     protected void startExtended(){
@@ -215,6 +213,21 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     @Override
     public void windowOpened(WindowEvent windowEvent) {
+            // Les données ont peut-être été ajustées par les méthodes changeXXX de l'éditeur
+            // Cahngement avant que l'utilisateur ne fase quoi que ce soit
+        if (! mode.equals(DialogEditor.NEW)) {
+            if (input.getInputContent().datasChangedNow()  && (input != null)){
+                String messageMode ;
+                if (mode.equals(UPDATE)){
+                    messageMode = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.update");
+                } else {
+                    messageMode = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.not.update");
+                }
+                String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
+                        new String[] {messageMode});
+                DialogMessage.showOk(this, message);
+            }
+        }
 
     }
 
@@ -371,6 +384,4 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         setSizeCustom(getSize());
         super.dispose();
     }
-
-
 }

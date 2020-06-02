@@ -1,9 +1,8 @@
 package window.editor.entity;
 
 import main.MVCCDElement;
-import mcd.MCDContEntities;
-import mcd.MCDElement;
-import mcd.MCDEntity;
+import main.MVCCDElementFactory;
+import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDContEntitiesService;
 import mcd.services.MCDElementService;
@@ -153,6 +152,11 @@ public class EntityInputContent extends PanelInputContentId {
     public void focusLost(FocusEvent focusEvent) {
     }
 
+    @Override
+    public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
+
+    }
+
 
     @Override
     protected int getLengthMax(int naming) {
@@ -198,6 +202,13 @@ public class EntityInputContent extends PanelInputContentId {
     protected void initDatas() {
         Preferences preferences = PreferencesManager.instance().preferences();
         super.initDatas();
+
+        MCDEntity forInitEntity = MVCCDElementFactory.instance().createMCDEntity(
+                (MCDContEntities) getEditor().getMvccdElementParent());
+        loadDatas(forInitEntity);
+        forInitEntity.removeInParent();
+        forInitEntity = null;
+
         entityAbstract.setSelected(false);
         entityOrdered.setSelected(false);
         entityJournal.setSelected(preferences.getMCD_JOURNALIZATION());

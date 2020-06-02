@@ -15,8 +15,5 @@ public abstract class Diagram extends ProjectElement {
         super(parent, name);
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
+
 }

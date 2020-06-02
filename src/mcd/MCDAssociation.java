@@ -19,7 +19,7 @@ public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDPara
     public static final String CLASSSHORTNAMEUI = "Association";
 
 
-    private MCDAssociationNature nature ;
+    private MCDAssociationNature nature = MCDAssociationNature.NOID;
     private boolean frozen = false;
     private boolean deleteCascade = false;
     private Boolean oriented = null;

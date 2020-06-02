@@ -39,9 +39,4 @@ public class Stereotype extends MVCCDElement {
         return classTargetName;
     }
 
-
-    @Override
-    public String getNameTree() {
-        return null;
-    }
 }

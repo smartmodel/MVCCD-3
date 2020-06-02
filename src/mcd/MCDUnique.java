@@ -66,11 +66,6 @@ public class MCDUnique extends MCDUnicity{
     }
 
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
-
     public boolean isAbsolute() {
         return absolute;
     }

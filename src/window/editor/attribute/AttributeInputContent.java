@@ -2,7 +2,9 @@ package window.editor.attribute;
 
 import datatypes.*;
 import main.MVCCDElement;
+import main.MVCCDElementFactory;
 import mcd.MCDAttribute;
+import mcd.MCDContAttributes;
 import mcd.MCDElement;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDAttributeService;
@@ -49,7 +51,6 @@ public class AttributeInputContent extends PanelInputContentId {
     private STextField datatypeScale = new STextField(this);
     private SButton btnDatatypeScale;
 
-    private STextField stereotypesStringUML = new STextField(this);
 
     private SCheckBox mandatory = new SCheckBox(this);
     private SCheckBox aid = new SCheckBox(this);
@@ -141,12 +142,7 @@ public class AttributeInputContent extends PanelInputContentId {
                 actionDatatypeScale();
             }
         });
-        stereotypesStringUML.setPreferredSize((new Dimension(100, Preferences.EDITOR_FIELD_HEIGHT)));
-        stereotypesStringUML.setToolTipText("Stéréotypes de l'attribut");
-        stereotypesStringUML.getDocument().addDocumentListener(this);
-        //stereotypesStringUML.addMouseListener(this);
-        stereotypesStringUML.addFocusListener(this);
-        stereotypesStringUML.setIndirectInput(true);
+
 
         mandatory.setToolTipText("Obligation de valeur");
         mandatory.addItemListener(this);
@@ -189,7 +185,6 @@ public class AttributeInputContent extends PanelInputContentId {
         super.getsComponents().add(btnDatatypeSize);
         super.getsComponents().add(datatypeScale);
         super.getsComponents().add(btnDatatypeScale);
-        super.getsComponents().add(stereotypesStringUML);
         super.getsComponents().add(mandatory);
         super.getsComponents().add(aid);
         super.getsComponents().add(list);
@@ -418,150 +413,50 @@ public class AttributeInputContent extends PanelInputContentId {
         if (mcdDatatypeSelected != null) {
             labelDatatypeSize.setText(MCDAttributeService.getTextLabelSize(mcdDatatypeSelected));
             if (mcdDatatypeSelected instanceof MCDDomain) {
-                datatypeSize.setEnabled(true);
-                datatypeSize.setText(mcdDatatypeSelected.getSizeDefault());
-                datatypeSize.setEnabled(false);
-                btnDatatypeSize.setEnabled(false);
-                datatypeScale.setText(mcdDatatypeSelected.getScaleDefault());
-                datatypeScale.setEnabled(false);
-                btnDatatypeScale.setEnabled(false);
+               datatypeSize.setText(mcdDatatypeSelected.getSizeDefault());
+               datatypeScale.setText(mcdDatatypeSelected.getScaleDefault());
             } else {
-                if (mcdDatatypeSelected.isSizeMandatoryWithInherit()) {
-                    datatypeSize.setText("");
-                    datatypeSize.setEnabled(true);
-                    btnDatatypeSize.setEnabled(true);
-                } else {
-                    datatypeSize.setText("");
-                    datatypeSize.setEnabled(false);
-                    btnDatatypeSize.setEnabled(false);
-                }
-                if (mcdDatatypeSelected.isScaleMandatoryWithInherit()) {
-                    datatypeScale.setText("");
-                    datatypeScale.setEnabled(true);
-                    btnDatatypeScale.setEnabled(true);
-                } else {
-                    datatypeScale.setText("");
-                    datatypeScale.setEnabled(false);
-                    btnDatatypeScale.setEnabled(false);
-                }
-            }
+                datatypeSize.setText("");
+                datatypeScale.setText("");
+             }
         } else {
             datatypeSize.setText("");
-            datatypeSize.setEnabled(false);
-            btnDatatypeSize.setEnabled(false);
             datatypeScale.setText("");
-            datatypeScale.setEnabled(false);
-            btnDatatypeScale.setEnabled(false);
-        }
-
-    }
-
-    /*
-    private void changeFieldList() {
-        if (list.isEnabled() && list.isSelected()) {
-            ordered.setEnabled(true);
-            derivedValue.setText("");
-            derivedValue.setEnabled(false);
-            initValue.setText("");
-            initValue.setEnabled(false);
-        } else {
-            ordered.setEnabled(false);
-            derivedValue.setEnabled(true);
-            initValue.setEnabled(true);
-        }
-        if (!list.isSelected()) {
-            ordered.setSelected(false);
-            derivedValue.setEnabled(true);
-            initValue.setEnabled(true);
         }
     }
 
-     */
+
 
     private void changeFieldSelectedList() {
-            ordered.setEnabled(true);
             derivedValue.setText("");
-            derivedValue.setEnabled(false);
             initValue.setText("");
-            initValue.setEnabled(false);
     }
 
     private void changeFieldDeSelectedList() {
-            ordered.setEnabled(false);
             ordered.setSelected(false);
-            derivedValue.setEnabled(true);
-            initValue.setEnabled(true);
     }
 
-    /*
-    private void changeFieldAid() {
-        if (aid.isSelected()){
-            datatypeNameSelect(MDDatatypeService.convertLienProgToName(
-                    PreferencesManager.instance().preferences().getMCD_AID_DATATYPE_LIENPROG()));
-            datatypeName.setEnabled(false);
-            mandatory.setSelected(true);
-            mandatory.setEnabled(false);
-            list.setSelected(false);
-            list.setEnabled(false);
-            frozen.setSelected(true);
-            frozen.setEnabled(false);
-            derivedValue.setText("");
-            derivedValue.setEnabled(false);
-            initValue.setText("");
-            initValue.setEnabled(false);
-        } else {
-            datatypeName.setSelectedIndex(0);
-            datatypeName.setEnabled(true);
-            mandatory.setSelected(false);
-            mandatory.setEnabled(true);
-            list.setSelected(false);
-            list.setEnabled(true);
-            frozen.setSelected(false);
-            frozen.setEnabled(true);
-            derivedValue.setEnabled(true);
-            initValue.setEnabled(true);
-        }
-    }
-
-     */
 
     private void changeFieldSelectedAid() {
-        fieldName.setEnabled(false);
         fieldName.setText((String) attributeNameAID.getFirstItem());
-        attributeNameAID.setEnabled(PreferencesManager.instance().preferences().isMCD_AID_WITH_DEP());
         SComboBoxService.selectByText(datatypeName,
                     PreferencesManager.instance().preferences().getMCD_AID_DATATYPE_LIENPROG());
-            datatypeName.setEnabled(false);
-            mandatory.setSelected(true);
-            mandatory.setEnabled(false);
+
+        mandatory.setSelected(true);
         list.setSelected(false);
-        list.setEnabled(false);
         ordered.setSelected(false);
-        ordered.setEnabled(false);
         frozen.setSelected(true);
-            frozen.setEnabled(false);
-            derivedValue.setText("");
-            derivedValue.setEnabled(false);
-            initValue.setText("");
-            initValue.setEnabled(false);
+        derivedValue.setText("");
+        initValue.setText("");
     }
 
     private void changeFieldDeSelectedAid() {
-        fieldName.setEnabled(true);
         fieldName.setText("");
-        attributeNameAID.setEnabled(false);
-            datatypeName.setSelectedFirst();
-            datatypeName.setEnabled(true);
-            mandatory.setSelected(false);
-            mandatory.setEnabled(true);
+        datatypeName.setSelectedFirst();
+        mandatory.setSelected(false);
         list.setSelected(false);
-        list.setEnabled(true);
         ordered.setSelected(false);
-        ordered.setEnabled(true);
         frozen.setSelected(false);
-        frozen.setEnabled(true);
-        derivedValue.setEnabled(true);
-        initValue.setEnabled(true);
     }
 
 
@@ -760,30 +655,13 @@ public class AttributeInputContent extends PanelInputContentId {
     }
 
 
-
     @Override
     protected void initDatas() {
-        // L'ordre d'appel est important pour que les initialisations se fassent
-        // du général (aid) au particulier (list)
-
-        aid.setSelected(false);
-
-        super.initDatas();
-        Preferences preferences = PreferencesManager.instance().preferences();
-        datatypeName.setSelectedFirst();
-        datatypeSize.setText("");
-        datatypeScale.setText("");
-        aid.setSelected(false);
-        mandatory.setSelected(false);
-        list.setSelected(false);
-        ordered.setSelected(false);
-        frozen.setSelected(false);
-        uppercase.setSelected(false);
-        derivedValue.setText("");
-        initValue.setText("");
-
-        stereotypesStringUML.setText("");
-
+        MCDAttribute forInitAttribute = MVCCDElementFactory.instance().createMCDAttribute(
+                (MCDContAttributes) getEditor().getMvccdElementParent());
+        loadDatas(forInitAttribute);
+        forInitAttribute.removeInParent();
+        forInitAttribute = null;
     }
 
 
@@ -794,17 +672,17 @@ public class AttributeInputContent extends PanelInputContentId {
 
         MCDAttribute mcdAttribute = (MCDAttribute) mvccdElement;
 
-        aid.setSelected(mcdAttribute.isAid());
 
         super.loadDatas(mcdAttribute);
 
+        aid.setSelected(mcdAttribute.isAid());
+
         if (mcdAttribute.isAid()) {
             // redondance entre les 2 champs attributeName et attributeNameAID
-            SComboBoxService.selectByText(attributeNameAID, fieldName.getName());
+            SComboBoxService.selectByText(attributeNameAID, fieldName.getText());
         } else {
             attributeNameAID.setSelectedFirst();
         }
-
 
         if (mcdAttribute.getDatatypeLienProg() != null) {
             MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(mcdAttribute.getDatatypeLienProg());
@@ -823,12 +701,22 @@ public class AttributeInputContent extends PanelInputContentId {
         uppercase.setSelected(mcdAttribute.isUppercase());
         derivedValue.setText(mcdAttribute.getDerivedValue());
         initValue.setText(mcdAttribute.getInitValue());
-
-        ArrayList<Stereotype> stereotypes =  mcdAttribute.getToStereotypes();
-        ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
-        stereotypesStringUML.setText(UtilDivers.ArrayStringToString(stereotypesUMLNames, ""));
     }
 
+    public void loadSimulationChange(MVCCDElement mvccdElement) {
+
+        MCDAttribute mcdAttribute = (MCDAttribute) mvccdElement;
+        if (mcdAttribute.isAid()) {
+            changeFieldSelectedAid();
+        }
+        if (mcdAttribute.isList()){
+            changeFieldSelectedList();
+        }
+        //Les deux méthode ci-dessous ne s'appliquent qu'au changement en édition
+        //changeFieldSelectedAttributeNameAID();
+        //changeFieldSelectedDatatypeName();
+
+    }
 
 
     private void loadSizeAndScale(MCDAttribute mcdAttribute) {
@@ -870,7 +758,11 @@ public class AttributeInputContent extends PanelInputContentId {
         MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByName(text);
 
         if(datatypeName.checkIfUpdated()){
-            mcdAttribute.setDatatypeLienProg(mcdDatatype.getLienProg());
+            if (mcdDatatype != null) {
+                mcdAttribute.setDatatypeLienProg(mcdDatatype.getLienProg());
+            } else {
+                mcdAttribute.setDatatypeLienProg(null);
+            }
         }
 
         saveSizeAndScale(mcdAttribute, mcdDatatype);
@@ -907,16 +799,6 @@ public class AttributeInputContent extends PanelInputContentId {
 
         if (initValue.checkIfUpdated()){
             mcdAttribute.setInitValue(initValue.getText());
-        }
-
-
-        if (stereotypesStringUML.checkIfUpdated()){
-            ArrayList<String> stereotypesString =
-            StereotypeService.getArrayListFromNamesStringTagged(stereotypesStringUML.getText(), false);
-            ArrayList<Stereotype> stereotypes =
-                    StereotypesManager.instance().stereotypes().getStereotypeByClassNameAndNames(
-                            MCDAttribute.class.getName(),stereotypesString );
-            mcdAttribute.setFromStereotypes(stereotypes);
         }
 
     }
@@ -963,9 +845,47 @@ public class AttributeInputContent extends PanelInputContentId {
     @Override
     protected void enabledContent() {
         Preferences preferences = PreferencesManager.instance().preferences();
-        fieldShortName.setEnabled(
-                !preferences.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME().equals(Preferences.OPTION_NO));
-        //entityJournal.setEnabled(preferences.getMCD_JOURNALIZATION_EXCEPTION());
+        fieldShortName.setEnabled( (!aid.isSelected()) &&
+                (!preferences.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME().equals(Preferences.OPTION_NO)));
+
+        fieldName.setEnabled(!aid.isSelected());
+        attributeNameAID.setEnabled(aid.isSelected() && PreferencesManager.instance().preferences().isMCD_AID_WITH_DEP());
+        datatypeName.setEnabled(!aid.isSelected());
+        btnDatatypeTree.setEnabled(!aid.isSelected());
+        mandatory.setEnabled(!aid.isSelected());
+        list.setEnabled(!aid.isSelected());
+        ordered.setEnabled((!aid.isSelected()) && list.isSelected());
+        frozen.setEnabled(!aid.isSelected());
+        derivedValue.setEnabled(!aid.isSelected() && (!list.isSelected()));
+        initValue.setEnabled(!aid.isSelected() && (!list.isSelected()));
+
+        String nameSelected = (String) datatypeName.getSelectedItem();
+        mcdDatatypeSelected = MDDatatypeService.getMCDDatatypeByName(nameSelected);
+
+        boolean c1 = mcdDatatypeSelected != null;
+        boolean c2 = mcdDatatypeSelected instanceof MCDDomain ;
+        boolean c3 = false;
+        if (c1){
+            c3 = mcdDatatypeSelected.isSizeMandatoryWithInherit();
+        }
+        boolean c4 = false;
+        if (c1){
+            c4 = mcdDatatypeSelected.isScaleMandatoryWithInherit();
+        }
+
+
+        if (c1){
+            labelDatatypeSize.setText(MCDAttributeService.getTextLabelSize(mcdDatatypeSelected));
+        } else {
+            labelDatatypeSize.setText("");
+        }
+
+        datatypeSize.setEnabled(c1 && (!c2) && c3);
+        btnDatatypeSize.setEnabled(c1 && (!c2) && c3);
+        datatypeScale.setEnabled(c1 && (!c2) && c4);
+        btnDatatypeScale.setEnabled(c1 && (!c2) && c4);
+
+
     }
 
    private void actionDatatypeTree() {

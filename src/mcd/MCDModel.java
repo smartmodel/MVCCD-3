@@ -65,11 +65,6 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
         this.mcdAuditException = mcdAuditException;
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
-
 
 
 }

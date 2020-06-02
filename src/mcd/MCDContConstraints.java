@@ -18,10 +18,6 @@ public class MCDContConstraints extends MCDElement {
         super(parent);
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
 
     public ArrayList<MCDConstraint> getMCDConstraints(){
         ArrayList<MCDConstraint> resultat = new ArrayList<MCDConstraint>();

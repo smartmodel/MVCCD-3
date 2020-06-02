@@ -66,10 +66,6 @@ public class MCDNID extends MCDUnicity {
         return resultat;
     }
 
-    @Override
-    public String getNameTree() {
-        return null;
-    }
 
     public boolean isLienProg() {
         return lienProg;

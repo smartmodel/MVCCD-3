@@ -42,4 +42,15 @@ public class DialogMessage {
         return JOptionPane.showOptionDialog(owner, message, title, JOptionPane.CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, options, optionSelected );
     }
+
+    //TODO-1 En cours de développement
+    public static Object selectInList(Window owner, String message, Object[] options, Object optionSelected) {
+        String title = MessagesBuilder.getMessagesProperty("Choix de l'entité de départ");
+        JComboBox optionList = new JComboBox(options);
+        optionList.setSelectedIndex(0);
+        return JOptionPane.showInputDialog(owner, optionList, title,
+                JOptionPane.QUESTION_MESSAGE);
+    }
+
+
 }
