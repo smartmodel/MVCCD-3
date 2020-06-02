@@ -9,6 +9,9 @@ public interface MRelEnd {
     public static final int FROM = 1 ;
     public static final int TO = 2 ;
 
+    public static final int GEN = 3 ;
+    public static final int SPEC = 4 ;
+
 
     public MCDRelation getMcdRelation();
 
