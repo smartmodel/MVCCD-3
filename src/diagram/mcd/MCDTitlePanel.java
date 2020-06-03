@@ -92,6 +92,7 @@ public class MCDTitlePanel {
                                 mcdEntityFrom, mcdEntityTo, MCDAssociationNature.NOID);
                     }
 
+
                     if (posOption == 3) {
                         IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
                         ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllEntitiesInIModel(iMCDModel);
