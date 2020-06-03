@@ -8,6 +8,7 @@ import preferences.Preferences;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.MCDAssociationEditingTreat;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
+import repository.editingTreat.mcd.MCDGeneralizationEditingTreat;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.services.PanelService;
@@ -57,7 +58,7 @@ public class MCDTitlePanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String message = "Choisisez la sorte d'élément à ajouter dans le projet";
-                Object[] options = {"Annuler", "Entité", "Association"};
+                Object[] options = {"Annuler", "Entité", "Association", "Généralisation"};
                 MVCCDWindow mvccdWindow = MVCCDManager.instance().getMvccdWindow();
                 int posOption = DialogMessage.showOptions(mvccdWindow,
                         message, options, JOptionPane.UNINITIALIZED_VALUE);
@@ -70,7 +71,6 @@ public class MCDTitlePanel {
                         MCDEntityEditingTreat mcdEntityEditingTreat = new MCDEntityEditingTreat();
                         MCDEntity newMCDEntity = (MCDEntity) mcdEntityEditingTreat.treatNew(mvccdWindow, mcdContEntities);
                     }
-
 
                     if (posOption == 2) {
                         IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
@@ -86,16 +86,31 @@ public class MCDTitlePanel {
                             mcdEntityTo = mcdEntities.get(1);
                         }
 
-                        for (MCDEntity mcdEntity : mcdEntities){
-                            System.out.println(mcdEntity.getName());
-                        }
-
                         MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
                         MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
                         MCDAssociation newMCDAssociation = mcdAssociationEditingTreat.treatNew(mvccdWindow, mcdContRelations,
                                 mcdEntityFrom, mcdEntityTo, MCDAssociationNature.NOID);
                     }
 
+                    if (posOption == 3) {
+                        IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
+                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllEntitiesInIModel(iMCDModel);
+
+                        MCDEntity mcdEntityGen = null;
+                        MCDEntity mcdEntitySpec= null;
+                        if (mcdEntities.size() == 1 ){
+                            mcdEntityGen = mcdEntities.get(0);
+                            mcdEntitySpec = mcdEntities.get(0);
+                        } else if (mcdEntities.size() > 1 ){
+                            mcdEntityGen = mcdEntities.get(0);
+                            mcdEntitySpec = mcdEntities.get(1);
+                        }
+
+                        MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
+                        MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
+                        MCDGeneralization newMCDGeneralization = mcdGeneralizationEditingTreat.treatNew(mvccdWindow, mcdContRelations,
+                                mcdEntityGen, mcdEntitySpec);
+                    }
                     if (fen != null) {
                         fen.setVisible(true);
                         newElement = (MCDElement) fen.getMvccdElementNew();

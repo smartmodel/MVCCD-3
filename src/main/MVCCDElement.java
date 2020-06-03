@@ -90,7 +90,7 @@ public abstract class MVCCDElement implements Serializable {
     }
 
     public String getShortNameSmart() {
-        if (shortName != null) {
+        if (StringUtils.isNotEmpty(shortName)){
             return shortName;
         } else {
             return name;
@@ -326,7 +326,9 @@ public abstract class MVCCDElement implements Serializable {
 
     public void setParent(MVCCDElement parent) {
         this.parent = parent;
-        parent.getChilds().add(this);
+        if (parent != null) {
+            parent.getChilds().add(this);
+        }
     }
 
     public void removeInParent(){

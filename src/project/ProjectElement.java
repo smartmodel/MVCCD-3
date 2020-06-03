@@ -31,11 +31,22 @@ public abstract class ProjectElement extends MVCCDElement {
             // Le projet lui-même
             this.id = 0;
         } else {
+            //TODO-1 A priori ok (A voir)
+            /*
             if (parent instanceof Project){
                 this.id = ProjectService.getProjectRoot(this).getNextIdElementSequence();
             } else {
                 this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
             }
+
+             */
+
+            try {
+                this.id = ProjectService.getProjectRoot(this).getNextIdElementSequence();
+            } catch(Exception e){
+                this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
+            }
+
             if ( parent == null) {
                 transitory = true;
             }

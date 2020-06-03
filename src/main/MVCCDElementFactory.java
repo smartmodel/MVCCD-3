@@ -149,6 +149,32 @@ public class MVCCDElementFactory {
     }
 
 
+    public MCDGeneralization createMCDGeneralization( MCDContRelations mcdContRelations,
+                                                MCDContEndRels mcdContEndRelsGen, MCDContEndRels mcdContEndRelsFrom) {
+
+        MCDGeneralization mcdGeneralization = new MCDGeneralization(mcdContRelations) ;
+
+        MCDEntity mcdEntityGen = (MCDEntity) mcdContEndRelsGen.getParent();
+        MCDContEndRels mcdContEndRelsEntityGen = mcdEntityGen.getMCDContEndRels();
+        MCDGSEnd mcdGSEndGen = new MCDGSEnd(mcdContEndRelsEntityGen) ;
+
+        MCDEntity mcdEntitySpec = (MCDEntity) mcdContEndRelsFrom.getParent();
+        MCDContEndRels mcdContEndRelsEntitySpec = mcdEntitySpec.getMCDContEndRels();
+        MCDGSEnd mcdGSEndSpec = new MCDGSEnd(mcdContEndRelsEntitySpec) ;
+
+        mcdGeneralization.setGen(mcdGSEndGen);
+        mcdGeneralization.setSpec(mcdGSEndSpec);
+
+        mcdGSEndGen.setMcdEntity(mcdEntityGen);
+        mcdGSEndGen.setMcdGeneralization(mcdGeneralization);
+
+        mcdGSEndSpec.setMcdEntity(mcdEntitySpec);
+        mcdGSEndSpec.setMcdGeneralization(mcdGeneralization);
+
+        return mcdGeneralization;
+    }
+
+
     private void createContentModel(MCDElement parent) {
         createContentPackage(parent);
     }

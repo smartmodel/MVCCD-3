@@ -135,15 +135,25 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         if (node.getUserObject() instanceof MCDAssociation) {
             treatGeneric(this, new MCDAssociationEditingTreat());
-            //TODO-0 Mettre à jour les AssEnd apès changement
+            //TODO-0 Mettre à jour les AssEnd après changement
         }
 
         if (node.getUserObject() instanceof MCDAssEnd) {
             mvccdElement = ((MCDAssEnd) node.getUserObject()).getMcdAssociation();
             treatGeneric(this, new MCDAssociationEditingTreat());
-            //TODO-0 Mettre à jour l'Assocition et l'AssEnd opposé apès changement
+            //TODO-0 Mettre à jour l'Assocition et l'AssEnd opposé après changement
         }
 
+        if (node.getUserObject() instanceof MCDGeneralization) {
+            treatGeneric(this, new MCDGeneralizationEditingTreat());
+            //TODO-0 Mettre à jour les GSEnd après changement
+        }
+
+        if (node.getUserObject() instanceof MCDGSEnd) {
+            mvccdElement = ((MCDGSEnd) node.getUserObject()).getMcdGeneralization();
+            treatGeneric(this, new MCDGeneralizationEditingTreat());
+            //TODO-0 Mettre à jour l'Assocition et l'AssEnd opposé après changement
+        }
 
     }
 
@@ -222,6 +232,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
     private void treatRelations(ISMenu menu) {
         treatGenericNew(this, new MCDAssociationEditingTreat(),
                 MessagesBuilder.getMessagesProperty("menu.new.association"));
+        treatGenericNew(this, new MCDGeneralizationEditingTreat(),
+                MessagesBuilder.getMessagesProperty("menu.new.generalization"));
+        treatGenericDeleteChilds(this, new MCDRelationsEditingTreat());
     }
 
     private void treatConstraints(ISMenu menu) {
@@ -319,6 +332,22 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 editingTreat.treatDelete(mvccdWindow, mvccdElement);
+            }
+        });
+    }
+
+    private void treatGenericDeleteChilds(ISMenu menu, EditingTreat editingTreat) {
+        String textMenu = MessagesBuilder.getMessagesProperty("menu.delete.childs");
+        treatGenericDeleteChilds(menu, editingTreat, textMenu);
+    }
+
+    private void treatGenericDeleteChilds(ISMenu menu, EditingTreat editingTreat, String textMenu) {
+        JMenuItem menuItem = new JMenuItem(textMenu);
+        addItem(menu, menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                editingTreat.treatDeleteChilds(mvccdWindow, mvccdElement);
             }
         });
     }

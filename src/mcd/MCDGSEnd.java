@@ -1,44 +1,28 @@
 package mcd;
 
-import m.MRelEndMulti;
-import m.MRelEndMultiPart;
-import m.services.MRelEndService;
-import main.MVCCDElement;
-import mcd.interfaces.IMCDParameter;
-import mcd.services.MCDElementService;
-import org.apache.commons.lang.StringUtils;
-import preferences.Preferences;
-import preferences.PreferencesManager;
-
-public class MCDAssEnd extends MCDRelEnd  {
+public class MCDGSEnd extends MCDRelEnd  {
 
     private static final long serialVersionUID = 1000;
 
-
-    //public static final int FROM = 1 ;  //drawingDirection
-    //public static final int TO = 2 ;  //drawingDirection
-
-    //private MCDAssociation mcdAssociation;
+    //private MCDGeneralization mcdGeneralization;
     //private MCDEntity mcdEntity ;
     private int drawingDirection ;
-    private boolean ordered = false;
-    private String multiStr;
 
 
-    public MCDAssEnd(MCDElement parent) {
+    public MCDGSEnd(MCDElement parent) {
         super(parent);
     }
 
-    public MCDAssEnd(MCDElement parent, String name) {
+    public MCDGSEnd(MCDElement parent, String name) {
         super(parent, name);
     }
 
-    public MCDAssociation getMcdAssociation() {
-        return (MCDAssociation) super.getMcdRelation() ;
+    public MCDGeneralization getMcdGeneralization() {
+        return (MCDGeneralization) super.getMcdRelation();
     }
 
-    public void setMcdAssociation(MCDAssociation mcdAssociation) {
-        super.setMcdRelation(mcdAssociation);
+    public void setMcdGeneralization(MCDGeneralization mcdGeneralization) {
+        super.setMcdRelation(mcdGeneralization);
     }
 
     public MCDEntity getMcdEntity() {
@@ -57,56 +41,18 @@ public class MCDAssEnd extends MCDRelEnd  {
         this.drawingDirection = drawingDirection;
     }
 
-    public String getMultiStr() {
-        return multiStr;
-    }
-
-    public void setMultiStr(String multiStr) {
-        this.multiStr = multiStr;
-    }
-
-
-    public MRelEndMultiPart getMultiMinStd() {
-        return MRelEndService.computeMultiMinStd(multiStr);
-    }
-
-    public Integer getMultiMinCustom() {
-        return MRelEndService.computeMultiMinCustom(multiStr);
-    }
-
-    public MRelEndMultiPart getMultiMaxStd() {
-        return MRelEndService.computeMultiMaxStd(multiStr);
-    }
-
-    public Integer getMultiMaxCustom() {
-        return MRelEndService.computeMultiMaxCustom(multiStr);
-    }
-
-    public MRelEndMulti getMulti(){
-        return MRelEndService.computeMultiStd(multiStr) ;
-    }
-
-
-    public boolean isOrdered() {
-        return ordered;
-    }
-
-    public void setOrdered(boolean ordered) {
-        this.ordered = ordered;
-    }
-
 
     @Override
     public String getNameTree() {
 
         String resultat = "";
-
+/*
         MVCCDElement containerEntity = this.getMcdEntity().getParent().getParent();
 
         MCDAssociation mcdAssociation = getMcdAssociation();
         MVCCDElement containerAssociation = this.getMcdAssociation().getParent().getParent();
 
-        MCDAssEnd mcdAssEndOpposite = mcdAssociation.getMCDAssEndOpposite(this);
+        MCDGSEnd mcdAssEndOpposite = mcdAssociation.getMCDAssEndOpposite(this);
         MCDEntity mcdEntityOpposite = mcdAssEndOpposite.getMcdEntity();
         MVCCDElement containerEntityOpposite = mcdEntityOpposite.getParent().getParent();
 
@@ -144,7 +90,7 @@ public class MCDAssEnd extends MCDRelEnd  {
         String namingAssociation ;
         if (StringUtils.isNotEmpty(this.getName()) && StringUtils.isNotEmpty(mcdAssEndOpposite.getName())){
             namingAssociation = this.getName();
-            if (this.getDrawingDirection() == MCDAssEnd.FROM){
+            if (this.getDrawingDirection() == MCDGSEnd.FROM){
                 namingAssociation = namingAssociation +
                                 Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT ;
 
@@ -153,18 +99,19 @@ public class MCDAssEnd extends MCDRelEnd  {
                         Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT ;
              }
         } else {
-            namingAssociation = /*Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +*/
+            namingAssociation =
                     mcdAssociation.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
         }
 
         resultat = namingAssociation + nameEntityOpposite;
+    */
         return resultat;
     }
 
 
-    public MCDAssEnd getMCDAssEndOpposite() {
-        MCDAssociation mcdAssociation = getMcdAssociation();
-        return mcdAssociation.getMCDAssEndOpposite(this);
+    public MCDGSEnd getMCDGSEndOpposite() {
+        MCDGeneralization mcdGeneralization = getMcdGeneralization();
+        return mcdGeneralization.getMCDAssGSOpposite(this);
     }
 
 

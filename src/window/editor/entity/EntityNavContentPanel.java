@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+
 public class EntityNavContentPanel extends PanelNavContent implements ActionListener {
 
     protected SButton btnEntity ;

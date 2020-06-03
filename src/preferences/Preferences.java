@@ -87,6 +87,7 @@ public class Preferences extends MVCCDElement {
     public static String FILE_HELP_MODEL_NAME = "helpModel.txt";
     public static String FILE_HELP_ENTITY_NAME = "helpEntity.txt";
     public static String FILE_HELP_ASSOCIATION_NAME = "helpAssociation.txt";
+    public static String FILE_HELP_GENERALIZATION_NAME = "helpGeneralization.txt";
     public static String FILE_HELP_PARAMETER_NAME ="helpParameter.txt";
 
     public static String FILE_HELP_ANCHOR_NAME = "helpAnchor.txt";
@@ -293,6 +294,7 @@ public class Preferences extends MVCCDElement {
     public static String MCD_NAMING_ASSOCIATION_SEPARATOR = " ... ";
     public static String MCD_NAMING_ASSOCIATION_ARROW_RIGHT = " -> ";
     public static String MCD_NAMING_ASSOCIATION_ARROW_LEFT = " <- ";
+    public static String MCD_NAMING_GENERALIZATION = " <|- ";
 
 
     public static String OPTION_ALWAYS = "option.always";

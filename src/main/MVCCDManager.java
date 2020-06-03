@@ -105,11 +105,13 @@ public class MVCCDManager {
     }
 
     public void showMVCCDElementInRepository(MVCCDElement mvccdElement) {
-        ProjectElement projectElement = (ProjectElement) mvccdElement;
-        DefaultMutableTreeNode node = ProjectService.getNodeById(projectElement.getId());
-        //getWinRepositoryContent().getTree().changeModel(repository);
-        getWinRepositoryContent().getTree().getTreeModel().reload(node);
-        getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
+        if ( mvccdElement instanceof ProjectElement) {
+            ProjectElement projectElement = (ProjectElement) mvccdElement;
+            DefaultMutableTreeNode node = ProjectService.getNodeById(projectElement.getId());
+            //getWinRepositoryContent().getTree().changeModel(repository);
+            getWinRepositoryContent().getTree().getTreeModel().reload(node);
+            getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
+        }
     }
 
     public void removeMVCCDElementInRepository(MVCCDElement mvccdElementToRemove, MVCCDElement parent) {

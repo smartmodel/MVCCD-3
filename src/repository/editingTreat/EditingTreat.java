@@ -60,11 +60,36 @@ public abstract class EditingTreat {
                 new String[] { messageTheElement, element.getName()});
         boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
         if (confirmDelete){
-                MVCCDManager.instance().removeMVCCDElementInRepository(element, element.getParent());
-                element.removeInParent();
-                element = null;
+            MVCCDManager.instance().removeMVCCDElementInRepository(element, element.getParent());
+            element.removeInParent();
+            element = null;
         }
         return element == null;
+    }
+
+    public void treatDeleteChilds (Window owner, MVCCDElement element) {
+        String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
+        String message = MessagesBuilder.getMessagesProperty ("editor.delete.childs.confirm",
+                new String[] {element.getName()});
+        boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
+        if (confirmDelete){
+            for (int i = element.getChilds().size() - 1  ; i >= 0 ;  i--) {
+            /*
+            for (MVCCDElement mvccdElement : element.getChilds()) {
+
+                MVCCDManager.instance().removeMVCCDElementInRepository(mvccdElement, element);
+                mvccdElement.removeInParent();
+                mvccdElement.setParent(null);
+            }
+
+             */
+
+                MVCCDElement child = element.getChilds().get(i);
+                MVCCDManager.instance().removeMVCCDElementInRepository(child, element);
+                child.removeInParent();
+                child = null;
+            }
+        }
     }
 
     public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
