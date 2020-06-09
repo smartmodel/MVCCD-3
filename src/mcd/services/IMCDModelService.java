@@ -1,9 +1,7 @@
 package mcd.services;
 
 import main.MVCCDElement;
-import mcd.MCDContEntities;
-import mcd.MCDElement;
-import mcd.MCDEntity;
+import mcd.*;
 import mcd.interfaces.IMCDModel;
 
 import java.util.ArrayList;
@@ -44,10 +42,26 @@ public class IMCDModelService {
         return resultat;
     }
 
-    public static ArrayList<MCDEntity> getAllEntitiesInIModel(IMCDModel model){
+    public static ArrayList<MCDEntity> getAllMCDEntitiesInIModel(IMCDModel model){
         ArrayList<MCDEntity> resultat = new ArrayList<MCDEntity>();
         for (MCDElement mcdElement : getMCDElementsByClassName(model, false, MCDEntity.class.getName())){
-               resultat.add ((MCDEntity) mcdElement);
+            resultat.add ((MCDEntity) mcdElement);
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDRelation> getAllMCDRelationsInIModel(IMCDModel model){
+        ArrayList<MCDRelation> resultat = new ArrayList<MCDRelation>();
+        for (MCDElement mcdElement : getMCDElementsByClassName(model, false, MCDRelation.class.getName())){
+            resultat.add ((MCDRelation) mcdElement);
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDAssociation> getAllMCDAssociationsInIModel(IMCDModel model){
+        ArrayList<MCDAssociation> resultat = new ArrayList<MCDAssociation>();
+        for (MCDElement mcdElement : getMCDElementsByClassName(model, false, MCDAssociation.class.getName())){
+            resultat.add ((MCDAssociation) mcdElement);
         }
         return resultat;
     }
@@ -73,6 +87,16 @@ public class IMCDModelService {
     public static MCDElement getMCDElementByClassAndNamePath(IMCDModel model, boolean withModel, String className, int pathMode, String namePath){
         for (MCDElement mcdElement: getMCDElementsByClassName(model, withModel, className)){
             if (mcdElement.getNamePath(pathMode).equals(namePath)){
+                return mcdElement;
+            }
+        }
+        return null;
+    }
+
+
+    public static MCDElement getMCDElementByClassAndNameTree(IMCDModel model, boolean withModel, String className,String nameTree){
+        for (MCDElement mcdElement: getMCDElementsByClassName(model, withModel, className)){
+            if (mcdElement.getNameTree().equals(nameTree)){
                 return mcdElement;
             }
         }

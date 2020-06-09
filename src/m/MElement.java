@@ -5,8 +5,6 @@ import project.ProjectElement;
 
 public abstract class MElement extends ProjectElement {
 
-
-
     public MElement(ProjectElement parent) {
         super(parent);
     }

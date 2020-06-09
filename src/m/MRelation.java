@@ -1,5 +1,7 @@
 package m;
 
+import mcd.MCDAssEnd;
+import mcd.MCDAssociation;
 import mcd.MCDRelEnd;
 
 public interface MRelation {
@@ -11,4 +13,6 @@ public interface MRelation {
     public MCDRelEnd getB();
 
     public void setB(MCDRelEnd b);
+
+
 }

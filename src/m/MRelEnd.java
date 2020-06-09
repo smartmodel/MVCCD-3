@@ -12,6 +12,8 @@ public interface MRelEnd {
     public static final int GEN = 3 ;
     public static final int SPEC = 4 ;
 
+    public static final int ELEMENT = 5 ;
+    public static final int RELATION = 6 ;
 
     public MCDRelation getMcdRelation();
 

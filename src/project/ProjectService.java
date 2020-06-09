@@ -2,9 +2,7 @@ package project;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDContModels;
-import mcd.MCDElement;
-import mcd.MCDEntity;
+import mcd.*;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;
@@ -101,10 +99,22 @@ public class ProjectService {
     }
 
 
+
+
     public static ArrayList<MCDElement> getAllMCDElementsByNamePath(int pathMode, String namePath){
         ArrayList<MCDElement>  resultat = new ArrayList<MCDElement>() ;
         for (MCDElement mcdElement : getAllMCDElements()){
             if (mcdElement.getNamePath(pathMode).equals(namePath)){
+                resultat.add(mcdElement);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDElement> getAllMCDElementsByNameTree(String nameTree){
+        ArrayList<MCDElement>  resultat = new ArrayList<MCDElement>() ;
+        for (MCDElement mcdElement : getAllMCDElements()){
+            if (mcdElement.getNameTree().equals(nameTree)){
                 resultat.add(mcdElement);
             }
         }
@@ -119,5 +129,52 @@ public class ProjectService {
         }
         return null;
     }
+
+    public static ArrayList<MCDRelEnd> getAllMCDRelEnd(){
+        ArrayList<MCDRelEnd>  resultat = new ArrayList<MCDRelEnd>() ;
+        for (MCDElement aMCDElement : getAllMCDElements()){
+            if (aMCDElement instanceof MCDRelEnd){
+                resultat.add((MCDRelEnd) aMCDElement);
+            }
+        }
+        return resultat;
+    }
+
+    // ByMCDElement : Element auquel est attaché la relation
+    public static ArrayList<MCDRelEnd> getAllMCDRelEndByMCDElement(MCDElement mcdElement){
+        ArrayList<MCDRelEnd>  resultat = new ArrayList<MCDRelEnd>() ;
+        for (MCDRelEnd aMCDRelEnd : getAllMCDRelEnd()){
+            if (aMCDRelEnd.getMcdElement() == mcdElement ){
+                resultat.add(aMCDRelEnd);
+            }
+        }
+        return resultat;
+    }
+
+
+
+    public static ArrayList<MCDRelation> getAllMCDRelations() {
+        ArrayList<MCDRelation>  resultat = new ArrayList<MCDRelation>() ;
+        for (MCDElement aMCDElement : getAllMCDElements()){
+            if (aMCDElement instanceof MCDRelation){
+                resultat.add((MCDRelation) aMCDElement);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDRelation> getAllMCDRelationsChilds(MCDRelation mcdRelation){
+        ArrayList<MCDRelation>  resultat = new ArrayList<MCDRelation>() ;
+        for (MCDRelation aMCDRelation: getAllMCDRelations()){
+            if ((aMCDRelation.getA() != null) && (aMCDRelation.getB() != null)) {
+                if ((aMCDRelation.getA().getMcdElement() == mcdRelation) ||
+                        (aMCDRelation.getB().getMcdElement() == mcdRelation)) {
+                    resultat.add(aMCDRelation);
+                }
+            }
+        }
+        return resultat;
+    }
+
 }
 

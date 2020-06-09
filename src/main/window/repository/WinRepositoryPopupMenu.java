@@ -135,24 +135,29 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         if (node.getUserObject() instanceof MCDAssociation) {
             treatGeneric(this, new MCDAssociationEditingTreat());
-            //TODO-0 Mettre à jour les AssEnd après changement
         }
 
         if (node.getUserObject() instanceof MCDAssEnd) {
             mvccdElement = ((MCDAssEnd) node.getUserObject()).getMcdAssociation();
             treatGeneric(this, new MCDAssociationEditingTreat());
-            //TODO-0 Mettre à jour l'Assocition et l'AssEnd opposé après changement
         }
 
         if (node.getUserObject() instanceof MCDGeneralization) {
             treatGeneric(this, new MCDGeneralizationEditingTreat());
-            //TODO-0 Mettre à jour les GSEnd après changement
         }
 
         if (node.getUserObject() instanceof MCDGSEnd) {
             mvccdElement = ((MCDGSEnd) node.getUserObject()).getMcdGeneralization();
             treatGeneric(this, new MCDGeneralizationEditingTreat());
-            //TODO-0 Mettre à jour l'Assocition et l'AssEnd opposé après changement
+        }
+
+        if (node.getUserObject() instanceof MCDLink) {
+            treatGeneric(this, new MCDLinkEditingTreat());
+        }
+
+        if (node.getUserObject() instanceof MCDLinkEnd) {
+            mvccdElement = ((MCDLinkEnd) node.getUserObject()).getMcdLink();
+            treatGeneric(this, new MCDLinkEditingTreat());
         }
 
     }
@@ -234,6 +239,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 MessagesBuilder.getMessagesProperty("menu.new.association"));
         treatGenericNew(this, new MCDGeneralizationEditingTreat(),
                 MessagesBuilder.getMessagesProperty("menu.new.generalization"));
+        treatGenericNew(this, new MCDLinkEditingTreat(),
+                MessagesBuilder.getMessagesProperty("menu.new.link"));
         treatGenericDeleteChilds(this, new MCDRelationsEditingTreat());
     }
 

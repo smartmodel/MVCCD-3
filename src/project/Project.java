@@ -14,18 +14,26 @@ public class Project extends ProjectElement {
 
     private static final long serialVersionUID = 1000;
 
+    // Utilisées pour indiquer le statut d'un projet
     public static final int NEW = 1 ;
     public static final int EXISTING = 2 ;
 
+    // Fichier de profil
     private String profileFileName ;
+    // Instance de profil
     private Profile profile;
+    //Plusieurs modèles autorisés
     private boolean modelsMany;
+    //Plusieurs paquetages autorisés
     private boolean packagesAutorizeds;
 
+    // Dernier numéro de séquence donné
     private int idElementSequence = 0;
 
     // Sauvegarde de l'état du projet
+    // Dernier noeud du référentiel visité
     private ProjectElement lastWinRepositoryProjectElement = null;
+    // Etat du dernier noeud visité
     private boolean lastWinRepositoryExpand = false;
 
 

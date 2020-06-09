@@ -34,6 +34,8 @@ public class MCDModelEditingTreat extends EditingTreat {
     }
 
 
+
+
     @Override
     protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
         ArrayList<String> resultat = new ArrayList<String>();

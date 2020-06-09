@@ -20,17 +20,16 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class MCDAssociationEditingTreat extends EditingTreat {
+public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
 
 
     public  MCDAssociation treatNew(Window owner,
-                                    MCDContRelations parent) {
+                                    MVCCDElement parent) {
 
         MCDAssociation mcdAssociationNew = (MCDAssociation) super.treatNew( owner, parent);
 
         if (mcdAssociationNew != null) {
-            addAssEndInRepository(mcdAssociationNew.getFrom());
-            addAssEndInRepository(mcdAssociationNew.getTo());
+           addRelEndsInRepository(mcdAssociationNew);
         }
         return mcdAssociationNew;
     }
@@ -58,16 +57,9 @@ public class MCDAssociationEditingTreat extends EditingTreat {
         MCDAssociation mcdAssociationNew = (MCDAssociation)  fen.getMvccdElementNew();
 
         if (mcdAssociationNew != null) {
-            addAssEndInRepository(mcdAssociationNew.getFrom());
-            addAssEndInRepository(mcdAssociationNew.getTo());
+            addRelEndsInRepository(mcdAssociationNew);
         }
         return mcdAssociationNew;
-    }
-
-    private void addAssEndInRepository(MCDAssEnd mcdAssEnd) {
-        MCDContEndRels parent = (MCDContEndRels) mcdAssEnd.getParent();
-        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById((int) parent.getId());
-        MVCCDManager.instance().addNewMVCCDElementInRepository(mcdAssEnd, nodeParent);
     }
 
 /*
@@ -111,5 +103,6 @@ public class MCDAssociationEditingTreat extends EditingTreat {
     protected String getPropertyTheElement() {
         return "the.association";
     }
+
 
 }

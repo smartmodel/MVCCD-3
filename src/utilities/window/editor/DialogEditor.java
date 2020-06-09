@@ -253,7 +253,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     @Override
     public void windowActivated(WindowEvent windowEvent) {
-        MVCCDManager.instance().setDatasProjectEdited(true);
+        MVCCDManager.instance().setDatasEdited(true);
     }
 
     @Override

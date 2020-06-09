@@ -30,6 +30,8 @@ public class PrefGeneralEditingTreat extends EditingTreat {
         return null;
     }
 
+
+
     @Override
     protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
         ArrayList<String> resultat = new ArrayList<String>();

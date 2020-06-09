@@ -13,22 +13,22 @@ public abstract class MVCCDElement implements Serializable {
 
     private static final long serialVersionUID = 1000;
 
+    // Constantes préfixées SCOPE : Utilisée pour retourner un des noms parmi les 3 ou aucun
     public static final int SCOPENAME = 1;
     public static final int SCOPESHORTNAME = 2;
     public static final int SCOPELONGNAME = 3;
     public static final int SCOPENOTNAME = 4;
+    // Constantes postfixées ORDER : Utilisées pour générer le numéro d'ordred de l'enfant dans la fraterie
     public static int FIRSTVALUEORDER = 10;
     public static int INTERVALORDER = 10;
 
+    private MVCCDElement parent;    // parent dans l'arborescence des objets
+    private String name = "";       // Nom usuel
+    private String shortName = "";  // Nom abréggé
+    private String longName = "";   // Nom long (à but de documentation)
+    private int order;              // ordre de l'enfant dans la fraterie
 
-    private MVCCDElement parent;
-    private String name = "";
-    private String shortName = "";
-    private String longName = "";
-    private int order;
-     //private boolean uniqueInParent = true;
-
-    private ArrayList<MVCCDElement> childs = new ArrayList<MVCCDElement>();
+    private ArrayList<MVCCDElement> childs = new ArrayList<MVCCDElement>();  // Tableau des enfants
 
 
     public MVCCDElement(MVCCDElement parent) {
@@ -300,7 +300,6 @@ public abstract class MVCCDElement implements Serializable {
 
     public  int compareToName(MVCCDElement o) {
         return this.getName().compareTo(o.getName());
-        //return o.getName().compareToIgnoreCase(this.getName());
     }
 
     public boolean implementsInterface(String className) {

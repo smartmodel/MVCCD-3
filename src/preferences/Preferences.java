@@ -24,6 +24,7 @@ public class Preferences extends MVCCDElement {
     public static String REPOSITORY_MCD_DIAGRAMS_NAME = "Diagrammes";
     public static String REPOSITORY_MCD_ENTITIES_NAME = "Entités";
     public static String REPOSITORY_MCD_RELATIONS_NAME = "Relations";
+    public static String REPOSITORY_MCD_RELATIONS_ENDS_NAME = "Extrémités de relations";
     public static String REPOSITORY_MCD_ATTRIBUTES_NAME = "Attributs";
     public static String REPOSITORY_MCD_CONSTRAINTS_NAME = "Contraintes";
     public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
@@ -88,6 +89,7 @@ public class Preferences extends MVCCDElement {
     public static String FILE_HELP_ENTITY_NAME = "helpEntity.txt";
     public static String FILE_HELP_ASSOCIATION_NAME = "helpAssociation.txt";
     public static String FILE_HELP_GENERALIZATION_NAME = "helpGeneralization.txt";
+    public static String FILE_HELP_LINK_NAME = "helpLink.txt";
     public static String FILE_HELP_PARAMETER_NAME ="helpParameter.txt";
 
     public static String FILE_HELP_ANCHOR_NAME = "helpAnchor.txt";
@@ -295,6 +297,13 @@ public class Preferences extends MVCCDElement {
     public static String MCD_NAMING_ASSOCIATION_ARROW_RIGHT = " -> ";
     public static String MCD_NAMING_ASSOCIATION_ARROW_LEFT = " <- ";
     public static String MCD_NAMING_GENERALIZATION = " <|- ";
+    public static String MCD_NAMING_LINK = " []--| ";
+
+
+    public static String MCD_NAMING_GENERALIZATION_SPECIALIZE = " <|- ";
+    public static String MCD_NAMING_GENERALIZATION_GENERALIZE = " -|> ";
+    public static String MCD_NAMING_LINK_ELEMENT = " |--[] ";
+    public static String MCD_NAMING_LINK_ASSOCIATION = " []--| ";
 
 
     public static String OPTION_ALWAYS = "option.always";

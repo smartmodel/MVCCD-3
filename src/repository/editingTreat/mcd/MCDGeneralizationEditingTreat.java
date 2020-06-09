@@ -17,17 +17,16 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class MCDGeneralizationEditingTreat extends EditingTreat {
+public class MCDGeneralizationEditingTreat extends MCDRelationEditingTreat {
 
 
     public  MCDGeneralization treatNew(Window owner,
-                                    MCDContRelations parent) {
+                                       MVCCDElement parent) {
 
         MCDGeneralization mcdGeneralizationNew = (MCDGeneralization) super.treatNew( owner, parent);
 
         if (mcdGeneralizationNew != null) {
-            addGSEndInRepository(mcdGeneralizationNew.getGen());
-            addGSEndInRepository(mcdGeneralizationNew.getSpec());
+            addRelEndsInRepository(mcdGeneralizationNew);
         }
         return mcdGeneralizationNew;
     }
@@ -90,5 +89,6 @@ public class MCDGeneralizationEditingTreat extends EditingTreat {
     protected String getPropertyTheElement() {
         return "the.generalization";
     }
+
 
 }

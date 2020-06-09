@@ -9,6 +9,7 @@ import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.MCDAssociationEditingTreat;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
 import repository.editingTreat.mcd.MCDGeneralizationEditingTreat;
+import repository.editingTreat.mcd.MCDLinkEditingTreat;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.services.PanelService;
@@ -58,7 +59,7 @@ public class MCDTitlePanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String message = "Choisisez la sorte d'élément à ajouter dans le projet";
-                Object[] options = {"Annuler", "Entité", "Association", "Généralisation"};
+                Object[] options = {"Annuler", "Entité", "Association", "Généralisation","Entité ass."};
                 MVCCDWindow mvccdWindow = MVCCDManager.instance().getMvccdWindow();
                 int posOption = DialogMessage.showOptions(mvccdWindow,
                         message, options, JOptionPane.UNINITIALIZED_VALUE);
@@ -74,7 +75,7 @@ public class MCDTitlePanel {
 
                     if (posOption == 2) {
                         IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
-                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllEntitiesInIModel(iMCDModel);
+                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllMCDEntitiesInIModel(iMCDModel);
 
                         MCDEntity mcdEntityFrom = null;
                         MCDEntity mcdEntityTo= null;
@@ -92,10 +93,9 @@ public class MCDTitlePanel {
                                 mcdEntityFrom, mcdEntityTo, MCDAssociationNature.NOID);
                     }
 
-
                     if (posOption == 3) {
                         IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
-                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllEntitiesInIModel(iMCDModel);
+                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllMCDEntitiesInIModel(iMCDModel);
 
                         MCDEntity mcdEntityGen = null;
                         MCDEntity mcdEntitySpec= null;
@@ -112,6 +112,27 @@ public class MCDTitlePanel {
                         MCDGeneralization newMCDGeneralization = mcdGeneralizationEditingTreat.treatNew(mvccdWindow, mcdContRelations,
                                 mcdEntityGen, mcdEntitySpec);
                     }
+
+                    if (posOption == 4) {
+                        IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
+                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllMCDEntitiesInIModel(iMCDModel);
+                        ArrayList<MCDAssociation> mcdAssociations = IMCDModelService.getAllMCDAssociationsInIModel(iMCDModel);
+
+                        MCDEntity mcdEntity = null;
+                        MCDAssociation mcdAssociation= null;
+                        if (mcdEntities.size() >= 1 ){
+                            mcdEntity = mcdEntities.get(0);
+                        }
+                        if (mcdAssociations.size() >= 1 ){
+                            mcdAssociation = mcdAssociations.get(0);
+                        }
+
+                        MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
+                        MCDLinkEditingTreat mcdLinkEditingTreat = new MCDLinkEditingTreat();
+                        MCDLink newMCDLink= mcdLinkEditingTreat.treatNew(mvccdWindow, mcdContRelations,
+                                mcdEntity, mcdAssociation);
+                    }
+
                     if (fen != null) {
                         fen.setVisible(true);
                         newElement = (MCDElement) fen.getMvccdElementNew();

@@ -1,5 +1,6 @@
 package mcd;
 
+import main.MVCCDElement;
 import mcd.services.MCDElementService;
 import md.MDElement;
 import project.ProjectElement;
@@ -8,14 +9,11 @@ public abstract class MCDElement extends MDElement {
 
     private static final long serialVersionUID = 1000;
 
-
     public MCDElement(ProjectElement parent) {
-
         super(parent);
     }
 
     public MCDElement(ProjectElement parent, String name) {
-
         super(parent, name);
     }
 
@@ -35,6 +33,16 @@ public abstract class MCDElement extends MDElement {
         } else {
             return getShortNameSmart();
         }
+    }
+
+
+    public MCDContEndRels getMCDContEndRels() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MCDContEndRels) {
+                return (MCDContEndRels) mvccdElement;
+            }
+        }
+        return null;
     }
 
 }

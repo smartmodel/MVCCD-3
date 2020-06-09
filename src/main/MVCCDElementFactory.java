@@ -3,7 +3,6 @@ package main;
 import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.MCDContAttributes;
-import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -76,7 +75,7 @@ public class MVCCDElementFactory {
         return mcdContEntities;
     }
 
-    public MCDContRelations createMCDRelations(ProjectElement parent, String name){
+    public MCDContRelations createMCDContRelations(ProjectElement parent, String name){
         MCDContRelations mcdContRelations = new MCDContRelations(parent, name);
         return mcdContRelations;
     }
@@ -90,8 +89,8 @@ public class MVCCDElementFactory {
         MCDEntity mcdEntity = new MCDEntity(parent);
         MCDContAttributes mcdContAttributes = MVCCDElementFactory.instance().createMCDAttributes(mcdEntity,
                 Preferences.REPOSITORY_MCD_ATTRIBUTES_NAME);
-        MCDContEndRels mcdContEndRels = MVCCDElementFactory.instance().createMCDRelations(mcdEntity,
-                Preferences.REPOSITORY_MCD_RELATIONS_NAME);
+        MCDContEndRels mcdContEndRels = MVCCDElementFactory.instance().createMCDContEndRels(mcdEntity,
+                Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME);
         MCDContConstraints mcdContConstraints = MVCCDElementFactory.instance().createMCDConstraints(mcdEntity,
                 Preferences.REPOSITORY_MCD_CONSTRAINTS_NAME);
 
@@ -102,7 +101,7 @@ public class MVCCDElementFactory {
         return new MCDContAttributes(parent, name);
     }
 
-    public MCDContEndRels createMCDRelations(MCDEntity parent, String name){
+    public MCDContEndRels createMCDContEndRels(MCDElement parent, String name){
         return new MCDContEndRels(parent, name);
     }
     public MCDAttribute createMCDAttribute(MCDContAttributes parent){
@@ -124,15 +123,13 @@ public class MVCCDElementFactory {
     }
 
     public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
-                                                MCDContEndRels mcdContEndRelsFrom, MCDContEndRels mcdContEndRelsTo) {
+                                                MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo) {
 
         MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations) ;
 
-        MCDEntity mcdEntityFrom = (MCDEntity) mcdContEndRelsFrom.getParent();
         MCDContEndRels mcdContEndRelsEntityFrom = mcdEntityFrom.getMCDContEndRels();
         MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdContEndRelsEntityFrom) ;
 
-        MCDEntity mcdEntityTo = (MCDEntity) mcdContEndRelsTo.getParent();
         MCDContEndRels mcdContEndRelsEntityTo = mcdEntityTo.getMCDContEndRels();
         MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdContEndRelsEntityTo) ;
 
@@ -145,22 +142,26 @@ public class MVCCDElementFactory {
         mcdAssEndTo.setMcdEntity(mcdEntityTo);
         mcdAssEndTo.setMcdAssociation(mcdAssociation);
 
+        MCDContEndRels mcdContEndRels = MVCCDElementFactory.instance().createMCDContEndRels(mcdAssociation,
+                Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME);
+
         return mcdAssociation;
     }
 
 
     public MCDGeneralization createMCDGeneralization( MCDContRelations mcdContRelations,
-                                                MCDContEndRels mcdContEndRelsGen, MCDContEndRels mcdContEndRelsFrom) {
+                                                      MCDEntity mcdEntityGen,
+                                                      MCDEntity mcdEntitySpec) {
 
         MCDGeneralization mcdGeneralization = new MCDGeneralization(mcdContRelations) ;
 
-        MCDEntity mcdEntityGen = (MCDEntity) mcdContEndRelsGen.getParent();
+
         MCDContEndRels mcdContEndRelsEntityGen = mcdEntityGen.getMCDContEndRels();
         MCDGSEnd mcdGSEndGen = new MCDGSEnd(mcdContEndRelsEntityGen) ;
 
-        MCDEntity mcdEntitySpec = (MCDEntity) mcdContEndRelsFrom.getParent();
         MCDContEndRels mcdContEndRelsEntitySpec = mcdEntitySpec.getMCDContEndRels();
         MCDGSEnd mcdGSEndSpec = new MCDGSEnd(mcdContEndRelsEntitySpec) ;
+
 
         mcdGeneralization.setGen(mcdGSEndGen);
         mcdGeneralization.setSpec(mcdGSEndSpec);
@@ -175,6 +176,32 @@ public class MVCCDElementFactory {
     }
 
 
+
+    public MCDLink createMCDLink( MCDContRelations mcdContRelations,
+                                  MCDEntity mcdEntity,
+                                  MCDAssociation mcdAssociation) {
+
+        MCDLink mcdLink = new MCDLink(mcdContRelations) ;
+
+        MCDContEndRels mcdContEndRelsEntity = mcdEntity.getMCDContEndRels();
+        MCDLinkEnd mcdLinkEndEntity = new MCDLinkEnd(mcdContEndRelsEntity) ;
+
+        MCDContEndRels mcdContEndRelsAssociation= mcdAssociation.getMCDContEndRels();
+        MCDLinkEnd mcdLinkEndAssociation = new MCDLinkEnd(mcdContEndRelsAssociation) ;
+
+        mcdLink.setEndEntity(mcdLinkEndEntity);
+        mcdLink.setEndAssociation(mcdLinkEndAssociation);
+
+        mcdLinkEndEntity.setMcdElement(mcdEntity);
+        mcdLinkEndEntity.setMcdLink(mcdLink);
+
+        mcdLinkEndAssociation.setMcdElement(mcdAssociation);
+        mcdLinkEndAssociation.setMcdLink(mcdLink);
+
+        return mcdLink;
+    }
+
+
     private void createContentModel(MCDElement parent) {
         createContentPackage(parent);
     }
@@ -182,7 +209,7 @@ public class MVCCDElementFactory {
     private void createContentPackage(MCDElement parent) {
         MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(parent,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
         MCDContEntities mcdContEntities = MVCCDElementFactory.instance().createMCDEntities(parent,Preferences.REPOSITORY_MCD_ENTITIES_NAME);
-        MCDContRelations mcdContRelations = MVCCDElementFactory.instance().createMCDRelations(parent,Preferences.REPOSITORY_MCD_RELATIONS_NAME);
+        MCDContRelations mcdContRelations = MVCCDElementFactory.instance().createMCDContRelations(parent,Preferences.REPOSITORY_MCD_RELATIONS_NAME);
     }
 
 

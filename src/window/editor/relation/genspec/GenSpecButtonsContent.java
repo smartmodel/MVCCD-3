@@ -21,13 +21,13 @@ public class GenSpecButtonsContent extends PanelButtonsContent {
         GenSpecInputContent inputContent = (GenSpecInputContent)  getEditor().getInput().getInputContent();
 
         MCDEntity mcdEntityGen = inputContent.getMCDEntityGen();
-        MCDContEndRels mcdContEndRelsFrom = mcdEntityGen.getMCDContEndRels();
+        //MCDContEndRels mcdContEndRelsFrom = mcdEntityGen.getMCDContEndRels();
 
         MCDEntity mcdEntitySpec = inputContent.getMCDEntitySpec();
-        MCDContEndRels mcdContEndRelsTo = mcdEntitySpec.getMCDContEndRels();
+        //MCDContEndRels mcdContEndRelsTo = mcdEntitySpec.getMCDContEndRels();
 
         MCDGeneralization mcdGeneralization = MVCCDElementFactory.instance().createMCDGeneralization(
-                (MCDContRelations)parent, mcdContEndRelsFrom, mcdContEndRelsTo);
+                (MCDContRelations)parent, mcdEntityGen, mcdEntitySpec);
         return mcdGeneralization;
     }
 

@@ -9,6 +9,7 @@ import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import project.ProjectService;
 import utilities.window.scomponents.SComboBox;
 
 import java.util.ArrayList;
@@ -122,4 +123,54 @@ public class MCDAssociationService {
         }
         return messages;
     }
+
+    public static ArrayList<MCDAssociation> getMCDAssociationsInIModel(IMCDModel iMCDModel) {
+        ArrayList<MCDAssociation> resultat =  new ArrayList<MCDAssociation>();
+        for (MCDElement element :  IMCDModelService.getMCDElementsByClassName(
+                iMCDModel, false, MCDAssociation.class.getName())){
+            resultat.add((MCDAssociation) element);
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDAssociation> getMCDAssociationsNoIdInIModel(IMCDModel iMCDModel) {
+        ArrayList<MCDAssociation> resultat =  new ArrayList<MCDAssociation>();
+        for (MCDAssociation mcdAssociation :   getMCDAssociationsInIModel(iMCDModel)){
+            if (mcdAssociation.getNature() == MCDAssociationNature.NOID) {
+                resultat.add(mcdAssociation);
+            }
+        }
+        return resultat;
+    }
+
+
+    public static void sortNameTreeAsc(ArrayList<MCDAssociation> associations){
+
+        Collections.sort(associations, NAMETREE_ASC);
+    }
+
+    static final Comparator<MCDAssociation> NAMETREE_ASC =
+            new Comparator<MCDAssociation>() {
+                public int compare(MCDAssociation e1, MCDAssociation e2) {
+                    return e1.getNameTree().compareTo(e2.getNameTree());
+                }
+            };
+
+
+
+    public static MCDAssociation getMCDAssociationByNameTree(IMCDModel model, String nameTree){
+        return (MCDAssociation) IMCDModelService.getMCDElementByClassAndNameTree(model, false,
+                MCDAssociation.class.getName(), nameTree);
+    }
+
+
+    public static MCDAssociation getMCDAssociationByNameTree(String nameTree){
+        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNameTree(nameTree)){
+            if (mcdElement instanceof MCDAssociation){
+                return (MCDAssociation) mcdElement;
+            }
+        }
+        return null;
+    }
+
 }

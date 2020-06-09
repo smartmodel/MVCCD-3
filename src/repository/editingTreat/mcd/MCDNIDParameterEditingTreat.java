@@ -32,7 +32,6 @@ public class MCDNIDParameterEditingTreat extends EditingTreat {
         return "the.operation.parameter";
     }
 
-
     @Override
     protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
         ArrayList<String> resultat = new ArrayList<String>();

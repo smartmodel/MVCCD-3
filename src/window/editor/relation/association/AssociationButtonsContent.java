@@ -21,13 +21,10 @@ public class AssociationButtonsContent extends PanelButtonsContent {
         AssociationInputContent inputContent = (AssociationInputContent)  getEditor().getInput().getInputContent();
 
         MCDEntity mcdEntityFrom = inputContent.getMCDEntityFrom();
-        MCDContEndRels mcdContEndRelsFrom = mcdEntityFrom.getMCDContEndRels();
-
         MCDEntity mcdEntityTo = inputContent.getMCDEntityTo();
-        MCDContEndRels mcdContEndRelsTo = mcdEntityTo.getMCDContEndRels();
 
         MCDAssociation mcdAssociation = MVCCDElementFactory.instance().createMCDAssociation(
-                (MCDContRelations)parent, mcdContEndRelsFrom, mcdContEndRelsTo);
+                (MCDContRelations)parent, mcdEntityFrom, mcdEntityTo);
         return mcdAssociation;
     }
 

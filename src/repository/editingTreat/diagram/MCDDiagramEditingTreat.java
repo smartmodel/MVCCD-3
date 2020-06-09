@@ -108,4 +108,6 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
     protected String getPropertyTheElement() {
         return "the.diagram";
     }
+
+
 }

@@ -4,6 +4,7 @@ import console.Console;
 import datatypes.MDDatatypesManager;
 import main.window.menu.WinMenuContent;
 import main.window.repository.WinRepositoryTree;
+import mcd.MCDRelation;
 import preferences.PreferencesManager;
 import project.*;
 import main.window.console.WinConsoleContent;
@@ -17,20 +18,21 @@ import main.window.repository.WinRepositoryContent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.io.File;
+import java.util.ArrayList;
 
 public class MVCCDManager {
 
     private static MVCCDManager instance ;
 
-    private MVCCDWindow mvccdWindow ;
-    private Repository repository;
-    private MVCCDElement rootMVCCDElement;
-    private Project project;
-    private Console console;
-    private ProjectsRecents projectsRecents = null;
-    private File fileProjectCurrent = null;
-    private boolean datasProjectChanged = false;
-    private boolean datasProjectEdited = true;
+    private MVCCDWindow mvccdWindow ;  //Ecran principal
+    private Repository repository;  //Référentiel
+    private MVCCDElement rootMVCCDElement; //Elément root du référentiel repository.root.name=Application MVCCD
+    private Project project;    //Projet en cours de traitement
+    private Console console;    //Classe d'accès à la console d'affichage de messages
+    private ProjectsRecents projectsRecents = null; //Projets ouverts  récemment
+    private File fileProjectCurrent = null; //Fichier de sauvegarde du projet en cours de traitement
+    private boolean datasProjectChanged = false; //Indicateur de changement de données propres au projet
+    private boolean datasEdited = true; //Indicateur d'édition de données y-compris les préférences d'application
 
 
     public static synchronized MVCCDManager instance(){
@@ -41,28 +43,37 @@ public class MVCCDManager {
     }
 
     public void start(){
+        // Chargement des messages de traduction
         LoadMessages.main();
+        // Chargement des préférences de l'application
         PreferencesManager.instance().loadOrCreateFileApplicationPreferences();
+        // Création et affichage de l'écran d'accueil
         startMVCCDWindow();
+        // Création de la console
         startConsole();
+        // Création du référentiel
         startRepository();
+        // Ajustement de la taille de la zone d'affichage du référentiel
         mvccdWindow.adjustPanelRepository();
-
+        // Chargement des adresses disques des derniers fichiers de projets utilisés
         projectsRecents = new ProjectsRecentsLoader().load();
+        // Création du menu contextuel des fichiers de projets récemment utilisés
         changeActivateProjectOpenRecentsItems();
+        // Ouverture du dernier fichier de projet utilisés
         openLastProject();
-        //StereotypesManager.instance().stereotypes();
-
     }
 
     private void startRepository() {
-        //MVCCDElement rootMVCCDElement = new MVCCDElementRepositoryRoot();
+        // Création de l'élément root du référentiel
         rootMVCCDElement = MVCCDFactory.instance().createRepositoryRoot();
+        // Création des types de données
         MDDatatypesManager.instance().mdDatatypes();
+        // Création du noeud root de l'arbre du référentiel
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootMVCCDElement);
+        // Création du référentiel
         repository = new Repository(rootNode, rootMVCCDElement);
+        // Affiche le référentiel dans l'écran d'accueil
         getWinRepositoryContent().getTree().changeModel(repository);
-
     }
 
 
@@ -120,6 +131,7 @@ public class MVCCDManager {
         DefaultMutableTreeNode nodeChild= ProjectService.getNodeById(child.getId());
         MVCCDManager.instance().getRepository().removeNodeFromParent(nodeChild);
         getWinRepositoryContent().getTree().changeModel(repository);
+        //getWinRepositoryContent().getTree().getTreeModel().reload();
         setDatasProjectChanged(true);
     }
 
@@ -134,6 +146,19 @@ public class MVCCDManager {
         getWinRepositoryContent().getTree().getTreeModel().reload();
         getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
 
+    }
+
+    public void removeMCDRelationAndDependantsInRepository(MCDRelation mcdRelation) {
+
+        ArrayList<MCDRelation> mcdRelationChilds = ProjectService.getAllMCDRelationsChilds(mcdRelation);
+        for (MCDRelation mcdRelationChild : mcdRelationChilds) {
+            removeMCDRelationAndDependantsInRepository(mcdRelationChild);
+        }
+
+        System.out.println("Remove " + mcdRelation.getNameTree());
+        removeMVCCDElementInRepository(mcdRelation, mcdRelation.getParent());
+        removeMVCCDElementInRepository(mcdRelation.getA(), mcdRelation.getA().getParent());
+        removeMVCCDElementInRepository(mcdRelation.getB(), mcdRelation.getB().getParent());
     }
 
     public void  openProject() {
@@ -155,21 +180,29 @@ public class MVCCDManager {
      }
 
     private void openProjectBase(File file){
+        //Mémorise le fichier associé au projet
         setFileProjectCurrent(file) ;
+
         if (file != null){
-            //setFileProjectCurrent(file) ;
+            // Lecture du fichier de sauvegarde
             project = new LoaderSerializable().load(fileProjectCurrent);
+            // Chargement des préférences du projet
             PreferencesManager.instance().setProjectPref(project.getPreferences());
+            // Copie des préférences d0'application au sein des préférences du projet
             PreferencesManager.instance().copyApplicationPref(Project.EXISTING);
 
         }
         if (project != null) {
-            //project.includeProfile();
+            // Reprise des préférences de profil (si existant)
             project.adjustProfile();
+            // Copie du projet au sein du référentiel
             projectToRepository();
             project.debugCheckLoadDeep(); //Provisoire pour le test de sérialisation/déséralisation
+            // Mémorisation du fichier de projet utilisé
             projectsRecents.add(fileProjectCurrent);
+            // Mise à jour du menu contextuel des fichiers de projets récemment utilisés
             changeActivateProjectOpenRecentsItems();
+            // Ajustement de la taille de la zone d'affichage du référentiel
             mvccdWindow.adjustPanelRepository();
         }
     }
@@ -313,18 +346,18 @@ public class MVCCDManager {
         this.datasProjectChanged = datasProjectChanged;
     }
 
-    public boolean isDatasProjectEdited() {
-        return datasProjectEdited;
+    public boolean isDatasEdited() {
+        return datasEdited;
     }
 
 
 
-    public void setDatasProjectEdited(boolean datasProjectEdited) {
-        this.datasProjectEdited = datasProjectEdited;
+    public void setDatasEdited(boolean datasEdited) {
+        this.datasEdited = datasEdited;
     }
 
     public void datasProjectChangedFromEditor(){
-        if (isDatasProjectEdited()){
+        if (isDatasEdited()){
             setDatasProjectChanged(true);
         }
     }

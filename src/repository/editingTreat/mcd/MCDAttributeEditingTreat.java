@@ -48,8 +48,6 @@ public class MCDAttributeEditingTreat extends EditingTreat {
         return "the.attribute";
     }
 
-
-
     @Override
     protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
         ArrayList<String> resultat = new ArrayList<String>();

@@ -3,17 +3,13 @@ package repository.editingTreat;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDAttribute;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
-import project.ProjectElement;
-import project.ProjectService;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -22,7 +18,6 @@ import static org.apache.commons.lang.StringUtils.lowerCase;
 public abstract class EditingTreat {
 
     public MVCCDElement treatNew(Window owner, MVCCDElement parent) {
-
 
         DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW);
         fen.setVisible(true);
@@ -60,12 +55,14 @@ public abstract class EditingTreat {
                 new String[] { messageTheElement, element.getName()});
         boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
         if (confirmDelete){
-            MVCCDManager.instance().removeMVCCDElementInRepository(element, element.getParent());
+            removeMVCCDElementInRepository(element);
             element.removeInParent();
             element = null;
         }
         return element == null;
     }
+
+
 
     public void treatDeleteChilds (Window owner, MVCCDElement element) {
         String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
@@ -73,24 +70,19 @@ public abstract class EditingTreat {
                 new String[] {element.getName()});
         boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
         if (confirmDelete){
+            System.out.println("Avant delete  " + element.getChilds().size());
             for (int i = element.getChilds().size() - 1  ; i >= 0 ;  i--) {
-            /*
-            for (MVCCDElement mvccdElement : element.getChilds()) {
-
-                MVCCDManager.instance().removeMVCCDElementInRepository(mvccdElement, element);
-                mvccdElement.removeInParent();
-                mvccdElement.setParent(null);
-            }
-
-             */
-
+                System.out.println("Delete  " + i);
                 MVCCDElement child = element.getChilds().get(i);
-                MVCCDManager.instance().removeMVCCDElementInRepository(child, element);
+                removeMVVCCDChildInRepository(child);
+                //MVCCDManager.instance().removeMVCCDElementInRepository(child, element);
+
                 child.removeInParent();
                 child = null;
             }
         }
     }
+
 
     public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
         //MVCCDElement mvccdElement = (MElement) element;
@@ -159,5 +151,15 @@ public abstract class EditingTreat {
     protected abstract DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) ;
 
     protected abstract String getPropertyTheElement();
+
+
+    protected  void removeMVCCDElementInRepository(MVCCDElement element){
+        MVCCDManager.instance().removeMVCCDElementInRepository(element, element.getParent());
+    }
+
+    protected  void removeMVVCCDChildInRepository(MVCCDElement child){
+        MVCCDManager.instance().removeMVCCDElementInRepository(child, child.getParent());
+    }
+
 
 }

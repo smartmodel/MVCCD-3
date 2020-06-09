@@ -50,7 +50,7 @@ public class MCDGeneralization extends MCDRelation implements IMCompliant, IMCDP
     public void setSpec(MCDGSEnd spec) {
         super.setB(spec);
         spec.setDrawingDirection(MCDGSEnd.SPEC);
-    }
+     }
 
 
     public String getNameId(){
@@ -60,58 +60,6 @@ public class MCDGeneralization extends MCDRelation implements IMCompliant, IMCDP
 
     @Override
     public String getNameTree(){
-        /*
-        String resultat = "";
-
-        MCDEntity entityGen = getGen().getMcdEntity();
-        MCDEntity entitySpec = getSpec().getMcdEntity();
-
-        MVCCDElement containerGeneralization = this.getParent().getParent();
-
-
-        MVCCDElement containerEntityGen = entityGen.getParent().getParent();
-        MVCCDElement containerEntitySpec = entitySpec.getParent().getParent();
-
-        boolean c1a = containerEntityGen == containerGeneralization;
-        boolean c1b = containerEntitySpec == containerGeneralization;
-        boolean c1 = c1a && c1b;
-        String treeNaming = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
-        boolean c3 = treeNaming.equals(Preferences.MCD_NAMING_NAME);
-        boolean c4 = treeNaming.equals(Preferences.MCD_NAMING_SHORT_NAME);
-
-        boolean r1 = c1 && c3;
-        boolean r2 = c1 && c4;
-        boolean r3 = (!c1) && c3;
-        boolean r4 = (!c1) && c4;
-
-        String nameEntityGen = "";
-        String nameEntitySpec = "";
-
-        if (r1){
-            nameEntityGen = entityGen.getName();
-            nameEntitySpec = entitySpec.getName();
-        }
-        
-        if (r2){
-            nameEntityGen = entityGen.getShortNameSmart();
-            nameEntitySpec = entitySpec.getShortNameSmart();
-        }
-
-        if (r3){
-            nameEntityGen = entityGen.getNamePath(MCDElementService.PATHSHORTNAME);
-            nameEntitySpec = entitySpec.getNamePath(MCDElementService.PATHSHORTNAME);
-        }
-
-        if (r4){
-           nameEntityGen = entityGen.getShortNameSmartPath();
-           nameEntitySpec = entitySpec.getShortNameSmartPath();
-        }
-
-
-        resultat = nameEntityGen + Preferences.MCD_NAMING_GENERALIZATION + nameEntitySpec;
-        return resultat;
-
-         */
 
         return MCDRelationService.getNameTreeBetweenEntities(this, Preferences.MCD_NAMING_GENERALIZATION);
 

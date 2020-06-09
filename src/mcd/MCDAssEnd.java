@@ -6,6 +6,7 @@ import m.services.MRelEndService;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDElementService;
+import mcd.services.MCDRelEndService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -20,7 +21,6 @@ public class MCDAssEnd extends MCDRelEnd  {
 
     //private MCDAssociation mcdAssociation;
     //private MCDEntity mcdEntity ;
-    private int drawingDirection ;
     private boolean ordered = false;
     private String multiStr;
 
@@ -49,13 +49,6 @@ public class MCDAssEnd extends MCDRelEnd  {
         super.setMcdElement(mcdEntity);
     }
 
-    public int getDrawingDirection() {
-        return drawingDirection;
-    }
-
-    public void setDrawingDirection(int drawingDirection) {
-        this.drawingDirection = drawingDirection;
-    }
 
     public String getMultiStr() {
         return multiStr;
@@ -99,6 +92,7 @@ public class MCDAssEnd extends MCDRelEnd  {
     @Override
     public String getNameTree() {
 
+        /*
         String resultat = "";
 
         MVCCDElement containerEntity = this.getMcdEntity().getParent().getParent();
@@ -153,12 +147,29 @@ public class MCDAssEnd extends MCDRelEnd  {
                         Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT ;
              }
         } else {
-            namingAssociation = /*Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +*/
+            namingAssociation =
                     mcdAssociation.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
         }
 
-        resultat = namingAssociation + nameEntityOpposite;
-        return resultat;
+         */
+
+        String namingAssociation ;
+        if (StringUtils.isNotEmpty(this.getName()) && StringUtils.isNotEmpty(this.getMCDAssEndOpposite().getName())){
+            namingAssociation = this.getName();
+            if (this.getDrawingDirection() == MCDAssEnd.FROM){
+                namingAssociation = namingAssociation +
+                        Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT ;
+
+            } else {
+                namingAssociation = namingAssociation  +
+                        Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT ;
+            }
+        } else {
+            namingAssociation =
+                    this.getMcdAssociation().getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
+        }
+
+        return MCDRelEndService.getNameTree(this, namingAssociation);
     }
 
 

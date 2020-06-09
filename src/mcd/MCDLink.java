@@ -1,5 +1,8 @@
 package mcd;
 
+import mcd.services.MCDRelationService;
+import preferences.Preferences;
+
 public class MCDLink extends MCDRelation {
 
     private  static final long serialVersionUID = 1000;
@@ -15,22 +18,29 @@ public class MCDLink extends MCDRelation {
         super(parent, name);
     }
 
-    public MCDRelEnd getEntity() {
-        return  super.getA();
+    public MCDLinkEnd getEndEntity() {
+        return  (MCDLinkEnd)  super.getA();
     }
 
-    public void setEntity(MCDRelEnd entity) {
-        super.setA(entity);
+    public void setEndEntity(MCDRelEnd endEntity) {
+        super.setA(endEntity);
+        endEntity.setDrawingDirection(MCDRelEnd.ELEMENT);
     }
 
-    public MCDRelEnd getAssociation() {
-        return (MCDRelEnd) super.getB();
+    public MCDLinkEnd getEndAssociation() {
+        return (MCDLinkEnd) super.getB();
     }
 
-    public void setAssociation(MCDRelEnd association) {
-        super.setB(association);
+    public void setEndAssociation(MCDRelEnd endAssociation) {
+        super.setB(endAssociation);
+        endAssociation.setDrawingDirection(MCDRelEnd.RELATION);
     }
 
+    @Override
+    public String getNameTree(){
 
+        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_LINK);
+
+    }
 
 }

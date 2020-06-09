@@ -9,12 +9,8 @@ public abstract class ProjectElement extends MVCCDElement {
 
     private static final long serialVersionUID = 1000;
 
-    //public static final int IDTRANSIENT = -1;
-
     private int id;
     private boolean transitory = false;
-
-
 
     public ProjectElement(ProjectElement parent) {
         super(parent);
@@ -32,21 +28,11 @@ public abstract class ProjectElement extends MVCCDElement {
             this.id = 0;
         } else {
             //TODO-1 A priori ok (A voir)
-            /*
-            if (parent instanceof Project){
-                this.id = ProjectService.getProjectRoot(this).getNextIdElementSequence();
-            } else {
-                this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
-            }
-
-             */
-
-            try {
+           try {
                 this.id = ProjectService.getProjectRoot(this).getNextIdElementSequence();
             } catch(Exception e){
                 this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
             }
-
             if ( parent == null) {
                 transitory = true;
             }

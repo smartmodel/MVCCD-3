@@ -8,7 +8,7 @@ public class MCDContEndRels extends MCDElement{
 
     private static final long serialVersionUID = 1000;
 
-    public MCDContEndRels(MCDEntity parent, String name) {
+    public MCDContEndRels(MCDElement parent, String name) {
         super(parent,name);
     }
 
