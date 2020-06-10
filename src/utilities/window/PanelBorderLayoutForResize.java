@@ -1,8 +1,11 @@
 package utilities.window;
 
 public class PanelBorderLayoutForResize {
+    //Panneau à redimensionner
     private PanelBorderLayout panelForResize = null ;
+    // Position X à l'écran du panneau
     private Integer xOnScreen = null ;
+    // Position Y à l'écran du panneau
     private Integer yOnScreen = null ;
 
     public PanelBorderLayoutForResize() {

@@ -12,11 +12,10 @@ import java.awt.event.MouseListener;
 
 public abstract class PanelBorderLayout extends JPanel implements MouseListener, MouseInputListener{
 
-    private boolean resizable = true;
-    private PrefMCDInput prefMCDInput;
-    private String borderLayoutPosition;
-    private PanelBorderLayoutResizer panelBLResizer;
-    private PanelContent panelContent;
+    private boolean resizable = true;   // Panneau redimensionnable
+    private String borderLayoutPosition;  // Position du panneau dans BorderLayout
+    private PanelBorderLayoutResizer panelBLResizer;  // Gestionnaire de redimensionnement
+    private PanelContent panelContent;  // Panneau de contenu
 
     public PanelBorderLayout() {
    }

@@ -7,10 +7,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public abstract class PanelContent extends JPanel {
-    private JScrollPane scroll;
+    private JScrollPane scroll; // Barre de défilement
     private JPanel panel;
-    PanelBorderLayout panelBL;
-    private boolean scrollInComponent= false;
+    PanelBorderLayout panelBL;  // JPanel constitutif d'un jeu de panneaux gérés par un BorderLayout
+    private boolean scrollInComponent= false; // Indicateur de prise en charge des barres de défilement
 
     public PanelContent(PanelBorderLayout panelBL) {
         this.panelBL = panelBL;

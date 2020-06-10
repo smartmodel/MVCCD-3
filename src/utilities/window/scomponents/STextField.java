@@ -10,13 +10,19 @@ import javax.swing.*;
 
 public class STextField extends JTextField implements SComponent {
 
+    // Valeur d'initialisation
     private String oldText ;
-    //private boolean firstAffectation = true;
+    // Erreur empêchant la sauvegarde du formulaire
     private boolean checkPreSave = false;
+    // Lecture seule
     private boolean readOnly = false;
+    // Panneau contenant le composant
     private IPanelInputContent panel;
+    // Mise en évidence d'erreur ou incohérence
     private int color;
+    // Erreur
     private boolean errorInput = false;
+    // Etiquette attachée au formulaire
     private  JLabel label;
 
     public STextField(IPanelInputContent panel) {
@@ -41,7 +47,6 @@ public class STextField extends JTextField implements SComponent {
         if (! panel.isDataInitialized()) {
             oldText = text;
         }
-        //firstAffectation = false;
     }
 
 

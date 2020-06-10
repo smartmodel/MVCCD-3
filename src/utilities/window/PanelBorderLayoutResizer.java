@@ -17,13 +17,21 @@ import java.util.ArrayList;
 
 public class PanelBorderLayoutResizer {
 
+    // Ensemble des panneaux constitutifs d'un JFrame mis en page avec BorderLayout
     private  ArrayList<PanelBorderLayout> panels = new ArrayList<PanelBorderLayout>() ;
+    // Panneau transitoire  de sortie de souris en redimensionnement
     private PanelBorderLayoutForResize subPanelExit = new PanelBorderLayoutForResize() ;
+    // Panneau transitoire  d'entrée de souris en redimensionnement
     private PanelBorderLayoutForResize subPanelEnter = new PanelBorderLayoutForResize() ;
+    // Forme de curseur en fonction du mode de redimensionnement en cours
     private Integer cursorTypeDefault = Cursor.DEFAULT_CURSOR;
+    // Redimensionnement vertical en cours
     private Boolean cursorResizingVertical = false;
+    // Redimensionnement horizontal en cours
     private Boolean cursorResizingHorizontal = false;
+    // Mouvement de glissement de souris détecté
     private Boolean draggedDetected = false;
+    // Mouvement de glissement de souris en cours
     private Boolean draggedInProgress = false;
 
     public PanelBorderLayoutResizer() {
