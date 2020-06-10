@@ -5,6 +5,8 @@ import datatypes.MDDatatypesManager;
 import main.window.menu.WinMenuContent;
 import main.window.repository.WinRepositoryTree;
 import mcd.MCDRelation;
+import org.w3c.dom.*;
+import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.*;
 import main.window.console.WinConsoleContent;
@@ -17,14 +19,22 @@ import main.window.repository.WinRepositoryContent;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.ArrayList;
 
 public class MVCCDManager {
 
-    private static MVCCDManager instance ;
+    private static MVCCDManager instance;
 
-    private MVCCDWindow mvccdWindow ;  //Ecran principal
+    private MVCCDWindow mvccdWindow;  //Ecran principal
     private Repository repository;  //Référentiel
     private MVCCDElement rootMVCCDElement; //Elément root du référentiel repository.root.name=Application MVCCD
     private Project project;    //Projet en cours de traitement
@@ -35,18 +45,20 @@ public class MVCCDManager {
     private boolean datasEdited = true; //Indicateur d'édition de données y-compris les préférences d'application
 
 
-    public static synchronized MVCCDManager instance(){
-        if(instance == null){
+    public static synchronized MVCCDManager instance() {
+        if (instance == null) {
             instance = new MVCCDManager();
         }
         return instance;
     }
 
-    public void start(){
+    public void start() {
         // Chargement des messages de traduction
         LoadMessages.main();
         // Chargement des préférences de l'application
         PreferencesManager.instance().loadOrCreateFileApplicationPreferences();
+
+        createXMLFichier();
         // Création et affichage de l'écran d'accueil
         startMVCCDWindow();
         // Création de la console
@@ -82,13 +94,13 @@ public class MVCCDManager {
         console = new Console();
     }
 
-    public void startMVCCDWindow(){
+    public void startMVCCDWindow() {
         mvccdWindow = new MVCCDWindow();
         mvccdWindow.setVisible(true);
         mvccdWindow.getPanelBLResizer().resizerContentPanels();
     }
 
-    public void completeNewProject(){
+    public void completeNewProject() {
         //this.project = project;
         PreferencesManager.instance().setProjectPref(project.getPreferences());
         PreferencesManager.instance().copyApplicationPref(Project.NEW);
@@ -116,7 +128,7 @@ public class MVCCDManager {
     }
 
     public void showMVCCDElementInRepository(MVCCDElement mvccdElement) {
-        if ( mvccdElement instanceof ProjectElement) {
+        if (mvccdElement instanceof ProjectElement) {
             ProjectElement projectElement = (ProjectElement) mvccdElement;
             DefaultMutableTreeNode node = ProjectService.getNodeById(projectElement.getId());
             //getWinRepositoryContent().getTree().changeModel(repository);
@@ -126,9 +138,9 @@ public class MVCCDManager {
     }
 
     public void removeMVCCDElementInRepository(MVCCDElement mvccdElementToRemove, MVCCDElement parent) {
-        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(((ProjectElement)parent).getId());
+        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(((ProjectElement) parent).getId());
         ProjectElement child = (ProjectElement) mvccdElementToRemove;
-        DefaultMutableTreeNode nodeChild= ProjectService.getNodeById(child.getId());
+        DefaultMutableTreeNode nodeChild = ProjectService.getNodeById(child.getId());
         MVCCDManager.instance().getRepository().removeNodeFromParent(nodeChild);
         getWinRepositoryContent().getTree().changeModel(repository);
         //getWinRepositoryContent().getTree().getTreeModel().reload();
@@ -161,29 +173,29 @@ public class MVCCDManager {
         removeMVCCDElementInRepository(mcdRelation.getB(), mcdRelation.getB().getParent());
     }
 
-    public void  openProject() {
+    public void openProject() {
         ProjectFileChooser fileChooser = new ProjectFileChooser(ProjectFileChooser.OPEN);
         File fileChoose = fileChooser.fileChoose();
         openProjectBase(fileChoose);
-     }
+    }
 
     public void openProjectRecent(String filePath) {
         File file = new File(filePath);
         openProjectBase(file);
-     }
+    }
 
     private void openLastProject() {
-        if (projectsRecents.getRecents().size() > 0){
+        if (projectsRecents.getRecents().size() > 0) {
             File file = projectsRecents.getRecents().get(0);
             openProjectBase(file);
         }
-     }
+    }
 
-    private void openProjectBase(File file){
+    private void openProjectBase(File file) {
         //Mémorise le fichier associé au projet
-        setFileProjectCurrent(file) ;
+        setFileProjectCurrent(file);
 
-        if (file != null){
+        if (file != null) {
             // Lecture du fichier de sauvegarde
             project = new LoaderSerializable().load(fileProjectCurrent);
             // Chargement des préférences du projet
@@ -208,7 +220,6 @@ public class MVCCDManager {
     }
 
 
-
     public void saveProject() {
         if (fileProjectCurrent != null) {
             new SaverSerializable().save(fileProjectCurrent);
@@ -221,8 +232,8 @@ public class MVCCDManager {
     public void saveAsProject() {
         ProjectFileChooser fileChooser = new ProjectFileChooser(ProjectFileChooser.SAVE);
         File fileChoose = fileChooser.fileChoose();
-        if (fileChoose != null){
-            fileProjectCurrent = fileChoose ;
+        if (fileChoose != null) {
+            fileProjectCurrent = fileChoose;
             new SaverSerializable().save(fileProjectCurrent);
             projectsRecents.add(fileProjectCurrent);
             changeActivateProjectOpenRecentsItems();
@@ -241,10 +252,10 @@ public class MVCCDManager {
 
 
     private void changeActivateProjectOpenRecentsItems() {
-        if (projectsRecents != null){
+        if (projectsRecents != null) {
             getWinMenuContent().desActivateProjectOpenRecentsItems();
             int i = 0;
-            for (File file : projectsRecents.getRecents()){
+            for (File file : projectsRecents.getRecents()) {
                 getWinMenuContent().activateProjectOpenRecentsItem(i, file.getPath());
                 i++;
             }
@@ -275,30 +286,31 @@ public class MVCCDManager {
         return mvccdWindow;
     }
 
-    public WinRepository getWinRepository(){
+    public WinRepository getWinRepository() {
         return mvccdWindow.getRepository();
     }
 
-    public WinRepositoryContent getWinRepositoryContent(){
+    public WinRepositoryContent getWinRepositoryContent() {
         return (WinRepositoryContent) mvccdWindow.getRepository().getPanelContent();
     }
 
-    public WinDiagram getWinDiagram(){
+    public WinDiagram getWinDiagram() {
         return mvccdWindow.getDiagram();
     }
 
-    public WinDiagramContent getWinDiagramContent(){
+    public WinDiagramContent getWinDiagramContent() {
         return (WinDiagramContent) mvccdWindow.getDiagram().getPanelContent();
     }
 
 
-    public WinMenuContent getWinMenuContent(){
+    public WinMenuContent getWinMenuContent() {
         return mvccdWindow.getMenuContent();
     }
 
-    public WinConsoleContent getWinConsoleContent(){
+    public WinConsoleContent getWinConsoleContent() {
         return (WinConsoleContent) mvccdWindow.getConsole().getPanelContent();
     }
+
     public Repository getRepository() {
         return repository;
     }
@@ -320,8 +332,8 @@ public class MVCCDManager {
     }
 
     public void setFileProjectCurrent(File fileProjectCurrent) {
-        if (datasProjectChanged){
-           //
+        if (datasProjectChanged) {
+            //
         } else {
             mvccdWindow.getMenuContent().getProjectSave().setEnabled(false);
         }
@@ -351,16 +363,16 @@ public class MVCCDManager {
     }
 
 
-
     public void setDatasEdited(boolean datasEdited) {
         this.datasEdited = datasEdited;
     }
 
-    public void datasProjectChangedFromEditor(){
-        if (isDatasEdited()){
+    public void datasProjectChangedFromEditor() {
+        if (isDatasEdited()) {
             setDatasProjectChanged(true);
         }
     }
+
     public MVCCDElement getRootMVCCDElement() {
         return rootMVCCDElement;
     }
@@ -370,14 +382,72 @@ public class MVCCDManager {
     }
 
 
-    public MVCCDElementApplicationMDDatatypes  getMDDatatypesRoot(){
+    public MVCCDElementApplicationMDDatatypes getMDDatatypesRoot() {
         MVCCDElement mvccdElement = MVCCDElementService.getUniqueInstanceByClassName(rootMVCCDElement,
                 MVCCDElementApplicationMDDatatypes.class.getName());
-        if (mvccdElement != null){
+        if (mvccdElement != null) {
             return (MVCCDElementApplicationMDDatatypes) mvccdElement;
         } else {
             return null;
         }
+    }
+
+    public void createXMLFichier() {
+        // création du document
+            Preferences prefApp = PreferencesManager.instance().getApplicationPref();
+
+
+        try {
+
+            DocumentBuilderFactory fabrique = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = fabrique.newDocumentBuilder();
+            Document document = builder.newDocument();
+
+            Element racine = (Element) document.createElement("PreferencesApplication");
+            document.appendChild(racine);
+
+            Element debug = document.createElement("DEBUG");
+            debug.appendChild(document.createTextNode(prefApp.isDEBUG().toString()));
+            racine.appendChild(debug);
+
+            Element debugBackgroudPanel = document.createElement("DEBUG_BACKGROUND_PANEL");
+            debugBackgroudPanel.appendChild(document.createTextNode(prefApp.isDEBUG_BACKGROUND_PANEL().toString()));
+            racine.appendChild(debugBackgroudPanel);
+
+            Element debugPrintMvccdelement = document.createElement("DEBUG_PRINT_MVCCDELEMENT");
+            debugPrintMvccdelement.appendChild(document.createTextNode(prefApp.isDEBUG_PRINT_MVCCDELEMENT().toString()));
+            racine.appendChild(debugPrintMvccdelement);
+
+            Element debugShowTableColHidden = document.createElement("DEBUG_SHOW_TABLE_COL_HIDDEN");
+            debugShowTableColHidden.appendChild(document.createTextNode(prefApp.isDEBUG_SHOW_TABLE_COL_HIDDEN().toString()));
+            racine.appendChild(debugShowTableColHidden);
+
+            Element debugInspectObjectInTree = document.createElement("DEBUG_INSPECT_OBJECT_IN_TREE");
+            debugInspectObjectInTree.appendChild(document.createTextNode(prefApp.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
+            racine.appendChild(debugInspectObjectInTree);
+
+            Element repositoryMcdModelsMny  = document.createElement("REPOSITORY_MCD_MODELS_MANY");
+            repositoryMcdModelsMny.appendChild(document.createTextNode(prefApp.getREPOSITORY_MCD_MODELS_MANY().toString()));
+            racine.appendChild(repositoryMcdModelsMny);
+
+            Element repositoryMcdPackagesAuthorizeds  = document.createElement("REPOSITORY_MCD_PACKAGES_AUTHORIZEDS");
+            repositoryMcdPackagesAuthorizeds.appendChild(document.createTextNode(prefApp.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS().toString()));
+            racine.appendChild(repositoryMcdPackagesAuthorizeds);
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(new File("applicationPref.xml"));
+            transformer.transform(source, result);
+
+            System.out.println("File saved!");
+
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace();
+        } catch (TransformerException tfe) {
+            tfe.printStackTrace();
+        }
+
     }
 
 }
