@@ -4,7 +4,6 @@ import diagram.MDDiagram;
 import project.ProjectElement;
 
 public class MCDDiagram extends MDDiagram {
-    private static final long test = 10;
     private static final long serialVersionUID = 1000;
 
     public MCDDiagram(ProjectElement parent) {

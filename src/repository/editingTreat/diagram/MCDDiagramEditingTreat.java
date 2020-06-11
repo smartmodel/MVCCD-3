@@ -2,12 +2,12 @@ package repository.editingTreat.diagram;
 
 import diagram.mcd.MCDDiagram;
 import diagram.mcd.MCDTitlePanel;
+import diagram.mcd.MCDPalette;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import main.window.diagram.WinDiagram;
-import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 
@@ -31,6 +31,13 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
                 DialogEditor.NEW,
                 newDiagram);
         mcdTitlePanel.getContent();
+        JPanel panelPalette = winDiagram.getContent().getPanelPalette();
+        MCDPalette mcdPalette = new MCDPalette(parent,
+                panelPalette,
+                DialogEditor.NEW,
+                newDiagram);
+        mcdPalette.getContent();
+
 
         //TODO-1  A reprendre (resize pour permettre le réaffichage des JPanel chargés dynamiquement
         //winDiagram.resizeContent();
@@ -51,6 +58,12 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
                 DialogEditor.UPDATE,
                 (MCDDiagram) element);
         mcdTitlePanel.getContent();
+        JPanel panelPalette = winDiagram.getContent().getPanelPalette();
+        MCDPalette mcdPalette = new MCDPalette(parentBefore,
+                panelPalette,
+                DialogEditor.UPDATE,
+                (MCDDiagram) element);
+        mcdPalette.getContent();
 
         //TODO-1  A reprendre (resize pour permettre le réaffichage des JPanel chargés dynamiquement
         //winDiagram.resizeContent();
@@ -78,6 +91,12 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
                 DialogEditor.READ,
                 (MCDDiagram) element);
         mcdTitlePanel.getContent();
+        JPanel panelPalette = winDiagram.getContent().getPanelPalette();
+        MCDPalette mcdPalette = new MCDPalette(element.getParent(),
+                panelPalette,
+                DialogEditor.READ,
+                (MCDDiagram) element);
+        mcdPalette.getContent();
 
         //TODO-1  A reprendre (resize pour permettre le réaffichage des JPanel chargés dynamiquement
         //winDiagram.resizeContent();
