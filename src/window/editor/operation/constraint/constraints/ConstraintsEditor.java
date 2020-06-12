@@ -13,9 +13,9 @@ import java.awt.*;
 
 public class ConstraintsEditor extends DialogEditorNav {
 
-     //
     //
-     public ConstraintsEditor(
+    //
+    public ConstraintsEditor(
             Window owner,
             MVCCDElement parent,
             MCDContConstraints mcdContConstraints,
