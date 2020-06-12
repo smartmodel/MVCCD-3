@@ -14,6 +14,7 @@ import java.awt.*;
 public class ConstraintsEditor extends DialogEditorNav {
 
      //
+    //
      public ConstraintsEditor(
             Window owner,
             MVCCDElement parent,
@@ -21,7 +22,6 @@ public class ConstraintsEditor extends DialogEditorNav {
             String mode,
             EditingTreat editingTreat)  {
         super(owner, parent, mcdContConstraints, mode, editingTreat);
-
     }
 
     @Override
