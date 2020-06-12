@@ -5,8 +5,6 @@ import datatypes.MDDatatypesManager;
 import main.window.menu.WinMenuContent;
 import main.window.repository.WinRepositoryTree;
 import mcd.MCDRelation;
-import org.w3c.dom.*;
-import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.*;
 import main.window.console.WinConsoleContent;
@@ -19,14 +17,6 @@ import main.window.repository.WinRepositoryContent;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -55,6 +45,9 @@ public class MVCCDManager {
     public void start() {
         // Chargement des messages de traduction
         LoadMessages.main();
+
+        //PreferencesManager.instance().loadOrCreateFileApplicationPreferences();
+
         //Chargement des préférences de l'application
         PreferencesManager.instance().loadOrCreateFileXMLApplicationPref();
         // Création et affichage de l'écran d'accueil

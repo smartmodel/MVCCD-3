@@ -4,6 +4,7 @@ import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import preferences.Preferences;
+import project.ProjectManager;
 import repository.editingTreat.ProjectEditingTreat;
 import utilities.window.DialogMessage;
 
@@ -162,6 +163,7 @@ public class WinMenuContent implements ActionListener {
     private void newProject() {
         if (MVCCDManager.instance().getProject() == null) {
             ProjectEditingTreat.treatNew(mvccdWindow);
+            ProjectManager.instance().createProjectFile();
 
         } else {
             String message = MessagesBuilder.getMessagesProperty ("project.new.not.close");

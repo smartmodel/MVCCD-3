@@ -229,8 +229,9 @@ public class PrefApplicationInputContent extends PanelInputContent {
         // Sauvegarde (fichier) des préférences d'application
 
         PreferencesManager.instance().createApplicationPref();
-        PreferencesSaver saver = new PreferencesSaver();
-        saver.save(new File(Preferences.FILE_APPLICATION_PREF_NAME), applicationPref);
+
+        //PreferencesSaver saver = new PreferencesSaver();
+        //saver.save(new File(Preferences.FILE_APPLICATION_PREF_NAME), applicationPref);
 
         String message = MessagesBuilder.getMessagesProperty ("preferences.application.saved",
                 new String[] {Preferences.APPLICATION_NAME });

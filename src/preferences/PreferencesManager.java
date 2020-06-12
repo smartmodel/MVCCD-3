@@ -201,7 +201,7 @@ public class PreferencesManager {
 
             //Création du fichier
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new File("applicationPref.xml"));
+            StreamResult result = new StreamResult(new File(Preferences.FILE_APPLICATION_PREF_NAME));
             transformer.transform(source, result);
 
         } catch (ParserConfigurationException pce) {
@@ -218,7 +218,7 @@ public class PreferencesManager {
             //Création du document en memoire
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(new File("applicationPref.xml"));
+            Document document = builder.parse(new File(Preferences.FILE_APPLICATION_PREF_NAME));
 
             //Récuperation des valeurs en memoire
             Element racine = document.getDocumentElement();
