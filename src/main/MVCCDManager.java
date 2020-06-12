@@ -55,10 +55,8 @@ public class MVCCDManager {
     public void start() {
         // Chargement des messages de traduction
         LoadMessages.main();
-        // Chargement des préférences de l'application
-        PreferencesManager.instance().loadOrCreateFileApplicationPreferences();
-
-        createXMLFichier();
+        //Chargement des préférences de l'application
+        PreferencesManager.instance().loadOrCreateFileXMLApplicationPref();
         // Création et affichage de l'écran d'accueil
         startMVCCDWindow();
         // Création de la console
@@ -390,64 +388,6 @@ public class MVCCDManager {
         } else {
             return null;
         }
-    }
-
-    public void createXMLFichier() {
-        // création du document
-            Preferences prefApp = PreferencesManager.instance().getApplicationPref();
-
-
-        try {
-
-            DocumentBuilderFactory fabrique = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = fabrique.newDocumentBuilder();
-            Document document = builder.newDocument();
-
-            Element racine = (Element) document.createElement("PreferencesApplication");
-            document.appendChild(racine);
-
-            Element debug = document.createElement("DEBUG");
-            debug.appendChild(document.createTextNode(prefApp.isDEBUG().toString()));
-            racine.appendChild(debug);
-
-            Element debugBackgroudPanel = document.createElement("DEBUG_BACKGROUND_PANEL");
-            debugBackgroudPanel.appendChild(document.createTextNode(prefApp.isDEBUG_BACKGROUND_PANEL().toString()));
-            racine.appendChild(debugBackgroudPanel);
-
-            Element debugPrintMvccdelement = document.createElement("DEBUG_PRINT_MVCCDELEMENT");
-            debugPrintMvccdelement.appendChild(document.createTextNode(prefApp.isDEBUG_PRINT_MVCCDELEMENT().toString()));
-            racine.appendChild(debugPrintMvccdelement);
-
-            Element debugShowTableColHidden = document.createElement("DEBUG_SHOW_TABLE_COL_HIDDEN");
-            debugShowTableColHidden.appendChild(document.createTextNode(prefApp.isDEBUG_SHOW_TABLE_COL_HIDDEN().toString()));
-            racine.appendChild(debugShowTableColHidden);
-
-            Element debugInspectObjectInTree = document.createElement("DEBUG_INSPECT_OBJECT_IN_TREE");
-            debugInspectObjectInTree.appendChild(document.createTextNode(prefApp.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
-            racine.appendChild(debugInspectObjectInTree);
-
-            Element repositoryMcdModelsMny  = document.createElement("REPOSITORY_MCD_MODELS_MANY");
-            repositoryMcdModelsMny.appendChild(document.createTextNode(prefApp.getREPOSITORY_MCD_MODELS_MANY().toString()));
-            racine.appendChild(repositoryMcdModelsMny);
-
-            Element repositoryMcdPackagesAuthorizeds  = document.createElement("REPOSITORY_MCD_PACKAGES_AUTHORIZEDS");
-            repositoryMcdPackagesAuthorizeds.appendChild(document.createTextNode(prefApp.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS().toString()));
-            racine.appendChild(repositoryMcdPackagesAuthorizeds);
-
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new File("applicationPref.xml"));
-            transformer.transform(source, result);
-
-            System.out.println("File saved!");
-
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-        } catch (TransformerException tfe) {
-            tfe.printStackTrace();
-        }
-
     }
 
 }

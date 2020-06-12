@@ -1,9 +1,23 @@
 package preferences;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import profile.ProfileFileChooser;
 import project.Project;
 import project.ProjectFileChooser;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 
 
@@ -129,7 +143,6 @@ public class PreferencesManager {
         }
     }
 
-
     public void createProfile() {
         ProfileFileChooser fileChooser = new ProfileFileChooser(ProjectFileChooser.SAVE);
         File fileChoose = fileChooser.fileChoose();
@@ -138,5 +151,114 @@ public class PreferencesManager {
         }
     }
 
+    // création du document Application
+    public void createApplicationPref() {
 
-}
+        try {
+            //Creation du document en memoire
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.newDocument();
+
+            //Création des éléments
+            Element racine = (Element) document.createElement("PreferencesApplication");
+            document.appendChild(racine);
+
+            Element debug = document.createElement("DEBUG");
+            debug.appendChild(document.createTextNode(applicationPref.isDEBUG().toString()));
+            racine.appendChild(debug);
+
+            Element debugBackgroudPanel = document.createElement("DEBUG_BACKGROUND_PANEL");
+            debugBackgroudPanel.appendChild(document.createTextNode(applicationPref.isDEBUG_BACKGROUND_PANEL().toString()));
+            racine.appendChild(debugBackgroudPanel);
+
+            Element debugPrintMvccdElement = document.createElement("DEBUG_PRINT_MVCCDELEMENT");
+            debugPrintMvccdElement.appendChild(document.createTextNode(applicationPref.isDEBUG_PRINT_MVCCDELEMENT().toString()));
+            racine.appendChild(debugPrintMvccdElement);
+
+            Element debugShowTableColHidden = document.createElement("DEBUG_SHOW_TABLE_COL_HIDDEN");
+            debugShowTableColHidden.appendChild(document.createTextNode(applicationPref.isDEBUG_SHOW_TABLE_COL_HIDDEN().toString()));
+            racine.appendChild(debugShowTableColHidden);
+
+            Element debugInspectObjectInTree = document.createElement("DEBUG_INSPECT_OBJECT_IN_TREE");
+            debugInspectObjectInTree.appendChild(document.createTextNode(applicationPref.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
+            racine.appendChild(debugInspectObjectInTree);
+
+            Element repositoryMcdModelsMny  = document.createElement("REPOSITORY_MCD_MODELS_MANY");
+            repositoryMcdModelsMny.appendChild(document.createTextNode(applicationPref.getREPOSITORY_MCD_MODELS_MANY().toString()));
+            racine.appendChild(repositoryMcdModelsMny);
+
+            Element repositoryMcdPackagesAuthorizeds  = document.createElement("REPOSITORY_MCD_PACKAGES_AUTHORIZEDS");
+            repositoryMcdPackagesAuthorizeds.appendChild(document.createTextNode(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS().toString()));
+            racine.appendChild(repositoryMcdPackagesAuthorizeds);
+
+            // formatage du fichier
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+            //Création du fichier
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(new File("applicationPref.xml"));
+            transformer.transform(source, result);
+
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace();
+        } catch (TransformerException tfe) {
+            tfe.printStackTrace();
+        }
+
+    }
+
+    public void loadApplicationPref() throws FileNotFoundException  {
+        try {
+
+            //Création du document en memoire
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(new File("applicationPref.xml"));
+
+            //Récuperation des valeurs en memoire
+            Element racine = document.getDocumentElement();
+            Element debug = (Element) racine.getElementsByTagName("DEBUG").item(0);
+            Element debugBackgroudPanel = (Element) racine.getElementsByTagName("DEBUG_BACKGROUND_PANEL").item(0);
+            Element debugPrintMvccdElement = (Element) racine.getElementsByTagName("DEBUG_PRINT_MVCCDELEMENT").item(0);
+            Element debugShowTableColHidden = (Element) racine.getElementsByTagName("DEBUG_SHOW_TABLE_COL_HIDDEN").item(0);
+            Element debugInspectObjectInTree = (Element) racine.getElementsByTagName("DEBUG_INSPECT_OBJECT_IN_TREE").item(0);
+            Element repositoryMcdModelsMany = (Element) racine.getElementsByTagName("REPOSITORY_MCD_MODELS_MANY").item(0);
+            Element repositoryMcdPackagesAuthorizeds = (Element) racine.getElementsByTagName("REPOSITORY_MCD_PACKAGES_AUTHORIZEDS").item(0);
+
+            // Instanciation des préférences de l'application
+            applicationPref.setDEBUG(Boolean.valueOf(debug.getTextContent()));
+            applicationPref.setDEBUG_BACKGROUND_PANEL(Boolean.valueOf(debugBackgroudPanel.getTextContent()));
+            applicationPref.setDEBUG_PRINT_MVCCDELEMENT(Boolean.valueOf(debugPrintMvccdElement.getTextContent()));
+            applicationPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(Boolean.valueOf(debugShowTableColHidden.getTextContent()));
+            applicationPref.setDEBUG_INSPECT_OBJECT_IN_TREE(Boolean.valueOf(debugInspectObjectInTree.getTextContent()));
+            applicationPref.setREPOSITORY_MCD_MODELS_MANY(Boolean.valueOf(repositoryMcdModelsMany.getTextContent()));
+            applicationPref.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(Boolean.valueOf(repositoryMcdPackagesAuthorizeds.getTextContent()));
+
+        }catch (FileNotFoundException e) {
+            throw (e);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void loadOrCreateFileXMLApplicationPref() {
+        applicationPref = new Preferences(null, null);
+        try{
+            loadApplicationPref();
+        } catch (FileNotFoundException e) {
+            createApplicationPref();
+        }
+    }
+
+
+    }
