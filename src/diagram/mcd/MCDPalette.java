@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -36,25 +37,38 @@ public class MCDPalette {
         // Réinitialisation
         //TODO-1 A affiner
         panelPalette.removeAll();
-
-        //Le flowLayout va alligner tous les composants sur l'axe Y
-        panelPalette.setLayout(new FlowLayout());
-        //Changement de la couleur de fond
+        //---------------------------------Panel---------------------------------------------
+        panelPalette.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
         panelPalette.setBackground(Color.WHITE);
         panelPalette.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        panelPalette.setPreferredSize((new Dimension(185, Preferences.PREFERENCES_WINDOW_HEIGHT)));
+        panelPalette.setPreferredSize((new Dimension(200, Preferences.PREFERENCES_WINDOW_HEIGHT)));
 
-        //Dimension pour la taille des bouttons ainsi ils ont tous la même taille
-        Dimension btnDimension = new Dimension(175,60);
+        //------------------------------Dimensions-------------------------------------------
+        //Dimension pour la taille des boutons ainsi ils ont tous la même taille.
+        Dimension btnDimension = new Dimension(195,60);
+        Dimension btnDimensionContenantUnDeroulant= new Dimension(165,60);
+        Dimension btnDimensionderoulant = new Dimension(30,60);
 
+
+        //--------------------------Composants du JPanel--------------------------------------
         JLabel labelName = new JLabel("Palette ");
 
         //Création du bouton Entité et ajout de son listener
         JButton btnEntite = createEntityBtn();
         btnEntite.addActionListener(this::actionPerformedEntity);
 
+        //Création du boutton ... à côté du bouton entité le listener ne marche pas encore
+        JButton btnEntitePlus = createEntityPlusBtn();
+        //btnEntitePlus.addActionListener(mcdPaletteListener.);
+
+        JButton btnAssociationPlus = createAssociationPlusBtn();
+
+
         JButton btnAssociation = createAssociationBtn();
         btnAssociation.addActionListener(this::actionPerformedAssociation);
+
+
+
 
         JButton btnEntiteAssociative = createEntiteAssociativeBtn();
         JButton btnNote = createNoteBtn();
@@ -63,9 +77,11 @@ public class MCDPalette {
         JButton btnContrainteOCL = createContrainteOCLBtn();
 
         //Ajout des boutons dans la palette
-        panelPalette.add(labelName);
-        panelPalette.add(btnEntite).setPreferredSize(btnDimension);
-        panelPalette.add(btnAssociation).setPreferredSize(btnDimension);
+        panelPalette.add(labelName).setPreferredSize(new Dimension(175,20));
+        panelPalette.add(btnEntite).setPreferredSize(btnDimensionContenantUnDeroulant);
+        panelPalette.add(btnEntitePlus).setPreferredSize(btnDimensionderoulant);
+        panelPalette.add(btnAssociation).setPreferredSize(btnDimensionContenantUnDeroulant);
+        panelPalette.add(btnAssociationPlus).setPreferredSize(btnDimensionderoulant);
         panelPalette.add(btnEntiteAssociative).setPreferredSize(btnDimension);
         panelPalette.add(btnNote).setPreferredSize(btnDimension);
         panelPalette.add(btnGenSpe).setPreferredSize(btnDimension);
@@ -73,13 +89,27 @@ public class MCDPalette {
         panelPalette.add(btnContrainteOCL).setPreferredSize(btnDimension);
     }
 
+
+
+    public JButton createEntityPlusBtn() {
+        JButton btnEntityPlus = new JButton("V");
+        try {
+            btnEntityPlus.setHorizontalAlignment(SwingConstants.CENTER);
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return btnEntityPlus;
+    }
+
     //Création du boutton entité
+
     public JButton createEntityBtn(){
         JButton btnEntite = new JButton();
 
         try {
             btnEntite.setHorizontalAlignment(SwingConstants.LEFT);
-            Image img = ImageIO.read(getClass().getResource("entite2.PNG")).getScaledInstance(60,35,4);
+            Image img = ImageIO.read(getClass().getResource("ressources/entite2.PNG")).getScaledInstance(60,35,4);
             btnEntite.setIcon(new ImageIcon(img));
             btnEntite.setText("Entité");
             btnEntite.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -93,12 +123,31 @@ public class MCDPalette {
 
     }
 
+    //Création du boutton enumération
+    /*public JButton createEnumBtn(){
+        JButton btnEnum = new JButton();
+        btnEnum.setVisible(false);
+        try {
+            btnEnum.setHorizontalAlignment(SwingConstants.LEFT);
+            Image img = ImageIO.read(getClass().getResource("ressources/association.png")).getScaledInstance(55,35,4);
+            btnEnum.setIcon(new ImageIcon(img));
+            btnEnum.setText("Enumération");
+            btnEnum.setHorizontalTextPosition(SwingConstants.RIGHT);
+
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return btnEnum;
+
+    }*/
+
     //Création du boutton associtaion
     public JButton createAssociationBtn(){
         JButton btnAssociation = new JButton();
         try {
             btnAssociation.setHorizontalAlignment(SwingConstants.LEFT);
-            Image img = ImageIO.read(getClass().getResource("association.png")).getScaledInstance(55,35,4);
+            Image img = ImageIO.read(getClass().getResource("ressources/association.png")).getScaledInstance(55,35,4);
             btnAssociation.setIcon(new ImageIcon(img));
             btnAssociation.setText("Association");
             btnAssociation.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -111,12 +160,25 @@ public class MCDPalette {
 
     }
 
+    public JButton createAssociationPlusBtn() {
+        JButton btnAssociationPlus = new JButton("V");
+        try {
+            btnAssociationPlus.setHorizontalAlignment(SwingConstants.CENTER);
+            //Image img = ImageIO.read(getClass().getResource("btnPlus.PNG")).getScaledInstance(10,10,4);
+            //btnAssociationPlus.setIcon(new ImageIcon(img));
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return btnAssociationPlus;
+    }
+
     //Création du boutton entité associative
     public JButton createEntiteAssociativeBtn(){
         JButton btnEntiteAssociative = new JButton("<html>Entité<br/>Associative</html>");
         try {
             btnEntiteAssociative.setHorizontalAlignment(SwingConstants.LEFT);
-            Image img = ImageIO.read(getClass().getResource("entiteAssociative.PNG")).getScaledInstance(60,35,4);
+            Image img = ImageIO.read(getClass().getResource("ressources/entiteAssociative.PNG")).getScaledInstance(60,35,4);
             btnEntiteAssociative.setIcon(new ImageIcon(img));
             btnEntiteAssociative.setHorizontalTextPosition(SwingConstants.RIGHT);
 
@@ -133,7 +195,7 @@ public class MCDPalette {
         JButton btnNote = new JButton("Note");
         try {
             btnNote.setHorizontalAlignment(SwingConstants.LEFT);
-            Image img = ImageIO.read(getClass().getResource("notes.PNG")).getScaledInstance(60,35,4);
+            Image img = ImageIO.read(getClass().getResource("ressources/notes.PNG")).getScaledInstance(60,35,4);
             btnNote.setIcon(new ImageIcon(img));
             btnNote.setHorizontalTextPosition(SwingConstants.RIGHT);
 
@@ -150,7 +212,7 @@ public class MCDPalette {
         JButton btnGenSpe = new JButton("<html>Généralisation /<br/>Spécialisation</html>");
         try {
             btnGenSpe.setHorizontalAlignment(SwingConstants.LEFT);
-            Image img = ImageIO.read(getClass().getResource("gen_spe.PNG")).getScaledInstance(60,35,4);
+            Image img = ImageIO.read(getClass().getResource("ressources/gen_spe.PNG")).getScaledInstance(60,35,4);
             btnGenSpe.setIcon(new ImageIcon(img));
             btnGenSpe.setHorizontalTextPosition(SwingConstants.RIGHT);
 
@@ -167,7 +229,7 @@ public class MCDPalette {
         JButton btnAncre = new JButton("Ancre");
         try {
             btnAncre.setHorizontalAlignment(SwingConstants.LEFT);
-            Image img = ImageIO.read(getClass().getResource("ancre.PNG")).getScaledInstance(60,35,4);
+            Image img = ImageIO.read(getClass().getResource("ressources/ancre.PNG")).getScaledInstance(60,35,4);
             btnAncre.setIcon(new ImageIcon(img));
             btnAncre.setHorizontalTextPosition(SwingConstants.RIGHT);
 
@@ -184,7 +246,7 @@ public class MCDPalette {
         JButton btnContrainteOCL = new JButton("<html>Contrainte<br/> OCL</html>");
         try {
             btnContrainteOCL.setHorizontalAlignment(SwingConstants.LEFT);
-            Image img = ImageIO.read(getClass().getResource("ocl.PNG")).getScaledInstance(60,35,4);
+            Image img = ImageIO.read(getClass().getResource("ressources/ocl.PNG")).getScaledInstance(60,35,4);
             btnContrainteOCL.setIcon(new ImageIcon(img));
             btnContrainteOCL.setHorizontalTextPosition(SwingConstants.RIGHT);
 
@@ -195,6 +257,33 @@ public class MCDPalette {
         return btnContrainteOCL;
 
     }
+
+    //Cacher et afficher certains bouton. Pas prêt pour l'instant
+    /*public void actionPerformedHideUnderEntity(ActionEvent actionEvent) {
+
+        JPanel panelEnumDomaine = new JPanel();
+        if (panelEnumDomaine.isVisible()){
+            panelEnumDomaine.setVisible(false);
+        } else {
+            panelEnumDomaine.setVisible(true);
+        }
+        Dimension btnDimension = new Dimension(175,60);
+
+        //Le flowLayout va alligner tous les composants sur l'axe Y
+        panelEnumDomaine.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
+        //Changement de la couleur de fond
+        panelEnumDomaine.setBackground(Color.WHITE);
+        panelEnumDomaine.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panelEnumDomaine.setPreferredSize((new Dimension(185, 180)));
+
+        JButton btnEnum = mcdPalette.createEnumBtn();
+
+        panelEnumDomaine.add(btnEnum);
+
+
+
+
+    }*/
 
     //Listener pour créer une entité si l'utilisateur clique sur l'entité dans la palette
     public void actionPerformedEntity(ActionEvent actionEvent){

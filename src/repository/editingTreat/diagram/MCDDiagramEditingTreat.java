@@ -1,5 +1,6 @@
 package repository.editingTreat.diagram;
 
+import diagram.ClosePalette;
 import diagram.mcd.MCDDiagram;
 import diagram.mcd.MCDTitlePanel;
 import diagram.mcd.MCDPalette;
@@ -91,12 +92,12 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
                 DialogEditor.READ,
                 (MCDDiagram) element);
         mcdTitlePanel.getContent();
-        JPanel panelPalette = winDiagram.getContent().getPanelPalette();
-        MCDPalette mcdPalette = new MCDPalette(element.getParent(),
-                panelPalette,
-                DialogEditor.READ,
-                (MCDDiagram) element);
-        mcdPalette.getContent();
+
+
+        //Fermer la palette afin que l'utilisateur ne puisse pas modifier un diagramme en lecture seule
+        JPanel panelPalette= winDiagram.getContent().getPanelPalette();
+        ClosePalette closePalette = new ClosePalette((panelPalette));
+        closePalette.getContent();
 
         //TODO-1  A reprendre (resize pour permettre le réaffichage des JPanel chargés dynamiquement
         //winDiagram.resizeContent();
