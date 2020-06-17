@@ -23,15 +23,15 @@ import java.io.*;
 
 public class PreferencesManager {
 
-    private static PreferencesManager instance ;
+    private static PreferencesManager instance;
 
     private Preferences defaultPref;
     private Preferences applicationPref;
     private Preferences profilePref;
     private Preferences projectPref;
 
-    public static synchronized PreferencesManager instance(){
-        if(instance == null){
+    public static synchronized PreferencesManager instance() {
+        if (instance == null) {
             instance = new PreferencesManager();
         }
         return instance;
@@ -41,22 +41,22 @@ public class PreferencesManager {
         defaultPref = new Preferences(null, null);
     }
 
-    public Preferences preferences (){
-        if (projectPref != null){
+    public Preferences preferences() {
+        if (projectPref != null) {
             return projectPref;
-        } else  if (applicationPref != null){
+        } else if (applicationPref != null) {
             return applicationPref;
-        } else  if (defaultPref != null){
+        } else if (defaultPref != null) {
             return defaultPref;
         } else {
             return null;
         }
     }
 
-    public Preferences profileOrDefault (){
-        if (profilePref != null){
+    public Preferences profileOrDefault() {
+        if (profilePref != null) {
             return profilePref;
-        } else  if (defaultPref != null){
+        } else if (defaultPref != null) {
             return defaultPref;
         } else {
             return null;
@@ -133,7 +133,7 @@ public class PreferencesManager {
     }
 
     public void loadOrCreateFileApplicationPreferences() {
-        try{
+        try {
             PreferencesLoader loader = new PreferencesLoader();
             applicationPref = loader.load(new File(Preferences.FILE_APPLICATION_PREF_NAME));
         } catch (FileNotFoundException e) {
@@ -146,7 +146,7 @@ public class PreferencesManager {
     public void createProfile() {
         ProfileFileChooser fileChooser = new ProfileFileChooser(ProjectFileChooser.SAVE);
         File fileChoose = fileChooser.fileChoose();
-        if (fileChoose != null){
+        if (fileChoose != null) {
             new PreferencesSaver().save(fileChoose, projectPref);
         }
     }
@@ -161,7 +161,7 @@ public class PreferencesManager {
             Document document = builder.newDocument();
 
             //Création des éléments
-            Element racine = (Element) document.createElement("PreferencesApplication");
+            Element racine = document.createElement(Preferences.REPOSITORY_PREFERENCES_APPLICATION_NAME);
             document.appendChild(racine);
 
             Element debug = document.createElement("DEBUG");
@@ -184,11 +184,11 @@ public class PreferencesManager {
             debugInspectObjectInTree.appendChild(document.createTextNode(applicationPref.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
             racine.appendChild(debugInspectObjectInTree);
 
-            Element repositoryMcdModelsMny  = document.createElement("REPOSITORY_MCD_MODELS_MANY");
+            Element repositoryMcdModelsMny = document.createElement("REPOSITORY_MCD_MODELS_MANY");
             repositoryMcdModelsMny.appendChild(document.createTextNode(applicationPref.getREPOSITORY_MCD_MODELS_MANY().toString()));
             racine.appendChild(repositoryMcdModelsMny);
 
-            Element repositoryMcdPackagesAuthorizeds  = document.createElement("REPOSITORY_MCD_PACKAGES_AUTHORIZEDS");
+            Element repositoryMcdPackagesAuthorizeds = document.createElement("REPOSITORY_MCD_PACKAGES_AUTHORIZEDS");
             repositoryMcdPackagesAuthorizeds.appendChild(document.createTextNode(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS().toString()));
             racine.appendChild(repositoryMcdPackagesAuthorizeds);
 
@@ -212,7 +212,7 @@ public class PreferencesManager {
 
     }
 
-    public void loadApplicationPref() throws FileNotFoundException  {
+    public void loadApplicationPref() throws FileNotFoundException {
         try {
 
             //Création du document en memoire
@@ -239,13 +239,13 @@ public class PreferencesManager {
             applicationPref.setREPOSITORY_MCD_MODELS_MANY(Boolean.valueOf(repositoryMcdModelsMany.getTextContent()));
             applicationPref.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(Boolean.valueOf(repositoryMcdPackagesAuthorizeds.getTextContent()));
 
-        }catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             throw (e);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -253,7 +253,7 @@ public class PreferencesManager {
 
     public void loadOrCreateFileXMLApplicationPref() {
         applicationPref = new Preferences(null, null);
-        try{
+        try {
             loadApplicationPref();
         } catch (FileNotFoundException e) {
             createApplicationPref();
@@ -261,4 +261,4 @@ public class PreferencesManager {
     }
 
 
-    }
+}

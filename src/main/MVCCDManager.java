@@ -215,6 +215,7 @@ public class MVCCDManager {
         if (fileProjectCurrent != null) {
             new SaverSerializable().save(fileProjectCurrent);
             setDatasProjectChanged(false);
+            ProjectManager.instance().createProjectFile();
         } else {
             saveAsProject();
         }
@@ -229,6 +230,7 @@ public class MVCCDManager {
             projectsRecents.add(fileProjectCurrent);
             changeActivateProjectOpenRecentsItems();
             setDatasProjectChanged(false);
+            ProjectManager.instance().createProjectFile();
         }
     }
 
