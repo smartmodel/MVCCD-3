@@ -3,12 +3,14 @@ package project;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
+import mcd.services.MCDAssociationService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import stereotypes.Stereotype;
+import utilities.window.scomponents.SComboBox;
 
 import javax.naming.Name;
 import javax.xml.parsers.DocumentBuilder;
@@ -572,12 +574,46 @@ public class ProjectManager {
 
             if (mcdRelation instanceof MCDGeneralization) {
                 MCDGeneralization mcdGeneralization = (MCDGeneralization) mcdRelation;
+                addGeneralization(doc, mcdGeneralization, generalisations);
             }
 
             if (mcdRelation instanceof MCDLink) {
-                MCDLink mcdAssociation = (MCDLink) mcdRelation;
+                MCDLink mcdLink = (MCDLink) mcdRelation;
+                addlink(doc, mcdLink,link);
             }
         }
+    }
+
+    private void addlink(Document doc, MCDLink mcdLink, Element link) {
+        MCDLinkEnd endAssociation = mcdLink.getEndAssociation();
+        Element association = doc.createElement("Association");
+        association.appendChild(doc.createTextNode(endAssociation.getMcdElement().toString()));
+        link.appendChild(association);
+
+
+        MCDLinkEnd endEntity = mcdLink.getEndEntity();
+        Element entity = doc.createElement("Entity");
+        entity.appendChild(doc.createTextNode(endEntity.getNamePath(1)));
+        link.appendChild(entity);
+
+
+
+    }
+
+    private void addGeneralization(Document doc, MCDGeneralization mcdGeneralization, Element generalisations) {
+        MCDGSEnd gen = mcdGeneralization.getGen();
+        MCDEntity genEntity = gen.getMcdEntity();
+        Element entityGen = doc.createElement("Gen_Entité");
+        entityGen.appendChild(doc.createTextNode(genEntity.getNamePath(1)));
+        generalisations.appendChild(entityGen);
+
+
+        MCDGSEnd spec = mcdGeneralization.getSpec();
+        MCDEntity specEntity = spec.getMcdEntity();
+        Element entitySpec = doc.createElement("Spec_Entité");
+        entitySpec.appendChild(doc.createTextNode(specEntity.getNamePath(1)));
+        generalisations.appendChild(entitySpec);
+
     }
 
     private void addassociations(Document doc, MCDAssociation mcdAssociation, Element associations) {
