@@ -5,9 +5,12 @@ import main.MVCCDManager;
 import mcd.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import stereotypes.Stereotype;
 
+import javax.naming.Name;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -103,7 +106,7 @@ public class ProjectManager {
         }
     }
 
-    public void addPreferenceProject(Document document, Element racine) {
+    private void addPreferenceProject(Document document, Element racine) {
         Element preferences = document.createElement("Prefereces");
         racine.appendChild(preferences);
 
@@ -157,36 +160,36 @@ public class ProjectManager {
     }
 
 
-    public void AddModelAndChilds(Document doc, Element mcd, ArrayList<MVCCDElement> mcdChilds) {
+    private void AddModelAndChilds(Document doc, Element mcd, ArrayList<MVCCDElement> mcdChilds) {
 
         ArrayList<MVCCDElement> modelsChilds;
 
         for (int i = 0; i < mcdChilds.size(); i++) {
             MVCCDElement child = mcdChilds.get(i);
-            Element modele = doc.createElement(child.getName());
-            mcd.appendChild(modele);
+            Element model = doc.createElement(child.getName());
+            mcd.appendChild(model);
             modelsChilds = child.getChilds();
 
             MCDModel modelChild = (MCDModel) child;
 
             if (modelChild.isPackagesAutorizeds()) {
-                addPropertiesModelsOrPackages(doc, modele, child);
-                addEntities(doc, modelsChilds, modele);
-                addDiagrams(doc, modelsChilds, modele);
-                addRelations(doc, modelsChilds, modele);
-                addPackages(doc, child, modele);
+                addPropertiesModelsOrPackages(doc, model, child);
+                addEntities(doc, modelsChilds, model);
+                addDiagrams(doc, modelsChilds, model);
+                addRelations(doc, modelsChilds, model);
+                addPackages(doc, child, model);
 
             } else {
-                addPropertiesModelsOrPackages(doc, modele, child);
-                addEntities(doc, modelsChilds, modele);
-                addDiagrams(doc, modelsChilds, modele);
-                addRelations(doc, modelsChilds, modele);
+                addPropertiesModelsOrPackages(doc, model, child);
+                addEntities(doc, modelsChilds, model);
+                addDiagrams(doc, modelsChilds, model);
+                addRelations(doc, modelsChilds, model);
             }
         }
 
     }
 
-    public void addPackages(Document doc, MVCCDElement listChilds, Element racine) {
+    private void addPackages(Document doc, MVCCDElement listChilds, Element racine) {
         ArrayList<MCDPackage> packagesChilds = getPackages(listChilds);
 
         for (int i = 0; i < packagesChilds.size(); i++) {
@@ -206,7 +209,7 @@ public class ProjectManager {
 
     }
 
-    public ArrayList<MCDPackage> getPackages(MVCCDElement element) {
+    private ArrayList<MCDPackage> getPackages(MVCCDElement element) {
         ArrayList<MCDPackage> packages = new ArrayList<>();
         for (MVCCDElement mvccdElement : element.getChilds()) {
             if (mvccdElement instanceof MCDPackage) {
@@ -216,7 +219,7 @@ public class ProjectManager {
         return packages;
     }
 
-    public void addDiagrams(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
+    private void addDiagrams(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
 
         for (int i = 0; i < listElement.size(); i++) {
             MVCCDElement childElement = listElement.get(i);
@@ -241,7 +244,7 @@ public class ProjectManager {
         }
     }
 
-    public void addEntities(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
+    private void addEntities(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
 
         for (int i = 0; i < listElement.size(); i++) {
             MVCCDElement childElement = listElement.get(i);
@@ -270,7 +273,7 @@ public class ProjectManager {
         }
     }
 
-    public void addPropertiesProject(Document document, Element racine) {
+    private void addPropertiesProject(Document document, Element racine) {
         Element properties = document.createElement("Propriétés");
         racine.appendChild(properties);
 
@@ -298,7 +301,7 @@ public class ProjectManager {
         properties.appendChild(packagesAutorizeds);
     }
 
-    public void addPropertiesEntity(Document doc, Element entity, MCDEntity mcdEntity) {
+    private void addPropertiesEntity(Document doc, Element entity, MCDEntity mcdEntity) {
 
         Element properties = doc.createElement("Propriétés");
         entity.appendChild(properties);
@@ -323,7 +326,7 @@ public class ProjectManager {
         audit.appendChild(doc.createTextNode(String.valueOf(mcdEntity.isAudit())));
     }
 
-    public void addPropertiesModelsOrPackages(Document doc, Element element, MVCCDElement child) {
+    private void addPropertiesModelsOrPackages(Document doc, Element element, MVCCDElement child) {
         Element properties = doc.createElement("Propriétés");
         element.appendChild(properties);
 
@@ -367,7 +370,7 @@ public class ProjectManager {
     }
 
 
-    public void addAttributs(Document doc, Element entity, ArrayList<MVCCDElement> listElement) {
+    private void addAttributs(Document doc, Element entity, ArrayList<MVCCDElement> listElement) {
         for (int i = 0; i < listElement.size(); i++) {
             MVCCDElement entitychild = listElement.get(i);
 
@@ -377,7 +380,7 @@ public class ProjectManager {
 
                 ArrayList<MVCCDElement> attributsChilds = entitychild.getChilds();
 
-                addAttributsChilds(doc,attributsChilds,attributs);
+                addAttributsChilds(doc, attributsChilds, attributs);
 
             }
         }
@@ -407,11 +410,11 @@ public class ProjectManager {
             attribut.appendChild(list);
 
             Element frozen = doc.createElement("Frozen");
-            frozen.appendChild(doc.createTextNode(String.valueOf( childAttribut.isFrozen())));
+            frozen.appendChild(doc.createTextNode(String.valueOf(childAttribut.isFrozen())));
             attribut.appendChild(frozen);
 
             Element ordered = doc.createElement("Ordered");
-            ordered.appendChild(doc.createTextNode(String.valueOf( childAttribut.isOrdered())));
+            ordered.appendChild(doc.createTextNode(String.valueOf(childAttribut.isOrdered())));
             attribut.appendChild(ordered);
 
             Element upperCase = doc.createElement("UpperCase");
@@ -419,33 +422,23 @@ public class ProjectManager {
             attribut.appendChild(upperCase);
 
             Element dataTypeLienProg = doc.createElement("Data_Type_Lien_Prog");
-            if (childAttribut.getDatatypeLienProg() != null) {
-                dataTypeLienProg.appendChild(doc.createTextNode(childAttribut.getDatatypeLienProg()));
-            }
+            dataTypeLienProg.appendChild(doc.createTextNode(childAttribut.getDatatypeLienProg()));
             attribut.appendChild(dataTypeLienProg);
 
             Element scale = doc.createElement("Scale");
-            if (childAttribut.getScale() != null) {
-                scale.appendChild(doc.createTextNode(String.valueOf(childAttribut.getScale())));
-            }
+            scale.appendChild(doc.createTextNode(String.valueOf(childAttribut.getScale())));
             attribut.appendChild(scale);
 
             Element size = doc.createElement("Size");
-            if (childAttribut.getSize() != null) {
-                size.appendChild(doc.createTextNode(String.valueOf(childAttribut.getSize())));
-            }
+            size.appendChild(doc.createTextNode(String.valueOf(childAttribut.getSize())));
             attribut.appendChild(size);
 
             Element initValue = doc.createElement("Init_Value");
-            if (childAttribut.getSize() != null) {
-                initValue.appendChild(doc.createTextNode(childAttribut.getInitValue()));
-            }
+            initValue.appendChild(doc.createTextNode(childAttribut.getInitValue()));
             attribut.appendChild(initValue);
 
             Element derivedValue = doc.createElement("Derived_Value");
-            if (childAttribut.getDerivedValue() != null) {
-                derivedValue.appendChild(doc.createTextNode(childAttribut.getDerivedValue()));
-            }
+            derivedValue.appendChild(doc.createTextNode(childAttribut.getDerivedValue()));
             attribut.appendChild(derivedValue);
 
             Element domain = doc.createElement("Domain");
@@ -457,18 +450,27 @@ public class ProjectManager {
         }
     }
 
-    public void addExtremites(Document doc, Element entity, ArrayList<MVCCDElement> listElement) {
+    private void addExtremites(Document doc, Element entity, ArrayList<MVCCDElement> listElement) {
         for (int i = 0; i < listElement.size(); i++) {
             MVCCDElement entitychild = listElement.get(i);
 
             if (entitychild.getName().equals(Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME)) {
-                Element extremiteRelations = doc.createElement("Extrémités_de_relations");
-                entity.appendChild(extremiteRelations);
+                Element extremitesRelations = doc.createElement("Extrémités_de_relations");
+                entity.appendChild(extremitesRelations);
+
+                ArrayList<MVCCDElement> extremitesRelationsChilds = entitychild.getChilds();
+                for (int j = 0; j < extremitesRelationsChilds.size(); j++) {
+                    if (extremitesRelationsChilds.get(j) instanceof MCDAssEnd) {
+                        MCDAssEnd childExtremite = (MCDAssEnd) extremitesRelationsChilds.get(j);
+
+                        addExtremite(doc, extremitesRelations, childExtremite);
+                    }
+                }
             }
         }
     }
 
-    public void addContraints(Document doc, Element entity, ArrayList<MVCCDElement> listElement) {
+    private void addContraints(Document doc, Element entity, ArrayList<MVCCDElement> listElement) {
         for (int i = 0; i < listElement.size(); i++) {
             MVCCDElement entitychild = listElement.get(i);
 
@@ -477,7 +479,7 @@ public class ProjectManager {
                 entity.appendChild(contraintes);
 
                 ArrayList<MVCCDElement> contraintsChilds = entitychild.getChilds();
-                addContraintsChilds(doc,contraintsChilds, contraintes);
+                addContraintsChilds(doc, contraintsChilds, contraintes);
             }
         }
     }
@@ -497,16 +499,43 @@ public class ProjectManager {
                 Element lienProg = doc.createElement("Lien_prog");
                 lienProg.appendChild(doc.createTextNode(String.valueOf(nid.isLienProg())));
                 constraint.appendChild(lienProg);
-            } else if(childContraint instanceof MCDUnique) {
+
+                addStereotype(doc, nid, constraint);
+
+            } else if (childContraint instanceof MCDUnique) {
                 MCDUnique unique = (MCDUnique) childContraint;
                 Element absolute = doc.createElement("Absolute");
                 absolute.appendChild(doc.createTextNode(String.valueOf(unique.isAbsolute())));
                 constraint.appendChild(absolute);
+
+                addStereotype(doc, unique, constraint);
             }
         }
     }
 
-    public void addRelations(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
+    private void addStereotype(Document doc, MCDConstraint mcdConstraint, Element constraint) {
+        ArrayList<Stereotype> stereotypesChilds = mcdConstraint.getToStereotypes();
+        for (int i = 0; i < stereotypesChilds.size(); i++) {
+            Stereotype stereotypeChild = stereotypesChilds.get(i);
+            Element sterotype = doc.createElement("Stereotype");
+            constraint.appendChild(sterotype);
+
+            Element nameStereotype = doc.createElement("Name");
+            nameStereotype.appendChild(doc.createTextNode(stereotypeChild.getName()));
+            sterotype.appendChild(nameStereotype);
+
+            Element lienProgStereotype = doc.createElement("Lien_prog");
+            lienProgStereotype.appendChild(doc.createTextNode(stereotypeChild.getLienProg()));
+            sterotype.appendChild(lienProgStereotype);
+
+            Element classTargetName = doc.createElement("Class_target_Name");
+            classTargetName.appendChild(doc.createTextNode(stereotypeChild.getClassTargetName()));
+            sterotype.appendChild(classTargetName);
+        }
+
+    }
+
+    private void addRelations(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
 
         for (int i = 0; i < listElement.size(); i++) {
             MVCCDElement childElement = listElement.get(i);
@@ -524,47 +553,114 @@ public class ProjectManager {
     }
 
     private void addRelationsChilds(Document doc, ArrayList<MVCCDElement> relationsChilds, Element relations) {
-            for (int j = 0; j < relationsChilds.size(); j++) {
-                MCDRelation childRelation = (MCDRelation) relationsChilds.get(j);
-                MCDAssEnd extremiteA = (MCDAssEnd) childRelation.getA();
-                MCDAssEnd extremiteB = (MCDAssEnd) childRelation.getB();
+        Element associations = doc.createElement("Associations");
+        relations.appendChild(associations);
 
-                if (childRelation.getName().equals("")) {
+        Element generalisations = doc.createElement("Généralisations");
+        relations.appendChild(generalisations);
 
-                    Element relation = doc.createElement("Relation");
-                    Element roleExtremiteA = doc.createElement("ExtremitéA");
-                    Element roleExtremiteB = doc.createElement("ExtremitéB");
+        Element link = doc.createElement("Links");
+        relations.appendChild(link);
 
+        for (int i = 0; i < relationsChilds.size(); i++) {
+            MCDRelation mcdRelation = (MCDRelation) relationsChilds.get(i);
 
-                    Element multiplicityA = doc.createElement("MultiplicityA");
-                    multiplicityA.appendChild(doc.createTextNode(extremiteA.getMultiStr()));
-                    Element multiplicityB = doc.createElement("MultiplicityB");
-                    multiplicityB.appendChild(doc.createTextNode(extremiteB.getMultiStr()));
+            if (mcdRelation instanceof MCDAssociation) {
+                MCDAssociation mcdAssociation = (MCDAssociation) mcdRelation;
+                addassociations(doc, mcdAssociation, associations);
+            }
 
-                    roleExtremiteA.appendChild(doc.createTextNode(extremiteA.getName()));
-                    roleExtremiteB.appendChild(doc.createTextNode(extremiteB.getName()));
+            if (mcdRelation instanceof MCDGeneralization) {
+                MCDGeneralization mcdGeneralization = (MCDGeneralization) mcdRelation;
+            }
 
-                    relation.appendChild(roleExtremiteA);
-                    relation.appendChild(roleExtremiteB);
-                    relation.appendChild((multiplicityA));
-                    relation.appendChild((multiplicityB));
-                    relations.appendChild(relation);
-                } else {
-                    Element relation = doc.createElement(childRelation.getName());
-
-                    Element multiplicityA = doc.createElement("multiplicityA");
-                    multiplicityA.appendChild(doc.createTextNode(extremiteA.getMultiStr()));
-                    Element multiplicityB = doc.createElement("multiplicityB");
-                    multiplicityB.appendChild(doc.createTextNode(extremiteB.getMultiStr()));
-
-                    relation.appendChild((multiplicityA));
-                    relation.appendChild((multiplicityB));
-
-                    relations.appendChild(relation);
-                }
-        }
+            if (mcdRelation instanceof MCDLink) {
+                MCDLink mcdAssociation = (MCDLink) mcdRelation;
+            }
         }
     }
+
+    private void addassociations(Document doc, MCDAssociation mcdAssociation, Element associations) {
+
+        MCDAssEnd extremiteFrom = mcdAssociation.getFrom();
+        MCDAssEnd extremiteTo = mcdAssociation.getTo();
+
+        Element association = doc.createElement("Association");
+        if (mcdAssociation.getName().equals("")) {
+
+
+            addPropertiesAssociation(doc, association, mcdAssociation);
+            addExtremite(doc, association, extremiteFrom);
+            addExtremite(doc, association, extremiteTo);
+
+
+        } else {
+            association = doc.createElement(mcdAssociation.getName());
+            addPropertiesAssociation(doc, association, mcdAssociation);
+            addExtremite(doc, association, extremiteFrom);
+            addExtremite(doc, association, extremiteTo);
+
+        }
+        associations.appendChild(association);
+    }
+
+
+    private void addPropertiesAssociation(Document doc, Element association, MCDAssociation mcdAssociation) {
+
+        Element properties = doc.createElement("Propriétés");
+        association.appendChild(properties);
+
+        Element nature = doc.createElement("Nature");
+        nature.appendChild(doc.createTextNode(mcdAssociation.getNature().getName()));
+        properties.appendChild(nature);
+
+        Element oriented = doc.createElement("Oriented");
+        oriented.appendChild(doc.createTextNode(String.valueOf(mcdAssociation.getOriented())));
+        properties.appendChild(oriented);
+
+        Element deleteCascade = doc.createElement("Delete_cascade");
+        deleteCascade.appendChild(doc.createTextNode(String.valueOf(mcdAssociation.isDeleteCascade())));
+        properties.appendChild(deleteCascade);
+
+        Element frozen = doc.createElement("Frozen");
+        frozen.appendChild(doc.createTextNode(String.valueOf(mcdAssociation.isFrozen())));
+        properties.appendChild(frozen);
+
+    }
+
+    private void addExtremite(Document doc, Element association, MCDAssEnd extremite) {
+
+        Element roleExtremite = doc.createElement("Role_extremité_From");
+
+        if (extremite.getDrawingDirection() == 2) {
+
+            roleExtremite = doc.createElement("Role_extremité_To");
+        }
+
+        association.appendChild(roleExtremite);
+
+        Element nameRole = doc.createElement("Name");
+        nameRole.appendChild(doc.createTextNode(extremite.getName()));
+        roleExtremite.appendChild(nameRole);
+
+        Element shortNameRole = doc.createElement("Short_name");
+        shortNameRole.appendChild(doc.createTextNode(extremite.getShortName()));
+        roleExtremite.appendChild(shortNameRole);
+
+        Element drawingDirection = doc.createElement("Drawing_direction");
+        drawingDirection.appendChild(doc.createTextNode(String.valueOf(extremite.getDrawingDirection())));
+        roleExtremite.appendChild(drawingDirection);
+
+        Element multiplicity = doc.createElement("Multiplicity");
+        multiplicity.appendChild(doc.createTextNode(extremite.getMultiStr()));
+        roleExtremite.appendChild((multiplicity));
+
+        Element orderedRole = doc.createElement("Ordered");
+        orderedRole.appendChild(doc.createTextNode(String.valueOf(extremite.isOrdered())));
+        roleExtremite.appendChild(orderedRole);
+
+    }
+}
 
 
 
