@@ -3,7 +3,6 @@ package project;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
-import mcd.services.MCDAssociationService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -11,9 +10,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
 import stereotypes.Stereotype;
-import utilities.window.scomponents.SComboBox;
-
-import javax.naming.Name;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,6 +20,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class ProjectManager {
@@ -39,7 +37,7 @@ public class ProjectManager {
         return instance;
     }
 
-    public void createProjectFile() {
+    public void createProjectFile(File file) {
         // initialisation de variable
         Boolean modelsApp = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
         Boolean modelsProj = project.isModelsMany();
@@ -98,8 +96,10 @@ public class ProjectManager {
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
             //Création du fichier
+
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new File("project.xml"));
+            //StreamResult result = new StreamResult(new FileOutputStream(file));
+            StreamResult result = new StreamResult(new File( "projectFile.xml"));
             transformer.transform(source, result);
 
         } catch (ParserConfigurationException pce) {
@@ -580,7 +580,7 @@ public class ProjectManager {
 
             if (mcdRelation instanceof MCDLink) {
                 MCDLink mcdLink = (MCDLink) mcdRelation;
-                addlink(doc, mcdLink,link);
+                addlink(doc, mcdLink, link);
             }
         }
     }
@@ -596,8 +596,6 @@ public class ProjectManager {
         Element entity = doc.createElement("Entity");
         entity.appendChild(doc.createTextNode(endEntity.getNamePath(1)));
         link.appendChild(entity);
-
-
 
     }
 

@@ -1,5 +1,6 @@
 package preferences;
 
+import exceptions.CodeApplException;
 import main.MVCCDManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -254,18 +255,23 @@ public class PreferencesManager {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
-            //Création du fichier
-            DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new File(Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR + MVCCDManager.instance().getProject().getName() +
-                    Preferences.FILE_DOT + Preferences.FILE_PROFILE_EXTENSION));
-            transformer.transform(source, result);
+            ProfileFileChooser fileChooser = new ProfileFileChooser(ProjectFileChooser.SAVE);
+            File fileChoose = fileChooser.fileChoose();
 
+            if (fileChoose != null) {
+                DOMSource source = new DOMSource(document);
+                StreamResult result = new StreamResult(new FileOutputStream(fileChoose));
+                transformer.transform(source, result);
+            }
+                //Création du fichier
 
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (TransformerConfigurationException e) {
             e.printStackTrace();
         } catch (TransformerException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }

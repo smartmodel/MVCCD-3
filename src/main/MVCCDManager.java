@@ -214,8 +214,9 @@ public class MVCCDManager {
     public void saveProject() {
         if (fileProjectCurrent != null) {
             new SaverSerializable().save(fileProjectCurrent);
+            ProjectManager.instance().createProjectFile(fileProjectCurrent);
             setDatasProjectChanged(false);
-            ProjectManager.instance().createProjectFile();
+
         } else {
             saveAsProject();
         }
@@ -226,11 +227,12 @@ public class MVCCDManager {
         File fileChoose = fileChooser.fileChoose();
         if (fileChoose != null) {
             fileProjectCurrent = fileChoose;
+            ProjectManager.instance().createProjectFile(fileProjectCurrent);
             new SaverSerializable().save(fileProjectCurrent);
             projectsRecents.add(fileProjectCurrent);
             changeActivateProjectOpenRecentsItems();
             setDatasProjectChanged(false);
-            ProjectManager.instance().createProjectFile();
+
         }
     }
 
