@@ -36,10 +36,10 @@ public abstract class MCDElement extends MDElement {
     }
 
 
-    public MCDContEndRels getMCDContEndRels() {
+    public MCDContRelEnds getMCDContEndRels() {
         for (MVCCDElement mvccdElement : getChilds()){
-            if (mvccdElement instanceof MCDContEndRels) {
-                return (MCDContEndRels) mvccdElement;
+            if (mvccdElement instanceof MCDContRelEnds) {
+                return (MCDContRelEnds) mvccdElement;
             }
         }
         return null;

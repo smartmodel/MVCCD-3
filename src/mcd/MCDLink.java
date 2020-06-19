@@ -1,11 +1,21 @@
 package mcd;
 
+import constraints.Constraint;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import mcd.services.MCDRelationService;
 import preferences.Preferences;
+import preferences.PreferencesManager;
+import stereotypes.Stereotype;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
+
+import java.util.ArrayList;
 
 public class MCDLink extends MCDRelation {
 
     private  static final long serialVersionUID = 1000;
+    public static final String CLASSSHORTNAMEUI = "Lien associatif";
 
 
     public MCDLink(MCDElement parent) {
@@ -41,6 +51,31 @@ public class MCDLink extends MCDRelation {
 
         return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_LINK);
 
+    }
+
+    @Override
+    public String getClassShortNameUI() {
+        return CLASSSHORTNAMEUI;
+    }
+
+    @Override
+    public ArrayList<Stereotype> getToStereotypes() {
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<Constraint> getToConstraints() {
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
     }
 
 }

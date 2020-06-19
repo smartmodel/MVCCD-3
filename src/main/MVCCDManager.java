@@ -155,7 +155,6 @@ public class MVCCDManager {
             removeMCDRelationAndDependantsInRepository(mcdRelationChild);
         }
 
-        System.out.println("Remove " + mcdRelation.getNameTree());
         removeMVCCDElementInRepository(mcdRelation, mcdRelation.getParent());
         removeMVCCDElementInRepository(mcdRelation.getA(), mcdRelation.getA().getParent());
         removeMVCCDElementInRepository(mcdRelation.getB(), mcdRelation.getB().getParent());

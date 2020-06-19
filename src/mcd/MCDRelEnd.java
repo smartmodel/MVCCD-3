@@ -1,14 +1,14 @@
 package mcd;
 
+import constraints.Constraint;
 import m.MRelEnd;
-import m.MRelEndMulti;
-import m.MRelEndMultiPart;
-import m.services.MRelEndService;
-import mcd.services.MCDAssEndService;
-import mcd.services.MCDRelEndService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import project.ProjectElement;
+import stereotypes.Stereotype;
+import utilities.files.UtilFiles;
+
+import javax.swing.*;
+import java.util.ArrayList;
 
 public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
 
@@ -63,5 +63,28 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
         this.drawingDirection = drawingDirection;
     }
 
+    public abstract ArrayList<Stereotype> getToStereotypes();
 
+    public abstract ArrayList<Constraint> getToConstraints(); // Contraintes UML
+
+
+
+    public  ImageIcon getImageIconLong(){
+        String strFileImage = getFileImageIconLong();
+        if (strFileImage != null) {
+            return UtilFiles.getImageIcon(Preferences.DIRECTORY_IMAGE_ICONE_RELATION, strFileImage);
+        } else {
+            return null;
+        }
+    }
+
+    protected abstract String getFileImageIconLong();
+
+    public String getNameOrNameRelation(){
+        String name = getName();
+        if (StringUtils.isNotEmpty(name)){
+            name = getMcdRelation().getName();
+        }
+        return name;
+    }
 }

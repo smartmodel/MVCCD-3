@@ -21,6 +21,11 @@ public class STable extends JTable implements SComponent {
         this.setColor(SComponent.COLORNORMAL);
     }
 
+    public STable(IPanelInputContent panel) {
+        this.panel = panel;
+        this.setColor(SComponent.COLORNORMAL);
+    }
+
 
 
 

@@ -1,5 +1,6 @@
 package stereotypes;
 
+import mcd.MCDAssociation;
 import mcd.MCDAttribute;
 import mcd.MCDNID;
 import mcd.MCDUnique;
@@ -30,7 +31,23 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_LP_NAME,
                 Preferences.STEREOTYPE_LP_LIENPROG,
                 MCDNID.class.getName());
+        createStereotype(
+                Preferences.STEREOTYPE_NID_NAME,
+                Preferences.STEREOTYPE_LP_LIENPROG,
+                MCDNID.class.getName());
+        createStereotype(
+                Preferences.STEREOTYPE_NID_NAME,
+                Preferences.STEREOTYPE_NID_LIENPROG,
+                MCDAssociation.class.getName());
         createStereotypesNID();
+        createStereotype(
+                Preferences.STEREOTYPE_CID_NAME,
+                Preferences.STEREOTYPE_CID_LIENPROG,
+                MCDAssociation.class.getName());
+        createStereotype(
+                Preferences.STEREOTYPE_CP_NAME,
+                Preferences.STEREOTYPE_CP_LIENPROG,
+                MCDAssociation.class.getName());
         createStereotypesU();
     }
 
@@ -53,13 +70,13 @@ public class StereotypesCreateDefault {
     private void createStereotypesNID() {
         for (int i = 0; i < Preferences.STEREOTYPE_NID_MAX; i++){
             createStereotypeMulti(
-                    Preferences.STEREOTYPE_NID_BASE_NAME,
-                    Preferences.STEREOTYPE_NID_BASE_LIENPROG,
+                    Preferences.STEREOTYPE_NID_NAME,
+                    Preferences.STEREOTYPE_NID_LIENPROG,
                     MCDNID.class.getName(),
                     i );
             createStereotypeMulti(
-                    Preferences.STEREOTYPE_NID_BASE_NAME,
-                    Preferences.STEREOTYPE_NID_BASE_LIENPROG,
+                    Preferences.STEREOTYPE_NID_NAME,
+                    Preferences.STEREOTYPE_NID_LIENPROG,
                     MCDAttribute.class.getName(),
                     i );
 
@@ -69,13 +86,13 @@ public class StereotypesCreateDefault {
     private void createStereotypesU() {
         for (int i = 0; i < Preferences.STEREOTYPE_U_MAX; i++){
             createStereotypeMulti(
-                    Preferences.STEREOTYPE_U_BASE_NAME,
-                    Preferences.STEREOTYPE_U_BASE_LIENPROG,
+                    Preferences.STEREOTYPE_U_NAME,
+                    Preferences.STEREOTYPE_U_LIENPROG,
                     MCDUnique.class.getName(),
                     i );
             createStereotypeMulti(
-                    Preferences.STEREOTYPE_U_BASE_NAME,
-                    Preferences.STEREOTYPE_U_BASE_LIENPROG,
+                    Preferences.STEREOTYPE_U_NAME,
+                    Preferences.STEREOTYPE_U_LIENPROG,
                     MCDAttribute.class.getName(),
                     i );
 

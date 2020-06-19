@@ -53,6 +53,11 @@ public class MCDRelEndService {
             nameElementOpposite = mcdElementOpposite.getShortNameSmartPath();
         }
 
+        // Si l'élément opposé est l'association (une relation en général)
+        if (mcdElementOpposite instanceof MCDElement){
+            nameElementOpposite = mcdElementOpposite.getNameTree();
+        }
+
         resultat = namingRelation + nameElementOpposite;
         return resultat;
     }

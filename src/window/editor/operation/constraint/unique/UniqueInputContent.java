@@ -106,7 +106,7 @@ public class UniqueInputContent extends PanelInputContentIdTable {
         table.getColumnModel().getColumn(col).setPreferredWidth(80);
         table.getColumnModel().getColumn(col).setMinWidth(80);
 
-        col = OperationParamTableColumn.SOUSTYPE.getPosition();
+        col = OperationParamTableColumn.SUBTYPE.getPosition();
         table.getColumnModel().getColumn(col).setPreferredWidth(80);
         table.getColumnModel().getColumn(col).setMinWidth(80);
     }
@@ -140,7 +140,7 @@ public class UniqueInputContent extends PanelInputContentIdTable {
         return  new String[]{
                 OperationParamTableColumn.NAME.getLabel(),
                 OperationParamTableColumn.TYPE.getLabel(),
-                OperationParamTableColumn.SOUSTYPE.getLabel()
+                OperationParamTableColumn.SUBTYPE.getLabel()
         };
     }
 
@@ -199,7 +199,7 @@ public class UniqueInputContent extends PanelInputContentIdTable {
             MCDAssociation mcdAssociation = (MCDAssociation) parameter.getTarget();
             sousType = mcdAssociation.getNature().getText();
         }
-        col = OperationParamTableColumn.SOUSTYPE.getPosition();
+        col = OperationParamTableColumn.SUBTYPE.getPosition();
         row[col] = sousType;
 
 
@@ -504,11 +504,11 @@ public class UniqueInputContent extends PanelInputContentIdTable {
             // Le parent contient l'objet transitoire !
             if (getScope() == UniqueEditor.NID) {
                 stereotype = stereotypes.getStereotypeByLienProg(MCDNID.class.getName(),
-                        Preferences.STEREOTYPE_NID_BASE_LIENPROG, mcdContConstraints.getMCDNIDs().size() );
+                        Preferences.STEREOTYPE_NID_LIENPROG, mcdContConstraints.getMCDNIDs().size() );
             }
             if (getScope() == UniqueEditor.UNIQUE){
                 stereotype = stereotypes.getStereotypeByLienProg(MCDUnique.class.getName(),
-                        Preferences.STEREOTYPE_U_BASE_LIENPROG, mcdContConstraints.getMCDUniques().size());
+                        Preferences.STEREOTYPE_U_LIENPROG, mcdContConstraints.getMCDUniques().size());
             }
         } else {
                 stereotype = ((MCDUnicity) getEditor().getMvccdElementCrt()).getDefaultStereotype();;

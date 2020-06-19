@@ -1,7 +1,17 @@
 package mcd;
 
+import constraints.Constraint;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
+import m.MRelEnd;
 import mcd.services.MCDRelEndService;
 import preferences.Preferences;
+import preferences.PreferencesManager;
+import stereotypes.Stereotype;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
+
+import java.util.ArrayList;
 
 public class MCDGSEnd extends MCDRelEnd  {
 
@@ -57,6 +67,36 @@ public class MCDGSEnd extends MCDRelEnd  {
         return mcdGeneralization.getMCDAssGSOpposite(this);
     }
 
+    @Override
+    public ArrayList<Stereotype> getToStereotypes() {
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<Constraint> getToConstraints() {
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+
+
+    @Override
+    protected String getFileImageIconLong() {
+        if (getDrawingDirection() == MRelEnd.GEN){
+            return Preferences.ICONE_RELATION_GENERALIZATION_LEFT_LG;
+        } else{
+            return Preferences.ICONE_RELATION_GENERALIZATION_RIGHT_LG;
+        }
+    }
 
 
 }

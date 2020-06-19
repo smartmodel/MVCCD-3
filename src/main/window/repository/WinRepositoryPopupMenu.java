@@ -113,7 +113,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             treatGeneric(this, new MCDAttributeEditingTreat());
         }
 
-        if (node.getUserObject() instanceof MCDContEndRels) {
+        if (node.getUserObject() instanceof MCDContRelEnds) {
+            treatGenericRead( this, new MCDRelEndsEditingTreat());
         }
 
         if (node.getUserObject() instanceof MCDContRelations) {
