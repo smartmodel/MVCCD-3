@@ -204,7 +204,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             preferencesExportProfil.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    PreferencesManager.instance().createProfile();
+                   // PreferencesManager.instance().createProfile();
+                    PreferencesManager.instance().createFileProfileXML();
                 }
             });
 

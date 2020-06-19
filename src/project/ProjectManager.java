@@ -9,6 +9,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import profile.Profile;
 import stereotypes.Stereotype;
 import utilities.window.scomponents.SComboBox;
 
@@ -59,7 +60,7 @@ public class ProjectManager {
             addPropertiesProject(document, racine);
 
             //Preferences Project
-            addPreferenceProject(document, racine);
+            preferenceProject(document, racine);
 
             // Element MCD
             MVCCDElement elementMcd = project.getChilds().get(1);
@@ -98,7 +99,7 @@ public class ProjectManager {
 
             //Création du fichier
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new File("test.xml"));
+            StreamResult result = new StreamResult(new File("project.xml"));
             transformer.transform(source, result);
 
         } catch (ParserConfigurationException pce) {
@@ -108,8 +109,8 @@ public class ProjectManager {
         }
     }
 
-    private void addPreferenceProject(Document document, Element racine) {
-        Element preferences = document.createElement("Prefereces");
+    public void preferenceProject(Document document, Element racine) {
+        Element preferences = document.createElement("Preferences");
         racine.appendChild(preferences);
 
         Element mcdJournalization = document.createElement("Mcd_journalization");

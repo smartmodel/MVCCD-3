@@ -1,5 +1,6 @@
 package preferences;
 
+import main.MVCCDManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -8,14 +9,12 @@ import org.xml.sax.SAXException;
 import profile.ProfileFileChooser;
 import project.Project;
 import project.ProjectFileChooser;
+import project.ProjectManager;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
@@ -164,33 +163,7 @@ public class PreferencesManager {
             Element racine = document.createElement(Preferences.REPOSITORY_PREFERENCES_APPLICATION_NAME);
             document.appendChild(racine);
 
-            Element debug = document.createElement("DEBUG");
-            debug.appendChild(document.createTextNode(applicationPref.isDEBUG().toString()));
-            racine.appendChild(debug);
-
-            Element debugBackgroudPanel = document.createElement("DEBUG_BACKGROUND_PANEL");
-            debugBackgroudPanel.appendChild(document.createTextNode(applicationPref.isDEBUG_BACKGROUND_PANEL().toString()));
-            racine.appendChild(debugBackgroudPanel);
-
-            Element debugPrintMvccdElement = document.createElement("DEBUG_PRINT_MVCCDELEMENT");
-            debugPrintMvccdElement.appendChild(document.createTextNode(applicationPref.isDEBUG_PRINT_MVCCDELEMENT().toString()));
-            racine.appendChild(debugPrintMvccdElement);
-
-            Element debugShowTableColHidden = document.createElement("DEBUG_SHOW_TABLE_COL_HIDDEN");
-            debugShowTableColHidden.appendChild(document.createTextNode(applicationPref.isDEBUG_SHOW_TABLE_COL_HIDDEN().toString()));
-            racine.appendChild(debugShowTableColHidden);
-
-            Element debugInspectObjectInTree = document.createElement("DEBUG_INSPECT_OBJECT_IN_TREE");
-            debugInspectObjectInTree.appendChild(document.createTextNode(applicationPref.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
-            racine.appendChild(debugInspectObjectInTree);
-
-            Element repositoryMcdModelsMny = document.createElement("REPOSITORY_MCD_MODELS_MANY");
-            repositoryMcdModelsMny.appendChild(document.createTextNode(applicationPref.getREPOSITORY_MCD_MODELS_MANY().toString()));
-            racine.appendChild(repositoryMcdModelsMny);
-
-            Element repositoryMcdPackagesAuthorizeds = document.createElement("REPOSITORY_MCD_PACKAGES_AUTHORIZEDS");
-            repositoryMcdPackagesAuthorizeds.appendChild(document.createTextNode(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS().toString()));
-            racine.appendChild(repositoryMcdPackagesAuthorizeds);
+            ProjectManager.instance().preferenceProject(document,racine);
 
             // formatage du fichier
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -257,6 +230,43 @@ public class PreferencesManager {
             loadApplicationPref();
         } catch (FileNotFoundException e) {
             createApplicationPref();
+        }
+    }
+
+    public void createFileProfileXML() {
+
+        try {
+            //Creation du document en memoire
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.newDocument();
+
+            //Création des éléments
+            Element racine = document.createElement("FileProfile");
+            document.appendChild(racine);
+
+            //récuperation des préférences du projet
+            ProjectManager.instance().preferenceProject(document,racine);
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
+            //Création du fichier
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(new File(Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR + MVCCDManager.instance().getProject().getName() +
+                    Preferences.FILE_DOT + Preferences.FILE_PROFILE_EXTENSION));
+            transformer.transform(source, result);
+
+
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
         }
     }
 

@@ -15,11 +15,11 @@ public class Project extends ProjectElement {
     private static final long serialVersionUID = 1000;
 
     // Utilisées pour indiquer le statut d'un projet
-    public static final int NEW = 1 ;
-    public static final int EXISTING = 2 ;
+    public static final int NEW = 1;
+    public static final int EXISTING = 2;
 
     // Fichier de profil
-    private String profileFileName ;
+    private String profileFileName;
     // Instance de profil
     private Profile profile;
     //Plusieurs modèles autorisés
@@ -43,7 +43,6 @@ public class Project extends ProjectElement {
     }
 
 
-
     public String getProfileFileName() {
         return profileFileName;
     }
@@ -59,42 +58,42 @@ public class Project extends ProjectElement {
 
     public void setProfileFileName(String profileFileName) {
         this.profileFileName = profileFileName;
-     }
+    }
 
-     public  Profile adjustProfile(){
-         if (this.getProfileFileName() != null) {
-             profile = MVCCDFactory.instance().createProfile(this.getProfileFileName());
-             Preferences profilePref = ProfileManager.instance().loadFileProfile(
-                      Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR +this.getProfileFileName());
-             if (profilePref != null){
-                 profilePref.setOrChangeParent(profile);
-                 profilePref.setName(Preferences.REPOSITORY_PREFERENCES_PROFILE_NAME);
-                 PreferencesManager.instance().setProfilePref(profilePref);
-                 PreferencesManager.instance().copyProfilePref();
-             }
-         } else {
-             profile = null;
-             PreferencesManager.instance().setProfilePref(null);
-             // A priori c'est une erreur!
-             //PreferencesManager.instance().copyDefaultPref();
-         }
-         new MCDAdjustPref(this).changeProfile();
-         MVCCDManager.instance().profileToRepository();
-         return profile;
-     }
+    public Profile adjustProfile() {
+        if (this.getProfileFileName() != null) {
+            profile = MVCCDFactory.instance().createProfile(this.getProfileFileName());
+            //Preferences profilePref = ProfileManager.instance().loadFileProfile(Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR + this.getProfileFileName());
+            Preferences profilePref = ProfileManager.instance().loadFileProfileXML(this.getProfileFileName());
+            if (profilePref != null) {
+                profilePref.setOrChangeParent(profile);
+                profilePref.setName(Preferences.REPOSITORY_PREFERENCES_PROFILE_NAME);
+                PreferencesManager.instance().setProfilePref(profilePref);
+                PreferencesManager.instance().copyProfilePref();
+            }
+        } else {
+            profile = null;
+            PreferencesManager.instance().setProfilePref(null);
+            // A priori c'est une erreur!
+            //PreferencesManager.instance().copyDefaultPref();
+        }
+        new MCDAdjustPref(this).changeProfile();
+        MVCCDManager.instance().profileToRepository();
+        return profile;
+    }
 
-     public Preferences getPreferences(){
-        for (MVCCDElement mvccdElement : getChilds()){
-            if (mvccdElement instanceof Preferences){
+    public Preferences getPreferences() {
+        for (MVCCDElement mvccdElement : getChilds()) {
+            if (mvccdElement instanceof Preferences) {
                 return (Preferences) mvccdElement;
             }
         }
         return null;
-     }
+    }
 
 
-    public int getNextIdElementSequence(){
-        idElementSequence++ ;
+    public int getNextIdElementSequence() {
+        idElementSequence++;
         return idElementSequence;
     }
 
