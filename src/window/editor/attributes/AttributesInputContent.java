@@ -36,6 +36,8 @@ public class AttributesInputContent extends PanelInputContentTable {
         createPanelMaster();
     }
 
+
+
     @Override
     public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
 
@@ -52,6 +54,14 @@ public class AttributesInputContent extends PanelInputContentTable {
 
     @Override
     protected void specificColumnsDisplay() {
+
+        int col;
+        col = AttributesTableColumn.UPPERCASE.getPosition();
+        table.getColumnModel().getColumn(col).setCellRenderer(table.getDefaultRenderer(Boolean.class));
+        //table.getColumnModel().getColumn(col).setCellEditor(table.getDefaultEditor(Boolean.class));
+
+        col = AttributesTableColumn.DERIVED.getPosition();
+        table.getColumnModel().getColumn(col).setCellRenderer(table.getDefaultRenderer(Boolean.class));
 
     }
 
@@ -86,6 +96,7 @@ public class AttributesInputContent extends PanelInputContentTable {
                 AttributesTableColumn.DEFAULTVALUE.getLabel()
         };
     }
+
 
     @Override
     protected boolean specificRefreshRow() {
@@ -171,6 +182,7 @@ public class AttributesInputContent extends PanelInputContentTable {
         row[col] = attribute.getScale();
 
         col = AttributesTableColumn.UPPERCASE.getPosition();
+        //table.getColumnModel().getColumn(col).setCellEditor(table.getDefaultEditor(Boolean.class));
         row[col] = attribute.isUppercase();
 
         col = AttributesTableColumn.CONSTRAINTS.getPosition();

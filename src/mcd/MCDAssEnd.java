@@ -1,5 +1,9 @@
 package mcd;
 
+import constraints.Constraint;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
+import m.MRelEnd;
 import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.services.MRelEndService;
@@ -10,6 +14,12 @@ import mcd.services.MCDRelEndService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import stereotypes.Stereotype;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
+
+import javax.swing.*;
+import java.util.ArrayList;
 
 public class MCDAssEnd extends MCDRelEnd  {
 
@@ -178,6 +188,56 @@ public class MCDAssEnd extends MCDRelEnd  {
         return mcdAssociation.getMCDAssEndOpposite(this);
     }
 
+    @Override
+    public ArrayList<Stereotype> getToStereotypes() {
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<Constraint> getToConstraints() {
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        if (ordered){
+            resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                    preferences.CONSTRAINT_ORDERED_NAME));
+        }
+
+        return resultat;
+    }
+
+
+    @Override
+    protected String getFileImageIconLong() {
+        MCDAssociation mcdAssociation = getMcdAssociation();
+        if (PreferencesManager.instance().preferences().getGENERAL_RELATION_NOTATION().equals(
+                Preferences.GENERAL_RELATION_NOTATION_UML)) {
+            if (mcdAssociation.getNature() == MCDAssociationNature.NOID) {
+                return Preferences.ICONE_RELATION_ASS_NONID_LG;
+            }
+
+            if (mcdAssociation.getNature() == MCDAssociationNature.IDCOMP) {
+                if (getMultiMaxStd() == MRelEndMultiPart.MULTI_ONE) {
+                    return Preferences.ICONE_RELATION_ASS_ID_COMP_LEFT_LG;
+                } else {
+                    return Preferences.ICONE_RELATION_ASS_ID_COMP_RIGHT_LG;
+                }
+            }
+        }
+        if (PreferencesManager.instance().preferences().getGENERAL_RELATION_NOTATION().equals(
+                Preferences.GENERAL_RELATION_NOTATION_STEREOTYPES)) {
+            return Preferences.ICONE_RELATION_ASS_NONID_LG;
+        }
+
+        return null;
+    }
 
 
 }

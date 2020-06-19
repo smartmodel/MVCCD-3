@@ -38,19 +38,29 @@ public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
                                     MCDContRelations parent,
                                     MCDEntity entityFrom,
                                     MCDEntity entityTo,
-                                    MCDAssociationNature nature) {
+                                    MCDAssociationNature nature,
+                                    boolean initFrozen) {
 
         DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW);
         AssociationInputContent content = (AssociationInputContent) fen.getInput().getInputContent();
 
         if (entityFrom  != null){
             SComboBoxService.selectByText(content.getFieldFromEntity(), entityFrom.getNamePath(content.getModePathName()));
+            if (initFrozen)  {
+                content.getFieldFromEntity().setReadOnly(true);
+            }
         }
         if (entityTo  != null) {
             SComboBoxService.selectByText(content.getFieldToEntity(), entityTo.getNamePath(content.getModePathName()));
+            if (initFrozen)  {
+                content.getFieldToEntity().setReadOnly(true);
+            }
         }
         if (nature  != null) {
             SComboBoxService.selectByText(content.getFieldNature(), nature.getText());
+            if (initFrozen)  {
+                content.getFieldNature().setReadOnly(true);
+            }
         }
 
         fen.setVisible(true);

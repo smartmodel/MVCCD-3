@@ -22,7 +22,7 @@ public class MCDAttributesEditingTreat extends EditingTreat {
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
         return new AttributesEditor(owner , parent, (MCDContAttributes)element, mode,
-                new MCDAttributeEditingTreat());
+                new MCDAttributesEditingTreat());
     }
 
     @Override

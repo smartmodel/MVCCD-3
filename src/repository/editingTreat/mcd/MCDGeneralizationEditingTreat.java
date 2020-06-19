@@ -4,11 +4,9 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
 import project.ProjectService;
-import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.services.SComboBoxService;
-import window.editor.relation.association.AssociationEditor;
 import window.editor.relation.association.AssociationInputContent;
 import window.editor.relation.genspec.GenSpecEditor;
 import window.editor.relation.genspec.GenSpecInputContent;
@@ -32,19 +30,25 @@ public class MCDGeneralizationEditingTreat extends MCDRelationEditingTreat {
     }
 
     public  MCDGeneralization treatNew(Window owner,
-                                    MCDContRelations parent,
-                                    MCDEntity entityGen,
-                                    MCDEntity entitySpec) {
+                                       MCDContRelations parent,
+                                       MCDEntity entityGen,
+                                       MCDEntity entitySpec,
+                                       boolean initFrozen) {
 
         DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW);
         GenSpecInputContent content = (GenSpecInputContent) fen.getInput().getInputContent();
 
         if (entityGen  != null){
             SComboBoxService.selectByText(content.getFieldGenEntity(), entityGen.getNamePath(content.getModePathName()));
+            if (initFrozen)  {
+                content.getFieldGenEntity().setReadOnly(true);
+            }
         }
         if (entitySpec  != null) {
             SComboBoxService.selectByText(content.getFieldSpecEntity(), entitySpec.getNamePath(content.getModePathName()));
-        }
+            if (initFrozen)  {
+                content.getFieldSpecEntity().setReadOnly(true);
+            }}
 
 
         fen.setVisible(true);
@@ -58,7 +62,7 @@ public class MCDGeneralizationEditingTreat extends MCDRelationEditingTreat {
     }
 
     private void addGSEndInRepository(MCDGSEnd mcdGSEnd) {
-        MCDContEndRels parent = (MCDContEndRels) mcdGSEnd.getParent();
+        MCDContRelEnds parent = (MCDContRelEnds) mcdGSEnd.getParent();
         DefaultMutableTreeNode nodeParent = ProjectService.getNodeById((int) parent.getId());
         MVCCDManager.instance().addNewMVCCDElementInRepository(mcdGSEnd, nodeParent);
     }

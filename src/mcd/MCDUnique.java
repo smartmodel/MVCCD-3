@@ -34,7 +34,7 @@ public class MCDUnique extends MCDUnicity{
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
         Preferences preferences = PreferencesManager.instance().preferences();
         return stereotypes.getStereotypeByLienProg(MCDUnique.class.getName(),
-                preferences.STEREOTYPE_U_BASE_LIENPROG,
+                preferences.STEREOTYPE_U_LIENPROG,
                 getOrderIndexInParentSameClass() + 1);
     }
 

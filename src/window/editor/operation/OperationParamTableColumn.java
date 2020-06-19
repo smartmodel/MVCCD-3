@@ -11,7 +11,7 @@ public enum OperationParamTableColumn implements ITableColumn {
     ORDER("Ordre"),
     NAME("Paramètre"),
     TYPE("Type"),
-    SOUSTYPE("Sous-type");
+    SUBTYPE("Sous-type");
 
 
     private final String label;

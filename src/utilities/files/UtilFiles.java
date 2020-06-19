@@ -6,6 +6,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -71,6 +72,11 @@ public class UtilFiles {
     public static String fileTextToString(String directory, String fileName) {
         String filePath = filePath(directory, fileName);
         return fileTextToString(filePath);
+    }
+
+    public static ImageIcon getImageIcon(String dir, String fileName){
+        return new ImageIcon (Preferences.DIRECTORY_RESSOURCES_NAME + Preferences.SYSTEM_FILE_SEPARATOR +
+                dir + Preferences.SYSTEM_FILE_SEPARATOR + fileName);
     }
 
 }

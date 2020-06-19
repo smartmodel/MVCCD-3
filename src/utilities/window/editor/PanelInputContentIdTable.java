@@ -172,7 +172,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
             public void actionPerformed(ActionEvent e) {
                 int posActual = table.getSelectedRow();
                 if (posActual >= 0){
-                    int posId = AttributesTableColumn.ID.getPosition();
+                    int posId = STableService.IDINDEX;
                     //TODO-0 Faire appel treatEdit
 
                     //updateRow(mcdAttributeActual, table.getSelectedRow());
@@ -267,7 +267,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
     }
 
 
-
+/*
     private void updateRow(MElement mElementSelected, int selectedRow) {
 
         Object[] row = new Object [AttributesTableColumn.getNbColumns()];
@@ -275,7 +275,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         UtilDivers.putValueRowInTable(table, selectedRow, row);
 
     }
-
+*/
 
 
     protected abstract void putValueInRow(MElement mElement, Object[] row);
@@ -406,11 +406,11 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     private void permuteOrder(int posActual, int posNew) {
 
-        int posOrder = AttributesTableColumn.ORDER.getPosition();
+        int posOrder = STableService.ORDERINDEX;
         Integer orderActual = (Integer) table.getModel().getValueAt(posActual, posOrder);
         Integer orderNew = (Integer) table.getModel().getValueAt(posNew, posOrder);
 
-        int posId = AttributesTableColumn.ID.getPosition();
+        int posId = STableService.IDINDEX;
         Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
         Integer idOther = (Integer) table.getModel().getValueAt(posNew, posId);
 

@@ -1,5 +1,8 @@
 package mcd;
 
+import constraints.Constraint;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import m.IMCompliant;
 import m.MRelationDegree;
@@ -12,6 +15,11 @@ import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import stereotypes.Stereotype;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
+
+import java.util.ArrayList;
 
 public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDParameter {
 
@@ -227,5 +235,63 @@ public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDPara
     @Override
     public String getClassShortNameUI() {
         return CLASSSHORTNAMEUI;
+    }
+
+    @Override
+    public ArrayList<Stereotype> getToStereotypes() {
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        if (PreferencesManager.instance().preferences().getGENERAL_RELATION_NOTATION().equals(
+                Preferences.GENERAL_RELATION_NOTATION_STEREOTYPES)){
+            if (isIdComp()){
+                resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                        preferences.STEREOTYPE_CID_LIENPROG));
+            }
+            if (isIdNatural()){
+                resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                        preferences.STEREOTYPE_NID_LIENPROG));
+            }
+        }
+
+        if (isCP()){
+            resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_CP_LIENPROG));
+        }
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<Constraint> getToConstraints() {
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        if (frozen){
+            resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                    preferences.CONSTRAINT_FROZEN_LIENPROG));
+        }
+        if (deleteCascade){
+            resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                    preferences.CONSTRAINT_DELETECASCADE_LIENPROG));
+        }
+        if (oriented != null){
+            if (oriented){
+                resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                        preferences.CONSTRAINT_ORIENTED_LIENPROG));
+            } else {
+                resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                        preferences.CONSTRAINT_NONORIENTED_LIENPROG));
+            }
+        }
+
+        return resultat;
+    }
+
+    public boolean isReflexive(){
+        return getFrom().getMcdEntity() == getTo().getMcdEntity();
     }
 }

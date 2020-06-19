@@ -25,6 +25,7 @@ public class PanelInputContentTableService {
         table.getColumnModel().getColumn(STableService.TRANSITORYINDEX).setPreferredWidth(sizeDebug);
         table.getColumnModel().getColumn(STableService.TRANSITORYINDEX).setMinWidth(sizeDebug);
         table.getColumnModel().getColumn(STableService.TRANSITORYINDEX).setMaxWidth(sizeDebug);
+        table.getColumnModel().getColumn(STableService.TRANSITORYINDEX).setCellRenderer(table.getDefaultRenderer(Boolean.class));
 
         //Order
         table.getColumnModel().getColumn(STableService.ORDERINDEX).setPreferredWidth(sizeDebug);

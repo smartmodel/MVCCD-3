@@ -29,18 +29,25 @@ public class MCDLinkEditingTreat extends MCDRelationEditingTreat {
     }
 
     public  MCDLink treatNew(Window owner,
-                                    MCDContRelations parent,
-                                    MCDEntity mcdEntity,
-                                    MCDAssociation mcdAssociation) {
+                             MCDContRelations parent,
+                             MCDEntity mcdEntity,
+                             MCDAssociation mcdAssociation,
+                             boolean initFrozen) {
 
         DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW);
         LinkInputContent content = (LinkInputContent) fen.getInput().getInputContent();
 
         if (mcdEntity  != null){
             SComboBoxService.selectByText(content.getFieldEntity(), mcdEntity.getNamePath(content.getModePathName()));
+            if (initFrozen)  {
+                content.getFieldEntity().setReadOnly(true);
+            }
         }
         if (mcdAssociation  != null) {
             SComboBoxService.selectByText(content.getFieldAssociation(), mcdAssociation.getNameTree());
+            if (initFrozen)  {
+                content.getFieldAssociation().setReadOnly(true);
+            }
         }
 
 

@@ -19,12 +19,24 @@ public class STableService {
         return row;
     }
 
+    //TODO-1 Faire appel à findIndexRecordById
     public static Object[] findRecordById(STable table, int id){
         Object [] row = new Object[table.getRowCount()];
         for (int line = 0 ; line <= table.getRowCount() -1 ; line++){
             row = getRecord(table, line);
             if ((int) row[IDINDEX] == id){
-               return row;
+                return row;
+            }
+        }
+        return null;
+    }
+
+    public static Integer findIndexRecordById(STable table, int id){
+        Object [] row = new Object[table.getRowCount()];
+        for (int line = 0 ; line < table.getRowCount() ; line++){
+            row = getRecord(table, line);
+            if ((int) row[IDINDEX] == id){
+                return line;
             }
         }
         return null;

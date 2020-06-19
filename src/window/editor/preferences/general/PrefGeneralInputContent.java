@@ -1,10 +1,16 @@
 package window.editor.preferences.general;
 
+import datatypes.MCDDatatype;
+import datatypes.MDDatatypeService;
 import main.MVCCDElement;
+import messages.MessagesBuilder;
 import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.window.scomponents.SComboBox;
+import utilities.window.scomponents.services.SComboBoxService;
 
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +18,8 @@ import java.awt.event.ItemEvent;
 
 public class PrefGeneralInputContent extends PanelInputContent {
     //private JPanel panel = new JPanel();
-
+    private SComboBox fieldRelationNotation;
+    private JLabel labelRelationNotation = new JLabel();
 
     public PrefGeneralInputContent(PrefGeneralInput prefGeneralInput) {
         super(prefGeneralInput);
@@ -27,7 +34,15 @@ public class PrefGeneralInputContent extends PanelInputContent {
 
     public void createContentCustom() {
 
+        labelRelationNotation.setText("Notation des relations");
+        fieldRelationNotation = new SComboBox(this, labelRelationNotation);
 
+        fieldRelationNotation.addItem(MessagesBuilder.getMessagesProperty(Preferences.GENERAL_RELATION_NOTATION_UML));
+        fieldRelationNotation.addItem(MessagesBuilder.getMessagesProperty(Preferences.GENERAL_RELATION_NOTATION_STEREOTYPES));
+        fieldRelationNotation.addItemListener(this);
+        fieldRelationNotation.addFocusListener(this);
+
+        super.getsComponents().add(fieldRelationNotation);
 
         panelInputContentCustom.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -39,6 +54,9 @@ public class PrefGeneralInputContent extends PanelInputContent {
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
 
+        panelInputContentCustom.add(labelRelationNotation, gbc);
+        gbc.gridx ++;
+        panelInputContentCustom.add(fieldRelationNotation, gbc);
     }
 
 
@@ -66,7 +84,11 @@ public class PrefGeneralInputContent extends PanelInputContent {
 
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
-        Preferences preferences = PreferencesManager.instance().preferences();
+        Preferences preferences = (Preferences) mvccdElement;
+
+        System.out.println(preferences.getGENERAL_RELATION_NOTATION());
+        SComboBoxService.selectByText(fieldRelationNotation,
+                MessagesBuilder.getMessagesProperty(preferences.getGENERAL_RELATION_NOTATION()));
     }
 
     @Override
@@ -79,7 +101,17 @@ public class PrefGeneralInputContent extends PanelInputContent {
 
     @Override
     public void saveDatas(MVCCDElement mvccdElement) {
-        Preferences preferences = PreferencesManager.instance().preferences();
+        Preferences preferences = (Preferences) mvccdElement;
+
+        if (fieldRelationNotation.checkIfUpdated()){
+            String text = (String) fieldRelationNotation.getSelectedItem();
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.GENERAL_RELATION_NOTATION_UML))){
+                preferences.setGENERAL_RELATION_NOTATION(Preferences.GENERAL_RELATION_NOTATION_UML);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.GENERAL_RELATION_NOTATION_STEREOTYPES))){
+                preferences.setGENERAL_RELATION_NOTATION(Preferences.GENERAL_RELATION_NOTATION_STEREOTYPES);
+            }
+        }
     }
 
     @Override

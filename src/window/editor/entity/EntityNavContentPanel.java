@@ -1,15 +1,13 @@
 package window.editor.entity;
 
-import mcd.MCDContAttributes;
-import mcd.MCDContConstraints;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDAttributesEditingTreat;
 import repository.editingTreat.mcd.MCDConstraintsEditingTreat;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
+import repository.editingTreat.mcd.MCDRelEndsEditingTreat;
 import utilities.window.editor.PanelNav;
 import utilities.window.editor.PanelNavContent;
 import utilities.window.scomponents.SButton;
-import window.editor.operation.constraint.constraints.ConstraintsNav;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +19,7 @@ public class EntityNavContentPanel extends PanelNavContent implements ActionList
     protected SButton btnEntity ;
     protected SButton btnAttributes ;
     protected SButton btnConstraints ;
+    protected SButton btnRelations ;
 
     protected ArrayList<SButton> btsEnabled = new ArrayList<SButton>();
 
@@ -33,22 +32,26 @@ public class EntityNavContentPanel extends PanelNavContent implements ActionList
 
         btnEntity = new SButton("Généralités");
         btnEntity.addActionListener(this);
-        //btnEntity.setEnabled(false);
+
         btnAttributes = new SButton("Attributes");
         btnAttributes.addActionListener(this);
-        //btnAttributes.setEnabled(false);
+
         btnConstraints = new SButton("Contraintes");
         btnConstraints.addActionListener(this);
-        //btnConstraints.setEnabled(false);
+
+        btnRelations = new SButton("Relations");
+        btnRelations.addActionListener(this);
 
         panelNavContentCustom.add(btnEntity);
         panelNavContentCustom.add(btnAttributes);
         panelNavContentCustom.add(btnConstraints);
+        panelNavContentCustom.add(btnRelations);
 
 
         btsEnabled.add(btnEntity);
         btsEnabled.add(btnAttributes);
         btsEnabled.add(btnConstraints);
+        btsEnabled.add(btnRelations);
 
         this.add(panelNavContentCustom);
     }
@@ -76,10 +79,15 @@ public class EntityNavContentPanel extends PanelNavContent implements ActionList
         }
 
         if (source == btnConstraints) {
-            //MCDContConstraints mcdContConstraints = (MCDContConstraints) getEditor().getMvccdElementCrt();
             getEditor().myDispose();
             new MCDConstraintsEditingTreat().treatUpdate(getEditor().getOwner(),
                     getMCDEntity().getMCDContConstraints());
+        }
+
+        if (source == btnRelations) {
+            getEditor().myDispose();
+            new MCDRelEndsEditingTreat().treatUpdate(getEditor().getOwner(),
+                    getMCDEntity().getMCDContRelEnds());
         }
     }
 

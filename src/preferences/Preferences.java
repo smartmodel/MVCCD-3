@@ -96,6 +96,7 @@ public class Preferences extends MVCCDElement {
     public static String FILE_HELP_MCDDATATYPE_NAME = "helpMCDDatatpe.txt";
 
     public static String DIRECTORY_PROFILE_NAME = "profiles";
+    public static String DIRECTORY_RESSOURCES_NAME = "ressources";
 
     public static String SYSTEM_LINE_SEPARATOR =System.getProperty("line.separator");
     public static String SYSTEM_FILE_SEPARATOR =System.getProperty("file.separator");
@@ -152,18 +153,30 @@ public class Preferences extends MVCCDElement {
     public static String STEREOTYPE_LP_NAME = "LP";
     public static String STEREOTYPE_LP_LIENPROG = "LP";
 
+    public static String STEREOTYPE_CID_NAME = "CID";
+    public static String STEREOTYPE_CID_LIENPROG = "CID";
+
     public static int STEREOTYPE_NID_MAX = 5;
-    public static String STEREOTYPE_NID_BASE_NAME = "NID";
-    public static String STEREOTYPE_NID_BASE_LIENPROG = "NID";
+    public static String STEREOTYPE_NID_NAME = "NID";
+    public static String STEREOTYPE_NID_LIENPROG = "NID";
+
+    public static String STEREOTYPE_CP_NAME = "CP";
+    public static String STEREOTYPE_CP_LIENPROG = "CP";
 
     public static int STEREOTYPE_U_MAX = 10;
-    public static String STEREOTYPE_U_BASE_NAME = "U";
-    public static String STEREOTYPE_U_BASE_LIENPROG = "U";
+    public static String STEREOTYPE_U_NAME = "U";
+    public static String STEREOTYPE_U_LIENPROG = "U";
 
     public static String CONSTRAINT_ORDERED_NAME = "ordered";
     public static String CONSTRAINT_ORDERED_LIENPROG = "ordered";
     public static String CONSTRAINT_FROZEN_NAME = "frozen";
     public static String CONSTRAINT_FROZEN_LIENPROG = "frozen";
+    public static String CONSTRAINT_DELETECASCADE_NAME = "deletecascade";
+    public static String CONSTRAINT_DELETECASCADE_LIENPROG = "deletecascade";
+    public static String CONSTRAINT_ORIENTED_NAME = "oriented";
+    public static String CONSTRAINT_ORIENTED_LIENPROG = "oriented";
+    public static String CONSTRAINT_NONORIENTED_NAME = "nonoriented";
+    public static String CONSTRAINT_NONORIENTED_LIENPROG = "nonoriented";
 
     public static String CONSTRAINT_ABSOLUTE_NAME = "absolute";
     public static String CONSTRAINT_ABSOLUTE_LIENPROG = "absolute";
@@ -287,6 +300,7 @@ public class Preferences extends MVCCDElement {
     public static String MCDDATATYPE_NUMBER_SIZE_PRECISION = "mcddatatype.number.size.precision";
     public static String MCDDATATYPE_NUMBER_SIZE_INTEGER_PORTION_ONLY = "mcddatatype.number.size.integer.portion.only";
 
+
     public static String MCD_AID_IND_COLUMN_NAME_DEFAULT = "num";
     public static String MCD_AID_DEP_COLUMN_NAME_DEFAULT = "numDep";
 
@@ -299,12 +313,25 @@ public class Preferences extends MVCCDElement {
     public static String MCD_NAMING_GENERALIZATION = " <|- ";
     public static String MCD_NAMING_LINK = " []--| ";
 
-
     public static String MCD_NAMING_GENERALIZATION_SPECIALIZE = " <|- ";
     public static String MCD_NAMING_GENERALIZATION_GENERALIZE = " -|> ";
     public static String MCD_NAMING_LINK_ELEMENT = " |--[] ";
     public static String MCD_NAMING_LINK_ASSOCIATION = " []--| ";
 
+    public static String DIRECTORY_IMAGE_ICONE_RELATION = "images" + SYSTEM_FILE_SEPARATOR + "icones" + SYSTEM_FILE_SEPARATOR + "relations";
+    public static String ICONE_RELATION_GENERALIZATION_LEFT_LG = "GeneralizationLeft.png";
+    public static String ICONE_RELATION_GENERALIZATION_RIGHT_LG = "GeneralizationRight.png";
+    public static String ICONE_RELATION_ASS_NONID_LG = "AssNonId.png";
+    public static String ICONE_RELATION_ASS_ID_COMP_LEFT_LG = "AssIdCompLeft.png";
+    public static String ICONE_RELATION_ASS_ID_COMP_RIGHT_LG = "AssIdCompRight.png";
+    public static String ICONE_RELATION_ASS_ID_NAT_LEFT_LG = "AssIdNatLeft.png";
+    public static String ICONE_RELATION_ASS_ID_NAT_RIGHT_LG = "AssIdNatRight.png";
+    public static String ICONE_RELATION_LINK_LEFT_LG = "LinkLeft.png";
+    public static String ICONE_RELATION_LINK_RIGHT_LG = "LinkRight.png";
+
+
+    public static String GENERAL_RELATION_NOTATION_UML = "uml";
+    public static String GENERAL_RELATION_NOTATION_STEREOTYPES = "stereotypes";
 
     public static String OPTION_ALWAYS = "option.always";
     public static String OPTION_NEVER = "option.never";
@@ -335,6 +362,7 @@ public class Preferences extends MVCCDElement {
     //private PreferencesDisplay GENERAL_PREFERENCES_DISPLAY = PreferencesDisplay.REPOSITORY;
 
     // Modification User/Custom
+    private String GENERAL_RELATION_NOTATION ;
     private Boolean MCD_JOURNALIZATION = false;
     private Boolean MCD_JOURNALIZATION_EXCEPTION = true;
     private Boolean MCD_AUDIT = false;
@@ -418,6 +446,18 @@ public class Preferences extends MVCCDElement {
     }
 
     // Project
+
+    public String getGENERAL_RELATION_NOTATION() {
+        if (GENERAL_RELATION_NOTATION == null){
+            GENERAL_RELATION_NOTATION = GENERAL_RELATION_NOTATION_UML;
+        }
+        return GENERAL_RELATION_NOTATION;
+    }
+
+    public void setGENERAL_RELATION_NOTATION(String GENERAL_RELATION_NOTATION) {
+        this.GENERAL_RELATION_NOTATION = GENERAL_RELATION_NOTATION;
+    }
+
     public Boolean getMCD_JOURNALIZATION() {
         return MCD_JOURNALIZATION;
     }

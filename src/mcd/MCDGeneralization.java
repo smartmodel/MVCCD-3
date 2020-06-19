@@ -1,5 +1,8 @@
 package mcd;
 
+import constraints.Constraint;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import m.IMCompliant;
 import m.MRelationDegree;
@@ -13,6 +16,11 @@ import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import stereotypes.Stereotype;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
+
+import java.util.ArrayList;
 
 public class MCDGeneralization extends MCDRelation implements IMCompliant, IMCDParameter {
 
@@ -83,4 +91,25 @@ public class MCDGeneralization extends MCDRelation implements IMCompliant, IMCDP
     public String getClassShortNameUI() {
         return CLASSSHORTNAMEUI;
     }
+
+    @Override
+    public ArrayList<Stereotype> getToStereotypes() {
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<Constraint> getToConstraints() {
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
 }

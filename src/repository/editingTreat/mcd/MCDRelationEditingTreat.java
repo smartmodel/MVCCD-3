@@ -5,11 +5,14 @@ import main.MVCCDManager;
 import mcd.*;
 import project.ProjectService;
 import repository.editingTreat.EditingTreat;
+import utilities.window.editor.DialogEditor;
+import utilities.window.editor.PanelInputContent;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class MCDRelationEditingTreat extends EditingTreat {
+public class MCDRelationEditingTreat extends EditingTreat {
 
 
     protected void addRelEndsInRepository(MCDRelation mcdRelation) {
@@ -18,11 +21,31 @@ public abstract class MCDRelationEditingTreat extends EditingTreat {
     }
 
     private void addRelEndInRepository(MCDRelEnd mcdRelEnd) {
-        MCDContEndRels parent = (MCDContEndRels) mcdRelEnd.getParent();
+        MCDContRelEnds parent = (MCDContRelEnds) mcdRelEnd.getParent();
         DefaultMutableTreeNode nodeParent = ProjectService.getNodeById((int) parent.getId());
         MVCCDManager.instance().addNewMVCCDElementInRepository(mcdRelEnd, nodeParent);
     }
 
+
+    @Override
+    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
+        return null;
+    }
+
+    @Override
+    protected PanelInputContent getPanelInputContent(MVCCDElement element) {
+        return null;
+    }
+
+    @Override
+    protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
+        return null;
+    }
+
+    @Override
+    protected String getPropertyTheElement() {
+        return "the.relation";
+    }
 
     @Override
     protected void removeMVCCDElementInRepository(MVCCDElement element) {

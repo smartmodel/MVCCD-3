@@ -89,6 +89,15 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return null;
     }
 
+    public MCDContRelEnds getMCDContRelEnds() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MCDContRelEnds) {
+                return (MCDContRelEnds) mvccdElement;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<MCDAssEnd> getMCDAssEnds() {
         ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
         for (MVCCDElement mvccdElement : this.getMCDContEndRels().getChilds()){

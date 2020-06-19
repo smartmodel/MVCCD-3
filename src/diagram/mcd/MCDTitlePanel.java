@@ -90,7 +90,7 @@ public class MCDTitlePanel {
                         MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
                         MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
                         MCDAssociation newMCDAssociation = mcdAssociationEditingTreat.treatNew(mvccdWindow, mcdContRelations,
-                                mcdEntityFrom, mcdEntityTo, MCDAssociationNature.NOID);
+                                mcdEntityFrom, mcdEntityTo, MCDAssociationNature.NOID, false);
                     }
 
                     if (posOption == 3) {
@@ -110,7 +110,7 @@ public class MCDTitlePanel {
                         MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
                         MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
                         MCDGeneralization newMCDGeneralization = mcdGeneralizationEditingTreat.treatNew(mvccdWindow, mcdContRelations,
-                                mcdEntityGen, mcdEntitySpec);
+                                mcdEntityGen, mcdEntitySpec, false);
                     }
 
                     if (posOption == 4) {
@@ -130,7 +130,7 @@ public class MCDTitlePanel {
                         MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
                         MCDLinkEditingTreat mcdLinkEditingTreat = new MCDLinkEditingTreat();
                         MCDLink newMCDLink= mcdLinkEditingTreat.treatNew(mvccdWindow, mcdContRelations,
-                                mcdEntity, mcdAssociation);
+                                mcdEntity, mcdAssociation, false);
                     }
 
                     if (fen != null) {
