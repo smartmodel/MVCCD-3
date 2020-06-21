@@ -1,16 +1,11 @@
 package preferences;
 
-import exceptions.CodeApplException;
-import main.MVCCDManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 import profile.ProfileFileChooser;
 import project.Project;
 import project.ProjectFileChooser;
-import project.ProjectManager;
+import project.ProjectSaverXML;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -132,7 +127,7 @@ public class PreferencesManager {
         to.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(from.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME());
     }
 
-    public void loadOrCreateFileApplicationPreferences() {
+    /*public void loadOrCreateFileApplicationPreferences() {
         try {
             PreferencesLoader loader = new PreferencesLoader();
             applicationPref = loader.load(new File(Preferences.FILE_APPLICATION_PREF_NAME));
@@ -149,132 +144,14 @@ public class PreferencesManager {
         if (fileChoose != null) {
             new PreferencesSaver().save(fileChoose, projectPref);
         }
-    }
-
-    // création du document Application
-    public void createApplicationPref() {
-
-        try {
-            //Creation du document en memoire
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.newDocument();
-
-            //Création des éléments
-            Element racine = document.createElement(Preferences.REPOSITORY_PREFERENCES_APPLICATION_NAME);
-            document.appendChild(racine);
-
-            ProjectManager.instance().preferenceProject(document,racine);
-
-            // formatage du fichier
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-
-            //Création du fichier
-            DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new File(Preferences.FILE_APPLICATION_PREF_NAME));
-            transformer.transform(source, result);
-
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-        } catch (TransformerException tfe) {
-            tfe.printStackTrace();
-        }
-
-    }
-
-    public void loadApplicationPref() throws FileNotFoundException {
-        try {
-
-            //Création du document en memoire
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(new File(Preferences.FILE_APPLICATION_PREF_NAME));
-
-            //Récuperation des valeurs en memoire
-            Element racine = document.getDocumentElement();
-            Element debug = (Element) racine.getElementsByTagName("DEBUG").item(0);
-            Element debugBackgroudPanel = (Element) racine.getElementsByTagName("DEBUG_BACKGROUND_PANEL").item(0);
-            Element debugPrintMvccdElement = (Element) racine.getElementsByTagName("DEBUG_PRINT_MVCCDELEMENT").item(0);
-            Element debugShowTableColHidden = (Element) racine.getElementsByTagName("DEBUG_SHOW_TABLE_COL_HIDDEN").item(0);
-            Element debugInspectObjectInTree = (Element) racine.getElementsByTagName("DEBUG_INSPECT_OBJECT_IN_TREE").item(0);
-            Element repositoryMcdModelsMany = (Element) racine.getElementsByTagName("REPOSITORY_MCD_MODELS_MANY").item(0);
-            Element repositoryMcdPackagesAuthorizeds = (Element) racine.getElementsByTagName("REPOSITORY_MCD_PACKAGES_AUTHORIZEDS").item(0);
-
-            // Instanciation des préférences de l'application
-            applicationPref.setDEBUG(Boolean.valueOf(debug.getTextContent()));
-            applicationPref.setDEBUG_BACKGROUND_PANEL(Boolean.valueOf(debugBackgroudPanel.getTextContent()));
-            applicationPref.setDEBUG_PRINT_MVCCDELEMENT(Boolean.valueOf(debugPrintMvccdElement.getTextContent()));
-            applicationPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(Boolean.valueOf(debugShowTableColHidden.getTextContent()));
-            applicationPref.setDEBUG_INSPECT_OBJECT_IN_TREE(Boolean.valueOf(debugInspectObjectInTree.getTextContent()));
-            applicationPref.setREPOSITORY_MCD_MODELS_MANY(Boolean.valueOf(repositoryMcdModelsMany.getTextContent()));
-            applicationPref.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(Boolean.valueOf(repositoryMcdPackagesAuthorizeds.getTextContent()));
-
-        } catch (FileNotFoundException e) {
-            throw (e);
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
+    }*/
 
     public void loadOrCreateFileXMLApplicationPref() {
-        applicationPref = new Preferences(null, null);
         try {
-            loadApplicationPref();
+            applicationPref = new PreferencesLoaderXml().loadFileApplicationPref();
         } catch (FileNotFoundException e) {
-            createApplicationPref();
+            applicationPref = new Preferences(null, null);
+            new PreferencesSaverXml().createFileApplicationPref();
         }
     }
-
-    public void createFileProfileXML() {
-
-        try {
-            //Creation du document en memoire
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.newDocument();
-
-            //Création des éléments
-            Element racine = document.createElement("FileProfile");
-            document.appendChild(racine);
-
-            //récuperation des préférences du projet
-            ProjectManager.instance().preferenceProject(document,racine);
-
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-
-            ProfileFileChooser fileChooser = new ProfileFileChooser(ProjectFileChooser.SAVE);
-            File fileChoose = fileChooser.fileChoose();
-
-            if (fileChoose != null) {
-                DOMSource source = new DOMSource(document);
-                StreamResult result = new StreamResult(new FileOutputStream(fileChoose));
-                transformer.transform(source, result);
-            }
-                //Création du fichier
-
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 }

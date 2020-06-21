@@ -8,6 +8,7 @@ import mcd.services.MCDAdjustPref;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
+import profile.ProfileLoaderXml;
 import profile.ProfileManager;
 
 public class Project extends ProjectElement {
@@ -64,7 +65,7 @@ public class Project extends ProjectElement {
         if (this.getProfileFileName() != null) {
             profile = MVCCDFactory.instance().createProfile(this.getProfileFileName());
             //Preferences profilePref = ProfileManager.instance().loadFileProfile(Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR + this.getProfileFileName());
-            Preferences profilePref = ProfileManager.instance().loadFileProfileXML(this.getProfileFileName());
+            Preferences profilePref = new ProfileLoaderXml().loadFileProfileXML(this.getProfileFileName());
             if (profilePref != null) {
                 profilePref.setOrChangeParent(profile);
                 profilePref.setName(Preferences.REPOSITORY_PREFERENCES_PROFILE_NAME);

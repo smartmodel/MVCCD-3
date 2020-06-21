@@ -2,6 +2,7 @@ package window.editor.preferences.application;
 
 import main.MVCCDElement;
 import messages.MessagesBuilder;
+import preferences.PreferencesSaverXml;
 import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -227,9 +228,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
 
 
         // Sauvegarde (fichier) des préférences d'application
-
-        PreferencesManager.instance().createApplicationPref();
-
+        new  PreferencesSaverXml().createFileApplicationPref();
         //PreferencesSaver saver = new PreferencesSaver();
         //saver.save(new File(Preferences.FILE_APPLICATION_PREF_NAME), applicationPref);
 

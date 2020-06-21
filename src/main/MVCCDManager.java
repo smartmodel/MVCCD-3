@@ -46,9 +46,9 @@ public class MVCCDManager {
         // Chargement des messages de traduction
         LoadMessages.main();
 
-        //PreferencesManager.instance().loadOrCreateFileApplicationPreferences();
-
         //Chargement des préférences de l'application
+
+        //PreferencesManager.instance().loadOrCreateFileApplicationPreferences();
         PreferencesManager.instance().loadOrCreateFileXMLApplicationPref();
         // Création et affichage de l'écran d'accueil
         startMVCCDWindow();
@@ -189,6 +189,7 @@ public class MVCCDManager {
         if (file != null) {
             // Lecture du fichier de sauvegarde
             project = new LoaderSerializable().load(fileProjectCurrent);
+            //project = new ProjectLoadXML().loadProjectFile(fileProjectCurrent);
             // Chargement des préférences du projet
             PreferencesManager.instance().setProjectPref(project.getPreferences());
             // Copie des préférences d0'application au sein des préférences du projet
@@ -213,8 +214,10 @@ public class MVCCDManager {
 
     public void saveProject() {
         if (fileProjectCurrent != null) {
+
             new SaverSerializable().save(fileProjectCurrent);
-            ProjectManager.instance().createProjectFile(fileProjectCurrent);
+            new ProjectSaverXML().createProjectFile(fileProjectCurrent);
+
             setDatasProjectChanged(false);
 
         } else {
@@ -227,8 +230,10 @@ public class MVCCDManager {
         File fileChoose = fileChooser.fileChoose();
         if (fileChoose != null) {
             fileProjectCurrent = fileChoose;
-            ProjectManager.instance().createProjectFile(fileProjectCurrent);
+
+            new ProjectSaverXML().createProjectFile(fileProjectCurrent);
             new SaverSerializable().save(fileProjectCurrent);
+
             projectsRecents.add(fileProjectCurrent);
             changeActivateProjectOpenRecentsItems();
             setDatasProjectChanged(false);

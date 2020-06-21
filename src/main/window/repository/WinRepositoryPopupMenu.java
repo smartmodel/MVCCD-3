@@ -9,6 +9,7 @@ import main.MVCCDManager;
 import main.MVCCDWindow;
 import mcd.*;
 import messages.MessagesBuilder;
+import profile.ProfileSaverXml;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.*;
 import repository.editingTreat.preferences.PrefApplEditingTreat;
@@ -205,7 +206,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                    // PreferencesManager.instance().createProfile();
-                    PreferencesManager.instance().createFileProfileXML();
+                    new ProfileSaverXml().createFileProfileXML();
                 }
             });
 
