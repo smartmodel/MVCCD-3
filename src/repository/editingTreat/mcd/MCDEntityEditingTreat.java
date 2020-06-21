@@ -1,24 +1,14 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
-import mcd.MCDAssociation;
 import mcd.MCDContEntities;
-import mcd.MCDContRelations;
 import mcd.MCDEntity;
-import mcd.services.MCDEntityService;
-import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
-import utilities.Debug;
-import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.entity.EntityEditor;
 import window.editor.entity.EntityInputContent;
-import window.editor.relation.association.AssociationEditor;
 
-import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.ArrayList;
 

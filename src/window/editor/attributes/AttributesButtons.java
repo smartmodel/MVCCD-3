@@ -6,7 +6,7 @@ import utilities.window.editor.PanelButtonsContent;
 public class AttributesButtons extends PanelButtons {
 
 
-    public AttributesButtons(AttributesEditor attributesEditor) {
+    public AttributesButtons(AttributesEditorBtn attributesEditor) {
         super(attributesEditor);
         //super.setButtonsContent (new AttributesButtonsContent(this));
     }

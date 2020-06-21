@@ -1,7 +1,6 @@
 package utilities.window;
 
 import preferences.PreferencesManager;
-import window.editor.preferences.MCD.PrefMCDInput;
 import preferences.Preferences;
 
 import javax.swing.*;

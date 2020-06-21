@@ -6,7 +6,7 @@ import utilities.window.editor.PanelInputContent;
 
 public class RelEndsInput extends PanelInput {
 
-    public RelEndsInput(RelEndsEditor relEndsEditor) {
+    public RelEndsInput(RelEndsEditorBtn relEndsEditor) {
         super(relEndsEditor);
     }
 

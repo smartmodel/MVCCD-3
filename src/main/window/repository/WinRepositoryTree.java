@@ -89,8 +89,6 @@ public class WinRepositoryTree extends JTree {
                     lastProjectElement = (ProjectElement) node.getUserObject();
                 }
 
-                //TODO-0 Pour faciliter les tests, enlever ensuite
-                MVCCDManager.instance().setDatasProjectChanged(true);
                 MVCCDManager.instance().getProject().setLastWinRepositoryProjectElement(lastProjectElement);
                 MVCCDManager.instance().getProject().setLastWinRepositoryExpand(expandCollapse);
             }

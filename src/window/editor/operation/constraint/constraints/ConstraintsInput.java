@@ -6,7 +6,7 @@ import utilities.window.editor.PanelInputContent;
 
 public class ConstraintsInput extends PanelInput {
 
-    public ConstraintsInput(ConstraintsEditor constraintsEditor) {
+    public ConstraintsInput(ConstraintsEditorBtn constraintsEditor) {
         super(constraintsEditor);
     }
 

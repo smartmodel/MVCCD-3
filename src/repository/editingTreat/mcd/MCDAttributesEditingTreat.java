@@ -1,13 +1,11 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
 import mcd.MCDContAttributes;
-import mcd.MCDEntity;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.attributes.AttributesEditor;
+import window.editor.attributes.AttributesEditorBtn;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -21,7 +19,7 @@ public class MCDAttributesEditingTreat extends EditingTreat {
 
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
-        return new AttributesEditor(owner , parent, (MCDContAttributes)element, mode,
+        return new AttributesEditorBtn(owner , parent, (MCDContAttributes)element, mode,
                 new MCDAttributesEditingTreat());
     }
 
