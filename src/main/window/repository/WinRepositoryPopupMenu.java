@@ -22,6 +22,8 @@ import repository.editingTreat.*;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
 import utilities.window.scomponents.SPopupMenu;
+import window.editor.preferences.project.PrefProject;
+import window.editor.preferences.project.PrefProjectMenu;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;

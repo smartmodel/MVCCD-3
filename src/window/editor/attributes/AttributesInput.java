@@ -6,7 +6,7 @@ import utilities.window.editor.PanelInputContent;
 
 public class AttributesInput extends PanelInput {
 
-    public AttributesInput(AttributesEditor attributesEditor) {
+    public AttributesInput(AttributesEditorBtn attributesEditor) {
         super(attributesEditor);
         //super.setInputContent( new AttributesInputContent(this));
     }

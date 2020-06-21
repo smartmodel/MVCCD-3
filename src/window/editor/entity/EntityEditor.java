@@ -5,12 +5,10 @@ import mcd.MCDEntity;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.*;
-import preferences.Preferences;
 
 import java.awt.*;
 
-public class EntityEditor extends DialogEditorNav {
-
+public class EntityEditor extends DialogEditorNavBtn {
 
 
     public EntityEditor(Window owner,
@@ -34,8 +32,8 @@ public class EntityEditor extends DialogEditorNav {
     }
 
     @Override
-    protected PanelNav getNavCustom() {
-        return new EntityNav(this);
+    protected PanelNavBtn getNavCustom() {
+        return new EntityNavBtn(this);
     }
 
     @Override

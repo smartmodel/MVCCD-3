@@ -230,6 +230,14 @@ public class MCDAssEnd extends MCDRelEnd  {
                     return Preferences.ICONE_RELATION_ASS_ID_COMP_RIGHT_LG;
                 }
             }
+
+            if (mcdAssociation.getNature() == MCDAssociationNature.IDNATURAL) {
+                if (getMultiMaxStd() == MRelEndMultiPart.MULTI_ONE) {
+                    return Preferences.ICONE_RELATION_ASS_ID_NAT_LEFT_LG;
+                } else {
+                    return Preferences.ICONE_RELATION_ASS_ID_NAT_RIGHT_LG;
+                }
+            }
         }
         if (PreferencesManager.instance().preferences().getGENERAL_RELATION_NOTATION().equals(
                 Preferences.GENERAL_RELATION_NOTATION_STEREOTYPES)) {

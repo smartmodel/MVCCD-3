@@ -1,13 +1,11 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import mcd.MCDContAttributes;
 import mcd.MCDContConstraints;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.attributes.AttributesEditor;
-import window.editor.operation.constraint.constraints.ConstraintsEditor;
+import window.editor.operation.constraint.constraints.ConstraintsEditorBtn;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -21,7 +19,7 @@ public class MCDConstraintsEditingTreat extends EditingTreat {
 
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
-        return new ConstraintsEditor(owner , parent, (MCDContConstraints)element, mode,
+        return new ConstraintsEditorBtn(owner , parent, (MCDContConstraints)element, mode,
                 new MCDConstraintsEditingTreat());
     }
 

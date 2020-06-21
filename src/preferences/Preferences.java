@@ -127,7 +127,7 @@ public class Preferences extends MVCCDElement {
     public static Integer LINK_WINDOW_HEIGHT = 600;
     public static Integer HELP_WINDOW_WIDTH = 600;
     public static Integer HELP_WINDOW_HEIGHT = 300;
-    public static Integer PREFERENCES_WINDOW_WIDTH = 800;
+    public static Integer PREFERENCES_WINDOW_WIDTH = 1000;
     public static Integer PREFERENCES_WINDOW_HEIGHT = 600;
     public static Integer MCDDATATYPE_WINDOW_WIDTH = 800;
     public static Integer MCDDATATYPE_WINDOW_HEIGHT = 600;
@@ -349,6 +349,9 @@ public class Preferences extends MVCCDElement {
     public static String MCD_UNIQUE_NATURE_NO_ID = "mcd.unique.nature.no.id";
     public static String MCD_UNIQUE_NATURE_NID = "mcd.unique.nature.nid";
 
+    public static String PREFERENCES_PROJECT_MENU_GENERAL = "preferences.project.menu.general";
+    public static String PREFERENCES_PROJECT_MENU_MCD = "preferences.project.menu.mcd";
+
     // Modification Application
     private Boolean DEBUG = false;
     private Boolean DEBUG_BACKGROUND_PANEL = false;
@@ -378,6 +381,8 @@ public class Preferences extends MVCCDElement {
 
     private Dimension ENTITY_WINDOW_SIZE_CUSTOM = null;
     private Point ENTITY_WINDOW_LOCATION_ONSCREEN = null;
+    private Dimension PREFERENCES_WINDOW_SIZE_CUSTOM = null;
+    private Point PREFERENCES_WINDOW_LOCATION_ONSCREEN = null;
 
 
 
@@ -583,11 +588,30 @@ public class Preferences extends MVCCDElement {
         this.ENTITY_WINDOW_SIZE_CUSTOM = ENTITY_WINDOW_SIZE_CUSTOM;
     }
 
-    public Point getENTITY_WINDOW_LOCATION_ONSCREEN() {
+    public Point getENTITY_WINDOW_LOCATION_ONSCREEN() { 
         return ENTITY_WINDOW_LOCATION_ONSCREEN;
     }
 
     public void setENTITY_WINDOW_LOCATION_ONSCREEN(Point ENTITY_WINDOW_LOCATION_ONSCREEN) {
         this.ENTITY_WINDOW_LOCATION_ONSCREEN = ENTITY_WINDOW_LOCATION_ONSCREEN;
+    }
+
+    public Dimension getPREFERENCES_WINDOW_SIZE_CUSTOM() {
+        if (PREFERENCES_WINDOW_SIZE_CUSTOM == null){
+            PREFERENCES_WINDOW_SIZE_CUSTOM = new Dimension( PREFERENCES_WINDOW_WIDTH, PREFERENCES_WINDOW_HEIGHT );
+        }
+        return PREFERENCES_WINDOW_SIZE_CUSTOM;
+    }
+
+    public void setPREFERENCES_WINDOW_SIZE_CUSTOM(Dimension PREFERENCES_WINDOW_SIZE_CUSTOM) {
+        this.PREFERENCES_WINDOW_SIZE_CUSTOM = PREFERENCES_WINDOW_SIZE_CUSTOM;
+    }
+
+    public Point getPREFERENCES_WINDOW_LOCATION_ONSCREEN() {
+        return PREFERENCES_WINDOW_LOCATION_ONSCREEN;
+    }
+
+    public void setPREFERENCES_WINDOW_LOCATION_ONSCREEN(Point PREFERENCES_WINDOW_LOCATION_ONSCREEN) {
+        this.PREFERENCES_WINDOW_LOCATION_ONSCREEN = PREFERENCES_WINDOW_LOCATION_ONSCREEN;
     }
 }

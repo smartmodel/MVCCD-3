@@ -1,8 +1,6 @@
 package utilities.window.editor;
 
 import main.MVCCDElement;
-import messages.MessagesBuilder;
-import utilities.window.DialogMessage;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 
@@ -176,10 +174,10 @@ public abstract class PanelInputContent
             getButtonsContent().getBtnApply().setEnabled(false);
         }
 
-        if (getEditor() instanceof DialogEditorNav) {
-            DialogEditorNav editor = (DialogEditorNav) getEditor();
+        if (getEditor() instanceof DialogEditorNavBtn) {
+            DialogEditorNavBtn editor = (DialogEditorNavBtn) getEditor();
             if (!editor.getMode().equals(DialogEditor.NEW)) {
-                editor.getNav().getTabbedContent().enabledButtons(!datasChangedNow());
+                editor.getNav().getContent().enabledButtons(!datasChangedNow());
             }
         }
     }

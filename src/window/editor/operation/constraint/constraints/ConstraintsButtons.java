@@ -6,7 +6,7 @@ import utilities.window.editor.PanelButtonsContent;
 public class ConstraintsButtons extends PanelButtons {
 
 
-    public ConstraintsButtons(ConstraintsEditor constraintsEditor) {
+    public ConstraintsButtons(ConstraintsEditorBtn constraintsEditor) {
         super(constraintsEditor);
     }
 

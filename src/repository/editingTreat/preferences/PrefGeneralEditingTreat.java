@@ -1,12 +1,11 @@
 package repository.editingTreat.preferences;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import utilities.window.editor.PanelInputContent;
-import window.editor.preferences.general.PrefGeneralEditor;
+import window.editor.preferences.project.general.PrefGeneralEditor;
 
 import java.awt.*;
 import java.util.ArrayList;

@@ -6,7 +6,7 @@ import utilities.window.editor.PanelButtonsContent;
 public class RelEndsButtons extends PanelButtons {
 
 
-    public RelEndsButtons(RelEndsEditor relEndsEditor) {
+    public RelEndsButtons(RelEndsEditorBtn relEndsEditor) {
         super(relEndsEditor);
     }
 
