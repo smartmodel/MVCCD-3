@@ -211,10 +211,10 @@ public class MVCCDManager {
     public void saveProject() {
         if (fileProjectCurrent != null) {
             new SaverSerializable().save(fileProjectCurrent);
-            setDatasProjectChanged(false);
         } else {
             saveAsProject();
         }
+        setDatasProjectChanged(false);
     }
 
     public void saveAsProject() {
@@ -225,7 +225,6 @@ public class MVCCDManager {
             new SaverSerializable().save(fileProjectCurrent);
             projectsRecents.add(fileProjectCurrent);
             changeActivateProjectOpenRecentsItems();
-            setDatasProjectChanged(false);
         }
     }
 
@@ -345,6 +344,7 @@ public class MVCCDManager {
         this.datasProjectChanged = datasProjectChanged;
     }
 
+
     public boolean isDatasEdited() {
         return datasEdited;
     }
@@ -356,6 +356,7 @@ public class MVCCDManager {
     }
 
     public void datasProjectChangedFromEditor(){
+        System.out.println("isDatasEdited()  " + isDatasEdited());
         if (isDatasEdited()){
             setDatasProjectChanged(true);
         }

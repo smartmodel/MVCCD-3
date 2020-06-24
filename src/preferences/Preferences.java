@@ -105,8 +105,8 @@ public class Preferences extends MVCCDElement {
     public static String MODEL_NAME_PATH_SEPARATOR = ".";
 
     public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
-    public static Integer PROJECT_WINDOW_WIDTH = 600;
-    public static Integer PROJECT_WINDOW_HEIGHT = 300;
+    public static Integer PROJECT_WINDOW_WIDTH = 800;
+    public static Integer PROJECT_WINDOW_HEIGHT = 400;
     public static Integer MODEL_WINDOW_WIDTH = 800;
     public static Integer MODEL_WINDOW_HEIGHT = 600;
     public static Integer ENTITY_WINDOW_WIDTH = 800;
@@ -358,6 +358,7 @@ public class Preferences extends MVCCDElement {
     private Boolean DEBUG_PRINT_MVCCDELEMENT = false;
     private Boolean DEBUG_SHOW_TABLE_COL_HIDDEN = false;
     private Boolean DEBUG_INSPECT_OBJECT_IN_TREE = false;
+    private Boolean DEBUG_EDITOR_DATAS_CHANGED = null;
     private Boolean REPOSITORY_MCD_MODELS_MANY = false;
     private Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = false;
 
@@ -432,6 +433,17 @@ public class Preferences extends MVCCDElement {
 
     public void setDEBUG_INSPECT_OBJECT_IN_TREE(Boolean DEBUG_INSPECT_OBJECT_IN_TREE) {
         this.DEBUG_INSPECT_OBJECT_IN_TREE = DEBUG_INSPECT_OBJECT_IN_TREE;
+    }
+
+    public Boolean getDEBUG_EDITOR_DATAS_CHANGED() {
+        if (DEBUG_EDITOR_DATAS_CHANGED == null) {
+            this.DEBUG_EDITOR_DATAS_CHANGED = false;
+        }
+        return DEBUG_EDITOR_DATAS_CHANGED;
+    }
+
+    public void setDEBUG_EDITOR_DATAS_CHANGED(Boolean DEBUG_EDITOR_DATAS_CHANGED) {
+        this.DEBUG_EDITOR_DATAS_CHANGED = DEBUG_EDITOR_DATAS_CHANGED;
     }
 
     public Boolean getREPOSITORY_MCD_MODELS_MANY() {

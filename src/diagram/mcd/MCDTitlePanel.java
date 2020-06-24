@@ -159,15 +159,14 @@ public class MCDTitlePanel {
                     diagram.setParent(parent);
                     diagram.setName(fieldName.getText());
                     MVCCDManager.instance().addNewMVCCDElementInRepository(diagram);
-                    MVCCDManager.instance().setDatasProjectChanged(true);
                     created = true;
                 } else {
                     // Mise à jour
                     diagram.setName(fieldName.getText());
                     MVCCDManager.instance().showMVCCDElementInRepository(diagram);
-                    //TODO-1 Véfier la mise à jour effective
-                    MVCCDManager.instance().setDatasProjectChanged(true);
                 }
+                //TODO-1 Véfier la mise à jour effective
+                MVCCDManager.instance().setDatasProjectChanged(true);
             }
         });
 

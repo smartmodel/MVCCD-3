@@ -21,8 +21,10 @@ public class ProjectEditingTreat  extends EditingTreat {
         fen.setVisible(true);
 
         Project project = (Project) fen.getMvccdElementNew();
-        MVCCDManager.instance().setProject(project);
-        MVCCDManager.instance().completeNewProject();
+        if (project != null) {
+            MVCCDManager.instance().setProject(project);
+            MVCCDManager.instance().completeNewProject();
+        }
     }
 
 

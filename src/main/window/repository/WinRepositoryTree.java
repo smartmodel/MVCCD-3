@@ -88,9 +88,10 @@ public class WinRepositoryTree extends JTree {
                 if (node.getUserObject() instanceof ProjectElement){
                     lastProjectElement = (ProjectElement) node.getUserObject();
                 }
-
-                MVCCDManager.instance().getProject().setLastWinRepositoryProjectElement(lastProjectElement);
-                MVCCDManager.instance().getProject().setLastWinRepositoryExpand(expandCollapse);
+                if ( MVCCDManager.instance().getProject() != null) {
+                    MVCCDManager.instance().getProject().setLastWinRepositoryProjectElement(lastProjectElement);
+                    MVCCDManager.instance().getProject().setLastWinRepositoryExpand(expandCollapse);
+                }
             }
         };
         this.addTreeExpansionListener(te);

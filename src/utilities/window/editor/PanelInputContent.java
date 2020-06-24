@@ -1,6 +1,7 @@
 package utilities.window.editor;
 
 import main.MVCCDElement;
+import preferences.PreferencesManager;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 
@@ -253,12 +254,13 @@ public abstract class PanelInputContent
     public boolean datasChangedNow() {
         boolean resultat = false;
         for (SComponent sComponent : sComponents) {
-            /*
-            if (sComponent.checkIfUpdated()){
-                System.out.println(sComponent);
+            if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
+                if (PreferencesManager.instance().getApplicationPref().getDEBUG_EDITOR_DATAS_CHANGED()) {
+                    if (sComponent.checkIfUpdated()) {
+                        System.out.println(sComponent);
+                    }
+                }
             }
-
-             */
             resultat = resultat || sComponent.checkIfUpdated();
         }
         return resultat;

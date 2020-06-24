@@ -13,7 +13,6 @@ import utilities.window.scomponents.SCheckBox;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
 
@@ -27,6 +26,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
     private SCheckBox debugBackgroundPanel = new SCheckBox(this );
     private SCheckBox debugJTableShowHidden = new SCheckBox(this );
     private SCheckBox debugJTreeInspectObject = new SCheckBox(this );
+    private SCheckBox debugEditorDatasChanged = new SCheckBox(this );
 
     private SCheckBox fieldRepMCDModelsMany = new SCheckBox(this);
     private SCheckBox fieldRepMCDPackagesAuthorizeds = new SCheckBox(this );
@@ -58,6 +58,8 @@ public class PrefApplicationInputContent extends PanelInputContent {
         debugJTableShowHidden.addFocusListener(this);
         debugJTreeInspectObject.addItemListener(this);
         debugJTreeInspectObject.addFocusListener(this);
+        debugEditorDatasChanged.addItemListener(this);
+        debugEditorDatasChanged.addFocusListener(this);
 
         fieldRepMCDModelsMany.addItemListener(this);
         fieldRepMCDModelsMany.addFocusListener(this);
@@ -74,6 +76,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
         super.getsComponents().add(debugBackgroundPanel);
         super.getsComponents().add(debugJTableShowHidden);
         super.getsComponents().add(debugJTreeInspectObject);
+        super.getsComponents().add(debugEditorDatasChanged);
         super.getsComponents().add(fieldRepMCDModelsMany);
         super.getsComponents().add(fieldRepMCDPackagesAuthorizeds);
 
@@ -132,6 +135,12 @@ public class PrefApplicationInputContent extends PanelInputContent {
         gbcDebug.gridx++;
         debugSubPanel.add(debugJTreeInspectObject, gbcDebug);
 
+        gbcDebug.gridy++ ;
+        gbcDebug.gridx = 0;
+        debugSubPanel.add(new JLabel ("SComposant chgt valeur"), gbcDebug);
+        gbcDebug.gridx++;
+        debugSubPanel.add(debugEditorDatasChanged, gbcDebug);
+
         gbc.gridy++ ;
         gbc.gridx = 0;
         panelInputContentCustom.add(new JLabel ("Modèles multiples autorisés"), gbc);
@@ -173,11 +182,13 @@ public class PrefApplicationInputContent extends PanelInputContent {
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
         Preferences preferences = PreferencesManager.instance().getApplicationPref();
+        Preferences preferencesDefault = PreferencesManager.instance().getDefaultPref();
         debug.setSelected(preferences.isDEBUG());
         debugPrintMVCCDElement.setSelected(preferences.isDEBUG_PRINT_MVCCDELEMENT());
         debugBackgroundPanel.setSelected(preferences.isDEBUG_BACKGROUND_PANEL());
         debugJTableShowHidden.setSelected(preferences.isDEBUG_SHOW_TABLE_COL_HIDDEN());
         debugJTreeInspectObject.setSelected(preferences.getDEBUG_INSPECT_OBJECT_IN_TREE());
+        debugEditorDatasChanged.setSelected(preferences.getDEBUG_EDITOR_DATAS_CHANGED());
         fieldRepMCDModelsMany.setSelected(preferences.getREPOSITORY_MCD_MODELS_MANY());
         fieldRepMCDPackagesAuthorizeds.setSelected(preferences.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
     }
@@ -207,6 +218,9 @@ public class PrefApplicationInputContent extends PanelInputContent {
         }
         if (debugJTreeInspectObject.checkIfUpdated()){
             applicationPref.setDEBUG_INSPECT_OBJECT_IN_TREE(debugJTreeInspectObject.isSelected());
+        }
+        if (debugEditorDatasChanged.checkIfUpdated()){
+            applicationPref.setDEBUG_EDITOR_DATAS_CHANGED(debugEditorDatasChanged.isSelected());
         }
 
         // Copie dans les préférences de pojet

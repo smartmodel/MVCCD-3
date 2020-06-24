@@ -80,45 +80,6 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     }
 
 
-
-/*
-    public DialogEditor(Window owner,
-                        MVCCDElement mvccdElementParent,
-                        MVCCDElement mvccdElementCrt,
-                        String mode,
-                        int scope) {
-        super(owner);
-        this.owner = owner ;
-        this.mode = mode;
-        this.mvccdElementParent = mvccdElementParent;
-        this.mvccdElementCrt = mvccdElementCrt;
-        this.mvccdElementParentChoosed = mvccdElementParent;  // valeur par défaut
-        this.scope = scope ;
-
-        if (mode.equals(DialogEditor.READ)){
-            this.setReadOnly(true);
-        }
-        if (mode.equals(DialogEditor.DELETE)){
-            this.setReadOnly(true);
-        }
-
-        setModal(true);
-        setLocation(100,100);
-
-        getContentPane().add(panel);
-
-        setSize(getSizeCustom());
-        setInput(getInputCustom());
-        setButtons(getButtonsCustom());
-
-        start();
-
-    }
-
- */
-
-
-
     protected abstract PanelButtons getButtonsCustom();
 
     protected abstract PanelInput getInputCustom();
@@ -233,7 +194,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
-        //this.dispose();
+        confirmClose();
     }
 
     @Override
@@ -376,6 +337,21 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     public EditingTreat getEditingTreat() {
         return editingTreat;
+    }
+
+    void confirmClose() {
+        if (getInput().getInputContent().datasChangedNow()){
+            String message = MessagesBuilder.getMessagesProperty ("editor.close.change.not.saved");
+            boolean confirm = DialogMessage.showConfirmYesNo_No(this, message) == JOptionPane.YES_OPTION;
+            if (confirm){
+                myDispose();
+                //setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            } else {
+                setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);//cancel
+            }
+        } else {
+            myDispose();
+        }
     }
 
     //TOD=-2 J'ai du écrire de mon propre dispose et nons surcharger car j'avais un appel parasite!

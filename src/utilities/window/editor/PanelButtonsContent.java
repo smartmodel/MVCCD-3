@@ -2,12 +2,10 @@ package utilities.window.editor;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDAttribute;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
-import project.ProjectService;
 import utilities.files.UtilFiles;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.SButton;
@@ -15,8 +13,6 @@ import utilities.window.services.ComponentService;
 import window.help.HelpWindow;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +22,7 @@ public abstract class PanelButtonsContent extends PanelContent
 
     private JPanel panel = new JPanel();
     protected SButton btnOk ;
-    protected SButton btnCancel ;
+    protected SButton btnClose;
     protected SButton btnApply ;
     protected SButton btnUndo;
     private SButton btnHelp ;
@@ -80,10 +76,10 @@ public abstract class PanelButtonsContent extends PanelContent
         btnOk.setEnabled(false);
         btns.add(btnOk);
         btns.add(Box.createHorizontalStrut(Preferences.JPANEL_HGAP));
-        btnCancel = new SButton("Fermer");
-        btnCancel.addActionListener(this);
-        btnCancel.setToolTipText("Fermer la fenêtre sans enregistrer la saisie effectuée depuis le dernier enregistrement");
-        btns.add(btnCancel);
+        btnClose = new SButton("Fermer");
+        btnClose.addActionListener(this);
+        btnClose.setToolTipText("Fermer la fenêtre sans enregistrer la saisie effectuée depuis le dernier enregistrement");
+        btns.add(btnClose);
         btns.add(Box.createHorizontalStrut(Preferences.JPANEL_HGAP));
         btnApply = new SButton("Appliquer");
         btnApply.addActionListener(this);
@@ -139,8 +135,8 @@ public abstract class PanelButtonsContent extends PanelContent
         return btnOk;
     }
 
-    public JButton getBtnCancel() {
-        return btnCancel;
+    public JButton getBtnClose() {
+        return btnClose;
     }
 
     public JButton getBtnApply() {
@@ -204,8 +200,8 @@ public abstract class PanelButtonsContent extends PanelContent
             // Seulement en update
             treatReset();
         }
-        if (source == btnCancel) {
-            getEditor().myDispose();
+        if (source == btnClose) {
+            getEditor().confirmClose();
         }
         if (source == btnHelp) {
             treatHelp();

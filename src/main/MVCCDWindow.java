@@ -1,5 +1,6 @@
 package main;
 
+import messages.MessagesBuilder;
 import preferences.Preferences;
 import main.window.console.WinConsole;
 import main.window.diagram.WinDiagram;
@@ -9,6 +10,7 @@ import main.window.repository.WinRepository;
 import main.window.reserve.Reserve;
 import project.ProjectsRecents;
 import project.ProjectsRecentsSaver;
+import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 import utilities.window.services.ComponentService;
 
@@ -104,8 +106,22 @@ public class MVCCDWindow extends JFrame implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
-        new ProjectsRecentsSaver().save();
-        System.exit(0);
+        if (MVCCDManager.instance().isDatasProjectChanged()){
+            String message = MessagesBuilder.getMessagesProperty ("project.close.change.not.saved");
+            boolean confirmClose = DialogMessage.showConfirmYesNo_No(this, message) == JOptionPane.YES_OPTION;
+            if (confirmClose){
+                System.out.println("confirmClose  " +  confirmClose);
+                setDefaultCloseOperation(DISPOSE_ON_CLOSE);//no
+                new ProjectsRecentsSaver().save();
+                System.exit(0);
+            } else {
+                System.out.println("confirmClose  " +  confirmClose);
+                setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);//cancel
+            }
+        } else {
+            new ProjectsRecentsSaver().save();
+            System.exit(0);
+        }
     }
 
     @Override
