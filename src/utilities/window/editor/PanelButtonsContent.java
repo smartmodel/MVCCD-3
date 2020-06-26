@@ -233,7 +233,9 @@ public abstract class PanelButtonsContent extends PanelContent
         MVCCDManager.instance().showMVCCDElementInRepository(getEditor().getMvccdElementCrt());
 
         if (getEditor().isDatasChanged()) {
-            MVCCDManager.instance().setDatasProjectChanged(true);
+            if (getEditor().isDatasProjectElementEdited()) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
         }
     }
 

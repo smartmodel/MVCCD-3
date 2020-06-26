@@ -1,9 +1,15 @@
 package preferences;
 
+import main.MVCCDManager;
+import messages.MessagesBuilder;
 import profile.ProfileFileChooser;
 import project.Project;
 import project.ProjectFileChooser;
+import utilities.files.UtilFiles;
+import utilities.window.DialogMessage;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 
 
@@ -135,7 +141,9 @@ public class PreferencesManager {
         ProfileFileChooser fileChooser = new ProfileFileChooser(ProjectFileChooser.SAVE);
         File fileChoose = fileChooser.fileChoose();
         if (fileChoose != null){
-            new PreferencesSaver().save(fileChoose, projectPref);
+            if (UtilFiles.confirmIfExist(MVCCDManager.instance().getMvccdWindow(), fileChoose)) {
+                new PreferencesSaver().save(fileChoose, projectPref);
+            }
         }
     }
 
