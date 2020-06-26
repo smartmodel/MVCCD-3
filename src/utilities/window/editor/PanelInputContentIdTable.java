@@ -422,7 +422,9 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         updateOrderINProjectElement(idActual, orderNew);
         updateOrderINProjectElement(idOther, orderActual);
 
-        MVCCDManager.instance().setDatasProjectChanged(true);
+        if (getEditor().isDatasProjectElementEdited()) {
+            MVCCDManager.instance().setDatasProjectChanged(true);
+        }
 
         // Mise à jour de l'affichage du référentiel
         swapNodes(idActual, idOther);

@@ -2,9 +2,12 @@ package utilities.files;
 
 import exceptions.CodeApplException;
 import main.MVCCDManager;
+import main.MVCCDWindow;
+import messages.MessagesBuilder;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.window.DialogMessage;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -79,4 +82,12 @@ public class UtilFiles {
                 dir + Preferences.SYSTEM_FILE_SEPARATOR + fileName);
     }
 
+    public static boolean confirmIfExist(MVCCDWindow mvccdWindow, File fileChoose) {
+        if (fileChoose.exists()){
+            String message = MessagesBuilder.getMessagesProperty ("file.create.exist",fileChoose.getPath());
+            return DialogMessage.showConfirmYesNo_No(
+                    MVCCDManager.instance().getMvccdWindow(), message) == JOptionPane.YES_OPTION ;
+        }
+        return true;
+    }
 }

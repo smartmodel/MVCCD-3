@@ -5,6 +5,7 @@ import datatypes.MDDatatypesManager;
 import main.window.menu.WinMenuContent;
 import main.window.repository.WinRepositoryTree;
 import mcd.MCDRelation;
+import messages.MessagesBuilder;
 import preferences.PreferencesManager;
 import project.*;
 import main.window.console.WinConsoleContent;
@@ -14,7 +15,10 @@ import messages.LoadMessages;
 import repository.Repository;
 import main.window.repository.WinRepository;
 import main.window.repository.WinRepositoryContent;
+import utilities.files.UtilFiles;
+import utilities.window.DialogMessage;
 
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.io.File;
@@ -32,8 +36,7 @@ public class MVCCDManager {
     private ProjectsRecents projectsRecents = null; //Projets ouverts  récemment
     private File fileProjectCurrent = null; //Fichier de sauvegarde du projet en cours de traitement
     private boolean datasProjectChanged = false; //Indicateur de changement de données propres au projet
-    private boolean datasEdited = true; //Indicateur d'édition de données y-compris les préférences d'application
-
+    //private boolean datasEdited = true; //Indicateur d'édition de données y-compris les préférences d'application
 
     public static synchronized MVCCDManager instance(){
         if(instance == null){
@@ -221,12 +224,15 @@ public class MVCCDManager {
         ProjectFileChooser fileChooser = new ProjectFileChooser(ProjectFileChooser.SAVE);
         File fileChoose = fileChooser.fileChoose();
         if (fileChoose != null){
-            fileProjectCurrent = fileChoose ;
-            new SaverSerializable().save(fileProjectCurrent);
-            projectsRecents.add(fileProjectCurrent);
-            changeActivateProjectOpenRecentsItems();
+           if (UtilFiles.confirmIfExist(mvccdWindow, fileChoose)) {
+               fileProjectCurrent = fileChoose;
+               new SaverSerializable().save(fileProjectCurrent);
+               projectsRecents.add(fileProjectCurrent);
+               changeActivateProjectOpenRecentsItems();
+           }
         }
     }
+
 
     public void closeProject() {
         project = null;
@@ -344,7 +350,7 @@ public class MVCCDManager {
         this.datasProjectChanged = datasProjectChanged;
     }
 
-
+/*
     public boolean isDatasEdited() {
         return datasEdited;
     }
@@ -355,12 +361,17 @@ public class MVCCDManager {
         this.datasEdited = datasEdited;
     }
 
+ */
+
+/*
     public void datasProjectChangedFromEditor(){
         System.out.println("isDatasEdited()  " + isDatasEdited());
         if (isDatasEdited()){
             setDatasProjectChanged(true);
         }
     }
+
+ */
     public MVCCDElement getRootMVCCDElement() {
         return rootMVCCDElement;
     }

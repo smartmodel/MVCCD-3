@@ -94,7 +94,7 @@ public class STextField extends JTextField implements SComponent {
             }
         }
         if (updated) {
-            MVCCDManager.instance().datasProjectChangedFromEditor();
+            //MVCCDManager.instance().datasProjectChangedFromEditor();
         }
         return updated;
     }
