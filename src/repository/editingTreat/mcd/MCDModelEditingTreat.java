@@ -1,6 +1,8 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
+import mcd.MCDModel;
+import mcd.MCDPackage;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContainer;
 import repository.editingTreat.EditingTreat;
@@ -34,12 +36,9 @@ public class MCDModelEditingTreat extends EditingTreat {
     }
 
 
-
-
     @Override
     protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        ArrayList<String> resultat = new ArrayList<String>();
-        return resultat;
+        return ((MCDModel) mvccdElement).treatCompliant();
     }
 
 }

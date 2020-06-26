@@ -65,27 +65,32 @@ public class ModelInputContent extends PanelInputContentId {
         fieldPackagesAutorizeds.setEnabled(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
         fieldPackagesAutorizeds.addItemListener(this);
         fieldPackagesAutorizeds.addFocusListener(this);
-
+        fieldPackagesAutorizeds.setName("fieldPackagesAutorizeds");
 
         fieldJournalization.setToolTipText("Journalisation des manipulations de l'entité");
         //MODELName.getDocument().addDocumentListener(this);
         fieldJournalization.addItemListener(this);
         fieldJournalization.addFocusListener(this);
+        fieldJournalization.setName("fieldJournalization");
 
         fieldJournalizationException.setToolTipText("Exception de journalisation autorisée");
         fieldJournalizationException.addItemListener(this);
         fieldJournalizationException.addFocusListener(this);
+        fieldJournalizationException.setName("fieldJournalizationException");
 
         fieldAudit.setToolTipText("Audit des ajouts et modifications de l'entité");
         fieldAudit.addItemListener(this);
         fieldAudit.addFocusListener(this);
+        fieldAudit.setName("fieldAudit");
 
         fieldAuditException.setToolTipText("Exception de l'audit autorisée");
         fieldAuditException.addItemListener(this);
         fieldAuditException.addFocusListener(this);
+        fieldAuditException.setName("fieldAuditException");
 
-
-        super.getsComponents().add(fieldPackagesAutorizeds);
+        if (getScope() == ModelEditor.MODEL) {
+            super.getsComponents().add(fieldPackagesAutorizeds);
+        }
         super.getsComponents().add(fieldJournalization);
         super.getsComponents().add(fieldJournalizationException);
         super.getsComponents().add(fieldAudit);
@@ -258,8 +263,10 @@ public class ModelInputContent extends PanelInputContentId {
         if (getScope() == ModelEditor.PACKAGE) {
             ArrayList<IMCDContPackages> iMCDContPackages = MCDPackageService.getIMCDContPackagesInIModel(iMCDModelContainer);
             // Supprimer l'élément lui-même qui ne peut être son propre conteneur
-            if (getEditor().getMvccdElementCrt() != null){
-                iMCDContPackages.remove(getEditor().getMvccdElementCrt());
+            if (panelInput != null) {
+                if (getEditor().getMvccdElementCrt() != null) {
+                    iMCDContPackages.remove(getEditor().getMvccdElementCrt());
+                }
             }
             return MCDPackageService.toMCDElements(iMCDContPackages);
         }
@@ -312,8 +319,10 @@ public class ModelInputContent extends PanelInputContentId {
 
 
     private void initDatasModel() {
-        Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
-        fieldPackagesAutorizeds.setSelected(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
+        //Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
+        //fieldPackagesAutorizeds.setSelected(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
+        Preferences preferences = PreferencesManager.instance().preferences();
+        fieldPackagesAutorizeds.setSelected(preferences.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
 
     }
 
@@ -379,7 +388,9 @@ public class ModelInputContent extends PanelInputContentId {
     }
 
     private void saveDatasModel(MCDModel mcdModel) {
-        mcdModel.setPackagesAutorizeds(fieldPackagesAutorizeds.isSelected());
+        if (fieldPackagesAutorizeds.checkIfUpdated()) {
+            mcdModel.setPackagesAutorizeds(fieldPackagesAutorizeds.isSelected());
+        }
     }
 
 

@@ -85,9 +85,6 @@ public abstract class EditingTreat {
 
 
     public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
-        //MVCCDElement mvccdElement = (MElement) element;
-
-
         PanelInputContent panelInputContent = loadPanelInput(mvccdElement);
 
         String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());

@@ -257,7 +257,7 @@ public abstract class PanelInputContent
             if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
                 if (PreferencesManager.instance().getApplicationPref().getDEBUG_EDITOR_DATAS_CHANGED()) {
                     if (sComponent.checkIfUpdated()) {
-                        System.out.println(sComponent);
+                        System.out.println(sComponent.getName() + " - " +sComponent);
                     }
                 }
             }

@@ -1,7 +1,10 @@
 package mcd;
 
 import m.IMCompliant;
+import main.MVCCDElement;
 import mcd.interfaces.*;
+
+import java.util.ArrayList;
 
 public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
         IMCDContContainer, IMCDNamePathParent, IMCDContPackages, IMCDContainer, IMCompliant {
@@ -65,6 +68,12 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
         this.mcdAuditException = mcdAuditException;
     }
 
+
+    public ArrayList<String> treatCompliant(){
+        ArrayList<String> resultat =new ArrayList<String>();
+        System.out.println("Contrôle de conformité");
+        return resultat;
+    }
 
 
 }

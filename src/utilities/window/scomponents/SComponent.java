@@ -33,5 +33,8 @@ public interface  SComponent {
     // Si oui, ce composant empêche la validation du formulaire en cs d'erreur de saisie
     void setCheckPreSave(boolean checkPreSave);
     boolean isCheckPreSave();
+    //Etiquette associée
     JLabel getJLabel();
+    // Nom donné au composant (pour faciliter la mise au point)
+    String getName();
 }

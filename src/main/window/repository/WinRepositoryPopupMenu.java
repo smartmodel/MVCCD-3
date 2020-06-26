@@ -234,6 +234,16 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
        } else {
             packageNew(menu, true);
         }
+
+        JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
+        addItem(menu, menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                ((MCDContModels) mvccdElement).treatCompliant();
+            }
+        });
+
     }
 
 

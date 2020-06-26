@@ -22,7 +22,7 @@ public class MCDPackageEditingTreat extends EditingTreat {
 
     @Override
     protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        return null;
+        return ((MCDPackage) mvccdElement).treatCompliant();
     }
 
     @Override

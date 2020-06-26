@@ -10,6 +10,8 @@ import project.Project;
 import project.ProjectElement;
 import utilities.files.UtilXML;
 
+import java.util.ArrayList;
+
 public class MCDContModels extends MCDElement implements IMCDModel, IMCDNamePathParent, IMCDContPackages,
         IMCDContContainer {
 
@@ -25,5 +27,11 @@ public class MCDContModels extends MCDElement implements IMCDModel, IMCDNamePath
         super (parent);
     }
 
+
+    public ArrayList<String> treatCompliant(){
+        ArrayList<String> resultat =new ArrayList<String>();
+        System.out.println("Contrôle de conformité");
+        return resultat;
+    }
 
 }
