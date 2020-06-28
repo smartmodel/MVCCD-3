@@ -2,9 +2,8 @@ package profile;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import preferences.PreferencesManager;
 import project.ProjectFileChooser;
-import project.ProjectSaverXML;
+import project.ProjectSaverXml;
 import utilities.files.TranformerForXml;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -14,8 +13,8 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ProfileSaverXml {
 
@@ -23,33 +22,35 @@ public class ProfileSaverXml {
 
         try {
             //Creation du document en memoire
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.newDocument();
 
+
             //Création des éléments
-            Element racine = document.createElement("FileProfile");
+            Element racine = document.createElement("fileProfile");
             document.appendChild(racine);
 
             //récuperation des préférences du projet
-            new ProjectSaverXML().preferenceProject(document, racine);
+            new ProjectSaverXml().preferenceProject(document, racine);
 
+            // Formatage du fichier
             Transformer transformer = new TranformerForXml().createTransformer();
 
+            // Création de la boîte de dialogue de fichiers
             ProfileFileChooser fileChooser = new ProfileFileChooser(ProjectFileChooser.SAVE);
             File fileChoose = fileChooser.fileChoose();
 
             if (fileChoose != null) {
-                DOMSource source = new DOMSource(document);
+
+                // Création du fichier par la boîte de dialogue
+                DOMSource source =  new DOMSource(document);
                 StreamResult result = new StreamResult(new FileOutputStream(fileChoose));
                 transformer.transform(source, result);
             }
 
-        } catch (ParserConfigurationException | TransformerException | FileNotFoundException e) {
+        } catch (ParserConfigurationException | TransformerException | IOException e) {
             e.printStackTrace();
         }
     }
-
-
 
 }

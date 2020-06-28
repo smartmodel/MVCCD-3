@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="applicationPreferences">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="preferences"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="debug">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="false"/>
+				<xs:enumeration value="true"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="debugBackgroudPanel">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="false"/>
+				<xs:enumeration value="true"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="debugInspectObjectInTree">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="false"/>
+				<xs:enumeration value="true"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="debugPrintMvccdElement">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="false"/>
+				<xs:enumeration value="true"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="debugShowTableColHidden">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="false"/>
+				<xs:enumeration value="true"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	
+	<xs:element name="repositoryMcdModelsMany">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="true"/>
+				<xs:enumeration value="false"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="repositoryMcdPackagesAuthorizeds">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="true"/>
+				<xs:enumeration value="false"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="preferences">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="debug"/>
+				<xs:element ref="debugBackgroudPanel"/>
+				<xs:element ref="debugPrintMvccdElement"/>
+				<xs:element ref="debugShowTableColHidden"/>
+				<xs:element ref="debugInspectObjectInTree"/>
+				<xs:element ref="repositoryMcdModelsMany"/>
+				<xs:element ref="repositoryMcdPackagesAuthorizeds"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

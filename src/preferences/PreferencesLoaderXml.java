@@ -18,19 +18,19 @@ public class PreferencesLoaderXml {
         try {
 
             //Création du document en memoire
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.parse(new File(Preferences.FILE_APPLICATION_PREF_NAME));
 
             //Récuperation des valeurs en memoire
             Element racine = document.getDocumentElement();
-            Element debug = (Element) racine.getElementsByTagName("DEBUG").item(0);
-            Element debugBackgroudPanel = (Element) racine.getElementsByTagName("DEBUG_BACKGROUND_PANEL").item(0);
-            Element debugPrintMvccdElement = (Element) racine.getElementsByTagName("DEBUG_PRINT_MVCCDELEMENT").item(0);
-            Element debugShowTableColHidden = (Element) racine.getElementsByTagName("DEBUG_SHOW_TABLE_COL_HIDDEN").item(0);
-            Element debugInspectObjectInTree = (Element) racine.getElementsByTagName("DEBUG_INSPECT_OBJECT_IN_TREE").item(0);
-            Element repositoryMcdModelsMany = (Element) racine.getElementsByTagName("REPOSITORY_MCD_MODELS_MANY").item(0);
-            Element repositoryMcdPackagesAuthorizeds = (Element) racine.getElementsByTagName("REPOSITORY_MCD_PACKAGES_AUTHORIZEDS").item(0);
+            Element preferences = (Element) racine.getElementsByTagName("preferences").item(0);
+            Element debug = (Element) racine.getElementsByTagName("debug").item(0);
+            Element debugBackgroudPanel = (Element) racine.getElementsByTagName("debugBackgroudPanel").item(0);
+            Element debugPrintMvccdElement = (Element) racine.getElementsByTagName("debugPrintMvccdElement").item(0);
+            Element debugShowTableColHidden = (Element) racine.getElementsByTagName("debugShowTableColHidden").item(0);
+            Element debugInspectObjectInTree = (Element) racine.getElementsByTagName("debugInspectObjectInTree").item(0);
+            Element repositoryMcdModelsMany = (Element) racine.getElementsByTagName("repositoryMcdModelsMany").item(0);
+            Element repositoryMcdPackagesAuthorizeds = (Element) racine.getElementsByTagName("repositoryMcdPackagesAuthorizeds").item(0);
 
             // Instanciation des préférences de l'application
             applicationPref.setDEBUG(Boolean.valueOf(debug.getTextContent()));

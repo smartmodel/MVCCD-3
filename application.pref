@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<applicationPreferences>
+    <preferences>
+        <debug>false</debug>
+        <debugBackgroudPanel>false</debugBackgroudPanel>
+        <debugPrintMvccdElement>false</debugPrintMvccdElement>
+        <debugShowTableColHidden>false</debugShowTableColHidden>
+        <debugInspectObjectInTree>false</debugInspectObjectInTree>
+        <repositoryMcdModelsMany>true</repositoryMcdModelsMany>
+        <repositoryMcdPackagesAuthorizeds>true</repositoryMcdPackagesAuthorizeds>
+    </preferences>
+</applicationPreferences>

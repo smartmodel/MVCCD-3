@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project>
+    <Proprietes>
+        <nameProject>test</nameProject>
+        <profileFileName>test.profile</profileFileName>
+        <modelsMany>true</modelsMany>
+        <packagesAutorizeds>false</packagesAutorizeds>
+    </Proprietes>
+    <preferences>
+        <mcdJournalization>true</mcdJournalization>
+        <mcdJournalizationException>true</mcdJournalizationException>
+        <mcdAudit>true</mcdAudit>
+        <mcdAuditException>true</mcdAuditException>
+        <mcdAidDataTypeLienProg>aid</mcdAidDataTypeLienProg>
+        <mcdDataTypeNumberSizeMode>mcddatatype.number.size.precision</mcdDataTypeNumberSizeMode>
+        <mcdAidIndColumnName>num</mcdAidIndColumnName>
+        <mcdAidDepColumnName>numDep</mcdAidDepColumnName>
+        <mcdAidWithDep>true</mcdAidWithDep>
+        <mcdTreeNamingAssociation>mcd.naming.name</mcdTreeNamingAssociation>
+        <mcdModeNamingLongName>option.no</mcdModeNamingLongName>
+        <mcdModeNamingAttributeShortName>option.no</mcdModeNamingAttributeShortName>
+        <repositoryMcdModelsMany>true</repositoryMcdModelsMany>
+    </preferences>
+    <MCD>
+        <model name="ModeleExistant">
+            <proprietes>
+                <shortName>mce</shortName>
+                <audit>true</audit>
+                <auditException>true</auditException>
+                <journalization>true</journalization>
+                <journalizationException>true</journalizationException>
+                <packagesAutorizeds>false</packagesAutorizeds>
+            </proprietes>
+            <entities>
+                <entite name="ventes">
+                    <proprietes>
+                        <shortName>ven</shortName>
+                        <ordered>false</ordered>
+                        <entityAbstract>false</entityAbstract>
+                        <journal>true</journal>
+                        <audit>true</audit>
+                    </proprietes>
+                    <attributs>
+                        <attribut name="num">
+                            <aid>true</aid>
+                            <aidDep>false</aidDep>
+                            <mandatory>true</mandatory>
+                            <list>false</list>
+                            <frozen>true</frozen>
+                            <ordered>false</ordered>
+                            <upperCase>false</upperCase>
+                            <dataTypeLienProg>aid</dataTypeLienProg>
+                            <scale>null</scale>
+                            <size>9</size>
+                            <initValue/>
+                            <derivedValue/>
+                            <domain/>
+                        </attribut>
+                    </attributs>
+                    <extremitesDeRelations/>
+                    <contraintes>
+                        <constraint name="contrainte">
+                            <shortName>contr</shortName>
+                            <lienProg>true</lienProg>
+                            <type>NID</type>
+                        </constraint>
+                        <constraint name="test">
+                            <shortName>tes</shortName>
+                            <absolute>true</absolute>
+                            <type>Unique</type>
+                        </constraint>
+                    </contraintes>
+                </entite>
+            </entities>
+            <diagrammes/>
+            <relations>
+                <associations/>
+                <generalisations/>
+                <links/>
+            </relations>
+        </model>
+        <model name="ModelCree">
+            <proprietes>
+                <shortName>test</shortName>
+                <audit>true</audit>
+                <auditException>true</auditException>
+                <journalization>true</journalization>
+                <journalizationException>true</journalizationException>
+                <packagesAutorizeds>false</packagesAutorizeds>
+            </proprietes>
+            <entities/>
+            <diagrammes/>
+            <relations>
+                <associations/>
+                <generalisations/>
+                <links/>
+            </relations>
+        </model>
+    </MCD>
+</project>

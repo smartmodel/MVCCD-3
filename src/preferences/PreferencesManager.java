@@ -1,18 +1,7 @@
 package preferences;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import profile.ProfileFileChooser;
 import project.Project;
-import project.ProjectFileChooser;
-import project.ProjectSaverXML;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 
 
@@ -108,7 +97,6 @@ public class PreferencesManager {
     public void copyDefaultPref() {
         copyPref(defaultPref, projectPref);
      }
-
      */
 
     private void copyPref(Preferences from, Preferences to) {
@@ -127,7 +115,9 @@ public class PreferencesManager {
         to.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(from.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME());
     }
 
-    /*public void loadOrCreateFileApplicationPreferences() {
+
+    /*
+    public void loadOrCreateFileApplicationPreferences() {
         try {
             PreferencesLoader loader = new PreferencesLoader();
             applicationPref = loader.load(new File(Preferences.FILE_APPLICATION_PREF_NAME));

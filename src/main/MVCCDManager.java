@@ -188,8 +188,8 @@ public class MVCCDManager {
 
         if (file != null) {
             // Lecture du fichier de sauvegarde
-            project = new LoaderSerializable().load(fileProjectCurrent);
-            //project = new ProjectLoadXML().loadProjectFile(fileProjectCurrent);
+            //project = new LoaderSerializable().load(fileProjectCurrent);
+            project = new ProjectLoaderXml().loadProjectFile();
             // Chargement des préférences du projet
             PreferencesManager.instance().setProjectPref(project.getPreferences());
             // Copie des préférences d0'application au sein des préférences du projet
@@ -215,8 +215,8 @@ public class MVCCDManager {
     public void saveProject() {
         if (fileProjectCurrent != null) {
 
-            new SaverSerializable().save(fileProjectCurrent);
-            new ProjectSaverXML().createProjectFile(fileProjectCurrent);
+            //new SaverSerializable().save(fileProjectCurrent);
+            new ProjectSaverXml().createProjectFile(fileProjectCurrent);
 
             setDatasProjectChanged(false);
 
@@ -231,8 +231,8 @@ public class MVCCDManager {
         if (fileChoose != null) {
             fileProjectCurrent = fileChoose;
 
-            new ProjectSaverXML().createProjectFile(fileProjectCurrent);
-            new SaverSerializable().save(fileProjectCurrent);
+            //new SaverSerializable().save(fileProjectCurrent);
+            new ProjectSaverXml().createProjectFile(fileProjectCurrent);
 
             projectsRecents.add(fileProjectCurrent);
             changeActivateProjectOpenRecentsItems();

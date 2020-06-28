@@ -2,8 +2,6 @@ package preferences;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
-import project.ProjectSaverXML;
 import utilities.files.TranformerForXml;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -22,41 +20,43 @@ public class PreferencesSaverXml {
 
         try {
             //Creation du document en memoire
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.newDocument();
 
             //Création des éléments
-            Element racine = document.createElement(Preferences.REPOSITORY_PREFERENCES_APPLICATION_NAME);
+            Element racine = document.createElement("applicationPreferences");
             document.appendChild(racine);
 
-            Element debug = document.createElement("DEBUG");
+            Element preferences = document.createElement("preferences");
+            racine.appendChild(preferences);
+
+            Element debug = document.createElement("debug");
             debug.appendChild(document.createTextNode(prefApp.isDEBUG().toString()));
-            racine.appendChild(debug);
+            preferences.appendChild(debug);
 
-            Element debugBackgroudPanel = document.createElement("DEBUG_BACKGROUND_PANEL");
+            Element debugBackgroudPanel = document.createElement("debugBackgroudPanel");
             debugBackgroudPanel.appendChild(document.createTextNode(prefApp.isDEBUG_BACKGROUND_PANEL().toString()));
-            racine.appendChild(debugBackgroudPanel);
+            preferences.appendChild(debugBackgroudPanel);
 
-            Element debugPrintMvccdelement = document.createElement("DEBUG_PRINT_MVCCDELEMENT");
+            Element debugPrintMvccdelement = document.createElement("debugPrintMvccdElement");
             debugPrintMvccdelement.appendChild(document.createTextNode(prefApp.isDEBUG_PRINT_MVCCDELEMENT().toString()));
-            racine.appendChild(debugPrintMvccdelement);
+            preferences.appendChild(debugPrintMvccdelement);
 
-            Element debugShowTableColHidden = document.createElement("DEBUG_SHOW_TABLE_COL_HIDDEN");
+            Element debugShowTableColHidden = document.createElement("debugShowTableColHidden");
             debugShowTableColHidden.appendChild(document.createTextNode(prefApp.isDEBUG_SHOW_TABLE_COL_HIDDEN().toString()));
-            racine.appendChild(debugShowTableColHidden);
+            preferences.appendChild(debugShowTableColHidden);
 
-            Element debugInspectObjectInTree = document.createElement("DEBUG_INSPECT_OBJECT_IN_TREE");
+            Element debugInspectObjectInTree = document.createElement("debugInspectObjectInTree");
             debugInspectObjectInTree.appendChild(document.createTextNode(prefApp.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
-            racine.appendChild(debugInspectObjectInTree);
+            preferences.appendChild(debugInspectObjectInTree);
 
-            Element repositoryMcdModelsMny  = document.createElement("REPOSITORY_MCD_MODELS_MANY");
+            Element repositoryMcdModelsMny  = document.createElement("repositoryMcdModelsMany");
             repositoryMcdModelsMny.appendChild(document.createTextNode(prefApp.getREPOSITORY_MCD_MODELS_MANY().toString()));
-            racine.appendChild(repositoryMcdModelsMny);
+            preferences.appendChild(repositoryMcdModelsMny);
 
-            Element repositoryMcdPackagesAuthorizeds  = document.createElement("REPOSITORY_MCD_PACKAGES_AUTHORIZEDS");
+            Element repositoryMcdPackagesAuthorizeds  = document.createElement("repositoryMcdPackagesAuthorizeds");
             repositoryMcdPackagesAuthorizeds.appendChild(document.createTextNode(prefApp.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS().toString()));
-            racine.appendChild(repositoryMcdPackagesAuthorizeds);
+            preferences.appendChild(repositoryMcdPackagesAuthorizeds);
 
             // formatage du fichier
             Transformer transformer = new TranformerForXml().createTransformer();
