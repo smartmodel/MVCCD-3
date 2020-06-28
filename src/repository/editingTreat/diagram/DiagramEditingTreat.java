@@ -1,5 +1,6 @@
 package repository.editingTreat.diagram;
 
+import diagram.CloseDraw;
 import diagram.ClosePalette;
 import diagram.CloseTitlePanel;
 import diagram.mcd.MCDDiagram;
@@ -28,10 +29,13 @@ public abstract class DiagramEditingTreat extends EditingTreat {
         WinDiagram winDiagram = mvccdWindow.getDiagram();
         JPanel panelTitle = winDiagram.getContent().getPanelTitle();
         JPanel panelPalette= winDiagram.getContent().getPanelPalette();
+        JPanel panelZoneDessin= winDiagram.getContent().getPanelDraw();
         CloseTitlePanel closeTitlePanel = new CloseTitlePanel(panelTitle);
         closeTitlePanel.getContent();
         ClosePalette closePalette = new ClosePalette((panelPalette));
         closePalette.getContent();
+        CloseDraw closeDraw= new CloseDraw(panelZoneDessin);
+        closeDraw.getContent();
 
         //TODO-1  A reprendre (resize pour permettre le réaffichage des JPanel chargés dynamiquement
         //winDiagram.resizeContent();

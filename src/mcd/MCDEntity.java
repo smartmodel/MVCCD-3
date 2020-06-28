@@ -1,10 +1,13 @@
 package mcd;
 
+import diagram.mcd.testDrawPanel.Attributes;
 import m.IMCompliant;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDNamePathParent;
 import project.ProjectElement;
 
+import java.awt.*;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -17,6 +20,7 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
     private boolean ordered = false;
     private boolean journal = false;
     private boolean audit = false;
+
 
 
     public MCDEntity(ProjectElement parent, String name) {

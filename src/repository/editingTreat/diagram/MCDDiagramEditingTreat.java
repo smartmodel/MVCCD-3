@@ -4,6 +4,9 @@ import diagram.ClosePalette;
 import diagram.mcd.MCDDiagram;
 import diagram.mcd.MCDTitlePanel;
 import diagram.mcd.MCDPalette;
+import diagram.mcd.MCDZoneDessin;
+import diagram.mcd.testDrawPanel.DiagramList;
+import diagram.mcd.testDrawPanel.MCDEntityDraw;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
@@ -38,6 +41,14 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
                 DialogEditor.NEW,
                 newDiagram);
         mcdPalette.getContent();
+        JPanel panelZoneDessin = winDiagram.getContent().getPanelDraw();
+        MCDZoneDessin mcdZoneDessin = new MCDZoneDessin(parent,
+                panelZoneDessin,
+                DialogEditor.NEW,
+                newDiagram);
+        mcdZoneDessin.getContentNew();
+
+
 
 
         //TODO-1  A reprendre (resize pour permettre le réaffichage des JPanel chargés dynamiquement
@@ -65,6 +76,12 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
                 DialogEditor.UPDATE,
                 (MCDDiagram) element);
         mcdPalette.getContent();
+        JPanel panelZoneDessin = winDiagram.getContent().getPanelDraw();
+        MCDZoneDessin mcdZoneDessin = new MCDZoneDessin(parentBefore,
+                panelZoneDessin,
+                DialogEditor.UPDATE,
+                (MCDDiagram) element);
+        mcdZoneDessin.getContentUpdate(element.getMCDEntityDraws());
 
         //TODO-1  A reprendre (resize pour permettre le réaffichage des JPanel chargés dynamiquement
         //winDiagram.resizeContent();
@@ -92,6 +109,12 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
                 DialogEditor.READ,
                 (MCDDiagram) element);
         mcdTitlePanel.getContent();
+        JPanel panelZoneDessin = winDiagram.getContent().getPanelDraw();
+        MCDZoneDessin mcdZoneDessin = new MCDZoneDessin(element.getParent(),
+                panelZoneDessin,
+                DialogEditor.READ,
+                (MCDDiagram) element);
+        mcdZoneDessin.getContentNew();
 
 
         //Fermer la palette afin que l'utilisateur ne puisse pas modifier un diagramme en lecture seule

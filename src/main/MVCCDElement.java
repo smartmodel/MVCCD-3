@@ -1,6 +1,6 @@
 package main;
 
-import datatypes.MDDatatype;
+import diagram.mcd.testDrawPanel.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
 import utilities.Debug;
@@ -27,6 +27,7 @@ public abstract class MVCCDElement implements Serializable {
     private String shortName = "";  // Nom abréggé
     private String longName = "";   // Nom long (à but de documentation)
     private int order;              // ordre de l'enfant dans la fraterie
+    private ArrayList<MCDEntityDraw> MCDEntityDraws; //Pour le diagramme ensemble des MCDEntityDraws contenues dans un diagramme
 
     private ArrayList<MVCCDElement> childs = new ArrayList<MVCCDElement>();  // Tableau des enfants
 
@@ -336,5 +337,11 @@ public abstract class MVCCDElement implements Serializable {
         }
    }
 
+    public ArrayList<MCDEntityDraw> getMCDEntityDraws() {
+        return MCDEntityDraws;
+    }
 
+    public void setMCDEntityDraws(ArrayList<MCDEntityDraw> MCDEntityDraws) {
+        this.MCDEntityDraws = MCDEntityDraws;
+    }
 }

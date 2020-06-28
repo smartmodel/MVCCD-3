@@ -40,6 +40,7 @@ public class WinDiagramContent extends PanelContent {
         return panelPalette;
     }
 
+
     public JPanel getPanelDraw() {
         return panelDraw;
     }

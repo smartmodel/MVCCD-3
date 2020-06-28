@@ -1,14 +1,20 @@
 package diagram.mcd;
 
+import diagram.Diagram;
+import diagram.mcd.testDrawPanel.Attributes;
+import diagram.mcd.testDrawPanel.DiagramList;
+import diagram.mcd.testDrawPanel.MCDEntityDraw;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import main.MVCCDWindow;
+import main.window.diagram.WinDiagram;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
 import preferences.Preferences;
 import repository.editingTreat.mcd.MCDAssociationEditingTreat;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
+import window.editor.entity.EntityEditor;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,6 +22,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
 
 public class MCDPalette {
@@ -142,7 +149,7 @@ public class MCDPalette {
 
     }*/
 
-    //Création du boutton associtaion
+    //Création du boutton association
     public JButton createAssociationBtn(){
         JButton btnAssociation = new JButton();
         try {
@@ -291,6 +298,28 @@ public class MCDPalette {
         MCDContEntities mcdContEntities = (MCDContEntities) parent.getBrotherByClassName(MCDContEntities.class.getName());
         MCDEntityEditingTreat mcdEntityEditingTreat = new MCDEntityEditingTreat();
         MCDEntity newMCDEntity = (MCDEntity) mcdEntityEditingTreat.treatNew(mvccdWindow, mcdContEntities);
+
+        //Nous devons dessiner une nouvelle entité dans la zonne de dessin
+        //Création d'un rectangle pour la zone de dessin
+        Rectangle rectangleEntite= new Rectangle(0,0,250,150);
+
+        Attributes attributType= new Attributes("<<Entity>>",250/2-"<<Entity>>".length()*6/2,15);
+        Attributes attributTitre= new Attributes(newMCDEntity.getName(),250/2-newMCDEntity.getName().length()*6/2,30);
+        ArrayList<Attributes> textDEntite= new ArrayList<>();
+            textDEntite.add(0,attributType);
+            textDEntite.add(1, attributTitre);
+
+        MCDEntityDraw entiteADessiner = new MCDEntityDraw(rectangleEntite, textDEntite);
+        ArrayList<MCDEntityDraw> diagramAjout = diagram.getMCDEntityDraws();
+        diagramAjout.add(entiteADessiner);
+        diagram.setMCDEntityDraws(diagramAjout);
+
+        WinDiagram winDiagram = mvccdWindow.getDiagram();
+        JPanel panelZoneDessin = winDiagram.getContent().getPanelDraw();
+
+
+        MCDZoneDessin mcdZoneDessin = new MCDZoneDessin(parent, panelZoneDessin, mode, diagram);
+        mcdZoneDessin.getContentUpdate(diagram.getMCDEntityDraws());
     }
 
     //Listener qui affiche le fenêtre modale pour créer une association si l'utilisateur clique sur l'association
