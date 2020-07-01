@@ -1,5 +1,13 @@
 package diagram.mcd.testDrawPanel;
 
+import diagram.Diagram;
+import main.MVCCDElement;
+import main.MVCCDManager;
+import main.MVCCDWindow;
+import mcd.MCDContEntities;
+import mcd.MCDEntity;
+import repository.editingTreat.mcd.MCDEntityEditingTreat;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Point;
@@ -8,7 +16,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -22,8 +29,8 @@ public class DrawEntity extends JPanel {
     public MathsForEntity mathsForEntity;
 
 
-    public DrawEntity(ArrayList<MCDEntityDraw> listEntite) {
-        //Une entité est composée d'un rectangle, d'une ligne permettant de séparer le rectangle en deux et d'une liste d'attribut
+    public DrawEntity(ArrayList<MCDEntityDraw> listEntite, JPanel panelZoneDessin, MCDContEntities mcdContEntities) {
+        //Une entité est composée d'un rectangle, de trois lignes permettant de séparer le rectangle en deux et d'une liste d'attribut
         //Crée une nouvelle liste de type entités pour contenir les elements à dessiner
         boxes = new ArrayList<>();
 
@@ -39,12 +46,14 @@ public class DrawEntity extends JPanel {
             y= listEntite.get(index).getRectangleEntite().y;
             width= (int) listEntite.get(index).getRectangleEntite().getWidth();
             height= listEntite.get(index).getRectangleEntite().height;
-            ArrayList<Attributes> attributesList= listEntite.get(index).attributesList;
+            ArrayList<Attributes> attributesList= new ArrayList<>();
+            attributesList.add(0, listEntite.get(index).getAttributesList().get(0));
+            attributesList.add(1, listEntite.get(index).getAttributesList().get(1));
 
 
-            for (int i=2; i<5; i++ ){
+            for (int i=2; i<listEntite.get(index).getAttributesList().size(); i++ ){
 
-                attributesList.add(i,new Attributes("<<NID-1>> test: word",x,(y+47)+((i-2)*15)));
+                attributesList.add(i,listEntite.get(index).getAttributesList().get(i));
 
             }
 
@@ -80,7 +89,7 @@ public class DrawEntity extends JPanel {
                             break;
                         }
                     }
-                    if (selected != null) {
+                    if (selected != null && boxes.size()>1) {
                         boxes.remove(selected);
                         boxes.add(boxes.size() - 1, selected);
                     }
@@ -91,6 +100,26 @@ public class DrawEntity extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e) && selected.getRectangleEntite().contains(e.getPoint())) {
+                    System.out.println("Right Click");
+                    MVCCDWindow mvccdWindow = MVCCDManager.instance().getMvccdWindow();
+
+                    ArrayList<MCDEntity> listVraiEntites= mcdContEntities.getMCDEntities();
+                    for (int index=0; index<listVraiEntites.size(); index++){
+                        if (selected.titre==listVraiEntites.get(index).getLongName()){
+                            MCDEntity entiteModifier = listVraiEntites.get(index);
+                            //PopUpMenuDiagram popmenu= new PopUpMenuDiagram(entiteModifier);
+                            MCDEntityEditingTreat mcdEntityEditingTreat= new MCDEntityEditingTreat();
+                            mcdEntityEditingTreat.treatUpdate(mvccdWindow,entiteModifier);
+
+
+                            break;
+                        }
+
+                    }
+
+
+                }
                 if (selected == previous && selected != null && selected.getRectangleEntite().contains(e.getPoint())) {
                     selected = null;
                     repaint();
@@ -131,8 +160,8 @@ public class DrawEntity extends JPanel {
                     selected.getAttributesList().get(0).yTextCenterTitre=y+15;
                     selected.getAttributesList().get(1).xTextCenterTitre=x+((finalWidth /2)-selected.attributesList.get(1).textTitre.length()*6/2);
                     selected.getAttributesList().get(1).yTextCenterTitre=y+30;
-                    for (int i=2; i<5; i++ ){
-                        selected.getAttributesList().get(i).xTextCenterTitre=x;
+                    for (int i=2; i<selected.getAttributesList().size(); i++ ){
+                        selected.getAttributesList().get(i).xTextCenterTitre=x+5;
                         selected.getAttributesList().get(i).yTextCenterTitre=(y+47)+((i-2)*15);
                     }
 
@@ -166,7 +195,7 @@ public class DrawEntity extends JPanel {
 
                     g2d.drawString(box.attributesList.get(0).getTextTitre(), box.attributesList.get(0).xTextCenterTitre, box.attributesList.get(0).yTextCenterTitre);
                     g2d.drawString(box.getAttributesList().get(1).textTitre, box.getAttributesList().get(1).xTextCenterTitre, box.getAttributesList().get(1).yTextCenterTitre);
-                    for (int i = 2; i < 5; i++) {
+                    for (int i = 2; i < box.getAttributesList().size(); i++) {
                         g2d.drawString(box.getAttributesList().get(i).textTitre, box.getAttributesList().get(i).xTextCenterTitre, box.getAttributesList().get(i).yTextCenterTitre);
                     }
                 }
@@ -185,7 +214,7 @@ public class DrawEntity extends JPanel {
                     selected.attributesList.get(0).xTextCenterTitre,
                     selected.attributesList.get(0).yTextCenterTitre);
             g2d.drawString(selected.attributesList.get(1).getTextTitre(),selected.attributesList.get(1).xTextCenterTitre,selected.attributesList.get(1).yTextCenterTitre);
-            for (int i=2; i<5; i++){
+            for (int i=2; i<selected.getAttributesList().size(); i++){
                 g2d.drawString(selected.attributesList.get(i).getTextTitre(),selected.attributesList.get(i).xTextCenterTitre, selected.attributesList.get(i).yTextCenterTitre);
             }
         }

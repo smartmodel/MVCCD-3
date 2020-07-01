@@ -1,6 +1,7 @@
 package mcd;
 
 import diagram.mcd.testDrawPanel.Attributes;
+import diagram.mcd.testDrawPanel.MCDEntityDraw;
 import m.IMCompliant;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDNamePathParent;
@@ -20,6 +21,7 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
     private boolean ordered = false;
     private boolean journal = false;
     private boolean audit = false;
+    public MCDEntityDraw mcdEntityDraw;
 
 
 
@@ -107,5 +109,11 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return "Entité";
     }
 
+    public MCDEntityDraw getMCDEntityDraw() {
+        return mcdEntityDraw;
+    }
 
+    public void setMCDEntityDraw(MCDEntityDraw mcdEntityDraw) {
+        this.mcdEntityDraw = mcdEntityDraw;
+    }
 }

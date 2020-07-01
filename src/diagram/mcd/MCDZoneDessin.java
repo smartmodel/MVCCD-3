@@ -2,6 +2,8 @@ package diagram.mcd;
 
 import diagram.mcd.testDrawPanel.*;
 import main.MVCCDElement;
+import mcd.MCDContEntities;
+import mcd.MCDEntity;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,11 +36,10 @@ public class MCDZoneDessin {
 
         DiagramList diagramList = new DiagramList(nom, entites);
         diagramList.setName("");
-        DrawEntity draw = new DrawEntity(entites);
+        MCDContEntities mcdContEntities = (MCDContEntities) parent.getBrotherByClassName(MCDContEntities.class.getName());
+        DrawEntity draw = new DrawEntity(entites,panelZoneDessin,mcdContEntities);
         diagram.setMCDEntityDraws(entites);
         draw.setPreferredSize(new Dimension(1400, 820));
-        //panelZoneDessin.add(draw);
-
 
     }
 
@@ -46,7 +47,8 @@ public class MCDZoneDessin {
         panelZoneDessin.setBackground(Color.white);
 
         panelZoneDessin.removeAll();
-        DrawEntity draw = new DrawEntity(listeEntite);
+        MCDContEntities mcdContEntities = (MCDContEntities) parent.getBrotherByClassName(MCDContEntities.class.getName());
+        DrawEntity draw = new DrawEntity(listeEntite, panelZoneDessin, mcdContEntities);
         draw.setPreferredSize(new Dimension(1400, 820));
         panelZoneDessin.add(draw);
 

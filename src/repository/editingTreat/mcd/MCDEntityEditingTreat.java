@@ -1,7 +1,11 @@
 package repository.editingTreat.mcd;
 
+import diagram.mcd.MCDDiagram;
+import diagram.mcd.MCDZoneDessin;
 import main.MVCCDElement;
 import main.MVCCDManager;
+import main.MVCCDWindow;
+import main.window.diagram.WinDiagram;
 import mcd.MCDAssociation;
 import mcd.MCDContEntities;
 import mcd.MCDContRelations;
@@ -35,6 +39,21 @@ public class MCDEntityEditingTreat extends EditingTreat {
         return new EntityEditor(owner, (MCDContEntities) parent, (MCDEntity) element, mode,
                 new MCDEntityEditingTreat());
     }
+
+    /*public boolean treatUpdate(Window owner, MVCCDElement element){
+        super.treatUpdate(owner, element);
+        MVCCDElement parent = element.getParent();
+        MCDContEntities mcdContEntities = (MCDContEntities) parent.getBrotherByClassName(MCDContEntities.class.getName());
+        MCDEntityEditingTreat mcdEntityEditingTreat = new MCDEntityEditingTreat();
+        MCDEntity newMCDEntity = (MCDEntity) mcdEntityEditingTreat.treatNew(mvccdWindow, mcdContEntities);
+
+        MVCCDWindow mvccdWindow = (MVCCDWindow) owner;
+        WinDiagram winDiagram = mvccdWindow.getDiagram();
+
+        MCDZoneDessin mcdZoneDessin = new MCDZoneDessin(parent, panelZoneDessin, mode, diagram);
+        mcdZoneDessin.getContentUpdate(diagram.getMCDEntityDraws());
+        newMCDEntity.setMCDEntityDraws(diagramAjout);
+    }*/
 
     @Override
     protected String getPropertyTheElement() {
