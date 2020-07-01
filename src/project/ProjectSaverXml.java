@@ -21,12 +21,15 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class ProjectSaverXml {
 
     private Project project = MVCCDManager.instance().getProject();
     private Boolean packApp = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS();
+    private Boolean modeleApp = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
 
     public void createProjectFile(File file) {
         //traitement
@@ -53,7 +56,7 @@ public class ProjectSaverXml {
             ArrayList<MVCCDElement> mcdChilds = elementMcd.getChilds();
 
             //Modele
-            if (project.isModelsMany()) {
+            if (modeleApp) {
 
                 addModelAndChilds(document, mcd, mcdChilds);
 
@@ -80,8 +83,8 @@ public class ProjectSaverXml {
             //Création du fichier
 
             DOMSource source = new DOMSource(document);
-            //StreamResult result = new StreamResult(new FileOutputStream(file));
-            StreamResult result = new StreamResult(new File("projectFile." + Preferences.FILE_PROJECT_EXTENSION));
+
+            StreamResult result = new StreamResult(new FileOutputStream(file));
             transformer.transform(source, result);
 
             // Message de confirmation de la sauvegarde du fichier
@@ -89,7 +92,7 @@ public class ProjectSaverXml {
                     new String[]{MVCCDManager.instance().getProject().getName()});
             DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), message);
 
-        } catch (ParserConfigurationException | TransformerException pce) {
+        } catch (ParserConfigurationException | TransformerException | FileNotFoundException pce) {
             pce.printStackTrace();
         }
     }
@@ -173,16 +176,16 @@ public class ProjectSaverXml {
             if (packApp) {
                 // Création des différents éléments du modèle avec packages
                 addPropertiesModelsOrPackages(doc, model, child);
-                addEntities(doc, modelsChilds, model);
                 addDiagrams(doc, modelsChilds, model);
+                addEntities(doc, modelsChilds, model);
                 addRelations(doc, modelsChilds, model);
                 addPackages(doc, child, model);
 
             } else {
                 // Création des différents éléments du modèle sans packages
                 addPropertiesModelsOrPackages(doc, model, child);
-                addEntities(doc, modelsChilds, model);
                 addDiagrams(doc, modelsChilds, model);
+                addEntities(doc, modelsChilds, model);
                 addRelations(doc, modelsChilds, model);
             }
         }
@@ -279,9 +282,9 @@ public class ProjectSaverXml {
                     ArrayList<MVCCDElement> entityChilds = childEntity.getChilds();
 
                     // Ajout des éléments qui composent une entité
-                    addPropertiesEntity(doc, entity, childEntity);
+                    addPropertiesEntity(doc, entity, childEntity, racine);
                     addAttributs(doc, entity, entityChilds);
-                    addExtremites(doc, entity, entityChilds);
+                    //addExtremites(doc, entity, entityChilds);
                     addContraints(doc, entity, entityChilds);
 
                 }
@@ -291,7 +294,7 @@ public class ProjectSaverXml {
 
     private void addPropertiesProject(Document document, Element racine) {
         // Ajout des propriétés du projet
-        Element properties = document.createElement("Proprietes");
+        Element properties = document.createElement("proprietes");
         racine.appendChild(properties);
 
         Element name = document.createElement("nameProject");
@@ -314,7 +317,7 @@ public class ProjectSaverXml {
         properties.appendChild(packagesAutorizeds);
     }
 
-    private void addPropertiesEntity(Document doc, Element entity, MCDEntity mcdEntity) {
+    private void addPropertiesEntity(Document doc, Element entity, MCDEntity mcdEntity, Element racine) {
         // Ajout des propriétés des entités
         Element properties = doc.createElement("proprietes");
         entity.appendChild(properties);
@@ -375,6 +378,10 @@ public class ProjectSaverXml {
 
         } else if (child instanceof MCDPackage) {
             MCDPackage mcdPackage = (MCDPackage) child;
+
+            Element parent = doc.createElement("parent");
+            parent.appendChild(doc.createTextNode(mcdPackage.getParent().getName()));
+            properties.appendChild(parent);
 
             shortName.appendChild(doc.createTextNode(mcdPackage.getShortName()));
             audit.appendChild(doc.createTextNode(String.valueOf(mcdPackage.isMcdAudit())));
@@ -443,34 +450,47 @@ public class ProjectSaverXml {
             attribut.appendChild(upperCase);
 
             Element dataTypeLienProg = doc.createElement("dataTypeLienProg");
-            dataTypeLienProg.appendChild(doc.createTextNode(childAttribut.getDatatypeLienProg()));
+            if (childAttribut.getDatatypeLienProg() != null) {
+                dataTypeLienProg.appendChild(doc.createTextNode(childAttribut.getDatatypeLienProg()));
+            }
             attribut.appendChild(dataTypeLienProg);
 
             Element scale = doc.createElement("scale");
-            scale.appendChild(doc.createTextNode(String.valueOf(childAttribut.getScale())));
             attribut.appendChild(scale);
+            Integer test = childAttribut.getScale();
+            if (test != null) {
+                scale.appendChild(doc.createTextNode(String.valueOf(childAttribut.getScale())));
+            }
 
             Element size = doc.createElement("size");
-            size.appendChild(doc.createTextNode(String.valueOf(childAttribut.getSize())));
             attribut.appendChild(size);
 
+            if (childAttribut.getSize() != null) {
+                size.appendChild(doc.createTextNode(String.valueOf(childAttribut.getSize())));
+            }
+
             Element initValue = doc.createElement("initValue");
-            initValue.appendChild(doc.createTextNode(childAttribut.getInitValue()));
-            attribut.appendChild(initValue);
+            if (!childAttribut.getInitValue().equals("")) {
+                initValue.appendChild(doc.createTextNode(childAttribut.getInitValue()));
+
+            }attribut.appendChild(initValue);
 
             Element derivedValue = doc.createElement("derivedValue");
-            derivedValue.appendChild(doc.createTextNode(childAttribut.getDerivedValue()));
+            if (!childAttribut.getDerivedValue().equals("")) {
+                derivedValue.appendChild(doc.createTextNode(childAttribut.getDerivedValue()));
+            }
             attribut.appendChild(derivedValue);
 
             Element domain = doc.createElement("domain");
+            attribut.appendChild(domain);
             if (childAttribut.getDomain() != null) {
                 domain.appendChild(doc.createTextNode(childAttribut.getDomain()));
             }
-            attribut.appendChild(domain);
+
 
         }
     }
-
+    // cette méthode est en trop, pas besoin de stocker à deux endroit
     private void addExtremites(Document doc, Element entity, ArrayList<MVCCDElement> listElement) {
         // Ajout du package Extremités de relations au document
         for (int i = 0; i < listElement.size(); i++) {
@@ -578,7 +598,7 @@ public class ProjectSaverXml {
 
     }
 
-    // méthode pour ajouter les paramètres des contraintes (non implémentés dans cette version de l'application)
+    // méthode pour ajouter les paramètres des contraintes (pas encore implémentés dans cette version de l'application)
     private void addParameters(Document doc, MCDConstraint mcdConstraint, Element constraint) {
         ArrayList<MCDParameter> parametersChilds = mcdConstraint.getMcdParameters();
         for (int i = 0; i < parametersChilds.size(); i++) {
@@ -634,8 +654,8 @@ public class ProjectSaverXml {
         Element generalisations = doc.createElement("generalisations");
         relations.appendChild(generalisations);
 
-        Element link = doc.createElement("links");
-        relations.appendChild(link);
+        Element links = doc.createElement("links");
+        relations.appendChild(links);
 
         // Récupération des valeurs pour chaque type
         for (int i = 0; i < relationsChilds.size(); i++) {
@@ -657,40 +677,64 @@ public class ProjectSaverXml {
             if (mcdRelation instanceof MCDLink) {
                 MCDLink mcdLink = (MCDLink) mcdRelation;
                 //Ajout des liens d'entité associative
-                addlink(doc, mcdLink, link);
+                addlink(doc, mcdLink, links);
             }
         }
     }
 
-    private void addlink(Document doc, MCDLink mcdLink, Element link) {
+    private void addlink(Document doc, MCDLink mcdLink, Element links) {
+
+        Element link = doc.createElement("lienDEntiteAssociative");
+        links.appendChild(link);
+
         // Récupération de l'association
         MCDLinkEnd endAssociation = mcdLink.getEndAssociation();
         Element association = doc.createElement("association");
-        association.appendChild(doc.createTextNode(endAssociation.getMcdElement().toString()));
+        Element name = doc.createElement("name");
+        association.appendChild(name);
+        if (!endAssociation.getMcdElement().getName().equals("")) {
+            name.appendChild(doc.createTextNode((endAssociation.getMcdElement().getNamePath(1))));
+        }
+        else {
+            MCDAssociation mcdAssociation = (MCDAssociation) endAssociation.getMcdElement();
+            MCDAssEnd from = mcdAssociation.getFrom();
+            MCDAssEnd to = mcdAssociation.getTo();
+
+            Element extremiteFrom = doc.createElement("extremiteFrom");
+            extremiteFrom.appendChild(doc.createTextNode(from.getNamePath(1)));
+            association.appendChild(extremiteFrom);
+
+            Element extremiteTo = doc.createElement("extremiteTo");
+            extremiteTo.appendChild(doc.createTextNode(to.getNamePath(1)));
+            association.appendChild(extremiteTo);
+        }
         link.appendChild(association);
 
         // Récupération de l'entité
         MCDLinkEnd endEntity = mcdLink.getEndEntity();
         Element entity = doc.createElement("entity");
-        entity.appendChild(doc.createTextNode(endEntity.getNamePath(1)));
+        entity.appendChild(doc.createTextNode(endEntity.getMcdElement().getNamePath(1)));
         link.appendChild(entity);
 
     }
 
     private void addGeneralization(Document doc, MCDGeneralization mcdGeneralization, Element generalisations) {
+        Element generalisation = doc.createElement("generalisation");
+        generalisations.appendChild(generalisation);
+
         // Récupération de l'entité de généralisation
         MCDGSEnd gen = mcdGeneralization.getGen();
         MCDEntity genEntity = gen.getMcdEntity();
         Element entityGen = doc.createElement("genEntite");
         entityGen.appendChild(doc.createTextNode(genEntity.getNamePath(1)));
-        generalisations.appendChild(entityGen);
+        generalisation.appendChild(entityGen);
 
         // Récupération de l'entité de spécialisation
         MCDGSEnd spec = mcdGeneralization.getSpec();
         MCDEntity specEntity = spec.getMcdEntity();
         Element entitySpec = doc.createElement("specEntite");
         entitySpec.appendChild(doc.createTextNode(specEntity.getNamePath(1)));
-        generalisations.appendChild(entitySpec);
+        generalisation.appendChild(entitySpec);
 
     }
 
@@ -703,19 +747,19 @@ public class ProjectSaverXml {
         // Association dans nom général ( noms dans les rôles)
         if (mcdAssociation.getName().equals("")) {
 
-
             addPropertiesAssociation(doc, association, mcdAssociation);
             addExtremite(doc, association, extremiteFrom);
             addExtremite(doc, association, extremiteTo);
-
 
         } else {
             // Association avec nom général
-            association = doc.createElement(mcdAssociation.getName());
+            Attr name = doc.createAttribute("name");
+            name.setValue(mcdAssociation.getName());
+            association.setAttributeNode(name);
+
             addPropertiesAssociation(doc, association, mcdAssociation);
             addExtremite(doc, association, extremiteFrom);
             addExtremite(doc, association, extremiteTo);
-
         }
         associations.appendChild(association);
     }
@@ -732,7 +776,10 @@ public class ProjectSaverXml {
         properties.appendChild(nature);
 
         Element oriented = doc.createElement("oriented");
-        oriented.appendChild(doc.createTextNode(String.valueOf(mcdAssociation.getOriented())));
+        if (mcdAssociation.getOriented() != null) {
+            oriented.appendChild(doc.createTextNode(String.valueOf(mcdAssociation.getOriented())));
+
+        }
         properties.appendChild(oriented);
 
         Element deleteCascade = doc.createElement("deleteCascade");
@@ -766,9 +813,9 @@ public class ProjectSaverXml {
         shortNameRole.appendChild(doc.createTextNode(extremite.getShortName()));
         roleExtremite.appendChild(shortNameRole);
 
-        Element drawingDirection = doc.createElement("drawingDirection");
-        drawingDirection.appendChild(doc.createTextNode(String.valueOf(extremite.getDrawingDirection())));
-        roleExtremite.appendChild(drawingDirection);
+        Element entity = doc.createElement("entiteNamePath");
+        entity.appendChild(doc.createTextNode(extremite.getMcdEntity().getNamePath(1)));
+        roleExtremite.appendChild(entity);
 
         Element multiplicity = doc.createElement("multiplicity");
         multiplicity.appendChild(doc.createTextNode(extremite.getMultiStr()));

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="applicationPreferences">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="preferences"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="debug" type="xs:boolean"/>
+	<xs:element name="debugBackgroudPanel" type="xs:boolean"/>
+	<xs:element name="debugInspectObjectInTree" type="xs:boolean"/>
+	<xs:element name="debugPrintMvccdElement" type="xs:boolean"/>
+	<xs:element name="debugShowTableColHidden" type="xs:boolean"/>
+	<xs:element name="repositoryMcdModelsMany" type="xs:boolean"/>
+	<xs:element name="repositoryMcdPackagesAuthorizeds" type="xs:boolean"/>
+	<xs:element name="preferences">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="debug"/>
+				<xs:element ref="debugBackgroudPanel"/>
+				<xs:element ref="debugPrintMvccdElement"/>
+				<xs:element ref="debugShowTableColHidden"/>
+				<xs:element ref="debugInspectObjectInTree"/>
+				<xs:element ref="repositoryMcdModelsMany"/>
+				<xs:element ref="repositoryMcdPackagesAuthorizeds"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

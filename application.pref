@@ -6,7 +6,7 @@
         <debugPrintMvccdElement>false</debugPrintMvccdElement>
         <debugShowTableColHidden>false</debugShowTableColHidden>
         <debugInspectObjectInTree>false</debugInspectObjectInTree>
-        <repositoryMcdModelsMany>true</repositoryMcdModelsMany>
+        <repositoryMcdModelsMany>false</repositoryMcdModelsMany>
         <repositoryMcdPackagesAuthorizeds>true</repositoryMcdPackagesAuthorizeds>
     </preferences>
 </applicationPreferences>

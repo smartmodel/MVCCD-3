@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project>
-    <Proprietes>
+    <proprietes>
         <nameProject>test</nameProject>
         <profileFileName>test.profile</profileFileName>
-        <modelsMany>true</modelsMany>
+        <modelsMany>false</modelsMany>
         <packagesAutorizeds>false</packagesAutorizeds>
-    </Proprietes>
+    </proprietes>
     <preferences>
         <mcdJournalization>true</mcdJournalization>
         <mcdJournalizationException>true</mcdJournalizationException>
-        <mcdAudit>true</mcdAudit>
+        <mcdAudit>false</mcdAudit>
         <mcdAuditException>true</mcdAuditException>
         <mcdAidDataTypeLienProg>aid</mcdAidDataTypeLienProg>
         <mcdDataTypeNumberSizeMode>mcddatatype.number.size.precision</mcdDataTypeNumberSizeMode>
@@ -19,82 +19,158 @@
         <mcdTreeNamingAssociation>mcd.naming.name</mcdTreeNamingAssociation>
         <mcdModeNamingLongName>option.no</mcdModeNamingLongName>
         <mcdModeNamingAttributeShortName>option.no</mcdModeNamingAttributeShortName>
-        <repositoryMcdModelsMany>true</repositoryMcdModelsMany>
+        <repositoryMcdModelsMany>false</repositoryMcdModelsMany>
     </preferences>
     <MCD>
-        <model name="ModeleExistant">
-            <proprietes>
-                <shortName>mce</shortName>
-                <audit>true</audit>
-                <auditException>true</auditException>
-                <journalization>true</journalization>
-                <journalizationException>true</journalizationException>
-                <packagesAutorizeds>false</packagesAutorizeds>
-            </proprietes>
-            <entities>
-                <entite name="ventes">
-                    <proprietes>
-                        <shortName>ven</shortName>
+        <diagrammes/>
+        <entities>
+            <entite name="test">
+                <proprietes>
+                    <shortName>ts</shortName>
+                    <ordered>false</ordered>
+                    <entityAbstract>false</entityAbstract>
+                    <journal>true</journal>
+                    <audit>false</audit>
+                </proprietes>
+                <attributs>
+                    <attribut name="num">
+                        <aid>true</aid>
+                        <aidDep>false</aidDep>
+                        <mandatory>true</mandatory>
+                        <list>false</list>
+                        <frozen>true</frozen>
                         <ordered>false</ordered>
-                        <entityAbstract>false</entityAbstract>
-                        <journal>true</journal>
-                        <audit>true</audit>
+                        <upperCase>false</upperCase>
+                        <dataTypeLienProg>aid</dataTypeLienProg>
+                        <scale/>
+                        <size>9</size>
+                        <initValue/>
+                        <derivedValue/>
+                        <domain/>
+                    </attribut>
+                </attributs>
+                <contraintes>
+                    <constraint name="ni">
+                        <shortName>ni</shortName>
+                        <lienProg>false</lienProg>
+                        <type>NID</type>
+                    </constraint>
+                    <constraint name="uni">
+                        <shortName>un</shortName>
+                        <absolute>false</absolute>
+                        <type>Unique</type>
+                    </constraint>
+                </contraintes>
+            </entite>
+            <entite name="fed">
+                <proprietes>
+                    <shortName>ds</shortName>
+                    <ordered>false</ordered>
+                    <entityAbstract>false</entityAbstract>
+                    <journal>true</journal>
+                    <audit>false</audit>
+                </proprietes>
+                <attributs/>
+                <contraintes/>
+            </entite>
+        </entities>
+        <relations>
+            <associations>
+                <association name="tes">
+                    <proprietes>
+                        <nature>mcd.association.nature.no.id</nature>
+                        <oriented>false</oriented>
+                        <deleteCascade>false</deleteCascade>
+                        <frozen>false</frozen>
                     </proprietes>
-                    <attributs>
-                        <attribut name="num">
-                            <aid>true</aid>
-                            <aidDep>false</aidDep>
-                            <mandatory>true</mandatory>
-                            <list>false</list>
-                            <frozen>true</frozen>
-                            <ordered>false</ordered>
-                            <upperCase>false</upperCase>
-                            <dataTypeLienProg>aid</dataTypeLienProg>
-                            <scale>null</scale>
-                            <size>9</size>
-                            <initValue/>
-                            <derivedValue/>
-                            <domain/>
-                        </attribut>
-                    </attributs>
-                    <extremitesDeRelations/>
-                    <contraintes>
-                        <constraint name="contrainte">
-                            <shortName>contr</shortName>
-                            <lienProg>true</lienProg>
-                            <type>NID</type>
-                        </constraint>
-                        <constraint name="test">
-                            <shortName>tes</shortName>
-                            <absolute>true</absolute>
-                            <type>Unique</type>
-                        </constraint>
-                    </contraintes>
-                </entite>
-            </entities>
-            <diagrammes/>
-            <relations>
-                <associations/>
-                <generalisations/>
-                <links/>
-            </relations>
-        </model>
-        <model name="ModelCree">
+                    <roleExtremiteFrom>
+                        <name/>
+                        <shortName/>
+                        <entiteNamePath>MCD.fed</entiteNamePath>
+                        <multiplicity>0..*</multiplicity>
+                        <ordered>false</ordered>
+                    </roleExtremiteFrom>
+                    <roleExtremiteTo>
+                        <name/>
+                        <shortName/>
+                        <entiteNamePath>MCD.fed</entiteNamePath>
+                        <multiplicity>0..*</multiplicity>
+                        <ordered>false</ordered>
+                    </roleExtremiteTo>
+                </association>
+                <association>
+                    <proprietes>
+                        <nature>mcd.association.nature.no.id</nature>
+                        <oriented/>
+                        <deleteCascade>false</deleteCascade>
+                        <frozen>false</frozen>
+                    </proprietes>
+                    <roleExtremiteFrom>
+                        <name>vsdv</name>
+                        <shortName/>
+                        <entiteNamePath>MCD.fed</entiteNamePath>
+                        <multiplicity>0..*</multiplicity>
+                        <ordered>false</ordered>
+                    </roleExtremiteFrom>
+                    <roleExtremiteTo>
+                        <name>vvds</name>
+                        <shortName/>
+                        <entiteNamePath>MCD.test</entiteNamePath>
+                        <multiplicity>0..1</multiplicity>
+                        <ordered>false</ordered>
+                    </roleExtremiteTo>
+                </association>
+            </associations>
+            <generalisations>
+                <generalisation>
+                    <genEntite>MCD.fed</genEntite>
+                    <specEntite>MCD.test</specEntite>
+                </generalisation>
+            </generalisations>
+            <links>
+                <lienDEntiteAssociative>
+                    <association>
+                        <name/>
+                        <extremiteFrom>MCD.fed.vsdv</extremiteFrom>
+                        <extremiteTo>MCD.test.vvds</extremiteTo>
+                    </association>
+                    <entity>MCD.fed</entity>
+                </lienDEntiteAssociative>
+            </links>
+        </relations>
+        <package name="teste">
             <proprietes>
-                <shortName>test</shortName>
-                <audit>true</audit>
+                <shortName/>
+                <audit>false</audit>
                 <auditException>true</auditException>
                 <journalization>true</journalization>
                 <journalizationException>true</journalizationException>
-                <packagesAutorizeds>false</packagesAutorizeds>
+                <parent>MCD</parent>
             </proprietes>
-            <entities/>
             <diagrammes/>
+            <entities/>
             <relations>
                 <associations/>
                 <generalisations/>
                 <links/>
             </relations>
-        </model>
+        </package>
+        <package name="test">
+            <proprietes>
+                <shortName/>
+                <audit>false</audit>
+                <auditException>true</auditException>
+                <journalization>true</journalization>
+                <journalizationException>true</journalizationException>
+                <parent>MCD</parent>
+            </proprietes>
+            <diagrammes/>
+            <entities/>
+            <relations>
+                <associations/>
+                <generalisations/>
+                <links/>
+            </relations>
+        </package>
     </MCD>
 </project>

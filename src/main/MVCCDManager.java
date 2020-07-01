@@ -189,7 +189,7 @@ public class MVCCDManager {
         if (file != null) {
             // Lecture du fichier de sauvegarde
             //project = new LoaderSerializable().load(fileProjectCurrent);
-            project = new ProjectLoaderXml().loadProjectFile();
+            project = new ProjectLoaderXml().loadProjectFile(fileProjectCurrent);
             // Chargement des préférences du projet
             PreferencesManager.instance().setProjectPref(project.getPreferences());
             // Copie des préférences d0'application au sein des préférences du projet

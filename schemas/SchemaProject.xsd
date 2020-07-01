@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="project">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="proprietes"/>
+				<xs:element ref="preferences"/>
+				<xs:element ref="MCD"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="proprietes">
+		<xs:complexType>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element ref="nameProject"/>
+					<xs:element ref="profileFileName"/>
+					<xs:element ref="modelsMany"/>
+					<xs:element ref="packagesAutorizeds"/>
+				</xs:sequence>
+				<xs:sequence>
+					<xs:element ref="nature"/>
+					<xs:element ref="oriented"/>
+					<xs:element ref="deleteCascade"/>
+					<xs:element ref="frozen"/>
+				</xs:sequence>
+				<xs:sequence>
+					<xs:element ref="shortName"/>
+					<xs:choice>
+						<xs:sequence>
+							<xs:element ref="audit"/>
+							<xs:element ref="auditException"/>
+							<xs:element ref="journalization"/>
+							<xs:element ref="journalizationException"/>
+							<xs:choice>
+								<xs:element ref="packagesAutorizeds"/>
+								<xs:element ref="parent"/>
+							</xs:choice>
+						</xs:sequence>
+						<xs:sequence>
+							<xs:element ref="ordered"/>
+							<xs:element ref="entityAbstract"/>
+							<xs:element ref="journal"/>
+							<xs:element ref="audit"/>
+						</xs:sequence>
+					</xs:choice>
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="nameProject">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+				<xs:maxLength value="50"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="profileFileName"/>
+	<xs:element name="modelsMany" type="xs:boolean"/>
+	<xs:element name="packagesAutorizeds" type="xs:boolean"/>
+
+	<xs:element name="preferences">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="mcdJournalization"/>
+				<xs:element ref="mcdJournalizationException"/>
+				<xs:element ref="mcdAudit"/>
+				<xs:element ref="mcdAuditException"/>
+				<xs:element ref="mcdAidDataTypeLienProg"/>
+				<xs:element ref="mcdDataTypeNumberSizeMode"/>
+				<xs:element ref="mcdAidIndColumnName"/>
+				<xs:element ref="mcdAidDepColumnName"/>
+				<xs:element ref="mcdAidWithDep"/>
+				<xs:element ref="mcdTreeNamingAssociation"/>
+				<xs:element ref="mcdModeNamingLongName"/>
+				<xs:element ref="mcdModeNamingAttributeShortName"/>
+				<xs:element ref="repositoryMcdModelsMany"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mcdJournalization" type="xs:boolean"/>
+	<xs:element name="mcdJournalizationException" type="xs:boolean"/>
+	<xs:element name="mcdAudit" type="xs:boolean"/>
+	<xs:element name="mcdAuditException" type="xs:boolean"/>
+	<xs:element name="mcdAidDataTypeLienProg">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="aid"/>
+				<xs:enumeration value="positiveInteger"/>
+				<xs:enumeration value="integer"/>
+				<xs:enumeration value="word"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="mcdDataTypeNumberSizeMode">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="mcddatatype.number.size.precision"/>
+				<xs:enumeration value="mcddatatype.number.size.integer.portion.only"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="mcdAidIndColumnName">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+				<xs:maxLength value="20"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="mcdAidDepColumnName">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+				<xs:maxLength value="20"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="mcdAidWithDep" type="xs:boolean"/>
+	<xs:element name="mcdTreeNamingAssociation">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="mcd.naming.name"/>
+				<xs:enumeration value="mcd.naming.short.name"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="mcdModeNamingLongName">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="option.no"/>
+				<xs:enumeration value="option.yes"/>
+				<xs:enumeration value="option.free"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="mcdModeNamingAttributeShortName">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="option.no"/>
+				<xs:enumeration value="option.yes"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="repositoryMcdModelsMany" type="xs:boolean"/>
+
+	<xs:element name="MCD">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="model" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:sequence>
+					<xs:element ref="diagrammes"/>
+					<xs:element ref="entities"/>
+					<xs:element ref="relations"/>
+					<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="model">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="proprietes"/>
+				<xs:element ref="diagrammes"/>
+				<xs:element ref="entities"/>
+				<xs:element ref="relations"/>
+				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+						<xs:maxLength value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="package">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="proprietes"/>
+				<xs:element ref="diagrammes"/>
+				<xs:element ref="entities"/>
+				<xs:element ref="relations"/>
+				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+						<xs:maxLength value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="audit" type="xs:boolean"/>
+	<xs:element name="auditException" type="xs:boolean"/>
+	<xs:element name="journalization" type="xs:boolean"/>
+	<xs:element name="journalizationException" type="xs:boolean"/>
+	<xs:element name="parent">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="diagrammes"/>
+
+	<xs:element name="entities">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="entite" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="entite">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="proprietes"/>
+				<xs:element ref="attributs"/>
+				<xs:element ref="contraintes"/>
+			</xs:sequence>
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+						<xs:maxLength value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="entityAbstract" type="xs:boolean"/>
+	<xs:element name="journal" type="xs:boolean"/>
+
+	<xs:element name="attributs">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="attribut" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="attribut">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="aid"/>
+				<xs:element ref="aidDep"/>
+				<xs:element ref="mandatory"/>
+				<xs:element ref="list"/>
+				<xs:element ref="frozen"/>
+				<xs:element ref="ordered"/>
+				<xs:element ref="upperCase"/>
+				<xs:element ref="dataTypeLienProg"/>
+				<xs:element ref="scale"/>
+				<xs:element ref="size"/>
+				<xs:element ref="initValue"/>
+				<xs:element ref="derivedValue"/>
+				<xs:element ref="domain"/>
+			</xs:sequence>
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+						<xs:maxLength value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="aid" type="xs:boolean"/>
+	<xs:element name="aidDep" type="xs:boolean"/>
+	<xs:element name="mandatory" type="xs:boolean"/>
+	<xs:element name="list" type="xs:boolean"/>
+	<xs:element name="frozen" type="xs:boolean"/>
+	<xs:element name="ordered" type="xs:boolean"/>
+	<xs:element name="upperCase" type="xs:boolean"/>
+	<xs:element name="dataTypeLienProg">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value=""/>
+				<xs:enumeration value="aid"/>
+				<xs:enumeration value="boolean"/>
+				<xs:enumeration value="date"/>
+				<xs:enumeration value="dateTime"/>
+				<xs:enumeration value="decimal"/>
+				<xs:enumeration value="duration"/>
+				<xs:enumeration value="email"/>
+				<xs:enumeration value="gDay"/>
+				<xs:enumeration value="gMonth"/>
+				<xs:enumeration value="gMonthDay"/>
+				<xs:enumeration value="gYear"/>
+				<xs:enumeration value="gYearMonth"/>
+				<xs:enumeration value="httpURL"/>
+				<xs:enumeration value="integer"/>
+				<xs:enumeration value="money"/>
+				<xs:enumeration value="negativeDecimal"/>
+				<xs:enumeration value="negativeInteger"/>
+				<xs:enumeration value="negativeMoney"/>
+				<xs:enumeration value="nonNegativeDecimal"/>
+				<xs:enumeration value="nonNegativeInteger"/>
+				<xs:enumeration value="nonNegativeMoney"/>
+				<xs:enumeration value="nonPositiveDecimal"/>
+				<xs:enumeration value="nonPositiveInteger"/>
+				<xs:enumeration value="nonPositiveMoney"/>
+				<xs:enumeration value="normalizedString"/>
+				<xs:enumeration value="positiveDecimal"/>
+				<xs:enumeration value="positiveInteger"/>
+				<xs:enumeration value="positiveMoney"/>
+				<xs:enumeration value="string"/>
+				<xs:enumeration value="time"/>
+				<xs:enumeration value="token"/>
+				<xs:enumeration value="word"/>
+				<xs:enumeration value="xml"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="scale">
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base='xs:string'>
+						<xs:length value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:pattern value="([0])|([1-9]{1,1}[0-9]*)"/>
+						<xs:maxInclusive value="30"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="size">
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base='xs:string'>
+						<xs:length value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:pattern value="([0])|([1-9]{1,1}[0-9]*)"/>
+						<xs:maxInclusive value="10"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="initValue"/>
+	<xs:element name="derivedValue"/>
+	<xs:element name="domain"/>
+
+	<xs:element name="contraintes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="constraint" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="constraint">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="shortName"/>
+				<xs:choice>
+					<xs:element ref="lienProg"/>
+					<xs:element ref="absolute"/>
+				</xs:choice>
+				<xs:element ref="type"/>
+			</xs:sequence>
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+						<xs:maxLength value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="absolute" type="xs:boolean"/>
+	<xs:element name="lienProg" type="xs:boolean"/>
+	<xs:element name="type">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="NID"/>
+				<xs:enumeration value="Unique"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="relations">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="associations"/>
+				<xs:element ref="generalisations"/>
+				<xs:element ref="links"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="generalisations">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="generalisation" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="generalisation">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="genEntite"/>
+				<xs:element ref="specEntite"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="specEntite">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="genEntite">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="links">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="lienDEntiteAssociative" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="lienDEntiteAssociative">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="association"/>
+				<xs:element ref="entity"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="entity">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="associations">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="association" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="association">
+		<xs:complexType>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element ref="name"/>
+					<xs:element ref="extremiteFrom"/>
+					<xs:element ref="extremiteTo"/>
+				</xs:sequence>
+				<xs:sequence>
+					<xs:element ref="proprietes"/>
+					<xs:element ref="roleExtremiteFrom"/>
+					<xs:element ref="roleExtremiteTo"/>
+				</xs:sequence>
+			</xs:choice>
+			<xs:attribute name="name" use="optional">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="name">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="extremiteFrom">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="extremiteTo">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="roleExtremiteFrom">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name"/>
+				<xs:element ref="shortName"/>
+				<xs:element ref="entiteNamePath"/>
+				<xs:element ref="multiplicity"/>
+				<xs:element ref="ordered"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="roleExtremiteTo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name"/>
+				<xs:element ref="shortName"/>
+				<xs:element ref="entiteNamePath"/>
+				<xs:element ref="multiplicity"/>
+				<xs:element ref="ordered"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="shortName">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="5"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="entiteNamePath">
+		<xs:simpleType>
+			<xs:restriction base="xs:string"/>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="multiplicity">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="0..*"/>
+				<xs:enumeration value="0..1"/>
+				<xs:enumeration value="0..n"/>
+				<xs:enumeration value="*"/>
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="1..1"/>
+				<xs:enumeration value="1..*"/>
+				<xs:enumeration value="1..n"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="nature">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="mcd.association.nature.no.id"/>
+				<xs:enumeration value="mcd.association.nature.no.natural"/>
+				<xs:enumeration value="mcd.association.nature.no.comp"/>
+				<xs:enumeration value="mcd.association.nature.sim.cp"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="oriented">
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base='xs:string'>
+						<xs:length value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:boolean"/>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="deleteCascade" type="xs:boolean"/>
+</xs:schema>

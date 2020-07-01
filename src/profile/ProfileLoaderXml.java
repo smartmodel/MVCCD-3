@@ -30,7 +30,7 @@ public class ProfileLoaderXml {
 
                 // Assignation du schéma XSD au fichier pour validation
                 SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                Schema schema = factory.newSchema(new File("SchemaProfil.xsd"));
+                Schema schema = factory.newSchema(new File("schemas/SchemaProfil.xsd"));
                 Validator validator = schema.newValidator();
 
                 // Récupération de la racine

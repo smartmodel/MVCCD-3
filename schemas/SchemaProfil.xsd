@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="fileProfile">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="preferences"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="mcdAidDataTypeLienProg">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="aid"/>
+                <xs:enumeration value="positiveInteger"/>
+                <xs:enumeration value="integer"/>
+                <xs:enumeration value="word"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="mcdAidDepColumnName">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+                <xs:maxLength value="20"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="mcdAidIndColumnName">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+                <xs:maxLength value="20"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="mcdAidWithDep" type="xs:boolean"/>
+    <xs:element name="mcdAudit" type="xs:boolean"/>
+    <xs:element name="mcdAuditException" type="xs:boolean"/>
+    <xs:element name="mcdDataTypeNumberSizeMode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="mcddatatype.number.size.precision"/>
+                <xs:enumeration value="mcddatatype.number.size.integer.portion.only"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="mcdJournalization" type="xs:boolean"/>
+    <xs:element name="mcdJournalizationException" type="xs:boolean"/>
+    <xs:element name="mcdModeNamingAttributeShortName">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="option.no"/>
+                <xs:enumeration value="option.yes"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="mcdModeNamingLongName">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="option.no"/>
+                <xs:enumeration value="option.yes"/>
+                <xs:enumeration value="option.free"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="mcdTreeNamingAssociation">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="mcd.naming.name"/>
+                <xs:enumeration value="mcd.naming.short.name"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="repositoryMcdModelsMany" type="xs:boolean"/>
+    <xs:element name="preferences">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="mcdJournalization"/>
+                <xs:element ref="mcdJournalizationException"/>
+                <xs:element ref="mcdAudit"/>
+                <xs:element ref="mcdAuditException"/>
+                <xs:element ref="mcdAidDataTypeLienProg"/>
+                <xs:element ref="mcdDataTypeNumberSizeMode"/>
+                <xs:element ref="mcdAidIndColumnName"/>
+                <xs:element ref="mcdAidDepColumnName"/>
+                <xs:element ref="mcdAidWithDep"/>
+                <xs:element ref="mcdTreeNamingAssociation"/>
+                <xs:element ref="mcdModeNamingLongName"/>
+                <xs:element ref="mcdModeNamingAttributeShortName"/>
+                <xs:element ref="repositoryMcdModelsMany"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
