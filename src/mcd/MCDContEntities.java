@@ -23,13 +23,14 @@ public class MCDContEntities extends MCDElement{
 
 
     public static MCDContEntities getMCDContEntitiesByNamePath(int pathMode, String namePath){
-        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){
-            if (mcdElement instanceof MCDContEntities){
-                return (MCDContEntities) mcdElement;
+        for (MCDContEntities mcdContEntities : ProjectService.getMCDContEntities()){
+            if (mcdContEntities.getNamePath(pathMode).equals(namePath)){
+                return mcdContEntities;
             }
         }
         return null;
     }
+
 
     public ArrayList<MCDEntity> getMCDEntities(){
         ArrayList<MCDEntity> resultat = new ArrayList<MCDEntity>();

@@ -72,28 +72,6 @@ public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
         return mcdAssociationNew;
     }
 
-/*
-    public static void treatCompliant(Window window,
-                                      MCDAssociation element) {
-
-        if (MCDAssociationService.check(element).size() == 0){
-            String message = MessagesBuilder.getMessagesProperty ("dialog.check.association.ok", new String[] {element.getName()});
-            DialogMessage.showOk(window, message);
-        } else {
-            String message = MessagesBuilder.getMessagesProperty ("dialog.check.association.error", new String[] {element.getName()});
-            if (DialogMessage.showConfirmYesNo_Yes(window, message) == JOptionPane.YES_OPTION){
-                AssociationEditor fen = new AssociationEditor(window, (MCDContRelations) element.getParent(), element, DialogEditor.UPDATE);
-                fen.setVisible(true);
-            }
-        }
-    }
-*/
-
-       @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        ArrayList<String> resultat = new ArrayList<String>();
-        return resultat;
-    }
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {

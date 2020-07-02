@@ -60,13 +60,6 @@ public class MCDLinkEditingTreat extends MCDRelationEditingTreat {
         return mcdLinkNew;
     }
 
-
-    @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        ArrayList<String> resultat = new ArrayList<String>();
-        return resultat;
-    }
-
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
         return new LinkInputContent(element);

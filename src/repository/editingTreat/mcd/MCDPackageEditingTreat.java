@@ -3,6 +3,7 @@ package repository.editingTreat.mcd;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
+import main.MVCCDWindow;
 import mcd.MCDElement;
 import mcd.MCDPackage;
 import mcd.interfaces.IMCDContContainer;
@@ -18,12 +19,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class MCDPackageEditingTreat extends EditingTreat {
-
-
-    @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        return ((MCDPackage) mvccdElement).treatCompliant();
-    }
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
@@ -41,6 +36,12 @@ public class MCDPackageEditingTreat extends EditingTreat {
         return "the.package";
     }
 
+    @Override
+    public ArrayList<String> treatCompliant(MVCCDWindow mvccdWindow, MVCCDElement mvccdElement) {
+        MCDPackage mcdPackage = (MCDPackage) mvccdElement;
+        ArrayList<String> resultat = mcdPackage.treatCompliant();
+        return resultat;
+    }
 
 
 }

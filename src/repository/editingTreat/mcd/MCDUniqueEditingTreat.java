@@ -1,6 +1,7 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
+import main.MVCCDWindow;
 import mcd.*;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
@@ -12,6 +13,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class MCDUniqueEditingTreat extends EditingTreat {
+
 
 
     @Override
@@ -31,12 +33,8 @@ public class MCDUniqueEditingTreat extends EditingTreat {
         return "the.constraint.unique";
     }
 
-
     @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        ArrayList<String> resultat = new ArrayList<String>();
-        return resultat;
+    public ArrayList<String> treatCompliant(MVCCDWindow mvccdWindow, MVCCDElement mvccdElement) {
+        return null;
     }
-
-
 }

@@ -4,13 +4,11 @@ import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
-import m.IMCompliant;
+import m.IMCompletness;
 import m.MRelationDegree;
 import m.services.MRelationService;
-import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAssociationService;
-import mcd.services.MCDElementService;
 import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -21,7 +19,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDParameter {
+public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDParameter {
 
     private  static final long serialVersionUID = 1000;
 
@@ -77,53 +75,16 @@ public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDPara
 
     @Override
     public String getNameTree(){
-        /*
-        String resultat = "";
+        String namingAssociation = computeNamingAssociation();
+        return MCDRelationService.getNameTree(this, namingAssociation, false, null);
+    }
 
-        MCDEntity entityFrom = getFrom().getMcdEntity();
-        MCDEntity entityTo = getTo().getMcdEntity();
+    public String getNamePath(int pathMode){
+        String namingAssociation = computeNamingAssociation();
+        return MCDRelationService.getNameTree(this, namingAssociation, true, pathMode);
+    }
 
-        MVCCDElement containerAssociation = this.getParent().getParent();
-
-
-        MVCCDElement containerEntityFrom = entityFrom.getParent().getParent();
-        MVCCDElement containerEntityTo = entityTo.getParent().getParent();
-
-        boolean c1a = containerEntityFrom == containerAssociation;
-        boolean c1b = containerEntityTo == containerAssociation;
-        boolean c1 = c1a && c1b;
-        String treeNaming = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
-        boolean c3 = treeNaming.equals(Preferences.MCD_NAMING_NAME);
-        boolean c4 = treeNaming.equals(Preferences.MCD_NAMING_SHORT_NAME);
-
-        boolean r1 = c1 && c3;
-        boolean r2 = c1 && c4;
-        boolean r3 = (!c1) && c3;
-        boolean r4 = (!c1) && c4;
-
-        String nameEntityFrom = "";
-        String nameEntityTo = "";
-
-        if (r1){
-            nameEntityFrom = entityFrom.getName();
-            nameEntityTo = entityTo.getName();
-        }
-
-        if (r2){
-            nameEntityFrom = entityFrom.getShortNameSmart();
-            nameEntityTo = entityTo.getShortNameSmart();
-        }
-
-        if (r3){
-            nameEntityFrom = entityFrom.getNamePath(MCDElementService.PATHSHORTNAME);
-            nameEntityTo = entityTo.getNamePath(MCDElementService.PATHSHORTNAME);
-        }
-
-        if (r4){
-            nameEntityFrom = entityFrom.getShortNameSmartPath();
-            nameEntityTo = entityTo.getShortNameSmartPath();
-        }
-
+    private String computeNamingAssociation(){
         String namingAssociation ;
         if (StringUtils.isNotEmpty(getFrom().getName())  && StringUtils.isNotEmpty(getTo().getName())){
             namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT +
@@ -135,23 +96,7 @@ public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDPara
             namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
                     this.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
         }
-        resultat = nameEntityFrom + namingAssociation + nameEntityTo;
-
-         */
-
-        String namingAssociation ;
-        if (StringUtils.isNotEmpty(getFrom().getName())  && StringUtils.isNotEmpty(getTo().getName())){
-            namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT +
-                    getFrom().getName() +
-                    Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR  +
-                    getTo().getName() +
-                    Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT;
-        } else {
-            namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
-                    this.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
-        }
-
-        return MCDRelationService.getNameTreeBetweenEntities(this, namingAssociation);
+        return namingAssociation;
     }
 
     public MCDAssEnd getMCDAssEndOpposite(MCDAssEnd mcdAssEnd) {

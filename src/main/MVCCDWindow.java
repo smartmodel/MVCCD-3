@@ -38,7 +38,7 @@ public class MVCCDWindow extends JFrame implements WindowListener {
     public MVCCDWindow() {
 
         setTitle("MVC-CD " + Preferences.VERSION);
-        setSize(1000, 600);
+        setSize(Preferences.MVCCD_WINDOW_WIDTH, Preferences.MVCCD_WINDOW_HEIGHT);
         getContentPane().add(panel);
         menuBar = new JMenuBar();
         setJMenuBar(menuBar);
@@ -110,12 +110,10 @@ public class MVCCDWindow extends JFrame implements WindowListener {
             String message = MessagesBuilder.getMessagesProperty ("project.close.change.not.saved");
             boolean confirmClose = DialogMessage.showConfirmYesNo_No(this, message) == JOptionPane.YES_OPTION;
             if (confirmClose){
-                System.out.println("confirmClose  " +  confirmClose);
                 setDefaultCloseOperation(DISPOSE_ON_CLOSE);//no
                 new ProjectsRecentsSaver().save();
                 System.exit(0);
             } else {
-                System.out.println("confirmClose  " +  confirmClose);
                 setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);//cancel
             }
         } else {

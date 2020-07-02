@@ -5,7 +5,6 @@ import datatypes.MDDatatypesManager;
 import main.window.menu.WinMenuContent;
 import main.window.repository.WinRepositoryTree;
 import mcd.MCDRelation;
-import messages.MessagesBuilder;
 import preferences.PreferencesManager;
 import project.*;
 import main.window.console.WinConsoleContent;
@@ -16,9 +15,7 @@ import repository.Repository;
 import main.window.repository.WinRepository;
 import main.window.repository.WinRepositoryContent;
 import utilities.files.UtilFiles;
-import utilities.window.DialogMessage;
 
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.io.File;
@@ -153,7 +150,7 @@ public class MVCCDManager {
 
     public void removeMCDRelationAndDependantsInRepository(MCDRelation mcdRelation) {
 
-        ArrayList<MCDRelation> mcdRelationChilds = ProjectService.getAllMCDRelationsChilds(mcdRelation);
+        ArrayList<MCDRelation> mcdRelationChilds = ProjectService.getMCDRelationsChilds(mcdRelation);
         for (MCDRelation mcdRelationChild : mcdRelationChilds) {
             removeMCDRelationAndDependantsInRepository(mcdRelationChild);
         }
@@ -350,28 +347,7 @@ public class MVCCDManager {
         this.datasProjectChanged = datasProjectChanged;
     }
 
-/*
-    public boolean isDatasEdited() {
-        return datasEdited;
-    }
 
-
-
-    public void setDatasEdited(boolean datasEdited) {
-        this.datasEdited = datasEdited;
-    }
-
- */
-
-/*
-    public void datasProjectChangedFromEditor(){
-        System.out.println("isDatasEdited()  " + isDatasEdited());
-        if (isDatasEdited()){
-            setDatasProjectChanged(true);
-        }
-    }
-
- */
     public MVCCDElement getRootMVCCDElement() {
         return rootMVCCDElement;
     }

@@ -2,6 +2,7 @@ package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
+import main.MVCCDWindow;
 import mcd.*;
 import project.ProjectService;
 import repository.editingTreat.EditingTreat;
@@ -28,11 +29,6 @@ public class MCDRelationEditingTreat extends EditingTreat {
 
 
     @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        return null;
-    }
-
-    @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
         return null;
     }
@@ -52,4 +48,10 @@ public class MCDRelationEditingTreat extends EditingTreat {
         MCDRelation mcdRelation = (MCDRelation) element;
         MVCCDManager.instance().removeMCDRelationAndDependantsInRepository(mcdRelation);
     }
+
+    @Override
+    public ArrayList<String> treatCompliant(MVCCDWindow mvccdWindow, MVCCDElement mvccdElement) {
+        return null;
+    }
+
 }

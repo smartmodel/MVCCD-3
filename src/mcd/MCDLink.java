@@ -48,9 +48,11 @@ public class MCDLink extends MCDRelation {
 
     @Override
     public String getNameTree(){
+        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_LINK, false,null);
+    }
 
-        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_LINK);
-
+    public String getNamePath(int pathMode){
+        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_LINK, true,pathMode);
     }
 
     @Override

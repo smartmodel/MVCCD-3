@@ -1,7 +1,9 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
+import main.MVCCDWindow;
 import mcd.MCDNID;
+import mcd.MCDPackage;
 import mcd.MCDParameter;
 import mcd.MCDUnique;
 import repository.editingTreat.EditingTreat;
@@ -33,12 +35,8 @@ public class MCDUniqueParameterEditingTreat extends EditingTreat {
         return "the.operation.parameter";
     }
 
-
     @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        ArrayList<String> resultat = new ArrayList<String>();
-        return resultat;
+    public ArrayList<String> treatCompliant(MVCCDWindow mvccdWindow, MVCCDElement mvccdElement) {
+        return null;
     }
-
-
 }

@@ -315,7 +315,6 @@ public class UniqueInputContent extends PanelInputContentIdTable {
 
     public boolean checkDatas(SComponent sComponent){
         boolean ok = super.checkDatas(sComponent);
-
         return ok;
     }
 
@@ -484,8 +483,8 @@ public class UniqueInputContent extends PanelInputContentIdTable {
     }
 
     @Override
-    protected void specificLoad() {
-        MCDUnicity mcdUnicity = (MCDUnicity) getEditor().getMvccdElementCrt();
+    protected void specificLoad(MVCCDElement mvccdElement) {
+        MCDUnicity mcdUnicity = (MCDUnicity) mvccdElement;
         ArrayList<MCDParameter> parameters = mcdUnicity.getParameters();
         datas = new Object[parameters.size()][OperationParamTableColumn.getNbColumns()];
         int line=-1;
@@ -496,22 +495,31 @@ public class UniqueInputContent extends PanelInputContentIdTable {
     }
 
     private Stereotype computeStereotype(){
-        MCDContConstraints mcdContConstraints = (MCDContConstraints) getEditor().getMvccdElementParent();
+        MCDContConstraints mcdContConstraints;
+        if (panelInput != null) {
+            mcdContConstraints = (MCDContConstraints) getEditor().getMvccdElementParent();
+        } else {
+            mcdContConstraints = (MCDContConstraints) super.getElementForCheckInput().getParent();
+        }
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
         Stereotype stereotype = null;
-        if (getEditor().getMode() == DialogEditor.NEW){
-            // Attention !
-            // Le parent contient l'objet transitoire !
-            if (getScope() == UniqueEditor.NID) {
-                stereotype = stereotypes.getStereotypeByLienProg(MCDNID.class.getName(),
-                        Preferences.STEREOTYPE_NID_LIENPROG, mcdContConstraints.getMCDNIDs().size() );
-            }
-            if (getScope() == UniqueEditor.UNIQUE){
-                stereotype = stereotypes.getStereotypeByLienProg(MCDUnique.class.getName(),
-                        Preferences.STEREOTYPE_U_LIENPROG, mcdContConstraints.getMCDUniques().size());
+        if (panelInput != null) {
+            if (getEditor().getMode() == DialogEditor.NEW) {
+                // Attention !
+                // Le parent contient l'objet transitoire !
+                if (getScope() == UniqueEditor.NID) {
+                    stereotype = stereotypes.getStereotypeByLienProg(MCDNID.class.getName(),
+                            Preferences.STEREOTYPE_NID_LIENPROG, mcdContConstraints.getMCDNIDs().size());
+                }
+                if (getScope() == UniqueEditor.UNIQUE) {
+                    stereotype = stereotypes.getStereotypeByLienProg(MCDUnique.class.getName(),
+                            Preferences.STEREOTYPE_U_LIENPROG, mcdContConstraints.getMCDUniques().size());
+                }
+            } else {
+                stereotype = ((MCDUnicity) getEditor().getMvccdElementCrt()).getDefaultStereotype();
             }
         } else {
-                stereotype = ((MCDUnicity) getEditor().getMvccdElementCrt()).getDefaultStereotype();;
+            stereotype = ((MCDUnicity)super.getElementForCheckInput()).getDefaultStereotype();
         }
         return stereotype;
     }

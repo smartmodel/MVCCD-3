@@ -1,11 +1,7 @@
 package mcd.services;
 
-import mcd.MCDElement;
-import mcd.MCDContEntities;
-import mcd.MCDEntity;
+import mcd.*;
 import mcd.interfaces.IMCDModel;
-import preferences.Preferences;
-import preferences.PreferencesManager;
 import project.ProjectService;
 
 import java.util.ArrayList;
@@ -13,21 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class MCDEntityService {
-
-/*
-    public static ArrayList<String> checkInput(MCDEntity mcdEntity) {
-        return MCDUtilService.checkNamingIdBatch(mcdEntity,
-                PreferencesManager.instance().preferences().ENTITY_NAME_LENGTH,
-                PreferencesManager.instance().preferences().ENTITY_SHORT_NAME_LENGTH,
-                PreferencesManager.instance().preferences().ENTITY_SHORT_NAME_LENGTH);
-    }
-
-
-    public static ArrayList<String> checkCompliant(MCDEntity mcdEntity) {
-
-        return checkInput(mcdEntity);
-    }
-*/
 
     public static void sortNameAsc(ArrayList<MCDEntity> entities){
 
@@ -59,12 +40,56 @@ public class MCDEntityService {
 
 
     public static MCDEntity getMCDEntityByNamePath(int pathMode, String namePath){
-        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){
-            if (mcdElement instanceof MCDEntity){
-                return (MCDEntity) mcdElement;
+        for (MCDEntity mcdEntity : ProjectService.getMCDEntities()){
+            if (mcdEntity.getNamePath(pathMode).equals(namePath)){
+                return mcdEntity;
             }
         }
         return null;
     }
 
+    public static ArrayList<MCDRelEnd> getMCDRelEnds(MCDEntity mcdEntity) {
+        MCDContRelEnds mcdContRelEnds = mcdEntity.getMCDContRelEnds();
+        return mcdContRelEnds.getMCDRelEnds();
+    }
+
+    public static ArrayList<MCDRelation> getMCDRelations(MCDEntity mcdEntity) {
+        ArrayList<MCDRelation> resultat = new ArrayList<MCDRelation>();
+        for (MCDRelEnd mcdRelEnd : getMCDRelEnds(mcdEntity)){
+            if (! resultat.contains(mcdRelEnd.getMcdRelation())) {
+                resultat.add(mcdRelEnd.getMcdRelation());
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDGSEnd> getMCDGSEnds(MCDEntity mcdEntity) {
+        ArrayList<MCDGSEnd> resultat = new ArrayList<MCDGSEnd>();
+        for (MCDRelEnd mcdRelEnd : getMCDRelEnds(mcdEntity)){
+            if (mcdRelEnd instanceof MCDGSEnd){
+                resultat.add((MCDGSEnd) mcdRelEnd);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDGSEnd> getGSEndsGeneralize(MCDEntity mcdEntity) {
+        ArrayList<MCDGSEnd> resultat = new ArrayList<MCDGSEnd>();
+        for (MCDGSEnd mcdGSEnd : getMCDGSEnds(mcdEntity)){
+            if (mcdGSEnd.getDrawingDirection() == MCDRelEnd.GEN){
+                resultat.add((MCDGSEnd) mcdGSEnd);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDGSEnd> getGSEndsSpecialize(MCDEntity mcdEntity) {
+        ArrayList<MCDGSEnd> resultat = new ArrayList<MCDGSEnd>();
+        for (MCDGSEnd mcdGSEnd : getMCDGSEnds(mcdEntity)){
+            if (mcdGSEnd.getDrawingDirection() == MCDRelEnd.SPEC){
+                resultat.add((MCDGSEnd) mcdGSEnd);
+            }
+        }
+        return resultat;
+    }
 }

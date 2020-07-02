@@ -370,5 +370,7 @@ public abstract class PanelInputContent
         }
     }
 
-
+    public MVCCDElement getElementForCheckInput() {
+        return elementForCheckInput;
+    }
 }

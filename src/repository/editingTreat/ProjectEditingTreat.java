@@ -2,6 +2,8 @@ package repository.editingTreat;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
+import main.MVCCDWindow;
+import mcd.MCDPackage;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
 import utilities.window.editor.DialogEditor;
 import project.Project;
@@ -35,10 +37,6 @@ public class ProjectEditingTreat  extends EditingTreat {
         fen.setVisible(true);
     }
 
-    @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        return null;
-    }
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
@@ -52,6 +50,11 @@ public class ProjectEditingTreat  extends EditingTreat {
 
     @Override
     protected String getPropertyTheElement() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<String> treatCompliant(MVCCDWindow mvccdWindow, MVCCDElement mvccdElement) {
         return null;
     }
 

@@ -1,14 +1,15 @@
 package mcd;
 
-import m.IMCompliant;
+import m.IMCompletness;
 import main.MVCCDElement;
+import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDNamePathParent;
+import mcd.services.MCDEntityService;
 import project.ProjectElement;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompliant {
+public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompletness {
 
     private static final long serialVersionUID = 1000;
 
@@ -80,6 +81,17 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return null;
     }
 
+
+    public ArrayList<MCDConstraint> getMcdConstraints() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MCDContConstraints) {
+                MCDContConstraints mcdContConstraints = (MCDContConstraints) mvccdElement;
+                return mcdContConstraints.getMCDConstraints();
+            }
+        }
+        return new ArrayList<MCDConstraint>();
+    }
+
     public MCDContConstraints getMCDContConstraints() {
         for (MVCCDElement mvccdElement : getChilds()){
             if (mvccdElement instanceof MCDContConstraints) {
@@ -112,5 +124,32 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return "Entité";
     }
 
+    public ArrayList<String> treatCompliant(){
+        MCDCompliant mcdCompliant = new MCDCompliant();
+        ArrayList<String> resultat = mcdCompliant.check(this);
+        return resultat;
+    }
 
+    public ArrayList<MCDRelation> getMCDRelations(){
+        return MCDEntityService.getMCDRelations(this);
+    }
+
+    public ArrayList<MCDGSEnd> getGSEndGeneralizes(){
+        return MCDEntityService.getGSEndsGeneralize(this);
+    }
+
+    // Un tableau est retourné car lors de la saisie plusieurs liens peuvent être àtablis!
+    // C'est lors du contrôle de conformité que je vérifie qu'il n'y a qu'un lien vers l'entité généralisée
+    public ArrayList<MCDGSEnd> getGSEndSpecialize(){
+        return MCDEntityService.getGSEndsSpecialize(this);
+    }
+
+
+    public boolean isGeneralized(){
+        return getGSEndGeneralizes().size() > 0;
+    }
+
+    public boolean isSpecialized(){
+        return getGSEndSpecialize().size() == 1;
+    }
 }

@@ -28,9 +28,9 @@ public class MCDContConstraints extends MCDElement {
     }
 
     public static MCDContConstraints getMCDContConstraintsByNamePath(int pathMode, String namePath) {
-        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)) {
-            if (mcdElement instanceof MCDContConstraints) {
-                return (MCDContConstraints) mcdElement;
+        for (MCDContConstraints mcdContConstraints : ProjectService.getMCDContConstraints()) {
+            if (mcdContConstraints.getNamePath(pathMode).equals(namePath)){
+                return mcdContConstraints;
             }
         }
         return null;

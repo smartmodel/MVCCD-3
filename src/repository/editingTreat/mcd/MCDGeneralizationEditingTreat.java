@@ -67,17 +67,9 @@ public class MCDGeneralizationEditingTreat extends MCDRelationEditingTreat {
         MVCCDManager.instance().addNewMVCCDElementInRepository(mcdGSEnd, nodeParent);
     }
 
-
-
-       @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        ArrayList<String> resultat = new ArrayList<String>();
-        return resultat;
-    }
-
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
-        return new AssociationInputContent(element);
+        return new GenSpecInputContent(element);
     }
 
     @Override

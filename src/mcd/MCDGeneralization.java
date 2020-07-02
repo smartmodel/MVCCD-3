@@ -4,16 +4,10 @@ import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
-import m.IMCompliant;
-import m.MRelationDegree;
-import m.services.MRelationService;
-import main.MVCCDElement;
-import mcd.*;
+import m.IMCompletness;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAssociationService;
-import mcd.services.MCDElementService;
 import mcd.services.MCDRelationService;
-import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import stereotypes.Stereotype;
@@ -22,7 +16,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MCDGeneralization extends MCDRelation implements IMCompliant, IMCDParameter {
+public class MCDGeneralization extends MCDRelation implements IMCompletness, IMCDParameter {
 
     private  static final long serialVersionUID = 1000;
 
@@ -68,9 +62,11 @@ public class MCDGeneralization extends MCDRelation implements IMCompliant, IMCDP
 
     @Override
     public String getNameTree(){
+        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_GENERALIZATION, false, null);
+    }
 
-        return MCDRelationService.getNameTreeBetweenEntities(this, Preferences.MCD_NAMING_GENERALIZATION);
-
+    public String getNamePath(int pathMode){
+        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_GENERALIZATION, true, pathMode);
     }
 
     public MCDGSEnd getMCDAssGSOpposite(MCDGSEnd mcdGSEnd) {

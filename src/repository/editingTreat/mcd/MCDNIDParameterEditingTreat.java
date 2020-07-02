@@ -1,7 +1,9 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
+import main.MVCCDWindow;
 import mcd.MCDNID;
+import mcd.MCDPackage;
 import mcd.MCDParameter;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
@@ -33,10 +35,8 @@ public class MCDNIDParameterEditingTreat extends EditingTreat {
     }
 
     @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        ArrayList<String> resultat = new ArrayList<String>();
-        return resultat;
+    public ArrayList<String> treatCompliant(MVCCDWindow mvccdWindow, MVCCDElement mvccdElement) {
+        return null;
     }
-
 
 }

@@ -13,6 +13,9 @@ public class WinConsoleContent extends PanelContent {
         super(console);
         super.setLayout(new FlowLayout(FlowLayout.LEFT));
         textArea = new JTextArea();
+        textArea.append(System.lineSeparator());
+        textArea.append(System.lineSeparator());
+        textArea.append(System.lineSeparator());
 
         super.addContent(textArea);
 

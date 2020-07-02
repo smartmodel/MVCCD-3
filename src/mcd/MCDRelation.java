@@ -2,9 +2,7 @@ package mcd;
 
 import constraints.Constraint;
 import exceptions.CodeApplException;
-import m.MRelEnd;
 import m.MRelation;
-import project.ProjectElement;
 import project.ProjectService;
 import stereotypes.Stereotype;
 
@@ -56,21 +54,10 @@ public abstract class MCDRelation extends MCDElement implements MRelation {
     public abstract String getClassShortNameUI();
 
     public ArrayList<MCDRelation> getAllMCDRelationsChilds(){
-        return ProjectService.getAllMCDRelationsChilds(this);
+        return ProjectService.getMCDRelationsChilds(this);
     }
 
     public void removeInParent(){
-        /*
-        ArrayList<MCDRelEnd> mcdRelEndLikeMCDElements = ProjectService.getAllMCDRelEndByMCDElement(this);
-        for (MCDRelEnd mcdRelEndLikeMCDElement  : mcdRelEndLikeMCDElements ){
-            System.out.println( mcdRelEndLikeMCDElement.getMcdRelation().getNameTree());
-            MCDRelation mcdRelationFromMCDElement = mcdRelEndLikeMCDElement.getMcdRelation();
-            System.out.println( mcdRelationFromMCDElement.getNameTree());
-            mcdRelEndLikeMCDElement.getMcdRelation().removeInParent();
-            mcdRelationFromMCDElement = null;
-            //System.out.println( mcdRelationFromMCDElement.getNameTree());
-        }
-        */
 
         ArrayList<MCDRelation> mcdRelationChilds = getAllMCDRelationsChilds();
         for (int i = mcdRelationChilds.size()-1 ; i >= 0 ; i--){
@@ -95,6 +82,7 @@ public abstract class MCDRelation extends MCDElement implements MRelation {
     public abstract ArrayList<Stereotype> getToStereotypes();
 
     public abstract ArrayList<Constraint> getToConstraints(); // Contraintes UML
+
 
 
 }

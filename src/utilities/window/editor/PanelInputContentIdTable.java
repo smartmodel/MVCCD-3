@@ -68,11 +68,16 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
     protected void makeTable() {
 
         columnsNames = PanelInputContentTableService.columnsNames(specificColumnsNames());
-        if (getEditor().getMode().equals(DialogEditor.NEW)){
-            specificInit();
+        if ( panelInput != null){
+            if (getEditor().getMode().equals(DialogEditor.NEW)){
+                specificInit();
+            } else {
+                specificLoad(getEditor().getMvccdElementCrt());
+            }
         } else {
-            specificLoad();
+            specificLoad(super.getElementForCheckInput());
         }
+
         oldDatas = datas;
 
         model = new ReadTableModel(datas, columnsNames);
@@ -350,7 +355,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     }
 
-    protected abstract void specificLoad();
+    protected abstract void specificLoad(MVCCDElement mvccdElement);
 
     @Override
     protected void saveDatas(MVCCDElement mvccdElement) {
@@ -471,7 +476,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         boolean notBatch = panelInput != null;
 
         boolean unitaire = notBatch && (sComponent == table);
-        ok = checkDetails(unitaire);
+        ok = checkDetails(unitaire) && ok;
         return ok;
     }
 

@@ -102,8 +102,6 @@ public class RelEndsInputContent extends PanelInputContentTable {
         MCDEntity mcdEntityContext = (MCDEntity) getEditor().getMvccdElementParent();
         MCDContRelations mcdContRelations = (MCDContRelations) mcdEntityContext.getParent().getBrotherByClassName(MCDContRelations.class.getName());
 
-        System.out.println(mcdEntityContext.getName() + " - " + mcdContRelations.getName());
-
         String message = MessagesBuilder.getMessagesProperty("editor.relends.choice.nature");
         Object[] options = {"Annuler", "Association", "Spécialisation", "Généralisation", "Entité associative"};
         int posOption = DialogMessage.showOptions(getEditor(), message, options, JOptionPane.UNINITIALIZED_VALUE);

@@ -81,8 +81,6 @@ public class PrefGeneralInputContent extends PanelInputContent {
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
         Preferences preferences = (Preferences) mvccdElement;
-
-        System.out.println(preferences.getGENERAL_RELATION_NOTATION());
         SComboBoxService.selectByText(fieldRelationNotation,
                 MessagesBuilder.getMessagesProperty(preferences.getGENERAL_RELATION_NOTATION()));
     }

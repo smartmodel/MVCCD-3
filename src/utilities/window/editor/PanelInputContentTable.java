@@ -228,10 +228,7 @@ public abstract class PanelInputContentTable extends PanelInputContent
     }
 
     protected boolean actionDelete(ActionEvent e, MElement mElement) {
-        System.out.println("Delete super");
         if (mElement != null){
-            System.out.println("Element "+ mElement.getId());
-
             // Mise à jour du référentiel
             if (deleteElement(mElement)) {
                 // Mise à joue de la table

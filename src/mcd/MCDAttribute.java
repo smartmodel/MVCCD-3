@@ -3,7 +3,7 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import m.IMCompliant;
+import m.IMCompletness;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAttributeService;
 import org.apache.commons.lang.StringUtils;
@@ -16,7 +16,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MCDAttribute extends MCDElement implements IMCompliant, IMCDParameter {
+public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParameter {
 
     private static final long serialVersionUID = 1000;
 

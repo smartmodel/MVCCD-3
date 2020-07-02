@@ -561,21 +561,25 @@ public class AssociationInputContent extends PanelInputContentId {
 
             unitaire = notBatch && (sComponent == fieldFromRoleShortName);
             boolean okCheckFromRoleShortName = checkFromRoleShortName(unitaire) ;
+
             ok = okCheckFromRoleShortName && ok;
-            if (unitaire) {
+
+            //if (unitaire) {
                 if (okCheckFromRoleShortName) {
-                    checkFromRoleNaming(unitaire);
+                    ok = checkFromRoleNaming(unitaire) && ok;
                 }
-            }
+            //}
 
             unitaire = notBatch && (sComponent == fieldToRoleShortName);
             boolean okCheckToRoleShortName = checkToRoleShortName(unitaire) ;
+
             ok = okCheckToRoleShortName && ok;
-            if (unitaire) {
+
+            //if (unitaire) {
                 if (okCheckToRoleShortName) {
-                    checkToRoleNaming(unitaire);
+                    ok = checkToRoleNaming(unitaire) && ok;
                 }
-            }
+            //}
 
             unitaire = notBatch && (sComponent == fieldNature);
             ok = checkNature(fieldNature, unitaire) && ok;
@@ -583,7 +587,6 @@ public class AssociationInputContent extends PanelInputContentId {
 
             unitaire = notBatch && (sComponent == fieldOriented);
             ok = checkOriented(fieldOriented, unitaire) && ok;
-
         }
 
         return ok;

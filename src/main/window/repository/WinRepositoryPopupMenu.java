@@ -2,7 +2,7 @@ package main.window.repository;
 
 import datatypes.MCDDatatype;
 import diagram.mcd.MCDDiagram;
-import m.IMCompliant;
+import m.IMCompletness;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
@@ -22,14 +22,13 @@ import repository.editingTreat.*;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
 import utilities.window.scomponents.SPopupMenu;
-import window.editor.preferences.project.PrefProject;
-import window.editor.preferences.project.PrefProjectMenu;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class WinRepositoryPopupMenu extends SPopupMenu {
     private DefaultMutableTreeNode node;
@@ -78,11 +77,13 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         if (node.getUserObject() instanceof MCDModel) {
             treatGeneric(this, new MCDModelEditingTreat());
+            treatGenericCompliant(this, new MCDModelEditingTreat());
             packageNew(this, true);
         }
 
         if (node.getUserObject() instanceof MCDPackage) {
             treatGeneric(this, new MCDPackageEditingTreat());
+            treatGenericCompliant(this, new MCDPackageEditingTreat());
             packageNew(this, false);
         }
 
@@ -100,6 +101,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         if (node.getUserObject() instanceof MCDEntity) {
             treatGeneric(this, new MCDEntityEditingTreat());
+            treatGenericCompliant(this, new MCDEntityEditingTreat());
         }
 
         if (node.getUserObject() instanceof MCDContAttributes) {
@@ -233,17 +235,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     MessagesBuilder.getMessagesProperty("menu.new.model"));
        } else {
             packageNew(menu, true);
+            treatGenericCompliant(menu, new MCDContModelsEditingTreat());
         }
-
-        JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
-        addItem(menu, menuItem);
-        menuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                ((MCDContModels) mvccdElement).treatCompliant();
-            }
-        });
-
     }
 
 
@@ -285,8 +278,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         treatGenericUpdate(menu, editingTreat);
         treatGenericDelete(menu, editingTreat);
 
-        if (mvccdElement instanceof IMCompliant) {
-            treatGenericCompliant(menu, editingTreat);
+        if (mvccdElement instanceof IMCompletness) {
+            treatGenericCompletness(menu, editingTreat);
         }
     }
 
@@ -372,13 +365,24 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         });
     }
 
+    private void treatGenericCompletness(ISMenu menu, EditingTreat editingTreat) {
+        JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.completness"));
+        addItem(menu, menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                editingTreat.treatCompletness(mvccdWindow, mvccdElement, true);
+            }
+        });
+    }
+
     private void treatGenericCompliant(ISMenu menu, EditingTreat editingTreat) {
         JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
         addItem(menu, menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                editingTreat.treatCompliant(mvccdWindow, mvccdElement);
+                ArrayList<String> messages = editingTreat.treatCompliant(mvccdWindow, mvccdElement);
             }
         });
     }

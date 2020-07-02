@@ -2,6 +2,8 @@ package repository.editingTreat.mcd;
 
 import datatypes.MCDDatatype;
 import main.MVCCDElement;
+import main.MVCCDWindow;
+import mcd.MCDPackage;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -32,11 +34,9 @@ public class MCDDatatypeEditingTreat extends EditingTreat {
         return null;
     }
 
-
-
     @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        ArrayList<String> resultat = new ArrayList<String>();
-        return resultat;
+    public ArrayList<String> treatCompliant(MVCCDWindow mvccdWindow, MVCCDElement mvccdElement) {
+        return null;
     }
+
 }

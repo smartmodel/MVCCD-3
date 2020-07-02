@@ -1,12 +1,9 @@
 package mcd.services;
 
 import mcd.MCDElement;
-import mcd.MCDEntity;
-import mcd.MCDModel;
 import mcd.MCDPackage;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
-import preferences.Preferences;
 import project.ProjectService;
 
 import java.util.ArrayList;
@@ -52,9 +49,9 @@ public class MCDPackageService {
 
 
     public static MCDPackage getMCDPackageByNamePath(int pathMode, String namePath){
-        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){
-            if (mcdElement instanceof MCDPackage){
-                return (MCDPackage) mcdElement;
+        for (MCDPackage mcdPackage : ProjectService.getMCDPackages()){
+            if (mcdPackage.getNamePath(pathMode).equals(namePath)){
+                return mcdPackage;
             }
         }
         return null;

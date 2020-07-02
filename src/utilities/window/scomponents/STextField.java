@@ -87,7 +87,7 @@ public class STextField extends JTextField implements SComponent {
             updated =  StringUtils.isNotEmpty(oldText);
         }
 
-        // Si ce n'est pas un appel directement pour le contrôle de conformité
+        // Si ce n'est pas un appel directement pour le contrôle de complétude
         if (panel.getEditor() != null) {
             if (panel.getEditor().getMode().equals(DialogEditor.NEW)) {
                 updated = true;
