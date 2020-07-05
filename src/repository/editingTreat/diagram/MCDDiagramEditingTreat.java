@@ -114,7 +114,7 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
                 panelZoneDessin,
                 DialogEditor.READ,
                 (MCDDiagram) element);
-        mcdZoneDessin.getContentNew();
+        mcdZoneDessin.getContentUpdate(element.getMCDEntityDraws());;
 
 
         //Fermer la palette afin que l'utilisateur ne puisse pas modifier un diagramme en lecture seule
