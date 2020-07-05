@@ -25,6 +25,7 @@ public class MCDZoneDessin {
         this.diagram = diagram;
     }
 
+    //Cette méthode va créer une zone de dessin vide
     public void getContentNew() {
         panelZoneDessin.setBackground(Color.white);
 
@@ -37,18 +38,19 @@ public class MCDZoneDessin {
         DiagramList diagramList = new DiagramList(nom, entites);
         diagramList.setName("");
         MCDContEntities mcdContEntities = (MCDContEntities) parent.getBrotherByClassName(MCDContEntities.class.getName());
-        DrawEntity draw = new DrawEntity(entites,panelZoneDessin,mcdContEntities);
+        DrawEntity draw = new DrawEntity(entites);
         diagram.setMCDEntityDraws(entites);
         draw.setPreferredSize(new Dimension(1400, 820));
 
     }
 
+    //Cette méthode va appeler la classe DrawEntity pour dessiner les entités ajoutés via la palette
     public void getContentUpdate(ArrayList<MCDEntityDraw> listeEntite){
         panelZoneDessin.setBackground(Color.white);
 
         panelZoneDessin.removeAll();
-        MCDContEntities mcdContEntities = (MCDContEntities) parent.getBrotherByClassName(MCDContEntities.class.getName());
-        DrawEntity draw = new DrawEntity(listeEntite, panelZoneDessin, mcdContEntities);
+        //MCDContEntities mcdContEntities = (MCDContEntities) parent.getBrotherByClassName(MCDContEntities.class.getName());
+        DrawEntity draw = new DrawEntity(listeEntite);
         draw.setPreferredSize(new Dimension(1400, 820));
         panelZoneDessin.add(draw);
 

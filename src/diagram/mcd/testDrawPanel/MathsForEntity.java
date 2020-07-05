@@ -17,5 +17,9 @@ public class MathsForEntity {
         double xCenter= x+((width/2)-"<<Entity>>".length()*6/2)/1.25;
         return xCenter;
     }
+    public int calculateHeight(int index){
+        int newHeight = 150+(index*5);
+        return newHeight;
+    }
 
 }

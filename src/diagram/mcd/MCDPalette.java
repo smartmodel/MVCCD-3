@@ -4,6 +4,7 @@ import diagram.Diagram;
 import diagram.mcd.testDrawPanel.Attributes;
 import diagram.mcd.testDrawPanel.DiagramList;
 import diagram.mcd.testDrawPanel.MCDEntityDraw;
+import diagram.mcd.testDrawPanel.MathsForEntity;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import main.MVCCDWindow;
@@ -66,10 +67,8 @@ public class MCDPalette {
         JButton btnEntite = createEntityBtn();
         btnEntite.addActionListener(this::actionPerformedEntity);
 
-        //Création du boutton ... à côté du bouton entité le listener ne marche pas encore
+        //Création du boutton pour cacher ou afficher des bouton à côté du bouton entité le listener ne marche pas encore
         JButton btnEntitePlus = createEntityPlusBtn();
-        //btnEntitePlus.addActionListener(mcdPaletteListener.);
-
         JButton btnAssociationPlus = createAssociationPlusBtn();
 
 
@@ -111,7 +110,7 @@ public class MCDPalette {
         return btnEntityPlus;
     }
 
-    //Création du boutton entité
+    //Classe pour créer le bouton entité
 
     public JButton createEntityBtn(){
         JButton btnEntite = new JButton();
@@ -151,7 +150,7 @@ public class MCDPalette {
 
     }*/
 
-    //Création du boutton association
+    //Classe pour créer le bouton association
     public JButton createAssociationBtn(){
         JButton btnAssociation = new JButton();
         try {
@@ -182,7 +181,7 @@ public class MCDPalette {
         return btnAssociationPlus;
     }
 
-    //Création du boutton entité associative
+    //Classe pour créer le bouton  entité associative
     public JButton createEntiteAssociativeBtn(){
         JButton btnEntiteAssociative = new JButton("<html>Entité<br/>Associative</html>");
         try {
@@ -199,7 +198,7 @@ public class MCDPalette {
 
     }
 
-    //Création du boutton note
+    //Classe pour créer le boutton note
     public JButton createNoteBtn(){
         JButton btnNote = new JButton("Note");
         try {
@@ -216,7 +215,7 @@ public class MCDPalette {
 
     }
 
-    //Création du boutton de généralisation et spécialisation
+    //CClasse pour créer le boutton de généralisation et spécialisation
     public JButton createGenSpeBtn(){
         JButton btnGenSpe = new JButton("<html>Généralisation /<br/>Spécialisation</html>");
         try {
@@ -233,7 +232,7 @@ public class MCDPalette {
 
     }
 
-    //Création du boutton ancre
+    //Classe pour créer le boutton ancre
     public JButton createAncreBtn(){
         JButton btnAncre = new JButton("Ancre");
         try {
@@ -250,7 +249,7 @@ public class MCDPalette {
 
     }
 
-    //Création du boutton de contrainte OCL
+    //Classe pour créer le boutton de contrainte OCL
     public JButton createContrainteOCLBtn(){
         JButton btnContrainteOCL = new JButton("<html>Contrainte<br/> OCL</html>");
         try {
@@ -301,20 +300,19 @@ public class MCDPalette {
         MCDEntityEditingTreat mcdEntityEditingTreat = new MCDEntityEditingTreat();
         MCDEntity newMCDEntity = (MCDEntity) mcdEntityEditingTreat.treatNew(mvccdWindow, mcdContEntities);
         newMCDEntity.getMcdAttributes();
-        System.out.println(newMCDEntity.getMcdAttributes());
 
+        //Ce listener va aussi créer un nouvel objet MCDEntityDraw pour la classe MCDZoneDessin
 
-        //Nous devons dessiner une nouvelle entité dans la zonne de dessin
-        //Création d'un rectangle pour la zone de dessin
-        Rectangle rectangleEntite= new Rectangle(0,0,250,150);
-
-        //Création des attributs pour la zone de dessin
+        //---------------------------Création des attributs pour la zone de dessin-------------------------------------------------
         Attributes attributType= new Attributes("<<Entity>>",250/2-"<<Entity>>".length()*6/2,15);
         Attributes attributTitre= new Attributes(newMCDEntity.getName(),250/2-newMCDEntity.getName().length()*6/2,30);
 
         ArrayList<Attributes> textDEntite= new ArrayList<>();
         textDEntite.add(0,attributType);
         textDEntite.add(1, attributTitre);
+
+        //Index pour calculer la profondeur
+        int indexForHeight = 0;
         for(int index=0; index<newMCDEntity.getMcdAttributes().size(); index ++){
 
             ArrayList<Stereotype> stereotype= new ArrayList<>();
@@ -329,15 +327,25 @@ public class MCDPalette {
             }
             Attributes attributs= new Attributes(attributeAvecStereo,5,47+((index)*15));
             textDEntite.add(index+2,attributs);
+            indexForHeight=index;
         }
 
+        //--------------------------------Création d'un rectangle pour la zone de dessin------------------------------
+        //Le rectangle est crée après les attributs car la profondeur dépend du nombre d'attributs
+
+
+        Rectangle rectangleEntite= new Rectangle(0,0,250,150+(indexForHeight*10));
+
+        //---------------------------------Création de l'objet MCDEntityDraw------------------------------------------
         //Création d'un objet MCDEntityDraw qui va contenir les informations pour la zone de dessin
         MCDEntityDraw entiteADessiner = new MCDEntityDraw(rectangleEntite, textDEntite);
         ArrayList<MCDEntityDraw> diagramAjout = diagram.getMCDEntityDraws();
 
-            diagramAjout.add(entiteADessiner);
-            diagram.setMCDEntityDraws(diagramAjout);
+        //Ajout du nouvel objet MCDEntityDraw dans le diagramme pour pouvoir sauvegarder
+        diagramAjout.add(entiteADessiner);
+        diagram.setMCDEntityDraws(diagramAjout);
 
+        //----------------------------------Code permettant de faire appel à la classe MCDZoneDeDessin
         WinDiagram winDiagram = mvccdWindow.getDiagram();
         JPanel panelZoneDessin = winDiagram.getContent().getPanelDraw();
 

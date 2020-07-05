@@ -29,7 +29,7 @@ public class DrawEntity extends JPanel {
     public MathsForEntity mathsForEntity;
 
 
-    public DrawEntity(ArrayList<MCDEntityDraw> listEntite, JPanel panelZoneDessin, MCDContEntities mcdContEntities) {
+    public DrawEntity(ArrayList<MCDEntityDraw> listEntite) {
         //Une entité est composée d'un rectangle, de trois lignes permettant de séparer le rectangle en deux et d'une liste d'attribut
         //Crée une nouvelle liste de type entités pour contenir les elements à dessiner
         boxes = new ArrayList<>();
@@ -37,10 +37,13 @@ public class DrawEntity extends JPanel {
         int x = 0;
         int y = 0;
         int width=250;
-        int height=200;
+        int height=500;
         mathsForEntity= new MathsForEntity();
+        selected=null;
 
-
+        /*Boucle parcourant toutes les entités de la liste passée en paramètre
+        Chaque itération va récuperer toutes les informations concernant les entités (Coordonnées, taille, attributs
+        Coordonnées des lignes pour les ajouté dans une liste*/
         for (int index = 0; index < listEntite.size(); index++) {
             x= listEntite.get(index).getRectangleEntite().x;
             y= listEntite.get(index).getRectangleEntite().y;
@@ -62,25 +65,27 @@ public class DrawEntity extends JPanel {
             linesList.add(1,new Line2D.Double(x,mathsForEntity.calculateYLine2(y,height),x+width,mathsForEntity.calculateYLine2(y,height)));
             linesList.add(2,new Line2D.Double(x,mathsForEntity.calculateYLine3(y,height),x+width,mathsForEntity.calculateYLine3(y,height)));
 
+            //Ajout de l'entité dans la liste Box qui va être utilisé dans les listeners
+
             boxes.add(new MCDEntityDraw(new Rectangle(x,y,width,height),linesList,attributesList));
 
         }
 
-        int finalHeight = height;
-        int finalWidth = width;
+
         MouseAdapter ma = new MouseAdapter() {
 
             private MCDEntityDraw previous;
             private Point delta;
 
+            //Listener qui va s'activer si l'utilisateur appuye sur une entité
             @Override
             public void mousePressed(MouseEvent e) {
-                //ArrayList<MCDEntityDraw> reversed = new ArrayList<>(boxes);
-
+                //Il faut tester si l'utilisateur a bien cliquer sur une entité ou s'il a cliquer à coté
                 previous = selected;
                 if (selected == null || !selected.getRectangleEntite().contains(e.getPoint())) {
                     for (int index = 0; index <boxes.size(); index++) {
                         MCDEntityDraw box = boxes.get(index);
+                        //Si l'utilisateur clique sur une entité il faut peindre le rectangle en bleu
                         if (box.getRectangleEntite().contains(e.getPoint())) {
                             selected = box;
                             selectedIndex= index;
@@ -89,6 +94,7 @@ public class DrawEntity extends JPanel {
                             break;
                         }
                     }
+                    //Si l'utilisateur a cliqué sur deux entités il faut uniquement que la dernière soit peinte en bleu
                     if (selected != null && boxes.size()>1) {
                         boxes.remove(selected);
                         boxes.add(boxes.size() - 1, selected);
@@ -98,8 +104,11 @@ public class DrawEntity extends JPanel {
                 }
             }
 
+            //Ce listener s'active uniquement si l'utilisateur clique sur une entité (Cliquer = presser et relacher très vite)
             @Override
             public void mouseClicked(MouseEvent e) {
+                //TODO Base du code pour ajouter un menu déroulant en cas de clic droit (Le clic droit fonctionne)
+                /*
                 if (SwingUtilities.isRightMouseButton(e) && selected.getRectangleEntite().contains(e.getPoint())) {
                     System.out.println("Right Click");
                     MVCCDWindow mvccdWindow = MVCCDManager.instance().getMvccdWindow();
@@ -119,46 +128,51 @@ public class DrawEntity extends JPanel {
                     }
 
 
-                }
+                }*/
+                //Permet de déselectionné l'entité si elle est peinte en bleu elle redevient noire
                 if (selected == previous && selected != null && selected.getRectangleEntite().contains(e.getPoint())) {
                     selected = null;
                     repaint();
                 }
             }
 
+            //Listener qui va s'activer quand l'utilisateur relache une entité
             @Override
             public void mouseDragged(MouseEvent e) {
+                //Dans cette méthode il faut modifié toute les coordonnées de l'entité deplacée afin de l'afficher ailleurs
                 List<MCDEntityDraw> reversed = new ArrayList<>(boxes);
                 if (selected != null) {
                     int x = e.getX() - delta.x;
                     int y = e.getY() - delta.y;
+                    int height= (int) selected.rectangleEntite.getHeight();
+                    int width= (int) selected.rectangleEntite.getWidth();
 
 
 
 
                     selected.getRectangleEntite().x = x;
                     selected.getRectangleEntite().y = y;
-                    selected.getRectangleEntite().height= finalHeight;
-                    selected.getRectangleEntite().width= finalWidth;
+                    selected.getRectangleEntite().height= height;
+                    selected.getRectangleEntite().width= width;
 
                     selected.getLinesList().get(0).x1=x;
-                    selected.getLinesList().get(0).y1=mathsForEntity.calculateYLine1(y, finalHeight);
-                    selected.getLinesList().get(0).x2=x+ finalWidth;
-                    selected.getLinesList().get(0).y2=mathsForEntity.calculateYLine1(y, finalHeight);
+                    selected.getLinesList().get(0).y1=mathsForEntity.calculateYLine1(y, height);
+                    selected.getLinesList().get(0).x2=x+ width;
+                    selected.getLinesList().get(0).y2=mathsForEntity.calculateYLine1(y, height);
 
                     selected.getLinesList().get(1).x1=x;
-                    selected.getLinesList().get(1).y1=mathsForEntity.calculateYLine2(y, finalHeight);
-                    selected.getLinesList().get(1).x2=x+ finalWidth;
-                    selected.getLinesList().get(1).y2=mathsForEntity.calculateYLine2(y, finalHeight);
+                    selected.getLinesList().get(1).y1=mathsForEntity.calculateYLine2(y, height);
+                    selected.getLinesList().get(1).x2=x+ width;
+                    selected.getLinesList().get(1).y2=mathsForEntity.calculateYLine2(y, height);
 
                     selected.getLinesList().get(2).x1=x;
-                    selected.getLinesList().get(2).y1=mathsForEntity.calculateYLine3(y, finalHeight);
-                    selected.getLinesList().get(2).x2=x+ finalWidth;
-                    selected.getLinesList().get(2).y2=mathsForEntity.calculateYLine3(y, finalHeight);
+                    selected.getLinesList().get(2).y1=mathsForEntity.calculateYLine3(y, height);
+                    selected.getLinesList().get(2).x2=x+ width;
+                    selected.getLinesList().get(2).y2=mathsForEntity.calculateYLine3(y, height);
 
-                    selected.getAttributesList().get(0).xTextCenterTitre=x+((finalWidth /2)-"<<Entity>>".length()*6/2);
+                    selected.getAttributesList().get(0).xTextCenterTitre=x+((width /2)-"<<Entity>>".length()*6/2);
                     selected.getAttributesList().get(0).yTextCenterTitre=y+15;
-                    selected.getAttributesList().get(1).xTextCenterTitre=x+((finalWidth /2)-selected.attributesList.get(1).textTitre.length()*6/2);
+                    selected.getAttributesList().get(1).xTextCenterTitre=x+((width /2)-selected.attributesList.get(1).textTitre.length()*6/2);
                     selected.getAttributesList().get(1).yTextCenterTitre=y+30;
                     for (int i=2; i<selected.getAttributesList().size(); i++ ){
                         selected.getAttributesList().get(i).xTextCenterTitre=x+5;
@@ -179,11 +193,13 @@ public class DrawEntity extends JPanel {
         addMouseMotionListener(ma);
     }
 
+    //Méthode pour dessiner les entités dans l'interface (ATTENTION la méthode paintComponent va repeindre tous les composants
+    //Même ceux qui ne sont pas modifiés
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
-
+        //Méthode pour dessiner toutes les entités à l'exception de l'entité séléctionnées
         for (MCDEntityDraw box : boxes) {
             try {
                 if (box != selected) {
@@ -203,6 +219,7 @@ public class DrawEntity extends JPanel {
                 e.printStackTrace();
             }
         }
+        //Code pour dessiner l'entité séléctionnée
         if (selected != null) {
             g2d.setColor(Color.BLUE);
             g2d.draw(selected.getRectangleEntite());
