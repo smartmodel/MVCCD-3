@@ -14,7 +14,6 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
 public class MCDDatatypeInputContent extends PanelInputContent{
@@ -69,25 +68,25 @@ public class MCDDatatypeInputContent extends PanelInputContent{
         createSize();
         createScale();
 
-        super.getsComponents().add(mcdDatatypeName);
-        super.getsComponents().add(abstrait);
-        super.getsComponents().add(lienProg);
-        super.getsComponents().add(sizeMandatory);
-        super.getsComponents().add(sizeMandatoryInheritFrom);
-        super.getsComponents().add(sizeDefault);
-        super.getsComponents().add(sizeDefaultInheritFrom);
-        super.getsComponents().add(sizeMin);
-        super.getsComponents().add(sizeMinInheritFrom);
-        super.getsComponents().add(sizeMax);
-        super.getsComponents().add(sizeMaxInheritFrom);
-        super.getsComponents().add(scaleMandatory);
-        super.getsComponents().add(scaleMandatoryInheritFrom);
-        super.getsComponents().add(scaleDefault);
-        super.getsComponents().add(scaleDefaultInheritFrom);
-        super.getsComponents().add(scaleMin);
-        super.getsComponents().add(scaleMinInheritFrom);
-        super.getsComponents().add(scaleMax);
-        super.getsComponents().add(scaleMaxInheritFrom);
+        super.getSComponents().add(mcdDatatypeName);
+        super.getSComponents().add(abstrait);
+        super.getSComponents().add(lienProg);
+        super.getSComponents().add(sizeMandatory);
+        super.getSComponents().add(sizeMandatoryInheritFrom);
+        super.getSComponents().add(sizeDefault);
+        super.getSComponents().add(sizeDefaultInheritFrom);
+        super.getSComponents().add(sizeMin);
+        super.getSComponents().add(sizeMinInheritFrom);
+        super.getSComponents().add(sizeMax);
+        super.getSComponents().add(sizeMaxInheritFrom);
+        super.getSComponents().add(scaleMandatory);
+        super.getSComponents().add(scaleMandatoryInheritFrom);
+        super.getSComponents().add(scaleDefault);
+        super.getSComponents().add(scaleDefaultInheritFrom);
+        super.getSComponents().add(scaleMin);
+        super.getSComponents().add(scaleMinInheritFrom);
+        super.getSComponents().add(scaleMax);
+        super.getSComponents().add(scaleMaxInheritFrom);
 
         panelInputContentCustom.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

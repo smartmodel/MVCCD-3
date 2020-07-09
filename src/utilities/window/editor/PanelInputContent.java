@@ -278,7 +278,7 @@ public abstract class PanelInputContent
         }
     }
 
-    public ArrayList<SComponent> getsComponents() {
+    public ArrayList<SComponent> getSComponents() {
         return sComponents;
     }
 

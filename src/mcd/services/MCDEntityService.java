@@ -1,5 +1,6 @@
 package mcd.services;
 
+import m.MRelEndMulti;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import project.ProjectService;
@@ -73,6 +74,16 @@ public class MCDEntityService {
         return resultat;
     }
 
+    public static ArrayList<MCDAssEnd> getMCDAssEnds(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDRelEnd mcdRelEnd : getMCDRelEnds(mcdEntity)){
+            if (mcdRelEnd instanceof MCDAssEnd){
+                resultat.add((MCDAssEnd) mcdRelEnd);
+            }
+        }
+        return resultat;
+    }
+
     public static ArrayList<MCDGSEnd> getGSEndsGeneralize(MCDEntity mcdEntity) {
         ArrayList<MCDGSEnd> resultat = new ArrayList<MCDGSEnd>();
         for (MCDGSEnd mcdGSEnd : getMCDGSEnds(mcdEntity)){
@@ -91,5 +102,69 @@ public class MCDEntityService {
             }
         }
         return resultat;
+    }
+
+    public static ArrayList<MCDAssEnd> getAssEndsIdComp(MCDEntity mcdEntity, boolean parent) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
+            if (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.IDCOMP){
+                boolean c1 = mcdAssEnd.getMulti() == MRelEndMulti.MULTI_ONE_ONE;
+                if ( c1 && parent ) {
+                    resultat.add((MCDAssEnd) mcdAssEnd);
+                }
+                if ( (!c1) && (!parent) ){
+                    resultat.add((MCDAssEnd) mcdAssEnd);
+                }
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDAssEnd> getAssEndsIdCompParent(MCDEntity mcdEntity) {
+        return getAssEndsIdComp(mcdEntity, true);
+    }
+
+    public static ArrayList<MCDAssEnd> getAssEndsIdCompChild(MCDEntity mcdEntity) {
+        return getAssEndsIdComp(mcdEntity, false);
+    }
+
+
+    public static ArrayList<MCDLinkEnd> getMCDLinkEnds(MCDEntity mcdEntity) {
+        ArrayList<MCDLinkEnd> resultat = new ArrayList<MCDLinkEnd>();
+        for (MCDRelEnd mcdRelEnd : getMCDRelEnds(mcdEntity)){
+            if (mcdRelEnd instanceof MCDLinkEnd){
+                resultat.add((MCDLinkEnd) mcdRelEnd);
+            }
+        }
+        return resultat;
+    }
+
+    public static MCDEntityNature getNature(MCDEntity mcdEntity) {
+        if (mcdEntity.isInd()){
+            return MCDEntityNature.IND;
+        }
+        if (mcdEntity.isDep()){
+            return MCDEntityNature.DEP;
+        }
+        if (mcdEntity.isEntAss()){
+            return MCDEntityNature.ENTASS;
+        }
+        if (mcdEntity.isEntAssDep()){
+            return MCDEntityNature.ENTASSDEP;
+        }
+        if (mcdEntity.isNAire()){
+            return MCDEntityNature.NAIRE;
+        }
+        if (mcdEntity.isNAireDep()){
+            return MCDEntityNature.NAIREDEP;
+        }
+        if (mcdEntity.isSpecialized()){
+            return MCDEntityNature.SPEC;
+        }
+        if (mcdEntity.isPseudoEntAss()){
+            return MCDEntityNature.PSEUDOENTASS;
+        }
+
+        return null;
     }
 }

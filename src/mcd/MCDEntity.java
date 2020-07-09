@@ -1,9 +1,12 @@
 package mcd;
 
 import m.IMCompletness;
+import m.MRelation;
+import m.MRelationDegree;
 import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDNamePathParent;
+import mcd.services.MCDEntityNature;
 import mcd.services.MCDEntityService;
 import project.ProjectElement;
 
@@ -62,7 +65,7 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         this.audit = audit;
     }
 
-    public ArrayList<MCDAttribute> getMcdAttributes() {
+    public ArrayList<MCDAttribute> getMCDAttributes() {
         for (MVCCDElement mvccdElement : getChilds()){
            if (mvccdElement instanceof MCDContAttributes) {
                MCDContAttributes mcdContAttributes = (MCDContAttributes) mvccdElement;
@@ -90,6 +93,17 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
             }
         }
         return new ArrayList<MCDConstraint>();
+    }
+
+
+    public ArrayList<MCDConstraint> getMCDNIDs() {
+        ArrayList<MCDConstraint> resultat = new ArrayList<MCDConstraint>();
+        for (MCDConstraint mcdConstraint: getMcdConstraints() ){
+            if (mcdConstraint instanceof MCDNID) {
+                resultat.add((MCDNID) mcdConstraint);
+            }
+        }
+        return resultat;
     }
 
     public MCDContConstraints getMCDContConstraints() {
@@ -130,26 +144,140 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return resultat;
     }
 
+    public boolean isDuplicateMCDAttributeAID(){
+        int nbAid = 0;
+        for (MCDAttribute mcdAttribute : getMCDAttributes()){
+            if (mcdAttribute.isAid()){
+                nbAid++;
+            }
+        }
+        return nbAid > 1;
+    }
+
+    public MCDAttribute getMCDAttributeAID(){
+        for (MCDAttribute mcdAttribute : getMCDAttributes()){
+            if (mcdAttribute.isAid()){
+                return mcdAttribute;
+            }
+        }
+        return null;
+    }
+
+    public boolean contentIdentifier(){
+        return ( getMCDAttributeAID() != null) || (getMCDNIDs().size() > 0) ;
+    }
+
+
     public ArrayList<MCDRelation> getMCDRelations(){
         return MCDEntityService.getMCDRelations(this);
     }
 
-    public ArrayList<MCDGSEnd> getGSEndGeneralizes(){
+    public ArrayList<MCDGSEnd> getGSEndsGeneralize(){
         return MCDEntityService.getGSEndsGeneralize(this);
     }
 
-    // Un tableau est retourné car lors de la saisie plusieurs liens peuvent être àtablis!
+    // Un tableau est retourné car lors de la saisie plusieurs liens peuvent être établis!
     // C'est lors du contrôle de conformité que je vérifie qu'il n'y a qu'un lien vers l'entité généralisée
     public ArrayList<MCDGSEnd> getGSEndSpecialize(){
         return MCDEntityService.getGSEndsSpecialize(this);
     }
 
+    public ArrayList<MCDAssEnd> getAssEndsIdCompParent(){
+        return MCDEntityService.getAssEndsIdCompParent(this);
+    }
+
+    public ArrayList<MCDAssEnd> getAssEndsIdCompChild(){
+        return MCDEntityService.getAssEndsIdCompChild(this);
+    }
+
+    // Un tableau est retourné car lors de la saisie plusieurs liens peuvent être établis!
+    // C'est lors du contrôle de conformité que je vérifie qu'il n'y a qu'un lien d'entité associative
+    public ArrayList<MCDLinkEnd> getLinkEnd(){
+        return MCDEntityService.getMCDLinkEnds(this);
+    }
 
     public boolean isGeneralized(){
-        return getGSEndGeneralizes().size() > 0;
+        return getGSEndsGeneralize().size() > 0;
     }
 
     public boolean isSpecialized(){
         return getGSEndSpecialize().size() == 1;
+    }
+
+    public boolean isLinkedEA(){
+        return getLinkEnd().size() == 1;
+    }
+
+    public MRelationDegree getLinkedEADegree(){
+        if (getLinkEnd().size() == 1){
+            return ((MCDAssociation)getLinkEnd().get(0).getMcdRelation()).getDegree();
+        }
+        return null;
+    }
+
+    public boolean isLinkedEANN(){
+        return getLinkedEADegree() == MRelationDegree.DEGREE_MANY_MANY;
+    }
+
+    public boolean isLinkedEAPseudo(){
+        return getLinkedEADegree() != MRelationDegree.DEGREE_MANY_MANY;
+    }
+
+    public boolean isInd(){
+        return (getAssEndsIdCompChild().size() == 0) && (! isLinkedEA()) && (! isSpecialized())
+                && contentIdentifier();
+    }
+
+    public boolean isPotentialInd(){
+        return (getAssEndsIdCompChild().size() == 0) && (! isLinkedEA()) && (! isSpecialized())
+                && (!contentIdentifier());
+    }
+
+    public boolean isDep(){
+        return (getAssEndsIdCompChild().size() == 1) && (! isLinkedEA()) && (! isSpecialized())
+                && contentIdentifier();
+    }
+
+    public boolean isPotentialDep(){
+        return (getAssEndsIdCompChild().size() == 1) && (! isLinkedEA()) && (! isSpecialized())
+                && (!contentIdentifier());
+    }
+
+    public boolean isNAire(){
+        return (getAssEndsIdCompChild().size() > 1) && (! isLinkedEA()) && (! isSpecialized())
+                && (!contentIdentifier());
+    }
+
+    public boolean isNAireDep(){
+        return (getAssEndsIdCompChild().size() > 1) && (! isLinkedEA()) && (! isSpecialized())
+                && contentIdentifier();
+    }
+
+    public boolean isPotentialSpecAttrAID(){
+        return isSpecialized() && (getMCDAttributeAID() != null);
+    }
+
+    public boolean isPotentialSpecAssIdComp(){
+        return isSpecialized() && (getAssEndsIdCompChild().size() > 0);
+    }
+
+    public boolean isPseudoEntAss(){
+        return isLinkedEA() && isLinkedEAPseudo() && (!contentIdentifier());
+    }
+
+    public boolean isPotentialPseudoEntAss(){
+        return isLinkedEA() && isLinkedEAPseudo() && contentIdentifier();
+    }
+
+    public boolean isEntAss(){
+        return isLinkedEA() && isLinkedEANN() && (!contentIdentifier());
+    }
+
+    public boolean isEntAssDep(){
+        return isLinkedEA() && isLinkedEANN() && contentIdentifier();
+    }
+
+    public MCDEntityNature getNature(){
+        return MCDEntityService.getNature(this);
     }
 }

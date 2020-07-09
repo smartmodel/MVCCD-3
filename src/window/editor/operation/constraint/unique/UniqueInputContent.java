@@ -71,7 +71,7 @@ public class UniqueInputContent extends PanelInputContentIdTable {
             fieldLienProg.addItemListener(this);
             fieldLienProg.addFocusListener(this);
 
-            super.getsComponents().add(fieldLienProg);
+            super.getSComponents().add(fieldLienProg);
         }
         if (getScope() == UniqueEditor.UNIQUE){
             labelAbsolute = new JLabel("Absolue");
@@ -80,14 +80,14 @@ public class UniqueInputContent extends PanelInputContentIdTable {
             fieldAbsolute.addItemListener(this);
             fieldAbsolute.addFocusListener(this);
 
-            super.getsComponents().add(fieldAbsolute);
+            super.getSComponents().add(fieldAbsolute);
         }
 
         labelStereotype = new JLabel("Stéréotype");
         fieldStereotype = new STextField(this, labelStereotype);
         fieldStereotype.setPreferredSize((new Dimension(50, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldStereotype.setEnabled(false);
-        super.getsComponents().add(fieldStereotype);
+        super.getSComponents().add(fieldStereotype);
 
 
         //super.getsComponents().add(fieldNature);

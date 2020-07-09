@@ -101,7 +101,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         if (node.getUserObject() instanceof MCDEntity) {
             treatGeneric(this, new MCDEntityEditingTreat());
-            treatGenericCompliant(this, new MCDEntityEditingTreat());
+            //treatGenericCompliant(this, new MCDEntityEditingTreat());
+            treatGenericRead(this, new MCDEntCompliantEditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.compliant"));
         }
 
         if (node.getUserObject() instanceof MCDContAttributes) {

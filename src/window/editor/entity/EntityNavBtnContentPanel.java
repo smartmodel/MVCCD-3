@@ -1,10 +1,7 @@
 package window.editor.entity;
 
 import mcd.MCDEntity;
-import repository.editingTreat.mcd.MCDAttributesEditingTreat;
-import repository.editingTreat.mcd.MCDConstraintsEditingTreat;
-import repository.editingTreat.mcd.MCDEntityEditingTreat;
-import repository.editingTreat.mcd.MCDRelEndsEditingTreat;
+import repository.editingTreat.mcd.*;
 import utilities.window.editor.PanelNavBtn;
 import utilities.window.editor.PanelNavBtnContent;
 import utilities.window.scomponents.SButton;
@@ -20,6 +17,7 @@ public class EntityNavBtnContentPanel extends PanelNavBtnContent implements Acti
     protected SButton btnAttributes ;
     protected SButton btnConstraints ;
     protected SButton btnRelations ;
+    protected SButton btnEntCompliant ;
 
     protected ArrayList<SButton> btsEnabled = new ArrayList<SButton>();
 
@@ -42,16 +40,21 @@ public class EntityNavBtnContentPanel extends PanelNavBtnContent implements Acti
         btnRelations = new SButton("Relations");
         btnRelations.addActionListener(this);
 
+        btnEntCompliant = new SButton("Conformité");
+        btnEntCompliant.addActionListener(this);
+
         panelNavContentCustom.add(btnEntity);
         panelNavContentCustom.add(btnAttributes);
         panelNavContentCustom.add(btnConstraints);
         panelNavContentCustom.add(btnRelations);
+        panelNavContentCustom.add(btnEntCompliant);
 
 
         btsEnabled.add(btnEntity);
         btsEnabled.add(btnAttributes);
         btsEnabled.add(btnConstraints);
         btsEnabled.add(btnRelations);
+        btsEnabled.add(btnEntCompliant);
 
         this.add(panelNavContentCustom);
     }
@@ -88,6 +91,17 @@ public class EntityNavBtnContentPanel extends PanelNavBtnContent implements Acti
             getEditor().myDispose();
             new MCDRelEndsEditingTreat().treatUpdate(getEditor().getOwner(),
                     getMCDEntity().getMCDContRelEnds());
+        }
+
+        if (source == btnEntCompliant) {
+            getEditor().myDispose();
+            new MCDEntCompliantEditingTreat().treatRead(getEditor().getOwner(),
+                    getMCDEntity());
+            /*
+            new MCDEntCompliantEditingTreat().treatCompliant(getEditor().getOwner(),
+                    getMCDEntity());
+
+             */
         }
     }
 

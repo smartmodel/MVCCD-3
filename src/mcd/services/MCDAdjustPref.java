@@ -24,7 +24,7 @@ public class MCDAdjustPref {
     public void mcdAIDDatatype(String lienProg) {
         ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(mcdContainer);
         for (MCDEntity mcdEntity : mcdEntities) {
-            for (MCDAttribute mcdAttribute : mcdEntity.getMcdAttributes()) {
+            for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()) {
                 if (mcdAttribute.isAid()) {
                     mcdAttribute.setDatatypeLienProg(lienProg);
                     MCDDatatype mcdDatatypeForAID = MDDatatypeService.getMCDDatatypeByLienProg(lienProg);
@@ -69,7 +69,7 @@ public class MCDAdjustPref {
 
         ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(mcdContainer);
         for (MCDEntity mcdEntity : mcdEntities){
-            for (MCDAttribute mcdAttribute : mcdEntity.getMcdAttributes()){
+            for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()){
                 if (mcdAttribute.isAid()  && (! mcdAttribute.isAidDep())){
                     mcdAttribute.setName(text);
                 }
@@ -83,7 +83,7 @@ public class MCDAdjustPref {
 
         ArrayList<MCDEntity> mcdEntities = MVCCDElementService.getAllEntities(mcdContainer);
         for (MCDEntity mcdEntity : mcdEntities){
-            for (MCDAttribute mcdAttribute : mcdEntity.getMcdAttributes()){
+            for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()){
                 if (mcdAttribute.isAid()  && mcdAttribute.isAidDep()){
                     mcdAttribute.setName(text);
                 }

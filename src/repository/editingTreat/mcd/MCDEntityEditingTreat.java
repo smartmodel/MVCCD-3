@@ -34,7 +34,7 @@ public class MCDEntityEditingTreat extends EditingTreat {
     }
 
     @Override
-    public ArrayList<String> treatCompliant(MVCCDWindow owner, MVCCDElement mvccdElement) {
+    public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
         MCDEntity mcdEntity = (MCDEntity) mvccdElement;
         ArrayList<String> resultat = mcdEntity.treatCompliant();
         super.treatCompliantBefore(owner, mvccdElement, resultat);

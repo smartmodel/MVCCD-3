@@ -6,6 +6,7 @@ import main.MVCCDElementFactory;
 import mcd.MCDAttribute;
 import mcd.MCDContAttributes;
 import mcd.MCDElement;
+import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDAttributeService;
 import messages.MessagesBuilder;
@@ -13,10 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import repository.Repository;
-import stereotypes.Stereotype;
-import stereotypes.StereotypeService;
-import stereotypes.StereotypesManager;
-import utilities.UtilDivers;
+import utilities.window.DialogMessage;
+import utilities.window.editor.DialogEditor;
 import utilities.window.editor.MDDatatypeTreeDialog;
 import utilities.window.editor.PanelInputContentId;
 import utilities.window.scomponents.*;
@@ -39,7 +38,7 @@ import java.util.Collections;
 
 public class AttributeInputContent extends PanelInputContentId {
 
-    //private JPanel panel = new JPanel();
+
     private SComboBox attributeNameAID = new SComboBox(this);
 
     private JPanel panelDatatype = new JPanel ();
@@ -178,21 +177,21 @@ public class AttributeInputContent extends PanelInputContentId {
         initValue.getDocument().addDocumentListener(this);
         initValue.addFocusListener(this);
 
-        super.getsComponents().add(attributeNameAID);
-        super.getsComponents().add(datatypeName);
-        super.getsComponents().add(btnDatatypeTree);
-        super.getsComponents().add(datatypeSize);
-        super.getsComponents().add(btnDatatypeSize);
-        super.getsComponents().add(datatypeScale);
-        super.getsComponents().add(btnDatatypeScale);
-        super.getsComponents().add(mandatory);
-        super.getsComponents().add(aid);
-        super.getsComponents().add(list);
-        super.getsComponents().add(frozen);
-        super.getsComponents().add(ordered);
-        super.getsComponents().add(uppercase);
-        super.getsComponents().add(derivedValue);
-        super.getsComponents().add(initValue);
+        super.getSComponents().add(attributeNameAID);
+        super.getSComponents().add(datatypeName);
+        super.getSComponents().add(btnDatatypeTree);
+        super.getSComponents().add(datatypeSize);
+        super.getSComponents().add(btnDatatypeSize);
+        super.getSComponents().add(datatypeScale);
+        super.getSComponents().add(btnDatatypeScale);
+        super.getSComponents().add(mandatory);
+        super.getSComponents().add(aid);
+        super.getSComponents().add(list);
+        super.getSComponents().add(frozen);
+        super.getSComponents().add(ordered);
+        super.getSComponents().add(uppercase);
+        super.getSComponents().add(derivedValue);
+        super.getSComponents().add(initValue);
         createPanelMaster();
 
         enabledOrVisibleFalse();
@@ -292,6 +291,15 @@ public class AttributeInputContent extends PanelInputContentId {
         panelId.add(new JLabel("Nom court : "), gbcId);
         gbcId.gridx++;
         panelId.add(fieldShortName, gbcId);
+        if (!longNameMode.equals(Preferences.OPTION_NO)) {
+            gbcId.gridx = 0;
+            gbcId.gridy++;
+            panelId.add(new JLabel("Nom long : "), gbcId);
+            gbcId.gridx++;
+            gbcId.gridwidth=4;
+            panelId.add(fieldLongName, gbcId);
+            gbcId.gridwidth=1;
+        }
         return gbcId;
     }
 
@@ -438,6 +446,9 @@ public class AttributeInputContent extends PanelInputContentId {
 
 
     private void changeFieldSelectedAid() {
+        if (panelInput != null) {
+            duplicateAid();
+        }
         fieldName.setText((String) attributeNameAID.getFirstItem());
         SComboBoxService.selectByText(datatypeName,
                     PreferencesManager.instance().preferences().getMCD_AID_DATATYPE_LIENPROG());
@@ -448,6 +459,17 @@ public class AttributeInputContent extends PanelInputContentId {
         frozen.setSelected(true);
         derivedValue.setText("");
         initValue.setText("");
+    }
+
+    private void duplicateAid() {
+        MCDEntity mcdEntity = (MCDEntity) getEditor().getMvccdElementParent().getParent();
+        MCDAttribute mcdAttributeAidExisting = mcdEntity.getMCDAttributeAID();
+        boolean c1 = getEditor().getMode().equals(DialogEditor.NEW);
+        boolean c2 = getEditor().getMode().equals(DialogEditor.UPDATE) &&
+                        (mcdAttributeAidExisting != getEditor().getMvccdElementCrt());
+        if ( c1 || c2 ){
+            DialogMessage.showError(getEditor(),MessagesBuilder.getMessagesProperty("attribute.aid.duplicate.error"));
+        }
     }
 
     private void changeFieldDeSelectedAid() {

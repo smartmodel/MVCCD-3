@@ -60,7 +60,7 @@ public class ParameterInputContent extends PanelInputContent {
         fieldTarget.addItemListener(this);
         fieldTarget.addFocusListener(this);
 
-        super.getsComponents().add(fieldTarget);
+        super.getSComponents().add(fieldTarget);
 
         createPanelMaster();
     }

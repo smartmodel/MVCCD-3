@@ -155,18 +155,18 @@ public class PrefMCDInputContent extends PanelInputContent {
         fieldNamingAttributeShortName.addItemListener(this);
         fieldNamingAttributeShortName.addFocusListener(this);
 
-        super.getsComponents().add(fieldAIDIndName);
-        super.getsComponents().add(fieldAIDWithDep);
-        super.getsComponents().add(fieldAIDDepName);
-        super.getsComponents().add(fieldAIDDatatype);
-        super.getsComponents().add(fieldDatatypeSizeMode);
-        super.getsComponents().add(fieldJournalization);
-        super.getsComponents().add(fieldJournalizationException);
-        super.getsComponents().add(fieldAudit);
-        super.getsComponents().add(fieldAuditException);
-        super.getsComponents().add(fieldTreeNamingAssociation);
-        super.getsComponents().add(fieldNamingLongName);
-        super.getsComponents().add(fieldNamingAttributeShortName);
+        super.getSComponents().add(fieldAIDIndName);
+        super.getSComponents().add(fieldAIDWithDep);
+        super.getSComponents().add(fieldAIDDepName);
+        super.getSComponents().add(fieldAIDDatatype);
+        super.getSComponents().add(fieldDatatypeSizeMode);
+        super.getSComponents().add(fieldJournalization);
+        super.getSComponents().add(fieldJournalizationException);
+        super.getSComponents().add(fieldAudit);
+        super.getSComponents().add(fieldAuditException);
+        super.getSComponents().add(fieldTreeNamingAssociation);
+        super.getSComponents().add(fieldNamingLongName);
+        super.getSComponents().add(fieldNamingAttributeShortName);
 
         panelInputContentCustom.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

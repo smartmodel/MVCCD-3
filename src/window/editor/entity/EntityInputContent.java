@@ -6,7 +6,6 @@ import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDContEntitiesService;
 import mcd.services.MCDElementService;
-import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentId;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -18,7 +17,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
@@ -66,10 +64,10 @@ public class EntityInputContent extends PanelInputContentId {
         entityAudit.addItemListener(this);
         entityAudit.addFocusListener(this);
 
-        super.getsComponents().add(entityOrdered);
-        super.getsComponents().add(entityAbstract);
-        super.getsComponents().add(entityJournal);
-        super.getsComponents().add(entityAudit);
+        super.getSComponents().add(entityOrdered);
+        super.getSComponents().add(entityAbstract);
+        super.getSComponents().add(entityJournal);
+        super.getSComponents().add(entityAudit);
 
         createPanelMaster();
     }

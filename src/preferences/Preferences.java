@@ -343,6 +343,15 @@ public class Preferences extends MVCCDElement {
 
     public static String MCD_MODE_NAMING_SHORT_NAME = OPTION_YES;
 
+    public static String MCD_ENTITY_NATURE_IND = "mcd.entity.nature.ind";
+    public static String MCD_ENTITY_NATURE_DEP = "mcd.entity.nature.dep";
+    public static String MCD_ENTITY_NATURE_ENTASS = "mcd.entity.nature.entass";
+    public static String MCD_ENTITY_NATURE_ENTASSDEP = "mcd.entity.nature.entassdep";
+    public static String MCD_ENTITY_NATURE_NAIRE = "mcd.entity.nature.naire";
+    public static String MCD_ENTITY_NATURE_NAIREDEP = "mcd.entity.nature.nairedep";
+    public static String MCD_ENTITY_NATURE_SPEC = "mcd.entity.nature.spec";
+    public static String MCD_ENTITY_NATURE_PSEUDOENTASS = "mcd.entity.nature.pseudoentass";
+
     public static String MCD_ASSOCIATION_NATURE_NO_ID = "mcd.association.nature.no.id";
     public static String MCD_ASSOCIATION_NATURE_ID_NATURAL = "mcd.association.nature.no.natural";
     public static String MCD_ASSOCIATION_NATURE_ID_COMP = "mcd.association.nature.no.comp";

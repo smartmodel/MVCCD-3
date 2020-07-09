@@ -80,12 +80,12 @@ public abstract class PanelInputContentId extends PanelInputContent {
         fieldLongName.getDocument().addDocumentListener(this);
         fieldLongName.addFocusListener(this);
 
-        super.getsComponents().add(fieldName);
+        super.getSComponents().add(fieldName);
         if (!shortNameMode.equals(Preferences.OPTION_NO)) {
-            super.getsComponents().add(fieldShortName);
+            super.getSComponents().add(fieldShortName);
         }
         if (!longNameMode.equals(Preferences.OPTION_NO)) {
-            super.getsComponents().add(fieldLongName);
+            super.getSComponents().add(fieldLongName);
         }
         
         //createContentIdCustom();

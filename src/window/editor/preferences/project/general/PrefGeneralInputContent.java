@@ -38,7 +38,7 @@ public class PrefGeneralInputContent extends PanelInputContent {
         fieldRelationNotation.addItemListener(this);
         fieldRelationNotation.addFocusListener(this);
 
-        super.getsComponents().add(fieldRelationNotation);
+        super.getSComponents().add(fieldRelationNotation);
 
         panelInputContentCustom.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
