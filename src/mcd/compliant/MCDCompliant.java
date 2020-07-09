@@ -3,6 +3,8 @@ package mcd.compliant;
 import console.Console;
 import main.MVCCDManager;
 import mcd.*;
+import mcd.services.MCDElementService;
+import messages.MessagesBuilder;
 import repository.editingTreat.mcd.*;
 
 import java.util.ArrayList;
@@ -20,36 +22,50 @@ public class MCDCompliant {
 
     public ArrayList<String> check(ArrayList<MCDEntity> mcdEntities, boolean showDialogCompletness){
         ArrayList<String> resultat = new ArrayList<String>();
-        for (MCDEntity mcdEntity : mcdEntities){
-            resultat.addAll(checkEntity(mcdEntity, showDialogCompletness));
-/*
-            if (mcdEntity.isGeneralized()){
-                System.out.println("Généralisation");
-            }
-            if (mcdEntity.isSpecialized()){
-                System.out.println("Spécialisation");
-            }
-
- */
+        for (MCDEntity mcdEntity : mcdEntities) {
+            // Teste l'entité pour elle-même
+            resultat.addAll(checkEntityOutContext(mcdEntity, showDialogCompletness));
         }
+
         for (MCDRelation mcdRelation : getMCDRelations(mcdEntities)){
+            // Teste la relation pour elle-même
             resultat.addAll(checkRelation(mcdRelation, showDialogCompletness));
+        }
+
+        if (resultat.size() == 0) {
+            for (MCDEntity mcdEntity : mcdEntities) {
+                // Teste la conformité entité et relations attachées
+                resultat.addAll(checkEntityInContext(mcdEntity));
+            }
         }
 
         Console.clearMessages();
         Console.printMessages(resultat);
-
         return resultat;
     }
 
 
 
-    public ArrayList<String> checkEntity(MCDEntity mcdEntity, boolean showDialogCompletness) {
+    public ArrayList<String> checkEntityOutContext(MCDEntity mcdEntity, boolean showDialogCompletness) {
         ArrayList<String> resultat =new MCDEntityEditingTreat().treatCompletness(
                 MVCCDManager.instance().getMvccdWindow(),
                 mcdEntity, showDialogCompletness);
 
-        for (MCDAttribute mcdAttribute : mcdEntity.getMcdAttributes()){
+        String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
+
+        // Un seul attribut aid (l'erreur peut venir d'un import ou de la modification du fichier de sauvegarde du projet
+        if (mcdEntity.isDuplicateMCDAttributeAID()){
+            resultat.add(MessagesBuilder.getMessagesProperty("entity.aid.duplicate.error",
+                    new String[]{mcdEntityNamePath}));
+
+        }
+        // aid ou nid
+        if ((mcdEntity.getMCDAttributeAID() != null) && (mcdEntity.getMCDNIDs().size() > 0)) {
+            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.identifier.aid.and.nid.error",
+                    new String[]{mcdEntityNamePath}));
+        }
+
+        for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()){
             resultat.addAll(checkAttribute(mcdAttribute, showDialogCompletness));
         }
 
@@ -59,7 +75,195 @@ public class MCDCompliant {
         return resultat;
     }
 
+    public ArrayList<String> checkEntityInContext(MCDEntity mcdEntity) {
+        ArrayList<String> resultat = new ArrayList<String>();
+        String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
 
+        // Spécialise une seule entité générale
+        if (mcdEntity.getGSEndSpecialize().size() > 0) {
+            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.specialized.only.one.error",
+                    new String[]{mcdEntityNamePath}));
+        }
+
+        // Entité associative ou pseudo d'une seule association
+        if (mcdEntity.getLinkEnd().size() > 0){
+            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.linkea.only.one.error",
+                    new String[] {mcdEntityNamePath}));
+        }
+
+        // Nature d'entité
+        resultat.addAll(checkEntityNature(mcdEntity));
+        return resultat;
+    }
+
+    private ArrayList<String> checkEntityNature(MCDEntity mcdEntity) {
+        ArrayList<String> resultat = new ArrayList<String>();
+        resultat.addAll(CheckEntitynNaturePseudoEA(mcdEntity));
+        resultat.addAll(CheckEntityNatureDep(mcdEntity));
+        resultat.addAll(CheckEntityNatureEntAss(mcdEntity));
+        resultat.addAll(CheckEntityOrdered(mcdEntity));
+        resultat.addAll(CheckEntityAbstract(mcdEntity));
+
+        resultat.addAll(CheckEntityNaturePotential(mcdEntity));
+        return resultat;
+    }
+
+
+    private ArrayList<String> CheckEntitynNaturePseudoEA(MCDEntity mcdEntity) {
+        ArrayList<String> resultat = new ArrayList<String>();
+        String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
+
+        if (mcdEntity.isPseudoEntAss()){
+            if (mcdEntity.isDep()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.dep",
+                        new String[] {mcdEntityNamePath}));
+            }
+            if (mcdEntity.isEntAss()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.entass",
+                        new String[] {mcdEntityNamePath}));
+            }
+            if (mcdEntity.isNAire()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.naire",
+                        new String[] {mcdEntityNamePath}));
+            }
+            if (mcdEntity.isSpecialized()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.specialized",
+                        new String[] {mcdEntityNamePath}));
+            }
+            if (mcdEntity.getAssEndsIdCompParent().size() > 0){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.parentasspk",
+                        new String[] {mcdEntityNamePath}));
+            }
+            if (mcdEntity.isGeneralized()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.generalized",
+                        new String[] {mcdEntityNamePath}));
+            }
+            // Pas d'association avec une pseudo entité associative
+            if (mcdEntity.getMCDAssEnds().size() > 0){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.association",
+                        new String[] {mcdEntityNamePath}));
+            }
+        }
+
+        return resultat;
+    }
+
+    private ArrayList<String> CheckEntityNatureDep(MCDEntity mcdEntity) {
+        ArrayList<String> resultat = new ArrayList<String>();
+        String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
+
+        if (mcdEntity.isDep()){
+            if (mcdEntity.isEntAss()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.dep.entass",
+                        new String[] {mcdEntityNamePath}));
+            }
+            if (mcdEntity.isNAire()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.dep.naire",
+                        new String[] {mcdEntityNamePath}));
+            }
+            if (mcdEntity.isSpecialized()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.dep.specialized",
+                        new String[] {mcdEntityNamePath}));
+            }
+        }
+        return resultat;
+    }
+
+    private ArrayList<String> CheckEntityNatureEntAss(MCDEntity mcdEntity) {
+        ArrayList<String> resultat = new ArrayList<String>();
+        String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
+
+        if (mcdEntity.isEntAss()){
+            if (mcdEntity.isNAire()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.entass.naire",
+                        new String[] {mcdEntityNamePath}));
+            }
+            if (mcdEntity.isSpecialized()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.entass.specialized",
+                        new String[] {mcdEntityNamePath}));
+            }
+        }
+        return resultat;
+    }
+
+    private ArrayList<String> CheckEntityNatureNAire(MCDEntity mcdEntity) {
+        ArrayList<String> resultat = new ArrayList<String>();
+        String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
+
+        if (mcdEntity.isNAire()){
+           if (mcdEntity.isSpecialized()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.naire.specialized",
+                        new String[] {mcdEntityNamePath}));
+            }
+        }
+        return resultat;
+    }
+
+    private ArrayList<String> CheckEntityOrdered(MCDEntity mcdEntity) {
+        ArrayList<String> resultat = new ArrayList<String>();
+        String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
+
+        if (mcdEntity.isOrdered()){
+            if (mcdEntity.isPseudoEntAss()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.ordered.pseudoea",
+                        new String[] {mcdEntityNamePath}));
+            }
+            if (mcdEntity.isEntAssDep()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.ordered.eadep",
+                        new String[] {mcdEntityNamePath}));
+            }
+            if (mcdEntity.isNAireDep()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.ordered.nairedep",
+                        new String[] {mcdEntityNamePath}));
+            }
+            if (mcdEntity.isSpecialized()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.ordered.specialized",
+                        new String[] {mcdEntityNamePath}));
+            }
+        }
+        return resultat;
+    }
+
+    private ArrayList<String> CheckEntityAbstract(MCDEntity mcdEntity) {
+        ArrayList<String> resultat = new ArrayList<String>();
+        String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
+
+        if (mcdEntity.isEntAbstract()){
+            if (! mcdEntity.isSpecialized()){
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.abstract.not.generalized",
+                        new String[] {mcdEntityNamePath}));
+            }
+        }
+        return resultat;
+    }
+
+
+    private ArrayList<String> CheckEntityNaturePotential(MCDEntity mcdEntity) {
+        ArrayList<String> resultat = new ArrayList<String>();
+        String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
+
+        if (mcdEntity.isPotentialInd()){
+            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.potential.ind",
+                    new String[] {mcdEntityNamePath}));
+        }
+        if (mcdEntity.isPotentialDep()){
+            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.potential.dep",
+                    new String[] {mcdEntityNamePath}));
+        }
+        if (mcdEntity.isPotentialSpecAttrAID()){
+            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.potential.specialized.attribute.aid",
+                    new String[] {mcdEntityNamePath}));
+        }
+        if (mcdEntity.isPotentialSpecAssIdComp()){
+            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.potential.specialized.association.idcomp",
+                    new String[] {mcdEntityNamePath}));
+        }
+        if (mcdEntity.isPotentialPseudoEntAss()){
+            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.potential.pseudoass.with.id",
+                    new String[] {mcdEntityNamePath}));
+        }
+        return resultat;
+    }
 
     public ArrayList<String> checkAttribute(MCDAttribute mcdAttribute, boolean showDialogCompletness) {
         ArrayList<String> resultat =new MCDAttributeEditingTreat().treatCompletness(
@@ -122,4 +326,5 @@ public class MCDCompliant {
         }
         return resultat;
     }
+
 }

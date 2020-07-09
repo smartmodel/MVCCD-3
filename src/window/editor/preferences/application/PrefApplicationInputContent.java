@@ -71,14 +71,14 @@ public class PrefApplicationInputContent extends PanelInputContent {
 
         //debugBackgroundPanel.addChangeListener(this);
 
-        super.getsComponents().add(debug);
-        super.getsComponents().add(debugPrintMVCCDElement);
-        super.getsComponents().add(debugBackgroundPanel);
-        super.getsComponents().add(debugJTableShowHidden);
-        super.getsComponents().add(debugJTreeInspectObject);
-        super.getsComponents().add(debugEditorDatasChanged);
-        super.getsComponents().add(fieldRepMCDModelsMany);
-        super.getsComponents().add(fieldRepMCDPackagesAuthorizeds);
+        super.getSComponents().add(debug);
+        super.getSComponents().add(debugPrintMVCCDElement);
+        super.getSComponents().add(debugBackgroundPanel);
+        super.getSComponents().add(debugJTableShowHidden);
+        super.getSComponents().add(debugJTreeInspectObject);
+        super.getSComponents().add(debugEditorDatasChanged);
+        super.getSComponents().add(fieldRepMCDModelsMany);
+        super.getSComponents().add(fieldRepMCDPackagesAuthorizeds);
 
 
         panelInputContentCustom.setLayout(new GridBagLayout());

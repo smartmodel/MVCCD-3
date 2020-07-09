@@ -1,10 +1,6 @@
 package window.editor.relation.genspec;
 
 import m.MRelEnd;
-import m.MRelEndMultiPart;
-import m.MRelationDegree;
-import m.services.MRelEndService;
-import m.services.MRelationService;
 import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
@@ -13,7 +9,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentId;
-import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.services.SComboBoxService;
@@ -95,7 +90,7 @@ public class GenSpecInputContent extends PanelInputContentId {
         factorizeFieldEntity.addFocusListener(this);
         factorizeFieldEntity.addItemListener(this);
 
-        super.getsComponents().add(factorizeFieldEntity);
+        super.getSComponents().add(factorizeFieldEntity);
      }
 
     private void createPanelMaster(){

@@ -36,7 +36,7 @@ public class MCDContModelsEditingTreat extends EditingTreat {
     }
 
     @Override
-    public ArrayList<String> treatCompliant(MVCCDWindow owner, MVCCDElement mvccdElement) {
+    public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
         MCDContModels mcdContModels = (MCDContModels) mvccdElement;
         ArrayList<String> resultat = mcdContModels.treatCompliant();
         super.treatCompliantBefore(owner, mvccdElement, resultat);

@@ -41,7 +41,7 @@ public class MCDAttributeEditingTreat extends EditingTreat {
     }
 
     @Override
-    public ArrayList<String> treatCompliant(MVCCDWindow mvccdWindow, MVCCDElement mvccdElement) {
+    public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
         return null;
     }
 }

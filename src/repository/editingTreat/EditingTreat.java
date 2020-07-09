@@ -165,10 +165,10 @@ public abstract class EditingTreat {
         MVCCDManager.instance().removeMVCCDElementInRepository(child, child.getParent());
     }
 
-    public abstract ArrayList<String> treatCompliant(MVCCDWindow mvccdWindow, MVCCDElement mvccdElement);
+    public abstract ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement);
 
 
-    protected void treatCompliantBefore(MVCCDWindow owner, MVCCDElement mvccdElement, ArrayList<String> messages) {
+    protected void treatCompliantBefore(Window owner, MVCCDElement mvccdElement, ArrayList<String> messages) {
         if (messages.size() == 0 ){
             MCDElement mcdElement = (MCDElement) mvccdElement;
             String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());

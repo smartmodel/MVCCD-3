@@ -11,14 +11,12 @@ import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
 import repository.RepositoryService;
-import utilities.UtilDivers;
 import utilities.window.DialogMessage;
 import utilities.window.ReadTableModel;
 import utilities.window.editor.services.PanelInputContentTableService;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STable;
 import utilities.window.scomponents.services.STableService;
-import window.editor.attributes.AttributesTableColumn;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -92,7 +90,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         PanelInputContentTableService.genericColumnsDisplay(table);
         specificColumnsDisplay();
 
-        super.getsComponents().add(table);
+        super.getSComponents().add(table);
 
 
         table.addMouseListener(new MouseListener() {

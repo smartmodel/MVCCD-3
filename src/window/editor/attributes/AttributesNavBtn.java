@@ -15,7 +15,7 @@ public class AttributesNavBtn extends PanelNavBtn {
     @Override
     protected PanelNavBtnContent createContentCustom() {
 
-        return new AttributesNavBtnContentContentPanel(this);
+        return new AttributesNavBtnContentPanel(this);
     }
 
 

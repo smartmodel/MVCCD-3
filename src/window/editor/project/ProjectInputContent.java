@@ -77,10 +77,10 @@ public class ProjectInputContent extends PanelInputContent {
             fieldPackagesAutorizeds.setEnabled(false);
         }
 
-        super.getsComponents().add(projectName);
-        super.getsComponents().add(profileFileName);
-        super.getsComponents().add(fieldModelsMany);
-        super.getsComponents().add(fieldPackagesAutorizeds);
+        super.getSComponents().add(projectName);
+        super.getSComponents().add(profileFileName);
+        super.getSComponents().add(fieldModelsMany);
+        super.getSComponents().add(fieldPackagesAutorizeds);
 
 
         panelInputContentCustom.setLayout(new GridBagLayout());

@@ -106,10 +106,10 @@ public class AssociationInputContent extends PanelInputContentId {
 
 
 
-        super.getsComponents().add(fieldNature);
-        super.getsComponents().add(fieldFrozen);
-        super.getsComponents().add(fieldDeleteCascade);
-        super.getsComponents().add(fieldOriented);
+        super.getSComponents().add(fieldNature);
+        super.getSComponents().add(fieldFrozen);
+        super.getSComponents().add(fieldDeleteCascade);
+        super.getSComponents().add(fieldOriented);
 
 
 
@@ -211,11 +211,11 @@ public class AssociationInputContent extends PanelInputContentId {
         factorizeFieldOrdered.addFocusListener(this);
         factorizeFieldOrdered.addItemListener(this);
 
-        super.getsComponents().add(factorizeFieldEntity);
-        super.getsComponents().add(factorizeFieldRoleName);
-        super.getsComponents().add(factorizeFieldRoleShortName);
-        super.getsComponents().add(factorizeFieldMulti);
-        super.getsComponents().add(factorizeFieldOrdered);
+        super.getSComponents().add(factorizeFieldEntity);
+        super.getSComponents().add(factorizeFieldRoleName);
+        super.getSComponents().add(factorizeFieldRoleShortName);
+        super.getSComponents().add(factorizeFieldMulti);
+        super.getSComponents().add(factorizeFieldOrdered);
     }
 
     private void createPanelMaster(){

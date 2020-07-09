@@ -48,7 +48,7 @@ public class MCDParameterService {
 
     public static ArrayList<MCDAttribute> createTargetsAttributesUnique(MCDEntity mcdEntity, ArrayList<MCDParameter> parameters) {
         ArrayList<MCDAttribute> resultat = new ArrayList<MCDAttribute>();
-        ArrayList<MVCCDElement> targetsPotential = MVCCDElementConvert.to(mcdEntity.getMcdAttributes());
+        ArrayList<MVCCDElement> targetsPotential = MVCCDElementConvert.to(mcdEntity.getMCDAttributes());
         for (MVCCDElement targetPotential : targetsPotential){
             if (targetPotential instanceof MCDAttribute){
                 MCDAttribute attributePotential = (MCDAttribute) targetPotential;
@@ -95,7 +95,7 @@ public class MCDParameterService {
 
     public static IMCDParameter getTargetByTypeAndName(MCDEntity mcdEntity, String type, String name){
         if ( type.equals(MCDAttribute.CLASSSHORTNAMEUI)){
-            for ( MCDAttribute mcdAttribute : mcdEntity.getMcdAttributes()){
+            for ( MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()){
                 if (mcdAttribute.getName().equals(name)){
                     return mcdAttribute;
                 }

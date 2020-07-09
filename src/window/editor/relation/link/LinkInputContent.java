@@ -78,8 +78,8 @@ public class LinkInputContent extends PanelInputContentId {
         fieldAssociation.addFocusListener(this);
         fieldAssociation.addItemListener(this);
 
-        super.getsComponents().add(fieldEntity);
-        super.getsComponents().add(fieldAssociation);
+        super.getSComponents().add(fieldEntity);
+        super.getSComponents().add(fieldAssociation);
         createPanelMaster();
     }
 

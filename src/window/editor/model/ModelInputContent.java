@@ -1,7 +1,6 @@
 package window.editor.model;
 
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDContPackages;
@@ -21,7 +20,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
@@ -89,12 +87,12 @@ public class ModelInputContent extends PanelInputContentId {
         fieldAuditException.setName("fieldAuditException");
 
         if (getScope() == ModelEditor.MODEL) {
-            super.getsComponents().add(fieldPackagesAutorizeds);
+            super.getSComponents().add(fieldPackagesAutorizeds);
         }
-        super.getsComponents().add(fieldJournalization);
-        super.getsComponents().add(fieldJournalizationException);
-        super.getsComponents().add(fieldAudit);
-        super.getsComponents().add(fieldAuditException);
+        super.getSComponents().add(fieldJournalization);
+        super.getSComponents().add(fieldJournalizationException);
+        super.getSComponents().add(fieldAudit);
+        super.getSComponents().add(fieldAuditException);
 
         //enabledOrVisibleFalse();
          createPanelMaster();
