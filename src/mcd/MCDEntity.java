@@ -1,7 +1,6 @@
 package mcd;
 
 import m.IMCompletness;
-import m.MRelation;
 import m.MRelationDegree;
 import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
@@ -96,8 +95,18 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
     }
 
 
-    public ArrayList<MCDConstraint> getMCDNIDs() {
-        ArrayList<MCDConstraint> resultat = new ArrayList<MCDConstraint>();
+    public ArrayList<MCDUnicity> getMCDUnicities() {
+        ArrayList<MCDUnicity> resultat = new ArrayList<MCDUnicity>();
+        for (MCDConstraint mcdConstraint: getMcdConstraints() ){
+            if (mcdConstraint instanceof MCDUnicity) {
+                resultat.add((MCDUnicity) mcdConstraint);
+            }
+        }
+        return resultat;
+    }
+
+    public ArrayList<MCDNID> getMCDNIDs() {
+        ArrayList<MCDNID> resultat = new ArrayList<MCDNID>();
         for (MCDConstraint mcdConstraint: getMcdConstraints() ){
             if (mcdConstraint instanceof MCDNID) {
                 resultat.add((MCDNID) mcdConstraint);
@@ -105,6 +114,17 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         }
         return resultat;
     }
+
+    public ArrayList<MCDUnique> getMCDUniques() {
+        ArrayList<MCDUnique> resultat = new ArrayList<MCDUnique>();
+        for (MCDConstraint mcdConstraint: getMcdConstraints() ){
+            if (mcdConstraint instanceof MCDUnique) {
+                resultat.add((MCDUnique) mcdConstraint);
+            }
+        }
+        return resultat;
+    }
+
 
     public MCDContConstraints getMCDContConstraints() {
         for (MVCCDElement mvccdElement : getChilds()){
@@ -129,6 +149,16 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         for (MVCCDElement mvccdElement : this.getMCDContEndRels().getChilds()){
             if (mvccdElement instanceof MCDAssEnd){
                 resultat.add((MCDAssEnd) mvccdElement);
+            }
+        }
+        return resultat;
+    }
+
+    public ArrayList<MCDLinkEnd> getMCDLinkEnds() {
+        ArrayList<MCDLinkEnd> resultat = new ArrayList<MCDLinkEnd>();
+        for (MVCCDElement mvccdElement : this.getMCDContEndRels().getChilds()){
+            if (mvccdElement instanceof MCDLinkEnd){
+                resultat.add((MCDLinkEnd) mvccdElement);
             }
         }
         return resultat;
@@ -186,13 +216,31 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return MCDEntityService.getAssEndsIdCompParent(this);
     }
 
+
     public ArrayList<MCDAssEnd> getAssEndsIdCompChild(){
+
         return MCDEntityService.getAssEndsIdCompChild(this);
     }
 
+    public ArrayList<MCDAssEnd> getAssEndsIdNatParent(){
+
+        return MCDEntityService.getAssEndsIdNatParent(this);
+    }
+
+    public ArrayList<MCDAssEnd> getAssEndsIdNatChild(){
+
+        return MCDEntityService.getAssEndsIdNatChild(this);
+    }
+
+    public ArrayList<MCDAssEnd> getAssEndsNoId(){
+
+        return MCDEntityService.getAssEndsNoId(this);
+    }
+
+
     // Un tableau est retourné car lors de la saisie plusieurs liens peuvent être établis!
     // C'est lors du contrôle de conformité que je vérifie qu'il n'y a qu'un lien d'entité associative
-    public ArrayList<MCDLinkEnd> getLinkEnd(){
+    public ArrayList<MCDLinkEnd> getLinkEnds(){
         return MCDEntityService.getMCDLinkEnds(this);
     }
 
@@ -205,12 +253,13 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
     }
 
     public boolean isLinkedEA(){
-        return getLinkEnd().size() == 1;
+        return getLinkEnds().size() == 1;
     }
 
     public MRelationDegree getLinkedEADegree(){
-        if (getLinkEnd().size() == 1){
-            return ((MCDAssociation)getLinkEnd().get(0).getMcdRelation()).getDegree();
+        if (getLinkEnds().size() == 1){
+            //return ((MCDAssociation) getLinkEnds().get(0).getMcdLink().getEndAssociation().getMcdRelation()).getDegree();
+            return ((MCDAssociation) getLinkEnds().get(0).getMcdLink().getEndAssociation().getMcdElement()).getDegree();
         }
         return null;
     }
@@ -253,6 +302,18 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
                 && contentIdentifier();
     }
 
+    public boolean isEntAssOrDescendant(){
+        return isEntAss() || isEntAssDep();
+    }
+
+    public boolean isNAireOrDescendant(){
+        return isNAire() || isNAireDep();
+    }
+
+    public boolean isEntConcret(){
+        return isInd() || isDep() || isEntAssOrDescendant() || isNAireOrDescendant() || isSpecialized();
+    }
+
     public boolean isPotentialSpecAttrAID(){
         return isSpecialized() && (getMCDAttributeAID() != null);
     }
@@ -272,6 +333,7 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
     public boolean isEntAss(){
         return isLinkedEA() && isLinkedEANN() && (!contentIdentifier());
     }
+
 
     public boolean isEntAssDep(){
         return isLinkedEA() && isLinkedEANN() && contentIdentifier();

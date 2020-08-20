@@ -37,4 +37,18 @@ public abstract class MCDConstraint extends MCDOperation{
         return resultat;
     }
 
+    public ArrayList<MCDAttribute> getMcdAttributes() {
+        ArrayList<MCDAttribute> resultat = new ArrayList<MCDAttribute>();
+        for (MCDParameter mcdParameter: getMcdParameters()){
+            if (mcdParameter.getTarget() instanceof MCDAttribute) {
+                resultat.add((MCDAttribute) mcdParameter.getTarget());
+            }
+        }
+        return resultat;
+    }
+
+    public MCDEntity getEntityParent(){
+        return (MCDEntity) getParent().getParent();
+    }
+
 }

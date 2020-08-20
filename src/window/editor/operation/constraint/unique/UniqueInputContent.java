@@ -6,8 +6,10 @@ import main.MVCCDElementFactory;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDParameter;
+import mcd.services.MCDNIDService;
 import mcd.services.MCDOperationService;
 import mcd.services.MCDParameterService;
+import mcd.services.MCDUniqueService;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import repository.editingTreat.mcd.*;
@@ -18,6 +20,7 @@ import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentIdTable;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComponent;
+import utilities.window.scomponents.STextArea;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
 import window.editor.operation.OperationParamTableColumn;
@@ -37,6 +40,8 @@ public class UniqueInputContent extends PanelInputContentIdTable {
     private SCheckBox fieldLienProg ;
     private JLabel labelAbsolute ;
     private SCheckBox fieldAbsolute ;
+    private JLabel labelAssEndIdParents ;
+    private STextArea fieldAssEndIdParents ;
     private JLabel labelStereotype ;
     private STextField fieldStereotype ;
 
@@ -63,6 +68,12 @@ public class UniqueInputContent extends PanelInputContentIdTable {
         super.createContentCustom();
 
         fieldParent.setVisible(false);
+
+        labelAssEndIdParents = new JLabel ("Extrémités d'associations identifiantes");
+        fieldAssEndIdParents = new STextArea (this, labelAssEndIdParents);
+
+        fieldAssEndIdParents.setPreferredSize((new Dimension(300, 50)));
+
 
         if (getScope() == UniqueEditor.NID){
             labelLienProg = new JLabel("Lien de programmation");
@@ -189,10 +200,16 @@ public class UniqueInputContent extends PanelInputContentIdTable {
         row[col] = parameter.getOrder();
 
         col = OperationParamTableColumn.NAME.getPosition();
-        row[col] = parameter.getName();
+        if (parameter.getTarget() != null) {
+            row[col] = parameter.getTarget().getNameTree();
+        } else {
+            row[col] = parameter.getName();
+        }
 
         col = OperationParamTableColumn.TYPE.getPosition();
-        row[col] = parameter.getTarget().getClassShortNameUI();
+        if (parameter.getTarget() != null) {
+            row[col] = parameter.getTarget().getClassShortNameUI();
+        }
 
         String sousType = "";
         if (parameter.getTarget() instanceof MCDAssociation){
@@ -230,6 +247,13 @@ public class UniqueInputContent extends PanelInputContentIdTable {
             gbc.gridx++;
             panelInputContentCustom.add(fieldAbsolute, gbc);
         }
+
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(labelAssEndIdParents, gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldAssEndIdParents, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
@@ -322,10 +346,28 @@ public class UniqueInputContent extends PanelInputContentIdTable {
     protected boolean checkDetails(boolean unitaire) {
         boolean ok = super.checkDetails(unitaire);
         if (ok) {
-            ok = super.checkInput(table, unitaire, MCDOperationService.checkTargets(
-                    table,
-                    getContextProperty(),
-                    getRowTargetProperty()));
+            MVCCDElement mvccdElement = null;
+            if (panelInput != null) {
+                mvccdElement = getEditor().getMvccdElementCrt();
+            } else {
+                mvccdElement = this.elementForCheckInput;
+            }
+            if (getScope() == UniqueEditor.NID) {
+                ok = super.checkInput(table, unitaire, MCDNIDService.checkParameters(
+                        //(MCDNID) getEditor().getMvccdElementCrt(),
+                        (MCDNID) mvccdElement,
+                        table,
+                        getContextProperty(),
+                        getRowTargetProperty()));
+            }
+            if (getScope() == UniqueEditor.UNIQUE) {
+                ok = super.checkInput(table, unitaire, MCDUniqueService.checkParameters(
+                        //(MCDUnique) getEditor().getMvccdElementCrt(),
+                        (MCDUnique) mvccdElement,
+                        table,
+                        getContextProperty(),
+                        getRowTargetProperty()));
+            }
         }
         return ok;
     }
@@ -468,19 +510,40 @@ public class UniqueInputContent extends PanelInputContentIdTable {
 
         super.loadDatas(mvccdElement);
 
-
         if (getScope() == UniqueEditor.UNIQUE) {
             MCDUnique mcdUnique = (MCDUnique) mvccdElement;
             fieldAbsolute.setSelected(mcdUnique.isAbsolute());
+            if (! mcdUnique.isAbsolute()) {
+                loadAssEndIdParents(mcdUnique);
+            }
         }
         if (getScope() == UniqueEditor.NID) {
             MCDNID mcdNID = (MCDNID) mvccdElement;
             fieldLienProg.setSelected(mcdNID.isLienProg());
+            loadAssEndIdParents(mcdNID);
         }
 
         fieldStereotype.setText(computeStereotype().getName());
 
     }
+
+    private void loadAssEndIdParents(MCDUnicity mcdUnicity) {
+        boolean c1 = mcdUnicity instanceof MCDNID;
+        boolean c2 = (mcdUnicity instanceof MCDUnique) &&  (!(((MCDUnique) mcdUnicity).isAbsolute())) ;
+
+        if (c1 || c2 ){
+            MCDEntity mcdEntity = mcdUnicity.getEntityParent();
+            ArrayList<MCDAssEnd> mcdAssEndsIdCompParent = mcdEntity.getAssEndsIdCompParent();
+            ArrayList<MCDAssEnd> mcdAssEndsIdParent = mcdAssEndsIdCompParent;
+            ArrayList<MCDAssEnd> mcdAssEndsIdNatParent = mcdEntity.getAssEndsIdNatParent();
+            mcdAssEndsIdParent.addAll(mcdAssEndsIdNatParent);
+            for (MCDAssEnd mcdAssEnd : mcdAssEndsIdParent){
+                fieldAssEndIdParents.append(mcdAssEnd.getNameTree());
+            }
+        }
+    }
+
+
 
     @Override
     protected void specificLoad(MVCCDElement mvccdElement) {
@@ -488,11 +551,13 @@ public class UniqueInputContent extends PanelInputContentIdTable {
         ArrayList<MCDParameter> parameters = mcdUnicity.getParameters();
         datas = new Object[parameters.size()][OperationParamTableColumn.getNbColumns()];
         int line=-1;
+        //specificLoadMCDAssociationsId(mcdUnicity, line);
         for (MCDParameter parameter:parameters){
             line++;
             putValueInRow((MElement) parameter, datas[line]);
         }
     }
+
 
     private Stereotype computeStereotype(){
         MCDContConstraints mcdContConstraints;
@@ -550,7 +615,7 @@ public class UniqueInputContent extends PanelInputContentIdTable {
 
         MCDUnicity mcdUnicity = (MCDUnicity) getEditor().getMvccdElementCrt();
         MCDEntity mcdEntity = (MCDEntity) mcdUnicity.getParent().getParent();
-        IMCDParameter target = MCDParameterService.getTargetByTypeAndName(mcdEntity,
+        IMCDParameter target = MCDParameterService.getTargetByTypeAndNameTree(mcdEntity,
                 (String) model.getValueAt(line, OperationParamTableColumn.TYPE.getPosition()),
                 (String) model.getValueAt(line, OperationParamTableColumn.NAME.getPosition()));
 

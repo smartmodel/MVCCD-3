@@ -239,7 +239,8 @@ public class RelEndsInputContent extends PanelInputContentTable {
         }
 
          */
-        row[col] = relEnd.getMCDRelEndOpposite().getMcdElement().getNameTree();
+        //row[col] = relEnd.getMCDRelEndOpposite().getMcdElement().getNameTree();
+        row[col] = relEnd.getMCDRelEndOpposite().getNameTree();
 
         col = RelEndsTableColumn.CONSTRAINTS.getPosition();
         row[col] = UtilDivers.ArrayStringToString(constraintsUMLNames, "");;

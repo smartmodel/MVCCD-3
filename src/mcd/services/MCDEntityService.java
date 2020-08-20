@@ -1,6 +1,7 @@
 package mcd.services;
 
 import m.MRelEndMulti;
+import m.MRelEndMultiPart;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import project.ProjectService;
@@ -104,11 +105,24 @@ public class MCDEntityService {
         return resultat;
     }
 
+
+    public static ArrayList<MCDAssEnd> getAssEndsNoId(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
+            if (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.NOID){
+                    resultat.add((MCDAssEnd) mcdAssEnd);
+            }
+        }
+        return resultat;
+    }
+
+
+
     public static ArrayList<MCDAssEnd> getAssEndsIdComp(MCDEntity mcdEntity, boolean parent) {
         ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
         for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
             if (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.IDCOMP){
-                boolean c1 = mcdAssEnd.getMulti() == MRelEndMulti.MULTI_ONE_ONE;
+                boolean c1 = mcdAssEnd.getMultiMaxStd() == MRelEndMultiPart.MULTI_MANY;
                 if ( c1 && parent ) {
                     resultat.add((MCDAssEnd) mcdAssEnd);
                 }
@@ -128,6 +142,30 @@ public class MCDEntityService {
         return getAssEndsIdComp(mcdEntity, false);
     }
 
+    public static ArrayList<MCDAssEnd> getAssEndsIdNat(MCDEntity mcdEntity, boolean parent) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
+            if (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.IDNATURAL){
+                boolean c1 = mcdAssEnd.getMultiMaxStd() == MRelEndMultiPart.MULTI_MANY;
+                if ( c1 && parent ) {
+                    resultat.add((MCDAssEnd) mcdAssEnd);
+                }
+                if ( (!c1) && (!parent) ){
+                    resultat.add((MCDAssEnd) mcdAssEnd);
+                }
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDAssEnd> getAssEndsIdNatParent(MCDEntity mcdEntity) {
+        return getAssEndsIdNat(mcdEntity, true);
+    }
+
+
+    public static ArrayList<MCDAssEnd> getAssEndsIdNatChild(MCDEntity mcdEntity) {
+        return getAssEndsIdNat(mcdEntity, false);
+    }
 
     public static ArrayList<MCDLinkEnd> getMCDLinkEnds(MCDEntity mcdEntity) {
         ArrayList<MCDLinkEnd> resultat = new ArrayList<MCDLinkEnd>();

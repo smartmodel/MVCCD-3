@@ -29,6 +29,7 @@ public class MCDLink extends MCDRelation {
     }
 
     public MCDLinkEnd getEndEntity() {
+
         return  (MCDLinkEnd)  super.getA();
     }
 

@@ -24,7 +24,7 @@ public class MCDUniqueEditingTreat extends EditingTreat {
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
         return new UniqueEditor(owner, (MCDContConstraints) parent, (MCDUnicity) element, mode,
-                UniqueEditor.UNIQUE, new MCDNIDEditingTreat());
+                UniqueEditor.UNIQUE, new MCDUniqueEditingTreat());
 
     }
 

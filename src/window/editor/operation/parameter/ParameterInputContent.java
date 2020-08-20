@@ -54,7 +54,7 @@ public class ParameterInputContent extends PanelInputContent {
         fieldTarget.addItem(SComboBox.LINEWHITE);
         for (MVCCDElement targetPotentialChecked : targetsPotential){
             if (targetPotentialChecked instanceof IMCDParameter) {
-                fieldTarget.addItem(((IMCDParameter)targetPotentialChecked).getName());
+                fieldTarget.addItem(((IMCDParameter)targetPotentialChecked).getNameTree());
             }
         }
         fieldTarget.addItemListener(this);
@@ -74,14 +74,16 @@ public class ParameterInputContent extends PanelInputContent {
             targetsPotential = MVCCDElementConvert.to(
                     MCDParameterService.createTargetsAttributesUnique(mcdEntity,
                             mcdOperation.getParameters()));
+            targetsPotential.addAll(
+                    MCDParameterService.createTargetsAssEnds(mcdEntity,
+                    mcdOperation.getParameters()));
         }
         if (getEditor().getScope() == ParameterEditor.NID){
             targetsPotential = MVCCDElementConvert.to(
                     MCDParameterService.createTargetsAttributesNID(mcdEntity,
                             mcdOperation.getParameters()));
         }
-
-    }
+   }
 
 
     private void createPanelMaster() {
@@ -191,7 +193,7 @@ public class ParameterInputContent extends PanelInputContent {
 
 
     private boolean checkTarget(boolean unitaire) {
-        IMCDParameter iMCDParameterTarget = getTargetByName((String) fieldTarget.getSelectedItem());
+        IMCDParameter iMCDParameterTarget = getTargetByNameTree((String) fieldTarget.getSelectedItem());
         
         return super.checkInput(fieldTarget, unitaire,
                 MCDParameterService.checkTarget(
@@ -229,28 +231,40 @@ public class ParameterInputContent extends PanelInputContent {
         MCDParameter mcdParameter =(MCDParameter) mvccdElement;
 
         if (fieldTarget.checkIfUpdated()) {
-            String nameTarget = (String) fieldTarget.getSelectedItem();
-            IMCDParameter iMCDParameterTarget = getTargetByName(nameTarget);
+            String nameTreeTarget = (String) fieldTarget.getSelectedItem();
+            IMCDParameter iMCDParameterTarget = getTargetByNameTree(nameTreeTarget);
             mcdParameter.setTarget(iMCDParameterTarget);
 
             if (iMCDParameterTarget != null) {
                 mcdParameter.setTarget(iMCDParameterTarget);
             } else {
-                throw new CodeApplException("Aucune cible de paramètre n'a été trouvée pour le nom: " + nameTarget);
+                throw new CodeApplException("Aucune cible de paramètre n'a été trouvée pour le nom: " + nameTreeTarget);
             }
         }
     }
 
     private IMCDParameter getTargetByName(String nameTarget) {
-            for (MVCCDElement target : targetsPotential) {
-                if (target instanceof IMCDParameter) {
-                    IMCDParameter iMCDParameterTarget = (IMCDParameter) target;
-                    if (iMCDParameterTarget.getName().equals(nameTarget)) {
-                        return iMCDParameterTarget;
-                    }
+        for (MVCCDElement target : targetsPotential) {
+            if (target instanceof IMCDParameter) {
+                IMCDParameter iMCDParameterTarget = (IMCDParameter) target;
+                if (iMCDParameterTarget.getName().equals(nameTarget)) {
+                    return iMCDParameterTarget;
                 }
             }
-            return null;
+        }
+        return null;
+    }
+
+    private IMCDParameter getTargetByNameTree(String nameTreeTarget) {
+        for (MVCCDElement target : targetsPotential) {
+            if (target instanceof IMCDParameter) {
+                IMCDParameter iMCDParameterTarget = (IMCDParameter) target;
+                if (iMCDParameterTarget.getNameTree().equals(nameTreeTarget)) {
+                    return iMCDParameterTarget;
+                }
+            }
+        }
+        return null;
     }
 
     private int getScope() {

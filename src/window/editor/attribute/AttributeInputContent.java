@@ -464,7 +464,8 @@ public class AttributeInputContent extends PanelInputContentId {
     private void duplicateAid() {
         MCDEntity mcdEntity = (MCDEntity) getEditor().getMvccdElementParent().getParent();
         MCDAttribute mcdAttributeAidExisting = mcdEntity.getMCDAttributeAID();
-        boolean c1 = getEditor().getMode().equals(DialogEditor.NEW);
+        boolean c1 = getEditor().getMode().equals(DialogEditor.NEW) &&
+                        (mcdAttributeAidExisting != null) ;
         boolean c2 = getEditor().getMode().equals(DialogEditor.UPDATE) &&
                         (mcdAttributeAidExisting != getEditor().getMvccdElementCrt());
         if ( c1 || c2 ){

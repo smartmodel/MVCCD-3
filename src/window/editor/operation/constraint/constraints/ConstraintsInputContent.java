@@ -150,7 +150,7 @@ public class ConstraintsInputContent extends PanelInputContentTable {
                     (MCDUnique) mElement,
                     DialogEditor.UPDATE,
                     UniqueEditor.UNIQUE,
-                    new MCDNIDEditingTreat());
+                    new MCDUniqueEditingTreat());
         }
         fen.setVisible(true);
     }

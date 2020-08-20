@@ -66,11 +66,11 @@ public class MCDCompliant {
         }
 
         for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()){
-            resultat.addAll(checkAttribute(mcdAttribute, showDialogCompletness));
+            resultat.addAll(checkAttributeOutContext(mcdAttribute, showDialogCompletness));
         }
 
         for (MCDConstraint mcdConstraint : mcdEntity.getMcdConstraints()){
-            resultat.addAll(checkConstraint(mcdConstraint, showDialogCompletness));
+            resultat.addAll(checkConstraintOutContext(mcdConstraint, showDialogCompletness));
         }
         return resultat;
     }
@@ -80,21 +80,34 @@ public class MCDCompliant {
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
 
         // Spécialise une seule entité générale
-        if (mcdEntity.getGSEndSpecialize().size() > 0) {
+        if (mcdEntity.getGSEndSpecialize().size() > 1) {
             resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.specialized.only.one.error",
                     new String[]{mcdEntityNamePath}));
         }
 
         // Entité associative ou pseudo d'une seule association
-        if (mcdEntity.getLinkEnd().size() > 0){
+        if (mcdEntity.getLinkEnds().size() > 1){
             resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.linkea.only.one.error",
                     new String[] {mcdEntityNamePath}));
         }
 
         // Nature d'entité
         resultat.addAll(checkEntityNature(mcdEntity));
+
+        // Contraintes dans le contexte
+        for (MCDConstraint mcdConstraint : mcdEntity.getMcdConstraints()){
+            resultat.addAll(checkConstraintInContext(mcdConstraint));
+        }
+
+        // Pas de redondances entre MCDUnicity
+        resultat.addAll(checkMCDUnicities(mcdEntity));
+
+
         return resultat;
     }
+
+
+
 
     private ArrayList<String> checkEntityNature(MCDEntity mcdEntity) {
         ArrayList<String> resultat = new ArrayList<String>();
@@ -105,6 +118,18 @@ public class MCDCompliant {
         resultat.addAll(CheckEntityAbstract(mcdEntity));
 
         resultat.addAll(CheckEntityNaturePotential(mcdEntity));
+
+        String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
+        // Nature indéterminée
+        if (mcdEntity.getNature() == null){
+            // Pas de message lié à une éventulle nature potentielle
+            if (resultat.size() == 0 ){
+                // Erreur - Nature indéterminée
+                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.nature.unknow",
+                        new String[] {mcdEntityNamePath}));
+                //TODO-1 Mettre une indication pour signaler l'erreur aux développeurs
+            }
+        }
         return resultat;
     }
 
@@ -265,14 +290,14 @@ public class MCDCompliant {
         return resultat;
     }
 
-    public ArrayList<String> checkAttribute(MCDAttribute mcdAttribute, boolean showDialogCompletness) {
+    public ArrayList<String> checkAttributeOutContext(MCDAttribute mcdAttribute, boolean showDialogCompletness) {
         ArrayList<String> resultat =new MCDAttributeEditingTreat().treatCompletness(
                 MVCCDManager.instance().getMvccdWindow(),
                 mcdAttribute, showDialogCompletness);
         return resultat;
     }
 
-    private Collection<? extends String> checkConstraint(MCDConstraint mcdConstraint, boolean showDialogCompletness) {
+    private Collection<? extends String> checkConstraintOutContext(MCDConstraint mcdConstraint, boolean showDialogCompletness) {
         //TODO-1 A factoriser
         if (mcdConstraint instanceof MCDNID){
             ArrayList<String> resultat =new MCDNIDEditingTreat().treatCompletness(
@@ -288,6 +313,46 @@ public class MCDCompliant {
         }
 
         return null;
+    }
+
+    private Collection<? extends String> checkConstraintInContext(MCDConstraint mcdConstraint) {
+        ArrayList<String>  resultat = new ArrayList<String>();
+        String mcdEntityNamePath = mcdConstraint.getEntityParent().getNamePath(MCDElementService.PATHSHORTNAME);
+
+        //TODO-1 A factoriser
+        if (mcdConstraint instanceof MCDNID) {
+            resultat.add(MessagesBuilder.getMessagesProperty("constraint.compliant.pseudoass.nid",
+                    new String[] {mcdEntityNamePath, mcdConstraint.getName()}));
+        }
+        if (mcdConstraint instanceof MCDUnique) {
+            resultat.add(MessagesBuilder.getMessagesProperty("constraint.compliant.pseudoass.unique",
+                    new String[] {mcdEntityNamePath, mcdConstraint.getName()}));
+        }
+
+
+        return resultat;
+    }
+
+    private Collection<? extends String> checkMCDUnicities(MCDEntity mcdEntity) {
+        ArrayList<String>  resultat = new ArrayList<String>();
+        // PAs de redondance entre les contraintes MCDUnicity
+        if ( mcdEntity.isEntConcret()){
+            ArrayList<MCDUnicity> mcdUnicities = mcdEntity.getMCDUnicities();
+            if (mcdUnicities.size() > 1 ) {
+                for (int exterior = 0; exterior < mcdUnicities.size() - 1; exterior++) {
+                    MCDUnicity mcdUnicityExt = mcdUnicities.get(exterior);
+                    // Traitement des seuls attributs (sans les relations pour MCDUnique)
+                    ArrayList<MCDAttribute> mcdAttributesExt = mcdUnicityExt.getMcdAttributes();
+                    for (int interior = exterior + 1; interior < mcdUnicities.size(); interior++) {
+                        MCDUnicity mcdUnicityInt = mcdUnicities.get(interior);
+                        ArrayList<MCDAttribute> mcdAttributesInt = mcdUnicityInt.getMcdAttributes();
+
+                    }
+                }
+            }
+        }
+
+        return resultat;
     }
 
     private ArrayList<String> checkRelation(MCDRelation mcdRelation, boolean showDialogCompletness) {

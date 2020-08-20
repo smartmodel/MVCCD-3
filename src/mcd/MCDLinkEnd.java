@@ -4,6 +4,7 @@ import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import m.MRelEnd;
+import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDRelEndService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -49,6 +50,8 @@ public class MCDLinkEnd extends MCDRelEnd  {
 
         return MCDRelEndService.getNameTree(this, namingLink);
     }
+
+
 
     @Override
     public ArrayList<Stereotype> getToStereotypes() {

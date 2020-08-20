@@ -21,9 +21,10 @@ import stereotypes.StereotypesManager;
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class MCDAssEnd extends MCDRelEnd  {
+public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
 
     private static final long serialVersionUID = 1000;
+    public static final String CLASSSHORTNAMEUI = "Extr. association";
 
 
     //public static final int FROM = 1 ;  //drawingDirection
@@ -182,6 +183,11 @@ public class MCDAssEnd extends MCDRelEnd  {
         return MCDRelEndService.getNameTree(this, namingAssociation);
     }
 
+    @Override
+    public String getClassShortNameUI() {
+        return CLASSSHORTNAMEUI;
+    }
+
 
     public MCDAssEnd getMCDAssEndOpposite() {
         MCDAssociation mcdAssociation = getMcdAssociation();
@@ -224,18 +230,32 @@ public class MCDAssEnd extends MCDRelEnd  {
             }
 
             if (mcdAssociation.getNature() == MCDAssociationNature.IDCOMP) {
+                /*
                 if (getMultiMaxStd() == MRelEndMultiPart.MULTI_ONE) {
                     return Preferences.ICONE_RELATION_ASS_ID_COMP_LEFT_LG;
                 } else {
                     return Preferences.ICONE_RELATION_ASS_ID_COMP_RIGHT_LG;
                 }
+                 */
+                if (getMultiMaxStd() == MRelEndMultiPart.MULTI_ONE) {
+                    return Preferences.ICONE_RELATION_ASS_ID_COMP_RIGHT_LG;
+                } else {
+                    return Preferences.ICONE_RELATION_ASS_ID_COMP_LEFT_LG;
+                }
             }
 
             if (mcdAssociation.getNature() == MCDAssociationNature.IDNATURAL) {
+                /*
                 if (getMultiMaxStd() == MRelEndMultiPart.MULTI_ONE) {
                     return Preferences.ICONE_RELATION_ASS_ID_NAT_LEFT_LG;
                 } else {
                     return Preferences.ICONE_RELATION_ASS_ID_NAT_RIGHT_LG;
+                }
+                 */
+                if (getMultiMaxStd() == MRelEndMultiPart.MULTI_ONE) {
+                    return Preferences.ICONE_RELATION_ASS_ID_NAT_RIGHT_LG;
+                } else {
+                    return Preferences.ICONE_RELATION_ASS_ID_NAT_LEFT_LG;
                 }
             }
         }
