@@ -212,7 +212,23 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return MCDEntityService.getGSEndsSpecialize(this);
     }
 
+    public ArrayList<MCDAssEnd> getAssEndsIdParent(){
+
+        return MCDEntityService.getAssEndsIdParent(this);
+    }
+
+
+    public ArrayList<MCDAssEnd> getAssEndsIdChild(){
+
+        return MCDEntityService.getAssEndsIdChild(this);
+    }
+
+    public ArrayList<MCDAssEnd> getAssEndsIdAndNNChild() {
+        return MCDEntityService.getAssEndsIdAndNNChild(this);
+    }
+
     public ArrayList<MCDAssEnd> getAssEndsIdCompParent(){
+
         return MCDEntityService.getAssEndsIdCompParent(this);
     }
 
@@ -232,11 +248,30 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return MCDEntityService.getAssEndsIdNatChild(this);
     }
 
-    public ArrayList<MCDAssEnd> getAssEndsNoId(){
+    public ArrayList<MCDAssEnd> getAssEndsCPParent(){
 
-        return MCDEntityService.getAssEndsNoId(this);
+        return MCDEntityService.getAssEndsCPParent(this);
     }
 
+    public ArrayList<MCDAssEnd> getAssEndsCPChild(){
+
+        return MCDEntityService.getAssEndsCPChild(this);
+    }
+
+    public ArrayList<MCDAssEnd> getAssEndsNoIdChild(){
+
+        return MCDEntityService.getAssEndsNoIdChild(this);
+    }
+
+    public ArrayList<MCDAssEnd> getAssEndsNoIdAndNoNNChild(){
+
+        return MCDEntityService.getAssEndsNoIdAndNoNNChild(this);
+    }
+
+    public ArrayList<MCDAssEnd> getAssEndsAssNNChild(){
+
+        return MCDEntityService.getAssEndsAssNNChild(this);
+    }
 
     // Un tableau est retourné car lors de la saisie plusieurs liens peuvent être établis!
     // C'est lors du contrôle de conformité que je vérifie qu'il n'y a qu'un lien d'entité associative

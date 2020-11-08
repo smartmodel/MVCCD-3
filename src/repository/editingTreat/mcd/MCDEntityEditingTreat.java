@@ -1,10 +1,8 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import main.MVCCDWindow;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
-import mcd.MCDPackage;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -37,7 +35,7 @@ public class MCDEntityEditingTreat extends EditingTreat {
     public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
         MCDEntity mcdEntity = (MCDEntity) mvccdElement;
         ArrayList<String> resultat = mcdEntity.treatCompliant();
-        super.treatCompliantBefore(owner, mvccdElement, resultat);
+        super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
         return resultat;
     }
 

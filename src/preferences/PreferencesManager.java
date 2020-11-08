@@ -1,15 +1,11 @@
 package preferences;
 
 import main.MVCCDManager;
-import messages.MessagesBuilder;
 import profile.ProfileFileChooser;
 import project.Project;
 import project.ProjectFileChooser;
 import utilities.files.UtilFiles;
-import utilities.window.DialogMessage;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 
 
@@ -88,6 +84,8 @@ public class PreferencesManager {
         projectPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(applicationPref.isDEBUG_SHOW_TABLE_COL_HIDDEN());
         projectPref.setDEBUG_INSPECT_OBJECT_IN_TREE(applicationPref.getDEBUG_INSPECT_OBJECT_IN_TREE());
         projectPref.setDEBUG_EDITOR_DATAS_CHANGED(applicationPref.getDEBUG_EDITOR_DATAS_CHANGED());
+        projectPref.setDEBUG_TD_PRINT(applicationPref.getDEBUG_TD_PRINT());
+        projectPref.setDEBUG_TD_UNICITY_PRINT(applicationPref.getDEBUG_TD_UNICITY_PRINT());
 
         // Pour le moment pas de changement possible pour un projet existant
         // A analyser et reprendre plus tard

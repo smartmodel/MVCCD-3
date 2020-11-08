@@ -70,6 +70,7 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
     }
 
     public ArrayList<MCDEntity> getMCDEntities(){
+
         return ProjectService.getMCDEntities(this);
     }
 

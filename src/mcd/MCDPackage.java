@@ -62,15 +62,14 @@ public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDName
 
 
     public ArrayList<MCDEntity> getMCDEntities(){
+
         return ProjectService.getMCDEntities(this);
     }
 
     public ArrayList<String> treatCompliant(){
         MCDCompliant mcdCompliant = new MCDCompliant();
         ArrayList<String> resultat = mcdCompliant.check(getMCDEntities(), false);
-
         return resultat;
-
     }
 
 

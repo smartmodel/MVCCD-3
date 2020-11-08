@@ -1,6 +1,8 @@
 package constraints;
 
+import exceptions.CodeApplException;
 import main.MVCCDElement;
+import messages.MessagesBuilder;
 
 import java.util.ArrayList;
 
@@ -35,8 +37,10 @@ public class Constraints extends MVCCDElement {
                 return constraint;
             }
         }
-        return null;
-    }
+        String message = MessagesBuilder.getMessagesProperty("error.constraint.lienProg",
+                new String[] {lienProg, className} );
+        throw new CodeApplException(this.getClass().getName() + " - " + message);
+ }
 
     public ArrayList<Constraint> getConstraintByClassNameAndNames(String className,
                                                                   ArrayList<String> names){

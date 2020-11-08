@@ -369,7 +369,7 @@ public class AttributeInputContent extends PanelInputContentId {
     @Override
     protected void changeFieldSelected(ItemEvent e) {
         super.changeFieldSelected(e);
-            Object source = e.getSource();
+        Object source = e.getSource();
 
         if (source == aid) {
             changeFieldSelectedAid();

@@ -1,5 +1,6 @@
 package mcd.services;
 
+import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import mcd.*;
 import mcd.interfaces.IMCDParameter;
@@ -29,9 +30,10 @@ public class MCDUniqueService {
                 contextMessage,
                 rowTargetMessage));
 
-        // Au moins un attribut optionnel ou
+        // Au moins un attribut o une extrémité d'association optionnelle
         if (table.getRowCount() >= 1) {
             boolean oneAttributeOptional = false;
+            boolean oneAssEndOptional = false;
             for (int line = 0; line < table.getRowCount(); line++) {
                 IMCDParameter target = MCDParameterService.getTargetByTypeAndNameTree(mcdEntity,
                         (String) table.getValueAt(line, OperationParamTableColumn.TYPE.getPosition()),
@@ -42,8 +44,14 @@ public class MCDUniqueService {
                         oneAttributeOptional = true;
                     }
                 }
+                if (target instanceof MCDAssEnd) {
+                    MCDAssEnd mcdAssEnd = (MCDAssEnd) target;
+                    if (mcdAssEnd.getMultiMinStd() == MRelEndMultiPart.MULTI_ZERO) {
+                        oneAssEndOptional = true;
+                    }
+                }
             }
-            if ( ! oneAttributeOptional) {
+            if ( ! (oneAttributeOptional || oneAssEndOptional)) {
                 messages.add(MessagesBuilder.getMessagesProperty(
                         "editor.unique.table.parameter.attribute.not.optional"
                         , new String[]{contextMessage}));

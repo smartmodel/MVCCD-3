@@ -42,6 +42,8 @@ public class STableService {
         return null;
     }
 
+
+
     public static boolean existRecordById(STable table, int id){
         return findRecordById(table, id) != null;
     }

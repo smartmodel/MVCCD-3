@@ -172,6 +172,10 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
         return false;
     }
 
+    public boolean isDegreeNN(){
+        return getDegree() == MRelationDegree.DEGREE_MANY_MANY;
+    }
+
     public MRelationDegree getDegree(){
         return MRelationService.computeDegree(getFrom().getMultiMaxStd(), getTo().getMultiMaxStd());
     }

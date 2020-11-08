@@ -8,7 +8,7 @@ import utilities.window.editor.PanelButtonsContent;
 
 import java.awt.event.ActionListener;
 
-public class ParameterButtonsContent extends PanelButtonsContent implements ActionListener {
+public class ParameterButtonsContent extends PanelButtonsContent  {
 
 
     public ParameterButtonsContent(ParameterButtons parameterButtons) {
