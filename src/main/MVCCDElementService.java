@@ -2,6 +2,7 @@ package main;
 
 import mcd.MCDElement;
 import mcd.MCDEntity;
+import mcd.MCDUnicity;
 import mcd.interfaces.IMCDTraceability;
 import org.apache.commons.lang.StringUtils;
 import utilities.UtilDivers;

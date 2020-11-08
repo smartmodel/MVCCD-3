@@ -147,8 +147,13 @@ public class EntCompliantInputContent extends PanelInputContent {
         fieldGeneralize.setSelected(mcdEntity.isGeneralized());
         //fieldAbstract.setSelected(mcdEntity.isEntAbstract());
 
-        for (String error : errors){
-            fieldErrors.append(error + System.lineSeparator());
+        if (errors.size() > 0 ){
+            for (String error : errors) {
+                fieldErrors.append(error + System.lineSeparator());
+            }
+        } else {
+            fieldErrors.setVisible (false);
+            labelErrors.setText("L'entité est conforme !");
         }
     }
 

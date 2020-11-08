@@ -172,6 +172,7 @@ public abstract class PanelButtonsContent extends PanelContent
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
+        System.out.println(source.toString());
         if (source == btnOk) {
             if (getEditor().getMode().equals(DialogEditor.NEW)) {
                 treatCreate();
@@ -201,6 +202,7 @@ public abstract class PanelButtonsContent extends PanelContent
             treatReset();
         }
         if (source == btnClose) {
+            System.out.println("Close...");
             getEditor().confirmClose();
         }
         if (source == btnHelp) {
@@ -224,7 +226,7 @@ public abstract class PanelButtonsContent extends PanelContent
         getInputContent().enabledButtons();
     }
 
-    private void treatUpdate(){
+    public void treatUpdate(){
         saveDatas(getEditor().getMvccdElementCrt());
         getEditor().setDatasChanged(true);
         getInputContent().restartChange();

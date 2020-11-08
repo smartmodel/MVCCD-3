@@ -46,6 +46,8 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
     @Override
     public void createContentCustom() {
+        //fieldParent.setCheckPreSave(true);  // A voir - code à faire
+        super.getSComponents().add(fieldParent);
         fieldParent.addFocusListener(this);
         fieldParent.addItemListener(this);
 

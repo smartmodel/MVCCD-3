@@ -117,7 +117,7 @@ public class Preferences extends MVCCDElement {
     public static Integer ATTRIBUTE_WINDOW_HEIGHT = 600;
     public static Integer ASSOCIATION_WINDOW_WIDTH = 1000;
     public static Integer ASSOCIATION_WINDOW_HEIGHT = 600;
-    public static Integer UNIQUE_WINDOW_WIDTH = 1000;
+    public static Integer UNICITY_WINDOW_WIDTH = 1000;
     public static Integer UNIQUE_WINDOW_HEIGHT = 600;
     public static Integer PARAMETER_WINDOW_WIDTH = 400;
     public static Integer PARAMETER_WINDOW_HEIGHT = 300;
@@ -141,6 +141,10 @@ public class Preferences extends MVCCDElement {
     public static Color EDITOR_SCOMPONENT_BACKGROUND_ERROR = Color.pink;
     public static Color EDITOR_SCOMPONENT_LINEBORDER_NORMAL = Color.gray;
     public static Color EDITOR_SCOMPONENT_LINEBORDER_ERROR = Color.RED;
+
+    public static Integer EDITOR_CONSTRAINTS_STEREO_WIDTH = 80;
+    public static Integer EDITOR_CONSTRAINTS_NAME_WIDTH = 150;
+    public static Integer EDITOR_CONSTRAINTS_UMLCONSTRAINTS_WIDTH = 150;
 
     public static Color SCOMPONENT_INDIRECT_INPUT_FOREGROUND = Color.RED;
 
@@ -363,6 +367,9 @@ public class Preferences extends MVCCDElement {
     public static String PREFERENCES_PROJECT_MENU_GENERAL = "preferences.project.menu.general";
     public static String PREFERENCES_PROJECT_MENU_MCD = "preferences.project.menu.mcd";
 
+    public static String PARAMETERS_SEPARATOR = ", ";
+
+
     // Modification Application
     private Boolean DEBUG = false;
     private Boolean DEBUG_BACKGROUND_PANEL = false;
@@ -370,6 +377,8 @@ public class Preferences extends MVCCDElement {
     private Boolean DEBUG_SHOW_TABLE_COL_HIDDEN = false;
     private Boolean DEBUG_INSPECT_OBJECT_IN_TREE = false;
     private Boolean DEBUG_EDITOR_DATAS_CHANGED = null;
+    private Boolean DEBUG_TD_PRINT = null;
+    private Boolean DEBUG_TD_UNICITY_PRINT = null;
     private Boolean REPOSITORY_MCD_MODELS_MANY = false;
     private Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = false;
 
@@ -455,6 +464,28 @@ public class Preferences extends MVCCDElement {
 
     public void setDEBUG_EDITOR_DATAS_CHANGED(Boolean DEBUG_EDITOR_DATAS_CHANGED) {
         this.DEBUG_EDITOR_DATAS_CHANGED = DEBUG_EDITOR_DATAS_CHANGED;
+    }
+
+    public Boolean getDEBUG_TD_PRINT() {
+        if (DEBUG_TD_PRINT == null) {
+            this.DEBUG_TD_PRINT = false;
+        }
+        return DEBUG_TD_PRINT;
+    }
+
+    public void setDEBUG_TD_PRINT(Boolean DEBUG_TD_PRINT) {
+        this.DEBUG_TD_PRINT = DEBUG_TD_PRINT;
+    }
+
+    public Boolean getDEBUG_TD_UNICITY_PRINT() {
+        if (DEBUG_TD_UNICITY_PRINT == null) {
+            this.DEBUG_TD_UNICITY_PRINT = false;
+        }
+        return DEBUG_TD_UNICITY_PRINT;
+    }
+
+    public void setDEBUG_TD_UNICITY_PRINT(Boolean DEBUG_TD_UNICITY_PRINT) {
+        this.DEBUG_TD_UNICITY_PRINT = DEBUG_TD_UNICITY_PRINT;
     }
 
     public Boolean getREPOSITORY_MCD_MODELS_MANY() {

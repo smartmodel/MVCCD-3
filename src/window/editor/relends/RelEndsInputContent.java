@@ -129,28 +129,44 @@ public class RelEndsInputContent extends PanelInputContentTable {
         MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
         MCDAssociation newMCDAssociation = mcdAssociationEditingTreat.treatNew(getEditor(), mcdContRelations,
                 mcdEntityContext, null, null, true);
-        return newMCDAssociation.getFrom();  // Extrémité mcdEntityContext
+        if (newMCDAssociation != null){
+            return newMCDAssociation.getFrom();  // Extrémité mcdEntityContext
+        } else {
+            return null;
+        }
     }
 
     private MVCCDElement newSpecialization(MCDEntity mcdEntityContext, MCDContRelations mcdContRelations) {
         MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
         MCDGeneralization mcdGeneralization = mcdGeneralizationEditingTreat.treatNew(getEditor(), mcdContRelations,
                 mcdEntityContext, null,  true);
-        return mcdGeneralization.getGen();  // Extrémité mcdEntityContext
+        if (mcdGeneralization != null){
+            return mcdGeneralization.getGen();  // Extrémité mcdEntityContext
+        } else {
+            return null;
+        }
     }
 
     private MVCCDElement newGeneralization(MCDEntity mcdEntityContext, MCDContRelations mcdContRelations) {
         MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
         MCDGeneralization mcdGeneralization = mcdGeneralizationEditingTreat.treatNew(getEditor(), mcdContRelations,
                  null,  mcdEntityContext, true);
-        return mcdGeneralization.getSpec();  // Extrémité mcdEntityContext
+        if (mcdGeneralization != null){
+            return mcdGeneralization.getSpec();  // Extrémité mcdEntityContext
+        } else {
+            return null;
+        }
     }
 
     private MVCCDElement newLink(MCDEntity mcdEntityContext, MCDContRelations mcdContRelations) {
         MCDLinkEditingTreat mcdLinkEditingTreat = new MCDLinkEditingTreat();
         MCDLink newMCDLink = mcdLinkEditingTreat.treatNew(getEditor(), mcdContRelations,
                 mcdEntityContext, null,  true);
-        return newMCDLink.getEndEntity();  // Extrémité mcdEntityContext
+        if (newMCDLink != null) {
+            return newMCDLink.getEndEntity();  // Extrémité mcdEntityContext
+        } else {
+            return null;
+        }
     }
 
 
@@ -240,7 +256,8 @@ public class RelEndsInputContent extends PanelInputContentTable {
 
          */
         //row[col] = relEnd.getMCDRelEndOpposite().getMcdElement().getNameTree();
-        row[col] = relEnd.getMCDRelEndOpposite().getNameTree();
+        row[col] = relEnd.getNameTree();
+        //row[col] = relEnd.getMCDRelEndOpposite().getNameTree();
 
         col = RelEndsTableColumn.CONSTRAINTS.getPosition();
         row[col] = UtilDivers.ArrayStringToString(constraintsUMLNames, "");;

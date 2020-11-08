@@ -134,19 +134,25 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
             public void actionPerformed(ActionEvent e) {
 
+
                 if (getEditor().getMode().equals(DialogEditor.NEW)) {
                     // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas confirmé
                     if (DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageAdd()) == JOptionPane.YES_OPTION) {
-                        getActionApply();
-                     }
+                        // Sauvegarde de l'enregistrement maitre
+                        getActionAddDetail(true);
+                    }
                 } else {
-                    MElement mElement = getNewElement();
-                    if (mElement != null) {
-                        Object[] row = getNewRow(mElement);
-                        model.addRow(row);
-                        table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
-                        newTransitoryElements.add(mElement);
-                        tableContentChanged();
+                    boolean appendAuthorized = true;
+                    // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
+                    if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
+                        appendAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageUpdate()) == JOptionPane.YES_OPTION;
+                        if (appendAuthorized) {
+                            //getEditor().getButtons().getButtonsContent().treatUpdate();
+                            // Sauvegarde de l'enregistrement maitre
+                            getActionAddDetail(false);
+                        }
+                    } else {
+                        fenDetail();
                     }
                 }
             }
@@ -157,6 +163,17 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         btnRemove.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e) {
+
+                boolean removedAuthorized = true;
+                // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
+                if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
+                    removedAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageDelete()) == JOptionPane.YES_OPTION;
+                    if (removedAuthorized) {
+                        //getEditor().getButtons().getButtonsContent().treatUpdate();
+                        // Sauvegarde de l'enregistrement maitre
+                        getActionAddDetail(false);
+                    }
+                }
                 int posActual = table.getSelectedRow();
                 if (posActual >= 0){
                     model.removeRow(posActual);
@@ -216,6 +233,19 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         });
     }
 
+    public void fenDetail(){
+        // Appel de l'éditeur de création d'un nouvel élément
+
+        MElement mElement = getNewElement();
+        if (mElement != null) {
+            Object[] row = getNewRow(mElement);
+            model.addRow(row);
+            table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
+            newTransitoryElements.add(mElement);
+            tableContentChanged();
+        }
+    }
+
     protected void tableContentChanged(){
         table.actionChangeActivated();
         enabledContent();
@@ -223,9 +253,11 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         checkDatas(table);
     }
 
-    protected abstract void getActionApply();
+    protected abstract void getActionAddDetail(boolean masterNew);
 
     protected abstract String getMessageAdd();
+    protected abstract String getMessageUpdate();
+    protected abstract String getMessageDelete();
 
     protected abstract Object[] getNewRow(MElement mElement);
 
@@ -334,11 +366,6 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     }
 
-    @Override
-    protected void changeFieldDeSelected(ItemEvent e) {
-
-    }
-
 
     @Override
     protected void initDatas() {
@@ -372,6 +399,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
      }
 
     private void deleteNoUsedRecord(MVCCDElement mvccdElement) {
+        /*
         for (int i = mvccdElement.getChilds().size() - 1; i >= 0; i--) {
             ProjectElement projectChildElement = (project.ProjectElement) mvccdElement.getChilds().get(i);
             if (!STableService.existRecordById(table, projectChildElement.getId())) {
@@ -380,6 +408,21 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
                 projectChildElement = null;
              }
         }
+
+         */
+
+        ArrayList<MVCCDElement> elementsInProject = mvccdElement.getChilds();
+        for (int i = elementsInProject.size() - 1; i >= 0; i--) {
+            ProjectElement elementInProject = (ProjectElement) elementsInProject.get(i);
+            if (!STableService.existRecordById(table,
+                    elementInProject.getId())) {
+                MVCCDManager.instance().removeMVCCDElementInRepository(elementInProject, elementInProject.getParent());
+                elementInProject.removeInParent();
+                elementInProject = null;
+            }
+        }
+
+
     }
 
 

@@ -45,7 +45,7 @@ public class MCDParameterService {
     }
 
 
-    public static ArrayList<MCDAttribute> createTargetsAttributesUnique(MCDEntity mcdEntity, ArrayList<MCDParameter> parameters) {
+    public static ArrayList<MCDAttribute> createTargetsAttributesUnique(MCDEntity mcdEntity) {
         ArrayList<MCDAttribute> resultat = new ArrayList<MCDAttribute>();
         ArrayList<MVCCDElement> targetsPotential = MVCCDElementConvert.to(mcdEntity.getMCDAttributes());
         for (MVCCDElement targetPotential : targetsPotential){
@@ -65,8 +65,7 @@ public class MCDParameterService {
                             mcdDatatype.isSelfOrDescendantOf(integer)||
                             mcdDatatype.isDescendantOf(temporal)));
                 }
-                boolean c6 = existTargetInParameters( parameters, attributePotential);
-                if ( ! (c1 || c2 || c3 || c4 || c5 || c6)){
+                if ( ! (c1 || c2 || c3 || c4 || c5 )){
                     resultat.add(attributePotential);
                 }
             }
@@ -74,31 +73,50 @@ public class MCDParameterService {
         return resultat;
     }
 
-    public static Collection<? extends MVCCDElement> createTargetsAssEnds(MCDEntity mcdEntity, ArrayList<MCDParameter> parameters) {
+
+
+    public static ArrayList<MCDAssEnd> createTargetsNonExisting(ArrayList <MCDAssEnd> mcdAssEnds, ArrayList<MCDParameter> parameters) {
         ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
-        ArrayList<MCDAssEnd> mcdAssEndChilds = mcdEntity.getAssEndsIdCompChild();
-        mcdAssEndChilds.addAll(mcdEntity.getAssEndsIdNatChild());
-        mcdAssEndChilds.addAll(mcdEntity.getAssEndsNoId());
-        for ( MCDAssEnd mcdAssEndChild : mcdAssEndChilds ){
-            resultat.add (mcdAssEndChild.getMCDAssEndOpposite());
-        }
-        if (mcdEntity.isEntAssOrDescendant()){
-            // Avant le contrôle de conformité, il peut y avoir plusieurs liens
-            if (mcdEntity.getLinkEnds().size() > 1 ){
-                // Je ne prends aucun lien
-            } else {
-                MCDLinkEnd mcdLinkEndAssociation = (MCDLinkEnd) mcdEntity.getLinkEnds().get(0).getMcdLink().getEndAssociation();
-                MCDAssociation mcdAssociationNN = (MCDAssociation) mcdLinkEndAssociation.getParent().getParent();
-                resultat.add (mcdAssociationNN.getFrom());
-                resultat.add (mcdAssociationNN.getTo());
+        for (MCDAssEnd mcdAssEnd : mcdAssEnds){
+            if (!existTargetInParameters(parameters, mcdAssEnd)){
+                resultat.add(mcdAssEnd);
             }
         }
         return resultat;
     }
 
-    public static ArrayList<MCDAttribute> createTargetsAttributesNID(MCDEntity mcdEntity, ArrayList<MCDParameter> parameters) {
+
+    public static Collection<? extends MVCCDElement> createTargetsAssEndsNoIdAndNoNN(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        // no Id
+        ArrayList<MCDAssEnd> mcdAssEndChilds = mcdEntity.getAssEndsNoIdChild();
+        mcdAssEndChilds.removeAll(mcdEntity.getAssEndsAssNNChild());
+
+        // Extrémité inverse comme résultat
+        for (MCDAssEnd mcdAssEndChild : mcdAssEndChilds) {
+            resultat.add(mcdAssEndChild.getMCDAssEndOpposite());
+        }
+
+        return resultat;
+    }
+
+
+    public static Collection<? extends MVCCDElement> createTargetsAssEndsIdAndNN(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        ArrayList<MCDAssEnd> mcdAssEndChilds = mcdEntity.getAssEndsIdAndNNChild();
+
+        // Extrémité inverse comme résultat
+        for ( MCDAssEnd mcdAssEndChild : mcdAssEndChilds ){
+            // Si n'existe pas déjà...
+            resultat.add (mcdAssEndChild.getMCDAssEndOpposite());
+        }
+
+        return resultat;
+    }
+
+    public static ArrayList<MCDAttribute> createTargetsAttributesNID(MCDEntity mcdEntity) {
         ArrayList<MCDAttribute> resultat = new  ArrayList<MCDAttribute>();
-        ArrayList<MCDAttribute> targetsPotential = createTargetsAttributesUnique(mcdEntity, parameters);
+        ArrayList<MCDAttribute> targetsPotential = createTargetsAttributesUnique(mcdEntity);
         for (MVCCDElement targetPotential : targetsPotential) {
             if (targetPotential instanceof MCDAttribute) {
                 MCDAttribute attributePotential = (MCDAttribute) targetPotential;
@@ -107,7 +125,7 @@ public class MCDParameterService {
                 MCDDatatype positiveInteger = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_POSITIVEINTEGER_LIENPROG);
                 boolean c1 = mcdDatatype.isSelfOrDescendantOf(token) || mcdDatatype.isSelfOrDescendantOf(positiveInteger);
                 if (c1) {
-                    resultat.add(attributePotential);
+                        resultat.add(attributePotential);
                 }
             }
         }

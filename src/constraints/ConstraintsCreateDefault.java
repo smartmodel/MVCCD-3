@@ -1,9 +1,6 @@
 package constraints;
 
-import mcd.MCDAssEnd;
-import mcd.MCDAssociation;
-import mcd.MCDAttribute;
-import mcd.MCDUnique;
+import mcd.*;
 import preferences.Preferences;
 
 public class ConstraintsCreateDefault {
@@ -54,6 +51,11 @@ public class ConstraintsCreateDefault {
                 Preferences.CONSTRAINT_ABSOLUTE_NAME,
                 Preferences.CONSTRAINT_ABSOLUTE_LIENPROG,
                 MCDUnique.class.getName());
+
+        createConstraint(
+                Preferences.CONSTRAINT_ABSOLUTE_NAME,
+                Preferences.CONSTRAINT_ABSOLUTE_LIENPROG,
+                MCDNID.class.getName());
     }
 
 

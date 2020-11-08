@@ -1,6 +1,7 @@
 package window.editor.operation.parameter;
 
 import exceptions.CodeApplException;
+import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import main.MVCCDElementFactory;
@@ -29,7 +30,7 @@ public class ParameterInputContent extends PanelInputContent {
     private SComboBox<String> fieldTarget ;
     private JLabel labelTarget;
 
-    private ArrayList<MVCCDElement> targetsPotential = new ArrayList<MVCCDElement>();
+    private ArrayList<MVCCDElement> targets= new ArrayList<MVCCDElement>();
 
 
     public ParameterInputContent(ParameterInput parameterInput)     {
@@ -52,7 +53,7 @@ public class ParameterInputContent extends PanelInputContent {
         fieldTarget = new SComboBox(this, labelTarget);
         fieldTarget.setCheckPreSave(true);
         fieldTarget.addItem(SComboBox.LINEWHITE);
-        for (MVCCDElement targetPotentialChecked : targetsPotential){
+        for (MVCCDElement targetPotentialChecked : targets){
             if (targetPotentialChecked instanceof IMCDParameter) {
                 fieldTarget.addItem(((IMCDParameter)targetPotentialChecked).getNameTree());
             }
@@ -69,21 +70,43 @@ public class ParameterInputContent extends PanelInputContent {
 
         MCDOperation mcdOperation = (MCDOperation) getEditor().getMvccdElementParent();
         MCDEntity mcdEntity = (MCDEntity) mcdOperation.getParent().getParent();
+        ArrayList<MVCCDElement> targetsPotential = new ArrayList<MVCCDElement>();
+
+        if (getEditor().getScope() == ParameterEditor.NID){
+            // Attributs
+            targetsPotential = MVCCDElementConvert.to(
+                    MCDParameterService.createTargetsAttributesNID(mcdEntity));
+            if (mcdOperation instanceof MCDNID) {
+                if (((MCDNID) mcdOperation).isAbsolute()) {
+                    // Associations identifiantes
+                    targetsPotential.addAll(MCDParameterService.createTargetsAssEndsIdAndNN(mcdEntity));
+                    // Associations non identifiantes
+                    targetsPotential.addAll(MCDParameterService.createTargetsAssEndsNoIdAndNoNN(mcdEntity));
+                }
+            }
+
+        }
 
         if (getEditor().getScope() == ParameterEditor.UNIQUE){
+            // Attributs
             targetsPotential = MVCCDElementConvert.to(
-                    MCDParameterService.createTargetsAttributesUnique(mcdEntity,
-                            mcdOperation.getParameters()));
-            targetsPotential.addAll(
-                    MCDParameterService.createTargetsAssEnds(mcdEntity,
-                    mcdOperation.getParameters()));
+                    MCDParameterService.createTargetsAttributesUnique(mcdEntity));
+            // Associations non identifiantes
+            targetsPotential.addAll(MCDParameterService.createTargetsAssEndsNoIdAndNoNN(mcdEntity));
+            if (mcdOperation instanceof MCDUnique) {
+                if (((MCDUnique) mcdOperation).isAbsolute()) {
+                    // Associations identifiantes
+                    targetsPotential.addAll(MCDParameterService.createTargetsAssEndsIdAndNN(mcdEntity));
+                }
+            }
         }
-        if (getEditor().getScope() == ParameterEditor.NID){
-            targetsPotential = MVCCDElementConvert.to(
-                    MCDParameterService.createTargetsAttributesNID(mcdEntity,
-                            mcdOperation.getParameters()));
+
+        for (MVCCDElement mvccdElement : targetsPotential) {
+            if (!MCDParameterService.existTargetInParameters(mcdOperation.getParameters(), (MElement) mvccdElement)) {
+                targets.add(mvccdElement);
+            }
         }
-   }
+    }
 
 
     private void createPanelMaster() {
@@ -244,7 +267,7 @@ public class ParameterInputContent extends PanelInputContent {
     }
 
     private IMCDParameter getTargetByName(String nameTarget) {
-        for (MVCCDElement target : targetsPotential) {
+        for (MVCCDElement target : targets) {
             if (target instanceof IMCDParameter) {
                 IMCDParameter iMCDParameterTarget = (IMCDParameter) target;
                 if (iMCDParameterTarget.getName().equals(nameTarget)) {
@@ -256,7 +279,7 @@ public class ParameterInputContent extends PanelInputContent {
     }
 
     private IMCDParameter getTargetByNameTree(String nameTreeTarget) {
-        for (MVCCDElement target : targetsPotential) {
+        for (MVCCDElement target : targets) {
             if (target instanceof IMCDParameter) {
                 IMCDParameter iMCDParameterTarget = (IMCDParameter) target;
                 if (iMCDParameterTarget.getNameTree().equals(nameTreeTarget)) {

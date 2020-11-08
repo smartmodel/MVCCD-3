@@ -2,29 +2,24 @@ package window.editor.operation.constraint.constraints;
 
 import constraints.Constraint;
 import constraints.ConstraintService;
-import datatypes.MCDDatatype;
-import datatypes.MDDatatypeService;
 import m.MElement;
 import main.MVCCDElement;
 import mcd.*;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import project.ProjectService;
-import repository.editingTreat.mcd.MCDAttributeEditingTreat;
 import repository.editingTreat.mcd.MCDNIDEditingTreat;
 import repository.editingTreat.mcd.MCDUniqueEditingTreat;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
-import stereotypes.Stereotypes;
-import stereotypes.StereotypesManager;
 import utilities.UtilDivers;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentTable;
 import utilities.window.scomponents.services.STableService;
 import utilities.window.services.PanelService;
-import window.editor.attribute.AttributeEditor;
-import window.editor.operation.constraint.unique.UniqueEditor;
+import window.editor.operation.constraint.unicity.UnicityEditor;
+import window.editor.operation.constraint.unicity.nid.NIDEditor;
+import window.editor.operation.constraint.unicity.unique.UniqueEditor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,6 +58,30 @@ public class ConstraintsInputContent extends PanelInputContentTable {
     @Override
     protected void specificColumnsDisplay() {
 
+
+        table.getColumnModel().getColumn(ConstraintsTableColumn.STEREOTYPES.getPosition()).setPreferredWidth(
+                Preferences.EDITOR_CONSTRAINTS_STEREO_WIDTH);
+        table.getColumnModel().getColumn(ConstraintsTableColumn.STEREOTYPES.getPosition()).setMinWidth(
+                Preferences.EDITOR_CONSTRAINTS_STEREO_WIDTH);
+        table.getColumnModel().getColumn(ConstraintsTableColumn.STEREOTYPES.getPosition()).setMaxWidth(
+                Preferences.EDITOR_CONSTRAINTS_STEREO_WIDTH);
+
+
+        table.getColumnModel().getColumn(ConstraintsTableColumn.NAME.getPosition()).setPreferredWidth(
+                Preferences.EDITOR_CONSTRAINTS_NAME_WIDTH);
+        table.getColumnModel().getColumn(ConstraintsTableColumn.NAME.getPosition()).setMinWidth(
+                Preferences.EDITOR_CONSTRAINTS_NAME_WIDTH);
+        table.getColumnModel().getColumn(ConstraintsTableColumn.NAME.getPosition()).setMaxWidth(
+                Preferences.EDITOR_CONSTRAINTS_NAME_WIDTH);
+
+        table.getColumnModel().getColumn(ConstraintsTableColumn.CONSTRAINTS.getPosition()).setPreferredWidth(
+                Preferences.EDITOR_CONSTRAINTS_UMLCONSTRAINTS_WIDTH);
+        table.getColumnModel().getColumn(ConstraintsTableColumn.CONSTRAINTS.getPosition()).setMinWidth(
+                Preferences.EDITOR_CONSTRAINTS_UMLCONSTRAINTS_WIDTH);
+        table.getColumnModel().getColumn(ConstraintsTableColumn.CONSTRAINTS.getPosition()).setMaxWidth(
+                Preferences.EDITOR_CONSTRAINTS_UMLCONSTRAINTS_WIDTH);
+
+
     }
 
     @Override
@@ -86,8 +105,9 @@ public class ConstraintsInputContent extends PanelInputContentTable {
     protected String[] specificColumnsNames() {
         return  new String[]{
                 ConstraintsTableColumn.STEREOTYPES.getLabel(),
-                ConstraintsTableColumn.NATURE.getLabel(),
+                //ConstraintsTableColumn.NATURE.getLabel(),
                 ConstraintsTableColumn.NAME.getLabel(),
+                ConstraintsTableColumn.PARAMETERS.getLabel(),
                 ConstraintsTableColumn.CONSTRAINTS.getLabel()
         };
     }
@@ -111,15 +131,13 @@ public class ConstraintsInputContent extends PanelInputContentTable {
 
         if (posOption > 0 ) {
             if (posOption == 1) {
-                fen = new UniqueEditor(getEditor(), mcdContConstraints, null,
-                        DialogEditor.NEW,
-                        UniqueEditor.NID, new MCDNIDEditingTreat());
+                fen = new NIDEditor(getEditor(), mcdContConstraints, null,
+                        DialogEditor.NEW, new MCDNIDEditingTreat());
             }
 
             if (posOption == 2) {
                 fen = new UniqueEditor(getEditor(), mcdContConstraints, null,
-                        DialogEditor.NEW,
-                        UniqueEditor.UNIQUE, new MCDUniqueEditingTreat());
+                        DialogEditor.NEW, new MCDUniqueEditingTreat());
             }
             fen.setVisible(true);
             newElement = fen.getMvccdElementNew();
@@ -139,17 +157,15 @@ public class ConstraintsInputContent extends PanelInputContentTable {
     protected void updateElement(MElement mElement) {
         DialogEditor fen = null;
         if (mElement instanceof MCDNID) {
-            fen = new UniqueEditor(getEditor(), (MCDContConstraints) mElement.getParent(),
+            fen = new NIDEditor(getEditor(), (MCDContConstraints) mElement.getParent(),
                     (MCDNID) mElement,
                     DialogEditor.UPDATE,
-                    UniqueEditor.NID,
                     new MCDNIDEditingTreat());
         }
         if (mElement instanceof MCDUnique) {
             fen = new UniqueEditor(getEditor(), (MCDContConstraints) mElement.getParent(),
                     (MCDUnique) mElement,
                     DialogEditor.UPDATE,
-                    UniqueEditor.UNIQUE,
                     new MCDUniqueEditingTreat());
         }
         fen.setVisible(true);
@@ -169,6 +185,7 @@ public class ConstraintsInputContent extends PanelInputContentTable {
         ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
 
         ArrayList<Constraint> constraints =  constraint.getToConstraints();
+
         ArrayList<String> constraintsUMLNames = ConstraintService.getUMLNamesByConstraints(constraints);
 
         int col;
@@ -182,14 +199,17 @@ public class ConstraintsInputContent extends PanelInputContentTable {
         col = ConstraintsTableColumn.ORDER.getPosition();
         row[col] = constraint.getOrder();
 
-        col = ConstraintsTableColumn.NATURE.getPosition();
-        row[col] = constraint.getClassShortNameUI();
+        //col = ConstraintsTableColumn.NATURE.getPosition();
+        //row[col] = constraint.getClassShortNameUI();
 
         col = ConstraintsTableColumn.STEREOTYPES.getPosition();
         row[col] = UtilDivers.ArrayStringToString(stereotypesUMLNames, "");
 
         col = ConstraintsTableColumn.NAME.getPosition();
         row[col] = constraint.getName();
+
+        col = ConstraintsTableColumn.PARAMETERS.getPosition();
+        row[col] = constraint.getParametersNameAsStr();
 
         col = ConstraintsTableColumn.CONSTRAINTS.getPosition();
         row[col] = UtilDivers.ArrayStringToString(constraintsUMLNames, "");;

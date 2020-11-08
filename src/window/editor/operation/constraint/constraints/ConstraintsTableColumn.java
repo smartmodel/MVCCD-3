@@ -7,8 +7,9 @@ public enum ConstraintsTableColumn {
     TRANSITORY("Trans."),
     ORDER("Ordre"),
     STEREOTYPES("Stéréotypes"),
-    NATURE("Nature"),
+    //NATURE("Nature"),
     NAME("Nom"),
+    PARAMETERS("Paramètres"),
     CONSTRAINTS("Contraintes");
 
     private final String label;

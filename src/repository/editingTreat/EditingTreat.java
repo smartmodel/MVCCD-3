@@ -1,5 +1,6 @@
 package repository.editingTreat;
 
+import console.Console;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
@@ -165,28 +166,32 @@ public abstract class EditingTreat {
         MVCCDManager.instance().removeMVCCDElementInRepository(child, child.getParent());
     }
 
-    public abstract ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement);
+    public abstract ArrayList<String> treatCompliant(
+            Window owner, MVCCDElement mvccdElement);
 
 
-    protected void treatCompliantBefore(Window owner, MVCCDElement mvccdElement, ArrayList<String> messages) {
+    protected void treatCompliantFinishMessages(Window owner, MVCCDElement mvccdElement, ArrayList<String> messages) {
+        String message = "";
         if (messages.size() == 0 ){
             MCDElement mcdElement = (MCDElement) mvccdElement;
             String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
 
-            String message = MessagesBuilder.getMessagesProperty("dialog.compliant.ok",
+            message = MessagesBuilder.getMessagesProperty("dialog.compliant.ok",
                     new String[]{messageElement, mcdElement.getNamePath(MCDElementService.PATHSHORTNAME)});
-            DialogMessage.showOk(owner, message);
         }
+
         if (messages.size() > 0 ){
             MCDElement mcdElement = (MCDElement) mvccdElement;
             String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
 
-            String message = MessagesBuilder.getMessagesProperty("dialog.compliant.error",
+            message = MessagesBuilder.getMessagesProperty("dialog.compliant.error",
                     new String[]{messageElement, mcdElement.getNamePath(MCDElementService.PATHSHORTNAME)});
             message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.compliant.error.console");
 
-            DialogMessage.showOk(owner, message);
         }
         //TODO-1 Erreur si < 0
-    }
+
+        Console.printMessage(message);
+        DialogMessage.showOk(owner, message);
+     }
 }

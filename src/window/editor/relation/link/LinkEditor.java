@@ -56,12 +56,12 @@ public class LinkEditor extends DialogEditor {
 
     @Override
     protected String getPropertyTitleNew() {
-        return "editor.genspec.new";
+        return "editor.link.new";
     }
 
     @Override
     protected String getPropertyTitleUpdate() {
-        return "editor.genspec.update";
+        return "editor.link.update";
     }
 
 }

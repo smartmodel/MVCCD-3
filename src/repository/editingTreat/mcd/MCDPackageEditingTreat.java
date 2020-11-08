@@ -1,10 +1,6 @@
 package repository.editingTreat.mcd;
 
-import m.MElement;
 import main.MVCCDElement;
-import main.MVCCDManager;
-import main.MVCCDWindow;
-import mcd.MCDElement;
 import mcd.MCDPackage;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContainer;
@@ -14,7 +10,6 @@ import utilities.window.editor.PanelInputContent;
 import window.editor.model.ModelEditor;
 import window.editor.model.ModelInputContent;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -40,6 +35,7 @@ public class MCDPackageEditingTreat extends EditingTreat {
     public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
         MCDPackage mcdPackage = (MCDPackage) mvccdElement;
         ArrayList<String> resultat = mcdPackage.treatCompliant();
+        super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
         return resultat;
     }
 

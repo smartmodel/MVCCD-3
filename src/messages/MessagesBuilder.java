@@ -23,58 +23,62 @@ import java.text.MessageFormat;
  *
  */
 public class MessagesBuilder {
-	
-			
+
+
 	/**
 	 * Instantiate the unique instance of the class.
 	 */
-	private MessagesBuilder(){
+	private MessagesBuilder() {
 	}
-	
-	
+
+
 	/**
 	 * Return the given text with replacement parameters with given params.
+	 *
 	 * @param text
 	 * @param params
 	 * @return
 	 */
-	public static String format(String text, Object[] params){
+	public static String format(String text, Object[] params) {
 		return MessageFormat.format(text, params);
 	}
-	
-	
+
+
 	/**
 	 * Return the given text with replacement parameters with given params.
+	 *
 	 * @param text
 	 * @param param
 	 * @return
 	 */
-	public static String format(String text, String param){
+	public static String format(String text, String param) {
 		return MessageFormat.format(text, param);
 	}
-	
-	
+
+
 	/**
 	 * Return the property coming entity "messages_xx.properties"
+	 *
 	 * @param property
 	 * @return
 	 */
-	public static String getMessagesProperty(String property){
+	public static String getMessagesProperty(String property) {
 		return getMessagesProperty(property, null);
 	}
-	
-	
+
+
 	/**
 	 * Do the same as "getMessagesProperty(String text, Object[] params)" but with only one parameter.
+	 *
 	 * @param property
 	 * @param param
 	 * @return
 	 */
-	public static String getMessagesProperty(String property, Object param){
-		return getMessagesProperty(property, new Object[] { param });
+	public static String getMessagesProperty(String property, Object param) {
+		return getMessagesProperty(property, new Object[]{param});
 	}
-	
-	
+
+
 	/**
 	 * Return the property coming entity "messages_xx.properties"
 	 * The text can be parameterized. Each char "{x}" found is replaced by the parameters.
@@ -83,20 +87,26 @@ public class MessagesBuilder {
 	 * Example: getMessagesProperty("The entity {0} has been transformed assLink a table {1}.", new Object[]{"Employee","Employees"});
 	 * If you give a no-string parameter, it will be converted assLink String using the current Locale.
 	 * Return null if nothing is founded.
+	 *
 	 * @param property
 	 * @param params
 	 * @return
 	 */
-	public static String getMessagesProperty(String property, Object[] params){
+	public static String getMessagesProperty(String property, Object[] params) {
 		String message = LoadMessages.getMessageBrut(property);
-		if (StringUtils.isEmpty(message) ) {
-				throw new CodeApplException("Le message de nom : >" + property
-						+ 
-	                    "< n'a pas été trouvé dans le fichier de messages ou est vide");
+		if (StringUtils.isEmpty(message)) {
+			throw new CodeApplException("Le message de nom : >" + property
+					+
+					"< n'a pas été trouvé dans le fichier de messages ou est vide");
 		}
 		// Remplacement des � par des espaces
 		message = message.replaceAll("£", "\\ ");
 		return format(message, params);
 	}
 
+	public static String getMessagesPropertyError(String property, Object[] params) {
+		String message = getMessagesProperty(property, params);
+		message = message + "\r\n" + getMessagesProperty("error.contact.support");
+		return message;
+	}
 }
