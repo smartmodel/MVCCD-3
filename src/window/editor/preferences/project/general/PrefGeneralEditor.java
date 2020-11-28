@@ -70,6 +70,11 @@ public class PrefGeneralEditor extends DialogEditorNavTree {
     }
 
     @Override
+    protected String getPropertyTitleRead() {
+        return "preferences.project.general.read";
+    }
+
+    @Override
     protected Object getNavNodeMenu() {
         return PrefProjectMenu.GENERAL;
     }

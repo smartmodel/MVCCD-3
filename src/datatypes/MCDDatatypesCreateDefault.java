@@ -151,17 +151,19 @@ public class MCDDatatypesCreateDefault {
                 Preferences.MCDDATATYPE_POSITIVEINTEGER_NAME,
                 Preferences.MCDDATATYPE_POSITIVEINTEGER_LIENPROG,
                 false);
-/*
+
+        // TODO-1 reprendre AID comme domaine
         MCDDatatype aid = createMCDDatatype(
                 positiveInteger,
-                Preferences.MCDDATATYPE_AID_NAME,
-                Preferences.MCDDATATYPE_AID_LIENPROG,
+                Preferences.MCDDOMAIN_AID_NAME,
+                Preferences.MCDDOMAIN_AID_LIENPROG,
                 false);
-        aid.setSizeDefault(Preferences.MCDDATATYPE_AID_SIZEDEFAULT);
-        aid.setSizeMin(Preferences.MCDDATATYPE_AID_SIZEMIN);
-        aid.setSizeMax(Preferences.MCDDATATYPE_AID_SIZEMAX);
+        aid.setSizeDefault(Preferences.MCDDOMAIN_AID_SIZEDEFAULT);
+        aid.setSizeMin(Preferences.MCDDOMAIN_AID_SIZEMIN);
+        aid.setSizeMax(Preferences.MCDDOMAIN_AID_SIZEMAX);
 
- */
+
+/*
         MCDDomainSubtype aid = createMCDDomainSubtype(
                 positiveInteger,
                 Preferences.MCDDOMAIN_AID_NAME,
@@ -170,6 +172,8 @@ public class MCDDatatypesCreateDefault {
         aid.setSizeDefault(Preferences.MCDDOMAIN_AID_SIZEDEFAULT);
         aid.setSizeMin(Preferences.MCDDOMAIN_AID_SIZEMIN);
         aid.setSizeMax(Preferences.MCDDOMAIN_AID_SIZEMAX);
+
+ */
 /*
         if (PreferencesManager.instance().preferences().getMCD_AID_DATATYPE_LIENPROG() == null){
             PreferencesManager.instance().preferences().setMCD_AID_DATATYPE_LIENPROG(aid.getLienProg());

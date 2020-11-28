@@ -5,7 +5,6 @@ import m.MRelationDegree;
 import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDNamePathParent;
-import mcd.services.MCDEntityNature;
 import mcd.services.MCDEntityService;
 import project.ProjectElement;
 
@@ -21,16 +20,21 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
     private boolean journal = false;
     private boolean audit = false;
 
+    private String mldrTableName = "";
 
     public MCDEntity(ProjectElement parent, String name) {
         super(parent,name);
+        setMldrTableName(name);
     }
 
     public MCDEntity(ProjectElement parent) {
         super (parent);
     }
 
-
+    public void setName(String name){
+        super.setName(name);
+        setMldrTableName(name);
+    }
 
     public boolean isEntAbstract() {
         return entAbstract;
@@ -62,6 +66,14 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
 
     public void setAudit(boolean audit) {
         this.audit = audit;
+    }
+
+    public String getMldrTableName() {
+        return mldrTableName;
+    }
+
+    public void setMldrTableName(String mldrTableName) {
+        this.mldrTableName = mldrTableName;
     }
 
     public ArrayList<MCDAttribute> getMCDAttributes() {
@@ -273,6 +285,11 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return MCDEntityService.getAssEndsAssNNChild(this);
     }
 
+    public ArrayList<MCDAssEnd> getAssEndsAssNNParent(){
+
+        return MCDEntityService.getAssEndsAssNNParent(this);
+    }
+
     // Un tableau est retourné car lors de la saisie plusieurs liens peuvent être établis!
     // C'est lors du contrôle de conformité que je vérifie qu'il n'y a qu'un lien d'entité associative
     public ArrayList<MCDLinkEnd> getLinkEnds(){
@@ -376,5 +393,15 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
 
     public MCDEntityNature getNature(){
         return MCDEntityService.getNature(this);
+    }
+
+    public ArrayList<MCDEntity> getSisters(){
+        ArrayList<MCDEntity> resultat = new ArrayList<MCDEntity>();
+        for (MVCCDElement mvccdElement : super.getBrothers()){
+            if (mvccdElement instanceof MCDEntity){
+                resultat.add((MCDEntity) mvccdElement) ;
+            }
+        }
+        return resultat;
     }
 }

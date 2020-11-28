@@ -2,6 +2,7 @@ package utilities.window.editor;
 
 import main.MVCCDElement;
 import preferences.PreferencesManager;
+import utilities.Debug;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 
@@ -257,7 +258,7 @@ public abstract class PanelInputContent
             if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
                 if (PreferencesManager.instance().getApplicationPref().getDEBUG_EDITOR_DATAS_CHANGED()) {
                     if (sComponent.checkIfUpdated()) {
-                        System.out.println(sComponent.getName() + " - " +sComponent);
+                        Debug.println(sComponent.getName() + " - " +sComponent);
                     }
                 }
             }
@@ -372,5 +373,9 @@ public abstract class PanelInputContent
 
     public MVCCDElement getElementForCheckInput() {
         return elementForCheckInput;
+    }
+
+    protected void reInitDatas(MVCCDElement mvccdElement){
+
     }
 }

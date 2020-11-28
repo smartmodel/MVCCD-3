@@ -11,6 +11,7 @@ import project.ProjectElement;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -143,7 +144,7 @@ public abstract class MCDConstraint extends MCDOperation{
         String resultat = "";
         for (String parameter : getParametersName()){
             if (StringUtils.isNotEmpty(resultat)){
-                resultat = resultat + Preferences.PARAMETERS_SEPARATOR;
+                resultat =  resultat+ Preferences.PARAMETERS_SEPARATOR;
             }
             resultat = resultat + parameter;
         }

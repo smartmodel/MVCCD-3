@@ -62,4 +62,9 @@ public class AttributeEditor extends DialogEditor {
         return "editor.attribute.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.attribute.read";
+    }
+
 }

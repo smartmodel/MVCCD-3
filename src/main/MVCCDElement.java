@@ -120,6 +120,11 @@ public abstract class MVCCDElement implements Serializable {
         return childs;
     }
 
+    public ArrayList<MVCCDElement> getChildsSortName() {
+        Collections.sort(childs, MVCCDElement::compareToName);
+        return childs;
+    }
+
     public ArrayList<MVCCDElement> getChildsWithout(MVCCDElement child) {
         ArrayList<MVCCDElement> resultat = new ArrayList<MVCCDElement>() ;
         for (MVCCDElement aChild : getChilds()){
@@ -128,6 +133,10 @@ public abstract class MVCCDElement implements Serializable {
             }
         }
         return resultat;
+    }
+
+    public ArrayList<MVCCDElement> getBrothers(){
+        return getParent().getChildsWithout(this);
     }
 
     public ArrayList<MVCCDElement> getChildsRepository() {

@@ -78,5 +78,11 @@ public class PrefMCDEditor extends DialogEditorNavTree {
         return "preferences.project.mcd.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "preferences.project.mcd.read";
+    }
+
+
 
 }

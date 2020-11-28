@@ -33,13 +33,27 @@ public class MCDModelEditingTreat extends EditingTreat {
 
     @Override
     protected String getPropertyTheElement() {
-        return "the.model";
+        return "tthe.model.conceptual";
     }
 
     @Override
     public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
         MCDModel mcdModel = (MCDModel) mvccdElement;
         ArrayList<String> resultat = mcdModel.treatCompliant();
+        super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
+        MCDModel mcdModel = (MCDModel) mvccdElement;
+        ArrayList<String> resultat = mcdModel.treatCompliant();
+        if (resultat.size() > 0) {
+            super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
+        } else {
+            resultat = mcdModel.treatTransform();
+            super.treatTransformFinishMessages(owner, mvccdElement, resultat);
+        }
         return resultat;
     }
 

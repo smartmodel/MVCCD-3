@@ -3,11 +3,24 @@ package main;
 import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.MCDContAttributes;
+import mcd.interfaces.IMCDModel;
+import mdr.*;
+import mdr.interfaces.IMDRParameter;
 import messages.MessagesBuilder;
+import mldr.*;
+import mldr.services.MLDRContConstraintsService;
+import mpdr.MPDRModel;
+import mpdr.mysql.MPDRMySQLModel;
+import mpdr.mysql.MPDRMySQLTable;
+import mpdr.oracle.MPDROracleModel;
+import mpdr.oracle.MPDROracleTable;
+import mpdr.postgresql.MPDRPostgreSQLModel;
+import mpdr.postgresql.MPDRPostgreSQLTable;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
+import utilities.Trace;
 
 public class MVCCDElementFactory {
 
@@ -32,7 +45,7 @@ public class MVCCDElementFactory {
 
         // Les préférences de projets ne sont pas encore mises à jour...
         if (!PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY()) {
-                createContentModel(mcdContModels);
+                createContentMCDModel(mcdContModels);
         }
         return project;
     }
@@ -44,7 +57,7 @@ public class MVCCDElementFactory {
 
     public MCDModel createMCDModel(MCDContModels mcdContModels){
         MCDModel mcdModel = new MCDModel(mcdContModels);
-        createContentModel(mcdModel);
+        createContentMCDModel(mcdModel);
         return mcdModel;
     }
 
@@ -202,7 +215,7 @@ public class MVCCDElementFactory {
     }
 
 
-    private void createContentModel(MCDElement parent) {
+    private void createContentMCDModel(MCDElement parent) {
         createContentPackage(parent);
     }
 
@@ -211,6 +224,106 @@ public class MVCCDElementFactory {
         MCDContEntities mcdContEntities = MVCCDElementFactory.instance().createMCDEntities(parent,Preferences.REPOSITORY_MCD_ENTITIES_NAME);
         MCDContRelations mcdContRelations = MVCCDElementFactory.instance().createMCDContRelations(parent,Preferences.REPOSITORY_MCD_RELATIONS_NAME);
     }
+
+
+
+    public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel){
+        MLDRModelDT mldrModelDT = new MLDRModelDT((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_DT_NAME);
+        createContentMLDRModel(mldrModelDT);
+        return mldrModelDT;
+    }
+
+    public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel){
+        MLDRModelTI mldrModelTI = new MLDRModelTI((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_TI_NAME);
+        createContentMLDRModel(mldrModelTI);
+        return mldrModelTI;
+    }
+
+    private void createContentMLDRModel(MLDRModel mldrModel) {
+        MDRContTables mdrContTable = new MDRContTables(mldrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
+    }
+
+
+    public MLDRTable createMLDRTable(MDRContTables mdrContTables, MCDEntity entitySource) {
+        MLDRTable mldrTable = new MLDRTable(mdrContTables, entitySource);
+        MLDRContColumns mldrContColumns = new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        MLDRContConstraints mldrContConstraints = new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+
+        return mldrTable;
+    }
+
+
+    public MLDRColumn createMLDRColumn(MDRContColumns mdrContColumns, MCDElement mcdElementSource) {
+        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource);
+        return mldrColumn;
+    }
+
+    public MLDRColumn createMLDRColumnFK(MDRContColumns mdrContColumns, MCDElement mcdElementSource, MLDRColumn mldrColumnPK) {
+        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource, mldrColumnPK);
+        return mldrColumn;
+    }
+
+
+    public MLDRPK createMLDRPK(MDRContConstraints mdrContConstraints, MCDElement mcdElementSource) {
+        MLDRPK mldrPK= new MLDRPK(mdrContConstraints, mcdElementSource);
+        return mldrPK;
+    }
+
+    public MLDRParameter createMLDRParameter(MDRConstraint mdrConstraint, IMDRParameter target) {
+        MLDRParameter mldrParameter = new MLDRParameter(mdrConstraint, target);
+        return mldrParameter;
+    }
+
+
+
+    public MLDRFK createMLDRFK(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
+        MLDRFK mldrFK= new MLDRFK(mldrContConstraints, mcdElementSource);
+        Integer indice = MLDRContConstraintsService.nextIndice(mldrContConstraints, mldrFK);
+        mldrFK.setIndice(indice);
+        return mldrFK;
+    }
+
+
+    public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {
+        MPDROracleModel mpdrOracleModel = new MPDROracleModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_ORACLE_NAME);
+        createContentMPDRModel(mpdrOracleModel);
+        return mpdrOracleModel;
+    }
+
+    public MPDRMySQLModel createMPDRModelMySQL(MLDRModel mldrModel) {
+        MPDRMySQLModel mpdrMySQLModel = new MPDRMySQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_MYSQL_NAME);
+        createContentMPDRModel(mpdrMySQLModel);
+        return mpdrMySQLModel;
+    }
+
+    public MPDRPostgreSQLModel createMPDRModelPostgreSQL(MLDRModel mldrModel) {
+        MPDRPostgreSQLModel mpdrPostgreSQLModel = new MPDRPostgreSQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME);
+        createContentMPDRModel(mpdrPostgreSQLModel);
+        return mpdrPostgreSQLModel;
+    }
+    
+
+    private void createContentMPDRModel(MPDRModel mpdrModel) {
+        MDRContTables mdrContTable = new MDRContTables(mpdrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
+    }
+
+    public MPDROracleTable createMPDROracleTable(MDRContTables mdrContTables, String buildNameTable, MLDRTable mldrTable) {
+        MPDROracleTable mpdrOracleTable = new MPDROracleTable(mdrContTables, buildNameTable, mldrTable);
+        return mpdrOracleTable;
+    }
+
+    public MPDRMySQLTable createMPDRMySQLTable(MDRContTables mdrContTables, String buildNameTable, MLDRTable mldrTable) {
+        MPDRMySQLTable mpdrMySQLTable = new MPDRMySQLTable(mdrContTables, buildNameTable, mldrTable);
+        return mpdrMySQLTable;
+    }
+
+    public MPDRPostgreSQLTable createMPDRPostgreSQLTable(MDRContTables mdrContTables, String buildNameTable, MLDRTable mldrTable) {
+        MPDRPostgreSQLTable mpdrPostgreSQLTable = new MPDRPostgreSQLTable(mdrContTables, buildNameTable, mldrTable);
+        return mpdrPostgreSQLTable;
+    }
+
+
+
 
 
     public ProjectElement createMVCCDElementFromXML(String baliseName, ProjectElement ancestor){
@@ -232,5 +345,4 @@ public class MVCCDElementFactory {
         }
     }
 
-
-}
+ }

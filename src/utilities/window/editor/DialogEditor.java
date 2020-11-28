@@ -302,10 +302,13 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         if (mode.equals(DialogEditor.NEW)){
             title = MessagesBuilder.getMessagesProperty(getPropertyTitleNew());
         }
-        if (mode.equals(DialogEditor.UPDATE) ||
-                mode.equals(DialogEditor.READ) ||
-                mode.equals(DialogEditor.DELETE) ){
+        if (mode.equals(DialogEditor.UPDATE)){
             title = MessagesBuilder.getMessagesProperty(getPropertyTitleUpdate(), new String[]{
+                    getElementNameTitle() });
+        }
+        if (mode.equals(DialogEditor.READ) ||
+                mode.equals(DialogEditor.DELETE) ){
+            title = MessagesBuilder.getMessagesProperty(getPropertyTitleRead(), new String[]{
                     getElementNameTitle() });
         }
         return title;
@@ -314,6 +317,8 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     protected abstract String getPropertyTitleNew();
 
     protected abstract String getPropertyTitleUpdate();
+
+    protected abstract String getPropertyTitleRead();
 
     protected String getElementNameTitle(){
         return getMvccdElementCrt().getName();

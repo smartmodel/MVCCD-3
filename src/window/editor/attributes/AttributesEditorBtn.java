@@ -73,6 +73,11 @@ public class AttributesEditorBtn extends DialogEditorNavBtn {
         return "editor.entity.attributes.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.entity.attributes.read";
+    }
+
     protected String getElementNameTitle(){
         return getMvccdElementCrt().getParent().getName();
     }

@@ -2,9 +2,13 @@ package mcd.services;
 
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
+import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
+import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
 import project.ProjectService;
+import utilities.Trace;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -134,9 +138,15 @@ public class MCDEntityService {
         return resultat;
     }
 
+    public static ArrayList<MCDAssEnd> getAssEndsAssNNParent(MCDEntity mcdEntity) {
+        // Il n'y a pas de rôle child ou parent !
+        return getAssEndsAssNNChild(mcdEntity);
+    }
 
 
-    public static ArrayList<MCDAssEnd> getAssEndsId(MCDEntity mcdEntity, boolean parent) {
+
+
+        public static ArrayList<MCDAssEnd> getAssEndsId(MCDEntity mcdEntity, boolean parent) {
         ArrayList<MCDAssEnd> resultat = getAssEndsIdComp(mcdEntity, parent);
         resultat.addAll(getAssEndsIdNat(mcdEntity, parent));
         resultat.addAll(getAssEndsCP(mcdEntity, parent));
@@ -286,6 +296,73 @@ public class MCDEntityService {
             return MCDEntityNature.PSEUDOENTASS;
         }
 
+        return null;
+    }
+
+
+    public static ArrayList<String> checkTableName(MCDEntity mcdEntity,
+                                                    String tableName    ) {
+
+        ArrayList<MCDEntity> sisters = mcdEntity.getSisters();
+
+        ArrayList<String> messages = MCDUtilService.checkString(
+                tableName,
+                true,
+                Preferences.ENTITY_TABLE_NAME_LENGTH,
+                Preferences.NAME_REGEXPR,
+                "naming.of.table.name",
+                "of.entity");
+
+        if (messages.size() == 0) {
+            messages.addAll(checkExistNameInSisters(sisters, tableName,  true));
+        }
+        return messages;
+    }
+
+
+
+    public static ArrayList<String> checkExistNameInSisters(ArrayList<MCDEntity> sisters,
+                                                            String name,
+                                                            boolean uppercase) {
+
+        MCDEntity elementConflict = nameExistInSisters(sisters, name, uppercase);
+        if (elementConflict != null) {
+            return MCDUtilService.messagesExistNaming(name,
+                    uppercase,
+                    "naming.exist.table.name.element",
+                    "naming.sister.entity",
+                    "naming.name.table",
+                    elementConflict.getName());
+
+        }
+
+        return new ArrayList<String>();
+    }
+
+    public static MCDEntity nameExistInSisters(ArrayList<MCDEntity> sisters,
+                                               String name,
+                                               boolean uppercase) {
+        for (MCDEntity sister : sisters) {
+            String namingToCheck = name;
+            String childNaming = sister.getMldrTableName();
+            if (uppercase) {
+                namingToCheck = namingToCheck.toUpperCase();
+                // Pour la transition vers l'obligation de valeur de TableName
+                if (childNaming == null) {
+                    ;
+                    childNaming = "";
+                } else {
+                    childNaming = childNaming.toUpperCase();
+                }
+            }
+
+            if (StringUtils.isNotEmpty(childNaming) && StringUtils.isNotEmpty(namingToCheck)) {
+                if (childNaming.equals(namingToCheck)) {
+                    return sister;
+                }
+            }
+
+        }
         return null;
     }
 

@@ -43,6 +43,11 @@ public class PrefApplicationEditor extends DialogEditor {
     }
 
     @Override
+    protected String getPropertyTitleRead() {
+        return "preferences.application.read";
+    }
+
+    @Override
     protected PanelButtons getButtonsCustom() {
         return new PrefApplicationButtons(this);
     }

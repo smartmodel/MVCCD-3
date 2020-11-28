@@ -211,7 +211,7 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         return CLASSSHORTNAMEUI;
     }
 
-    public MCDEntity getEntityParent(){
+    public MCDEntity getEntityAccueil(){
         return (MCDEntity) getParent().getParent();
     }
     public ArrayList<MCDNID> partOfNIds(){

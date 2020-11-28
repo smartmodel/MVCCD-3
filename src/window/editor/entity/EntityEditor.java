@@ -68,5 +68,10 @@ public class EntityEditor extends DialogEditorNavBtn {
         return "editor.entity.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.entity.read";
+    }
+
 
 }

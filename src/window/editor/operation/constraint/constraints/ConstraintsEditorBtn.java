@@ -69,6 +69,11 @@ public class ConstraintsEditorBtn extends DialogEditorNavBtn {
         return "editor.entity.constraints.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.entity.constraints.read";
+    }
+
     protected String getElementNameTitle(){
         return getMvccdElementCrt().getParent().getName();
     }

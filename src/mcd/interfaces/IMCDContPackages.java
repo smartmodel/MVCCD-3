@@ -6,6 +6,7 @@ import project.ProjectService;
 public interface IMCDContPackages {
 
     public abstract String getNamePath(int pathMode);
+
     public static IMCDContPackages getIMCDContPackagesByNamePath(int pathMode, String namePath){
         for (IMCDContPackages imcdContPackages: ProjectService.getIMCDContPackages()){
             if (imcdContPackages.getNamePath(pathMode).equals(namePath)){

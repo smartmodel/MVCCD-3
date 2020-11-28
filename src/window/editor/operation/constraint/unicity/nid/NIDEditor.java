@@ -48,4 +48,9 @@ public class NIDEditor extends UnicityEditor {
         return "editor.nid.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.nid.read";
+    }
+
 }

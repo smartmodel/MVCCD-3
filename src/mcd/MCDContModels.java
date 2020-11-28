@@ -6,6 +6,7 @@ import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDNamePathParent;
+import mcd.transform.MCDTransform;
 import preferences.Preferences;
 import project.Project;
 import project.ProjectElement;
@@ -14,7 +15,7 @@ import utilities.files.UtilXML;
 
 import java.util.ArrayList;
 
-public class MCDContModels extends MCDElement implements IMCDModel, IMCDNamePathParent, IMCDContPackages,
+public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePathParent, */IMCDContPackages,
         IMCDContContainer {
 
     private static final long serialVersionUID = 1000;
@@ -34,9 +35,15 @@ public class MCDContModels extends MCDElement implements IMCDModel, IMCDNamePath
         MCDCompliant mcdCompliant = new MCDCompliant();
         // Il n'y a pas de modèles. Il faut donc tester toutes les entités
         ArrayList<String> resultat = mcdCompliant.check(ProjectService.getMCDEntities(), false);
-
         return resultat;
+    }
 
+
+    public ArrayList<String> treatTransform(){
+        MCDTransform mcdTransform = new MCDTransform();
+        // Il n'y a pas de modèles. Il faut donc tester toutes les entités
+        ArrayList<String> resultat = mcdTransform.transform(this);
+        return resultat;
     }
 
 }

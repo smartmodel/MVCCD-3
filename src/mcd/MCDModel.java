@@ -3,12 +3,16 @@ package mcd;
 import m.IMCompletness;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
+import mcd.services.MCDModelService;
+import mcd.transform.MCDTransform;
+import mldr.MLDRModelDT;
+import mldr.MLDRModelTI;
 import project.ProjectService;
 
 import java.util.ArrayList;
 
 public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
-        IMCDContContainer, IMCDNamePathParent, IMCDContPackages, IMCDContainer, IMCompletness {
+        IMCDContContainer, /*IMCDNamePathParent,*/ IMCDContPackages, IMCDContainer, IMCompletness {
 
     private static final long serialVersionUID = 1000;
 
@@ -82,7 +86,13 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
 
     }
 
+    public ArrayList<String> treatTransform(){
+        MCDTransform mcdTransform = new MCDTransform();
+        ArrayList<String> resultat = mcdTransform.transform(this);
 
+        return resultat;
+
+    }
 
 
 }

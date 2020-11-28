@@ -42,4 +42,9 @@ public class MCDRelationsEditingTreat extends EditingTreat {
         return null;
     }
 
+    @Override
+    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
+        return null;
+    }
+
 }

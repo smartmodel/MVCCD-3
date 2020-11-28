@@ -72,4 +72,9 @@ public class ParameterEditor extends DialogEditor {
         return "editor.parameter.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.parameter.read";
+    }
+
 }

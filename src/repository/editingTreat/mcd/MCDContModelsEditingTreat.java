@@ -2,7 +2,9 @@ package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
 import mcd.MCDContModels;
+import mcd.MCDModel;
 import repository.editingTreat.EditingTreat;
+import utilities.Trace;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 
@@ -34,6 +36,19 @@ public class MCDContModelsEditingTreat extends EditingTreat {
         MCDContModels mcdContModels = (MCDContModels) mvccdElement;
         ArrayList<String> resultat = mcdContModels.treatCompliant();
         super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
+        MCDContModels mcdContModels = (MCDContModels) mvccdElement;
+        ArrayList<String> resultat = mcdContModels.treatCompliant();
+        if (resultat.size() > 0) {
+            super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
+        } else {
+            resultat = mcdContModels.treatTransform();
+            super.treatTransformFinishMessages(owner, mvccdElement, resultat);
+        }
         return resultat;
     }
 

@@ -9,6 +9,7 @@ import mcd.MCDParameter;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.Trace;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.STable;
 
@@ -211,7 +212,7 @@ public class MCDUtilService {
         String messageTypeNaming = MessagesBuilder.getMessagesProperty(typeNaming);
 
         messages.add(0, MessagesBuilder.getMessagesProperty(bodyMessage
-                , new String[]{messageTypeNaming, naming, messageContext}));
+        , new String[]{messageTypeNaming, naming, messageContext}));
         if (uppercase) {
             messages.add(MessagesBuilder.getMessagesProperty("naming.uppercase"));
         } else {

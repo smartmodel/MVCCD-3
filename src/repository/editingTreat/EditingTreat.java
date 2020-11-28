@@ -1,12 +1,14 @@
 package repository.editingTreat;
 
 import console.Console;
+import delete.Delete;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import mcd.MCDElement;
 import mcd.services.MCDElementService;
+import md.MDElement;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import utilities.window.DialogMessage;
@@ -59,9 +61,7 @@ public abstract class EditingTreat {
                 new String[] { messageTheElement, element.getName()});
         boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
         if (confirmDelete){
-            removeMVCCDElementInRepository(element);
-            element.removeInParent();
-            element = null;
+            element = Delete.deleteMVCCDElement(element);
         }
         return element == null;
     }
@@ -157,7 +157,6 @@ public abstract class EditingTreat {
 
     protected abstract String getPropertyTheElement();
 
-
     protected  void removeMVCCDElementInRepository(MVCCDElement element){
         MVCCDManager.instance().removeMVCCDElementInRepository(element, element.getParent());
     }
@@ -169,29 +168,43 @@ public abstract class EditingTreat {
     public abstract ArrayList<String> treatCompliant(
             Window owner, MVCCDElement mvccdElement);
 
+    public abstract ArrayList<String> treatTransform(
+            Window owner, MVCCDElement mvccdElement);
+
+
 
     protected void treatCompliantFinishMessages(Window owner, MVCCDElement mvccdElement, ArrayList<String> messages) {
-        String message = "";
-        if (messages.size() == 0 ){
-            MCDElement mcdElement = (MCDElement) mvccdElement;
-            String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
+        treatFinishMessages(owner, mvccdElement, messages,"dialog.compliant.ok", "dialog.compliant.error") ;
+    }
 
-            message = MessagesBuilder.getMessagesProperty("dialog.compliant.ok",
-                    new String[]{messageElement, mcdElement.getNamePath(MCDElementService.PATHSHORTNAME)});
+    protected void treatTransformFinishMessages(Window owner, MVCCDElement mvccdElement, ArrayList<String> messages) {
+        treatFinishMessages(owner, mvccdElement, messages,"dialog.transform.ok", "dialog.transform.error") ;
+    }
+
+    protected void treatFinishMessages(Window owner, MVCCDElement mvccdElement, ArrayList<String> messages,
+                    String propertyOk , String propertyError ) {
+        String message = "";
+        MDElement mdElement = (MDElement) mvccdElement;
+        String mdElementName = mdElement.getName();
+        if (mdElement instanceof MCDElement){
+            mdElementName = ((MCDElement) mdElement).getNamePath(MCDElementService.PATHSHORTNAME);
+        }
+        if (messages.size() == 0 ){
+            String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
+            message = MessagesBuilder.getMessagesProperty(propertyOk,
+                    new String[]{messageElement, mdElementName});
         }
 
         if (messages.size() > 0 ){
-            MCDElement mcdElement = (MCDElement) mvccdElement;
             String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
-
-            message = MessagesBuilder.getMessagesProperty("dialog.compliant.error",
-                    new String[]{messageElement, mcdElement.getNamePath(MCDElementService.PATHSHORTNAME)});
-            message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.compliant.error.console");
+            message = MessagesBuilder.getMessagesProperty(propertyError,
+                    new String[]{messageElement, mdElementName});
+            message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.error.console");
 
         }
         //TODO-1 Erreur si < 0
 
         Console.printMessage(message);
         DialogMessage.showOk(owner, message);
-     }
+    }
 }

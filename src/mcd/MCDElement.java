@@ -3,6 +3,8 @@ package mcd;
 import main.MVCCDElement;
 import mcd.services.MCDElementService;
 import md.MDElement;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.ProjectElement;
 
 public abstract class MCDElement extends MDElement {
@@ -17,23 +19,40 @@ public abstract class MCDElement extends MDElement {
         super(parent, name);
     }
 
+    public String getPath(int pathMode, String separator) {
+        return MCDElementService.getPath(this, pathMode, separator);
+    }
+
+    public String getShortPath(String separator) {
+        return MCDElementService.getPath(this, MCDElementService.PATHSHORTNAME, separator);
+    }
+
+    public String getNormalPath(String separator) {
+        return MCDElementService.getPath(this, MCDElementService.PATHNAME, separator);
+    }
+
+
+
     public String getNamePath(int pathMode) {
-        String path = MCDElementService.getPath(this, pathMode);
+        String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
+        String path = getPath( pathMode, separator);
         if (path !=null){
-            return path + getName();
+            return path + separator + getName();
         } else {
             return getName();
         }
     }
 
     public String getShortNameSmartPath() {
-        String path = MCDElementService.getPath(this, MCDElementService.PATHSHORTNAME);
+        String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
+        String path = getPath( MCDElementService.PATHSHORTNAME, separator);
         if (path !=null){
-            return path + getShortNameSmart();
+            return path + separator + getShortNameSmart();
         } else {
             return getShortNameSmart();
         }
     }
+
 
 
     public MCDContRelEnds getMCDContEndRels() {

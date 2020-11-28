@@ -11,6 +11,7 @@ import repository.editingTreat.mcd.MCDNIDEditingTreat;
 import repository.editingTreat.mcd.MCDUniqueEditingTreat;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
+import utilities.Trace;
 import utilities.UtilDivers;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;

@@ -3,6 +3,7 @@ package mcd;
 import m.IMCompletness;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
+import mcd.services.MCDPackageService;
 import project.ProjectElement;
 import project.ProjectService;
 
@@ -70,6 +71,10 @@ public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDName
         MCDCompliant mcdCompliant = new MCDCompliant();
         ArrayList<String> resultat = mcdCompliant.check(getMCDEntities(), false);
         return resultat;
+    }
+
+    public int getLevel(){
+        return MCDPackageService.getLevel(this);
     }
 
 

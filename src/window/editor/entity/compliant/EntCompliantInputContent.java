@@ -2,7 +2,7 @@ package window.editor.entity.compliant;
 
 import main.MVCCDElement;
 import mcd.MCDEntity;
-import mcd.services.MCDEntityNature;
+import mcd.MCDEntityNature;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.editor.PanelInputContent;

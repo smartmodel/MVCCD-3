@@ -64,7 +64,7 @@ public class WinRepositoryTree extends JTree {
                             evt.getNewLeadSelectionPath().getLastPathComponent();
 
                     // récupération des données associées au noeud pour les afficher
-                    //System.out.println(evt.getNewLeadSelectionPath().getLastPathComponent().toString());
+                    //Trace.println(evt.getNewLeadSelectionPath().getLastPathComponent().toString());
                 }
             }
         };

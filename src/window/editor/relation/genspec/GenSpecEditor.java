@@ -65,4 +65,9 @@ public class GenSpecEditor extends DialogEditor {
         return "editor.genspec.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.genspec.read";
+    }
+
 }

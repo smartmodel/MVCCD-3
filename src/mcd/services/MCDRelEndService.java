@@ -7,6 +7,8 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
+import java.util.ArrayList;
+
 public class MCDRelEndService {
 
     public static String getNameTree(MCDRelEnd mcdRelEndStart,
@@ -59,6 +61,16 @@ public class MCDRelEndService {
         }
 
         resultat = namingRelation + nameElementOpposite;
+        return resultat;
+    }
+
+    public static <T> ArrayList<MCDRelEnd> convertToMCDRelEnd(ArrayList<T> mcdTEnds){
+        ArrayList<MCDRelEnd> resultat = new ArrayList<MCDRelEnd>();
+        for (T mcdTEnd : mcdTEnds){
+            if (mcdTEnd instanceof MCDRelEnd) {
+                resultat.add((MCDRelEnd) mcdTEnd);
+            }
+        }
         return resultat;
     }
 }

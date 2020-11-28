@@ -39,5 +39,10 @@ public class MCDEntityEditingTreat extends EditingTreat {
         return resultat;
     }
 
+    @Override
+    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
+        return null;
+    }
+
 
 }

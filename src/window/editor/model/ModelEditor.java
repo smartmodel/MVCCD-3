@@ -82,4 +82,15 @@ public class ModelEditor extends DialogEditor {
         }
         return null;
     }
+
+    @Override
+    protected String getPropertyTitleRead() {
+        if (scope == ModelEditor.MODEL) {
+            return "editor.model.read";
+        }
+        if (scope == ModelEditor.PACKAGE) {
+            return "editor.package.read";
+        }
+        return null;
+    }
 }

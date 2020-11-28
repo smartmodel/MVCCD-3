@@ -4,6 +4,7 @@ import mcd.MCDElement;
 import mcd.MCDPackage;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
+import preferences.Preferences;
 import project.ProjectService;
 
 import java.util.ArrayList;
@@ -23,6 +24,21 @@ public class MCDPackageService {
         for (MCDElement element :  IMCDModelService.getMCDElementsByClassName(
                 iMCDModel, true, IMCDContPackages.class.getName())){
             resultat.add((IMCDContPackages) element);
+        }
+        return resultat;
+    }
+
+    public static ArrayList<IMCDContPackages> getIMCDContPackagesInIModelUnderLevelMax(IMCDModel iMCDModel) {
+        ArrayList<IMCDContPackages> resultat =  new ArrayList<IMCDContPackages>();
+        for (IMCDContPackages imcdContPackages :  getIMCDContPackagesInIModel(iMCDModel)){
+            if ( imcdContPackages instanceof MCDPackage){
+                MCDPackage mcdPackage = (MCDPackage) imcdContPackages;
+                if (mcdPackage.getLevel() < Preferences.PACKAGE_LEVEL_MAX){
+                    resultat.add(mcdPackage);
+                }
+            } else {
+                resultat.add(imcdContPackages);
+            }
         }
         return resultat;
     }
@@ -57,4 +73,17 @@ public class MCDPackageService {
         return null;
     }
 
+    private static int getLevel(MCDPackage mcdPackage, int level) {
+        if ( mcdPackage.getParent() instanceof MCDPackage){
+            MCDPackage mcdPackageParent = (MCDPackage) mcdPackage.getParent();
+            level++;
+            level = getLevel(mcdPackageParent,level);
+        }
+        return level;
+    }
+
+
+    public static int getLevel(MCDPackage mcdPackage) {
+        return getLevel(mcdPackage, 1);
+    }
 }

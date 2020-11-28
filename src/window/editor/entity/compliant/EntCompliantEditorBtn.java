@@ -67,6 +67,11 @@ public class EntCompliantEditorBtn extends DialogEditorNavBtn {
 
     @Override
     protected String getPropertyTitleUpdate() {
+        return null;
+    }
+
+    @Override
+    protected String getPropertyTitleRead() {
         return "editor.entity.compliant.read";
     }
 

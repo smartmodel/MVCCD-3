@@ -5,6 +5,7 @@ import m.MRelEnd;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import stereotypes.Stereotype;
+import utilities.UtilDivers;
 import utilities.files.UtilFiles;
 
 import javax.swing.*;
@@ -80,11 +81,30 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
 
     protected abstract String getFileImageIconLong();
 
-    public String getNameOrNameRelation(){
+    public String getNameFromNoFree(){
         String name = getName();
-        if (StringUtils.isNotEmpty(name)){
-            name = getMcdRelation().getName();
+        if (name != null){
+            name = UtilDivers.toNoFree(name);
         }
         return name;
     }
+
+    public String getNameNoFreeOrNameRelation(){
+        String nameNoFree = getNameFromNoFree();
+        if (StringUtils.isEmpty(nameNoFree)){
+            nameNoFree = getMcdRelation().getName();
+        }
+        return nameNoFree;
+    }
+
+    //TODO-0 Vérifier que shortName de MCDRelation soit obligatoire si pas de rôle
+    public String getShortName(){
+        String shortName = super.getShortName();
+        if (StringUtils.isEmpty(shortName)){
+            shortName = getMcdRelation().getShortName();
+        }
+        return shortName;
+    }
+
+
 }

@@ -259,7 +259,7 @@ public class ModelInputContent extends PanelInputContentId {
     @Override
     protected ArrayList<MCDElement> getParentCandidates(IMCDModel iMCDModelContainer) {
         if (getScope() == ModelEditor.PACKAGE) {
-            ArrayList<IMCDContPackages> iMCDContPackages = MCDPackageService.getIMCDContPackagesInIModel(iMCDModelContainer);
+            ArrayList<IMCDContPackages> iMCDContPackages = MCDPackageService.getIMCDContPackagesInIModelUnderLevelMax(iMCDModelContainer);
             // Supprimer l'élément lui-même qui ne peut être son propre conteneur
             if (panelInput != null) {
                 if (getEditor().getMvccdElementCrt() != null) {

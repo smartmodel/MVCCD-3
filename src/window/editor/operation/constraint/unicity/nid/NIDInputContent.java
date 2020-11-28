@@ -134,8 +134,6 @@ public class NIDInputContent extends UnicityInputContent {
 
         fen.setVisible(true);
         MVCCDElement newElement = fen.getMvccdElementNew();
-
-        System.out.println (newElement.toString());
         return (MElement) newElement;
     }
 

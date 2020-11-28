@@ -4,6 +4,7 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDContPackages;
+import mcd.MCDEntityNature;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;
@@ -209,6 +210,43 @@ public class ProjectService {
         return resultat;
     }
 
+    public static ArrayList<MCDEntity> getMCDEntitiesConcrets(MCDElement root){
+        ArrayList<MCDEntity>  resultat = new ArrayList<MCDEntity>() ;
+        for (MCDEntity aMCDEntity : getMCDEntities(root)){
+            if ( aMCDEntity.getNature() != MCDEntityNature.PSEUDOENTASS){
+                resultat.add((MCDEntity) aMCDEntity);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDEntity> getMCDEntitiesIndependants(MCDElement root) {
+        ArrayList<MCDEntity>  resultat = new ArrayList<MCDEntity>() ;
+        for (MCDEntity aMCDEntity : getMCDEntities(root)){
+            if ( aMCDEntity.getNature() == MCDEntityNature.IND){
+                resultat.add((MCDEntity) aMCDEntity);
+            }
+        }
+        return resultat;
+    }
+
+
+    public static ArrayList<MCDEntity> getMCDEntitiesConcretsNoInd(MCDElement root) {
+        ArrayList<MCDEntity>  resultat = new ArrayList<MCDEntity>() ;
+        for (MCDEntity aMCDEntity : getMCDEntities(root)){
+            if (    (aMCDEntity.getNature() == MCDEntityNature.DEP) ||
+                    (aMCDEntity.getNature() == MCDEntityNature.ENTASS) ||
+                    (aMCDEntity.getNature() == MCDEntityNature.ENTASSDEP) ||
+                    (aMCDEntity.getNature() == MCDEntityNature.NAIRE) ||
+                    (aMCDEntity.getNature() == MCDEntityNature.NAIREDEP) ||
+                    (aMCDEntity.getNature() == MCDEntityNature.SPEC) ){
+                resultat.add((MCDEntity) aMCDEntity);
+            }
+        }
+        return resultat;
+    }
+
+
     // ByMCDElement : Element auquel est attaché la relation
     public static ArrayList<MCDRelEnd> getMCDRelEndsByMCDElement(MCDElement mcdElement){
         ArrayList<MCDRelEnd>  resultat = new ArrayList<MCDRelEnd>() ;
@@ -244,6 +282,8 @@ public class ProjectService {
         }
         return resultat;
     }
+
+
 
 }
 

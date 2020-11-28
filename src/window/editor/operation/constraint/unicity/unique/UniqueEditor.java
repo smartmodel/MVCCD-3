@@ -47,4 +47,9 @@ public class UniqueEditor extends UnicityEditor {
     protected String getPropertyTitleUpdate() {
         return "editor.unique.update";
     }
+
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.unique.read";
+    }
 }

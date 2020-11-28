@@ -66,4 +66,9 @@ public class AssociationEditor extends DialogEditor {
         return "editor.association.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.association.read";
+    }
+
 }

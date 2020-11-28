@@ -331,6 +331,10 @@ public class PrefMCDInputContent extends PanelInputContent {
             boolean unitaire;
 
             // Autre attributs
+
+            //TODO-0
+            // vérifier la taille maximale des 2 champs fieldAID...
+            // Avec MCD_AID_COLUMN_NAME_LENGTH = 5
         }
 
         return ok;

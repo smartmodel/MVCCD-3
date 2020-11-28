@@ -3,6 +3,9 @@ package mcd.services;
 import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
+import mldr.MLDRModelDT;
+import mldr.MLDRModelTI;
+import project.ProjectService;
 
 import java.util.ArrayList;
 
@@ -40,6 +43,16 @@ public class IMCDModelService {
         }
         resultat.addAll(getMCDElementsByClassNameInternal((MCDElement) model, className));
         return resultat;
+    }
+
+
+    public static boolean foundMCDElementInIModelByInstance(IMCDModel model, MCDElement mcdElement){
+        for ( MCDElement aMCDElement : ProjectService.getMCDElements()){
+            if (aMCDElement == mcdElement){
+               return true;
+            }
+        }
+        return false;
     }
 
     public static ArrayList<MCDEntity> getAllMCDEntitiesInIModel(IMCDModel model){
@@ -103,5 +116,22 @@ public class IMCDModelService {
         return null;
     }
 
+
+    public static MLDRModelDT getMLDRModelDT(IMCDModel imcdModel) {
+        for ( MVCCDElement mvccdElement : imcdModel.getChilds()){
+            if ( mvccdElement instanceof MLDRModelDT){
+                return (MLDRModelDT) mvccdElement ;
+            }
+        }
+        return null;
+    }
+
+    public static MLDRModelTI getMLDRModelTI(IMCDModel imcdModel) {
+        for ( MVCCDElement mvccdElement : imcdModel.getChilds()){
+            if ( mvccdElement instanceof MLDRModelTI){
+                return (MLDRModelTI) mvccdElement ;
+            }
+        }
+        return null;}
 
 }

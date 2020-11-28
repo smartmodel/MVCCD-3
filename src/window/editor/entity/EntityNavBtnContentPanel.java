@@ -18,6 +18,7 @@ public class EntityNavBtnContentPanel extends PanelNavBtnContent implements Acti
     protected SButton btnConstraints ;
     protected SButton btnRelations ;
     protected SButton btnEntCompliant ;
+    protected SButton btnMLDR ;
 
     protected ArrayList<SButton> btsEnabled = new ArrayList<SButton>();
 
@@ -43,11 +44,15 @@ public class EntityNavBtnContentPanel extends PanelNavBtnContent implements Acti
         btnEntCompliant = new SButton("Conformité");
         btnEntCompliant.addActionListener(this);
 
+        btnMLDR = new SButton("MLD-R");
+        btnMLDR.addActionListener(this);
+
         panelNavContentCustom.add(btnEntity);
         panelNavContentCustom.add(btnAttributes);
         panelNavContentCustom.add(btnConstraints);
         panelNavContentCustom.add(btnRelations);
         panelNavContentCustom.add(btnEntCompliant);
+        panelNavContentCustom.add(btnMLDR);
 
 
         btsEnabled.add(btnEntity);
@@ -55,6 +60,7 @@ public class EntityNavBtnContentPanel extends PanelNavBtnContent implements Acti
         btsEnabled.add(btnConstraints);
         btsEnabled.add(btnRelations);
         btsEnabled.add(btnEntCompliant);
+        btsEnabled.add(btnMLDR);
 
         this.add(panelNavContentCustom);
     }
@@ -95,7 +101,15 @@ public class EntityNavBtnContentPanel extends PanelNavBtnContent implements Acti
 
         if (source == btnEntCompliant) {
             getEditor().myDispose();
+            // Le contrôle de conformité se fait au sein du formulaire
+            // EntCompliantInputContent
             new MCDEntCompliantEditingTreat().treatRead(getEditor().getOwner(),
+                    getMCDEntity());
+        }
+
+        if (source == btnMLDR) {
+            getEditor().myDispose();
+            new MCDEntMLDREditingTreat().treatUpdate(getEditor().getOwner(),
                     getMCDEntity());
             /*
             new MCDEntCompliantEditingTreat().treatCompliant(getEditor().getOwner(),

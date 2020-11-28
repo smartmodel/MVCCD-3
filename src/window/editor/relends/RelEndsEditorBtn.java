@@ -68,6 +68,11 @@ public class RelEndsEditorBtn extends DialogEditorNavBtn {
         return "editor.entity.relends.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.entity.relends.read";
+    }
+
     protected String getElementNameTitle(){
         return getMvccdElementCrt().getParent().getName();
     }

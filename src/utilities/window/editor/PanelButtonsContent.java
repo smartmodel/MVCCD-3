@@ -26,11 +26,12 @@ public abstract class PanelButtonsContent extends PanelContent
     protected SButton btnApply ;
     protected SButton btnUndo;
     private SButton btnHelp ;
+    protected SButton btnReInit ;
     private JTextArea messages ;
     private JScrollPane messagesScroll;
     private PanelButtons panelButtons;
     private Box bVer ;
-    private Box btns ;
+    protected Box btns ;
 
 
     public PanelButtonsContent(PanelButtons panelButtons) {
@@ -69,7 +70,16 @@ public abstract class PanelButtonsContent extends PanelContent
         btnUndo.setToolTipText("Annuler la saisie effectuée depuis le dernier enregistrement");
         btnUndo.setEnabled(false);
         btns.add(btnUndo);
+
+        btnReInit= new SButton("Réinitialiser");
+        btnReInit.addActionListener(this);
+        //TODO-1 Affiner le message selon qu'un profil est existant ou pas
+        // Depuis le profil s'il existe, sinon depuis les préférences de l'application
+        btnReInit.setToolTipText("Réinitiliser les valeurs");
+        btnReInit.setVisible(false);
+        btns.add(btnReInit);
         btns.add(Box.createGlue());
+
         btnOk = new SButton("Ok");
         btnOk.addActionListener(this);
         btnOk.setToolTipText("Enregistrer la saisie et fermer la fenêtre");
@@ -172,7 +182,6 @@ public abstract class PanelButtonsContent extends PanelContent
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        System.out.println(source.toString());
         if (source == btnOk) {
             if (getEditor().getMode().equals(DialogEditor.NEW)) {
                 treatCreate();
@@ -201,8 +210,11 @@ public abstract class PanelButtonsContent extends PanelContent
             // Seulement en update
             treatReset();
         }
+        if (source == btnReInit) {
+            // Seulement en update
+            treatReInit();
+        }
         if (source == btnClose) {
-            System.out.println("Close...");
             getEditor().confirmClose();
         }
         if (source == btnHelp) {
@@ -221,6 +233,14 @@ public abstract class PanelButtonsContent extends PanelContent
 
     protected void treatReset(){
         getInputContent().resetDatas();
+        // Effacement des éventuels anciens messages
+        clearMessages();
+        getInputContent().enabledButtons();
+    }
+
+
+    protected void treatReInit(){
+        getInputContent().reInitDatas(getEditor().getMvccdElementCrt());
         // Effacement des éventuels anciens messages
         clearMessages();
         getInputContent().enabledButtons();

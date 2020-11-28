@@ -64,4 +64,9 @@ public class LinkEditor extends DialogEditor {
         return "editor.link.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.link.read";
+    }
+
 }
