@@ -45,6 +45,12 @@ public class PrefNavTreeContent extends PanelNavTreeContent {
         root.add( mldr);
         DefaultMutableTreeNode mcdToMldr = new DefaultMutableTreeNode(PrefProjectMenu.MCDToMLDR);
         root.add( mcdToMldr );
+        DefaultMutableTreeNode mpdr = new DefaultMutableTreeNode(PrefProjectMenu.MPDR);
+        root.add( mpdr);
+        DefaultMutableTreeNode mpdrOracle = new DefaultMutableTreeNode(PrefProjectMenu.MPDROracle);
+        mpdr.add( mpdrOracle);
+        DefaultMutableTreeNode mpdrMySQL = new DefaultMutableTreeNode(PrefProjectMenu.MPDRMySQL);
+        mpdr.add( mpdrMySQL);
         DefaultMutableTreeNode mldrToMpdr = new DefaultMutableTreeNode(PrefProjectMenu.MLDRToMPDR);
         root.add( mldrToMpdr );
     }

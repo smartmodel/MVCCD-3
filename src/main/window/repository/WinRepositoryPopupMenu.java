@@ -27,8 +27,7 @@ import preferences.PreferencesManager;
 import profile.Profile;
 import project.Project;
 import repository.editingTreat.*;
-import utilities.Trace;
-import utilities.window.DialogMessage;
+import utilities.DefaultMutableTreeNodeService;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
 import utilities.window.scomponents.SPopupMenu;
@@ -180,11 +179,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         }
 
         if (node.getUserObject() instanceof MLDRModel) {
-            treatGenericRead(this, new MLDRModelEditingTreat());
-            treatGenericUpdate(this, new MLDRModelEditingTreat());
+            treatGeneric(this, new MLDRModelEditingTreat());
             treatGenericTransform(this, new MLDRModelEditingTreat(),
                     "menu.transform.mldr.to.mpdr");
-            treatGenericDelete(this, new MLDRModelEditingTreat());
         }
 
         if (node.getUserObject() instanceof MLDRTable) {
@@ -196,8 +193,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         }
 
         if (node.getUserObject() instanceof MPDRModel) {
-            treatGenericRead(this, new MPDRModelEditingTreat());
-            treatGenericDelete(this, new MPDRModelEditingTreat());
+            treatGeneric(this, new MPDRModelEditingTreat());
         }
 
         if (node.getUserObject() instanceof MPDRTable) {
@@ -226,12 +222,12 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         SMenu preferencesEdit = new SMenu(MessagesBuilder.getMessagesProperty("menu.preferences"));
         addItem(menu, preferencesEdit);
-        DefaultMutableTreeNode nodeParent = (DefaultMutableTreeNode) node.getParent();
 
-        //boolean profile = nodeParent.getUserObject() instanceof Profile;
-        //boolean project = nodeParent.getUserObject() instanceof Project;
-        
-        if (nodeParent.getUserObject() instanceof Profile) {
+
+        //DefaultMutableTreeNode nodeParent = (DefaultMutableTreeNode) node.getParent();
+
+        if (DefaultMutableTreeNodeService.isObjectDescendantOf(node, new Profile(null, null))){
+        //if (nodeParent.getUserObject() instanceof Profile) {
             treatGenericRead( preferencesEdit, new PrefGeneralEditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.general"));
 
@@ -250,11 +246,15 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             treatGenericRead( preferencesEdit, new PrefMCDToMLDREditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mcd.to.mldr"));
 
+            SMenu preferencesEditMPDR = new SMenu(MessagesBuilder.getMessagesProperty("menu.preferences"));
+            addItem(preferencesEdit, preferencesEditMPDR);
+
             treatGenericRead( preferencesEdit, new PrefMLDRToMPDREditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mldr.to.mpdr"));
         }
-        
-        if (nodeParent.getUserObject() instanceof Project) {
+
+        if (DefaultMutableTreeNodeService.isObjectDescendantOf(node, new Project(null))){
+        //if (nodeParent.getUserObject() instanceof Project) {
             treatGenericUpdate( preferencesEdit, new PrefGeneralEditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.general"));
 
@@ -272,6 +272,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             treatGenericUpdate( preferencesEdit, new PrefMCDToMLDREditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mcd.to.mldr"));
+
+            SMenu preferencesEditMPDR = new SMenu(MessagesBuilder.getMessagesProperty("menu.preferences.mpdr"));
+            addItem(preferencesEdit, preferencesEditMPDR);
 
             treatGenericUpdate( preferencesEdit, new PrefMLDRToMPDREditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mldr.to.mpdr"));

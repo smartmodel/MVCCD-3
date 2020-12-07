@@ -7,17 +7,18 @@ import preferences.PreferencesManager;
 import utilities.Trace;
 
 public enum MDRNamingLength {
-    LENGTH30 (Preferences.MDR_NAMING_LENGTH_30, 30),
-    LENGTH60 (Preferences.MDR_NAMING_LENGTH_60, 60),
-    LENGTH120 (Preferences.MDR_NAMING_LENGTH_120, 120);
+    LENGTH30 (Preferences.MDR_NAMING_LENGTH_30, 30, true),
+    LENGTH60 (Preferences.MDR_NAMING_LENGTH_60, 60, true),
+    LENGTH120 (Preferences.MDR_NAMING_LENGTH_120, 120, true);
 
     private final String name;
-    private final Integer length;
+    private final int length;
     private  boolean required = true;
 
-    MDRNamingLength(String name, Integer length) {
+    MDRNamingLength(String name, int length, boolean required) {
         this.name = name;
         this.length = length;
+        this.required = required;
     }
 
     public String getName() {
@@ -42,21 +43,10 @@ public enum MDRNamingLength {
     }
 
     public boolean isRequired() {
-        Preferences preferences = PreferencesManager.instance().preferences();
-
-        if (this == LENGTH30){
-            return preferences.getMDR_PREF_NAMING_LENGTH_30_REQUIRED();
-        }
-        if (this == LENGTH60){
-            return preferences.getMDR_PREF_NAMING_LENGTH_60_REQUIRED();
-        }
-        if (this == LENGTH120){
-            return preferences.getMDR_PREF_NAMING_LENGTH_120_REQUIRED();
-        }
-        throw new CodeApplException("MDRNamingLength.isRequired - la taille passée en paramètre est inconnue." );
+        return required;
     }
 
-
-
-
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
 }

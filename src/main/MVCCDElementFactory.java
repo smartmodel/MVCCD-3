@@ -228,14 +228,16 @@ public class MVCCDElementFactory {
 
     public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel){
         MLDRModelDT mldrModelDT = new MLDRModelDT((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_DT_NAME);
-        mldrModelDT.setNamingLenth( MDRNamingLength.findByText(
-                MessagesBuilder.getMessagesProperty(PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH())));
+        mldrModelDT.setNamingLengthActual( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
+        mldrModelDT.setNamingLengthFuture( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
         createContentMLDRModel(mldrModelDT);
         return mldrModelDT;
     }
 
     public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel){
         MLDRModelTI mldrModelTI = new MLDRModelTI((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_TI_NAME);
+        mldrModelTI.setNamingLengthActual( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
+        mldrModelTI.setNamingLengthFuture( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
         createContentMLDRModel(mldrModelTI);
         return mldrModelTI;
     }
@@ -287,12 +289,18 @@ public class MVCCDElementFactory {
 
     public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {
         MPDROracleModel mpdrOracleModel = new MPDROracleModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_ORACLE_NAME);
+        //TODO-1 A corriger dès que les préférence MPDR_oracle seront réalisées
+        mpdrOracleModel.setNamingLengthActual( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
+        mpdrOracleModel.setNamingLengthFuture( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
         createContentMPDRModel(mpdrOracleModel);
         return mpdrOracleModel;
     }
 
     public MPDRMySQLModel createMPDRModelMySQL(MLDRModel mldrModel) {
         MPDRMySQLModel mpdrMySQLModel = new MPDRMySQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_MYSQL_NAME);
+        //TODO-1 A corriger dès que les préférence MPDR_oracle seront réalisées
+        mpdrMySQLModel.setNamingLengthActual( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
+        mpdrMySQLModel.setNamingLengthFuture( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
         createContentMPDRModel(mpdrMySQLModel);
         return mpdrMySQLModel;
     }

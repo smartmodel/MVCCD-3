@@ -92,7 +92,7 @@ public class PrefMLDRInputContent extends PanelInputContent {
     public void loadDatas(MVCCDElement mvccdElement) {
         Preferences preferences = (Preferences) mvccdElement;
         SComboBoxService.selectByText(fieldNamingLength,
-                MessagesBuilder.getMessagesProperty(preferences.getMLDR_PREF_NAMING_LENGTH()));
+                preferences.getMLDR_PREF_NAMING_LENGTH().getText());
     }
 
     @Override
@@ -107,18 +107,16 @@ public class PrefMLDRInputContent extends PanelInputContent {
     public void saveDatas(MVCCDElement mvccdElement) {
         Preferences preferences = (Preferences) mvccdElement;
 
-
-
         if (fieldNamingLength.checkIfUpdated()){
             String text = (String) fieldNamingLength.getSelectedItem();
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_30))){
-                preferences.setMLDR_PREF_NAMING_LENGTH(Preferences.MDR_NAMING_LENGTH_30);
+                preferences.setMLDR_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH30);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_60))){
-                preferences.setMLDR_PREF_NAMING_LENGTH(Preferences.MDR_NAMING_LENGTH_60);
+                preferences.setMLDR_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH60);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_120))){
-                preferences.setMLDR_PREF_NAMING_LENGTH(Preferences.MDR_NAMING_LENGTH_120);
+                preferences.setMLDR_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120);
             }
         }
     }

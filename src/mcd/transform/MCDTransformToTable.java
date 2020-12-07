@@ -218,7 +218,7 @@ public class MCDTransformToTable {
     public void modifyTable(MLDRTable mldrTable, MCDEntity mcdEntity){
 
         // Nom
-        TransformService.name(mldrTable, buildNameTable(mcdEntity), mldrModel.getNamingLenth());
+        TransformService.name(mldrTable, buildNameTable(mcdEntity), mldrModel.getNamingLengthActual());
 
         if (mcdEntity.getNature() != mldrTable.getMcdEntitySourceNature()){
 

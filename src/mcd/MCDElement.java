@@ -3,6 +3,7 @@ package mcd;
 import main.MVCCDElement;
 import mcd.services.MCDElementService;
 import md.MDElement;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -36,7 +37,7 @@ public abstract class MCDElement extends MDElement {
     public String getNamePath(int pathMode) {
         String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
         String path = getPath( pathMode, separator);
-        if (path !=null){
+        if (StringUtils.isNotEmpty(path)){
             return path + separator + getName();
         } else {
             return getName();

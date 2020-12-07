@@ -62,7 +62,7 @@ public class MCDTransformToColumn {
 
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrColumn.getMDRTableParent().getMDRModelParent();
-        TransformService.name(mldrColumn, buildNameColumnAttr(mcdAttribute), mldrModel.getNamingLenth());
+        TransformService.name(mldrColumn, buildNameColumnAttr(mcdAttribute), mldrModel.getNamingLengthActual());
 
 
         // Datatype
@@ -185,7 +185,7 @@ public class MCDTransformToColumn {
 
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrColumnPK.getMDRTableParent().getMDRModelParent();
-        TransformService.name(mldrColumnPK, buildNameColumnPK(mcdEntity), mldrModel.getNamingLenth());
+        TransformService.name(mldrColumnPK, buildNameColumnPK(mcdEntity), mldrModel.getNamingLengthActual());
 
         modifyColumnPKorFK(mldrColumnPK);
     }
@@ -194,7 +194,7 @@ public class MCDTransformToColumn {
 
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrColumnFK.getMDRTableParent().getMDRModelParent();
-        TransformService.name(mldrColumnFK, buildNameColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK), mldrModel.getNamingLenth());
+        TransformService.name(mldrColumnFK, buildNameColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK), mldrModel.getNamingLengthActual());
 
         modifyColumnPKorFK(mldrColumnFK);
     }

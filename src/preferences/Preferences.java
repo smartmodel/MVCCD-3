@@ -2,6 +2,7 @@ package preferences;
 
 
 import main.MVCCDElement;
+import mdr.MDRNamingLength;
 
 import java.awt.*;
 
@@ -393,6 +394,9 @@ public class Preferences extends MVCCDElement {
     public static String PREFERENCES_PROJECT_MENU_MDR_FORMAT = "preferences.project.menu.mdr.format";
     public static String PREFERENCES_PROJECT_MENU_MCD_TO_MLDR = "preferences.project.menu.mcd.to.mldr";
     public static String PREFERENCES_PROJECT_MENU_MLDR_TO_MPDR = "preferences.project.menu.mldr.to.mpdr";
+    public static String PREFERENCES_PROJECT_MENU_MPDR = "preferences.project.menu.mpdr";
+    public static String PREFERENCES_PROJECT_MENU_MPDR_ORACLE = "preferences.project.menu.mpdr.oracle";
+    public static String PREFERENCES_PROJECT_MENU_MPDR_MYSQL = "preferences.project.menu.mpdr.mysql";
 
     public static String PARAMETERS_SEPARATOR = ", ";
 
@@ -501,11 +505,6 @@ public class Preferences extends MVCCDElement {
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1 = "mdr.pref.column.fk.one.diff.indice.start.1";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2 = "mdr.pref.column.fk.one.diff.indice.start.2";
 
-    public static Boolean MDR_PREF_NAMING_LENGTH_30_REQUIRED_DEFAULT = true;
-    public static Boolean MDR_PREF_NAMING_LENGTH_60_REQUIRED_DEFAULT = true;
-    public static Boolean MDR_PREF_NAMING_LENGTH_120_REQUIRED_DEFAULT = true;
-
-
     // Modification Application
     private Boolean DEBUG = false;
     private Boolean DEBUG_BACKGROUND_PANEL = false;
@@ -575,12 +574,9 @@ public class Preferences extends MVCCDElement {
     // MDR Préférences
     private Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR = null ;
     private String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = null;
-    private Boolean MDR_PREF_NAMING_LENGTH_30_REQUIRED = null;
-    private Boolean MDR_PREF_NAMING_LENGTH_60_REQUIRED = null;
-    private Boolean MDR_PREF_NAMING_LENGTH_120_REQUIRED = null;
 
     // MLDR Préférences
-    private String MLDR_PREF_NAMING_LENGTH = null;
+    private MDRNamingLength MLDR_PREF_NAMING_LENGTH = null;
 
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);
@@ -1074,50 +1070,15 @@ public class Preferences extends MVCCDElement {
         this.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF;
     }
 
-    public String getMLDR_PREF_NAMING_LENGTH() {
+    public MDRNamingLength getMLDR_PREF_NAMING_LENGTH() {
         if (MLDR_PREF_NAMING_LENGTH == null){
-            MLDR_PREF_NAMING_LENGTH = MDR_NAMING_LENGTH_30;
+            MLDR_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
         }
         return MLDR_PREF_NAMING_LENGTH;
     }
 
-    public void setMLDR_PREF_NAMING_LENGTH(String MLDR_PREF_NAMING_LENGTH) {
+    public void setMLDR_PREF_NAMING_LENGTH(MDRNamingLength MLDR_PREF_NAMING_LENGTH) {
         this.MLDR_PREF_NAMING_LENGTH = MLDR_PREF_NAMING_LENGTH;
     }
-
-
-    public Boolean getMDR_PREF_NAMING_LENGTH_30_REQUIRED() {
-        if (MDR_PREF_NAMING_LENGTH_30_REQUIRED == null){
-            MDR_PREF_NAMING_LENGTH_30_REQUIRED = MDR_PREF_NAMING_LENGTH_30_REQUIRED_DEFAULT;
-        }
-        return MDR_PREF_NAMING_LENGTH_30_REQUIRED;
-    }
-
-    public void setMDR_PREF_NAMING_LENGTH_30_REQUIRED(Boolean MDR_PREF_NAMING_LENGTH_30_REQUIRED) {
-        this.MDR_PREF_NAMING_LENGTH_30_REQUIRED = MDR_PREF_NAMING_LENGTH_30_REQUIRED;
-    }
-
-    public Boolean getMDR_PREF_NAMING_LENGTH_60_REQUIRED() {
-        if (MDR_PREF_NAMING_LENGTH_60_REQUIRED == null){
-            MDR_PREF_NAMING_LENGTH_60_REQUIRED = MDR_PREF_NAMING_LENGTH_60_REQUIRED_DEFAULT;
-        }
-        return MDR_PREF_NAMING_LENGTH_60_REQUIRED;
-    }
-
-    public void setMDR_PREF_NAMING_LENGTH_60_REQUIRED(Boolean MDR_PREF_NAMING_LENGTH_60_REQUIRED) {
-        this.MDR_PREF_NAMING_LENGTH_60_REQUIRED = MDR_PREF_NAMING_LENGTH_60_REQUIRED;
-    }
-
-    public void setMDR_PREF_NAMING_LENGTH_120_REQUIRED(Boolean MDR_PREF_NAMING_LENGTH_120_REQUIRED) {
-        this.MDR_PREF_NAMING_LENGTH_120_REQUIRED = MDR_PREF_NAMING_LENGTH_120_REQUIRED;
-    }
-
-    public Boolean getMDR_PREF_NAMING_LENGTH_120_REQUIRED() {
-        if (MDR_PREF_NAMING_LENGTH_120_REQUIRED == null){
-            MDR_PREF_NAMING_LENGTH_120_REQUIRED = MDR_PREF_NAMING_LENGTH_120_REQUIRED_DEFAULT;
-        }
-        return MDR_PREF_NAMING_LENGTH_120_REQUIRED;
-    }
-
 
 }

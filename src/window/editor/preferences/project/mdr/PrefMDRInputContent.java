@@ -164,11 +164,10 @@ public class PrefMDRInputContent extends PanelInputContent {
         fieldColumnFKOneAncestor.setSelected(preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR());
         SComboBoxService.selectByText(fieldColumnFKOneAncestorDiff,
                 MessagesBuilder.getMessagesProperty(preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF()));
-        fieldNamingLength30.setSelected(preferences.getMDR_PREF_NAMING_LENGTH_30_REQUIRED());
-        fieldNamingLength60.setSelected(preferences.getMDR_PREF_NAMING_LENGTH_60_REQUIRED());
-        fieldNamingLength120.setSelected(preferences.getMDR_PREF_NAMING_LENGTH_120_REQUIRED());
-
-    }
+        fieldNamingLength30.setSelected(MDRNamingLength.LENGTH30.isRequired());
+        fieldNamingLength60.setSelected(MDRNamingLength.LENGTH30.LENGTH60.isRequired());
+        fieldNamingLength120.setSelected(MDRNamingLength.LENGTH30.LENGTH120.isRequired());
+   }
 
     @Override
     protected void initDatas() {
@@ -200,18 +199,18 @@ public class PrefMDRInputContent extends PanelInputContent {
         }
 
         if (fieldNamingLength30.checkIfUpdated()){
-            preferences.setMDR_PREF_NAMING_LENGTH_30_REQUIRED(fieldNamingLength30.isSelected());
-            PrefMDRService.adjustMLDRPrefNaming(MDRNamingLength.LENGTH30);
+            MDRNamingLength.LENGTH30.setRequired(fieldNamingLength30.isSelected());
+            PrefMDRService.adjustMDRPrefNaming(MDRNamingLength.LENGTH30);
         }
 
         if (fieldNamingLength60.checkIfUpdated()){
-            preferences.setMDR_PREF_NAMING_LENGTH_60_REQUIRED(fieldNamingLength60.isSelected());
-            PrefMDRService.adjustMLDRPrefNaming(MDRNamingLength.LENGTH60);
+            MDRNamingLength.LENGTH60.setRequired(fieldNamingLength60.isSelected());
+            PrefMDRService.adjustMDRPrefNaming(MDRNamingLength.LENGTH60);
         }
 
         if (fieldNamingLength120.checkIfUpdated()){
-            preferences.setMDR_PREF_NAMING_LENGTH_120_REQUIRED(fieldNamingLength120.isSelected());
-            PrefMDRService.adjustMLDRPrefNaming(MDRNamingLength.LENGTH120);
+            MDRNamingLength.LENGTH120.setRequired(fieldNamingLength120.isSelected());
+            PrefMDRService.adjustMDRPrefNaming(MDRNamingLength.LENGTH120);
         }
     }
 

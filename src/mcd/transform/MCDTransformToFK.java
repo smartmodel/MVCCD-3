@@ -40,7 +40,7 @@ public class MCDTransformToFK {
 
         // Nom
         MDRElementNames nameFK = buildNameFK(mldrTable, mldrFK, mcdRelEndParent, mldrTableParent);
-        TransformService.name(mldrFK, nameFK, mldrModel.getNamingLenth());
+        TransformService.name(mldrFK, nameFK, mldrModel.getNamingLengthActual());
 
         // Nature
         mldrFK.setNature(fkNature);
