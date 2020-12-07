@@ -1,0 +1,2 @@
+//#MAJ 2020-12-05 Boutons Ok/Annuler absents à l'ouverture en update de données modifiées
+Cas initial, les préférences de nommage MLDR qui sont impactées par un chgt au niveau MDR

@@ -1,6 +1,7 @@
 package utilities.window.editor;
 
 import messages.MessagesBuilder;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.STree;
@@ -34,7 +35,6 @@ public abstract class PanelNavTreeContent extends PanelContent  implements IAcce
                 new DefaultMutableTreeNode(getTitleRootNode());
         tree = new STree(top);
 
-        // add MouseListener to tree
         // Repris de WinRepositoryTree (exemple de gestion de popup)
         //TODO-1 A factoriser
         MouseAdapter ma = new MouseAdapter() {
@@ -46,19 +46,24 @@ public abstract class PanelNavTreeContent extends PanelContent  implements IAcce
                 if (path == null)
                     return;
 
+
                 tree.setSelectionPath(path);
                 DefaultMutableTreeNode rightClickedNode =
                         (DefaultMutableTreeNode)path.getLastPathComponent();
                 if(rightClickedNode != null){
+                    // Changement de page
                     if (getEditor().getInput().getInputContent().datasChangedNow()){
+                        getEditor().getInput().getInputContent().enabledButtons();
                         DialogMessage.showError(getEditor(),
                                 MessagesBuilder.getMessagesProperty("editor.nav.tree.error.datas.changed"));
+
                     } else {
                         clickedNode(rightClickedNode);
                         String clickedString = (String) rightClickedNode.getUserObject().toString();
                         super.mousePressed(e);
                     }
                 }
+
             }
             public void mousePressed(MouseEvent e) {
                 myPopupEvent(e);
@@ -97,9 +102,9 @@ public abstract class PanelNavTreeContent extends PanelContent  implements IAcce
                     ((DialogEditorNavTree) getEditor()).getNavNodeMenu());
             TreeNode[] lastArrayNodes = lastNode.getPath();
             TreePath lastPath = new TreePath (lastArrayNodes);
-            tree.collapsePath(lastPath);
+            //tree.collapsePath(lastPath);
+            tree.setSelectionPath(lastPath);
 
     }
-
 
 }

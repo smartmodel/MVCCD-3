@@ -1,12 +1,16 @@
 package mcd.transform;
 
 import exceptions.CodeApplException;
-import exceptions.OrderBuildNameException;
+import exceptions.orderbuildnaming.OrderBuildNameException;
+import exceptions.TransformMCDException;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDRelEndService;
-import mdr.utilities.MDROrderBuildString;
+import mdr.MDRElementNames;
+import mdr.MDRNamingLength;
+import mdr.orderbuildnaming.MDROrderBuildNaming;
+import mdr.orderbuildnaming.MDROrderBuildTargets;
 import messages.MessagesBuilder;
 import mldr.MLDRModel;
 import mldr.MLDRPK;
@@ -15,7 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectService;
-import utilities.Transform;
+import utilities.TransformService;
 
 import java.util.ArrayList;
 
@@ -26,7 +30,7 @@ public class MCDTransformToTable {
 
 
 
-    public void fromEntities(IMCDModel  imcdModel, MLDRModel mldrModel){
+    public void fromEntities(IMCDModel  imcdModel, MLDRModel mldrModel)  throws TransformMCDException{
         this.imcdModel = imcdModel;
         this.mldrModel = mldrModel;
         fromEntitiesConcrets(ProjectService.getMCDEntitiesConcrets((MCDElement) imcdModel));
@@ -59,14 +63,14 @@ public class MCDTransformToTable {
     }
 
 
-    private void transformPKEntitiesIndependants(ArrayList<MCDEntity> mcdEntitiesIndependants) {
+    private void transformPKEntitiesIndependants(ArrayList<MCDEntity> mcdEntitiesIndependants)  throws TransformMCDException{
         for (MCDEntity mcdEntityIndependant : mcdEntitiesIndependants){
             MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(mcdEntityIndependant);
             new MCDTransformToPK().fromEntityIndependant(mcdEntityIndependant, mldrTable);
         }
     }
 
-    private void transformPKEntitiesConcretsNoInd(ArrayList<MCDEntity> mcdEntitiesNoIndNoEntAss) {
+    private void transformPKEntitiesConcretsNoInd(ArrayList<MCDEntity> mcdEntitiesNoIndNoEntAss)  throws TransformMCDException {
 
         ArrayList<MCDEntity> mcdEntitiesToTransform = (ArrayList<MCDEntity>) mcdEntitiesNoIndNoEntAss.clone();
         int controle = mcdEntitiesToTransform.size();
@@ -212,41 +216,45 @@ public class MCDTransformToTable {
 
 
     public void modifyTable(MLDRTable mldrTable, MCDEntity mcdEntity){
+
         // Nom
-        Transform.name(mldrTable, buildNameTable(mcdEntity));
+        TransformService.name(mldrTable, buildNameTable(mcdEntity), mldrModel.getNamingLenth());
 
         if (mcdEntity.getNature() != mldrTable.getMcdEntitySourceNature()){
 
         }
     }
 
-    protected String buildNameTable(MCDEntity mcdEntity){
+    protected MDRElementNames buildNameTable(MCDEntity mcdEntity){
 
         Preferences preferences = PreferencesManager.instance().preferences();
-        String path = mcdEntity.getShortPath(preferences.getMDR_PATH_SEP_FORMAT());
 
-        MDROrderBuildString orderBuild = new  MDROrderBuildString();
-        orderBuild.setFormat(preferences.getMDR_TABLE_NAME_FORMAT());
-        if (StringUtils.isNotEmpty(path)){
-            orderBuild.setPath(path);
-            orderBuild.setPathSep(preferences.getMDR_PATH_SEP_FORMAT());
-        } else {
-            orderBuild.setPath("");
-            orderBuild.setPathSep("");
+        MDRElementNames names = new MDRElementNames();
+        for (MDRNamingLength element: MDRNamingLength.values()) {
+            MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
+            orderBuild.setFormat(preferences.getMDR_TABLE_NAME_FORMAT());
+            orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_TABLE_NAME_LENGTH);
+            orderBuild.setTargetNaming(MDROrderBuildTargets.TABLE);
+
+            orderBuild.getTableName().setValue(mcdEntity);
+
+            String name;
+
+            try {
+                name = orderBuild.buildNaming();
+            } catch (OrderBuildNameException e) {
+                String message = "";
+                if (StringUtils.isNotEmpty(e.getMessage())) {
+                    message = e.getMessage();
+                } else {
+                    message = MessagesBuilder.getMessagesProperty("mldrtable.build.name.error",
+                            new String[]{mcdEntity.getName()});
+                }
+                throw new TransformMCDException(message, e);
+            }
+            names.setElementName(name, element);
         }
-        orderBuild.setTableName(mcdEntity.getMldrTableName());
-
-
-        String nameFinal ;
-
-        try {
-            nameFinal = orderBuild.buildString();
-        } catch(OrderBuildNameException e){
-            String message = MessagesBuilder.getMessagesProperty("mldrtable.build.name.error",
-                    new String[] {mcdEntity.getName()});
-            throw new CodeApplException(message,e);
-        }
-        return nameFinal;
+        return names;
 
     }
 

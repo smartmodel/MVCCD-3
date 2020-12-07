@@ -1,8 +1,10 @@
 package window.editor.preferences.project.mdr;
 
 import main.MVCCDElement;
+import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
 import preferences.Preferences;
+import preferences.services.PrefMDRService;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
@@ -20,8 +22,18 @@ public class PrefMDRInputContent extends PanelInputContent {
     private JPanel panelColumnFKOneAncestor = new JPanel ();
     private JLabel labelColumnFKOneAncestor ;
     private SCheckBox fieldColumnFKOneAncestor;
-    private JLabel labelColumnFKOneAncestorDiff = new JLabel();
+    private JLabel labelColumnFKOneAncestorDiff ;
     private SComboBox fieldColumnFKOneAncestorDiff;
+
+
+    private JPanel panelNamingLengths = new JPanel ();
+    private JLabel labelNamingLength30 ;
+    private SCheckBox fieldNamingLength30;
+    private JLabel labelNamingLength60 ;
+    private SCheckBox fieldNamingLength60;
+    private JLabel labelNamingLength120 ;
+    private SCheckBox fieldNamingLength120;
+    
 
     public PrefMDRInputContent(PrefMDRInput prefMDRInput) {
         super(prefMDRInput);
@@ -42,12 +54,29 @@ public class PrefMDRInputContent extends PanelInputContent {
         fieldColumnFKOneAncestorDiff.addItem(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1));
         fieldColumnFKOneAncestorDiff.addItem(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2));
         fieldColumnFKOneAncestorDiff.setToolTipText("La valeur de différenciation est prise automatiquement pour les modèles physiques.");
-
         fieldColumnFKOneAncestorDiff.addItemListener(this);
         fieldColumnFKOneAncestorDiff.addFocusListener(this);
 
+        labelNamingLength30 = new JLabel("30 :");
+        fieldNamingLength30 = new SCheckBox(this, labelNamingLength30);
+        fieldNamingLength30.addItemListener(this);
+        fieldNamingLength30.addFocusListener(this);
+
+        labelNamingLength60 = new JLabel("60 :");
+        fieldNamingLength60 = new SCheckBox(this, labelNamingLength60);
+        fieldNamingLength60.addItemListener(this);
+        fieldNamingLength60.addFocusListener(this);
+
+        labelNamingLength120 = new JLabel("120 :");
+        fieldNamingLength120 = new SCheckBox(this, labelNamingLength120);
+        fieldNamingLength120.addItemListener(this);
+        fieldNamingLength120.addFocusListener(this);
+
         super.getSComponents().add(fieldColumnFKOneAncestor);
         super.getSComponents().add(fieldColumnFKOneAncestorDiff);
+        super.getSComponents().add(fieldNamingLength30);
+        super.getSComponents().add(fieldNamingLength60);
+        super.getSComponents().add(fieldNamingLength120);
 
         createPanelMaster();
 
@@ -57,8 +86,12 @@ public class PrefMDRInputContent extends PanelInputContent {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
         createPanelColumnFKOneAncestor();
+        createPanelNamingLengths();
 
+        gbc.gridwidth = 4;
         panelInputContentCustom.add(panelColumnFKOneAncestor, gbc);
+        gbc.gridy++ ;
+        panelInputContentCustom.add(panelNamingLengths, gbc);
 
     }
 
@@ -80,6 +113,27 @@ public class PrefMDRInputContent extends PanelInputContent {
         panelColumnFKOneAncestor.add(fieldColumnFKOneAncestorDiff, gbcA);
     }
 
+
+    private void createPanelNamingLengths() {
+        GridBagConstraints gbcA = PanelService.createSubPanelGridBagConstraints(panelNamingLengths,
+                "Calcul des noms ");
+
+        panelNamingLengths.add(labelNamingLength30, gbcA);
+        gbcA.gridx++ ;
+        panelNamingLengths.add(fieldNamingLength30, gbcA);
+
+        gbcA.gridx++ ;
+        panelNamingLengths.add(labelNamingLength60, gbcA);
+        gbcA.gridx++ ;
+        panelNamingLengths.add(fieldNamingLength60, gbcA);
+
+        gbcA.gridx++ ;
+        panelNamingLengths.add(labelNamingLength120, gbcA);
+        gbcA.gridx++ ;
+        panelNamingLengths.add(fieldNamingLength120, gbcA);
+
+
+    }
 
 
     @Override
@@ -107,9 +161,13 @@ public class PrefMDRInputContent extends PanelInputContent {
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
         Preferences preferences = (Preferences) mvccdElement;
-        fieldColumnFKOneAncestor.setSelected(((Preferences) mvccdElement).getMDR_PREF_COLUMN_FK_ONE_ANCESTOR());
+        fieldColumnFKOneAncestor.setSelected(preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR());
         SComboBoxService.selectByText(fieldColumnFKOneAncestorDiff,
                 MessagesBuilder.getMessagesProperty(preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF()));
+        fieldNamingLength30.setSelected(preferences.getMDR_PREF_NAMING_LENGTH_30_REQUIRED());
+        fieldNamingLength60.setSelected(preferences.getMDR_PREF_NAMING_LENGTH_60_REQUIRED());
+        fieldNamingLength120.setSelected(preferences.getMDR_PREF_NAMING_LENGTH_120_REQUIRED());
+
     }
 
     @Override
@@ -124,6 +182,10 @@ public class PrefMDRInputContent extends PanelInputContent {
     public void saveDatas(MVCCDElement mvccdElement) {
         Preferences preferences = (Preferences) mvccdElement;
 
+        if (fieldColumnFKOneAncestor.checkIfUpdated()){
+            preferences.setMDR_PREF_COLUMN_FK_ONE_ANCESTOR(fieldColumnFKOneAncestor.isSelected());
+        }
+
         if (fieldColumnFKOneAncestorDiff.checkIfUpdated()){
             String text = (String) fieldColumnFKOneAncestorDiff.getSelectedItem();
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK))){
@@ -136,7 +198,24 @@ public class PrefMDRInputContent extends PanelInputContent {
                 preferences.setMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2);
             }
         }
+
+        if (fieldNamingLength30.checkIfUpdated()){
+            preferences.setMDR_PREF_NAMING_LENGTH_30_REQUIRED(fieldNamingLength30.isSelected());
+            PrefMDRService.adjustMLDRPrefNaming(MDRNamingLength.LENGTH30);
+        }
+
+        if (fieldNamingLength60.checkIfUpdated()){
+            preferences.setMDR_PREF_NAMING_LENGTH_60_REQUIRED(fieldNamingLength60.isSelected());
+            PrefMDRService.adjustMLDRPrefNaming(MDRNamingLength.LENGTH60);
+        }
+
+        if (fieldNamingLength120.checkIfUpdated()){
+            preferences.setMDR_PREF_NAMING_LENGTH_120_REQUIRED(fieldNamingLength120.isSelected());
+            PrefMDRService.adjustMLDRPrefNaming(MDRNamingLength.LENGTH120);
+        }
     }
+
+
 
     @Override
     public void loadSimulationChange(MVCCDElement mvccdElementCrt) {

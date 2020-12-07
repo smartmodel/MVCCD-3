@@ -1,5 +1,6 @@
 package mcd;
 
+import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDContContainer;
@@ -39,7 +40,7 @@ public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePa
     }
 
 
-    public ArrayList<String> treatTransform(){
+    public ArrayList<String> treatTransform()  throws TransformMCDException {
         MCDTransform mcdTransform = new MCDTransform();
         // Il n'y a pas de modèles. Il faut donc tester toutes les entités
         ArrayList<String> resultat = mcdTransform.transform(this);

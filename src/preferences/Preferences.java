@@ -39,7 +39,8 @@ public class Preferences extends MVCCDElement {
 
     public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
     public static String REGEXPR_FIRSTCAR = "[a-zA-Z]{1,1}";
-    public static String REGEXPR_NOFREE = "[a-zA-Z0-9_]*";
+    public static String REGEXPR_LASTCAR = "([a-zA-Z]{1,1})$"; // pas de chiffre (indiçage) et _ (séparateur) en fin de nom
+    public static String REGEXPR_NOFREE = "[a-zA-Z0-9_]*" + REGEXPR_LASTCAR;
     public static String REGEXPR_FREE="([ ]{0,1}[a-zA-Z0-9_àâäçéèêëòöùûü]+)*";
     public static String NAME_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_NOFREE;
     public static String NAME_FREE_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_FREE ;
@@ -55,27 +56,25 @@ public class Preferences extends MVCCDElement {
     public static Integer PACKAGE_SHORT_NAME_LENGTH = 2;
     public static Integer PACKAGE_LEVEL_MAX = 2 ;
     public static Integer PACKAGE_LONG_NAME_LENGTH = 50;
-    public static Integer ENTITY_NAME_LENGTH = 24;
+    public static Integer ENTITY_NAME_LENGTH = 20;
     public static Integer ENTITY_SHORT_NAME_LENGTH = 8;
     public static Integer ENTITY_LONG_NAME_LENGTH = 50;
     public static Integer ENTITY_TABLE_NAME_LENGTH = ENTITY_NAME_LENGTH ;
-    public static Integer ATTRIBUTE_NAME_LENGTH = 24;
-    public static Integer ATTRIBUTE_SHORT_NAME_LENGTH = 10;
+    public static Integer ATTRIBUTE_NAME_LENGTH = 26;
+    public static Integer ATTRIBUTE_SHORT_NAME_LENGTH = 22;
     public static Integer ATTRIBUTE_LONG_NAME_LENGTH = 50;
     public static Integer ATTRIBUTE_PEA_NAME_LENGTH = 15;
     public static Integer ASSOCIATION_NAME_LENGTH = 20;
-    public static Integer ASSOCIATION_SHORT_NAME_LENGTH = 5;
-    public static Integer ASSOCIATION_LONG_NAME_LENGTH = 50;
-    public static Integer ASSEND_ROLE_NAME_LENGTH = 20;
     public static Integer ASSEND_ROLE_SHORT_NAME_LENGTH = 5;
+    public static Integer ASSEND_ROLE_NAME_LENGTH = 20;
+    public static Integer ASSOCIATION_SHORT_NAME_LENGTH = ASSEND_ROLE_SHORT_NAME_LENGTH;
+    public static Integer ASSOCIATION_LONG_NAME_LENGTH = 50;
     public static Integer UNIQUE_NAME_LENGTH = 20;
     public static Integer UNIQUE_SHORT_NAME_LENGTH = 5;
     public static Integer UNIQUE_LONG_NAME_LENGTH = 50;
     public static String MCD_AID_IND_COLUMN_NAME_DEFAULT = "num";
     public static String MCD_AID_DEP_COLUMN_NAME_DEFAULT = "numDep";
-    public static Integer MCD_AID_COLUMN_NAME_LENGTH_DEFAULT = 5;
-    public static Integer MARKER_DERIVED_LENGTH = 5;
-    public static Integer SEPARATOR_NAMING_LENGTH = 1;
+    public static Integer MCD_AID_COLUMN_NAME_LENGTH = 5;
 
 
     public static String INTEGER_REGEXPR = "([0])|([1-9]{1,1}[0-9]*)";
@@ -390,6 +389,7 @@ public class Preferences extends MVCCDElement {
     public static String PREFERENCES_PROJECT_MENU_GENERAL = "preferences.project.menu.general";
     public static String PREFERENCES_PROJECT_MENU_MCD = "preferences.project.menu.mcd";
     public static String PREFERENCES_PROJECT_MENU_MDR = "preferences.project.menu.mdr";
+    public static String PREFERENCES_PROJECT_MENU_MLDR = "preferences.project.menu.mldr";
     public static String PREFERENCES_PROJECT_MENU_MDR_FORMAT = "preferences.project.menu.mdr.format";
     public static String PREFERENCES_PROJECT_MENU_MCD_TO_MLDR = "preferences.project.menu.mcd.to.mldr";
     public static String PREFERENCES_PROJECT_MENU_MLDR_TO_MPDR = "preferences.project.menu.mldr.to.mpdr";
@@ -422,46 +422,88 @@ public class Preferences extends MVCCDElement {
     public static String MLDRDATATYPE_TIME_NAME = "TIME";
     public static String MLDRDATATYPE_TIME_LIENPROG = "TIME";
 
+    public static String MDR_NAMING_LENGTH_30 = "mdr.naming.length.30";
+    public static String MDR_NAMING_LENGTH_60 = "mdr.naming.length.60";
+    public static String MDR_NAMING_LENGTH_120 = "mdr.naming.length.120";
 
+    public static String MDR_NAMING_TABLE = "mdr.table";
+    public static String MDR_NAMING_TABLE_NN = "mdr.table.nn";
+    public static String MDR_NAMING_TABLE_NN_INDICE = "mdr.table.nn.indice";
+    public static String MDR_NAMING_COLUMN_ATTR = "mdr.column.attr";
+    public static String MDR_NAMING_COLUMN_PK = "mdr.column.pk";
+    public static String MDR_NAMING_COLUMN_FK = "mdr.column.fk";
+    public static String MDR_NAMING_PK = "mdr.pk";
+    public static String MDR_NAMING_FK = "mdr.fk";
 
     public static String MDR_PATH_WORD = "path";
     public static String MDR_PATH_SEP_WORD = "pathSep";
+    public static String MDR_TABLE_NAME_WORD = "tableName";
+    public static String MDR_TABLE_SHORT_NAME_WORD = "tableShortName";
+    public static String MDR_TABLE_SHORT_NAME_A_WORD = "ATableShortName";
+    public static String MDR_TABLE_SHORT_NAME_B_WORD = "BTableShortName";
+    public static String MDR_TABLE_SHORT_NAME_PARENT_WORD = "parentTableShortName";
+    public static String MDR_TABLE_SHORT_NAME_CHILD_WORD = "childTableShortName";
+
     public static String MDR_ATTR_NAME_WORD = "attrName";
     public static String MDR_COL_NAME_WORD = "colName";
     public static String MDR_COLUMN_DERIVED_WORD = "colDerived";
-    public static String MDR_TABLE_NAME_WORD = "tableName";
-    public static String MDR_TABLE_SHORT_NAME_WORD = "tableShortName";
-    public static String MDR_INDICE_NAME_WORD = "indice";
     public static String MDR_COLUMNS_NAME_WORD = "columnsName";
-    public static String MDR_PARENT_TABLE_SHORT_NAME_WORD = "parentTableShortName";
-    public static String MDR_PARENT_ROLE_NAME_SEP_WORD = "parentRoleNameSep";
-    public static String MDR_PARENT_NAME_SEP_WORD = "parentNameSep";
-    public static String MDR_PARENT_ROLE_NAME_WORD = "parentRoleName";
-    public static String MDR_CHILD_TABLE_SHORT_NAME_WORD = "childTableShortName";
-    public static String MDR_CHILD_ROLE_NAME_WORD = "childRoleName";
-    public static String MDR_CHILD_ROLE_NAME_SEP_WORD = "childRoleNameSep";
+
+    public static String MDR_ASS_SHORT_NAME_WORD = "assShortName";
+
+    public static String MDR_ROLE_SHORT_NAME_A_WORD = "roleA";
+    public static String MDR_ROLE_SHORT_NAME_B_WORD = "roleB";
+    public static String MDR_ROLE_SHORT_NAME_PARENT_WORD = "parentRoleShortName";
+    public static String MDR_ROLE_SHORT_NAME_CHILD_WORD = "childRoleShortName";
+
     public static String MDR_PEA_SHORT_NAME_WORD = "peaShortName";
+
+    public static String MDR_INDICE_TABLENN_WORD = "indTableNN";
+    public static String MDR_INDICE_COL_FK_WORD = "indColFK";
+    public static String MDR_INDICE_CONST_FK_WORD = "indConstFK";
+
+    public static String MDR_ROLE_SEP_WORD = "roleSep";
+    public static String MDR_TABLE_SEP_WORD = "tableSep";
     public static String MDR_PEA_SEP_WORD = "peaSep";
 
+    public static Integer MDR_MARKER_DERIVED_LENGTH = 5;
+    public static Integer MDR_MARKER_CUSTOM_TABLE_NAME_LENGTH = 3;
+    public static Integer MDR_MARKER_CUSTOM_COLUMN_NAME_LENGTH = 3;
+    public static Integer MDR_MARKER_CUSTOM_PK_LENGTH = 3;
+    public static Integer MDR_MARKER_CUSTOM_FK_LENGTH = 2;
+    public static Integer MDR_SEPARATOR_NAMING_LENGTH = 1;
+
+
     public static String MDR_WORDS_PATTERN = "\\{[a-zA-Z_]+\\}";
-    public static String MDR_TABLE_NAME_FORMAT_DEFAULT = "{path}{pathSep}{tableName}";
-    public static String MDR_COLUMN_ATTR_NAME_FORMAT_DEFAULT = "{colDerived}{path}{pathSep}{peaShortName}{peaSep}{attrName}";
-    public static String MDR_COLUMN_DERIVED_DEFAULT = "DER_";
-    public static String MDR_PK_NAME_FORMAT_DEFAULT = "{PK_}{path}{pathSep}{tableShortName}";
-    public static String MDR_COLUMN_FK_NAME_FORMAT_DEFAULT = "{path}{pathSep}{parentTableShortName}{parentNameSep}{parentRoleName}{parentRoleNameSep}{colName}";
-    public static String MDR_COLUMN_FK_NAME_INDICE_REGEXPR = "(_[0-9]*)$";
-    public static String MDR_COLUMN_FK_NAME_INDICE_SEP_DEFAULT = "_";
-    public static String MDR_FK_NAME_FORMAT_DEFAULT = "{FK}{indice}{_}{childTableShortName}{_}{parentTableShortName}{parentRoleNameSep}{parentRoleName}";
-    public static String MDR_PATH_SEP_FORMAT_DEFAULT = "_";
-    public static String MDR_PEA_SEP_FORMAT_DEFAULT = "_";
-    public static String MDR_PARENT_NAME_SEP_FORMAT_DEFAULT = "_";
-    public static String MDR_PARENT_ROLE_NAME_SEP_FORMAT_DEFAULT = "_";
+    public static String MDR_TABLE_NAME_FORMAT_DEFAULT = "{tableName}";
+    public static String MDR_TABLE_NN_NAME_FORMAT_DEFAULT = "{ATableShortName}{tableSep}{assShortName}{roleA}{roleSep}{roleB}{tableSep}{BTableShortName}";
+    public static String MDR_TABLE_NN_NAME_INDICE_FORMAT_DEFAULT = "{ATableShortName}{tableSep}{BTableShortName}{indTableNN}";
+    public static String MDR_COLUMN_PK_NAME_FORMAT_DEFAULT = "{attrName}";
+    public static String MDR_COLUMN_ATTR_NAME_FORMAT_DEFAULT = "{colDerived}{peaShortName}{peaSep}{attrName}";
+    public static String MDR_COLUMN_DERIVED_MARKER_DEFAULT = "DER_";
+    public static String MDR_COLUMN_FK_NAME_FORMAT_DEFAULT = "{parentTableShortName}{tableSep}{parentRoleShortName}{roleSep}{colName}{indColFK}";
+    public static String MDR_PK_NAME_FORMAT_DEFAULT = "{PK_}{tableShortName}";
+    public static String MDR_INDICE_REGEXPR = "([0-9]*)$";
+    public static Integer MDR_INDICE_TABLENN_LENGTH = 1 ;
+    public static Integer MDR_INDICE_COL_FK_LENGTH = 1 ;
+    public static Integer MDR_INDICE_CONST_FK_LENGTH = 2 ;
+    public static String MDR_FK_NAME_FORMAT_DEFAULT = "{FK}{indConstFK}{_}{childTableShortName}{tableSep}{parentTableShortName}{tableSep}{parentRoleShortName}";
+    public static String MDR_ROLE_GENERALIZE_MARKER_DEFAULT = "gen";
+    public static String MDR_SEPARATOR = "_" ;
+    public static String MDR_PATH_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
+    public static String MDR_PEA_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
+    public static String MDR_TABLE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
+    public static String MDR_ROLE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
 
     public static Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DEFAULT = true;
 
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK = "mdr.pref.column.fk.one.diff.indice.fk";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1 = "mdr.pref.column.fk.one.diff.indice.start.1";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2 = "mdr.pref.column.fk.one.diff.indice.start.2";
+
+    public static Boolean MDR_PREF_NAMING_LENGTH_30_REQUIRED_DEFAULT = true;
+    public static Boolean MDR_PREF_NAMING_LENGTH_60_REQUIRED_DEFAULT = true;
+    public static Boolean MDR_PREF_NAMING_LENGTH_120_REQUIRED_DEFAULT = true;
 
 
     // Modification Application
@@ -490,7 +532,6 @@ public class Preferences extends MVCCDElement {
     private Boolean MCD_AUDIT_EXCEPTION = true;
     private String MCDDATATYPE_NUMBER_SIZE_MODE = null;
     private String MCD_AID_DATATYPE_LIENPROG = null;
-    private Integer MCD_AID_COLUMN_NAME_LENGTH  = null;
     private String MCD_AID_IND_COLUMN_NAME = null;
     private String MCD_AID_DEP_COLUMN_NAME = null;
     private Boolean MCD_AID_WITH_DEP = true;
@@ -514,23 +555,32 @@ public class Preferences extends MVCCDElement {
     // MLDRToMPDR
     private String MLDRTOMPDR_DB = null;
 
-    // MDR
+    // MDR Format
     private String MDR_TABLE_NAME_FORMAT = null;
+    private String MDR_TABLE_NN_NAME_FORMAT = null ;
+    private String MDR_TABLE_NN_NAME_INDICE_FORMAT = null;
     private String MDR_COLUMN_ATTR_NAME_FORMAT = null;
-    private String MDR_COLUMN_DERIVED = null;
+    private String MDR_COLUMN_DERIVED_MARKER = null;
     private String MDR_PK_NAME_FORMAT = null;
+    private String MDR_COLUMN_PK_NAME_FORMAT = null;
     private String MDR_COLUMN_FK_NAME_FORMAT = null;
-    private String MDR_COLUMN_FK_NAME_INDICE_SEP = null;
     private String MDR_FK_NAME_FORMAT = null;
+    private String MDR_ROLE_GENERALIZE_MARKER = null;
+    private String MDR_INDICE_SEP_FORMAT = null;
     private String MDR_PATH_SEP_FORMAT = null;
     private String MDR_PEA_SEP_FORMAT = null;
-    private String MDR_PARENT_NAME_SEP_FORMAT = null;
-    private String MDR_PARENT_ROLE_NAME_SEP_FORMAT = null ;
+    private String MDR_TABLE_SEP_FORMAT = null;
+    private String MDR_ROLE_SEP_FORMAT = null ;
 
     // MDR Préférences
     private Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR = null ;
     private String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = null;
+    private Boolean MDR_PREF_NAMING_LENGTH_30_REQUIRED = null;
+    private Boolean MDR_PREF_NAMING_LENGTH_60_REQUIRED = null;
+    private Boolean MDR_PREF_NAMING_LENGTH_120_REQUIRED = null;
 
+    // MLDR Préférences
+    private String MLDR_PREF_NAMING_LENGTH = null;
 
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);
@@ -707,7 +757,7 @@ public class Preferences extends MVCCDElement {
 
     public Integer getMCD_AID_COLUMN_NAME_LENGTH() {
         if (MCD_AID_COLUMN_NAME_LENGTH== null){
-            MCD_AID_COLUMN_NAME_LENGTH = MCD_AID_COLUMN_NAME_LENGTH_DEFAULT;
+            MCD_AID_COLUMN_NAME_LENGTH = MCD_AID_COLUMN_NAME_LENGTH;
         }
         return MCD_AID_COLUMN_NAME_LENGTH;
     }
@@ -857,6 +907,28 @@ public class Preferences extends MVCCDElement {
         this.MDR_TABLE_NAME_FORMAT = MDR_TABLE_NAME_FORMAT;
     }
 
+    public String getMDR_TABLE_NN_NAME_FORMAT() {
+        if (MDR_TABLE_NN_NAME_FORMAT == null){
+            MDR_TABLE_NN_NAME_FORMAT = MDR_TABLE_NN_NAME_FORMAT_DEFAULT;
+        }
+        return MDR_TABLE_NN_NAME_FORMAT;
+    }
+
+    public void setMDR_TABLE_NN_NAME_FORMAT(String MDR_TABLE_NN_NAME_FORMAT) {
+        this.MDR_TABLE_NN_NAME_FORMAT = MDR_TABLE_NN_NAME_FORMAT;
+    }
+
+    public String getMDR_TABLE_NN_NAME_INDICE_FORMAT() {
+        if (MDR_TABLE_NN_NAME_INDICE_FORMAT == null){
+            MDR_TABLE_NN_NAME_INDICE_FORMAT = MDR_TABLE_NN_NAME_INDICE_FORMAT_DEFAULT;
+        }
+        return MDR_TABLE_NN_NAME_INDICE_FORMAT;
+    }
+
+    public void setMDR_TABLE_NN_NAME_INDICE_FORMAT(String MDR_TABLE_NN_NAME_INDICE_FORMAT) {
+        this.MDR_TABLE_NN_NAME_INDICE_FORMAT = MDR_TABLE_NN_NAME_INDICE_FORMAT;
+    }
+
     public String getMDR_COLUMN_ATTR_NAME_FORMAT() {
         if (MDR_COLUMN_ATTR_NAME_FORMAT == null){
             MDR_COLUMN_ATTR_NAME_FORMAT = MDR_COLUMN_ATTR_NAME_FORMAT_DEFAULT;
@@ -868,15 +940,15 @@ public class Preferences extends MVCCDElement {
         this.MDR_COLUMN_ATTR_NAME_FORMAT = MDR_COLUMN_ATTR_NAME_FORMAT;
     }
 
-    public String getMDR_COLUMN_DERIVED() {
-        if (MDR_COLUMN_DERIVED == null){
-            MDR_COLUMN_DERIVED = MDR_COLUMN_DERIVED_DEFAULT;
+    public String getMDR_COLUMN_DERIVED_MARKER() {
+        if (MDR_COLUMN_DERIVED_MARKER == null){
+            MDR_COLUMN_DERIVED_MARKER = MDR_COLUMN_DERIVED_MARKER_DEFAULT;
         }
-        return MDR_COLUMN_DERIVED;
+        return MDR_COLUMN_DERIVED_MARKER;
     }
 
-    public void setMDR_COLUMN_DERIVED(String MDR_COLUMN_DERIVED) {
-        this.MDR_COLUMN_DERIVED = MDR_COLUMN_DERIVED;
+    public void setMDR_COLUMN_DERIVED_MARKER(String MDR_COLUMN_DERIVED_MARKER) {
+        this.MDR_COLUMN_DERIVED_MARKER = MDR_COLUMN_DERIVED_MARKER;
     }
 
     public String getMDR_PK_NAME_FORMAT() {
@@ -901,15 +973,15 @@ public class Preferences extends MVCCDElement {
         this.MDR_COLUMN_FK_NAME_FORMAT = MDR_COLUMN_FK_NAME_FORMAT;
     }
 
-    public String getMDR_COLUMN_FK_NAME_INDICE_SEP() {
-        if (MDR_COLUMN_FK_NAME_INDICE_SEP == null){
-            MDR_COLUMN_FK_NAME_INDICE_SEP = MDR_COLUMN_FK_NAME_INDICE_SEP_DEFAULT;
+    public String getMDR_COLUMN_PK_NAME_FORMAT() {
+        if (MDR_COLUMN_PK_NAME_FORMAT == null){
+            MDR_COLUMN_PK_NAME_FORMAT = MDR_COLUMN_PK_NAME_FORMAT_DEFAULT;
         }
-        return MDR_COLUMN_FK_NAME_INDICE_SEP;
+        return MDR_COLUMN_PK_NAME_FORMAT;
     }
 
-    public void setMDR_COLUMN_FK_NAME_INDICE_SEP(String MDR_COLUMN_FK_NAME_INDICE_SEP) {
-        this.MDR_COLUMN_FK_NAME_INDICE_SEP = MDR_COLUMN_FK_NAME_INDICE_SEP;
+    public void setMDR_COLUMN_PK_NAME_FORMAT(String MDR_COLUMN_PK_NAME_FORMAT) {
+        this.MDR_COLUMN_PK_NAME_FORMAT = MDR_COLUMN_PK_NAME_FORMAT;
     }
 
     public String getMDR_FK_NAME_FORMAT() {
@@ -921,6 +993,16 @@ public class Preferences extends MVCCDElement {
 
     public void setMDR_FK_NAME_FORMAT(String MDR_FK_NAME_FORMAT) {
         this.MDR_FK_NAME_FORMAT = MDR_FK_NAME_FORMAT;
+    }
+
+    public String getMDR_ROLE_GENERALIZE_MARKER() {
+        if (MDR_ROLE_GENERALIZE_MARKER == null){
+            MDR_ROLE_GENERALIZE_MARKER = MDR_ROLE_GENERALIZE_MARKER_DEFAULT;
+        }return MDR_ROLE_GENERALIZE_MARKER;
+    }
+
+    public void setMDR_ROLE_GENERALIZE_MARKER(String MDR_ROLE_GENERALIZE_MARKER) {
+        this.MDR_ROLE_GENERALIZE_MARKER = MDR_ROLE_GENERALIZE_MARKER;
     }
 
     public String getMDR_PATH_SEP_FORMAT() {
@@ -945,26 +1027,26 @@ public class Preferences extends MVCCDElement {
         this.MDR_PEA_SEP_FORMAT = MDR_PEA_SEP_FORMAT;
     }
 
-    public String getMDR_PARENT_NAME_SEP_FORMAT() {
-        if (MDR_PARENT_NAME_SEP_FORMAT == null){
-            MDR_PARENT_NAME_SEP_FORMAT = MDR_PARENT_NAME_SEP_FORMAT_DEFAULT;
+    public String getMDR_TABLE_SEP_FORMAT() {
+        if (MDR_TABLE_SEP_FORMAT == null){
+            MDR_TABLE_SEP_FORMAT = MDR_TABLE_SEP_FORMAT_DEFAULT;
         }
-        return MDR_PARENT_NAME_SEP_FORMAT;
+        return MDR_TABLE_SEP_FORMAT;
     }
 
-    public void setMDR_PARENT_NAME_SEP_FORMAT(String MDR_PARENT_NAME_SEP_FORMAT) {
-        this.MDR_PARENT_NAME_SEP_FORMAT = MDR_PARENT_NAME_SEP_FORMAT;
+    public void setMDR_TABLE_SEP_FORMAT(String MDR_TABLE_SEP_FORMAT) {
+        this.MDR_TABLE_SEP_FORMAT = MDR_TABLE_SEP_FORMAT;
     }
 
-    public String getMDR_PARENT_ROLE_NAME_SEP_FORMAT() {
-        if (MDR_PARENT_ROLE_NAME_SEP_FORMAT == null){
-            MDR_PARENT_ROLE_NAME_SEP_FORMAT = MDR_PARENT_ROLE_NAME_SEP_FORMAT_DEFAULT;
+    public String getMDR_ROLE_SEP_FORMAT() {
+        if (MDR_ROLE_SEP_FORMAT == null){
+            MDR_ROLE_SEP_FORMAT = MDR_ROLE_SEP_FORMAT_DEFAULT;
         }
-        return MDR_PARENT_ROLE_NAME_SEP_FORMAT;
+        return MDR_ROLE_SEP_FORMAT;
     }
 
-    public void setMDR_PARENT_ROLE_NAME_SEP_FORMAT(String MDR_PARENT_ROLE_NAME_SEP_FORMAT) {
-        this.MDR_PARENT_ROLE_NAME_SEP_FORMAT = MDR_PARENT_ROLE_NAME_SEP_FORMAT;
+    public void setMDR_ROLE_SEP_FORMAT(String MDR_ROLE_SEP_FORMAT) {
+        this.MDR_ROLE_SEP_FORMAT = MDR_ROLE_SEP_FORMAT;
     }
 
     public Boolean getMDR_PREF_COLUMN_FK_ONE_ANCESTOR() {
@@ -978,6 +1060,9 @@ public class Preferences extends MVCCDElement {
         this.MDR_PREF_COLUMN_FK_ONE_ANCESTOR = MDR_PREF_COLUMN_FK_ONE_ANCESTOR;
     }
 
+    //TODO-0
+    // Renommer car utilisé par tous les indices
+    // Modifier aussi l'interface utilisateur
     public String getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF() {
         if (MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF == null){
             MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK;
@@ -988,4 +1073,51 @@ public class Preferences extends MVCCDElement {
     public void setMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF(String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF) {
         this.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF;
     }
+
+    public String getMLDR_PREF_NAMING_LENGTH() {
+        if (MLDR_PREF_NAMING_LENGTH == null){
+            MLDR_PREF_NAMING_LENGTH = MDR_NAMING_LENGTH_30;
+        }
+        return MLDR_PREF_NAMING_LENGTH;
+    }
+
+    public void setMLDR_PREF_NAMING_LENGTH(String MLDR_PREF_NAMING_LENGTH) {
+        this.MLDR_PREF_NAMING_LENGTH = MLDR_PREF_NAMING_LENGTH;
+    }
+
+
+    public Boolean getMDR_PREF_NAMING_LENGTH_30_REQUIRED() {
+        if (MDR_PREF_NAMING_LENGTH_30_REQUIRED == null){
+            MDR_PREF_NAMING_LENGTH_30_REQUIRED = MDR_PREF_NAMING_LENGTH_30_REQUIRED_DEFAULT;
+        }
+        return MDR_PREF_NAMING_LENGTH_30_REQUIRED;
+    }
+
+    public void setMDR_PREF_NAMING_LENGTH_30_REQUIRED(Boolean MDR_PREF_NAMING_LENGTH_30_REQUIRED) {
+        this.MDR_PREF_NAMING_LENGTH_30_REQUIRED = MDR_PREF_NAMING_LENGTH_30_REQUIRED;
+    }
+
+    public Boolean getMDR_PREF_NAMING_LENGTH_60_REQUIRED() {
+        if (MDR_PREF_NAMING_LENGTH_60_REQUIRED == null){
+            MDR_PREF_NAMING_LENGTH_60_REQUIRED = MDR_PREF_NAMING_LENGTH_60_REQUIRED_DEFAULT;
+        }
+        return MDR_PREF_NAMING_LENGTH_60_REQUIRED;
+    }
+
+    public void setMDR_PREF_NAMING_LENGTH_60_REQUIRED(Boolean MDR_PREF_NAMING_LENGTH_60_REQUIRED) {
+        this.MDR_PREF_NAMING_LENGTH_60_REQUIRED = MDR_PREF_NAMING_LENGTH_60_REQUIRED;
+    }
+
+    public void setMDR_PREF_NAMING_LENGTH_120_REQUIRED(Boolean MDR_PREF_NAMING_LENGTH_120_REQUIRED) {
+        this.MDR_PREF_NAMING_LENGTH_120_REQUIRED = MDR_PREF_NAMING_LENGTH_120_REQUIRED;
+    }
+
+    public Boolean getMDR_PREF_NAMING_LENGTH_120_REQUIRED() {
+        if (MDR_PREF_NAMING_LENGTH_120_REQUIRED == null){
+            MDR_PREF_NAMING_LENGTH_120_REQUIRED = MDR_PREF_NAMING_LENGTH_120_REQUIRED_DEFAULT;
+        }
+        return MDR_PREF_NAMING_LENGTH_120_REQUIRED;
+    }
+
+
 }

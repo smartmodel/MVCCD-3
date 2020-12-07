@@ -1,10 +1,12 @@
 package repository.editingTreat.mcd;
 
+import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import mcd.MCDContModels;
 import mcd.MCDModel;
 import repository.editingTreat.EditingTreat;
 import utilities.Trace;
+import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 
@@ -42,14 +44,20 @@ public class MCDContModelsEditingTreat extends EditingTreat {
     @Override
     public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
         MCDContModels mcdContModels = (MCDContModels) mvccdElement;
-        ArrayList<String> resultat = mcdContModels.treatCompliant();
-        if (resultat.size() > 0) {
-            super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
-        } else {
-            resultat = mcdContModels.treatTransform();
-            super.treatTransformFinishMessages(owner, mvccdElement, resultat);
+        ArrayList<String> resultat = new ArrayList<String>();
+        try {
+            resultat = mcdContModels.treatCompliant();
+            if (resultat.size() > 0) {
+                super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
+            } else {
+                resultat = mcdContModels.treatTransform();
+                super.treatTransformFinishMessages(owner, mvccdElement, resultat);
+            }
+            return resultat;
+        } catch (TransformMCDException e){
+            DialogMessage.showError(owner, e.getMessage());
+            return resultat;
         }
-        return resultat;
     }
 
 }

@@ -6,6 +6,7 @@ import mcd.MCDEntity;
 import mcd.services.MCDElementService;
 import mdr.MDRContTables;
 import mdr.MDRElement;
+import mdr.MDRModel;
 import mldr.interfaces.IMLDRElement;
 import mldr.services.MLDRModelService;
 import mldr.transform.MLDRTransform;
@@ -14,7 +15,7 @@ import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public abstract class MLDRModel extends MDRElement implements IMLDRElement {
+public abstract class MLDRModel extends MDRModel implements IMLDRElement {
 
     private  static final long serialVersionUID = 1000;
 

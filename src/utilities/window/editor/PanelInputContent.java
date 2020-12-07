@@ -3,6 +3,7 @@ package utilities.window.editor;
 import main.MVCCDElement;
 import preferences.PreferencesManager;
 import utilities.Debug;
+import utilities.Trace;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 
@@ -157,12 +158,13 @@ public abstract class PanelInputContent
     }
 
 
-    protected void enabledButtons() {
+
+    public void enabledButtons() {
 
         // Le check doit être fait au début pour remettre l'affichage normal
         // de champs testés ensemble
         if (datasChangedNow()) {
-            if (preSaveOk) {
+             if (preSaveOk) {
                 getButtonsContent().getBtnOk().setEnabled(true);
                 getButtonsContent().getBtnApply().setEnabled(true);
             } else {
@@ -176,12 +178,19 @@ public abstract class PanelInputContent
             getButtonsContent().getBtnApply().setEnabled(false);
         }
 
+        //#MAJ 2020-12-05 pas de boutons Annuler/OK pour les préférences
+        // ? Je supprime ce code qui me semble erroné
+        // enabledButtons est traité en standard (DialogEditor.window.opened()
+        /*
         if (getEditor() instanceof DialogEditorNavBtn) {
             DialogEditorNavBtn editor = (DialogEditorNavBtn) getEditor();
             if (!editor.getMode().equals(DialogEditor.NEW)) {
                 editor.getNav().getContent().enabledButtons(!datasChangedNow());
             }
         }
+         */
+
+
     }
 
     public boolean checkInput(SComponent field, boolean unitaire, ArrayList<String> messagesErrors) {

@@ -2,6 +2,7 @@ package repository.editingTreat;
 
 import console.Console;
 import delete.Delete;
+import exceptions.TransformMCDException;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
@@ -37,9 +38,10 @@ public abstract class EditingTreat {
 
     public boolean treatUpdate(Window owner, MVCCDElement element) {
         MVCCDElement parentBefore = element.getParent();
-        DialogEditor fen = getDialogEditor(owner, element.getParent(), element, DialogEditor.UPDATE);
-        fen.setVisible(true);
 
+        DialogEditor fen = getDialogEditor(owner, element.getParent(), element, DialogEditor.UPDATE);
+
+        fen.setVisible(true);
 
         MVCCDElement parentAfter = element.getParent();
         if (parentBefore != parentAfter) {
@@ -169,7 +171,7 @@ public abstract class EditingTreat {
             Window owner, MVCCDElement mvccdElement);
 
     public abstract ArrayList<String> treatTransform(
-            Window owner, MVCCDElement mvccdElement);
+            Window owner, MVCCDElement mvccdElement)  throws TransformMCDException;
 
 
 

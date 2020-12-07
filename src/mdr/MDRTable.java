@@ -86,7 +86,12 @@ public abstract class MDRTable extends MDRTableOrView  {
 
     }
 
-    public abstract String getShortName();
+    //TODO-0 A voir !!!  Erreur?
+    //public abstract String getShortName();
 
+
+    public MDRModel getMDRModelParent(){
+        return (MDRModel) getParent().getParent();
+    }
 
 }

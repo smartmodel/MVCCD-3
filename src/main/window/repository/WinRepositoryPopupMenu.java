@@ -180,6 +180,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         }
 
         if (node.getUserObject() instanceof MLDRModel) {
+            treatGenericRead(this, new MLDRModelEditingTreat());
+            treatGenericUpdate(this, new MLDRModelEditingTreat());
             treatGenericTransform(this, new MLDRModelEditingTreat(),
                     "menu.transform.mldr.to.mpdr");
             treatGenericDelete(this, new MLDRModelEditingTreat());
@@ -194,6 +196,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         }
 
         if (node.getUserObject() instanceof MPDRModel) {
+            treatGenericRead(this, new MPDRModelEditingTreat());
             treatGenericDelete(this, new MPDRModelEditingTreat());
         }
 
@@ -241,6 +244,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             treatGenericRead( preferencesEdit, new PrefMDRFormatEditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mdr.format"));
 
+            treatGenericRead( preferencesEdit, new PrefMLDREditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.preferences.mldr"));
+
             treatGenericRead( preferencesEdit, new PrefMCDToMLDREditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mcd.to.mldr"));
 
@@ -260,6 +266,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             treatGenericUpdate( preferencesEdit, new PrefMDRFormatEditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mdr.format"));
+
+            treatGenericUpdate( preferencesEdit, new PrefMLDREditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.preferences.mldr"));
 
             treatGenericUpdate( preferencesEdit, new PrefMCDToMLDREditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mcd.to.mldr"));
@@ -334,7 +343,6 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             }
             if (node.getUserObject() instanceof MCDPackage) {
                 MCDPackage mcdPackage = (MCDPackage) node.getUserObject();
-                Trace.println(mcdPackage.getName() + "  -  " + mcdPackage.getLevel());
                 if (mcdPackage.getLevel() < Preferences.PACKAGE_LEVEL_MAX) {
                     treatGenericNew(menu, new MCDPackageEditingTreat(),
                             MessagesBuilder.getMessagesProperty(propertyMessage));

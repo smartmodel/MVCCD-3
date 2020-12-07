@@ -143,11 +143,16 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         return mldrFK;
     }
 
+    //TODO-0
+    // Une association n:n sans entité associative doit avoir Name et shortName!
 
+    /*
     @Override
     public String getShortName() {
         //TODO-0
         // Une association n:n sans entité associative doit avoir Name et shortName!
         return getMcdElementSource().getShortName();
     }
+
+     */
 }

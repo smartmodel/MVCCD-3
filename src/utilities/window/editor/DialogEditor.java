@@ -4,6 +4,7 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 
@@ -190,8 +191,11 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
                 String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
                         new String[] {messageMode});
                 DialogMessage.showOk(this, message);
+                //#MAJ 2020-12-05 - Instruction manquante
+                input.getInputContent().enabledButtons();
             }
         }
+        //TODO-1 traiter le cas d'un ajustement de données avec un formulaire en lecture seule
 
     }
 

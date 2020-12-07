@@ -1,12 +1,15 @@
 package repository.editingTreat.mcd;
 
+import exceptions.TransformMCDException;
 import main.MVCCDElement;
+import main.MVCCDManager;
 import main.MVCCDWindow;
 import mcd.MCDModel;
 import mcd.MCDPackage;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContainer;
 import repository.editingTreat.EditingTreat;
+import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.entity.EntityInputContent;
@@ -33,7 +36,7 @@ public class MCDModelEditingTreat extends EditingTreat {
 
     @Override
     protected String getPropertyTheElement() {
-        return "tthe.model.conceptual";
+        return "the.model.conceptual";
     }
 
     @Override
@@ -45,16 +48,22 @@ public class MCDModelEditingTreat extends EditingTreat {
     }
 
     @Override
-    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
+    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement)  throws TransformMCDException {
         MCDModel mcdModel = (MCDModel) mvccdElement;
-        ArrayList<String> resultat = mcdModel.treatCompliant();
-        if (resultat.size() > 0) {
-            super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
-        } else {
-            resultat = mcdModel.treatTransform();
-            super.treatTransformFinishMessages(owner, mvccdElement, resultat);
+        ArrayList<String> resultat = new ArrayList<String>();
+        try {
+            resultat = mcdModel.treatCompliant();
+            if (resultat.size() > 0) {
+                super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
+            } else {
+                resultat = mcdModel.treatTransform();
+                super.treatTransformFinishMessages(owner, mvccdElement, resultat);
+            }
+            return resultat;
+        } catch (TransformMCDException e){
+            DialogMessage.showError(owner, e.getMessage());
+            return resultat;
         }
-        return resultat;
     }
 
 }

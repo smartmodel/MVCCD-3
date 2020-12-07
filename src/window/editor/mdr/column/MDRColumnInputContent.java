@@ -6,18 +6,17 @@ import datatypes.MDDatatypeService;
 import main.MVCCDElement;
 import mdr.MDRColumn;
 import preferences.Preferences;
-import utilities.Trace;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
-import window.editor.mdr.utilities.PanelInputContentIdMPDR;
+import window.editor.mdr.utilities.PanelInputContentIdMDR;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
-public class MDRColumnInputContent extends PanelInputContentIdMPDR {
+public class MDRColumnInputContent extends PanelInputContentIdMDR {
 
     protected JPanel panelDatatype = new JPanel ();
 

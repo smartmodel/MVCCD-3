@@ -1,22 +1,20 @@
 package mcd.transform;
 
-import exceptions.CodeApplException;
-import exceptions.OrderBuildNameException;
+import exceptions.orderbuildnaming.OrderBuildNameException;
+import exceptions.TransformMCDException;
 import main.MVCCDManager;
 import mcd.MCDEntity;
 import mcd.MCDRelEnd;
 import mcd.MCDRelation;
-import mdr.MDRColumn;
-import mdr.MDRFK;
-import mdr.MDRFKNature;
-import mdr.MDRTable;
-import mdr.utilities.MDROrderBuildString;
+import mdr.*;
+import mdr.orderbuildnaming.MDROrderBuildNaming;
+import mdr.orderbuildnaming.MDROrderBuildTargets;
 import messages.MessagesBuilder;
 import mldr.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Transform;
+import utilities.TransformService;
 
 import java.util.ArrayList;
 
@@ -41,8 +39,8 @@ public class MCDTransformToFK {
         MLDRPK mldrPKParent = mldrTableParent.getMLDRPK();
 
         // Nom
-        String nameFK = buildNameFK(mldrTable, mldrFK, mcdRelEndParent, mldrTableParent);
-        Transform.name(mldrFK, nameFK);
+        MDRElementNames nameFK = buildNameFK(mldrTable, mldrFK, mcdRelEndParent, mldrTableParent);
+        TransformService.name(mldrFK, nameFK, mldrModel.getNamingLenth());
 
         // Nature
         mldrFK.setNature(fkNature);
@@ -69,36 +67,44 @@ public class MCDTransformToFK {
 
     }
 
-    protected String buildNameFK(MDRTable mdrTable,
-                                 MDRFK mdrFK,
-                                 MCDRelEnd mcdRelEnd,
-                                 MDRTable mdrTableParent){
+    protected MDRElementNames buildNameFK(MDRTable mdrTable,
+                                          MDRFK mdrFK,
+                                          MCDRelEnd mcdRelEndParent,
+                                          MDRTable mdrTableParent  ) {
         Preferences preferences = PreferencesManager.instance().preferences();
+        MDRElementNames names = new MDRElementNames();
+        for (MDRNamingLength element: MDRNamingLength.values()) {
 
-        MDROrderBuildString orderConstrFk = new  MDROrderBuildString();
-        orderConstrFk.setFormat(preferences.getMDR_FK_NAME_FORMAT());
-        orderConstrFk.setChildTableShortName(mdrFK.getShortName());
-        orderConstrFk.setParentTableShortName(mdrTableParent.getShortName());
-        String roleParent = mcdRelEnd.getNameNoFreeOrNameRelation();
-        orderConstrFk.setParentRoleName(roleParent);
-        orderConstrFk.setIndice(mdrFK.getIndice().toString());
-        if (StringUtils.isEmpty(roleParent) ){
-            orderConstrFk.setParentRoleSep("");
-        } else{
-            orderConstrFk.setParentRoleSep(preferences.getMDR_PARENT_ROLE_NAME_SEP_FORMAT());
+            MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
+            orderBuild.setFormat(preferences.getMDR_FK_NAME_FORMAT());
+            orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_FK_LENGTH);
+            orderBuild.setTargetNaming(MDROrderBuildTargets.FK);
+
+            orderBuild.getIndConstFK().setValue(mdrFK.getIndice().toString());
+
+            orderBuild.getTableShortNameChild().setValue((MCDEntity) mcdRelEndParent.getMCDRelEndOpposite().getMcdElement());
+            orderBuild.getTableShortNameParent().setValue((MCDEntity) mcdRelEndParent.getMcdElement());
+            orderBuild.getTableSep().setValue();
+            orderBuild.getRoleShortNameParent().setValue(mcdRelEndParent);
+
+
+            String name;
+
+            try {
+                name = orderBuild.buildNaming();
+            } catch (OrderBuildNameException e) {
+                String message = "";
+                if (StringUtils.isNotEmpty(e.getMessage())) {
+                    message = e.getMessage();
+                } else {
+                    message = MessagesBuilder.getMessagesProperty("mdrfk.build.name.error",
+                            new String[]{mdrTable.getName(), mdrTableParent.getName(), mcdRelEndParent.getNameNoFreeOrNameRelation()});
+                }
+                throw new TransformMCDException(message, e);
+            }
+            names.setElementName(name, element);
         }
-
-        String nameConstrFk;
-
-        try {
-            nameConstrFk = orderConstrFk.buildString();
-        } catch(OrderBuildNameException e){
-            String message = MessagesBuilder.getMessagesProperty("mdrfk.build.name.error",
-                    new String[] {mdrTable.getName(), mdrTableParent.getName(), mcdRelEnd.getNameNoFreeOrNameRelation()});
-            throw new CodeApplException(message,e);
-        }
-
-        return nameConstrFk;
+        return names;
    }
 
 }

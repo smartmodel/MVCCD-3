@@ -32,7 +32,7 @@ public class STreeService {
         } else if (resultat.size() == 1) {
             return resultat.get(0);
         } else {
-            throw new CodeApplException("L'objet n'est pas trouvé dans l'arbre." +
+            throw new CodeApplException("L'objet est trouvé dans l'arbre en plusieurs exemplaires." +
                     "\r\n" + object.toString());
         }
     }

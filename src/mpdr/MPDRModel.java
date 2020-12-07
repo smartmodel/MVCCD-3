@@ -6,13 +6,14 @@ import mcd.MCDEntity;
 import mcd.services.MCDElementService;
 import mdr.MDRContTables;
 import mdr.MDRElement;
+import mdr.MDRModel;
 import mldr.MLDRTable;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.services.MPDRModelService;
 import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
 
-public abstract class MPDRModel extends MDRElement implements IMPDRElement {
+public abstract class MPDRModel extends MDRModel implements IMPDRElement {
     private  static final long serialVersionUID = 1000;
 
     public MPDRModel(ProjectElement parent, String name) {

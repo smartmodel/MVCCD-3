@@ -34,11 +34,18 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     }
 
 
+    //TODO-0
+    // Une association n:n sans entité associative doit avoir Name et shortName!
+
+    /*
     @Override
     public String getShortName() {
-        //TODO-0
-        // Une association n:n sans entité associative doit avoir Name et shortName!
         return ((IMLDRElementWithSource) getMldrElementSource()).getMcdElementSource().getShortName();
     }
+
+     */
+
+
+
 
 }

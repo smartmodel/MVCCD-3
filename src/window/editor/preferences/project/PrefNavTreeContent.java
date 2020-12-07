@@ -8,12 +8,13 @@ import window.editor.preferences.project.general.PrefGeneralEditor;
 import window.editor.preferences.project.mcdtomldr.PrefMCDToMLDREditor;
 import window.editor.preferences.project.mdr.PrefMDREditor;
 import window.editor.preferences.project.mdrformat.PrefMDRFormatEditor;
+import window.editor.preferences.project.mldr.PrefMLDREditor;
 import window.editor.preferences.project.mldrtompdr.PrefMLDRToMPDREditor;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 public class PrefNavTreeContent extends PanelNavTreeContent {
-
 
 
     public PrefNavTreeContent(PrefNavTree prefNavTree) {
@@ -40,6 +41,8 @@ public class PrefNavTreeContent extends PanelNavTreeContent {
         root.add( mdr);
         DefaultMutableTreeNode mdrFormat = new DefaultMutableTreeNode(PrefProjectMenu.MDRFormat);
         root.add( mdrFormat);
+        DefaultMutableTreeNode mldr = new DefaultMutableTreeNode(PrefProjectMenu.MLDR);
+        root.add( mldr);
         DefaultMutableTreeNode mcdToMldr = new DefaultMutableTreeNode(PrefProjectMenu.MCDToMLDR);
         root.add( mcdToMldr );
         DefaultMutableTreeNode mldrToMpdr = new DefaultMutableTreeNode(PrefProjectMenu.MLDRToMPDR);
@@ -70,6 +73,12 @@ public class PrefNavTreeContent extends PanelNavTreeContent {
             if (!(getEditor() instanceof PrefMDRFormatEditor)) {
                 getEditor().myDispose();
                 new PrefMDRFormatEditingTreat().treatUpdate(getEditor().getOwner(), PreferencesManager.instance().getProjectPref());
+            }
+        }
+        if (rightClickedNode.getUserObject() == PrefProjectMenu.MLDR) {
+            if (!(getEditor() instanceof PrefMLDREditor)) {
+                getEditor().myDispose();
+                new PrefMLDREditingTreat().treatUpdate(getEditor().getOwner(), PreferencesManager.instance().getProjectPref());
             }
         }
         if (rightClickedNode.getUserObject() == PrefProjectMenu.MCDToMLDR) {

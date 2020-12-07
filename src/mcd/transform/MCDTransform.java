@@ -1,6 +1,7 @@
 package mcd.transform;
 
 import delete.Delete;
+import exceptions.TransformMCDException;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import mcd.MCDAttribute;
@@ -22,7 +23,7 @@ public class MCDTransform {
     private IMCDModel  imcdModel ;
     private MLDRModel mldrModel ;
 
-    public ArrayList<String> transform(IMCDModel imcdModel) {
+    public ArrayList<String> transform(IMCDModel imcdModel)  throws TransformMCDException {
         this.imcdModel = imcdModel ;
         ArrayList<String> resultat = new ArrayList<String>();
 

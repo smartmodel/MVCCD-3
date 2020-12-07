@@ -5,8 +5,6 @@ import mdr.MDROperation;
 import mdr.MDRParameter;
 import mdr.MDRTableOrView;
 import mdr.interfaces.IMDRParameter;
-import utilities.Trace;
-import utilities.Transform;
 
 import java.util.ArrayList;
 

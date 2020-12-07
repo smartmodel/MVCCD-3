@@ -1,8 +1,7 @@
-package exceptions;
+package exceptions.orderbuildnaming;
 
 
 public class OrderBuildNameException extends RuntimeException {
-
 
 	public OrderBuildNameException() {
 		super();

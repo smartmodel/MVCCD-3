@@ -1,35 +1,13 @@
 package window.editor.mdr.table;
 
-import m.MElement;
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
-import mcd.MCDContEntities;
-import mcd.MCDElement;
-import mcd.MCDEntity;
-import mcd.interfaces.IMCDModel;
-import mcd.services.MCDContEntitiesService;
-import mcd.services.MCDElementService;
-import md.MDElement;
 import mdr.MDRTable;
-import preferences.Preferences;
-import preferences.PreferencesManager;
-import utilities.window.editor.PanelInputContent;
-import utilities.window.editor.PanelInputContentId;
-import utilities.window.scomponents.SCheckBox;
-import utilities.window.scomponents.SComponent;
-import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
-import window.editor.mdr.utilities.PanelInputContentIdMPDR;
+import window.editor.mdr.utilities.PanelInputContentIdMDR;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.text.Document;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
-import java.util.ArrayList;
 
-public class MDRTableInputContent extends PanelInputContentIdMPDR {
+public class MDRTableInputContent extends PanelInputContentIdMDR {
 
 
 

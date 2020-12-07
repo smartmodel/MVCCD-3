@@ -20,7 +20,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
-import utilities.Trace;
 
 public class MVCCDElementFactory {
 
@@ -229,6 +228,8 @@ public class MVCCDElementFactory {
 
     public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel){
         MLDRModelDT mldrModelDT = new MLDRModelDT((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_DT_NAME);
+        mldrModelDT.setNamingLenth( MDRNamingLength.findByText(
+                MessagesBuilder.getMessagesProperty(PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH())));
         createContentMLDRModel(mldrModelDT);
         return mldrModelDT;
     }

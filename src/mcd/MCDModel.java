@@ -1,5 +1,6 @@
 package mcd;
 
+import exceptions.TransformMCDException;
 import m.IMCompletness;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
@@ -86,7 +87,7 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
 
     }
 
-    public ArrayList<String> treatTransform(){
+    public ArrayList<String> treatTransform()  throws TransformMCDException {
         MCDTransform mcdTransform = new MCDTransform();
         ArrayList<String> resultat = mcdTransform.transform(this);
 

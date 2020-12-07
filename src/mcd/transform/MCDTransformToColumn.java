@@ -1,22 +1,25 @@
 package mcd.transform;
 
 import datatypes.MLDRDatatype;
-import exceptions.CodeApplException;
-import exceptions.OrderBuildNameException;
+import exceptions.orderbuildnaming.OrderBuildNameException;
+import exceptions.TransformMCDException;
+import main.MVCCDElement;
+import main.MVCCDElementConvert;
 import main.MVCCDManager;
 import mcd.*;
-import mdr.MDRColumn;
-import mdr.MDRFKNature;
-import mdr.MDRTable;
-import mdr.utilities.MDROrderBuildString;
+import mdr.*;
+import mdr.orderbuildnaming.MDROrderBuildNaming;
+import mdr.orderbuildnaming.MDROrderBuildTargets;
 import messages.MessagesBuilder;
 import mldr.MLDRColumn;
+import mldr.MLDRModel;
 import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Transform;
+import utilities.TransformService;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,7 +61,9 @@ public class MCDTransformToColumn {
     public void modifyColumn(MLDRColumn mldrColumn, MCDAttribute mcdAttribute){
 
         // Nom
-        Transform.name(mldrColumn, buildNameColumnAttr(mcdAttribute));
+        MLDRModel mldrModel = (MLDRModel) mldrColumn.getMDRTableParent().getMDRModelParent();
+        TransformService.name(mldrColumn, buildNameColumnAttr(mcdAttribute), mldrModel.getNamingLenth());
+
 
         // Datatype
         MLDRDatatype mldrDatatypeNew = MCDTransformToMLDRDatatype.fromMCDDatatype(mcdAttribute.getDatatypeLienProg());
@@ -179,7 +184,8 @@ public class MCDTransformToColumn {
     public void modifyColumnPK(MCDEntity mcdEntity, MLDRColumn mldrColumnPK) {
 
         // Nom
-        Transform.name(mldrColumnPK, buildNameColumnPK(mcdEntity));
+        MLDRModel mldrModel = (MLDRModel) mldrColumnPK.getMDRTableParent().getMDRModelParent();
+        TransformService.name(mldrColumnPK, buildNameColumnPK(mcdEntity), mldrModel.getNamingLenth());
 
         modifyColumnPKorFK(mldrColumnPK);
     }
@@ -187,162 +193,147 @@ public class MCDTransformToColumn {
     public void modifyColumnFK(MLDRColumn mldrColumnFK, MCDRelEnd mcdRelEndParent, MLDRColumn mldrColumnPK, MDRFKNature fkNature) {
 
         // Nom
-        Transform.name(mldrColumnFK, buildNameColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK));
+        MLDRModel mldrModel = (MLDRModel) mldrColumnFK.getMDRTableParent().getMDRModelParent();
+        TransformService.name(mldrColumnFK, buildNameColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK), mldrModel.getNamingLenth());
 
         modifyColumnPKorFK(mldrColumnFK);
     }
 
 
-    private static  String buildNameColumnAttr(MCDAttribute mcdAttribute){
-        //Construire le nom standard de la colonne
+    private static  MDRElementNames buildNameColumnAttr(MCDAttribute mcdAttribute){
         Preferences preferences = PreferencesManager.instance().preferences();
-        MCDEntity mcdEntityAccueil = mcdAttribute.getEntityAccueil();
+        MDRElementNames names = new MDRElementNames();
+        for (MDRNamingLength element: MDRNamingLength.values()) {
 
-        MDROrderBuildString orderCol = new  MDROrderBuildString();
-        orderCol.setFormat(preferences.getMDR_COLUMN_ATTR_NAME_FORMAT());
-        orderCol.setAttrName(mcdAttribute.getName());
-        orderCol.setTableShortName(mcdEntityAccueil.getShortName());
-        if (mcdAttribute.isDerived()){
-            orderCol.setColDerived(preferences.getMDR_COLUMN_DERIVED());
-        } else {
-            orderCol.setColDerived("");
-        }
-        if (mcdEntityAccueil.getNature() == MCDEntityNature.PSEUDOENTASS){
-            orderCol.setPeaShortName(mcdEntityAccueil.getShortName());
-            orderCol.setPeaSep(preferences.getMDR_PEA_SEP_FORMAT());
-        } else {
-            orderCol.setPeaShortName("");
-            orderCol.setPeaSep("");
-        }
+            MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
+            MCDEntity mcdEntityAccueil = mcdAttribute.getEntityAccueil();
 
-        String nameFinal ;
+            orderBuild.setFormat(preferences.getMDR_COLUMN_ATTR_NAME_FORMAT());
+            orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_COLUMN_NAME_LENGTH);
+            orderBuild.setTargetNaming(MDROrderBuildTargets.COLUMNATTR);
 
-        try {
-            nameFinal = orderCol.buildString();
-        } catch(OrderBuildNameException e){
-            String message = MessagesBuilder.getMessagesProperty("mdrcolumn.build.name.attribute.error",
-                    new String[] {mcdEntityAccueil.getName(), mcdAttribute.getName()});
-            throw new CodeApplException(message,e);
-        }
-        return nameFinal;
-    }
+            orderBuild.getAttrName().setValue(mcdAttribute.getName());
 
-    private static  String buildNameColumnPK(MCDEntity mcdEntity){
-        String nameBrut = "";
-        MCDEntityNature mcdEntityNature = mcdEntity.getNature();
-        if (mcdEntityNature == MCDEntityNature.IND) {
-            nameBrut = PreferencesManager.instance().preferences().getMCD_AID_IND_COLUMN_NAME();
-        }
-        if (    (mcdEntityNature == MCDEntityNature.DEP) ||
-                (mcdEntityNature == MCDEntityNature.ENTASSDEP) ||
-                (mcdEntityNature == MCDEntityNature.NAIREDEP) ) {
-            if (PreferencesManager.instance().preferences().getMCDTOMLDR_MODE().equals(
-                    Preferences.MCDTOMLDR_MODE_DT)) {
-                nameBrut = PreferencesManager.instance().preferences().getMCD_AID_DEP_COLUMN_NAME();
-            }
-            if (PreferencesManager.instance().preferences().getMCDTOMLDR_MODE().equals(
-                    Preferences.MCDTOMLDR_MODE_TI)) {
-                nameBrut = PreferencesManager.instance().preferences().getMCD_AID_IND_COLUMN_NAME();
-            }
-        }
+            orderBuild.getColDerived().setValue(
+                    mcdAttribute.isDerived() ? preferences.getMDR_COLUMN_DERIVED_MARKER() : "");
 
-        Preferences preferences = PreferencesManager.instance().preferences();
-        MDROrderBuildString orderCol = new  MDROrderBuildString();
-        orderCol.setFormat(preferences.getMDR_COLUMN_ATTR_NAME_FORMAT());
-        orderCol.setAttrName(nameBrut);
-        orderCol.setTableShortName(mcdEntity.getShortName());
-        orderCol.setColDerived("");
-        orderCol.setPeaShortName("");
-        orderCol.setPeaSep("");
-
-        String nameFinal ;
-
-        try {
-            nameFinal = orderCol.buildString();
-        } catch(OrderBuildNameException e){
-            String message = MessagesBuilder.getMessagesProperty("mdrcolumn.build.name.pk.error",
-                    new String[] {mcdEntity.getName()});
-            throw new CodeApplException(message,e);
-        }
-        return nameFinal;
-
-    }
-
-    private static  String buildNameColumnFK(MLDRColumn mldrColumnFK, MCDRelEnd mcdRelEndParent, MLDRColumn mldrColumnPK){
-        Preferences preferences = PreferencesManager.instance().preferences();
-
-        MDROrderBuildString orderColFk = new  MDROrderBuildString();
-        orderColFk.setFormat(preferences.getMDR_COLUMN_FK_NAME_FORMAT());
-        orderColFk.setColName(mldrColumnPK.getName());
-        if (mldrColumnPK.isFk() && preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()){
-            orderColFk.setParentTableShortName("");
-            orderColFk.setParentRoleName("");
-            orderColFk.setParentRoleSep("");
-            orderColFk.setParentSep("");
-        } else {
-            orderColFk.setParentTableShortName(
-                    mldrColumnPK.getMDRTableParent().getShortName());
-            orderColFk.setParentSep(preferences.getMDR_PARENT_NAME_SEP_FORMAT());
-            String roleParent = mcdRelEndParent.getNameNoFreeOrNameRelation();
-            orderColFk.setParentRoleName(roleParent);
-            if (StringUtils.isEmpty(roleParent) ) {
-                // Le role parent est inexistant pour les généralisations-spécialisations?
-                orderColFk.setParentRoleSep("");
+            if (mcdEntityAccueil.getNature() == MCDEntityNature.PSEUDOENTASS) {
+                orderBuild.getPea().setValue(mcdEntityAccueil.getShortName());
+                orderBuild.getPeaSep().setValue(preferences.getMDR_PEA_SEP_FORMAT());
             } else {
-                orderColFk.setParentRoleSep(preferences.getMDR_PARENT_ROLE_NAME_SEP_FORMAT());
+                orderBuild.getPea().setValue("");
+                orderBuild.getPeaSep().setValue("");
             }
+
+            String name;
+
+            try {
+                name = orderBuild.buildNaming();
+            } catch (OrderBuildNameException e) {
+                String message = "";
+                if (StringUtils.isNotEmpty(e.getMessage())) {
+                    message = e.getMessage();
+                } else {
+                    message = MessagesBuilder.getMessagesProperty("mdrcolumn.build.name.attribute.error",
+                            new String[]{mcdEntityAccueil.getName(), mcdAttribute.getName()});
+                }
+                throw new TransformMCDException(message, e);
+            }
+            names.setElementName(name, element);
         }
+        return names;
+    }
 
-        String nameColFk;
+    private static  MDRElementNames buildNameColumnPK(MCDEntity mcdEntity){
+        Preferences preferences = PreferencesManager.instance().preferences();
 
-        try {
-            nameColFk = orderColFk.buildString();
-        } catch(OrderBuildNameException e){
-            String message = MessagesBuilder.getMessagesProperty("mdrcolfk.build.name.error",
-                    new String[] {mldrColumnPK.getMDRTableParent().getName(),
-                            mldrColumnPK.getName(),
-                            mldrColumnFK.getMDRTableParent().getName(),
-                            mcdRelEndParent.getNameNoFreeOrNameRelation()});
-            throw new CodeApplException(message, e);
+        MDRElementNames names = new MDRElementNames();
+        for (MDRNamingLength element: MDRNamingLength.values()) {
+
+            MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
+            orderBuild.setFormat(preferences.getMDR_COLUMN_PK_NAME_FORMAT());
+            orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_COLUMN_NAME_LENGTH);
+            orderBuild.setTargetNaming(MDROrderBuildTargets.PK);
+
+            orderBuild.getAttrName().setValue(mcdEntity);
+
+            String name;
+
+            try {
+                name = orderBuild.buildNaming();
+            } catch (OrderBuildNameException e) {
+                String message = "";
+                if (StringUtils.isNotEmpty(e.getMessage())) {
+                    message = e.getMessage();
+                } else {
+                    message = MessagesBuilder.getMessagesProperty("mdrcolumn.build.name.pk.error",
+                            new String[]{mcdEntity.getName()});
+                }
+                throw new TransformMCDException(message, e);
+            }
+            names.setElementName(name, element);
         }
+        return names;
 
-        if (mldrColumnPK.isFk() && preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()){
-            Integer indice = null;
-            String racine = nameColFk;
+    }
 
+    private static  MDRElementNames buildNameColumnFK(MLDRColumn mldrColumnFK, MCDRelEnd mcdRelEndParent, MLDRColumn mldrColumnPK){
+        Preferences preferences = PreferencesManager.instance().preferences();
 
-            Pattern pattern = Pattern.compile(Preferences.MDR_COLUMN_FK_NAME_INDICE_REGEXPR);
-            //Matcher matcher = pattern.matcher(nameColFk);
-            Matcher matcher = pattern.matcher(nameColFk);
-            if(matcher.find()){
-                String differenciation = matcher.group();
-                racine = extractRoot(nameColFk, differenciation);
+        MDRElementNames names = new MDRElementNames();
+        for (MDRNamingLength element: MDRNamingLength.values()) {
+
+            MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
+            orderBuild.setFormat(preferences.getMDR_COLUMN_FK_NAME_FORMAT());
+            orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_COLUMN_NAME_LENGTH);
+            orderBuild.setTargetNaming(MDROrderBuildTargets.FK);
+
+            String namePK = mldrColumnPK.getName();
+            orderBuild.getColName().setValue(namePK);
+            if (mldrColumnPK.isFk() && preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()) {
+                orderBuild.getTableShortNameParent().setValue("");
+                orderBuild.getTableSep().setValue("");
+                orderBuild.getRoleShortNameParent().setValue("");
+                orderBuild.getRoleSep().setValue("");
+                ArrayList<MVCCDElement> brothers = MVCCDElementConvert.to(
+                        mldrColumnFK.getMDRTableParent().getMDRColumns());
+                orderBuild.getIndColFK().setValue(namePK, brothers);
+            } else {
+                orderBuild.getTableShortNameParent().setValue((MCDEntity) mcdRelEndParent.getMcdElement());
+                orderBuild.getTableSep().setValue();
+                String roleParent = mcdRelEndParent.getNameNoFreeOrNameRelation();
+                orderBuild.getRoleShortNameParent().setValue(mcdRelEndParent);
+                if (StringUtils.isNotEmpty(orderBuild.getRoleShortNameParent().getValue())) {
+                    orderBuild.getRoleSep().setValue();
+                } else {
+                    orderBuild.getRoleSep().setValue("");
+                }
+                orderBuild.getIndColFK().setValue("");
             }
 
-            if (preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK)){
-                //TODO-0 calculer l'indice de FK !
-                //indice = indiceFK;
-            }
+            String name;
 
-            if (preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1)){
-                int nbRacinesEqv = nbColumnFKByRoot(racine, mldrColumnFK.getMDRTableParent());
-                if (nbRacinesEqv >= 0) indice = nbRacinesEqv + 1;
-            }
+            try {
+                name = orderBuild.buildNaming();
+            } catch (OrderBuildNameException e) {
 
-            if (preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2)){
-                int nbRacinesEqv = nbColumnFKByRoot(racine,  mldrColumnFK.getMDRTableParent());
-                if (nbRacinesEqv >= 1) indice = nbRacinesEqv + 1;
-            }
+                String message = "";
+                if (StringUtils.isNotEmpty(e.getMessage())) {
+                    message = e.getMessage();
+                } else {
+                    message = MessagesBuilder.getMessagesProperty("mdrcolfk.build.name.error",
+                            new String[]{mldrColumnPK.getMDRTableParent().getName(),
+                                    mldrColumnPK.getName(),
+                                    mldrColumnFK.getMDRTableParent().getName(),
+                                    mcdRelEndParent.getNameNoFreeOrNameRelation()});
+                }
+                throw new TransformMCDException(message, e);
 
-            if (indice != null){
-                nameColFk = racine + preferences.getMDR_COLUMN_FK_NAME_INDICE_SEP() + indice.toString();
             }
+            names.setElementName(name, element);
 
         }
-
-        return nameColFk;
-
-
+        return names;
     }
 
 
@@ -354,7 +345,7 @@ public class MCDTransformToColumn {
 
     private static int nbColumnFKByRoot(String rootNew, MDRTable mdrTableParent){
         int resultat = 0;
-        Pattern pattern = Pattern.compile(Preferences.MDR_COLUMN_FK_NAME_INDICE_REGEXPR);
+        Pattern pattern = Pattern.compile(Preferences.MDR_INDICE_REGEXPR);
         for (MDRColumn col : mdrTableParent.getMDRColumns()){
             Matcher matcher = pattern.matcher(col.getName());
             if (matcher.find()){
