@@ -2,14 +2,10 @@ package repository.editingTreat.mpdr;
 
 import main.MVCCDElement;
 import mdr.MDRModel;
-import mldr.MLDRModel;
 import repository.editingTreat.EditingTreat;
-import repository.editingTreat.mdr.MDRTableEditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mdr.model.MDRModelEditor;
-import window.editor.model.ModelEditor;
-import window.editor.model.ModelInputContent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,7 +22,7 @@ public class MPDRModelEditingTreat extends EditingTreat {
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
         return new MDRModelEditor(owner, parent, (MDRModel) element, mode,
-                new MDRTableEditingTreat());
+                new MPDRModelEditingTreat());
     }
 
     @Override

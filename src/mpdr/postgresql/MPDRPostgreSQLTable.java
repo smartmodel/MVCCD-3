@@ -8,7 +8,7 @@ public class MPDRPostgreSQLTable extends MPDRTable {
 
     private  static final long serialVersionUID = 1000;
 
-    public MPDRPostgreSQLTable(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
-        super(parent, name, mldrElementSource);
+    public MPDRPostgreSQLTable(ProjectElement parent,  IMLDRElement mldrElementSource) {
+        super(parent, mldrElementSource);
     }
 }

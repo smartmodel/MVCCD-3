@@ -1,15 +1,12 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
 import mcd.*;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.operation.constraint.unicity.UnicityEditor;
-import window.editor.operation.constraint.unicity.UnicityInputContent;
-import window.editor.operation.constraint.unicity.unique.UniqueEditor;
-import window.editor.operation.constraint.unicity.unique.UniqueInputContent;
+import window.editor.mcd.operation.constraint.unicity.unique.UniqueEditor;
+import window.editor.mcd.operation.constraint.unicity.unique.UniqueInputContent;
 
 import java.awt.*;
 import java.util.ArrayList;

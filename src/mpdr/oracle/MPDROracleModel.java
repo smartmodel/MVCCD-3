@@ -20,7 +20,7 @@ public class MPDROracleModel extends MPDRModel {
     @Override
     public MPDROracleTable createTable(MLDRTable mldrTable){
         MPDROracleTable newTable = MVCCDElementFactory.instance().createMPDROracleTable(
-                getMDRContTables(), buildNameTable(mldrTable), mldrTable);
+                getMDRContTables(), mldrTable);
 
         return newTable;
     }

@@ -8,7 +8,7 @@ public abstract class MDRElement extends MDElement {
 
     private  static final long serialVersionUID = 1000;
 
-    private MDRElementNames names ;
+    private MDRElementNames names = new MDRElementNames();
 
     public MDRElement(ProjectElement parent, String name) {
         super(parent, name);

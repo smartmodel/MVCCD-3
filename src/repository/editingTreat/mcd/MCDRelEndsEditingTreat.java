@@ -1,13 +1,11 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import main.MVCCDWindow;
 import mcd.MCDContRelEnds;
-import mcd.MCDPackage;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.relends.RelEndsEditorBtn;
+import window.editor.mcd.relends.RelEndsEditorBtn;
 
 import java.awt.*;
 import java.util.ArrayList;

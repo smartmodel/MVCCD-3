@@ -3,7 +3,6 @@ package mpdr;
 import md.MDElement;
 import mdr.MDRTable;
 import mldr.interfaces.IMLDRElement;
-import mldr.interfaces.IMLDRElementWithSource;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import project.ProjectElement;
@@ -14,6 +13,11 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     private IMLDRElement mldrElementSource;
 
     public MPDRTable(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
+        super(parent);
+        this.mldrElementSource = mldrElementSource;
+    }
+
+    public MPDRTable(ProjectElement parent, IMLDRElement mldrElementSource) {
         super(parent);
         this.mldrElementSource = mldrElementSource;
     }

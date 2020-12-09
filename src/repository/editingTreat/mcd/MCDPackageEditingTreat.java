@@ -7,8 +7,8 @@ import mcd.interfaces.IMCDContainer;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.model.ModelEditor;
-import window.editor.model.ModelInputContent;
+import window.editor.mcd.model.ModelEditor;
+import window.editor.mcd.model.ModelInputContent;
 
 import java.awt.*;
 import java.util.ArrayList;

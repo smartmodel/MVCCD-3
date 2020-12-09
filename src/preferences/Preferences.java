@@ -2,7 +2,9 @@ package preferences;
 
 
 import main.MVCCDElement;
+import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
+import utilities.Trace;
 
 import java.awt.*;
 
@@ -430,6 +432,11 @@ public class Preferences extends MVCCDElement {
     public static String MDR_NAMING_LENGTH_60 = "mdr.naming.length.60";
     public static String MDR_NAMING_LENGTH_120 = "mdr.naming.length.120";
 
+    public static String MDR_NAMING_FORMAT_NOTHING = "mdr.naming.format.nothing";
+    public static String MDR_NAMING_FORMAT_UPPERCASE = "mdr.naming.format.uppercase";
+    public static String MDR_NAMING_FORMAT_LOWERCASE = "mdr.naming.format.lowercase";
+    public static String MDR_NAMING_FORMAT_CAPITALIZE = "mdr.naming.format.capitalize";
+
     public static String MDR_NAMING_TABLE = "mdr.table";
     public static String MDR_NAMING_TABLE_NN = "mdr.table.nn";
     public static String MDR_NAMING_TABLE_NN_INDICE = "mdr.table.nn.indice";
@@ -577,6 +584,15 @@ public class Preferences extends MVCCDElement {
 
     // MLDR Préférences
     private MDRNamingLength MLDR_PREF_NAMING_LENGTH = null;
+    private MDRNamingFormat MLDR_PREF_NAMING_FORMAT = null;
+
+    // MPDR Oracle Préférences
+    private MDRNamingLength MPDRORACLE_PREF_NAMING_LENGTH = null;
+    private MDRNamingFormat MPDRORACLE_PREF_NAMING_FORMAT = null;
+
+    // MPDR MySQL Préférences
+    private MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH = null;
+    private MDRNamingFormat MPDRMYSQL_PREF_NAMING_FORMAT = null;
 
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);
@@ -1081,4 +1097,58 @@ public class Preferences extends MVCCDElement {
         this.MLDR_PREF_NAMING_LENGTH = MLDR_PREF_NAMING_LENGTH;
     }
 
+    public MDRNamingFormat getMLDR_PREF_NAMING_FORMAT() {
+        if (MLDR_PREF_NAMING_FORMAT == null){
+            MLDR_PREF_NAMING_FORMAT= MDRNamingFormat.NOTHING;
+        }
+        return MLDR_PREF_NAMING_FORMAT;
+    }
+
+    public void setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat MLDR_PREF_NAMING_FORMAT) {
+        this.MLDR_PREF_NAMING_FORMAT = MLDR_PREF_NAMING_FORMAT;
+    }
+
+    public MDRNamingLength getMPDRORACLE_PREF_NAMING_LENGTH() {
+        if (MPDRORACLE_PREF_NAMING_LENGTH == null){
+            MPDRORACLE_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
+        }
+        return MPDRORACLE_PREF_NAMING_LENGTH;
+    }
+
+    public void setMPDRORACLE_PREF_NAMING_LENGTH(MDRNamingLength MPDRORACLE_PREF_NAMING_LENGTH) {
+        this.MPDRORACLE_PREF_NAMING_LENGTH = MPDRORACLE_PREF_NAMING_LENGTH;
+    }
+
+    public MDRNamingFormat getMPDRORACLE_PREF_NAMING_FORMAT() {
+        if (MPDRORACLE_PREF_NAMING_FORMAT == null){
+            MPDRORACLE_PREF_NAMING_FORMAT = MDRNamingFormat.NOTHING;
+        }
+        return MPDRORACLE_PREF_NAMING_FORMAT;
+    }
+
+    public void setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat MPDRORACLE_PREF_NAMING_FORMAT) {
+        this.MPDRORACLE_PREF_NAMING_FORMAT = MPDRORACLE_PREF_NAMING_FORMAT;
+    }
+
+    public MDRNamingLength getMPDRMYSQL_PREF_NAMING_LENGTH() {
+        if (MPDRMYSQL_PREF_NAMING_LENGTH == null){
+            MPDRMYSQL_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
+        }
+        return MPDRMYSQL_PREF_NAMING_LENGTH;
+    }
+
+    public void setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH) {
+        this.MPDRMYSQL_PREF_NAMING_LENGTH = MPDRMYSQL_PREF_NAMING_LENGTH;
+    }
+
+    public MDRNamingFormat getMPDRMYSQL_PREF_NAMING_FORMAT() {
+        if (MPDRMYSQL_PREF_NAMING_FORMAT == null){
+            MPDRMYSQL_PREF_NAMING_FORMAT = MDRNamingFormat.NOTHING;
+        }
+        return MPDRMYSQL_PREF_NAMING_FORMAT;
+    }
+
+    public void setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat MPDRMYSQL_PREF_NAMING_FORMAT) {
+        this.MPDRMYSQL_PREF_NAMING_FORMAT = MPDRMYSQL_PREF_NAMING_FORMAT;
+    }
 }

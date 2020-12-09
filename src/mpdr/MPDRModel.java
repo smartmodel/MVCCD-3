@@ -1,19 +1,13 @@
 package mpdr;
 
-import main.MVCCDElementFactory;
-import mcd.MCDElement;
-import mcd.MCDEntity;
-import mcd.services.MCDElementService;
 import mdr.MDRContTables;
-import mdr.MDRElement;
 import mdr.MDRModel;
 import mldr.MLDRTable;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.services.MPDRModelService;
-import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
 
-public abstract class MPDRModel extends MDRModel implements IMPDRElement {
+public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     private  static final long serialVersionUID = 1000;
 
     public MPDRModel(ProjectElement parent, String name) {
@@ -27,20 +21,12 @@ public abstract class MPDRModel extends MDRModel implements IMPDRElement {
 
     public  abstract MPDRTable createTable(MLDRTable mldrTable);
 
-    public void modifyTable(MPDRTable mpdrTable, MLDRTable mldrTable){
-        String nameTable = buildNameTable(mldrTable);
-        if (!nameTable.equals(mpdrTable.getName())){
-            mpdrTable.setName(nameTable);
-        }
-    }
+
 
     public MDRContTables getMDRContTables(){
         return MPDRModelService.getMDRContTables(this);
     }
 
-    protected String buildNameTable(MLDRTable mldrTable){
 
-        return mldrTable.getName();
-    }
 
 }

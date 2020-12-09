@@ -20,6 +20,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
+import utilities.Trace;
 
 public class MVCCDElementFactory {
 
@@ -228,18 +229,25 @@ public class MVCCDElementFactory {
 
     public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel){
         MLDRModelDT mldrModelDT = new MLDRModelDT((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_DT_NAME);
-        mldrModelDT.setNamingLengthActual( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
-        mldrModelDT.setNamingLengthFuture( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
+        namingMLDRModel(mldrModelDT);
         createContentMLDRModel(mldrModelDT);
         return mldrModelDT;
     }
 
     public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel){
         MLDRModelTI mldrModelTI = new MLDRModelTI((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_TI_NAME);
-        mldrModelTI.setNamingLengthActual( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
-        mldrModelTI.setNamingLengthFuture( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
+        namingMLDRModel(mldrModelTI);
         createContentMLDRModel(mldrModelTI);
         return mldrModelTI;
+    }
+
+    private void namingMLDRModel(MLDRModel mldrModel){
+        Preferences preferences = PreferencesManager.instance().preferences();
+        mldrModel.setNamingLengthActual( preferences.getMLDR_PREF_NAMING_LENGTH());
+        mldrModel.setNamingLengthFuture( preferences.getMLDR_PREF_NAMING_LENGTH());
+        mldrModel.setNamingFormatActual( preferences.getMLDR_PREF_NAMING_FORMAT());
+        mldrModel.setNamingFormatFuture( preferences.getMLDR_PREF_NAMING_FORMAT());
+
     }
 
     private void createContentMLDRModel(MLDRModel mldrModel) {
@@ -289,18 +297,22 @@ public class MVCCDElementFactory {
 
     public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {
         MPDROracleModel mpdrOracleModel = new MPDROracleModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_ORACLE_NAME);
-        //TODO-1 A corriger dès que les préférence MPDR_oracle seront réalisées
-        mpdrOracleModel.setNamingLengthActual( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
-        mpdrOracleModel.setNamingLengthFuture( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
+        Preferences preferences = PreferencesManager.instance().preferences();
+        mpdrOracleModel.setNamingLengthActual( preferences.getMPDRORACLE_PREF_NAMING_LENGTH());
+        mpdrOracleModel.setNamingLengthFuture( preferences.getMPDRORACLE_PREF_NAMING_LENGTH());
+        mpdrOracleModel.setNamingFormatActual( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
+        mpdrOracleModel.setNamingFormatFuture( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
         createContentMPDRModel(mpdrOracleModel);
         return mpdrOracleModel;
     }
 
     public MPDRMySQLModel createMPDRModelMySQL(MLDRModel mldrModel) {
         MPDRMySQLModel mpdrMySQLModel = new MPDRMySQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_MYSQL_NAME);
-        //TODO-1 A corriger dès que les préférence MPDR_oracle seront réalisées
-        mpdrMySQLModel.setNamingLengthActual( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
-        mpdrMySQLModel.setNamingLengthFuture( PreferencesManager.instance().preferences().getMLDR_PREF_NAMING_LENGTH());
+        Preferences preferences = PreferencesManager.instance().preferences();
+        mpdrMySQLModel.setNamingLengthActual( preferences.getMPDRMYSQL_PREF_NAMING_LENGTH());
+        mpdrMySQLModel.setNamingLengthFuture( preferences.getMPDRMYSQL_PREF_NAMING_LENGTH());
+        mpdrMySQLModel.setNamingFormatActual( preferences.getMPDRMYSQL_PREF_NAMING_FORMAT());
+        mpdrMySQLModel.setNamingFormatFuture( preferences.getMPDRMYSQL_PREF_NAMING_FORMAT());
         createContentMPDRModel(mpdrMySQLModel);
         return mpdrMySQLModel;
     }
@@ -316,18 +328,18 @@ public class MVCCDElementFactory {
         MDRContTables mdrContTable = new MDRContTables(mpdrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
     }
 
-    public MPDROracleTable createMPDROracleTable(MDRContTables mdrContTables, String buildNameTable, MLDRTable mldrTable) {
-        MPDROracleTable mpdrOracleTable = new MPDROracleTable(mdrContTables, buildNameTable, mldrTable);
+    public MPDROracleTable createMPDROracleTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
+        MPDROracleTable mpdrOracleTable = new MPDROracleTable(mdrContTables, mldrTable);
         return mpdrOracleTable;
     }
 
-    public MPDRMySQLTable createMPDRMySQLTable(MDRContTables mdrContTables, String buildNameTable, MLDRTable mldrTable) {
-        MPDRMySQLTable mpdrMySQLTable = new MPDRMySQLTable(mdrContTables, buildNameTable, mldrTable);
+    public MPDRMySQLTable createMPDRMySQLTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
+        MPDRMySQLTable mpdrMySQLTable = new MPDRMySQLTable(mdrContTables, mldrTable);
         return mpdrMySQLTable;
     }
 
-    public MPDRPostgreSQLTable createMPDRPostgreSQLTable(MDRContTables mdrContTables, String buildNameTable, MLDRTable mldrTable) {
-        MPDRPostgreSQLTable mpdrPostgreSQLTable = new MPDRPostgreSQLTable(mdrContTables, buildNameTable, mldrTable);
+    public MPDRPostgreSQLTable createMPDRPostgreSQLTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
+        MPDRPostgreSQLTable mpdrPostgreSQLTable = new MPDRPostgreSQLTable(mdrContTables, mldrTable);
         return mpdrPostgreSQLTable;
     }
 

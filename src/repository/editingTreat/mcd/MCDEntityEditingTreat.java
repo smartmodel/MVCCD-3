@@ -6,8 +6,8 @@ import mcd.MCDEntity;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.entity.EntityEditor;
-import window.editor.entity.EntityInputContent;
+import window.editor.mcd.entity.EntityEditor;
+import window.editor.mcd.entity.EntityInputContent;
 
 import java.awt.*;
 import java.util.ArrayList;

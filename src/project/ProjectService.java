@@ -5,7 +5,9 @@ import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDContPackages;
 import mcd.MCDEntityNature;
+import mdr.MDRElement;
 import mdr.MDRModel;
+import mdr.MDRTable;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;
@@ -290,6 +292,29 @@ public class ProjectService {
         for (ProjectElement projectElement : getProjectElements()){
             if (projectElement instanceof MDRModel){
                 resultat.add((MDRModel) projectElement);
+            }
+        }
+        return resultat;
+    }
+
+
+    public static ArrayList<MDRElement> getMDRElementsDeep(MDRElement root) {
+        ArrayList<MDRElement> resultat = new ArrayList<MDRElement>();
+        for (ProjectElement projectElement : getProjectElementsByParent(root)){
+            if (projectElement instanceof MDRElement){
+                resultat.add((MDRElement)projectElement);
+            }
+        }
+
+        return resultat;
+    }
+
+
+    public static ArrayList<MDRTable> getMDRTablesDeep(MDRElement root){
+        ArrayList<MDRTable>  resultat = new ArrayList<MDRTable>() ;
+        for (MDRElement aMDRElement : getMDRElementsDeep(root)){
+            if (aMDRElement instanceof MDRTable){
+                resultat.add((MDRTable) aMDRElement);
             }
         }
         return resultat;

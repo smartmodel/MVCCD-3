@@ -3,11 +3,8 @@ package mcd.services;
 import mcd.*;
 import mcd.interfaces.IMCDParameter;
 import messages.MessagesBuilder;
-import project.ProjectElement;
-import project.ProjectService;
 import utilities.window.scomponents.STable;
-import utilities.window.scomponents.services.STableService;
-import window.editor.operation.OperationParamTableColumn;
+import window.editor.mcd.operation.OperationParamTableColumn;
 
 import java.util.ArrayList;
 

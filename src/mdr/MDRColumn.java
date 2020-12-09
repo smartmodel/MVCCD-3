@@ -1,11 +1,12 @@
 package mdr;
 
+import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithSource;
 import mdr.interfaces.IMDRParameter;
 import mldr.MLDRColumn;
 import project.ProjectElement;
 
-public abstract class MDRColumn extends MDRElement implements IMDRElementWithSource, IMDRParameter {
+public abstract class MDRColumn extends MDRElement implements IMDRElementWithSource, IMDRParameter, IMDRElementNamingPreferences {
 
     private String datatypeLienProg = null;
     private String datatypeConstraintLienProg = null;

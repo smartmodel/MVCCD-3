@@ -1,16 +1,13 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import main.MVCCDWindow;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.entity.EntityEditor;
-import window.editor.entity.EntityInputContent;
-import window.editor.entity.compliant.EntCompliantEditorBtn;
-import window.editor.entity.compliant.EntCompliantInputContent;
+import window.editor.mcd.entity.compliant.EntCompliantEditorBtn;
+import window.editor.mcd.entity.compliant.EntCompliantInputContent;
 
 import java.awt.*;
 import java.util.ArrayList;

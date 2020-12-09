@@ -2,7 +2,7 @@ package utilities.window.editor.services;
 
 import preferences.PreferencesManager;
 import utilities.window.scomponents.services.STableService;
-import window.editor.operation.OperationParamTableColumn;
+import window.editor.mcd.operation.OperationParamTableColumn;
 
 import javax.swing.*;
 import java.util.Arrays;

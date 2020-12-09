@@ -13,5 +13,9 @@ public class MPDRMySQLTable extends MPDRTable {
         super(parent, name, mldrElementSource);
     }
 
+    public MPDRMySQLTable(ProjectElement parent, IMLDRElement mldrElementSource) {
+        super(parent, mldrElementSource);
+    }
+
 
 }

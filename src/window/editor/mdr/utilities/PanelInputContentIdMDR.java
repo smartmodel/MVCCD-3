@@ -194,7 +194,9 @@ public class PanelInputContentIdMDR extends PanelInputContent {
 
     @Override
     protected void saveDatas(MVCCDElement mvccdElement) {
-     }
+        MDRElement mdrElement = (MDRElement) mvccdElement;
+        mdrElement.setName(fieldName.getText());
+    }
 
     @Override
     protected void enabledContent() {

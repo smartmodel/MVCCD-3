@@ -6,10 +6,8 @@ import mcd.MCDUnicity;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.operation.constraint.unicity.UnicityEditor;
-import window.editor.operation.constraint.unicity.UnicityInputContent;
-import window.editor.operation.constraint.unicity.nid.NIDEditor;
-import window.editor.operation.constraint.unicity.nid.NIDInputContent;
+import window.editor.mcd.operation.constraint.unicity.nid.NIDEditor;
+import window.editor.mcd.operation.constraint.unicity.nid.NIDInputContent;
 
 import java.awt.*;
 import java.util.ArrayList;

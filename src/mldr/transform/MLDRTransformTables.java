@@ -31,14 +31,16 @@ public class MLDRTransformTables {
     private void transformTable(MLDRTable mldrTable) {
 
         MPDRTable mpdrTable = mpdrModel.getMPDRTableByMLDRTableSource(mldrTable);
-        if (mpdrTable != null){
-            mpdrModel.modifyTable(mpdrTable, mldrTable);
-        } else {
+        if (mpdrTable == null){
             mpdrTable = mpdrModel.createTable(mldrTable);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrTable);
         }
+        modifyTable(mpdrModel, mpdrTable, mldrTable );
+    }
 
-
+    private void modifyTable(MPDRModel mpdrModel, MPDRTable mpdrTable, MLDRTable mldrTable ) {
+        MLDRTransformService.modifyNames(mpdrTable, mldrTable);
+        MLDRTransformService.modifyName(mpdrModel, mpdrTable,  mldrTable);
     }
 
 
