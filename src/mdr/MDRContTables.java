@@ -2,6 +2,7 @@ package mdr;
 
 import main.MVCCDElement;
 import mcd.MCDEntity;
+import mdr.services.MDRContTablesService;
 import project.ProjectElement;
 
 import java.util.ArrayList;
@@ -14,13 +15,11 @@ public class MDRContTables extends MDRElement {
         super(parent, name);
     }
 
+
     public ArrayList<MDRTable> getMDRTables(){
-        ArrayList<MDRTable> resultat = new ArrayList<MDRTable>();
-        for (MVCCDElement mvccdElement: getChildsSortName()){
-            resultat.add((MDRTable) mvccdElement);
-        }
-        return resultat;
+        return MDRContTablesService.getMDRTables(this);
     }
+
 
 
 }

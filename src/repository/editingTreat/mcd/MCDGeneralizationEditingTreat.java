@@ -7,13 +7,11 @@ import project.ProjectService;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.services.SComboBoxService;
-import window.editor.relation.association.AssociationInputContent;
-import window.editor.relation.genspec.GenSpecEditor;
-import window.editor.relation.genspec.GenSpecInputContent;
+import window.editor.mcd.relation.genspec.GenSpecEditor;
+import window.editor.mcd.relation.genspec.GenSpecInputContent;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDGeneralizationEditingTreat extends MCDRelationEditingTreat {
 

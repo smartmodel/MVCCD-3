@@ -1,6 +1,7 @@
 package window.editor.preferences.project.mldr;
 
 import main.MVCCDElement;
+import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
 import preferences.Preferences;
@@ -8,17 +9,15 @@ import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
+import window.editor.preferences.project.mdr.utilities.PrefMLPDRInputContent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
-public class PrefMLDRInputContent extends PanelInputContent {
+public class PrefMLDRInputContent extends PrefMLPDRInputContent {
 
-    //private JPanel panel = new JPanel();
-    private JLabel labelNamingLength = new JLabel();
-    private SComboBox fieldNamingLength;
 
 
     public PrefMLDRInputContent(PrefMLDRInput prefMLDRInput) {
@@ -27,31 +26,7 @@ public class PrefMLDRInputContent extends PanelInputContent {
 
     public void createContentCustom() {
 
-
-        labelNamingLength = new JLabel("Taille de nommage");
-        fieldNamingLength = new SComboBox(this, labelNamingLength);
-        if (MDRNamingLength.LENGTH30.isRequired()){
-            fieldNamingLength.addItem(MDRNamingLength.LENGTH30.getText());
-        }
-        if (MDRNamingLength.LENGTH60.isRequired()){
-            fieldNamingLength.addItem(MDRNamingLength.LENGTH60.getText());
-        }
-        if (MDRNamingLength.LENGTH120.isRequired()){
-            fieldNamingLength.addItem(MDRNamingLength.LENGTH120.getText());
-        }
-        /*
-        fieldNamingLength.addItem(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_30));
-        fieldNamingLength.addItem(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_60));
-        fieldNamingLength.addItem(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_120));
-
-         */
-        fieldNamingLength.setToolTipText("Taillle maximales des noms de tous les objets du modèle");
-        fieldNamingLength.addItemListener(this);
-        fieldNamingLength.addFocusListener(this);
-
-
-        super.getSComponents().add(fieldNamingLength);
-
+        super.createContentCustom();
         createPanelMaster();
 
     }
@@ -59,9 +34,7 @@ public class PrefMLDRInputContent extends PanelInputContent {
     private void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
-        panelInputContentCustom.add(labelNamingLength, gbc);
-        gbc.gridx++ ;
-        panelInputContentCustom.add(fieldNamingLength, gbc);
+        super.affectPanelMaster(gbc);
     }
 
 
@@ -93,15 +66,14 @@ public class PrefMLDRInputContent extends PanelInputContent {
         Preferences preferences = (Preferences) mvccdElement;
         SComboBoxService.selectByText(fieldNamingLength,
                 preferences.getMLDR_PREF_NAMING_LENGTH().getText());
+        SComboBoxService.selectByText(fieldNamingFormat,
+                preferences.getMLDR_PREF_NAMING_FORMAT().getText());
     }
 
     @Override
     protected void initDatas() {
 
     }
-
-
-
 
     @Override
     public void saveDatas(MVCCDElement mvccdElement) {
@@ -119,6 +91,24 @@ public class PrefMLDRInputContent extends PanelInputContent {
                 preferences.setMLDR_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120);
             }
         }
+
+        if (fieldNamingFormat.checkIfUpdated()){
+            String text = (String) fieldNamingFormat.getSelectedItem();
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_NOTHING))) {
+                preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_UPPERCASE))) {
+                preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_LOWERCASE))) {
+                preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_CAPITALIZE))) {
+                preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE);
+            }
+        }
+        
+        
     }
 
     @Override

@@ -2,19 +2,15 @@ package repository.editingTreat.mcd;
 
 import exceptions.TransformMCDException;
 import main.MVCCDElement;
-import main.MVCCDManager;
-import main.MVCCDWindow;
 import mcd.MCDModel;
-import mcd.MCDPackage;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContainer;
 import repository.editingTreat.EditingTreat;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.entity.EntityInputContent;
-import window.editor.model.ModelEditor;
-import window.editor.model.ModelInputContent;
+import window.editor.mcd.model.ModelEditor;
+import window.editor.mcd.model.ModelInputContent;
 
 import java.awt.*;
 import java.util.ArrayList;

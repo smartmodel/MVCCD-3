@@ -1,15 +1,13 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import main.MVCCDWindow;
 import mcd.MCDNID;
-import mcd.MCDPackage;
 import mcd.MCDParameter;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.operation.parameter.ParameterEditor;
-import window.editor.operation.parameter.ParameterInputContent;
+import window.editor.mcd.operation.parameter.ParameterEditor;
+import window.editor.mcd.operation.parameter.ParameterInputContent;
 
 import java.awt.*;
 import java.util.ArrayList;

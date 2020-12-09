@@ -10,6 +10,8 @@ import window.editor.preferences.project.mdr.PrefMDREditor;
 import window.editor.preferences.project.mdrformat.PrefMDRFormatEditor;
 import window.editor.preferences.project.mldr.PrefMLDREditor;
 import window.editor.preferences.project.mldrtompdr.PrefMLDRToMPDREditor;
+import window.editor.preferences.project.mpdr.mysql.PrefMPDRMySQLEditor;
+import window.editor.preferences.project.mpdr.oracle.PrefMPDROracleEditor;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -91,6 +93,18 @@ public class PrefNavTreeContent extends PanelNavTreeContent {
             if (!(getEditor() instanceof PrefMCDToMLDREditor)) {
                 getEditor().myDispose();
                 new PrefMCDToMLDREditingTreat().treatUpdate(getEditor().getOwner(), PreferencesManager.instance().getProjectPref());
+            }
+        }
+        if (rightClickedNode.getUserObject() == PrefProjectMenu.MPDROracle) {
+            if (!(getEditor() instanceof PrefMPDROracleEditor)) {
+                getEditor().myDispose();
+                new PrefMPDROracleEditingTreat().treatUpdate(getEditor().getOwner(), PreferencesManager.instance().getProjectPref());
+            }
+        }
+        if (rightClickedNode.getUserObject() == PrefProjectMenu.MPDRMySQL) {
+            if (!(getEditor() instanceof PrefMPDRMySQLEditor)) {
+                getEditor().myDispose();
+                new PrefMPDRMySQLEditingTreat().treatUpdate(getEditor().getOwner(), PreferencesManager.instance().getProjectPref());
             }
         }
         if (rightClickedNode.getUserObject() == PrefProjectMenu.MLDRToMPDR) {

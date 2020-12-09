@@ -26,7 +26,10 @@ public class PrefMDRService {
         for (MDRNamingLength mdrNamingLength : MDRNamingLength.values()) {
             if (mdrNamingLength.isRequired()) {
                 // Remplacement de la préférence
+                // Logique
                 preferences.setMLDR_PREF_NAMING_LENGTH(mdrNamingLength);
+                // Physique
+                preferences.setMPDRORACLE_PREF_NAMING_LENGTH(mdrNamingLength);
                 // Sortie après la 1ère affectation
                 break ;
             }
@@ -37,7 +40,6 @@ public class PrefMDRService {
                 if (mdrNamingLength.isRequired()) {
                     // Remplacement de la valeur par défaut
                     mdrModel.setNamingLengthFuture(mdrNamingLength);
-                    preferences.setMLDR_PREF_NAMING_LENGTH(mdrNamingLength);
                     break ;
                 }
             }

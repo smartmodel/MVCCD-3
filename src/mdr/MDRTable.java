@@ -6,6 +6,7 @@ import mcd.MCDElement;
 import mcd.MCDEntity;
 import mcd.MCDRelation;
 import mcd.services.MCDElementService;
+import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithSource;
 import mdr.interfaces.IMDRParameter;
 import mldr.MLDRColumn;
@@ -17,7 +18,7 @@ import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public abstract class MDRTable extends MDRTableOrView  {
+public abstract class MDRTable extends MDRTableOrView implements IMDRElementNamingPreferences {
 
     private  static final long serialVersionUID = 1000;
 

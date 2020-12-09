@@ -11,7 +11,7 @@ import mcd.interfaces.IMCDParameter;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import window.editor.operation.parameter.ParameterEditor;
+import window.editor.mcd.operation.parameter.ParameterEditor;
 
 import java.util.ArrayList;
 import java.util.Collection;

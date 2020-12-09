@@ -1,13 +1,11 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import main.MVCCDWindow;
 import mcd.MCDContConstraints;
-import mcd.MCDPackage;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.operation.constraint.constraints.ConstraintsEditorBtn;
+import window.editor.mcd.operation.constraint.constraints.ConstraintsEditorBtn;
 
 import java.awt.*;
 import java.util.ArrayList;

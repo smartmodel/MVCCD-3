@@ -246,8 +246,18 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             treatGenericRead( preferencesEdit, new PrefMCDToMLDREditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mcd.to.mldr"));
 
+            // Sous-menu MPDR
             SMenu preferencesEditMPDR = new SMenu(MessagesBuilder.getMessagesProperty("menu.preferences"));
-            addItem(preferencesEdit, preferencesEditMPDR);
+            addItem(preferencesEditMPDR, preferencesEditMPDR);
+
+            treatGenericRead( preferencesEdit, new PrefMPDROracleEditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.oracle"));
+
+            treatGenericRead( preferencesEditMPDR, new PrefMPDRMySQLEditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.mysql"));
+
+            // Fin Sous-menu MPDR
+
 
             treatGenericRead( preferencesEdit, new PrefMLDRToMPDREditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mldr.to.mpdr"));
@@ -273,8 +283,17 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             treatGenericUpdate( preferencesEdit, new PrefMCDToMLDREditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mcd.to.mldr"));
 
+            // Sous-menu MPDR
             SMenu preferencesEditMPDR = new SMenu(MessagesBuilder.getMessagesProperty("menu.preferences.mpdr"));
             addItem(preferencesEdit, preferencesEditMPDR);
+
+            treatGenericUpdate( preferencesEditMPDR, new PrefMPDROracleEditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.oracle"));
+
+            treatGenericUpdate( preferencesEditMPDR, new PrefMPDRMySQLEditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.mysql"));
+
+            // Fin Sous-menu MPDR
 
             treatGenericUpdate( preferencesEdit, new PrefMLDRToMPDREditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mldr.to.mpdr"));
