@@ -30,8 +30,6 @@ public class MLDRTransformService {
 
     public static void modifyName(MPDRModel mpdrModel, MDRElement mpdrElement, MDRElement mplrElement ) {
         String name = MDRModelService.buildName(mpdrModel, mpdrElement);
-        Trace.println(name);
-        // String name = mldrElement.getName();
         if (!name.equals(mpdrElement.getName())) {
             mpdrElement.setName(name);
         }
