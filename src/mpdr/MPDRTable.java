@@ -2,9 +2,13 @@ package mpdr;
 
 import md.MDElement;
 import mdr.MDRTable;
+import mldr.MLDRColumn;
+import mldr.MLDRTable;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.services.MPDRModelService;
+import mpdr.services.MPDRTableService;
 import project.ProjectElement;
 
 public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRElementWithSource {
@@ -32,11 +36,6 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         return (MDElement) getMldrElementSource();
     }
 
-    @Override
-    public void setMdElementSource(MDElement mdElementSource) {
-        this.mdElementSource = mdElementSource;
-    }
-
 
     //TODO-0
     // Une association n:n sans entité associative doit avoir Name et shortName!
@@ -49,6 +48,13 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
      */
 
+
+    public MPDRColumn getMPDRColumnByMLDRColumnSource(MLDRColumn mldrColumn){
+        return MPDRTableService.getMPDRColumnByMLDRColumnSource(this, mldrColumn);
+    }
+
+
+    public  abstract MPDRColumn createColumn(MLDRColumn mldrColumn);
 
 
 

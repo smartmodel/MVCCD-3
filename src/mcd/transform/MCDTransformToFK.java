@@ -14,7 +14,7 @@ import mldr.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.TransformService;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -40,8 +40,7 @@ public class MCDTransformToFK {
 
         // Nom
         MDRElementNames nameFK = buildNameFK(mldrTable, mldrFK, mcdRelEndParent, mldrTableParent);
-        TransformService.name(mldrFK, nameFK, mldrModel.getNamingLengthActual());
-
+        MCDTransformService.names(mldrFK, nameFK, mldrModel);
         // Nature
         mldrFK.setNature(fkNature);
 
@@ -55,7 +54,7 @@ public class MCDTransformToFK {
             MCDRelation mcdRelation = mcdRelEndParent.getMcdRelation();
 
             // Transformation de la colonne PK en colonne FK
-            MLDRColumn mldrColumnFK = new MCDTransformToColumn().fromRelEndParent(mldrTable, mcdRelEndParent, mldrTableParent, mldrColumnPK, fkNature);
+            MLDRColumn mldrColumnFK = new MCDTransformToColumn().fromRelEndParent(mldrTable, mcdRelEndParent, mldrTableParent, mldrColumnPK, fkNature, mldrFK.getIndice());
             mdrColumnsFK.add(mldrColumnFK);
         }
 
@@ -81,6 +80,7 @@ public class MCDTransformToFK {
             orderBuild.setTargetNaming(MDROrderBuildTargets.FK);
 
             orderBuild.getIndConstFK().setValue(mdrFK.getIndice().toString());
+            orderBuild.getFkIndSep().setValue();
 
             orderBuild.getTableShortNameChild().setValue((MCDEntity) mcdRelEndParent.getMCDRelEndOpposite().getMcdElement());
             orderBuild.getTableShortNameParent().setValue((MCDEntity) mcdRelEndParent.getMcdElement());

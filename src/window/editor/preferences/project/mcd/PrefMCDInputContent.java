@@ -50,6 +50,7 @@ public class PrefMCDInputContent extends PanelInputContent {
     private JPanel panelTreeNaming = new JPanel ();
     private SComboBox fieldTreeNamingAssociation = new SComboBox(this);
 
+    private JPanel panelNaming = new JPanel ();
     private SComboBox fieldNamingLongName = new SComboBox(this);
     private SComboBox fieldNamingAttributeShortName = new SComboBox(this);
 
@@ -151,7 +152,7 @@ public class PrefMCDInputContent extends PanelInputContent {
         fieldNamingLongName.addItemListener(this);
         fieldNamingLongName.addFocusListener(this);
 
-        PanelInputService.createComboBoxYesNo(fieldNamingAttributeShortName);
+        PanelInputService.createComboBoxYesNoFreeUnique(fieldNamingAttributeShortName);
         fieldNamingAttributeShortName.addItemListener(this);
         fieldNamingAttributeShortName.addFocusListener(this);
 
@@ -228,14 +229,9 @@ public class PrefMCDInputContent extends PanelInputContent {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panelInputContentCustom.add(new JLabel("Nom long : "), gbc);
-        gbc.gridx++;
-        panelInputContentCustom.add(fieldNamingLongName, gbc);
-
-        gbc.gridx++;
-        panelInputContentCustom.add(new JLabel("Nom court (Attribut) : "), gbc);
-        gbc.gridx++;
-        panelInputContentCustom.add(fieldNamingAttributeShortName, gbc);
+        gbc.gridwidth = 6;
+        createPanelNaming(border);
+        panelInputContentCustom.add(panelNaming, gbc);
 
     }
 
@@ -299,6 +295,31 @@ public class PrefMCDInputContent extends PanelInputContent {
         panelTreeNaming.add(new JLabel("Associations : "), gbcJ);
         gbcJ.gridx++;
         panelTreeNaming.add(fieldTreeNamingAssociation, gbcJ);
+    }
+
+    private void createPanelNaming(Border border) {
+        TitledBorder titleBorder = BorderFactory.createTitledBorder(border, "Choix des noms courts et longs");
+        panelNaming.setBorder(titleBorder);
+
+        panelNaming.setLayout(new GridBagLayout());
+        GridBagConstraints gbcJ = new GridBagConstraints();
+        gbcJ.anchor = GridBagConstraints.NORTHWEST;
+        gbcJ.insets = new Insets(10, 10, 0, 0);
+
+        gbcJ.gridx = 0;
+        gbcJ.gridy = 0;
+        gbcJ.gridwidth = 1;
+        gbcJ.gridheight = 1;
+
+
+        panelNaming.add(new JLabel("Nom long : "), gbcJ);
+        gbcJ.gridx++;
+        panelNaming.add(fieldNamingLongName, gbcJ);
+
+        gbcJ.gridx++;
+        panelNaming.add(new JLabel("Nom court (Attribut) : "), gbcJ);
+        gbcJ.gridx++;
+        panelNaming.add(fieldNamingAttributeShortName, gbcJ);
     }
 
     private void createPanelAIDWithDep(Border border) {
@@ -582,7 +603,7 @@ public class PrefMCDInputContent extends PanelInputContent {
 
 
         if (fieldNamingAttributeShortName.checkIfUpdated()){
-            preferences.setMCD_MODE_NAMING_LONG_NAME( PanelInputService.prefComboBoxOption(fieldNamingAttributeShortName));
+            preferences.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME( PanelInputService.prefComboBoxOption(fieldNamingAttributeShortName));
         }
 
     }

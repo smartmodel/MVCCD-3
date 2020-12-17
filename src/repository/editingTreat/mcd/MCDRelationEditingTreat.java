@@ -6,6 +6,7 @@ import main.MVCCDWindow;
 import mcd.*;
 import project.ProjectService;
 import repository.editingTreat.EditingTreat;
+import utilities.Trace;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 

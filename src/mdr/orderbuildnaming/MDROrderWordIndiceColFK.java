@@ -1,40 +1,48 @@
 package mdr.orderbuildnaming;
 
 import main.MVCCDElement;
+import main.MVCCDElementService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.IndexingName;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
-public class MDROrderWordIndiceColFK extends MDROrderWordIndice{
+public class MDROrderWordIndiceColFK extends MDROrderWord{
 
     public MDROrderWordIndiceColFK(String name) {
         super(name, Preferences.MDR_INDICE_COL_FK_LENGTH);
     }
 
-    @Override
-    protected Integer compute(String racine, ArrayList<MVCCDElement> brothers) {
+    public void setValue(String name, ArrayList<MVCCDElement> brothers, int indiceFK){
         Preferences preferences = PreferencesManager.instance().preferences();
 
-        Integer indice = null;
+        int indice = 0;
 
-        if (preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK)){
-            //TODO-0 calculer l'indice de FK !
-            //indice = indiceFK;
+        boolean c1 = preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK);
+        boolean c2 = preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1);
+        boolean c3 = preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2);
+
+        if (c1){
+            indice = indiceFK ;
         }
 
-        if (preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1)){
-            int nbRacinesEqv = nbColumnFKByRoot(racine, brothers);
-            if (nbRacinesEqv >= 0) indice = nbRacinesEqv + 1;
+        if (c2 || c3) {
+            IndexingName indexingName = new IndexingName(Preferences.MDR_INDICE_REGEXPR);
+            indice = indexingName.indexInBrothers(name, MVCCDElementService.convertArrayMVCCDElementsToNames(brothers));
+            if (c3) {
+                if (indice < 2) {
+                    indice = 0;
+                };
+            }
         }
 
-        if (preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2)){
-            int nbRacinesEqv = nbColumnFKByRoot(racine,  brothers);
-            if (nbRacinesEqv >= 1) indice = nbRacinesEqv + 1;
+        if (indice != 0){
+            super.setValue("" + indice);
+        } else {
+            super.setValue("");
         }
-
-        return indice;
-
     }
 
 }

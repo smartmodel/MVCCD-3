@@ -8,16 +8,17 @@ import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import mcd.*;
+import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
-import mldr.MLDRColumn;
-import mldr.MLDRModel;
-import mldr.MLDRTable;
+import mldr.*;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.*;
 import repository.editingTreat.md.MDDatatypeEditingTreat;
 import repository.editingTreat.mdr.MDRColumnEditingTreat;
+import repository.editingTreat.mdr.MDRFKEditingTreat;
+import repository.editingTreat.mdr.MDRPKEditingTreat;
 import repository.editingTreat.mdr.MDRTableEditingTreat;
 import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
@@ -28,6 +29,7 @@ import profile.Profile;
 import project.Project;
 import repository.editingTreat.*;
 import utilities.DefaultMutableTreeNodeService;
+import utilities.Trace;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
 import utilities.window.scomponents.SPopupMenu;
@@ -86,7 +88,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         if (node.getUserObject() instanceof MCDModel) {
             treatGeneric(this, new MCDModelEditingTreat());
-            packageNew(this, true);
+            MCDModel mcdModel = (MCDModel) node.getUserObject();
+            if (mcdModel.isPackagesAutorizeds()) {
+                packageNew(this, "menu.new.package");
+            }
             treatGenericCompliant(this, new MCDModelEditingTreat());
             treatGenericTransform(this, new MCDModelEditingTreat(),
                     "menu.transform.mcd.to.mldr");
@@ -95,8 +100,12 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         if (node.getUserObject() instanceof MCDPackage) {
             treatGeneric(this, new MCDPackageEditingTreat());
             treatGenericCompliant(this, new MCDPackageEditingTreat());
-            packageNew(this, false);
+            MCDPackage mcdPackage = (MCDPackage) node.getUserObject();
+            // Pas nécessaire de vérifier les droits de créer unpackage puisque le parent est déjà un package
+            packageNew(this, "menu.new.subpackage");
+
         }
+
 
         if (node.getUserObject() instanceof MCDContDiagrams) {
             treatGenericNew(this, new MCDDiagramEditingTreat(),
@@ -190,6 +199,14 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         if (node.getUserObject() instanceof MLDRColumn) {
             treatGenericRead(this, new MDRColumnEditingTreat());
+        }
+
+        if (node.getUserObject() instanceof MLDRPK) {
+            treatGenericRead(this, new MDRPKEditingTreat());
+        }
+
+        if (node.getUserObject() instanceof MLDRFK) {
+            treatGenericRead(this, new MDRFKEditingTreat());
         }
 
         if (node.getUserObject() instanceof MPDRModel) {
@@ -328,7 +345,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             treatGenericNew( menu, new MCDModelEditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.new.model"));
        } else {
-            packageNew(menu, true);
+            if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()) {
+                packageNew(menu, "menu.new.package");
+            }
             treatGenericCompliant(menu, new MCDContModelsEditingTreat());
             treatGenericTransform(menu, new MCDContModelsEditingTreat(),
                     "menu.transform.mcd.to.mldr");
@@ -355,22 +374,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
     }
 
-    private void packageNew(ISMenu menu, boolean top) {
-        if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()) {
-            String propertyMessage ;
-            if (top) {
-                propertyMessage = "menu.new.package";
-            } else {
-                propertyMessage = "menu.new.subpackage";
-            }
-            if (node.getUserObject() instanceof MCDPackage) {
-                MCDPackage mcdPackage = (MCDPackage) node.getUserObject();
-                if (mcdPackage.getLevel() < Preferences.PACKAGE_LEVEL_MAX) {
-                    treatGenericNew(menu, new MCDPackageEditingTreat(),
-                            MessagesBuilder.getMessagesProperty(propertyMessage));
-                }
-            }
-         }
+    private void packageNew(ISMenu menu, String propertyMessage) {
+        treatGenericNew(menu, new MCDPackageEditingTreat(),
+                        MessagesBuilder.getMessagesProperty(propertyMessage));
     }
 
 

@@ -62,22 +62,22 @@ public class PanelInputContentIdMDR extends PanelInputContent {
 
         labelName = new JLabel("Nom : ");
         fieldName = new STextField(this, labelName);
-        fieldName.setPreferredSize((new Dimension(400, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldName.setPreferredSize((new Dimension(700, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldName.setReadOnly(true);
 
         labelName30 = new JLabel(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_30));
         fieldName30 = new STextField(this, labelName);
-        fieldName30.setPreferredSize((new Dimension(400, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldName30.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldName30.setReadOnly(true);
 
         labelName60 = new JLabel(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_60));
         fieldName60 = new STextField(this, labelName);
-        fieldName60.setPreferredSize((new Dimension(400, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldName60.setPreferredSize((new Dimension(500, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldName60.setReadOnly(true);
 
         labelName120 = new JLabel(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_120));
         fieldName120 = new STextField(this, labelName);
-        fieldName120.setPreferredSize((new Dimension(400, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldName120.setPreferredSize((new Dimension(700, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldName120.setReadOnly(true);
 
         labelSource = new JLabel("Source :");

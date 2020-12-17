@@ -117,12 +117,21 @@ public abstract class MDRColumn extends MDRElement implements IMDRElementWithSou
     }
 
     public boolean isPk() {
-        return getMDRTableParent().getMDRColumnsPK().contains(this);
+        return getMDRTableAccueil().getMDRColumnsPK().contains(this);
     }
 
 
     public boolean isFk() {
-        return getMDRTableParent().getMDRColumnsFK().contains(this);
+        return getMDRTableAccueil().getMDRColumnsFK().contains(this);
+    }
+
+    public MDRFK getFk() {
+        for (MDRFK mdrFK : getMDRTableAccueil().getMDRFKs()) {
+            if (mdrFK.getMDRColumns().contains(this)){
+                return mdrFK;
+            }
+        }
+        return null;
     }
 
 
@@ -136,7 +145,7 @@ public abstract class MDRColumn extends MDRElement implements IMDRElementWithSou
         return null;
     }
 
-    public MDRTable getMDRTableParent(){
+    public MDRTable getMDRTableAccueil(){
         return (MDRTable) getParent().getParent();
     }
 }

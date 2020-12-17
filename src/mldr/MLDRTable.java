@@ -35,11 +35,6 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
     }
 
     @Override
-    public void setMdElementSource(MDElement mdElementSource) {
-        this.mcdElementSource = (MCDElement) mdElementSource;
-    }
-
-    @Override
     public MCDElement getMcdElementSource() {
         return mcdElementSource;
     }

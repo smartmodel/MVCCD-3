@@ -14,6 +14,18 @@ public  class  MVCCDElementConvert {
         return resultat;
     }
 
+    public static <T> ArrayList<String> toNamesString(ArrayList<T> source){
+        ArrayList<String> resultat = new ArrayList<String>();
+        for ( T t : source){
+            if (t instanceof MVCCDElement){
+                resultat.add(((MVCCDElement) t).getName());
+            }
+        }
+        return resultat;
+    }
+
+
+
     //TODO-1  Pas encore testé
     public static <T> Object[] toArrayObject(ArrayList<T> source){
         Object[] resultat = new Object[source.size()];

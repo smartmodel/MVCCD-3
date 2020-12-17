@@ -12,6 +12,7 @@ import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mldr.services.MLDROperationService;
 import project.ProjectElement;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ public class MLDRFK extends MDRFK implements IMLDRElement, IMLDRElementWithSourc
 
     public MLDRFK(ProjectElement parent, MCDElement mcdElementSource) {
         super(parent);
-        this.mcdElementSource = getMcdElementSource();
+        this.mcdElementSource = mcdElementSource;
     }
 
 
@@ -40,11 +41,6 @@ public class MLDRFK extends MDRFK implements IMLDRElement, IMLDRElementWithSourc
     @Override
     public MDElement getMdElementSource() {
         return mcdElementSource;
-    }
-
-    @Override
-    public void setMdElementSource(MDElement mdElementSource) {
-        this.mcdElementSource = (MCDElement) mdElementSource;
     }
 
 

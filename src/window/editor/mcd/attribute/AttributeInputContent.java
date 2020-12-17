@@ -538,10 +538,16 @@ public class AttributeInputContent extends PanelInputContentId {
 
 
 
-    protected boolean checkShortName(boolean unitaire){
-        return checkShortName(unitaire,
-                PreferencesManager.instance().preferences().getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME().equals(
-                        Preferences.OPTION_YES));
+    protected boolean checkShortName(boolean unitaire) {
+        String mode = PreferencesManager.instance().preferences().getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME();
+        if (StringUtils.isNotEmpty(fieldShortName.getText())) {
+            boolean c1 = mode.equals(Preferences.OPTION_YES);
+            boolean c2 = mode.equals(Preferences.OPTION_FREE_UNIQUE);
+            if (c1 || c2) {
+                return checkShortName(unitaire, false);
+            }
+        }
+        return true;
     }
 
 

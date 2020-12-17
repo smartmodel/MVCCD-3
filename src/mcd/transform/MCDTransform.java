@@ -77,14 +77,12 @@ public class MCDTransform {
                     // Passe d'absence d'un attribut AID à présence d'un attribut AID
                     if ((mcdElementSourceColumnPK instanceof MCDEntity) &&
                             (mcdAttributeAID != null)){
-                        mldrColumnPK.setMdElementSource(mcdAttributeAID);
                         mldrColumnPK.setMcdElementSource(mcdAttributeAID);
                     }
 
                     // Passe de présence d'un attribut AID à l'absence d'un attribut AID
                     if ((mcdElementSourceColumnPK instanceof MCDAttribute) &&
                             (mcdAttributeAID == null)){
-                        mldrColumnPK.setMdElementSource(mcdEntitySource);
                         mldrColumnPK.setMcdElementSource(mcdEntitySource);
                     }
                 }

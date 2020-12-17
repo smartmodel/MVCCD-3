@@ -1,6 +1,8 @@
 package mcd.services;
 
+import exceptions.CodeApplException;
 import mcd.MCDElement;
+import mcd.MCDModel;
 import mcd.MCDPackage;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;

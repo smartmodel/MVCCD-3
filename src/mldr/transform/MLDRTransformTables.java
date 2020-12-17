@@ -5,6 +5,7 @@ import mldr.MLDRModel;
 import mldr.MLDRTable;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
+import utilities.Trace;
 
 public class MLDRTransformTables {
 
@@ -14,11 +15,6 @@ public class MLDRTransformTables {
     public MLDRTransformTables(MLDRModel mldrModel, MPDRModel mpdrModel) {
         this.mldrModel = mldrModel;
         this.mpdrModel = mpdrModel;
-    }
-
-    public void transform() {
-
-        transformTables();
     }
 
 
@@ -35,12 +31,17 @@ public class MLDRTransformTables {
             mpdrTable = mpdrModel.createTable(mldrTable);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrTable);
         }
-        modifyTable(mpdrModel, mpdrTable, mldrTable );
+        modifyTable(mldrTable, mpdrTable );
+
+
+        // Transformation des colonnes
+        MLDRTransformColumns mldrTransformColumns = new MLDRTransformColumns(mldrTable, mpdrModel, mpdrTable);
+        mldrTransformColumns.transformColumns();
     }
 
-    private void modifyTable(MPDRModel mpdrModel, MPDRTable mpdrTable, MLDRTable mldrTable ) {
-        MLDRTransformService.modifyNames(mpdrTable, mldrTable);
-        MLDRTransformService.modifyName(mpdrModel, mpdrTable,  mldrTable);
+    private void modifyTable(MLDRTable mldrTable, MPDRTable mpdrTable ) {
+        MLDRTransformService.modifyNames(mldrTable, mpdrTable);
+        MLDRTransformService.modifyName(mpdrModel, mpdrTable);
     }
 
 

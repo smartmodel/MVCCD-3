@@ -26,6 +26,18 @@ public abstract class MDRElement extends MDElement {
         this.names = names;
     }
 
+    public String getNameByNamingLength(MDRNamingLength namingLength){
+        if (namingLength == MDRNamingLength.LENGTH30){
+            return names.getName30();
+        }
+        if (namingLength == MDRNamingLength.LENGTH60){
+            return names.getName60();
+        }
+        if (namingLength == MDRNamingLength.LENGTH120){
+            return names.getName120();
+        }
+        return null;
+    }
     /*
 
     public String getName30() {

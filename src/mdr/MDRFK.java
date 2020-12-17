@@ -1,5 +1,6 @@
 package mdr;
 
+import exceptions.CodeApplException;
 import mdr.interfaces.IMDRConstraintIndice;
 import project.ProjectElement;
 
@@ -26,7 +27,16 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
     @Override
     public Integer getIndice() {
         return indice;
+        /*
+        if (indice != null) {
+            return indice;
+        } else {
+            throw new CodeApplException("MDRFK.getIndice() - L'incide de " + this.getName()  + " est null");
+        }
+
+         */
     }
+
 
     @Override
     public void setIndice(Integer indice) {

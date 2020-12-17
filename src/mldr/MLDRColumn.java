@@ -40,10 +40,4 @@ public class MLDRColumn extends MDRColumn implements IMLDRElement, IMLDRElementW
     public MDElement getMdElementSource() {
         return mcdElementSource;
     }
-
-    @Override
-    public void setMdElementSource(MDElement mdElementSource) {
-        this.mcdElementSource = (MCDElement) mdElementSource;
-
-    }
 }

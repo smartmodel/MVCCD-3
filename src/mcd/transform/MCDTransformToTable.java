@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectService;
+import utilities.Trace;
 import utilities.TransformService;
 
 import java.util.ArrayList;
@@ -218,7 +219,7 @@ public class MCDTransformToTable {
     public void modifyTable(MLDRTable mldrTable, MCDEntity mcdEntity){
 
         // Nom
-        TransformService.name(mldrTable, buildNameTable(mcdEntity), mldrModel.getNamingLengthActual());
+        MCDTransformService.names(mldrTable, buildNameTable(mcdEntity), mldrModel);
 
         if (mcdEntity.getNature() != mldrTable.getMcdEntitySourceNature()){
 

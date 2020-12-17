@@ -1,2 +1,9 @@
 //#MAJ 2020-12-05 Boutons Ok/Annuler absents à l'ouverture en update de données modifiées
 Cas initial, les préférences de nommage MLDR qui sont impactées par un chgt au niveau MDR
+
+
+//#MAJ 2020-12-11 getShortName() de MDRRelEnd remplacée par getShortName() de MDRRelation si vide
+Problèmes : Initialisation d'une relation en création
+            Contraire au principe d'éviter une surcharge pour les méthodes de bas niveau
+
+//#MAJ 2020-12-16 AssociationInputContent shortName obligatoire

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public abstract class MDRTableOrView extends MDRElement implements IMDRElementWithSource {
 
-    protected MDElement mdElementSource;
+    //protected MDElement mdElementSource;
     private  static final long serialVersionUID = 1000;
 
     public MDRTableOrView(ProjectElement parent) {

@@ -12,10 +12,11 @@ public abstract class MPDRColumn extends MDRTable implements IMPDRElement, IMPDR
     private  static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;
 
-    public MPDRColumn(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
+    public MPDRColumn(ProjectElement parent,  IMLDRElement mldrElementSource) {
         super(parent);
         this.mldrElementSource = mldrElementSource;
     }
+
 
     @Override
     public IMLDRElement getMldrElementSource() {

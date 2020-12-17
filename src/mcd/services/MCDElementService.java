@@ -1,7 +1,9 @@
 package mcd.services;
 
+import exceptions.CodeApplException;
 import mcd.MCDElement;
 import mcd.MCDContModels;
+import mcd.MCDModel;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDNamePathParent;
 import org.apache.commons.lang.StringUtils;
@@ -55,5 +57,27 @@ public class MCDElementService {
         }
         return path;
     }
+
+
+    public static IMCDModel getIMCDModelAccueil(MCDElement mcdElement) {
+        if (mcdElement.getParent() instanceof MCDElement) {
+            if (mcdElement.getParent() instanceof IMCDModel) {
+                return (IMCDModel) mcdElement.getParent();
+            } else {
+                return getIMCDModelAccueil((MCDElement) mcdElement.getParent());
+            }
+        } else {
+            throw new CodeApplException("MCDElementService.getIMCDModelAccueil  - Erreur de parcours");
+        }
+    }
+
+    public static MCDModel getMCDModelAccueil(MCDElement mcdElement) {
+        IMCDModel imcdModel = getIMCDModelAccueil(mcdElement);
+        if (imcdModel instanceof MCDModel){
+            return (MCDModel) imcdModel;
+        }
+        return null;
+    }
+
 }
 

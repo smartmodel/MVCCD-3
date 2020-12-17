@@ -100,9 +100,15 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
     //TODO-0 Vérifier que shortName de MCDRelation soit obligatoire si pas de rôle
     public String getShortName(){
         String shortName = super.getShortName();
+
+        //TODO-0 Vérifier que shortName de MCDRelation soit obligatoire si pas de rôle
+        //#MAJ 2020-12-11
+        /*
         if (StringUtils.isEmpty(shortName)){
             shortName = getMcdRelation().getShortName();
         }
+        */
+
         return shortName;
     }
 

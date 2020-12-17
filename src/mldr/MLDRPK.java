@@ -23,7 +23,7 @@ public class MLDRPK extends MDRPK implements IMLDRElement, IMLDRElementWithSourc
 
     public MLDRPK(ProjectElement parent, MCDElement mcdElementSource) {
         super(parent);
-        this.mcdElementSource = getMcdElementSource();
+        this.mcdElementSource = mcdElementSource;
     }
 
 
@@ -41,12 +41,6 @@ public class MLDRPK extends MDRPK implements IMLDRElement, IMLDRElementWithSourc
     @Override
     public MDElement getMdElementSource() {
         return mcdElementSource;
-    }
-
-    @Override
-    public void setMdElementSource(MDElement mdElementSource) {
-        this.mcdElementSource = (MCDElement) mdElementSource;
-
     }
 
 

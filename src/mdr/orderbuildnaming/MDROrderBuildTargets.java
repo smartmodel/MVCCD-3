@@ -8,10 +8,14 @@ public enum MDROrderBuildTargets {
     TABLENN (Preferences.MDR_NAMING_TABLE_NN, "mdr.of.tables.nn"),
     TABLENNINDICE (Preferences.MDR_NAMING_TABLE_NN, "mdr.of.tables.nn"),
     COLUMNATTR (Preferences.MDR_NAMING_COLUMN_ATTR, "mdr.of.columns.attr"),
+    COLUMNATTRSHORTNAME (Preferences.MDR_NAMING_COLUMN_ATTR, "mdr.of.columns.attr"),
     COLUMNPK (Preferences.MDR_NAMING_COLUMN_PK, "mdr.of.columns.pk"),
-    COLUMNFK (Preferences.MDR_NAMING_COLUMN_FK, "mdr.of.columns.fk"),
+    COLUMNFKFROMENTITYNOIND(Preferences.MDR_NAMING_COLUMN_FK, "mdr.of.columns.fk"),
+    COLUMNFKFROMENTITYIND (Preferences.MDR_NAMING_COLUMN_FK, "mdr.of.columns.fk"),
+    COLUMNFKONEANCESTOR (Preferences.MDR_NAMING_COLUMN_FK, "mdr.of.columns.fk"),
     PK (Preferences.MDR_NAMING_PK, "mdr.of.constraints.pk"),
-    FK (Preferences.MDR_NAMING_FK, "mdr.of.constraints.fk");
+    FK (Preferences.MDR_NAMING_FK, "mdr.of.constraints.fk"),
+    FKWITHOUTROLE(Preferences.MDR_NAMING_FK, "mdr.of.constraints.fk");
 
     private final String name;
     private final String propertyOfTarget;

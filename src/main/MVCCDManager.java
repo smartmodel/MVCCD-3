@@ -14,6 +14,7 @@ import messages.LoadMessages;
 import repository.Repository;
 import main.window.repository.WinRepository;
 import main.window.repository.WinRepositoryContent;
+import utilities.Trace;
 import utilities.files.UtilFiles;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -154,7 +155,6 @@ public class MVCCDManager {
         for (MCDRelation mcdRelationChild : mcdRelationChilds) {
             removeMCDRelationAndDependantsInRepository(mcdRelationChild);
         }
-
         removeMVCCDElementInRepository(mcdRelation, mcdRelation.getParent());
         removeMVCCDElementInRepository(mcdRelation.getA(), mcdRelation.getA().getParent());
         removeMVCCDElementInRepository(mcdRelation.getB(), mcdRelation.getB().getParent());

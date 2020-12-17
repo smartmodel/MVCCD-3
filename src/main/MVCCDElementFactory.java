@@ -9,7 +9,9 @@ import mdr.interfaces.IMDRParameter;
 import messages.MessagesBuilder;
 import mldr.*;
 import mldr.services.MLDRContConstraintsService;
+import mpdr.MPDRContColumns;
 import mpdr.MPDRModel;
+import mpdr.mysql.MPDRMySQLColumn;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.mysql.MPDRMySQLTable;
 import mpdr.oracle.MPDROracleModel;
@@ -330,16 +332,24 @@ public class MVCCDElementFactory {
 
     public MPDROracleTable createMPDROracleTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
         MPDROracleTable mpdrOracleTable = new MPDROracleTable(mdrContTables, mldrTable);
+        MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrOracleTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         return mpdrOracleTable;
     }
 
     public MPDRMySQLTable createMPDRMySQLTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
         MPDRMySQLTable mpdrMySQLTable = new MPDRMySQLTable(mdrContTables, mldrTable);
+        MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrMySQLTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         return mpdrMySQLTable;
+    }
+
+    public MPDRMySQLColumn createMPDRMySQLColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn) {
+        MPDRMySQLColumn mpdrMySQLColumn = new MPDRMySQLColumn(mdrContColumns, mldrColumn);
+        return mpdrMySQLColumn;
     }
 
     public MPDRPostgreSQLTable createMPDRPostgreSQLTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
         MPDRPostgreSQLTable mpdrPostgreSQLTable = new MPDRPostgreSQLTable(mdrContTables, mldrTable);
+        MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrPostgreSQLTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         return mpdrPostgreSQLTable;
     }
 

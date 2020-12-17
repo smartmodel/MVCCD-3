@@ -63,7 +63,9 @@ public abstract class EditingTreat {
                 new String[] { messageTheElement, element.getName()});
         boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
         if (confirmDelete){
-            element = Delete.deleteMVCCDElement(element);
+            removeMVCCDElementInRepository(element);
+            element.removeInParent();
+            element = null;
         }
         return element == null;
     }

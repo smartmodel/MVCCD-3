@@ -72,8 +72,12 @@ public class MDRModelService {
         }
 
         MDRNamingFormat mdrNamingFormat = mdrModel.getNamingFormatFuture();
+        return formatNaming(name, mdrNamingFormat);
+    }
+
+    public static String formatNaming(String name, MDRNamingFormat mdrNamingFormat){
         if (mdrNamingFormat == MDRNamingFormat.NOTHING) {
-                    // Rien
+            // Rien
         }
         if (mdrNamingFormat == MDRNamingFormat.UPPERCASE) {
             name = StringUtils.upperCase(name);

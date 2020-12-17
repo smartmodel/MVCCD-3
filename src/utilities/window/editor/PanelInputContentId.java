@@ -8,6 +8,7 @@ import mcd.services.MCDElementService;
 import mcd.services.MCDUtilService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.Trace;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
@@ -165,7 +166,7 @@ return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
     }
 
     protected boolean checkShortName(boolean unitaire){
-       return checkShortName(unitaire, Preferences.MCD_MODE_NAMING_SHORT_NAME.equals(Preferences.OPTION_YES));
+        return checkShortName(unitaire, Preferences.MCD_MODE_NAMING_SHORT_NAME.equals(Preferences.OPTION_YES));
     }
 
 
@@ -173,7 +174,7 @@ return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
 
         ArrayList<MVCCDElement> brothers = getParentForCheck().getChildsWithout(getElementForCheck());
 
-        return super.checkInput(fieldShortName, unitaire, MCDUtilService.checkShortNameId(
+         return super.checkInput(fieldShortName, unitaire, MCDUtilService.checkShortNameId(
                 getBrothers(),
                 fieldShortName.getText(),
                 fieldShortName.getText(),

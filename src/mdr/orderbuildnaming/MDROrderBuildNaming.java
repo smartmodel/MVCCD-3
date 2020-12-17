@@ -3,11 +3,12 @@ package mdr.orderbuildnaming;
 import exceptions.CodeApplException;
 import exceptions.orderbuildnaming.*;
 import main.MVCCDElement;
-import main.MVCCDElementConvert;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -30,7 +31,9 @@ public class MDROrderBuildNaming {
     private MDROrderWordTableShortNameChild tableShortNameChild;
 
     private MDROrderWordAttrName attrName;
+    private MDROrderWordAttrShortName attrShortName;
     private MDROrderWordColName colName;
+    private MDROrderWordColNameOneAncestor colNameOneAncestor;
     private MDROrderWordColDerived colDerived;
 
     private MDROrderWordAssociationShortName assShortName;
@@ -47,6 +50,7 @@ public class MDROrderBuildNaming {
     private MDROrderWordTableSep tableSep;
     private MDROrderWordPEASep peaSep;
     private MDROrderWordRoleSep roleSep;
+    private MDROrderWordFKIndSep fkIndSep;
 
 
 
@@ -64,7 +68,9 @@ public class MDROrderBuildNaming {
         tableShortNameChild = new MDROrderWordTableShortNameChild(Preferences.MDR_TABLE_SHORT_NAME_CHILD_WORD);
 
         attrName = new MDROrderWordAttrName(Preferences.MDR_ATTR_NAME_WORD);
+        attrShortName = new MDROrderWordAttrShortName(Preferences.MDR_ATTR_NAME_WORD);
         colName = new MDROrderWordColName(Preferences.MDR_COL_NAME_WORD);
+        colNameOneAncestor = new MDROrderWordColNameOneAncestor(Preferences.MDR_COL_NAME_ONE_ANCESTOR_WORD);
         colDerived = new MDROrderWordColDerived(Preferences.MDR_COLUMN_DERIVED_WORD);
 
         assShortName = new MDROrderWordAssociationShortName(Preferences.MDR_ASS_SHORT_NAME_WORD);
@@ -80,14 +86,16 @@ public class MDROrderBuildNaming {
         indTableNN = new MDROrderWordIndiceTableNN(Preferences.MDR_INDICE_TABLENN_WORD);
         tableSep = new MDROrderWordTableSep(Preferences.MDR_TABLE_SEP_WORD);
         roleSep = new MDROrderWordRoleSep(Preferences.MDR_ROLE_SEP_WORD);
+        fkIndSep = new MDROrderWordFKIndSep(Preferences.MDR_FKIND_SEP_WORD);
         peaSep = new MDROrderWordPEASep(Preferences.MDR_PEA_SEP_WORD);
 
     }
 
 
-    public String buildNaming() throws OrderBuildNameException{
+    public String buildNaming() throws OrderBuildNameException {
 
         Preferences preferences = PreferencesManager.instance().preferences();
+        String userMarkersDetected = "";
 
         try {
             Pattern pattern = Pattern.compile(Preferences.MDR_WORDS_PATTERN);
@@ -100,9 +108,9 @@ public class MDROrderBuildNaming {
             // La taille maximale effective ne doit pas dépasser la taille prévue
             Matcher matcher = pattern.matcher(this.getFormat());
             String newName = "";
-            int sizeMarkers = 0 ;
-            int sizeMarkersLimit = 0 ;
-            if (formatUserMarkerLengthMax != null){
+            int sizeMarkers = 0;
+            int sizeMarkersLimit = 0;
+            if (formatUserMarkerLengthMax != null) {
                 sizeMarkersLimit = getFormatUserMarkerLengthMax();
             }
             while (matcher.find()) {
@@ -123,15 +131,20 @@ public class MDROrderBuildNaming {
 
                 } else if (mg.equals(Preferences.MDR_TABLE_SHORT_NAME_PARENT_WORD)) {
                     value = pushValue(tableShortNameParent);
-
                 } else if (mg.equals(Preferences.MDR_TABLE_SHORT_NAME_CHILD_WORD)) {
                     value = pushValue(tableShortNameChild);
 
                 } else if (mg.equals(Preferences.MDR_ATTR_NAME_WORD)) {
                     value = pushValue(attrName);
 
+                } else if (mg.equals(Preferences.MDR_ATTR_SHORT_NAME_WORD)) {
+                    value = pushValue(attrShortName);
+
                 } else if (mg.equals(Preferences.MDR_COL_NAME_WORD)) {
                     value = pushValue(colName);
+
+                } else if (mg.equals(Preferences.MDR_COL_NAME_ONE_ANCESTOR_WORD)) {
+                    value = pushValue(colNameOneAncestor);
 
                 } else if (mg.equals(Preferences.MDR_COLUMN_DERIVED_WORD)) {
                     value = pushValue(colDerived);
@@ -147,7 +160,6 @@ public class MDROrderBuildNaming {
 
                 } else if (mg.equals(Preferences.MDR_ROLE_SHORT_NAME_PARENT_WORD)) {
                     value = pushValue(roleShortNameParent);
-
                 } else if (mg.equals(Preferences.MDR_PEA_SHORT_NAME_WORD)) {
                     value = pushValue(pea);
 
@@ -157,6 +169,9 @@ public class MDROrderBuildNaming {
                 } else if (mg.equals(Preferences.MDR_ROLE_SEP_WORD)) {
                     value = pushValue(roleSep);
 
+                } else if (mg.equals(Preferences.MDR_FKIND_SEP_WORD)) {
+                    value = pushValue(fkIndSep);
+
                 } else if (mg.equals(Preferences.MDR_PEA_SEP_WORD)) {
                     value = pushValue(peaSep);
 
@@ -164,111 +179,238 @@ public class MDROrderBuildNaming {
                     value = pushValue(indColFK);
 
                 } else if (mg.equals(Preferences.MDR_INDICE_CONST_FK_WORD)) {
-                    value = pushValue(indConstFK);
+                   value = pushValue(indConstFK);
 
                 } else if (mg.equals(Preferences.MDR_INDICE_TABLENN_WORD)) {
                     value = pushValue(indTableNN);
 
                 } else {
                     // Marqueurs libres
+                    value = mg;
+                    userMarkersDetected += Preferences.MDR_WORDS_BEGIN + value + Preferences.MDR_WORDS_END;
+
                     // Marqueurs libres non autorisés
-                    if (sizeMarkersLimit <= 0){
+                    if (sizeMarkersLimit <= 0) {
                         throw new OrderBuildNameMarkerNotAuthorizedException();
                     }
                     // Taille maximale des marqueurs libres dépassés
                     sizeMarkers += mg.length();
-                    if (sizeMarkers > sizeMarkersLimit){
+                    if (sizeMarkers > sizeMarkersLimit) {
                         throw new OrderBuildNameMarkerSizeLimitException();
                     }
-                    value = mg;
-
                 }
-
-                newName += value;
+                newName = newName + value;
             }
-
 
             // Contrôle de la taille du nom
-            int lengthMax = namingLength.getLength();
-            if (newName.length() > lengthMax) {
-                limitSize(newName);
-            }
+            newName = limitSize(newName);
+
             return newName;
 
-        } catch (OrderBuildNameTableNNSizeLimitException e){
+        }
+        catch (OrderBuildNameTableNNSizeLimitException e) {
             // Calcul du nom avec la variante indicée
             format = preferences.getMDR_TABLE_NN_NAME_INDICE_FORMAT();
-            String nameNN = tableShortNameA.getValue() + tableSep.getValue() + tableShortNameB.getValue() ;
+            targetNaming = MDROrderBuildTargets.TABLENNINDICE;
+
+            String nameNN = tableShortNameA.getValue() + tableSep.getValue() + tableShortNameB.getValue();
 
             //TODO-0
             // A terminer le code lorsque la génération des tables n:n sera réalisée!
-            // Brohters devra être passé en paramètre par la f(9 de build initiale
+            // Brohters devra être passé en paramètre par la f() de build initiale
             // Il faudra vérifier l'unicité dans les 2 sens !
             ArrayList<MVCCDElement> brothers = new ArrayList<MVCCDElement>();
             indTableNN.setValue(nameNN, brothers);
-
             return buildNaming();
+       }
 
-        } catch (OrderBuildNameWordNotAuthorizedException e) {
-            String message = MessagesBuilder.getMessagesProperty("mdr.build.name.word.notauthorized.error",
+        catch (OrderBuildNameColumnAttrSizeLimitException e){
+            // Calcul du nom avec le shortName
+            format = preferences.getMDR_COLUMN_ATTR_SHORT_NAME_FORMAT();
+            targetNaming = MDROrderBuildTargets.COLUMNATTRSHORTNAME;
+            return buildNaming();
+        }
+
+        catch (OrderBuildNameColumnFKSizeLimitException e){
+            // Calcul du nom avec le shortName
+            format = preferences.getMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT();
+            targetNaming = MDROrderBuildTargets.COLUMNFKONEANCESTOR;
+            return buildNaming();
+        }
+        catch (OrderBuildNameFKSizeLimitException e){
+            // Calcul du nom avec la variante sans rôle
+            format = preferences.getMDR_FK_NAME_WITHOUT_ROLE_FORMAT();
+            targetNaming = MDROrderBuildTargets.FKWITHOUTROLE;
+            return buildNaming();
+        }
+        catch (OrderBuildNameWordNullException e) {
+            String message = MessagesBuilder.getMessagesProperty("mdr.build.name.word.null.error",
                     new String[]{e.getMessage(), format, targetNaming.getMessageOfTarget()});
             throw new OrderBuildNameException(message, e);
-        } catch (OrderBuildNameMarkerNotAuthorizedException e){
+        }
+        catch (OrderBuildNameMarkerNotAuthorizedException e){
             String message = MessagesBuilder.getMessagesProperty("mdr.build.name.markers.notauthorized.error",
                     new String[]{format, targetNaming.getMessageOfTarget()});
             throw new OrderBuildNameException(message, e);
-        } catch (OrderBuildNameMarkerSizeLimitException e){
+        }
+        catch (OrderBuildNameMarkerSizeLimitException e){
             String message = MessagesBuilder.getMessagesProperty("mdr.build.name.markers.sizeLimit.error",
-                    new String[]{format, targetNaming.getMessageOfTarget()});
+                    new String[]{userMarkersDetected, format, targetNaming.getMessageOfTarget()});
             throw new OrderBuildNameException(message, e);
-        } catch (Exception e) {
-           throw new OrderBuildNameException(e);
+        }
+        catch (OrderBuildNameException e) {
+            // Renvoyer le message généré lors de la création de l'exception
+            // Si le message n'est pas renvoyé l'affichage de la source de l'erreur sera effectué
+            throw new OrderBuildNameException(e.getMessage(),e);
+        }
+        catch (Exception e) {
+            throw new OrderBuildNameException(e);
         }
     }
 
 
 
-    private String pushValue (MDROrderWord orderWord) throws OrderBuildNameWordNotAuthorizedException {
+
+    private String pushValue (MDROrderWord orderWord) throws OrderBuildNameWordNullException {
         if (orderWord.getValue() != null) {
            return  orderWord.getValue();
         } else {
-            throw new OrderBuildNameWordNotAuthorizedException(orderWord.getName());
+            throw new OrderBuildNameWordNullException(orderWord.getName());
         }
     }
 
-    private void limitSize(String newName) {
-        if (newName.length() > namingLength.getLength()){
-            boolean c1 = targetNaming == MDROrderBuildTargets.TABLE;
-            boolean c2 = targetNaming == MDROrderBuildTargets.TABLENN;
-            boolean c3 = targetNaming == MDROrderBuildTargets.TABLENNINDICE;
-            if (c1 ){
-                limitCodeError(newName);
-           }
-            if (c2 || c3){
-                limitSizeTableNN(newName);
+    private String limitSize(String newName) {
+        if (newName.length() > namingLength.getLength()) {
+            //boolean table = targetNaming == MDROrderBuildTargets.TABLE;
+            boolean tableNN = targetNaming == MDROrderBuildTargets.TABLENN;
+            boolean tableNNInd = targetNaming == MDROrderBuildTargets.TABLENNINDICE;
+            boolean colAttr = targetNaming == MDROrderBuildTargets.COLUMNATTR;
+            boolean colAttrShortName = targetNaming == MDROrderBuildTargets.COLUMNATTRSHORTNAME;
+            boolean colFKFromEntityInd = targetNaming == MDROrderBuildTargets.COLUMNFKFROMENTITYIND;
+            boolean colFKFromEntityNoInd = targetNaming == MDROrderBuildTargets.COLUMNFKFROMENTITYNOIND;
+            boolean colFKOneAncestor = targetNaming == MDROrderBuildTargets.COLUMNFKONEANCESTOR;
+
+            //boolean pk = targetNaming == MDROrderBuildTargets.PK;
+            boolean fk = targetNaming == MDROrderBuildTargets.FK;
+            boolean fkInd = targetNaming == MDROrderBuildTargets.FKWITHOUTROLE;
+
+            int lengthMax = namingLength.getLength();
+
+            if (newName.length() > lengthMax - Preferences.MDR_INDICE_CONST_FK_LENGTH) {
+                if (colFKFromEntityNoInd || colFKFromEntityInd){
+                    // Suffisament de place pour un futur indice
+                    return limitSizeColFK(newName);
+                }
+            }
+
+            if (newName.length() > lengthMax) {
+
+                if (tableNN || tableNNInd) {
+                    return limitSizeTableNN(newName);
+                } else if (colAttr || colAttrShortName) {
+                    return limitSizeColumnAttr(newName);
+                } else if (fk || fkInd) {
+                    return limitSizeFK(newName);
+                } else {
+                    limitCodeError(newName);
+                }
+            } else {
+                return newName ;
             }
 
         }
+        return newName;
     }
 
-    private void limitSizeTableNN(String newName){
+    private void limitCodeError(String newName) {
+        int gap =  newName.length() - namingLength.getLength() ;
+        throw new CodeApplException("MDROrderBuildNaming - " + targetNaming.getText() +
+                " - Le nom calculé " + newName + " dépasse de " + gap +
+                " caractères la taille maximale autorisée de " + namingLength.getLength());
+    }
+
+    private String limitComputedCodeError(String newName){
+        if (newName.length() > namingLength.getLength()) {
+            throw new CodeApplException("MDROrderBuildNaming - " + targetNaming.getText() +
+                    " - Le nom calculé " + newName + " n'a pu être limité qu'à " + newName.length() +
+                    " caractères au lieu de " + namingLength.getLength());
+        }
+        return newName;
+    }
+
+
+    private String limitSizeColumnAttr(String newName) {
+        if (namingLength == MDRNamingLength.LENGTH30) {
+            if (targetNaming == MDROrderBuildTargets.COLUMNATTR) {
+                if (StringUtils.isNotEmpty(attrShortName.getValue())) {
+                    // Relancement du calcul avec shortname de l'attribut
+                    throw new OrderBuildNameColumnAttrSizeLimitException();
+                } else {
+                    String message = MessagesBuilder.getMessagesProperty("mdr.build.column.attr.sizeLimit.error",
+                            new String[] { "" + (newName.length() - namingLength.getLength()), namingLength.getLength().toString()});
+                    message += System.lineSeparator();
+                    message +=  MessagesBuilder.getMessagesProperty("mdr.build.column.attr.sizeLimit.error.advice",
+                            MessagesBuilder.getMessagesProperty("menu.preferences.mcd"));
+                    throw new OrderBuildNameException(message);
+                }
+            }
+            if (targetNaming == MDROrderBuildTargets.COLUMNATTRSHORTNAME) {
+                limitCodeError(newName);;
+            }
+        } else {
+            limitCodeError(newName);
+        }
+        throw new CodeApplException("MDROrderBuildNaming - Erreur limitSizeColumnAttr");
+    }
+
+    private String limitSizeTableNN(String newName){
+        String error = "MDROrderBuildNaming - Erreur limitSizeTableNN";
         if (namingLength == MDRNamingLength.LENGTH30){
             if (targetNaming == MDROrderBuildTargets.TABLENN){
                 throw new OrderBuildNameTableNNSizeLimitException();
             }
-            if (targetNaming == MDROrderBuildTargets.TABLENNINDICE){
-                newName.replace(Preferences.MDR_SEPARATOR, "");
+            else if (targetNaming == MDROrderBuildTargets.TABLENNINDICE){
+                newName = newName.replace(Preferences.MDR_SEPARATOR, "");
+                if (newName.length() <= MDRNamingLength.LENGTH30.getLength()) {
+                    return newName;
+                } else {
+                    limitComputedCodeError(newName);
+                }
+            } else {
+                throw new CodeApplException(error);
             }
         } else {
-           limitCodeError(newName);
+            limitCodeError(newName);
         }
+        throw new CodeApplException(error);
     }
 
-    private void limitCodeError(String newName) {
-        int gap = namingLength.getLength() - newName.length();
-        throw new CodeApplException("MDROrderBuildNaming - " + targetNaming.getText() +
-                " - Le nom calculé " + newName + " dépasse de " + gap +
-                "caractères la taille maximale autorisée de " + namingLength.getLength());
+    private String limitSizeFK(String newName){
+        String error = "MDROrderBuildNaming - Erreur limitSizeFK";
+        if (namingLength == MDRNamingLength.LENGTH30){
+            if (targetNaming == MDROrderBuildTargets.FK){
+                throw new OrderBuildNameFKSizeLimitException();
+            }
+            else if (targetNaming == MDROrderBuildTargets.FKWITHOUTROLE){
+                newName = newName.replace(Preferences.MDR_SEPARATOR, "");
+                if (newName.length() <= MDRNamingLength.LENGTH30.getLength()) {
+                    return newName;
+                } else {
+                    limitComputedCodeError(newName);
+                }
+            }
+            else {
+                throw new CodeApplException(error);
+            }
+        } else {
+            limitCodeError(newName);
+        }
+        throw new CodeApplException(error);
+    }
+
+
+    private String limitSizeColFK(String newName) {
+        throw new OrderBuildNameColumnFKSizeLimitException();
     }
 
     public String getFormat() {
@@ -321,6 +463,14 @@ public class MDROrderBuildNaming {
 
     public void setAttrName(MDROrderWordAttrName attrName) {
         this.attrName = attrName;
+    }
+
+    public MDROrderWordAttrShortName getAttrShortName() {
+        return attrShortName;
+    }
+
+    public void setAttrShortName(MDROrderWordAttrShortName attrShortName) {
+        this.attrShortName = attrShortName;
     }
 
     public MDROrderWordColDerived getColDerived() {
@@ -387,12 +537,28 @@ public class MDROrderBuildNaming {
         this.roleSep = roleSep;
     }
 
+    public MDROrderWordFKIndSep getFkIndSep() {
+        return fkIndSep;
+    }
+
+    public void setFkIndSep(MDROrderWordFKIndSep fkIndSep) {
+        this.fkIndSep = fkIndSep;
+    }
+
     public MDROrderWordColName getColName() {
         return colName;
     }
 
     public void setColName(MDROrderWordColName colName) {
         this.colName = colName;
+    }
+
+    public MDROrderWordColNameOneAncestor getColNameOneAncestor() {
+        return colNameOneAncestor;
+    }
+
+    public void setColNameOneAncestor(MDROrderWordColNameOneAncestor colNameOneAncestor) {
+        this.colNameOneAncestor = colNameOneAncestor;
     }
 
     public MDROrderWordIndiceColFK getIndColFK() {

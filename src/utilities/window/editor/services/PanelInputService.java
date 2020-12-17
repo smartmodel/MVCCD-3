@@ -19,6 +19,18 @@ public class PanelInputService {
         sComboBox.addItem(text);
     }
 
+    public static  void createComboBoxYesNoFreeUnique(SComboBox sComboBox) {
+        String text = MessagesBuilder.getMessagesProperty(
+                Preferences.OPTION_YES);
+        sComboBox.addItem(text);
+        text = MessagesBuilder.getMessagesProperty(
+                Preferences.OPTION_FREE_UNIQUE);
+        sComboBox.addItem(text);
+        text = MessagesBuilder.getMessagesProperty(
+                Preferences.OPTION_NO);
+        sComboBox.addItem(text);
+    }
+
     public static  void createComboBoxYesNo(SComboBox sComboBox) {
         String text = MessagesBuilder.getMessagesProperty(
                 Preferences.OPTION_YES);
@@ -49,6 +61,9 @@ public class PanelInputService {
         }
         if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.OPTION_FREE))){
             return Preferences.OPTION_FREE;
+        }
+        if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.OPTION_FREE_UNIQUE))){
+            return Preferences.OPTION_FREE_UNIQUE;
         }
         if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.OPTION_ALWAYS))){
             return Preferences.OPTION_ALWAYS;

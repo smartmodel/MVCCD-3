@@ -16,6 +16,7 @@ import preferences.PreferencesManager;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -86,6 +87,7 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
 
     private String computeNamingAssociation(){
         String namingAssociation ;
+
         if (StringUtils.isNotEmpty(getFrom().getName())  && StringUtils.isNotEmpty(getTo().getName())){
             namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT +
                     getFrom().getName() +
@@ -96,6 +98,7 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
             namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
                     this.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
         }
+
         return namingAssociation;
     }
 

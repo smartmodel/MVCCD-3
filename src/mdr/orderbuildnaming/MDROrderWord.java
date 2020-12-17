@@ -8,6 +8,7 @@ public abstract class MDROrderWord {
 
     public MDROrderWord(String name, Integer lengthMax) {
         this.name = name;
+        this.lengthMax = lengthMax;
     }
 
     public String getName() {

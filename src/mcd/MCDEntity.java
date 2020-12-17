@@ -328,6 +328,9 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return (getAssEndsIdCompChild().size() == 0) && (! isLinkedEA()) && (! isSpecialized())
                 && contentIdentifier();
     }
+    public boolean isNoInd(){
+        return ! isInd();
+    }
 
     public boolean isPotentialInd(){
         return (getAssEndsIdCompChild().size() == 0) && (! isLinkedEA()) && (! isSpecialized())

@@ -6,29 +6,31 @@ import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
 import mdr.services.MDRModelService;
 import mldr.MLDRTable;
+import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRModel;
+import mpdr.interfaces.IMPDRElement;
 import org.apache.commons.lang.StringUtils;
 import utilities.Trace;
 
 public class MLDRTransformService {
 
 
-    public static void modifyNames(MDRElement mpdrElement, MDRElement mldrElement) {
-        String name30 = mldrElement.getNames().getName30();
-        if (!name30.equals(mpdrElement.getNames().getName30())) {
-            mpdrElement.getNames().setName30(name30);
+    public static void modifyNames(IMLDRElement mldrElement, IMPDRElement mpdrElement) {
+        String name30 = ((MDRElement) mldrElement).getNames().getName30();
+        if (!name30.equals(((MDRElement) mpdrElement).getNames().getName30())) {
+            ((MDRElement) mpdrElement).getNames().setName30(name30);
         }
-        String name60 = mldrElement.getNames().getName60();
-        if (!name60.equals(mpdrElement.getNames().getName60())) {
-            mpdrElement.getNames().setName60(name60);
+        String name60 = ((MDRElement) mldrElement).getNames().getName60();
+        if (!name60.equals(((MDRElement) mpdrElement).getNames().getName60())) {
+            ((MDRElement) mpdrElement).getNames().setName60(name60);
         }
-        String name120 = mldrElement.getNames().getName120();
-        if (!name120.equals(mpdrElement.getNames().getName120())) {
-            mpdrElement.getNames().setName120(name120);
+        String name120 = ((MDRElement) mldrElement).getNames().getName120();
+        if (!name120.equals(((MDRElement) mpdrElement).getNames().getName120())) {
+            ((MDRElement) mpdrElement).getNames().setName120(name120);
         }
     }
 
-    public static void modifyName(MPDRModel mpdrModel, MDRElement mpdrElement, MDRElement mplrElement ) {
+    public static void modifyName(MPDRModel mpdrModel, MDRElement mpdrElement) {
         String name = MDRModelService.buildName(mpdrModel, mpdrElement);
         if (!name.equals(mpdrElement.getName())) {
             mpdrElement.setName(name);

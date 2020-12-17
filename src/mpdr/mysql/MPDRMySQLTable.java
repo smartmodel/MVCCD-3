@@ -1,7 +1,11 @@
 package mpdr.mysql;
 
+import main.MVCCDElementFactory;
 import md.MDElement;
+import mldr.MLDRColumn;
+import mldr.MLDRTable;
 import mldr.interfaces.IMLDRElement;
+import mpdr.MPDRColumn;
 import mpdr.MPDRTable;
 import project.ProjectElement;
 
@@ -17,5 +21,24 @@ public class MPDRMySQLTable extends MPDRTable {
         super(parent, mldrElementSource);
     }
 
+    @Override
+    public MPDRMySQLColumn createColumn(MLDRColumn mldrColumn) {
+        MPDRMySQLColumn newColumn = MVCCDElementFactory.instance().createMPDRMySQLColumn(
+                getMDRContColumns(),  mldrColumn);
+
+        return newColumn;
+    }
+
+
+    /*
+    @Override
+    public  MPDRMySQLTable createTable(MLDRTable mldrTable){
+        MPDRMySQLTable newTable = MVCCDElementFactory.instance().createMPDRMySQLTable(
+                getMDRContTables(),  mldrTable);
+
+        return newTable;
+    }
+
+     */
 
 }

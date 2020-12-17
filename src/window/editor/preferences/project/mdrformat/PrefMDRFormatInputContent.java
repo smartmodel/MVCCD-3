@@ -21,14 +21,20 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
     private STextField fieldPKName;
     private JLabel labelFKName = new JLabel();
     private STextField fieldFKName;
+    private JLabel labelFKWithoutRoleName = new JLabel();
+    private STextField fieldFKWithoutRoleName;
 
     private JPanel panelColumnsName = new JPanel ();
     private JLabel labelColumnPKName ;
     private STextField fieldColumnPKName;
     private JLabel labelColumnAttrName ;
     private STextField fieldColumnAttrName;
+    private JLabel labelColumnAttrShortName ;
+    private STextField fieldColumnAttrShortName;
     private JLabel labelColumnFKName ;
     private STextField fieldColumnFKName;
+    private JLabel labelColumnFKNameOneAncestor ;
+    private STextField fieldColumnFKNameOneAncestor;
 
     private JPanel panelTablesName = new JPanel ();
     private JLabel labelTableName ;
@@ -45,6 +51,8 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
     private SCheckBox fieldTableSep;
     private JLabel labelRoleSep ;
     private SCheckBox fieldRoleSep;
+    private JLabel labelFKIndSep ;
+    private SCheckBox fieldFKIndSep;
     private JLabel labelPEASep ;
     private SCheckBox fieldPEASep;
 
@@ -79,6 +87,12 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
         fieldFKName.getDocument().addDocumentListener(this);
         fieldFKName.addFocusListener(this);
 
+        labelFKWithoutRoleName = new JLabel("FK sans rôle :");
+        fieldFKWithoutRoleName = new STextField(this, labelFKWithoutRoleName);
+        fieldFKWithoutRoleName.setPreferredSize((new Dimension(600, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldFKWithoutRoleName.getDocument().addDocumentListener(this);
+        fieldFKWithoutRoleName.addFocusListener(this);
+
         labelColumnPKName = new JLabel("PK :");
         fieldColumnPKName = new STextField(this, labelColumnPKName);
         fieldColumnPKName.setPreferredSize((new Dimension(150, Preferences.EDITOR_FIELD_HEIGHT)));
@@ -90,12 +104,24 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
         fieldColumnAttrName.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldColumnAttrName.getDocument().addDocumentListener(this);
         fieldColumnAttrName.addFocusListener(this);
-        
+
+        labelColumnAttrShortName = new JLabel("Attribut court:");
+        fieldColumnAttrShortName = new STextField(this, labelColumnAttrShortName);
+        fieldColumnAttrShortName.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldColumnAttrShortName.getDocument().addDocumentListener(this);
+        fieldColumnAttrShortName.addFocusListener(this);
+
         labelColumnFKName = new JLabel("FK :");
         fieldColumnFKName = new STextField(this, labelColumnFKName);
         fieldColumnFKName.setPreferredSize((new Dimension(600, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldColumnFKName.getDocument().addDocumentListener(this);
         fieldColumnFKName.addFocusListener(this);
+
+        labelColumnFKNameOneAncestor = new JLabel("FK (1 ancêtre):");
+        fieldColumnFKNameOneAncestor = new STextField(this, labelColumnFKNameOneAncestor);
+        fieldColumnFKNameOneAncestor.setPreferredSize((new Dimension(600, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldColumnFKNameOneAncestor.getDocument().addDocumentListener(this);
+        fieldColumnFKNameOneAncestor.addFocusListener(this);
 
         labelTableName = new JLabel("Depuis entité :");
         fieldTableName = new STextField(this, labelTableName);
@@ -130,6 +156,11 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
         fieldRoleSep.addItemListener(this);
         fieldRoleSep.addFocusListener(this);
 
+        labelFKIndSep = new JLabel("FK indicée :");
+        fieldFKIndSep = new SCheckBox(this, labelFKIndSep);
+        fieldFKIndSep.addItemListener(this);
+        fieldFKIndSep.addFocusListener(this);
+
         labelPEASep = new JLabel("PEA :");
         fieldPEASep = new SCheckBox(this, labelPEASep);
         fieldPEASep.addItemListener(this);
@@ -150,14 +181,18 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
 
         super.getSComponents().add(fieldPKName);
         super.getSComponents().add(fieldFKName);
+        super.getSComponents().add(fieldFKWithoutRoleName);
         super.getSComponents().add(fieldColumnPKName);
         super.getSComponents().add(fieldColumnAttrName);
+        super.getSComponents().add(fieldColumnAttrShortName);
         super.getSComponents().add(fieldColumnFKName);
+        super.getSComponents().add(fieldColumnFKNameOneAncestor);
         super.getSComponents().add(fieldTableName);
         super.getSComponents().add(fieldTableNNName);
         super.getSComponents().add(fieldTableNNNameIndice);
         super.getSComponents().add(fieldPathSep);
         super.getSComponents().add(fieldRoleSep);
+        super.getSComponents().add(fieldFKIndSep);
         super.getSComponents().add(fieldPEASep);
         super.getSComponents().add(fieldGeneralize);
         super.getSComponents().add(fieldColumnDerived);
@@ -227,9 +262,21 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
 
         gbcA.gridx = 0;
         gbcA.gridy++ ;
+        panelColumnsName.add(labelColumnAttrShortName, gbcA);
+        gbcA.gridx++ ;
+        panelColumnsName.add(fieldColumnAttrShortName, gbcA);
+
+        gbcA.gridx = 0;
+        gbcA.gridy++ ;
         panelColumnsName.add(labelColumnFKName, gbcA);
         gbcA.gridx++ ;
         panelColumnsName.add(fieldColumnFKName, gbcA);
+
+        gbcA.gridx = 0;
+        gbcA.gridy++ ;
+        panelColumnsName.add(labelColumnFKNameOneAncestor, gbcA);
+        gbcA.gridx++ ;
+        panelColumnsName.add(fieldColumnFKNameOneAncestor, gbcA);
 
     }
 
@@ -246,6 +293,12 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
         panelConstraintsName.add(labelFKName, gbcA);
         gbcA.gridx++ ;
         panelConstraintsName.add(fieldFKName, gbcA);
+
+        gbcA.gridx = 0;
+        gbcA.gridy++ ;
+        panelConstraintsName.add(labelFKWithoutRoleName, gbcA);
+        gbcA.gridx++ ;
+        panelConstraintsName.add(fieldFKWithoutRoleName, gbcA);
     }
 
     private void createPanelSeparators() {
@@ -265,6 +318,11 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
         panelSeparators.add(labelRoleSep, gbcA);
         gbcA.gridx++ ;
         panelSeparators.add(fieldRoleSep, gbcA);
+
+        gbcA.gridx++ ;
+        panelSeparators.add(labelFKIndSep, gbcA);
+        gbcA.gridx++ ;
+        panelSeparators.add(fieldFKIndSep, gbcA);
 
         gbcA.gridx++ ;
         panelSeparators.add(labelPEASep, gbcA);
@@ -348,15 +406,19 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
     public void loadDatasWithSource(MVCCDElement mvccdElement, Preferences preferences) {
         fieldPKName.setText(preferences.getMDR_PK_NAME_FORMAT());
         fieldFKName.setText(preferences.getMDR_FK_NAME_FORMAT());
+        fieldFKWithoutRoleName.setText(preferences.getMDR_FK_NAME_WITHOUT_ROLE_FORMAT());
         fieldColumnPKName.setText(preferences.getMDR_COLUMN_PK_NAME_FORMAT());
         fieldColumnAttrName.setText(preferences.getMDR_COLUMN_ATTR_NAME_FORMAT());
+        fieldColumnAttrShortName.setText(preferences.getMDR_COLUMN_ATTR_SHORT_NAME_FORMAT());
         fieldColumnFKName.setText(preferences.getMDR_COLUMN_FK_NAME_FORMAT());
+        fieldColumnFKNameOneAncestor.setText(preferences.getMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT());
         fieldTableName.setText(preferences.getMDR_TABLE_NAME_FORMAT());
         fieldTableNNName.setText(preferences.getMDR_TABLE_NN_NAME_FORMAT());
         fieldTableNNNameIndice.setText(preferences.getMDR_TABLE_NN_NAME_INDICE_FORMAT());
         fieldPathSep.setSelected(preferences.getMDR_PATH_SEP_FORMAT().equals(Preferences.MDR_SEPARATOR));
         fieldTableSep.setSelected(preferences.getMDR_TABLE_SEP_FORMAT().equals(Preferences.MDR_SEPARATOR));
         fieldRoleSep.setSelected(preferences.getMDR_ROLE_SEP_FORMAT().equals(Preferences.MDR_SEPARATOR));
+        fieldFKIndSep.setSelected(preferences.getMDR_FKIND_SEP_FORMAT().equals(Preferences.MDR_SEPARATOR));
         fieldPEASep.setSelected(preferences.getMDR_PEA_SEP_FORMAT().equals(Preferences.MDR_SEPARATOR));
         fieldGeneralize.setText(preferences.getMDR_ROLE_GENERALIZE_MARKER());
         fieldColumnDerived.setText(preferences.getMDR_COLUMN_DERIVED_MARKER());
@@ -382,14 +444,23 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
         if (fieldFKName.checkIfUpdated()){
             preferences.setMDR_FK_NAME_FORMAT(fieldFKName.getText());
         }
+        if (fieldFKWithoutRoleName.checkIfUpdated()){
+            preferences.setMDR_FK_NAME_WITHOUT_ROLE_FORMAT(fieldFKWithoutRoleName.getText());
+        }
         if (fieldColumnPKName.checkIfUpdated()){
             preferences.setMDR_COLUMN_PK_NAME_FORMAT(fieldColumnPKName.getText());
         }
         if (fieldColumnAttrName.checkIfUpdated()){
             preferences.setMDR_COLUMN_ATTR_NAME_FORMAT(fieldColumnAttrName.getText());
         }
+        if (fieldColumnAttrShortName.checkIfUpdated()){
+            preferences.setMDR_COLUMN_ATTR_SHORT_NAME_FORMAT(fieldColumnAttrShortName.getText());
+        }
         if (fieldColumnFKName.checkIfUpdated()){
             preferences.setMDR_COLUMN_FK_NAME_FORMAT(fieldColumnFKName.getText());
+        }
+        if (fieldColumnFKNameOneAncestor.checkIfUpdated()){
+            preferences.setMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT(fieldColumnFKNameOneAncestor.getText());
         }
         if (fieldTableName.checkIfUpdated()){
             preferences.setMDR_TABLE_NAME_FORMAT(fieldTableName.getText());
@@ -408,6 +479,9 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
         }
         if (fieldRoleSep.checkIfUpdated()){
             preferences.setMDR_ROLE_SEP_FORMAT(fieldRoleSep.isSelected() ? Preferences.MDR_SEPARATOR : "");
+        }
+        if (fieldFKIndSep.checkIfUpdated()){
+            preferences.setMDR_FKIND_SEP_FORMAT(fieldFKIndSep.isSelected() ? Preferences.MDR_SEPARATOR : "");
         }
         if (fieldPEASep.checkIfUpdated()){
             preferences.setMDR_PEA_SEP_FORMAT(fieldPEASep.isSelected() ? Preferences.MDR_SEPARATOR : "");

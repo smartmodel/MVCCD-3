@@ -105,7 +105,7 @@ public class MCDTransformToPK {
     public void modifyPK(MLDRPK mldrPK, MCDEntity mcdEntity)  throws TransformMCDException {
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrPK.getMDRTableAccueil().getMDRModelParent();
-        TransformService.name(mldrPK, buildNamePK(mldrPK.getMDRTableAccueil(), mcdEntity), mldrModel.getNamingLengthActual());
+        MCDTransformService.names(mldrPK, buildNamePK(mldrPK.getMDRTableAccueil(), mcdEntity), mldrModel);
     }
 
 
