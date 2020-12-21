@@ -11,8 +11,13 @@ import java.util.ArrayList;
 
 public class MCDRelEndService {
 
-    public static String getNameTree(MCDRelEnd mcdRelEndStart,
-                                     String namingRelation){
+    public static final int TREE = 1 ;
+    public static final int SOURCE = 2 ;
+
+
+    public static String getNameTreeOrSource(int scope,
+                                             MCDRelEnd mcdRelEndStart,
+                                             String namingRelation){
         String resultat = "";
 
         MCDElement containerElementStart = (MCDElement) mcdRelEndStart.getMcdElement().getParent().getParent();
@@ -60,7 +65,15 @@ public class MCDRelEndService {
             nameElementOpposite = mcdElementOpposite.getNameTree();
         }
 
-        resultat = namingRelation + nameElementOpposite;
+        if (scope == TREE) {
+            resultat = namingRelation + nameElementOpposite;
+        }
+        else if (scope == SOURCE) {
+            resultat = mcdRelEndStart.getMcdElement().getName() + "  " + namingRelation + "(" + nameElementOpposite + ")";
+        } else {
+            resultat = namingRelation ;
+        }
+
         return resultat;
     }
 

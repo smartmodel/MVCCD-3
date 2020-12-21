@@ -2,8 +2,12 @@ package mcd;
 
 import constraints.Constraint;
 import m.MRelEnd;
+import mcd.interfaces.IMCDElementWithTargets;
+import mcd.services.MCDElementService;
+import mldr.interfaces.IMLDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import stereotypes.Stereotype;
 import utilities.UtilDivers;
 import utilities.files.UtilFiles;
@@ -11,9 +15,11 @@ import utilities.files.UtilFiles;
 import javax.swing.*;
 import java.util.ArrayList;
 
-public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
+
+public abstract class MCDRelEnd extends MCDElement implements MRelEnd, IMCDElementWithTargets {
 
     private static final long serialVersionUID = 1000;
+    private ArrayList<IMLDRElement> imldrElementTargets = new ArrayList<IMLDRElement>();
 
     //public static final int FROM = 1 ;
     //public static final int TO = 2 ;
@@ -100,17 +106,16 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
     //TODO-0 Vérifier que shortName de MCDRelation soit obligatoire si pas de rôle
     public String getShortName(){
         String shortName = super.getShortName();
-
-        //TODO-0 Vérifier que shortName de MCDRelation soit obligatoire si pas de rôle
-        //#MAJ 2020-12-11
-        /*
-        if (StringUtils.isEmpty(shortName)){
-            shortName = getMcdRelation().getShortName();
-        }
-        */
-
         return shortName;
     }
 
+    @Override
+    public ArrayList<IMLDRElement> getImldrElementTargets() {
+        return imldrElementTargets;
+    }
 
+    @Override
+    public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
+        this.imldrElementTargets = imldrElementTargets;
+    }
 }

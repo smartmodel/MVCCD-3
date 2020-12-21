@@ -1,4 +1,4 @@
-package mcd.transform;
+package transform.mcdtomldr;
 
 import exceptions.CodeApplException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
@@ -19,37 +19,37 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectService;
-import utilities.Trace;
-import utilities.TransformService;
 
 import java.util.ArrayList;
 
 public class MCDTransformToTable {
 
+    private MCDTransform mcdTransform ;
     private IMCDModel  imcdModel ;
     private MLDRModel mldrModel ;
 
-
-
-    public void fromEntities(IMCDModel  imcdModel, MLDRModel mldrModel)  throws TransformMCDException{
+    public MCDTransformToTable(MCDTransform mcdTransform, IMCDModel imcdModel, MLDRModel mldrModel) {
+        this.mcdTransform = mcdTransform;
         this.imcdModel = imcdModel;
         this.mldrModel = mldrModel;
-        fromEntitiesConcrets(ProjectService.getMCDEntitiesConcrets((MCDElement) imcdModel));
-        transformPKEntitiesIndependants(ProjectService.getMCDEntitiesIndependants((MCDElement) imcdModel));
-        transformPKEntitiesConcretsNoInd(ProjectService.getMCDEntitiesConcretsNoInd((MCDElement) imcdModel));
     }
 
 
+    public void createOrModifyFromAllEntities()  throws TransformMCDException{
+        this.imcdModel = imcdModel;
+        this.mldrModel = mldrModel;
+        createOrModifyFromEntities(ProjectService.getMCDEntitiesConcrets((MCDElement) imcdModel));
+        createOrModifyPKEntitiesInd(ProjectService.getMCDEntitiesIndependants((MCDElement) imcdModel));
+        createOrModifyPKEntitiesNoInd(ProjectService.getMCDEntitiesConcretsNoInd((MCDElement) imcdModel));
+    }
 
-    private void fromEntitiesConcrets(ArrayList<MCDEntity> mcdEntitiesConcrets) {
+    private void createOrModifyFromEntities(ArrayList<MCDEntity> mcdEntitiesConcrets) {
         for (MCDEntity mcdEntityConcret : mcdEntitiesConcrets){
-            fromEntityConcret (mcdEntityConcret);
+            createOrModifyFromEntity(mcdEntityConcret);
         }
     }
 
-
-
-    private void fromEntityConcret(MCDEntity mcdEntity) {
+    private void createOrModifyFromEntity(MCDEntity mcdEntity) {
         // Table
         MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(mcdEntity);
         if (mldrTable == null){
@@ -58,20 +58,22 @@ public class MCDTransformToTable {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrTable);
         }
         modifyTable(mldrTable, mcdEntity);
+        mcdTransform.addInTrace(mcdEntity, mldrTable);
 
         // Attributs
-        new MCDTransformToColumn().fromAttributes(mcdEntity, mldrTable);
+        MCDTransformToColumn mcdTransformToColumn = new MCDTransformToColumn(mcdTransform);
+        mcdTransformToColumn.createOrModifyFromAttributes(mcdEntity, mldrTable);
     }
 
 
-    private void transformPKEntitiesIndependants(ArrayList<MCDEntity> mcdEntitiesIndependants)  throws TransformMCDException{
+    private void createOrModifyPKEntitiesInd(ArrayList<MCDEntity> mcdEntitiesIndependants)  throws TransformMCDException{
         for (MCDEntity mcdEntityIndependant : mcdEntitiesIndependants){
             MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(mcdEntityIndependant);
-            new MCDTransformToPK().fromEntityIndependant(mcdEntityIndependant, mldrTable);
+            new MCDTransformToPK(mcdTransform).createOrModifyFromEntityInd(mcdEntityIndependant, mldrTable);
         }
     }
 
-    private void transformPKEntitiesConcretsNoInd(ArrayList<MCDEntity> mcdEntitiesNoIndNoEntAss)  throws TransformMCDException {
+    private void createOrModifyPKEntitiesNoInd(ArrayList<MCDEntity> mcdEntitiesNoIndNoEntAss)  throws TransformMCDException {
 
         ArrayList<MCDEntity> mcdEntitiesToTransform = (ArrayList<MCDEntity>) mcdEntitiesNoIndNoEntAss.clone();
         int controle = mcdEntitiesToTransform.size();
@@ -85,14 +87,15 @@ public class MCDTransformToTable {
                 ArrayList<MLDRTable> mldrTablesParents = getMLDRTablesParents(mcdRelEndsParents);
                 if (pkParentsExists(mldrTablesParents)){
                     MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(mcdEntity);
-                    MLDRPK mldrPK = new MCDTransformToPK().fromEntityConcretNoInd(mldrModel, mcdEntity, mldrTable,mcdRelEndsParents);
+                    MLDRPK mldrPK = new MCDTransformToPK(mcdTransform).createOrModifyFromEntityConcretNoInd(mldrModel, mcdEntity, mldrTable,mcdRelEndsParents);
                     if (mldrPK != null){
+                        // Suppression de l'entité dans la liste à transformer
                         mcdEntitiesToTransform.remove(mcdEntity);
                     }
                  }
             }
             if (controle == mcdEntitiesToTransform.size()){
-                throw new CodeApplException("Erreur interne dans la boucle de trnsformation des entités non ondépendantes");
+                throw new CodeApplException("Erreur interne dans la boucle de transformation des entités non indépendantes");
             }
         }
     }

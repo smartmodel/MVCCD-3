@@ -8,11 +8,13 @@ import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import mcd.*;
+import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
 import mldr.*;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
+import project.ProjectElement;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.*;
 import repository.editingTreat.md.MDDatatypeEditingTreat;
@@ -30,6 +32,7 @@ import project.Project;
 import repository.editingTreat.*;
 import utilities.DefaultMutableTreeNodeService;
 import utilities.Trace;
+import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
 import utilities.window.scomponents.SPopupMenu;
@@ -165,8 +168,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         }
 
         if (node.getUserObject() instanceof MCDAssEnd) {
-            mvccdElement = ((MCDAssEnd) node.getUserObject()).getMcdAssociation();
-            treatGeneric(this, new MCDAssociationEditingTreat());
+            //mvccdElement = ((MCDAssEnd) node.getUserObject()).getMcdAssociation();
+            //treatGeneric(this, new MCDAssociationEditingTreat());
+            treatGeneric(this, new MCDAssEndEditingTreat());
         }
 
         if (node.getUserObject() instanceof MCDGeneralization) {
@@ -174,8 +178,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         }
 
         if (node.getUserObject() instanceof MCDGSEnd) {
-            mvccdElement = ((MCDGSEnd) node.getUserObject()).getMcdGeneralization();
-            treatGeneric(this, new MCDGeneralizationEditingTreat());
+            //mvccdElement = ((MCDGSEnd) node.getUserObject()).getMcdGeneralization();
+            //treatGeneric(this, new MCDGeneralizationEditingTreat());
+            treatGeneric(this, new MCDGSEndEditingTreat());
         }
 
         if (node.getUserObject() instanceof MCDLink) {
@@ -183,8 +188,16 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         }
 
         if (node.getUserObject() instanceof MCDLinkEnd) {
-            mvccdElement = ((MCDLinkEnd) node.getUserObject()).getMcdLink();
-            treatGeneric(this, new MCDLinkEditingTreat());
+            //mvccdElement = ((MCDLinkEnd) node.getUserObject()).getMcdLink();
+            //treatGeneric(this, new MCDLinkEditingTreat());
+            treatGeneric(this, new MCDLinkEndEditingTreat());
+
+        }
+
+
+        if (node.getUserObject() instanceof IMCDElementWithTargets) {
+            String textMenu = MessagesBuilder.getMessagesProperty("menu.mcd.targets.read");
+            treatGenericRead( this, new MCDTargetsEditingTreat(), textMenu);
         }
 
         if (node.getUserObject() instanceof MLDRModel) {
@@ -221,12 +234,17 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
 
     private void treatInspectObject() {
-        JMenuItem inspecter = new JMenuItem("Inpecter l'objet --> Résultat dans la console!");
+        JMenuItem inspecter = new JMenuItem("Inspecter l'objet ");
         this.add(inspecter);
         inspecter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println(node.getUserObject().getClass().getName());
+                String message = "Classe : " + mvccdElement.getClass().getName();
+                if (mvccdElement instanceof ProjectElement){
+                    ProjectElement projectElement = (ProjectElement) mvccdElement;
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getId();
+                }
+                new DialogMessage().showOk(mvccdWindow, message);
             }
         });
 

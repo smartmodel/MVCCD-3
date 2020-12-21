@@ -4,10 +4,7 @@ import exceptions.TransformMCDException;
 import m.IMCompletness;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
-import mcd.services.MCDModelService;
-import mcd.transform.MCDTransform;
-import mldr.MLDRModelDT;
-import mldr.MLDRModelTI;
+import transform.mcdtomldr.MCDTransform;
 import project.ProjectService;
 
 import java.util.ArrayList;

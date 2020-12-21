@@ -1,4 +1,4 @@
-package mcd.transform;
+package transform;
 
 import mdr.MDRColumn;
 import mdr.MDROperation;

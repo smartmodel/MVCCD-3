@@ -3,6 +3,7 @@ package mldr.services;
 import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.MCDEntity;
+import mcd.MCDRelEnd;
 import mcd.MCDRelation;
 import mdr.MDRContColumns;
 import mdr.MDRContConstraints;
@@ -11,6 +12,7 @@ import mldr.MLDRColumn;
 import mldr.MLDRFK;
 import mldr.MLDRModel;
 import mldr.MLDRTable;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -79,12 +81,12 @@ public class MLDRTableService {
         return resultat ;
     }
 
-    public static MLDRColumn getMLDRColumnFKByMCDRelationAndMLDRColumnPK(MLDRTable mldrTable,
-                                                                         MCDRelation mcdRelation,
+    public static MLDRColumn getMLDRColumnFKByMCDRelEndChildAndMLDRColumnPK(MLDRTable mldrTable,
+                                                                         MCDRelEnd mcdRelEnd,
                                                                          MLDRColumn mldrColumnPK) {
 
-        for (MLDRColumn mldrColumnFK : getMLDRColumnsByMCDElementSource(mldrTable, mcdRelation)){
-            if ( mldrColumnFK.getMLDRColumnPK() == mldrColumnPK){
+        for (MLDRColumn mldrColumnFK : getMLDRColumnsByMCDElementSource(mldrTable, mcdRelEnd)){
+            if ( mldrColumnFK.getMDRColumnPK() == mldrColumnPK){
                 return mldrColumnFK;
             }
         }

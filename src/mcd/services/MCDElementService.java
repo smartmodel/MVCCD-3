@@ -16,24 +16,7 @@ public class MCDElementService {
 
     public static String getPath(MCDElement mcdElement, int pathMode, String separator) {
         String path = "";
-        // Reculer jusqu'à la racine
 
-        /*
-        if (!(mcdElement.getParent() instanceof IMCDModel)){
-            if (!(mcdElement instanceof IMCDModel)) {
-                path = getPath((MCDElement) mcdElement.getParent(), pathMode);
-            }
-        }
-        */
-
-        /*
-        if (!(mcdElement.getParent() instanceof MCDContModels)){
-            if (!(mcdElement instanceof MCDContModels)) {
-                path = getPath((MCDElement) mcdElement.getParent(), pathMode);
-            }
-        }
-
-         */
 
         if (!(mcdElement.getParent() instanceof IMCDModel)) {
             if (!(mcdElement instanceof IMCDModel)) {
@@ -77,6 +60,17 @@ public class MCDElementService {
             return (MCDModel) imcdModel;
         }
         return null;
+    }
+
+
+    public static String getNamePathSource(MCDElement mcdElement, int pathMode, String separator) {
+        String nameSource = "";
+        String path = getPath( mcdElement, pathMode, separator);
+        if (path !=null){
+            nameSource = nameSource + path + separator ;
+        }
+        nameSource = nameSource +  mcdElement.getNameSource();
+        return nameSource ;
     }
 
 }

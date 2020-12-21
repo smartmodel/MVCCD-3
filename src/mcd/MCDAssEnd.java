@@ -3,13 +3,10 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import m.MRelEnd;
 import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.services.MRelEndService;
-import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
-import mcd.services.MCDElementService;
 import mcd.services.MCDRelEndService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -18,7 +15,6 @@ import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
@@ -102,67 +98,18 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
 
     @Override
     public String getNameTree() {
+        return getNameTreeOrSource(MCDRelEndService.TREE);
+    }
 
-        /*
-        String resultat = "";
-
-        MVCCDElement containerEntity = this.getMcdEntity().getParent().getParent();
-
-        MCDAssociation mcdAssociation = getMcdAssociation();
-        MVCCDElement containerAssociation = this.getMcdAssociation().getParent().getParent();
-
-        MCDAssEnd mcdAssEndOpposite = mcdAssociation.getMCDAssEndOpposite(this);
-        MCDEntity mcdEntityOpposite = mcdAssEndOpposite.getMcdEntity();
-        MVCCDElement containerEntityOpposite = mcdEntityOpposite.getParent().getParent();
-
-        boolean c1a = containerEntity == containerAssociation;
-        boolean c1b = containerEntityOpposite == containerAssociation;
-        boolean c1 = c1a && c1b;
-        String treeNaming = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
-        boolean c3 = treeNaming.equals(Preferences.MCD_NAMING_NAME);
-        boolean c4 = treeNaming.equals(Preferences.MCD_NAMING_SHORT_NAME);
-
-        boolean r1 = c1 && c3;
-        boolean r2 = c1 && c4;
-        boolean r3 = (!c1) && c3;
-        boolean r4 = (!c1) && c4;
-
-        String nameEntityOpposite = "";
+    @Override
+    public String getNameSource() {
+        return getNameTreeOrSource(MCDRelEndService.SOURCE);
+    }
 
 
-        if (r1){
-            nameEntityOpposite = mcdEntityOpposite.getName();
-        }
+    public String getNameTreeOrSource(int scope) {
 
-        if (r2){
-            nameEntityOpposite = mcdEntityOpposite.getShortNameSmart();
-        }
 
-        if (r3){
-            nameEntityOpposite = mcdEntityOpposite.getNamePath(MCDElementService.PATHSHORTNAME);
-        }
-
-        if (r4){
-            nameEntityOpposite = mcdEntityOpposite.getShortNameSmartPath();
-        }
-
-        String namingAssociation ;
-        if (StringUtils.isNotEmpty(this.getName()) && StringUtils.isNotEmpty(mcdAssEndOpposite.getName())){
-            namingAssociation = this.getName();
-            if (this.getDrawingDirection() == MCDAssEnd.FROM){
-                namingAssociation = namingAssociation +
-                                Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT ;
-
-            } else {
-                namingAssociation = namingAssociation  +
-                        Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT ;
-             }
-        } else {
-            namingAssociation =
-                    mcdAssociation.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
-        }
-
-         */
 
         String namingAssociation ;
         if (StringUtils.isNotEmpty(this.getName()) && StringUtils.isNotEmpty(this.getMCDAssEndOpposite().getName())){
@@ -180,7 +127,7 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
                     this.getMcdAssociation().getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
         }
 
-        return MCDRelEndService.getNameTree(this, namingAssociation);
+        return MCDRelEndService.getNameTreeOrSource(scope, this, namingAssociation);
     }
 
     @Override

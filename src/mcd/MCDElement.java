@@ -1,11 +1,11 @@
 package mcd;
 
+import exceptions.CodeApplException;
 import main.MVCCDElement;
 import mcd.services.MCDElementService;
 import md.MDElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 import project.ProjectElement;
 
 public abstract class MCDElement extends MDElement {
@@ -54,8 +54,6 @@ public abstract class MCDElement extends MDElement {
         }
     }
 
-
-
     public MCDContRelEnds getMCDContEndRels() {
         for (MVCCDElement mvccdElement : getChilds()){
             if (mvccdElement instanceof MCDContRelEnds) {
@@ -64,5 +62,26 @@ public abstract class MCDElement extends MDElement {
         }
         return null;
     }
+
+    public String getNameSource(){
+        if (getName() != null) {
+            return getName();
+        }
+        else if (getShortName() != null) {
+            return getShortName();
+        } else {
+            throw new CodeApplException("MCDElement.getMainSource - Impossible de créer un nom") ;
+        }
+    }
+
+    public String getNamePathSource(int pathMode, String separator) {
+        return MCDElementService.getNamePathSource(this, pathMode, separator);
+    }
+
+    public String getNamePathSourceDefault() {
+        return MCDElementService.getNamePathSource(this, MCDElementService.PATHNAME,
+                Preferences.MODEL_NAME_PATH_SEPARATOR);
+    }
+
 
 }

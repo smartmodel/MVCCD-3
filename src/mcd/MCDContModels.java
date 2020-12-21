@@ -1,18 +1,13 @@
 package mcd;
 
 import exceptions.TransformMCDException;
-import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
-import mcd.interfaces.IMCDNamePathParent;
-import mcd.transform.MCDTransform;
-import preferences.Preferences;
-import project.Project;
+import transform.mcdtomldr.MCDTransform;
 import project.ProjectElement;
 import project.ProjectService;
-import utilities.files.UtilXML;
 
 import java.util.ArrayList;
 

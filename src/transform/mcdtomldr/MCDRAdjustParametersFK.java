@@ -1,16 +1,16 @@
-package mcd.transform;
+package transform.mcdtomldr;
 
 import main.MVCCDManager;
 import mdr.MDRColumn;
 import mdr.MDROperation;
 import mdr.MDRTableOrView;
 import mldr.MLDRFK;
-import mldr.MLDRPK;
 import mldr.MLDRParameter;
+import transform.MDRAdjustParameters;
 
 import java.util.ArrayList;
 
-public class MLDRAdjustParametersFK extends MDRAdjustParameters{
+public class MCDRAdjustParametersFK extends MDRAdjustParameters {
 
 
     @Override
@@ -19,11 +19,11 @@ public class MLDRAdjustParametersFK extends MDRAdjustParameters{
                                  ArrayList<MDRColumn> mdrColumns) {
         // Ajout des colonnes manquantes
         for (MDRColumn mdrColumn : mdrColumns){
-                if (! mdrOperation.existeTarget(mdrColumn)) {
-                    MLDRFK mldrFK = (MLDRFK) mdrOperation;
-                    MLDRParameter mldrParameter = mldrFK.createParameter(mdrColumn);
-                    MVCCDManager.instance().addNewMVCCDElementInRepository(mldrParameter);
-                }
+            if (! mdrOperation.existeTarget(mdrColumn)) {
+                MLDRFK mldrFK = (MLDRFK) mdrOperation;
+                MLDRParameter mldrParameter = mldrFK.createParameter(mdrColumn);
+                MVCCDManager.instance().addNewMVCCDElementInRepository(mldrParameter);
+            }
         }
 
     }

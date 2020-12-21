@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class UtilDivers {
 
-    public static final int NULL = 1 ;
-    public static final int EMPTY = 2 ;
+    public static final int NULL = 1;
+    public static final int EMPTY = 2;
 
-    public static String ArrayStringToString(ArrayList<String> array, String separator){
+    public static String ArrayStringToString(ArrayList<String> array, String separator) {
         String resultat = "";
         boolean first = true;
         if (array != null) {
@@ -28,20 +28,20 @@ public class UtilDivers {
     }
 
     public static ArrayList<String> getArrayListFromNamesStringTagged(String names,
-                                                                        String tagBegin,
-                                                                        String tagEnd,
-                                                                        boolean withTags){
+                                                                      String tagBegin,
+                                                                      String tagEnd,
+                                                                      boolean withTags) {
         ArrayList<String> resultat = new ArrayList();
-        if (!StringUtils.isEmpty(names)){
+        if (!StringUtils.isEmpty(names)) {
             String[] parts = names.split(tagEnd);
             int i;
-            for (i=0; i<parts.length;i++){
+            for (i = 0; i < parts.length; i++) {
                 // Vérification de la présence du marqueur de début
-                if (parts[i].indexOf(tagBegin) == 0){
+                if (parts[i].indexOf(tagBegin) == 0) {
                     // Il n'y a qu'un seul caractère pour le symbole de début de marquage!
                     String name = parts[i].substring(1);
-                    if (name != null){
-                        if (withTags){
+                    if (name != null) {
+                        if (withTags) {
                             name = tagBegin + name + tagEnd;
                         }
                         resultat.add(name);
@@ -52,18 +52,18 @@ public class UtilDivers {
         return resultat;
     }
 
-    public static String fromBooleanToString (Boolean exprBoolean, int showNull){
-        if (exprBoolean != null){
-            if (exprBoolean){
+    public static String fromBooleanToString(Boolean exprBoolean, int showNull) {
+        if (exprBoolean != null) {
+            if (exprBoolean) {
                 return MessagesBuilder.getMessagesProperty("boolean.to.string.true");
             } else {
                 return MessagesBuilder.getMessagesProperty("boolean.to.string.false");
             }
         } else {
-            if ( showNull == NULL) {
+            if (showNull == NULL) {
                 return MessagesBuilder.getMessagesProperty("boolean.to.string.null");
             }
-            if ( showNull == EMPTY) {
+            if (showNull == EMPTY) {
                 return "";
             }
         }
@@ -71,33 +71,33 @@ public class UtilDivers {
     }
 
 
-    public static String fromIntegerToString (Integer exprInteger, int showNull){
-        if (exprInteger != null){
+    public static String fromIntegerToString(Integer exprInteger, int showNull) {
+        if (exprInteger != null) {
             return String.valueOf(exprInteger.intValue());
         } else {
-            if ( showNull == NULL) {
+            if (showNull == NULL) {
                 return MessagesBuilder.getMessagesProperty("boolean.to.integer.null");
             }
-            if ( showNull == EMPTY) {
+            if (showNull == EMPTY) {
                 return "";
             }
         }
         return null;
     }
 
-    public static String fromStringToString (String exprString, int showNull){
-        if (exprString != null){
+    public static String fromStringToString(String exprString, int showNull) {
+        if (exprString != null) {
             return exprString;
         } else {
             return stringNull(showNull);
         }
     }
 
-    public static String stringNull(int showNull){
-        if ( showNull == NULL) {
+    public static String stringNull(int showNull) {
+        if (showNull == NULL) {
             return MessagesBuilder.getMessagesProperty("string.to.integer.null");
         }
-        if ( showNull == EMPTY) {
+        if (showNull == EMPTY) {
             return "";
         }
         return null;
@@ -105,13 +105,13 @@ public class UtilDivers {
 
     public static void putValueRowInTable(JTable table, int selectedRow, Object[] row) {
         if (row.length >= 1) {
-            for (int i = 0; i < row.length ; i++) {
+            for (int i = 0; i < row.length; i++) {
                 table.setValueAt(row[i], selectedRow, i);
             }
         }
     }
 
-    public static String toNoFree(String str){
+    public static String toNoFree(String str) {
         String noFree = "";
         if (StringUtils.isNotEmpty(str)) {
             noFree = StringUtils.remove(str, ' ');
@@ -131,5 +131,18 @@ public class UtilDivers {
             noFree = noFree.replace('ü', 'u');
         }
         return noFree;
+    }
+
+    public static <T> boolean isNotEmpty(ArrayList<T> arrayList) {
+        if (arrayList != null) {
+            if (arrayList.size() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static <T> boolean isEmpty(ArrayList<T> arrayList) {
+        return !isNotEmpty(arrayList);
     }
 }

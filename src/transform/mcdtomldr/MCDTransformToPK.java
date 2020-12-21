@@ -1,4 +1,4 @@
-package mcd.transform;
+package transform.mcdtomldr;
 
 import exceptions.orderbuildnaming.OrderBuildNameException;
 import exceptions.TransformMCDException;
@@ -12,33 +12,37 @@ import mldr.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.TransformService;
 
 import java.util.ArrayList;
 
 public class MCDTransformToPK {
+
+    private MCDTransform mcdTransform ;
 
     //private MLDRModel mldrModel ;
     //private MCDEntity mcdEntity ;
     //private MLDRTable mldrTable ;
 
 
+    public MCDTransformToPK(MCDTransform mcdTransform) {
+        this.mcdTransform = mcdTransform;
+    }
 
-    public void fromEntityIndependant(MCDEntity mcdEntity, MLDRTable mldrTable)  throws TransformMCDException{
+    public void createOrModifyFromEntityInd(MCDEntity mcdEntity, MLDRTable mldrTable)  throws TransformMCDException{
 
         MLDRPK mldrPK = createOrModifyPKEntityBase(mcdEntity, mldrTable);
 
         ArrayList<MDRColumn> mdrColumnPKs = new ArrayList<MDRColumn>();
-        mdrColumnPKs.add(createOrModifyColumnPK(mcdEntity, mldrTable));
+        mdrColumnPKs.add(createOrModifyColumnPKProper(mcdEntity, mldrTable));
 
-        new MLDRAdjustParametersPK().adjustParameters(mldrTable, mldrPK, mdrColumnPKs);
+        new MCDAdjustParametersPK().adjustParameters(mldrTable, mldrPK, mdrColumnPKs);
     }
 
 
-    public MLDRPK fromEntityConcretNoInd(MLDRModel mldrModel,
-                                         MCDEntity mcdEntity,
-                                         MLDRTable mldrTable,
-                                         ArrayList<MCDRelEnd> mcdRelEndsParents)  throws TransformMCDException{
+    public MLDRPK createOrModifyFromEntityConcretNoInd(MLDRModel mldrModel,
+                                                       MCDEntity mcdEntity,
+                                                       MLDRTable mldrTable,
+                                                       ArrayList<MCDRelEnd> mcdRelEndsParents)  throws TransformMCDException{
 
         // Ensemble des colonnes PK
         ArrayList<MDRColumn> mdrColumnPKs = new ArrayList<MDRColumn>();
@@ -46,7 +50,8 @@ public class MCDTransformToPK {
         // Création des PFK
         for (MCDRelEnd mcdRelEndParent : mcdRelEndsParents){
             // Création des PFK
-            MLDRFK mldrFK = new MCDTransformToFK().fromRelEndParent(mldrModel, mcdRelEndParent, mldrTable, MDRFKNature.IDCOMP);
+            MCDTransformToFK mcdTransformToFK = new MCDTransformToFK(mcdTransform);
+            MLDRFK mldrFK = mcdTransformToFK.createOrModifyFromRelEndParent(mldrModel, mcdRelEndParent, mldrTable, MDRFKNature.IDCOMP);
             mdrColumnPKs.addAll(mldrFK.getMDRColumns());
         }
 
@@ -55,11 +60,11 @@ public class MCDTransformToPK {
         if ( (mcdEntity.getNature() == MCDEntityNature.DEP)  ||
                 (mcdEntity.getNature() == MCDEntityNature.ENTASSDEP) ||
                 (mcdEntity.getNature() == MCDEntityNature.ENTASSDEP ))  {
-            MDRColumn mdrColumnPKProper = createOrModifyColumnPK(mcdEntity, mldrTable);
+            MDRColumn mdrColumnPKProper = createOrModifyColumnPKProper(mcdEntity, mldrTable);
             mdrColumnPKs.add(mdrColumnPKProper);
         }
 
-        new MLDRAdjustParametersPK().adjustParameters(mldrTable, mldrPK, mdrColumnPKs);
+        new MCDAdjustParametersPK().adjustParameters(mldrTable, mldrPK, mdrColumnPKs);
 
         return mldrPK;
     }
@@ -71,13 +76,15 @@ public class MCDTransformToPK {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrPK);
         }
         modifyPK(mldrPK, mcdEntity);
+        mcdTransform.addInTrace(mcdEntity, mldrPK);
+
         return mldrPK;
     }
 
 
 
 
-    public MLDRColumn createOrModifyColumnPK(MCDEntity mcdEntity, MLDRTable mldrTable) {
+    public MLDRColumn createOrModifyColumnPKProper(MCDEntity mcdEntity, MLDRTable mldrTable) {
 
         // Crée ou modifie Colonne PK (num ou numDep)
         MCDAttribute mcdAttributeAID = mcdEntity.getMCDAttributeAID();
@@ -92,10 +99,16 @@ public class MCDTransformToPK {
             } else {
                 mldrColumnPK = mldrColumnPKWithoutAID;
             }
+            // Sans attribut AID
+            mcdTransform.addInTrace(mcdEntity, mldrColumnPK);
         } else {
             mldrColumnPK = mldrColumnPKWithAID;
+            // Déjà tracé lors de la transformation de la colonne
+            // mcdTransform.addInTrace(mcdAttributeAID, mldrColumnPK);
         }
-        new MCDTransformToColumn().modifyColumnPK(mcdEntity, mldrColumnPK);
+        MCDTransformToColumn mcdTransformToColumn = new MCDTransformToColumn(mcdTransform);
+        mcdTransformToColumn.modifyColumnPK(mcdEntity, mldrColumnPK);
+
 
         return mldrColumnPK;
     }

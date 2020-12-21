@@ -3,14 +3,18 @@ package mcd;
 import constraints.Constraint;
 import exceptions.CodeApplException;
 import m.MRelation;
+import mcd.interfaces.IMCDElementWithTargets;
+import mldr.interfaces.IMLDRElement;
 import project.ProjectService;
 import stereotypes.Stereotype;
 
 import java.util.ArrayList;
 
-public abstract class MCDRelation extends MCDElement implements MRelation {
+public abstract class MCDRelation extends MCDElement implements MRelation, IMCDElementWithTargets {
 
     private  static final long serialVersionUID = 1000;
+
+    private ArrayList<IMLDRElement> imldrElementTargets;
 
     private MCDRelEnd a ;
     private MCDRelEnd b ;
@@ -83,6 +87,13 @@ public abstract class MCDRelation extends MCDElement implements MRelation {
 
     public abstract ArrayList<Constraint> getToConstraints(); // Contraintes UML
 
+    @Override
+    public ArrayList<IMLDRElement> getImldrElementTargets() {
+        return imldrElementTargets;
+    }
 
-
+    @Override
+    public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
+        this.imldrElementTargets = imldrElementTargets;
+    }
 }

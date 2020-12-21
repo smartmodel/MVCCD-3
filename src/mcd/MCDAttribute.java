@@ -4,8 +4,10 @@ import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import m.IMCompletness;
+import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAttributeService;
+import mldr.interfaces.IMLDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -16,9 +18,10 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParameter {
+public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParameter, IMCDElementWithTargets {
 
     private static final long serialVersionUID = 1000;
+    private ArrayList<IMLDRElement> imldrElementTargets = new ArrayList<IMLDRElement>();
 
     public static final String CLASSSHORTNAMEUI = "Attribute";
 
@@ -48,6 +51,15 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         super(parent);
     }
 
+    @Override
+    public ArrayList<IMLDRElement> getImldrElementTargets() {
+        return imldrElementTargets;
+    }
+
+    @Override
+    public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
+        this.imldrElementTargets = imldrElementTargets;
+    }
 
     public boolean isFrozen() {
         return frozen;

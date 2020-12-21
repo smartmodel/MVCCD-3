@@ -1,4 +1,4 @@
-package mcd.transform;
+package transform.mcdtomldr;
 
 import exceptions.orderbuildnaming.OrderBuildNameException;
 import exceptions.TransformMCDException;
@@ -20,15 +20,24 @@ import java.util.ArrayList;
 
 public class MCDTransformToFK {
 
-    public MLDRFK  fromRelEndParent(MLDRModel mldrModel, MCDRelEnd mcdRelEndParent, MLDRTable mldrTable, MDRFKNature fkNature) {
+    private MCDTransform mcdTransform ;
+
+    public MCDTransformToFK(MCDTransform mcdTransform) {
+        this.mcdTransform = mcdTransform;
+    }
+
+    public MLDRFK createOrModifyFromRelEndParent(MLDRModel mldrModel, MCDRelEnd mcdRelEndParent, MLDRTable mldrTable, MDRFKNature fkNature) {
 
         MLDRFK mldrFK =  mldrTable.getMLDRFKByMCDElementSource(mcdRelEndParent.getMcdRelation());
 
+        MCDRelation mcdRelation = mcdRelEndParent.getMcdRelation();
         if (mldrFK == null) {
-            mldrFK = mldrTable.createFK(mcdRelEndParent.getMcdRelation());
+            mldrFK = mldrTable.createFK(mcdRelation);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrFK);
         }
         modifyFK(mldrModel, mcdRelEndParent, mldrTable, mldrFK, fkNature);
+        mcdTransform.addInTrace(mcdRelEndParent.getMCDRelEndOpposite(), mldrFK);
+
         return mldrFK;
     }
 
@@ -54,12 +63,13 @@ public class MCDTransformToFK {
             MCDRelation mcdRelation = mcdRelEndParent.getMcdRelation();
 
             // Transformation de la colonne PK en colonne FK
-            MLDRColumn mldrColumnFK = new MCDTransformToColumn().fromRelEndParent(mldrTable, mcdRelEndParent, mldrTableParent, mldrColumnPK, fkNature, mldrFK.getIndice());
+            MCDTransformToColumn mcdTransformToColumn = new MCDTransformToColumn(mcdTransform);
+            MLDRColumn mldrColumnFK = mcdTransformToColumn.createOrModifyFromRelEndParent(mldrTable, mcdRelEndParent, mldrTableParent, mldrColumnPK, fkNature, mldrFK.getIndice());
             mdrColumnsFK.add(mldrColumnFK);
         }
 
         // Transformation des paramètres PK en paramètres FK
-        new MLDRAdjustParametersFK().adjustParameters(mldrTable, mldrFK, mdrColumnsFK);
+        new MCDRAdjustParametersFK().adjustParameters(mldrTable, mldrFK, mdrColumnsFK);
     }
 
     private void adjustParameters(MLDRFK mldrFK, MLDRColumn mldrColumnPK) {

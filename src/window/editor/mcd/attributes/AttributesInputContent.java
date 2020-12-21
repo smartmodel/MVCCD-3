@@ -25,7 +25,7 @@ public class AttributesInputContent extends PanelInputContentTable {
     public AttributesInputContent(AttributesInput attributesInput)    {
 
         super(attributesInput);
-     }
+    }
 
     @Override
     public void createContentCustom() {

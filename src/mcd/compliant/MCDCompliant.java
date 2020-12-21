@@ -75,7 +75,7 @@ public class MCDCompliant {
             resultat.addAll(checkAttributeOutContext(mcdAttribute, showDialogCompletness));
         }
 
-        for (MCDConstraint mcdConstraint : mcdEntity.getMcdConstraints()){
+        for (MCDConstraint mcdConstraint : mcdEntity.getMCDConstraints()){
             resultat.addAll(checkConstraintOutContext(mcdConstraint, showDialogCompletness));
         }
         return resultat;
@@ -108,7 +108,7 @@ public class MCDCompliant {
         }
 
         // Contraintes dans le contexte
-        for (MCDConstraint mcdConstraint : mcdEntity.getMcdConstraints()){
+        for (MCDConstraint mcdConstraint : mcdEntity.getMCDConstraints()){
             if (resultat.size() == 0) {
                 resultat.addAll(checkConstraintInContext(mcdConstraint));
             }

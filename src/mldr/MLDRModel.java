@@ -1,16 +1,12 @@
 package mldr;
 
 import main.MVCCDElementFactory;
-import mcd.MCDElement;
 import mcd.MCDEntity;
-import mcd.services.MCDElementService;
 import mdr.MDRContTables;
-import mdr.MDRElement;
 import mdr.MDRModel;
 import mldr.interfaces.IMLDRElement;
 import mldr.services.MLDRModelService;
-import mldr.transform.MLDRTransform;
-import org.apache.commons.lang.StringUtils;
+import transform.mldrtompdr.MLDRTransform;
 import project.ProjectElement;
 
 import java.util.ArrayList;

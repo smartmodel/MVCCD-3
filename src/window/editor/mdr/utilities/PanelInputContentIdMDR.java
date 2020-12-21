@@ -185,7 +185,8 @@ public class PanelInputContentIdMDR extends PanelInputContent {
             MDElement mdElementSource = ((IMDRElementWithSource)mdrElement).getMdElementSource();
             String sourceName = mdElementSource.getName();
             if (mdElementSource instanceof MCDElement) {
-                sourceName = ((MCDElement) mdElementSource).getNamePath(MElement.SCOPESHORTNAME);
+                //sourceName = ((MCDElement) mdElementSource).getNamePath(MElement.SCOPESHORTNAME);
+                sourceName = ((MCDElement) mdElementSource).getNameSource();
             }
             String sourceClassName = mdElementSource.getClass().getSimpleName();
             fieldSource.setText(sourceClassName + " :  " + sourceName);

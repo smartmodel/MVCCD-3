@@ -39,6 +39,15 @@ public class MCDLinkEnd extends MCDRelEnd  {
 
     @Override
     public String getNameTree() {
+        return getNameTreeOrSource(MCDRelEndService.TREE);
+    }
+
+    @Override
+    public String getNameSource() {
+        return getNameTreeOrSource(MCDRelEndService.SOURCE);
+    }
+
+    public String getNameTreeOrSource(int scope) {
 
         String namingLink ;
 
@@ -48,7 +57,7 @@ public class MCDLinkEnd extends MCDRelEnd  {
             namingLink = Preferences.MCD_NAMING_LINK_ELEMENT ;
         }
 
-        return MCDRelEndService.getNameTree(this, namingLink);
+        return MCDRelEndService.getNameTreeOrSource(scope, this, namingLink);
     }
 
 

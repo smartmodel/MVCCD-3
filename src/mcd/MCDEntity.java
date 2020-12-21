@@ -5,14 +5,18 @@ import m.MRelationDegree;
 import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDNamePathParent;
+import mcd.interfaces.IMCDElementWithTargets;
 import mcd.services.MCDEntityService;
+import mldr.interfaces.IMLDRElement;
 import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompletness {
+public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompletness, IMCDElementWithTargets {
 
     private static final long serialVersionUID = 1000;
+    private ArrayList<IMLDRElement> imldrElementTargets = new ArrayList<IMLDRElement>();
+
 
     //private String shortName ;
     private boolean entAbstract = false;
@@ -34,6 +38,14 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
     public void setName(String name){
         super.setName(name);
         setMldrTableName(name);
+    }
+
+    public ArrayList<IMLDRElement> getImldrElementTargets() {
+        return imldrElementTargets;
+    }
+
+    public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
+        this.imldrElementTargets = imldrElementTargets;
     }
 
     public boolean isEntAbstract() {
@@ -96,7 +108,7 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
     }
 
 
-    public ArrayList<MCDConstraint> getMcdConstraints() {
+    public ArrayList<MCDConstraint> getMCDConstraints() {
         for (MVCCDElement mvccdElement : getChilds()){
             if (mvccdElement instanceof MCDContConstraints) {
                 MCDContConstraints mcdContConstraints = (MCDContConstraints) mvccdElement;
@@ -109,7 +121,7 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
 
     public ArrayList<MCDUnicity> getMCDUnicities() {
         ArrayList<MCDUnicity> resultat = new ArrayList<MCDUnicity>();
-        for (MCDConstraint mcdConstraint: getMcdConstraints() ){
+        for (MCDConstraint mcdConstraint: getMCDConstraints() ){
             if (mcdConstraint instanceof MCDUnicity) {
                 resultat.add((MCDUnicity) mcdConstraint);
             }
@@ -119,7 +131,7 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
 
     public ArrayList<MCDNID> getMCDNIDs() {
         ArrayList<MCDNID> resultat = new ArrayList<MCDNID>();
-        for (MCDConstraint mcdConstraint: getMcdConstraints() ){
+        for (MCDConstraint mcdConstraint: getMCDConstraints() ){
             if (mcdConstraint instanceof MCDNID) {
                 resultat.add((MCDNID) mcdConstraint);
             }
@@ -129,7 +141,7 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
 
     public ArrayList<MCDUnique> getMCDUniques() {
         ArrayList<MCDUnique> resultat = new ArrayList<MCDUnique>();
-        for (MCDConstraint mcdConstraint: getMcdConstraints() ){
+        for (MCDConstraint mcdConstraint: getMCDConstraints() ){
             if (mcdConstraint instanceof MCDUnique) {
                 resultat.add((MCDUnique) mcdConstraint);
             }

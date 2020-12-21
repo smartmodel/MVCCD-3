@@ -27,18 +27,22 @@ public abstract class MDRColumn extends MDRElement implements IMDRElementWithSou
 
     private  static final long serialVersionUID = 1000;
 
-    private MLDRColumn mldrColumnPK = null;
-
+    private MDRColumn mdrColumnPK = null;
 
 
     public MDRColumn(ProjectElement parent) {
         super(parent);
     }
 
-    public MDRColumn(ProjectElement parent, MLDRColumn mldrColumnPK) {
+
+
+
+    public MDRColumn(ProjectElement parent, MLDRColumn mdrColumnPK) {
         super(parent);
-        this.mldrColumnPK = mldrColumnPK;
+        this.mdrColumnPK = mdrColumnPK;
     }
+
+
 
 
 
@@ -136,8 +140,12 @@ public abstract class MDRColumn extends MDRElement implements IMDRElementWithSou
 
 
 
-    public MLDRColumn getMLDRColumnPK() {
-        return mldrColumnPK;
+    public MDRColumn getMDRColumnPK() {
+        return mdrColumnPK;
+    }
+
+    public void setMdrColumnPK(MDRColumn mdrColumnPK) {
+        this.mdrColumnPK = mdrColumnPK;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package mcd.transform;
+package transform.mcdtomldr;
 
 import datatypes.MLDRDatatype;
 import exceptions.orderbuildnaming.OrderBuildNameException;
@@ -17,23 +17,29 @@ import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
 public class MCDTransformToColumn {
 
-    //private MCDEntity mcdEntity ;
-    //private MLDRTable mldrTable ;
+    private MCDTransform mcdTransform ;
+    private MCDEntity mcdEntity ;
+    private MLDRTable mldrTable ;
 
-
-    public void fromAttributes(MCDEntity mcdEntity, MLDRTable mldrTable) {
-        for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()) {
-            fromAttribute(mcdAttribute, mldrTable);
-        }
+    public MCDTransformToColumn(MCDTransform mcdTransform) {
+        this.mcdTransform = mcdTransform;
+        this.mcdEntity = mcdEntity;
+        this.mldrTable = mldrTable;
     }
 
-    public void fromAttribute(MCDAttribute mcdAttribute, MLDRTable mldrTable) {
+    public void createOrModifyFromAttributes(MCDEntity mcdEntity, MLDRTable mldrTable) {
+        for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()) {
+            createOrModifyFromAttribute(mcdAttribute, mldrTable);
+        }
+
+    }
+
+    public void createOrModifyFromAttribute(MCDAttribute mcdAttribute, MLDRTable mldrTable) {
 
         MLDRColumn mldrColumn = mldrTable.getMLDRColumnByMCDElementSource(mcdAttribute);
 
@@ -42,17 +48,21 @@ public class MCDTransformToColumn {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrColumn);
         }
         modifyColumn(mldrColumn, mcdAttribute);
+        mcdTransform.addInTrace(mcdAttribute, mldrColumn);
+
     }
 
 
-    public MLDRColumn fromRelEndParent(MLDRTable mldrTable, MCDRelEnd mcdRelEndParent, MLDRTable mldrTableParent, MLDRColumn mldrColumnPK, MDRFKNature fkNature, Integer indiceFK) {
-        MLDRColumn mldrColumnFK = mldrTable.getMLDRColumnFKByMCDRelationAndMLDRColumnPK(
-                mcdRelEndParent.getMcdRelation(), mldrColumnPK);
+    public MLDRColumn createOrModifyFromRelEndParent(MLDRTable mldrTable, MCDRelEnd mcdRelEndParent, MLDRTable mldrTableParent, MLDRColumn mldrColumnPK, MDRFKNature fkNature, Integer indiceFK) {
+        MLDRColumn mldrColumnFK = mldrTable.getMLDRColumnFKByMCDRelEndChildAndMLDRColumnPK(
+                mcdRelEndParent.getMCDRelEndOpposite(), mldrColumnPK);
         if (mldrColumnFK == null){
-            mldrColumnFK = mldrTable.createColumnFK(mcdRelEndParent.getMcdRelation(), mldrColumnPK);
+            //mldrColumnFK = mldrTable.createColumnFK(mcdRelEndParent.getMcdRelation(), mldrColumnPK);
+            mldrColumnFK = mldrTable.createColumnFK(mcdRelEndParent.getMCDRelEndOpposite(), mldrColumnPK);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrColumnFK);
         }
         modifyColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK, fkNature, indiceFK);
+        mcdTransform.addInTrace(mcdRelEndParent.getMCDRelEndOpposite(), mldrColumnFK);
         return mldrColumnFK;
     }
 
@@ -192,6 +202,7 @@ public class MCDTransformToColumn {
 
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrColumnFK.getMDRTableAccueil().getMDRModelParent();
+
         MCDTransformService.names(mldrColumnFK, buildNameColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK, indiceFK), mldrModel);
 
         modifyColumnPKorFK(mldrColumnFK);

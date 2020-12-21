@@ -1,4 +1,4 @@
-package mcd.transform;
+package transform.mcdtomldr;
 
 import mdr.MDRElement;
 import mdr.MDRElementNames;

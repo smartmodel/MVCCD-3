@@ -81,9 +81,9 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         return MLDRTableService.getMLDRColumnsByMCDElementSource(this, mcdElement);
     }
 
-    public MLDRColumn getMLDRColumnFKByMCDRelationAndMLDRColumnPK(MCDRelation mcdRelation,
+    public MLDRColumn getMLDRColumnFKByMCDRelEndChildAndMLDRColumnPK(MCDRelEnd mcdRelEnd,
                                                                   MLDRColumn mldrColumnPK) {
-        return MLDRTableService.getMLDRColumnFKByMCDRelationAndMLDRColumnPK(this, mcdRelation, mldrColumnPK);
+        return MLDRTableService.getMLDRColumnFKByMCDRelEndChildAndMLDRColumnPK(this, mcdRelEnd, mldrColumnPK);
     }
 
     public MLDRColumn createColumn(MCDAttribute mcdAttribute) {
@@ -98,10 +98,11 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         return mldrColumn;
     }
 
-    public MLDRColumn createColumnFK(MCDRelation mcdRelation, MLDRColumn mldrColumnPK){
-        MLDRColumn mldrColumn = MVCCDElementFactory.instance().createMLDRColumn(
-                getMDRContColumns(), mcdRelation);
-        return mldrColumn;
+    public MLDRColumn createColumnFK(MCDRelEnd mcdRelEnd, MLDRColumn mldrColumnPK){
+        MLDRColumn mldrColumnFK = MVCCDElementFactory.instance().createMLDRColumn(
+                getMDRContColumns(), mcdRelEnd);
+        mldrColumnFK.setMdrColumnPK(mldrColumnPK);
+        return mldrColumnFK;
     }
 
     public MLDRFK getMLDRFKByMCDElementSource(MCDElement mcdElement){

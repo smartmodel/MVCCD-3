@@ -1,11 +1,10 @@
-package mldr.transform;
+package transform.mldrtompdr;
 
 import main.MVCCDManager;
 import mldr.MLDRModel;
 import mldr.MLDRTable;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
-import utilities.Trace;
 
 public class MLDRTransformTables {
 
