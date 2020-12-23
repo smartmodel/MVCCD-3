@@ -19,8 +19,8 @@ public class MDROrderWordRoleShortNameParent extends MDROrderWordRoleShortName{
         Preferences preferences = PreferencesManager.instance().preferences();
         if (StringUtils.isNotEmpty(mcdRelEnd.getShortName())){
             value = mcdRelEnd.getShortName();
-        } else if (StringUtils.isNotEmpty(mcdRelEnd.getMcdRelation().getShortName())){
-            value = mcdRelEnd.getMcdRelation().getShortName();
+        } else if (StringUtils.isNotEmpty(mcdRelEnd.getImRelation().getShortName())){
+            value = mcdRelEnd.getImRelation().getShortName();
         } else if(mcdRelEnd instanceof MCDGSEnd){
             value = preferences.getMDR_ROLE_GENERALIZE_MARKER();
         }

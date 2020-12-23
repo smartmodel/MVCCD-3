@@ -1,6 +1,6 @@
 package mcd;
 
-import m.IMCompletness;
+import m.interfaces.IMCompletness;
 import m.MRelationDegree;
 import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
@@ -323,7 +323,7 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
     public MRelationDegree getLinkedEADegree(){
         if (getLinkEnds().size() == 1){
             //return ((MCDAssociation) getLinkEnds().get(0).getMcdLink().getEndAssociation().getMcdRelation()).getDegree();
-            return ((MCDAssociation) getLinkEnds().get(0).getMcdLink().getEndAssociation().getMcdElement()).getDegree();
+            return ((MCDAssociation) getLinkEnds().get(0).getMcdLink().getEndAssociation().getmElement()).getDegree();
         }
         return null;
     }

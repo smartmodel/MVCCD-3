@@ -1,15 +1,12 @@
 package mcd.services;
 
 import exceptions.CodeApplException;
-import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDElementService;
 import mcd.MCDElement;
-import mcd.MCDParameter;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.Trace;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.STable;
 

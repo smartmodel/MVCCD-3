@@ -62,8 +62,8 @@ public class MCDEntityService {
     public static ArrayList<MCDRelation> getMCDRelations(MCDEntity mcdEntity) {
         ArrayList<MCDRelation> resultat = new ArrayList<MCDRelation>();
         for (MCDRelEnd mcdRelEnd : getMCDRelEnds(mcdEntity)){
-            if (! resultat.contains(mcdRelEnd.getMcdRelation())) {
-                resultat.add(mcdRelEnd.getMcdRelation());
+            if (! resultat.contains(mcdRelEnd.getImRelation())) {
+                resultat.add((MCDRelation) mcdRelEnd.getImRelation());
             }
         }
         return resultat;
@@ -129,7 +129,7 @@ public class MCDEntityService {
     public static ArrayList<MCDAssEnd> getAssEndsAssNNChild(MCDEntity mcdEntity) {
         ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
         for (MCDLinkEnd mcdLinkEnd: getMCDLinkEnds(mcdEntity)){
-            MCDAssociation mcdAssociation = (MCDAssociation) mcdLinkEnd.getMcdLink().getEndAssociation().getMcdElement();
+            MCDAssociation mcdAssociation = (MCDAssociation) mcdLinkEnd.getMcdLink().getEndAssociation().getmElement();
             if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_MANY_MANY){
                     resultat.add((MCDAssEnd) mcdAssociation.getFrom());
                     resultat.add((MCDAssEnd) mcdAssociation.getTo());

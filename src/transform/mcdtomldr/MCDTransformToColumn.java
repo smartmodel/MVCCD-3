@@ -55,14 +55,14 @@ public class MCDTransformToColumn {
 
     public MLDRColumn createOrModifyFromRelEndParent(MLDRTable mldrTable, MCDRelEnd mcdRelEndParent, MLDRTable mldrTableParent, MLDRColumn mldrColumnPK, MDRFKNature fkNature, Integer indiceFK) {
         MLDRColumn mldrColumnFK = mldrTable.getMLDRColumnFKByMCDRelEndChildAndMLDRColumnPK(
-                mcdRelEndParent.getMCDRelEndOpposite(), mldrColumnPK);
+                mcdRelEndParent, mldrColumnPK);
         if (mldrColumnFK == null){
             //mldrColumnFK = mldrTable.createColumnFK(mcdRelEndParent.getMcdRelation(), mldrColumnPK);
-            mldrColumnFK = mldrTable.createColumnFK(mcdRelEndParent.getMCDRelEndOpposite(), mldrColumnPK);
+            mldrColumnFK = mldrTable.createColumnFK(mcdRelEndParent, mldrColumnPK);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrColumnFK);
         }
         modifyColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK, fkNature, indiceFK);
-        mcdTransform.addInTrace(mcdRelEndParent.getMCDRelEndOpposite(), mldrColumnFK);
+        mcdTransform.addInTrace(mcdRelEndParent, mldrColumnFK);
         return mldrColumnFK;
     }
 
@@ -302,7 +302,7 @@ public class MCDTransformToColumn {
         MDRElementNames names = new MDRElementNames();
         for (MDRNamingLength element: MDRNamingLength.values()) {
 
-            MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getMcdElement();
+            MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getmElement();
             MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
             if (mldrColumnPK.isFk() && preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()) {
             //if (mcdEntityParent.isNoInd() && preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()) {
@@ -317,7 +317,7 @@ public class MCDTransformToColumn {
                     orderBuild.setTargetNaming(MDROrderBuildTargets.COLUMNFKFROMENTITYNOIND);
                 }
             }
-            orderBuild.getTableShortNameParent().setValue((MCDEntity) mcdRelEndParent.getMcdElement());
+            orderBuild.getTableShortNameParent().setValue((MCDEntity) mcdRelEndParent.getmElement());
             orderBuild.getTableSep().setValue();
             String roleParent = mcdRelEndParent.getNameNoFreeOrNameRelation();
             orderBuild.getRoleShortNameParent().setValue(roleParent);

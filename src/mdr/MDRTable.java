@@ -1,10 +1,8 @@
 package mdr;
 
 import exceptions.CodeApplException;
-import mcd.MCDAttribute;
-import mcd.MCDElement;
-import mcd.MCDEntity;
-import mcd.MCDRelation;
+import main.MVCCDElement;
+import mcd.*;
 import mcd.services.MCDElementService;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithSource;
@@ -93,6 +91,16 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
 
     public MDRModel getMDRModelParent(){
         return (MDRModel) getParent().getParent();
+    }
+
+
+    public MDRContRelEnds getMDRContRelEnds() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MDRContRelEnds) {
+                return (MDRContRelEnds) mvccdElement;
+            }
+        }
+        return null;
     }
 
 }

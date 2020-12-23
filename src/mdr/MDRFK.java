@@ -12,6 +12,8 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
 
     private MDRFKNature nature = null;
 
+    private MDRRelationFK mdrRelationFK;
+
     public MDRFK(ProjectElement parent) {
         super(parent);
     }
@@ -41,5 +43,15 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
     @Override
     public void setIndice(Integer indice) {
         this.indice = indice;
+    }
+
+    public MDRRelationFK getMDRRelationFK() {
+        return mdrRelationFK;
+    }
+
+    public void setMDRRelationFK(MDRRelationFK mdrRelationFK) {
+        // Double lien
+        this.mdrRelationFK = mdrRelationFK;
+        mdrRelationFK.setMDRFK(this);
     }
 }

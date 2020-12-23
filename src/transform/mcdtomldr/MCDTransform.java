@@ -12,8 +12,13 @@ import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
 import md.MDElement;
 import mdr.MDRConstraint;
+import mdr.MDRElement;
+import mdr.MDRParameter;
 import mldr.*;
+import mldr.interfaces.IMDLRConstraint;
 import mldr.interfaces.IMLDRElement;
+import mldr.interfaces.IMLDRElementWithSource;
+import mldr.interfaces.IMLDRRelation;
 import mldr.services.MLDRModelService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -111,7 +116,7 @@ public class MCDTransform {
     }
 
     private void deleteOrphansFromMCDElement() {
-        for (MLDRTable mldrTable : mldrModel.getMLDRTables()){
+        for (MLDRTable mldrTable : mldrModel.getMLDRTables()) {
             boolean foundSource = MLDRModelService.foundMCDElementSource(mldrTable, imcdModel);
             if (!foundSource) {
                 Delete.deleteMVCCDElement(mldrTable);
@@ -120,22 +125,43 @@ public class MCDTransform {
                 deleteConstraintsOrphans(mldrTable);
             }
         }
+
+        for (IMLDRRelation imldrRelation : mldrModel.getIMLDRRelations()) {
+            boolean foundSource = MLDRModelService.foundMCDElementSource((IMLDRElementWithSource) imldrRelation, imcdModel);
+            if (!foundSource) {
+                Delete.deleteMVCCDElement((MVCCDElement) imldrRelation);
+            }
+        }
     }
 
-    private void deleteColumnsOrphans(MLDRTable mldrTable) {
-        for (MLDRColumn mldrColumn : mldrTable.getMLDRColumns()) {
-            boolean foundSource = MLDRModelService.foundMCDElementSource(mldrTable, imcdModel);
+    private void deleteColumnsOrphans(MLDRTable mldrRelation) {
+        for (MLDRColumn mldrColumn : mldrRelation.getMLDRColumns()) {
+            boolean foundSource = MLDRModelService.foundMCDElementSource(mldrColumn, imcdModel);
             if (!foundSource) {
                 Delete.deleteMVCCDElement(mldrColumn);
             }
         }
     }
 
-    private void deleteConstraintsOrphans(MLDRTable mldrTable) {
-        for (MDRConstraint mdrConstraint : mldrTable.getMDRConstraints()) {
-            boolean foundSource = MLDRModelService.foundMCDElementSource(mldrTable, imcdModel);
+    private void deleteConstraintsOrphans(MLDRTable mldrRelation) {
+        for (MDRConstraint mdrConstraint : mldrRelation.getMDRConstraints()) {
+            boolean foundSource = MLDRModelService.foundMCDElementSource((IMLDRElementWithSource) mdrConstraint, imcdModel);
             if (!foundSource) {
                 Delete.deleteMVCCDElement(mdrConstraint);
+            } else {
+                deleteParametersOrphans(mdrConstraint);
+            }
+        }
+    }
+
+    private void deleteParametersOrphans(MDRConstraint mdrConstraint) {
+        for (MDRParameter mdrParameter : mdrConstraint.getMDRParameters()){
+            MDRElement target = (MDRElement) mdrParameter.getTarget();
+            if (target != null) {
+                boolean foundSource = MLDRModelService.foundMCDElementSource((IMLDRElementWithSource) target, imcdModel);
+                if (!foundSource) {
+                    Delete.deleteMVCCDElement(mdrParameter);
+                }
             }
         }
     }

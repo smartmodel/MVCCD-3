@@ -1,7 +1,7 @@
 package mcd;
 
 import exceptions.TransformMCDException;
-import m.IMCompletness;
+import m.interfaces.IMCompletness;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
 import transform.mcdtomldr.MCDTransform;

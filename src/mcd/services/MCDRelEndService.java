@@ -1,9 +1,7 @@
 package mcd.services;
 
-import m.MRelEnd;
 import main.MVCCDElement;
 import mcd.*;
-import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
@@ -20,13 +18,13 @@ public class MCDRelEndService {
                                              String namingRelation){
         String resultat = "";
 
-        MCDElement containerElementStart = (MCDElement) mcdRelEndStart.getMcdElement().getParent().getParent();
+        MCDElement containerElementStart = (MCDElement) mcdRelEndStart.getmElement().getParent().getParent();
 
-        MCDRelation mcdRelation = (MCDRelation) mcdRelEndStart.getMcdRelation();
+        MCDRelation mcdRelation = (MCDRelation) mcdRelEndStart.getImRelation();
         MCDElement containerRelation = (MCDElement) mcdRelation.getParent().getParent();
 
         MCDRelEnd mcdRelEndOpposite = mcdRelation.getMCDRelEndOpposite(mcdRelEndStart);
-        MCDElement mcdElementOpposite = mcdRelEndOpposite.getMcdElement();
+        MCDElement mcdElementOpposite = (MCDElement) mcdRelEndOpposite.getmElement();
         MVCCDElement containerElementOpposite = mcdElementOpposite.getParent().getParent();
 
         boolean c1a = containerElementStart == containerRelation;
@@ -69,7 +67,7 @@ public class MCDRelEndService {
             resultat = namingRelation + nameElementOpposite;
         }
         else if (scope == SOURCE) {
-            resultat = mcdRelEndStart.getMcdElement().getName() + "  " + namingRelation + "(" + nameElementOpposite + ")";
+            resultat = mcdRelEndStart.getmElement().getName() + "  " + namingRelation + "(" + nameElementOpposite + ")";
         } else {
             resultat = namingRelation ;
         }

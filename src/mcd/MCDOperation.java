@@ -1,9 +1,8 @@
 package mcd;
 
-import m.IMCompletness;
+import m.interfaces.IMCompletness;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDElementWithTargets;
-import mcd.interfaces.IMCDParameter;
 import mldr.interfaces.IMLDRElement;
 import project.ProjectElement;
 

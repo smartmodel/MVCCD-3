@@ -2,7 +2,8 @@ package mcd;
 
 import constraints.Constraint;
 import exceptions.CodeApplException;
-import m.MRelation;
+import m.interfaces.IMRelEnd;
+import m.interfaces.IMRelation;
 import mcd.interfaces.IMCDElementWithTargets;
 import mldr.interfaces.IMLDRElement;
 import project.ProjectService;
@@ -10,14 +11,14 @@ import stereotypes.Stereotype;
 
 import java.util.ArrayList;
 
-public abstract class MCDRelation extends MCDElement implements MRelation, IMCDElementWithTargets {
+public abstract class MCDRelation extends MCDElement implements IMRelation, IMCDElementWithTargets {
 
     private  static final long serialVersionUID = 1000;
 
     private ArrayList<IMLDRElement> imldrElementTargets;
 
-    private MCDRelEnd a ;
-    private MCDRelEnd b ;
+    private IMRelEnd a ;
+    private IMRelEnd b ;
 
     public MCDRelation(MCDElement parent) {
         super(parent);
@@ -27,28 +28,32 @@ public abstract class MCDRelation extends MCDElement implements MRelation, IMCDE
         super(parent, name);
     }
 
-    public MCDRelEnd getA() {
+    @Override
+    public IMRelEnd getA() {
         return a;
     }
 
-    public void setA(MCDRelEnd a) {
+    @Override
+    public void setA(IMRelEnd a) {
         this.a = a;
     }
 
-    public MCDRelEnd getB() {
+    @Override
+    public IMRelEnd getB() {
         return b;
     }
 
-    public void setB(MCDRelEnd b) {
+    @Override
+    public void setB(IMRelEnd b) {
         this.b = b;
     }
 
     public MCDRelEnd getMCDRelEndOpposite(MCDRelEnd mcdRelEnd) {
         if (this.getA() == mcdRelEnd){
-            return this.getB();
+            return (MCDRelEnd) this.getB();
         }
         if (this.getB() == mcdRelEnd){
-            return this.getA();
+            return (MCDRelEnd)this.getA();
         }
 
         throw new CodeApplException("L'extrémité de relation passée en paramètre n'existe pas pour cette relation ");
@@ -70,12 +75,12 @@ public abstract class MCDRelation extends MCDElement implements MRelation, IMCDE
             mcdRelationChild = null;
          }
 
-        MCDRelEnd a = getA();
+        MCDRelEnd a = (MCDRelEnd) getA();
         if (a != null) {
             a.removeInParent();
             a = null;
         }
-        MCDRelEnd b = getB();
+        MCDRelEnd b = (MCDRelEnd) getB();
         if (b != null) {
             b.removeInParent();
             b = null;

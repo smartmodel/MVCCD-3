@@ -18,8 +18,8 @@ public class MCDRelationEditingTreat extends EditingTreat {
 
 
     protected void addRelEndsInRepository(MCDRelation mcdRelation) {
-        addRelEndInRepository(mcdRelation.getA());
-        addRelEndInRepository(mcdRelation.getB());
+        addRelEndInRepository((MCDRelEnd) mcdRelation.getA());
+        addRelEndInRepository((MCDRelEnd) mcdRelation.getB());
     }
 
     private void addRelEndInRepository(MCDRelEnd mcdRelEnd) {

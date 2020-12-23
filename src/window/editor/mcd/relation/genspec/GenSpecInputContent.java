@@ -1,6 +1,6 @@
 package window.editor.mcd.relation.genspec;
 
-import m.MRelEnd;
+import m.interfaces.IMRelEnd;
 import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
@@ -299,7 +299,7 @@ public class GenSpecInputContent extends PanelInputContentId {
             // null dans le cas de l'initialisation
             mcdGSEndGen = new MCDGSEnd(null);
         }
-        loadDatasGSEnd(MRelEnd.GEN, mcdGSEndGen);
+        loadDatasGSEnd(MCDRelEnd.GEN, mcdGSEndGen);
 
         MCDGSEnd  mcdGSEndSpec = null;
         if (mcdGeneralization.getSpec() != null) {
@@ -308,7 +308,7 @@ public class GenSpecInputContent extends PanelInputContentId {
             // null dans le cas de l'initialisation
             mcdGSEndSpec = new MCDGSEnd(null);
         }
-        loadDatasGSEnd(MRelEnd.SPEC, mcdGSEndSpec);
+        loadDatasGSEnd(MCDRelEnd.SPEC, mcdGSEndSpec);
     }
 
     private void loadDatasGSEnd(int direction, MCDGSEnd mcdGSEnd) {
@@ -327,10 +327,10 @@ public class GenSpecInputContent extends PanelInputContentId {
 
         // Au niveau de chacune des 2 extémités
         MCDGSEnd  mcdGSEndGen = mcdGeneralization.getGen();
-        saveDatasGSEnd(MRelEnd.GEN, mcdGSEndGen);
+        saveDatasGSEnd(MCDRelEnd.GEN, mcdGSEndGen);
 
         MCDGSEnd  mcdGSEndSpec = mcdGeneralization.getSpec();
-        saveDatasGSEnd(MRelEnd.SPEC, mcdGSEndSpec);
+        saveDatasGSEnd(MCDRelEnd.SPEC, mcdGSEndSpec);
 
      }
 

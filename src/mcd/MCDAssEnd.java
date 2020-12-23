@@ -41,19 +41,19 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
     }
 
     public MCDAssociation getMcdAssociation() {
-        return (MCDAssociation) super.getMcdRelation() ;
+        return (MCDAssociation) super.getImRelation() ;
     }
 
     public void setMcdAssociation(MCDAssociation mcdAssociation) {
-        super.setMcdRelation(mcdAssociation);
+        super.setImRelation(mcdAssociation);
     }
 
     public MCDEntity getMcdEntity() {
-        return (MCDEntity) super.getMcdElement();
+        return (MCDEntity) super.getmElement();
     }
 
     public void setMcdEntity(MCDEntity mcdEntity) {
-        super.setMcdElement(mcdEntity);
+        super.setmElement(mcdEntity);
     }
 
 

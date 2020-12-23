@@ -1,6 +1,5 @@
 package mdr;
 
-import m.MElement;
 import md.MDElement;
 import project.ProjectElement;
 

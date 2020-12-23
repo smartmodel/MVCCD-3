@@ -3,7 +3,7 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import m.IMCompletness;
+import m.interfaces.IMCompletness;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAttributeService;

@@ -4,7 +4,7 @@ import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
-import m.IMCompletness;
+import m.interfaces.IMCompletness;
 import m.MRelationDegree;
 import m.services.MRelationService;
 import mcd.interfaces.IMCDParameter;
@@ -16,7 +16,6 @@ import preferences.PreferencesManager;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,6 @@
 package window.editor.mcd.relation.association;
 
-import m.MRelEnd;
+import m.interfaces.IMRelEnd;
 import m.MRelEndMultiPart;
 import m.MRelEndMultiStr;
 import m.MRelationDegree;
@@ -1036,7 +1036,7 @@ public class AssociationInputContent extends PanelInputContentId {
             // null dans le cas de l'initialisation
             mcdAssEndFrom = new MCDAssEnd(null);
         }
-        loadDatasAssEnd(MRelEnd.FROM, mcdAssEndFrom);
+        loadDatasAssEnd(MCDRelEnd.FROM, mcdAssEndFrom);
 
         MCDAssEnd  mcdAssEndTo = null;
         if (mcdAssociation.getTo() != null) {
@@ -1045,7 +1045,7 @@ public class AssociationInputContent extends PanelInputContentId {
             // null dans le cas de l'initialisation
             mcdAssEndTo = new MCDAssEnd(null);
         }
-        loadDatasAssEnd(MRelEnd.TO, mcdAssEndTo);
+        loadDatasAssEnd(MCDRelEnd.TO, mcdAssEndTo);
     }
 
     private void loadDatasAssEnd(int direction, MCDAssEnd mcdAssEnd) {
@@ -1089,10 +1089,10 @@ public class AssociationInputContent extends PanelInputContentId {
 
         // Au niveau de chacune des 2 extémités
         MCDAssEnd  mcdAssEndFrom = mcdAssociation.getFrom();
-        saveDatasAssEnd(MRelEnd.FROM, mcdAssEndFrom);
+        saveDatasAssEnd(MCDRelEnd.FROM, mcdAssEndFrom);
 
         MCDAssEnd  mcdAssEndTo = mcdAssociation.getTo();
-        saveDatasAssEnd(MRelEnd.TO, mcdAssEndTo);
+        saveDatasAssEnd(MCDRelEnd.TO, mcdAssEndTo);
 
     }
 

@@ -4,6 +4,7 @@ import console.Console;
 import datatypes.MDDatatypesManager;
 import main.window.menu.WinMenuContent;
 import main.window.repository.WinRepositoryTree;
+import mcd.MCDRelEnd;
 import mcd.MCDRelation;
 import preferences.PreferencesManager;
 import project.*;
@@ -64,6 +65,7 @@ public class MVCCDManager {
         openLastProject();
     }
 
+
     private void startRepository() {
         // Création de l'élément root du référentiel
         rootMVCCDElement = MVCCDFactory.instance().createRepositoryRoot();
@@ -76,6 +78,7 @@ public class MVCCDManager {
         // Affiche le référentiel dans l'écran d'accueil
         getWinRepositoryContent().getTree().changeModel(repository);
     }
+
 
 
     private void startConsole() {
@@ -156,8 +159,8 @@ public class MVCCDManager {
             removeMCDRelationAndDependantsInRepository(mcdRelationChild);
         }
         removeMVCCDElementInRepository(mcdRelation, mcdRelation.getParent());
-        removeMVCCDElementInRepository(mcdRelation.getA(), mcdRelation.getA().getParent());
-        removeMVCCDElementInRepository(mcdRelation.getB(), mcdRelation.getB().getParent());
+        removeMVCCDElementInRepository((MCDRelEnd)mcdRelation.getA(), ((MCDRelEnd) mcdRelation.getA()).getParent());
+        removeMVCCDElementInRepository((MCDRelEnd)mcdRelation.getB(), ((MCDRelEnd) mcdRelation.getB()).getParent());
     }
 
     public void  openProject() {

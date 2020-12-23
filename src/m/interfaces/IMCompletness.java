@@ -1,4 +1,4 @@
-package m;
+package m.interfaces;
 
 public interface IMCompletness {
 }

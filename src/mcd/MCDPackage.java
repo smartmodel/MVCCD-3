@@ -1,6 +1,6 @@
 package mcd;
 
-import m.IMCompletness;
+import m.interfaces.IMCompletness;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
 import mcd.services.MCDElementService;

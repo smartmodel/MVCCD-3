@@ -284,9 +284,9 @@ public class LinkInputContent extends PanelInputContentId {
             // null dans le cas de l'initialisation
             mcdLinkEndEntity = new MCDLinkEnd(null);
         }
-        if (mcdLinkEndEntity.getMcdElement() != null) {
+        if (mcdLinkEndEntity.getmElement() != null) {
             SComboBoxService.selectByText(fieldEntity,
-                    ((MCDEntity) mcdLinkEndEntity.getMcdElement()).getNamePath(modePathName));
+                    ((MCDEntity) mcdLinkEndEntity.getmElement()).getNamePath(modePathName));
         }
 
         MCDLinkEnd  mcdLinkEndAssociation = null;
@@ -296,9 +296,9 @@ public class LinkInputContent extends PanelInputContentId {
             // null dans le cas de l'initialisation
             mcdLinkEndAssociation = new MCDLinkEnd(null);
         }
-        if (mcdLinkEndAssociation.getMcdElement() != null) {
+        if (mcdLinkEndAssociation.getmElement() != null) {
             SComboBoxService.selectByText(fieldAssociation,
-                    ((MCDAssociation) mcdLinkEndAssociation.getMcdElement()).getNameTree());
+                    ((MCDAssociation) mcdLinkEndAssociation.getmElement()).getNameTree());
         }
 
     }

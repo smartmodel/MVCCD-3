@@ -133,9 +133,9 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
     }
 
 
-    public MLDRFK createFK(MCDRelation mcdRelation) {
+    public MLDRFK createFK(MCDRelEnd mcdRelEnd) {
         MLDRFK mldrFK= MVCCDElementFactory.instance().createMLDRFK(
-                (MLDRContConstraints) getMDRContConstraints(), mcdRelation);
+                (MLDRContConstraints) getMDRContConstraints(), mcdRelEnd);
         return mldrFK;
     }
 

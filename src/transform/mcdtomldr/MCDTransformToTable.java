@@ -134,7 +134,7 @@ public class MCDTransformToTable {
         mcdRelEndsChild.addAll( MCDRelEndService.convertToMCDRelEnd(mcdAssEndsSpecialize));
         for (MCDRelEnd mcdRelEndChild : mcdRelEndsChild){
             MCDRelEnd mcdRelEndParent = mcdRelEndChild.getMCDRelEndOpposite() ;
-            MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getMcdElement();
+            MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getmElement();
             MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(mcdEntityParent);
             exist = exist && (mldrTable.getMLDRPK() != null);
         }
@@ -175,7 +175,7 @@ public class MCDTransformToTable {
         mcdRelEndsChild.addAll( MCDRelEndService.convertToMCDRelEnd(mcdAssEndsSpecialize));
         for (MCDRelEnd mcdRelEndChild : mcdRelEndsChild){
             MCDRelEnd mcdRelEndParent = mcdRelEndChild.getMCDRelEndOpposite() ;
-            MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getMcdElement();
+            MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getmElement();
             resultat.add(mldrModel.getMLDRTableByEntitySource(mcdEntityParent));
         }
 
@@ -187,7 +187,7 @@ public class MCDTransformToTable {
         ArrayList<MLDRTable> resultat = new ArrayList<MLDRTable>();
 
         for (MCDRelEnd mcdRelEndParent : mcdRelEndsParents){
-            MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getMcdElement();
+            MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getmElement();
             resultat.add(mldrModel.getMLDRTableByEntitySource(mcdEntityParent));
         }
 

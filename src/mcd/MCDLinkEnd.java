@@ -3,8 +3,6 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import m.MRelEnd;
-import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDRelEndService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -12,7 +10,6 @@ import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 public class MCDLinkEnd extends MCDRelEnd  {
@@ -28,11 +25,11 @@ public class MCDLinkEnd extends MCDRelEnd  {
     }
 
     public MCDLink getMcdLink() {
-        return (MCDLink) super.getMcdRelation();
+        return (MCDLink) super.getImRelation();
     }
 
     public void setMcdLink(MCDLink mcdLink) {
-        super.setMcdRelation(mcdLink);
+        super.setImRelation(mcdLink);
     }
 
 
@@ -84,7 +81,7 @@ public class MCDLinkEnd extends MCDRelEnd  {
 
     @Override
     protected String getFileImageIconLong() {
-        if (getMcdElement() instanceof  MCDEntity){
+        if (getmElement() instanceof  MCDEntity){
             return Preferences.ICONE_RELATION_LINK_RIGHT_LG;
         } else {
             return Preferences.ICONE_RELATION_LINK_LEFT_LG;

@@ -1,12 +1,10 @@
 package repository.editingTreat;
 
 import console.Console;
-import delete.Delete;
 import exceptions.TransformMCDException;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
-import main.MVCCDWindow;
 import mcd.MCDElement;
 import mcd.services.MCDElementService;
 import md.MDElement;

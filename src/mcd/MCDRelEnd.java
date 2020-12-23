@@ -1,13 +1,13 @@
 package mcd;
 
 import constraints.Constraint;
-import m.MRelEnd;
+import m.MElement;
+import m.interfaces.IMRelEnd;
+import m.interfaces.IMRelation;
 import mcd.interfaces.IMCDElementWithTargets;
-import mcd.services.MCDElementService;
 import mldr.interfaces.IMLDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 import stereotypes.Stereotype;
 import utilities.UtilDivers;
 import utilities.files.UtilFiles;
@@ -16,7 +16,16 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 
-public abstract class MCDRelEnd extends MCDElement implements MRelEnd, IMCDElementWithTargets {
+public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElementWithTargets {
+
+    public static final int FROM = 1 ;
+    public static final int TO = 2 ;
+
+    public static final int GEN = 3 ;
+    public static final int SPEC = 4 ;
+
+    public static final int ELEMENT = 5 ;
+    public static final int RELATION = 6 ;
 
     private static final long serialVersionUID = 1000;
     private ArrayList<IMLDRElement> imldrElementTargets = new ArrayList<IMLDRElement>();
@@ -26,8 +35,11 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd, IMCDEleme
 
     protected int drawingDirection ;
 
-    private MCDRelation mcdRelation;
-    private MCDElement mcdElement ;
+    private IMRelation imRelation;
+    private MElement mElement ;
+
+//    private MCDRelation mcdRelation;
+//   private MCDElement mcdElement ;
 
     public MCDRelEnd(MCDElement parent) {
         super(parent);
@@ -41,6 +53,23 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd, IMCDEleme
         return serialVersionUID;
     }
 
+    public IMRelation getImRelation() {
+        return imRelation;
+    }
+
+    public void setImRelation(IMRelation imRelation) {
+        this.imRelation = imRelation;
+    }
+
+    public MElement getmElement() {
+        return mElement;
+    }
+
+    public void setmElement(MElement mElement) {
+        this.mElement = mElement;
+    }
+
+    /*
     public MCDRelation getMcdRelation() {
         return mcdRelation;
     }
@@ -57,8 +86,10 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd, IMCDEleme
         this.mcdElement = mcdElement;
     }
 
+     */
+
     public MCDRelEnd getMCDRelEndOpposite() {
-        MCDRelation mcdRelation = this.getMcdRelation();
+        MCDRelation mcdRelation = (MCDRelation) this.getImRelation();
         return mcdRelation.getMCDRelEndOpposite(this);
     }
 
@@ -98,7 +129,7 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd, IMCDEleme
     public String getNameNoFreeOrNameRelation(){
         String nameNoFree = getNameFromNoFree();
         if (StringUtils.isEmpty(nameNoFree)){
-            nameNoFree = getMcdRelation().getName();
+            nameNoFree = getImRelation().getName();
         }
         return nameNoFree;
     }

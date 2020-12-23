@@ -3,7 +3,7 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import m.MRelEnd;
+import m.interfaces.IMRelEnd;
 import mcd.services.MCDRelEndService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -30,19 +30,19 @@ public class MCDGSEnd extends MCDRelEnd  {
     }
 
     public MCDGeneralization getMcdGeneralization() {
-        return (MCDGeneralization) super.getMcdRelation();
+        return (MCDGeneralization) super.getImRelation();
     }
 
     public void setMcdGeneralization(MCDGeneralization mcdGeneralization) {
-        super.setMcdRelation(mcdGeneralization);
+        super.setImRelation(mcdGeneralization);
     }
 
     public MCDEntity getMcdEntity() {
-        return (MCDEntity) super.getMcdElement();
+        return (MCDEntity) super.getmElement();
     }
 
     public void setMcdEntity(MCDEntity mcdEntity) {
-        super.setMcdElement(mcdEntity);
+        super.setmElement(mcdEntity);
     }
 
 
@@ -101,7 +101,7 @@ public class MCDGSEnd extends MCDRelEnd  {
 
     @Override
     protected String getFileImageIconLong() {
-        if (getDrawingDirection() == MRelEnd.GEN){
+        if (getDrawingDirection() == MCDRelEnd.GEN){
             return Preferences.ICONE_RELATION_GENERALIZATION_LEFT_LG;
         } else{
             return Preferences.ICONE_RELATION_GENERALIZATION_RIGHT_LG;

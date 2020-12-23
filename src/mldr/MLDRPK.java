@@ -8,6 +8,7 @@ import mdr.MDRElement;
 import mdr.MDRPK;
 import mdr.MDRParameter;
 import mdr.interfaces.IMDRParameter;
+import mldr.interfaces.IMDLRConstraint;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mldr.services.MLDROperationService;
@@ -15,11 +16,12 @@ import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public class MLDRPK extends MDRPK implements IMLDRElement, IMLDRElementWithSource {
+public class MLDRPK extends MDRPK implements IMLDRElement, IMLDRElementWithSource, IMDLRConstraint {
+
+    private  static final long serialVersionUID = 1000;
 
     private MCDElement mcdElementSource ;
 
-    private  static final long serialVersionUID = 1000;
 
     public MLDRPK(ProjectElement parent, MCDElement mcdElementSource) {
         super(parent);

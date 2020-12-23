@@ -181,21 +181,21 @@ public class RelEndsInputContent extends PanelInputContentTable {
     protected void updateElement(MElement mElement) {
         MCDRelEnd mcdRelEnd = (MCDRelEnd) mElement;
         DialogEditor fen = null;
-        if (mcdRelEnd.getMcdRelation() instanceof MCDAssociation) {
-            fen = new AssociationEditor(getEditor(), (MCDContRelations) mcdRelEnd.getMcdRelation().getParent(),
-                    (MCDAssociation) mcdRelEnd.getMcdRelation(),
+        if (mcdRelEnd.getImRelation() instanceof MCDAssociation) {
+            fen = new AssociationEditor(getEditor(), (MCDContRelations) mcdRelEnd.getImRelation().getParent(),
+                    (MCDAssociation) mcdRelEnd.getImRelation(),
                     DialogEditor.UPDATE,
                     new MCDAssociationEditingTreat());
         }
-        if (mcdRelEnd.getMcdRelation() instanceof MCDGeneralization) {
-            fen = new GenSpecEditor(getEditor(), (MCDContRelations) mcdRelEnd.getMcdRelation().getParent(),
-                    (MCDGeneralization) mcdRelEnd.getMcdRelation(),
+        if (mcdRelEnd.getImRelation() instanceof MCDGeneralization) {
+            fen = new GenSpecEditor(getEditor(), (MCDContRelations) mcdRelEnd.getImRelation().getParent(),
+                    (MCDGeneralization) mcdRelEnd.getImRelation(),
                     DialogEditor.UPDATE,
                     new MCDGeneralizationEditingTreat());
         }
-        if (mcdRelEnd.getMcdRelation() instanceof MCDLink) {
-            fen = new LinkEditor(getEditor(), (MCDContRelations) mcdRelEnd.getMcdRelation().getParent(),
-                    (MCDLink) mcdRelEnd.getMcdRelation(),
+        if (mcdRelEnd.getImRelation() instanceof MCDLink) {
+            fen = new LinkEditor(getEditor(), (MCDContRelations) mcdRelEnd.getImRelation().getParent(),
+                    (MCDLink) mcdRelEnd.getImRelation(),
                     DialogEditor.UPDATE,
                     new MCDLinkEditingTreat());
         }
@@ -207,14 +207,14 @@ public class RelEndsInputContent extends PanelInputContentTable {
 
     @Override
     protected boolean deleteElement(MElement mElement) {
-        MCDRelation mcdRelation = ((MCDRelEnd) mElement).getMcdRelation();
+        MCDRelation mcdRelation = (MCDRelation) ((MCDRelEnd) mElement).getImRelation();
         return new MCDRelationEditingTreat().treatDelete(getEditor(), mcdRelation );
     }
 
     @Override
     protected void putValueInRow(MElement mElement, Object[] row) {
         MCDRelEnd relEnd = (MCDRelEnd) mElement;
-        MCDRelation relation = relEnd.getMcdRelation();
+        MCDRelation relation = (MCDRelation) relEnd.getImRelation();
 
 
         ArrayList<Stereotype> stereotypes =  relEnd.getToStereotypes();
@@ -271,8 +271,8 @@ public class RelEndsInputContent extends PanelInputContentTable {
         // Modification de la ligne de l'extrémité opposée des associations réflexives
         MCDRelEnd mcdRelEnd = (MCDRelEnd) mElement;
         if (mcdRelEnd != null) {
-            if (mcdRelEnd.getMcdRelation() instanceof MCDAssociation) {
-                MCDAssociation mcdAssociation = (MCDAssociation) mcdRelEnd.getMcdRelation();
+            if (mcdRelEnd.getImRelation() instanceof MCDAssociation) {
+                MCDAssociation mcdAssociation = (MCDAssociation) mcdRelEnd.getImRelation();
                 if (mcdAssociation.isReflexive()) {
                     MCDRelEnd mcdRelEndOpposite = mcdRelEnd.getMCDRelEndOpposite();
                     Integer indexRowOpposite = STableService.findIndexRecordById(table, mcdRelEndOpposite.getId());
@@ -289,8 +289,8 @@ public class RelEndsInputContent extends PanelInputContentTable {
         MCDRelEnd mcdRelEnd = (MCDRelEnd) mElement;
         MCDRelEnd mcdRelEndOpposite = null;
         if (mcdRelEnd != null) {
-            if (mcdRelEnd.getMcdRelation() instanceof MCDAssociation) {
-                MCDAssociation mcdAssociation = (MCDAssociation) mcdRelEnd.getMcdRelation();
+            if (mcdRelEnd.getImRelation() instanceof MCDAssociation) {
+                MCDAssociation mcdAssociation = (MCDAssociation) mcdRelEnd.getImRelation();
                 if (mcdAssociation.isReflexive()) {
                     mcdRelEndOpposite = mcdRelEnd.getMCDRelEndOpposite();
                 }

@@ -1,25 +1,18 @@
 package window.editor.mdr.utilities;
 
-import m.MElement;
 import main.MVCCDElement;
 import mcd.MCDElement;
 import md.MDElement;
 import mdr.MDRElement;
-import mdr.MDRModel;
-import mdr.MDRTable;
 import mdr.interfaces.IMDRElementWithSource;
 import messages.MessagesBuilder;
-import mldr.interfaces.IMLDRElement;
-import mldr.interfaces.IMLDRElementWithSource;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 import utilities.window.editor.PanelInput;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
-import window.editor.mdr.table.MDRTableInput;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

@@ -8,6 +8,7 @@ import mdr.MDRFK;
 import mdr.MDRPK;
 import mdr.MDRParameter;
 import mdr.interfaces.IMDRParameter;
+import mldr.interfaces.IMDLRConstraint;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mldr.services.MLDROperationService;
@@ -16,7 +17,7 @@ import utilities.Trace;
 
 import java.util.ArrayList;
 
-public class MLDRFK extends MDRFK implements IMLDRElement, IMLDRElementWithSource {
+public class MLDRFK extends MDRFK implements IMLDRElement, IMLDRElementWithSource, IMDLRConstraint {
 
     private MCDElement mcdElementSource ;
 

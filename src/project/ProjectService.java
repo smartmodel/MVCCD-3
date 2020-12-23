@@ -254,7 +254,7 @@ public class ProjectService {
     public static ArrayList<MCDRelEnd> getMCDRelEndsByMCDElement(MCDElement mcdElement){
         ArrayList<MCDRelEnd>  resultat = new ArrayList<MCDRelEnd>() ;
         for (MCDRelEnd aMCDRelEnd : getMCDRelEnds()){
-            if (aMCDRelEnd.getMcdElement() == mcdElement ){
+            if (aMCDRelEnd.getmElement() == mcdElement ){
                 resultat.add(aMCDRelEnd);
             }
         }
@@ -277,8 +277,8 @@ public class ProjectService {
         ArrayList<MCDRelation>  resultat = new ArrayList<MCDRelation>() ;
         for (MCDRelation aMCDRelation: getMCDRelations()){
             if ((aMCDRelation.getA() != null) && (aMCDRelation.getB() != null)) {
-                if ((aMCDRelation.getA().getMcdElement() == mcdRelation) ||
-                        (aMCDRelation.getB().getMcdElement() == mcdRelation)) {
+                if ((aMCDRelation.getA().getmElement() == mcdRelation) ||
+                        (aMCDRelation.getB().getmElement() == mcdRelation)) {
                     resultat.add(aMCDRelation);
                 }
             }

@@ -2,22 +2,17 @@ package utilities.window.editor;
 
 import m.MElement;
 import main.MVCCDElement;
-import main.MVCCDManager;
 import mcd.MCDConstraint;
 import preferences.Preferences;
-import project.ProjectElement;
 import project.ProjectService;
-import repository.RepositoryService;
 import utilities.UtilDivers;
 import utilities.window.ReadTableModel;
-import utilities.window.editor.services.PanelInputContentTableService;
 import utilities.window.scomponents.STable;
 import utilities.window.scomponents.services.STableService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.*;
 

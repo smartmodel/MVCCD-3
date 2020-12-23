@@ -30,8 +30,10 @@ public class Preferences extends MVCCDElement {
     public static String REPOSITORY_MCD_ATTRIBUTES_NAME = "Attributs";
     public static String REPOSITORY_MCD_CONSTRAINTS_NAME = "Contraintes";
     public static String REPOSITORY_MDR_TABLES_NAME = "Tables";
+    public static String REPOSITORY_MDR_RELATIONS_NAME = "Relations";
     public static String REPOSITORY_MDR_COLUMNS_NAME = "Colonnes";
     public static String REPOSITORY_MDR_CONSTRAINTS_NAME = "Contraintes";
+    public static String REPOSITORY_MDR_RELENDS_NAME = "Extrémités de relations";
     public static String REPOSITORY_MLDR_MODEL_DT_NAME = "MLDR_DT";
     public static String REPOSITORY_MLDR_MODEL_TI_NAME = "MLDR_TI";
     public static String REPOSITORY_MPDR_MODEL_ORACLE_NAME = "MPDR_Oracle";

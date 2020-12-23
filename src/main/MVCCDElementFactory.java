@@ -207,10 +207,10 @@ public class MVCCDElementFactory {
         mcdLink.setEndEntity(mcdLinkEndEntity);
         mcdLink.setEndAssociation(mcdLinkEndAssociation);
 
-        mcdLinkEndEntity.setMcdElement(mcdEntity);
+        mcdLinkEndEntity.setmElement(mcdEntity);
         mcdLinkEndEntity.setMcdLink(mcdLink);
 
-        mcdLinkEndAssociation.setMcdElement(mcdAssociation);
+        mcdLinkEndAssociation.setmElement(mcdAssociation);
         mcdLinkEndAssociation.setMcdLink(mcdLink);
 
         return mcdLink;
@@ -253,7 +253,8 @@ public class MVCCDElementFactory {
     }
 
     private void createContentMLDRModel(MLDRModel mldrModel) {
-        MDRContTables mdrContTable = new MDRContTables(mldrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
+        MLDRContTables mldrContTable = new MLDRContTables(mldrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
+        MLDRContRelations mldrContRelations = new MLDRContRelations(mldrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
     }
 
 
@@ -261,6 +262,7 @@ public class MVCCDElementFactory {
         MLDRTable mldrTable = new MLDRTable(mdrContTables, entitySource);
         MLDRContColumns mldrContColumns = new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         MLDRContConstraints mldrContConstraints = new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+        //MLDRContRelEnds mldrContRelEnds = new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
 
         return mldrTable;
     }
@@ -296,6 +298,33 @@ public class MVCCDElementFactory {
         return mldrFK;
     }
 
+
+
+    public MLDRRelationFK createMLDRRelationFK( MLDRContRelations mldrContRelations,
+                                                MCDRelation mcdRelation,
+                                                MLDRTable mldrTableParent,
+                                                MLDRTable mldrTableChild) {
+
+
+        MLDRRelationFK mldrRelationFK = new MLDRRelationFK(mldrContRelations, mcdRelation) ;
+
+        MLDRContRelEnds mldrContEndRelsParent = (MLDRContRelEnds) mldrTableParent.getMDRContRelEnds();
+        MLDRRelFKEnd mldrRelFKEndParent = new MLDRRelFKEnd(mldrContEndRelsParent) ;
+
+        MLDRContRelEnds mldrContEndRelsChild = (MLDRContRelEnds) mldrTableChild.getMDRContRelEnds();
+        MLDRRelFKEnd mldrRelFKEndChild = new MLDRRelFKEnd(mldrContEndRelsParent) ;
+
+        mldrRelationFK.setEndParent(mldrRelFKEndParent);
+        mldrRelationFK.setEndChild(mldrRelFKEndChild);
+
+        mldrRelFKEndParent.setMDRTable(mldrTableParent);
+        mldrRelFKEndParent.setMDRRelationFK(mldrRelationFK);
+
+        mldrRelFKEndChild.setMDRTable(mldrTableChild);
+        mldrRelFKEndChild.setMDRRelationFK(mldrRelationFK);
+
+        return mldrRelationFK;
+    }
 
     public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {
         MPDROracleModel mpdrOracleModel = new MPDROracleModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_ORACLE_NAME);

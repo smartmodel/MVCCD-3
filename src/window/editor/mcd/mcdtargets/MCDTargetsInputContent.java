@@ -4,8 +4,6 @@ import m.MElement;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDElementWithTargets;
 import mldr.interfaces.IMLDRElement;
-import utilities.Trace;
-import utilities.window.editor.PanelInputContentTable;
 import utilities.window.editor.PanelInputContentTableBasic;
 import utilities.window.services.PanelService;
 

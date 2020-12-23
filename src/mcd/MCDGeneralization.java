@@ -4,7 +4,7 @@ import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
-import m.IMCompletness;
+import m.interfaces.IMCompletness;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAssociationService;
 import mcd.services.MCDRelationService;

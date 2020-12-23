@@ -5,6 +5,7 @@ import mcd.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -18,8 +19,8 @@ public class MCDRelationService {
 
         String resultat = "";
 
-        MCDElement elementA = mcdRelation.getA().getMcdElement();
-        MCDElement elementB = mcdRelation.getB().getMcdElement();
+        MCDElement elementA = (MCDElement) mcdRelation.getA().getmElement();
+        MCDElement elementB = (MCDElement) mcdRelation.getB().getmElement();
 
         MVCCDElement containerRelation = mcdRelation.getParent().getParent();
 

@@ -3,12 +3,13 @@ package mldr.services;
 import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.MCDEntity;
+import mcd.MCDRelation;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
 import mdr.MDRContTables;
-import mldr.MLDRModel;
-import mldr.MLDRTable;
+import mldr.*;
 import mldr.interfaces.IMLDRElementWithSource;
+import mldr.interfaces.IMLDRRelation;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
@@ -38,10 +39,104 @@ public class MLDRModelService {
     }
 
 
+
     public static MLDRTable getMLDRTableByEntitySource(MLDRModel mldrModel, MCDEntity mcdEntity) {
         for (MLDRTable mldrTable : getMLDRTables(mldrModel)){
             if (mldrTable.getMcdElementSource() == mcdEntity){
                 return mldrTable;
+            }
+        }
+        return null ;
+    }
+
+
+    public static MLDRContRelations getMLDRContRelations(MLDRModel mldrModel) {
+        for (MVCCDElement mvccdElement : mldrModel.getChilds()){
+            if (mvccdElement instanceof MLDRContRelations){
+                return (MLDRContRelations) mvccdElement ;
+            }
+        }
+        return null ;
+    }
+
+    public static ArrayList<IMLDRRelation> getIMLDRRelations(MLDRModel mldrModel){
+        ArrayList<IMLDRRelation> resultat = new ArrayList<IMLDRRelation>();
+        MLDRContRelations mldrContRelations = getMLDRContRelations(mldrModel);
+        for (MVCCDElement mvccdElement: mldrContRelations.getChilds()){
+            if (mvccdElement instanceof IMLDRRelation){
+                resultat.add((IMLDRRelation) mvccdElement);
+            }
+        }
+        return resultat;
+    }
+
+/*
+    public static IMLDRRelation getIMLDRRelationByMCDRelationSource(MLDRModel mldrModel, MCDRelation mcdRelation) {
+        for (IMLDRRelation imldrRelation : getIMLDRRelations(mldrModel)){
+            if (imldrRelation.getMcdElementSource() == mcdRelation){
+                return imldrRelation;
+            }
+        }
+        return null ;
+    }
+
+ */
+
+
+    public static ArrayList<MLDRRelationFK> getMLDRRelationFKsByMCDRelationSource(MLDRModel mldrModel, MCDRelation mcdRelation) {
+        ArrayList<MLDRRelationFK> resultat = new ArrayList<MLDRRelationFK>();
+        for (IMLDRRelation imldrRelation : getIMLDRRelations(mldrModel)) {
+            if (imldrRelation instanceof MLDRRelationFK) {
+                MLDRRelationFK mldrRelationFK = (MLDRRelationFK) imldrRelation;
+                if (mldrRelationFK.getMcdElementSource() == mcdRelation) {
+                    resultat.add(mldrRelationFK);
+                }
+            }
+        }
+        return resultat;
+    }
+
+    /*
+    public static MLDRRelationFK getMLDRRelationFKByMCDRelationSourceAndTableParent(MLDRModel mldrModel,
+                                                                                MCDRelation mcdRelation,
+                                                                                MLDRTable mldrTableParent) {
+        for (MLDRRelationFK mldrRelationFK : getMLDRRelationFKsByMCDRelationSource(mldrModel, mcdRelation)){
+            if (mldrRelationFK.getEndChild().getMDRTable() == mldrTableParent){
+                return mldrRelationFK;
+            }
+        }
+        return null ;
+    }
+
+     */
+/*
+    public static MLDRRelationFK getMLDRRelationFKByMCDRelationSourceAndMLDRFK(MLDRModel mldrModel,
+                                                                               MCDRelation mcdRelation,
+                                                                               MLDRFK mldrFK) {
+        for (MLDRRelationFK mldrRelationFK : getMLDRRelationFKsByMCDRelationSource(mldrModel, mcdRelation)){
+            if (mldrRelationFK.getMDRFK() == mldrFK){
+                return mldrRelationFK;
+            }
+        }
+        return null ;
+    }
+
+ */
+
+    public static MLDRRelationFK getMLDRRelationFKByMCDRelationSourceAndSameTables(MLDRModel mldrModel,
+                                                                                    MCDRelation mcdRelation,
+                                                                                    MLDRTable mldrTableA,
+                                                                                    MLDRTable mldrTableB) {
+        for (MLDRRelationFK mldrRelationFK : getMLDRRelationFKsByMCDRelationSource(mldrModel, mcdRelation)){
+            MLDRTable mldrTable1 = (MLDRTable) mldrRelationFK.getEndChild().getMDRTable();
+            MLDRTable mldrTable2 = (MLDRTable) mldrRelationFK.getEndParent().getMDRTable();
+
+            boolean c1 = (mldrTable1 == mldrTableA) && (mldrTable2 == mldrTableB);
+            boolean c2 = (mldrTable1 == mldrTableB) && (mldrTable2 == mldrTableA);
+
+            boolean sameTables = c1 || c2;
+            if (sameTables){
+                return mldrRelationFK;
             }
         }
         return null ;

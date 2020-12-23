@@ -3,9 +3,11 @@ package transform.mcdtomldr;
 import exceptions.orderbuildnaming.OrderBuildNameException;
 import exceptions.TransformMCDException;
 import main.MVCCDManager;
+import mcd.MCDElement;
 import mcd.MCDEntity;
 import mcd.MCDRelEnd;
 import mcd.MCDRelation;
+import md.MDElement;
 import mdr.*;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
 import mdr.orderbuildnaming.MDROrderBuildTargets;
@@ -28,22 +30,41 @@ public class MCDTransformToFK {
 
     public MLDRFK createOrModifyFromRelEndParent(MLDRModel mldrModel, MCDRelEnd mcdRelEndParent, MLDRTable mldrTable, MDRFKNature fkNature) {
 
-        MLDRFK mldrFK =  mldrTable.getMLDRFKByMCDElementSource(mcdRelEndParent.getMcdRelation());
-
-        MCDRelation mcdRelation = mcdRelEndParent.getMcdRelation();
+        // Contrainte FK
+           MLDRFK mldrFK =  mldrTable.getMLDRFKByMCDElementSource((MCDRelEnd) mcdRelEndParent);
         if (mldrFK == null) {
-            mldrFK = mldrTable.createFK(mcdRelation);
+            mldrFK = mldrTable.createFK(mcdRelEndParent);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrFK);
         }
         modifyFK(mldrModel, mcdRelEndParent, mldrTable, mldrFK, fkNature);
-        mcdTransform.addInTrace(mcdRelEndParent.getMCDRelEndOpposite(), mldrFK);
+        mcdTransform.addInTrace(mcdRelEndParent, mldrFK);
+
+        // Relation FK
+        MCDRelation mcdRelation = (MCDRelation) mcdRelEndParent.getImRelation();
+        MLDRTable mldrTableParent = mldrModel.getMLDRTableByEntitySource((MCDEntity)mcdRelEndParent.getmElement());
+        MLDRRelationFK mldrRelationFK = mldrModel.getMLDRRelationFKByMCDRelationSourceAndSameTables(mcdRelation,mldrTable, mldrTableParent);
+        if (mldrRelationFK == null){
+            mldrRelationFK = mldrModel.createRelationFK(mcdRelation, mldrTable, mldrTableParent);
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK);
+        }
+        modifyRelationFK(mldrModel, mcdRelEndParent, mldrTable, mldrFK, fkNature);
+        mcdTransform.addInTrace(mcdRelation, mldrRelationFK);
+
+        // Double lien entre contrainte FK et sa représentation sous forme de relation
+        if (mldrFK.getMDRRelationFK() != mldrRelationFK){
+            mldrFK.setMDRRelationFK(mldrRelationFK);
+        }
+        if (mldrRelationFK.getMDRFK() != mldrFK){
+            mldrRelationFK.setMDRFK(mldrFK);
+        }
 
         return mldrFK;
     }
 
 
+
     private void modifyFK(MLDRModel mldrModel, MCDRelEnd mcdRelEndParent, MLDRTable mldrTable, MLDRFK mldrFK, MDRFKNature fkNature) {
-        MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getMcdElement();
+        MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getmElement();
         MLDRTable mldrTableParent = mldrModel.getMLDRTableByEntitySource(mcdEntityParent);
         MLDRPK mldrPKParent = mldrTableParent.getMLDRPK();
 
@@ -59,8 +80,8 @@ public class MCDTransformToFK {
         // Parcours des colonne de la PK
         for (MLDRParameter mldrParameter : mldrPKParent.getMLDRParameters()){
             MLDRColumn mldrColumnPK = (MLDRColumn) mldrParameter.getTarget() ;
-            MCDEntity mcdEntity = (MCDEntity) mcdRelEndParent.getMCDRelEndOpposite().getMcdElement();
-            MCDRelation mcdRelation = mcdRelEndParent.getMcdRelation();
+            MCDEntity mcdEntity = (MCDEntity) mcdRelEndParent.getMCDRelEndOpposite().getmElement();
+            MCDRelation mcdRelation = (MCDRelation) mcdRelEndParent.getImRelation();
 
             // Transformation de la colonne PK en colonne FK
             MCDTransformToColumn mcdTransformToColumn = new MCDTransformToColumn(mcdTransform);
@@ -72,9 +93,9 @@ public class MCDTransformToFK {
         new MCDRAdjustParametersFK().adjustParameters(mldrTable, mldrFK, mdrColumnsFK);
     }
 
-    private void adjustParameters(MLDRFK mldrFK, MLDRColumn mldrColumnPK) {
-
+    private void modifyRelationFK(MLDRModel mldrModel, MCDRelEnd mcdRelEndParent, MLDRTable mldrTable, MLDRFK mldrFK, MDRFKNature fkNature) {
     }
+
 
     protected MDRElementNames buildNameFK(MDRTable mdrTable,
                                           MDRFK mdrFK,
@@ -92,8 +113,8 @@ public class MCDTransformToFK {
             orderBuild.getIndConstFK().setValue(mdrFK.getIndice().toString());
             orderBuild.getFkIndSep().setValue();
 
-            orderBuild.getTableShortNameChild().setValue((MCDEntity) mcdRelEndParent.getMCDRelEndOpposite().getMcdElement());
-            orderBuild.getTableShortNameParent().setValue((MCDEntity) mcdRelEndParent.getMcdElement());
+            orderBuild.getTableShortNameChild().setValue((MCDEntity) mcdRelEndParent.getMCDRelEndOpposite().getmElement());
+            orderBuild.getTableShortNameParent().setValue((MCDEntity) mcdRelEndParent.getmElement());
             orderBuild.getTableSep().setValue();
             orderBuild.getRoleShortNameParent().setValue(mcdRelEndParent);
 
