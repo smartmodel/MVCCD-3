@@ -57,7 +57,8 @@ public class MLDRFK extends MDRFK implements IMLDRElement, IMLDRElementWithSourc
 
 
     public MLDRParameter createParameter(IMDRParameter target) {
-        MLDRParameter mldrParameter = MVCCDElementFactory.instance().createMLDRParameter(this, target);
+        MLDRParameter mldrParameter = MVCCDElementFactory.instance().createMLDRParameter(this,
+                target, this.getMcdElementSource());
         return mldrParameter;
     }
 

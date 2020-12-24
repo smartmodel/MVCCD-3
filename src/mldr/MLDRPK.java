@@ -4,6 +4,7 @@ import main.MVCCDElementFactory;
 import mcd.MCDElement;
 import mcd.MCDEntity;
 import md.MDElement;
+import mdr.MDRColumn;
 import mdr.MDRElement;
 import mdr.MDRPK;
 import mdr.MDRParameter;
@@ -58,7 +59,8 @@ public class MLDRPK extends MDRPK implements IMLDRElement, IMLDRElementWithSourc
 
 
     public MLDRParameter createParameter(IMDRParameter target) {
-        MLDRParameter mldrParameter = MVCCDElementFactory.instance().createMLDRParameter(this, target);
+        MLDRParameter mldrParameter = MVCCDElementFactory.instance().createMLDRParameter(this,
+                target, this.getMcdElementSource());
         return mldrParameter;
     }
 
@@ -66,5 +68,6 @@ public class MLDRPK extends MDRPK implements IMLDRElement, IMLDRElementWithSourc
     public ArrayList<MLDRColumn> getMLDRColumns(){
         return MLDROperationService.getMLDRColumns(this);
     }
+
 
 }

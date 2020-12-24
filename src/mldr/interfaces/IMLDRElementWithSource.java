@@ -1,12 +1,12 @@
 package mldr.interfaces;
 
 import mcd.MCDElement;
+import md.interfaces.IMDElementWithSource;
 
-public interface IMLDRElementWithSource {
+public interface IMLDRElementWithSource extends IMDElementWithSource {
 
     public MCDElement getMcdElementSource();
     public void setMcdElementSource(MCDElement mcdElementSource);
 
-    public String getName();
 
 }

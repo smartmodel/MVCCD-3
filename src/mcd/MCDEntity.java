@@ -7,6 +7,8 @@ import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDNamePathParent;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.services.MCDEntityService;
+import md.MDElement;
+import md.services.MDElementConvert;
 import mldr.interfaces.IMLDRElement;
 import project.ProjectElement;
 
@@ -46,6 +48,16 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
 
     public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
         this.imldrElementTargets = imldrElementTargets;
+    }
+
+    @Override
+    public ArrayList<MDElement> getMdElementTargets() {
+        return MDElementConvert.to(imldrElementTargets);
+    }
+
+    @Override
+    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
+        this.imldrElementTargets = MDElementConvert.from(mdElementTargets);
     }
 
     public boolean isEntAbstract() {
@@ -419,4 +431,6 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         }
         return resultat;
     }
+
+
 }

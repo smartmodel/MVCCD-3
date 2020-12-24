@@ -23,6 +23,13 @@ public abstract class MPDRColumn extends MDRTable implements IMPDRElement, IMPDR
         return mldrElementSource;
     }
 
+
+    @Override
+    public void setMldrElementSource(IMLDRElement imldrElementSource) {
+        this.mldrElementSource = mldrElementSource;
+    }
+
+
     @Override
     public MDElement getMdElementSource() {
         return (MDElement) getMldrElementSource();

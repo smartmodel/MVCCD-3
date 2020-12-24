@@ -5,6 +5,8 @@ import m.MElement;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
 import mcd.interfaces.IMCDElementWithTargets;
+import md.MDElement;
+import md.services.MDElementConvert;
 import mldr.interfaces.IMLDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -148,5 +150,15 @@ public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElem
     @Override
     public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
         this.imldrElementTargets = imldrElementTargets;
+    }
+
+    @Override
+    public ArrayList<MDElement> getMdElementTargets() {
+        return MDElementConvert.to(imldrElementTargets);
+    }
+
+    @Override
+    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
+        this.imldrElementTargets = MDElementConvert.from(mdElementTargets);
     }
 }

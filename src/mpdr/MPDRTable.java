@@ -32,6 +32,12 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     }
 
     @Override
+    public void setMldrElementSource(IMLDRElement imldrElementSource) {
+        this.mldrElementSource = mldrElementSource;
+    }
+
+
+    @Override
     public MDElement getMdElementSource() {
         return (MDElement) getMldrElementSource();
     }

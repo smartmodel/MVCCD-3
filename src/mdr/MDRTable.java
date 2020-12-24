@@ -2,16 +2,7 @@ package mdr;
 
 import exceptions.CodeApplException;
 import main.MVCCDElement;
-import mcd.*;
-import mcd.services.MCDElementService;
 import mdr.interfaces.IMDRElementNamingPreferences;
-import mdr.interfaces.IMDRElementWithSource;
-import mdr.interfaces.IMDRParameter;
-import mldr.MLDRColumn;
-import mldr.MLDRFK;
-import mldr.MLDRPK;
-import mldr.MLDRTable;
-import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
 
 import java.util.ArrayList;

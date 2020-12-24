@@ -1,13 +1,13 @@
 package mdr;
 
-import mcd.MCDEntity;
+import mdr.interfaces.IMDRElementWithIteration;
 import mdr.services.MDRModelService;
 import project.ProjectElement;
 import project.ProjectService;
 
 import java.util.ArrayList;
 
-public class MDRModel extends MDRElement {
+public class MDRModel extends MDRElement  {
 
     private  static final long serialVersionUID = 1000;
 
@@ -15,6 +15,8 @@ public class MDRModel extends MDRElement {
     private MDRNamingLength namingLengthFuture ;// = MDRNamingLength.LENGTH60;
     private MDRNamingFormat namingFormatActual ;// = MDRNamingFormat.NOTHING;
     private MDRNamingFormat namingFormatFuture ;// = MDRNamingFormat.NOTHING;
+
+    private Integer iteration = 0 ;
 
     public MDRModel(ProjectElement parent, String name) {
         super(parent, name);
@@ -70,6 +72,10 @@ public class MDRModel extends MDRElement {
         return MDRModelService.getMDRElements(this);
     }
 
+    public ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration(){
+        return MDRModelService.getIMDRElementsWithIteration(this);
+    }
+
     public MDRContTables getMDRContTables(){
         return MDRModelService.getMDRContTables(this);
     }
@@ -80,5 +86,13 @@ public class MDRModel extends MDRElement {
 
     public void adjustNaming(){
         MDRModelService.adjustNaming(this);
+    }
+
+    public Integer getIteration() {
+        return iteration;
+    }
+
+    public void incrementeIteration(){
+        iteration = iteration + 1 ;
     }
 }

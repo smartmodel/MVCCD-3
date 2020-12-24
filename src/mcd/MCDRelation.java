@@ -5,6 +5,8 @@ import exceptions.CodeApplException;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
 import mcd.interfaces.IMCDElementWithTargets;
+import md.MDElement;
+import md.services.MDElementConvert;
 import mldr.interfaces.IMLDRElement;
 import project.ProjectService;
 import stereotypes.Stereotype;
@@ -100,5 +102,15 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
     @Override
     public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
         this.imldrElementTargets = imldrElementTargets;
+    }
+
+    @Override
+    public ArrayList<MDElement> getMdElementTargets() {
+        return MDElementConvert.to(imldrElementTargets);
+    }
+
+    @Override
+    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
+        this.imldrElementTargets = MDElementConvert.from(mdElementTargets);
     }
 }

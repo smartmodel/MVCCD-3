@@ -1,7 +1,9 @@
 package mdr;
 
 import md.MDElement;
+import mdr.interfaces.IMDRParameter;
 import mldr.MLDRColumn;
+import mldr.MLDRParameter;
 import mldr.services.MLDROperationService;
 import project.ProjectElement;
 
@@ -16,5 +18,5 @@ public abstract class MDRPK extends MDRConstraint{
         super(parent);
     }
 
-
+    public abstract MLDRParameter createParameter(IMDRParameter target);
 }

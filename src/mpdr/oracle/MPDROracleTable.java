@@ -21,4 +21,8 @@ public class MPDROracleTable extends MPDRTable {
     }
 
 
+    @Override
+    public void setMldrElementSource(IMLDRElement imldrElementSource) {
+
+    }
 }

@@ -128,7 +128,7 @@ public class Preferences extends MVCCDElement {
 
     public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
     public static Integer MVCCD_WINDOW_WIDTH = 1200;
-    public static Integer MVCCD_WINDOW_HEIGHT = 700;
+    public static Integer MVCCD_WINDOW_HEIGHT = 1000;
     public static Integer PROJECT_WINDOW_WIDTH = 800;
     public static Integer PROJECT_WINDOW_HEIGHT = 400;
     public static Integer MODEL_WINDOW_WIDTH = 800;

@@ -3,11 +3,18 @@ package mdr;
 import exceptions.CodeApplException;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
+import md.MDElement;
+import md.interfaces.IMDElementWithTargets;
+import mdr.interfaces.IMDRElementWithIteration;
 import project.ProjectElement;
 
-public abstract class MDRRelation extends MDRElement implements IMRelation {
+import java.util.ArrayList;
+
+public abstract class MDRRelation extends MDRElement implements IMRelation, IMDRElementWithIteration, IMDElementWithTargets {
 
     private static final long serialVersionUID = 1000;
+    private Integer iteration = null; // Si un objet est créé directement et non par transformation
+    private ArrayList<MDElement> mdElementTargets= new  ArrayList<MDElement>();
 
     private IMRelEnd a ;
     private IMRelEnd b ;
@@ -17,6 +24,24 @@ public abstract class MDRRelation extends MDRElement implements IMRelation {
     }
     public MDRRelation(ProjectElement parent, String name) {
         super(parent, name);
+    }
+
+    @Override
+    public Integer getIteration() {
+        return iteration;
+    }
+
+    @Override
+    public void setIteration(Integer iteration) {
+        this.iteration = iteration;
+    }
+
+    public ArrayList<MDElement> getMdElementTargets() {
+        return mdElementTargets;
+    }
+
+    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
+        this.mdElementTargets = mdElementTargets;
     }
 
     @Override

@@ -16,6 +16,7 @@ import mldr.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import transform.MDRAdjustParameters;
 import utilities.Trace;
 
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class MCDTransformToFK {
         }
 
         // Transformation des paramètres PK en paramètres FK
-        new MCDRAdjustParametersFK().adjustParameters(mldrTable, mldrFK, mdrColumnsFK);
+        MDRAdjustParameters.adjustParameters(mcdTransform, mldrTable, mldrFK, mdrColumnsFK);
     }
 
     private void modifyRelationFK(MLDRModel mldrModel, MCDRelEnd mcdRelEndParent, MLDRTable mldrTable, MLDRFK mldrFK, MDRFKNature fkNature) {

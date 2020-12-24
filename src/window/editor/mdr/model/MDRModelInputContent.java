@@ -38,7 +38,11 @@ public class MDRModelInputContent extends PanelInputContent  {
     private SComboBox fieldNamingFormatFuture;
     private JLabel labelNamingFormatActual;
     private STextField fieldNamingFormatActual;
-    
+
+    private JLabel labelLastIteration;
+    private STextField fieldLastIteration;
+
+
 
     public MDRModelInputContent(MDRModelInput MDRModelInput)     {
         super(MDRModelInput);
@@ -102,6 +106,11 @@ public class MDRModelInputContent extends PanelInputContent  {
         fieldNamingFormatFuture.addItemListener(this);
         fieldNamingFormatFuture.addFocusListener(this);
 
+        labelLastIteration = new JLabel("Dernière itération");
+        fieldLastIteration = new STextField (this, labelLastIteration);
+        fieldLastIteration.setReadOnly(true);
+        fieldLastIteration.setToolTipText("Dernière itération de transformation");
+
 
 
         super.getSComponents().add(fieldName);
@@ -109,6 +118,7 @@ public class MDRModelInputContent extends PanelInputContent  {
         super.getSComponents().add(fieldNamingLengthFuture);
         super.getSComponents().add(fieldNamingFormatActual);
         super.getSComponents().add(fieldNamingFormatFuture);
+        super.getSComponents().add(fieldLastIteration);
 
         createPanelMaster();
     }
@@ -144,6 +154,12 @@ public class MDRModelInputContent extends PanelInputContent  {
         panelInputContentCustom.add(panelNaming, gbc);
 
         gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(labelLastIteration, gbc);
+        gbc.gridx++ ;
+        panelInputContentCustom.add(fieldLastIteration, gbc);
+
 
         this.add(panelInputContentCustom);
     }
@@ -183,6 +199,7 @@ public class MDRModelInputContent extends PanelInputContent  {
         SComboBoxService.selectByText(fieldNamingLengthFuture, mdrModel.getNamingLengthFuture().getText());
         fieldNamingFormatActual.setText(mdrModel.getNamingFormatActual().getText());
         SComboBoxService.selectByText(fieldNamingFormatFuture, mdrModel.getNamingFormatFuture().getText());
+        fieldLastIteration.setText(mdrModel.getIteration().intValue());
     }
 
     @Override

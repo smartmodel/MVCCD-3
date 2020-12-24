@@ -1,11 +1,11 @@
 package mdr;
 
 import main.MVCCDElement;
-import mcd.interfaces.IMCDParameter;
 import md.MDElement;
-import mdr.interfaces.IMDRElementWithSource;
+import md.interfaces.IMDElementWithSource;
+import md.interfaces.IMDElementWithTargets;
+import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
-import mldr.MLDRParameter;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
@@ -13,15 +13,36 @@ import utilities.Trace;
 
 import java.util.ArrayList;
 
-public abstract class MDROperation extends MDRElement implements IMDRElementWithSource {
+public abstract class MDROperation extends MDRElement implements IMDRElementWithIteration, IMDElementWithSource, IMDElementWithTargets {
 
     private  static final long serialVersionUID = 1000;
+    private Integer iteration = null; // Si un objet est créé directement et non par transformation
 
+    private ArrayList<MDElement> mdElementTargets= new  ArrayList<MDElement>();
 
     public MDROperation(ProjectElement parent) {
         super(parent);
     }
 
+    @Override
+    public Integer getIteration() {
+        return iteration;
+    }
+
+
+    @Override
+    public void setIteration(Integer iteration) {
+        this.iteration = iteration;
+    }
+
+    public ArrayList<MDElement> getMdElementTargets() {
+        return mdElementTargets;
+    }
+
+    @Override
+    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
+        this.mdElementTargets = mdElementTargets;
+    }
 
     public ArrayList<MDRParameter> getMDRParameters(){
         ArrayList<MDRParameter> resultat = new ArrayList<MDRParameter>();
@@ -33,15 +54,24 @@ public abstract class MDROperation extends MDRElement implements IMDRElementWith
         return resultat;
     }
 
-    public boolean existeTarget (IMDRParameter target){
+    public boolean existeTarget (IMDRParameter element){
         for (MDRParameter mdrParameter : getMDRParameters()){
-            if (mdrParameter.getTarget() == target){
+            if (mdrParameter.getTarget() == element){
                 return true;
             }
         }
         return false ;
     }
 
+
+    public MDRParameter getParameter (IMDRParameter element){
+        for (MDRParameter mdrParameter : getMDRParameters()){
+            if (mdrParameter.getTarget() == element){
+                return mdrParameter;
+            }
+        }
+        return null ;
+    }
 
     public ArrayList<IMDRParameter> getTargets(){
         ArrayList<IMDRParameter> resultat = new ArrayList<IMDRParameter>();
@@ -89,4 +119,5 @@ public abstract class MDROperation extends MDRElement implements IMDRElementWith
     }
 
 
+    public abstract MDRParameter createParameter(IMDRParameter target);
 }

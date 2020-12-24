@@ -12,6 +12,7 @@ import mldr.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import transform.MDRAdjustParameters;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class MCDTransformToPK {
         ArrayList<MDRColumn> mdrColumnPKs = new ArrayList<MDRColumn>();
         mdrColumnPKs.add(createOrModifyColumnPKProper(mcdEntity, mldrTable));
 
-        new MCDAdjustParametersPK().adjustParameters(mldrTable, mldrPK, mdrColumnPKs);
+        MDRAdjustParameters.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
     }
 
 
@@ -64,7 +65,7 @@ public class MCDTransformToPK {
             mdrColumnPKs.add(mdrColumnPKProper);
         }
 
-        new MCDAdjustParametersPK().adjustParameters(mldrTable, mldrPK, mdrColumnPKs);
+        MDRAdjustParameters.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
 
         return mldrPK;
     }

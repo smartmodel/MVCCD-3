@@ -3,6 +3,8 @@ package mcd;
 import m.interfaces.IMCompletness;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDElementWithTargets;
+import md.MDElement;
+import md.services.MDElementConvert;
 import mldr.interfaces.IMLDRElement;
 import project.ProjectElement;
 
@@ -41,5 +43,15 @@ public abstract class MCDOperation extends MCDElement implements IMCompletness, 
             }
         }
         return parameters;
+    }
+
+    @Override
+    public ArrayList<MDElement> getMdElementTargets() {
+        return MDElementConvert.to(imldrElementTargets);
+    }
+
+    @Override
+    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
+        this.imldrElementTargets = MDElementConvert.from(mdElementTargets);
     }
 }

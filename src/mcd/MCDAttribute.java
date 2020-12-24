@@ -7,6 +7,8 @@ import m.interfaces.IMCompletness;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAttributeService;
+import md.MDElement;
+import md.services.MDElementConvert;
 import mldr.interfaces.IMLDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -61,6 +63,15 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         this.imldrElementTargets = imldrElementTargets;
     }
 
+    @Override
+    public ArrayList<MDElement> getMdElementTargets() {
+        return MDElementConvert.to(imldrElementTargets);
+    }
+
+    @Override
+    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
+        this.imldrElementTargets = MDElementConvert.from(mdElementTargets);
+    }
     public boolean isFrozen() {
         return frozen;
     }

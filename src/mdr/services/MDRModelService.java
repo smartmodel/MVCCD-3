@@ -6,6 +6,7 @@ import mcd.MCDAttribute;
 import mcd.MCDContAttributes;
 import mdr.*;
 import mdr.interfaces.IMDRElementNamingPreferences;
+import mdr.interfaces.IMDRElementWithIteration;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.Project;
@@ -31,6 +32,18 @@ public class MDRModelService {
     }
 
 
+
+    public static ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration(MDRElement root) {
+        ArrayList<IMDRElementWithIteration> resultat = new ArrayList<IMDRElementWithIteration>();
+        for (MDRElement mdrElement : getMDRElements(root)) {
+            if (mdrElement instanceof IMDRElementWithIteration) {
+                resultat.add((IMDRElementWithIteration) mdrElement);
+            }
+        }
+        return resultat;
+    }
+
+
     public static MDRContTables getMDRContTables(MDRModel mdrModel) {
         for (MVCCDElement mvccdElement : mdrModel.getChilds()) {
             if (mvccdElement instanceof MDRContTables) {
@@ -39,6 +52,7 @@ public class MDRModelService {
         }
         return null;
     }
+
 
 
     public static ArrayList<MDRTable> getMDRTables(MDRModel mdrModel) {

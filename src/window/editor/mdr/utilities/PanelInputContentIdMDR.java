@@ -3,8 +3,8 @@ package window.editor.mdr.utilities;
 import main.MVCCDElement;
 import mcd.MCDElement;
 import md.MDElement;
+import md.interfaces.IMDElementWithSource;
 import mdr.MDRElement;
-import mdr.interfaces.IMDRElementWithSource;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -174,8 +174,8 @@ public class PanelInputContentIdMDR extends PanelInputContent {
             fieldName120.setText(mdrElement.getNames().getName120());
         }
 
-        if (mdrElement instanceof IMDRElementWithSource) {
-            MDElement mdElementSource = ((IMDRElementWithSource)mdrElement).getMdElementSource();
+        if (mdrElement instanceof IMDElementWithSource) {
+            MDElement mdElementSource = ((IMDElementWithSource)mdrElement).getMdElementSource();
             String sourceName = mdElementSource.getName();
             if (mdElementSource instanceof MCDElement) {
                 //sourceName = ((MCDElement) mdElementSource).getNamePath(MElement.SCOPESHORTNAME);

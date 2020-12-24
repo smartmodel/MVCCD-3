@@ -1,24 +1,45 @@
 package mdr;
 
 import main.MVCCDElement;
-import mcd.MCDAttribute;
-import mcd.MCDContAttributes;
-import mcd.MCDContConstraints;
+import mcd.interfaces.IMCDElementWithTargets;
 import md.MDElement;
-import mdr.interfaces.IMDRElementWithSource;
+import md.interfaces.IMDElementWithTargets;
 import mdr.interfaces.IMDRParameter;
+import mdr.interfaces.IMDRElementWithIteration;
 import project.ProjectElement;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
-public abstract class MDRTableOrView extends MDRElement implements IMDRElementWithSource {
+public abstract class MDRTableOrView extends MDRElement implements IMDRElementWithIteration, IMDElementWithTargets {
 
     //protected MDElement mdElementSource;
     private  static final long serialVersionUID = 1000;
+    private Integer iteration = null; // Si un objet est créé directement et non par transformation
+    private ArrayList<MDElement> mdElementTargets= new  ArrayList<MDElement>();
+
 
     public MDRTableOrView(ProjectElement parent) {
         super(parent);
+    }
+
+    @Override
+    public Integer getIteration() {
+        return iteration;
+    }
+
+    @Override
+    public void setIteration(Integer iteration) {
+        this.iteration = iteration;
+    }
+
+    @Override
+    public ArrayList<MDElement> getMdElementTargets() {
+        return mdElementTargets;
+    }
+
+    @Override
+    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
+        this.mdElementTargets = mdElementTargets;
     }
 
     public ArrayList<MDRColumn> getMDRColumns() {
