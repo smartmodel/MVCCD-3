@@ -2,6 +2,7 @@ package mcd;
 
 import exceptions.CodeApplException;
 import main.MVCCDElement;
+import mcd.interfaces.IMCDModel;
 import mcd.services.MCDElementService;
 import md.MDElement;
 import org.apache.commons.lang.StringUtils;
@@ -83,5 +84,11 @@ public abstract class MCDElement extends MDElement {
                 Preferences.MODEL_NAME_PATH_SEPARATOR);
     }
 
+    public IMCDModel getIMCDModelAccueil(){
+        return MCDElementService.getIMCDModelAccueil(this);
+    }
 
+    public IMCDModel getMCDModelAccueil(){
+        return MCDElementService.getMCDModelAccueil(this);
+    }
 }

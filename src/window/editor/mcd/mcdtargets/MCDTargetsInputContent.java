@@ -2,16 +2,26 @@ package window.editor.mcd.mcdtargets;
 
 import m.MElement;
 import main.MVCCDElement;
+import mcd.MCDElement;
 import mcd.interfaces.IMCDElementWithTargets;
-import mldr.interfaces.IMLDRElement;
+import mcd.interfaces.IMCDModel;
+import mdr.MDRElement;
+import mdr.MDRModel;
+import preferences.Preferences;
+import utilities.Trace;
 import utilities.window.editor.PanelInputContentTableBasic;
+import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class MCDTargetsInputContent extends PanelInputContentTableBasic {
+
+    private JLabel labelLastMLDRModel;
+    private STextField fieldLastMLDRModel ;
 
 
     public MCDTargetsInputContent(MCDTargetsInput MCDTargetsInput)    {
@@ -23,6 +33,14 @@ public class MCDTargetsInputContent extends PanelInputContentTableBasic {
     public void createContentCustom() {
 
         super.createContentCustom();
+
+        // TODO-1 Offrir le choix du MLD-R cible et non pas seulement le dernier
+        labelLastMLDRModel = new JLabel("Dernier MLD-R transformé : ");
+        fieldLastMLDRModel = new STextField(this, labelLastMLDRModel);
+        fieldLastMLDRModel.setPreferredSize((new Dimension(100,Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldLastMLDRModel.setReadOnly(true);
+
+        super.getSComponents().add(fieldLastMLDRModel);
 
         createPanelMaster();
     }
@@ -37,6 +55,14 @@ public class MCDTargetsInputContent extends PanelInputContentTableBasic {
 
     private void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
+
+        panelInputContentCustom.add(labelLastMLDRModel, gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldLastMLDRModel,gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
         panelInputContentCustom.add(panelTableComplete, gbc);
 
         this.add(panelInputContentCustom);
@@ -72,24 +98,40 @@ public class MCDTargetsInputContent extends PanelInputContentTableBasic {
 
     }
 
+    private MDRModel getLastMDRModel(){
+        MCDElement mcdElement = (MCDElement) getEditor().getMvccdElementCrt();
+
+        IMCDElementWithTargets imcdElementWithTargets = (IMCDElementWithTargets) mcdElement;
+        IMCDModel imodelAccueil = imcdElementWithTargets.getIMCDModelAccueil();
+        MDRModel lastMDRModel = imodelAccueil.getLastTransformedMLDRModel();
+        return lastMDRModel;
+    }
+
+
+    public void loadDatas(MVCCDElement mvccdElementCrt) {
+        super.loadDatas(mvccdElementCrt);
+        fieldLastMLDRModel.setText(getLastMDRModel().getName());
+
+    }
+
     @Override
     protected void specificInitOrLoadTable() {
+        MCDElement mcdElement = (MCDElement) getEditor().getMvccdElementCrt();
 
-        IMCDElementWithTargets imcdElementWithTargets = (IMCDElementWithTargets) getEditor().getMvccdElementCrt();
-        ArrayList<IMLDRElement> imldrElements = imcdElementWithTargets.getImldrElementTargets();
+        ArrayList<MDRElement> mdrElements = getLastMDRModel().getMDRElementsTransformedBySource(mcdElement);
 
         int datasSize;
-        if (imldrElements != null){
-           datasSize = imldrElements.size();
+        if (mdrElements != null){
+           datasSize = mdrElements.size();
         } else {datasSize = 0 ;
         }
         datas = new Object[datasSize][MCDTargetsTableColumn.getNbColumns()];
         int line=-1;
         int col;
-        if (imldrElements != null) {
-            for (IMLDRElement imldrElement : imldrElements) {
+        if (mdrElements != null) {
+            for (MDRElement mdrElement : mdrElements) {
                 line++;
-                putValueInRow((MElement) imldrElement, datas[line]);
+                putValueInRow((MElement) mdrElement, datas[line]);
             }
         }
     }

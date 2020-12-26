@@ -12,8 +12,7 @@ import java.util.ArrayList;
 
 public abstract class MCDOperation extends MCDElement implements IMCompletness, IMCDElementWithTargets {
 
-    private  static final long serialVersionUID = 1000;
-    private ArrayList<IMLDRElement> imldrElementTargets = new ArrayList<IMLDRElement>();
+    private static final long serialVersionUID = 1000;
 
     public MCDOperation(ProjectElement parent) {
 
@@ -25,33 +24,13 @@ public abstract class MCDOperation extends MCDElement implements IMCompletness, 
         super(parent, name);
     }
 
-    @Override
-    public ArrayList<IMLDRElement> getImldrElementTargets() {
-        return imldrElementTargets;
-    }
-
-    @Override
-    public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
-        this.imldrElementTargets = imldrElementTargets;
-    }
-
     public ArrayList<MCDParameter> getParameters() {
         ArrayList<MCDParameter> parameters = new ArrayList<MCDParameter>();
-        for (MVCCDElement mvccdElement : getChilds()){
-            if (mvccdElement instanceof MCDParameter){
+        for (MVCCDElement mvccdElement : getChilds()) {
+            if (mvccdElement instanceof MCDParameter) {
                 parameters.add((MCDParameter) mvccdElement);
             }
         }
         return parameters;
-    }
-
-    @Override
-    public ArrayList<MDElement> getMdElementTargets() {
-        return MDElementConvert.to(imldrElementTargets);
-    }
-
-    @Override
-    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
-        this.imldrElementTargets = MDElementConvert.from(mdElementTargets);
     }
 }

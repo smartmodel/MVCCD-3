@@ -1,15 +1,10 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import mcd.MCDContConstraints;
-import mcd.MCDUnicity;
-import mcd.interfaces.IMCDElementWithTargets;
 import repository.editingTreat.EditingTreat;
-import utilities.Trace;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.mcdtargets.MCDTargetsEditor;
-import window.editor.mcd.operation.constraint.unicity.nid.NIDEditor;
 import window.editor.mcd.operation.constraint.unicity.nid.NIDInputContent;
 
 import java.awt.*;

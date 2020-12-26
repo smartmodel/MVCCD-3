@@ -1,7 +1,6 @@
 package mdr;
 
 import md.MDElement;
-import md.interfaces.IMDElementWithTargets;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
@@ -11,10 +10,9 @@ import project.ProjectElement;
 import java.util.ArrayList;
 
 public abstract class MDRColumn extends MDRElement implements
-        IMDRParameter, IMDRElementNamingPreferences, IMDRElementWithIteration, IMDElementWithTargets {
+        IMDRParameter, IMDRElementNamingPreferences, IMDRElementWithIteration {
 
     private Integer iteration = null; // Si un objet est créé directement et non par transformation
-    private ArrayList<MDElement> mdElementTargets= new  ArrayList<MDElement>();
 
     private String datatypeLienProg = null;
     private String datatypeConstraintLienProg = null;
@@ -59,14 +57,6 @@ public abstract class MDRColumn extends MDRElement implements
     @Override
     public void setIteration(Integer iteration) {
         this.iteration = iteration;
-    }
-
-    public ArrayList<MDElement> getMdElementTargets() {
-        return mdElementTargets;
-    }
-
-    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
-        this.mdElementTargets = mdElementTargets;
     }
 
     public String getDatatypeLienProg() {

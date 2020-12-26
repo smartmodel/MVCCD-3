@@ -23,7 +23,6 @@ import java.util.ArrayList;
 public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParameter, IMCDElementWithTargets {
 
     private static final long serialVersionUID = 1000;
-    private ArrayList<IMLDRElement> imldrElementTargets = new ArrayList<IMLDRElement>();
 
     public static final String CLASSSHORTNAMEUI = "Attribute";
 
@@ -53,25 +52,7 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         super(parent);
     }
 
-    @Override
-    public ArrayList<IMLDRElement> getImldrElementTargets() {
-        return imldrElementTargets;
-    }
 
-    @Override
-    public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
-        this.imldrElementTargets = imldrElementTargets;
-    }
-
-    @Override
-    public ArrayList<MDElement> getMdElementTargets() {
-        return MDElementConvert.to(imldrElementTargets);
-    }
-
-    @Override
-    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
-        this.imldrElementTargets = MDElementConvert.from(mdElementTargets);
-    }
     public boolean isFrozen() {
         return frozen;
     }

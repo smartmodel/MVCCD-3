@@ -1,34 +1,16 @@
 package transform.mcdtomldr;
 
-import delete.Delete;
-import exceptions.CodeApplException;
 import exceptions.TransformMCDException;
-import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import mcd.*;
-import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
-import md.MDElement;
-import md.interfaces.IMDElementWithTargets;
-import mdr.MDRConstraint;
-import mdr.MDRElement;
-import mdr.MDRParameter;
 import mdr.interfaces.IMDRElementWithIteration;
 import mldr.*;
-import mldr.interfaces.IMDLRConstraint;
-import mldr.interfaces.IMLDRElement;
-import mldr.interfaces.IMLDRElementWithSource;
-import mldr.interfaces.IMLDRRelation;
-import mldr.services.MLDRModelService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import project.ProjectManager;
-import project.ProjectService;
 import transform.MDTransform;
-import utilities.Trace;
-import utilities.UtilDivers;
 
 import java.util.ArrayList;
 
@@ -57,12 +39,12 @@ public class MCDTransform extends MDTransform {
         MCDTransformToTable mcdTransformToTable = new MCDTransformToTable(this, imcdModel, mldrModel);
         mcdTransformToTable.createOrModifyFromAllEntities();
 
-        //Mémorise les cibles de la transformation
-        recordTraces();
-
         //Suppression des MLDRElement absents de l'itération
         deleteMDRElementNotInIteration();
 
+        // Enregistrer la dernière transformation
+        //TODO-0 Mettre après le traitement d'erreur lorsqu'il sera fait!
+        imcdModel.setLastTransformedMLDRModel(mldrModel);
         return resultat;
     }
 

@@ -5,6 +5,7 @@ import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
+import mldr.MLDRModel;
 import transform.mcdtomldr.MCDTransform;
 import project.ProjectElement;
 import project.ProjectService;
@@ -15,6 +16,7 @@ public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePa
         IMCDContContainer {
 
     private static final long serialVersionUID = 1000;
+    private MLDRModel lastTransformedMLDRModel;
 
     public MCDContModels(ProjectElement parent, String name) {
         super(parent, name);
@@ -40,6 +42,18 @@ public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePa
         // Il n'y a pas de modèles. Il faut donc tester toutes les entités
         ArrayList<String> resultat = mcdTransform.transform(this);
         return resultat;
+    }
+
+
+
+    @Override
+    public MLDRModel getLastTransformedMLDRModel() {
+        return lastTransformedMLDRModel;
+    }
+
+    @Override
+    public void setLastTransformedMLDRModel(MLDRModel lastTransformedMLDRModel) {
+        this.lastTransformedMLDRModel = lastTransformedMLDRModel;
     }
 
 }

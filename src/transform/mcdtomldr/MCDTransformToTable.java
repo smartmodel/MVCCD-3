@@ -58,7 +58,7 @@ public class MCDTransformToTable {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrTable);
         }
         modifyTable(mldrTable, mcdEntity);
-        mcdTransform.addInTrace(mcdEntity, mldrTable);
+        mldrTable.setIteration(mcdTransform.getIteration());
 
         // Attributs
         MCDTransformToColumn mcdTransformToColumn = new MCDTransformToColumn(mcdTransform);

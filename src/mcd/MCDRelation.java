@@ -17,8 +17,6 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
 
     private  static final long serialVersionUID = 1000;
 
-    private ArrayList<IMLDRElement> imldrElementTargets;
-
     private IMRelEnd a ;
     private IMRelEnd b ;
 
@@ -94,23 +92,5 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
 
     public abstract ArrayList<Constraint> getToConstraints(); // Contraintes UML
 
-    @Override
-    public ArrayList<IMLDRElement> getImldrElementTargets() {
-        return imldrElementTargets;
-    }
 
-    @Override
-    public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
-        this.imldrElementTargets = imldrElementTargets;
-    }
-
-    @Override
-    public ArrayList<MDElement> getMdElementTargets() {
-        return MDElementConvert.to(imldrElementTargets);
-    }
-
-    @Override
-    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
-        this.imldrElementTargets = MDElementConvert.from(mdElementTargets);
-    }
 }

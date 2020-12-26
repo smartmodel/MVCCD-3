@@ -48,8 +48,7 @@ public class MCDTransformToColumn {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrColumn);
         }
         modifyColumn(mldrColumn, mcdAttribute);
-        mcdTransform.addInTrace(mcdAttribute, mldrColumn);
-
+        mldrColumn.setIteration(mcdTransform.getIteration());
     }
 
 
@@ -62,7 +61,7 @@ public class MCDTransformToColumn {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrColumnFK);
         }
         modifyColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK, fkNature, indiceFK);
-        mcdTransform.addInTrace(mcdRelEndParent, mldrColumnFK);
+        mldrColumnFK.setIteration(mcdTransform.getIteration());
         return mldrColumnFK;
     }
 

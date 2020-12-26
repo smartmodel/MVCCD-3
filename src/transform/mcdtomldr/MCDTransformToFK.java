@@ -38,7 +38,7 @@ public class MCDTransformToFK {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrFK);
         }
         modifyFK(mldrModel, mcdRelEndParent, mldrTable, mldrFK, fkNature);
-        mcdTransform.addInTrace(mcdRelEndParent, mldrFK);
+        mldrFK.setIteration(mcdTransform.getIteration());
 
         // Relation FK
         MCDRelation mcdRelation = (MCDRelation) mcdRelEndParent.getImRelation();
@@ -49,7 +49,7 @@ public class MCDTransformToFK {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK);
         }
         modifyRelationFK(mldrModel, mcdRelEndParent, mldrTable, mldrFK, fkNature);
-        mcdTransform.addInTrace(mcdRelation, mldrRelationFK);
+        mldrRelationFK.setIteration(mcdTransform.getIteration());
 
         // Double lien entre contrainte FK et sa représentation sous forme de relation
         if (mldrFK.getMDRRelationFK() != mldrRelationFK){

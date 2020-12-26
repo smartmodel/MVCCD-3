@@ -3,22 +3,18 @@ package mdr;
 import main.MVCCDElement;
 import md.MDElement;
 import md.interfaces.IMDElementWithSource;
-import md.interfaces.IMDElementWithTargets;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
-public abstract class MDROperation extends MDRElement implements IMDRElementWithIteration, IMDElementWithSource, IMDElementWithTargets {
+public abstract class MDROperation extends MDRElement implements IMDRElementWithIteration, IMDElementWithSource {
 
     private  static final long serialVersionUID = 1000;
     private Integer iteration = null; // Si un objet est créé directement et non par transformation
-
-    private ArrayList<MDElement> mdElementTargets= new  ArrayList<MDElement>();
 
     public MDROperation(ProjectElement parent) {
         super(parent);
@@ -35,14 +31,6 @@ public abstract class MDROperation extends MDRElement implements IMDRElementWith
         this.iteration = iteration;
     }
 
-    public ArrayList<MDElement> getMdElementTargets() {
-        return mdElementTargets;
-    }
-
-    @Override
-    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
-        this.mdElementTargets = mdElementTargets;
-    }
 
     public ArrayList<MDRParameter> getMDRParameters(){
         ArrayList<MDRParameter> resultat = new ArrayList<MDRParameter>();

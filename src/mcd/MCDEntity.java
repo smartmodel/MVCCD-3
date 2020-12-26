@@ -4,8 +4,8 @@ import m.interfaces.IMCompletness;
 import m.MRelationDegree;
 import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
-import mcd.interfaces.IMCDNamePathParent;
 import mcd.interfaces.IMCDElementWithTargets;
+import mcd.interfaces.IMCDNamePathParent;
 import mcd.services.MCDEntityService;
 import md.MDElement;
 import md.services.MDElementConvert;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompletness, IMCDElementWithTargets {
 
     private static final long serialVersionUID = 1000;
-    private ArrayList<IMLDRElement> imldrElementTargets = new ArrayList<IMLDRElement>();
 
 
     //private String shortName ;
@@ -40,24 +39,6 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
     public void setName(String name){
         super.setName(name);
         setMldrTableName(name);
-    }
-
-    public ArrayList<IMLDRElement> getImldrElementTargets() {
-        return imldrElementTargets;
-    }
-
-    public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
-        this.imldrElementTargets = imldrElementTargets;
-    }
-
-    @Override
-    public ArrayList<MDElement> getMdElementTargets() {
-        return MDElementConvert.to(imldrElementTargets);
-    }
-
-    @Override
-    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
-        this.imldrElementTargets = MDElementConvert.from(mdElementTargets);
     }
 
     public boolean isEntAbstract() {

@@ -77,7 +77,7 @@ public class MCDTransformToPK {
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrPK);
         }
         modifyPK(mldrPK, mcdEntity);
-        mcdTransform.addInTrace(mcdEntity, mldrPK);
+        mldrPK.setIteration(mcdTransform.getIteration());
 
         return mldrPK;
     }
@@ -101,11 +101,11 @@ public class MCDTransformToPK {
                 mldrColumnPK = mldrColumnPKWithoutAID;
             }
             // Sans attribut AID
-            mcdTransform.addInTrace(mcdEntity, mldrColumnPK);
+            mldrColumnPK.setIteration(mcdTransform.getIteration());
+
         } else {
             mldrColumnPK = mldrColumnPKWithAID;
             // Déjà tracé lors de la transformation de la colonne
-            // mcdTransform.addInTrace(mcdAttributeAID, mldrColumnPK);
         }
         MCDTransformToColumn mcdTransformToColumn = new MCDTransformToColumn(mcdTransform);
         mcdTransformToColumn.modifyColumnPK(mcdEntity, mldrColumnPK);

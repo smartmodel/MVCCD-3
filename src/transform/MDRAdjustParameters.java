@@ -1,10 +1,7 @@
 package transform;
 
 import main.MVCCDManager;
-import md.interfaces.IMDElementWithTargets;
 import mdr.*;
-import mdr.interfaces.IMDRParameter;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -24,8 +21,7 @@ public class MDRAdjustParameters {
                     MVCCDManager.instance().addNewMVCCDElementInRepository(mdrParameter);
             }
             // Pas de modification car les propriétés viennet de la colonnes
-            mdTransform.addInTrace((IMDElementWithTargets) mdrOperation.getMdElementSource(), mdrParameter);
-
+            mdrParameter.setIteration(mdTransform.getIteration());
         }
 
     }

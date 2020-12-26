@@ -1,16 +1,13 @@
 package mdr.services;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
-import mcd.MCDAttribute;
-import mcd.MCDContAttributes;
+import md.MDElement;
+import md.interfaces.IMDElementWithSource;
 import mdr.*;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import project.Project;
-import project.ProjectElement;
 
 import java.util.ArrayList;
 
@@ -31,13 +28,32 @@ public class MDRModelService {
         return resultat;
     }
 
-
-
     public static ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration(MDRElement root) {
         ArrayList<IMDRElementWithIteration> resultat = new ArrayList<IMDRElementWithIteration>();
         for (MDRElement mdrElement : getMDRElements(root)) {
             if (mdrElement instanceof IMDRElementWithIteration) {
                 resultat.add((IMDRElementWithIteration) mdrElement);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<IMDElementWithSource> getIMDElementsWithSource(MDRElement root) {
+        ArrayList<IMDElementWithSource> resultat = new ArrayList<IMDElementWithSource>();
+        for (MDRElement mdrElement : getMDRElements(root)) {
+            if (mdrElement instanceof IMDElementWithSource) {
+                resultat.add((IMDElementWithSource) mdrElement);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MDRElement> getMDRElementsTransformedBySource(MDRElement root,
+                                                                          MDElement mdElementSource) {
+        ArrayList<MDRElement> resultat = new ArrayList<MDRElement>();
+        for (IMDElementWithSource imdElementWithSource : getIMDElementsWithSource(root)) {
+            if (imdElementWithSource.getMdElementSource() == mdElementSource) {
+                resultat.add((MDRElement) imdElementWithSource);
             }
         }
         return resultat;

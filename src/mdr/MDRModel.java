@@ -1,5 +1,6 @@
 package mdr;
 
+import md.MDElement;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.services.MDRModelService;
 import project.ProjectElement;
@@ -74,6 +75,10 @@ public class MDRModel extends MDRElement  {
 
     public ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration(){
         return MDRModelService.getIMDRElementsWithIteration(this);
+    }
+
+    public ArrayList<MDRElement> getMDRElementsTransformedBySource(MDElement mdElementSource){
+        return MDRModelService.getMDRElementsTransformedBySource(this, mdElementSource);
     }
 
     public MDRContTables getMDRContTables(){

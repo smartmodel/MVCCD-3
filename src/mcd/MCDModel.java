@@ -4,6 +4,7 @@ import exceptions.TransformMCDException;
 import m.interfaces.IMCompletness;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
+import mldr.MLDRModel;
 import transform.mcdtomldr.MCDTransform;
 import project.ProjectService;
 
@@ -13,6 +14,7 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
         IMCDContContainer, /*IMCDNamePathParent,*/ IMCDContPackages, IMCDContainer, IMCompletness {
 
     private static final long serialVersionUID = 1000;
+    private MLDRModel lastTransformedMLDRModel;
 
     private boolean packagesAutorizeds = false;
     private boolean mcdJournalization = false;
@@ -93,4 +95,13 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
     }
 
 
+    @Override
+    public MLDRModel getLastTransformedMLDRModel() {
+        return lastTransformedMLDRModel;
+    }
+
+    @Override
+    public void setLastTransformedMLDRModel(MLDRModel lastTransformedMLDRModel) {
+        this.lastTransformedMLDRModel = lastTransformedMLDRModel;
+    }
 }

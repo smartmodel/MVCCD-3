@@ -170,10 +170,12 @@ public abstract class PanelInputContentTableBasic extends PanelInputContent
     }
 
     // Pour éviter de surcharger les descendants
+
     @Override
     public void loadDatas(MVCCDElement mvccdElementCrt) {
 
     }
+
 
     // Pour éviter de surcharger les descendants
     @Override

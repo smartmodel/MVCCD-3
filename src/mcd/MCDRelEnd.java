@@ -30,7 +30,6 @@ public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElem
     public static final int RELATION = 6 ;
 
     private static final long serialVersionUID = 1000;
-    private ArrayList<IMLDRElement> imldrElementTargets = new ArrayList<IMLDRElement>();
 
     //public static final int FROM = 1 ;
     //public static final int TO = 2 ;
@@ -140,25 +139,5 @@ public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElem
     public String getShortName(){
         String shortName = super.getShortName();
         return shortName;
-    }
-
-    @Override
-    public ArrayList<IMLDRElement> getImldrElementTargets() {
-        return imldrElementTargets;
-    }
-
-    @Override
-    public void setImldrElementTargets(ArrayList<IMLDRElement> imldrElementTargets) {
-        this.imldrElementTargets = imldrElementTargets;
-    }
-
-    @Override
-    public ArrayList<MDElement> getMdElementTargets() {
-        return MDElementConvert.to(imldrElementTargets);
-    }
-
-    @Override
-    public void setMdElementTargets(ArrayList<MDElement> mdElementTargets) {
-        this.imldrElementTargets = MDElementConvert.from(mdElementTargets);
     }
 }
