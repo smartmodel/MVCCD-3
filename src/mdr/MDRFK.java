@@ -3,6 +3,7 @@ package mdr;
 import exceptions.CodeApplException;
 import mdr.interfaces.IMDRConstraintIndice;
 import project.ProjectElement;
+import project.ProjectService;
 
 public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndice {
 
@@ -12,7 +13,8 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
 
     private MDRFKNature nature = null;
 
-    private MDRRelationFK mdrRelationFK;
+    //private MDRRelationFK mdrRelationFK;
+    private int mdrRelationFKId;
 
     public MDRFK(ProjectElement parent) {
         super(parent);
@@ -46,12 +48,12 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
     }
 
     public MDRRelationFK getMDRRelationFK() {
-        return mdrRelationFK;
+        return (MDRRelationFK) ProjectService.getElementById(mdrRelationFKId);
     }
 
     public void setMDRRelationFK(MDRRelationFK mdrRelationFK) {
         // Double lien
-        this.mdrRelationFK = mdrRelationFK;
+        this.mdrRelationFKId = mdrRelationFK.getId();
         mdrRelationFK.setMDRFK(this);
     }
 }

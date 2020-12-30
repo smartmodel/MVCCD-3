@@ -5,6 +5,7 @@ import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
+import project.ProjectService;
 
 import java.util.ArrayList;
 
@@ -13,12 +14,13 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
     private  static final long serialVersionUID = 1000;
     private Integer iteration = null; // Si un objet est créé directement et non par transformation
 
-    private IMDRParameter target = null;
+    //private IMDRParameter target = null;
+    private int targetId ;
 
     public MDRParameter(ProjectElement parent, IMDRParameter target) {
 
         super(parent);
-        this.target = target;
+        this.targetId = target.getId();
     }
 
     @Override
@@ -32,7 +34,7 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
     }
 
     public IMDRParameter getTarget() {
-        return target;
+        return (IMDRParameter) ProjectService.getElementById(targetId);
     }
 
 

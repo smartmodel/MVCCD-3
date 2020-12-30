@@ -1,12 +1,14 @@
 package mdr;
 
 import project.ProjectElement;
+import project.ProjectService;
 
 public abstract class MDRRelationFK extends MDRRelation{
 
     private static final long serialVersionUID = 1000;
 
-    private MDRFK mdrfk ;
+    //private MDRFK mdrfk ;
+    private int mdrFKId;
 
     public MDRRelationFK(ProjectElement parent) {
         super(parent);
@@ -33,15 +35,15 @@ public abstract class MDRRelationFK extends MDRRelation{
     }
 
     public MDRFK getMDRFK() {
-        return mdrfk;
+        return (MDRFK) ProjectService.getElementById(mdrFKId);
     }
 
     public void setMDRFK(MDRFK mdrfk) {
-        this.mdrfk = mdrfk;
+        this.mdrFKId = mdrfk.getId();
    }
     public String getName() {
-        if (mdrfk != null) {
-            return mdrfk.getName();
+        if (getMDRFK() != null) {
+            return getMDRFK().getName();
         }
         return "La liaison avec la contrainte FK n'est pas encore faite";
     }
