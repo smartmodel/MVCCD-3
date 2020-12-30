@@ -33,13 +33,4 @@ public class MCDNIDEditingTreat extends EditingTreat {
         return "the.constraint.nid";
     }
 
-    @Override
-    public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
-        return null;
-    }
-
-    @Override
-    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
-        return null;
-    }
 }

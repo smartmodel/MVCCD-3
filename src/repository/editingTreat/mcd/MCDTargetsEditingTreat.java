@@ -30,14 +30,4 @@ public class MCDTargetsEditingTreat extends EditingTreat {
     protected String getPropertyTheElement() {
         return null;
     }
-
-    @Override
-    public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
-        return null;
-    }
-
-    @Override
-    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
-        return null;
-    }
 }

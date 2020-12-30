@@ -62,9 +62,6 @@ public class WinRepositoryTree extends JTree {
                     // récupérer le noeud sélectionné
                     DefaultMutableTreeNode node = (DefaultMutableTreeNode)
                             evt.getNewLeadSelectionPath().getLastPathComponent();
-
-                    // récupération des données associées au noeud pour les afficher
-                    //Trace.println(evt.getNewLeadSelectionPath().getLastPathComponent().toString());
                 }
             }
         };

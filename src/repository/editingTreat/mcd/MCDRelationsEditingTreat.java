@@ -37,14 +37,4 @@ public class MCDRelationsEditingTreat extends EditingTreat {
         MVCCDManager.instance().removeMCDRelationAndDependantsInRepository(mcdRelation);
     }
 
-    @Override
-    public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
-        return null;
-    }
-
-    @Override
-    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
-        return null;
-    }
-
 }

@@ -1,7 +1,12 @@
 package mdr;
 
+import exceptions.CodeApplException;
+import main.MVCCDElement;
 import md.MDElement;
 import project.ProjectElement;
+import utilities.Trace;
+
+import java.util.ArrayList;
 
 public abstract class MDRElement extends MDElement {
 
@@ -37,30 +42,18 @@ public abstract class MDRElement extends MDElement {
         }
         return null;
     }
+
     /*
-
-    public String getName30() {
-        return name30;
+    public ArrayList<MDRElement> getMDRElementChilds(){
+        ArrayList<MDRElement> resultat = new ArrayList<MDRElement>();
+        for (MVCCDElement mvccdElement : getChilds()){
+           if (mvccdElement instanceof MDRElement) {
+               resultat.add((MDRElement) mvccdElement);
+           }
+        }
+        return resultat;
     }
 
-    public void setName30(String name30) {
-        this.name30 = name30;
-    }
+     */
 
-    public String getName60() {
-        return name60;
-    }
-
-    public void setName60(String name60) {
-        this.name60 = name60;
-    }
-
-    public String getName120() {
-        return name120;
-    }
-
-    public void setName120(String name120) {
-        this.name120 = name120;
-    }
-    */
 }

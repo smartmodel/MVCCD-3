@@ -45,6 +45,7 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
     }
 
     public ArrayList<MDRColumn> getMDRColumnsPK() {
+
         return getMDRPK().getMDRColumns();
     }
 

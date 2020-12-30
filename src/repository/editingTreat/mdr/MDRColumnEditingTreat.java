@@ -36,15 +36,4 @@ public class MDRColumnEditingTreat extends EditingTreat {
         return "the.column";
     }
 
-    @Override
-    public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
-        return new ArrayList<String>();
-    }
-
-    @Override
-    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
-        return new ArrayList<String>();
-    }
-
-
 }

@@ -4,6 +4,7 @@ import main.MVCCDElement;
 import mdr.MDRModel;
 import mldr.MLDRModel;
 import repository.editingTreat.EditingTreat;
+import repository.editingTreat.EditingTreatTransform;
 import repository.editingTreat.mdr.MDRTableEditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -12,7 +13,7 @@ import window.editor.mdr.model.MDRModelEditor;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class MLDRModelEditingTreat extends EditingTreat {
+public class MLDRModelEditingTreat extends EditingTreatTransform {
 
 
     @Override
@@ -33,13 +34,11 @@ public class MLDRModelEditingTreat extends EditingTreat {
     }
 
     @Override
-    public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
-
-        return new ArrayList<String>();
-    }
+    public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
+}
 
     @Override
-    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
+    public void treatTransform(Window owner, MVCCDElement mvccdElement) {
         MLDRModel mldrModel = (MLDRModel) mvccdElement;
 
         /*
@@ -49,10 +48,7 @@ public class MLDRModelEditingTreat extends EditingTreat {
         } else {
 
          */
-        ArrayList<String> resultat = mldrModel.treatTransform();
-        super.treatTransformFinishMessages(owner, mvccdElement, resultat);
-
-        return resultat;
-    }
+        mldrModel.treatTransform();
+     }
 
 }

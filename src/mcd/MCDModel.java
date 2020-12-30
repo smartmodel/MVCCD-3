@@ -88,10 +88,7 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
 
     public ArrayList<String> treatTransform()  throws TransformMCDException {
         MCDTransform mcdTransform = new MCDTransform();
-        ArrayList<String> resultat = mcdTransform.transform(this);
-
-        return resultat;
-
+        return mcdTransform.transform(this);
     }
 
 

@@ -3,6 +3,7 @@ package repository.editingTreat.mcd;
 import main.MVCCDElement;
 import mcd.*;
 import repository.editingTreat.EditingTreat;
+import repository.editingTreat.EditingTreatTransform;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.relation.association.AssociationEditor;
@@ -30,18 +31,6 @@ public class MCDAssEndEditingTreat extends EditingTreat {
 
     @Override
     protected String getPropertyTheElement() {
-        return null;
-    }
-
-
-    @Override
-    public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
-
-        return null;
-    }
-
-    @Override
-    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
         return null;
     }
 

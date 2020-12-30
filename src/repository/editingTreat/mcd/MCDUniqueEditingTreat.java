@@ -33,13 +33,4 @@ public class MCDUniqueEditingTreat extends EditingTreat {
         return "the.constraint.unique";
     }
 
-    @Override
-    public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
-        return null;
-    }
-
-    @Override
-    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
-        return null;
-    }
 }

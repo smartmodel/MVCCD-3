@@ -1,15 +1,19 @@
 package main;
 
 import datatypes.MDDatatype;
+import exceptions.CodeApplException;
+import mdr.MDRColumn;
+import mdr.MDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
 import utilities.Debug;
+import utilities.Trace;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public abstract class MVCCDElement implements Serializable {
+public abstract class MVCCDElement implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1000;
 
@@ -345,5 +349,47 @@ public abstract class MVCCDElement implements Serializable {
         }
    }
 
+   public void clearChilds(){
+        childs =  new ArrayList<MVCCDElement>();
+   }
+
+    public MVCCDElement clone(){
+        try {
+            MVCCDElement clone = (MVCCDElement) super.clone();
+            clone.setParent(null);
+            clone.clearChilds();
+            return clone;
+        }
+        catch (CloneNotSupportedException e) {
+            throw new CodeApplException("Le MVCCDElement de nom " + getName() + " n'est pas clonable");
+        }
+    }
+
+    public MVCCDElement cloneDeep() {
+       MVCCDElement rootClone = clone();
+       cloneChilds(this, rootClone);
+       return rootClone;
+    }
+
+    private void cloneChilds(MVCCDElement root, MVCCDElement rootClone) {
+        //TODO-0 La boucle for provoque une erreur. A voir!
+        /*
+        for (MVCCDElement child : root.getChilds()){
+            MVCCDElement childClone = child.clone();
+            Trace.println(root.getChilds().size() + "  " + root.getName() + "  " + childClone.getName());
+            childClone.setParent(rootClone);
+            cloneChilds(child, childClone);
+        }
+
+         */
+        int i = 0 ;
+        while (i < root.getChilds().size()){
+            MVCCDElement child = root.getChilds().get(i);
+            MVCCDElement childClone = child.clone();
+            childClone.setParent(rootClone);
+            cloneChilds(child, childClone);
+            i++;
+        }
+    }
 
 }

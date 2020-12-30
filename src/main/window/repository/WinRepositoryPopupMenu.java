@@ -499,24 +499,24 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         });
     }
 
-    private void treatGenericCompliant(ISMenu menu, EditingTreat editingTreat) {
+    private void treatGenericCompliant(ISMenu menu, EditingTreatTransform editingTreatTransform) {
         JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
         addItem(menu, menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                ArrayList<String> messages = editingTreat.treatCompliant(mvccdWindow, mvccdElement);
+                editingTreatTransform.treatCompliant(mvccdWindow, mvccdElement);
             }
         });
     }
 
-    private void treatGenericTransform(ISMenu menu, EditingTreat editingTreat, String propertyTextMenu) {
+    private void treatGenericTransform(ISMenu menu, EditingTreatTransform editingTreatTransform, String propertyTextMenu) {
         JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(propertyTextMenu));
         addItem(menu, menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                ArrayList<String> messages = editingTreat.treatTransform(mvccdWindow, mvccdElement);
+                editingTreatTransform.treatTransform(mvccdWindow, mvccdElement);
             }
         });
     }

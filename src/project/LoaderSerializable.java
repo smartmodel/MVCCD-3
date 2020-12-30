@@ -50,5 +50,4 @@ public class LoaderSerializable {
         }
         return project;
     }
-
 }

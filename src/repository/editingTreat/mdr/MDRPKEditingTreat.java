@@ -35,15 +35,4 @@ public class MDRPKEditingTreat extends EditingTreat {
         return "the.pk";
     }
 
-    @Override
-    public ArrayList<String> treatCompliant(Window owner, MVCCDElement mvccdElement) {
-        return new ArrayList<String>();
-    }
-
-    @Override
-    public ArrayList<String> treatTransform(Window owner, MVCCDElement mvccdElement) {
-        return new ArrayList<String>();
-    }
-
-
 }

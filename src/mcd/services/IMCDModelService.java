@@ -6,6 +6,7 @@ import mcd.interfaces.IMCDModel;
 import mldr.MLDRModelDT;
 import mldr.MLDRModelTI;
 import project.ProjectService;
+import utilities.Trace;
 
 import java.util.ArrayList;
 

@@ -167,46 +167,5 @@ public abstract class EditingTreat {
         MVCCDManager.instance().removeMVCCDElementInRepository(child, child.getParent());
     }
 
-    public abstract ArrayList<String> treatCompliant(
-            Window owner, MVCCDElement mvccdElement);
 
-    public abstract ArrayList<String> treatTransform(
-            Window owner, MVCCDElement mvccdElement)  throws TransformMCDException;
-
-
-
-    protected void treatCompliantFinishMessages(Window owner, MVCCDElement mvccdElement, ArrayList<String> messages) {
-        treatFinishMessages(owner, mvccdElement, messages,"dialog.compliant.ok", "dialog.compliant.error") ;
-    }
-
-    protected void treatTransformFinishMessages(Window owner, MVCCDElement mvccdElement, ArrayList<String> messages) {
-        treatFinishMessages(owner, mvccdElement, messages,"dialog.transform.ok", "dialog.transform.error") ;
-    }
-
-    protected void treatFinishMessages(Window owner, MVCCDElement mvccdElement, ArrayList<String> messages,
-                    String propertyOk , String propertyError ) {
-        String message = "";
-        MDElement mdElement = (MDElement) mvccdElement;
-        String mdElementName = mdElement.getName();
-        if (mdElement instanceof MCDElement){
-            mdElementName = ((MCDElement) mdElement).getNamePath(MCDElementService.PATHSHORTNAME);
-        }
-        if (messages.size() == 0 ){
-            String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
-            message = MessagesBuilder.getMessagesProperty(propertyOk,
-                    new String[]{messageElement, mdElementName});
-        }
-
-        if (messages.size() > 0 ){
-            String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
-            message = MessagesBuilder.getMessagesProperty(propertyError,
-                    new String[]{messageElement, mdElementName});
-            message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.error.console");
-
-        }
-        //TODO-1 Erreur si < 0
-
-        Console.printMessage(message);
-        DialogMessage.showOk(owner, message);
-    }
 }
