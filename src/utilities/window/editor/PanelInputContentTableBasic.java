@@ -100,7 +100,7 @@ public abstract class PanelInputContentTableBasic extends PanelInputContent
 
     protected abstract boolean specificRefreshRow();
 
-
+/*
     protected void refreshRow(int selectedRow){
         int idElementSelected = (int) table.getValueAt(selectedRow, STableService.IDINDEX);
         MElement mElementSelected = (MElement) ProjectService.getElementById(idElementSelected);
@@ -112,6 +112,8 @@ public abstract class PanelInputContentTableBasic extends PanelInputContent
         putValueInRow(mElementSelected, row);
         UtilDivers.putValueRowInTable(table, selectedRow, row);
     };
+
+ */
 
 
     protected abstract MElement newElement();
@@ -200,7 +202,6 @@ public abstract class PanelInputContentTableBasic extends PanelInputContent
         panelTable.setSize(
                 new Dimension((int) newDimension.getWidth() -widthGap, 200));
         return newDimension;
-
     }
 
 

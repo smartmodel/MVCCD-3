@@ -32,11 +32,12 @@ public class MCDTransformToFK {
     public MLDRFK createOrModifyFromRelEndParent(MLDRModel mldrModel, MCDRelEnd mcdRelEndParent, MLDRTable mldrTable, MDRFKNature fkNature) {
 
         // Contrainte FK
-           MLDRFK mldrFK =  mldrTable.getMLDRFKByMCDElementSource((MCDRelEnd) mcdRelEndParent);
+        MLDRFK mldrFK =  mldrTable.getMLDRFKByMCDElementSource((MCDRelEnd) mcdRelEndParent);
         if (mldrFK == null) {
             mldrFK = mldrTable.createFK(mcdRelEndParent);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrFK);
         }
+        // modification et Ajout des colonnes
         modifyFK(mldrModel, mcdRelEndParent, mldrTable, mldrFK, fkNature);
         mldrFK.setIteration(mcdTransform.getIteration());
 
@@ -74,7 +75,8 @@ public class MCDTransformToFK {
         MCDTransformService.names(mldrFK, nameFK, mldrModel);
         // Nature
         mldrFK.setNature(fkNature);
-
+        // Lien avec la PK
+        mldrFK.setMdrPK(mldrPKParent);
 
         ArrayList<MDRColumn> mdrColumnsFK = new ArrayList<MDRColumn>();
         //Création des colonnes FK et des paramètres

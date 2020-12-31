@@ -155,7 +155,7 @@ public class Preferences extends MVCCDElement {
     public static Integer PREFERENCES_WINDOW_HEIGHT = 600;
     public static Integer MCDDATATYPE_WINDOW_WIDTH = 800;
     public static Integer MCDDATATYPE_WINDOW_HEIGHT = 600;
-    public static Integer MDRTABLE_WINDOW_WIDTH = 800;
+    public static Integer MDRTABLE_WINDOW_WIDTH = 1000;
     public static Integer MDRTABLE_WINDOW_HEIGHT = 600;
 
 

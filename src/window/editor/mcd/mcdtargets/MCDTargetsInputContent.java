@@ -75,11 +75,6 @@ public class MCDTargetsInputContent extends PanelInputContentTableBasic {
         int col;
 
         col = MCDTargetsTableColumn.ID.getPosition();
-        col = MCDTargetsTableColumn.NAME.getPosition();
-        col = MCDTargetsTableColumn.MCDELEMENT.getPosition();
-
-
-        col = MCDTargetsTableColumn.ID.getPosition();
         table.getColumnModel().getColumn(col).setPreferredWidth(50);
         table.getColumnModel().getColumn(col).setMinWidth(50);
         table.getColumnModel().getColumn(col).setMaxWidth(50);

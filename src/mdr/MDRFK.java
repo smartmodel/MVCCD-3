@@ -15,6 +15,7 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
 
     //private MDRRelationFK mdrRelationFK;
     private int mdrRelationFKId;
+    private int mdrPKId;
 
     public MDRFK(ProjectElement parent) {
         super(parent);
@@ -55,5 +56,13 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
         // Double lien
         this.mdrRelationFKId = mdrRelationFK.getId();
         mdrRelationFK.setMDRFK(this);
+    }
+
+    public MDRPK getMdrPK() {
+        return (MDRPK) ProjectService.getElementById(mdrPKId);
+    }
+
+    public void setMdrPK(MDRPK mdrPK) {
+        this.mdrPKId = mdrPK.getId();
     }
 }
