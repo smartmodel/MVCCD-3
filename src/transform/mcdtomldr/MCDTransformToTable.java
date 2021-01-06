@@ -6,6 +6,7 @@ import exceptions.TransformMCDException;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
+import mcd.services.IMCDModelService;
 import mcd.services.MCDRelEndService;
 import mdr.MDRElementNames;
 import mdr.MDRNamingLength;
@@ -36,11 +37,9 @@ public class MCDTransformToTable {
 
 
     public void createOrModifyFromAllEntities()  throws TransformMCDException{
-        this.imcdModel = imcdModel;
-        this.mldrModel = mldrModel;
-        createOrModifyFromEntities(ProjectService.getMCDEntitiesConcrets((MCDElement) imcdModel));
-        createOrModifyPKEntitiesInd(ProjectService.getMCDEntitiesIndependants((MCDElement) imcdModel));
-        createOrModifyPKEntitiesNoInd(ProjectService.getMCDEntitiesConcretsNoInd((MCDElement) imcdModel));
+        createOrModifyFromEntities(IMCDModelService.getMCDEntitiesConcrets(imcdModel));
+        createOrModifyPKEntitiesInd(IMCDModelService.getMCDEntitiesIndependants(imcdModel));
+        createOrModifyPKEntitiesNoInd(IMCDModelService.getMCDEntitiesConcretsNoInd(imcdModel));
     }
 
     private void createOrModifyFromEntities(ArrayList<MCDEntity> mcdEntitiesConcrets) {
@@ -97,6 +96,12 @@ public class MCDTransformToTable {
             if (controle == mcdEntitiesToTransform.size()){
                 throw new CodeApplException("Erreur interne dans la boucle de transformation des entités non indépendantes");
             }
+        }
+    }
+
+    public void createOrModifyFromAllAssociationsNN() {
+        for (MCDAssociation mcdAssNN : IMCDModelService.getMCDAssociationsNN(imcdModel)){
+
         }
     }
 

@@ -14,6 +14,7 @@ public class MCDContRelations extends MCDElement{
         super (parent);
     }
 
+    /*
     public static MCDContRelations getMCDContRelationsByNamePath(int pathMode, String namePath){
         for (MCDContRelations mcdContRelations : ProjectService.getMCDContRelations()){
             if (mcdContRelations.getNamePath(pathMode).equals(namePath)){
@@ -23,6 +24,8 @@ public class MCDContRelations extends MCDElement{
         }
         return null;
     }
+
+     */
 
 
 }

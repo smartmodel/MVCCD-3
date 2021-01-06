@@ -8,7 +8,6 @@ import mcd.services.MCDElementService;
 import mcd.services.MCDUtilService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
@@ -56,12 +55,15 @@ public abstract class PanelInputContentId extends PanelInputContent {
         if (panelInput != null) {
             //TODO-1 Mettre un message d'erreur si elementCrt et parent sont nulls (Voir supprimer le parent de l'appel)
             if ((MCDElement) getEditor().getMvccdElementParent() != null) {
-                iMCDModelContainer = IMCDModelService.getIModelContainer((MCDElement) getEditor().getMvccdElementParent());
+                //iMCDModelContainer = IMCDModelService.getIMCDModelContainer((MCDElement) getEditor().getMvccdElementParent());
+                iMCDModelContainer = ((MCDElement) getEditor().getMvccdElementParent()).getIMCDModelAccueil();
             } else {
-                iMCDModelContainer = IMCDModelService.getIModelContainer((MCDElement) getEditor().getMvccdElementCrt());
+                //iMCDModelContainer = IMCDModelService.getIMCDModelContainer((MCDElement) getEditor().getMvccdElementCrt());
+                iMCDModelContainer = ((MCDElement) getEditor().getMvccdElementCrt()).getIMCDModelAccueil();
             }
         } else {
-            iMCDModelContainer = IMCDModelService.getIModelContainer((MCDElement) elementForCheckInput);
+            //iMCDModelContainer = IMCDModelService.getIMCDModelContainer((MCDElement) elementForCheckInput);
+            iMCDModelContainer = ((MCDElement) elementForCheckInput).getIMCDModelAccueil();
         }
 
         if (getParentCandidates(iMCDModelContainer) != null) {

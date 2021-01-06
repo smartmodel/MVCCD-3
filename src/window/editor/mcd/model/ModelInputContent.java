@@ -271,7 +271,8 @@ public class ModelInputContent extends PanelInputContentId {
 
         if (getScope() == ModelEditor.MODEL) {
             ArrayList<MCDElement> mcdContModels = new ArrayList<MCDElement>();
-            mcdContModels.add(ProjectService.getMCDContModels());
+            //mcdContModels.add(ProjectService.getMCDContModels());
+            mcdContModels.add((MCDElement) getEditor().getMvccdElementParent());
             return mcdContModels;
         }
 
@@ -281,7 +282,9 @@ public class ModelInputContent extends PanelInputContentId {
     @Override
     protected MCDElement getParentByNamePath(int pathname, String text) {
         if (getScope() == ModelEditor.PACKAGE) {
-            return (MCDElement) IMCDContPackages.getIMCDContPackagesByNamePath(MCDElementService.PATHNAME, text);
+            MCDPackage mcdPackage = (MCDPackage) getEditor().getMvccdElementParent();
+            return (MCDElement) IMCDContPackages.getIMCDContPackagesByNamePath(mcdPackage.getIMCDModelAccueil()
+                    ,MCDElementService.PATHNAME, text);
         }
         if (getScope() == ModelEditor.MODEL) {
             return (MCDElement) getEditor().getMvccdElementParent();

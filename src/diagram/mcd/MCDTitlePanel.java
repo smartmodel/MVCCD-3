@@ -74,8 +74,9 @@ public class MCDTitlePanel {
                     }
 
                     if (posOption == 2) {
-                        IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
-                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllMCDEntitiesInIModel(iMCDModel);
+                        //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
+                        IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
+                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
 
                         MCDEntity mcdEntityFrom = null;
                         MCDEntity mcdEntityTo= null;
@@ -94,8 +95,9 @@ public class MCDTitlePanel {
                     }
 
                     if (posOption == 3) {
-                        IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
-                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllMCDEntitiesInIModel(iMCDModel);
+                        //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
+                        IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
+                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
 
                         MCDEntity mcdEntityGen = null;
                         MCDEntity mcdEntitySpec= null;
@@ -114,8 +116,9 @@ public class MCDTitlePanel {
                     }
 
                     if (posOption == 4) {
-                        IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
-                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllMCDEntitiesInIModel(iMCDModel);
+                        //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
+                        IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
+                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
                         ArrayList<MCDAssociation> mcdAssociations = IMCDModelService.getAllMCDAssociationsInIModel(iMCDModel);
 
                         MCDEntity mcdEntity = null;

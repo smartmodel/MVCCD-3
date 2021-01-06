@@ -5,6 +5,7 @@ import exceptions.CodeApplException;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
 import mcd.interfaces.IMCDElementWithTargets;
+import mcd.services.MCDRelationService;
 import md.MDElement;
 import md.services.MDElementConvert;
 import mldr.interfaces.IMLDRElement;
@@ -62,13 +63,14 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
 
     public abstract String getClassShortNameUI();
 
-    public ArrayList<MCDRelation> getAllMCDRelationsChilds(){
-        return ProjectService.getMCDRelationsChilds(this);
+
+    public ArrayList<MCDRelation> getMCDRelationsChilds(){
+        return MCDRelationService.getMCDRelationsChilds(this);
     }
 
     public void removeInParent(){
 
-        ArrayList<MCDRelation> mcdRelationChilds = getAllMCDRelationsChilds();
+        ArrayList<MCDRelation> mcdRelationChilds = getMCDRelationsChilds();
         for (int i = mcdRelationChilds.size()-1 ; i >= 0 ; i--){
             MCDRelation  mcdRelationChild =  mcdRelationChilds.get(i);
             mcdRelationChild.removeInParent();

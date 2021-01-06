@@ -161,14 +161,4 @@ public class MCDAssociationService {
                 MCDAssociation.class.getName(), nameTree);
     }
 
-
-    public static MCDAssociation getMCDAssociationByNameTree(String nameTree){
-        for (MCDElement mcdElement : ProjectService.getMCDElementsByNameTree(nameTree)){
-            if (mcdElement instanceof MCDAssociation){
-                return (MCDAssociation) mcdElement;
-            }
-        }
-        return null;
-    }
-
 }

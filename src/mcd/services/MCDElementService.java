@@ -1,13 +1,18 @@
 package mcd.services;
 
 import exceptions.CodeApplException;
+import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.MCDContModels;
+import mcd.MCDEntity;
 import mcd.MCDModel;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDNamePathParent;
+import mdr.MDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+
+import java.util.ArrayList;
 
 public class MCDElementService {
 
@@ -42,6 +47,18 @@ public class MCDElementService {
     }
 
 
+
+    public static String getNamePathSource(MCDElement mcdElement, int pathMode, String separator) {
+        String nameSource = "";
+        String path = getPath( mcdElement, pathMode, separator);
+        if (path !=null){
+            nameSource = nameSource + path + separator ;
+        }
+        nameSource = nameSource +  mcdElement.getNameSource();
+        return nameSource ;
+    }
+
+
     public static IMCDModel getIMCDModelAccueil(MCDElement mcdElement) {
         if (mcdElement.getParent() instanceof MCDElement) {
             if (mcdElement.getParent() instanceof IMCDModel) {
@@ -62,16 +79,18 @@ public class MCDElementService {
         return null;
     }
 
-
-    public static String getNamePathSource(MCDElement mcdElement, int pathMode, String separator) {
-        String nameSource = "";
-        String path = getPath( mcdElement, pathMode, separator);
-        if (path !=null){
-            nameSource = nameSource + path + separator ;
+    public static ArrayList<MCDElement> getMCDElements(MCDElement root) {
+        ArrayList<MCDElement> resultat = new ArrayList<MCDElement>();
+        resultat.add(root);
+        for (MVCCDElement mvccdElement : root.getChilds()){
+            if (mvccdElement instanceof MCDElement){
+                MCDElement childMCDElement  = (MCDElement) mvccdElement;
+                resultat.addAll(getMCDElements(childMCDElement));
+            }
         }
-        nameSource = nameSource +  mcdElement.getNameSource();
-        return nameSource ;
+        return resultat;
     }
+
 
 }
 

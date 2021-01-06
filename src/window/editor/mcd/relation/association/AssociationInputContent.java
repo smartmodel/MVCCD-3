@@ -159,7 +159,8 @@ public class AssociationInputContent extends PanelInputContentId {
 
 
     private void createContentAssEnd(int direction) {
-        ArrayList<MCDEntity> mcdEntities = MCDEntityService.getMCDEntitiesInIModel(iMCDModelContainer);
+        //ArrayList<MCDEntity> mcdEntities = MCDEntityService.getMCDEntitiesInIModel(iMCDModelContainer);
+        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModelContainer);
         MCDEntityService.sortNameAsc(mcdEntities);
 
         factorizeAssEnd(direction);
@@ -724,12 +725,14 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
     private boolean checkFromRoleScopeNaming(boolean unitaire, int scopeNaming) {
-        String text = (String) fieldFromEntity.getSelectedItem();
-        MCDEntity mcdEntity = MCDEntityService.getMCDEntityByNamePath(modePathName, text);
-        text = (String) fieldToEntity.getSelectedItem();
-        MCDEntity mcdEntityOpposite = MCDEntityService.getMCDEntityByNamePath(modePathName, text);
-
         MCDAssociation mcdAssociation = (MCDAssociation)  getElementForCheck();
+        IMCDModel imcdModel = mcdAssociation.getIMCDModelAccueil();
+
+        String text = (String) fieldFromEntity.getSelectedItem();
+        MCDEntity mcdEntity = IMCDModelService.getMCDEntityByNamePath(imcdModel, modePathName, text);
+        text = (String) fieldToEntity.getSelectedItem();
+        MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(imcdModel, modePathName, text);
+
         MCDAssEnd mcdAssEnd = null;
         if (mcdAssociation != null){
             mcdAssEnd = mcdAssociation.getFrom();
@@ -761,13 +764,16 @@ public class AssociationInputContent extends PanelInputContentId {
 
 
     private boolean checkToRoleScopeNaming(boolean unitaire, int scopeNaming) {
-        String text = (String) fieldToEntity.getSelectedItem();
-        MCDEntity mcdEntity = MCDEntityService.getMCDEntityByNamePath(modePathName, text);
-        text = (String) fieldFromEntity.getSelectedItem();
-        MCDEntity mcdEntityOpposite = MCDEntityService.getMCDEntityByNamePath(modePathName, text);
-
 
         MCDAssociation mcdAssociation = (MCDAssociation)  getElementForCheck();
+        IMCDModel imcdModel = mcdAssociation.getIMCDModelAccueil();
+
+        String text = (String) fieldToEntity.getSelectedItem();
+        MCDEntity mcdEntity = IMCDModelService.getMCDEntityByNamePath(imcdModel, modePathName, text);
+        text = (String) fieldFromEntity.getSelectedItem();
+        MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(imcdModel, modePathName, text);
+
+
         MCDAssEnd mcdAssEnd= null;
         if (mcdAssociation != null){
             mcdAssEnd = mcdAssociation.getTo();
@@ -882,13 +888,15 @@ public class AssociationInputContent extends PanelInputContentId {
 
     @Override
     protected ArrayList<MCDElement> getParentCandidates(IMCDModel iMCDModelContainer) {
-        ArrayList<MCDContRelations> mcdContRelations = MCDContRelationsService.getMCDContRelationsInIModel(iMCDModelContainer);
-        return MCDContRelationsService.toMCDElements(mcdContRelations);
+        //ArrayList<MCDContRelations> mcdContRelations = MCDContRelationsService.getMCDContRelationsInIModel(iMCDModelContainer);
+        ArrayList<MCDContRelations> mcdContRelations = IMCDModelService.getMCDContRelations(iMCDModelContainer);
+        return MCDElementConvert.to(mcdContRelations);
     }
 
     @Override
     protected MCDElement getParentByNamePath(int pathname, String text) {
-        return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
+        //return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
+        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, MCDElementService.PATHNAME, text);
     }
 
 
@@ -900,7 +908,6 @@ public class AssociationInputContent extends PanelInputContentId {
                 "of.association");
 
         return super.checkInput(fieldFromEntity, unitaire, messages);
-
     }
 
     private boolean checkAssociationTo(boolean unitaire) {
@@ -1173,12 +1180,12 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
     public MCDEntity getMCDEntityTo(){
-        return MCDEntityService.getMCDEntityByNamePath(
+        return IMCDModelService.getMCDEntityByNamePath(
                 iMCDModelContainer, modePathName, (String) fieldToEntity.getSelectedItem());
     }
 
     public MCDEntity getMCDEntityFrom(){
-        return MCDEntityService.getMCDEntityByNamePath(
+        return IMCDModelService.getMCDEntityByNamePath(
                 iMCDModelContainer, modePathName, (String) fieldFromEntity.getSelectedItem());
     }
 

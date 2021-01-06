@@ -142,10 +142,10 @@ public class MVCCDElementFactory {
 
         MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations) ;
 
-        MCDContRelEnds mcdContRelEndsEntityFrom = mcdEntityFrom.getMCDContEndRels();
+        MCDContRelEnds mcdContRelEndsEntityFrom = mcdEntityFrom.getMCDContRelEnds();
         MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdContRelEndsEntityFrom) ;
 
-        MCDContRelEnds mcdContRelEndsEntityTo = mcdEntityTo.getMCDContEndRels();
+        MCDContRelEnds mcdContRelEndsEntityTo = mcdEntityTo.getMCDContRelEnds();
         MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdContRelEndsEntityTo) ;
 
         mcdAssociation.setFrom(mcdAssEndFrom);
@@ -171,10 +171,10 @@ public class MVCCDElementFactory {
         MCDGeneralization mcdGeneralization = new MCDGeneralization(mcdContRelations) ;
 
 
-        MCDContRelEnds mcdContRelEndsEntityGen = mcdEntityGen.getMCDContEndRels();
+        MCDContRelEnds mcdContRelEndsEntityGen = mcdEntityGen.getMCDContRelEnds();
         MCDGSEnd mcdGSEndGen = new MCDGSEnd(mcdContRelEndsEntityGen) ;
 
-        MCDContRelEnds mcdContRelEndsEntitySpec = mcdEntitySpec.getMCDContEndRels();
+        MCDContRelEnds mcdContRelEndsEntitySpec = mcdEntitySpec.getMCDContRelEnds();
         MCDGSEnd mcdGSEndSpec = new MCDGSEnd(mcdContRelEndsEntitySpec) ;
 
 
@@ -198,10 +198,10 @@ public class MVCCDElementFactory {
 
         MCDLink mcdLink = new MCDLink(mcdContRelations) ;
 
-        MCDContRelEnds mcdContRelEndsEntity = mcdEntity.getMCDContEndRels();
+        MCDContRelEnds mcdContRelEndsEntity = mcdEntity.getMCDContRelEnds();
         MCDLinkEnd mcdLinkEndEntity = new MCDLinkEnd(mcdContRelEndsEntity) ;
 
-        MCDContRelEnds mcdContRelEndsAssociation = mcdAssociation.getMCDContEndRels();
+        MCDContRelEnds mcdContRelEndsAssociation = mcdAssociation.getMCDContRelEnds();
         MCDLinkEnd mcdLinkEndAssociation = new MCDLinkEnd(mcdContRelEndsAssociation) ;
 
         mcdLink.setEndEntity(mcdLinkEndEntity);

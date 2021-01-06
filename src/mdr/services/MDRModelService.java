@@ -8,29 +8,29 @@ import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import project.ProjectElement;
 
 import java.util.ArrayList;
 
 public class MDRModelService {
 
 
-    public static ArrayList<MDRElement> getMDRElements(MDRElement parentMDRElement) {
-        ArrayList<MDRElement> resultat = new ArrayList<MDRElement>();
-        resultat.add(parentMDRElement);
-        for (MVCCDElement mvccdElement : parentMDRElement.getChilds()) {
-            if (mvccdElement instanceof MDRElement) {
-                MDRElement childProjectElement = (MDRElement) mvccdElement;
-                if (!(childProjectElement instanceof MDRModel)) {
-                    resultat.addAll(getMDRElements(childProjectElement));
-                }
+    public static ArrayList<MDRTable> getMDRTablesDeep(MDRElement root){
+        ArrayList<MDRTable>  resultat = new ArrayList<MDRTable>() ;
+        /*for (MDRElement aMDRElement : getMDRElementsDeep(root)){
+            if (aMDRElement instanceof MDRTable){
+                resultat.add((MDRTable) aMDRElement);
             }
         }
+
+         */
         return resultat;
     }
 
-    public static ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration(MDRElement root) {
+
+    public static ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration(MDRModel mdrModel) {
         ArrayList<IMDRElementWithIteration> resultat = new ArrayList<IMDRElementWithIteration>();
-        for (MDRElement mdrElement : getMDRElements(root)) {
+        for (MDRElement mdrElement : mdrModel.getMDRElements()) {
             if (mdrElement instanceof IMDRElementWithIteration) {
                 resultat.add((IMDRElementWithIteration) mdrElement);
             }
@@ -38,9 +38,9 @@ public class MDRModelService {
         return resultat;
     }
 
-    public static ArrayList<IMDElementWithSource> getIMDElementsWithSource(MDRElement root) {
+    public static ArrayList<IMDElementWithSource> getIMDElementsWithSource(MDRModel mdrModel) {
         ArrayList<IMDElementWithSource> resultat = new ArrayList<IMDElementWithSource>();
-        for (MDRElement mdrElement : getMDRElements(root)) {
+        for (MDRElement mdrElement : mdrModel.getMDRElements()) {
             if (mdrElement instanceof IMDElementWithSource) {
                 resultat.add((IMDElementWithSource) mdrElement);
             }
@@ -48,10 +48,10 @@ public class MDRModelService {
         return resultat;
     }
 
-    public static ArrayList<MDRElement> getMDRElementsTransformedBySource(MDRElement root,
+    public static ArrayList<MDRElement> getMDRElementsTransformedBySource(MDRModel mdrModel,
                                                                           MDElement mdElementSource) {
         ArrayList<MDRElement> resultat = new ArrayList<MDRElement>();
-        for (IMDElementWithSource imdElementWithSource : getIMDElementsWithSource(root)) {
+        for (IMDElementWithSource imdElementWithSource : getIMDElementsWithSource(mdrModel)) {
             if (imdElementWithSource.getMdElementSource() == mdElementSource) {
                 resultat.add((MDRElement) imdElementWithSource);
             }
@@ -76,11 +76,23 @@ public class MDRModelService {
         return mdrContTables.getMDRTables();
     }
 
+    /*
+
+    public static ArrayList<MDRTable> getMDRTables(MDRModel mdrModel) {
+        ArrayList<MDRTable> resultat = new ArrayList<MDRTable>();
+        for (MDRElement mdrElement : mdrModel.getMDRElements()){
+            if (mdrElement instanceof MDRTable){
+                resultat.add((MDRTable) mdrElement);
+            }
+        }
+        return resultat;
+    }
+
+     */
 
     public static void adjustNaming(MDRModel mdrModel){
-
         // Il faudra faire le changement de longueur en premier!
-        for (MDRElement mdrElement : getMDRElements(mdrModel)){
+        for (MDRElement mdrElement : mdrModel.getMDRElements()){
             if (mdrElement instanceof IMDRElementNamingPreferences) {
                 String name = buildName(mdrModel, mdrElement);
                 mdrElement.setName(name);

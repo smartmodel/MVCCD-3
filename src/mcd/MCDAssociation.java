@@ -7,6 +7,7 @@ import exceptions.CodeApplException;
 import m.interfaces.IMCompletness;
 import m.MRelationDegree;
 import m.services.MRelationService;
+import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAssociationService;
 import mcd.services.MCDRelationService;
@@ -111,6 +112,15 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
 
         throw new CodeApplException("L'extrémité d'association passée en paramètre n'existe pas pour cette association ");
 
+    }
+
+    public MCDContRelEnds getMCDContRelEnds() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MCDContRelEnds) {
+                return (MCDContRelEnds) mvccdElement;
+            }
+        }
+        return null;
     }
 
     public MCDAssociationNature getNature() {

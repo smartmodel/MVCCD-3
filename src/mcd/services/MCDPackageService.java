@@ -2,6 +2,7 @@ package mcd.services;
 
 import exceptions.CodeApplException;
 import mcd.MCDElement;
+import mcd.MCDEntity;
 import mcd.MCDModel;
 import mcd.MCDPackage;
 import mcd.interfaces.IMCDContPackages;
@@ -65,15 +66,17 @@ public class MCDPackageService {
                 }
     };
 
-
+/*
     public static MCDPackage getMCDPackageByNamePath(int pathMode, String namePath){
-        for (MCDPackage mcdPackage : ProjectService.getMCDPackages()){
+        for (MCDPackage mcdPackage : IMCDModelService.getMCDPackages()){
             if (mcdPackage.getNamePath(pathMode).equals(namePath)){
                 return mcdPackage;
             }
         }
         return null;
     }
+
+ */
 
     private static int getLevel(MCDPackage mcdPackage, int level) {
         if ( mcdPackage.getParent() instanceof MCDPackage){
@@ -88,4 +91,20 @@ public class MCDPackageService {
     public static int getLevel(MCDPackage mcdPackage) {
         return getLevel(mcdPackage, 1);
     }
+
+
+    public static ArrayList<MCDElement> getMCDElements(MCDPackage mcdPackage) {
+        return ((MCDElement) mcdPackage).getMCDElements();
+    }
+
+    public static ArrayList<MCDEntity> getMCDEntities(MCDPackage mcdPackage){
+        ArrayList<MCDEntity>  resultat = new ArrayList<MCDEntity>() ;
+        for (MCDElement aMCDElement : getMCDElements(mcdPackage)){
+            if (aMCDElement instanceof MCDEntity){
+                resultat.add((MCDEntity) aMCDElement);
+            }
+        }
+        return resultat;
+    }
+
 }

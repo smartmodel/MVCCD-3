@@ -58,7 +58,8 @@ public class LinkInputContent extends PanelInputContentId {
         fieldEntity.setCheckPreSave(true);
         fieldAssociation.setCheckPreSave(true);
 
-        ArrayList<MCDEntity> mcdEntities = MCDEntityService.getMCDEntitiesInIModel(iMCDModelContainer);
+        //ArrayList<MCDEntity> mcdEntities = MCDEntityService.getMCDEntitiesInIModel(iMCDModelContainer);
+        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModelContainer);
         MCDEntityService.sortNameAsc(mcdEntities);
 
         fieldEntity.addItem(SComboBox.LINEWHITE);
@@ -226,13 +227,15 @@ public class LinkInputContent extends PanelInputContentId {
 
     @Override
     protected ArrayList<MCDElement> getParentCandidates(IMCDModel iMCDModelContainer) {
-        ArrayList<MCDContRelations> mcdContRelations = MCDContRelationsService.getMCDContRelationsInIModel(iMCDModelContainer);
-        return MCDContRelationsService.toMCDElements(mcdContRelations);
+        //ArrayList<MCDContRelations> mcdContRelations = MCDContRelationsService.getMCDContRelationsInIModel(iMCDModelContainer);
+        ArrayList<MCDContRelations> mcdContRelations = IMCDModelService.getMCDContRelations(iMCDModelContainer);
+        return MCDElementConvert.to(mcdContRelations);
     }
 
     @Override
     protected MCDElement getParentByNamePath(int pathname, String text) {
-        return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
+        //return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
+        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, MCDElementService.PATHNAME, text);
     }
 
 
@@ -333,7 +336,7 @@ public class LinkInputContent extends PanelInputContentId {
 
 
     public MCDEntity getMCDEntity(){
-        return MCDEntityService.getMCDEntityByNamePath(
+        return IMCDModelService.getMCDEntityByNamePath(
                 iMCDModelContainer, modePathName, (String) fieldEntity.getSelectedItem());
     }
 

@@ -78,7 +78,8 @@ public class GenSpecInputContent extends PanelInputContentId {
 
 
     private void createContentGSEnd(int direction) {
-        ArrayList<MCDEntity> mcdEntities = MCDEntityService.getMCDEntitiesInIModel(iMCDModelContainer);
+        //ArrayList<MCDEntity> mcdEntities = MCDEntityService.getMCDEntitiesInIModel(iMCDModelContainer);
+        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModelContainer);
         MCDEntityService.sortNameAsc(mcdEntities);
 
         factorizeAssEnd(direction);
@@ -239,13 +240,15 @@ public class GenSpecInputContent extends PanelInputContentId {
 
     @Override
     protected ArrayList<MCDElement> getParentCandidates(IMCDModel iMCDModelContainer) {
-        ArrayList<MCDContRelations> mcdContRelations = MCDContRelationsService.getMCDContRelationsInIModel(iMCDModelContainer);
-        return MCDContRelationsService.toMCDElements(mcdContRelations);
+        //ArrayList<MCDContRelations> mcdContRelations = MCDContRelationsService.getMCDContRelationsInIModel(iMCDModelContainer);
+        ArrayList<MCDContRelations> mcdContRelations = IMCDModelService.getMCDContRelations(iMCDModelContainer);
+        return MCDElementConvert.to(mcdContRelations);
     }
 
     @Override
     protected MCDElement getParentByNamePath(int pathname, String text) {
-        return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
+        //return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
+        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, MCDElementService.PATHNAME, text);
     }
 
 
@@ -357,12 +360,12 @@ public class GenSpecInputContent extends PanelInputContentId {
 
 
     public MCDEntity getMCDEntitySpec(){
-        return MCDEntityService.getMCDEntityByNamePath(
+        return IMCDModelService.getMCDEntityByNamePath(
                 iMCDModelContainer, modePathName, (String) fieldSpecEntity.getSelectedItem());
     }
 
     public MCDEntity getMCDEntityGen(){
-        return MCDEntityService.getMCDEntityByNamePath(
+        return IMCDModelService.getMCDEntityByNamePath(
                 iMCDModelContainer, modePathName, (String) fieldGenEntity.getSelectedItem());
    }
 

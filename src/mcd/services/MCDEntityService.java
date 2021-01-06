@@ -28,31 +28,6 @@ public class MCDEntityService {
                 }
     };
 
-    public static ArrayList<MCDEntity> getMCDEntitiesInIModel(IMCDModel iMCDModel) {
-        ArrayList<MCDEntity> resultat =  new ArrayList<MCDEntity>();
-        for (MCDElement element :  IMCDModelService.getMCDElementsByClassName(
-                iMCDModel, false, MCDEntity.class.getName())){
-            resultat.add((MCDEntity) element);
-        }
-        return resultat;
-    }
-
-    public static MCDEntity getMCDEntityByNamePath(IMCDModel model,
-                                                   int pathMode,
-                                                    String namePath){
-        return (MCDEntity) IMCDModelService.getMCDElementByClassAndNamePath(model, false,
-                MCDEntity.class.getName(), pathMode, namePath);
-    }
-
-
-    public static MCDEntity getMCDEntityByNamePath(int pathMode, String namePath){
-        for (MCDEntity mcdEntity : ProjectService.getMCDEntities()){
-            if (mcdEntity.getNamePath(pathMode).equals(namePath)){
-                return mcdEntity;
-            }
-        }
-        return null;
-    }
 
     public static ArrayList<MCDRelEnd> getMCDRelEnds(MCDEntity mcdEntity) {
         MCDContRelEnds mcdContRelEnds = mcdEntity.getMCDContRelEnds();
@@ -365,6 +340,7 @@ public class MCDEntityService {
         }
         return null;
     }
+
 
 
 }

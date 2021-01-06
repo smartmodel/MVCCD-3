@@ -159,7 +159,6 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
 
         col = MDRFKTableColumn.COLUMNPK.getPosition();
         row[col] = mdrColumn.getMDRColumnPK().getName();
-
     }
 
 

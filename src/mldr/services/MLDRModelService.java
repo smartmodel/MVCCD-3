@@ -178,7 +178,7 @@ public class MLDRModelService {
         if (mcdElementSource == null){
             return false;
         } else {
-            return IMCDModelService.foundMCDElementInIModelByInstance(imcdModel, mcdElementSource);
+            return IMCDModelService.existMCDElement(imcdModel, mcdElementSource);
         }
 
     }

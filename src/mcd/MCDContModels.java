@@ -5,6 +5,7 @@ import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
+import mcd.services.IMCDModelService;
 import mldr.MLDRModel;
 import transform.mcdtomldr.MCDTransform;
 import project.ProjectElement;
@@ -31,8 +32,9 @@ public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePa
 
     public ArrayList<String> treatCompliant(){
         MCDCompliant mcdCompliant = new MCDCompliant();
-        // Il n'y a pas de modèles. Il faut donc tester toutes les entités
-        ArrayList<String> resultat = mcdCompliant.check(ProjectService.getMCDEntities(), false);
+        // Il n'y a pas de modèles. Il faut donc tester toutes les entités du conteneur
+        //ArrayList<String> resultat = mcdCompliant.check(ProjectService.getMCDEntities(), false);
+        ArrayList<String> resultat = mcdCompliant.check(IMCDModelService.getMCDEntities(this), false);
         return resultat;
     }
 

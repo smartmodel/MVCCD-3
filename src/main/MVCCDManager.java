@@ -154,7 +154,7 @@ public class MVCCDManager {
 
     public void removeMCDRelationAndDependantsInRepository(MCDRelation mcdRelation) {
 
-        ArrayList<MCDRelation> mcdRelationChilds = ProjectService.getMCDRelationsChilds(mcdRelation);
+        ArrayList<MCDRelation> mcdRelationChilds = mcdRelation.getMCDRelationsChilds();
         for (MCDRelation mcdRelationChild : mcdRelationChilds) {
             removeMCDRelationAndDependantsInRepository(mcdRelationChild);
         }

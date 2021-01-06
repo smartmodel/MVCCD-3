@@ -9,6 +9,8 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
 
+import java.util.ArrayList;
+
 public abstract class MCDElement extends MDElement {
 
     private static final long serialVersionUID = 1000;
@@ -55,14 +57,7 @@ public abstract class MCDElement extends MDElement {
         }
     }
 
-    public MCDContRelEnds getMCDContEndRels() {
-        for (MVCCDElement mvccdElement : getChilds()){
-            if (mvccdElement instanceof MCDContRelEnds) {
-                return (MCDContRelEnds) mvccdElement;
-            }
-        }
-        return null;
-    }
+
 
     public String getNameSource(){
         if (getName() != null) {
@@ -90,5 +85,10 @@ public abstract class MCDElement extends MDElement {
 
     public IMCDModel getMCDModelAccueil(){
         return MCDElementService.getMCDModelAccueil(this);
+    }
+
+    // L'élément lui-même et tous ses enfants MCDElement
+    public ArrayList<MCDElement> getMCDElements(){
+        return MCDElementService.getMCDElements(this);
     }
 }

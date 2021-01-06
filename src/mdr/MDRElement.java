@@ -2,7 +2,10 @@ package mdr;
 
 import exceptions.CodeApplException;
 import main.MVCCDElement;
+import mcd.MCDElement;
+import mcd.services.MCDElementService;
 import md.MDElement;
+import mdr.services.MDRElementService;
 import project.ProjectElement;
 import utilities.Trace;
 
@@ -43,17 +46,11 @@ public abstract class MDRElement extends MDElement {
         return null;
     }
 
-    /*
-    public ArrayList<MDRElement> getMDRElementChilds(){
-        ArrayList<MDRElement> resultat = new ArrayList<MDRElement>();
-        for (MVCCDElement mvccdElement : getChilds()){
-           if (mvccdElement instanceof MDRElement) {
-               resultat.add((MDRElement) mvccdElement);
-           }
-        }
-        return resultat;
+
+    // L'élément lui-même et tous ses enfants MDRElement
+    public ArrayList<MDRElement> getMDRElements(){
+        return MDRElementService.getMDRElements(this);
     }
 
-     */
 
 }

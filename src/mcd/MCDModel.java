@@ -4,6 +4,7 @@ import exceptions.TransformMCDException;
 import m.interfaces.IMCompletness;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
+import mcd.services.IMCDModelService;
 import mldr.MLDRModel;
 import transform.mcdtomldr.MCDTransform;
 import project.ProjectService;
@@ -74,8 +75,7 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
     }
 
     public ArrayList<MCDEntity> getMCDEntities(){
-
-        return ProjectService.getMCDEntities(this);
+        return IMCDModelService.getMCDEntities(this);
     }
 
     public ArrayList<String> treatCompliant(){

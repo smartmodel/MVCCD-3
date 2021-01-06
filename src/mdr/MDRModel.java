@@ -59,20 +59,6 @@ public class MDRModel extends MDRElement  {
         this.namingFormatFuture = namingFormatFuture;
     }
 
-    // parcours des modèles relationnels en profondeur
-    public ArrayList<MDRElement> getMDRElementsDeep(){
-        return ProjectService.getMDRElementsDeep(this);
-    }
-
-    // parcours des modèles relationnels en profondeur
-    public ArrayList<MDRTable> getMDRTablesDeep(){
-        return ProjectService.getMDRTablesDeep(this);
-    }
-
-    public ArrayList<MDRElement> getMDRElements(){
-        return MDRModelService.getMDRElements(this);
-    }
-
     public ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration(){
         return MDRModelService.getIMDRElementsWithIteration(this);
     }
