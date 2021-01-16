@@ -1212,11 +1212,6 @@ public class AssociationInputContent extends PanelInputContentId {
         }
     }
 
-
-    public ArrayList<MVCCDElement> getBrothers() {
-        return ((MVCCDElement) iMCDModelContainer).getDescendantsWithout(getElementForCheck());
-    }
-
     public boolean isReflexive(){
         return (fieldFromEntity.isNotSelectedEmpty() && fieldToEntity.isNotSelectedEmpty()) &&
                 (fieldFromEntity.getSelectedIndex() == fieldToEntity.getSelectedIndex());

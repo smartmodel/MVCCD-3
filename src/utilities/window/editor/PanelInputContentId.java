@@ -92,7 +92,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
         if (!longNameMode.equals(Preferences.OPTION_NO)) {
             super.getSComponents().add(fieldLongName);
         }
-        
+
         //createContentIdCustom();
 
     }
@@ -132,14 +132,6 @@ public abstract class PanelInputContentId extends PanelInputContent {
         return gbc;
     }
 
-    protected MCDElement getParentForCheck(){
-        // Pour utilisation  uniquement checkDatas
-        if (panelInput != null) {
-            return (MCDElement) getEditor().getMvccdElementParent();
-        } else {
-            return (MCDElement) elementForCheckInput.getParent();
-        }
-    }
     protected MCDElement getElementForCheck(){
         // Pour utilisation  uniquement checkDatas
         if (panelInput != null) {
@@ -150,15 +142,15 @@ public abstract class PanelInputContentId extends PanelInputContent {
     }
 
     protected boolean checkName(boolean unitaire){
-       return checkName(unitaire, true);
+        return checkName(unitaire, true);
     }
 
 
     protected boolean checkName(boolean unitaire, boolean mandatory){
-return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
+        return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
                 getBrothers(),
                 fieldName.getText(),
-                    fieldName.getText(),
+                fieldName.getText(),
                 mandatory,
                 getLengthMax(MVCCDElement.SCOPENAME),
                 getNaming(MVCCDElement.SCOPENAME),
@@ -174,9 +166,7 @@ return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
 
     protected boolean checkShortName(boolean unitaire, boolean mandatory){
 
-        ArrayList<MVCCDElement> brothers = getParentForCheck().getChildsWithout(getElementForCheck());
-
-         return super.checkInput(fieldShortName, unitaire, MCDUtilService.checkShortNameId(
+        return super.checkInput(fieldShortName, unitaire, MCDUtilService.checkShortNameId(
                 getBrothers(),
                 fieldShortName.getText(),
                 fieldShortName.getText(),
@@ -268,14 +258,13 @@ return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
             checkDatasId();
             checkDatasPreSaveId(true);
         }
-
          */
         super.focusGained(focusEvent);
         Object source = focusEvent.getSource();
 
         if (source == fieldName) {
             checkDatas(fieldName);
-       }
+        }
         if (source == fieldShortName) {
             checkDatas(fieldShortName);
         }
@@ -335,7 +324,6 @@ return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
         } else {
             parent = (MCDElement) mvccdElement.getParent();
         }
-
          */
         parent = (MCDElement) mvccdElement.getParent();
 
@@ -350,13 +338,13 @@ return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
 
     protected void saveDatas(MVCCDElement mvccdElement) {
         if (fieldParent.checkIfUpdated()){
-             MCDElement parentChoosed = getParentChoosed();
+            MCDElement parentChoosed = getParentChoosed();
 
-             // Pas de changement successif en ajout (Btn Apply uniquement en update)
-             if (getEditor().getMode().equals(DialogEditor.UPDATE)){
-                   mvccdElement.setOrChangeParent(parentChoosed);
-             }
-         }
+            // Pas de changement successif en ajout (Btn Apply uniquement en update)
+            if (getEditor().getMode().equals(DialogEditor.UPDATE)){
+                mvccdElement.setOrChangeParent(parentChoosed);
+            }
+        }
 
         if (fieldName.checkIfUpdated()){
             mvccdElement.setName(fieldName.getText());
@@ -394,9 +382,16 @@ return super.checkInput(fieldName, unitaire, MCDUtilService.checkNameId(
         this.longNameMode = longNameMode;
     }
 
-
-    private ArrayList<MVCCDElement> getBrothers(){
-        return getParentForCheck().getChildsWithout(getElementForCheck());
+    protected ArrayList<MVCCDElement> getBrothers(){
+        if (panelInput != null) {
+            if (getEditor().getMode().equals(DialogEditor.NEW)) {
+                return getEditor().getMvccdElementParent().getChilds();
+            } else {
+                return getEditor().getMvccdElementCrt().getBrothers();
+            }
+        } else {
+            return elementForCheckInput.getBrothers();
+        }
     }
 
 }

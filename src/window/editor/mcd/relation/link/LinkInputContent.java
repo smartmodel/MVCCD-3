@@ -345,16 +345,6 @@ public class LinkInputContent extends PanelInputContentId {
                 iMCDModelContainer, (String) fieldAssociation.getSelectedItem());
    }
 
-
-
-
-    public ArrayList<MVCCDElement> getBrothers() {
-        return ((MVCCDElement) iMCDModelContainer).getDescendantsWithout(getElementForCheck());
-    }
-
-
-
-
     public SComboBox getFieldEntity() {
         return fieldEntity;
     }

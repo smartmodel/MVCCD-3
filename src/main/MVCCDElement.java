@@ -129,23 +129,18 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         return childs;
     }
 
-    public ArrayList<MVCCDElement> getChildsWithout(MVCCDElement child) {
-        ArrayList<MVCCDElement> resultat = new ArrayList<MVCCDElement>() ;
-        for (MVCCDElement aChild : getChilds()){
-            if (aChild != child){
-                resultat.add(aChild);
-            }
-        }
-        return resultat;
+    public ArrayList<MVCCDElement> getSiblings(){
+        return getParent().getChilds();
     }
 
     public ArrayList<MVCCDElement> getBrothers(){
-        return getParent().getChildsWithout(this);
-    }
-
-    public ArrayList<MVCCDElement> getChildsRepository() {
-        Collections.sort(childs, MVCCDElement::compareToOrder);
-        return childs;
+        ArrayList<MVCCDElement> resultat = new ArrayList<MVCCDElement>() ;
+        for (MVCCDElement sibling : getSiblings()){
+            if (sibling != this){
+                resultat.add(sibling);
+            }
+        }
+        return resultat;
     }
 
     public int getChildOrderIndex(MVCCDElement child){
@@ -187,16 +182,6 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
 
     public ArrayList<MVCCDElement> getDescendants(){
         return MVCCDElementService.getDescendants(this);
-    }
-
-    public ArrayList<MVCCDElement> getDescendantsWithout(MVCCDElement child) {
-        ArrayList<MVCCDElement> resultat = new ArrayList<MVCCDElement>() ;
-        for (MVCCDElement aChild : getDescendants()){
-            if (aChild != child){
-                resultat.add(aChild);
-            }
-        }
-        return resultat;
     }
 
 

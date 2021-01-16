@@ -2,7 +2,9 @@ package mcd;
 
 import exceptions.CodeApplException;
 import main.MVCCDElement;
+import main.MVCCDElementService;
 import mcd.interfaces.IMCDModel;
+import mcd.services.MCDElementConvert;
 import mcd.services.MCDElementService;
 import md.MDElement;
 import org.apache.commons.lang.StringUtils;
@@ -87,8 +89,40 @@ public abstract class MCDElement extends MDElement {
         return MCDElementService.getMCDModelAccueil(this);
     }
 
+    public MCDElement getMCDParent(){
+        if (super.getParent() instanceof MCDElement){
+            return (MCDElement) super.getParent();
+        } else {
+            throw new CodeApplException("MCDElement.getParent() - Le parent n'est pas descendant de MCDElement");
+        }
+    }
+
+
+    public ArrayList<MCDElement> getMCDChilds() {
+        return MCDElementConvert.to(super.getChilds());
+    }
+
+
+    public ArrayList<MCDElement> getMCDSiblings(){
+        return getMCDParent().getMCDChilds();
+    }
+
+
+    public ArrayList<MCDElement> getMCDBrothers(){
+        return MCDElementConvert.to(getParent().getBrothers());
+    }
+
+
+    public ArrayList<MCDElement> getMCDDescendants(){
+        return MCDElementService.getMCDDescendants(this);
+    }
+
+    //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+    /*
     // L'élément lui-même et tous ses enfants MCDElement
     public ArrayList<MCDElement> getMCDElements(){
         return MCDElementService.getMCDElements(this);
     }
+
+     */
 }

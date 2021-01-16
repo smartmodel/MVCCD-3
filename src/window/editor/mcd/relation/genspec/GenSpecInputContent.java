@@ -382,11 +382,6 @@ public class GenSpecInputContent extends PanelInputContentId {
        }
    }
 
-
-    public ArrayList<MVCCDElement> getBrothers() {
-        return ((MVCCDElement) iMCDModelContainer).getDescendantsWithout(getElementForCheck());
-    }
-
     public boolean isReflexive(){
         return (fieldGenEntity.isNotSelectedEmpty() && fieldSpecEntity.isNotSelectedEmpty()) &&
                 (fieldGenEntity.getSelectedIndex() == fieldSpecEntity.getSelectedIndex());

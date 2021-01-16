@@ -30,7 +30,7 @@ public class MDRModelService {
 
     public static ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration(MDRModel mdrModel) {
         ArrayList<IMDRElementWithIteration> resultat = new ArrayList<IMDRElementWithIteration>();
-        for (MDRElement mdrElement : mdrModel.getMDRElements()) {
+        for (MDRElement mdrElement : mdrModel.getMDRDescendants()) {
             if (mdrElement instanceof IMDRElementWithIteration) {
                 resultat.add((IMDRElementWithIteration) mdrElement);
             }
@@ -40,7 +40,7 @@ public class MDRModelService {
 
     public static ArrayList<IMDElementWithSource> getIMDElementsWithSource(MDRModel mdrModel) {
         ArrayList<IMDElementWithSource> resultat = new ArrayList<IMDElementWithSource>();
-        for (MDRElement mdrElement : mdrModel.getMDRElements()) {
+        for (MDRElement mdrElement : mdrModel.getMDRDescendants()) {
             if (mdrElement instanceof IMDElementWithSource) {
                 resultat.add((IMDElementWithSource) mdrElement);
             }
@@ -92,7 +92,7 @@ public class MDRModelService {
 
     public static void adjustNaming(MDRModel mdrModel){
         // Il faudra faire le changement de longueur en premier!
-        for (MDRElement mdrElement : mdrModel.getMDRElements()){
+        for (MDRElement mdrElement : mdrModel.getMDRDescendants()){
             if (mdrElement instanceof IMDRElementNamingPreferences) {
                 String name = buildName(mdrModel, mdrElement);
                 mdrElement.setName(name);

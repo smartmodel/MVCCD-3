@@ -92,14 +92,19 @@ public class MCDPackageService {
         return getLevel(mcdPackage, 1);
     }
 
-
+    //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+    /*
     public static ArrayList<MCDElement> getMCDElements(MCDPackage mcdPackage) {
         return ((MCDElement) mcdPackage).getMCDElements();
     }
 
+     */
+
     public static ArrayList<MCDEntity> getMCDEntities(MCDPackage mcdPackage){
         ArrayList<MCDEntity>  resultat = new ArrayList<MCDEntity>() ;
-        for (MCDElement aMCDElement : getMCDElements(mcdPackage)){
+        //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+        //for (MCDElement aMCDElement : getMCDElements(mcdPackage)){
+        for (MCDElement aMCDElement : mcdPackage.getMCDDescendants()){
             if (aMCDElement instanceof MCDEntity){
                 resultat.add((MCDEntity) aMCDElement);
             }

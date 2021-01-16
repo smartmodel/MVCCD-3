@@ -304,9 +304,7 @@ public abstract class PanelInputContent
         // Les données peuvent être ajustées par les méthodes changeXXX de l'éditeur
         if (! getEditor().getMode().equals(DialogEditor.NEW)) {
             loadSimulationChange(getEditor().getMvccdElementCrt());
-        }
-
-
+       }
         checkDatas(null);
         preSaveOk = checkDatasPreSave(null);
     }

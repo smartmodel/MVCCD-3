@@ -7,3 +7,7 @@ Problèmes : Initialisation d'une relation en création
             Contraire au principe d'éviter une surcharge pour les méthodes de bas niveau
 
 //#MAJ 2020-12-16 AssociationInputContent shortName obligatoire
+
+//#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+
+//#MAJ 2021-01-14 Suppression de MDRElement.getMDRElements()

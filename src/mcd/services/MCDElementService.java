@@ -79,6 +79,9 @@ public class MCDElementService {
         return null;
     }
 
+    //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+    /*
+
     public static ArrayList<MCDElement> getMCDElements(MCDElement root) {
         ArrayList<MCDElement> resultat = new ArrayList<MCDElement>();
         resultat.add(root);
@@ -86,6 +89,20 @@ public class MCDElementService {
             if (mvccdElement instanceof MCDElement){
                 MCDElement childMCDElement  = (MCDElement) mvccdElement;
                 resultat.addAll(getMCDElements(childMCDElement));
+            }
+        }
+        return resultat;
+    }
+
+     */
+
+
+    public static ArrayList<MCDElement> getMCDDescendants(MCDElement root) {
+        ArrayList<MCDElement> resultat = new ArrayList<MCDElement>();
+        for (MCDElement child : root.getMCDChilds()){
+            resultat.add(child);
+            if (child.getChilds().size() > 0) {
+                resultat.addAll(getMCDDescendants(child));
             }
         }
         return resultat;

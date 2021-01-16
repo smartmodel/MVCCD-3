@@ -34,15 +34,20 @@ public class IMCDModelService {
 
      */
 
-
+    //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+    /*
     public static ArrayList<MCDElement> getMCDElements(IMCDModel imcdModel) {
         return ((MCDElement) imcdModel).getMCDElements();
     }
 
+     */
+
 
     public static ArrayList<IMCDContPackages> getIMCDContPackages(IMCDModel imcdModel){
         ArrayList<IMCDContPackages>  resultat = new ArrayList<IMCDContPackages>() ;
-        for (MCDElement mcdElement : getMCDElements(imcdModel)){
+        //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+        //for (MCDElement mcdElement : getMCDElements(imcdModel)){
+        for (MCDElement mcdElement : imcdModel.getMCDDescendants()){
             if (mcdElement instanceof IMCDContPackages){
                 resultat.add((IMCDContPackages) mcdElement);
             }
@@ -81,7 +86,10 @@ public class IMCDModelService {
 
 
     public static boolean existMCDElement(IMCDModel imcdModel, MCDElement mcdElement){
-        for ( MCDElement aMCDElement : getMCDElements(imcdModel)){
+
+        //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+        //for ( MCDElement aMCDElement : getMCDElements(imcdModel)){
+        for ( MCDElement aMCDElement : imcdModel.getMCDDescendants()){
             if (aMCDElement == mcdElement){
                return true;
             }
@@ -91,7 +99,9 @@ public class IMCDModelService {
 
     public static ArrayList<MCDEntity> getMCDEntities(IMCDModel imcdModel){
         ArrayList<MCDEntity>  resultat = new ArrayList<MCDEntity>() ;
-        for (MCDElement aMCDElement : getMCDElements(imcdModel)){
+        //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+        //for (MCDElement aMCDElement : getMCDElements(imcdModel)){
+        for ( MCDElement aMCDElement : imcdModel.getMCDDescendants()){
             if (aMCDElement instanceof MCDEntity){
                 resultat.add((MCDEntity) aMCDElement);
             }
@@ -173,7 +183,9 @@ public class IMCDModelService {
 
     public static ArrayList<MCDElement> getMCDElementsByNameTree(IMCDModel imcdModel, String nameTree){
         ArrayList<MCDElement>  resultat = new ArrayList<MCDElement>() ;
-        for (MCDElement mcdElement : getMCDElements(imcdModel)){
+        //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+        // for (MCDElement mcdElement : getMCDElements(imcdModel)){
+        for ( MCDElement mcdElement : imcdModel.getMCDDescendants()){
             if (mcdElement.getNameTree().equals(nameTree)){
                 resultat.add(mcdElement);
             }
@@ -211,7 +223,9 @@ public class IMCDModelService {
 
     public static ArrayList<MCDPackage> getMCDPackages(IMCDModel imcdModel){
         ArrayList<MCDPackage>  resultat = new ArrayList<MCDPackage>() ;
-        for (MCDElement mcdElement : getMCDElements(imcdModel)){
+        //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+        //for (MCDElement mcdElement : getMCDElements(imcdModel)){
+        for ( MCDElement mcdElement : imcdModel.getMCDDescendants()){
             if (mcdElement instanceof MCDPackage){
                 resultat.add((MCDPackage) mcdElement);
             }
@@ -221,9 +235,10 @@ public class IMCDModelService {
 
     public static ArrayList<MCDRelation> getMCDRelations(IMCDModel imcdModel) {
         ArrayList<MCDRelation>  resultat = new ArrayList<MCDRelation>() ;
-        for (MCDElement aMCDElement : getMCDElements(imcdModel)){
-            if (aMCDElement instanceof MCDRelation){
-                resultat.add((MCDRelation) aMCDElement);
+        //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+        for ( MCDElement mcdElement : imcdModel.getMCDDescendants()){
+            if (mcdElement instanceof MCDRelation){
+                resultat.add((MCDRelation) mcdElement);
             }
         }
         return resultat;
@@ -250,7 +265,8 @@ public class IMCDModelService {
 
     public static ArrayList<MCDContEntities> getMCDContEntities(IMCDModel imcdModel) {
         ArrayList<MCDContEntities>  resultat = new ArrayList<MCDContEntities>() ;
-        for (MCDElement mcdElement : getMCDElements(imcdModel)) {
+        //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+        for ( MCDElement mcdElement : imcdModel.getMCDDescendants()){
             if (mcdElement instanceof MCDContEntities) {
                 resultat.add( (MCDContEntities) mcdElement);
             }
@@ -270,7 +286,8 @@ public class IMCDModelService {
 
     public static ArrayList<MCDContRelations> getMCDContRelations(IMCDModel imcdModel) {
         ArrayList<MCDContRelations> resultat =  new ArrayList<MCDContRelations>();
-        for (MCDElement mcdElement :  getMCDElements(imcdModel)){
+        //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+        for ( MCDElement mcdElement : imcdModel.getMCDDescendants()){
             if (mcdElement instanceof MCDContRelations) {
                 resultat.add((MCDContRelations) mcdElement);
             }

@@ -5,6 +5,7 @@ import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.services.MCDElementService;
 import md.MDElement;
+import mdr.services.MDRElementConvert;
 import mdr.services.MDRElementService;
 import project.ProjectElement;
 import utilities.Trace;
@@ -23,6 +24,31 @@ public abstract class MDRElement extends MDElement {
 
     public MDRElement(ProjectElement parent) {
         super(parent);
+    }
+
+
+    public MDRElement getMDRParent(){
+        if (super.getParent() instanceof MDRElement){
+            return (MDRElement) super.getParent();
+        } else {
+            throw new CodeApplException("MDRElement.getParent() - Le parent n'est pas descendant de MDRElement");
+        }
+    }
+
+    public ArrayList<MDRElement> getMDRChilds() {
+        return MDRElementConvert.to(super.getChilds());
+    }
+
+    public ArrayList<MDRElement> getMDRSiblings(){
+        return getMDRParent().getMDRChilds();
+    }
+
+    public ArrayList<MDRElement> getMDRBrothers(){
+        return MDRElementConvert.to(getParent().getBrothers());
+    }
+
+    public ArrayList<MDRElement> getMDRDescendants(){
+        return MDRElementService.getMDRDescendants(this);
     }
 
     public MDRElementNames getNames() {
@@ -47,10 +73,14 @@ public abstract class MDRElement extends MDElement {
     }
 
 
+    //#MAJ 2021-01-14 Suppression de MDRElement.getMDRElements()
+    /*
     // L'élément lui-même et tous ses enfants MDRElement
     public ArrayList<MDRElement> getMDRElements(){
         return MDRElementService.getMDRElements(this);
     }
+
+     */
 
 
 }

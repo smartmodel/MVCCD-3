@@ -24,13 +24,13 @@ public class Repository extends DefaultTreeModel{
     }
 
     public void addChildsNodes(DefaultMutableTreeNode nodeParent, MVCCDElement mvccdElementParent) {
-        for ( MVCCDElement mvccdElement : mvccdElementParent.getChildsRepository()){
+        for ( MVCCDElement mvccdElement : mvccdElementParent.getChilds()){
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(mvccdElement);
              if (mvccdElement instanceof MVCCDElementProfileEntry){
                 nodeProfileEntry = node ;
             }
             nodeParent.add (node);
-            if (mvccdElement.getChildsRepository().size()>0){
+            if (mvccdElement.getChilds().size()>0){
                 addChildsNodes(node, mvccdElement);
             }
         }
@@ -114,7 +114,7 @@ public class Repository extends DefaultTreeModel{
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(mvccdElement);
         int index = 0;
         if (mvccdElement.getParent() != null) {
-            for (MVCCDElement child : mvccdElement.getParent().getChildsRepository()) {
+            for (MVCCDElement child : mvccdElement.getParent().getChilds()) {
                 if (child == mvccdElement) {
                     break;
                 }

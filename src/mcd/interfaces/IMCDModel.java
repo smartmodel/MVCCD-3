@@ -1,6 +1,7 @@
 package mcd.interfaces;
 
 import main.MVCCDElement;
+import mcd.MCDElement;
 import mdr.MDRModel;
 import mldr.MLDRModel;
 
@@ -13,5 +14,6 @@ public interface IMCDModel {
     public MLDRModel getLastTransformedMLDRModel();
     public void setLastTransformedMLDRModel(MLDRModel getLastTransformedMLDRModel) ;
     public String getName();
+    public ArrayList<MCDElement> getMCDDescendants();
 
 }
