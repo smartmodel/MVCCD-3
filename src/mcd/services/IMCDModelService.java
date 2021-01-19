@@ -263,6 +263,17 @@ public class IMCDModelService {
         return resultat;
     }
 
+    public static ArrayList<MCDAssociation> getMCDAssociationsNNWithoutEntity(IMCDModel imcdModel) {
+        ArrayList<MCDAssociation>  resultat = new ArrayList<MCDAssociation>() ;
+        for (MCDAssociation mcdAssociationNN : getMCDAssociationsNN(imcdModel)){
+            /*
+            if () {
+                resultat.add(mcdAssociationNN);
+            }*/
+        }
+        return resultat;
+    }
+
     public static ArrayList<MCDContEntities> getMCDContEntities(IMCDModel imcdModel) {
         ArrayList<MCDContEntities>  resultat = new ArrayList<MCDContEntities>() ;
         //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
