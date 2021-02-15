@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="MVCCD3-16:jar">
+  <artifact type="jar" build-on-make="true" name="MVCCD3-16:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/MVCCD3_16_jar</output-path>
     <root id="archive" name="MVCCD3-16.jar">
       <element id="module-output" name="MVCCD3-16" />
