@@ -27,14 +27,6 @@ public class MCDContConstraints extends MCDElement {
         return resultat;
     }
 
-    public static MCDContConstraints getMCDContConstraintsByNamePath(int pathMode, String namePath) {
-        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)) {
-            if (mcdElement instanceof MCDContConstraints) {
-                return (MCDContConstraints) mcdElement;
-            }
-        }
-        return null;
-    }
 
     public ArrayList<MCDNID> getMCDNIDs(){
         ArrayList<MCDNID> resultat = new ArrayList<MCDNID>();

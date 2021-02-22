@@ -3,11 +3,26 @@ package main;
 import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.MCDContAttributes;
+import mcd.interfaces.IMCDModel;
+import mdr.*;
+import mdr.interfaces.IMDRParameter;
 import messages.MessagesBuilder;
+import mldr.*;
+import mldr.services.MLDRContConstraintsService;
+import mpdr.MPDRContColumns;
+import mpdr.MPDRModel;
+import mpdr.mysql.MPDRMySQLColumn;
+import mpdr.mysql.MPDRMySQLModel;
+import mpdr.mysql.MPDRMySQLTable;
+import mpdr.oracle.MPDROracleModel;
+import mpdr.oracle.MPDROracleTable;
+import mpdr.postgresql.MPDRPostgreSQLModel;
+import mpdr.postgresql.MPDRPostgreSQLTable;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
+import utilities.Trace;
 
 public class MVCCDElementFactory {
 
@@ -32,7 +47,7 @@ public class MVCCDElementFactory {
 
         // Les préférences de projets ne sont pas encore mises à jour...
         if (!PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY()) {
-                createContentModel(mcdContModels);
+                createContentMCDModel(mcdContModels);
         }
         return project;
     }
@@ -44,7 +59,7 @@ public class MVCCDElementFactory {
 
     public MCDModel createMCDModel(MCDContModels mcdContModels){
         MCDModel mcdModel = new MCDModel(mcdContModels);
-        createContentModel(mcdModel);
+        createContentMCDModel(mcdModel);
         return mcdModel;
     }
 
@@ -89,7 +104,7 @@ public class MVCCDElementFactory {
         MCDEntity mcdEntity = new MCDEntity(parent);
         MCDContAttributes mcdContAttributes = MVCCDElementFactory.instance().createMCDAttributes(mcdEntity,
                 Preferences.REPOSITORY_MCD_ATTRIBUTES_NAME);
-        MCDContEndRels mcdContEndRels = MVCCDElementFactory.instance().createMCDContEndRels(mcdEntity,
+        MCDContRelEnds mcdContRelEnds = MVCCDElementFactory.instance().createMCDContEndRels(mcdEntity,
                 Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME);
         MCDContConstraints mcdContConstraints = MVCCDElementFactory.instance().createMCDConstraints(mcdEntity,
                 Preferences.REPOSITORY_MCD_CONSTRAINTS_NAME);
@@ -101,8 +116,8 @@ public class MVCCDElementFactory {
         return new MCDContAttributes(parent, name);
     }
 
-    public MCDContEndRels createMCDContEndRels(MCDElement parent, String name){
-        return new MCDContEndRels(parent, name);
+    public MCDContRelEnds createMCDContEndRels(MCDElement parent, String name){
+        return new MCDContRelEnds(parent, name);
     }
     public MCDAttribute createMCDAttribute(MCDContAttributes parent){
 
@@ -127,11 +142,11 @@ public class MVCCDElementFactory {
 
         MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations) ;
 
-        MCDContEndRels mcdContEndRelsEntityFrom = mcdEntityFrom.getMCDContEndRels();
-        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdContEndRelsEntityFrom) ;
+        MCDContRelEnds mcdContRelEndsEntityFrom = mcdEntityFrom.getMCDContRelEnds();
+        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdContRelEndsEntityFrom) ;
 
-        MCDContEndRels mcdContEndRelsEntityTo = mcdEntityTo.getMCDContEndRels();
-        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdContEndRelsEntityTo) ;
+        MCDContRelEnds mcdContRelEndsEntityTo = mcdEntityTo.getMCDContRelEnds();
+        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdContRelEndsEntityTo) ;
 
         mcdAssociation.setFrom(mcdAssEndFrom);
         mcdAssociation.setTo(mcdAssEndTo);
@@ -142,7 +157,7 @@ public class MVCCDElementFactory {
         mcdAssEndTo.setMcdEntity(mcdEntityTo);
         mcdAssEndTo.setMcdAssociation(mcdAssociation);
 
-        MCDContEndRels mcdContEndRels = MVCCDElementFactory.instance().createMCDContEndRels(mcdAssociation,
+        MCDContRelEnds mcdContRelEnds = MVCCDElementFactory.instance().createMCDContEndRels(mcdAssociation,
                 Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME);
 
         return mcdAssociation;
@@ -156,11 +171,11 @@ public class MVCCDElementFactory {
         MCDGeneralization mcdGeneralization = new MCDGeneralization(mcdContRelations) ;
 
 
-        MCDContEndRels mcdContEndRelsEntityGen = mcdEntityGen.getMCDContEndRels();
-        MCDGSEnd mcdGSEndGen = new MCDGSEnd(mcdContEndRelsEntityGen) ;
+        MCDContRelEnds mcdContRelEndsEntityGen = mcdEntityGen.getMCDContRelEnds();
+        MCDGSEnd mcdGSEndGen = new MCDGSEnd(mcdContRelEndsEntityGen) ;
 
-        MCDContEndRels mcdContEndRelsEntitySpec = mcdEntitySpec.getMCDContEndRels();
-        MCDGSEnd mcdGSEndSpec = new MCDGSEnd(mcdContEndRelsEntitySpec) ;
+        MCDContRelEnds mcdContRelEndsEntitySpec = mcdEntitySpec.getMCDContRelEnds();
+        MCDGSEnd mcdGSEndSpec = new MCDGSEnd(mcdContRelEndsEntitySpec) ;
 
 
         mcdGeneralization.setGen(mcdGSEndGen);
@@ -183,26 +198,26 @@ public class MVCCDElementFactory {
 
         MCDLink mcdLink = new MCDLink(mcdContRelations) ;
 
-        MCDContEndRels mcdContEndRelsEntity = mcdEntity.getMCDContEndRels();
-        MCDLinkEnd mcdLinkEndEntity = new MCDLinkEnd(mcdContEndRelsEntity) ;
+        MCDContRelEnds mcdContRelEndsEntity = mcdEntity.getMCDContRelEnds();
+        MCDLinkEnd mcdLinkEndEntity = new MCDLinkEnd(mcdContRelEndsEntity) ;
 
-        MCDContEndRels mcdContEndRelsAssociation= mcdAssociation.getMCDContEndRels();
-        MCDLinkEnd mcdLinkEndAssociation = new MCDLinkEnd(mcdContEndRelsAssociation) ;
+        MCDContRelEnds mcdContRelEndsAssociation = mcdAssociation.getMCDContRelEnds();
+        MCDLinkEnd mcdLinkEndAssociation = new MCDLinkEnd(mcdContRelEndsAssociation) ;
 
         mcdLink.setEndEntity(mcdLinkEndEntity);
         mcdLink.setEndAssociation(mcdLinkEndAssociation);
 
-        mcdLinkEndEntity.setMcdElement(mcdEntity);
+        mcdLinkEndEntity.setmElement(mcdEntity);
         mcdLinkEndEntity.setMcdLink(mcdLink);
 
-        mcdLinkEndAssociation.setMcdElement(mcdAssociation);
+        mcdLinkEndAssociation.setmElement(mcdAssociation);
         mcdLinkEndAssociation.setMcdLink(mcdLink);
 
         return mcdLink;
     }
 
 
-    private void createContentModel(MCDElement parent) {
+    private void createContentMCDModel(MCDElement parent) {
         createContentPackage(parent);
     }
 
@@ -211,6 +226,164 @@ public class MVCCDElementFactory {
         MCDContEntities mcdContEntities = MVCCDElementFactory.instance().createMCDEntities(parent,Preferences.REPOSITORY_MCD_ENTITIES_NAME);
         MCDContRelations mcdContRelations = MVCCDElementFactory.instance().createMCDContRelations(parent,Preferences.REPOSITORY_MCD_RELATIONS_NAME);
     }
+
+
+
+    public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel){
+        MLDRModelDT mldrModelDT = new MLDRModelDT((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_DT_NAME);
+        namingMLDRModel(mldrModelDT);
+        createContentMLDRModel(mldrModelDT);
+        return mldrModelDT;
+    }
+
+    public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel){
+        MLDRModelTI mldrModelTI = new MLDRModelTI((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_TI_NAME);
+        namingMLDRModel(mldrModelTI);
+        createContentMLDRModel(mldrModelTI);
+        return mldrModelTI;
+    }
+
+    private void namingMLDRModel(MLDRModel mldrModel){
+        Preferences preferences = PreferencesManager.instance().preferences();
+        mldrModel.setNamingLengthActual( preferences.getMLDR_PREF_NAMING_LENGTH());
+        mldrModel.setNamingLengthFuture( preferences.getMLDR_PREF_NAMING_LENGTH());
+        mldrModel.setNamingFormatActual( preferences.getMLDR_PREF_NAMING_FORMAT());
+        mldrModel.setNamingFormatFuture( preferences.getMLDR_PREF_NAMING_FORMAT());
+
+    }
+
+    private void createContentMLDRModel(MLDRModel mldrModel) {
+        MLDRContTables mldrContTable = new MLDRContTables(mldrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
+        MLDRContRelations mldrContRelations = new MLDRContRelations(mldrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
+    }
+
+
+    public MLDRTable createMLDRTable(MDRContTables mdrContTables, MCDEntity entitySource) {
+        MLDRTable mldrTable = new MLDRTable(mdrContTables, entitySource);
+        MLDRContColumns mldrContColumns = new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        MLDRContConstraints mldrContConstraints = new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+        //MLDRContRelEnds mldrContRelEnds = new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
+
+        return mldrTable;
+    }
+
+
+    public MLDRColumn createMLDRColumn(MDRContColumns mdrContColumns, MCDElement mcdElementSource) {
+        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource);
+        return mldrColumn;
+    }
+
+    public MLDRColumn createMLDRColumnFK(MDRContColumns mdrContColumns, MCDElement mcdElementSource, MLDRColumn mldrColumnPK) {
+        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource, mldrColumnPK);
+        return mldrColumn;
+    }
+
+
+    public MLDRPK createMLDRPK(MDRContConstraints mdrContConstraints, MCDElement mcdElementSource) {
+        MLDRPK mldrPK= new MLDRPK(mdrContConstraints, mcdElementSource);
+        return mldrPK;
+    }
+
+    public MLDRParameter createMLDRParameter(MDRConstraint mdrConstraint, IMDRParameter target, MCDElement mcdElementSource) {
+        MLDRParameter mldrParameter = new MLDRParameter(mdrConstraint, target, mcdElementSource);
+        return mldrParameter;
+    }
+
+
+
+    public MLDRFK createMLDRFK(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
+        MLDRFK mldrFK= new MLDRFK(mldrContConstraints, mcdElementSource);
+        Integer indice = MLDRContConstraintsService.nextIndice(mldrContConstraints, mldrFK);
+        mldrFK.setIndice(indice);
+        return mldrFK;
+    }
+
+
+
+    public MLDRRelationFK createMLDRRelationFK( MLDRContRelations mldrContRelations,
+                                                MCDRelation mcdRelation,
+                                                MLDRTable mldrTableParent,
+                                                MLDRTable mldrTableChild) {
+
+
+        MLDRRelationFK mldrRelationFK = new MLDRRelationFK(mldrContRelations, mcdRelation) ;
+
+        MLDRContRelEnds mldrContEndRelsParent = (MLDRContRelEnds) mldrTableParent.getMDRContRelEnds();
+        MLDRRelFKEnd mldrRelFKEndParent = new MLDRRelFKEnd(mldrContEndRelsParent) ;
+
+        MLDRContRelEnds mldrContEndRelsChild = (MLDRContRelEnds) mldrTableChild.getMDRContRelEnds();
+        MLDRRelFKEnd mldrRelFKEndChild = new MLDRRelFKEnd(mldrContEndRelsParent) ;
+
+        mldrRelationFK.setEndParent(mldrRelFKEndParent);
+        mldrRelationFK.setEndChild(mldrRelFKEndChild);
+
+        mldrRelFKEndParent.setMDRTable(mldrTableParent);
+        mldrRelFKEndParent.setMDRRelationFK(mldrRelationFK);
+
+        mldrRelFKEndChild.setMDRTable(mldrTableChild);
+        mldrRelFKEndChild.setMDRRelationFK(mldrRelationFK);
+
+        return mldrRelationFK;
+    }
+
+    public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {
+        MPDROracleModel mpdrOracleModel = new MPDROracleModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_ORACLE_NAME);
+        Preferences preferences = PreferencesManager.instance().preferences();
+        mpdrOracleModel.setNamingLengthActual( preferences.getMPDRORACLE_PREF_NAMING_LENGTH());
+        mpdrOracleModel.setNamingLengthFuture( preferences.getMPDRORACLE_PREF_NAMING_LENGTH());
+        mpdrOracleModel.setNamingFormatActual( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
+        mpdrOracleModel.setNamingFormatFuture( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
+        createContentMPDRModel(mpdrOracleModel);
+        return mpdrOracleModel;
+    }
+
+    public MPDRMySQLModel createMPDRModelMySQL(MLDRModel mldrModel) {
+        MPDRMySQLModel mpdrMySQLModel = new MPDRMySQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_MYSQL_NAME);
+        Preferences preferences = PreferencesManager.instance().preferences();
+        mpdrMySQLModel.setNamingLengthActual( preferences.getMPDRMYSQL_PREF_NAMING_LENGTH());
+        mpdrMySQLModel.setNamingLengthFuture( preferences.getMPDRMYSQL_PREF_NAMING_LENGTH());
+        mpdrMySQLModel.setNamingFormatActual( preferences.getMPDRMYSQL_PREF_NAMING_FORMAT());
+        mpdrMySQLModel.setNamingFormatFuture( preferences.getMPDRMYSQL_PREF_NAMING_FORMAT());
+        createContentMPDRModel(mpdrMySQLModel);
+        return mpdrMySQLModel;
+    }
+
+    public MPDRPostgreSQLModel createMPDRModelPostgreSQL(MLDRModel mldrModel) {
+        MPDRPostgreSQLModel mpdrPostgreSQLModel = new MPDRPostgreSQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME);
+        createContentMPDRModel(mpdrPostgreSQLModel);
+        return mpdrPostgreSQLModel;
+    }
+    
+
+    private void createContentMPDRModel(MPDRModel mpdrModel) {
+        MDRContTables mdrContTable = new MDRContTables(mpdrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
+    }
+
+    public MPDROracleTable createMPDROracleTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
+        MPDROracleTable mpdrOracleTable = new MPDROracleTable(mdrContTables, mldrTable);
+        MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrOracleTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        return mpdrOracleTable;
+    }
+
+    public MPDRMySQLTable createMPDRMySQLTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
+        MPDRMySQLTable mpdrMySQLTable = new MPDRMySQLTable(mdrContTables, mldrTable);
+        MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrMySQLTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        return mpdrMySQLTable;
+    }
+
+    public MPDRMySQLColumn createMPDRMySQLColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn) {
+        MPDRMySQLColumn mpdrMySQLColumn = new MPDRMySQLColumn(mdrContColumns, mldrColumn);
+        return mpdrMySQLColumn;
+    }
+
+    public MPDRPostgreSQLTable createMPDRPostgreSQLTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
+        MPDRPostgreSQLTable mpdrPostgreSQLTable = new MPDRPostgreSQLTable(mdrContTables, mldrTable);
+        MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrPostgreSQLTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        return mpdrPostgreSQLTable;
+    }
+
+
+
 
 
     public ProjectElement createMVCCDElementFromXML(String baliseName, ProjectElement ancestor){
@@ -232,5 +405,4 @@ public class MVCCDElementFactory {
         }
     }
 
-
-}
+ }

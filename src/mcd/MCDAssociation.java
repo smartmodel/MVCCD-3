@@ -1,19 +1,26 @@
 package mcd;
 
+import constraints.Constraint;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
-import m.IMCompliant;
+import m.interfaces.IMCompletness;
 import m.MRelationDegree;
 import m.services.MRelationService;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAssociationService;
-import mcd.services.MCDElementService;
 import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import stereotypes.Stereotype;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
 
-public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDParameter {
+import java.util.ArrayList;
+
+public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDParameter {
 
     private  static final long serialVersionUID = 1000;
 
@@ -69,69 +76,18 @@ public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDPara
 
     @Override
     public String getNameTree(){
-        /*
-        String resultat = "";
+        String namingAssociation = computeNamingAssociation();
+        return MCDRelationService.getNameTree(this, namingAssociation, false, null);
+    }
 
-        MCDEntity entityFrom = getFrom().getMcdEntity();
-        MCDEntity entityTo = getTo().getMcdEntity();
+    public String getNamePath(int pathMode){
+        String namingAssociation = computeNamingAssociation();
+        return MCDRelationService.getNameTree(this, namingAssociation, true, pathMode);
+    }
 
-        MVCCDElement containerAssociation = this.getParent().getParent();
-
-
-        MVCCDElement containerEntityFrom = entityFrom.getParent().getParent();
-        MVCCDElement containerEntityTo = entityTo.getParent().getParent();
-
-        boolean c1a = containerEntityFrom == containerAssociation;
-        boolean c1b = containerEntityTo == containerAssociation;
-        boolean c1 = c1a && c1b;
-        String treeNaming = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
-        boolean c3 = treeNaming.equals(Preferences.MCD_NAMING_NAME);
-        boolean c4 = treeNaming.equals(Preferences.MCD_NAMING_SHORT_NAME);
-
-        boolean r1 = c1 && c3;
-        boolean r2 = c1 && c4;
-        boolean r3 = (!c1) && c3;
-        boolean r4 = (!c1) && c4;
-
-        String nameEntityFrom = "";
-        String nameEntityTo = "";
-
-        if (r1){
-            nameEntityFrom = entityFrom.getName();
-            nameEntityTo = entityTo.getName();
-        }
-
-        if (r2){
-            nameEntityFrom = entityFrom.getShortNameSmart();
-            nameEntityTo = entityTo.getShortNameSmart();
-        }
-
-        if (r3){
-            nameEntityFrom = entityFrom.getNamePath(MCDElementService.PATHSHORTNAME);
-            nameEntityTo = entityTo.getNamePath(MCDElementService.PATHSHORTNAME);
-        }
-
-        if (r4){
-            nameEntityFrom = entityFrom.getShortNameSmartPath();
-            nameEntityTo = entityTo.getShortNameSmartPath();
-        }
-
+    private String computeNamingAssociation(){
         String namingAssociation ;
-        if (StringUtils.isNotEmpty(getFrom().getName())  && StringUtils.isNotEmpty(getTo().getName())){
-            namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT +
-                    getFrom().getName() +
-                    Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR  +
-                    getTo().getName() +
-                    Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT;
-        } else {
-            namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
-                    this.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
-        }
-        resultat = nameEntityFrom + namingAssociation + nameEntityTo;
 
-         */
-
-        String namingAssociation ;
         if (StringUtils.isNotEmpty(getFrom().getName())  && StringUtils.isNotEmpty(getTo().getName())){
             namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT +
                     getFrom().getName() +
@@ -143,7 +99,7 @@ public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDPara
                     this.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
         }
 
-        return MCDRelationService.getNameTreeBetweenEntities(this, namingAssociation);
+        return namingAssociation;
     }
 
     public MCDAssEnd getMCDAssEndOpposite(MCDAssEnd mcdAssEnd) {
@@ -156,6 +112,15 @@ public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDPara
 
         throw new CodeApplException("L'extrémité d'association passée en paramètre n'existe pas pour cette association ");
 
+    }
+
+    public MCDContRelEnds getMCDContRelEnds() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MCDContRelEnds) {
+                return (MCDContRelEnds) mvccdElement;
+            }
+        }
+        return null;
     }
 
     public MCDAssociationNature getNature() {
@@ -219,6 +184,10 @@ public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDPara
         return false;
     }
 
+    public boolean isDegreeNN(){
+        return getDegree() == MRelationDegree.DEGREE_MANY_MANY;
+    }
+
     public MRelationDegree getDegree(){
         return MRelationService.computeDegree(getFrom().getMultiMaxStd(), getTo().getMultiMaxStd());
     }
@@ -227,5 +196,63 @@ public class MCDAssociation extends MCDRelation implements IMCompliant, IMCDPara
     @Override
     public String getClassShortNameUI() {
         return CLASSSHORTNAMEUI;
+    }
+
+    @Override
+    public ArrayList<Stereotype> getToStereotypes() {
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        if (PreferencesManager.instance().preferences().getGENERAL_RELATION_NOTATION().equals(
+                Preferences.GENERAL_RELATION_NOTATION_STEREOTYPES)){
+            if (isIdComp()){
+                resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                        preferences.STEREOTYPE_CID_LIENPROG));
+            }
+            if (isIdNatural()){
+                resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                        preferences.STEREOTYPE_NID_LIENPROG));
+            }
+        }
+
+        if (isCP()){
+            resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_CP_LIENPROG));
+        }
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<Constraint> getToConstraints() {
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        if (frozen){
+            resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                    preferences.CONSTRAINT_FROZEN_LIENPROG));
+        }
+        if (deleteCascade){
+            resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                    preferences.CONSTRAINT_DELETECASCADE_LIENPROG));
+        }
+        if (oriented != null){
+            if (oriented){
+                resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                        preferences.CONSTRAINT_ORIENTED_LIENPROG));
+            } else {
+                resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                        preferences.CONSTRAINT_NONORIENTED_LIENPROG));
+            }
+        }
+
+        return resultat;
+    }
+
+    public boolean isReflexive(){
+        return getFrom().getMcdEntity() == getTo().getMcdEntity();
     }
 }

@@ -204,4 +204,13 @@ public class MCDAssEndService {
         }
         return messages;
     }
+
+    public static ArrayList<MCDAssEnd> getOpposites (ArrayList<MCDAssEnd> mcdAssEnds ){
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : mcdAssEnds){
+            resultat.add(mcdAssEnd.getMCDAssEndOpposite());
+        }
+        return resultat ;
+
+    }
 }

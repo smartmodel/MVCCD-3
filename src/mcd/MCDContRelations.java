@@ -14,14 +14,18 @@ public class MCDContRelations extends MCDElement{
         super (parent);
     }
 
+    /*
     public static MCDContRelations getMCDContRelationsByNamePath(int pathMode, String namePath){
-        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){
-            if (mcdElement instanceof MCDContRelations){
-                return (MCDContRelations) mcdElement;
+        for (MCDContRelations mcdContRelations : ProjectService.getMCDContRelations()){
+            if (mcdContRelations.getNamePath(pathMode).equals(namePath)){
+                return mcdContRelations;
+
             }
         }
         return null;
     }
+
+     */
 
 
 }

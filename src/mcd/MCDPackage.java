@@ -1,11 +1,17 @@
 package mcd;
 
-import m.IMCompliant;
+import m.interfaces.IMCompletness;
+import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
+import mcd.services.MCDElementService;
+import mcd.services.MCDPackageService;
 import project.ProjectElement;
+import project.ProjectService;
+
+import java.util.ArrayList;
 
 public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDNamePathParent,
-        IMCDContPackages, IMCDContContainer, IMCDContainer, IMCompliant {
+        IMCDContPackages, IMCDContContainer, IMCDContainer, IMCompletness {
 
     private static final long serialVersionUID = 1000;
 
@@ -57,5 +63,26 @@ public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDName
     }
 
 
+    public ArrayList<MCDEntity> getMCDEntities(){
+        return MCDPackageService.getMCDEntities(this);
+    }
+
+    public ArrayList<String> treatCompliant(){
+        MCDCompliant mcdCompliant = new MCDCompliant();
+        ArrayList<String> resultat = mcdCompliant.check(getMCDEntities(), false);
+        return resultat;
+    }
+
+    public int getLevel(){
+        return MCDPackageService.getLevel(this);
+    }
+
+    public IMCDModel getIMCDModelAccueil(){
+        return MCDElementService.getIMCDModelAccueil(this);
+    }
+
+    public MCDModel getMCDModelAccueil(){
+        return MCDElementService.getMCDModelAccueil(this);
+    }
 
 }

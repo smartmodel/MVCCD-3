@@ -2,16 +2,13 @@ package repository.editingTreat;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDContEntities;
-import mcd.MCDEntity;
+import main.MVCCDWindow;
+import mcd.MCDPackage;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
 import utilities.window.editor.DialogEditor;
 import project.Project;
 import utilities.window.editor.PanelInputContent;
-import window.editor.entity.EntityEditor;
-import window.editor.entity.EntityInputContent;
 import window.editor.project.ProjectEditor;
-import window.editor.project.ProjectInputContent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,8 +23,10 @@ public class ProjectEditingTreat  extends EditingTreat {
         fen.setVisible(true);
 
         Project project = (Project) fen.getMvccdElementNew();
-        MVCCDManager.instance().setProject(project);
-        MVCCDManager.instance().completeNewProject();
+        if (project != null) {
+            MVCCDManager.instance().setProject(project);
+            MVCCDManager.instance().completeNewProject();
+        }
     }
 
 
@@ -38,10 +37,6 @@ public class ProjectEditingTreat  extends EditingTreat {
         fen.setVisible(true);
     }
 
-    @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        return null;
-    }
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
@@ -57,6 +52,5 @@ public class ProjectEditingTreat  extends EditingTreat {
     protected String getPropertyTheElement() {
         return null;
     }
-
 
 }

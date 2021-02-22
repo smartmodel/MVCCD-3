@@ -23,6 +23,10 @@ public class MDDatatypesManager {
     private MCDDatatype profileMCDDatatypeRoot;
     private MCDDatatype projectMCDDatatypeRoot;
 
+    private MLDRDatatype defaultMLDRDatatypeRoot;
+    private MLDRDatatype profileMLDRDatatypeRoot;
+    private MLDRDatatype projectMLDRDatatypeRoot;
+
     public static synchronized MDDatatypesManager instance(){
         if(instance == null){
             instance = new MDDatatypesManager();
@@ -35,6 +39,9 @@ public class MDDatatypesManager {
         MCDDatatypesCreateDefault createDefaultMCD = new MCDDatatypesCreateDefault(
                 applicationMDDatatypes);
         defaultMCDDatatypeRoot = createDefaultMCD.create();
+        MLDRDatatypesCreateDefault createDefaultMLDR = new MLDRDatatypesCreateDefault(
+                applicationMDDatatypes);
+        defaultMLDRDatatypeRoot = createDefaultMLDR.create();
 
 
     }
@@ -54,6 +61,16 @@ public class MDDatatypesManager {
             return projectMCDDatatypeRoot;
         } else  if (defaultMCDDatatypeRoot != null){
             return defaultMCDDatatypeRoot;
+        } else {
+            return null;
+        }
+    }
+
+    public MLDRDatatype mldrDatatypeRoot (){
+        if (projectMLDRDatatypeRoot!= null){
+            return projectMLDRDatatypeRoot;
+        } else  if (defaultMLDRDatatypeRoot != null){
+            return defaultMLDRDatatypeRoot;
         } else {
             return null;
         }
@@ -104,6 +121,18 @@ public class MDDatatypesManager {
         return projectMCDDatatypeRoot;
     }
 
+    public MLDRDatatype getDefaultMLDRDatatypeRoot() {
+        return defaultMLDRDatatypeRoot;
+    }
+
+    public MLDRDatatype getProfileMLDRDatatypeRoot() {
+        return profileMLDRDatatypeRoot;
+    }
+
+    public MLDRDatatype getProjectMLDRDatatypeRoot() {
+        return projectMLDRDatatypeRoot;
+    }
+
     // Pour plus tard ...
 /*
     public void createProfile() {
@@ -126,6 +155,35 @@ public class MDDatatypesManager {
 
     public ArrayList<MCDDatatype> getMCDDatatypesByRoot(MCDDatatype root, int treatAbstrait){
         ArrayList<MCDDatatype> resultat = new ArrayList<MCDDatatype>();
+        for (MDDatatype mdDatatype : getMDDatatypesByRoot(root, treatAbstrait)){
+            if (mdDatatype instanceof MCDDatatype){
+                resultat.add((MCDDatatype) mdDatatype);
+            }
+        }
+        return resultat;
+    }
+
+    public ArrayList<String> getMLDRDatatypesNames (int treatAbstrait){
+        ArrayList<MLDRDatatype> mldrDatatypes =  getMLDRDatatypes(treatAbstrait);
+        return MVCCDElementService.convertArrayMVCCDElementsToNames(mldrDatatypes);
+    }
+
+    public ArrayList<MLDRDatatype> getMLDRDatatypes (int treatAbstrait){
+        return getMLDRDatatypesByRoot(mldrDatatypeRoot(), treatAbstrait);
+    }
+
+    public ArrayList<MLDRDatatype> getMLDRDatatypesByRoot(MLDRDatatype root, int treatAbstrait){
+        ArrayList<MLDRDatatype> resultat = new ArrayList<MLDRDatatype>();
+        for (MDDatatype mdDatatype : getMDDatatypesByRoot(root, treatAbstrait)){
+            if (mdDatatype instanceof MLDRDatatype){
+                resultat.add((MLDRDatatype) mdDatatype);
+            }
+        }
+        return resultat;
+    }
+
+    public ArrayList<MDDatatype> getMDDatatypesByRoot(MDDatatype root, int treatAbstrait){
+        ArrayList<MDDatatype> resultat = new ArrayList<MDDatatype>();
         boolean r1 = treatAbstrait == BOTH;
         boolean r2 = (treatAbstrait == CONCRET) && (!root.isAbstrait());
         boolean r3 = (treatAbstrait == ABSTRAIT) && root.isAbstrait();
@@ -133,10 +191,8 @@ public class MDDatatypesManager {
             resultat.add(root);
         }
         for (MDDatatype mdDatatype : MDDatatypeService.getChilds(root)){
-            if (mdDatatype instanceof MCDDatatype){
-                resultat.addAll(getMCDDatatypesByRoot((MCDDatatype) mdDatatype, treatAbstrait));
-            }
+            resultat.addAll(getMDDatatypesByRoot(mdDatatype, treatAbstrait));
         }
         return resultat;
     }
- }
+}

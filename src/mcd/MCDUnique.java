@@ -3,6 +3,7 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -18,7 +19,7 @@ public class MCDUnique extends MCDUnicity{
     public static final String CLASSSHORTNAMEUI = "Unique";
 
 
-    private boolean absolute = false;
+    //private boolean absolute = false;
 
     public MCDUnique(ProjectElement parent) {
 
@@ -34,7 +35,7 @@ public class MCDUnique extends MCDUnicity{
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
         Preferences preferences = PreferencesManager.instance().preferences();
         return stereotypes.getStereotypeByLienProg(MCDUnique.class.getName(),
-                preferences.STEREOTYPE_U_BASE_LIENPROG,
+                preferences.STEREOTYPE_U_LIENPROG,
                 getOrderIndexInParentSameClass() + 1);
     }
 
@@ -50,32 +51,15 @@ public class MCDUnique extends MCDUnicity{
         return resultat;
     }
 
-    @Override
-    public ArrayList<Constraint> getToConstraints() {
-        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
 
-        Constraints constraints = ConstraintsManager.instance().constraints();
-        Preferences preferences = PreferencesManager.instance().preferences();
-
-        if (absolute){
-            resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
-                    preferences.CONSTRAINT_ABSOLUTE_LIENPROG));
-        }
-
-        return resultat;
-    }
-
-
-    public boolean isAbsolute() {
-        return absolute;
-    }
-
-    public void setAbsolute(boolean absolute) {
-        this.absolute = absolute;
-    }
 
     @Override
     public String getClassShortNameUI() {
         return CLASSSHORTNAMEUI;
+    }
+
+    @Override
+    public String getOfUnicity() {
+        return MessagesBuilder.getMessagesProperty("of.unique.2");
     }
 }

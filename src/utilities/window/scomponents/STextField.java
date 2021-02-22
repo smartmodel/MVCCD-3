@@ -8,15 +8,24 @@ import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;
 
+/**
+ * Est une extension de JTextField.
+ */
 public class STextField extends JTextField implements SComponent {
 
+    // Valeur d'initialisation
     private String oldText ;
-    //private boolean firstAffectation = true;
+    // Erreur empêchant la sauvegarde du formulaire
     private boolean checkPreSave = false;
+    // Lecture seule
     private boolean readOnly = false;
+    // Panneau contenant le composant
     private IPanelInputContent panel;
+    // Mise en évidence d'erreur ou incohérence
     private int color;
+    // Erreur
     private boolean errorInput = false;
+    // Etiquette attachée au formulaire
     private  JLabel label;
 
     public STextField(IPanelInputContent panel) {
@@ -25,6 +34,11 @@ public class STextField extends JTextField implements SComponent {
         this.setColor(SComponent.COLORNORMAL);
     }
 
+    /**
+     * Constructeur d'un champ texte (TextField).
+     * @param panel Le panneau qui contient le composant textField. Le panneau doit réaliser l'interface IPanelInputContent.
+     * @param label L'étiquette associtée au champ de saisie.
+     */
     public STextField(IPanelInputContent panel, JLabel label) {
         super();
         this.panel = panel;
@@ -41,7 +55,6 @@ public class STextField extends JTextField implements SComponent {
         if (! panel.isDataInitialized()) {
             oldText = text;
         }
-        //firstAffectation = false;
     }
 
 
@@ -82,14 +95,14 @@ public class STextField extends JTextField implements SComponent {
             updated =  StringUtils.isNotEmpty(oldText);
         }
 
-        // Si ce n'est pas un appel directement pour le contrôle de conformité
+        // Si ce n'est pas un appel directement pour le contrôle de complétude
         if (panel.getEditor() != null) {
             if (panel.getEditor().getMode().equals(DialogEditor.NEW)) {
                 updated = true;
             }
         }
         if (updated) {
-            MVCCDManager.instance().datasProjectChangedFromEditor();
+            //MVCCDManager.instance().datasProjectChangedFromEditor();
         }
         return updated;
     }

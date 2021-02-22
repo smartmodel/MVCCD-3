@@ -1,3 +1,6 @@
+/**
+ * Paquetage de base du projet utilisateur géré par MVC-CD-3.
+ */
 package project;
 
 import main.MVCCDElement;
@@ -11,6 +14,11 @@ import profile.Profile;
 import profile.ProfileLoaderXml;
 import profile.ProfileManager;
 
+/**
+ * Classe maitresse du projet utilisateur.
+ * Divers attributs permettent de mémoriser les caractéristiques du projet utilisateur.
+ * Le projet est un élément du référentiel (hérite de MVCCDElement).
+ */
 public class Project extends ProjectElement {
 
     private static final long serialVersionUID = 1000;
@@ -38,6 +46,12 @@ public class Project extends ProjectElement {
     private boolean lastWinRepositoryExpand = false;
 
 
+    /**
+     * Le projet n'a pas de parent ! Par contre, il est rattaché à la racine de l'arbre de visualisation du référentiel
+     * pour pouvoir le visualiser. Le rattachement se fait par la commande repository.addProject(project) de la méthode
+     * projectToRepository() de la classe MVCCDManager.
+     * @param name
+     */
     public Project(String name) {
 
         super(null, name);

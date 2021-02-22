@@ -1,8 +1,7 @@
 package mcd;
 
 import constraints.Constraint;
-import constraints.Constraints;
-import constraints.ConstraintsManager;
+import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -39,9 +38,11 @@ public class MCDNID extends MCDUnicity {
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
         Preferences preferences = PreferencesManager.instance().preferences();
         return stereotypes.getStereotypeByLienProg(MCDNID.class.getName(),
-                preferences.STEREOTYPE_NID_BASE_LIENPROG,
+                preferences.STEREOTYPE_NID_LIENPROG,
                 getOrderIndexInParentSameClass() + 1);
     }
+
+
 
     @Override
     public ArrayList<Stereotype> getToStereotypes() {
@@ -60,12 +61,6 @@ public class MCDNID extends MCDUnicity {
         return resultat;
     }
 
-    @Override
-    public ArrayList<Constraint> getToConstraints() {
-        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
-        return resultat;
-    }
-
 
     public boolean isLienProg() {
         return lienProg;
@@ -73,5 +68,10 @@ public class MCDNID extends MCDUnicity {
 
     public void setLienProg(boolean lienProg) {
         this.lienProg = lienProg;
+    }
+
+    @Override
+    public String getOfUnicity() {
+        return MessagesBuilder.getMessagesProperty("of.nid.2");
     }
 }

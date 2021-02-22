@@ -74,8 +74,9 @@ public class MCDTitlePanel {
                     }
 
                     if (posOption == 2) {
-                        IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
-                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllMCDEntitiesInIModel(iMCDModel);
+                        //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
+                        IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
+                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
 
                         MCDEntity mcdEntityFrom = null;
                         MCDEntity mcdEntityTo= null;
@@ -90,12 +91,13 @@ public class MCDTitlePanel {
                         MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
                         MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
                         MCDAssociation newMCDAssociation = mcdAssociationEditingTreat.treatNew(mvccdWindow, mcdContRelations,
-                                mcdEntityFrom, mcdEntityTo, MCDAssociationNature.NOID);
+                                mcdEntityFrom, mcdEntityTo, MCDAssociationNature.NOID, false);
                     }
 
                     if (posOption == 3) {
-                        IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
-                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllMCDEntitiesInIModel(iMCDModel);
+                        //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
+                        IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
+                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
 
                         MCDEntity mcdEntityGen = null;
                         MCDEntity mcdEntitySpec= null;
@@ -110,12 +112,13 @@ public class MCDTitlePanel {
                         MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
                         MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
                         MCDGeneralization newMCDGeneralization = mcdGeneralizationEditingTreat.treatNew(mvccdWindow, mcdContRelations,
-                                mcdEntityGen, mcdEntitySpec);
+                                mcdEntityGen, mcdEntitySpec, false);
                     }
 
                     if (posOption == 4) {
-                        IMCDModel iMCDModel = IMCDModelService.getIModelContainer((MCDElement) parent);
-                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getAllMCDEntitiesInIModel(iMCDModel);
+                        //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
+                        IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
+                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
                         ArrayList<MCDAssociation> mcdAssociations = IMCDModelService.getAllMCDAssociationsInIModel(iMCDModel);
 
                         MCDEntity mcdEntity = null;
@@ -130,7 +133,7 @@ public class MCDTitlePanel {
                         MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
                         MCDLinkEditingTreat mcdLinkEditingTreat = new MCDLinkEditingTreat();
                         MCDLink newMCDLink= mcdLinkEditingTreat.treatNew(mvccdWindow, mcdContRelations,
-                                mcdEntity, mcdAssociation);
+                                mcdEntity, mcdAssociation, false);
                     }
 
                     if (fen != null) {
@@ -159,15 +162,14 @@ public class MCDTitlePanel {
                     diagram.setParent(parent);
                     diagram.setName(fieldName.getText());
                     MVCCDManager.instance().addNewMVCCDElementInRepository(diagram);
-                    MVCCDManager.instance().setDatasProjectChanged(true);
                     created = true;
                 } else {
                     // Mise à jour
                     diagram.setName(fieldName.getText());
                     MVCCDManager.instance().showMVCCDElementInRepository(diagram);
-                    //TODO-1 Véfier la mise à jour effective
-                    MVCCDManager.instance().setDatasProjectChanged(true);
                 }
+                //TODO-1 Véfier la mise à jour effective
+                MVCCDManager.instance().setDatasProjectChanged(true);
             }
         });
 

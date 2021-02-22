@@ -43,6 +43,11 @@ public class PrefApplicationEditor extends DialogEditor {
     }
 
     @Override
+    protected String getPropertyTitleRead() {
+        return "preferences.application.read";
+    }
+
+    @Override
     protected PanelButtons getButtonsCustom() {
         return new PrefApplicationButtons(this);
     }
@@ -74,7 +79,8 @@ public class PrefApplicationEditor extends DialogEditor {
 
     @Override
     public void windowActivated(WindowEvent windowEvent) {
-        MVCCDManager.instance().setDatasEdited(false);
+        //MVCCDManager.instance().setDatasEdited(false);
+        super.setDatasApplicationPreferencesEdited(true);
     }
 
     @Override

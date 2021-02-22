@@ -1,6 +1,9 @@
 package constraints;
 
+import datatypes.MCDDatatype;
+import exceptions.CodeApplException;
 import main.MVCCDElement;
+import messages.MessagesBuilder;
 
 import java.util.ArrayList;
 
@@ -35,7 +38,20 @@ public class Constraints extends MVCCDElement {
                 return constraint;
             }
         }
-        return null;
+        String message = MessagesBuilder.getMessagesProperty("error.constraint.lienProg",
+                new String[] {lienProg, className} );
+        throw new CodeApplException(this.getClass().getName() + " - " + message);
+    }
+
+    public Constraint getConstraintByName(String className, String name){
+        for (Constraint constraint : getConstraintsByClassName(className)){
+            if (constraint.getName().equals(name)){
+                return constraint;
+            }
+        }
+        String message = MessagesBuilder.getMessagesProperty("error.constraint.name",
+                new String[] {name, className} );
+        throw new CodeApplException(this.getClass().getName() + " - " + message);
     }
 
     public ArrayList<Constraint> getConstraintByClassNameAndNames(String className,
@@ -51,4 +67,18 @@ public class Constraints extends MVCCDElement {
         }
         return resultat;
     }
+
+
+
+
+    public String convertNameToLienProg(String className, String name){
+        Constraint constraint = getConstraintByName(className, name);
+        return constraint.getLienProg();
+    }
+
+    public String convertLienProgToName(String className, String lienProg){
+        Constraint constraint = getConstraintByLienProg(className, lienProg);
+        return constraint.getName();
+    }
+
 }

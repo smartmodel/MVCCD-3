@@ -44,10 +44,10 @@ public class ProjectSaverXml {
             addPropertiesProject(document, racine);
 
             //Preferences Project
-            preferenceProject(document, racine);
+            preferenceProject(document, racine); //TODO-STB: utiliser PreferencesManager.getProjectPref
 
             // Element MCD
-            MCDContModels elementMcd = (MCDContModels) project.getChilds().get(1);
+            MCDContModels elementMcd = (MCDContModels) project.getChilds().get(1); //TODO-STB: PAS: Ajouter méthode propre dans MCDContModels. le get(0) c'est les préférences, le (1) c'est le MCD. Ce serait à revoir pour s'assurer de rechercher vraiment le bon.
             Element mcd = document.createElement(elementMcd.getName());
             racine.appendChild(mcd);
 
@@ -611,14 +611,14 @@ public class ProjectSaverXml {
         links.appendChild(link);
 
         // Récupération de l'association
-        MCDLinkEnd endAssociation = mcdLink.getEndAssociation();
+        MCDLinkEnd linkEnd = mcdLink.getEndAssociation(); //TODO-STB: peut-être prévoir une méthode qui retourne directement l'association MCD et pas ele End. //Dans la méthode, le A est l'entité associative et le B est l'association
         Element association = doc.createElement("association");
         Element name = doc.createElement("name");
         association.appendChild(name);
-        if (!endAssociation.getMcdElement().getName().equals("")) {
-            name.appendChild(doc.createTextNode((endAssociation.getMcdElement().getNamePath(1))));
+        if (!linkEnd.getName().equals("")) { //TODO-STB: c'était avant endAssociation.getMcdElement().getName().equals("")
+            name.appendChild(doc.createTextNode((linkEnd.getNamePath(1)))); //TODO-STB: c'était avant endAssociation.getMcdElement().getNamePath(...)
         } else {
-            MCDAssociation mcdAssociation = (MCDAssociation) endAssociation.getMcdElement();
+            MCDAssociation mcdAssociation = (MCDAssociation) linkEnd.getmElement(); //TODO-STB: C'était avant (MCDAssociation) linkEnd.getMcdElement()
             MCDAssEnd from = mcdAssociation.getFrom();
             MCDAssEnd to = mcdAssociation.getTo();
 
@@ -635,7 +635,7 @@ public class ProjectSaverXml {
         // Récupération de l'entité
         MCDLinkEnd endEntity = mcdLink.getEndEntity();
         Element entity = doc.createElement("entity");
-        entity.appendChild(doc.createTextNode(endEntity.getMcdElement().getNamePath(1)));
+        entity.appendChild(doc.createTextNode(((MCDElement) endEntity.getmElement()).getNamePath(1))); //TODO-STB: c'était avant entity.appendChild(doc.createTextNode(endEntity.getMCDElement().getNamePath(1)));
         link.appendChild(entity);
 
     }

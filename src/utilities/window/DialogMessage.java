@@ -1,3 +1,6 @@
+/**
+ * Librairie qui étend les fonctionnalités de Swing pour MVC-CD-3.
+ */
 package utilities.window;
 
 import messages.MessagesBuilder;
@@ -5,6 +8,10 @@ import messages.MessagesBuilder;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Simplifie l'utilisataion de JOptionPane en faisant appel à des méthodes spécifiques.
+ * (voir par exemple la méthode showConfirmYesNo_No)
+ */
 public class DialogMessage {
 
 

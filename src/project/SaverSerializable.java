@@ -25,7 +25,7 @@ public class SaverSerializable {
 
             // Quittance de fin
             String message = MessagesBuilder.getMessagesProperty ("project.saved",
-                    new String[] {MVCCDManager.instance().getProject().getName() });
+                    new String[] {MVCCDManager.instance().getProject().getName(), file.getPath() });
             DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(),message);
 
         } catch (Exception  ex) {

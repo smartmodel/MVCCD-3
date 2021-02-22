@@ -1,14 +1,18 @@
 package mcd;
 
+import m.interfaces.IMCompletness;
 import main.MVCCDElement;
-import mcd.interfaces.IMCDParameter;
+import mcd.interfaces.IMCDElementWithTargets;
+import md.MDElement;
+import md.services.MDElementConvert;
+import mldr.interfaces.IMLDRElement;
 import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public abstract class MCDOperation extends MCDElement {
+public abstract class MCDOperation extends MCDElement implements IMCompletness, IMCDElementWithTargets {
 
-    private  static final long serialVersionUID = 1000;
+    private static final long serialVersionUID = 1000;
 
     public MCDOperation(ProjectElement parent) {
 
@@ -22,8 +26,8 @@ public abstract class MCDOperation extends MCDElement {
 
     public ArrayList<MCDParameter> getParameters() {
         ArrayList<MCDParameter> parameters = new ArrayList<MCDParameter>();
-        for (MVCCDElement mvccdElement : getChilds()){
-            if (mvccdElement instanceof MCDParameter){
+        for (MVCCDElement mvccdElement : getChilds()) {
+            if (mvccdElement instanceof MCDParameter) {
                 parameters.add((MCDParameter) mvccdElement);
             }
         }

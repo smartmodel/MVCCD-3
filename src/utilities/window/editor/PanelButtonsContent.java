@@ -2,12 +2,10 @@ package utilities.window.editor;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDAttribute;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
-import project.ProjectService;
 import utilities.files.UtilFiles;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.SButton;
@@ -15,8 +13,6 @@ import utilities.window.services.ComponentService;
 import window.help.HelpWindow;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,15 +22,16 @@ public abstract class PanelButtonsContent extends PanelContent
 
     private JPanel panel = new JPanel();
     protected SButton btnOk ;
-    protected SButton btnCancel ;
+    protected SButton btnClose;
     protected SButton btnApply ;
     protected SButton btnUndo;
     private SButton btnHelp ;
+    protected SButton btnReInit ;
     private JTextArea messages ;
     private JScrollPane messagesScroll;
     private PanelButtons panelButtons;
     private Box bVer ;
-    private Box btns ;
+    protected Box btns ;
 
 
     public PanelButtonsContent(PanelButtons panelButtons) {
@@ -73,17 +70,26 @@ public abstract class PanelButtonsContent extends PanelContent
         btnUndo.setToolTipText("Annuler la saisie effectuée depuis le dernier enregistrement");
         btnUndo.setEnabled(false);
         btns.add(btnUndo);
+
+        btnReInit= new SButton("Réinitialiser");
+        btnReInit.addActionListener(this);
+        //TODO-1 Affiner le message selon qu'un profil est existant ou pas
+        // Depuis le profil s'il existe, sinon depuis les préférences de l'application
+        btnReInit.setToolTipText("Réinitiliser les valeurs");
+        btnReInit.setVisible(false);
+        btns.add(btnReInit);
         btns.add(Box.createGlue());
+
         btnOk = new SButton("Ok");
         btnOk.addActionListener(this);
         btnOk.setToolTipText("Enregistrer la saisie et fermer la fenêtre");
         btnOk.setEnabled(false);
         btns.add(btnOk);
         btns.add(Box.createHorizontalStrut(Preferences.JPANEL_HGAP));
-        btnCancel = new SButton("Fermer");
-        btnCancel.addActionListener(this);
-        btnCancel.setToolTipText("Fermer la fenêtre sans enregistrer la saisie effectuée depuis le dernier enregistrement");
-        btns.add(btnCancel);
+        btnClose = new SButton("Fermer");
+        btnClose.addActionListener(this);
+        btnClose.setToolTipText("Fermer la fenêtre sans enregistrer la saisie effectuée depuis le dernier enregistrement");
+        btns.add(btnClose);
         btns.add(Box.createHorizontalStrut(Preferences.JPANEL_HGAP));
         btnApply = new SButton("Appliquer");
         btnApply.addActionListener(this);
@@ -139,8 +145,8 @@ public abstract class PanelButtonsContent extends PanelContent
         return btnOk;
     }
 
-    public JButton getBtnCancel() {
-        return btnCancel;
+    public JButton getBtnClose() {
+        return btnClose;
     }
 
     public JButton getBtnApply() {
@@ -204,8 +210,12 @@ public abstract class PanelButtonsContent extends PanelContent
             // Seulement en update
             treatReset();
         }
-        if (source == btnCancel) {
-            getEditor().myDispose();
+        if (source == btnReInit) {
+            // Seulement en update
+            treatReInit();
+        }
+        if (source == btnClose) {
+            getEditor().confirmClose();
         }
         if (source == btnHelp) {
             treatHelp();
@@ -228,7 +238,15 @@ public abstract class PanelButtonsContent extends PanelContent
         getInputContent().enabledButtons();
     }
 
-    private void treatUpdate(){
+
+    protected void treatReInit(){
+        getInputContent().reInitDatas(getEditor().getMvccdElementCrt());
+        // Effacement des éventuels anciens messages
+        clearMessages();
+        getInputContent().enabledButtons();
+    }
+
+    public void treatUpdate(){
         saveDatas(getEditor().getMvccdElementCrt());
         getEditor().setDatasChanged(true);
         getInputContent().restartChange();
@@ -237,7 +255,9 @@ public abstract class PanelButtonsContent extends PanelContent
         MVCCDManager.instance().showMVCCDElementInRepository(getEditor().getMvccdElementCrt());
 
         if (getEditor().isDatasChanged()) {
-            MVCCDManager.instance().setDatasProjectChanged(true);
+            if (getEditor().isDatasProjectElementEdited()) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
         }
     }
 

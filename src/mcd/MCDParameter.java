@@ -28,14 +28,22 @@ public class MCDParameter extends MCDElement {
 
     public String getName() {
         if (target != null){
-            return target.getName();
+            return target.getNameTree();
         } else {
             return super.getName();
         }
     }
 
+    public String getNameTree() {
+        if (target != null){
+            return target.getNameTree();
+        } else {
+            return super.getNameTree();
+        }
+    }
+
     public String toString(){
-        return getName();
+        return getNameTree();
     }
 
     public static String getClassShortNameUI() {

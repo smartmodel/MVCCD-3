@@ -5,6 +5,7 @@ import main.MVCCDElement;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import project.Project;
+import utilities.Trace;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -36,6 +37,8 @@ public class LoaderSerializable {
                 }
             }
         } catch (Exception e){
+            //TODO-0 Traiter correctement l'erreur ... Attendre la sauvegarde XML
+            Trace.println(file.getPath().toString());
             throw (new CodeApplException(e));	// L'erreur est renvoyée
         } finally {
             if (reader != null) {
@@ -47,5 +50,4 @@ public class LoaderSerializable {
         }
         return project;
     }
-
 }

@@ -1,15 +1,22 @@
 package main;
 
 import datatypes.MDDatatype;
+import exceptions.CodeApplException;
+import mdr.MDRColumn;
+import mdr.MDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
 import utilities.Debug;
+import utilities.Trace;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public abstract class MVCCDElement implements Serializable {
+/**
+ * L'ancêtre de toutes les classes contenues dans le référentiel.
+ */
+public abstract class MVCCDElement implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1000;
 
@@ -42,6 +49,9 @@ public abstract class MVCCDElement implements Serializable {
         init();
     }
 
+    /**
+     * Établit le lien avec le parent et affecte la valeur d'ordonnancement dans la fratrie.
+     */
     private void init(){
         if (parent != null) {
             if (parent.getChilds().size() == 0){
@@ -115,24 +125,32 @@ public abstract class MVCCDElement implements Serializable {
     }
 
 
+    /**
+     * Retourne une liste ordonnée de la fratrie.
+     * @return
+     */
     public ArrayList<MVCCDElement> getChilds() {
         Collections.sort(childs, MVCCDElement::compareToOrder);
         return childs;
     }
 
-    public ArrayList<MVCCDElement> getChildsWithout(MVCCDElement child) {
+    public ArrayList<MVCCDElement> getChildsSortName() {
+        Collections.sort(childs, MVCCDElement::compareToName);
+        return childs;
+    }
+
+    public ArrayList<MVCCDElement> getSiblings(){
+        return getParent().getChilds();
+    }
+
+    public ArrayList<MVCCDElement> getBrothers(){
         ArrayList<MVCCDElement> resultat = new ArrayList<MVCCDElement>() ;
-        for (MVCCDElement aChild : getChilds()){
-            if (aChild != child){
-                resultat.add(aChild);
+        for (MVCCDElement sibling : getSiblings()){
+            if (sibling != this){
+                resultat.add(sibling);
             }
         }
         return resultat;
-    }
-
-    public ArrayList<MVCCDElement> getChildsRepository() {
-        Collections.sort(childs, MVCCDElement::compareToOrder);
-        return childs;
     }
 
     public int getChildOrderIndex(MVCCDElement child){
@@ -172,18 +190,12 @@ public abstract class MVCCDElement implements Serializable {
         return getParent().getChildOrderIndexSameClass(this);
     }
 
+    /**
+     * Retourne une liste de tous les descendants. Le traitement est réalisé par la méthode de même nom de la classe MVCCDElementService.
+     * @return
+     */
     public ArrayList<MVCCDElement> getDescendants(){
-        return MVCCDElementService.getDescendants(this);
-    }
-
-    public ArrayList<MVCCDElement> getDescendantsWithout(MVCCDElement child) {
-        ArrayList<MVCCDElement> resultat = new ArrayList<MVCCDElement>() ;
-        for (MVCCDElement aChild : getDescendants()){
-            if (aChild != child){
-                resultat.add(aChild);
-            }
-        }
-        return resultat;
+        return MVCCDElementService.getDescendants(this); // Stratégie adoptée: minimum de code dans chaque classe et les traitements sont faits dans les services.
     }
 
 
@@ -336,5 +348,47 @@ public abstract class MVCCDElement implements Serializable {
         }
    }
 
+   public void clearChilds(){
+        childs =  new ArrayList<MVCCDElement>();
+   }
+
+    public MVCCDElement clone(){
+        try {
+            MVCCDElement clone = (MVCCDElement) super.clone();
+            clone.setParent(null);
+            clone.clearChilds();
+            return clone;
+        }
+        catch (CloneNotSupportedException e) {
+            throw new CodeApplException("Le MVCCDElement de nom " + getName() + " n'est pas clonable");
+        }
+    }
+
+    public MVCCDElement cloneDeep() {
+       MVCCDElement rootClone = clone();
+       cloneChilds(this, rootClone);
+       return rootClone;
+    }
+
+    private void cloneChilds(MVCCDElement root, MVCCDElement rootClone) {
+        //TODO-0 La boucle for provoque une erreur. A voir!
+        /*
+        for (MVCCDElement child : root.getChilds()){
+            MVCCDElement childClone = child.clone();
+            Trace.println(root.getChilds().size() + "  " + root.getName() + "  " + childClone.getName());
+            childClone.setParent(rootClone);
+            cloneChilds(child, childClone);
+        }
+
+         */
+        int i = 0 ;
+        while (i < root.getChilds().size()){
+            MVCCDElement child = root.getChilds().get(i);
+            MVCCDElement childClone = child.clone();
+            childClone.setParent(rootClone);
+            cloneChilds(child, childClone);
+            i++;
+        }
+    }
 
 }

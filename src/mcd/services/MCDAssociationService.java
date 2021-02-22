@@ -2,13 +2,11 @@ package mcd.services;
 
 import m.*;
 import m.services.MRelEndService;
-import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 import project.ProjectService;
 import utilities.window.scomponents.SComboBox;
 
@@ -161,16 +159,6 @@ public class MCDAssociationService {
     public static MCDAssociation getMCDAssociationByNameTree(IMCDModel model, String nameTree){
         return (MCDAssociation) IMCDModelService.getMCDElementByClassAndNameTree(model, false,
                 MCDAssociation.class.getName(), nameTree);
-    }
-
-
-    public static MCDAssociation getMCDAssociationByNameTree(String nameTree){
-        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNameTree(nameTree)){
-            if (mcdElement instanceof MCDAssociation){
-                return (MCDAssociation) mcdElement;
-            }
-        }
-        return null;
     }
 
 }

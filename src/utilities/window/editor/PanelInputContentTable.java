@@ -11,8 +11,8 @@ import repository.RepositoryService;
 import utilities.UtilDivers;
 import utilities.window.ReadTableModel;
 import utilities.window.editor.services.PanelInputContentTableService;
+import utilities.window.scomponents.STable;
 import utilities.window.scomponents.services.STableService;
-import window.editor.attributes.AttributesTableColumn;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -21,11 +21,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.*;
 
-public abstract class PanelInputContentTable extends PanelInputContent {
+public abstract class PanelInputContentTable extends PanelInputContent
+        implements ActionListener {
 
     protected JPanel panelIdTable = new JPanel();
 
-    protected JTable table;
+    protected STable table;
     String[] columnsNames;
     protected DefaultTableModel model;
     protected Object[][] datas;
@@ -56,16 +57,17 @@ public abstract class PanelInputContentTable extends PanelInputContent {
     }
 
     protected void makeTable() {
-
         columnsNames = PanelInputContentTableService.columnsNames(specificColumnsNames());
 
         specificInitOrLoadTable();
         oldDatas = datas;
 
-        table = new JTable();
+        table = new STable(this);
         model = new ReadTableModel(datas, columnsNames);
 
         table.setModel(model);
+
+
         table.setRowHeight(Preferences.EDITOR_TABLE_ROW_HEIGHT);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table.setFillsViewportHeight(true);
@@ -103,6 +105,7 @@ public abstract class PanelInputContentTable extends PanelInputContent {
         });
     }
 
+
     protected abstract void specificColumnsDisplay();
 
     protected abstract void specificInitOrLoadTable();
@@ -126,60 +129,15 @@ public abstract class PanelInputContentTable extends PanelInputContent {
 
     protected void  makeButtons(){
         btnAdd = new JButton("Ajouter");
-        btnAdd.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-
-                    MElement mElement = newElement();
-                    if (mElement != null) {
-                        Object[] row = newRow(mElement);
-                        model.addRow(row);
-                        table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
-                        enabledContent();
-                    }
-
-            }
-        });
-
+        btnAdd.addActionListener(this);
 
         btnEdit = new JButton("Editer");
         btnEdit.setEnabled(false);
-        btnEdit.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e) {
-                int posActual = table.getSelectedRow();
-                if (posActual >= 0){
-                    int idElementSelected = (int) table.getValueAt(posActual, STableService.IDINDEX);
-
-                    MElement mElementActual = (MElement) ProjectService.getElementById(idElementSelected);
-                    updateElement(mElementActual);
-
-                    updateRow(mElementActual, table.getSelectedRow());
-                    enabledContent();
-                }
-            }
-        });
+        btnEdit.addActionListener(this);
 
         btnRemove = new JButton("Supprimer");
         btnRemove.setEnabled(false);
-        btnRemove.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e) {
-                int posActual = table.getSelectedRow();
-                if (posActual >= 0){
-
-                    int idElementSelected = (int) table.getValueAt(posActual, STableService.IDINDEX);
-                    MElement mElementActual = (MElement) ProjectService.getElementById(idElementSelected);
-
-                    if (deleteElement(mElementActual)) {
-                        model.removeRow(posActual);
-                        enabledContent();
-                    }
-                }
-            }
-
-        });
+        btnRemove.addActionListener(this);
 
         btnUp = new JButton("^");
         btnUp.setEnabled(false);
@@ -229,6 +187,57 @@ public abstract class PanelInputContentTable extends PanelInputContent {
 
             }
         });
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        MElement mElement = getMElementSelected();
+
+        if (source == btnAdd) {
+            actionAdd(e);
+        }
+        if (source == btnEdit) {
+            actionEdit(e, mElement);
+        }
+        if (source == btnRemove) {
+            actionDelete(e, mElement);
+        }
+    }
+
+    private MElement actionAdd(ActionEvent e) {
+        MElement mElement = newElement();
+        if (mElement != null) {
+            Object[] row = newRow(mElement);
+            model.addRow(row);
+            table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
+            enabledContent();
+        }
+        return mElement;
+    }
+
+
+    protected void actionEdit(ActionEvent e, MElement mElement) {
+        if (mElement != null) {
+            // Mise à jour du référentiel
+            updateElement(mElement);
+            // Mise à joue de la table
+            updateRow(mElement, table.getSelectedRow());
+            enabledContent();
+        }
+    }
+
+    protected boolean actionDelete(ActionEvent e, MElement mElement) {
+        if (mElement != null){
+            // Mise à jour du référentiel
+            if (deleteElement(mElement)) {
+                // Mise à joue de la table
+                model.removeRow(table.getSelectedRow());
+                enabledContent();
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -318,7 +327,7 @@ public abstract class PanelInputContentTable extends PanelInputContent {
         Integer orderActual = (Integer) table.getModel().getValueAt(posActual, posOrder);
         Integer orderNew = (Integer) table.getModel().getValueAt(posNew, posOrder);
 
-        int posId = AttributesTableColumn.ID.getPosition();
+        int posId =  STableService.IDINDEX;
         Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
         Integer idOther = (Integer) table.getModel().getValueAt(posNew, posId);
 
@@ -330,7 +339,9 @@ public abstract class PanelInputContentTable extends PanelInputContent {
         updateOrderINProjectElement(idActual, orderNew);
         updateOrderINProjectElement(idOther, orderActual);
 
-        MVCCDManager.instance().setDatasProjectChanged(true);
+        if (getEditor().isDatasProjectElementEdited()) {
+            MVCCDManager.instance().setDatasProjectChanged(true);
+        }
 
         // Mise à jour de l'affichage du référentiel
         swapNodes(idActual, idOther);
@@ -409,5 +420,17 @@ public abstract class PanelInputContentTable extends PanelInputContent {
                 new Dimension((int) newDimension.getWidth() -widthGap, 200));
         return newDimension;
     }
+
+    private MElement getMElementSelected() {
+        int posSelected = table.getSelectedRow();
+        if (posSelected >= 0) {
+            int idElementSelected = (int) table.getValueAt(posSelected, STableService.IDINDEX);
+
+            MElement mElementSelected = (MElement) ProjectService.getElementById(idElementSelected);
+            return mElementSelected;
+        }
+        return null;
+    }
+
 
 }

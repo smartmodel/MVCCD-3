@@ -6,16 +6,15 @@ import exceptions.CodeApplException;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
-import mcd.MCDAttribute;
-import mcd.MCDEntity;
-import mcd.MCDParameter;
+import mcd.*;
 import mcd.interfaces.IMCDParameter;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import window.editor.operation.parameter.ParameterEditor;
+import window.editor.mcd.operation.parameter.ParameterEditor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class MCDParameterService {
 
@@ -46,9 +45,9 @@ public class MCDParameterService {
     }
 
 
-    public static ArrayList<MCDAttribute> createTargetsAttributesUnique(MCDEntity mcdEntity, ArrayList<MCDParameter> parameters) {
+    public static ArrayList<MCDAttribute> createTargetsAttributesUnique(MCDEntity mcdEntity) {
         ArrayList<MCDAttribute> resultat = new ArrayList<MCDAttribute>();
-        ArrayList<MVCCDElement> targetsPotential = MVCCDElementConvert.to(mcdEntity.getMcdAttributes());
+        ArrayList<MVCCDElement> targetsPotential = MVCCDElementConvert.to(mcdEntity.getMCDAttributes());
         for (MVCCDElement targetPotential : targetsPotential){
             if (targetPotential instanceof MCDAttribute){
                 MCDAttribute attributePotential = (MCDAttribute) targetPotential;
@@ -66,8 +65,7 @@ public class MCDParameterService {
                             mcdDatatype.isSelfOrDescendantOf(integer)||
                             mcdDatatype.isDescendantOf(temporal)));
                 }
-                boolean c6 = existTargetInParameters( parameters, attributePotential);
-                if ( ! (c1 || c2 || c3 || c4 || c5 || c6)){
+                if ( ! (c1 || c2 || c3 || c4 || c5 )){
                     resultat.add(attributePotential);
                 }
             }
@@ -75,9 +73,50 @@ public class MCDParameterService {
         return resultat;
     }
 
-    public static ArrayList<MCDAttribute> createTargetsAttributesNID(MCDEntity mcdEntity, ArrayList<MCDParameter> parameters) {
+
+
+    public static ArrayList<MCDAssEnd> createTargetsNonExisting(ArrayList <MCDAssEnd> mcdAssEnds, ArrayList<MCDParameter> parameters) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : mcdAssEnds){
+            if (!existTargetInParameters(parameters, mcdAssEnd)){
+                resultat.add(mcdAssEnd);
+            }
+        }
+        return resultat;
+    }
+
+
+    public static Collection<? extends MVCCDElement> createTargetsAssEndsNoIdAndNoNN(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        // no Id
+        ArrayList<MCDAssEnd> mcdAssEndChilds = mcdEntity.getAssEndsNoIdChild();
+        mcdAssEndChilds.removeAll(mcdEntity.getAssEndsAssNNChild());
+
+        // Extrémité inverse comme résultat
+        for (MCDAssEnd mcdAssEndChild : mcdAssEndChilds) {
+            resultat.add(mcdAssEndChild.getMCDAssEndOpposite());
+        }
+
+        return resultat;
+    }
+
+
+    public static Collection<? extends MVCCDElement> createTargetsAssEndsIdAndNN(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        ArrayList<MCDAssEnd> mcdAssEndChilds = mcdEntity.getAssEndsIdAndNNChild();
+
+        // Extrémité inverse comme résultat
+        for ( MCDAssEnd mcdAssEndChild : mcdAssEndChilds ){
+            // Si n'existe pas déjà...
+            resultat.add (mcdAssEndChild.getMCDAssEndOpposite());
+        }
+
+        return resultat;
+    }
+
+    public static ArrayList<MCDAttribute> createTargetsAttributesNID(MCDEntity mcdEntity) {
         ArrayList<MCDAttribute> resultat = new  ArrayList<MCDAttribute>();
-        ArrayList<MCDAttribute> targetsPotential = createTargetsAttributesUnique(mcdEntity, parameters);
+        ArrayList<MCDAttribute> targetsPotential = createTargetsAttributesUnique(mcdEntity);
         for (MVCCDElement targetPotential : targetsPotential) {
             if (targetPotential instanceof MCDAttribute) {
                 MCDAttribute attributePotential = (MCDAttribute) targetPotential;
@@ -86,23 +125,44 @@ public class MCDParameterService {
                 MCDDatatype positiveInteger = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_POSITIVEINTEGER_LIENPROG);
                 boolean c1 = mcdDatatype.isSelfOrDescendantOf(token) || mcdDatatype.isSelfOrDescendantOf(positiveInteger);
                 if (c1) {
-                    resultat.add(attributePotential);
+                        resultat.add(attributePotential);
                 }
             }
         }
         return resultat;
     }
 
-    public static IMCDParameter getTargetByTypeAndName(MCDEntity mcdEntity, String type, String name){
-        if ( type.equals(MCDAttribute.CLASSSHORTNAMEUI)){
-            for ( MCDAttribute mcdAttribute : mcdEntity.getMcdAttributes()){
-                if (mcdAttribute.getName().equals(name)){
+    public static IMCDParameter getTargetByTypeAndNameTree(MCDEntity mcdEntity, String type, String nameTree) {
+        if ( type.equals(MCDAttribute.CLASSSHORTNAMEUI)) {
+            // Attributs
+            for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()) {
+                if (mcdAttribute.getNameTree().equals(nameTree)) {
                     return mcdAttribute;
                 }
             }
         }
+        if ( type.equals(MCDAssEnd.CLASSSHORTNAMEUI)) {
+            // Extrémités d'association
+            // Sans entité associative
+            for (MCDAssEnd mcdAssEnd : mcdEntity.getMCDAssEnds()) {
+                if (mcdAssEnd.getMCDAssEndOpposite().getNameTree().equals(nameTree)) {
+                    return mcdAssEnd.getMCDAssEndOpposite();
+                }
+            }
+            // Avec entité associative
+            for (MCDLinkEnd mcdLinkEnd : mcdEntity.getMCDLinkEnds()) {
+                MCDAssociation mcdAssociation = (MCDAssociation) mcdLinkEnd.getMcdLink().getEndAssociation().getParent().getParent();
+                if (mcdAssociation.getFrom().getNameTree().equals(nameTree)) {
+                    return mcdAssociation.getFrom();
+                }
+                if (mcdAssociation.getTo().getNameTree().equals(nameTree)) {
+                    return mcdAssociation.getTo();
+                }
+            }
+        }
+
         throw new CodeApplException("La méthode getTargetByTypeAndName ne trouve pas de cible de type "+
-                type + " et de nom " + name + "pour l'entité " + mcdEntity.getName());
+                type + " et de nom " + nameTree + " pour l'entité " + mcdEntity.getName());
     }
 
     public static boolean existTargetInParameters(ArrayList<MCDParameter> parameters,
@@ -117,4 +177,4 @@ public class MCDParameterService {
         return false;
     }
 
-}
+ }

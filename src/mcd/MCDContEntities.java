@@ -2,6 +2,8 @@ package mcd;
 
 import main.MVCCDElement ;
 import mcd.interfaces.IMCDContPackages;
+import mcd.interfaces.IMCDModel;
+import mcd.services.IMCDModelService;
 import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
@@ -22,14 +24,6 @@ public class MCDContEntities extends MCDElement{
     }
 
 
-    public static MCDContEntities getMCDContEntitiesByNamePath(int pathMode, String namePath){
-        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){
-            if (mcdElement instanceof MCDContEntities){
-                return (MCDContEntities) mcdElement;
-            }
-        }
-        return null;
-    }
 
     public ArrayList<MCDEntity> getMCDEntities(){
         ArrayList<MCDEntity> resultat = new ArrayList<MCDEntity>();

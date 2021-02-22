@@ -1,6 +1,5 @@
 package m.services;
 
-import m.MRelEnd;
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
 

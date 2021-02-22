@@ -1,19 +1,22 @@
 package repository.editingTreat.mcd;
 
+import exceptions.TransformMCDException;
 import main.MVCCDElement;
+import mcd.MCDModel;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContainer;
 import repository.editingTreat.EditingTreat;
+import repository.editingTreat.EditingTreatTransform;
+import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.entity.EntityInputContent;
-import window.editor.model.ModelEditor;
-import window.editor.model.ModelInputContent;
+import window.editor.mcd.model.ModelEditor;
+import window.editor.mcd.model.ModelInputContent;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class MCDModelEditingTreat extends EditingTreat {
+public class MCDModelEditingTreat extends EditingTreatTransform {
 
 
     @Override
@@ -30,16 +33,27 @@ public class MCDModelEditingTreat extends EditingTreat {
 
     @Override
     protected String getPropertyTheElement() {
-        return "the.model";
+        return "the.model.conceptual";
     }
 
-
-
+    @Override
+    public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
+        MCDModel mcdModel = (MCDModel) mvccdElement;
+        ArrayList<String> resultat = mcdModel.treatCompliant();
+        super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
+    }
 
     @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
+    public  void treatTransform(Window owner, MVCCDElement mvccdElement)   {
+        MCDModel mcdModel = (MCDModel) mvccdElement;
         ArrayList<String> resultat = new ArrayList<String>();
-        return resultat;
+        resultat = mcdModel.treatCompliant();
+        if (resultat.size() > 0) {
+                super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
+        } else {
+                resultat = mcdModel.treatTransform();
+                super.treatTransformFinishMessages(owner, mvccdElement, resultat);
+        }
     }
 
 }

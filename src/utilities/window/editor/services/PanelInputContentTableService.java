@@ -2,7 +2,7 @@ package utilities.window.editor.services;
 
 import preferences.PreferencesManager;
 import utilities.window.scomponents.services.STableService;
-import window.editor.operation.OperationParamTableColumn;
+import window.editor.mcd.operation.OperationParamTableColumn;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -25,6 +25,7 @@ public class PanelInputContentTableService {
         table.getColumnModel().getColumn(STableService.TRANSITORYINDEX).setPreferredWidth(sizeDebug);
         table.getColumnModel().getColumn(STableService.TRANSITORYINDEX).setMinWidth(sizeDebug);
         table.getColumnModel().getColumn(STableService.TRANSITORYINDEX).setMaxWidth(sizeDebug);
+        table.getColumnModel().getColumn(STableService.TRANSITORYINDEX).setCellRenderer(table.getDefaultRenderer(Boolean.class));
 
         //Order
         table.getColumnModel().getColumn(STableService.ORDERINDEX).setPreferredWidth(sizeDebug);

@@ -1,5 +1,6 @@
 package main;
 
+import messages.MessagesBuilder;
 import preferences.Preferences;
 import main.window.console.WinConsole;
 import main.window.diagram.WinDiagram;
@@ -9,6 +10,7 @@ import main.window.repository.WinRepository;
 import main.window.reserve.Reserve;
 import project.ProjectsRecents;
 import project.ProjectsRecentsSaver;
+import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 import utilities.window.services.ComponentService;
 
@@ -19,6 +21,10 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+/**
+ * Construit l'écran d'accueil.
+ * Le paquetage main.window permet de réaliser cet écran.
+ */
 public class MVCCDWindow extends JFrame implements WindowListener {
 
     private JPanel panel= new JPanel();;
@@ -32,11 +38,14 @@ public class MVCCDWindow extends JFrame implements WindowListener {
     private WinMenuContent menuContent;
 
 
-
+    /**
+     * Le menu, les panneaux et les listeners sont mis en place.
+     * Le gestionnaire de redimensionnement est créé.
+     */
     public MVCCDWindow() {
 
         setTitle("MVC-CD " + Preferences.VERSION);
-        setSize(1000, 600);
+        setSize(Preferences.MVCCD_WINDOW_WIDTH, Preferences.MVCCD_WINDOW_HEIGHT);
         getContentPane().add(panel);
         menuBar = new JMenuBar();
         setJMenuBar(menuBar);
@@ -104,8 +113,20 @@ public class MVCCDWindow extends JFrame implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
-        new ProjectsRecentsSaver().save();
-        System.exit(0);
+        if (MVCCDManager.instance().isDatasProjectChanged()){
+            String message = MessagesBuilder.getMessagesProperty ("project.close.change.not.saved");
+            boolean confirmClose = DialogMessage.showConfirmYesNo_No(this, message) == JOptionPane.YES_OPTION;
+            if (confirmClose){
+                setDefaultCloseOperation(DISPOSE_ON_CLOSE);//no
+                new ProjectsRecentsSaver().save();
+                System.exit(0);
+            } else {
+                setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);//cancel
+            }
+        } else {
+            new ProjectsRecentsSaver().save();
+            System.exit(0);
+        }
     }
 
     @Override

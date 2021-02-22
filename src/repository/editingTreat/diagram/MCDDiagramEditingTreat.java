@@ -7,6 +7,7 @@ import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import main.window.diagram.WinDiagram;
+import mcd.MCDPackage;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -89,10 +90,7 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
         return null;
     }
 
-    @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        return null;
-    }
+
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
@@ -108,6 +106,5 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
     protected String getPropertyTheElement() {
         return "the.diagram";
     }
-
 
 }

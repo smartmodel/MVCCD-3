@@ -3,9 +3,13 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import m.IMCompliant;
+import m.interfaces.IMCompletness;
+import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAttributeService;
+import md.MDElement;
+import md.services.MDElementConvert;
+import mldr.interfaces.IMLDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -16,7 +20,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MCDAttribute extends MCDElement implements IMCompliant, IMCDParameter {
+public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParameter, IMCDElementWithTargets {
 
     private static final long serialVersionUID = 1000;
 
@@ -211,7 +215,7 @@ public class MCDAttribute extends MCDElement implements IMCompliant, IMCDParamet
         return CLASSSHORTNAMEUI;
     }
 
-    public MCDEntity getEntityParent(){
+    public MCDEntity getEntityAccueil(){
         return (MCDEntity) getParent().getParent();
     }
     public ArrayList<MCDNID> partOfNIds(){

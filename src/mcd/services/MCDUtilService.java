@@ -1,11 +1,9 @@
 package mcd.services;
 
 import exceptions.CodeApplException;
-import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDElementService;
 import mcd.MCDElement;
-import mcd.MCDParameter;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -211,7 +209,7 @@ public class MCDUtilService {
         String messageTypeNaming = MessagesBuilder.getMessagesProperty(typeNaming);
 
         messages.add(0, MessagesBuilder.getMessagesProperty(bodyMessage
-                , new String[]{messageTypeNaming, naming, messageContext}));
+        , new String[]{messageTypeNaming, naming, messageContext}));
         if (uppercase) {
             messages.add(MessagesBuilder.getMessagesProperty("naming.uppercase"));
         } else {

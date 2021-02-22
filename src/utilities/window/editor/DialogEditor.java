@@ -4,6 +4,7 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 
@@ -33,6 +34,9 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     private MVCCDElement mvccdElementNew = null;     // lui-même pour la modification
     private MVCCDElement mvccdElementParentChoosed = null;     // la parent effectivement choisi lors de la saisie
     private boolean datasChanged = false;     // données modifiées
+    private boolean datasProjectElementEdited = false;
+    private boolean datasApplicationPreferencesEdited = false;
+
 
     private boolean readOnly = false;
 
@@ -78,45 +82,6 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
         start();
     }
-
-
-
-/*
-    public DialogEditor(Window owner,
-                        MVCCDElement mvccdElementParent,
-                        MVCCDElement mvccdElementCrt,
-                        String mode,
-                        int scope) {
-        super(owner);
-        this.owner = owner ;
-        this.mode = mode;
-        this.mvccdElementParent = mvccdElementParent;
-        this.mvccdElementCrt = mvccdElementCrt;
-        this.mvccdElementParentChoosed = mvccdElementParent;  // valeur par défaut
-        this.scope = scope ;
-
-        if (mode.equals(DialogEditor.READ)){
-            this.setReadOnly(true);
-        }
-        if (mode.equals(DialogEditor.DELETE)){
-            this.setReadOnly(true);
-        }
-
-        setModal(true);
-        setLocation(100,100);
-
-        getContentPane().add(panel);
-
-        setSize(getSizeCustom());
-        setInput(getInputCustom());
-        setButtons(getButtonsCustom());
-
-        start();
-
-    }
-
- */
-
 
 
     protected abstract PanelButtons getButtonsCustom();
@@ -214,7 +179,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     @Override
     public void windowOpened(WindowEvent windowEvent) {
             // Les données ont peut-être été ajustées par les méthodes changeXXX de l'éditeur
-            // Cahngement avant que l'utilisateur ne fase quoi que ce soit
+            // Changement avant que l'utilisateur ne fase quoi que ce soit
         if (! mode.equals(DialogEditor.NEW)) {
             if (input.getInputContent().datasChangedNow()  && (input != null)){
                 String messageMode ;
@@ -226,14 +191,17 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
                 String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
                         new String[] {messageMode});
                 DialogMessage.showOk(this, message);
+                //#MAJ 2020-12-05 - Instruction manquante
+                input.getInputContent().enabledButtons();
             }
         }
+        //TODO-1 traiter le cas d'un ajustement de données avec un formulaire en lecture seule
 
     }
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
-        //this.dispose();
+        confirmClose();
     }
 
     @Override
@@ -253,7 +221,8 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     @Override
     public void windowActivated(WindowEvent windowEvent) {
-        MVCCDManager.instance().setDatasEdited(true);
+        //MVCCDManager.instance().setDatasEdited(true);
+        datasProjectElementEdited = true;
     }
 
     @Override
@@ -310,6 +279,22 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         this.datasChanged = datasChanged;
     }
 
+    public boolean isDatasProjectElementEdited() {
+        return datasProjectElementEdited;
+    }
+
+    public void setDatasProjectElementEdited(boolean datasProjectElementEdited) {
+        this.datasProjectElementEdited = datasProjectElementEdited;
+    }
+
+    public boolean isDatasApplicationPreferencesEdited() {
+        return datasApplicationPreferencesEdited;
+    }
+
+    public void setDatasApplicationPreferencesEdited(boolean datasApplicationPreferencesEdited) {
+        this.datasApplicationPreferencesEdited = datasApplicationPreferencesEdited;
+    }
+
     public void adjustTitle() {
        String title = MessagesBuilder.getMessagesProperty(getPropertyTitleUpdate(), new String[]{
                 getMvccdElementCrt().getName()});
@@ -321,10 +306,13 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         if (mode.equals(DialogEditor.NEW)){
             title = MessagesBuilder.getMessagesProperty(getPropertyTitleNew());
         }
-        if (mode.equals(DialogEditor.UPDATE) ||
-                mode.equals(DialogEditor.READ) ||
-                mode.equals(DialogEditor.DELETE) ){
+        if (mode.equals(DialogEditor.UPDATE)){
             title = MessagesBuilder.getMessagesProperty(getPropertyTitleUpdate(), new String[]{
+                    getElementNameTitle() });
+        }
+        if (mode.equals(DialogEditor.READ) ||
+                mode.equals(DialogEditor.DELETE) ){
+            title = MessagesBuilder.getMessagesProperty(getPropertyTitleRead(), new String[]{
                     getElementNameTitle() });
         }
         return title;
@@ -333,6 +321,8 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     protected abstract String getPropertyTitleNew();
 
     protected abstract String getPropertyTitleUpdate();
+
+    protected abstract String getPropertyTitleRead();
 
     protected String getElementNameTitle(){
         return getMvccdElementCrt().getName();
@@ -376,6 +366,21 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     public EditingTreat getEditingTreat() {
         return editingTreat;
+    }
+
+    void confirmClose() {
+        if (getInput().getInputContent().datasChangedNow()){
+            String message = MessagesBuilder.getMessagesProperty ("editor.close.change.not.saved");
+            boolean confirm = DialogMessage.showConfirmYesNo_No(this, message) == JOptionPane.YES_OPTION;
+            if (confirm){
+                myDispose();
+                //setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            } else {
+                setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);//cancel
+            }
+        } else {
+            myDispose();
+        }
     }
 
     //TOD=-2 J'ai du écrire de mon propre dispose et nons surcharger car j'avais un appel parasite!

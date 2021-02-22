@@ -7,23 +7,32 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-/*
-    Le redimensionnement est possible si:
-    1. Start: La souris quitte un panneau
-    2. Dimensionnement possible si la souris entre dans un panneau adjacent avec un déplacemt restreint
-    3. Annulation : La souris quitte la zone de détection de panneau adjacent de plus de x pixels
-*/
-
-
+/**
+ * Gestionnaire de redimensionnement des panneaux constitutifs d'un JFrame.
+ * Le layout est la fenêtre qui regroupe les différents panneaux à l'intérieur et qui peuvent être redimensionnés.
+ *
+ *     Le redimensionnement est possible si:
+ *     1. Start: La souris quitte un panneau
+ *     2. Dimensionnement possible si la souris entre dans un panneau adjacent avec un déplacemt restreint
+ *     3. Annulation : La souris quitte la zone de détection de panneau adjacent de plus de x pixels
+ */
 public class PanelBorderLayoutResizer {
 
+    // Ensemble des panneaux constitutifs d'un JFrame mis en page avec BorderLayout
     private  ArrayList<PanelBorderLayout> panels = new ArrayList<PanelBorderLayout>() ;
+    // Panneau transitoire  de sortie de souris en redimensionnement
     private PanelBorderLayoutForResize subPanelExit = new PanelBorderLayoutForResize() ;
+    // Panneau transitoire  d'entrée de souris en redimensionnement
     private PanelBorderLayoutForResize subPanelEnter = new PanelBorderLayoutForResize() ;
+    // Forme de curseur en fonction du mode de redimensionnement en cours
     private Integer cursorTypeDefault = Cursor.DEFAULT_CURSOR;
+    // Redimensionnement vertical en cours
     private Boolean cursorResizingVertical = false;
+    // Redimensionnement horizontal en cours
     private Boolean cursorResizingHorizontal = false;
+    // Mouvement de glissement de souris détecté
     private Boolean draggedDetected = false;
+    // Mouvement de glissement de souris en cours
     private Boolean draggedInProgress = false;
 
     public PanelBorderLayoutResizer() {

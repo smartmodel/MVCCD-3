@@ -1,8 +1,9 @@
 package utilities.window.editor;
 
 import main.MVCCDElement;
-import messages.MessagesBuilder;
-import utilities.window.DialogMessage;
+import preferences.PreferencesManager;
+import utilities.Debug;
+import utilities.Trace;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 
@@ -157,12 +158,13 @@ public abstract class PanelInputContent
     }
 
 
-    protected void enabledButtons() {
+
+    public void enabledButtons() {
 
         // Le check doit être fait au début pour remettre l'affichage normal
         // de champs testés ensemble
         if (datasChangedNow()) {
-            if (preSaveOk) {
+             if (preSaveOk) {
                 getButtonsContent().getBtnOk().setEnabled(true);
                 getButtonsContent().getBtnApply().setEnabled(true);
             } else {
@@ -176,12 +178,19 @@ public abstract class PanelInputContent
             getButtonsContent().getBtnApply().setEnabled(false);
         }
 
-        if (getEditor() instanceof DialogEditorNav) {
-            DialogEditorNav editor = (DialogEditorNav) getEditor();
+        //#MAJ 2020-12-05 pas de boutons Annuler/OK pour les préférences
+        // ? Je supprime ce code qui me semble erroné
+        // enabledButtons est traité en standard (DialogEditor.window.opened()
+        /*
+        if (getEditor() instanceof DialogEditorNavBtn) {
+            DialogEditorNavBtn editor = (DialogEditorNavBtn) getEditor();
             if (!editor.getMode().equals(DialogEditor.NEW)) {
-                editor.getNav().getTabbedContent().enabledButtons(!datasChangedNow());
+                editor.getNav().getContent().enabledButtons(!datasChangedNow());
             }
         }
+         */
+
+
     }
 
     public boolean checkInput(SComponent field, boolean unitaire, ArrayList<String> messagesErrors) {
@@ -255,12 +264,13 @@ public abstract class PanelInputContent
     public boolean datasChangedNow() {
         boolean resultat = false;
         for (SComponent sComponent : sComponents) {
-            /*
-            if (sComponent.checkIfUpdated()){
-                System.out.println(sComponent);
+            if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
+                if (PreferencesManager.instance().getApplicationPref().getDEBUG_EDITOR_DATAS_CHANGED()) {
+                    if (sComponent.checkIfUpdated()) {
+                        Debug.println(sComponent.getName() + " - " +sComponent);
+                    }
+                }
             }
-
-             */
             resultat = resultat || sComponent.checkIfUpdated();
         }
         return resultat;
@@ -278,7 +288,7 @@ public abstract class PanelInputContent
         }
     }
 
-    public ArrayList<SComponent> getsComponents() {
+    public ArrayList<SComponent> getSComponents() {
         return sComponents;
     }
 
@@ -294,9 +304,7 @@ public abstract class PanelInputContent
         // Les données peuvent être ajustées par les méthodes changeXXX de l'éditeur
         if (! getEditor().getMode().equals(DialogEditor.NEW)) {
             loadSimulationChange(getEditor().getMvccdElementCrt());
-        }
-
-
+       }
         checkDatas(null);
         preSaveOk = checkDatasPreSave(null);
     }
@@ -370,5 +378,11 @@ public abstract class PanelInputContent
         }
     }
 
+    public MVCCDElement getElementForCheckInput() {
+        return elementForCheckInput;
+    }
 
+    protected void reInitDatas(MVCCDElement mvccdElement){
+
+    }
 }

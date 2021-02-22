@@ -1,17 +1,18 @@
 package mcd.interfaces;
 
-import mcd.MCDElement;
 import mcd.MCDPackage;
+import mcd.services.IMCDModelService;
 import project.ProjectService;
 
 // Implémentée par les classes qui peuvent contenir des paquetages
 public interface IMCDContPackages {
 
+    public abstract String getNamePath(int pathMode);
 
-    public static IMCDContPackages getIMCDContPackagesByNamePath(int pathMode, String namePath){
-        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){
-            if (mcdElement instanceof IMCDContPackages){
-                return (IMCDContPackages) mcdElement;
+    public static IMCDContPackages getIMCDContPackagesByNamePath(IMCDModel imcdModel, int pathMode, String namePath){
+        for (IMCDContPackages imcdContPackages: IMCDModelService.getIMCDContPackages(imcdModel)){
+            if (imcdContPackages.getNamePath(pathMode).equals(namePath)){
+                return imcdContPackages;
             }
         }
         return null;

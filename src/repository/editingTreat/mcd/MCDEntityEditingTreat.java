@@ -1,28 +1,19 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
-import mcd.MCDAssociation;
 import mcd.MCDContEntities;
-import mcd.MCDContRelations;
 import mcd.MCDEntity;
-import mcd.services.MCDEntityService;
-import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
-import utilities.Debug;
-import utilities.window.DialogMessage;
+import repository.editingTreat.EditingTreatTransform;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.entity.EntityEditor;
-import window.editor.entity.EntityInputContent;
-import window.editor.relation.association.AssociationEditor;
+import window.editor.mcd.entity.EntityEditor;
+import window.editor.mcd.entity.EntityInputContent;
 
-import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class MCDEntityEditingTreat extends EditingTreat {
+public class MCDEntityEditingTreat extends EditingTreatTransform {
 
 
     @Override
@@ -41,11 +32,15 @@ public class MCDEntityEditingTreat extends EditingTreat {
         return "the.entity";
     }
 
+    @Override
+    public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
+        MCDEntity mcdEntity = (MCDEntity) mvccdElement;
+        ArrayList<String> resultat = mcdEntity.treatCompliant();
+        super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
+    }
 
     @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        ArrayList<String> resultat = new ArrayList<String>();
-        return resultat;
+    public void treatTransform(Window owner, MVCCDElement mvccdElement) {
     }
 
 

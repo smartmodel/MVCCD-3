@@ -1,20 +1,22 @@
 package mcd;
 
+import constraints.Constraint;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
-import m.IMCompliant;
-import m.MRelationDegree;
-import m.services.MRelationService;
-import main.MVCCDElement;
-import mcd.*;
+import m.interfaces.IMCompletness;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAssociationService;
-import mcd.services.MCDElementService;
 import mcd.services.MCDRelationService;
-import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import stereotypes.Stereotype;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
 
-public class MCDGeneralization extends MCDRelation implements IMCompliant, IMCDParameter {
+import java.util.ArrayList;
+
+public class MCDGeneralization extends MCDRelation implements IMCompletness, IMCDParameter {
 
     private  static final long serialVersionUID = 1000;
 
@@ -60,9 +62,11 @@ public class MCDGeneralization extends MCDRelation implements IMCompliant, IMCDP
 
     @Override
     public String getNameTree(){
+        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_GENERALIZATION, false, null);
+    }
 
-        return MCDRelationService.getNameTreeBetweenEntities(this, Preferences.MCD_NAMING_GENERALIZATION);
-
+    public String getNamePath(int pathMode){
+        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_GENERALIZATION, true, pathMode);
     }
 
     public MCDGSEnd getMCDAssGSOpposite(MCDGSEnd mcdGSEnd) {
@@ -83,4 +87,25 @@ public class MCDGeneralization extends MCDRelation implements IMCompliant, IMCDP
     public String getClassShortNameUI() {
         return CLASSSHORTNAMEUI;
     }
+
+    @Override
+    public ArrayList<Stereotype> getToStereotypes() {
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<Constraint> getToConstraints() {
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
 }

@@ -11,14 +11,12 @@ import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
 import repository.RepositoryService;
-import utilities.UtilDivers;
 import utilities.window.DialogMessage;
 import utilities.window.ReadTableModel;
 import utilities.window.editor.services.PanelInputContentTableService;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STable;
 import utilities.window.scomponents.services.STableService;
-import window.editor.attributes.AttributesTableColumn;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -68,11 +66,16 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
     protected void makeTable() {
 
         columnsNames = PanelInputContentTableService.columnsNames(specificColumnsNames());
-        if (getEditor().getMode().equals(DialogEditor.NEW)){
-            specificInit();
+        if ( panelInput != null){
+            if (getEditor().getMode().equals(DialogEditor.NEW)){
+                specificInit();
+            } else {
+                specificLoad(getEditor().getMvccdElementCrt());
+            }
         } else {
-            specificLoad();
+            specificLoad(super.getElementForCheckInput());
         }
+
         oldDatas = datas;
 
         model = new ReadTableModel(datas, columnsNames);
@@ -87,7 +90,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         PanelInputContentTableService.genericColumnsDisplay(table);
         specificColumnsDisplay();
 
-        super.getsComponents().add(table);
+        super.getSComponents().add(table);
 
 
         table.addMouseListener(new MouseListener() {
@@ -131,19 +134,25 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
             public void actionPerformed(ActionEvent e) {
 
+
                 if (getEditor().getMode().equals(DialogEditor.NEW)) {
                     // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas confirmé
                     if (DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageAdd()) == JOptionPane.YES_OPTION) {
-                        getActionApply();
-                     }
+                        // Sauvegarde de l'enregistrement maitre
+                        getActionAddDetail(true);
+                    }
                 } else {
-                    MElement mElement = getNewElement();
-                    if (mElement != null) {
-                        Object[] row = getNewRow(mElement);
-                        model.addRow(row);
-                        table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
-                        newTransitoryElements.add(mElement);
-                        tableContentChanged();
+                    boolean appendAuthorized = true;
+                    // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
+                    if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
+                        appendAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageUpdate()) == JOptionPane.YES_OPTION;
+                        if (appendAuthorized) {
+                            //getEditor().getButtons().getButtonsContent().treatUpdate();
+                            // Sauvegarde de l'enregistrement maitre
+                            getActionAddDetail(false);
+                        }
+                    } else {
+                        fenDetail();
                     }
                 }
             }
@@ -154,6 +163,17 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         btnRemove.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e) {
+
+                boolean removedAuthorized = true;
+                // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
+                if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
+                    removedAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageDelete()) == JOptionPane.YES_OPTION;
+                    if (removedAuthorized) {
+                        //getEditor().getButtons().getButtonsContent().treatUpdate();
+                        // Sauvegarde de l'enregistrement maitre
+                        getActionAddDetail(false);
+                    }
+                }
                 int posActual = table.getSelectedRow();
                 if (posActual >= 0){
                     model.removeRow(posActual);
@@ -172,7 +192,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
             public void actionPerformed(ActionEvent e) {
                 int posActual = table.getSelectedRow();
                 if (posActual >= 0){
-                    int posId = AttributesTableColumn.ID.getPosition();
+                    int posId = STableService.IDINDEX;
                     //TODO-0 Faire appel treatEdit
 
                     //updateRow(mcdAttributeActual, table.getSelectedRow());
@@ -213,6 +233,19 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         });
     }
 
+    public void fenDetail(){
+        // Appel de l'éditeur de création d'un nouvel élément
+
+        MElement mElement = getNewElement();
+        if (mElement != null) {
+            Object[] row = getNewRow(mElement);
+            model.addRow(row);
+            table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
+            newTransitoryElements.add(mElement);
+            tableContentChanged();
+        }
+    }
+
     protected void tableContentChanged(){
         table.actionChangeActivated();
         enabledContent();
@@ -220,9 +253,11 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         checkDatas(table);
     }
 
-    protected abstract void getActionApply();
+    protected abstract void getActionAddDetail(boolean masterNew);
 
     protected abstract String getMessageAdd();
+    protected abstract String getMessageUpdate();
+    protected abstract String getMessageDelete();
 
     protected abstract Object[] getNewRow(MElement mElement);
 
@@ -267,7 +302,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
     }
 
 
-
+/*
     private void updateRow(MElement mElementSelected, int selectedRow) {
 
         Object[] row = new Object [AttributesTableColumn.getNbColumns()];
@@ -275,7 +310,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         UtilDivers.putValueRowInTable(table, selectedRow, row);
 
     }
-
+*/
 
 
     protected abstract void putValueInRow(MElement mElement, Object[] row);
@@ -331,11 +366,6 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     }
 
-    @Override
-    protected void changeFieldDeSelected(ItemEvent e) {
-
-    }
-
 
     @Override
     protected void initDatas() {
@@ -350,7 +380,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     }
 
-    protected abstract void specificLoad();
+    protected abstract void specificLoad(MVCCDElement mvccdElement);
 
     @Override
     protected void saveDatas(MVCCDElement mvccdElement) {
@@ -369,6 +399,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
      }
 
     private void deleteNoUsedRecord(MVCCDElement mvccdElement) {
+        /*
         for (int i = mvccdElement.getChilds().size() - 1; i >= 0; i--) {
             ProjectElement projectChildElement = (project.ProjectElement) mvccdElement.getChilds().get(i);
             if (!STableService.existRecordById(table, projectChildElement.getId())) {
@@ -377,6 +408,21 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
                 projectChildElement = null;
              }
         }
+
+         */
+
+        ArrayList<MVCCDElement> elementsInProject = mvccdElement.getChilds();
+        for (int i = elementsInProject.size() - 1; i >= 0; i--) {
+            ProjectElement elementInProject = (ProjectElement) elementsInProject.get(i);
+            if (!STableService.existRecordById(table,
+                    elementInProject.getId())) {
+                MVCCDManager.instance().removeMVCCDElementInRepository(elementInProject, elementInProject.getParent());
+                elementInProject.removeInParent();
+                elementInProject = null;
+            }
+        }
+
+
     }
 
 
@@ -406,11 +452,11 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     private void permuteOrder(int posActual, int posNew) {
 
-        int posOrder = AttributesTableColumn.ORDER.getPosition();
+        int posOrder = STableService.ORDERINDEX;
         Integer orderActual = (Integer) table.getModel().getValueAt(posActual, posOrder);
         Integer orderNew = (Integer) table.getModel().getValueAt(posNew, posOrder);
 
-        int posId = AttributesTableColumn.ID.getPosition();
+        int posId = STableService.IDINDEX;
         Integer idActual = (Integer) table.getModel().getValueAt(posActual, posId);
         Integer idOther = (Integer) table.getModel().getValueAt(posNew, posId);
 
@@ -422,7 +468,9 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         updateOrderINProjectElement(idActual, orderNew);
         updateOrderINProjectElement(idOther, orderActual);
 
-        MVCCDManager.instance().setDatasProjectChanged(true);
+        if (getEditor().isDatasProjectElementEdited()) {
+            MVCCDManager.instance().setDatasProjectChanged(true);
+        }
 
         // Mise à jour de l'affichage du référentiel
         swapNodes(idActual, idOther);
@@ -469,7 +517,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         boolean notBatch = panelInput != null;
 
         boolean unitaire = notBatch && (sComponent == table);
-        ok = checkDetails(unitaire);
+        ok = checkDetails(unitaire) && ok;
         return ok;
     }
 

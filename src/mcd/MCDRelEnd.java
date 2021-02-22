@@ -1,16 +1,33 @@
 package mcd;
 
-import m.MRelEnd;
-import m.MRelEndMulti;
-import m.MRelEndMultiPart;
-import m.services.MRelEndService;
-import mcd.services.MCDAssEndService;
-import mcd.services.MCDRelEndService;
+import constraints.Constraint;
+import m.MElement;
+import m.interfaces.IMRelEnd;
+import m.interfaces.IMRelation;
+import mcd.interfaces.IMCDElementWithTargets;
+import md.MDElement;
+import md.services.MDElementConvert;
+import mldr.interfaces.IMLDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import project.ProjectElement;
+import stereotypes.Stereotype;
+import utilities.UtilDivers;
+import utilities.files.UtilFiles;
 
-public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
+import javax.swing.*;
+import java.util.ArrayList;
+
+
+public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElementWithTargets {
+
+    public static final int FROM = 1 ;
+    public static final int TO = 2 ;
+
+    public static final int GEN = 3 ;
+    public static final int SPEC = 4 ;
+
+    public static final int ELEMENT = 5 ;
+    public static final int RELATION = 6 ;
 
     private static final long serialVersionUID = 1000;
 
@@ -19,8 +36,11 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
 
     protected int drawingDirection ;
 
-    private MCDRelation mcdRelation;
-    private MCDElement mcdElement ;
+    private IMRelation imRelation;
+    private MElement mElement ;
+
+//    private MCDRelation mcdRelation;
+//   private MCDElement mcdElement ;
 
     public MCDRelEnd(MCDElement parent) {
         super(parent);
@@ -34,6 +54,33 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
         return serialVersionUID;
     }
 
+    /**
+     * L'extrémité de relation (MCDRelEnd) fait le lien entre une relation et un élément.
+     * Cette méthode retourne l'objet "relation" attaché à l'extrémité de relation.
+     * @return
+     */
+    public IMRelation getImRelation() {
+        return imRelation;
+    }
+
+    public void setImRelation(IMRelation imRelation) {
+        this.imRelation = imRelation;
+    }
+
+    /**
+     * L'extrémité de relation (MCDRelEnd) fait le lien entre une relation et un élément.
+     * Cette méthode retourne l'objet "élément" attaché à l'extrémité de relation.
+     * @return
+     */
+    public MElement getmElement() {
+        return mElement;
+    }
+
+    public void setmElement(MElement mElement) {
+        this.mElement = mElement;
+    }
+
+    /*
     public MCDRelation getMcdRelation() {
         return mcdRelation;
     }
@@ -50,8 +97,10 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
         this.mcdElement = mcdElement;
     }
 
+     */
+
     public MCDRelEnd getMCDRelEndOpposite() {
-        MCDRelation mcdRelation = this.getMcdRelation();
+        MCDRelation mcdRelation = (MCDRelation) this.getImRelation();
         return mcdRelation.getMCDRelEndOpposite(this);
     }
 
@@ -63,5 +112,42 @@ public abstract class MCDRelEnd extends MCDElement implements MRelEnd {
         this.drawingDirection = drawingDirection;
     }
 
+    public abstract ArrayList<Stereotype> getToStereotypes();
 
+    public abstract ArrayList<Constraint> getToConstraints(); // Contraintes UML
+
+
+
+    public  ImageIcon getImageIconLong(){
+        String strFileImage = getFileImageIconLong();
+        if (strFileImage != null) {
+            return UtilFiles.getImageIcon(Preferences.DIRECTORY_IMAGE_ICONE_RELATION, strFileImage);
+        } else {
+            return null;
+        }
+    }
+
+    protected abstract String getFileImageIconLong();
+
+    public String getNameFromNoFree(){
+        String name = getName();
+        if (name != null){
+            name = UtilDivers.toNoFree(name);
+        }
+        return name;
+    }
+
+    public String getNameNoFreeOrNameRelation(){
+        String nameNoFree = getNameFromNoFree();
+        if (StringUtils.isEmpty(nameNoFree)){
+            nameNoFree = getImRelation().getName();
+        }
+        return nameNoFree;
+    }
+
+    //TODO-0 Vérifier que shortName de MCDRelation soit obligatoire si pas de rôle
+    public String getShortName(){
+        String shortName = super.getShortName();
+        return shortName;
+    }
 }

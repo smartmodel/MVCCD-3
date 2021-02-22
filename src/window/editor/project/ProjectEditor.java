@@ -66,4 +66,9 @@ public class ProjectEditor extends DialogEditor {
         return "editor.project.update";
     }
 
+    @Override
+    protected String getPropertyTitleRead() {
+        return "editor.project.read";
+    }
+
 }

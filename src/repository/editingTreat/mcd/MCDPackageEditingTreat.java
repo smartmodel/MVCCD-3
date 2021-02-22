@@ -1,29 +1,20 @@
 package repository.editingTreat.mcd;
 
-import m.MElement;
 import main.MVCCDElement;
-import main.MVCCDManager;
-import mcd.MCDElement;
 import mcd.MCDPackage;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContainer;
 import repository.editingTreat.EditingTreat;
+import repository.editingTreat.EditingTreatTransform;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.model.ModelEditor;
-import window.editor.model.ModelInputContent;
+import window.editor.mcd.model.ModelEditor;
+import window.editor.mcd.model.ModelInputContent;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class MCDPackageEditingTreat extends EditingTreat {
-
-
-    @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        return null;
-    }
+public class MCDPackageEditingTreat extends EditingTreatTransform {
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
@@ -40,6 +31,16 @@ public class MCDPackageEditingTreat extends EditingTreat {
     protected String getPropertyTheElement() {
         return "the.package";
     }
+
+    @Override
+    public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
+        MCDPackage mcdPackage = (MCDPackage) mvccdElement;
+        ArrayList<String> resultat = mcdPackage.treatCompliant();
+        super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
+    }
+
+    @Override
+    public void treatTransform(Window owner, MVCCDElement mvccdElement) { }
 
 
 

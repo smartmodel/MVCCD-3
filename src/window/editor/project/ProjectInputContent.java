@@ -1,6 +1,7 @@
 package window.editor.project;
 
 import main.MVCCDElement;
+import main.MVCCDManager;
 import mcd.services.MCDProjectService;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -17,12 +18,14 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.ArrayList;
 
 public class ProjectInputContent extends PanelInputContent {
 
     //private JPanel panel = new JPanel();
     private STextField projectName = new STextField(this);
+    private STextField projectFileName = new STextField(this);
     private SComboBox<String> profileFileName = new SComboBox<>(this);
     private SCheckBox fieldModelsMany = new SCheckBox(this);
     private SCheckBox fieldPackagesAutorizeds = new SCheckBox(this);
@@ -32,26 +35,24 @@ public class ProjectInputContent extends PanelInputContent {
 
     public ProjectInputContent(ProjectInput projectInput)     {
         super(projectInput);
-        /*
-        projectInput.setPanelContent(this);
-        createContent();
-        super.addContent(panel);
-        super.initOrLoadDatas();
-
-         */
-    }
+     }
 
 
 
     public void createContentCustom() {
         Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
 
-        projectName.setPreferredSize((new Dimension(300,20)));
+        projectName.setPreferredSize((new Dimension(300,Preferences.EDITOR_FIELD_HEIGHT)));
         projectName.setCheckPreSave(true);
         //projectName.setText("");
 
         projectName.getDocument().addDocumentListener(this);
         projectName.addFocusListener(this);
+
+        //TODO-1 Traiter le cas du nom complet qui dépasse la taille de la zone d'affichage
+        projectFileName.setPreferredSize((new Dimension(500,Preferences.EDITOR_FIELD_HEIGHT)));
+        projectFileName.setVisible(!getEditor().getMode().equals(DialogEditor.NEW));
+        projectFileName.setReadOnly(true);
 
         ArrayList<String> filesProfile = ProfileManager.instance().filesProfile();
         profileFileName.addItem(SComboBox.LINEDASH);
@@ -76,10 +77,10 @@ public class ProjectInputContent extends PanelInputContent {
             fieldPackagesAutorizeds.setEnabled(false);
         }
 
-        super.getsComponents().add(projectName);
-        super.getsComponents().add(profileFileName);
-        super.getsComponents().add(fieldModelsMany);
-        super.getsComponents().add(fieldPackagesAutorizeds);
+        super.getSComponents().add(projectName);
+        super.getSComponents().add(profileFileName);
+        super.getSComponents().add(fieldModelsMany);
+        super.getSComponents().add(fieldPackagesAutorizeds);
 
 
         panelInputContentCustom.setLayout(new GridBagLayout());
@@ -95,6 +96,12 @@ public class ProjectInputContent extends PanelInputContent {
         gbc.gridx = 1;
         panelInputContentCustom.add(projectName, gbc);
 
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(new JLabel("Fichier : "), gbc);
+        gbc.gridx = 1;
+        panelInputContentCustom.add(projectFileName, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
@@ -217,6 +224,8 @@ public class ProjectInputContent extends PanelInputContent {
 
         // Initialisation sans passer par un objet transitoire car la création d'un projet
         // déclenche trop d'automatisme qu'il est certainement difficile de stopper pour un objet transitoire
+        projectName.setText("");
+        projectFileName.setText("");
         fieldModelsMany.setSelected(applicationPref.getREPOSITORY_MCD_MODELS_MANY());
         fieldPackagesAutorizeds.setSelected(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
         profileFileName.setSelectedEmpty();
@@ -227,6 +236,12 @@ public class ProjectInputContent extends PanelInputContent {
     public void loadDatas(MVCCDElement mvccdElement) {
         Project project = (Project) mvccdElement;
         projectName.setText(project.getName());
+        String filePath = "";
+        File file = MVCCDManager.instance().getFileProjectCurrent();
+        if (file != null){
+            filePath = file.getPath();
+        }
+        projectFileName.setText(filePath);
         if (project.getProfileFileName() != null) {
             profileFileName.setSelectedItem(project.getProfileFileName());
         } else {

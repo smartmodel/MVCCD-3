@@ -62,9 +62,6 @@ public class WinRepositoryTree extends JTree {
                     // récupérer le noeud sélectionné
                     DefaultMutableTreeNode node = (DefaultMutableTreeNode)
                             evt.getNewLeadSelectionPath().getLastPathComponent();
-
-                    // récupération des données associées au noeud pour les afficher
-                    //System.out.println(evt.getNewLeadSelectionPath().getLastPathComponent().toString());
                 }
             }
         };
@@ -88,11 +85,10 @@ public class WinRepositoryTree extends JTree {
                 if (node.getUserObject() instanceof ProjectElement){
                     lastProjectElement = (ProjectElement) node.getUserObject();
                 }
-
-                //TODO-0 Pour faciliter les tests, enlever ensuite
-                MVCCDManager.instance().setDatasProjectChanged(true);
-                MVCCDManager.instance().getProject().setLastWinRepositoryProjectElement(lastProjectElement);
-                MVCCDManager.instance().getProject().setLastWinRepositoryExpand(expandCollapse);
+                if ( MVCCDManager.instance().getProject() != null) {
+                    MVCCDManager.instance().getProject().setLastWinRepositoryProjectElement(lastProjectElement);
+                    MVCCDManager.instance().getProject().setLastWinRepositoryExpand(expandCollapse);
+                }
             }
         };
         this.addTreeExpansionListener(te);

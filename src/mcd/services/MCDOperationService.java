@@ -8,13 +8,11 @@ import java.util.ArrayList;
 
 public class MCDOperationService {
 
-    public static ArrayList<String> checkTargets(STable table,
-                                                 String contextProperty,
-                                                 String rowTargetProperty) {
+    public static ArrayList<String> checkParametersTargets(STable table,
+                                                           String contextMessage,
+                                                           String rowTargetMessage) {
 
         ArrayList<String> messages = new ArrayList<String>();
-        String contextMessage = MessagesBuilder.getMessagesProperty(contextProperty);
-        String rowTargetMessage = MessagesBuilder.getMessagesProperty(rowTargetProperty);
         if (table.getRowCount() > 1) {
            for (int i = 0; i < table.getRowCount(); i++) {
                for (int j = i + 1; j < table.getRowCount(); j++) {

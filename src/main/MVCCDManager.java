@@ -4,6 +4,7 @@ import console.Console;
 import datatypes.MDDatatypesManager;
 import main.window.menu.WinMenuContent;
 import main.window.repository.WinRepositoryTree;
+import mcd.MCDRelEnd;
 import mcd.MCDRelation;
 import preferences.PreferencesManager;
 import project.*;
@@ -14,12 +15,18 @@ import messages.LoadMessages;
 import repository.Repository;
 import main.window.repository.WinRepository;
 import main.window.repository.WinRepositoryContent;
+import utilities.Trace;
+import utilities.files.UtilFiles;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * Il s'agit de la classe d'orchestration du programme.
+ * Les attributs permettent cette orchestration.
+ */
 public class MVCCDManager {
 
     private static MVCCDManager instance;
@@ -32,8 +39,7 @@ public class MVCCDManager {
     private ProjectsRecents projectsRecents = null; //Projets ouverts  récemment
     private File fileProjectCurrent = null; //Fichier de sauvegarde du projet en cours de traitement
     private boolean datasProjectChanged = false; //Indicateur de changement de données propres au projet
-    private boolean datasEdited = true; //Indicateur d'édition de données y-compris les préférences d'application
-
+    //private boolean datasEdited = true; //Indicateur d'édition de données y-compris les préférences d'application
 
     public static synchronized MVCCDManager instance() {
         if (instance == null) {
@@ -42,13 +48,16 @@ public class MVCCDManager {
         return instance;
     }
 
+    /**
+     * Lance MVC-CD-3
+     */
     public void start() {
         // Chargement des messages de traduction
         LoadMessages.main();
 
         //Chargement des préférences de l'application
 
-        //PreferencesManager.instance().loadOrCreateFileApplicationPreferences();
+        //PreferencesManager.instance().loadOrCreateFileApplicationPreferences(); //TODO-STB: suppression de Giorgio
         PreferencesManager.instance().loadOrCreateFileXMLApplicationPref();
         // Création et affichage de l'écran d'accueil
         startMVCCDWindow();
@@ -66,6 +75,10 @@ public class MVCCDManager {
         openLastProject();
     }
 
+
+    /**
+     * Créé le référentiel et l'affiche à l'écran d'accueil.
+     */
     private void startRepository() {
         // Création de l'élément root du référentiel
         rootMVCCDElement = MVCCDFactory.instance().createRepositoryRoot();
@@ -74,10 +87,11 @@ public class MVCCDManager {
         // Création du noeud root de l'arbre du référentiel
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootMVCCDElement);
         // Création du référentiel
-        repository = new Repository(rootNode, rootMVCCDElement);
+        repository = new Repository(rootNode, rootMVCCDElement); //Créer un repository vide (le chargement se fait après, dans l'ouverture du projet)
         // Affiche le référentiel dans l'écran d'accueil
         getWinRepositoryContent().getTree().changeModel(repository);
     }
+
 
 
     private void startConsole() {
@@ -85,6 +99,9 @@ public class MVCCDManager {
         console = new Console();
     }
 
+    /**
+     * La méthode crée et affiche l'écran d'accueil.
+     */
     public void startMVCCDWindow() {
         mvccdWindow = new MVCCDWindow();
         mvccdWindow.setVisible(true);
@@ -153,15 +170,13 @@ public class MVCCDManager {
 
     public void removeMCDRelationAndDependantsInRepository(MCDRelation mcdRelation) {
 
-        ArrayList<MCDRelation> mcdRelationChilds = ProjectService.getAllMCDRelationsChilds(mcdRelation);
+        ArrayList<MCDRelation> mcdRelationChilds = mcdRelation.getMCDRelationsChilds();
         for (MCDRelation mcdRelationChild : mcdRelationChilds) {
             removeMCDRelationAndDependantsInRepository(mcdRelationChild);
         }
-
-        System.out.println("Remove " + mcdRelation.getNameTree());
         removeMVCCDElementInRepository(mcdRelation, mcdRelation.getParent());
-        removeMVCCDElementInRepository(mcdRelation.getA(), mcdRelation.getA().getParent());
-        removeMVCCDElementInRepository(mcdRelation.getB(), mcdRelation.getB().getParent());
+        removeMVCCDElementInRepository((MCDRelEnd)mcdRelation.getA(), ((MCDRelEnd) mcdRelation.getA()).getParent());
+        removeMVCCDElementInRepository((MCDRelEnd)mcdRelation.getB(), ((MCDRelEnd) mcdRelation.getB()).getParent());
     }
 
     public void openProject() {
@@ -175,6 +190,9 @@ public class MVCCDManager {
         openProjectBase(file);
     }
 
+    /**
+     * Recherche un éventuel dernier projet utilisé et en demande l'ouverture.
+     */
     private void openLastProject() {
         if (projectsRecents.getRecents().size() > 0) {
             File file = projectsRecents.getRecents().get(0);
@@ -182,17 +200,21 @@ public class MVCCDManager {
         }
     }
 
+    /**
+     * Ouvre un projet à partir de son fichier de sauvegarde et le charge dans le référentiel.
+     * @param file
+     */
     private void openProjectBase(File file) {
         //Mémorise le fichier associé au projet
         setFileProjectCurrent(file);
 
         if (file != null) {
             // Lecture du fichier de sauvegarde
-            //project = new LoaderSerializable().load(fileProjectCurrent);
+            //project = new LoaderSerializable().load(fileProjectCurrent); //TODO-STB: suppression de Giorgio
             project = new ProjectLoaderXml().loadProjectFile(fileProjectCurrent);
             // Chargement des préférences du projet
             PreferencesManager.instance().setProjectPref(project.getPreferences());
-            // Copie des préférences d0'application au sein des préférences du projet
+            // Copie des préférences d'application au sein des préférences du projet
             PreferencesManager.instance().copyApplicationPref(Project.EXISTING);
 
         }
@@ -214,32 +236,29 @@ public class MVCCDManager {
 
     public void saveProject() {
         if (fileProjectCurrent != null) {
-
-            //new SaverSerializable().save(fileProjectCurrent);
-            new ProjectSaverXml().createProjectFile(fileProjectCurrent);
-
-            setDatasProjectChanged(false);
+            //new SaverSerializable().save(fileProjectCurrent); //TODO-STB: suppression de Giorgio
+            new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
 
         } else {
             saveAsProject();
         }
+        setDatasProjectChanged(false);
     }
 
     public void saveAsProject() {
         ProjectFileChooser fileChooser = new ProjectFileChooser(ProjectFileChooser.SAVE);
         File fileChoose = fileChooser.fileChoose();
-        if (fileChoose != null) {
-            fileProjectCurrent = fileChoose;
-
-            //new SaverSerializable().save(fileProjectCurrent);
-            new ProjectSaverXml().createProjectFile(fileProjectCurrent);
-
-            projectsRecents.add(fileProjectCurrent);
-            changeActivateProjectOpenRecentsItems();
-            setDatasProjectChanged(false);
-
+        if (fileChoose != null){
+            if (UtilFiles.confirmIfExist(mvccdWindow, fileChoose)) {
+                fileProjectCurrent = fileChoose;
+                //new SaverSerializable().save(fileProjectCurrent); //TODO-STB: Suppression de Giorgio
+                new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
+                projectsRecents.add(fileProjectCurrent);
+                changeActivateProjectOpenRecentsItems();
+            }
         }
     }
+
 
     public void closeProject() {
         project = null;
@@ -264,6 +283,9 @@ public class MVCCDManager {
         }
     }
 
+    /**
+     * Copie le projet ouvert au sein du référentiel.
+     */
     private void projectToRepository() {
         repository.removeProject();
         repository.addProject(project);
@@ -358,20 +380,6 @@ public class MVCCDManager {
         this.datasProjectChanged = datasProjectChanged;
     }
 
-    public boolean isDatasEdited() {
-        return datasEdited;
-    }
-
-
-    public void setDatasEdited(boolean datasEdited) {
-        this.datasEdited = datasEdited;
-    }
-
-    public void datasProjectChangedFromEditor() {
-        if (isDatasEdited()) {
-            setDatasProjectChanged(true);
-        }
-    }
 
     public MVCCDElement getRootMVCCDElement() {
         return rootMVCCDElement;

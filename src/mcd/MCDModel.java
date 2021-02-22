@@ -1,12 +1,21 @@
 package mcd;
 
-import m.IMCompliant;
+import exceptions.TransformMCDException;
+import m.interfaces.IMCompletness;
+import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
+import mcd.services.IMCDModelService;
+import mldr.MLDRModel;
+import transform.mcdtomldr.MCDTransform;
+import project.ProjectService;
+
+import java.util.ArrayList;
 
 public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
-        IMCDContContainer, IMCDNamePathParent, IMCDContPackages, IMCDContainer, IMCompliant {
+        IMCDContContainer, /*IMCDNamePathParent,*/ IMCDContPackages, IMCDContainer, IMCompletness {
 
     private static final long serialVersionUID = 1000;
+    private MLDRModel lastTransformedMLDRModel;
 
     private boolean packagesAutorizeds = false;
     private boolean mcdJournalization = false;
@@ -65,6 +74,31 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
         this.mcdAuditException = mcdAuditException;
     }
 
+    public ArrayList<MCDEntity> getMCDEntities(){
+        return IMCDModelService.getMCDEntities(this);
+    }
+
+    public ArrayList<String> treatCompliant(){
+        MCDCompliant mcdCompliant = new MCDCompliant();
+        ArrayList<String> resultat = mcdCompliant.check(getMCDEntities(), false);
+
+        return resultat;
+
+    }
+
+    public ArrayList<String> treatTransform()  throws TransformMCDException {
+        MCDTransform mcdTransform = new MCDTransform();
+        return mcdTransform.transform(this);
+    }
 
 
+    @Override
+    public MLDRModel getLastTransformedMLDRModel() {
+        return lastTransformedMLDRModel;
+    }
+
+    @Override
+    public void setLastTransformedMLDRModel(MLDRModel lastTransformedMLDRModel) {
+        this.lastTransformedMLDRModel = lastTransformedMLDRModel;
+    }
 }

@@ -1,8 +1,13 @@
 package repository.editingTreat;
 
+import console.Console;
+import exceptions.TransformMCDException;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
+import mcd.MCDElement;
+import mcd.services.MCDElementService;
+import md.MDElement;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import utilities.window.DialogMessage;
@@ -31,9 +36,10 @@ public abstract class EditingTreat {
 
     public boolean treatUpdate(Window owner, MVCCDElement element) {
         MVCCDElement parentBefore = element.getParent();
-        DialogEditor fen = getDialogEditor(owner, element.getParent(), element, DialogEditor.UPDATE);
-        fen.setVisible(true);
 
+        DialogEditor fen = getDialogEditor(owner, element.getParent(), element, DialogEditor.UPDATE);
+
+        fen.setVisible(true);
 
         MVCCDElement parentAfter = element.getParent();
         if (parentBefore != parentAfter) {
@@ -70,12 +76,9 @@ public abstract class EditingTreat {
                 new String[] {element.getName()});
         boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
         if (confirmDelete){
-            System.out.println("Avant delete  " + element.getChilds().size());
             for (int i = element.getChilds().size() - 1  ; i >= 0 ;  i--) {
-                System.out.println("Delete  " + i);
                 MVCCDElement child = element.getChilds().get(i);
                 removeMVVCCDChildInRepository(child);
-                //MVCCDManager.instance().removeMVCCDElementInRepository(child, element);
 
                 child.removeInParent();
                 child = null;
@@ -84,47 +87,51 @@ public abstract class EditingTreat {
     }
 
 
-    public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
-        //MVCCDElement mvccdElement = (MElement) element;
-
-
+    public ArrayList<String> treatCompletness(Window owner, MVCCDElement mvccdElement, boolean showDialog) {
+        ArrayList <String> resultat = new ArrayList <String>();
         PanelInputContent panelInputContent = loadPanelInput(mvccdElement);
 
         String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
 
         if (datasAdjusted( panelInputContent)) {
-            String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.compliant");
+            String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.completness");
             String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
                     new String[] {messageMode});
-            if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
-                DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
-                fen.setVisible(true);
-            }
-        } else {
-            if (!checkInput( panelInputContent)) {
-                String message = MessagesBuilder.getMessagesProperty("dialog.input.error",
-                        new String[]{messageElement, mvccdElement.getNameTree()});
+            resultat.add(message);
+            if (showDialog) {
                 if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
                     DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
                     fen.setVisible(true);
                 }
+            }
+        } else {
+            if (!checkInput(panelInputContent)) {
+                String elementNameInContext ;
+                if (showDialog) {
+                    elementNameInContext = mvccdElement.getNameTree();
+                } else {
+                    elementNameInContext = ((MCDElement) mvccdElement).getNamePath(MCDElementService.PATHSHORTNAME);
+                }
+               String message = MessagesBuilder.getMessagesProperty("dialog.completness.error",
+                        new String[]{messageElement, elementNameInContext});
+                resultat.add(message);
+                if (showDialog) {
+                    message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.question.input");
+                    if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
+                        DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
+                        fen.setVisible(true);
+                    }
+                }
             } else {
-                ArrayList<String> messagesCompliant = checkCompliant(mvccdElement);
-                if (messagesCompliant.size() == 0) {
-                    String message = MessagesBuilder.getMessagesProperty("dialog.compliant.ok",
+                if (showDialog) {
+                    String message = MessagesBuilder.getMessagesProperty("dialog.completness.ok",
                             new String[]{messageElement, mvccdElement.getNameTree()});
                     DialogMessage.showOk(owner, message);
-                } else {
-                    String message = MessagesBuilder.getMessagesProperty("dialog.compliant.error",
-                            new String[]{messageElement, mvccdElement.getNameTree()});
-                    DialogMessage.showError(owner, message);
                 }
             }
         }
+        return resultat;
     }
-
-    protected abstract ArrayList<String> checkCompliant(MVCCDElement mvccdElement);
-
 
 
     public PanelInputContent loadPanelInput(MVCCDElement element){
@@ -151,7 +158,6 @@ public abstract class EditingTreat {
     protected abstract DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) ;
 
     protected abstract String getPropertyTheElement();
-
 
     protected  void removeMVCCDElementInRepository(MVCCDElement element){
         MVCCDManager.instance().removeMVCCDElementInRepository(element, element.getParent());

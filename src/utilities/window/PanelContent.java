@@ -6,17 +6,24 @@ import preferences.PreferencesManager;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Extension de JPanel.
+ */
 public abstract class PanelContent extends JPanel {
-    private JScrollPane scroll;
+    private JScrollPane scroll; // Barre de défilement
     private JPanel panel;
-    PanelBorderLayout panelBL;
-    private boolean scrollInComponent= false;
+    PanelBorderLayout panelBL;  // JPanel constitutif d'un jeu de panneaux gérés par un BorderLayout
+    private boolean scrollInComponent= false; // Indicateur de prise en charge des barres de défilement
 
     public PanelContent(PanelBorderLayout panelBL) {
         this.panelBL = panelBL;
     }
 
 
+    /**
+     * Permet d'ajouter un composant (classe Component de awt) dans un JPanel. Si nécessaire, des barres de défilement sont ajoutées.
+     * @param panel
+     */
     public void addContent(JPanel panel) {
         scroll = new JScrollPane(panel);
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -38,6 +45,10 @@ public abstract class PanelContent extends JPanel {
     }
 
 
+    /**
+     * Utilisé pour la fenêtre de gauche de l'écran d'accueil.
+     * @param tree
+     */
     public void addContent(JTree tree) {
         addContentBase(tree);
     }
@@ -59,6 +70,10 @@ public abstract class PanelContent extends JPanel {
     }
 
 
+    /**
+     * Ajuste la taille du panneau en cas de redimensionnement de la fenêtre.
+     * @return
+     */
     public Dimension resizeContent() {
 
         int widthBL = panelBL.getSize().width;

@@ -1,5 +1,6 @@
 package mcd.services;
 
+import exceptions.CodeApplException;
 import mcd.MCDElement;
 import mcd.MCDEntity;
 import mcd.MCDModel;
@@ -30,6 +31,21 @@ public class MCDPackageService {
         return resultat;
     }
 
+    public static ArrayList<IMCDContPackages> getIMCDContPackagesInIModelUnderLevelMax(IMCDModel iMCDModel) {
+        ArrayList<IMCDContPackages> resultat =  new ArrayList<IMCDContPackages>();
+        for (IMCDContPackages imcdContPackages :  getIMCDContPackagesInIModel(iMCDModel)){
+            if ( imcdContPackages instanceof MCDPackage){
+                MCDPackage mcdPackage = (MCDPackage) imcdContPackages;
+                if (mcdPackage.getLevel() < Preferences.PACKAGE_LEVEL_MAX){
+                    resultat.add(mcdPackage);
+                }
+            } else {
+                resultat.add(imcdContPackages);
+            }
+        }
+        return resultat;
+    }
+
     public static ArrayList<MCDElement> toMCDElements(ArrayList<IMCDContPackages> imcdContPackages) {
         ArrayList<MCDElement> resultat = new ArrayList<MCDElement>();
         for (IMCDContPackages imcdContPackage : imcdContPackages){
@@ -50,14 +66,50 @@ public class MCDPackageService {
                 }
     };
 
-
+/*
     public static MCDPackage getMCDPackageByNamePath(int pathMode, String namePath){
-        for (MCDElement mcdElement : ProjectService.getAllMCDElementsByNamePath(pathMode, namePath)){
-            if (mcdElement instanceof MCDPackage){
-                return (MCDPackage) mcdElement;
+        for (MCDPackage mcdPackage : IMCDModelService.getMCDPackages()){
+            if (mcdPackage.getNamePath(pathMode).equals(namePath)){
+                return mcdPackage;
             }
         }
         return null;
+    }
+
+ */
+
+    private static int getLevel(MCDPackage mcdPackage, int level) {
+        if ( mcdPackage.getParent() instanceof MCDPackage){
+            MCDPackage mcdPackageParent = (MCDPackage) mcdPackage.getParent();
+            level++;
+            level = getLevel(mcdPackageParent,level);
+        }
+        return level;
+    }
+
+
+    public static int getLevel(MCDPackage mcdPackage) {
+        return getLevel(mcdPackage, 1);
+    }
+
+    //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+    /*
+    public static ArrayList<MCDElement> getMCDElements(MCDPackage mcdPackage) {
+        return ((MCDElement) mcdPackage).getMCDElements();
+    }
+
+     */
+
+    public static ArrayList<MCDEntity> getMCDEntities(MCDPackage mcdPackage){
+        ArrayList<MCDEntity>  resultat = new ArrayList<MCDEntity>() ;
+        //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
+        //for (MCDElement aMCDElement : getMCDElements(mcdPackage)){
+        for (MCDElement aMCDElement : mcdPackage.getMCDDescendants()){
+            if (aMCDElement instanceof MCDEntity){
+                resultat.add((MCDEntity) aMCDElement);
+            }
+        }
+        return resultat;
     }
 
 }

@@ -1,5 +1,7 @@
 package constraints;
 
+import datatypes.MCDDatatype;
+import datatypes.MDDatatypesManager;
 import main.MVCCDElementService;
 import stereotypes.Stereotype;
 import utilities.UtilDivers;
@@ -20,12 +22,12 @@ public class ConstraintService {
         return resultat ;
     }
 */
-    public static String getUMLName(Stereotype stereotype){
-        return getUMLName(stereotype.getName());
+    public static String getUMLName(Constraint constraint){
+        return getUMLName(constraint.getName());
     }
 
-    public static String getUMLName(String stereotypeName){
-        return  UML_SYMBOLE_BEGIN_CONSTRAINT + stereotypeName + UML_SYMBOLE_END_CONSTRAINT;
+    public static String getUMLName(String constraintName){
+        return  UML_SYMBOLE_BEGIN_CONSTRAINT + constraintName + UML_SYMBOLE_END_CONSTRAINT;
     }
 
 
@@ -53,6 +55,8 @@ public class ConstraintService {
         return UtilDivers.getArrayListFromNamesStringTagged(names,
                 UML_SYMBOLE_BEGIN_CONSTRAINT, UML_SYMBOLE_END_CONSTRAINT, withTag);
     }
+
+
 
 
 

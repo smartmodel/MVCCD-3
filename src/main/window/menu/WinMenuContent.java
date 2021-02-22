@@ -140,7 +140,7 @@ public class WinMenuContent implements ActionListener {
         if (source == projectClose){
             boolean confirmClose = true;
             if (MVCCDManager.instance().isDatasProjectChanged()){
-                String message = MessagesBuilder.getMessagesProperty ("window.close.change.not.saved");
+                String message = MessagesBuilder.getMessagesProperty ("project.close.change.not.saved");
                 confirmClose = DialogMessage.showConfirmYesNo_No(mvccdWindow, message) == JOptionPane.YES_OPTION;
             }
             if (confirmClose) {

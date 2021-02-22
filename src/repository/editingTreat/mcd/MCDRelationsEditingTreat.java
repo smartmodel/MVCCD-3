@@ -2,6 +2,8 @@ package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
+import main.MVCCDWindow;
+import mcd.MCDPackage;
 import mcd.MCDRelation;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
@@ -12,12 +14,6 @@ import java.util.ArrayList;
 
 public class MCDRelationsEditingTreat extends EditingTreat {
 
-    @Override
-    protected ArrayList<String> checkCompliant(MVCCDElement mvccdElement) {
-        ArrayList<String> resultat = new ArrayList<String>();
-        return resultat;
-
-    }
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
@@ -40,4 +36,5 @@ public class MCDRelationsEditingTreat extends EditingTreat {
         MCDRelation mcdRelation = (MCDRelation) child;
         MVCCDManager.instance().removeMCDRelationAndDependantsInRepository(mcdRelation);
     }
+
 }
