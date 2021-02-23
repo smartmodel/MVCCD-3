@@ -23,7 +23,7 @@ import java.awt.event.WindowListener;
 
 /**
  * Construit l'écran d'accueil.
- * Le paquetage main.window permet de réaliser cet écran.
+ * Le paquetage main.window (et tout ce qu'il contient) permet de réaliser cet écran.
  */
 public class MVCCDWindow extends JFrame implements WindowListener {
 
@@ -39,7 +39,7 @@ public class MVCCDWindow extends JFrame implements WindowListener {
 
 
     /**
-     * Le menu, les panneaux et les listeners sont mis en place.
+     * Dans le constructeur, le menu, les panneaux et les listeners sont mis en place.
      * Le gestionnaire de redimensionnement est créé.
      */
     public MVCCDWindow() {

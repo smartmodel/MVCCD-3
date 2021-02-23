@@ -29,6 +29,8 @@ public class ProjectSaverXml {
     private Boolean packApp = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS();
     private Boolean modeleApp = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
 
+    //TODO-STB: ajouter le num de version dans le fichier persisté
+
     public void createProjectFile(File file) {
         //traitement
         try {

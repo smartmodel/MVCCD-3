@@ -15,6 +15,9 @@ import javax.swing.tree.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * La classe gère l'arbre de représentation du référentiel.
+ */
 public class WinRepositoryTree extends JTree {
 
     private DefaultTreeModel treeModel;
