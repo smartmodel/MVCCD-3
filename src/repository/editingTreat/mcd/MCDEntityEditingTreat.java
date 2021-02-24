@@ -21,6 +21,15 @@ public class MCDEntityEditingTreat extends EditingTreatTransform {
         return new EntityInputContent(element);
     }
 
+    /**
+     * Fournit à la classe ancêtre l'éditeur d'entité à utiliser. C'est cet éditeur qui s'affiche à l'utilisateur lors
+     * de la création d'une nouvelle entité.
+     * @param owner
+     * @param parent
+     * @param element
+     * @param mode
+     * @return
+     */
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
         return new EntityEditor(owner, (MCDContEntities) parent, (MCDEntity) element, mode,

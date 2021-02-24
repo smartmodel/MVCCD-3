@@ -1,6 +1,3 @@
-/**
- * Le paquetage offre une extension des composants Swing pour l'interaction utilisateur.
- */
 package utilities.window.scomponents;
 
 import javax.swing.*;

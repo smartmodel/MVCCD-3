@@ -12,7 +12,7 @@ public abstract class ProjectElement extends MVCCDElement {
 
     private static final long serialVersionUID = 1000;
 
-    private int id;
+    private int id; //Identifiant unique pour tout élément d'un projet utilisateur. La valeur est générée automatiquement.
     private boolean transitory = false;
 
     public ProjectElement(ProjectElement parent) {
@@ -55,7 +55,10 @@ public abstract class ProjectElement extends MVCCDElement {
         }
     }
 
-
+    /**
+     * Retourne l'identifiant unique de chaque élément du projet.
+     * @return
+     */
     public int getId() {
         return id;
     }

@@ -15,6 +15,9 @@ import java.util.Collections;
 
 /**
  * L'ancêtre de toutes les classes contenues dans le référentiel.
+ * Remarques concernant les accesseurs get():
+ *  - Les préfixes "short" et "long" définissent 2 attributs name particuliers (un name short et un name long).
+ *  - Les postfixes "Id", "Smart" et "Tree" qualifient des méthodes particulières.
  */
 public abstract class MVCCDElement implements Serializable, Cloneable {
 
@@ -30,9 +33,19 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
     public static int INTERVALORDER = 10;
 
     private MVCCDElement parent;    // parent dans l'arborescence des objets
-    private String name = "";       // Nom usuel
-    private String shortName = "";  // Nom abréggé
-    private String longName = "";   // Nom long (à but de documentation)
+
+    /*
+    Concernant les attributs name, shortName et longName:
+    - leur valeur est unique dans le contexte du parent.
+    - name et shortName peuvent avoir une valeur nulle (par exemple pour des objets comme les relations).
+    - leur format est vérifié par une expression régulière.
+        - pour name et shortName: les principes de nommage SQL sont repris sauf pour le nom des rôles d'associations.
+        - pour longName: les espaces entre les mots et les caractères accentués sont autorisés.
+     */
+    private String name = "";       // Nom usuel (nommage standard). Tous les objets ont un nom hormis les instances de relations.
+    private String shortName = "";  // Nom abréggé. Utilisé comme préfixe ou postfixe de nommage des contraintes, et aussi pour créer des path de taille réduite.
+    private String longName = "";   // Nom long (à but de documentation et diagrammes)
+
     private int order;              // ordre de l'enfant dans la fraterie
 
     private ArrayList<MVCCDElement> childs = new ArrayList<MVCCDElement>();  // Tableau des enfants
@@ -83,6 +96,10 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         parent.getChilds().add(this);
     }
 
+    /**
+     * Retourne le name tel qu'il a été saisi par l'utilisateur.
+     * @return
+     */
     public String getName() {
         return name;
     }
@@ -91,6 +108,10 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         this.name = name;
     }
 
+    /**
+     * Retourne le shortname tel qu'il a été saisi par l'utilisateur.
+     * @return
+     */
     public String getShortName() {
         return shortName;
     }
@@ -99,6 +120,10 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         this.shortName = shortName;
     }
 
+    /**
+     * Retourne shortName s'il n'est pas null, sinon retourne name.
+     * @return
+     */
     public String getShortNameSmart() {
         if (StringUtils.isNotEmpty(shortName)){
             return shortName;
@@ -107,6 +132,10 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         }
     }
 
+    /**
+     * Retourne longName tel qu'il a été saisi par l'utilisateur.
+     * @return
+     */
     public String getLongName() {
         return longName;
     }
@@ -250,8 +279,13 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         return order;
     }
 
-    // Peut être surchargé par les descendants si nécessaire (p.exemple, les relations
-    // est utilisé par toString()
+    /**
+     * Retourne la chaîne de description de l'objet.
+     * Pour tout objet MVCCDElement non surchargé, retourne simplement le name.
+     * La méthode doit être surchargée par tous les objets qui n'ont pas de valeur pour name (par exemple les relations).
+     * Le nameTree est utilisé essentiellement pour afficher le nom dans l'arbre du référentiel (par ex: role-association-role).
+     * @return
+     */
     public String getNameTree(){
         return getName();
     } ;
@@ -323,14 +357,32 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         return false;
     }
 
+    /**
+     * Le nameId est utilisé pour vérifier l'unicité de nommage.
+     * Pour tout objet de type MVCCDElement non surchargé, retourne simplement le name tel qu'il a été saisi.
+     * Cette méthode doit être surchargée pour tous les objets qui n'ont pas de valeur pour name (par exemple certaines relations).
+     * @return
+     */
     public String getNameId() {
         return getName();
     }
 
+    /**
+     * Le shortNameId est utilisé pour vérifier l'unicité de nommage.
+     * Pour tout objet de type MVCCDElement non surchargé, retourne simplement le shortName tel qu'il a été saisi.
+     * Cette méthode doit être surchargée pour tous les objets qui n'ont pas de valeur pour shortName (par exemple certaines relations).
+     * @return
+     */
     public String getShortNameId() {
         return getShortName();
     }
 
+    /**
+     * Le longNameId est utilisé pour vérifier l'unicité de nommage.
+     * Pour tout objet de type MVCCDElement non surchargé, retourne simplement le longName tel qu'il a été saisi.
+     * Cette méthode doit être surchargée pour tous les objets qui n'ont pas de valeur pour longName (par exemple certaines relations).
+     * @return
+     */
     public String getLongNameId() {
         return getLongName();
     }

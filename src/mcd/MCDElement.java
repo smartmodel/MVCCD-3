@@ -50,9 +50,17 @@ public abstract class MCDElement extends MDElement {
 
     //TODO-STB: voir avec PAS si ce n'est pas pertinent de le mettre dans mElement. Cela simplifierait la ligne suivante dans ProjectSaverXml:
     //entity.appendChild(doc.createTextNode(((MCDElement) endEntity.getmElement()).getNamePath(1)));
+
+    /**
+     * Retourne le path et le name d'un objet.
+     * Le path d'un objet est constitué de l'arborescence des ancêtres de l'objet.
+     * Pour autant que name soit obligatoire pour une classe, cette méthode peut faire office d'identifiant unique naturel (UID) ! (par ex: des entités de même nom dans des paquetages différents)
+     * @param pathMode Permet de choisir de créer le path avec le name ou le shortName des parents successifs. Valeurs possibles: MVCCDElementService.PATHNAME et PATHSHORTNAME.
+     * @return
+     */
     public String getNamePath(int pathMode) {
         String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
-        String path = getPath( pathMode, separator);
+        String path = getPath(pathMode, separator);
         if (StringUtils.isNotEmpty(path)){
             return path + separator + getName();
         } else {
@@ -60,6 +68,11 @@ public abstract class MCDElement extends MDElement {
         }
     }
 
+    /**
+     * Au même titre que getNamePath(), retourne le path et le shortName d'un objet.
+     * La différence est que le namePath est construit avec la méthode getShortNameSmart(), afin d'utiliser le name si shortName est nul.
+     * @return
+     */
     public String getShortNameSmartPath() {
         String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
         String path = getPath( MCDElementService.PATHSHORTNAME, separator);
