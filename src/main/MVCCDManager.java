@@ -101,11 +101,13 @@ public class MVCCDManager {
     /**
      * La méthode crée et affiche l'écran d'accueil.
      * L'écran comporte 5 zones :
-     *  - Haut	    Probablement des commandes contextuelles à terme
-     *  - Gauche 	L’arbre de représentation du contenu du référentiel
+     * <pre>
+     *  - Haut		Probablement des commandes contextuelles à terme
+     *  - Gauche	L’arbre de représentation du contenu du référentiel
      *  - Centre	Le diagrammeur
      *  - Droite	Une zone de réserve
-     *  - Bas       Une console d’affichage (Contrôle de conformité…)
+     *  - Bas		Une console d’affichage (Contrôle de conformité…)
+     * </pre>
      * <img src="doc-files/UI_homeScreen.jpg" alt="Fenêtre de l'écran d'accueil">
      */
     public void startMVCCDWindow() {

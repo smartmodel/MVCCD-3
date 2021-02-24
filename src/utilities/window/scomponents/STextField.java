@@ -35,6 +35,7 @@ public class STextField extends JTextField implements SComponent {
 
     /**
      * Constructeur d'un champ texte (TextField).
+     * <img src="doc-files/UI_NameMissingWhenCreationOfNewEntity.jpg" alt="Contenu manquant dans le champ de saisie de nom lors de la création d'une nouvelle entité">
      * @param panel Le panneau qui contient le composant textField. Le panneau doit réaliser l'interface IPanelInputContent.
      * @param label L'étiquette associtée au champ de saisie.
      */

@@ -25,6 +25,22 @@ public abstract class ProjectElement extends MVCCDElement {
 
     /**
      * La méthode donne une valeur "id" à chaque élément du projet.
+     * <pre>
+     * Si le parent est null, la méthode met la propriété "transitory" à true.
+     *  Un élément transitoire est créé lorsqu'il est nécessaire de travailler avec l'élément mais qu'il n'est pas encore validé par l'utilisateur.
+     *  Plus précisément un élément transitoire est créé:
+     * - Pour l'initialisation d'un élément lors de l'édition d'un nouvel élément.
+     * - Pour la création d'objets au sein d'une transaction en attente de validation (par exemple lors de l'ajout de paramètres à une contrainte).
+     *    Le fait qu'un élément est transitoire est visible en mode Debug dans l'interface graphique pour certains éléments (par exemple dans l'edition d'une table).
+     *    D'autres informations techniques sont aussi affichées de cette manière, comme l'id (identifiant unique) ainsi que la valeur d'ordonnancement.
+     * </pre>
+     * <img src="doc-files/UI_UniqueConstraintEdition.jpg" alt="Fenêtre d'édition d'une contrainte">
+     * <pre>
+     * En mode Debug, l'éditeur de table permet de visualiser les 3 propriétés techniques :
+     * - id, identifiant unique
+     * - transitory, élément transitoire
+     * - order, valeur d'ordonnancement
+     * </pre>
      */
     private void init(ProjectElement parent) {
         if (this instanceof Project) {
@@ -38,15 +54,6 @@ public abstract class ProjectElement extends MVCCDElement {
                 this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
             }
             if ( parent == null) {
-                /*
-                Un élément transitoire est créé lorsqu'il est nécessaire de travailler avec l'élément mais qu'il n'est pas
-                encore validé par l'utilisateur. Plus précisément un élément transitoire est créé:
-                 - pour l'initialisation d'un élément lors de l'édition d'un nouvel élément.
-                 - pour la création d'objets au sein d'une transaction en attente de validation (par exemple lors de l'ajout de paramètres à une contrainte).
-                Le fait qu'un élément est transitoire est visible en mode Debug dans l'interface graphique pour certains éléments (par exemple dans
-                l'edition d'une table). D'autres informations techniques sont aussi affichées de cette manière, comme l'id (identifiant unique) ainsi
-                que la valeur d'ordonnancement.
-                 */
                 transitory = true;
             }
         }

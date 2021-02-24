@@ -24,6 +24,7 @@ public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
      * utilisateur. Dans le référentiel, on peut voir ces extrémités d'association, (1) au sein des 2 entités reliés
      * par l'association (sous le répertoire "Extrémités de relations", ainsi que (2) sous le répertoire "Relations"
      * qui se trouve sous "MCD".
+     * <img src="doc-files/UI_ViewingThe2EndAssociationInRepository.jpg" alt="Visualisation des 2 extrémités d'association dans l'arbre du référentiel">
      */
     public  MCDAssociation treatNew(Window owner,
                                     MVCCDElement parent) {
@@ -41,6 +42,7 @@ public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
      * Dans l'interface utilisateur, sur le formulaire de création d'une association appelé depuis le diagrammeur, des
      * listes déroulantes permettent de sélectionner l'entité de départ, l'entité d'arrivée, la nature de l'association
      * ainsi que le conteneur dans lequel l'association se trouve (par exemple "MCD.Relations").
+     * <img src="doc-files/UI_NewAssociationFormFromDrawingArea.jpg" alt="Visualisation des 2 extrémités d'association dans l'arbre du référentiel">
      * @param entityFrom l'entité de départ de l'association
      * @param entityTo l'entité d'arrivée de l'association
      * @param nature la nature de l'association (par ex: Non identifiante)
@@ -101,6 +103,7 @@ public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
      * Il s'agit de l'éditeur de création d'une nouvelle association qui est affichée à l'utilisateur lorsqu'il crée
      * nouvelle association. Cet éditeur comprend le formulaire permettant de renseigner les informations sur la
      * nouvelle association.
+     * <img src="doc-files/UI_NewAssociationForm.jpg" alt="Formulaire spécifique de création d'une association">
      */
     @Override
     protected DialogEditor getDialogEditor(Window owner,

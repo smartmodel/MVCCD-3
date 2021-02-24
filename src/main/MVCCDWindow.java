@@ -23,6 +23,8 @@ import java.awt.event.WindowListener;
 /**
  * Construit l'écran d'accueil.
  * Le paquetage main.window (et tout ce qu'il contient) permet de réaliser cet écran.
+ * La zone de dessin est appelé "diagrammeur".
+ * <img src="doc-files/UI_homeScreen_RepositoryAndDrawingArea.jpg" alt="Ecran d'accueil - Référentiel et zone de dessin (diagrammeur)">
  */
 public class MVCCDWindow extends JFrame implements WindowListener {
 
