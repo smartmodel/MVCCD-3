@@ -2,16 +2,13 @@ package repository.editingTreat;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
-import main.MVCCDWindow;
-import mcd.MCDPackage;
+import project.Project;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
 import utilities.window.editor.DialogEditor;
-import project.Project;
 import utilities.window.editor.PanelInputContent;
 import window.editor.project.ProjectEditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 
 // Project est une classe particulière qui n'étend pas EditingTreat!

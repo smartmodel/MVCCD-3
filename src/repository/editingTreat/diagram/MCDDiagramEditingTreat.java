@@ -7,14 +7,11 @@ import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import main.window.diagram.WinDiagram;
-import mcd.MCDPackage;
-import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Cette classe implémante le diagrammeur (DiagramEditingTreat) spécifique à l'élaboration d'un MCD.

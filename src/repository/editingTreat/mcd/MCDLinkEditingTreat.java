@@ -1,7 +1,10 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import mcd.*;
+import mcd.MCDAssociation;
+import mcd.MCDContRelations;
+import mcd.MCDEntity;
+import mcd.MCDLink;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.services.SComboBoxService;

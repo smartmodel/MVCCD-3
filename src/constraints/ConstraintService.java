@@ -1,9 +1,6 @@
 package constraints;
 
-import datatypes.MCDDatatype;
-import datatypes.MDDatatypesManager;
 import main.MVCCDElementService;
-import stereotypes.Stereotype;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;

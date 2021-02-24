@@ -3,7 +3,10 @@ package messages;
 import exceptions.CodeApplException;
 import preferences.Preferences;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 
 
@@ -38,12 +41,11 @@ public class LoadMessages {
 	 */
 	private LoadMessages(){
 	}
-	
+
+
 	/**
 	 * Get the unique instance of this class.
-	 * @return
 	 */
-
 	public static void main(){
 		try {
 			//Load messages.properties
@@ -64,7 +66,6 @@ public class LoadMessages {
 	 * The property file loaded correspond to the right Locale parameterized 
 	 * in plugin.properties.
 	 * The file plugin.properties can't be internationalized.
-	 * @param fileName
 	 */
 	private static Map<String,String> loadProperties(String fileName){
 		Map<String,String> propertiesMap = new HashMap<String,String>();

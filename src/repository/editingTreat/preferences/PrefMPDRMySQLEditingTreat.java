@@ -6,10 +6,8 @@ import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.preferences.project.mpdr.mysql.PrefMPDRMySQLEditor;
-import window.editor.preferences.project.mpdr.oracle.PrefMPDROracleEditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class PrefMPDRMySQLEditingTreat extends EditingTreat {
 

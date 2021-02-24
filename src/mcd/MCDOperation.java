@@ -3,9 +3,6 @@ package mcd;
 import m.interfaces.IMCompletness;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDElementWithTargets;
-import md.MDElement;
-import md.services.MDElementConvert;
-import mldr.interfaces.IMLDRElement;
 import project.ProjectElement;
 
 import java.util.ArrayList;

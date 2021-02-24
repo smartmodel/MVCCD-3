@@ -1,7 +1,5 @@
 package mdr;
 
-import mcd.MCDEntity;
-import mcd.MCDGeneralization;
 import project.ProjectElement;
 
 public abstract class MDRRelFKEnd extends MDRRelEnd{

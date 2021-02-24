@@ -8,7 +8,6 @@ import utilities.window.editor.PanelInputContent;
 import window.editor.mddatatype.MDDatatypeEditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MDDatatypeEditingTreat extends EditingTreat {
 

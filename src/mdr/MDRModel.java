@@ -4,7 +4,6 @@ import md.MDElement;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.services.MDRModelService;
 import project.ProjectElement;
-import project.ProjectService;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,6 @@
 package mdr;
 
 import main.MVCCDElement;
-import md.MDElement;
 import md.interfaces.IMDElementWithSource;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;

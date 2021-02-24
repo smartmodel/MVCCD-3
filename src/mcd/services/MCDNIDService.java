@@ -1,6 +1,8 @@
 package mcd.services;
 
-import mcd.*;
+import mcd.MCDAttribute;
+import mcd.MCDEntity;
+import mcd.MCDNID;
 import mcd.interfaces.IMCDParameter;
 import messages.MessagesBuilder;
 import utilities.window.scomponents.STable;

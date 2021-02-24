@@ -2,9 +2,11 @@ package main;
 
 import diagram.mcd.MCDDiagram;
 import mcd.*;
-import mcd.MCDContAttributes;
 import mcd.interfaces.IMCDModel;
-import mdr.*;
+import mdr.MDRConstraint;
+import mdr.MDRContColumns;
+import mdr.MDRContConstraints;
+import mdr.MDRContTables;
 import mdr.interfaces.IMDRParameter;
 import messages.MessagesBuilder;
 import mldr.*;
@@ -22,7 +24,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
-import utilities.Trace;
 
 public class MVCCDElementFactory {
 

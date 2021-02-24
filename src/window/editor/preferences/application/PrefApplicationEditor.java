@@ -2,11 +2,10 @@ package window.editor.preferences.application;
 
 import main.MVCCDElement;
 import main.MVCCDElementApplicationPreferences;
-import main.MVCCDManager;
+import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
 import repository.editingTreat.preferences.PrefApplEditingTreat;
 import utilities.window.editor.DialogEditor;
-import preferences.Preferences;
 import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelInput;
 

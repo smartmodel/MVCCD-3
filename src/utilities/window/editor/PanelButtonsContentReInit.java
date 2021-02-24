@@ -1,10 +1,5 @@
 package utilities.window.editor;
 
-import main.MVCCDElement;
-import window.editor.preferences.project.mdrformat.PrefMDRFormatButtons;
-
-import java.awt.event.ActionListener;
-
 public abstract class PanelButtonsContentReInit extends PanelButtonsContent {
 
 

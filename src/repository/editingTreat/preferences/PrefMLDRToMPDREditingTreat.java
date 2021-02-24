@@ -5,11 +5,9 @@ import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.preferences.project.mcdtomldr.PrefMCDToMLDREditor;
 import window.editor.preferences.project.mldrtompdr.PrefMLDRToMPDREditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class PrefMLDRToMPDREditingTreat extends EditingTreat {
 

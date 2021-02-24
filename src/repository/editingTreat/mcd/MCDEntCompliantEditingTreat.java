@@ -3,7 +3,6 @@ package repository.editingTreat.mcd;
 import main.MVCCDElement;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
-import repository.editingTreat.EditingTreat;
 import repository.editingTreat.EditingTreatTransform;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;

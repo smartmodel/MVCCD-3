@@ -36,7 +36,6 @@ public abstract class MDRElement extends MDElement {
 
     /**
      * Retourne une liste ordonnée des enfants.
-     * @return
      */
     public ArrayList<MDRElement> getMDRChilds() {
         return MDRElementConvert.to(super.getChilds());
@@ -44,7 +43,6 @@ public abstract class MDRElement extends MDElement {
 
     /**
      * Retourne une liste ordonnée de la fratrie.
-     * @return
      */
     public ArrayList<MDRElement> getMDRSiblings(){
         return getMDRParent().getMDRChilds();
@@ -52,7 +50,6 @@ public abstract class MDRElement extends MDElement {
 
     /**
      * Retourne une liste ordonnée des frères et soeurs.
-     * @return
      */
     public ArrayList<MDRElement> getMDRBrothers(){
         return MDRElementConvert.to(getParent().getBrothers());
@@ -60,7 +57,6 @@ public abstract class MDRElement extends MDElement {
 
     /**
      * Retourne une liste de tous les descendants.
-     * @return
      */
     public ArrayList<MDRElement> getMDRDescendants(){
         return MDRElementService.getMDRDescendants(this);

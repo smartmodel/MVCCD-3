@@ -10,7 +10,6 @@ import window.editor.mdr.table.MDRTableEditor;
 import window.editor.mdr.table.MDRTableInputContent;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MDRTableEditingTreat extends EditingTreat {
 

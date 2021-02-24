@@ -16,8 +16,6 @@ public abstract class EditingTreatTransform extends EditingTreat{
      * Effectue le contrôle de conformité en deux phases:
      *  1. Lancement du contrôle de saisie de l'éditeur graphique pour l'élément à contrôler ;
      *  2. Lancement d'une méthode spécifique à l'élément à contrôler, qui effectue alors un contrôle prenant en compte tous les éléments du projet utilisateur.
-     * @param owner
-     * @param mvccdElement
      */
     public abstract void treatCompliant(
             Window owner, MVCCDElement mvccdElement);

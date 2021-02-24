@@ -3,15 +3,12 @@ package repository.editingTreat.mldr;
 import main.MVCCDElement;
 import mdr.MDRModel;
 import mldr.MLDRModel;
-import repository.editingTreat.EditingTreat;
 import repository.editingTreat.EditingTreatTransform;
-import repository.editingTreat.mdr.MDRTableEditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mdr.model.MDRModelEditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MLDRModelEditingTreat extends EditingTreatTransform {
 

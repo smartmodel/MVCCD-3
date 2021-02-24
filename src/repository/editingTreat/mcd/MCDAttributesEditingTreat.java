@@ -8,7 +8,6 @@ import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.attributes.AttributesEditorBtn;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDAttributesEditingTreat extends EditingTreat {
 

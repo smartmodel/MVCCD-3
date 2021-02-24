@@ -2,9 +2,7 @@ package utilities.window.editor;
 
 import main.MVCCDElement;
 import repository.editingTreat.EditingTreat;
-import window.editor.preferences.project.PrefProjectMenu;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
 public abstract class DialogEditorNavTree extends DialogEditor{

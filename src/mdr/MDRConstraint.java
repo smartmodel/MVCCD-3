@@ -1,12 +1,6 @@
 package mdr;
 
-import main.MVCCDElement;
-import main.MVCCDElementFactory;
-import mcd.MCDEntity;
-import mldr.MLDRColumn;
 import project.ProjectElement;
-
-import java.util.ArrayList;
 
 public abstract class MDRConstraint extends MDROperation{
 

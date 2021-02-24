@@ -34,10 +34,6 @@ public class MessagesBuilder {
 
 	/**
 	 * Return the given text with replacement parameters with given params.
-	 *
-	 * @param text
-	 * @param params
-	 * @return
 	 */
 	public static String format(String text, Object[] params) {
 		return MessageFormat.format(text, params);
@@ -46,10 +42,6 @@ public class MessagesBuilder {
 
 	/**
 	 * Return the given text with replacement parameters with given params.
-	 *
-	 * @param text
-	 * @param param
-	 * @return
 	 */
 	public static String format(String text, String param) {
 		return MessageFormat.format(text, param);
@@ -58,9 +50,6 @@ public class MessagesBuilder {
 
 	/**
 	 * Return the property coming entity "messages_xx.properties"
-	 *
-	 * @param property
-	 * @return
 	 */
 	public static String getMessagesProperty(String property) {
 		return getMessagesProperty(property, null);
@@ -69,10 +58,6 @@ public class MessagesBuilder {
 
 	/**
 	 * Do the same as "getMessagesProperty(String text, Object[] params)" but with only one parameter.
-	 *
-	 * @param property
-	 * @param param
-	 * @return
 	 */
 	public static String getMessagesProperty(String property, Object param) {
 		return getMessagesProperty(property, new Object[]{param});
@@ -87,10 +72,6 @@ public class MessagesBuilder {
 	 * Example: getMessagesProperty("The entity {0} has been transformed assLink a table {1}.", new Object[]{"Employee","Employees"});
 	 * If you give a no-string parameter, it will be converted assLink String using the current Locale.
 	 * Return null if nothing is founded.
-	 *
-	 * @param property
-	 * @param params
-	 * @return
 	 */
 	public static String getMessagesProperty(String property, Object[] params) {
 		String message = LoadMessages.getMessageBrut(property);

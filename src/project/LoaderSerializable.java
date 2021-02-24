@@ -2,17 +2,12 @@ package project;
 
 import exceptions.CodeApplException;
 import main.MVCCDElement;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import project.Project;
 import utilities.Trace;
 
-import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 public class LoaderSerializable {
    

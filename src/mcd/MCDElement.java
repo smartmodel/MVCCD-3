@@ -1,8 +1,6 @@
 package mcd;
 
 import exceptions.CodeApplException;
-import main.MVCCDElement;
-import main.MVCCDElementService;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDElementConvert;
 import mcd.services.MCDElementService;
@@ -31,9 +29,6 @@ public abstract class MCDElement extends MDElement {
     /**
      * Retourne le nom d'un élément avec le chemin d'accès.
      * Par exemple: le nom d'une entité préfixé du ou des paquetages qui la contiennent.
-     * @param pathMode
-     * @param separator
-     * @return
      */
     public String getPath(int pathMode, String separator) {
         return MCDElementService.getPath(this, pathMode, separator);
@@ -59,7 +54,6 @@ public abstract class MCDElement extends MDElement {
      * naturel (UID) ! (par ex: des entités de même nom dans des paquetages différents)
      * @param pathMode Permet de choisir de créer le path avec le name ou le shortName des parents successifs. Valeurs
      *                 possibles: MVCCDElementService.PATHNAME et PATHSHORTNAME.
-     * @return
      */
     public String getNamePath(int pathMode) {
         String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
@@ -74,7 +68,6 @@ public abstract class MCDElement extends MDElement {
     /**
      * Au même titre que getNamePath(), retourne le path et le shortName d'un objet.
      * La différence est que le namePath est construit avec la méthode getShortNameSmart(), afin d'utiliser le name si shortName est nul.
-     * @return
      */
     public String getShortNameSmartPath() {
         String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
@@ -127,7 +120,6 @@ public abstract class MCDElement extends MDElement {
 
     /**
      * Retourne une liste ordonnée des enfants.
-     * @return
      */
     public ArrayList<MCDElement> getMCDChilds() {
         return MCDElementConvert.to(super.getChilds());
@@ -135,7 +127,6 @@ public abstract class MCDElement extends MDElement {
 
     /**
      * Retourne une liste ordonnée de la fratrie.
-     * @return
      */
     public ArrayList<MCDElement> getMCDSiblings(){
         return getMCDParent().getMCDChilds();
@@ -143,7 +134,6 @@ public abstract class MCDElement extends MDElement {
 
     /**
      * Retourne une liste ordonnée des frères et soeurs.
-     * @return
      */
     public ArrayList<MCDElement> getMCDBrothers(){
         return MCDElementConvert.to(getParent().getBrothers());
@@ -151,7 +141,6 @@ public abstract class MCDElement extends MDElement {
 
     /**
      * Retourne une liste de tous les descendants.
-     * @return
      */
     public ArrayList<MCDElement> getMCDDescendants(){
         return MCDElementService.getMCDDescendants(this);

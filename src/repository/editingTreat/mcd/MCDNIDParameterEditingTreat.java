@@ -10,7 +10,6 @@ import window.editor.mcd.operation.parameter.ParameterEditor;
 import window.editor.mcd.operation.parameter.ParameterInputContent;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDNIDParameterEditingTreat extends EditingTreat {
 

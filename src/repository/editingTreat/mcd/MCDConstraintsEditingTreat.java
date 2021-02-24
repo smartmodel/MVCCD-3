@@ -8,7 +8,6 @@ import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.operation.constraint.constraints.ConstraintsEditorBtn;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDConstraintsEditingTreat extends EditingTreat {
 

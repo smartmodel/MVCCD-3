@@ -8,7 +8,6 @@ import utilities.window.editor.PanelInputContent;
 import window.editor.preferences.project.mcdtomldr.PrefMCDToMLDREditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class PrefMCDToMLDREditingTreat extends EditingTreat {
 

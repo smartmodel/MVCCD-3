@@ -1,7 +1,8 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import mcd.*;
+import mcd.MCDContConstraints;
+import mcd.MCDUnicity;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -9,7 +10,6 @@ import window.editor.mcd.operation.constraint.unicity.unique.UniqueEditor;
 import window.editor.mcd.operation.constraint.unicity.unique.UniqueInputContent;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDUniqueEditingTreat extends EditingTreat {
 

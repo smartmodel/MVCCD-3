@@ -1,9 +1,14 @@
 package project;
 
-import main.*;
+import main.MVCCDElement;
+import main.MVCCDElementFactory;
+import main.MVCCDFactory;
 import mcd.*;
 import messages.MessagesBuilder;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import preferences.Preferences;
 import profile.Profile;

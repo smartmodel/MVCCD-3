@@ -4,7 +4,7 @@ import mcd.MCDContConstraints;
 import mcd.MCDUnicity;
 import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
-import utilities.window.editor.*;
+import utilities.window.editor.DialogEditor;
 
 import java.awt.*;
 

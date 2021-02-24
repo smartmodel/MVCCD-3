@@ -116,19 +116,25 @@ public class UtilDivers {
         if (StringUtils.isNotEmpty(str)) {
             noFree = StringUtils.remove(str, ' ');
 
-            noFree = noFree.replace('à', 'a');
-            noFree = noFree.replace('â', 'a');
-            noFree = noFree.replace('ä', 'a');
-            noFree = noFree.replace('ç', 'c');
-            noFree = noFree.replace('é', 'e');
-            noFree = noFree.replace('è', 'e');
-            noFree = noFree.replace('ê', 'e');
-            noFree = noFree.replace('ë', 'e');
-            noFree = noFree.replace('ò', 'o');
-            noFree = noFree.replace('ö', 'o');
-            noFree = noFree.replace('ù', 'u');
-            noFree = noFree.replace('û', 'u');
-            noFree = noFree.replace('ü', 'u');
+            /*
+            Remarque: Il semblerait qu'il y ait un soucis d'encodage du fichier source (UtilDivers.java)
+            Ci-après les caractères unicode sont données au lieu du caractère directement, de façon à éviter les
+            erreurs d'interprétation des caractères lors de la lecture du fichier si cela se fait avec un mauvais
+            encodage.
+            */
+            noFree = noFree.replace('\u00e0', 'a'); //à
+            noFree = noFree.replace('\u00e2', 'a'); //â
+            noFree = noFree.replace('\u00e4', 'a'); //ä
+            noFree = noFree.replace('\u00e7', 'c'); //ç
+            noFree = noFree.replace('\u00e9', 'e'); //é
+            noFree = noFree.replace('\u00e8', 'e'); //è
+            noFree = noFree.replace('\u00ea', 'e'); //ê
+            noFree = noFree.replace('\u00eb', 'e'); //ë
+            noFree = noFree.replace('\u00f2', 'o'); //ò
+            noFree = noFree.replace('\u00f6', 'o'); //ö
+            noFree = noFree.replace('\u00f9', 'u'); //ù
+            noFree = noFree.replace('\u00fb', 'u'); //û
+            noFree = noFree.replace('\u00fc', 'u'); //ü
         }
         return noFree;
     }

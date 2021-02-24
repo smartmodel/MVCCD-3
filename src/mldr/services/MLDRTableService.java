@@ -2,17 +2,12 @@ package mldr.services;
 
 import main.MVCCDElement;
 import mcd.MCDElement;
-import mcd.MCDEntity;
 import mcd.MCDRelEnd;
-import mcd.MCDRelation;
 import mdr.MDRContColumns;
 import mdr.MDRContConstraints;
-import mdr.MDRContTables;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
-import mldr.MLDRModel;
 import mldr.MLDRTable;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

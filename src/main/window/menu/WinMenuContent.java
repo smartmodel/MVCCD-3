@@ -4,7 +4,6 @@ import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import project.ProjectManager;
 import repository.editingTreat.ProjectEditingTreat;
 import utilities.window.DialogMessage;
 

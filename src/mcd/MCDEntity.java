@@ -1,15 +1,12 @@
 package mcd;
 
-import m.interfaces.IMCompletness;
 import m.MRelationDegree;
+import m.interfaces.IMCompletness;
 import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDNamePathParent;
 import mcd.services.MCDEntityService;
-import md.MDElement;
-import md.services.MDElementConvert;
-import mldr.interfaces.IMLDRElement;
 import project.ProjectElement;
 
 import java.util.ArrayList;

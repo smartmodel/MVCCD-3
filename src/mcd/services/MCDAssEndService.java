@@ -1,7 +1,5 @@
 package mcd.services;
 
-import exceptions.CodeApplException;
-import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.services.MRelEndService;
 import main.MVCCDElement;
@@ -16,7 +14,6 @@ import preferences.Preferences;
 import utilities.window.scomponents.SComboBox;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class MCDAssEndService {
 

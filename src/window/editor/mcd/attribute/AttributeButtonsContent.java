@@ -4,8 +4,8 @@ import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import mcd.MCDAttribute;
 import mcd.MCDContAttributes;
-import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
+import utilities.window.editor.PanelButtonsContent;
 
 public class AttributeButtonsContent extends PanelButtonsContent {
 

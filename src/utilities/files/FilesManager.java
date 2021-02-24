@@ -24,7 +24,6 @@ public class FilesManager {
 	
 	/**
 	 * Get the unique instance of the class.
-	 * @return
 	 */
 	public static synchronized FilesManager instance(){
 		if(instance == null){

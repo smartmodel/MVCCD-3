@@ -3,8 +3,6 @@ package project;
 import main.MVCCDElement;
 import main.MVCCDManager;
 
-import java.util.ArrayList;
-
 /**
  * Ancêtre de tous les éléments d'un projet (y compris le projet lui-même).
  */
@@ -27,7 +25,6 @@ public abstract class ProjectElement extends MVCCDElement {
 
     /**
      * La méthode donne une valeur "id" à chaque élément du projet.
-     * @param parent
      */
     private void init(ProjectElement parent) {
         if (this instanceof Project) {
@@ -57,7 +54,6 @@ public abstract class ProjectElement extends MVCCDElement {
 
     /**
      * Retourne l'identifiant unique de chaque élément du projet.
-     * @return
      */
     public int getId() {
         return id;

@@ -3,13 +3,11 @@ package project;
 import main.MVCCDElement;
 import main.MVCCDFactory;
 import main.MVCCDManager;
-import main.window.repository.WinRepositoryTree;
 import mcd.services.MCDAdjustPref;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
 import profile.ProfileLoaderXml;
-import profile.ProfileManager;
 
 /**
  * Classe maitresse du projet utilisateur.
@@ -47,7 +45,6 @@ public class Project extends ProjectElement {
      * Le projet n'a pas de parent ! Par contre, il est rattaché à la racine de l'arbre de visualisation du référentiel
      * pour pouvoir le visualiser. Le rattachement se fait par la commande repository.addProject(project) de la méthode
      * projectToRepository() de la classe MVCCDManager.
-     * @param name
      */
     public Project(String name) {
 

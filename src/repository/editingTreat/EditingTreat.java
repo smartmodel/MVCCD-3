@@ -23,9 +23,6 @@ public abstract class EditingTreat {
     /**
      * Déclenchement de traitement de données pour la création d'un élément (par exemple pour la création d'une entité).
      * Notamment, ouvre l'éditeur attendu en faisant appel à getDialogEditor().
-     * @param owner
-     * @param parent
-     * @return
      */
     public MVCCDElement treatNew(Window owner, MVCCDElement parent) {
 
@@ -36,9 +33,6 @@ public abstract class EditingTreat {
 
     /**
      * Déclenchement de traitement de données pour la modification d'un élément.
-     * @param owner
-     * @param element
-     * @return
      */
     public boolean treatUpdate(Window owner, MVCCDElement element) {
         MVCCDElement parentBefore = element.getParent();
@@ -56,9 +50,6 @@ public abstract class EditingTreat {
 
     /**
      * Déclenchement de traitement de données pour la visualisation d'un élément.
-     * @param owner
-     * @param element
-     * @return
      */
     public DialogEditor treatRead(Window owner, MVCCDElement element) {
         DialogEditor fen = getDialogEditor(owner, element.getParent(), element, DialogEditor.READ);
@@ -69,9 +60,6 @@ public abstract class EditingTreat {
 
     /**
      * Déclenchement de traitement de données pour la suppression d'un élément.
-     * @param owner
-     * @param element
-     * @return
      */
     public boolean treatDelete (Window owner, MVCCDElement element) {
         String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
@@ -89,8 +77,6 @@ public abstract class EditingTreat {
 
     /**
      * Déclenchement de traitement de données pour la suppression des éléments enfants d'un élément.
-     * @param owner
-     * @param element
      */
     public void treatDeleteChilds (Window owner, MVCCDElement element) {
         String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
@@ -178,11 +164,6 @@ public abstract class EditingTreat {
 
     /**
      * Chaque descendant de EditingTreat doit définir l'éditeur graphique à utiliser.
-     * @param owner
-     * @param parent
-     * @param element
-     * @param mode
-     * @return
      */
     protected abstract DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) ;
 

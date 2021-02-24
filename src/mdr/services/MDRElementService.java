@@ -1,7 +1,5 @@
 package mdr.services;
 
-import main.MVCCDElement;
-import mcd.MCDElement;
 import mdr.MDRElement;
 
 import java.util.ArrayList;

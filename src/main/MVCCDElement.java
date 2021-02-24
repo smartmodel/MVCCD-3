@@ -1,13 +1,9 @@
 package main;
 
-import datatypes.MDDatatype;
 import exceptions.CodeApplException;
-import mdr.MDRColumn;
-import mdr.MDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
 import utilities.Debug;
-import utilities.Trace;
 
 import java.io.Serializable;
 import java.util.ArrayList;

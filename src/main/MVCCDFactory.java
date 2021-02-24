@@ -1,12 +1,6 @@
 package main;
 
-import datatypes.MDDatatype;
-import datatypes.MDDatatypesManager;
-import mcd.*;
-import preferences.Preferences;
-import preferences.PreferencesManager;
 import profile.Profile;
-import profile.ProfileManager;
 import project.Project;
 
 public class MVCCDFactory {

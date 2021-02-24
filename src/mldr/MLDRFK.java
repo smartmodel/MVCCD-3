@@ -3,9 +3,7 @@ package mldr;
 import main.MVCCDElementFactory;
 import mcd.MCDElement;
 import md.MDElement;
-import mdr.MDRColumn;
 import mdr.MDRFK;
-import mdr.MDRPK;
 import mdr.MDRParameter;
 import mdr.interfaces.IMDRParameter;
 import mldr.interfaces.IMDLRConstraint;
@@ -13,7 +11,6 @@ import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mldr.services.MLDROperationService;
 import project.ProjectElement;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

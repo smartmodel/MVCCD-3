@@ -1,6 +1,5 @@
 package main.window.repository;
 
-import main.MVCCDElement;
 import main.MVCCDManager;
 import project.Project;
 import project.ProjectElement;

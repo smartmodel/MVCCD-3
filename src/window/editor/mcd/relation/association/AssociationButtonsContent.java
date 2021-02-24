@@ -2,9 +2,11 @@ package window.editor.mcd.relation.association;
 
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
-import mcd.*;
-import utilities.window.editor.PanelButtonsContent;
+import mcd.MCDAssociation;
+import mcd.MCDContRelations;
+import mcd.MCDEntity;
 import preferences.Preferences;
+import utilities.window.editor.PanelButtonsContent;
 
 public class AssociationButtonsContent extends PanelButtonsContent {
 

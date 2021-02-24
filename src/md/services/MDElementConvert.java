@@ -1,8 +1,6 @@
 package md.services;
 
-import main.MVCCDElement;
 import md.MDElement;
-import org.apache.commons.lang.StringUtils;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;

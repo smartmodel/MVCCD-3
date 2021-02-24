@@ -1,12 +1,11 @@
 package window.editor.preferences.project.general;
 
 import main.MVCCDElement;
-import preferences.PreferencesManager;
-import repository.editingTreat.EditingTreat;
-import utilities.window.editor.*;
 import preferences.Preferences;
+import repository.editingTreat.EditingTreat;
+import utilities.window.editor.PanelButtons;
+import utilities.window.editor.PanelInput;
 import window.editor.preferences.project.PrefEditor;
-import window.editor.preferences.project.PrefNavTree;
 import window.editor.preferences.project.PrefProjectMenu;
 
 import java.awt.*;

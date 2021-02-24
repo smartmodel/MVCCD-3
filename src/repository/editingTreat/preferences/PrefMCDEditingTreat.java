@@ -1,18 +1,13 @@
 package repository.editingTreat.preferences;
 
 import main.MVCCDElement;
-import main.MVCCDWindow;
-import mcd.MCDPackage;
+import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
-import preferences.Preferences;
 import utilities.window.editor.PanelInputContent;
-import window.editor.preferences.project.PrefProject;
-import window.editor.preferences.project.PrefProjectMenu;
 import window.editor.preferences.project.mcd.PrefMCDEditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class PrefMCDEditingTreat extends EditingTreat {
 

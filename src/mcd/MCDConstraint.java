@@ -6,12 +6,8 @@ import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 import project.ProjectElement;
 import stereotypes.Stereotype;
-import stereotypes.Stereotypes;
-import stereotypes.StereotypesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

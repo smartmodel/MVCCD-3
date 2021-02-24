@@ -8,7 +8,6 @@ import utilities.window.editor.PanelInputContent;
 import window.editor.mdr.model.MDRModelEditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MPDRModelEditingTreat extends EditingTreat {
 

@@ -4,9 +4,9 @@ import main.MVCCDElement;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
-import utilities.window.editor.*;
-import window.editor.preferences.project.general.PrefGeneralButtons;
-import window.editor.preferences.project.general.PrefGeneralInput;
+import utilities.window.editor.DialogEditor;
+import utilities.window.editor.DialogEditorNavTree;
+import utilities.window.editor.PanelNavTree;
 
 import java.awt.*;
 

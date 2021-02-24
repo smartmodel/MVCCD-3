@@ -1,10 +1,5 @@
 package repository;
 
-import main.MVCCDElement;
-import main.MVCCDManager;
-import mcd.*;
-import preferences.Preferences;
-import project.Project;
 import project.ProjectElement;
 
 import javax.swing.tree.DefaultMutableTreeNode;

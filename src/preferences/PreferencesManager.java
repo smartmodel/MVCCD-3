@@ -1,12 +1,8 @@
 package preferences;
 
-import main.MVCCDManager;
-import profile.ProfileFileChooser;
 import project.Project;
-import project.ProjectFileChooser;
-import utilities.files.UtilFiles;
 
-import java.io.*;
+import java.io.FileNotFoundException;
 
 
 public class PreferencesManager {

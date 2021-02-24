@@ -1,6 +1,5 @@
 package mpdr.oracle;
 
-import md.MDElement;
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;

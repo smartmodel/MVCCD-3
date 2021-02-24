@@ -1,8 +1,8 @@
 package transform.mcdtomldr;
 
 import exceptions.CodeApplException;
-import exceptions.orderbuildnaming.OrderBuildNameException;
 import exceptions.TransformMCDException;
+import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
@@ -19,7 +19,6 @@ import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import project.ProjectService;
 
 import java.util.ArrayList;
 

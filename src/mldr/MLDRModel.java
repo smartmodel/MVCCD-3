@@ -8,8 +8,8 @@ import mdr.MDRModel;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRRelation;
 import mldr.services.MLDRModelService;
-import transform.mldrtompdr.MLDRTransform;
 import project.ProjectElement;
+import transform.mldrtompdr.MLDRTransform;
 
 import java.util.ArrayList;
 

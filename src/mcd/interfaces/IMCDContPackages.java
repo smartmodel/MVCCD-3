@@ -1,8 +1,6 @@
 package mcd.interfaces;
 
-import mcd.MCDPackage;
 import mcd.services.IMCDModelService;
-import project.ProjectService;
 
 // Implémentée par les classes qui peuvent contenir des paquetages
 public interface IMCDContPackages {

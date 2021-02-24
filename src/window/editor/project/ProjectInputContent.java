@@ -3,21 +3,22 @@ package window.editor.project;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.services.MCDProjectService;
-import utilities.window.editor.DialogEditor;
-import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.ProfileManager;
 import project.Project;
+import utilities.window.editor.DialogEditor;
+import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
+import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
-import utilities.window.scomponents.SComboBox;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.ArrayList;
 

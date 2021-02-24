@@ -1,7 +1,6 @@
 package mcd;
 
 import project.ProjectElement;
-import project.ProjectService;
 
 public class MCDContRelations extends MCDElement{
 

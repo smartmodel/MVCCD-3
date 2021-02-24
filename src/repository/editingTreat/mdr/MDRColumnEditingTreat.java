@@ -3,18 +3,13 @@ package repository.editingTreat.mdr;
 import main.MVCCDElement;
 import mdr.MDRColumn;
 import mdr.MDRContColumns;
-import mdr.MDRContTables;
-import mdr.MDRTable;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mdr.column.MDRColumnEditor;
 import window.editor.mdr.column.MDRColumnInputContent;
-import window.editor.mdr.table.MDRTableEditor;
-import window.editor.mdr.table.MDRTableInputContent;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MDRColumnEditingTreat extends EditingTreat {
 

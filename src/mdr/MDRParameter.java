@@ -1,13 +1,10 @@
 package mdr;
 
-import md.MDElement;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
 import project.ProjectService;
-
-import java.util.ArrayList;
 
 public abstract class MDRParameter extends MDRElement implements IMDRElementWithIteration{
 

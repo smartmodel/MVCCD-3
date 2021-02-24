@@ -2,20 +2,19 @@ package main;
 
 import console.Console;
 import datatypes.MDDatatypesManager;
-import main.window.menu.WinMenuContent;
-import main.window.repository.WinRepositoryTree;
-import mcd.MCDRelEnd;
-import mcd.MCDRelation;
-import preferences.PreferencesManager;
-import project.*;
 import main.window.console.WinConsoleContent;
 import main.window.diagram.WinDiagram;
 import main.window.diagram.WinDiagramContent;
-import messages.LoadMessages;
-import repository.Repository;
+import main.window.menu.WinMenuContent;
 import main.window.repository.WinRepository;
 import main.window.repository.WinRepositoryContent;
-import utilities.Trace;
+import main.window.repository.WinRepositoryTree;
+import mcd.MCDRelEnd;
+import mcd.MCDRelation;
+import messages.LoadMessages;
+import preferences.PreferencesManager;
+import project.*;
+import repository.Repository;
 import utilities.files.UtilFiles;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -101,6 +100,13 @@ public class MVCCDManager {
 
     /**
      * La méthode crée et affiche l'écran d'accueil.
+     * L'écran comporte 5 zones :
+     *  - Haut	    Probablement des commandes contextuelles à terme
+     *  - Gauche 	L’arbre de représentation du contenu du référentiel
+     *  - Centre	Le diagrammeur
+     *  - Droite	Une zone de réserve
+     *  - Bas       Une console d’affichage (Contrôle de conformité…)
+     * <img src="doc-files/UI_homeScreen.jpg" alt="Fenêtre de l'écran d'accueil">
      */
     public void startMVCCDWindow() {
         mvccdWindow = new MVCCDWindow();
@@ -202,7 +208,6 @@ public class MVCCDManager {
 
     /**
      * Ouvre un projet à partir de son fichier de sauvegarde et le charge dans le référentiel.
-     * @param file
      */
     private void openProjectBase(File file) {
         //Mémorise le fichier associé au projet

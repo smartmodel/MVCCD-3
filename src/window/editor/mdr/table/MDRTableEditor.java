@@ -1,16 +1,11 @@
 package window.editor.mdr.table;
 
-import mcd.MCDContEntities;
-import mcd.MCDEntity;
 import mdr.MDRContTables;
 import mdr.MDRTable;
-import mldr.MLDRModel;
 import mldr.MLDRTable;
-import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
-import utilities.Trace;
 import utilities.window.editor.DialogEditorNavBtn;
 import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelInput;

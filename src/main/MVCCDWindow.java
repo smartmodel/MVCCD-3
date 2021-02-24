@@ -1,14 +1,13 @@
 package main;
 
-import messages.MessagesBuilder;
-import preferences.Preferences;
 import main.window.console.WinConsole;
 import main.window.diagram.WinDiagram;
 import main.window.haut.Haut;
 import main.window.menu.WinMenuContent;
 import main.window.repository.WinRepository;
 import main.window.reserve.Reserve;
-import project.ProjectsRecents;
+import messages.MessagesBuilder;
+import preferences.Preferences;
 import project.ProjectsRecentsSaver;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;

@@ -1,14 +1,8 @@
 package project;
 
-import m.MRelationDegree;
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.*;
-import mcd.interfaces.IMCDContPackages;
-import mcd.MCDEntityNature;
-import mdr.MDRElement;
 import mdr.MDRModel;
-import mdr.MDRTable;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;

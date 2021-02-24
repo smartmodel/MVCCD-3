@@ -3,8 +3,8 @@ package window.editor.preferences.project;
 import preferences.PreferencesManager;
 import repository.editingTreat.preferences.*;
 import utilities.window.editor.PanelNavTreeContent;
-import window.editor.preferences.project.mcd.PrefMCDEditor;
 import window.editor.preferences.project.general.PrefGeneralEditor;
+import window.editor.preferences.project.mcd.PrefMCDEditor;
 import window.editor.preferences.project.mcdtomldr.PrefMCDToMLDREditor;
 import window.editor.preferences.project.mdr.PrefMDREditor;
 import window.editor.preferences.project.mdrformat.PrefMDRFormatEditor;
@@ -14,7 +14,6 @@ import window.editor.preferences.project.mpdr.mysql.PrefMPDRMySQLEditor;
 import window.editor.preferences.project.mpdr.oracle.PrefMPDROracleEditor;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 public class PrefNavTreeContent extends PanelNavTreeContent {
 

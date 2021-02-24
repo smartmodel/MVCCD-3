@@ -1,12 +1,8 @@
 package mldr.services;
 
 import exceptions.CodeApplException;
-import mdr.MDRColumn;
 import mdr.MDRPK;
-import mldr.MLDRColumn;
 import mldr.MLDRPK;
-
-import java.util.ArrayList;
 
 public class MLDRPKService {
 

@@ -1,6 +1,5 @@
 package utilities;
 
-import main.MVCCDElement;
 import preferences.Preferences;
 
 import java.util.ArrayList;

@@ -4,7 +4,7 @@ import exceptions.CodeApplException;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.*;
+import mcd.MCDElement;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDUtilService;
 import preferences.Preferences;
@@ -22,7 +22,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public abstract class PanelInputContentIdTable extends PanelInputContentId {

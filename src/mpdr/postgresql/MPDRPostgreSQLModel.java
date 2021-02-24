@@ -1,11 +1,8 @@
 package mpdr.postgresql;
 
 import main.MVCCDElementFactory;
-import mdr.MDRElement;
 import mldr.MLDRTable;
-import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRModel;
-import mpdr.mysql.MPDRMySQLTable;
 import project.ProjectElement;
 
 public class MPDRPostgreSQLModel extends MPDRModel {

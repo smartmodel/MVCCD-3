@@ -22,7 +22,6 @@ public abstract class PanelContent extends JPanel {
 
     /**
      * Permet d'ajouter un composant (classe Component de awt) dans un JPanel. Si nécessaire, des barres de défilement sont ajoutées.
-     * @param panel
      */
     public void addContent(JPanel panel) {
         scroll = new JScrollPane(panel);

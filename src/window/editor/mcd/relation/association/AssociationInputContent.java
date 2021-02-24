@@ -1,6 +1,5 @@
 package window.editor.mcd.relation.association;
 
-import m.interfaces.IMRelEnd;
 import m.MRelEndMultiPart;
 import m.MRelEndMultiStr;
 import m.MRelationDegree;
@@ -28,7 +27,10 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 public class AssociationInputContent extends PanelInputContentId {

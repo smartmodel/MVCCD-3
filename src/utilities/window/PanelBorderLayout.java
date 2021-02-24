@@ -1,7 +1,7 @@
 package utilities.window;
 
-import preferences.PreferencesManager;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;

@@ -1,13 +1,17 @@
 package mcd.services;
 
-import m.*;
+import m.MRelEndMulti;
+import m.MRelEndMultiPart;
+import m.MRelationDegree;
 import m.services.MRelEndService;
-import mcd.*;
+import mcd.MCDAssociation;
+import mcd.MCDAssociationNature;
+import mcd.MCDElement;
+import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import project.ProjectService;
 import utilities.window.scomponents.SComboBox;
 
 import java.util.ArrayList;

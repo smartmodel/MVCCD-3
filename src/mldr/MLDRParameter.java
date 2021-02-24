@@ -2,15 +2,11 @@ package mldr;
 
 import mcd.MCDElement;
 import md.MDElement;
-import mdr.MDRColumn;
-import mdr.MDRElement;
 import mdr.MDRParameter;
 import mdr.interfaces.IMDRParameter;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import project.ProjectElement;
-
-import java.util.ArrayList;
 
 public class MLDRParameter extends MDRParameter implements IMLDRElement, IMLDRElementWithSource {
 

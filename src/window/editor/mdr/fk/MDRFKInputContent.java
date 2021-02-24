@@ -2,16 +2,12 @@ package window.editor.mdr.fk;
 
 import m.MElement;
 import main.MVCCDElement;
-import mcd.MCDElement;
 import mdr.MDRColumn;
-import mdr.MDRElement;
 import mdr.MDRFK;
-import mdr.MDRPK;
 import preferences.Preferences;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
 import window.editor.mcd.mcdtargets.MCDTargetsTableColumn;
-import window.editor.mdr.utilities.PanelInputContentIdMDR;
 import window.editor.mdr.utilities.PanelInputContentTableBasicIdMDR;
 
 import javax.swing.*;

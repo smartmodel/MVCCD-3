@@ -10,7 +10,6 @@ import window.editor.mcd.attribute.AttributeEditor;
 import window.editor.mcd.attribute.AttributeInputContent;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDAttributeEditingTreat extends EditingTreat {
 

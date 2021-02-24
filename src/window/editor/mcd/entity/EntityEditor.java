@@ -4,7 +4,10 @@ import mcd.MCDContEntities;
 import mcd.MCDEntity;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
-import utilities.window.editor.*;
+import utilities.window.editor.DialogEditorNavBtn;
+import utilities.window.editor.PanelButtons;
+import utilities.window.editor.PanelInput;
+import utilities.window.editor.PanelNavBtn;
 
 import java.awt.*;
 

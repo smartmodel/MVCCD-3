@@ -1,11 +1,8 @@
 package mldr;
 
-import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
 import mcd.*;
 import md.MDElement;
-import mdr.MDRColumn;
-import mdr.MDRConstraint;
 import mdr.MDRTable;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;

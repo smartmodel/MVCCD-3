@@ -1,13 +1,8 @@
 package repository.editingTreat.mcd;
 
-import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import mcd.MCDContModels;
-import mcd.MCDModel;
-import repository.editingTreat.EditingTreat;
 import repository.editingTreat.EditingTreatTransform;
-import utilities.Trace;
-import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 

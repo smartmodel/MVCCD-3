@@ -1,10 +1,8 @@
 package utilities.window.editor;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
 import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 

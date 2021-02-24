@@ -2,20 +2,18 @@ package window.editor.preferences.application;
 
 import main.MVCCDElement;
 import messages.MessagesBuilder;
-import preferences.PreferencesSaverXml;
-import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import preferences.PreferencesSaver;
+import preferences.PreferencesSaverXml;
 import project.Project;
 import utilities.window.DialogMessage;
+import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.io.File;
 
 public class PrefApplicationInputContent extends PanelInputContent {
     //private JPanel panel = new JPanel();

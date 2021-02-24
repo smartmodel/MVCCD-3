@@ -3,7 +3,6 @@ package utilities.window.scomponents.services;
 import org.apache.commons.lang.StringUtils;
 import utilities.window.editor.services.PanelInputService;
 import utilities.window.scomponents.SComboBox;
-import utilities.window.scomponents.STextField;
 
 public class SComboBoxService {
 

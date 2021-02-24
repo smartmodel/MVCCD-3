@@ -1,6 +1,5 @@
 package utilities.window.scomponents;
 
-import main.MVCCDManager;
 import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.services.SComponentService;
 

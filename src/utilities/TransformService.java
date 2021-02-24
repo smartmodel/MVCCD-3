@@ -1,10 +1,5 @@
 package utilities;
 
-import main.MVCCDElement;
-import mdr.MDRElement;
-import mdr.MDRElementNames;
-import mdr.MDRNamingLength;
-
 public class TransformService {
 
     /*

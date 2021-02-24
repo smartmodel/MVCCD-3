@@ -8,7 +8,8 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.editor.PanelInputContent;
-import utilities.window.scomponents.*;
+import utilities.window.scomponents.SComponent;
+import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
 
 import javax.swing.*;

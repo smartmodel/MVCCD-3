@@ -1,11 +1,8 @@
 package mpdr.mysql;
 
 import main.MVCCDElementFactory;
-import mdr.MDRElement;
 import mldr.MLDRTable;
-import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRModel;
-import mpdr.MPDRTable;
 import project.ProjectElement;
 
 public class MPDRMySQLModel extends MPDRModel {

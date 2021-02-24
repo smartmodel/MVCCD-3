@@ -1,7 +1,5 @@
 package mdr.interfaces;
 
-import md.interfaces.IMDElementWithSource;
-
 public interface IMDRElementWithIteration  {
 
 

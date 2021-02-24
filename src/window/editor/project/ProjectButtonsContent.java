@@ -2,9 +2,9 @@ package window.editor.project;
 
 import main.MVCCDElement;
 import main.MVCCDFactory;
-import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
 import project.Project;
+import utilities.window.editor.PanelButtonsContent;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;

@@ -6,7 +6,9 @@ import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
-import mcd.*;
+import mcd.MCDAttribute;
+import mcd.MCDElement;
+import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
 import mdr.interfaces.IMDRElementWithIteration;
@@ -14,7 +16,6 @@ import mldr.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.MDTransform;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

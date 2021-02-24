@@ -1,8 +1,6 @@
 package mldr;
 
-import mcd.MCDElement;
 import mdr.MDRContTables;
-import mdr.MDRTable;
 import mldr.interfaces.IMLDRElement;
 import project.ProjectElement;
 

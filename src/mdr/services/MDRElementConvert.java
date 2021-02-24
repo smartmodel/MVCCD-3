@@ -1,6 +1,5 @@
 package mdr.services;
 
-import mcd.MCDElement;
 import mdr.MDRElement;
 import utilities.UtilDivers;
 

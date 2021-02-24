@@ -8,7 +8,6 @@ import mcd.interfaces.IMCDModel;
 import mdr.MDRElement;
 import mdr.MDRModel;
 import preferences.Preferences;
-import utilities.Trace;
 import utilities.window.editor.PanelInputContentTableBasic;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;

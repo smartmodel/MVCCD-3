@@ -1,17 +1,14 @@
 package window.editor.mdr.pk;
 
 import mdr.MDRContConstraints;
-import mdr.MDRContTables;
 import mdr.MDRPK;
-import mdr.MDRTable;
 import mldr.MLDRPK;
-import mldr.MLDRTable;
 import mpdr.MPDRPK;
-import mpdr.MPDRTable;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
-import utilities.window.editor.*;
-import window.editor.mdr.table.MDRTableNavBtn;
+import utilities.window.editor.DialogEditor;
+import utilities.window.editor.PanelButtons;
+import utilities.window.editor.PanelInput;
 
 import java.awt.*;
 

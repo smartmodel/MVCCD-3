@@ -3,7 +3,6 @@ package utilities.window.editor;
 import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.interfaces.IMCDModel;
-import mcd.services.IMCDModelService;
 import mcd.services.MCDElementService;
 import mcd.services.MCDUtilService;
 import preferences.Preferences;

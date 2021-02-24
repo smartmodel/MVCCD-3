@@ -2,8 +2,6 @@ package utilities.window.editor;
 
 import utilities.window.PanelBorderLayout;
 
-import javax.swing.tree.TreePath;
-
 public abstract class PanelNavTree extends PanelBorderLayout implements IAccessDialogEditor{
     private DialogEditorNavTree dialogEditorNavTree;
     private PanelNavTreeContent content;

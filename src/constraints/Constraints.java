@@ -1,6 +1,5 @@
 package constraints;
 
-import datatypes.MCDDatatype;
 import exceptions.CodeApplException;
 import main.MVCCDElement;
 import messages.MessagesBuilder;

@@ -2,7 +2,10 @@ package window.editor.mcd.relation.link;
 
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
-import mcd.*;
+import mcd.MCDAssociation;
+import mcd.MCDContRelations;
+import mcd.MCDEntity;
+import mcd.MCDLink;
 import preferences.Preferences;
 import utilities.window.editor.PanelButtonsContent;
 

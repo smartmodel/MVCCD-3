@@ -2,15 +2,12 @@ package window.editor.preferences.project.mcd;
 
 import main.MVCCDElement;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
-import utilities.window.editor.*;
+import utilities.window.editor.PanelButtons;
+import utilities.window.editor.PanelInput;
 import window.editor.preferences.project.PrefEditor;
-import window.editor.preferences.project.PrefNavTree;
-import window.editor.preferences.project.PrefProject;
 import window.editor.preferences.project.PrefProjectMenu;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
 public class PrefMCDEditor extends PrefEditor {

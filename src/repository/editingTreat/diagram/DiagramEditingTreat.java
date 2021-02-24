@@ -1,18 +1,10 @@
 package repository.editingTreat.diagram;
 
 import diagram.CloseTitlePanel;
-import diagram.mcd.MCDDiagram;
-import diagram.mcd.MCDTitlePanel;
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
-import main.MVCCDManager;
 import main.MVCCDWindow;
 import main.window.diagram.WinDiagram;
-import messages.MessagesBuilder;
-import org.apache.commons.lang.StringUtils;
 import repository.editingTreat.EditingTreat;
-import utilities.window.DialogMessage;
-import utilities.window.editor.DialogEditor;
 
 import javax.swing.*;
 import java.awt.*;

@@ -2,7 +2,6 @@ package delete;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
-import md.MDElement;
 
 public class Delete {
 

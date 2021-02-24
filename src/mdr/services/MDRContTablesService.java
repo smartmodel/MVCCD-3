@@ -1,9 +1,7 @@
 package mdr.services;
 
 import main.MVCCDElement;
-import mcd.MCDAttribute;
 import mdr.MDRContTables;
-import mdr.MDRModel;
 import mdr.MDRTable;
 
 import java.util.ArrayList;

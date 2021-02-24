@@ -6,7 +6,6 @@ import mcd.interfaces.*;
 import mcd.services.MCDElementService;
 import mcd.services.MCDPackageService;
 import project.ProjectElement;
-import project.ProjectService;
 
 import java.util.ArrayList;
 

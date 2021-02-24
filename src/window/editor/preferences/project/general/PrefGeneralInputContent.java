@@ -2,8 +2,8 @@ package window.editor.preferences.project.general;
 
 import main.MVCCDElement;
 import messages.MessagesBuilder;
-import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
+import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.services.SComboBoxService;
 

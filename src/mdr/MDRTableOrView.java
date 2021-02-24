@@ -1,9 +1,8 @@
 package mdr;
 
 import main.MVCCDElement;
-import md.MDElement;
-import mdr.interfaces.IMDRParameter;
 import mdr.interfaces.IMDRElementWithIteration;
+import mdr.interfaces.IMDRParameter;
 import project.ProjectElement;
 
 import java.util.ArrayList;

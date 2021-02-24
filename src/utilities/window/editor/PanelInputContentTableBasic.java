@@ -2,7 +2,6 @@ package utilities.window.editor;
 
 import m.MElement;
 import main.MVCCDElement;
-import mcd.MCDConstraint;
 import preferences.Preferences;
 import project.ProjectService;
 import utilities.UtilDivers;
@@ -14,7 +13,10 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public abstract class PanelInputContentTableBasic extends PanelInputContent
         implements ActionListener {

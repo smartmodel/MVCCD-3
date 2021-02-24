@@ -1,12 +1,9 @@
 package mldr.services;
 
-import main.MVCCDElementService;
 import mdr.MDRConstraint;
 import mdr.interfaces.IMDRConstraintIndice;
 import mldr.MLDRContConstraints;
-import preferences.Preferences;
 import utilities.Indexing;
-import utilities.IndexingName;
 
 import java.util.ArrayList;
 

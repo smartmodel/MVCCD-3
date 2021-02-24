@@ -1,10 +1,9 @@
 package window.editor.preferences.project;
 
 
-import utilities.window.editor.*;
-
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
+import utilities.window.editor.DialogEditorNavTree;
+import utilities.window.editor.PanelNavTree;
+import utilities.window.editor.PanelNavTreeContent;
 
 public class PrefNavTree extends PanelNavTree {
 

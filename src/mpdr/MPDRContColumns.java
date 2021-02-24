@@ -1,8 +1,6 @@
 package mpdr;
 
-import mcd.MCDElement;
 import mdr.MDRContColumns;
-import mldr.interfaces.IMLDRElement;
 import project.ProjectElement;
 
 public class MPDRContColumns extends MDRContColumns {

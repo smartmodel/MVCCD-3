@@ -1,8 +1,8 @@
 package window.editor.mddatatype;
 
 import main.MVCCDElement;
-import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
+import utilities.window.editor.PanelButtonsContent;
 
 public class MDDatatypeButtonsContent extends PanelButtonsContent {
 

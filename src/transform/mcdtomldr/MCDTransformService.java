@@ -2,11 +2,8 @@ package transform.mcdtomldr;
 
 import mdr.MDRElement;
 import mdr.MDRElementNames;
-import mdr.MDRNamingFormat;
-import mdr.MDRNamingLength;
 import mdr.services.MDRModelService;
 import mldr.MLDRModel;
-import mldr.MLDRTable;
 
 public class MCDTransformService {
 

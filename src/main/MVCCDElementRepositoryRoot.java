@@ -1,6 +1,5 @@
 package main;
 
-import main.MVCCDElement;
 import messages.MessagesBuilder;
 
 public class MVCCDElementRepositoryRoot extends MVCCDElement {

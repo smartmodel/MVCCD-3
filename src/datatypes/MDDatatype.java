@@ -4,8 +4,6 @@ import exceptions.CodeApplException;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 
-import java.util.ArrayList;
-
 public abstract class MDDatatype extends MVCCDElement {
 
     public static final int SIZEMANDATORY = 10;

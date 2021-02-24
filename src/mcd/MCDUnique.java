@@ -1,8 +1,5 @@
 package mcd;
 
-import constraints.Constraint;
-import constraints.Constraints;
-import constraints.ConstraintsManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;

@@ -1,12 +1,9 @@
 package mdr;
 
-import main.MVCCDElement;
-import mcd.MCDEntity;
 import mdr.services.MDRContTablesService;
 import project.ProjectElement;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class MDRContTables extends MDRElement {
 

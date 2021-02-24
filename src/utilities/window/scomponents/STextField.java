@@ -1,6 +1,5 @@
 package utilities.window.scomponents;
 
-import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.window.editor.DialogEditor;

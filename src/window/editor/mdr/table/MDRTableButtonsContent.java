@@ -1,9 +1,6 @@
 package window.editor.mdr.table;
 
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
-import preferences.Preferences;
-import project.ProjectElement;
 import utilities.window.editor.PanelButtonsContent;
 
 public class MDRTableButtonsContent extends PanelButtonsContent {

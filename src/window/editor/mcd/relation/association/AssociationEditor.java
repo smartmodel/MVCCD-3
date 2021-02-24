@@ -2,9 +2,9 @@ package window.editor.mcd.relation.association;
 
 import mcd.MCDAssociation;
 import mcd.MCDContRelations;
+import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
-import preferences.Preferences;
 import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelInput;
 

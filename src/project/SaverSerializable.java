@@ -4,7 +4,6 @@ import exceptions.CodeApplException;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
-import preferences.Preferences;
 import utilities.window.DialogMessage;
 
 import javax.swing.tree.DefaultMutableTreeNode;

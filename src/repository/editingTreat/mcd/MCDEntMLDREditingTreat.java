@@ -10,7 +10,6 @@ import window.editor.mcd.entity.compliant.EntCompliantInputContent;
 import window.editor.mcd.entity.mldr.EntMLDREditorBtn;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDEntMLDREditingTreat extends EditingTreat {
 

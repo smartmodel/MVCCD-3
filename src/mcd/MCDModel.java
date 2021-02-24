@@ -7,7 +7,6 @@ import mcd.interfaces.*;
 import mcd.services.IMCDModelService;
 import mldr.MLDRModel;
 import transform.mcdtomldr.MCDTransform;
-import project.ProjectService;
 
 import java.util.ArrayList;
 
