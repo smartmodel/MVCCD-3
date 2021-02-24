@@ -155,7 +155,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
 
 
     /**
-     * Retourne une liste ordonnée de la fratrie.
+     * Retourne une liste ordonnée des enfants.
      * @return
      */
     public ArrayList<MVCCDElement> getChilds() {
@@ -168,10 +168,18 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         return childs;
     }
 
+    /**
+     * Retourne une liste ordonnée de la fratrie.
+     * @return
+     */
     public ArrayList<MVCCDElement> getSiblings(){
         return getParent().getChilds();
     }
 
+    /**
+     * Retourne une liste ordonnée des frères et soeurs.
+     * @return
+     */
     public ArrayList<MVCCDElement> getBrothers(){
         ArrayList<MVCCDElement> resultat = new ArrayList<MVCCDElement>() ;
         for (MVCCDElement sibling : getSiblings()){
