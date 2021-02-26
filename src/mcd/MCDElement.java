@@ -43,7 +43,7 @@ public abstract class MCDElement extends MDElement {
     }
 
 
-    //TODO-STB: voir avec PAS si ce n'est pas pertinent de le mettre dans mElement. Cela simplifierait la ligne suivante dans ProjectSaverXml:
+    //TODO-STB: voir avec PAS si ce n'est pas pertinent de mettre getNamePath dans mElement. Cela simplifierait la ligne suivante dans ProjectSaverXml:
     //entity.appendChild(doc.createTextNode(((MCDElement) endEntity.getmElement()).getNamePath(1)));
 
     /**

@@ -13,6 +13,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 
+//TODO-STB: voir si c'est pertinent, car ici seules quelques préférences sont sauvés, et à la main une par une.
+/**
+ * Cette classe fournit le nécessaire pour sauvegarder quelques préférences d'application dans un fichier XML.
+ * Cette méthode de sauvegarde vise à remplacer la sauvegarde dans un fichier sérialisé.
+ * @author Giorgio Roncallo, adaptée et complétée par Steve Berberat
+ */
 public class PreferencesSaverXml {
 
     public void createFileApplicationPref() {

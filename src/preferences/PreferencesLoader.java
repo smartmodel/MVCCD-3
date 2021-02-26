@@ -4,6 +4,11 @@ import exceptions.CodeApplException;
 
 import java.io.*;
 
+/**
+ * Cette classe fournit le nécessaire pour charger des préférences à partir du fichier sérialisé contenant des
+ * préférences sauvegardées.
+ * À termes, les préférences seront sauvegardées dans un fichier XML au lieu et place du fichier sérialisé.
+ */
 public class PreferencesLoader {
 
     public Preferences load(File file) throws FileNotFoundException {

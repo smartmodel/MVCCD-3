@@ -17,6 +17,10 @@ import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.IOException;
 
+//TODO-STB: voir le code de Giorgio
+/**
+ * @author Giorgio Roncallo
+ */
 public class ProfileLoaderXml {
 
     public Preferences loadFileProfileXML(String profileFileName) {

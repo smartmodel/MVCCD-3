@@ -38,7 +38,17 @@ public class SaverSerializable {
         }
     }
 
-    private void saveNode(DefaultMutableTreeNode node, int level) throws IOException {
+    /**
+     * Parcourt récursivement le noeud de l'arbre passé en paramètre. À chaque noeud, l'objet attaché(par exemple, une
+     * entité MCD) est sérialisé dans le fichier définit dans le writer de cette classe. Le noeud en lui-même est aussi
+     * sauvegardé.
+     * Ainsi, tous les noeuds existants dans l'arbre donné sont sauvegardé dans le fichier sérialisé.
+     * @param node Noeud racine à partir duquel la sérialisation est faite.
+     * @param level Indique à quel niveau le noeud à partir duquel faire le traitement de sauvegarde se trouve par
+     *              rapport à l'arbre complet. Si l'arbre complet est envoyé pour sauvegarde (par exemple le noeud qui
+     *              représente le projet), alors le level doit être définit à 0.
+     */
+    private void saveNode(DefaultMutableTreeNode node, int level) {
         try{
             if (node.getUserObject() instanceof MVCCDElement) {
                 MVCCDElement mcdElement= (MVCCDElement) node.getUserObject();

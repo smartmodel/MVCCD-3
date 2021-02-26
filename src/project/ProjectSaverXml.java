@@ -23,13 +23,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
+/**
+ * @author Giorgio Roncallo, adapté et complété par Steve Berberat
+ */
 public class ProjectSaverXml {
 
     private Project project = MVCCDManager.instance().getProject();
-    private Boolean packApp = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS();
-    private Boolean modeleApp = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
+    private Boolean packagesAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(); //TODO-STB: valider avec PAS le fait qu'il faudrait plutôt utiliser instance().preferences()
+    private Boolean manyModelsAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
 
-    //TODO-STB: ajouter le num de version dans le fichier persisté
+    //TODO-STB: vérifier que la version s'enregistre bien avec les préférences dans le fichier XML: Preferences.VERSION
 
     public void createProjectFile(File file) {
         //traitement
@@ -46,7 +49,7 @@ public class ProjectSaverXml {
             addPropertiesProject(document, racine);
 
             //Preferences Project
-            preferenceProject(document, racine); //TODO-STB: utiliser PreferencesManager.getProjectPref
+            preferenceProject(document, racine); //TODO-STB: adapter et utiliser plutôt PreferencesManager.getProjectPref()
 
             // Element MCD
             MCDContModels elementMcd = (MCDContModels) project.getChilds().get(1); //TODO-STB: PAS: Ajouter méthode propre dans MCDContModels. le get(0) c'est les préférences, le (1) c'est le MCD. Ce serait à revoir pour s'assurer de rechercher vraiment le bon.
@@ -56,12 +59,12 @@ public class ProjectSaverXml {
             ArrayList<MVCCDElement> mcdChilds = elementMcd.getChilds();
 
             //Modele
-            if (modeleApp) {
+            if (manyModelsAuthorized) {
 
                 addModelAndChilds(document, mcd, mcdChilds);
 
                 //Package
-            } else if (packApp) {
+            } else if (packagesAuthorized) {
 
                 addDiagrams(document, mcdChilds, mcd);
                 addEntities(document, mcdChilds, mcd);
@@ -173,7 +176,7 @@ public class ProjectSaverXml {
 
             ArrayList<MVCCDElement> modelsChilds = child.getChilds();
 
-            if (packApp) {
+            if (packagesAuthorized) {
                 // Création des différents éléments du modèle avec packages
                 addPropertiesModelsOrPackages(doc, model, child);
                 addDiagrams(doc, modelsChilds, model);
@@ -222,7 +225,9 @@ public class ProjectSaverXml {
 
     }
 
-    // Méthode pour récupérer tous les paquetages d'un élément
+    /**
+     * Méthode pour récupérer tous les paquetages d'un élément
+     */
     private ArrayList<MCDPackage> getPackages(MVCCDElement element) {
         ArrayList<MCDPackage> packages = new ArrayList<>();
         for (MVCCDElement mvccdElement : element.getChilds()) {
@@ -751,7 +756,9 @@ public class ProjectSaverXml {
 
     }
 
-    // méthode pour ajouter les paramètres des contraintes (pas encore implémentés dans cette version de l'application)
+    /**
+     * Méthode pour ajouter les paramètres des contraintes (pas encore implémentés dans cette version de l'application)
+     */
     private void addParameters(Document doc, MCDConstraint mcdConstraint, Element constraint) {
         ArrayList<MCDParameter> parametersChilds = mcdConstraint.getMcdParameters();
         for (int i = 0; i < parametersChilds.size(); i++) {

@@ -1,4 +1,3 @@
-//TODO-STB: voir pourquoi les images ne s'affichent pas
 /**
  * Le paquetage fournit les classes concrètes, descendantes de EditingTreat, pour déclencher le traitement d'un élément
  * de modèle conceptuel de données, MCDElement.

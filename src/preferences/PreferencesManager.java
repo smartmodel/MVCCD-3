@@ -11,7 +11,7 @@ public class PreferencesManager {
 
     private Preferences defaultPref;
     private Preferences applicationPref;
-    private Preferences profilePref;
+    private Preferences profilePref; //ensemble de préférences sauvegardés, pouvant être chargées en tant que préférences de projet.
     private Preferences projectPref;
 
     public static synchronized PreferencesManager instance() {
@@ -25,6 +25,12 @@ public class PreferencesManager {
         defaultPref = new Preferences(null, null);
     }
 
+    /**
+     * Retourne les préférences qui doivent être prises en compte par l'instance du programme lancé par l'utilisateur.
+     * Les préférences sont retournées dans l'ordre de priorité suivant: (1) préférences du projet si elles existent,
+     * sinon (2) les préférences de l'application si elles existent et, autrement, (3) les préférences par défaut.
+     * @return L'ensemble des préférences à utiliser.
+     */
     public Preferences preferences() {
         if (projectPref != null) {
             return projectPref;
@@ -37,6 +43,11 @@ public class PreferencesManager {
         }
     }
 
+    /**
+     * Évalue l'existance de préférences de profile.
+     * @return Retourne les préférences de profile si elles existent et le cas échéant, retourne les préférences par
+     * défaut
+     */
     public Preferences profileOrDefault() {
         if (profilePref != null) {
             return profilePref;
@@ -103,6 +114,14 @@ public class PreferencesManager {
      */
 
     private void copyPref(Preferences from, Preferences to) {
+        /*
+        TODO-STB: remplacer par une implémentation de la méthode abstraite clone, de sorte à faire simplement:
+        to = from.clone();
+        Analyser également la possibilité de boucler de manière générique les préférences, de sorte à éviter de devoir
+        ajouter une ligne ici à chaque nouvelle préférence créée.
+         */
+        //
+
         // Général
         to.setGENERAL_RELATION_NOTATION(from.getGENERAL_RELATION_NOTATION()) ;
 
@@ -162,7 +181,7 @@ public class PreferencesManager {
 
     }
 
-    // TODO-STB: Suppression de Giorgio
+    // TODO-STB: à vérifier, Giorgio a mis en commentaire ces deux méthodes.
     /*
     public void loadOrCreateFileApplicationPreferences() {
         try {
@@ -185,7 +204,9 @@ public class PreferencesManager {
         }
     }*/
 
-    //Ajout de Giorgio
+    /**
+     * @author Giorgio Roncallo
+     */
     public void loadOrCreateFileXMLApplicationPref() {
         try {
             applicationPref = new PreferencesLoaderXml().loadFileApplicationPref();

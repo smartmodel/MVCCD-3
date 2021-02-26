@@ -16,22 +16,30 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/**
+ * Cette classe fournit le nécessaire pour charger les préférences d'application sauvegardées dans le fichier des
+ * préférences XML.
+ * @author Giorgio Roncallo, adaptée et complétée par Steve Berberat
+ */
 public class PreferencesLoaderXml {
 
+    //TODO-STB: à creuser l'utilité et voir avec PAS si l'idée est correcte ou non.
     public Preferences loadFileApplicationPref() throws FileNotFoundException {
-        Preferences applicationPref = new Preferences(null, null);
+        Preferences applicationPrefs = new Preferences(null, null);
         try {
 
-            //Création du document en memoire
+            //Création du document en mémoire
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document = builder.parse(new File(Preferences.FILE_APPLICATION_PREF_NAME));
+            File applicationPrefsFilePath = new File(Preferences.FILE_APPLICATION_PREF_NAME);
+            Document document = builder.parse(applicationPrefsFilePath); //Parse en charge le fichier dans un DOM. Si le fichier n'existe pas, une FileNotFoundException est levée (IOexception)
 
-            // Assignation du schéma XSD au fichier pour validation
+            //Assignation du schéma XSD au fichier pour validation
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = factory.newSchema(new File("schemas/SchemaApplicationPref.xsd"));
+            File applicationPrefsSchemaPath = new File("schemas/SchemaApplicationPref.xsd");
+            Schema schema = factory.newSchema(applicationPrefsSchemaPath); //Parse et charge le fichier en tant que schema XSD. Si le fichier n'existe pas, une FileNotFoundException est levée (IOexception)
             Validator validator = schema.newValidator();
 
-            //Récuperation des valeurs en memoire
+            //Récupération des valeurs en mémoire
             Element racine = document.getDocumentElement();
             Element preferences = (Element) racine.getElementsByTagName("preferences").item(0);
             Element debug = (Element) racine.getElementsByTagName("debug").item(0);
@@ -42,14 +50,14 @@ public class PreferencesLoaderXml {
             Element repositoryMcdModelsMany = (Element) racine.getElementsByTagName("repositoryMcdModelsMany").item(0);
             Element repositoryMcdPackagesAuthorizeds = (Element) racine.getElementsByTagName("repositoryMcdPackagesAuthorizeds").item(0);
 
-            // Instanciation des préférences de l'application
-            applicationPref.setDEBUG(Boolean.valueOf(debug.getTextContent()));
-            applicationPref.setDEBUG_BACKGROUND_PANEL(Boolean.valueOf(debugBackgroudPanel.getTextContent()));
-            applicationPref.setDEBUG_PRINT_MVCCDELEMENT(Boolean.valueOf(debugPrintMvccdElement.getTextContent()));
-            applicationPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(Boolean.valueOf(debugShowTableColHidden.getTextContent()));
-            applicationPref.setDEBUG_INSPECT_OBJECT_IN_TREE(Boolean.valueOf(debugInspectObjectInTree.getTextContent()));
-            applicationPref.setREPOSITORY_MCD_MODELS_MANY(Boolean.valueOf(repositoryMcdModelsMany.getTextContent()));
-            applicationPref.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(Boolean.valueOf(repositoryMcdPackagesAuthorizeds.getTextContent()));
+            // Instantiation des préférences de l'application
+            applicationPrefs.setDEBUG(Boolean.valueOf(debug.getTextContent()));
+            applicationPrefs.setDEBUG_BACKGROUND_PANEL(Boolean.valueOf(debugBackgroudPanel.getTextContent()));
+            applicationPrefs.setDEBUG_PRINT_MVCCDELEMENT(Boolean.valueOf(debugPrintMvccdElement.getTextContent()));
+            applicationPrefs.setDEBUG_SHOW_TABLE_COL_HIDDEN(Boolean.valueOf(debugShowTableColHidden.getTextContent()));
+            applicationPrefs.setDEBUG_INSPECT_OBJECT_IN_TREE(Boolean.valueOf(debugInspectObjectInTree.getTextContent()));
+            applicationPrefs.setREPOSITORY_MCD_MODELS_MANY(Boolean.valueOf(repositoryMcdModelsMany.getTextContent()));
+            applicationPrefs.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(Boolean.valueOf(repositoryMcdPackagesAuthorizeds.getTextContent()));
 
             // Validation du fichier
             validator.validate(new DOMSource(document));
@@ -59,7 +67,7 @@ public class PreferencesLoaderXml {
         } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
         }
-    return applicationPref;
+    return applicationPrefs;
     }
 
 }
