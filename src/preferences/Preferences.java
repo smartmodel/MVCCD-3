@@ -9,11 +9,12 @@ import java.awt.*;
 
 public class Preferences extends MVCCDElement {
 
+    //TODO-STB: voir avec PAS si mon commentaire ci-dessous est correct
+    //Toutes les préférences statics sont des préférences qui ne doivent pas être sauvegardées et que seuls les développeurs peuvent modifier.
     private static final long serialVersionUID = 1000;
-
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
-    public static String VERSION = "3.0.16";
+    public static String VERSION = "3.0.16"; //TODO-STB: voir avec PAS si la version ne devrait pas aussi être sauvegardée
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
     public static Integer PANEL_REPOSITORY_WIDTH = 200;
@@ -522,6 +523,8 @@ public class Preferences extends MVCCDElement {
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK = "mdr.pref.column.fk.one.diff.indice.fk";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1 = "mdr.pref.column.fk.one.diff.indice.start.1";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2 = "mdr.pref.column.fk.one.diff.indice.start.2";
+
+
 
     // Modification Application
     private Boolean DEBUG = false;

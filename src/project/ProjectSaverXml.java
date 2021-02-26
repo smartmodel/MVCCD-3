@@ -34,10 +34,13 @@ public class ProjectSaverXml {
 
     //TODO-STB: vérifier que la version s'enregistre bien avec les préférences dans le fichier XML: Preferences.VERSION
 
+    /**
+     * Méthode principale qui se charge de créer un fichier XML contenant la sauvegarde du projet utilisateur.
+     * @param file Chemin d'accès au fichier (y compris le nom du fichier) qui sera créé ou qui sera modifié.
+     */
     public void createProjectFile(File file) {
-        //traitement
         try {
-            //Creation du document en memoire;
+            //Creation du document XML en mémoire;
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.newDocument();
 
@@ -45,20 +48,20 @@ public class ProjectSaverXml {
             Element racine = document.createElement("project");
             document.appendChild(racine);
 
-            //properties
-            addPropertiesProject(document, racine);
+            //Propriété du projet
+            addProperties(document, racine);
 
-            //Preferences Project
-            preferenceProject(document, racine); //TODO-STB: adapter et utiliser plutôt PreferencesManager.getProjectPref()
+            //Préférences du projet
+            addProjectPreferences(document, racine); //TODO-STB: adapter et utiliser plutôt PreferencesManager.getProjectPref() => à voir une fois que j'ai mieux compris avec PAS
 
-            // Element MCD
+            //Element MCD
             MCDContModels elementMcd = (MCDContModels) project.getChilds().get(1); //TODO-STB: PAS: Ajouter méthode propre dans MCDContModels. le get(0) c'est les préférences, le (1) c'est le MCD. Ce serait à revoir pour s'assurer de rechercher vraiment le bon.
             Element mcd = document.createElement(elementMcd.getName());
             racine.appendChild(mcd);
 
             ArrayList<MVCCDElement> mcdChilds = elementMcd.getChilds();
 
-            //Modele
+            //Modèle
             if (manyModelsAuthorized) {
 
                 addModelAndChilds(document, mcd, mcdChilds);
@@ -80,14 +83,14 @@ public class ProjectSaverXml {
 
             }
 
-            //formatage du fichier
+            //Formatage du fichier
             Transformer transformer = new TranformerForXml().createTransformer();
 
             //Création du fichier
 
             DOMSource source = new DOMSource(document);
 
-            StreamResult result = new StreamResult(new FileOutputStream(file));
+            StreamResult result = new StreamResult(new FileOutputStream(file)); //Génère un FileNotFoundException si le fichier ne peut pas être créé, s'il existe mais ne peut pas être modifié ou si un répertoire du même nom existe.
             transformer.transform(source, result);
 
             // Message de confirmation de la sauvegarde du fichier
@@ -101,9 +104,13 @@ public class ProjectSaverXml {
     }
 
 
-    public void preferenceProject(Document document, Element racine) {
+    /**
+     * Ajoute les préférences de projet au document XML
+     * @param document Document XML auquel ajouter les préférences
+     * @param racine Noeud racine du document XML. Les préférences seront ajoutées en tant que fils de ce noeud.
+     */
+    public void addProjectPreferences(Document document, Element racine) {
 
-        // Ajout des préférences de projet au document
         Element preferences = document.createElement("preferences");
         racine.appendChild(preferences);
 
@@ -297,7 +304,7 @@ public class ProjectSaverXml {
         }
     }
 
-    private void addPropertiesProject(Document document, Element racine) {
+    private void addProperties(Document document, Element racine) {
         // Ajout des propriétés du projet
         Element properties = document.createElement("proprietes");
         racine.appendChild(properties);

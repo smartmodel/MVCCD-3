@@ -91,10 +91,17 @@ public class Project extends ProjectElement {
         return profile;
     }
 
+    /**
+     * Recherche les préférences du projet en parcourant tous les enfants du projet jusqu'à tomber sur l'objet
+     * correspondant aux préférences.
+     * Remarque de STB: une alternative est PreferencesManager.getProjectPref()
+     * @author PAS
+     * @return Ensemble des préférences du projet
+     */
     public Preferences getPreferences() {
         for (MVCCDElement mvccdElement : getChilds()) {
             if (mvccdElement instanceof Preferences) {
-                return (Preferences) mvccdElement;
+                return (Preferences) mvccdElement; //Retourne le 1er enfant qui correspond aux préférences
             }
         }
         return null;

@@ -225,7 +225,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
 
     /**
      * Retourne une liste de tous les descendants. Le traitement est réalisé par la méthode de même nom de la classe MVCCDElementService.
-     * @return
+     * @return Liste de tous les descendants.
      */
     public ArrayList<MVCCDElement> getDescendants(){
         return MVCCDElementService.getDescendants(this); // Stratégie adoptée: minimum de code dans chaque classe et les traitements sont faits dans les services.
@@ -288,7 +288,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
      * Pour tout objet MVCCDElement non surchargé, retourne simplement le name.
      * La méthode doit être surchargée par tous les objets qui n'ont pas de valeur pour name (par exemple les relations).
      * Le nameTree est utilisé essentiellement pour afficher le nom dans l'arbre du référentiel (par ex: role-association-role).
-     * @return
+     * @return Chaîne de description de l'objet.
      */
     public String getNameTree(){
         return getName();
@@ -398,6 +398,9 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         }
     }
 
+    /**
+     * Le présent élément est supprimé des enfants de son parent.
+     */
     public void removeInParent(){
         if (this.getParent() != null){
             this.getParent().getChilds().remove(this);

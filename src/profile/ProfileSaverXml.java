@@ -36,7 +36,7 @@ public class ProfileSaverXml {
             document.appendChild(racine);
 
             //récuperation des préférences du projet
-            new ProjectSaverXml().preferenceProject(document, racine);
+            new ProjectSaverXml().addProjectPreferences(document, racine);
 
             // Formatage du fichier
             Transformer transformer = new TranformerForXml().createTransformer();
