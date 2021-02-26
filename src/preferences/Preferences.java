@@ -526,7 +526,7 @@ public class Preferences extends MVCCDElement {
 
 
 
-    // Modification Application
+    // Préférences de l'application
     private Boolean DEBUG = false;
     private Boolean DEBUG_BACKGROUND_PANEL = false;
     private Boolean DEBUG_PRINT_MVCCDELEMENT = false;
