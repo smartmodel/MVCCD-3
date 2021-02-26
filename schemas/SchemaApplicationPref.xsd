@@ -9,9 +9,12 @@
 	</xs:element>
 	<xs:element name="debug" type="xs:boolean"/>
 	<xs:element name="debugBackgroudPanel" type="xs:boolean"/>
-	<xs:element name="debugInspectObjectInTree" type="xs:boolean"/>
 	<xs:element name="debugPrintMvccdElement" type="xs:boolean"/>
 	<xs:element name="debugShowTableColHidden" type="xs:boolean"/>
+	<xs:element name="debugInspectObjectInTree" type="xs:boolean"/>
+	<xs:element name="debugEditorDatasChanged" type="xs:boolean"/>
+	<xs:element name="debugTdPrint" type="xs:boolean"/>
+	<xs:element name="debugTdUnicityPrint" type="xs:boolean"/>
 	<xs:element name="repositoryMcdModelsMany" type="xs:boolean"/>
 	<xs:element name="repositoryMcdPackagesAuthorizeds" type="xs:boolean"/>
 	<xs:element name="preferences">
@@ -22,6 +25,9 @@
 				<xs:element ref="debugPrintMvccdElement"/>
 				<xs:element ref="debugShowTableColHidden"/>
 				<xs:element ref="debugInspectObjectInTree"/>
+				<xs:element ref="debugEditorDatasChanged"/>
+				<xs:element ref="debugTdPrint"/>
+				<xs:element ref="debugTdUnicityPrint"/>
 				<xs:element ref="repositoryMcdModelsMany"/>
 				<xs:element ref="repositoryMcdPackagesAuthorizeds"/>
 			</xs:sequence>

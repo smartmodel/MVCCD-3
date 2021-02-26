@@ -209,10 +209,10 @@ public class PreferencesManager {
      */
     public void loadOrCreateFileXMLApplicationPref() {
         try {
-            applicationPref = new PreferencesLoaderXml().loadFileApplicationPref();
+            applicationPref = new PreferencesOfApplicationLoaderXml().loadFileApplicationPref();
         } catch (FileNotFoundException e) {
             applicationPref = new Preferences(null, null);
-            new PreferencesSaverXml().createFileApplicationPref();
+            new PreferencesOfApplicationSaverXml().createFileApplicationPref();
         }
     }
 }

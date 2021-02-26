@@ -4,7 +4,7 @@ import main.MVCCDElement;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import preferences.PreferencesSaverXml;
+import preferences.PreferencesOfApplicationSaverXml;
 import project.Project;
 import utilities.window.DialogMessage;
 import utilities.window.editor.PanelInputContent;
@@ -282,7 +282,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
 
 
         // Sauvegarde (fichier) des préférences d'application
-        new  PreferencesSaverXml().createFileApplicationPref();
+        new PreferencesOfApplicationSaverXml().createFileApplicationPref();
         //PreferencesSaver saver = new PreferencesSaver();
         //saver.save(new File(Preferences.FILE_APPLICATION_PREF_NAME), applicationPref);
 

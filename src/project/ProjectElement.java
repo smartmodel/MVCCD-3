@@ -14,12 +14,12 @@ public abstract class ProjectElement extends MVCCDElement {
     private boolean transitory = false;
 
     public ProjectElement(ProjectElement parent) {
-        super(parent);
+        super(parent); // Ceci appelle aussi de-facto la méthode init() de MVCCDElement.
         init(parent);
     }
 
     public ProjectElement(ProjectElement parent, String name) {
-        super(parent, name);
+        super(parent, name); // Ceci appelle aussi de-facto la méthode init() de MVCCDElement.
         init(parent);
     }
 

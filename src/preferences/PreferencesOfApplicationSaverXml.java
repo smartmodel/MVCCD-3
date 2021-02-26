@@ -15,17 +15,17 @@ import java.io.File;
 
 //TODO-STB: voir si c'est pertinent, car ici seules quelques préférences sont sauvés, et à la main une par une.
 /**
- * Cette classe fournit le nécessaire pour sauvegarder quelques préférences d'application dans un fichier XML.
+ * Cette classe fournit le nécessaire pour sauvegarder les préférences d'application dans le fichier application.pref.
  * Cette méthode de sauvegarde vise à remplacer la sauvegarde dans un fichier sérialisé.
  * @author Giorgio Roncallo, adaptée et complétée par Steve Berberat
  */
-public class PreferencesSaverXml {
+public class PreferencesOfApplicationSaverXml {
 
     public void createFileApplicationPref() {
         Preferences prefApp = PreferencesManager.instance().getApplicationPref();
 
         try {
-            //Creation du document en memoire
+            //Creation du document en mémoire
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.newDocument();
 
@@ -56,6 +56,18 @@ public class PreferencesSaverXml {
             debugInspectObjectInTree.appendChild(document.createTextNode(prefApp.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
             preferences.appendChild(debugInspectObjectInTree);
 
+            Element debugEditorDatasChanged = document.createElement("debugEditorDatasChanged");
+            debugEditorDatasChanged.appendChild(document.createTextNode(prefApp.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
+            preferences.appendChild(debugEditorDatasChanged);
+
+            Element debugTdPrint = document.createElement("debugTdPrint");
+            debugTdPrint.appendChild(document.createTextNode(prefApp.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
+            preferences.appendChild(debugTdPrint);
+
+            Element debugTdUnicityPrint = document.createElement("debugTdUnicityPrint");
+            debugTdUnicityPrint.appendChild(document.createTextNode(prefApp.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
+            preferences.appendChild(debugTdUnicityPrint);
+
             Element repositoryMcdModelsMny  = document.createElement("repositoryMcdModelsMany");
             repositoryMcdModelsMny.appendChild(document.createTextNode(prefApp.getREPOSITORY_MCD_MODELS_MANY().toString()));
             preferences.appendChild(repositoryMcdModelsMny);
@@ -64,7 +76,7 @@ public class PreferencesSaverXml {
             repositoryMcdPackagesAuthorizeds.appendChild(document.createTextNode(prefApp.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS().toString()));
             preferences.appendChild(repositoryMcdPackagesAuthorizeds);
 
-            // formatage du fichier
+            //Formatage du fichier
             Transformer transformer = new TranformerForXml().createTransformer();
 
             //Création du fichier

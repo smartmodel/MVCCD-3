@@ -18,10 +18,11 @@ import java.io.IOException;
 
 /**
  * Cette classe fournit le nécessaire pour charger les préférences d'application sauvegardées dans le fichier des
- * préférences XML.
+ * préférences XML (application.pref). Les préférences sont récupérées de ce fichier et sont affectées aux préférences
+ * d'application existantes dans Preferences.java.
  * @author Giorgio Roncallo, adaptée et complétée par Steve Berberat
  */
-public class PreferencesLoaderXml {
+public class PreferencesOfApplicationLoaderXml {
 
     //TODO-STB: à creuser l'utilité et voir avec PAS si l'idée est correcte ou non.
     public Preferences loadFileApplicationPref() throws FileNotFoundException {
@@ -47,6 +48,9 @@ public class PreferencesLoaderXml {
             Element debugPrintMvccdElement = (Element) racine.getElementsByTagName("debugPrintMvccdElement").item(0);
             Element debugShowTableColHidden = (Element) racine.getElementsByTagName("debugShowTableColHidden").item(0);
             Element debugInspectObjectInTree = (Element) racine.getElementsByTagName("debugInspectObjectInTree").item(0);
+            Element debugEditorDatasChanged = (Element) racine.getElementsByTagName("debugEditorDatasChanged").item(0);
+            Element debugTdPrint = (Element) racine.getElementsByTagName("debugTdPrint").item(0);
+            Element debugTdUnicityPrint = (Element) racine.getElementsByTagName("debugTdUnicityPrint").item(0);
             Element repositoryMcdModelsMany = (Element) racine.getElementsByTagName("repositoryMcdModelsMany").item(0);
             Element repositoryMcdPackagesAuthorizeds = (Element) racine.getElementsByTagName("repositoryMcdPackagesAuthorizeds").item(0);
 
@@ -56,6 +60,9 @@ public class PreferencesLoaderXml {
             applicationPrefs.setDEBUG_PRINT_MVCCDELEMENT(Boolean.valueOf(debugPrintMvccdElement.getTextContent()));
             applicationPrefs.setDEBUG_SHOW_TABLE_COL_HIDDEN(Boolean.valueOf(debugShowTableColHidden.getTextContent()));
             applicationPrefs.setDEBUG_INSPECT_OBJECT_IN_TREE(Boolean.valueOf(debugInspectObjectInTree.getTextContent()));
+            applicationPrefs.setDEBUG_EDITOR_DATAS_CHANGED(Boolean.valueOf(debugEditorDatasChanged.getTextContent()));
+            applicationPrefs.setDEBUG_TD_PRINT(Boolean.valueOf(debugTdPrint.getTextContent()));
+            applicationPrefs.setDEBUG_TD_UNICITY_PRINT(Boolean.valueOf(debugTdUnicityPrint.getTextContent()));
             applicationPrefs.setREPOSITORY_MCD_MODELS_MANY(Boolean.valueOf(repositoryMcdModelsMany.getTextContent()));
             applicationPrefs.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(Boolean.valueOf(repositoryMcdPackagesAuthorizeds.getTextContent()));
 

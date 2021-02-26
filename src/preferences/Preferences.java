@@ -10,7 +10,7 @@ import java.awt.*;
 public class Preferences extends MVCCDElement {
 
     //TODO-STB: voir avec PAS si mon commentaire ci-dessous est correct
-    //Toutes les préférences statics sont des préférences qui ne doivent pas être sauvegardées et que seuls les développeurs peuvent modifier.
+    //Toutes les préférences statics sont des préférences développeurs, qui ne doivent pas être sauvegardées dans les fichiers.
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
@@ -526,7 +526,13 @@ public class Preferences extends MVCCDElement {
 
 
 
-    // Préférences de l'application
+    /*
+     * Préférences de l'application
+     * ATTENTION: pour chaque nouvelle préférence créée, il est nécessaire d'ajouter la préférence dans :
+     *  - la classe PreferencesOfApplicationSaverXml: de sorte à ce que la nouvelle préférence soit persisté lors des prochaines sauvegardes des préférences d'application dans le fichier XML.
+     *  - la classe PreferencesOfApplicationLeaderXml: de sorte à ce que la nouvelle préférence soit chargée lors des prochains chargements de sauvegardes.
+     *  - le schéma SchemaApplicationPref.xsd: de sorte à ce que les futurs sauvegardes soient valides selon le schéma XSD.
+     */
     private Boolean DEBUG = false;
     private Boolean DEBUG_BACKGROUND_PANEL = false;
     private Boolean DEBUG_PRINT_MVCCDELEMENT = false;
@@ -541,7 +547,7 @@ public class Preferences extends MVCCDElement {
 
     //private PreferencesDisplay GENERAL_PREFERENCES_DISPLAY = PreferencesDisplay.REPOSITORY;
 
-    // Modification User/Custom
+    // Préférences de projet (modifications User/Custom)
     // Général
     private String GENERAL_RELATION_NOTATION ;
 
@@ -559,7 +565,7 @@ public class Preferences extends MVCCDElement {
     private String MCD_MODE_NAMING_LONG_NAME = null;
     private String MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = null;
 
-    //  Editeur
+    // Éditeur
     private Dimension PREFERENCES_WINDOW_SIZE_CUSTOM = null;
     private Point PREFERENCES_WINDOW_LOCATION_ONSCREEN = null;
 
