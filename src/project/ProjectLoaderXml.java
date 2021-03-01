@@ -110,7 +110,7 @@ public class ProjectLoaderXml {
 
     public void addPreferences(Element racine, Preferences preferences) {
 
-        //Récupération et instaciation des préférences de projet
+        //Récupération et instantiation des préférences de projet
 
         Element mcdJournalization = (Element) racine.getElementsByTagName("mcdJournalization").item(0);
         preferences.setMCD_JOURNALIZATION(Boolean.valueOf(mcdJournalization.getTextContent()));
@@ -147,9 +147,6 @@ public class ProjectLoaderXml {
 
         Element mcdModeNamingAttributeShortName = (Element) racine.getElementsByTagName("mcdModeNamingAttributeShortName").item(0);
         preferences.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(mcdModeNamingAttributeShortName.getTextContent());
-
-        Element repositoryMcdModelsMany = (Element) racine.getElementsByTagName("repositoryMcdModelsMany").item(0);
-        preferences.setREPOSITORY_MCD_MODELS_MANY(Boolean.valueOf(repositoryMcdModelsMany.getTextContent()));
     }
 
     private ArrayList<Element> loadModels(MCDContModels mcdCont, Element mcd) {

@@ -77,7 +77,6 @@
 				<xs:element ref="mcdTreeNamingAssociation"/>
 				<xs:element ref="mcdModeNamingLongName"/>
 				<xs:element ref="mcdModeNamingAttributeShortName"/>
-				<xs:element ref="repositoryMcdModelsMany"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -146,7 +145,6 @@
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-	<xs:element name="repositoryMcdModelsMany" type="xs:boolean"/>
 
 	<xs:element name="MCD">
 		<xs:complexType>

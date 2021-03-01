@@ -161,10 +161,6 @@ public class ProjectSaverXml {
         Element mcdModeNamingAttributeShortName = document.createElement("mcdModeNamingAttributeShortName");
         mcdModeNamingAttributeShortName.appendChild(document.createTextNode(project.getPreferences().getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME()));
         preferences.appendChild(mcdModeNamingAttributeShortName);
-
-        Element repositoryMcdModelsMany = document.createElement("repositoryMcdModelsMany");
-        repositoryMcdModelsMany.appendChild(document.createTextNode(project.getPreferences().getREPOSITORY_MCD_MODELS_MANY().toString()));
-        preferences.appendChild(repositoryMcdModelsMany);
     }
 
 
