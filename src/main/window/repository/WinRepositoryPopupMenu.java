@@ -338,8 +338,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             preferencesExportProfil.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                   // PreferencesManager.instance().createProfile(); //TODO-STB: Suppression de Giorgio
-                    new ProfileSaverXml().createFileProfileXML(); //Ajout de Giorgio
+                    if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
+                        PreferencesManager.instance().createProfile(); //Persistance avec sérialisation
+                    }else{
+                        new ProfileSaverXml().createFileProfileXML(); //Ajout de Giorgio
+                    }
                 }
             });
 

@@ -12,6 +12,7 @@ import main.window.repository.WinRepositoryTree;
 import mcd.MCDRelEnd;
 import mcd.MCDRelation;
 import messages.LoadMessages;
+import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.*;
 import repository.Repository;
@@ -55,9 +56,12 @@ public class MVCCDManager {
         LoadMessages.main();
 
         //Chargement des préférences de l'application
+        if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
+            PreferencesManager.instance().loadOrCreateFileApplicationPreferences(); //Persistance avec sérialisation
+        }else{
+            PreferencesManager.instance().loadOrCreateFileXMLApplicationPref(); //Ajout de Giorgio Roncallo
+        }
 
-        //PreferencesManager.instance().loadOrCreateFileApplicationPreferences(); //TODO-STB: suppression de Giorgio
-        PreferencesManager.instance().loadOrCreateFileXMLApplicationPref();
         // Création et affichage de l'écran d'accueil
         startMVCCDWindow();
         // Création de la console
@@ -217,8 +221,11 @@ public class MVCCDManager {
 
         if (file != null) {
             // Lecture du fichier de sauvegarde
-            //project = new LoaderSerializable().load(fileProjectCurrent); //TODO-STB: suppression de Giorgio
-            project = new ProjectLoaderXml().loadProjectFile(fileProjectCurrent);
+            if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
+                project = new LoaderSerializable().load(fileProjectCurrent); //Persistance avec sérialisation
+            }else{
+                project = new ProjectLoaderXml().loadProjectFile(fileProjectCurrent); //Ajout de Giorgio Roncallo
+            }
             // Chargement des préférences du projet
             PreferencesManager.instance().setProjectPref(project.getPreferences());
             // Copie des préférences d'application au sein des préférences du projet
@@ -243,8 +250,11 @@ public class MVCCDManager {
 
     public void saveProject() {
         if (fileProjectCurrent != null) {
-            //new SaverSerializable().save(fileProjectCurrent); //TODO-STB: suppression de Giorgio
-            new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
+            if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
+                new SaverSerializable().save(fileProjectCurrent); //Persistance avec sérialisation
+            }else{
+                new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
+            }
 
         } else {
             saveAsProject();
@@ -258,8 +268,11 @@ public class MVCCDManager {
         if (fileChoose != null){
             if (UtilFiles.confirmIfExist(mvccdWindow, fileChoose)) {
                 fileProjectCurrent = fileChoose;
-                //new SaverSerializable().save(fileProjectCurrent); //TODO-STB: Suppression de Giorgio
-                new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
+                if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
+                    new SaverSerializable().save(fileProjectCurrent); //Persistance avec sérialisation
+                }else{
+                    new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
+                }
                 projectsRecents.add(fileProjectCurrent);
                 changeActivateProjectOpenRecentsItems();
             }

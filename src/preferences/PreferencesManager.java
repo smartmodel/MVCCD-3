@@ -1,8 +1,14 @@
 package preferences;
 
+import main.MVCCDManager;
+import profile.ProfileFileChooser;
 import project.Project;
+import project.ProjectFileChooser;
+import utilities.files.UtilFiles;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.StreamCorruptedException;
 
 
 public class PreferencesManager {
@@ -181,9 +187,13 @@ public class PreferencesManager {
 
     }
 
-    // TODO-STB: à vérifier, Giorgio a mis en commentaire ces deux méthodes.
-    /*
+    /**
+     * Méthode utile pour la persistance avec sérialisation uniquement.
+     * Elle pourra être supprimée lorsque la propriété Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML sera supprimée.
+     * @author PAS
+    */
     public void loadOrCreateFileApplicationPreferences() {
+        boolean tempInutile = Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML; //Ligne créée uniquement dans le but de ne pas oublier de supprimer cette méthode lorsque la préférence sera supprimée.
         try {
             PreferencesLoader loader = new PreferencesLoader();
             applicationPref = loader.load(new File(Preferences.FILE_APPLICATION_PREF_NAME));
@@ -194,7 +204,13 @@ public class PreferencesManager {
         }
     }
 
+    /**
+     * Méthode utile pour la persistance avec sérialisation uniquement.
+     * Elle pourra être supprimée lorsque la propriété Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML sera supprimée.
+     * @author PAS
+     */
     public void createProfile() {
+        boolean tempInutile = Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML; //Ligne créée uniquement dans le but de ne pas oublier de supprimer cette méthode lorsque la préférence sera supprimée.
         ProfileFileChooser fileChooser = new ProfileFileChooser(ProjectFileChooser.SAVE);
         File fileChoose = fileChooser.fileChoose();
         if (fileChoose != null){
@@ -202,9 +218,13 @@ public class PreferencesManager {
                 new PreferencesSaver().save(fileChoose, projectPref);
             }
         }
-    }*/
+    }
 
     /**
+     * Se charge de charger le fichier XML des préférences d'application et de les appliquer à this.applicationPref.
+     * Si le fichier XML n'existe pas, une instance vide de applicationPref est créée, et le fichier XML est créé
+     * également.
+     * Cette méthode est créée dans le cadre de la persistance XML au lieu et place de la persistance avec sérialisation.
      * @author Giorgio Roncallo
      */
     public void loadOrCreateFileXMLApplicationPref() {

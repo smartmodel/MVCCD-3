@@ -15,6 +15,7 @@ public class Preferences extends MVCCDElement {
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
     public static String VERSION = "3.0.16"; //TODO-STB: voir avec PAS si la version ne devrait pas aussi être sauvegardée
+    public static boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = true; //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref //TODO-STB: mettre à false par défaut, et éventuellement supprimer la propriété lorsque la persistance XML est ok.
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
     public static Integer PANEL_REPOSITORY_WIDTH = 200;

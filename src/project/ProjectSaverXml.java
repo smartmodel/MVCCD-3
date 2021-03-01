@@ -625,14 +625,14 @@ public class ProjectSaverXml {
         links.appendChild(link);
 
         // Récupération de l'association
-        MCDLinkEnd linkEnd = mcdLink.getEndAssociation(); //TODO-STB: peut-être prévoir une méthode qui retourne directement l'association MCD et pas ele End. //Dans la méthode, le A est l'entité associative et le B est l'association
+        MCDLinkEnd linkEnd = mcdLink.getEndAssociation(); //TODO-STB: peut-être prévoir une méthode qui retourne directement l'association MCD et pas le End. //Dans la méthode, le A est l'entité associative et le B est l'association
         Element association = doc.createElement("association");
         Element name = doc.createElement("name");
         association.appendChild(name);
-        if (!linkEnd.getName().equals("")) { //TODO-STB: c'était avant endAssociation.getMcdElement().getName().equals("")
-            name.appendChild(doc.createTextNode((linkEnd.getNamePath(1)))); //TODO-STB: c'était avant endAssociation.getMcdElement().getNamePath(...)
+        if (!linkEnd.getName().equals("")) { //TODO-STB: avant c'était endAssociation.getMcdElement().getName().equals("")
+            name.appendChild(doc.createTextNode((linkEnd.getNamePath(1)))); //TODO-STB: avant c'était endAssociation.getMcdElement().getNamePath(...)
         } else {
-            MCDAssociation mcdAssociation = (MCDAssociation) linkEnd.getmElement(); //TODO-STB: C'était avant (MCDAssociation) linkEnd.getMcdElement()
+            MCDAssociation mcdAssociation = (MCDAssociation) linkEnd.getmElement(); //TODO-STB: avant c'était (MCDAssociation) linkEnd.getMcdElement()
             MCDAssEnd from = mcdAssociation.getFrom();
             MCDAssEnd to = mcdAssociation.getTo();
 
@@ -649,7 +649,7 @@ public class ProjectSaverXml {
         // Récupération de l'entité
         MCDLinkEnd endEntity = mcdLink.getEndEntity();
         Element entity = doc.createElement("entity");
-        entity.appendChild(doc.createTextNode(((MCDElement) endEntity.getmElement()).getNamePath(1))); //TODO-STB: c'était avant entity.appendChild(doc.createTextNode(endEntity.getMCDElement().getNamePath(1)));
+        entity.appendChild(doc.createTextNode(((MCDElement) endEntity.getmElement()).getNamePath(1))); //TODO-STB: avant c'était entity.appendChild(doc.createTextNode(endEntity.getMCDElement().getNamePath(1)));
         link.appendChild(entity);
 
     }
