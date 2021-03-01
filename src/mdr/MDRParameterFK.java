@@ -14,7 +14,7 @@ public abstract class MDRParameterFK extends MDRParameter {
     public MDRParameterFK(ProjectElement parent, IMDRParameter target, MDRColumn columnPK) {
 
         super(parent, target);
-        this.columnPKId = columnPK.getId();
+        this.columnPKId = columnPK.getIdProjectElement();
     }
 
     public MDRColumn getColumnPK() {

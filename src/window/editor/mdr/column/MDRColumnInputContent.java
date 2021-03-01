@@ -5,7 +5,10 @@ import constraints.ConstraintsManager;
 import datatypes.MDDatatypeService;
 import main.MVCCDElement;
 import mdr.MDRColumn;
+import mldr.MLDRColumn;
+import mpdr.MPDRColumn;
 import preferences.Preferences;
+import utilities.Trace;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
@@ -206,9 +209,15 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
 
         String datatypeName = "";
         if (mdrColumn.getDatatypeLienProg() != null) {
-            datatypeName = MDDatatypeService.convertMLDRLienProgToName(mdrColumn.getDatatypeLienProg());
+            if (mdrColumn instanceof MLDRColumn){
+                datatypeName = MDDatatypeService.convertMLDRLienProgToName(mdrColumn.getDatatypeLienProg());
+            }
+            if (mdrColumn instanceof MPDRColumn){
+                datatypeName = MDDatatypeService.convertMPDRLienProgToName(mdrColumn.getDatatypeLienProg());
+            }
         }
         fieldDatatypeName.setText(datatypeName);
+
 
         String datatypeConstraintName = "";
         if (mdrColumn.getDatatypeLienProg() != null) {
@@ -217,6 +226,7 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
             datatypeConstraintName = ConstraintService.getUMLName(datatypeConstraintName);
         }
         fieldDatatypeConstraint.setText(datatypeConstraintName);
+
 
         String datatypeSize = "";
         if (mdrColumn.getSize() != null){

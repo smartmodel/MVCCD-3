@@ -356,7 +356,7 @@ public abstract class PanelInputContentTable extends PanelInputContent
     private void swapNodes(Integer idA, Integer idB) {
 
         DefaultMutableTreeNode nodeParent =  ProjectService.getNodeById(
-                ((ProjectElement) getEditor().getMvccdElementCrt()).getId());
+                ((ProjectElement) getEditor().getMvccdElementCrt()).getIdProjectElement());
 
         DefaultMutableTreeNode nodeA = RepositoryService.instance().getNodeInChildsByIdElement(
                 nodeParent, idA);

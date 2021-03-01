@@ -22,13 +22,14 @@ public abstract class ProjectElement extends MVCCDElement {
         init(parent);
     }
 
+
     private void init(ProjectElement parent) {
         if (this instanceof Project) {
             // Le projet lui-même
             this.id = 0;
         } else {
             //TODO-1 A priori ok (A voir)
-           try {
+            try {
                 this.id = ProjectService.getProjectRoot(this).getNextIdElementSequence();
             } catch(Exception e){
                 this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
@@ -39,16 +40,25 @@ public abstract class ProjectElement extends MVCCDElement {
         }
     }
 
-
-    public int getId() {
+    //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
+    //IdProjectElement au lieu de Id
+    public int getIdProjectElement() {
         return id;
     }
 
-    public boolean isTransitory() {
+
+    //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
+    //TransitoryProjectElement au lieu de Transitory
+    public boolean isTransitoryProjectElement() {
         return transitory;
     }
 
-    public void setTransitory(boolean transitory) {
+    //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
+    //TransitoryProjectElement au lieu de Transitory
+    public void setTransitoryProjectElement(boolean transitory) {
         this.transitory = transitory;
     }
+
+
+
 }

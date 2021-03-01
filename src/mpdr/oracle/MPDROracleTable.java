@@ -1,10 +1,14 @@
 package mpdr.oracle;
 
+import exceptions.CodeApplException;
+import main.MVCCDElementFactory;
 import md.MDElement;
+import mdr.MDRConstraint;
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRTable;
+import mpdr.mysql.MPDRMySQLColumn;
 import project.ProjectElement;
 
 public class MPDROracleTable extends MPDRTable {
@@ -17,8 +21,28 @@ public class MPDROracleTable extends MPDRTable {
 
     @Override
     public MPDRColumn createColumn(MLDRColumn mldrColumn) {
-        return null;
+        MPDROracleColumn newColumn = MVCCDElementFactory.instance().createMPDROracleColumn(
+                getMDRContColumns(),  mldrColumn);
+
+        return newColumn;
     }
+
+    @Override
+
+    public MDRConstraint createConstraint(MDRConstraint mldrConstraint) {
+        /*
+        if (mldrConstraint instanceof MLDRPK) {
+            MPDROraclePK newPK = MVCCDElementFactory.instance().createMPDROracleColumn(
+                    getMDRContColumns(),  mldrColumn);
+            return newPK;
+        }
+
+         */
+
+        throw new CodeApplException("La contrainte "  + mldrConstraint.getName() + " n'est pas reconnue");
+    }
+
+
 
 
     @Override

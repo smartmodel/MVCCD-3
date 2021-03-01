@@ -61,7 +61,7 @@ public class MCDGeneralizationEditingTreat extends MCDRelationEditingTreat {
 
     private void addGSEndInRepository(MCDGSEnd mcdGSEnd) {
         MCDContRelEnds parent = (MCDContRelEnds) mcdGSEnd.getParent();
-        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById((int) parent.getId());
+        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById((int) parent.getIdProjectElement());
         MVCCDManager.instance().addNewMVCCDElementInRepository(mcdGSEnd, nodeParent);
     }
 

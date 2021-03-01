@@ -35,7 +35,6 @@ public class MCDTransformToTable {
         this.mldrModel = mldrModel;
     }
 
-
     public void createOrModifyFromAllEntities()  throws TransformMCDException{
         createOrModifyFromEntities(IMCDModelService.getMCDEntitiesConcrets(imcdModel));
         createOrModifyPKEntitiesInd(IMCDModelService.getMCDEntitiesIndependants(imcdModel));
@@ -63,7 +62,6 @@ public class MCDTransformToTable {
         MCDTransformToColumn mcdTransformToColumn = new MCDTransformToColumn(mcdTransform);
         mcdTransformToColumn.createOrModifyFromAttributes(mcdEntity, mldrTable);
     }
-
 
     private void createOrModifyPKEntitiesInd(ArrayList<MCDEntity> mcdEntitiesIndependants)  throws TransformMCDException{
         for (MCDEntity mcdEntityIndependant : mcdEntitiesIndependants){

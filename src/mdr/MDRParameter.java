@@ -20,7 +20,7 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
     public MDRParameter(ProjectElement parent, IMDRParameter target) {
 
         super(parent);
-        this.targetId = target.getId();
+        this.targetId = target.getIdProjectElement();
     }
 
     @Override

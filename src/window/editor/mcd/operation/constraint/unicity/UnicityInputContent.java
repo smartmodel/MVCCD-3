@@ -180,10 +180,10 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
         int col;
 
         col = OperationParamTableColumn.ID.getPosition();
-        row[col] = parameter.getId();
+        row[col] = parameter.getIdProjectElement();
 
         col = OperationParamTableColumn.TRANSITORY.getPosition();
-        row[col] = parameter.isTransitory();
+        row[col] = parameter.isTransitoryProjectElement();
 
         col = OperationParamTableColumn.ORDER.getPosition();
         row[col] = parameter.getOrder();

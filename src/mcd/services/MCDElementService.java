@@ -11,6 +11,8 @@ import mcd.interfaces.IMCDNamePathParent;
 import mdr.MDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import project.ProjectElement;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -66,7 +68,11 @@ public class MCDElementService {
             } else {
                 return getIMCDModelAccueil((MCDElement) mcdElement.getParent());
             }
-        } else {
+        } else if (mcdElement instanceof IMCDModel) {
+            //#MAJ 2021-02-21 Erreur création d'un modèle en multi-modèles
+            //Il ne faut pas remonter au parent
+            return (IMCDModel) mcdElement ;
+        } else{
             throw new CodeApplException("MCDElementService.getIMCDModelAccueil  - Erreur de parcours");
         }
     }

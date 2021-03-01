@@ -1,13 +1,14 @@
 package mpdr;
 
 import md.MDElement;
+import mdr.MDRColumn;
 import mdr.MDRTable;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import project.ProjectElement;
 
-public abstract class MPDRColumn extends MDRTable implements IMPDRElement, IMPDRElementWithSource {
+public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPDRElementWithSource {
 
     private  static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;

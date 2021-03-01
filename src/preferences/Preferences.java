@@ -4,6 +4,7 @@ package preferences;
 import main.MVCCDElement;
 import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
+import utilities.Trace;
 
 import java.awt.*;
 
@@ -401,6 +402,7 @@ public class Preferences extends MVCCDElement {
     public static String PREFERENCES_PROJECT_MENU_MPDR = "preferences.project.menu.mpdr";
     public static String PREFERENCES_PROJECT_MENU_MPDR_ORACLE = "preferences.project.menu.mpdr.oracle";
     public static String PREFERENCES_PROJECT_MENU_MPDR_MYSQL = "preferences.project.menu.mpdr.mysql";
+    public static String PREFERENCES_PROJECT_MENU_MPDR_POSTGRESQL = "preferences.project.menu.mpdr.postgresql";
 
     public static String PARAMETERS_SEPARATOR = ", ";
 
@@ -423,12 +425,86 @@ public class Preferences extends MVCCDElement {
     public static String MLDRDATATYPE_TEMPORAL_LIENPROG = "TEMPORAL";
     public static String MLDRDATATYPE_INTERVAL_NAME = "INTERVAL";
     public static String MLDRDATATYPE_INTERVAL_LIENPROG = "INTERVAL";
+    public static String MLDRDATATYPE_YEAR_NAME = "YEAR";
+    public static String MLDRDATATYPE_YEAR_LIENPROG = "YEAR";
+    public static String MLDRDATATYPE_DATETIME_NAME = "DATETIME";
+    public static String MLDRDATATYPE_DATETIME_LIENPROG = "DATETIME";
     public static String MLDRDATATYPE_TIMESTAMP_NAME = "TIMESTAMP";
     public static String MLDRDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
     public static String MLDRDATATYPE_DATE_NAME = "DATE";
     public static String MLDRDATATYPE_DATE_LIENPROG = "DATE";
     public static String MLDRDATATYPE_TIME_NAME = "TIME";
     public static String MLDRDATATYPE_TIME_LIENPROG = "TIME";
+
+    public static String MPDRORACLEDATATYPE_ROOT_NAME = "MPDR-Oracle";
+    public static String MPDRORACLEDATATYPE_ROOT_LIENPROG = "MPDR-Oracle";
+    public static String MPDRORACLEDATATYPE_VARCHAR2_NAME = "VARCHAR2";
+    public static String MPDRORACLEDATATYPE_VARCHAR2_LIENPROG = "VARCHAR2";
+    public static String MPDRORACLEDATATYPE_NUMBER_NAME = "NUMBER";
+    public static String MPDRORACLEDATATYPE_NUMBER_LIENPROG = "NUMBER";
+    public static String MPDRORACLEDATATYPE_TEMPORAL_NAME = "TEMPORAL";
+    public static String MPDRORACLEDATATYPE_TEMPORAL_LIENPROG = "TEMPORAL";
+    public static String MPDRORACLEDATATYPE_TIMESTAMP_NAME = "TIMESTAMP";
+    public static String MPDRORACLEDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
+    public static String MPDRORACLEDATATYPE_DATE_NAME = "DATE";
+    public static String MPDRORACLEDATATYPE_DATE_LIENPROG = "DATE";
+
+
+    public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
+    public static String MPDRMySQLDATATYPE_ROOT_LIENPROG = "MPDR-MySQL";
+    public static String MPDRMySQLDATATYPE_TEXT_NAME = "TEXT";
+    public static String MPDRMySQLDATATYPE_TEXT_LIENPROG = "TEXT";
+    public static String MPDRMySQLDATATYPE_VARCHAR_NAME = "VARCHAR";
+    public static String MPDRMySQLDATATYPE_VARCHAR_LIENPROG = "VARCHAR";
+    public static String MPDRMySQLDATATYPE_NUMERIC_NAME = "NUMERIC";
+    public static String MPDRMySQLDATATYPE_NUMERIC_LIENPROG = "NUMERIC";
+    public static String MPDRMySQLDATATYPE_TINYINT_NAME = "TINYINT";
+    public static String MPDRMySQLDATATYPE_TINYINT_LIENPROG = "TINYINT";
+    public static String MPDRMySQLDATATYPE_DECIMAL_NAME = "DECIMAL";
+    public static String MPDRMySQLDATATYPE_DECIMAL_LIENPROG = "DECIMAL";
+    public static String MPDRMySQLDATATYPE_BIGINT_NAME = "BIGINT";
+    public static String MPDRMySQLDATATYPE_BIGINT_LIENPROG = "BIGINT";
+    public static String MPDRMySQLDATATYPE_INT_NAME = "INT";
+    public static String MPDRMySQLDATATYPE_INT_LIENPROG = "INT";
+    public static String MPDRMySQLDATATYPE_TEMPORAL_NAME = "TEMPORAL";
+    public static String MPDRMySQLDATATYPE_TEMPORAL_LIENPROG = "TEMPORAL";
+    public static String MPDRMySQLDATATYPE_DATE_NAME = "DATE";
+    public static String MPDRMySQLDATATYPE_DATE_LIENPROG = "DATE";
+    public static String MPDRMySQLDATATYPE_DATETIME_NAME = "DATETIME";
+    public static String MPDRMySQLDATATYPE_DATETIME_LIENPROG = "DATETIME";
+    public static String MPDRMySQLDATATYPE_TIMESTAMP_NAME = "TIMESTAMP";
+    public static String MPDRMySQLDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
+    public static String MPDRMySQLDATATYPE_TIME_NAME = "TIME";
+    public static String MPDRMySQLDATATYPE_TIME_LIENPROG = "TIME";
+    public static String MPDRMySQLDATATYPE_YEAR_NAME = "YEAR";
+    public static String MPDRMySQLDATATYPE_YEAR_LIENPROG = "YEAR";
+
+    public static String MPDRPOSTGRESQLDATATYPE_ROOT_NAME = "MPDR-PostgreSQL";
+    public static String MPDRPOSTGRESQLDATATYPE_ROOT_LIENPROG = "MPDR-PostgreSQL";
+    public static String MPDRPOSTGRESQLDATATYPE_BOOLEAN_NAME = "BOOLEAN";
+    public static String MPDRPOSTGRESQLDATATYPE_BOOLEAN_LIENPROG = "BOOLEAN";
+    public static String MPDRPOSTGRESQLDATATYPE_TEXT_NAME = "TEXT";
+    public static String MPDRPOSTGRESQLDATATYPE_TEXT_LIENPROG = "TEXT";
+    public static String MPDRPOSTGRESQLDATATYPE_VARCHAR_NAME = "VARCHAR";
+    public static String MPDRPOSTGRESQLDATATYPE_VARCHAR_LIENPROG = "VARCHAR";
+    public static String MPDRPOSTGRESQLDATATYPE_NUMERIC_NAME = "NUMERIC";
+    public static String MPDRPOSTGRESQLDATATYPE_NUMERIC_LIENPROG = "NUMERIC";
+    public static String MPDRPOSTGRESQLDATATYPE_SMALLINT_NAME = "SMALLINT";
+    public static String MPDRPOSTGRESQLDATATYPE_SMALLINT_LIENPROG = "SMALLINT";
+    public static String MPDRPOSTGRESQLDATATYPE_INTEGER_NAME = "INTEGER";
+    public static String MPDRPOSTGRESQLDATATYPE_INTEGER_LIENPROG = "INTEGER";
+    public static String MPDRPOSTGRESQLDATATYPE_BIGINT_NAME = "BIGINT";
+    public static String MPDRPOSTGRESQLDATATYPE_BIGINT_LIENPROG = "BIGINT";
+    public static String MPDRPOSTGRESQLDATATYPE_TEMPORAL_NAME = "TEMPORAL";
+    public static String MPDRPOSTGRESQLDATATYPE_TEMPORAL_LIENPROG = "TEMPORAL";
+    public static String MPDRPOSTGRESQLDATATYPE_INTERVAL_NAME = "INTERVAL";
+    public static String MPDRPOSTGRESQLDATATYPE_INTERVAL_LIENPROG = "INTERVAL";
+    public static String MPDRPOSTGRESQLDATATYPE_DATE_NAME = "DATE";
+    public static String MPDRPOSTGRESQLDATATYPE_DATE_LIENPROG = "DATE";
+    public static String MPDRPOSTGRESQLDATATYPE_TIMESTAMP_NAME = "TIMESTAMP";
+    public static String MPDRPOSTGRESQLDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
+    public static String MPDRPOSTGRESQLDATATYPE_TIME_NAME = "TIME";
+    public static String MPDRPOSTGRESQLDATATYPE_TIME_LIENPROG = "TIME";
 
     public static String MDR_NAMING_LENGTH_30 = "mdr.naming.length.30";
     public static String MDR_NAMING_LENGTH_60 = "mdr.naming.length.60";
@@ -608,6 +684,10 @@ public class Preferences extends MVCCDElement {
     // MPDR MySQL Préférences
     private MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH = null;
     private MDRNamingFormat MPDRMYSQL_PREF_NAMING_FORMAT = null;
+
+    // MPDR PostgreSQL Préférences
+    private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
+    private MDRNamingFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT = null;
 
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);
@@ -1209,5 +1289,27 @@ public class Preferences extends MVCCDElement {
 
     public void setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat MPDRMYSQL_PREF_NAMING_FORMAT) {
         this.MPDRMYSQL_PREF_NAMING_FORMAT = MPDRMYSQL_PREF_NAMING_FORMAT;
+    }
+
+    public MDRNamingLength getMPDRPOSTGRESQL_PREF_NAMING_LENGTH() {
+        if (MPDRPOSTGRESQL_PREF_NAMING_LENGTH == null){
+            MPDRPOSTGRESQL_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
+        }
+        return MPDRPOSTGRESQL_PREF_NAMING_LENGTH;
+    }
+
+    public void setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH) {
+        this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH = MPDRPOSTGRESQL_PREF_NAMING_LENGTH;
+    }
+
+    public MDRNamingFormat getMPDRPOSTGRESQL_PREF_NAMING_FORMAT() {
+        if (MPDRPOSTGRESQL_PREF_NAMING_FORMAT == null){
+            MPDRPOSTGRESQL_PREF_NAMING_FORMAT = MDRNamingFormat.NOTHING;
+        }
+        return MPDRPOSTGRESQL_PREF_NAMING_FORMAT;
+    }
+
+    public void setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT) {
+        this.MPDRPOSTGRESQL_PREF_NAMING_FORMAT = MPDRPOSTGRESQL_PREF_NAMING_FORMAT;
     }
 }

@@ -1,6 +1,7 @@
 package mpdr.services;
 
 import main.MVCCDElement;
+import mdr.MDRConstraint;
 import mdr.MDRContColumns;
 import mdr.MDRContTables;
 import mldr.MLDRColumn;
@@ -8,6 +9,7 @@ import mldr.MLDRTable;
 import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
+import mpdr.interfaces.IMPDRElementWithSource;
 
 import java.util.ArrayList;
 
@@ -44,4 +46,15 @@ public class MPDRTableService {
         return null ;
     }
 
+    public static MDRConstraint getMPDRConstraintByMLDRConstraintSource(MPDRTable mpdrTable, MDRConstraint mldrConstraint) {
+        for (MDRConstraint mdrConstraint : mpdrTable.getMDRConstraints()){
+            if (mdrConstraint instanceof IMPDRElementWithSource) {
+                IMPDRElementWithSource mpdrConstraint = (IMPDRElementWithSource) mdrConstraint;
+                if (mpdrConstraint.getMldrElementSource() == mldrConstraint) {
+                    return mdrConstraint;
+                }
+            }
+        }
+        return null ;
+    }
 }

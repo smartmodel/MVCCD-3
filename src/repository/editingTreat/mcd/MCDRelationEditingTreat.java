@@ -24,7 +24,7 @@ public class MCDRelationEditingTreat extends EditingTreat {
 
     private void addRelEndInRepository(MCDRelEnd mcdRelEnd) {
         MCDContRelEnds parent = (MCDContRelEnds) mcdRelEnd.getParent();
-        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById((int) parent.getId());
+        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById((int) parent.getIdProjectElement());
         MVCCDManager.instance().addNewMVCCDElementInRepository(mcdRelEnd, nodeParent);
     }
 

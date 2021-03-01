@@ -19,7 +19,7 @@ public class MPDRMySQLModel extends MPDRModel {
     @Override
     public  MPDRMySQLTable createTable(MLDRTable mldrTable){
         MPDRMySQLTable newTable = MVCCDElementFactory.instance().createMPDRMySQLTable(
-                getMDRContTables(),  mldrTable);
+                getMPDRContTables(),  mldrTable);
 
         return newTable;
     }

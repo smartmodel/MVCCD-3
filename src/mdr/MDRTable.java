@@ -94,5 +94,4 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
         }
         return null;
     }
-
 }

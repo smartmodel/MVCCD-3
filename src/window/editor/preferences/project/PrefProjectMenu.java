@@ -14,6 +14,7 @@ public enum PrefProjectMenu {
     MPDR(Preferences.PREFERENCES_PROJECT_MENU_MPDR),
     MPDROracle(Preferences.PREFERENCES_PROJECT_MENU_MPDR_ORACLE),
     MPDRMySQL(Preferences.PREFERENCES_PROJECT_MENU_MPDR_MYSQL),
+    MPDRPostgreSQL(Preferences.PREFERENCES_PROJECT_MENU_MPDR_POSTGRESQL),
     MLDRToMPDR (Preferences.PREFERENCES_PROJECT_MENU_MLDR_TO_MPDR);
 
     private final String name;
