@@ -65,6 +65,7 @@
 	<xs:element name="preferences">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element ref="generalRelationNotation"/>
 				<xs:element ref="mcdJournalization"/>
 				<xs:element ref="mcdJournalizationException"/>
 				<xs:element ref="mcdAudit"/>
@@ -79,6 +80,15 @@
 				<xs:element ref="mcdModeNamingAttributeShortName"/>
 			</xs:sequence>
 		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="generalRelationNotation">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="uml"/>
+				<xs:enumeration value="stereotypes"/>
+			</xs:restriction>
+		</xs:simpleType>
 	</xs:element>
 
 	<xs:element name="mcdJournalization" type="xs:boolean"/>

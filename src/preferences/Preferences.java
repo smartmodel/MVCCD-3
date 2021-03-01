@@ -550,7 +550,7 @@ public class Preferences extends MVCCDElement {
 
     // Préférences de projet (modifications User/Custom)
     // Général
-    private String GENERAL_RELATION_NOTATION ;
+    private String GENERAL_RELATION_NOTATION ; //TODO-STB: intégrer dans la persistance des préférences de projet.
 
     // MCD
     private Boolean MCD_JOURNALIZATION = false;

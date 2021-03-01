@@ -66,7 +66,7 @@ public class ProjectSaverXml {
 
                 addModelAndChilds(document, mcd, mcdChilds);
 
-                //Package
+            //Package
             } else if (packagesAuthorized) {
 
                 addDiagrams(document, mcdChilds, mcd);
@@ -74,7 +74,7 @@ public class ProjectSaverXml {
                 addRelations(document, mcdChilds, mcd);
                 addPackages(document, elementMcd, mcd);
 
-                //projet simple
+            //projet simple
             } else {
 
                 addDiagrams(document, mcdChilds, mcd);
@@ -114,6 +114,12 @@ public class ProjectSaverXml {
         Element preferences = document.createElement("preferences");
         racine.appendChild(preferences);
 
+        //Préférences Général
+        Element generalRelationNotation = document.createElement("generalRelationNotation");
+        generalRelationNotation.appendChild(document.createTextNode(project.getPreferences().getGENERAL_RELATION_NOTATION().toString()));
+        preferences.appendChild(generalRelationNotation);
+
+        //Préférences MCD
         Element mcdJournalization = document.createElement("mcdJournalization");
         mcdJournalization.appendChild(document.createTextNode(project.getPreferences().getMCD_JOURNALIZATION().toString()));
         preferences.appendChild(mcdJournalization);
@@ -398,7 +404,6 @@ public class ProjectSaverXml {
             journalizationException.appendChild(doc.createTextNode(String.valueOf(mcdPackage.isMcdJournalizationException())));
         }
     }
-
 
     private void addAttributs(Document doc, Element entity, ArrayList<MVCCDElement> listElement) {
         // Ajout du package Attributs au document

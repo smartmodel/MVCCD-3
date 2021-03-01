@@ -112,6 +112,11 @@ public class ProjectLoaderXml {
 
         //Récupération et instantiation des préférences de projet
 
+        //Préférences général
+        Element generalRelationNotation = (Element) racine.getElementsByTagName("generalRelationNotation").item(0);
+        preferences.setGENERAL_RELATION_NOTATION(generalRelationNotation.getTextContent());
+
+        //Préférences MCD
         Element mcdJournalization = (Element) racine.getElementsByTagName("mcdJournalization").item(0);
         preferences.setMCD_JOURNALIZATION(Boolean.valueOf(mcdJournalization.getTextContent()));
 
