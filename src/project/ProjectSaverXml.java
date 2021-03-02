@@ -119,7 +119,7 @@ public class ProjectSaverXml {
         generalRelationNotation.appendChild(document.createTextNode(project.getPreferences().getGENERAL_RELATION_NOTATION().toString()));
         preferences.appendChild(generalRelationNotation);
 
-        //TODO-STB: voir quelle avec PAS et ensuite supprimer
+        //TODO-STB: voir avec PAS et ensuite supprimer
         //Quelle différence entre les 2?
         //À quel moment chacun des 2 est alimenté?
         /*
@@ -793,7 +793,7 @@ public class ProjectSaverXml {
             target.setAttributeNode(targetName);
 
             Element id = doc.createElement("id");
-            id.appendChild(doc.createTextNode(String.valueOf(parameterChild.getTarget().getId())));
+            id.appendChild(doc.createTextNode(String.valueOf(parameterChild.getTarget().getIdProjectElement())));
             target.appendChild(id);
 
             Element order = doc.createElement("order");
