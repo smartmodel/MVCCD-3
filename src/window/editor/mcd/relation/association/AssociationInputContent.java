@@ -728,12 +728,13 @@ public class AssociationInputContent extends PanelInputContentId {
 
     private boolean checkFromRoleScopeNaming(boolean unitaire, int scopeNaming) {
         MCDAssociation mcdAssociation = (MCDAssociation)  getElementForCheck();
-        IMCDModel imcdModel = mcdAssociation.getIMCDModelAccueil();
+        //#MAJ 2021-03-02-A Erreur création d'une association
+        //IMCDModel imcdModel = mcdAssociation.getIMCDModelAccueil();
 
         String text = (String) fieldFromEntity.getSelectedItem();
-        MCDEntity mcdEntity = IMCDModelService.getMCDEntityByNamePath(imcdModel, modePathName, text);
+        MCDEntity mcdEntity = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, modePathName, text);
         text = (String) fieldToEntity.getSelectedItem();
-        MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(imcdModel, modePathName, text);
+        MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, modePathName, text);
 
         MCDAssEnd mcdAssEnd = null;
         if (mcdAssociation != null){
@@ -768,12 +769,13 @@ public class AssociationInputContent extends PanelInputContentId {
     private boolean checkToRoleScopeNaming(boolean unitaire, int scopeNaming) {
 
         MCDAssociation mcdAssociation = (MCDAssociation)  getElementForCheck();
-        IMCDModel imcdModel = mcdAssociation.getIMCDModelAccueil();
+        //#MAJ 2021-03-02-A Erreur création d'une association
+        // IMCDModel imcdModel = mcdAssociation.getIMCDModelAccueil();
 
         String text = (String) fieldToEntity.getSelectedItem();
-        MCDEntity mcdEntity = IMCDModelService.getMCDEntityByNamePath(imcdModel, modePathName, text);
+        MCDEntity mcdEntity = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, modePathName, text);
         text = (String) fieldFromEntity.getSelectedItem();
-        MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(imcdModel, modePathName, text);
+        MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, modePathName, text);
 
 
         MCDAssEnd mcdAssEnd= null;

@@ -17,3 +17,5 @@ Problèmes : Initialisation d'une relation en création
 //#MAJ 2021-02-21 Erreur création d'un modèle en multi-modèles
 
 //#MAJ 2021-02-21-A Erreur création d'un paquetage sous un modèle
+
+//#MAJ 2021-03-02-A Erreur création d'une association
