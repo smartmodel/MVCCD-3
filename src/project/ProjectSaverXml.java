@@ -119,6 +119,15 @@ public class ProjectSaverXml {
         generalRelationNotation.appendChild(document.createTextNode(project.getPreferences().getGENERAL_RELATION_NOTATION().toString()));
         preferences.appendChild(generalRelationNotation);
 
+        //TODO-STB: voir quelle avec PAS et ensuite supprimer
+        //Quelle différence entre les 2?
+        //À quel moment chacun des 2 est alimenté?
+        /*
+        MVCCDManager.instance().getProject().getPreferences().getMCD_JOURNALIZATION();
+        PreferencesManager.instance().getProjectPref().getMCD_JOURNALIZATION();
+        */
+
+
         //Préférences MCD
         Element mcdJournalization = document.createElement("mcdJournalization");
         mcdJournalization.appendChild(document.createTextNode(project.getPreferences().getMCD_JOURNALIZATION().toString()));
