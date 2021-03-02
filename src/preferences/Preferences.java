@@ -223,6 +223,7 @@ public class Preferences extends MVCCDElement {
     public static String MCDDATATYPE_BOOLEAN_NAME = "boolean";
     public static String MCDDATATYPE_BOOLEAN_LIENPROG = "boolean";
 
+    //ATTENTION, en cas de changement de valeurs de tailles possibles, il est nécessaire d'adapter les contrôles en conséquences dans SchemaProject.xsd, qui vérifie les exports/imports de projet sauvegardé.
     public static String MCDDATATYPE_TEXT_NAME = "text";
     public static String MCDDATATYPE_TEXT_LIENPROG = "text";
     public static Integer MCDDATATYPE_TEXT_SIZEMIN = 1;
