@@ -1,8 +1,11 @@
 package datatypes;
 
+import exceptions.CodeApplException;
 import main.MVCCDElementApplicationMDDatatypes;
 import main.MVCCDElementService;
 import main.MVCCDManager;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 
 import java.util.ArrayList;
 
@@ -27,6 +30,14 @@ public class MDDatatypesManager {
     private MLDRDatatype profileMLDRDatatypeRoot;
     private MLDRDatatype projectMLDRDatatypeRoot;
 
+    private MPDROracleDatatype defaultMPDROracleDatatypeRoot;
+    private MPDRMySQLDatatype defaultMPDRMySQLDatatypeRoot;
+    private MPDRPostgreSQLDatatype defaultMPDRPostgreSQLDatatypeRoot;
+
+    private MPDRDatatype defaultMPDRDatatypeRoot;
+    private MPDRDatatype profileMPDRDatatypeRoot;
+    private MPDRDatatype projectMPDRDatatypeRoot;
+
     public static synchronized MDDatatypesManager instance(){
         if(instance == null){
             instance = new MDDatatypesManager();
@@ -42,6 +53,17 @@ public class MDDatatypesManager {
         MLDRDatatypesCreateDefault createDefaultMLDR = new MLDRDatatypesCreateDefault(
                 applicationMDDatatypes);
         defaultMLDRDatatypeRoot = createDefaultMLDR.create();
+
+        MPDROracleDatatypesCreateDefault createDefaultMPDROracle = new MPDROracleDatatypesCreateDefault(
+                applicationMDDatatypes);
+        defaultMPDROracleDatatypeRoot = createDefaultMPDROracle.create();
+        MPDRMySQLDatatypesCreateDefault createDefaultMPDRMySQL = new MPDRMySQLDatatypesCreateDefault(
+                applicationMDDatatypes);
+        defaultMPDRMySQLDatatypeRoot = createDefaultMPDRMySQL.create();
+        MPDRPostgreSQLDatatypesCreateDefault createDefaultMPDRPostgreSQL = new MPDRPostgreSQLDatatypesCreateDefault(
+                applicationMDDatatypes);
+        defaultMPDRPostgreSQLDatatypeRoot = createDefaultMPDRPostgreSQL.create();
+
 
 
     }
@@ -71,6 +93,28 @@ public class MDDatatypesManager {
             return projectMLDRDatatypeRoot;
         } else  if (defaultMLDRDatatypeRoot != null){
             return defaultMLDRDatatypeRoot;
+        } else {
+            return null;
+        }
+    }
+
+
+
+    public MPDRDatatype mpdrDatatypeRoot (){
+        Preferences preferences = PreferencesManager.instance().preferences();
+        if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MLDRTOMPDR_DB_ORACLE)){
+            defaultMPDRDatatypeRoot = defaultMPDROracleDatatypeRoot;
+        } else if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MLDRTOMPDR_DB_MYSQL)){
+            defaultMPDRDatatypeRoot = defaultMPDRMySQLDatatypeRoot;
+        } else if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MLDRTOMPDR_DB_POSTGRESQL)){
+            defaultMPDRDatatypeRoot = defaultMPDRPostgreSQLDatatypeRoot;
+        } else {
+            throw new CodeApplException("mpdrDatatypeRoot () "+ " - La BD n'est pas trouvée");
+        }
+        if (projectMPDRDatatypeRoot!= null){
+            return projectMPDRDatatypeRoot;
+        } else  if (defaultMPDRDatatypeRoot != null){
+            return defaultMPDRDatatypeRoot;
         } else {
             return null;
         }
@@ -133,6 +177,30 @@ public class MDDatatypesManager {
         return projectMLDRDatatypeRoot;
     }
 
+    public MPDROracleDatatype getDefaultMPDROracleDatatypeRoot() {
+        return defaultMPDROracleDatatypeRoot;
+    }
+
+    public MPDRMySQLDatatype getDefaultMPDRMySQLDatatypeRoot() {
+        return defaultMPDRMySQLDatatypeRoot;
+    }
+
+    public MPDRPostgreSQLDatatype getDefaultMPDRPostgreSQLDatatypeRoot() {
+        return defaultMPDRPostgreSQLDatatypeRoot;
+    }
+
+    public MPDRDatatype getDefaultMPDRDatatypeRoot() {
+        return defaultMPDRDatatypeRoot;
+    }
+
+    public MPDRDatatype getProfileMPDRDatatypeRoot() {
+        return profileMPDRDatatypeRoot;
+    }
+
+    public MPDRDatatype getProjectMPDRDatatypeRoot() {
+        return projectMPDRDatatypeRoot;
+    }
+
     // Pour plus tard ...
 /*
     public void createProfile() {
@@ -177,6 +245,21 @@ public class MDDatatypesManager {
         for (MDDatatype mdDatatype : getMDDatatypesByRoot(root, treatAbstrait)){
             if (mdDatatype instanceof MLDRDatatype){
                 resultat.add((MLDRDatatype) mdDatatype);
+            }
+        }
+        return resultat;
+    }
+
+
+    public ArrayList<MPDRDatatype> getMPDRDatatypes (int treatAbstrait){
+        return getMPDRDatatypesByRoot(mpdrDatatypeRoot(), treatAbstrait);
+    }
+
+    public ArrayList<MPDRDatatype> getMPDRDatatypesByRoot(MPDRDatatype root, int treatAbstrait){
+        ArrayList<MPDRDatatype> resultat = new ArrayList<MPDRDatatype>();
+        for (MDDatatype mdDatatype : getMDDatatypesByRoot(root, treatAbstrait)){
+            if (mdDatatype instanceof MPDRDatatype){
+                resultat.add((MPDRDatatype) mdDatatype);
             }
         }
         return resultat;

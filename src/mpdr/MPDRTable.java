@@ -1,6 +1,7 @@
 package mpdr;
 
 import md.MDElement;
+import mdr.MDRConstraint;
 import mdr.MDRTable;
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
@@ -58,7 +59,14 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     }
 
 
+    public MDRConstraint getMPDRConstraintByMLDRConstraintSource(MDRConstraint mldrConstraint){
+        return MPDRTableService.getMPDRConstraintByMLDRConstraintSource(this, mldrConstraint);
+    }
+
+
     public  abstract MPDRColumn createColumn(MLDRColumn mldrColumn);
+
+    public  abstract MDRConstraint createConstraint(MDRConstraint mldrConstraint);
 
 
 

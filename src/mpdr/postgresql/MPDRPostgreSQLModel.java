@@ -19,7 +19,7 @@ public class MPDRPostgreSQLModel extends MPDRModel {
     @Override
     public MPDRPostgreSQLTable createTable(MLDRTable mldrTable){
         MPDRPostgreSQLTable newTable = MVCCDElementFactory.instance().createMPDRPostgreSQLTable(
-                getMDRContTables(), mldrTable);
+                getMPDRContTables(), mldrTable);
 
         return newTable;
     }

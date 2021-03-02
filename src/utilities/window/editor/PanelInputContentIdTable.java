@@ -418,7 +418,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         for (int i = elementsInProject.size() - 1; i >= 0; i--) {
             ProjectElement elementInProject = (ProjectElement) elementsInProject.get(i);
             if (!STableService.existRecordById(table,
-                    elementInProject.getId())) {
+                    elementInProject.getIdProjectElement())) {
                 MVCCDManager.instance().removeMVCCDElementInRepository(elementInProject, elementInProject.getParent());
                 elementInProject.removeInParent();
                 elementInProject = null;
@@ -435,7 +435,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         MElement newElement = getNewTransitoryElementById(idNewRecord);
 
         newElement.setParent(getEditor().getMvccdElementCrt());
-        newElement.setTransitory(false);
+        newElement.setTransitoryProjectElement(false);
 
         int order = STable.getOrderByLine(i);
         newElement.setOrder(order);
@@ -488,7 +488,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
     private void swapNodes(Integer idA, Integer idB) {
 
         DefaultMutableTreeNode nodeParent =  ProjectService.getNodeById(
-                ((ProjectElement) getEditor().getMvccdElementCrt()).getId());
+                ((ProjectElement) getEditor().getMvccdElementCrt()).getIdProjectElement());
 
         DefaultMutableTreeNode nodeA = RepositoryService.instance().getNodeInChildsByIdElement(
                 nodeParent, idA);
@@ -508,7 +508,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     protected MElement getNewTransitoryElementById(int id){
         for (MElement mElement : newTransitoryElements){
-            if (mElement.getId() == id){
+            if (mElement.getIdProjectElement() == id){
                 return mElement;
             }
         }

@@ -1,7 +1,12 @@
 package transform.mldrtompdr;
 
+import console.Console;
+import delete.Delete;
+import exceptions.TransformMCDException;
+import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
+import mdr.interfaces.IMDRElementWithIteration;
 import mldr.MLDRModel;
 import mldr.services.MLDRModelService;
 import mpdr.MPDRModel;
@@ -10,10 +15,11 @@ import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import transform.MDTransform;
 
 import java.util.ArrayList;
 
-public class MLDRTransform {
+public class MLDRTransform extends MDTransform {
 
     private MLDRModel mldrModel ;
     private MPDRModel mpdrModel ;
@@ -26,12 +32,34 @@ public class MLDRTransform {
         mpdrModel = foundOrCreateMPDRModel(
                 PreferencesManager.instance().preferences().getMLDRTOMPDR_DB());
 
-        // Transformation des tables
-        MLDRTransformTables mldrTransformTables = new MLDRTransformTables(mldrModel, mpdrModel);
-        mldrTransformTables.transformTables();
+        //Clonage du modèle avant transformation
+        MPDRModel mpdrModelClone = (MPDRModel) mpdrModel.cloneDeep();
 
+        try {
+            mldrModel.incrementeIteration();
+
+            // Transformation des tables
+            MLDRTransformTables mldrTransformTables = new MLDRTransformTables(this, mldrModel, mpdrModel);
+            mldrTransformTables.transformTables();
+
+            //Suppression des MPDRElement absents de l'itération
+            deleteMDRElementNotInIteration();
+
+
+        } catch(TransformMCDException e){
+            resultat.add(e.getMessage());
+            undoTransform(mpdrModelClone);
+            Console.printMessages(resultat);
+            return resultat;
+        }
 
         return resultat;
+    }
+
+    private void undoTransform(MPDRModel mpdrModelClone) {
+        Delete.deleteMVCCDElement(mpdrModel);
+        mpdrModelClone.setParent((MVCCDElement) mldrModel);
+        MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrModelClone);
     }
 
 
@@ -65,4 +93,14 @@ public class MLDRTransform {
     }
 
 
+    @Override
+    protected int getIteration() {
+        return mpdrModel.getIteration();
+    }
+
+    @Override
+    protected ArrayList<IMDRElementWithIteration> getIMDRElementWithIteration() {
+        return mpdrModel.getIMDRElementsWithIteration();
+
+    }
 }

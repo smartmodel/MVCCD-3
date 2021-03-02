@@ -11,3 +11,9 @@ Problèmes : Initialisation d'une relation en création
 //#MAJ 2021-01-09 Suppression de MCDElement.getMCDElements()
 
 //#MAJ 2021-01-14 Suppression de MDRElement.getMDRElements()
+
+//#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
+
+//#MAJ 2021-02-21 Erreur création d'un modèle en multi-modèles
+
+//#MAJ 2021-02-21-A Erreur création d'un paquetage sous un modèle

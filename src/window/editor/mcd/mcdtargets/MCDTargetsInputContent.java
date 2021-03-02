@@ -173,7 +173,7 @@ public class MCDTargetsInputContent extends PanelInputContentTableBasic {
         int col;
 
         col = MCDTargetsTableColumn.ID.getPosition();
-        row[col] = mElement.getId();
+        row[col] = mElement.getIdProjectElement();
 
         col = MCDTargetsTableColumn.NAME.getPosition();
         row[col] = mElement.getName();

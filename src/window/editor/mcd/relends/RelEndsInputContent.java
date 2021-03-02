@@ -228,10 +228,10 @@ public class RelEndsInputContent extends PanelInputContentTable {
         int col;
 
         col = RelEndsTableColumn.ID.getPosition();
-        row[col] = relEnd.getId();
+        row[col] = relEnd.getIdProjectElement();
 
         col = RelEndsTableColumn.TRANSITORY.getPosition();
-        row[col] = relEnd.isTransitory();
+        row[col] = relEnd.isTransitoryProjectElement();
 
         col = RelEndsTableColumn.ORDER.getPosition();
         row[col] = relEnd.getOrder();
@@ -275,7 +275,7 @@ public class RelEndsInputContent extends PanelInputContentTable {
                 MCDAssociation mcdAssociation = (MCDAssociation) mcdRelEnd.getImRelation();
                 if (mcdAssociation.isReflexive()) {
                     MCDRelEnd mcdRelEndOpposite = mcdRelEnd.getMCDRelEndOpposite();
-                    Integer indexRowOpposite = STableService.findIndexRecordById(table, mcdRelEndOpposite.getId());
+                    Integer indexRowOpposite = STableService.findIndexRecordById(table, mcdRelEndOpposite.getIdProjectElement());
                     if (indexRowOpposite != null) {
                         updateRow(mcdRelEndOpposite, indexRowOpposite);
                     }
@@ -301,7 +301,7 @@ public class RelEndsInputContent extends PanelInputContentTable {
         if (super.actionDelete(e, mElement)) {
             // Suppression de la ligne de l'extrémité opposée des associations réflexives
             if (mcdRelEndOpposite != null) {
-                Integer indexRowOpposite = STableService.findIndexRecordById(table, mcdRelEndOpposite.getId());
+                Integer indexRowOpposite = STableService.findIndexRecordById(table, mcdRelEndOpposite.getIdProjectElement());
                 if (indexRowOpposite != null) {
                     model.removeRow(indexRowOpposite);
                 }

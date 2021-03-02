@@ -192,10 +192,10 @@ public class ConstraintsInputContent extends PanelInputContentTable {
         int col;
 
         col = ConstraintsTableColumn.ID.getPosition();
-        row[col] = constraint.getId();
+        row[col] = constraint.getIdProjectElement();
 
         col = ConstraintsTableColumn.TRANSITORY.getPosition();
-        row[col] = constraint.isTransitory();
+        row[col] = constraint.isTransitoryProjectElement();
 
         col = ConstraintsTableColumn.ORDER.getPosition();
         row[col] = constraint.getOrder();

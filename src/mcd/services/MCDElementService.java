@@ -61,7 +61,11 @@ public class MCDElementService {
             } else {
                 return getIMCDModelAccueil((MCDElement) mcdElement.getParent());
             }
-        } else {
+        } else if (mcdElement instanceof IMCDModel) {
+            //#MAJ 2021-02-21 Erreur création d'un modèle en multi-modèles
+            //Il ne faut pas remonter au parent
+            return (IMCDModel) mcdElement ;
+        } else{
             throw new CodeApplException("MCDElementService.getIMCDModelAccueil  - Erreur de parcours");
         }
     }

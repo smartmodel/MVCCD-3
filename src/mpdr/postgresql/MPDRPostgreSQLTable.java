@@ -1,5 +1,7 @@
 package mpdr.postgresql;
 
+import main.MVCCDElementFactory;
+import mdr.MDRConstraint;
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
@@ -16,6 +18,14 @@ public class MPDRPostgreSQLTable extends MPDRTable {
 
     @Override
     public MPDRColumn createColumn(MLDRColumn mldrColumn) {
+        MPDRPostgreSQLColumn newColumn = MVCCDElementFactory.instance().createMPDRPostgreSQLColumn(
+                getMDRContColumns(),  mldrColumn);
+
+        return newColumn;
+    }
+
+    @Override
+    public MDRConstraint createConstraint(MDRConstraint mldrConstraint) {
         return null;
     }
 }

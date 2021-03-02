@@ -1,6 +1,5 @@
 package mpdr;
 
-import mdr.MDRContTables;
 import mdr.MDRModel;
 import mldr.MLDRTable;
 import mpdr.interfaces.IMPDRElement;
@@ -23,8 +22,8 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
 
 
 
-    public MDRContTables getMDRContTables(){
-        return MPDRModelService.getMDRContTables(this);
+    public MPDRContTables getMPDRContTables(){
+        return MPDRModelService.getMPDRContTables(this);
     }
 
 

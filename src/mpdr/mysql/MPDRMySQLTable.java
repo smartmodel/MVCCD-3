@@ -1,6 +1,7 @@
 package mpdr.mysql;
 
 import main.MVCCDElementFactory;
+import mdr.MDRConstraint;
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRTable;
@@ -24,6 +25,11 @@ public class MPDRMySQLTable extends MPDRTable {
                 getMDRContColumns(),  mldrColumn);
 
         return newColumn;
+    }
+
+    @Override
+    public MDRConstraint createConstraint(MDRConstraint mldrConstraint) {
+        return null;
     }
 
 

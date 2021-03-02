@@ -86,7 +86,7 @@ public class MCDTransformToColumn {
         }
 
         // Datatype contrainte
-        // Les préférences (nom et lienProg) des contraintes datatype sont les mêmes que celles de datratypes !
+        // Les préférences (nom et lienProg) des contraintes datatype sont les mêmes que celles de datatypes !
         if (mldrColumn.getDatatypeConstraintLienProg() != null) {
             if (!(mldrColumn.getDatatypeConstraintLienProg().equals(mcdAttribute.getDatatypeLienProg()))) {
                 mldrColumn.setDatatypeConstraintLienProg(mcdAttribute.getDatatypeLienProg());
@@ -107,7 +107,7 @@ public class MCDTransformToColumn {
         // Datatype scale
         if (mldrColumn.getScale() != null) {
             if (mldrColumn.getScale().intValue() != mcdAttribute.getScale().intValue()) {
-                mldrColumn.setDatatypeLienProg(mldrDatatypeLienProgNew);
+                mldrColumn.setScale(mcdAttribute.getScale());
             }
         } else {
             mldrColumn.setScale(mcdAttribute.getScale());

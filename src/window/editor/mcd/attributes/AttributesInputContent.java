@@ -157,10 +157,10 @@ public class AttributesInputContent extends PanelInputContentTable {
         int col;
 
         col = AttributesTableColumn.ID.getPosition();
-        row[col] = attribute.getId();
+        row[col] = attribute.getIdProjectElement();
 
         col = AttributesTableColumn.TRANSITORY.getPosition();
-        row[col] = attribute.isTransitory();
+        row[col] = attribute.isTransitoryProjectElement();
 
         col = AttributesTableColumn.ORDER.getPosition();
         row[col] = attribute.getOrder();

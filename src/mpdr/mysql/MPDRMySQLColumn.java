@@ -13,7 +13,4 @@ public class MPDRMySQLColumn extends MPDRColumn {
     }
 
 
-
-
-
 }

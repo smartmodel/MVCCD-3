@@ -28,14 +28,18 @@ public abstract class MDRTableOrView extends MDRElement implements IMDRElementWi
         this.iteration = iteration;
     }
 
-    public ArrayList<MDRColumn> getMDRColumns() {
+    public MDRContColumns getMDRContColumns() {
         for (MVCCDElement mvccdElement : getChilds()){
             if (mvccdElement instanceof MDRContColumns) {
-                MDRContColumns mdrContColumns = (MDRContColumns ) mvccdElement;
-                return mdrContColumns.getMDRColumns();
+                return (MDRContColumns) mvccdElement;
             }
         }
-        return new ArrayList<MDRColumn>();
+        return null;
+    }
+
+
+    public ArrayList<MDRColumn> getMDRColumns() {
+        return getMDRContColumns().getMDRColumns();
     }
 
 
@@ -49,25 +53,8 @@ public abstract class MDRTableOrView extends MDRElement implements IMDRElementWi
         return resultat;
     }
 
-    public MDRContColumns getMDRContColumns() {
-        for (MVCCDElement mvccdElement : getChilds()){
-            if (mvccdElement instanceof MDRContColumns) {
-                return (MDRContColumns) mvccdElement;
-            }
-        }
-        return null;
-    }
 
 
-    public ArrayList<MDRConstraint> getMDRConstraints() {
-        for (MVCCDElement mvccdElement : getChilds()){
-            if (mvccdElement instanceof MDRContConstraints) {
-                MDRContConstraints mdrContConstraints = (MDRContConstraints ) mvccdElement;
-                return mdrContConstraints.getMDRConstraints();
-            }
-        }
-        return new ArrayList<MDRConstraint>();
-    }
 
     public MDRContConstraints getMDRContConstraints() {
         for (MVCCDElement mvccdElement : getChilds()){
@@ -77,6 +64,12 @@ public abstract class MDRTableOrView extends MDRElement implements IMDRElementWi
         }
         return null;
     }
+
+
+    public ArrayList<MDRConstraint> getMDRConstraints(){
+        return getMDRContConstraints().getMDRConstraints();
+    }
+
 
     public boolean existColumn(MDRColumn mdrColumn){
         for (MDRColumn aMdrColumn : getMDRColumns()){

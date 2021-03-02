@@ -28,6 +28,10 @@ public class DialogMessage {
         JOptionPane.showMessageDialog(owner, message, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public static void showOk(Window owner, String message, String title){
+        JOptionPane.showMessageDialog(owner, message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public static int showConfirmYesNo_Yes(Window owner, String message) {
         String title = MessagesBuilder.getMessagesProperty("dialog.confirm");
         return JOptionPane.showConfirmDialog(owner, message, title, JOptionPane.YES_NO_OPTION);

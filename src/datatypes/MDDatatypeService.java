@@ -203,7 +203,40 @@ public class MDDatatypeService {
     }
 
     public static String convertMLDRLienProgToName(String lienProg){
-        MLDRDatatype mldrDatatype = getMLDRDatatypeByName(lienProg);
+        MLDRDatatype mldrDatatype = getMLDRDatatypeByLienProg(lienProg);
         return mldrDatatype.getName();
     }
+
+
+
+
+    public static MPDRDatatype getMPDRDatatypeByName(String name){
+        for (MPDRDatatype mpdrDatatype : MDDatatypesManager.instance().getMPDRDatatypes(MDDatatypesManager.BOTH)){
+            if (mpdrDatatype.getName().equals(name)){
+                return mpdrDatatype;
+            }
+        }
+        return null;
+    }
+
+
+    public static MPDRDatatype getMPDRDatatypeByLienProg(String lienProg){
+        for (MPDRDatatype mpdrDatatype : MDDatatypesManager.instance().getMPDRDatatypes(MDDatatypesManager.BOTH)){
+            if (mpdrDatatype.getLienProg().equals(lienProg)){
+                return mpdrDatatype;
+            }
+        }
+        return null;
+    }
+
+    public static String convertMPDRNameToLienProg(String name){
+        MPDRDatatype mpdrDatatype = getMPDRDatatypeByName(name);
+        return mpdrDatatype.getLienProg();
+    }
+
+    public static String convertMPDRLienProgToName(String lienProg){
+        MPDRDatatype mpdrDatatype = getMPDRDatatypeByLienProg(lienProg);
+        return mpdrDatatype.getName();
+    }
+
 }

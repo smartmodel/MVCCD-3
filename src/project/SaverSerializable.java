@@ -9,7 +9,6 @@ import utilities.window.DialogMessage;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class SaverSerializable {

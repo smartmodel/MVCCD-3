@@ -39,7 +39,7 @@ public abstract class MDRRelationFK extends MDRRelation{
     }
 
     public void setMDRFK(MDRFK mdrfk) {
-        this.mdrFKId = mdrfk.getId();
+        this.mdrFKId = mdrfk.getIdProjectElement();
    }
     public String getName() {
         if (getMDRFK() != null) {

@@ -59,18 +59,22 @@ public abstract class ProjectElement extends MVCCDElement {
         }
     }
 
-    /**
-     * Retourne l'identifiant unique de chaque élément du projet.
-     */
-    public int getId() {
+    //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
+    //IdProjectElement au lieu de Id
+    public int getIdProjectElement() {
         return id;
     }
 
-    public boolean isTransitory() {
+
+    //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
+    //TransitoryProjectElement au lieu de Transitory
+    public boolean isTransitoryProjectElement() {
         return transitory;
     }
 
-    public void setTransitory(boolean transitory) {
+    //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
+    //TransitoryProjectElement au lieu de Transitory
+    public void setTransitoryProjectElement(boolean transitory) {
         this.transitory = transitory;
     }
 }

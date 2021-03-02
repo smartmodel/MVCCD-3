@@ -1,8 +1,8 @@
 package mpdr.services;
 
 import main.MVCCDElement;
-import mdr.MDRContTables;
 import mldr.MLDRTable;
+import mpdr.MPDRContTables;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 
@@ -11,19 +11,20 @@ import java.util.ArrayList;
 public class MPDRModelService {
 
 
-    public static MDRContTables getMDRContTables(MPDRModel mpdrModel) {
+    public static MPDRContTables getMPDRContTables(MPDRModel mpdrModel) {
         for (MVCCDElement mvccdElement : mpdrModel.getChilds()){
-            if (mvccdElement instanceof MDRContTables){
-                return (MDRContTables) mvccdElement ;
+            if (mvccdElement instanceof MPDRContTables){
+                return (MPDRContTables) mvccdElement ;
             }
         }
         return null ;
+
     }
 
     public static ArrayList<MPDRTable> getMPDRTables(MPDRModel mpdrModel){
         ArrayList<MPDRTable> resultat = new ArrayList<MPDRTable>();
-        MDRContTables mdrContTables = getMDRContTables(mpdrModel);
-        for (MVCCDElement mvccdElement: mdrContTables.getChilds()){
+        MPDRContTables mpdrContTables = getMPDRContTables(mpdrModel);
+        for (MVCCDElement mvccdElement: mpdrContTables.getChilds()){
             if (mvccdElement instanceof MPDRTable){
                 resultat.add((MPDRTable) mvccdElement);
             }

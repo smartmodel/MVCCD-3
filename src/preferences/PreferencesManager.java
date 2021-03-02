@@ -8,7 +8,6 @@ import utilities.files.UtilFiles;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.StreamCorruptedException;
 
 
 public class PreferencesManager {
@@ -126,7 +125,6 @@ public class PreferencesManager {
         Analyser également la possibilité de boucler de manière générique les préférences, de sorte à éviter de devoir
         ajouter une ligne ici à chaque nouvelle préférence créée.
          */
-        //
 
         // Général
         to.setGENERAL_RELATION_NOTATION(from.getGENERAL_RELATION_NOTATION()) ;

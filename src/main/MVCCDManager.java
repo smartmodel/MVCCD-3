@@ -33,7 +33,7 @@ public class MVCCDManager {
 
     private MVCCDWindow mvccdWindow;  //Ecran principal
     private Repository repository;  //Référentiel
-    private MVCCDElement rootMVCCDElement; //Elément root du référentiel repository.root.name=Application MVCCD
+    private MVCCDElementRepositoryRoot rootMVCCDElement; //Elément root du référentiel repository.root.name=Application MVCCD
     private Project project;    //Projet en cours de traitement
     private Console console;    //Classe d'accès à la console d'affichage de messages
     private ProjectsRecents projectsRecents = null; //Projets ouverts  récemment
@@ -140,7 +140,7 @@ public class MVCCDManager {
 
     public void addNewMVCCDElementInRepository(MVCCDElement mvccdElementNew) {
         ProjectElement parent = (ProjectElement) mvccdElementNew.getParent();
-        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(parent.getId());
+        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(parent.getIdProjectElement());
         DefaultMutableTreeNode nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
         getWinRepositoryContent().getTree().changeModel(repository);
         getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(nodeNew.getPath()));
@@ -150,7 +150,7 @@ public class MVCCDManager {
     public void showMVCCDElementInRepository(MVCCDElement mvccdElement) {
         if (mvccdElement instanceof ProjectElement) {
             ProjectElement projectElement = (ProjectElement) mvccdElement;
-            DefaultMutableTreeNode node = ProjectService.getNodeById(projectElement.getId());
+            DefaultMutableTreeNode node = ProjectService.getNodeById(projectElement.getIdProjectElement());
             //getWinRepositoryContent().getTree().changeModel(repository);
             getWinRepositoryContent().getTree().getTreeModel().reload(node);
             getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
@@ -158,9 +158,9 @@ public class MVCCDManager {
     }
 
     public void removeMVCCDElementInRepository(MVCCDElement mvccdElementToRemove, MVCCDElement parent) {
-        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(((ProjectElement) parent).getId());
+        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(((ProjectElement)parent).getIdProjectElement());
         ProjectElement child = (ProjectElement) mvccdElementToRemove;
-        DefaultMutableTreeNode nodeChild = ProjectService.getNodeById(child.getId());
+        DefaultMutableTreeNode nodeChild= ProjectService.getNodeById(child.getIdProjectElement());
         MVCCDManager.instance().getRepository().removeNodeFromParent(nodeChild);
         getWinRepositoryContent().getTree().changeModel(repository);
         //getWinRepositoryContent().getTree().getTreeModel().reload();
@@ -405,7 +405,7 @@ public class MVCCDManager {
         return rootMVCCDElement;
     }
 
-    public void setRootMVCCDElement(MVCCDElement rootMVCCDElement) {
+    public void setRootMVCCDElement(MVCCDElementRepositoryRoot rootMVCCDElement) {
         this.rootMVCCDElement = rootMVCCDElement;
     }
 

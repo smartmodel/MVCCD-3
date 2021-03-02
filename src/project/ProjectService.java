@@ -32,7 +32,7 @@ public class ProjectService {
         for (MVCCDElement mvccdElement : projectElement.getChilds()) {
             if (mvccdElement instanceof ProjectElement) {
                 ProjectElement child = (ProjectElement) mvccdElement;
-                if (child.getId() == id) {
+                if (child.getIdProjectElement() == id) {
                     resultat = child;
                 } else {
                     if (resultat == null) {
@@ -55,7 +55,7 @@ public class ProjectService {
         DefaultMutableTreeNode resultat = null;
         if (root.getUserObject() instanceof ProjectElement) {
             ProjectElement projectElement = (ProjectElement) root.getUserObject();
-            if (projectElement.getId() == id) {
+            if (projectElement.getIdProjectElement() == id) {
                 resultat = root;
             }
         }

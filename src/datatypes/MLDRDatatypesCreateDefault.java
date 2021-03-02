@@ -40,7 +40,7 @@ public class MLDRDatatypesCreateDefault {
         varchar.setScaleMandatory(false);
 
 
-        // VARCHAR
+        // NUMERIC
         MLDRDatatype numeric = createMLDRDatatype(
                 mldrDatatypeRoot,
                 Preferences.MLDRDATATYPE_NUMERIC_NAME,
@@ -69,33 +69,38 @@ public class MLDRDatatypesCreateDefault {
                 temporal,
                 Preferences.MLDRDATATYPE_INTERVAL_NAME,
                 Preferences.MLDRDATATYPE_INTERVAL_LIENPROG,
-                true);
-        interval.setSizeMandatory(false);
-        interval.setScaleMandatory(false);
+                false);
+
+        MLDRDatatype year = createMLDRDatatype(
+                temporal,
+                Preferences.MLDRDATATYPE_YEAR_NAME,
+                Preferences.MLDRDATATYPE_YEAR_LIENPROG,
+                false);
+
+        MLDRDatatype datetime = createMLDRDatatype(
+                temporal,
+                Preferences.MLDRDATATYPE_DATETIME_NAME,
+                Preferences.MLDRDATATYPE_DATETIME_LIENPROG,
+                false);
 
         MLDRDatatype timestamp = createMLDRDatatype(
                 temporal,
                 Preferences.MLDRDATATYPE_TIMESTAMP_NAME,
                 Preferences.MLDRDATATYPE_TIMESTAMP_LIENPROG,
-                true);
-        timestamp.setSizeMandatory(false);
-        timestamp.setScaleMandatory(false);
+                false);
 
         MLDRDatatype date = createMLDRDatatype(
                 temporal,
                 Preferences.MLDRDATATYPE_DATE_NAME,
                 Preferences.MLDRDATATYPE_DATE_LIENPROG,
-                true);
-        date.setSizeMandatory(false);
-        date.setScaleMandatory(false);
+                false);
 
         MLDRDatatype time = createMLDRDatatype(
                 temporal,
                 Preferences.MLDRDATATYPE_TIME_NAME,
                 Preferences.MLDRDATATYPE_TIME_LIENPROG,
-                true);
-        time.setSizeMandatory(false);
-        time.setScaleMandatory(false);
+                false);
+
    }
 
     private MLDRDatatype createMLDRDatatype(MVCCDElement parent , String name, String lienProg, boolean abstrait){

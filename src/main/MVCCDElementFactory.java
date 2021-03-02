@@ -12,12 +12,15 @@ import messages.MessagesBuilder;
 import mldr.*;
 import mldr.services.MLDRContConstraintsService;
 import mpdr.MPDRContColumns;
+import mpdr.MPDRContTables;
 import mpdr.MPDRModel;
 import mpdr.mysql.MPDRMySQLColumn;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.mysql.MPDRMySQLTable;
+import mpdr.oracle.MPDROracleColumn;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.oracle.MPDROracleTable;
+import mpdr.postgresql.MPDRPostgreSQLColumn;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 import mpdr.postgresql.MPDRPostgreSQLTable;
 import preferences.Preferences;
@@ -327,6 +330,7 @@ public class MVCCDElementFactory {
         return mldrRelationFK;
     }
 
+    // Oravce
     public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {
         MPDROracleModel mpdrOracleModel = new MPDROracleModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_ORACLE_NAME);
         Preferences preferences = PreferencesManager.instance().preferences();
@@ -338,6 +342,24 @@ public class MVCCDElementFactory {
         return mpdrOracleModel;
     }
 
+    public MPDROracleTable createMPDROracleTable(MPDRContTables mpdrContTables, MLDRTable mldrTable) {
+        MPDROracleTable mpdrOracleTable = new MPDROracleTable(mpdrContTables, mldrTable);
+        MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrOracleTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        return mpdrOracleTable;
+    }
+
+
+    public MPDROracleColumn createMPDROracleColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn) {
+        MPDROracleColumn mpdrOracleColumn = new MPDROracleColumn(mdrContColumns, mldrColumn);
+        return mpdrOracleColumn;
+    }
+
+    public MPDROracleColumn createMPDROraclePK(MDRContConstraints mdrContConstraints, MLDRPK mldrPK) {
+        MPDROracleColumn mpdrOracleColumn = new MPDROracleColumn(mdrContConstraints, mldrPK);
+        return mpdrOracleColumn;
+    }
+
+    // MySQL
     public MPDRMySQLModel createMPDRModelMySQL(MLDRModel mldrModel) {
         MPDRMySQLModel mpdrMySQLModel = new MPDRMySQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_MYSQL_NAME);
         Preferences preferences = PreferencesManager.instance().preferences();
@@ -349,38 +371,48 @@ public class MVCCDElementFactory {
         return mpdrMySQLModel;
     }
 
-    public MPDRPostgreSQLModel createMPDRModelPostgreSQL(MLDRModel mldrModel) {
-        MPDRPostgreSQLModel mpdrPostgreSQLModel = new MPDRPostgreSQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME);
-        createContentMPDRModel(mpdrPostgreSQLModel);
-        return mpdrPostgreSQLModel;
-    }
-    
-
-    private void createContentMPDRModel(MPDRModel mpdrModel) {
-        MDRContTables mdrContTable = new MDRContTables(mpdrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
-    }
-
-    public MPDROracleTable createMPDROracleTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
-        MPDROracleTable mpdrOracleTable = new MPDROracleTable(mdrContTables, mldrTable);
-        MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrOracleTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
-        return mpdrOracleTable;
-    }
-
-    public MPDRMySQLTable createMPDRMySQLTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
-        MPDRMySQLTable mpdrMySQLTable = new MPDRMySQLTable(mdrContTables, mldrTable);
+    public MPDRMySQLTable createMPDRMySQLTable(MPDRContTables mpdrContTables, MLDRTable mldrTable) {
+        MPDRMySQLTable mpdrMySQLTable = new MPDRMySQLTable(mpdrContTables, mldrTable);
         MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrMySQLTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         return mpdrMySQLTable;
     }
+
 
     public MPDRMySQLColumn createMPDRMySQLColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn) {
         MPDRMySQLColumn mpdrMySQLColumn = new MPDRMySQLColumn(mdrContColumns, mldrColumn);
         return mpdrMySQLColumn;
     }
 
-    public MPDRPostgreSQLTable createMPDRPostgreSQLTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
-        MPDRPostgreSQLTable mpdrPostgreSQLTable = new MPDRPostgreSQLTable(mdrContTables, mldrTable);
+
+
+    // PostgreSQL
+    public MPDRPostgreSQLModel createMPDRModelPostgreSQL(MLDRModel mldrModel) {
+        MPDRPostgreSQLModel mpdrPostgreSQLModel = new MPDRPostgreSQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME);
+        Preferences preferences = PreferencesManager.instance().preferences();
+        mpdrPostgreSQLModel.setNamingLengthActual( preferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH());
+        mpdrPostgreSQLModel.setNamingLengthFuture( preferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH());
+        mpdrPostgreSQLModel.setNamingFormatActual( preferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT());
+        mpdrPostgreSQLModel.setNamingFormatFuture( preferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT());
+        createContentMPDRModel(mpdrPostgreSQLModel);
+        return mpdrPostgreSQLModel;
+    }
+
+    public MPDRPostgreSQLTable createMPDRPostgreSQLTable(MPDRContTables mpdrContTables, MLDRTable mldrTable) {
+        MPDRPostgreSQLTable mpdrPostgreSQLTable = new MPDRPostgreSQLTable(mpdrContTables, mldrTable);
         MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrPostgreSQLTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         return mpdrPostgreSQLTable;
+    }
+
+
+    public MPDRPostgreSQLColumn createMPDRPostgreSQLColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn) {
+        MPDRPostgreSQLColumn mpdrPostgreSQLColumn = new MPDRPostgreSQLColumn(mdrContColumns, mldrColumn);
+        return mpdrPostgreSQLColumn;
+    }
+
+
+    //Tous les MPDR
+    private void createContentMPDRModel(MPDRModel mpdrModel) {
+        MPDRContTables mpdrContTable = new MPDRContTables(mpdrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
     }
 
 

@@ -9,10 +9,15 @@ import main.MVCCDManager;
 import main.MVCCDWindow;
 import mcd.*;
 import mcd.interfaces.IMCDElementWithTargets;
+import mcd.services.MCDElementService;
 import messages.MessagesBuilder;
 import mldr.*;
+import mldr.interfaces.IMLDRElement;
+import mldr.interfaces.IMLDRElementWithSource;
+import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
+import mpdr.interfaces.IMPDRElementWithSource;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
@@ -65,6 +70,15 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 treatInspectObject();
             }
         }
+
+        if (node.getUserObject() instanceof IMLDRElementWithSource) {
+            treatSourceMLDRElementWithSource();
+        }
+
+        if (node.getUserObject() instanceof IMPDRElementWithSource) {
+            treatSourceMPDRElementWithSource();
+        }
+
         if (node.getUserObject() instanceof MVCCDElementApplicationPreferences) {
             treatGenericUpdate(this, new PrefApplEditingTreat());
         }
@@ -229,6 +243,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         if (node.getUserObject() instanceof MPDRTable) {
             treatGenericRead(this, new MDRTableEditingTreat());
         }
+
+        if (node.getUserObject() instanceof MPDRColumn) {
+            treatGenericRead(this, new MDRColumnEditingTreat());
+        }
+
     }
 
 
@@ -242,9 +261,51 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 String message = "Classe : " + mvccdElement.getClass().getName();
                 if (mvccdElement instanceof ProjectElement){
                     ProjectElement projectElement = (ProjectElement) mvccdElement;
-                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getId();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
                 }
                 new DialogMessage().showOk(mvccdWindow, message);
+            }
+        });
+
+    }
+
+
+    private void treatSourceMLDRElementWithSource() {
+        JMenuItem source = new JMenuItem("Source conceptuelle");
+        this.add(source);
+        source.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                IMLDRElementWithSource imldrElementWithSource = (IMLDRElementWithSource) mvccdElement ;
+                MCDElement mcdElementSource = imldrElementWithSource.getMcdElementSource();
+                String message = "Classe : " +  mcdElementSource.getClass().getName();
+                message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNamePath(MCDElementService.PATHNAME);
+                ProjectElement projectElement = (ProjectElement) mvccdElement;
+                message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
+
+                new DialogMessage().showOk(mvccdWindow, message,
+                        "Source de niveau conceptuel de l'objet : " + mvccdElement.getName());
+            }
+        });
+
+    }
+
+
+    private void treatSourceMPDRElementWithSource() {
+        JMenuItem source = new JMenuItem("Source logique");
+        this.add(source);
+        source.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                IMPDRElementWithSource impdrElementWithSource = (IMPDRElementWithSource) mvccdElement ;
+                IMLDRElement mldrElementSource = impdrElementWithSource.getMldrElementSource();
+                String message = "Classe : " +  mldrElementSource.getClass().getName();
+                message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mldrElementSource.getName();
+                ProjectElement projectElement = (ProjectElement) mvccdElement;
+                message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
+
+                new DialogMessage().showOk(mvccdWindow, message,
+                        "Source de niveau logique de l'objet : " + mvccdElement.getName());
             }
         });
 
@@ -291,6 +352,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             treatGenericRead( preferencesEditMPDR, new PrefMPDRMySQLEditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.mysql"));
 
+            treatGenericRead( preferencesEditMPDR, new PrefMPDRPostgreSQLEditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.postgresql"));
+
             // Fin Sous-menu MPDR
 
 
@@ -327,6 +391,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             treatGenericUpdate( preferencesEditMPDR, new PrefMPDRMySQLEditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.mysql"));
+
+            treatGenericUpdate( preferencesEditMPDR, new PrefMPDRPostgreSQLEditingTreat(),
+                    MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.postgresql"));
 
             // Fin Sous-menu MPDR
 

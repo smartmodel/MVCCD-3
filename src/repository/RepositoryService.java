@@ -24,7 +24,7 @@ public class RepositoryService {
                 DefaultMutableTreeNode nodeChild = (DefaultMutableTreeNode) parent.getChildAt(i);
                 if (nodeChild.getUserObject() instanceof ProjectElement){
                     ProjectElement projectElement = (ProjectElement) nodeChild.getUserObject();
-                    if (projectElement.getId() == id ){
+                    if (projectElement.getIdProjectElement() == id ){
                         return nodeChild;
                     }
                 }
