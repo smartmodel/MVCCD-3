@@ -2,9 +2,9 @@ package window.editor.mcd.entity;
 
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
-import utilities.window.editor.PanelButtonsContent;
 import preferences.Preferences;
 import project.ProjectElement;
+import utilities.window.editor.PanelButtonsContent;
 
 public class EntityButtonsContent extends PanelButtonsContent {
 

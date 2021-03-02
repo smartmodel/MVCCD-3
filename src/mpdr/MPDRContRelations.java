@@ -1,7 +1,6 @@
 package mpdr;
 
 import mdr.MDRContRelations;
-import mdr.MDRContTables;
 import project.ProjectElement;
 
 public class MPDRContRelations extends MDRContRelations {

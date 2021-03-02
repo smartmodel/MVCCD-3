@@ -6,20 +6,21 @@ import project.Project;
 import project.ProjectFileChooser;
 import utilities.files.UtilFiles;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 
 public class PreferencesManager {
 
-    private static PreferencesManager instance ;
+    private static PreferencesManager instance;
 
     private Preferences defaultPref;
     private Preferences applicationPref;
-    private Preferences profilePref;
+    private Preferences profilePref; //ensemble de préférences sauvegardés, pouvant être chargées en tant que préférences de projet.
     private Preferences projectPref;
 
-    public static synchronized PreferencesManager instance(){
-        if(instance == null){
+    public static synchronized PreferencesManager instance() {
+        if (instance == null) {
             instance = new PreferencesManager();
         }
         return instance;
@@ -29,22 +30,33 @@ public class PreferencesManager {
         defaultPref = new Preferences(null, null);
     }
 
-    public Preferences preferences (){
-        if (projectPref != null){
+    /**
+     * Retourne les préférences qui doivent être prises en compte par l'instance du programme lancé par l'utilisateur.
+     * Les préférences sont retournées dans l'ordre de priorité suivant: (1) préférences du projet si elles existent,
+     * sinon (2) les préférences de l'application si elles existent et, autrement, (3) les préférences par défaut.
+     * @return L'ensemble des préférences à utiliser.
+     */
+    public Preferences preferences() {
+        if (projectPref != null) {
             return projectPref;
-        } else  if (applicationPref != null){
+        } else if (applicationPref != null) {
             return applicationPref;
-        } else  if (defaultPref != null){
+        } else if (defaultPref != null) {
             return defaultPref;
         } else {
             return null;
         }
     }
 
-    public Preferences profileOrDefault (){
-        if (profilePref != null){
+    /**
+     * Évalue l'existance de préférences de profile.
+     * @return Retourne les préférences de profile si elles existent et le cas échéant, retourne les préférences par
+     * défaut
+     */
+    public Preferences profileOrDefault() {
+        if (profilePref != null) {
             return profilePref;
-        } else  if (defaultPref != null){
+        } else if (defaultPref != null) {
             return defaultPref;
         } else {
             return null;
@@ -104,10 +116,17 @@ public class PreferencesManager {
     public void copyDefaultPref() {
         copyPref(defaultPref, projectPref);
      }
-
      */
 
     private void copyPref(Preferences from, Preferences to) {
+        /*
+        TODO-STB: remplacer par une implémentation de la méthode abstraite clone, de sorte à faire simplement:
+        to = from.clone();
+        Analyser également la possibilité de boucler de manière générique les préférences, de sorte à éviter de devoir
+        ajouter une ligne ici à chaque nouvelle préférence créée.
+         */
+        //
+
         // Général
         to.setGENERAL_RELATION_NOTATION(from.getGENERAL_RELATION_NOTATION()) ;
 
@@ -125,7 +144,7 @@ public class PreferencesManager {
         to.setMCD_TREE_NAMING_ASSOCIATION(from.getMCD_TREE_NAMING_ASSOCIATION());
         to.setMCD_MODE_NAMING_LONG_NAME(from.getMCD_MODE_NAMING_LONG_NAME());
         to.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(from.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME());
-        
+
         // Editeur
         to.setPREFERENCES_WINDOW_SIZE_CUSTOM(from.getPREFERENCES_WINDOW_SIZE_CUSTOM());
         to.setPREFERENCES_WINDOW_LOCATION_ONSCREEN(from.getPREFERENCES_WINDOW_LOCATION_ONSCREEN());
@@ -167,8 +186,14 @@ public class PreferencesManager {
 
     }
 
+    /**
+     * Méthode utile pour la persistance avec sérialisation uniquement.
+     * Elle pourra être supprimée lorsque la propriété Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML sera supprimée.
+     * @author PAS
+    */
     public void loadOrCreateFileApplicationPreferences() {
-        try{
+        boolean tempInutile = Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML; //Ligne créée uniquement dans le but de ne pas oublier de supprimer cette méthode lorsque la préférence sera supprimée.
+        try {
             PreferencesLoader loader = new PreferencesLoader();
             applicationPref = loader.load(new File(Preferences.FILE_APPLICATION_PREF_NAME));
         } catch (FileNotFoundException e) {
@@ -178,8 +203,13 @@ public class PreferencesManager {
         }
     }
 
-
+    /**
+     * Méthode utile pour la persistance avec sérialisation uniquement.
+     * Elle pourra être supprimée lorsque la propriété Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML sera supprimée.
+     * @author PAS
+     */
     public void createProfile() {
+        boolean tempInutile = Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML; //Ligne créée uniquement dans le but de ne pas oublier de supprimer cette méthode lorsque la préférence sera supprimée.
         ProfileFileChooser fileChooser = new ProfileFileChooser(ProjectFileChooser.SAVE);
         File fileChoose = fileChooser.fileChoose();
         if (fileChoose != null){
@@ -189,5 +219,19 @@ public class PreferencesManager {
         }
     }
 
-
+    /**
+     * Se charge de charger le fichier XML des préférences d'application et de les appliquer à this.applicationPref.
+     * Si le fichier XML n'existe pas, une instance vide de applicationPref est créée, et le fichier XML est créé
+     * également.
+     * Cette méthode est créée dans le cadre de la persistance XML au lieu et place de la persistance avec sérialisation.
+     * @author Giorgio Roncallo
+     */
+    public void loadOrCreateFileXMLApplicationPref() {
+        try {
+            applicationPref = new PreferencesOfApplicationLoaderXml().loadFileApplicationPref();
+        } catch (FileNotFoundException e) {
+            applicationPref = new Preferences(null, null);
+            new PreferencesOfApplicationSaverXml().createFileApplicationPref();
+        }
+    }
 }

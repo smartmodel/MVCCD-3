@@ -1,13 +1,11 @@
 package transform.mcdtomldr;
 
-import exceptions.orderbuildnaming.OrderBuildNameException;
 import exceptions.TransformMCDException;
+import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDManager;
-import mcd.MCDElement;
 import mcd.MCDEntity;
 import mcd.MCDRelEnd;
 import mcd.MCDRelation;
-import md.MDElement;
 import mdr.*;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
 import mdr.orderbuildnaming.MDROrderBuildTargets;
@@ -17,7 +15,6 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.MDRAdjustParameters;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

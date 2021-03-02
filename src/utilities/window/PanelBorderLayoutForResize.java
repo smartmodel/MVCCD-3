@@ -1,5 +1,9 @@
 package utilities.window;
 
+/**
+ * Les instances de cette classe sont créées par le gestionnaire de redimensionnement PanelBorderLayoutResizer.
+ * Ce sont des instances transitoires qui ont comme propriété une instance de PanelBorderLayout à redimensionner.
+ */
 public class PanelBorderLayoutForResize {
     //Panneau à redimensionner
     private PanelBorderLayout panelForResize = null ;

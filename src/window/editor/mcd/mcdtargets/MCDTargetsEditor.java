@@ -5,8 +5,9 @@ import mcd.*;
 import messages.MessagesBuilder;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
-import utilities.Trace;
-import utilities.window.editor.*;
+import utilities.window.editor.DialogEditor;
+import utilities.window.editor.PanelButtons;
+import utilities.window.editor.PanelInput;
 
 import java.awt.*;
 

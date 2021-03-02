@@ -5,7 +5,6 @@ import mdr.MDRColumn;
 import mdr.MDROperation;
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

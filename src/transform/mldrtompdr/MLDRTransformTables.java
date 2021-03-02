@@ -5,8 +5,6 @@ import mldr.MLDRModel;
 import mldr.MLDRTable;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
-import transform.mcdtomldr.MCDTransform;
-import utilities.Trace;
 
 public class MLDRTransformTables {
 

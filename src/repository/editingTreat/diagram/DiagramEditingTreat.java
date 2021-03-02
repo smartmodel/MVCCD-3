@@ -1,25 +1,24 @@
 package repository.editingTreat.diagram;
 
 import diagram.CloseTitlePanel;
-import diagram.mcd.MCDDiagram;
-import diagram.mcd.MCDTitlePanel;
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
-import main.MVCCDManager;
 import main.MVCCDWindow;
 import main.window.diagram.WinDiagram;
-import messages.MessagesBuilder;
-import org.apache.commons.lang.StringUtils;
 import repository.editingTreat.EditingTreat;
-import utilities.window.DialogMessage;
-import utilities.window.editor.DialogEditor;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Tous les diagrammeurs concrets doivent être des descendants de cette classe.
+ */
 public abstract class DiagramEditingTreat extends EditingTreat {
 
 
+    /**
+     * Ferme le diagrammeur.
+     * @param owner
+     */
     public void treatClose(Window owner) {
 
 
@@ -36,6 +35,12 @@ public abstract class DiagramEditingTreat extends EditingTreat {
 
     }
 
+    /**
+     * Supprime un diagramme.
+     * @param owner
+     * @param element
+     * @return
+     */
     public boolean treatDelete (Window owner, MVCCDElement element) {
         boolean deleted = super.treatDelete (owner, element);
         if (deleted ){

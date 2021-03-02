@@ -1,6 +1,5 @@
 package window.editor.mcd.relation.genspec;
 
-import m.interfaces.IMRelEnd;
 import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDModel;

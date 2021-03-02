@@ -1,8 +1,6 @@
 package window.editor.mdr.table;
 
-import mcd.MCDEntity;
 import mdr.MDRTable;
-import repository.editingTreat.mcd.*;
 import repository.editingTreat.mdr.MDRTableEditingTreat;
 import utilities.window.editor.PanelNavBtn;
 import utilities.window.editor.PanelNavBtnContent;

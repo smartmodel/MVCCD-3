@@ -1,12 +1,8 @@
 package window.editor.mdr.model;
 
 import main.MVCCDElement;
-import mdr.MDRColumn;
-import mdr.MDRContColumns;
 import mdr.MDRModel;
-import mldr.MLDRColumn;
 import mldr.MLDRModel;
-import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;

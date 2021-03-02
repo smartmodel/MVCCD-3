@@ -1,10 +1,7 @@
 package mdr;
 
-import exceptions.CodeApplException;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import preferences.PreferencesManager;
-import utilities.Trace;
 
 public enum MDRNamingLength {
     LENGTH30 (Preferences.MDR_NAMING_LENGTH_30, 30, true),

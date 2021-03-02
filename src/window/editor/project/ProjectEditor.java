@@ -1,10 +1,9 @@
 package window.editor.project;
 
-import main.MVCCDElement;
-import repository.editingTreat.EditingTreat;
-import utilities.window.editor.DialogEditor;
 import preferences.Preferences;
 import project.Project;
+import repository.editingTreat.EditingTreat;
+import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelInput;
 

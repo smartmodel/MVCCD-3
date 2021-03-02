@@ -2,14 +2,16 @@ package window.editor.mcd.entity;
 
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
-import mcd.*;
+import mcd.MCDContEntities;
+import mcd.MCDElement;
+import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
 import mcd.services.MCDContEntitiesService;
 import mcd.services.MCDElementService;
-import utilities.window.editor.PanelInputContentId;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.window.editor.PanelInputContentId;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.services.PanelService;

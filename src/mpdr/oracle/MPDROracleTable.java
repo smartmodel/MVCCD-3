@@ -2,13 +2,11 @@ package mpdr.oracle;
 
 import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
-import md.MDElement;
 import mdr.MDRConstraint;
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRTable;
-import mpdr.mysql.MPDRMySQLColumn;
 import project.ProjectElement;
 
 public class MPDROracleTable extends MPDRTable {

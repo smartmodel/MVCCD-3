@@ -3,7 +3,6 @@ package repository.editingTreat.mcd;
 import main.MVCCDElement;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
-import repository.editingTreat.EditingTreat;
 import repository.editingTreat.EditingTreatTransform;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -21,6 +20,10 @@ public class MCDEntityEditingTreat extends EditingTreatTransform {
         return new EntityInputContent(element);
     }
 
+    /**
+     * Fournit à la classe ancêtre l'éditeur d'entité à utiliser. C'est cet éditeur qui s'affiche à l'utilisateur lors
+     * de la création d'une nouvelle entité.
+     */
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
         return new EntityEditor(owner, (MCDContEntities) parent, (MCDEntity) element, mode,

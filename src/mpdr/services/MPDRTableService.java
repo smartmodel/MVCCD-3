@@ -3,11 +3,8 @@ package mpdr.services;
 import main.MVCCDElement;
 import mdr.MDRConstraint;
 import mdr.MDRContColumns;
-import mdr.MDRContTables;
 import mldr.MLDRColumn;
-import mldr.MLDRTable;
 import mpdr.MPDRColumn;
-import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRElementWithSource;
 

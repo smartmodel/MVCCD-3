@@ -1,13 +1,8 @@
 package transform.mldrtompdr;
 
-import datatypes.MDDatatypeService;
 import datatypes.MPDRDatatype;
 import exceptions.CodeApplException;
 import mldr.MLDRColumn;
-import mpdr.MPDRModel;
-import mpdr.mysql.MPDRMySQLModel;
-import mpdr.oracle.MPDROracleModel;
-import mpdr.postgresql.MPDRPostgreSQLModel;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 

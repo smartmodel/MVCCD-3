@@ -1,13 +1,15 @@
 package transform.mcdtomldr;
 
 import datatypes.MLDRDatatype;
-import exceptions.orderbuildnaming.OrderBuildNameException;
 import exceptions.TransformMCDException;
+import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import main.MVCCDManager;
 import mcd.*;
-import mdr.*;
+import mdr.MDRElementNames;
+import mdr.MDRFKNature;
+import mdr.MDRNamingLength;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
 import mdr.orderbuildnaming.MDROrderBuildTargets;
 import messages.MessagesBuilder;

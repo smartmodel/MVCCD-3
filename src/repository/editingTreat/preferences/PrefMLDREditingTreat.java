@@ -5,11 +5,9 @@ import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.preferences.project.mdr.PrefMDREditor;
 import window.editor.preferences.project.mldr.PrefMLDREditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class PrefMLDREditingTreat extends EditingTreat {
 

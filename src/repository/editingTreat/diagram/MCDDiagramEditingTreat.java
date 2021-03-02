@@ -7,18 +7,30 @@ import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import main.window.diagram.WinDiagram;
-import mcd.MCDPackage;
-import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
+/**
+ * Cette classe implémante le diagrammeur (DiagramEditingTreat) spécifique à l'élaboration d'un MCD.
+ * Elle spécialise donc:
+ *  - Le panneau d'en-tête (à priori)
+ *  - le panneau de palette (certainement)
+ *  - le panneau de zone de dessin (à priori)
+ */
 public class MCDDiagramEditingTreat extends DiagramEditingTreat {
 
+    /**
+     * La méthode crée un nouveau diagramme.
+     * @param owner
+     * @param parent
+     * @return
+     */
     public MVCCDElement treatNew(Window owner, MVCCDElement parent) {
+
+        //Remarque: le code ci-dessous est encore expérimental !
 
         // Création d'un objet transitoire
         MCDDiagram newDiagram = MVCCDElementFactory.instance().createMCDDiagram(null);

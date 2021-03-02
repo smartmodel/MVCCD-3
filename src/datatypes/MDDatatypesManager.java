@@ -6,7 +6,6 @@ import main.MVCCDElementService;
 import main.MVCCDManager;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

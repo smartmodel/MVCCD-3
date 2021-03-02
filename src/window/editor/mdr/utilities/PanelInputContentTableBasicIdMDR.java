@@ -1,27 +1,19 @@
 package window.editor.mdr.utilities;
 
-import m.MElement;
 import main.MVCCDElement;
 import mcd.MCDElement;
-import mcd.interfaces.IMCDElementWithTargets;
-import mcd.interfaces.IMCDModel;
 import md.MDElement;
 import md.interfaces.IMDElementWithSource;
 import mdr.MDRElement;
-import mdr.MDRModel;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import utilities.window.editor.PanelInput;
 import utilities.window.editor.PanelInputContentTableBasic;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
-import window.editor.mcd.mcdtargets.MCDTargetsInput;
-import window.editor.mcd.mcdtargets.MCDTargetsTableColumn;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 
 public abstract class PanelInputContentTableBasicIdMDR extends PanelInputContentTableBasic {
 

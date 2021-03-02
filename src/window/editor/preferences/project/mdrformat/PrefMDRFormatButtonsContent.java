@@ -1,7 +1,6 @@
 package window.editor.preferences.project.mdrformat;
 
 import main.MVCCDElement;
-import utilities.window.editor.PanelButtonsContent;
 import utilities.window.editor.PanelButtonsContentReInit;
 
 import java.awt.event.ActionListener;

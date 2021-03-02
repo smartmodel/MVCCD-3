@@ -1,9 +1,9 @@
 package project;
 
-import exceptions.CodeApplException;
 import preferences.Preferences;
 
-import java.io.*;
+import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ProjectsRecents implements Serializable {

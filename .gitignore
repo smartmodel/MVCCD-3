@@ -1,0 +1,11 @@
+# Default ignored files
+/.idea/workspace.xml
+
+# Output path
+/out
+
+# List of recent project files opened by user
+/recentFiles.dat
+
+# Preferences of the application chosen by user
+/application.pref

@@ -1,6 +1,5 @@
 package utilities.window.scomponents;
 
-import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.window.editor.DialogEditor;
@@ -8,6 +7,9 @@ import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;
 
+/**
+ * Est une extension de JTextField.
+ */
 public class STextField extends JTextField implements SComponent {
 
     // Valeur d'initialisation
@@ -31,6 +33,12 @@ public class STextField extends JTextField implements SComponent {
         this.setColor(SComponent.COLORNORMAL);
     }
 
+    /**
+     * Constructeur d'un champ texte (TextField).
+     * <img src="doc-files/UI_NameMissingWhenCreationOfNewEntity.jpg" alt="Contenu manquant dans le champ de saisie de nom lors de la création d'une nouvelle entité">
+     * @param panel Le panneau qui contient le composant textField. Le panneau doit réaliser l'interface IPanelInputContent.
+     * @param label L'étiquette associtée au champ de saisie.
+     */
     public STextField(IPanelInputContent panel, JLabel label) {
         super();
         this.panel = panel;

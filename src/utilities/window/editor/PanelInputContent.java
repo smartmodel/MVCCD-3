@@ -3,7 +3,6 @@ package utilities.window.editor;
 import main.MVCCDElement;
 import preferences.PreferencesManager;
 import utilities.Debug;
-import utilities.Trace;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 
@@ -11,7 +10,10 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 public abstract class PanelInputContent

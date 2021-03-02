@@ -8,7 +8,6 @@ import window.editor.mcd.mcdtargets.MCDTargetsEditor;
 import window.editor.mcd.operation.constraint.unicity.nid.NIDInputContent;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDTargetsEditingTreat extends EditingTreat {
 

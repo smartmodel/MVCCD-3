@@ -1,17 +1,17 @@
 package main;
 
-import exceptions.CodeApplException;
 import mcd.MCDElement;
 import mcd.MCDEntity;
-import mcd.MCDUnicity;
 import mcd.interfaces.IMCDTraceability;
-import mdr.MDRElement;
 import org.apache.commons.lang.StringUtils;
-import utilities.Trace;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;
 
+/**
+ * Il s'agit de la classe de services pour MVCCDElement.
+ * Elle fournit les différents services dont le contrôle d'unicité de nommage (attributs "name", "shortname" et "longname").
+ */
 public class MVCCDElementService {
 
     public static ArrayList<MCDEntity> getAllEntities(MVCCDElement container){

@@ -1,13 +1,10 @@
 package utilities.window.editor;
 
 import messages.MessagesBuilder;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.STree;
 import utilities.window.scomponents.services.STreeService;
-import window.editor.preferences.project.PrefProject;
-import window.editor.preferences.project.PrefProjectMenu;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;

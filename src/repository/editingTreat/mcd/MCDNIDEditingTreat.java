@@ -10,7 +10,6 @@ import window.editor.mcd.operation.constraint.unicity.nid.NIDEditor;
 import window.editor.mcd.operation.constraint.unicity.nid.NIDInputContent;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDNIDEditingTreat extends EditingTreat {
 

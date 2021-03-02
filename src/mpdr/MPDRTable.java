@@ -4,11 +4,9 @@ import md.MDElement;
 import mdr.MDRConstraint;
 import mdr.MDRTable;
 import mldr.MLDRColumn;
-import mldr.MLDRTable;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
-import mpdr.services.MPDRModelService;
 import mpdr.services.MPDRTableService;
 import project.ProjectElement;
 

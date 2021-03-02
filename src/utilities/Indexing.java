@@ -1,10 +1,6 @@
 package utilities;
 
-import preferences.Preferences;
-
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Indexing {
 

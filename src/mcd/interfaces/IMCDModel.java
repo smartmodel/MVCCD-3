@@ -2,7 +2,6 @@ package mcd.interfaces;
 
 import main.MVCCDElement;
 import mcd.MCDElement;
-import mdr.MDRModel;
 import mldr.MLDRModel;
 
 import java.util.ArrayList;

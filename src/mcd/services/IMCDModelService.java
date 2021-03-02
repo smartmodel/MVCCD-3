@@ -2,15 +2,11 @@ package mcd.services;
 
 import m.MRelationDegree;
 import main.MVCCDElement;
-import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
 import mldr.MLDRModelDT;
 import mldr.MLDRModelTI;
-import project.Project;
-import project.ProjectElement;
-import project.ProjectService;
 
 import java.util.ArrayList;
 

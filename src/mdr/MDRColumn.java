@@ -1,13 +1,10 @@
 package mdr;
 
-import md.MDElement;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import mldr.MLDRColumn;
 import project.ProjectElement;
-
-import java.util.ArrayList;
 
 public abstract class MDRColumn extends MDRElement implements
         IMDRParameter, IMDRElementNamingPreferences, IMDRElementWithIteration {

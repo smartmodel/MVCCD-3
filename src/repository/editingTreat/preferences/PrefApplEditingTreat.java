@@ -2,16 +2,12 @@ package repository.editingTreat.preferences;
 
 import main.MVCCDElement;
 import main.MVCCDElementApplicationPreferences;
-import main.MVCCDManager;
-import main.MVCCDWindow;
-import mcd.MCDPackage;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.preferences.application.PrefApplicationEditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class PrefApplEditingTreat extends EditingTreat {
 

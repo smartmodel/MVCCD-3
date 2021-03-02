@@ -1,14 +1,11 @@
 package mcd.services;
 
-import exceptions.CodeApplException;
 import mcd.MCDElement;
 import mcd.MCDEntity;
-import mcd.MCDModel;
 import mcd.MCDPackage;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
 import preferences.Preferences;
-import project.ProjectService;
 
 import java.util.ArrayList;
 import java.util.Collections;

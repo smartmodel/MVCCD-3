@@ -3,7 +3,6 @@ package datatypes;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationMDDatatypes;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 
 public class MCDDatatypesCreateDefault {
 

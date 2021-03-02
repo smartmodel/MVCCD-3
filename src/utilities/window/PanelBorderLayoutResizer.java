@@ -7,14 +7,15 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-/*
-    Le redimensionnement est possible si:
-    1. Start: La souris quitte un panneau
-    2. Dimensionnement possible si la souris entre dans un panneau adjacent avec un déplacemt restreint
-    3. Annulation : La souris quitte la zone de détection de panneau adjacent de plus de x pixels
-*/
-
-
+/**
+ * Gestionnaire de redimensionnement des panneaux constitutifs d'un JFrame.
+ * Le layout est la fenêtre qui regroupe les différents panneaux à l'intérieur et qui peuvent être redimensionnés.
+ *
+ *     Le redimensionnement est possible si:
+ *     1. Start: La souris quitte un panneau
+ *     2. Dimensionnement possible si la souris entre dans un panneau adjacent avec un déplacemt restreint
+ *     3. Annulation : La souris quitte la zone de détection de panneau adjacent de plus de x pixels
+ */
 public class PanelBorderLayoutResizer {
 
     // Ensemble des panneaux constitutifs d'un JFrame mis en page avec BorderLayout

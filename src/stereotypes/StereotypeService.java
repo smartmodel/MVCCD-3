@@ -1,7 +1,6 @@
 package stereotypes;
 
 import main.MVCCDElementService;
-import org.apache.commons.lang.StringUtils;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;

@@ -3,23 +3,27 @@ package project;
 import main.MVCCDElement;
 import main.MVCCDFactory;
 import main.MVCCDManager;
-import main.window.repository.WinRepositoryTree;
 import mcd.services.MCDAdjustPref;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
-import profile.ProfileManager;
+import profile.ProfileLoaderXml;
 
+/**
+ * Classe maitresse du projet utilisateur.
+ * Divers attributs permettent de mémoriser les caractéristiques du projet utilisateur.
+ * Le projet est un élément du référentiel (hérite de MVCCDElement).
+ */
 public class Project extends ProjectElement {
 
     private static final long serialVersionUID = 1000;
 
     // Utilisées pour indiquer le statut d'un projet
-    public static final int NEW = 1 ;
-    public static final int EXISTING = 2 ;
+    public static final int NEW = 1;
+    public static final int EXISTING = 2;
 
     // Fichier de profil
-    private String profileFileName ;
+    private String profileFileName;
     // Instance de profil
     private Profile profile;
     //Plusieurs modèles autorisés
@@ -37,11 +41,15 @@ public class Project extends ProjectElement {
     private boolean lastWinRepositoryExpand = false;
 
 
+    /**
+     * Le projet n'a pas de parent ! Par contre, il est rattaché à la racine de l'arbre de visualisation du référentiel
+     * pour pouvoir le visualiser. Le rattachement se fait par la commande repository.addProject(project) de la méthode
+     * projectToRepository() de la classe MVCCDManager.
+     */
     public Project(String name) {
 
         super(null, name);
     }
-
 
 
     public String getProfileFileName() {
@@ -59,42 +67,49 @@ public class Project extends ProjectElement {
 
     public void setProfileFileName(String profileFileName) {
         this.profileFileName = profileFileName;
-     }
+    }
 
-     public  Profile adjustProfile(){
-         if (this.getProfileFileName() != null) {
-             profile = MVCCDFactory.instance().createProfile(this.getProfileFileName());
-             Preferences profilePref = ProfileManager.instance().loadFileProfile(
-                      Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR +this.getProfileFileName());
-             if (profilePref != null){
-                 profilePref.setOrChangeParent(profile);
-                 profilePref.setName(Preferences.REPOSITORY_PREFERENCES_PROFILE_NAME);
-                 PreferencesManager.instance().setProfilePref(profilePref);
-                 PreferencesManager.instance().copyProfilePref();
-             }
-         } else {
-             profile = null;
-             PreferencesManager.instance().setProfilePref(null);
-             // A priori c'est une erreur!
-             //PreferencesManager.instance().copyDefaultPref();
-         }
-         new MCDAdjustPref(this).changeProfile();
-         MVCCDManager.instance().profileToRepository();
-         return profile;
-     }
+    public Profile adjustProfile() {
+        if (this.getProfileFileName() != null) {
+            profile = MVCCDFactory.instance().createProfile(this.getProfileFileName());
+            //Preferences profilePref = ProfileManager.instance().loadFileProfile(Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR + this.getProfileFileName());
+            Preferences profilePref = new ProfileLoaderXml().loadFileProfileXML(this.getProfileFileName());
+            if (profilePref != null) {
+                profilePref.setOrChangeParent(profile);
+                profilePref.setName(Preferences.REPOSITORY_PREFERENCES_PROFILE_NAME);
+                PreferencesManager.instance().setProfilePref(profilePref);
+                PreferencesManager.instance().copyProfilePref();
+            }
+        } else {
+            profile = null;
+            PreferencesManager.instance().setProfilePref(null);
+            // A priori c'est une erreur!
+            //PreferencesManager.instance().copyDefaultPref();
+        }
+        new MCDAdjustPref(this).changeProfile();
+        MVCCDManager.instance().profileToRepository();
+        return profile;
+    }
 
-     public Preferences getPreferences(){
-        for (MVCCDElement mvccdElement : getChilds()){
-            if (mvccdElement instanceof Preferences){
-                return (Preferences) mvccdElement;
+    /**
+     * Recherche les préférences du projet en parcourant tous les enfants du projet jusqu'à tomber sur l'objet
+     * correspondant aux préférences.
+     * Remarque de STB: une alternative est PreferencesManager.getProjectPref()
+     * @author PAS
+     * @return Ensemble des préférences du projet
+     */
+    public Preferences getPreferences() {
+        for (MVCCDElement mvccdElement : getChilds()) {
+            if (mvccdElement instanceof Preferences) {
+                return (Preferences) mvccdElement; //Retourne le 1er enfant qui correspond aux préférences
             }
         }
         return null;
-     }
+    }
 
 
-    public int getNextIdElementSequence(){
-        idElementSequence++ ;
+    public int getNextIdElementSequence() {
+        idElementSequence++;
         return idElementSequence;
     }
 

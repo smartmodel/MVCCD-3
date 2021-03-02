@@ -2,6 +2,9 @@ package utilities.window.scomponents;
 
 import javax.swing.*;
 
+/**
+ * Tous les composants étendus de Swing (classes S... dans ce paquetage) réalisent l'interface SComponent.
+ */
 public interface  SComponent {
     // Changement au niveau de l'application
     public static String CHANGEINAPPLICATION = "ChangeInAplication";

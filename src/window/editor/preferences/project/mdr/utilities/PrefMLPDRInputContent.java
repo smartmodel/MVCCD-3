@@ -1,15 +1,10 @@
 package window.editor.preferences.project.mdr.utilities;
 
-import main.MVCCDElement;
 import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
-import messages.MessagesBuilder;
-import preferences.Preferences;
 import utilities.window.editor.PanelInput;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SComboBox;
-import utilities.window.scomponents.services.SComboBoxService;
-import utilities.window.services.PanelService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

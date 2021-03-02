@@ -1,22 +1,21 @@
 package mdr;
 
 import exceptions.CodeApplException;
-import main.MVCCDElement;
-import mcd.MCDElement;
-import mcd.services.MCDElementService;
 import md.MDElement;
 import mdr.services.MDRElementConvert;
 import mdr.services.MDRElementService;
 import project.ProjectElement;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
+/**
+ * Il s'agit de la classe ancêtre de tous les éléments de modélisation de données relationnelles.
+ */
 public abstract class MDRElement extends MDElement {
 
     private  static final long serialVersionUID = 1000;
 
-    private MDRElementNames names = new MDRElementNames();
+    private MDRElementNames names = new MDRElementNames(); //un élément a 3 noms: un court avec 30 caractères, un avec 60 et un avec 120. Selon le constructeur choisit lors de la génération, on choisit le bon.
 
     public MDRElement(ProjectElement parent, String name) {
         super(parent, name);
@@ -35,18 +34,30 @@ public abstract class MDRElement extends MDElement {
         }
     }
 
+    /**
+     * Retourne une liste ordonnée des enfants.
+     */
     public ArrayList<MDRElement> getMDRChilds() {
         return MDRElementConvert.to(super.getChilds());
     }
 
+    /**
+     * Retourne une liste ordonnée de la fratrie.
+     */
     public ArrayList<MDRElement> getMDRSiblings(){
         return getMDRParent().getMDRChilds();
     }
 
+    /**
+     * Retourne une liste ordonnée des frères et soeurs.
+     */
     public ArrayList<MDRElement> getMDRBrothers(){
         return MDRElementConvert.to(getParent().getBrothers());
     }
 
+    /**
+     * Retourne une liste de tous les descendants.
+     */
     public ArrayList<MDRElement> getMDRDescendants(){
         return MDRElementService.getMDRDescendants(this);
     }

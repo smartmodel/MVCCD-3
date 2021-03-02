@@ -8,7 +8,6 @@ import mdr.MDRColumn;
 import mldr.MLDRColumn;
 import mpdr.MPDRColumn;
 import preferences.Preferences;
-import utilities.Trace;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;

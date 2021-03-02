@@ -1,7 +1,6 @@
 package utilities.window.scomponents.services;
 
 import preferences.PreferencesManager;
-import utilities.window.scomponents.SComponent;
 
 import javax.swing.*;
 

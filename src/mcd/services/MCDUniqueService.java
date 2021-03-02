@@ -1,7 +1,10 @@
 package mcd.services;
 
 import m.MRelEndMultiPart;
-import mcd.*;
+import mcd.MCDAssEnd;
+import mcd.MCDAttribute;
+import mcd.MCDEntity;
+import mcd.MCDUnique;
 import mcd.interfaces.IMCDParameter;
 import messages.MessagesBuilder;
 import utilities.window.scomponents.STable;

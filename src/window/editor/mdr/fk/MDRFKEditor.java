@@ -2,10 +2,8 @@ package window.editor.mdr.fk;
 
 import mdr.MDRContConstraints;
 import mdr.MDRFK;
-import mdr.MDRPK;
 import mldr.MLDRFK;
 import mldr.MLDRPK;
-import mpdr.MPDRPK;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;

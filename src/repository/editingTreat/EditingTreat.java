@@ -1,13 +1,10 @@
 package repository.editingTreat;
 
-import console.Console;
-import exceptions.TransformMCDException;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.MCDElement;
 import mcd.services.MCDElementService;
-import md.MDElement;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import utilities.window.DialogMessage;
@@ -18,22 +15,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static org.apache.commons.lang.StringUtils.lowerCase;
-
+/**
+ * Fournit les méthodes génériques de déclenchement de traitement de données telles que treatNew(), treatUpdate(), treatRead(), etc.
+ */
 public abstract class EditingTreat {
 
+    /**
+     * Déclenchement de traitement de données pour la création d'un élément (par exemple pour la création d'une entité).
+     * Notamment, ouvre l'éditeur attendu en faisant appel à getDialogEditor().
+     */
     public MVCCDElement treatNew(Window owner, MVCCDElement parent) {
 
-        DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW);
+        DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW); //Ouvre l'éditeur attendu
         fen.setVisible(true);
-        MVCCDElement newElement = fen.getMvccdElementNew();
-        return newElement;
+        return fen.getMvccdElementNew();
     }
 
-
-
-
-
+    /**
+     * Déclenchement de traitement de données pour la modification d'un élément.
+     */
     public boolean treatUpdate(Window owner, MVCCDElement element) {
         MVCCDElement parentBefore = element.getParent();
 
@@ -48,6 +48,9 @@ public abstract class EditingTreat {
         return fen.isDatasChanged();
     }
 
+    /**
+     * Déclenchement de traitement de données pour la visualisation d'un élément.
+     */
     public DialogEditor treatRead(Window owner, MVCCDElement element) {
         DialogEditor fen = getDialogEditor(owner, element.getParent(), element, DialogEditor.READ);
         fen.setVisible(true);
@@ -55,6 +58,9 @@ public abstract class EditingTreat {
     }
 
 
+    /**
+     * Déclenchement de traitement de données pour la suppression d'un élément.
+     */
     public boolean treatDelete (Window owner, MVCCDElement element) {
         String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
         String message = MessagesBuilder.getMessagesProperty ("editor.delete.confirm",
@@ -69,7 +75,9 @@ public abstract class EditingTreat {
     }
 
 
-
+    /**
+     * Déclenchement de traitement de données pour la suppression des éléments enfants d'un élément.
+     */
     public void treatDeleteChilds (Window owner, MVCCDElement element) {
         String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
         String message = MessagesBuilder.getMessagesProperty ("editor.delete.childs.confirm",
@@ -85,7 +93,6 @@ public abstract class EditingTreat {
             }
         }
     }
-
 
     public ArrayList<String> treatCompletness(Window owner, MVCCDElement mvccdElement, boolean showDialog) {
         ArrayList <String> resultat = new ArrayList <String>();
@@ -155,6 +162,9 @@ public abstract class EditingTreat {
 
     protected abstract PanelInputContent getPanelInputContent(MVCCDElement element);
 
+    /**
+     * Chaque descendant de EditingTreat doit définir l'éditeur graphique à utiliser.
+     */
     protected abstract DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) ;
 
     protected abstract String getPropertyTheElement();

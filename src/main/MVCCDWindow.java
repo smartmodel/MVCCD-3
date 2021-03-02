@@ -1,14 +1,13 @@
 package main;
 
-import messages.MessagesBuilder;
-import preferences.Preferences;
 import main.window.console.WinConsole;
 import main.window.diagram.WinDiagram;
 import main.window.haut.Haut;
 import main.window.menu.WinMenuContent;
 import main.window.repository.WinRepository;
 import main.window.reserve.Reserve;
-import project.ProjectsRecents;
+import messages.MessagesBuilder;
+import preferences.Preferences;
 import project.ProjectsRecentsSaver;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
@@ -21,6 +20,12 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+/**
+ * Construit l'écran d'accueil.
+ * Le paquetage main.window (et tout ce qu'il contient) permet de réaliser cet écran.
+ * La zone de dessin est appelé "diagrammeur".
+ * <img src="doc-files/UI_homeScreen_RepositoryAndDrawingArea.jpg" alt="Ecran d'accueil - Référentiel et zone de dessin (diagrammeur)">
+ */
 public class MVCCDWindow extends JFrame implements WindowListener {
 
     private JPanel panel= new JPanel();;
@@ -34,7 +39,10 @@ public class MVCCDWindow extends JFrame implements WindowListener {
     private WinMenuContent menuContent;
 
 
-
+    /**
+     * Dans le constructeur, le menu, les panneaux et les listeners sont mis en place.
+     * Le gestionnaire de redimensionnement est créé.
+     */
     public MVCCDWindow() {
 
         setTitle("MVC-CD " + Preferences.VERSION);

@@ -4,7 +4,6 @@ import main.MVCCDElement;
 import mcd.MCDPackage;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContainer;
-import repository.editingTreat.EditingTreat;
 import repository.editingTreat.EditingTreatTransform;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;

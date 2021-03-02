@@ -5,9 +5,6 @@ import m.MElement;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
 import mcd.interfaces.IMCDElementWithTargets;
-import md.MDElement;
-import md.services.MDElementConvert;
-import mldr.interfaces.IMLDRElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import stereotypes.Stereotype;
@@ -54,6 +51,10 @@ public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElem
         return serialVersionUID;
     }
 
+    /**
+     * L'extrémité de relation (MCDRelEnd) fait le lien entre une relation et un élément.
+     * Cette méthode retourne l'objet "relation" attaché à l'extrémité de relation.
+     */
     public IMRelation getImRelation() {
         return imRelation;
     }
@@ -62,6 +63,10 @@ public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElem
         this.imRelation = imRelation;
     }
 
+    /**
+     * L'extrémité de relation (MCDRelEnd) fait le lien entre une relation et un élément.
+     * Cette méthode retourne l'objet "élément" attaché à l'extrémité de relation.
+     */
     public MElement getmElement() {
         return mElement;
     }

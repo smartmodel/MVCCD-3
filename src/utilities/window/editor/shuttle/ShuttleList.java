@@ -3,18 +3,15 @@ package utilities.window.editor.shuttle;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-/**
-     * TODO javadoc
-     *
+    //TODO javadoc
+    /**
      * @author Dawid Kunert
      * @author Marcin Kunert
-     *
      */
-
     public class ShuttleList<T> extends JComponent {
 
         private static final long serialVersionUID = -2630410357962722533L;
@@ -27,9 +24,7 @@ import java.util.Collection;
 
         private ArrayList<T> resultat;
 
-        /**
-         * TODO javadoc
-         */
+        //TODO javadoc
         public ShuttleList() {
             shuttlePanel = new ShuttlePanel<>();
 
@@ -40,11 +35,6 @@ import java.util.Collection;
 
             add(shuttlePanel, BorderLayout.CENTER);
         }
-
-        /**
-         * TODO javadoc
-         *
-         */
 
 	/*
 	public ShuttleList(Collection<T> elements) {
@@ -136,42 +126,25 @@ import java.util.Collection;
             leftTableElements.addAll(elements);
         }
 
-        /**
-         * TODO javadoc
-         *
-         * @param elements
-         */
+        //TODO javadoc
         public void addElements(Collection<T> elements) {
             leftTableElements.addAll(elements);
             refreshView();
         }
 
-        /**
-         * TODO javadoc
-         *
-         * @param element
-         */
+        //TODO javadoc
         public void addElement(T element) {
             leftTableElements.add(element);
             refreshView();
         }
 
-        /**
-         * TODO javadoc
-         *
-         * @param element
-         */
+        //TODO javadoc
         public void removeElement(T element) {
             leftTableElements.remove(element);
             refreshView();
         }
 
-
-        /**
-         *
-         *  PAS
-         */
-
+        //PAS
         public void init(ArrayList<T> leftElements, ArrayList<T> rightElements){
             leftInitialTableElements.clear();
             leftInitialTableElements.addAll(leftElements);

@@ -2,19 +2,18 @@ package window.editor.preferences.application;
 
 import main.MVCCDElement;
 import messages.MessagesBuilder;
-import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import preferences.PreferencesSaver;
+import preferences.PreferencesOfApplicationSaverXml;
 import project.Project;
 import utilities.window.DialogMessage;
+import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.io.File;
 
 public class PrefApplicationInputContent extends PanelInputContent {
     //private JPanel panel = new JPanel();
@@ -283,8 +282,9 @@ public class PrefApplicationInputContent extends PanelInputContent {
 
 
         // Sauvegarde (fichier) des préférences d'application
-        PreferencesSaver saver = new PreferencesSaver();
-        saver.save(new File(Preferences.FILE_APPLICATION_PREF_NAME), applicationPref);
+        new PreferencesOfApplicationSaverXml().createFileApplicationPref();
+        //PreferencesSaver saver = new PreferencesSaver();
+        //saver.save(new File(Preferences.FILE_APPLICATION_PREF_NAME), applicationPref);
 
         String message = MessagesBuilder.getMessagesProperty ("preferences.application.saved",
                 new String[] {Preferences.APPLICATION_NAME });

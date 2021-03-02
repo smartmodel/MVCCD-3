@@ -1,7 +1,6 @@
 package mcd.services;
 
 import mcd.MCDElement;
-import md.MDElement;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;

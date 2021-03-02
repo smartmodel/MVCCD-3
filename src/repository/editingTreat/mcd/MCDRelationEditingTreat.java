@@ -2,17 +2,16 @@ package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
-import main.MVCCDWindow;
-import mcd.*;
+import mcd.MCDContRelEnds;
+import mcd.MCDRelEnd;
+import mcd.MCDRelation;
 import project.ProjectService;
 import repository.editingTreat.EditingTreat;
-import utilities.Trace;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDRelationEditingTreat extends EditingTreat {
 

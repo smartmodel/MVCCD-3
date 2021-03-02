@@ -1,6 +1,5 @@
 package transform.mcdtomldr;
 
-import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import datatypes.MLDRDatatype;
 import preferences.Preferences;

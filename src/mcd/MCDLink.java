@@ -28,6 +28,9 @@ public class MCDLink extends MCDRelation {
         super(parent, name);
     }
 
+    /**
+     * Retourne l'extrémité du lien d'entité associative (c'est-à-dire MCDLinkEnd) se trouvant du côté de l'entité associative.
+     */
     public MCDLinkEnd getEndEntity() {
 
         return  (MCDLinkEnd)  super.getA();
@@ -38,6 +41,9 @@ public class MCDLink extends MCDRelation {
         endEntity.setDrawingDirection(MCDRelEnd.ELEMENT);
     }
 
+    /**
+     * Retourne l'extrémité du lien d'entité associative (c'est-à-dire MCDLinkEnd) se trouvant du côté de l'association.
+     */
     public MCDLinkEnd getEndAssociation() {
         return (MCDLinkEnd) super.getB();
     }

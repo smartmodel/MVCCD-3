@@ -1,8 +1,6 @@
 package mcd;
 
 import exceptions.CodeApplException;
-import main.MVCCDElement;
-import main.MVCCDElementService;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDElementConvert;
 import mcd.services.MCDElementService;
@@ -13,6 +11,9 @@ import project.ProjectElement;
 
 import java.util.ArrayList;
 
+/**
+ * Ancêtre de tous les éléments de modélisation conceptuelle des données.
+ */
 public abstract class MCDElement extends MDElement {
 
     private static final long serialVersionUID = 1000;
@@ -25,6 +26,10 @@ public abstract class MCDElement extends MDElement {
         super(parent, name);
     }
 
+    /**
+     * Retourne le nom d'un élément avec le chemin d'accès.
+     * Par exemple: le nom d'une entité préfixé du ou des paquetages qui la contiennent.
+     */
     public String getPath(int pathMode, String separator) {
         return MCDElementService.getPath(this, pathMode, separator);
     }
@@ -38,10 +43,21 @@ public abstract class MCDElement extends MDElement {
     }
 
 
+    //TODO-STB: voir avec PAS si ce n'est pas pertinent de mettre getNamePath dans mElement. Cela simplifierait la ligne suivante dans ProjectSaverXml:
+    //entity.appendChild(doc.createTextNode(((MCDElement) endEntity.getmElement()).getNamePath(1)));
 
+    /**
+     * Retourne le nom d'un objet (d'un élément) avec le path (le chemin d'accès). Par exemple: le nom d'une entité
+     * préfixé du ou des paquetages qui la contiennent.
+     * Le path d'un objet est constitué de l'arborescence des ancêtres de l'objet.
+     * Pour autant que name soit obligatoire pour une classe, cette méthode peut faire office d'identifiant unique
+     * naturel (UID) ! (par ex: des entités de même nom dans des paquetages différents)
+     * @param pathMode Permet de choisir de créer le path avec le name ou le shortName des parents successifs. Valeurs
+     *                 possibles: MVCCDElementService.PATHNAME et PATHSHORTNAME.
+     */
     public String getNamePath(int pathMode) {
         String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
-        String path = getPath( pathMode, separator);
+        String path = getPath(pathMode, separator);
         if (StringUtils.isNotEmpty(path)){
             return path + separator + getName();
         } else {
@@ -49,6 +65,10 @@ public abstract class MCDElement extends MDElement {
         }
     }
 
+    /**
+     * Au même titre que getNamePath(), retourne le path et le shortName d'un objet.
+     * La différence est que le namePath est construit avec la méthode getShortNameSmart(), afin d'utiliser le name si shortName est nul.
+     */
     public String getShortNameSmartPath() {
         String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
         String path = getPath( MCDElementService.PATHSHORTNAME, separator);
@@ -89,6 +109,7 @@ public abstract class MCDElement extends MDElement {
         return MCDElementService.getMCDModelAccueil(this);
     }
 
+
     public MCDElement getMCDParent(){
         if (super.getParent() instanceof MCDElement){
             return (MCDElement) super.getParent();
@@ -97,22 +118,30 @@ public abstract class MCDElement extends MDElement {
         }
     }
 
-
+    /**
+     * Retourne une liste ordonnée des enfants.
+     */
     public ArrayList<MCDElement> getMCDChilds() {
         return MCDElementConvert.to(super.getChilds());
     }
 
-
+    /**
+     * Retourne une liste ordonnée de la fratrie.
+     */
     public ArrayList<MCDElement> getMCDSiblings(){
         return getMCDParent().getMCDChilds();
     }
 
-
+    /**
+     * Retourne une liste ordonnée des frères et soeurs.
+     */
     public ArrayList<MCDElement> getMCDBrothers(){
         return MCDElementConvert.to(getParent().getBrothers());
     }
 
-
+    /**
+     * Retourne une liste de tous les descendants.
+     */
     public ArrayList<MCDElement> getMCDDescendants(){
         return MCDElementService.getMCDDescendants(this);
     }

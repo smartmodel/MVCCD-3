@@ -1,6 +1,5 @@
 package mdr;
 
-import exceptions.CodeApplException;
 import mdr.interfaces.IMDRConstraintIndice;
 import project.ProjectElement;
 import project.ProjectService;

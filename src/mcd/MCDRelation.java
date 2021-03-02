@@ -6,10 +6,6 @@ import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.services.MCDRelationService;
-import md.MDElement;
-import md.services.MDElementConvert;
-import mldr.interfaces.IMLDRElement;
-import project.ProjectService;
 import stereotypes.Stereotype;
 
 import java.util.ArrayList;

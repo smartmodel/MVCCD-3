@@ -3,8 +3,6 @@ package profile;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import project.ProjectsRecents;
-import utilities.files.UtilFiles;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;

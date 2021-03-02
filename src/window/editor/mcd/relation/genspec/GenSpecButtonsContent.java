@@ -2,7 +2,9 @@ package window.editor.mcd.relation.genspec;
 
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
-import mcd.*;
+import mcd.MCDContRelations;
+import mcd.MCDEntity;
+import mcd.MCDGeneralization;
 import preferences.Preferences;
 import utilities.window.editor.PanelButtonsContent;
 

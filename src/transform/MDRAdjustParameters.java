@@ -1,7 +1,10 @@
 package transform;
 
 import main.MVCCDManager;
-import mdr.*;
+import mdr.MDRColumn;
+import mdr.MDROperation;
+import mdr.MDRParameter;
+import mdr.MDRTableOrView;
 
 import java.util.ArrayList;
 

@@ -1,8 +1,6 @@
 package mdr;
 
 import main.MVCCDElement;
-import mcd.MCDElement;
-import mcd.MCDRelEnd;
 import project.ProjectElement;
 
 import java.util.ArrayList;

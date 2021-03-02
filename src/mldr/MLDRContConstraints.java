@@ -1,7 +1,6 @@
 package mldr;
 
 import mcd.MCDElement;
-import mdr.MDRContColumns;
 import mdr.MDRContConstraints;
 import mldr.interfaces.IMLDRElement;
 import project.ProjectElement;

@@ -8,7 +8,6 @@ import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.relends.RelEndsEditorBtn;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDRelEndsEditingTreat extends EditingTreat {
 

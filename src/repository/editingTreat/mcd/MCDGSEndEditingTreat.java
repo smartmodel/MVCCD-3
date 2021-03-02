@@ -1,7 +1,6 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import mcd.MCDContRelEnds;
 import mcd.MCDContRelations;
 import mcd.MCDGSEnd;
 import mcd.MCDGeneralization;
@@ -9,10 +8,8 @@ import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.relation.genspec.GenSpecEditor;
-import window.editor.mcd.relends.RelEndsEditorBtn;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDGSEndEditingTreat extends EditingTreat {
 

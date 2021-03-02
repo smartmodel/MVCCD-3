@@ -1,6 +1,5 @@
 package mpdr;
 
-import mdr.MDRContTables;
 import mdr.MDRModel;
 import mldr.MLDRTable;
 import mpdr.interfaces.IMPDRElement;

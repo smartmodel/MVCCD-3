@@ -1,12 +1,10 @@
 package transform.mldrtompdr;
 
 import datatypes.MDDatatypeService;
-import datatypes.MLDRDatatype;
 import datatypes.MPDRDatatype;
 import exceptions.CodeApplException;
 import mldr.MLDRColumn;
 import preferences.Preferences;
-import utilities.Trace;
 
 public class MLDRTransformToMPDROracleDatatype {
 

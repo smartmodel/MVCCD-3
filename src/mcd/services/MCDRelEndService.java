@@ -1,7 +1,9 @@
 package mcd.services;
 
 import main.MVCCDElement;
-import mcd.*;
+import mcd.MCDElement;
+import mcd.MCDRelEnd;
+import mcd.MCDRelation;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 

@@ -1,16 +1,15 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import mcd.*;
+import mcd.MCDAssEnd;
+import mcd.MCDAssociation;
+import mcd.MCDContRelations;
 import repository.editingTreat.EditingTreat;
-import repository.editingTreat.EditingTreatTransform;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.relation.association.AssociationEditor;
-import window.editor.mcd.relation.genspec.GenSpecEditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MCDAssEndEditingTreat extends EditingTreat {
 

@@ -5,13 +5,10 @@ import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import utilities.window.editor.PanelInputContent;
-import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
 import window.editor.preferences.project.mdr.utilities.PrefMLPDRInputContent;
 
-import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;

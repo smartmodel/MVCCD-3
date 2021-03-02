@@ -2,8 +2,6 @@ package mcd.services;
 
 import mcd.MCDContEntities;
 import mcd.MCDElement;
-import mcd.MCDEntity;
-import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
 
 import java.util.ArrayList;

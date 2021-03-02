@@ -1,9 +1,6 @@
 package mpdr.services;
 
 import main.MVCCDElement;
-import mcd.MCDEntity;
-import mdr.MDRContTables;
-import mldr.MLDRModel;
 import mldr.MLDRTable;
 import mpdr.MPDRContTables;
 import mpdr.MPDRModel;

@@ -5,7 +5,6 @@ import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.preferences.project.mpdr.oracle.PrefMPDROracleEditor;
 import window.editor.preferences.project.mpdr.postgresql.PrefMPDRPostgreSQLEditor;
 
 import java.awt.*;

@@ -8,8 +8,6 @@ import mldr.MLDRTable;
 import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
-import preferences.Preferences;
-import preferences.PreferencesManager;
 
 public class MLDRTransformConstraints {
 

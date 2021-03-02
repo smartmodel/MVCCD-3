@@ -5,7 +5,6 @@ import datatypes.MPDRDatatype;
 import exceptions.CodeApplException;
 import mldr.MLDRColumn;
 import preferences.Preferences;
-import utilities.Trace;
 
 public class MLDRTransformToMPDRMySQLDatatype {
 

@@ -1,7 +1,8 @@
 package window.editor.mcd.entity;
 
 
-import utilities.window.editor.*;
+import utilities.window.editor.PanelNavBtn;
+import utilities.window.editor.PanelNavBtnContent;
 
 public class EntityNavBtn extends PanelNavBtn {
 

@@ -2,7 +2,6 @@ package repository;
 
 import main.MVCCDElement;
 import main.MVCCDElementProfileEntry;
-import main.MVCCDManager;
 import profile.Profile;
 import project.Project;
 

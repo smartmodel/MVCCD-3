@@ -1,6 +1,5 @@
 package utilities.window.editor.services;
 
-import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import utilities.window.scomponents.SComboBox;

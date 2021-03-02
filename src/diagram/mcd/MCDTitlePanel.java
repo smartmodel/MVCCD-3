@@ -1,6 +1,8 @@
 package diagram.mcd;
 
-import main.*;
+import main.MVCCDElement;
+import main.MVCCDManager;
+import main.MVCCDWindow;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
@@ -20,15 +22,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-
+/**
+ * La classe réalise l'en-tête des diagrammes de type MCD (en finalité, cette classe sera probablement généralisé en TitlePanel).
+ */
 public class MCDTitlePanel {
 
-    private JPanel panelTitle;
-    MVCCDElement parent;
-    String mode ;
-    MCDDiagram diagram;
-
-    boolean created = false;
+    private JPanel panelTitle;  // Paneau d'en-tête de la zone du diagrammeur
+    MVCCDElement parent;        // Elément parent du diagramme traité
+    String mode ;               // Mode d'édition DialogEditor.NEW ou autre
+    MCDDiagram diagram;         // Diagramme traité
+    boolean created = false;    // Indicateur de diagramme créé
 
     public MCDTitlePanel(MVCCDElement parent, JPanel panelTitle, String mode, MCDDiagram diagram) {
         this.panelTitle = panelTitle;
@@ -37,6 +40,12 @@ public class MCDTitlePanel {
         this.diagram = diagram;
     }
 
+    /**
+     * Dans le traitement de cette méthode, il y a notamment:
+     *  - la création d'un bouton (btnCancel) qui fait appel à la méthode se chargeant de fermer le diagrammeur;
+     *  - la création d'un autre bouton (btnApply) qui effectue les changements au sein de l'arbre du projet et qui
+     *    synchronise la vue du référentiel.
+     */
     public void getContent( ){
         // Réinitialisation
         //TODO-1 A affiner
@@ -145,6 +154,7 @@ public class MCDTitlePanel {
             }
         });
 
+        // Le bouton qui fait appel à la fermeture du diagrammeur
         JButton btnCancel = new JButton("Fermer");
         btnCancel.addActionListener(new ActionListener() {
             @Override
@@ -153,6 +163,7 @@ public class MCDTitlePanel {
             }
         });
 
+        // Le bouton qui effectue les changements au sein de l'arbre du projet et qui synchronise la vue du référentiel
         JButton btnApply = new JButton("Appliquer");
         btnApply.addActionListener(new ActionListener() {
             @Override

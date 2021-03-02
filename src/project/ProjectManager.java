@@ -1,33 +1,20 @@
 package project;
 
-import datatypes.MCDDatatype;
-import datatypes.MDDatatypesManager;
-import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDElement;
-import mcd.MCDEntity;
-import preferences.Preferences;
-import preferences.PreferencesLoader;
-import utilities.files.UtilFiles;
-import utilities.window.DialogMessage;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 public class ProjectManager {
 
-    private static ProjectManager instance ;
+    private static ProjectManager instance;
     private static Project project;
 
-    public static synchronized ProjectManager instance(){
-        if(instance == null){
+    public static synchronized ProjectManager instance() {
+        if (instance == null) {
             instance = new ProjectManager();
         }
         project = MVCCDManager.instance().getProject();
         return instance;
     }
-
+}
 
     /*
     public  ProjectElement getElementById (int id) {
@@ -90,4 +77,5 @@ public class ProjectManager {
 */
 
 
-}
+
+

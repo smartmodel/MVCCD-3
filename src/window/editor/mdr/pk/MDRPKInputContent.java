@@ -2,7 +2,6 @@ package window.editor.mdr.pk;
 
 import main.MVCCDElement;
 import mdr.MDRPK;
-import mdr.MDRTable;
 import utilities.window.services.PanelService;
 import window.editor.mdr.utilities.PanelInputContentIdMDR;
 

@@ -1,6 +1,5 @@
 package mpdr.interfaces;
 
-import mcd.MCDElement;
 import md.interfaces.IMDElementWithSource;
 import mldr.interfaces.IMLDRElement;
 

@@ -1,9 +1,6 @@
 package m.interfaces;
 
 import m.MElement;
-import m.services.MRelEndService;
-import mcd.MCDElement;
-import mcd.MCDRelation;
 
 public interface IMRelEnd {
 

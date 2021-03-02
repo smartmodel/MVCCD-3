@@ -156,9 +156,6 @@ public class WinMenuContent implements ActionListener {
 
     }
 
-
-
-
     private void newProject() {
         if (MVCCDManager.instance().getProject() == null) {
             ProjectEditingTreat.treatNew(mvccdWindow);

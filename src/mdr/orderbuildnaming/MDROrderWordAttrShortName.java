@@ -1,9 +1,6 @@
 package mdr.orderbuildnaming;
 
-import mcd.MCDEntity;
-import mcd.MCDEntityNature;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 
 public class MDROrderWordAttrShortName extends MDROrderWord{
 

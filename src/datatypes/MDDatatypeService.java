@@ -1,7 +1,6 @@
 package datatypes;
 
 import main.MVCCDElement;
-import utilities.Trace;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;

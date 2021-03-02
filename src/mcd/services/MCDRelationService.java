@@ -1,12 +1,11 @@
 package mcd.services;
 
 import main.MVCCDElement;
-import mcd.*;
+import mcd.MCDElement;
+import mcd.MCDRelation;
 import mcd.interfaces.IMCDModel;
-import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

@@ -2,7 +2,6 @@ package utilities.window.scomponents.services;
 
 import exceptions.CodeApplException;
 import utilities.window.scomponents.STree;
-import window.editor.preferences.project.PrefProject;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;

@@ -1,16 +1,10 @@
 package transform.mldrtompdr;
 
 import mdr.MDRElement;
-import mdr.MDRElementNames;
-import mdr.MDRNamingFormat;
-import mdr.MDRNamingLength;
 import mdr.services.MDRModelService;
-import mldr.MLDRTable;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRModel;
 import mpdr.interfaces.IMPDRElement;
-import org.apache.commons.lang.StringUtils;
-import utilities.Trace;
 
 public class MLDRTransformService {
 

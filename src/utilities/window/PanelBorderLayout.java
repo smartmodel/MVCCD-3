@@ -1,7 +1,7 @@
 package utilities.window;
 
-import preferences.PreferencesManager;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
@@ -9,6 +9,11 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/**
+ * Extension de JPanel.
+ * Ancêtre des divers panneaux d'un écran mis en page à l'aide du gestionnaire BorderLayout (par ex. l'écran d'accueil).
+ * Elle fournit les méthodes de calcul de redimensionnement à ses descendants (par ex. "correctedMinimalWidth").
+ */
 public abstract class PanelBorderLayout extends JPanel implements MouseListener, MouseInputListener{
 
     private boolean resizable = true;   // Panneau redimensionnable

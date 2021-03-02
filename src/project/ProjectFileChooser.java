@@ -2,7 +2,6 @@ package project;
 
 import main.MVCCDManager;
 import messages.MessagesBuilder;
-import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.files.UtilFiles;
 

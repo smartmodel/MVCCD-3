@@ -1,7 +1,6 @@
 package project;
 
 import exceptions.CodeApplException;
-import main.MVCCDElement;
 import preferences.Preferences;
 
 import java.io.*;

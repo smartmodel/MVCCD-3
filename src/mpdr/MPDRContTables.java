@@ -1,6 +1,5 @@
 package mpdr;
 
-import mdr.MDRContColumns;
 import mdr.MDRContTables;
 import project.ProjectElement;
 

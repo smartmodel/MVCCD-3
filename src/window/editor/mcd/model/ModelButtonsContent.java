@@ -2,9 +2,12 @@ package window.editor.mcd.model;
 
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
-import mcd.*;
-import utilities.window.editor.PanelButtonsContent;
+import mcd.MCDContModels;
+import mcd.MCDElement;
+import mcd.MCDModel;
+import mcd.MCDPackage;
 import preferences.Preferences;
+import utilities.window.editor.PanelButtonsContent;
 
 public class ModelButtonsContent extends PanelButtonsContent {
 

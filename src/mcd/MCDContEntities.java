@@ -1,13 +1,7 @@
 package mcd;
 
-import main.MVCCDElement ;
-import mcd.interfaces.IMCDContPackages;
-import mcd.interfaces.IMCDModel;
-import mcd.services.IMCDModelService;
-import preferences.Preferences;
+import main.MVCCDElement;
 import project.ProjectElement;
-import project.ProjectService;
-import utilities.files.UtilXML;
 
 import java.util.ArrayList;
 import java.util.Collections;

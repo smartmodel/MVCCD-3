@@ -18,7 +18,15 @@ import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRElementWithSource;
+import preferences.Preferences;
+import preferences.PreferencesManager;
+import profile.Profile;
+import profile.ProfileSaverXml;
+import project.Project;
 import project.ProjectElement;
+import repository.editingTreat.EditingTreat;
+import repository.editingTreat.EditingTreatTransform;
+import repository.editingTreat.ProjectEditingTreat;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.*;
 import repository.editingTreat.md.MDDatatypeEditingTreat;
@@ -29,11 +37,6 @@ import repository.editingTreat.mdr.MDRTableEditingTreat;
 import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
 import repository.editingTreat.preferences.*;
-import preferences.Preferences;
-import preferences.PreferencesManager;
-import profile.Profile;
-import project.Project;
-import repository.editingTreat.*;
 import utilities.DefaultMutableTreeNodeService;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
@@ -45,7 +48,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class WinRepositoryPopupMenu extends SPopupMenu {
     private DefaultMutableTreeNode node;
@@ -327,7 +329,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             treatGenericRead( preferencesEdit, new PrefMCDEditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mcd"));
-            
+
             treatGenericRead( preferencesEdit, new PrefMDREditingTreat(),
                     MessagesBuilder.getMessagesProperty("menu.preferences.mdr"));
 
@@ -403,7 +405,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             preferencesExportProfil.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    PreferencesManager.instance().createProfile();
+                    if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
+                        PreferencesManager.instance().createProfile(); //Persistance avec sérialisation
+                    }else{
+                        new ProfileSaverXml().createFileProfileXML(); //Ajout de Giorgio
+                    }
                 }
             });
 

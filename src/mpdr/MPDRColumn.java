@@ -2,7 +2,6 @@ package mpdr;
 
 import md.MDElement;
 import mdr.MDRColumn;
-import mdr.MDRTable;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;

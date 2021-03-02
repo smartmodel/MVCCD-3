@@ -5,9 +5,7 @@ import mdr.MDRModel;
 import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
 import preferences.Preferences;
-import utilities.Trace;
 import utilities.window.editor.PanelInputContent;
-import utilities.window.scomponents.SButton;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.STextField;
 import utilities.window.scomponents.services.SComboBoxService;
@@ -16,8 +14,6 @@ import utilities.window.services.PanelService;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 
 public class MDRModelInputContent extends PanelInputContent  {

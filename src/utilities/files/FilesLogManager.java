@@ -24,7 +24,6 @@ public class FilesLogManager {
 	
 	/**
 	 * Get the unique instance of the class.
-	 * @return
 	 */
 	public static synchronized FilesLogManager instance(){
 		if(instance == null){
@@ -41,9 +40,6 @@ public class FilesLogManager {
 	 * If the file don't exist yet, it will be created.
 	 * The characters tilde "~" are replaced by new lines.
 	 * @param folderPath must be the absolute folder of the file. It must not contain the file name.
-	 * @param fileName
-	 * @param newLine
-	 * @throws Throwable 
 	 */
 
 	
@@ -53,8 +49,6 @@ public class FilesLogManager {
 	 * If the folder don't exist, it will be created.
 	 * If the file don't exist yet, it will be created.
 	 * @param folderPath must be the absolute folder of the file. It must not contain the file name.
-	 * @param fileName
-	 * @param text
 	 * @throws Throwable 
 	 */
 	public void addLineToFile(String folderPath, String fileName, String text) throws Throwable{

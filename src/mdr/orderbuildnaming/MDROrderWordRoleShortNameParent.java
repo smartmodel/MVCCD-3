@@ -5,7 +5,6 @@ import mcd.MCDRelEnd;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 public class MDROrderWordRoleShortNameParent extends MDROrderWordRoleShortName{
 

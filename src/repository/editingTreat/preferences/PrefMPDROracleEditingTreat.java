@@ -5,11 +5,9 @@ import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.preferences.project.mldr.PrefMLDREditor;
 import window.editor.preferences.project.mpdr.oracle.PrefMPDROracleEditor;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class PrefMPDROracleEditingTreat extends EditingTreat {
 

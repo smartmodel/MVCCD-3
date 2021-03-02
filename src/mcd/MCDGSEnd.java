@@ -3,7 +3,6 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import m.interfaces.IMRelEnd;
 import mcd.services.MCDRelEndService;
 import preferences.Preferences;
 import preferences.PreferencesManager;

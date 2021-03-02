@@ -6,7 +6,6 @@ import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRTable;
-import mpdr.oracle.MPDROracleColumn;
 import project.ProjectElement;
 
 public class MPDRPostgreSQLTable extends MPDRTable {

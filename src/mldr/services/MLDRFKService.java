@@ -1,9 +1,7 @@
 package mldr.services;
 
 import exceptions.CodeApplException;
-import mdr.MDRColumn;
 import mdr.MDRFK;
-import mldr.MLDRColumn;
 import mldr.MLDRFK;
 
 import java.util.ArrayList;

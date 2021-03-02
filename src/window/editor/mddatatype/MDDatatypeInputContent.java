@@ -3,9 +3,9 @@ package window.editor.mddatatype;
 import datatypes.MDDatatype;
 import datatypes.MDDatatypeService;
 import main.MVCCDElement;
-import utilities.window.editor.PanelInputContent;
 import preferences.Preferences;
 import utilities.UtilDivers;
+import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.STextField;
 

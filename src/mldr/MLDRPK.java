@@ -2,10 +2,7 @@ package mldr;
 
 import main.MVCCDElementFactory;
 import mcd.MCDElement;
-import mcd.MCDEntity;
 import md.MDElement;
-import mdr.MDRColumn;
-import mdr.MDRElement;
 import mdr.MDRPK;
 import mdr.MDRParameter;
 import mdr.interfaces.IMDRParameter;

@@ -2,13 +2,9 @@ package mcd.services;
 
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
-import main.MVCCDElement;
 import mcd.*;
-import mcd.interfaces.IMCDModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import project.ProjectService;
-import utilities.Trace;
 
 import java.util.ArrayList;
 import java.util.Collections;

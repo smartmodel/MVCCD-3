@@ -1,6 +1,5 @@
 package main.window.repository;
 
-import main.MVCCDElement;
 import main.MVCCDManager;
 import project.Project;
 import project.ProjectElement;
@@ -15,6 +14,9 @@ import javax.swing.tree.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * La classe gère l'arbre de représentation du référentiel.
+ */
 public class WinRepositoryTree extends JTree {
 
     private DefaultTreeModel treeModel;

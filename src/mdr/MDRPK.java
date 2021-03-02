@@ -1,13 +1,8 @@
 package mdr;
 
-import md.MDElement;
 import mdr.interfaces.IMDRParameter;
-import mldr.MLDRColumn;
 import mldr.MLDRParameter;
-import mldr.services.MLDROperationService;
 import project.ProjectElement;
-
-import java.util.ArrayList;
 
 public abstract class MDRPK extends MDRConstraint{
 

@@ -1,10 +1,8 @@
 package mcd;
 
 import main.MVCCDElement;
-import project.ProjectElement;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class MCDContAttributes extends MCDElement{
 

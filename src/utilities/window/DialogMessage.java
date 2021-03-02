@@ -5,6 +5,11 @@ import messages.MessagesBuilder;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Simplifie l'utilisataion de JOptionPane en faisant appel à des méthodes spécifiques.
+ * (voir par exemple la méthode showConfirmYesNo_No)
+ * <img src="doc-files/UI_DialogMessageForConfirmationYesNo.jpg" alt="Boîte de dialogue de confirmation">
+ */
 public class DialogMessage {
 
 
