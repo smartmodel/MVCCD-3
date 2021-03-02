@@ -768,6 +768,7 @@ public class AssociationInputContent extends PanelInputContentId {
 
     private boolean checkToRoleScopeNaming(boolean unitaire, int scopeNaming) {
 
+
         MCDAssociation mcdAssociation = (MCDAssociation)  getElementForCheck();
         //#MAJ 2021-03-02-A Erreur création d'une association
         // IMCDModel imcdModel = mcdAssociation.getIMCDModelAccueil();
