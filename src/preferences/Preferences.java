@@ -14,7 +14,7 @@ public class Preferences extends MVCCDElement {
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
-    public static String VERSION = "3.0.16"; //TODO-STB+PAS: sauvegarder également la version dans la sauvegarde du projet
+    public static String APPLICATION_VERSION = "3.0.16"; //TODO-STB+PAS: sauvegarder également la version dans la sauvegarde du projet
     public static boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = true; //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref //TODO-STB: mettre à false par défaut, et éventuellement supprimer la propriété lorsque la persistance XML est ok.
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
