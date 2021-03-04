@@ -23,6 +23,10 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
     private boolean errorInput = false;
     private  JLabel label = null;
 
+    // Contrôle de changement de valeur pour les listes de valeurs utilisées pour aliement un champ
+    // Exemple aid avec la liste : num, numDep en mettant à false
+    boolean checkAdjustAutomatically = true;
+
 
 
     public SComboBox(IPanelInputContent panel) {
@@ -207,5 +211,13 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
     public void setSelectedFirst() {
         super.setSelectedIndex(0);
         setSelectedBase(0);
+    }
+
+    public boolean isCheckAdjustAutomatically() {
+        return checkAdjustAutomatically;
+    }
+
+    public void setCheckAdjustAutomatically(boolean checkAdjustAutomatically) {
+        this.checkAdjustAutomatically = checkAdjustAutomatically;
     }
 }

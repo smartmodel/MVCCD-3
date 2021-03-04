@@ -4,6 +4,7 @@ import main.MVCCDManager;
 import profile.ProfileFileChooser;
 import project.Project;
 import project.ProjectFileChooser;
+import utilities.Trace;
 import utilities.files.UtilFiles;
 
 import java.io.File;
@@ -127,6 +128,7 @@ public class PreferencesManager {
          */
 
         // Général
+        //to.setPROJET_VERSION(from.getPROJET_VERSION());
         to.setGENERAL_RELATION_NOTATION(from.getGENERAL_RELATION_NOTATION()) ;
 
         // MCD
@@ -140,6 +142,7 @@ public class PreferencesManager {
         to.setMCD_AID_IND_COLUMN_NAME(from.getMCD_AID_IND_COLUMN_NAME());
         to.setMCD_AID_DEP_COLUMN_NAME(from.getMCD_AID_DEP_COLUMN_NAME());
         to.setMCD_AID_WITH_DEP(from.isMCD_AID_WITH_DEP());
+        to.setMCD_AID_SIZEDEFAULT(from.MCDDOMAIN_AID_SIZEDEFAULT);
         to.setMCD_TREE_NAMING_ASSOCIATION(from.getMCD_TREE_NAMING_ASSOCIATION());
         to.setMCD_MODE_NAMING_LONG_NAME(from.getMCD_MODE_NAMING_LONG_NAME());
         to.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(from.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME());
@@ -194,7 +197,9 @@ public class PreferencesManager {
         boolean tempInutile = Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML; //Ligne créée uniquement dans le but de ne pas oublier de supprimer cette méthode lorsque la préférence sera supprimée.
         try {
             PreferencesLoader loader = new PreferencesLoader();
+            System.out.println(" Avant applicationPref = loader.load");
             applicationPref = loader.load(new File(Preferences.FILE_APPLICATION_PREF_NAME));
+            Trace.println(" Avant applicationPref = loader.load");
         } catch (FileNotFoundException e) {
             applicationPref = new Preferences(null, null);
             PreferencesSaver saver = new PreferencesSaver();

@@ -38,6 +38,11 @@ public class PrefMCDInputContent extends PanelInputContent {
     private SButton btnAIDDepNameDefault ;
 
     private SComboBox fieldAIDDatatype = new SComboBox(this);
+
+    //TODO-1 Mettre un champ pour le changement de la valeur par défaut de la taille de l'attribt AID
+    // fieldAIDDataTypeSize Preferences.getMCD_AID_SIZEDEFAULT()
+    // Vérifier les bornes
+
     private SComboBox fieldDatatypeSizeMode = new SComboBox(this);
 
     private JPanel panelJournalization = new JPanel ();

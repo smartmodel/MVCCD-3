@@ -56,11 +56,14 @@ public class MVCCDManager {
         LoadMessages.main();
 
         //Chargement des préférences de l'application
+        PreferencesManager.instance().loadOrCreateFileXMLApplicationPref(); //Ajout de Giorgio Roncallo
+        /*
         if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
             PreferencesManager.instance().loadOrCreateFileApplicationPreferences(); //Persistance avec sérialisation
         }else{
             PreferencesManager.instance().loadOrCreateFileXMLApplicationPref(); //Ajout de Giorgio Roncallo
         }
+         */
 
         // Création et affichage de l'écran d'accueil
         startMVCCDWindow();

@@ -22,6 +22,8 @@ public class Project extends ProjectElement {
     public static final int NEW = 1;
     public static final int EXISTING = 2;
 
+    private String version ;
+
     // Fichier de profil
     private String profileFileName;
     // Instance de profil
@@ -51,6 +53,17 @@ public class Project extends ProjectElement {
         super(null, name);
     }
 
+    public String getVersion() {
+        if (version == null){
+            // Uniquement pour la phase de développement !
+            return Preferences.APPLICATION_VERSION;
+        }
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
     public String getProfileFileName() {
         return profileFileName;
