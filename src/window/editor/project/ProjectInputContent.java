@@ -26,6 +26,7 @@ public class ProjectInputContent extends PanelInputContent {
 
     //private JPanel panel = new JPanel();
     private STextField projectName = new STextField(this);
+    private STextField projectVersion = new STextField(this);
     private STextField projectFileName = new STextField(this);
     private SComboBox<String> profileFileName = new SComboBox<>(this);
     private SCheckBox fieldModelsMany = new SCheckBox(this);
@@ -46,9 +47,12 @@ public class ProjectInputContent extends PanelInputContent {
         projectName.setPreferredSize((new Dimension(300,Preferences.EDITOR_FIELD_HEIGHT)));
         projectName.setCheckPreSave(true);
         //projectName.setText("");
-
         projectName.getDocument().addDocumentListener(this);
         projectName.addFocusListener(this);
+
+        projectVersion.setPreferredSize((new Dimension(100,Preferences.EDITOR_FIELD_HEIGHT)));
+        projectVersion.setVisible(!getEditor().getMode().equals(DialogEditor.NEW));
+        projectVersion.setReadOnly(true);
 
         //TODO-1 Traiter le cas du nom complet qui dépasse la taille de la zone d'affichage
         projectFileName.setPreferredSize((new Dimension(500,Preferences.EDITOR_FIELD_HEIGHT)));
@@ -79,6 +83,7 @@ public class ProjectInputContent extends PanelInputContent {
         }
 
         super.getSComponents().add(projectName);
+        super.getSComponents().add(projectVersion);
         super.getSComponents().add(profileFileName);
         super.getSComponents().add(fieldModelsMany);
         super.getSComponents().add(fieldPackagesAutorizeds);
@@ -97,6 +102,11 @@ public class ProjectInputContent extends PanelInputContent {
         gbc.gridx = 1;
         panelInputContentCustom.add(projectName, gbc);
 
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(new JLabel("Version : "), gbc);
+        gbc.gridx = 1;
+        panelInputContentCustom.add(projectVersion, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
@@ -226,6 +236,7 @@ public class ProjectInputContent extends PanelInputContent {
         // Initialisation sans passer par un objet transitoire car la création d'un projet
         // déclenche trop d'automatisme qu'il est certainement difficile de stopper pour un objet transitoire
         projectName.setText("");
+        projectVersion.setText(Preferences.APPLICATION_VERSION);
         projectFileName.setText("");
         fieldModelsMany.setSelected(applicationPref.getREPOSITORY_MCD_MODELS_MANY());
         fieldPackagesAutorizeds.setSelected(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
@@ -237,6 +248,7 @@ public class ProjectInputContent extends PanelInputContent {
     public void loadDatas(MVCCDElement mvccdElement) {
         Project project = (Project) mvccdElement;
         projectName.setText(project.getName());
+        projectVersion.setText(project.getVersion());
         String filePath = "";
         File file = MVCCDManager.instance().getFileProjectCurrent();
         if (file != null){

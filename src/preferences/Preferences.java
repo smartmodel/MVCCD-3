@@ -14,7 +14,7 @@ public class Preferences extends MVCCDElement {
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
-    public static String VERSION = "3.0.16"; //TODO-STB: voir avec PAS si la version ne devrait pas aussi être sauvegardée
+    public static String APPLICATION_VERSION = "3.0.16"; //TODO-STB: voir avec PAS si la version ne devrait pas aussi être sauvegardée
     public static boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = true; //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref //TODO-STB: mettre à false par défaut, et éventuellement supprimer la propriété lorsque la persistance XML est ok.
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
@@ -291,8 +291,8 @@ public class Preferences extends MVCCDElement {
 
     public static String MCDDOMAIN_AID_NAME = "aid";
     public static String MCDDOMAIN_AID_LIENPROG = "aid";
-    public static Integer MCDDOMAIN_AID_SIZEMIN = 9;
-    public static Integer MCDDOMAIN_AID_SIZEMAX = 9;
+    public static Integer MCDDOMAIN_AID_SIZEMIN = 3;
+    public static Integer MCDDOMAIN_AID_SIZEMAX = 12;
     public static Integer MCDDOMAIN_AID_SIZEDEFAULT = 9;
 
     public static String MCDDATATYPE_MONEY_NAME = "money";
@@ -625,6 +625,7 @@ public class Preferences extends MVCCDElement {
 
     // Préférences de projet (modifications User/Custom)
     // Général
+    //private String PROJET_VERSION;  //Directement comme propriété de projet
     private String GENERAL_RELATION_NOTATION ;
 
     // MCD
@@ -637,6 +638,8 @@ public class Preferences extends MVCCDElement {
     private String MCD_AID_IND_COLUMN_NAME = null;
     private String MCD_AID_DEP_COLUMN_NAME = null;
     private Boolean MCD_AID_WITH_DEP = true;
+    private Integer MCD_AID_SIZEDEFAULT = MCDDOMAIN_AID_SIZEDEFAULT;
+
     private String MCD_TREE_NAMING_ASSOCIATION = null;
     private String MCD_MODE_NAMING_LONG_NAME = null;
     private String MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = null;
@@ -796,6 +799,20 @@ public class Preferences extends MVCCDElement {
 
     // Project
 
+/*
+    public String getPROJET_VERSION() {
+        if ( PROJET_VERSION == null) {
+            PROJET_VERSION = APPLICATION_VERSION ;
+        }
+        return PROJET_VERSION;
+    }
+
+    public void setPROJET_VERSION(String PROJET_VERSION) {
+        this.PROJET_VERSION = PROJET_VERSION;
+    }
+
+ */
+
     public String getGENERAL_RELATION_NOTATION() {
         if (GENERAL_RELATION_NOTATION == null){
             GENERAL_RELATION_NOTATION = GENERAL_RELATION_NOTATION_UML;
@@ -900,6 +917,16 @@ public class Preferences extends MVCCDElement {
         this.MCD_AID_WITH_DEP = MCD_AID_WITH_DEP;
     }
 
+    public Integer getMCD_AID_SIZEDEFAULT() {
+        if (MCD_AID_SIZEDEFAULT == null){
+            MCD_AID_SIZEDEFAULT = MCDDOMAIN_AID_SIZEDEFAULT;
+        }
+        return MCD_AID_SIZEDEFAULT;
+    }
+
+    public void setMCD_AID_SIZEDEFAULT(Integer MCD_AID_SIZEDEFAULT) {
+        this.MCD_AID_SIZEDEFAULT = MCD_AID_SIZEDEFAULT;
+    }
 
     public String getMCD_TREE_NAMING_ASSOCIATION() {
         if(MCD_TREE_NAMING_ASSOCIATION  == null){

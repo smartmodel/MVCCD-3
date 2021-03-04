@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import repository.Repository;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.MDDatatypeTreeDialog;
@@ -90,6 +91,7 @@ public class AttributeInputContent extends PanelInputContentId {
         }
         attributeNameAID.addItemListener(this);
         attributeNameAID.addFocusListener(this);
+        attributeNameAID.setCheckAdjustAutomatically(false);
 
         fieldName.setToolTipText("Nom de l'attribut");
 
@@ -446,13 +448,17 @@ public class AttributeInputContent extends PanelInputContentId {
 
 
     private void changeFieldSelectedAid() {
+        Preferences preferences = PreferencesManager.instance().preferences();
         if (panelInput != null) {
             duplicateAid();
         }
-        fieldName.setText((String) attributeNameAID.getFirstItem());
-        SComboBoxService.selectByText(datatypeName,
-                    PreferencesManager.instance().preferences().getMCD_AID_DATATYPE_LIENPROG());
-
+        //#MAJ 2021-03-03-A Empêcher le message de changement de valeur lors de la saisie de numDep comme nom de AID
+        if (StringUtils.isEmpty(fieldName.getText())){
+            fieldName.setText((String) attributeNameAID.getFirstItem());
+        }
+        //TODO-1 Il faut présenter le nomdans lé'interface utilisateur
+        SComboBoxService.selectByText(datatypeName, preferences.getMCD_AID_DATATYPE_LIENPROG());
+        datatypeSize.setText(preferences.getMCD_AID_SIZEDEFAULT());
         mandatory.setSelected(true);
         list.setSelected(false);
         ordered.setSelected(false);
@@ -460,6 +466,7 @@ public class AttributeInputContent extends PanelInputContentId {
         derivedValue.setText("");
         initValue.setText("");
     }
+
 
     private void duplicateAid() {
         MCDEntity mcdEntity = (MCDEntity) getEditor().getMvccdElementParent().getParent();
@@ -880,7 +887,9 @@ public class AttributeInputContent extends PanelInputContentId {
         fieldName.setEnabled(!aid.isSelected());
         attributeNameAID.setEnabled(aid.isSelected() && PreferencesManager.instance().preferences().isMCD_AID_WITH_DEP());
         datatypeName.setEnabled(!aid.isSelected());
-        btnDatatypeTree.setEnabled(!aid.isSelected());
+        datatypeName.setEnabled(!aid.isSelected());
+        datatypeSize.setEnabled(!aid.isSelected());
+        btnDatatypeSize.setEnabled(!aid.isSelected());
         mandatory.setEnabled(!aid.isSelected());
         list.setEnabled(!aid.isSelected());
         ordered.setEnabled((!aid.isSelected()) && list.isSelected());

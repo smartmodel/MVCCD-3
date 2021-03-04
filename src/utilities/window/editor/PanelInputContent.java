@@ -266,14 +266,24 @@ public abstract class PanelInputContent
     public boolean datasChangedNow() {
         boolean resultat = false;
         for (SComponent sComponent : sComponents) {
+            boolean test = true ;
+            //#MAJ 2021-03-03-A Empêcher le message de changement de valeur lors de la saisie de numDep comme nom de AID
+            if (sComponent instanceof SComboBox){
+                SComboBox sComboBox = (SComboBox) sComponent ;
+                if (! sComboBox.isCheckAdjustAutomatically()){
+                    test = false;
+                }
+            }
             if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
                 if (PreferencesManager.instance().getApplicationPref().getDEBUG_EDITOR_DATAS_CHANGED()) {
                     if (sComponent.checkIfUpdated()) {
-                        Debug.println(sComponent.getName() + " - " +sComponent);
+                        Debug.println(sComponent.getName() + " - " +sComponent + " Ajustement automatique : " + test);
                     }
                 }
             }
-            resultat = resultat || sComponent.checkIfUpdated();
+            if (test) {
+                resultat = resultat || sComponent.checkIfUpdated();
+            }
         }
         return resultat;
     }
