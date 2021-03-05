@@ -1,5 +1,6 @@
 package project;
 
+import console.Console;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDFactory;
@@ -359,7 +360,7 @@ public class ProjectLoaderXml {
     }
 
     private void addEntities(MCDContEntities mcdContEntities, Element element) {
-        // Récuperation de la balise entities
+        // Récupération de la balise entities
         Element entities = (Element) element.getElementsByTagName("entities").item(0);
         // Parcours des entités
         NodeList entitiesChilds = entities.getChildNodes();
@@ -412,7 +413,7 @@ public class ProjectLoaderXml {
                     // Récupération des conteneurs d'attributs
                     mcdContAttributes = (MCDContAttributes) contEntities;
                     for (Element child : elementsEntities) {
-                        // Ajout des attributs si l'élément entité cré dans l'application est égal à celui du fichier
+                        // Ajout des attributs si l'élément entité créée dans l'application est égale à celui du fichier
                         if (child.getAttribute("name").equals(mvccdElement.getName())) {
                             addAttributs(mcdContAttributes, child);
                         }
@@ -474,7 +475,7 @@ public class ProjectLoaderXml {
             mcdAttribute.setScale(Integer.valueOf(scale.getTextContent()));
         }
         Element size = (Element) attribut.getElementsByTagName("size").item(0);
-        if (!scale.getTextContent().equals("")) {
+        if (!size.getTextContent().equals("")) {
             mcdAttribute.setSize(Integer.valueOf(size.getTextContent()));
         }
 
