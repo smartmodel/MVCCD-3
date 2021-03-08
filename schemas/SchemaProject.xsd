@@ -277,6 +277,11 @@
 				<xs:element ref="derivedValue"/>
 				<xs:element ref="domain"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:int"/>
+				</xs:simpleType>
+			</xs:attribute>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -422,6 +427,21 @@
 						<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*([a-zA-Z])"/>
 						<xs:maxLength value="26"/>
 					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="target_id" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:int"/>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="target_order" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:int"/>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="target_ClassShortNameUI" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
 				</xs:simpleType>
 			</xs:attribute>
 		</xs:complexType>

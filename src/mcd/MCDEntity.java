@@ -11,6 +11,15 @@ import project.ProjectElement;
 
 import java.util.ArrayList;
 
+/**
+ * Classe qui représente l'entité du modèle MCD.
+ * Une entité a comme enfants (attribut childs hérité de MVCCDElement) (l'ordre peut différer):
+ * (1) un conteneur d'attributs (MCDContAttributes);
+ * (2) un conteneur de contraintes (MCDContConstrains);
+ * (3) un conteneur d'extrémité de relation (MCDContRelEnds), qui contient autant des extrémités
+ * d'associations (MCDAssEnd), que des extrémités de lien d'entité associative (MCDLinkEnd) ou que des extrémités
+ * de liens de généralisation/spécialisation (MCDGSEnd).
+ */
 public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompletness, IMCDElementWithTargets {
 
     private static final long serialVersionUID = 1000;

@@ -10,6 +10,10 @@ import stereotypes.Stereotype;
 
 import java.util.ArrayList;
 
+/**
+ * Classe abstraite qui représente les contraintes MCD de type unique. Généralement ce sont 2 types de contraintes
+ * uniques qui existent: Unique (<<U>>) (représentée par MCDUnique) et NID (<<NID>>) (MCDNID).
+ */
 public abstract class MCDUnicity extends MCDConstraint{
 
     private  static final long serialVersionUID = 1000;

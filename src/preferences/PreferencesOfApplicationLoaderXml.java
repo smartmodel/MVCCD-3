@@ -24,7 +24,6 @@ import java.io.IOException;
  */
 public class PreferencesOfApplicationLoaderXml {
 
-    //TODO-STB: à creuser l'utilité et voir avec PAS si l'idée est correcte ou non.
     public Preferences loadFileApplicationPref() throws FileNotFoundException {
         Preferences applicationPrefs = new Preferences(null, null);
         try {

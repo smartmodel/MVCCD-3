@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class ProjectSaverXml {
 
     private Project project = MVCCDManager.instance().getProject();
-    private Boolean packagesAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(); //TODO-STB: valider avec PAS le fait qu'il faudrait plutôt utiliser instance().preferences()
+    private Boolean packagesAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(); //TODO-STB: valider avec PAS le fait qu'il faudrait plutôt utiliser PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()
     private Boolean manyModelsAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
 
     //TODO-STB: vérifier que la version s'enregistre bien avec les préférences dans le fichier XML: Preferences.VERSION
@@ -419,13 +419,13 @@ public class ProjectSaverXml {
         for (int i = 0; i < listElement.size(); i++) {
             MVCCDElement entitychild = listElement.get(i);
             if (entitychild.getName().equals("Attributs")) {
-                Element attributs = doc.createElement("attributs");
-                entity.appendChild(attributs);
+                Element attributsTag = doc.createElement("attributs");
+                entity.appendChild(attributsTag);
 
                 ArrayList<MVCCDElement> attributsChilds = entitychild.getChilds();
 
                 // Ajout des attributs
-                addAttributsChilds(doc, attributsChilds, attributs);
+                addAttributsChilds(doc, attributsChilds, attributsTag);
 
             }
         }
@@ -436,57 +436,64 @@ public class ProjectSaverXml {
             MVCCDElement attributsChild = attributsChilds.get(i);
             MCDAttribute childAttribut = (MCDAttribute) attributsChild;
 
-            Element attribut = doc.createElement("attribut");
+            // Création de la balise <attribut>
+            Element attributTag = doc.createElement("attribut");
+            attributs.appendChild(attributTag);
+
+            // Ajout de l'attribut "id" à <attribut>
+            Attr id = doc.createAttribute("id");
+            id.setValue(String.valueOf(childAttribut.getIdProjectElement()));
+            attributTag.setAttributeNode(id);
+
+            // Ajout de l'attribut "name" à <attribut>
             Attr name = doc.createAttribute("name");
             name.setValue(childAttribut.getName());
-            attribut.setAttributeNode(name);
-
-            attributs.appendChild(attribut);
+            attributTag.setAttributeNode(name);
 
             Element aid = doc.createElement("aid");
             aid.appendChild(doc.createTextNode(String.valueOf(childAttribut.isAid())));
-            attribut.appendChild(aid);
+            attributTag.appendChild(aid);
 
             Element aidDep = doc.createElement("aidDep");
             aidDep.appendChild(doc.createTextNode(String.valueOf(childAttribut.isAidDep())));
-            attribut.appendChild(aidDep);
+            attributTag.appendChild(aidDep);
 
             Element mandatory = doc.createElement("mandatory");
             mandatory.appendChild(doc.createTextNode(String.valueOf(childAttribut.isMandatory())));
-            attribut.appendChild(mandatory);
+            attributTag.appendChild(mandatory);
 
             Element list = doc.createElement("list");
             list.appendChild(doc.createTextNode(String.valueOf(childAttribut.isList())));
-            attribut.appendChild(list);
+            attributTag.appendChild(list);
 
             Element frozen = doc.createElement("frozen");
             frozen.appendChild(doc.createTextNode(String.valueOf(childAttribut.isFrozen())));
-            attribut.appendChild(frozen);
+            attributTag.appendChild(frozen);
 
             Element ordered = doc.createElement("ordered");
             ordered.appendChild(doc.createTextNode(String.valueOf(childAttribut.isOrdered())));
-            attribut.appendChild(ordered);
+            attributTag.appendChild(ordered);
 
             Element upperCase = doc.createElement("upperCase");
             upperCase.appendChild(doc.createTextNode(String.valueOf(childAttribut.isUppercase())));
-            attribut.appendChild(upperCase);
+            attributTag.appendChild(upperCase);
 
             // Tout les éléments qui suive peuvent être vide. Dans le fichier ils ne sont pas stockés dans ce cas
             Element dataTypeLienProg = doc.createElement("dataTypeLienProg");
             if (childAttribut.getDatatypeLienProg() != null) {
                 dataTypeLienProg.appendChild(doc.createTextNode(childAttribut.getDatatypeLienProg()));
             }
-            attribut.appendChild(dataTypeLienProg);
+            attributTag.appendChild(dataTypeLienProg);
 
             Element scale = doc.createElement("scale");
-            attribut.appendChild(scale);
+            attributTag.appendChild(scale);
             Integer test = childAttribut.getScale();
             if (test != null) {
                 scale.appendChild(doc.createTextNode(String.valueOf(childAttribut.getScale())));
             }
 
             Element size = doc.createElement("size");
-            attribut.appendChild(size);
+            attributTag.appendChild(size);
 
             if (childAttribut.getSize() != null) {
                 size.appendChild(doc.createTextNode(String.valueOf(childAttribut.getSize())));
@@ -497,16 +504,16 @@ public class ProjectSaverXml {
                 initValue.appendChild(doc.createTextNode(childAttribut.getInitValue()));
 
             }
-            attribut.appendChild(initValue);
+            attributTag.appendChild(initValue);
 
             Element derivedValue = doc.createElement("derivedValue");
             if (!childAttribut.getDerivedValue().equals("")) {
                 derivedValue.appendChild(doc.createTextNode(childAttribut.getDerivedValue()));
             }
-            attribut.appendChild(derivedValue);
+            attributTag.appendChild(derivedValue);
 
             Element domain = doc.createElement("domain");
-            attribut.appendChild(domain);
+            attributTag.appendChild(domain);
             if (childAttribut.getDomain() != null) {
                 domain.appendChild(doc.createTextNode(childAttribut.getDomain()));
             }
@@ -571,7 +578,7 @@ public class ProjectSaverXml {
                 Element typeConstrainte = doc.createElement("type");
                 typeConstrainte.appendChild(doc.createTextNode("Unique"));
                 constraint.appendChild(typeConstrainte);
-                // Ajout des parameters ( encore pas implémenté dans l'application)
+                // Ajout des parameters
                 addParameters(doc, unique, constraint);
             }
         }
@@ -639,10 +646,10 @@ public class ProjectSaverXml {
         Element association = doc.createElement("association");
         Element name = doc.createElement("name");
         association.appendChild(name);
-        if (!linkEnd.getName().equals("")) { //TODO-STB: avant c'était endAssociation.getMcdElement().getName().equals("")
-            name.appendChild(doc.createTextNode((linkEnd.getNamePath(1)))); //TODO-STB: avant c'était endAssociation.getMcdElement().getNamePath(...)
+        if (!linkEnd.getName().equals("")) {
+            name.appendChild(doc.createTextNode((linkEnd.getNamePath(1))));
         } else {
-            MCDAssociation mcdAssociation = (MCDAssociation) linkEnd.getmElement(); //TODO-STB: avant c'était (MCDAssociation) linkEnd.getMcdElement()
+            MCDAssociation mcdAssociation = (MCDAssociation) linkEnd.getmElement();
             MCDAssEnd from = mcdAssociation.getFrom();
             MCDAssEnd to = mcdAssociation.getTo();
 
@@ -659,7 +666,7 @@ public class ProjectSaverXml {
         // Récupération de l'entité
         MCDLinkEnd endEntity = mcdLink.getEndEntity();
         Element entity = doc.createElement("entity");
-        entity.appendChild(doc.createTextNode(((MCDElement) endEntity.getmElement()).getNamePath(1))); //TODO-STB: avant c'était entity.appendChild(doc.createTextNode(endEntity.getMCDElement().getNamePath(1)));
+        entity.appendChild(doc.createTextNode(((MCDElement) endEntity.getmElement()).getNamePath(1)));
         link.appendChild(entity);
 
     }
@@ -774,35 +781,59 @@ public class ProjectSaverXml {
     }
 
     /**
-     * Méthode pour ajouter les paramètres des contraintes (pas encore implémentés dans cette version de l'application)
+     * Méthode pour ajouter les paramètres (les attributs référencés) des contraintes
      */
     private void addParameters(Document doc, MCDConstraint mcdConstraint, Element constraint) {
-        ArrayList<MCDParameter> parametersChilds = mcdConstraint.getMcdParameters();
-        for (int i = 0; i < parametersChilds.size(); i++) {
-            MCDParameter parameterChild = parametersChilds.get(i);
-            Element parameter = doc.createElement("parameter");
-            constraint.appendChild(parameter);
+        //ArrayList<MCDParameter> parametersChilds = mcdConstraint.getMcdParameters(); //old: à supprimer
+        //for (int i = 0; i < parametersChilds.size(); i++) { //old: à supprimer
+        for(MCDParameter parameterOfConstraint : mcdConstraint.getMcdParameters()){
+            //MCDParameter parameterOfConstraint = parametersChilds.get(i); //old: à supprimer
+            // TODO-STB: implémenter les paramètres de contraintes Unique et UID.
 
-            Attr name = doc.createAttribute("name");
-            name.setValue(parameterChild.getName());
-            parameter.setAttributeNode(name);
+            // Créer la balise <parameter> pour chaque paramètre (donc pour chaque attribut)
+            Element parameterTag = doc.createElement("parameter");
+            constraint.appendChild(parameterTag);
 
+            // Ajout de l'attribut "name" à la balise <parameter>
+            Attr nameAttributeOfParameterTag = doc.createAttribute("name");
+            nameAttributeOfParameterTag.setValue(parameterOfConstraint.getName());
+            parameterTag.setAttributeNode(nameAttributeOfParameterTag);
+
+            // Ajout de l'attribut "target_id" à la balise <parameter>
+            Attr targetIdAttributeOfParameterTag = doc.createAttribute("target_id");
+            targetIdAttributeOfParameterTag.setValue(String.valueOf(parameterOfConstraint.getTarget().getIdProjectElement()));
+            parameterTag.setAttributeNode(targetIdAttributeOfParameterTag);
+
+            // Ajout de l'attribut "target_order" à la balise <parameter>
+            Attr targetOrderAttributeOfParameterTag = doc.createAttribute("target_order");
+            targetOrderAttributeOfParameterTag.setValue(String.valueOf(parameterOfConstraint.getTarget().getOrder()));
+            parameterTag.setAttributeNode(targetOrderAttributeOfParameterTag);
+
+            // Ajout de l'attribut "target_ClassShortNameUI"* à la balise <parameter>
+            Attr targetClassShortNameUIAttributeOfParameterTag = doc.createAttribute("target_ClassShortNameUI");
+            targetClassShortNameUIAttributeOfParameterTag.setValue(parameterOfConstraint.getTarget().getClassShortNameUI());
+            parameterTag.setAttributeNode(targetClassShortNameUIAttributeOfParameterTag);
+
+            //Old: développements de Giorgio Roncallo (semblent inutiles/trop compliqué)
+            /*
             Element target = doc.createElement("target");
             Attr targetName = doc.createAttribute("name");
-            name.setValue(parameterChild.getTarget().getName());
+            nameAttributeOfParameterTag.setValue(parameterOfConstraint.getTarget().getName());
             target.setAttributeNode(targetName);
 
             Element id = doc.createElement("id");
-            id.appendChild(doc.createTextNode(String.valueOf(parameterChild.getTarget().getIdProjectElement())));
+            id.appendChild(doc.createTextNode(String.valueOf(parameterOfConstraint.getTarget().getIdProjectElement())));
             target.appendChild(id);
 
             Element order = doc.createElement("order");
-            order.appendChild(doc.createTextNode(String.valueOf(parameterChild.getTarget().getOrder())));
+            order.appendChild(doc.createTextNode(String.valueOf(parameterOfConstraint.getTarget().getOrder())));
             target.appendChild(order);
 
             Element classShortNameUi = doc.createElement("classShortNameUi");
-            classShortNameUi.appendChild(doc.createTextNode(parameterChild.getTarget().getClassShortNameUI()));
+            classShortNameUi.appendChild(doc.createTextNode(parameterOfConstraint.getTarget().getClassShortNameUI()));
             target.appendChild(classShortNameUi);
+
+             */
 
         }
     }

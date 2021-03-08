@@ -554,6 +554,7 @@ public class ProjectLoaderXml {
             Element absolute = (Element) constraint.getElementsByTagName("absolute").item(0);
             mcdUnique.setAbsolute(Boolean.valueOf(absolute.getTextContent()));
 
+            //TODO-STB: Ajouter le chargement de "parameter"
         }
     }
 

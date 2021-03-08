@@ -11,6 +11,11 @@ import stereotypes.Stereotype;
 
 import java.util.ArrayList;
 
+/**
+ * Classe qui représente toute contrainte MCD.
+ * Une contrainte MCD contient un ensemble de paramètres, chacun d'eux étant un attribut inclus dans la contrainte.
+ * La liste des paramètres correspond à la liste des enfants de la contraintes (attribut childs, hérité de MVCCDElement).
+ */
 public abstract class MCDConstraint extends MCDOperation{
 
     private static final long serialVersionUID = 1000;
