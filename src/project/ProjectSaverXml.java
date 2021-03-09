@@ -1,12 +1,16 @@
 package project;
 
+import console.Console;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
 import messages.MessagesBuilder;
+import mldr.MLDRModel;
+import mldr.MLDRTable;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.files.TranformerForXml;
 import utilities.window.DialogMessage;
@@ -55,32 +59,33 @@ public class ProjectSaverXml {
             addProjectPreferences(document, racine); //TODO-STB: adapter et utiliser plutôt PreferencesManager.getProjectPref() => à voir une fois que j'ai mieux compris avec PAS
 
             //Element MCD
-            MCDContModels elementMcd = (MCDContModels) project.getChilds().get(1); //TODO-STB: PAS: Ajouter méthode propre dans MCDContModels. le get(0) c'est les préférences, le (1) c'est le MCD. Ce serait à revoir pour s'assurer de rechercher vraiment le bon.
-            Element mcd = document.createElement(elementMcd.getName());
-            racine.appendChild(mcd);
+            MCDContModels mcdContModels = project.getMCDContModels();
+            Element mcdTag = document.createElement(mcdContModels.getName());
+            racine.appendChild(mcdTag);
 
-            ArrayList<MVCCDElement> mcdChilds = elementMcd.getChilds();
+            ArrayList<MVCCDElement> mcdModels = mcdContModels.getChilds();
 
             //Modèle
             if (manyModelsAuthorized) {
 
-                addModelAndChilds(document, mcd, mcdChilds);
+                addModelAndChilds(document, mcdTag, mcdModels);
 
             //Package
             } else if (packagesAuthorized) {
 
-                addDiagrams(document, mcdChilds, mcd);
-                addEntities(document, mcdChilds, mcd);
-                addRelations(document, mcdChilds, mcd);
-                addPackages(document, elementMcd, mcd);
+                addDiagrams(document, mcdModels, mcdTag);
+                addEntities(document, mcdModels, mcdTag);
+                addRelations(document, mcdModels, mcdTag);
+                addPackages(document, mcdContModels, mcdTag);
+                addMLD(document, mcdModels, mcdTag);
 
             //projet simple
             } else {
 
-                addDiagrams(document, mcdChilds, mcd);
-                addEntities(document, mcdChilds, mcd);
-                addRelations(document, mcdChilds, mcd);
-
+                addDiagrams(document, mcdModels, mcdTag);
+                addEntities(document, mcdModels, mcdTag);
+                addRelations(document, mcdModels, mcdTag);
+                addMLD(document, mcdModels, mcdTag);
             }
 
             //Formatage du fichier
@@ -201,13 +206,14 @@ public class ProjectSaverXml {
                 addEntities(doc, modelsChilds, model);
                 addRelations(doc, modelsChilds, model);
                 addPackages(doc, child, model);
-
+                addMLD(doc, modelsChilds, model);
             } else {
                 // Création des différents éléments du modèle sans packages
                 addPropertiesModelsOrPackages(doc, model, child);
                 addDiagrams(doc, modelsChilds, model);
                 addEntities(doc, modelsChilds, model);
                 addRelations(doc, modelsChilds, model);
+                addMLD(doc, modelsChilds, model);
             }
         }
 
@@ -255,6 +261,8 @@ public class ProjectSaverXml {
         }
         return packages;
     }
+
+    // *** Méthodes de sauvegarde du MCD ***
 
     private void addDiagrams(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
         // Ajout du package diagrammes dans le document
@@ -837,4 +845,49 @@ public class ProjectSaverXml {
 
         }
     }
+
+
+    // *** Méthodes de sauvegarde du MCD ***
+
+
+    /**
+     * Sauvegarde du ou des modèles MLDR_DT ou MLDR_TI qui se trouvent sous un modèle MCD.
+     * @param doc Document DOM
+     * @param models Liste des modèles à parcourir: tous ceux qui sont MLDR_DT ou MLDR_TI seront traités et persistés.
+     * @param racineTag balise parent (par exemple, la balise <mcd> du fichier persisté).
+     */
+    private void addMLD(Document doc, ArrayList<MVCCDElement> models, Element racineTag) {
+
+        //Pour chaque modèle MLDR (que ce soit MLDR_DT ou MLDR_TI)
+        for(MVCCDElement model : models){
+            if(model instanceof MLDRModel){
+                MLDRModel mldrModel = (MLDRModel) model;
+
+                //Création de la balise <MLDR>
+                Element mldrTag = doc.createElement("MLDR");
+                racineTag.appendChild(mldrTag);
+
+                //Création de la balise <tables>
+                Element tablesTag = doc.createElement("tables");
+                mldrTag.appendChild(tablesTag);
+
+                //Persistance des tables
+                for(MLDRTable mldrTable : mldrModel.getMLDRTables()){
+
+                    //Création de la balise <table>
+                    Element tableTag = doc.createElement("table");
+                    tablesTag.appendChild(tableTag);
+
+                    //Ajout de l'attribut "name" à <table>
+                    Attr tableNameAttr = doc.createAttribute("name");
+                    tableNameAttr.setValue(mldrTable.getName());
+                    tableTag.setAttributeNode(tableNameAttr);
+
+                    //TODO-STB: Continuer ici, et en premier lieu charger le MLDR et les tables
+                }
+
+            }
+        }
+    }
+
 }

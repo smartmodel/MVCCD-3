@@ -165,6 +165,7 @@
 					<xs:element ref="entities"/>
 					<xs:element ref="relations"/>
 					<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="MLDR" minOccurs="0"/>
 				</xs:sequence>
 			</xs:choice>
 		</xs:complexType>
@@ -178,6 +179,7 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="MLDR"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
@@ -198,6 +200,7 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="MLDR"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
@@ -643,4 +646,37 @@
 		</xs:simpleType>
 	</xs:element>
 	<xs:element name="deleteCascade" type="xs:boolean"/>
+
+	<!-- MLDR -->
+	<xs:element name="MLDR">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tables"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="tables">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="table" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="table">
+		<xs:complexType>
+			<!--<xs:sequence>
+				 <xs:element ref="colonnes"/>
+			</xs:sequence>-->
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*"/>
+						<xs:maxLength value="30"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
 </xs:schema>
