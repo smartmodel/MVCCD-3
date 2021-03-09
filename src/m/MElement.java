@@ -14,6 +14,10 @@ public abstract class MElement extends ProjectElement {
         super(parent);
     }
 
+    public MElement(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MElement(ProjectElement parent, String name) {
         super(parent, name);
     }

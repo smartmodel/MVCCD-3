@@ -22,6 +22,10 @@ public abstract class MCDElement extends MDElement {
         super(parent);
     }
 
+    public MCDElement(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MCDElement(ProjectElement parent, String name) {
         super(parent, name);
     }

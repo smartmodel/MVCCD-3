@@ -49,6 +49,10 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         super(parent);
     }
 
+    public MCDAttribute(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
 
     public boolean isFrozen() {
         return frozen;

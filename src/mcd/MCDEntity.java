@@ -97,6 +97,10 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return new ArrayList<MCDAttribute>();
     }
 
+    public MCDAttribute getMCDAttributeById(int id){
+        return (MCDAttribute) this.getMCDContAttributes().getChildById(id);
+    }
+
     public MCDContAttributes getMCDContAttributes() {
         for (MVCCDElement mvccdElement : getChilds()){
             if (mvccdElement instanceof MCDContAttributes) {

@@ -123,10 +123,15 @@ public class MVCCDElementFactory {
     public MCDContRelEnds createMCDContEndRels(MCDElement parent, String name){
         return new MCDContRelEnds(parent, name);
     }
-    public MCDAttribute createMCDAttribute(MCDContAttributes parent){
 
+    public MCDAttribute createMCDAttribute(MCDContAttributes parent){
         return new MCDAttribute(parent);
     }
+
+    public MCDAttribute createMCDAttribute(MCDContAttributes parent, int id){
+        return new MCDAttribute(parent, id);
+    }
+
     public MCDUnique createMCDUnique(MCDContConstraints parent){
 
         return new MCDUnique(parent);
