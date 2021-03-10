@@ -6,6 +6,7 @@ import main.MVCCDElementFactory;
 import main.MVCCDFactory;
 import mcd.*;
 import messages.MessagesBuilder;
+import mldr.MLDRModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -65,21 +66,24 @@ public class ProjectLoaderXml {
             // Création du conteneur MCD
             MCDContModels mcdCont = MVCCDElementFactory.instance().createMCDModels(project, Preferences.REPOSITORY_MCD_MODELS_NAME);
             // Récupération de la balise MCD du fichier
-            Element mcd = (Element) racine.getElementsByTagName("MCD").item(0);
-            // Chargement des modèles ou des 3 conteurs principaux
-            ArrayList<Element> elementsModeles = loadModels(mcdCont, mcd);
+            Element mcdTag = (Element) racine.getElementsByTagName("MCD").item(0);
+            // Chargement des modèles ou des 3 conteneurs principaux
+            ArrayList<Element> elementsModeles = loadModels(mcdCont, mcdTag);
             // Chargement des packages
-            loadPackages(mcdCont, mcd);
+            loadPackages(mcdCont, mcdTag);
             // Chargement des entités
-            loadEntities(mcdCont, mcd, elementsModeles);
+            loadEntities(mcdCont, mcdTag, elementsModeles);
             // Chargement des attributs
             loadAttributs();
             // Chargements des contraintes
             loadContraints();
             // Chargements des rélations ( associations et généralisations)
-            loadRelations(mcdCont, mcd, elementsModeles);
+            loadRelations(mcdCont, mcdTag, elementsModeles);
             // Chargements des liens d'entités associatives
-            loadLinks(mcdCont, mcd, elementsModeles);
+            loadLinks(mcdCont, mcdTag, elementsModeles);
+
+            //Chargement du (ou des) MLDR
+            loadMLDR(mcdCont, mcdTag); //TODO-STB: CONTINUER ICI
 
             // Validation du fichier
             validator.validate(new DOMSource(document));
@@ -855,6 +859,15 @@ public class ProjectLoaderXml {
             }
         }
         return mcdAssociation;
+    }
+
+
+
+    // *** Méthode de chargement du MLD ***
+
+    private void loadMLDR(MCDContModels mcdContModels, Element mcdTag){
+
+        //TODO-STB: CONTINUER ICI
     }
 
 }
