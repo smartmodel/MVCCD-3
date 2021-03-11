@@ -20,10 +20,21 @@ public class MLDRTransformTables {
 
 
     void transformTables() {
+        //tansformTablesWithoutFKsIdComp();
         for (MLDRTable mldrTable : mldrModel.getMLDRTables()){
             transformTable (mldrTable);
         }
     }
+    /*
+    void tansformTablesWithoutFKsIdComp() {
+        for (MLDRTable mldrTable : mldrModel.getMLDRTables()){
+            if (mldrTable.getMDRFKsIdComp().size() == 0) {
+                transformTable(mldrTable);
+            }
+        }
+    }
+
+     */
 
     private void transformTable(MLDRTable mldrTable) {
 
@@ -42,6 +53,9 @@ public class MLDRTransformTables {
         mldrTransformColumns.transformColumns();
 
         //Transformation des opérations
+        MLDRTransformConstraints mldrTransformConstraints = new MLDRTransformConstraints(
+                mldrTransform, mldrTable, mpdrModel, mpdrTable);
+        mldrTransformConstraints.transformConstraints();
 
     }
 

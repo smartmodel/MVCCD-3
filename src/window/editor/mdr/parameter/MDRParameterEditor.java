@@ -1,10 +1,13 @@
-package window.editor.mdr.fk;
+package window.editor.mdr.parameter;
 
-import mdr.MDRContConstraints;
-import mdr.MDRFK;
-import mldr.MLDRFK;
-import mldr.MLDRPK;
-import mpdr.MPDRFK;
+import mdr.MDRColumn;
+import mdr.MDRConstraint;
+import mdr.MDRContColumns;
+import mdr.MDRParameter;
+import mldr.MLDRColumn;
+import mldr.MLDRParameter;
+import mpdr.MPDRColumn;
+import mpdr.MPDRParameter;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
@@ -13,28 +16,29 @@ import utilities.window.editor.PanelInput;
 
 import java.awt.*;
 
-public class MDRFKEditor extends DialogEditor {
+public class MDRParameterEditor extends DialogEditor {
 
 
-    public MDRFKEditor(Window owner,
-                       MDRContConstraints parent,
-                       MDRFK mdrFK,
-                       String mode,
-                       EditingTreat editingTreat)  {
-        super(owner, parent, mdrFK, mode, DialogEditor.SCOPE_NOTHING, editingTreat);
+    public MDRParameterEditor(Window owner,
+                              MDRConstraint parent,
+                              MDRParameter mdrColumn,
+                              String mode,
+                              EditingTreat editingTreat)  {
+        super(owner, parent, mdrColumn, mode, DialogEditor.SCOPE_NOTHING, editingTreat);
 
     }
 
     @Override
     protected PanelButtons getButtonsCustom() {
-        return new MDRFKButtons(this);
+        return new MDRParameterButtons(this);
     }
 
     @Override
     protected PanelInput getInputCustom() {
 
-        return new MDRFKInput(this);
+        return new MDRParameterInput(this);
     }
+
 
     @Override
     protected Dimension getSizeCustom() {
@@ -65,16 +69,17 @@ public class MDRFKEditor extends DialogEditor {
 
     @Override
     protected String getPropertyTitleUpdate() {
+
         return null;
     }
 
     @Override
     protected String getPropertyTitleRead() {
-        if ( getMvccdElementCrt() instanceof MLDRFK){
-            return "editor.mldr.fk.read";
+        if ( getMvccdElementCrt() instanceof MLDRParameter){
+            return "editor.mldr.parameter.read";
         }
-        if ( getMvccdElementCrt() instanceof MPDRFK){
-            return "editor.mpdr.fk.read";
+        if ( getMvccdElementCrt() instanceof MPDRParameter){
+            return "editor.mpdr.parameter.read";
         }
         return null;
     }

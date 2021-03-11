@@ -10,6 +10,7 @@ import mldr.interfaces.IMDLRConstraint;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mldr.services.MLDROperationService;
+import mpdr.MPDRParameter;
 import project.ProjectElement;
 
 import java.util.ArrayList;
@@ -57,6 +58,11 @@ public class MLDRFK extends MDRFK implements IMLDRElement, IMLDRElementWithSourc
         MLDRParameter mldrParameter = MVCCDElementFactory.instance().createMLDRParameter(this,
                 target, this.getMcdElementSource());
         return mldrParameter;
+    }
+
+    @Override
+    public MPDRParameter createParameter(MLDRParameter mldrParameter) {
+        return null;
     }
 
     public ArrayList<MLDRColumn> getMLDRColumns(){

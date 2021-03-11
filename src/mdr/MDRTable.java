@@ -4,6 +4,7 @@ import exceptions.CodeApplException;
 import main.MVCCDElement;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import project.ProjectElement;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -44,7 +45,31 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
         return resultat;
     }
 
-    public ArrayList<MDRColumn> getMDRColumnsPK() {
+
+    public ArrayList<MDRFK> getMDRFKsIdComp(){
+        ArrayList<MDRFK> resultat = new ArrayList<MDRFK>();
+        for (MDRFK mdrFK : getMDRFKs()){
+            if (mdrFK.getNature() == MDRFKNature.IDCOMP){
+                resultat.add (mdrFK);
+            }
+        }
+        return resultat;
+    }
+
+    public ArrayList<MDRTable> getMDRTablesIdComp() {
+        ArrayList<MDRTable> resultat = new ArrayList<MDRTable>();
+        for (MDRFK mdrFK : getMDRFKsIdComp()) {
+            MDRPK mdrPK = mdrFK.getMdrPK();
+            MDRTable mdrTablePK = mdrPK.getMDRTableAccueil();
+            if (!resultat.contains(mdrTablePK)) {
+                resultat.add(mdrTablePK);
+            }
+        }
+        return resultat;
+    }
+
+
+        public ArrayList<MDRColumn> getMDRColumnsPK() {
 
         return getMDRPK().getMDRColumns();
     }

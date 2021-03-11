@@ -144,9 +144,18 @@ public class MCDTransform extends MDTransform {
 
     }
 
+    /*
     @Override
-    protected ArrayList<IMDRElementWithIteration> getIMDRElementWithIteration() {
+    protected ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration() {
         return mldrModel.getIMDRElementsWithIteration();
+    }
+
+     */
+
+
+    @Override
+    protected ArrayList<IMDRElementWithIteration> getIMDRElementsWithIterationInScope() {
+        return mldrModel.getIMDRElementsWithIterationInScope();
     }
 
 

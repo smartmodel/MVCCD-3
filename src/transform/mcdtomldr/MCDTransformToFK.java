@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.MDRAdjustParameters;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -70,6 +71,7 @@ public class MCDTransformToFK {
         // Nom
         MDRElementNames nameFK = buildNameFK(mldrTable, mldrFK, mcdRelEndParent, mldrTableParent);
         MCDTransformService.names(mldrFK, nameFK, mldrModel);
+        //TODO-1 Faire les changements de valeurs
         // Nature
         mldrFK.setNature(fkNature);
         // Lien avec la PK

@@ -410,9 +410,9 @@ public class Preferences extends MVCCDElement {
     public static String MCDTOMLDR_MODE_DT = "mcdtomldr.mode.dt";
     public static String MCDTOMLDR_MODE_TI = "mcdtomldr.mode.ti";
 
-    public static String MLDRTOMPDR_DB_ORACLE = "mldrtompdr.db.oracle";
-    public static String MLDRTOMPDR_DB_MYSQL = "mldrtompdr.db.mysql";
-    public static String MLDRTOMPDR_DB_POSTGRESQL = "mldrtompdr.db.postgresql";
+    public static String MPDR_DB_ORACLE = "mpdr.db.oracle";
+    public static String MPDR_DB_MYSQL = "mpdr.db.mysql";
+    public static String MPDR_DB_POSTGRESQL = "mpdr.db.postgresql";
 
     public static String MLDRDATATYPE_ROOT_NAME = "MLD-R";
     public static String MLDRDATATYPE_ROOT_LIENPROG = "MLD-R";
@@ -1030,7 +1030,7 @@ public class Preferences extends MVCCDElement {
 
     public String getMLDRTOMPDR_DB() {
         if (MLDRTOMPDR_DB == null){
-            MLDRTOMPDR_DB = MLDRTOMPDR_DB_ORACLE;
+            MLDRTOMPDR_DB = MPDR_DB_ORACLE;
         }
         return MLDRTOMPDR_DB;
     }

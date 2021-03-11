@@ -52,7 +52,8 @@ public class MLDRTransformColumns {
         MLDRTransformService.modifyName(mpdrModel, mpdrColumn);
 
         // Datatype
-        MPDRDatatype mpdrDatatype = MLDRTransformToMPDRDatatype.fromMLDRDatatype(mldrColumn);
+        //MPDRDatatype mpdrDatatype = MLDRTransformToMPDRDatatype.fromMLDRDatatype(mldrColumn);
+        MPDRDatatype mpdrDatatype = mpdrModel.fromMLDRDatatype(mldrColumn);
         String mpdrDatatypeLienProg = mpdrDatatype.getLienProg();
         if (mpdrColumn.getDatatypeLienProg() != null) {
             if (!(mpdrColumn.getDatatypeLienProg().equals(mpdrDatatypeLienProg))) {
@@ -137,13 +138,13 @@ public class MLDRTransformColumns {
         // Boolean
         if (mldrColumn.getDatatypeLienProg().equals(Preferences.MLDRDATATYPE_BOOLEAN_LIENPROG)){
             // Oracle
-            if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MLDRTOMPDR_DB_ORACLE)){
+            if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_ORACLE)){
                 if (mldrColumn.getDatatypeLienProg().equals(Preferences.MPDRORACLEDATATYPE_VARCHAR2_LIENPROG)){
                     pushSize(mpdrColumn, 1);
                 }
             }
             // MySQL
-            if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MLDRTOMPDR_DB_MYSQL)){
+            if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_MYSQL)){
                 if (mldrColumn.getDatatypeLienProg().equals(Preferences.MPDRMySQLDATATYPE_TINYINT_LIENPROG)){
                     pushSize(mpdrColumn, 1);
                 }

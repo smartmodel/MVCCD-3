@@ -16,6 +16,7 @@ import mldr.interfaces.IMLDRRelation;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -85,7 +86,7 @@ public class MLDRModelService {
 
  */
 
-
+    // Il peut y avoir 2 relations logiques pour une association n:n de niveau conceptuel
     public static ArrayList<MLDRRelationFK> getMLDRRelationFKsByMCDRelationSource(MLDRModel mldrModel, MCDRelation mcdRelation) {
         ArrayList<MLDRRelationFK> resultat = new ArrayList<MLDRRelationFK>();
         for (IMLDRRelation imldrRelation : getIMLDRRelations(mldrModel)) {
@@ -126,10 +127,13 @@ public class MLDRModelService {
 
  */
 
+    // Une relation de niveau logique peut être simplement modifiée alors que la contrainte de clé étrangère
+    // passe d'une table à une autre en changeant par exemple le sens d'un degré 1:n
     public static MLDRRelationFK getMLDRRelationFKByMCDRelationSourceAndSameTables(MLDRModel mldrModel,
                                                                                     MCDRelation mcdRelation,
                                                                                     MLDRTable mldrTableA,
                                                                                     MLDRTable mldrTableB) {
+
         for (MLDRRelationFK mldrRelationFK : getMLDRRelationFKsByMCDRelationSource(mldrModel, mcdRelation)){
             MLDRTable mldrTable1 = (MLDRTable) mldrRelationFK.getEndChild().getMDRTable();
             MLDRTable mldrTable2 = (MLDRTable) mldrRelationFK.getEndParent().getMDRTable();

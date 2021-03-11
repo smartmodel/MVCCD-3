@@ -14,9 +14,7 @@ import messages.MessagesBuilder;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
-import mpdr.MPDRColumn;
-import mpdr.MPDRModel;
-import mpdr.MPDRTable;
+import mpdr.*;
 import mpdr.interfaces.IMPDRElementWithSource;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -30,10 +28,7 @@ import repository.editingTreat.ProjectEditingTreat;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.*;
 import repository.editingTreat.md.MDDatatypeEditingTreat;
-import repository.editingTreat.mdr.MDRColumnEditingTreat;
-import repository.editingTreat.mdr.MDRFKEditingTreat;
-import repository.editingTreat.mdr.MDRPKEditingTreat;
-import repository.editingTreat.mdr.MDRTableEditingTreat;
+import repository.editingTreat.mdr.*;
 import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
 import repository.editingTreat.preferences.*;
@@ -236,6 +231,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             treatGenericRead(this, new MDRFKEditingTreat());
         }
 
+        if (node.getUserObject() instanceof MLDRParameter) {
+            treatGenericRead(this, new MDRParameterEditingTreat());
+        }
+
         if (node.getUserObject() instanceof MPDRModel) {
             treatGeneric(this, new MPDRModelEditingTreat());
         }
@@ -247,6 +246,15 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         if (node.getUserObject() instanceof MPDRColumn) {
             treatGenericRead(this, new MDRColumnEditingTreat());
         }
+
+        if (node.getUserObject() instanceof MPDRFK) {
+            treatGenericRead(this, new MDRFKEditingTreat());
+        }
+
+        if (node.getUserObject() instanceof MPDRParameter) {
+            treatGenericRead(this, new MDRParameterEditingTreat());
+        }
+
 
     }
 
@@ -301,8 +309,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 IMLDRElement mldrElementSource = impdrElementWithSource.getMldrElementSource();
                 String message = "Classe : " +  mldrElementSource.getClass().getName();
                 message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mldrElementSource.getName();
-                ProjectElement projectElement = (ProjectElement) mvccdElement;
-                message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
+                message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mldrElementSource.getIdProjectElement();
+
 
                 new DialogMessage().showOk(mvccdWindow, message,
                         "Source de niveau logique de l'objet : " + mvccdElement.getName());

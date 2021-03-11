@@ -25,7 +25,7 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
 
     // Contrôle de changement de valeur pour les listes de valeurs utilisées pour aliement un champ
     // Exemple aid avec la liste : num, numDep en mettant à false
-    boolean checkAdjustAutomatically = true;
+    // boolean checkAdjustAutomatically = true;
 
 
 
@@ -213,6 +213,7 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         setSelectedBase(0);
     }
 
+    /*
     public boolean isCheckAdjustAutomatically() {
         return checkAdjustAutomatically;
     }
@@ -220,4 +221,6 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
     public void setCheckAdjustAutomatically(boolean checkAdjustAutomatically) {
         this.checkAdjustAutomatically = checkAdjustAutomatically;
     }
+
+     */
 }

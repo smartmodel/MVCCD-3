@@ -5,6 +5,9 @@ import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import mldr.MLDRColumn;
 import project.ProjectElement;
+import utilities.Trace;
+
+import java.util.ArrayList;
 
 public abstract class MDRColumn extends MDRElement implements
         IMDRParameter, IMDRElementNamingPreferences, IMDRElementWithIteration {
@@ -134,6 +137,10 @@ public abstract class MDRColumn extends MDRElement implements
 
 
     public boolean isFk() {
+        Trace.println(getMDRTableAccueil().getClass().getName() + "   "+ getMDRTableAccueil().getName());
+        for (MDRColumn mdrColumn : getMDRTableAccueil().getMDRColumnsFK()){
+            Trace.println ("2 "+ mdrColumn.getClass().getName() + "  " + mdrColumn.getName() );
+        }
         return getMDRTableAccueil().getMDRColumnsFK().contains(this);
     }
 

@@ -1,5 +1,6 @@
 package mdr;
 
+import mdr.services.MDRConstraintService;
 import project.ProjectElement;
 
 public abstract class MDRConstraint extends MDROperation{
@@ -8,6 +9,11 @@ public abstract class MDRConstraint extends MDROperation{
 
     public MDRConstraint(ProjectElement parent) {
         super(parent);
+    }
+
+
+    public MDRTable getMDRTableAccueil(){
+        return (MDRTable) getParent().getParent();
     }
 
 }

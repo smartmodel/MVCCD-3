@@ -7,6 +7,7 @@ import mldr.MLDRColumn;
 import mpdr.MPDRColumn;
 import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRElementWithSource;
+import utilities.Trace;
 
 import java.util.ArrayList;
 

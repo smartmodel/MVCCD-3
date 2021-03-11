@@ -7,7 +7,7 @@ import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public class MDRModel extends MDRElement  {
+public abstract class MDRModel extends MDRElement  {
 
     private  static final long serialVersionUID = 1000;
 
@@ -58,9 +58,17 @@ public class MDRModel extends MDRElement  {
         this.namingFormatFuture = namingFormatFuture;
     }
 
+    /*
     public ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration(){
         return MDRModelService.getIMDRElementsWithIteration(this);
     }
+
+     */
+
+
+
+    public abstract ArrayList<IMDRElementWithIteration> getIMDRElementsWithIterationInScope();
+
 
     public ArrayList<MDRElement> getMDRElementsTransformedBySource(MDElement mdElementSource){
         return MDRModelService.getMDRElementsTransformedBySource(this, mdElementSource);

@@ -1,13 +1,14 @@
 package mpdr;
 
 import md.MDElement;
+import mdr.MDRFK;
 import mdr.MDRPK;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import project.ProjectElement;
 
-public abstract class MPDRFK extends MDRPK implements IMPDRElement, IMPDRElementWithSource {
+public abstract class MPDRFK extends MDRFK implements IMPDRElement, IMPDRElementWithSource {
 
     private  static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;
@@ -25,6 +26,11 @@ public abstract class MPDRFK extends MDRPK implements IMPDRElement, IMPDRElement
     @Override
     public IMLDRElement getMldrElementSource() {
         return mldrElementSource;
+    }
+
+    @Override
+    public void setMldrElementSource(IMLDRElement imldrElementSource) {
+        this.mldrElementSource = mldrElementSource;
     }
 
     @Override

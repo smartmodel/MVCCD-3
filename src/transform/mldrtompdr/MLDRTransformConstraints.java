@@ -1,13 +1,17 @@
 package transform.mldrtompdr;
 
+import console.Console;
 import datatypes.MPDRDatatype;
 import main.MVCCDManager;
 import mdr.MDRConstraint;
 import mldr.MLDRColumn;
+import mldr.MLDRFK;
+import mldr.MLDRPK;
 import mldr.MLDRTable;
-import mpdr.MPDRColumn;
-import mpdr.MPDRModel;
-import mpdr.MPDRTable;
+import mldr.interfaces.IMLDRElement;
+import mpdr.*;
+import mpdr.interfaces.IMPDRElement;
+import utilities.Trace;
 
 public class MLDRTransformConstraints {
 
@@ -27,6 +31,28 @@ public class MLDRTransformConstraints {
 
 
     void transformConstraints() {
+        //TODO-1 A reprendre et spécialiser par genre de contrainte
+        /*
+        for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
+            if(mldrConstraint instanceof MLDRPK) {
+                MDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
+                Trace.println("MPDRPK   " + mpdrConstraint.getName());
+            }
+        }
+        for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
+            if(mldrConstraint instanceof MLDRFK) {
+                MDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
+            }
+        }
+        for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
+            boolean c1 = !(mldrConstraint instanceof MLDRPK);
+            boolean c2 = !(mldrConstraint instanceof MLDRFK);
+            if(c1 && c2) {
+                MDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
+            }
+        }
+
+         */
         for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
             MDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
         }
@@ -37,99 +63,52 @@ public class MLDRTransformConstraints {
     private MDRConstraint transformConstraint(MDRConstraint mldrConstraint) {
 
         MDRConstraint mpdrConstraint = mpdrTable.getMPDRConstraintByMLDRConstraintSource(mldrConstraint);
-        if (mpdrConstraint == null){
-            mpdrConstraint = mpdrTable.createConstraint(mldrConstraint);
-            MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
+        if ( mpdrConstraint == null){
+            if (mldrConstraint instanceof MLDRPK){
+                MLDRPK mldrPK = (MLDRPK) mldrConstraint;
+                mpdrConstraint = mpdrTable.createPK(mldrPK);
+                MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
+            }
+            if (mldrConstraint instanceof MLDRFK){
+                MLDRFK mldrFK = (MLDRFK) mldrConstraint;
+                mpdrConstraint = mpdrTable.createFK(mldrFK);
+                MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
+            }
         }
-        //modifyColumn(mldrColumn, mpdrColumn );
-        mpdrConstraint.setIteration(mldrTransform.getIteration());
+
+        // Le temps de développement
+        if (mpdrConstraint != null) {
+            modifyConstraint(mldrConstraint, mpdrConstraint );
+            // Transformation des paramètres
+            MLDRTransformParameters mldrTransformParameters = new MLDRTransformParameters(
+                    mldrTransform, mldrConstraint, mpdrModel, mpdrConstraint);
+            mldrTransformParameters.transformParameters();
+
+            mpdrConstraint.setIteration(mldrTransform.getIteration());
+        } else {
+            String message = "La contrainte " + mldrConstraint.getName() +" de type " +
+                    mldrConstraint.getClass().getName() + " n'est pas encore implantée pour la base de données " +
+                    mpdrModel.getDb().getText();
+            Console.printMessage(message);
+        }
+
+
+
         return mpdrConstraint;
     }
 
-    private void modifyColumn(MLDRColumn mldrColumn, MPDRColumn mpdrColumn ) {
-        MLDRTransformService.modifyNames(mldrColumn, mpdrColumn);
-        MLDRTransformService.modifyName(mpdrModel, mpdrColumn);
+    private void modifyConstraint(MDRConstraint mldrConstraint, MDRConstraint mpdrConstraint ) {
+        MLDRTransformService.modifyNames((IMLDRElement) mldrConstraint, (IMPDRElement) mpdrConstraint);
+        MLDRTransformService.modifyName(mpdrModel, mpdrConstraint);
 
-        // Datatype
-        MPDRDatatype mpdrDatatype = MLDRTransformToMPDRDatatype.fromMLDRDatatype(mldrColumn);
-        String mpdrDatatypeLienProg = mpdrDatatype.getLienProg();
-        if (mpdrColumn.getDatatypeLienProg() != null) {
-            if (!(mpdrColumn.getDatatypeLienProg().equals(mpdrDatatypeLienProg))) {
-                mpdrColumn.setDatatypeLienProg(mpdrDatatypeLienProg);
+        // Nature
+        if (mpdrConstraint instanceof MPDRFK) {
+            MLDRFK mldrFK = (MLDRFK) mldrConstraint;
+            MPDRFK mpdrFK = (MPDRFK) mpdrConstraint;
+            if (mpdrFK.getNature() != mldrFK.getNature()) {
+                mpdrFK.setNature(mldrFK.getNature());
             }
-        } else {
-            mpdrColumn.setDatatypeLienProg(mpdrDatatypeLienProg);
-        }
-
-        // Reprise des valeurs du modèle logique
-        // Datatype contrainte
-        if (mpdrColumn.getDatatypeConstraintLienProg() != null) {
-            if (!(mpdrColumn.getDatatypeConstraintLienProg().equals(mldrColumn.getDatatypeLienProg()))) {
-                mpdrColumn.setDatatypeConstraintLienProg(mldrColumn.getDatatypeConstraintLienProg());
-            }
-        } else {
-            mpdrColumn.setDatatypeConstraintLienProg(mldrColumn.getDatatypeConstraintLienProg());
-        }
-        
-        // Datatype size
-        pushSize(mpdrColumn, mldrColumn.getSize().intValue());
-
-
-        // Datatype scale
-        if (mpdrColumn.getScale() != null) {
-            if (mpdrColumn.getScale().intValue() != mldrColumn.getScale().intValue()) {
-                mpdrColumn.setScale(mldrColumn.getScale());
-            }
-        } else {
-            mpdrColumn.setScale(mldrColumn.getScale());
-        }
-
-
-        // Mandatory
-        if (mpdrColumn.isMandatory() != mldrColumn.isMandatory()){
-            mpdrColumn.setMandatory(mldrColumn.isMandatory());
-        }
-
-        // Frozen
-        if (mpdrColumn.isFrozen() != mldrColumn.isFrozen()){
-            mpdrColumn.setFrozen(mldrColumn.isFrozen());
-        }
-
-        // Uppercase
-        if (mpdrColumn.isUppercase() != mldrColumn.isUppercase()){
-            mpdrColumn.setUppercase(mldrColumn.isUppercase());
-        }
-
-        // Init Value
-        String mpdrInitValue= mldrColumn.getInitValue();
-        if (mpdrColumn.getInitValue() != null) {
-            if (! mpdrColumn.getInitValue().equals(mldrColumn.getInitValue())) {
-                mpdrColumn.setInitValue(mpdrInitValue);
-            }
-        } else {
-            mpdrColumn.setInitValue(mpdrInitValue);
-        }
-
-        // Derived Value
-        String mpdrDefaultValue= mldrColumn.getInitValue();
-        if (mpdrColumn.getDerivedValue() != null) {
-            if (! mpdrColumn.getDerivedValue().equals(mldrColumn.getDerivedValue())) {
-                mpdrColumn.setDerivedValue(mpdrDefaultValue);
-            }
-        } else {
-            mpdrColumn.setDerivedValue(mpdrDefaultValue);
         }
     }
-
-    private void pushSize(MPDRColumn mpdrColumn, int value) {
-        if (mpdrColumn.getSize() != null) {
-            if (mpdrColumn.getSize().intValue() != value) {
-                mpdrColumn.setSize(value);
-            }
-        } else {
-            mpdrColumn.setSize(value);
-        }
-    }
-
 
 }
