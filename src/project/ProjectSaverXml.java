@@ -127,9 +127,10 @@ public class ProjectSaverXml {
         //TODO-STB: voir avec PAS et ensuite supprimer
         //Quelle différence entre les 2?
         //À quel moment chacun des 2 est alimenté?
+        //même logique que dans ProjectElement.initIdAndTransitory(). À utiliser plutôt le 2e.
         /*
-        MVCCDManager.instance().getProject().getPreferences().getMCD_JOURNALIZATION();
-        PreferencesManager.instance().getProjectPref().getMCD_JOURNALIZATION();
+        MVCCDManager.instance().getProject().getPreferences().getMCD_JOURNALIZATION(); //lorsque le projet existe mais n'est pas encore créé dans le référentiel. À utiliser seulement en cas de problème avec l'autre.
+        PreferencesManager.instance().getProjectPref().getMCD_JOURNALIZATION(); //lorsque le projet est existant dans le référentiel. Celui-ci à utiliser dans la persistance XML.
         */
 
 

@@ -15,7 +15,7 @@ public abstract class ProjectElement extends MVCCDElement {
 
     public ProjectElement(ProjectElement parent) {
         super(parent); // Ceci appelle aussi de-facto la méthode init() de MVCCDElement.
-        init(parent);
+        initIdAndTransitory(parent);
     }
 
     /**
@@ -25,13 +25,13 @@ public abstract class ProjectElement extends MVCCDElement {
      * @param id
      */
     public ProjectElement(ProjectElement parent, int id){
-        this(parent);
-        this.id = id; //TODO-STB: voir avec PAS si ok
+        super(parent);
+        this.id = id;
     }
 
     public ProjectElement(ProjectElement parent, String name) {
         super(parent, name); // Ceci appelle aussi de-facto la méthode init() de MVCCDElement.
-        init(parent);
+        initIdAndTransitory(parent);
     }
 
     /**
@@ -53,7 +53,7 @@ public abstract class ProjectElement extends MVCCDElement {
      * - order, valeur d'ordonnancement
      * </pre>
      */
-    private void init(ProjectElement parent) {
+    private void initIdAndTransitory(ProjectElement parent) {
         if (this instanceof Project) {
             // Le projet lui-même
             this.id = 0;

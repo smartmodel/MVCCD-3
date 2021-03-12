@@ -16,7 +16,7 @@ public class PreferencesManager {
     private static PreferencesManager instance;
 
     private Preferences defaultPref;
-    private Preferences applicationPref;
+    private Preferences applicationPref; //maintient les préférences d'application, séparément du projet. Nécessaire lorsque le projet n'est pas encore existant.
     private Preferences profilePref; //ensemble de préférences sauvegardés, pouvant être chargées en tant que préférences de projet.
     private Preferences projectPref;
 
