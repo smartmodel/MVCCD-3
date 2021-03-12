@@ -1,6 +1,8 @@
 package mpdr;
 
 import datatypes.MPDRDatatype;
+import main.MVCCDManager;
+import main.window.repository.WinRepositoryTree;
 import mdr.MDRConstraint;
 import mdr.MDRElement;
 import mdr.MDRModel;
@@ -59,6 +61,16 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     public IMPDRElement getIMPDRElementByMLDRElementSource(IMLDRElement imldrElement){
         return (IMPDRElement) MPDRModelService.getIMPDRElementByMLDRElementSource(this, imldrElement);
     }
+
+
+
+    //TODO-1 A suppimer si la solution du listner est possible
+    // Voir MLDR (même problème)
+
+    public void refreshTreeMPDR(){
+        MVCCDManager.instance().getWinRepositoryContent().reload(this.getNode());
+    }
+
 
 
 }

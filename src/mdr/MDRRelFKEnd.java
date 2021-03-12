@@ -29,4 +29,8 @@ public abstract class MDRRelFKEnd extends MDRRelEnd{
     public void setMDRTable(MDRTable mdrTable) {
         super.setmElement(mdrTable);
     }
+
+    public String getName() {
+        return getMDRRelationFK().getName();
+    }
 }

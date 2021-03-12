@@ -44,11 +44,12 @@ public class MCDTransformToFK {
         MLDRTable mldrTableParent = mldrModel.getMLDRTableByEntitySource((MCDEntity)mcdRelEndParent.getmElement());
         MLDRRelationFK mldrRelationFK = mldrModel.getMLDRRelationFKByMCDRelationSourceAndSameTables(mcdRelation,mldrTable, mldrTableParent);
         if (mldrRelationFK == null){
-            mldrRelationFK = mldrModel.createRelationFK(mcdRelation, mldrTable, mldrTableParent);
+            mldrRelationFK = mldrModel.createRelationFK(mcdRelation,  mldrTableParent, mldrTable);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK);
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK.getEndParent());
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK.getEndChild());
         }
-        modifyRelationFK(mldrModel, mcdRelEndParent, mldrTable, mldrFK, fkNature);
-        mldrRelationFK.setIteration(mcdTransform.getIteration());
+
 
         // Double lien entre contrainte FK et sa représentation sous forme de relation
         if (mldrFK.getMDRRelationFK() != mldrRelationFK){
@@ -57,6 +58,9 @@ public class MCDTransformToFK {
         if (mldrRelationFK.getMDRFK() != mldrFK){
             mldrRelationFK.setMDRFK(mldrFK);
         }
+
+        modifyRelationFK(mldrModel, mcdRelEndParent, mldrTable, mldrFK, fkNature);
+        mldrRelationFK.setIteration(mcdTransform.getIteration());
 
         return mldrFK;
     }
@@ -71,7 +75,8 @@ public class MCDTransformToFK {
         // Nom
         MDRElementNames nameFK = buildNameFK(mldrTable, mldrFK, mcdRelEndParent, mldrTableParent);
         MCDTransformService.names(mldrFK, nameFK, mldrModel);
-        //TODO-1 Faire les changements de valeurs
+
+        //TODO-1 Faire les test de changements de valeurs
         // Nature
         mldrFK.setNature(fkNature);
         // Lien avec la PK

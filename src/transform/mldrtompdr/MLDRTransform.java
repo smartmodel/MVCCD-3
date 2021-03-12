@@ -50,6 +50,10 @@ public class MLDRTransform extends MDTransform {
             referencingBetweenElements();
             //Suppression des MPDRElement absents de l'itération
             deleteMDRElementNotInIteration();
+
+            //Rafraichir l'arbre
+            mpdrModel.refreshTreeMPDR();
+
         } catch(TransformMCDException e){
             resultat.add(e.getMessage());
             undoTransform(mpdrModelClone);

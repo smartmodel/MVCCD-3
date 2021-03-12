@@ -1,6 +1,8 @@
 package mldr;
 
 import main.MVCCDElementFactory;
+import main.MVCCDManager;
+import main.window.repository.WinRepositoryTree;
 import mcd.MCDEntity;
 import mcd.MCDRelation;
 import mdr.MDRContTables;
@@ -12,7 +14,9 @@ import mldr.interfaces.IMLDRRelation;
 import mldr.services.MLDRModelService;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransform;
+import utilities.Trace;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;
 
 public abstract class MLDRModel extends MDRModel implements IMLDRElement {
@@ -92,4 +96,40 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
         }
         return resultat;
     }
+
+    //TODO-1 Je vourais raffraichir les noeud modifiés
+    // Mettre un listner de l'arbre sur les objets IMLDRElement ?
+    /*
+    public ArrayList<DefaultMutableTreeNode> getTreeMLDR(){
+        DefaultMutableTreeNode rootMLDR = this.getNode();
+        return getTreeMLDRInternal(rootMLDR);
+    }
+
+    protected ArrayList<DefaultMutableTreeNode> getTreeMLDRInternal(DefaultMutableTreeNode nodeMLDR){
+        ArrayList<DefaultMutableTreeNode> resultat = new ArrayList<DefaultMutableTreeNode>();
+        for (int i = 0 ; i < nodeMLDR.getChildCount() ; i++){
+            DefaultMutableTreeNode nodeChild = (DefaultMutableTreeNode) nodeMLDR.getChildAt(i);
+           if (nodeChild.getUserObject() instanceof IMLDRElement){
+               resultat.add(nodeChild);
+               resultat.addAll(getTreeMLDRInternal(nodeChild));
+           }
+        }
+        return resultat;
+    }
+
+    public void refreshTreeMLDR(){
+        for (DefaultMutableTreeNode node : getTreeMLDR()){
+            Trace.println(node.getUserObject().toString());
+        }
+        WinRepositoryTree tree = MVCCDManager.instance().getWinRepositoryContent().getTree();
+        tree.getTreeModel().reload(this.getNode());
+    }
+
+     */
+
+    //TODO-1 A suppimer si la solution du listner est possible
+    public void refreshTreeMLDR(){
+        MVCCDManager.instance().getWinRepositoryContent().reload(this.getNode());
+    }
+
 }

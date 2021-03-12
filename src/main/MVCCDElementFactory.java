@@ -24,6 +24,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
+import utilities.Trace;
 
 public class MVCCDElementFactory {
 
@@ -263,7 +264,7 @@ public class MVCCDElementFactory {
         MLDRTable mldrTable = new MLDRTable(mdrContTables, entitySource);
         MLDRContColumns mldrContColumns = new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         MLDRContConstraints mldrContConstraints = new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
-        //MLDRContRelEnds mldrContRelEnds = new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
+        MLDRContRelEnds mldrContRelEnds = new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
 
         return mldrTable;
     }
@@ -306,20 +307,14 @@ public class MVCCDElementFactory {
                                                 MLDRTable mldrTableParent,
                                                 MLDRTable mldrTableChild) {
 
-
         MLDRRelationFK mldrRelationFK = new MLDRRelationFK(mldrContRelations, mcdRelation) ;
 
-        /*
+
         MLDRContRelEnds mldrContEndRelsParent = (MLDRContRelEnds) mldrTableParent.getMDRContRelEnds();
         MLDRRelFKEnd mldrRelFKEndParent = new MLDRRelFKEnd(mldrContEndRelsParent) ;
 
         MLDRContRelEnds mldrContEndRelsChild = (MLDRContRelEnds) mldrTableChild.getMDRContRelEnds();
-        MLDRRelFKEnd mldrRelFKEndChild = new MLDRRelFKEnd(mldrContEndRelsParent) ;
-
-         */
-
-        MLDRRelFKEnd mldrRelFKEndParent = new MLDRRelFKEnd(mldrTableParent) ;
-        MLDRRelFKEnd mldrRelFKEndChild = new MLDRRelFKEnd(mldrTableChild) ;
+        MLDRRelFKEnd mldrRelFKEndChild = new MLDRRelFKEnd(mldrContEndRelsChild) ;
 
         mldrRelationFK.setEndParent(mldrRelFKEndParent);
         mldrRelationFK.setEndChild(mldrRelFKEndChild);
