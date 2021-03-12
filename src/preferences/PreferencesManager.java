@@ -126,7 +126,6 @@ public class PreferencesManager {
         Analyser également la possibilité de boucler de manière générique les préférences, de sorte à éviter de devoir
         ajouter une ligne ici à chaque nouvelle préférence créée.
          */
-        //
 
         // Général
         //to.setPROJET_VERSION(from.getPROJET_VERSION());

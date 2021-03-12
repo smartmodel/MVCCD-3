@@ -20,6 +20,17 @@ public abstract class ProjectElement extends MVCCDElement {
         init(parent);
     }
 
+    /**
+     * Instantiation d'un nouvel élément de projet avec connaissance à l'avance de l'id de l'élément.
+     * Cette manière de procéder est utilisé lors du chargement d'un projet persisté.
+     * @param parent
+     * @param id
+     */
+    public ProjectElement(ProjectElement parent, int id){
+        this(parent);
+        this.id = id; //TODO-STB: voir avec PAS si ok
+    }
+
     public ProjectElement(ProjectElement parent, String name) {
         super(parent, name); // Ceci appelle aussi de-facto la méthode init() de MVCCDElement.
         init(parent);
@@ -67,6 +78,21 @@ public abstract class ProjectElement extends MVCCDElement {
         return id;
     }
 
+    /**
+     * Retourne le premier élément enfant qui a l'id donné en paramètre.
+     * @param id Identifiant de l'enfant à rechercher
+     * @return L'élément retourné, s'il a un id, est forcément un ProjectElement. Retourne null si aucun élément n'est trouvé.
+     */
+    public ProjectElement getChildById(int id){
+        for(MVCCDElement mvccdElement : this.getChilds()){
+            if(mvccdElement instanceof ProjectElement){
+                if(((ProjectElement) mvccdElement).getIdProjectElement() == id){
+                    return (ProjectElement) mvccdElement;
+                }
+            }
+        }
+        return null;
+    }
 
     //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
     //TransitoryProjectElement au lieu de Transitory

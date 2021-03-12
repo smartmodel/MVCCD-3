@@ -13,6 +13,10 @@ public abstract class MDElement extends MElement {
         super(parent);
     }
 
+    public MDElement(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MDElement(ProjectElement parent, String name) {
         super(parent, name);
     }

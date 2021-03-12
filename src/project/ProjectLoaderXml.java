@@ -1,10 +1,12 @@
 package project;
 
+import console.Console;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDFactory;
 import mcd.*;
 import messages.MessagesBuilder;
+import mldr.MLDRModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -64,21 +66,24 @@ public class ProjectLoaderXml {
             // Création du conteneur MCD
             MCDContModels mcdCont = MVCCDElementFactory.instance().createMCDModels(project, Preferences.REPOSITORY_MCD_MODELS_NAME);
             // Récupération de la balise MCD du fichier
-            Element mcd = (Element) racine.getElementsByTagName("MCD").item(0);
-            // Chargement des modèles ou des 3 conteurs principaux
-            ArrayList<Element> elementsModeles = loadModels(mcdCont, mcd);
+            Element mcdTag = (Element) racine.getElementsByTagName("MCD").item(0);
+            // Chargement des modèles ou des 3 conteneurs principaux
+            ArrayList<Element> elementsModeles = loadModels(mcdCont, mcdTag);
             // Chargement des packages
-            loadPackages(mcdCont, mcd);
+            loadPackages(mcdCont, mcdTag);
             // Chargement des entités
-            loadEntities(mcdCont, mcd, elementsModeles);
+            loadEntities(mcdCont, mcdTag, elementsModeles);
             // Chargement des attributs
             loadAttributs();
             // Chargements des contraintes
             loadContraints();
             // Chargements des rélations ( associations et généralisations)
-            loadRelations(mcdCont, mcd, elementsModeles);
+            loadRelations(mcdCont, mcdTag, elementsModeles);
             // Chargements des liens d'entités associatives
-            loadLinks(mcdCont, mcd, elementsModeles);
+            loadLinks(mcdCont, mcdTag, elementsModeles);
+
+            //Chargement du (ou des) MLDR
+            loadMLDR(mcdCont, mcdTag); //TODO-STB: CONTINUER ICI
 
             // Validation du fichier
             validator.validate(new DOMSource(document));
@@ -110,8 +115,13 @@ public class ProjectLoaderXml {
 
     public void addPreferences(Element racine, Preferences preferences) {
 
-        //Récupération et instaciation des préférences de projet
+        //Récupération et instantiation des préférences de projet
 
+        //Préférences général
+        Element generalRelationNotation = (Element) racine.getElementsByTagName("generalRelationNotation").item(0);
+        preferences.setGENERAL_RELATION_NOTATION(generalRelationNotation.getTextContent());
+
+        //Préférences MCD
         Element mcdJournalization = (Element) racine.getElementsByTagName("mcdJournalization").item(0);
         preferences.setMCD_JOURNALIZATION(Boolean.valueOf(mcdJournalization.getTextContent()));
 
@@ -147,9 +157,6 @@ public class ProjectLoaderXml {
 
         Element mcdModeNamingAttributeShortName = (Element) racine.getElementsByTagName("mcdModeNamingAttributeShortName").item(0);
         preferences.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(mcdModeNamingAttributeShortName.getTextContent());
-
-        Element repositoryMcdModelsMany = (Element) racine.getElementsByTagName("repositoryMcdModelsMany").item(0);
-        preferences.setREPOSITORY_MCD_MODELS_MANY(Boolean.valueOf(repositoryMcdModelsMany.getTextContent()));
     }
 
     private ArrayList<Element> loadModels(MCDContModels mcdCont, Element mcd) {
@@ -357,7 +364,7 @@ public class ProjectLoaderXml {
     }
 
     private void addEntities(MCDContEntities mcdContEntities, Element element) {
-        // Récuperation de la balise entities
+        // Récupération de la balise entities
         Element entities = (Element) element.getElementsByTagName("entities").item(0);
         // Parcours des entités
         NodeList entitiesChilds = entities.getChildNodes();
@@ -410,7 +417,7 @@ public class ProjectLoaderXml {
                     // Récupération des conteneurs d'attributs
                     mcdContAttributes = (MCDContAttributes) contEntities;
                     for (Element child : elementsEntities) {
-                        // Ajout des attributs si l'élément entité cré dans l'application est égal à celui du fichier
+                        // Ajout des attributs si l'élément entité créée dans l'application est égale à celui du fichier
                         if (child.getAttribute("name").equals(mvccdElement.getName())) {
                             addAttributs(mcdContAttributes, child);
                         }
@@ -428,61 +435,59 @@ public class ProjectLoaderXml {
         for (int i = 0; i < attributsChilds.getLength(); i++) {
             Node attributsChild = attributsChilds.item(i);
             if (attributsChild instanceof Element) {
-                // Création de l'element attribut
-                Element attribut = (Element) attributsChild;
-                // création de l'attribut dans l'application
-                MCDAttribute mcdAttribute = MVCCDElementFactory.instance().createMCDAttribute(mcdContAttributes);
-                mcdAttribute.setName(attribut.getAttribute("name"));
-                // Ajout des propriétés de l'attribut
-                addPropertiesAttributs(mcdAttribute, attribut);
+                Element attributeTag = (Element) attributsChild; // Récupération de la balise <attribut>
+                int attributeId = Integer.parseInt(attributeTag.getAttribute("id")); // Récupération de l'id de l'attribut
+                MCDAttribute mcdAttribute = MVCCDElementFactory.instance().createMCDAttribute(mcdContAttributes, attributeId); // Création de l'attribut dans l'application
+                mcdAttribute.setName(attributeTag.getAttribute("name")); //Attribuer le "name" de l'attribut
+                addPropertiesAttributs(mcdAttribute, attributeTag); // Ajout des propriétés de l'attribut (des balises enfants)
             }
         }
     }
 
-    private void addPropertiesAttributs(MCDAttribute mcdAttribute, Element attribut) {
+    private void addPropertiesAttributs(MCDAttribute mcdAttribute, Element attributeTag) {
 
         // Récupération des propriétés d'attribut
-        Element aid = (Element) attribut.getElementsByTagName("aid").item(0);
+        Element aid = (Element) attributeTag.getElementsByTagName("aid").item(0);
         mcdAttribute.setAid(Boolean.valueOf(aid.getTextContent()));
 
-        Element aidDep = (Element) attribut.getElementsByTagName("aidDep").item(0);
+        Element aidDep = (Element) attributeTag.getElementsByTagName("aidDep").item(0);
         mcdAttribute.setAidDep(Boolean.valueOf(aidDep.getTextContent()));
 
-        Element mandatory = (Element) attribut.getElementsByTagName("mandatory").item(0);
+        Element mandatory = (Element) attributeTag.getElementsByTagName("mandatory").item(0);
         mcdAttribute.setMandatory(Boolean.valueOf(mandatory.getTextContent()));
 
-        Element list = (Element) attribut.getElementsByTagName("list").item(0);
+        Element list = (Element) attributeTag.getElementsByTagName("list").item(0);
         mcdAttribute.setList(Boolean.valueOf(list.getTextContent()));
 
-        Element frozen = (Element) attribut.getElementsByTagName("frozen").item(0);
+        Element frozen = (Element) attributeTag.getElementsByTagName("frozen").item(0);
         mcdAttribute.setFrozen(Boolean.valueOf(frozen.getTextContent()));
 
-        Element ordered = (Element) attribut.getElementsByTagName("ordered").item(0);
+        Element ordered = (Element) attributeTag.getElementsByTagName("ordered").item(0);
         mcdAttribute.setOrdered(Boolean.valueOf(ordered.getTextContent()));
 
-        Element upperCase = (Element) attribut.getElementsByTagName("upperCase").item(0);
+        Element upperCase = (Element) attributeTag.getElementsByTagName("upperCase").item(0);
         mcdAttribute.setUppercase(Boolean.valueOf(upperCase.getTextContent()));
 
-        Element dataTypeLienProg = (Element) attribut.getElementsByTagName("dataTypeLienProg").item(0);
+        Element dataTypeLienProg = (Element) attributeTag.getElementsByTagName("dataTypeLienProg").item(0);
         mcdAttribute.setDatatypeLienProg(dataTypeLienProg.getTextContent());
 
         // Test pour éviter le nullPointException
-        Element scale = (Element) attribut.getElementsByTagName("scale").item(0);
+        Element scale = (Element) attributeTag.getElementsByTagName("scale").item(0);
         if (!scale.getTextContent().equals("")) {
             mcdAttribute.setScale(Integer.valueOf(scale.getTextContent()));
         }
-        Element size = (Element) attribut.getElementsByTagName("size").item(0);
-        if (!scale.getTextContent().equals("")) {
+        Element size = (Element) attributeTag.getElementsByTagName("size").item(0);
+        if (!size.getTextContent().equals("")) {
             mcdAttribute.setSize(Integer.valueOf(size.getTextContent()));
         }
 
-        Element initValue = (Element) attribut.getElementsByTagName("initValue").item(0);
+        Element initValue = (Element) attributeTag.getElementsByTagName("initValue").item(0);
         mcdAttribute.setInitValue(initValue.getTextContent());
 
-        Element derivedValue = (Element) attribut.getElementsByTagName("derivedValue").item(0);
+        Element derivedValue = (Element) attributeTag.getElementsByTagName("derivedValue").item(0);
         mcdAttribute.setDerivedValue(derivedValue.getTextContent());
 
-        Element domain = (Element) attribut.getElementsByTagName("domain").item(0);
+        Element domain = (Element) attributeTag.getElementsByTagName("domain").item(0);
         mcdAttribute.setDomain(domain.getTextContent());
 
     }
@@ -508,49 +513,53 @@ public class ProjectLoaderXml {
         }
     }
 
-    private void addContraints(MCDContConstraints mcdContConstraints, Element entite) {
+    private void addContraints(MCDContConstraints mcdContConstraints, Element entityTag) {
         // Récupération de la balise contraintes
-        Element constraints = (Element) entite.getElementsByTagName("contraintes").item(0);
+        Element constraintsTag = (Element) entityTag.getElementsByTagName("contraintes").item(0);
         // Parcours des éléments enfant de la balise contraintes
-        NodeList constraintsChilds = constraints.getChildNodes();
+        NodeList constraintsChilds = constraintsTag.getChildNodes();
         for (int i = 0; i < constraintsChilds.getLength(); i++) {
-            Node constraintsChild = constraintsChilds.item(i);
-            if (constraintsChild instanceof Element) {
+            Node constraintChild = constraintsChilds.item(i);
+            if (constraintChild instanceof Element) {
                 // Création de l'element attribut
-                Element constraint = (Element) constraintsChild;
-                // Récupération du shortName de l'attribut
-                Element shortName = (Element) constraint.getElementsByTagName("shortName").item(0);
-                // Ajout du type de contrainte
-                addTypeConstraintes(constraint, shortName, mcdContConstraints);
+                Element constraintTag = (Element) constraintChild;
+                // Ajout de la contrainte NID ou Unique en fonction de son type
+                addTypeConstraintes(constraintTag, mcdContConstraints);
             }
         }
     }
 
-    private void addTypeConstraintes(Element constraint, Element shortName, MCDContConstraints mcdContConstraints) {
+    private void addTypeConstraintes(Element constraintTag, MCDContConstraints mcdContConstraints) {
+        Element typeConstraint = (Element) constraintTag.getElementsByTagName("type").item(0); //Récupération du type
+        Element shortNameTag = (Element) constraintTag.getElementsByTagName("shortName").item(0); // Récupération du shortName de l'attribut
+        MCDConstraint mcdConstraint = null;
+
         // Contraintes de type NID
-        Element typeConstraint = (Element) constraint.getElementsByTagName("type").item(0);
         if (typeConstraint.getTextContent().equals("NID")) {
-            // Création de la contrainte
-            MCDNID mcdnid = MVCCDElementFactory.instance().createMCDNID(mcdContConstraints);
-            mcdnid.setName(constraint.getAttribute("name"));
-
-            mcdnid.setShortName(shortName.getTextContent());
-
-            Element lienProg = (Element) constraint.getElementsByTagName("lienProg").item(0);
-            mcdnid.setLienProg(Boolean.valueOf(lienProg.getTextContent()));
-
+            mcdConstraint = MVCCDElementFactory.instance().createMCDNID(mcdContConstraints); // Création de la contrainte
+            Element lienProg = (Element) constraintTag.getElementsByTagName("lienProg").item(0); //Attribuer le "lienProg" de la contrainte
+            ((MCDNID) mcdConstraint).setLienProg(Boolean.valueOf(lienProg.getTextContent()));           //idem suite
         }
         // Contraintes de type Unique
-        if (typeConstraint.getTextContent().equals("Unique")) {
-            // Création de la contrainte
-            MCDUnique mcdUnique = MVCCDElementFactory.instance().createMCDUnique(mcdContConstraints);
-            mcdUnique.setName(constraint.getAttribute("name"));
+        else if (typeConstraint.getTextContent().equals("Unique")) {
+            mcdConstraint = MVCCDElementFactory.instance().createMCDUnique(mcdContConstraints); // Création de la contrainte
+            Element absolute = (Element) constraintTag.getElementsByTagName("absolute").item(0); //Attribuer le "absolute" de la contrainte
+            ((MCDUnique) mcdConstraint).setAbsolute(Boolean.valueOf(absolute.getTextContent()));        //idem suite
+        }
 
-            mcdUnique.setShortName(shortName.getTextContent());
+        //Attribuer les éléments communs pour NID et Unique
+        mcdConstraint.setName(constraintTag.getAttribute("name")); // Attribuer le "name" de la contrainte
+        mcdConstraint.setShortName(shortNameTag.getTextContent()); //Attribuer le "shortname" de la contrainte
 
-            Element absolute = (Element) constraint.getElementsByTagName("absolute").item(0);
-            mcdUnique.setAbsolute(Boolean.valueOf(absolute.getTextContent()));
-
+        //Attribuer les parameters (c'est-à-dire les attributs liés à la contrainte)
+        //<parameter name="code" target_ClassShortNameUI="Attribute" target_id="36" target_order="10"/>
+        NodeList parametersNodes = constraintTag.getElementsByTagName("parameter");
+        for (int i = 0; i < parametersNodes.getLength(); i++) { //Boucle toutes les balises <parameter> de la contrainte
+            Element parameterTag = (Element) parametersNodes.item(i); //Récupération de la balise <parameter>
+            int ParameterTargetId = Integer.parseInt(parameterTag.getAttribute("target_id")); //Récupération du target_id de <parameter>
+            MCDParameter mcdParameter = MVCCDElementFactory.instance().createMCDParameter(mcdConstraint); //Création du parameter dans l'application
+            MCDAttribute mcdTargetAttribute = ((MCDEntity) mcdContConstraints.getMCDParent()).getMCDAttributeById(ParameterTargetId); //Recherche de l'attribut de l'entité qui porte cet id dans l'application
+            mcdParameter.setTarget(mcdTargetAttribute); //Affecter l'attribut de l'entité comme paramètre de la contrainte
         }
     }
 
@@ -850,6 +859,15 @@ public class ProjectLoaderXml {
             }
         }
         return mcdAssociation;
+    }
+
+
+
+    // *** Méthode de chargement du MLD ***
+
+    private void loadMLDR(MCDContModels mcdContModels, Element mcdTag){
+
+        //TODO-STB: CONTINUER ICI
     }
 
 }

@@ -14,7 +14,7 @@ public class Preferences extends MVCCDElement {
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
-    public static String APPLICATION_VERSION = "3.0.16"; //TODO-STB: voir avec PAS si la version ne devrait pas aussi être sauvegardée
+    public static String APPLICATION_VERSION = "3.0.16"; //TODO-STB+PAS: sauvegarder également la version dans la sauvegarde du projet
     public static boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = true; //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref //TODO-STB: mettre à false par défaut, et éventuellement supprimer la propriété lorsque la persistance XML est ok.
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
@@ -223,6 +223,7 @@ public class Preferences extends MVCCDElement {
     public static String MCDDATATYPE_BOOLEAN_NAME = "boolean";
     public static String MCDDATATYPE_BOOLEAN_LIENPROG = "boolean";
 
+    //ATTENTION, en cas de changement de valeurs de tailles possibles, il est nécessaire d'adapter les contrôles en conséquences dans SchemaProject.xsd, qui vérifie les exports/imports de projet sauvegardé.
     public static String MCDDATATYPE_TEXT_NAME = "text";
     public static String MCDDATATYPE_TEXT_LIENPROG = "text";
     public static Integer MCDDATATYPE_TEXT_SIZEMIN = 1;
@@ -639,7 +640,6 @@ public class Preferences extends MVCCDElement {
     private String MCD_AID_DEP_COLUMN_NAME = null;
     private Boolean MCD_AID_WITH_DEP = true;
     private Integer MCD_AID_SIZEDEFAULT = MCDDOMAIN_AID_SIZEDEFAULT;
-
     private String MCD_TREE_NAMING_ASSOCIATION = null;
     private String MCD_MODE_NAMING_LONG_NAME = null;
     private String MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = null;

@@ -53,7 +53,7 @@
 	<xs:element name="nameProject">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+				<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*"/>
 				<xs:maxLength value="50"/>
 			</xs:restriction>
 		</xs:simpleType>
@@ -65,6 +65,7 @@
 	<xs:element name="preferences">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element ref="generalRelationNotation"/>
 				<xs:element ref="mcdJournalization"/>
 				<xs:element ref="mcdJournalizationException"/>
 				<xs:element ref="mcdAudit"/>
@@ -77,9 +78,17 @@
 				<xs:element ref="mcdTreeNamingAssociation"/>
 				<xs:element ref="mcdModeNamingLongName"/>
 				<xs:element ref="mcdModeNamingAttributeShortName"/>
-				<xs:element ref="repositoryMcdModelsMany"/>
 			</xs:sequence>
 		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="generalRelationNotation">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="uml"/>
+				<xs:enumeration value="stereotypes"/>
+			</xs:restriction>
+		</xs:simpleType>
 	</xs:element>
 
 	<xs:element name="mcdJournalization" type="xs:boolean"/>
@@ -107,7 +116,7 @@
 	<xs:element name="mcdAidIndColumnName">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+				<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*"/>
 				<xs:maxLength value="20"/>
 			</xs:restriction>
 		</xs:simpleType>
@@ -115,7 +124,7 @@
 	<xs:element name="mcdAidDepColumnName">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+				<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*"/>
 				<xs:maxLength value="20"/>
 			</xs:restriction>
 		</xs:simpleType>
@@ -146,7 +155,6 @@
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-	<xs:element name="repositoryMcdModelsMany" type="xs:boolean"/>
 
 	<xs:element name="MCD">
 		<xs:complexType>
@@ -157,6 +165,7 @@
 					<xs:element ref="entities"/>
 					<xs:element ref="relations"/>
 					<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="MLDR" minOccurs="0"/>
 				</xs:sequence>
 			</xs:choice>
 		</xs:complexType>
@@ -170,11 +179,12 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="MLDR"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
-						<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+						<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*"/>
 						<xs:maxLength value="20"/>
 					</xs:restriction>
 				</xs:simpleType>
@@ -190,11 +200,12 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="MLDR"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
-						<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+						<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*"/>
 						<xs:maxLength value="20"/>
 					</xs:restriction>
 				</xs:simpleType>
@@ -233,7 +244,7 @@
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
-						<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+						<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*"/>
 						<xs:maxLength value="20"/>
 					</xs:restriction>
 				</xs:simpleType>
@@ -247,7 +258,7 @@
 	<xs:element name="attributs">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="attribut" minOccurs="0"/>
+				<xs:element ref="attribut" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -269,10 +280,15 @@
 				<xs:element ref="derivedValue"/>
 				<xs:element ref="domain"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:int"/>
+				</xs:simpleType>
+			</xs:attribute>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
-						<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+						<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*"/>
 						<xs:maxLength value="20"/>
 					</xs:restriction>
 				</xs:simpleType>
@@ -337,7 +353,7 @@
 				</xs:simpleType>
 				<xs:simpleType>
 					<xs:restriction base="xs:integer">
-						<xs:pattern value="([0])|([1-9]{1,1}[0-9]*)"/>
+						<xs:pattern value="([0])|([1-9][0-9]*)"/>
 						<xs:maxInclusive value="30"/>
 					</xs:restriction>
 				</xs:simpleType>
@@ -347,15 +363,15 @@
 	<xs:element name="size">
 		<xs:simpleType>
 			<xs:union>
-				<xs:simpleType>
+				<xs:simpleType> <!-- Autorise une valeur vide pour size -->
 					<xs:restriction base='xs:string'>
 						<xs:length value="0"/>
 					</xs:restriction>
 				</xs:simpleType>
 				<xs:simpleType>
 					<xs:restriction base="xs:integer">
-						<xs:pattern value="([0])|([1-9]{1,1}[0-9]*)"/>
-						<xs:maxInclusive value="10"/>
+						<xs:pattern value="([0])|([1-9][0-9]*)"/>
+						<xs:maxInclusive value="1000000000"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:union>
@@ -382,11 +398,12 @@
 					<xs:element ref="absolute"/>
 				</xs:choice>
 				<xs:element ref="type"/>
+				<xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
-						<xs:pattern value="[a-zA-Z]{1,1}[a-zA-Z0-9_]*"/>
+						<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*"/>
 						<xs:maxLength value="20"/>
 					</xs:restriction>
 				</xs:simpleType>
@@ -403,6 +420,34 @@
 				<xs:enumeration value="Unique"/>
 			</xs:restriction>
 		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="parameter">
+		<xs:complexType>
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*([a-zA-Z])"/>
+						<xs:maxLength value="26"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="target_id" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:int"/>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="target_order" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:int"/>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="target_ClassShortNameUI" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
 	</xs:element>
 
 	<xs:element name="relations">
@@ -493,7 +538,7 @@
 					<xs:element ref="roleExtremiteTo"/>
 				</xs:sequence>
 			</xs:choice>
-			<xs:attribute name="name" use="optional">
+			<xs:attribute name="name">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
 					</xs:restriction>
@@ -550,7 +595,7 @@
 	<xs:element name="shortName">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:maxLength value="5"/>
+				<xs:maxLength value="6"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -601,4 +646,37 @@
 		</xs:simpleType>
 	</xs:element>
 	<xs:element name="deleteCascade" type="xs:boolean"/>
+
+	<!-- MLDR -->
+	<xs:element name="MLDR">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tables"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="tables">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="table" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="table">
+		<xs:complexType>
+			<!--<xs:sequence>
+				 <xs:element ref="colonnes"/>
+			</xs:sequence>-->
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*"/>
+						<xs:maxLength value="30"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
 </xs:schema>

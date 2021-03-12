@@ -3,6 +3,7 @@ package project;
 import main.MVCCDElement;
 import main.MVCCDFactory;
 import main.MVCCDManager;
+import mcd.MCDContModels;
 import mcd.services.MCDAdjustPref;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -13,6 +14,7 @@ import profile.ProfileLoaderXml;
  * Classe maitresse du projet utilisateur.
  * Divers attributs permettent de mémoriser les caractéristiques du projet utilisateur.
  * Le projet est un élément du référentiel (hérite de MVCCDElement).
+ * Les enfants (childs) du projet sont notamment les préférences ainsi que le conteneur de modèles (MCDContModels).
  */
 public class Project extends ProjectElement {
 
@@ -160,5 +162,18 @@ public class Project extends ProjectElement {
 
     public void setLastWinRepositoryExpand(boolean lastWinRepositoryExpand) {
         this.lastWinRepositoryExpand = lastWinRepositoryExpand;
+    }
+
+    /**
+     * Retourne le container de modèles, qui contient le (ou les) MCD qui sont dans le projet de l'utilisateur.
+     * @return Si aucun conteneur de modèles n'est trouvé, null est retourné.
+     */
+    public MCDContModels getMCDContModels(){
+        for(MVCCDElement mvccdElementChild : this.getChilds()){
+            if(mvccdElementChild instanceof MCDContModels){
+                return (MCDContModels) mvccdElementChild;
+            }
+        }
+        return null;
     }
 }
