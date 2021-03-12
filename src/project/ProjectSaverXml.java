@@ -33,8 +33,16 @@ import java.util.ArrayList;
 public class ProjectSaverXml {
 
     private Project project = MVCCDManager.instance().getProject();
-    private Boolean packagesAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(); //TODO-STB: valider avec PAS le fait qu'il faudrait plutôt utiliser PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()
-    private Boolean manyModelsAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
+    private Preferences projectPreferences = PreferencesManager.instance().getProjectPref(); //Il est mieux de récupérer les préférences par ce biais plutôt que project.getPreferences(): cela permet de s'assurer de récupérer des préférences si celles du projet n'existent pas (à priori, à confirmer avec PAS).
+    private Boolean packagesAuthorized = PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS();
+    private Boolean manyModelsAuthorized = PreferencesManager.instance().preferences().getREPOSITORY_MCD_MODELS_MANY();
+
+    /*
+    Le code commenté ci-dessous était celui de Giorgio Roncallo. Il chargeait d'office les préférences d'application,
+    qu'il faut à priori charger les bonnes préférences applicables (projet, sinon profile, sinon application...)
+    */
+    //private Boolean packagesAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS();
+    //private Boolean manyModelsAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
 
     //TODO-STB: vérifier que la version s'enregistre bien avec les préférences dans le fichier XML: Preferences.VERSION
 
@@ -56,7 +64,7 @@ public class ProjectSaverXml {
             addProperties(document, racine);
 
             //Préférences du projet
-            addProjectPreferences(document, racine); //TODO-STB: adapter et utiliser plutôt PreferencesManager.getProjectPref() => à voir une fois que j'ai mieux compris avec PAS
+            addProjectPreferences(document, racine);
 
             //Element MCD
             MCDContModels mcdContModels = project.getMCDContModels();
@@ -121,66 +129,56 @@ public class ProjectSaverXml {
 
         //Préférences Général
         Element generalRelationNotation = document.createElement("generalRelationNotation");
-        generalRelationNotation.appendChild(document.createTextNode(project.getPreferences().getGENERAL_RELATION_NOTATION().toString()));
+        generalRelationNotation.appendChild(document.createTextNode(projectPreferences.getGENERAL_RELATION_NOTATION().toString()));
         preferences.appendChild(generalRelationNotation);
-
-        //TODO-STB: voir avec PAS et ensuite supprimer
-        //Quelle différence entre les 2?
-        //À quel moment chacun des 2 est alimenté?
-        //même logique que dans ProjectElement.initIdAndTransitory(). À utiliser plutôt le 2e.
-        /*
-        MVCCDManager.instance().getProject().getPreferences().getMCD_JOURNALIZATION(); //lorsque le projet existe mais n'est pas encore créé dans le référentiel. À utiliser seulement en cas de problème avec l'autre.
-        PreferencesManager.instance().getProjectPref().getMCD_JOURNALIZATION(); //lorsque le projet est existant dans le référentiel. Celui-ci à utiliser dans la persistance XML.
-        */
-
 
         //Préférences MCD
         Element mcdJournalization = document.createElement("mcdJournalization");
-        mcdJournalization.appendChild(document.createTextNode(project.getPreferences().getMCD_JOURNALIZATION().toString()));
+        mcdJournalization.appendChild(document.createTextNode(projectPreferences.getMCD_JOURNALIZATION().toString()));
         preferences.appendChild(mcdJournalization);
 
         Element mcdJournalizationException = document.createElement("mcdJournalizationException");
-        mcdJournalizationException.appendChild(document.createTextNode(project.getPreferences().getMCD_JOURNALIZATION_EXCEPTION().toString()));
+        mcdJournalizationException.appendChild(document.createTextNode(projectPreferences.getMCD_JOURNALIZATION_EXCEPTION().toString()));
         preferences.appendChild(mcdJournalizationException);
 
         Element mcdAudit = document.createElement("mcdAudit");
-        mcdAudit.appendChild(document.createTextNode(project.getPreferences().getMCD_AUDIT().toString()));
+        mcdAudit.appendChild(document.createTextNode(projectPreferences.getMCD_AUDIT().toString()));
         preferences.appendChild(mcdAudit);
 
         Element mcdAuditException = document.createElement("mcdAuditException");
-        mcdAuditException.appendChild(document.createTextNode(project.getPreferences().getMCD_AUDIT_EXCEPTION().toString()));
+        mcdAuditException.appendChild(document.createTextNode(projectPreferences.getMCD_AUDIT_EXCEPTION().toString()));
         preferences.appendChild(mcdAuditException);
 
         Element mcdAidDataTypeLienProg = document.createElement("mcdAidDataTypeLienProg");
-        mcdAidDataTypeLienProg.appendChild(document.createTextNode(project.getPreferences().getMCD_AID_DATATYPE_LIENPROG()));
+        mcdAidDataTypeLienProg.appendChild(document.createTextNode(projectPreferences.getMCD_AID_DATATYPE_LIENPROG()));
         preferences.appendChild(mcdAidDataTypeLienProg);
 
         Element mcdDataTypeNumberSizeMode = document.createElement("mcdDataTypeNumberSizeMode");
-        mcdDataTypeNumberSizeMode.appendChild(document.createTextNode(project.getPreferences().getMCDDATATYPE_NUMBER_SIZE_MODE()));
+        mcdDataTypeNumberSizeMode.appendChild(document.createTextNode(projectPreferences.getMCDDATATYPE_NUMBER_SIZE_MODE()));
         preferences.appendChild(mcdDataTypeNumberSizeMode);
 
         Element mcdAidIndColumnName = document.createElement("mcdAidIndColumnName");
-        mcdAidIndColumnName.appendChild(document.createTextNode(project.getPreferences().getMCD_AID_IND_COLUMN_NAME()));
+        mcdAidIndColumnName.appendChild(document.createTextNode(projectPreferences.getMCD_AID_IND_COLUMN_NAME()));
         preferences.appendChild(mcdAidIndColumnName);
 
         Element mcdAidDepColumnName = document.createElement("mcdAidDepColumnName");
-        mcdAidDepColumnName.appendChild(document.createTextNode(project.getPreferences().getMCD_AID_DEP_COLUMN_NAME()));
+        mcdAidDepColumnName.appendChild(document.createTextNode(projectPreferences.getMCD_AID_DEP_COLUMN_NAME()));
         preferences.appendChild(mcdAidDepColumnName);
 
         Element mcdAidWithDep = document.createElement("mcdAidWithDep");
-        mcdAidWithDep.appendChild(document.createTextNode(project.getPreferences().isMCD_AID_WITH_DEP().toString()));
+        mcdAidWithDep.appendChild(document.createTextNode(projectPreferences.isMCD_AID_WITH_DEP().toString()));
         preferences.appendChild(mcdAidWithDep);
 
         Element mcdTreeNamingAssociation = document.createElement("mcdTreeNamingAssociation");
-        mcdTreeNamingAssociation.appendChild(document.createTextNode(project.getPreferences().getMCD_TREE_NAMING_ASSOCIATION()));
+        mcdTreeNamingAssociation.appendChild(document.createTextNode(projectPreferences.getMCD_TREE_NAMING_ASSOCIATION()));
         preferences.appendChild(mcdTreeNamingAssociation);
 
         Element mcdModeNamingLongName = document.createElement("mcdModeNamingLongName");
-        mcdModeNamingLongName.appendChild(document.createTextNode(project.getPreferences().getMCD_MODE_NAMING_LONG_NAME()));
+        mcdModeNamingLongName.appendChild(document.createTextNode(projectPreferences.getMCD_MODE_NAMING_LONG_NAME()));
         preferences.appendChild(mcdModeNamingLongName);
 
         Element mcdModeNamingAttributeShortName = document.createElement("mcdModeNamingAttributeShortName");
-        mcdModeNamingAttributeShortName.appendChild(document.createTextNode(project.getPreferences().getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME()));
+        mcdModeNamingAttributeShortName.appendChild(document.createTextNode(projectPreferences.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME()));
         preferences.appendChild(mcdModeNamingAttributeShortName);
     }
 

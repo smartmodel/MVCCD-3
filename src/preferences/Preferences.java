@@ -7,13 +7,26 @@ import mdr.MDRNamingLength;
 
 import java.awt.*;
 
+/**
+ * Regroupe l'ensemble des préférences développeur (les attributs statics de la classe), des préférences d'application
+ * (les attributs qui suivent ensuite) et des préférences de projet (les attributs plus bas dans la classe).
+ * Cette classe est instanciée plusieurs fois depuis MVCCDManager.
+ * Lorsqu'une préférence doit être utilisée, il est plus simple d'utiliser la méthode statique Preferences.preferences()
+ * qui se charge de retourner les bonnes préférences à utiliser en fonction du contexte de l'utilisateur (celles du
+ * projet, du profile, de l'appliation, etc.).
+ * Lorsque des préférences doivent être chargé spécifiquement pour le projet (préférences de projet) ou pour l'application
+ * (préférences d'application), il est conseillé d'utiliser PreferencesManager.instance().getProjectPref().
+ * L'utilisation de MVCCDManager.instance().getProject().getPreferences() n'est pas à privilégier. Elle est utile
+ * surtout dans le cas spécifique où le projet existe mais n'est pas encore créé dans le référentiel.
+ * @author PAS
+ */
 public class Preferences extends MVCCDElement {
 
     //Toutes les préférences statics sont des préférences développeurs, qui ne doivent pas être sauvegardées dans les fichiers.
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
-    public static String APPLICATION_VERSION = "3.0.16"; //TODO-STB+PAS: sauvegarder également la version dans la sauvegarde du projet
+    public static String APPLICATION_VERSION = "3.0.16"; //TODO-STB+PAS: sauvegarder également la version dans le projet. Prévoir des versions pour les XSD.
     public static boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = false; //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref //TODO-STB: mettre à false par défaut, et éventuellement supprimer la propriété lorsque la persistance XML est ok.
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
