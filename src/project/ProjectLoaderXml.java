@@ -62,10 +62,11 @@ public class ProjectLoaderXml {
             addPropertiesProject(projectTag, project);
             addPreferences(projectTag, preferences);
 
-            // Création du conteneur MCD
-            MCDContModels mcdCont = MVCCDElementFactory.instance().createMCDModels(project, Preferences.REPOSITORY_MCD_MODELS_NAME);
-            // Récupération de la balise MCD du fichier
+            // Chargement du modèle MCD
             Element mcdTag = (Element) projectTag.getElementsByTagName("MCD").item(0);
+            MCDContModels mcdCont = MVCCDElementFactory.instance().createMCDModels(project, mcdTag.getAttribute("id"));
+            mcdCont.setName(Preferences.REPOSITORY_MCD_MODELS_NAME);
+
             // Chargement des modèles ou des 3 conteneurs principaux
             ArrayList<Element> elementsModeles = loadModels(mcdCont, mcdTag);
             // Chargement des packages

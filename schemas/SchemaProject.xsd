@@ -7,11 +7,7 @@
 				<xs:element ref="preferences"/>
 				<xs:element ref="MCD"/>
 			</xs:sequence>
-			<xs:attribute name="id" use="required">
-				<xs:simpleType>
-					<xs:restriction base="xs:int"/>
-				</xs:simpleType>
-			</xs:attribute>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -173,6 +169,7 @@
 					<xs:element ref="MLDR" minOccurs="0"/>
 				</xs:sequence>
 			</xs:choice>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -285,11 +282,7 @@
 				<xs:element ref="derivedValue"/>
 				<xs:element ref="domain"/>
 			</xs:sequence>
-			<xs:attribute name="id" use="required">
-				<xs:simpleType>
-					<xs:restriction base="xs:int"/>
-				</xs:simpleType>
-			</xs:attribute>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -437,11 +430,7 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
-			<xs:attribute name="target_id" use="required">
-				<xs:simpleType>
-					<xs:restriction base="xs:int"/>
-				</xs:simpleType>
-			</xs:attribute>
+			<xs:attribute name="target_id" use="required" type="xs:int"/>
 			<xs:attribute name="target_order" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:int"/>

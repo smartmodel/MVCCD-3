@@ -59,9 +59,9 @@ public class ProjectSaverXml {
             //Création de la balise racine <project>
             Element projectTag = document.createElement("project");
             document.appendChild(projectTag);
-            Attr idAttr = document.createAttribute("id");
-            idAttr.setValue(String.valueOf(project.getIdProjectElement()));
-            projectTag.setAttributeNode(idAttr);
+            Attr idAttrOfProjectTag = document.createAttribute("id");
+            idAttrOfProjectTag.setValue(String.valueOf(project.getIdProjectElement()));
+            projectTag.setAttributeNode(idAttrOfProjectTag);
 
             //Propriété du projet
             addProperties(document, projectTag);
@@ -69,10 +69,13 @@ public class ProjectSaverXml {
             //Préférences du projet
             addProjectPreferences(document, projectTag);
 
-            //Element MCD
+            //Création de la balise <MCD>
             MCDContModels mcdContModels = project.getMCDContModels();
             Element mcdTag = document.createElement(mcdContModels.getName());
             projectTag.appendChild(mcdTag);
+            Attr idAttrOfMcdTag = document.createAttribute("id");
+            idAttrOfMcdTag.setValue(String.valueOf(mcdContModels.getIdProjectElement()));
+            mcdTag.setAttributeNode(idAttrOfMcdTag);
 
             ArrayList<MVCCDElement> mcdModels = mcdContModels.getChilds();
 

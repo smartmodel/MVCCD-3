@@ -54,6 +54,9 @@ public class MVCCDElementFactory {
         return project;
     }
 
+    public MCDContModels createMCDModels(Project project, int id){
+        return new MCDContModels(project, id);
+    }
 
     public MCDContModels createMCDModels(Project project, String name){
         return new MCDContModels(project, name);
