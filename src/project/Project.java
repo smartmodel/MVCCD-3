@@ -46,12 +46,22 @@ public class Project extends ProjectElement {
 
 
     /**
+     * L'id du projet est à indiquer uniquement lors du chargement du projet persisté. Autrement, il faut utiliser le
+     * constructeur sans le paramètre "id".
+     * @param id Id à affecter au projet (qui est lui-même un élément de projet ProjectElement)
+     */
+    public Project(int id){
+        super(null, id);
+    }
+
+
+    /**
      * Le projet n'a pas de parent ! Par contre, il est rattaché à la racine de l'arbre de visualisation du référentiel
      * pour pouvoir le visualiser. Le rattachement se fait par la commande repository.addProject(project) de la méthode
      * projectToRepository() de la classe MVCCDManager.
+     * @param name Le nom donné au projet.
      */
     public Project(String name) {
-
         super(null, name);
     }
 

@@ -56,20 +56,23 @@ public class ProjectSaverXml {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.newDocument();
 
-            //Création des éléments
-            Element racine = document.createElement("project");
-            document.appendChild(racine);
+            //Création de la balise racine <project>
+            Element projectTag = document.createElement("project");
+            document.appendChild(projectTag);
+            Attr idAttr = document.createAttribute("id");
+            idAttr.setValue(String.valueOf(project.getIdProjectElement()));
+            projectTag.setAttributeNode(idAttr);
 
             //Propriété du projet
-            addProperties(document, racine);
+            addProperties(document, projectTag);
 
             //Préférences du projet
-            addProjectPreferences(document, racine);
+            addProjectPreferences(document, projectTag);
 
             //Element MCD
             MCDContModels mcdContModels = project.getMCDContModels();
             Element mcdTag = document.createElement(mcdContModels.getName());
-            racine.appendChild(mcdTag);
+            projectTag.appendChild(mcdTag);
 
             ArrayList<MVCCDElement> mcdModels = mcdContModels.getChilds();
 

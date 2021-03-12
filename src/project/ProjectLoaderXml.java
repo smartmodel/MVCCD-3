@@ -37,10 +37,7 @@ public class ProjectLoaderXml {
     private ArrayList<MVCCDElement> listeAssociations = new ArrayList<>();
 
     public Project loadProjectFile(File fileProjectCurrent) {
-        // création du projet et initialisation des préférences du projet
-        Project project = new Project(null);
-        Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME);
-
+        Project project = null;
         try {
             // Création du document et du parseur pour récupérer les information du fichier
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -51,22 +48,24 @@ public class ProjectLoaderXml {
             Schema schema = factory.newSchema(new File("schemas/SchemaProject.xsd"));
             Validator validator = schema.newValidator();
 
+            // Récupération de la racine du fichier XML (balise <project>)
+            Element projectTag = document.getDocumentElement();
 
-            // Récupération de la racine du fichier
-            Element racine = document.getDocumentElement();
+            // Chargement du projet et du nom du projet
+            project = new Project(projectTag.getAttribute("id"));
+            project.setName(projectTag.getElementsByTagName("nameProject").item(0).getTextContent());
 
-            // Récupération du nom du projet
-            Element name = (Element) racine.getElementsByTagName("nameProject").item(0);
-            project.setName(name.getTextContent());
+            // Initialisation des préférences du projet
+            Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME);
 
             // Ajout des éléments du projet
-            addPropertiesProject(racine, project);
-            addPreferences(racine, preferences);
+            addPropertiesProject(projectTag, project);
+            addPreferences(projectTag, preferences);
 
             // Création du conteneur MCD
             MCDContModels mcdCont = MVCCDElementFactory.instance().createMCDModels(project, Preferences.REPOSITORY_MCD_MODELS_NAME);
             // Récupération de la balise MCD du fichier
-            Element mcdTag = (Element) racine.getElementsByTagName("MCD").item(0);
+            Element mcdTag = (Element) projectTag.getElementsByTagName("MCD").item(0);
             // Chargement des modèles ou des 3 conteneurs principaux
             ArrayList<Element> elementsModeles = loadModels(mcdCont, mcdTag);
             // Chargement des packages
@@ -87,7 +86,6 @@ public class ProjectLoaderXml {
 
             // Validation du fichier
             validator.validate(new DOMSource(document));
-
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
