@@ -35,6 +35,7 @@ public class MCDTransform extends MDTransform {
                 PreferencesManager.instance().preferences().getMCDTOMLDR_MODE());
 
         //Clonage du modèle avant transformation
+        //TODO-1 Faut-il s'arr^ter au niveau MLD-R ou descendre vers tous les MPD-R ?
         MLDRModel mldrModelClone = (MLDRModel) mldrModel.cloneDeep();
 
         try {
@@ -57,6 +58,10 @@ public class MCDTransform extends MDTransform {
 
             // Enregistrer la dernière transformation
             imcdModel.setLastTransformedMLDRModel(mldrModel);
+
+            //Rafraichir l'arbre
+            mldrModel.refreshTreeMLDR();
+
 
         } catch(TransformMCDException e){
              resultat.add(e.getMessage());
@@ -144,9 +149,18 @@ public class MCDTransform extends MDTransform {
 
     }
 
+    /*
     @Override
-    protected ArrayList<IMDRElementWithIteration> getIMDRElementWithIteration() {
+    protected ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration() {
         return mldrModel.getIMDRElementsWithIteration();
+    }
+
+     */
+
+
+    @Override
+    protected ArrayList<IMDRElementWithIteration> getIMDRElementsWithIterationInScope() {
+        return mldrModel.getIMDRElementsWithIterationInScope();
     }
 
 

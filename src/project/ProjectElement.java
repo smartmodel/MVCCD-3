@@ -3,6 +3,8 @@ package project;
 import main.MVCCDElement;
 import main.MVCCDManager;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 /**
  * Ancêtre de tous les éléments d'un projet (y compris le projet lui-même).
  */
@@ -102,5 +104,9 @@ public abstract class ProjectElement extends MVCCDElement {
     //TransitoryProjectElement au lieu de Transitory
     public void setTransitoryProjectElement(boolean transitory) {
         this.transitory = transitory;
+    }
+
+    public DefaultMutableTreeNode getNode(){
+        return ProjectService.getNodeById(this.id);
     }
 }

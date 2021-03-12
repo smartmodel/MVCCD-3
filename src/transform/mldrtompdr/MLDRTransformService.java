@@ -5,6 +5,7 @@ import mdr.services.MDRModelService;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRModel;
 import mpdr.interfaces.IMPDRElement;
+import utilities.Trace;
 
 public class MLDRTransformService {
 

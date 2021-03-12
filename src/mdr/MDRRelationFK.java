@@ -27,11 +27,11 @@ public abstract class MDRRelationFK extends MDRRelation{
     }
 
     public MDRRelFKEnd getEndChild() {
-        return (MDRRelFKEnd) super.getA();
+        return (MDRRelFKEnd) super.getB();
     }
 
     public void setEndChild(MDRRelFKEnd endChild){
-        super.setA(endChild);
+        super.setB(endChild);
     }
 
     public MDRFK getMDRFK() {
@@ -41,6 +41,7 @@ public abstract class MDRRelationFK extends MDRRelation{
     public void setMDRFK(MDRFK mdrfk) {
         this.mdrFKId = mdrfk.getIdProjectElement();
    }
+
     public String getName() {
         if (getMDRFK() != null) {
             return getMDRFK().getName();

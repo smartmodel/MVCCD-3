@@ -1,35 +1,41 @@
 package mldr;
 
 import main.MVCCDElementFactory;
+import main.MVCCDManager;
+import main.window.repository.WinRepositoryTree;
 import mcd.MCDEntity;
 import mcd.MCDRelation;
 import mdr.MDRContTables;
+import mdr.MDRElement;
 import mdr.MDRModel;
+import mdr.interfaces.IMDRElementWithIteration;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRRelation;
 import mldr.services.MLDRModelService;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransform;
+import utilities.Trace;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;
 
 public abstract class MLDRModel extends MDRModel implements IMLDRElement {
 
-    private  static final long serialVersionUID = 1000;
+    private static final long serialVersionUID = 1000;
 
     public MLDRModel(ProjectElement parent, String name) {
         super(parent, name);
     }
 
 
-    public MLDRTable createTable(MCDEntity mcdEntity){
+    public MLDRTable createTable(MCDEntity mcdEntity) {
         MLDRTable newTable = MVCCDElementFactory.instance().createMLDRTable(
                 getMDRContTables(), mcdEntity);
 
         return newTable;
     }
 
-    public MDRContTables getMDRContTables(){
+    public MDRContTables getMDRContTables() {
         return MLDRModelService.getMDRContTables(this);
     }
 
@@ -37,18 +43,17 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
         return MLDRModelService.getMLDRTables(this);
     }
 
-    public MLDRTable getMLDRTableByEntitySource(MCDEntity mcdEntity){
+    public MLDRTable getMLDRTableByEntitySource(MCDEntity mcdEntity) {
         return MLDRModelService.getMLDRTableByEntitySource(this, mcdEntity);
     }
 
 
-    public MLDRContRelations getMLDRContRelations(){
+    public MLDRContRelations getMLDRContRelations() {
         return MLDRModelService.getMLDRContRelations(this);
     }
 
 
-
-    public MLDRRelationFK createRelationFK(MCDRelation mcdRelation, MLDRTable mldrTableParent, MLDRTable mldrTableChild){
+    public MLDRRelationFK createRelationFK(MCDRelation mcdRelation, MLDRTable mldrTableParent, MLDRTable mldrTableChild) {
         MLDRRelationFK newRelationFK = MVCCDElementFactory.instance().createMLDRRelationFK(
                 getMLDRContRelations(), mcdRelation, mldrTableParent, mldrTableChild);
 
@@ -59,25 +64,72 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
         return MLDRModelService.getIMLDRRelations(this);
     }
 
-    public ArrayList<MLDRRelationFK> getMLDRRelationFKsByMCDRelationSource(MCDRelation mcdRelation){
+    public ArrayList<MLDRRelationFK> getMLDRRelationFKsByMCDRelationSource(MCDRelation mcdRelation) {
         return MLDRModelService.getMLDRRelationFKsByMCDRelationSource(this, mcdRelation);
     }
 
     public MLDRRelationFK getMLDRRelationFKByMCDRelationSourceAndSameTables(MCDRelation mcdRelation,
-                                                                          MLDRTable mldrTableA,
-                                                                          MLDRTable mldrTableB){
+                                                                            MLDRTable mldrTableA,
+                                                                            MLDRTable mldrTableB) {
         return MLDRModelService.getMLDRRelationFKByMCDRelationSourceAndSameTables(
                 this, mcdRelation, mldrTableA, mldrTableB);
     }
 
 
-
-
-    public ArrayList<String> treatTransform(){
+    public ArrayList<String> treatTransform() {
         MLDRTransform mldrTransform = new MLDRTransform();
         ArrayList<String> resultat = mldrTransform.transform(this);
 
         return resultat;
 
     }
+
+
+    public ArrayList<IMDRElementWithIteration> getIMDRElementsWithIterationInScope() {
+        ArrayList<IMDRElementWithIteration> resultat = new ArrayList<IMDRElementWithIteration>();
+        for (MDRElement mdrElement : getMDRDescendants()) {
+            if (mdrElement instanceof IMDRElementWithIteration) {
+                if (mdrElement instanceof MLDRModel) {
+                    resultat.add((IMDRElementWithIteration) mdrElement);
+                }
+            }
+        }
+        return resultat;
+    }
+
+    //TODO-1 Je vourais raffraichir les noeud modifiés
+    // Mettre un listner de l'arbre sur les objets IMLDRElement ?
+    /*
+    public ArrayList<DefaultMutableTreeNode> getTreeMLDR(){
+        DefaultMutableTreeNode rootMLDR = this.getNode();
+        return getTreeMLDRInternal(rootMLDR);
+    }
+
+    protected ArrayList<DefaultMutableTreeNode> getTreeMLDRInternal(DefaultMutableTreeNode nodeMLDR){
+        ArrayList<DefaultMutableTreeNode> resultat = new ArrayList<DefaultMutableTreeNode>();
+        for (int i = 0 ; i < nodeMLDR.getChildCount() ; i++){
+            DefaultMutableTreeNode nodeChild = (DefaultMutableTreeNode) nodeMLDR.getChildAt(i);
+           if (nodeChild.getUserObject() instanceof IMLDRElement){
+               resultat.add(nodeChild);
+               resultat.addAll(getTreeMLDRInternal(nodeChild));
+           }
+        }
+        return resultat;
+    }
+
+    public void refreshTreeMLDR(){
+        for (DefaultMutableTreeNode node : getTreeMLDR()){
+            Trace.println(node.getUserObject().toString());
+        }
+        WinRepositoryTree tree = MVCCDManager.instance().getWinRepositoryContent().getTree();
+        tree.getTreeModel().reload(this.getNode());
+    }
+
+     */
+
+    //TODO-1 A suppimer si la solution du listner est possible
+    public void refreshTreeMLDR(){
+        MVCCDManager.instance().getWinRepositoryContent().reload(this.getNode());
+    }
+
 }

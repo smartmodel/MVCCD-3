@@ -4,11 +4,17 @@ import md.MDElement;
 import mdr.MDRConstraint;
 import mdr.MDRTable;
 import mldr.MLDRColumn;
+import mldr.MLDRFK;
+import mldr.MLDRPK;
 import mldr.interfaces.IMLDRElement;
+import mldr.services.MLDRColumnService;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.services.MPDRColumnService;
 import mpdr.services.MPDRTableService;
 import project.ProjectElement;
+
+import java.util.ArrayList;
 
 public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRElementWithSource {
 
@@ -66,8 +72,12 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public  abstract MPDRColumn createColumn(MLDRColumn mldrColumn);
 
-    public  abstract MDRConstraint createConstraint(MDRConstraint mldrConstraint);
+    public  abstract MPDRPK createPK(MLDRPK mldrPK);
 
 
+    public abstract MDRConstraint createFK(MLDRFK mldrFK);
 
+    public ArrayList<MPDRColumn> getMPDRColumns() {
+        return MPDRColumnService.to(getMDRColumns());
+    }
 }

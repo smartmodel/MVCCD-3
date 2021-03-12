@@ -4,6 +4,7 @@ import mdr.MDRContConstraints;
 import mdr.MDRFK;
 import mldr.MLDRFK;
 import mldr.MLDRPK;
+import mpdr.MPDRFK;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
@@ -72,7 +73,7 @@ public class MDRFKEditor extends DialogEditor {
         if ( getMvccdElementCrt() instanceof MLDRFK){
             return "editor.mldr.fk.read";
         }
-        if ( getMvccdElementCrt() instanceof MLDRPK){
+        if ( getMvccdElementCrt() instanceof MPDRFK){
             return "editor.mpdr.fk.read";
         }
         return null;

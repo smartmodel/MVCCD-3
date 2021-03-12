@@ -3,7 +3,10 @@ package mpdr.mysql;
 import main.MVCCDElementFactory;
 import mdr.MDRConstraint;
 import mldr.MLDRColumn;
+import mldr.MLDRFK;
+import mldr.MLDRPK;
 import mldr.interfaces.IMLDRElement;
+import mpdr.MPDRPK;
 import mpdr.MPDRTable;
 import project.ProjectElement;
 
@@ -28,20 +31,13 @@ public class MPDRMySQLTable extends MPDRTable {
     }
 
     @Override
-    public MDRConstraint createConstraint(MDRConstraint mldrConstraint) {
+    public MPDRPK createPK(MLDRPK mldrPK) {
         return null;
     }
 
-
-    /*
     @Override
-    public  MPDRMySQLTable createTable(MLDRTable mldrTable){
-        MPDRMySQLTable newTable = MVCCDElementFactory.instance().createMPDRMySQLTable(
-                getMDRContTables(),  mldrTable);
-
-        return newTable;
+    public MDRConstraint createFK(MLDRFK mldrFK) {
+        return null;
     }
-
-     */
 
 }

@@ -16,6 +16,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.*;
 import repository.Repository;
+import utilities.Trace;
 import utilities.files.UtilFiles;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -164,6 +165,7 @@ public class MVCCDManager {
         DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(((ProjectElement)parent).getIdProjectElement());
         ProjectElement child = (ProjectElement) mvccdElementToRemove;
         DefaultMutableTreeNode nodeChild= ProjectService.getNodeById(child.getIdProjectElement());
+
         MVCCDManager.instance().getRepository().removeNodeFromParent(nodeChild);
         getWinRepositoryContent().getTree().changeModel(repository);
         //getWinRepositoryContent().getTree().getTreeModel().reload();

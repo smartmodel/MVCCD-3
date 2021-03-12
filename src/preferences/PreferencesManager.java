@@ -197,9 +197,7 @@ public class PreferencesManager {
         boolean tempInutile = Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML; //Ligne créée uniquement dans le but de ne pas oublier de supprimer cette méthode lorsque la préférence sera supprimée.
         try {
             PreferencesLoader loader = new PreferencesLoader();
-            System.out.println(" Avant applicationPref = loader.load");
             applicationPref = loader.load(new File(Preferences.FILE_APPLICATION_PREF_NAME));
-            Trace.println(" Avant applicationPref = loader.load");
         } catch (FileNotFoundException e) {
             applicationPref = new Preferences(null, null);
             PreferencesSaver saver = new PreferencesSaver();

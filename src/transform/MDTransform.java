@@ -5,15 +5,17 @@ import main.MVCCDElement;
 import md.MDElement;
 import md.interfaces.IMDElementWithSource;
 import mdr.interfaces.IMDRElementWithIteration;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
 public abstract class MDTransform {
 
+
     protected abstract int getIteration();
 
     protected void deleteMDRElementNotInIteration(){
-        for (IMDRElementWithIteration imdrElementWithIteration : getIMDRElementWithIteration()){
+        for (IMDRElementWithIteration imdrElementWithIteration : getIMDRElementsWithIterationInScope()){
             if ( imdrElementWithIteration instanceof IMDElementWithSource) {
                 // vérifier que'une source soit présente
                 MDElement mdElementSource = ((IMDElementWithSource) imdrElementWithIteration).getMdElementSource();
@@ -27,7 +29,9 @@ public abstract class MDTransform {
         }
     }
 
-    protected abstract ArrayList<IMDRElementWithIteration> getIMDRElementWithIteration();
+    //protected abstract ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration();
+
+    protected abstract ArrayList<IMDRElementWithIteration> getIMDRElementsWithIterationInScope();
 
 
 }

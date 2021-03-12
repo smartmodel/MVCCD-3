@@ -3,6 +3,7 @@ package main.window.repository;
 import preferences.PreferencesManager;
 import utilities.window.PanelContent;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -47,5 +48,9 @@ public class WinRepositoryContent extends PanelContent implements ActionListener
 
     public WinRepositoryTree getTree() {
         return tree;
+    }
+
+    public void reload(DefaultMutableTreeNode node) {
+        tree.getTreeModel().reload(node);
     }
 }

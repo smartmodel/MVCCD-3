@@ -91,7 +91,7 @@ public class AttributeInputContent extends PanelInputContentId {
         }
         attributeNameAID.addItemListener(this);
         attributeNameAID.addFocusListener(this);
-        attributeNameAID.setCheckAdjustAutomatically(false);
+        //attributeNameAID.setCheckAdjustAutomatically(false);
 
         fieldName.setToolTipText("Nom de l'attribut");
 

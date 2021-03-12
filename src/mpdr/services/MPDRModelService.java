@@ -1,10 +1,16 @@
 package mpdr.services;
 
 import main.MVCCDElement;
+import mdr.MDRConstraint;
+import mdr.MDRElement;
 import mldr.MLDRTable;
+import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRContTables;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
+import mpdr.interfaces.IMPDRElement;
+import mpdr.interfaces.IMPDRElementWithSource;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -42,4 +48,18 @@ public class MPDRModelService {
         return null ;
     }
 
+    public static IMPDRElement getIMPDRElementByMLDRElementSource(MPDRModel mpdrModel, IMLDRElement imldrElement) {
+
+        for (MDRElement mdrElement : mpdrModel.getMDRDescendants()){
+            if (mdrElement instanceof IMPDRElementWithSource) {
+                IMPDRElementWithSource impdrElement = (IMPDRElementWithSource) mdrElement;
+                if (impdrElement.getMldrElementSource() == imldrElement) {
+                    if ( mdrElement instanceof IMPDRElement) {
+                        return (IMPDRElement) mdrElement;
+                    }
+                }
+            }
+        }
+        return null ;
+    }
 }

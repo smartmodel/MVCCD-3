@@ -27,6 +27,7 @@ public class MDRModelService {
     }
 
 
+    /*
     public static ArrayList<IMDRElementWithIteration> getIMDRElementsWithIteration(MDRModel mdrModel) {
         ArrayList<IMDRElementWithIteration> resultat = new ArrayList<IMDRElementWithIteration>();
         for (MDRElement mdrElement : mdrModel.getMDRDescendants()) {
@@ -37,6 +38,9 @@ public class MDRModelService {
         return resultat;
     }
 
+     */
+
+
     public static ArrayList<IMDElementWithSource> getIMDElementsWithSource(MDRModel mdrModel) {
         ArrayList<IMDElementWithSource> resultat = new ArrayList<IMDElementWithSource>();
         for (MDRElement mdrElement : mdrModel.getMDRDescendants()) {
@@ -46,6 +50,7 @@ public class MDRModelService {
         }
         return resultat;
     }
+
 
     public static ArrayList<MDRElement> getMDRElementsTransformedBySource(MDRModel mdrModel,
                                                                           MDElement mdElementSource) {
@@ -140,6 +145,7 @@ public class MDRModelService {
         }
         return nameCapitalized;
     }
-}
+
+ }
 
 

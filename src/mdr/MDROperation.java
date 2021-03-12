@@ -4,6 +4,9 @@ import main.MVCCDElement;
 import md.interfaces.IMDElementWithSource;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
+import mldr.MLDRParameter;
+import mldr.interfaces.IMLDRElement;
+import mpdr.MPDRParameter;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
@@ -106,5 +109,10 @@ public abstract class MDROperation extends MDRElement implements IMDRElementWith
     }
 
 
+    // Utilisé pour les paramètres de niveau logique
     public abstract MDRParameter createParameter(IMDRParameter target);
+
+    // Utilisé pour les paramètres de niveau physique
+    public abstract MPDRParameter createParameter(MLDRParameter mldrParameter);
+
 }

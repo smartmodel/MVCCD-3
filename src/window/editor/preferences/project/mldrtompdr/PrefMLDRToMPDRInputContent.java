@@ -26,9 +26,9 @@ public class PrefMLDRToMPDRInputContent extends PanelInputContent {
         labelMLDRToMPDRDB.setText("Base de données");
         fieldMLDRToMPDRDB = new SComboBox(this, labelMLDRToMPDRDB);
 
-        fieldMLDRToMPDRDB.addItem(MessagesBuilder.getMessagesProperty(Preferences.MLDRTOMPDR_DB_ORACLE));
-        fieldMLDRToMPDRDB.addItem(MessagesBuilder.getMessagesProperty(Preferences.MLDRTOMPDR_DB_MYSQL));
-        fieldMLDRToMPDRDB.addItem(MessagesBuilder.getMessagesProperty(Preferences.MLDRTOMPDR_DB_POSTGRESQL));
+        fieldMLDRToMPDRDB.addItem(MessagesBuilder.getMessagesProperty(Preferences.MPDR_DB_ORACLE));
+        fieldMLDRToMPDRDB.addItem(MessagesBuilder.getMessagesProperty(Preferences.MPDR_DB_MYSQL));
+        fieldMLDRToMPDRDB.addItem(MessagesBuilder.getMessagesProperty(Preferences.MPDR_DB_POSTGRESQL));
         fieldMLDRToMPDRDB.addItemListener(this);
         fieldMLDRToMPDRDB.addFocusListener(this);
 
@@ -93,14 +93,14 @@ public class PrefMLDRToMPDRInputContent extends PanelInputContent {
 
         if (fieldMLDRToMPDRDB.checkIfUpdated()){
             String text = (String) fieldMLDRToMPDRDB.getSelectedItem();
-            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MLDRTOMPDR_DB_ORACLE))){
-                preferences.setMLDRTOMPDR_DB(Preferences.MLDRTOMPDR_DB_ORACLE);
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MPDR_DB_ORACLE))){
+                preferences.setMLDRTOMPDR_DB(Preferences.MPDR_DB_ORACLE);
             }
-            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MLDRTOMPDR_DB_MYSQL))){
-                preferences.setMLDRTOMPDR_DB(Preferences.MLDRTOMPDR_DB_MYSQL);
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MPDR_DB_MYSQL))){
+                preferences.setMLDRTOMPDR_DB(Preferences.MPDR_DB_MYSQL);
             }
-            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MLDRTOMPDR_DB_POSTGRESQL))){
-                preferences.setMLDRTOMPDR_DB(Preferences.MLDRTOMPDR_DB_POSTGRESQL);
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MPDR_DB_POSTGRESQL))){
+                preferences.setMLDRTOMPDR_DB(Preferences.MPDR_DB_POSTGRESQL);
             }
 
         }

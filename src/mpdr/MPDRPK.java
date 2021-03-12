@@ -28,6 +28,11 @@ public abstract class MPDRPK extends MDRPK implements IMPDRElement, IMPDRElement
     }
 
     @Override
+    public void setMldrElementSource(IMLDRElement imldrElementSource) {
+        this.mldrElementSource = mldrElementSource;
+    }
+
+    @Override
     public MDElement getMdElementSource() {
         return (MDElement) getMldrElementSource();
     }

@@ -12,12 +12,17 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
     private Integer iteration = null; // Si un objet est créé directement et non par transformation
 
     //private IMDRParameter target = null;
-    private int targetId ;
+    private Integer targetId ;
 
+    // Pour le niveau logique
     public MDRParameter(ProjectElement parent, IMDRParameter target) {
-
         super(parent);
         this.targetId = target.getIdProjectElement();
+    }
+
+    // Pour le niveau physique
+    public MDRParameter(ProjectElement parent) {
+        super(parent);
     }
 
     @Override
@@ -30,8 +35,20 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
         this.iteration = iteration;
     }
 
+    // Pour l'affectation de niveau physique
+    public void setTargetId(Integer targetId) {
+        this.targetId = targetId;
+    }
+
+    public Integer getTargetId() {
+        return targetId;
+    }
+
     public IMDRParameter getTarget() {
-        return (IMDRParameter) ProjectService.getElementById(targetId);
+        if (targetId != null) {
+            return (IMDRParameter) ProjectService.getElementById(targetId);
+        }
+        return null;
     }
 
 
@@ -43,6 +60,16 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
             }
         }
         return name;
+    }
+
+
+    public MDRConstraint getMDRConstraintAccueil(){
+        return (MDRConstraint) getParent();
+    }
+
+
+    public MDRTable getMDRTableAccueil(){
+        return (MDRTable) getMDRConstraintAccueil().getMDRTableAccueil();
     }
 
 }

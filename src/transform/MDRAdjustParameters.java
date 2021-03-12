@@ -23,7 +23,7 @@ public class MDRAdjustParameters {
                     mdrParameter = mdrOperation.createParameter(mdrColumn);
                     MVCCDManager.instance().addNewMVCCDElementInRepository(mdrParameter);
             }
-            // Pas de modification car les propriétés viennet de la colonnes
+            // Pas de modification car les propriétés viennent de la colonne
             mdrParameter.setIteration(mdTransform.getIteration());
         }
 

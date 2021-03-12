@@ -41,6 +41,9 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
     private JLabel labelDerivedValue ;
     private STextField fieldDerivedValue ;
 
+    private JLabel labelReferencePK; // pour les colonnes FK
+    private STextField fieldReferencePK ;
+
 
     public MDRColumnInputContent(MDRColumnInput MDRColumnInput)     {
         super(MDRColumnInput);
@@ -93,6 +96,11 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
         fieldDerivedValue.setPreferredSize((new Dimension(400, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldDerivedValue.setToolTipText("Valeur dérivée...");
 
+        labelReferencePK = new JLabel("Référence PK : ");
+        fieldReferencePK= new STextField(this, labelReferencePK);
+        fieldReferencePK.setPreferredSize((new Dimension(400, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldReferencePK.setToolTipText("Référence de colonne PK pour une colonne FK");
+
 
         super.getSComponents().add(fieldDatatypeName);
         super.getSComponents().add(fieldDatatypeConstraint);
@@ -103,6 +111,7 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
         super.getSComponents().add(fieldUppercase);
         super.getSComponents().add(fieldInitValue);
         super.getSComponents().add(fieldDerivedValue);
+        super.getSComponents().add(fieldReferencePK);
 
         createPanelMaster();
     }
@@ -155,11 +164,15 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        gbc.gridwidth = 1;
         panelInputContentCustom.add(labelDerivedValue, gbc);
         gbc.gridx++;
-        gbc.gridwidth = 5;
         panelInputContentCustom.add(fieldDerivedValue, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(labelReferencePK, gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldReferencePK, gbc);
 
         this.add(panelInputContentCustom);
     }
@@ -249,13 +262,19 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
         if (mdrColumn.getInitValue() != null){
             initValue = mdrColumn.getInitValue();
         }
-        fieldDatatypeScale.setText((initValue));
+        fieldInitValue.setText((initValue));
 
         String derivedValue = "";
         if (mdrColumn.getDerivedValue() != null){
             derivedValue = mdrColumn.getDerivedValue();
         }
-        fieldDatatypeScale.setText((derivedValue));
+        fieldDerivedValue.setText((derivedValue));
+
+        String referencePK = "";
+        if (mdrColumn.getMDRColumnPK() != null){
+            referencePK = mdrColumn.getMDRColumnPK().getName();
+        }
+        fieldReferencePK.setText((referencePK));
 
     }
 
