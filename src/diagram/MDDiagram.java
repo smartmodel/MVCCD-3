@@ -13,6 +13,10 @@ public abstract class MDDiagram extends Diagram {
         super(parent);
     }
 
+    public MDDiagram(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MDDiagram(ProjectElement parent, String name) {
         super(parent, name);
     }

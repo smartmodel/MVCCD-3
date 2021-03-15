@@ -1,6 +1,7 @@
 package project;
 
 import console.Console;
+import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDFactory;
@@ -35,6 +36,7 @@ public class ProjectLoaderXml {
     private ArrayList<Element> elementsEntities = new ArrayList<>();
     private ArrayList<MVCCDElement> listeEntities = new ArrayList<>();
     private ArrayList<MVCCDElement> listeAssociations = new ArrayList<>();
+    private NodeList diagramTagsList = null; //Contient la liste des enfants de <diagrammes>
 
     public Project loadProjectFile(File fileProjectCurrent) {
         Project project = null;
@@ -71,6 +73,8 @@ public class ProjectLoaderXml {
             ArrayList<Element> elementsModeles = loadModels(mcdCont, mcdTag);
             // Chargement des packages
             loadPackages(mcdCont, mcdTag);
+            // Chargement des diagramme
+            loadDiagrams(mcdCont, mcdTag);
             // Chargement des entités
             loadEntities(mcdCont, mcdTag, elementsModeles);
             // Chargement des attributs
@@ -166,6 +170,9 @@ public class ProjectLoaderXml {
         for (int i = 0; i < childsOfMcdTag.getLength(); i++) {
             if (childsOfMcdTag.item(i) instanceof Element) {
                 Element childOfMcdTag = (Element) childsOfMcdTag.item(i); //peut être <model>, <diagrammes>, <entities> ou <relations>
+                /*
+                Chargement d'un modèle
+                 */
                 if (childOfMcdTag.getNodeName().equals("model")) {
                     // Alimentation de la listes des éléments modèles
                     modelsTagsList.add(childOfMcdTag);
@@ -177,10 +184,14 @@ public class ProjectLoaderXml {
                     // Ajout des propriétés du modèle
                     addPropertiesModelOrPackage(mcdModel, childOfMcdTag);
                 }
-                // Ajout des conteneurs sans modèles
+                /*
+                Chargement des conteneurs sans modèle
+                 */
+                //Chargement des diagrammes
                 if (childOfMcdTag.getNodeName().equals("diagrammes")) {
                     MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(mcdContModels, Integer.parseInt(childOfMcdTag.getAttribute("id")));
                     mcdContDiagrams.setName(Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+                    this.diagramTagsList = childOfMcdTag.getChildNodes(); //Récupération des enfants de <diagrammes>, c'est-à-dire de la liste de chaque <diagramme>.
                 }
                 if (childOfMcdTag.getNodeName().equals("entities")) {
                     MVCCDElementFactory.instance().createMCDEntities(mcdContModels, Preferences.REPOSITORY_MCD_ENTITIES_NAME);
@@ -226,7 +237,7 @@ public class ProjectLoaderXml {
                     // Récupération du nom du parent du paquetage
                     Element nameParent = (Element) pack.getElementsByTagName("parent").item(0);
 
-                    // Récuperation du modèle en lien avec le paquetage
+                    // Récupération du modèle en lien avec le paquetage
                     MCDModel mcdModel = null;
                     for (MVCCDElement mvccdElement : listModel) {
                         MCDModel child = (MCDModel) mvccdElement;
@@ -314,6 +325,24 @@ public class ProjectLoaderXml {
             mcdPackage.setMcdJournalization(Boolean.valueOf(journalization.getTextContent()));
             mcdPackage.setMcdJournalizationException(Boolean.valueOf(journalizationException.getTextContent()));
 
+        }
+    }
+
+    private void loadDiagrams(MCDContModels mcd, Element mcdTag){
+        //Recherche du conteneur de diagrammes au sein du modèle "MCD"
+        ArrayList<MVCCDElement> mcdElements = mcd.getChilds();
+        for(MVCCDElement mvccdElement : mcdElements){
+            if (mvccdElement instanceof MCDContDiagrams) {
+                MCDContDiagrams mcdContDiagrams = (MCDContDiagrams) mvccdElement;
+                //Parcours chaque diagramme pour chargement
+                for (int i = 0; i < this.diagramTagsList.getLength(); i++) {
+                    if(this.diagramTagsList.item(i) instanceof Element){
+                        Element diagramTag = (Element) this.diagramTagsList.item(i);
+                        MCDDiagram mcdDiagram = MVCCDElementFactory.instance().createMCDDiagram(mcdContDiagrams, Integer.parseInt(diagramTag.getAttribute("id")));
+                        mcdDiagram.setName(diagramTag.getAttribute("name"));
+                    }
+                }
+            }
         }
     }
 

@@ -14,6 +14,10 @@ public abstract class Diagram extends ProjectElement {
         super(parent);
     }
 
+    public Diagram(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public Diagram(ProjectElement parent, String name) {
         super(parent, name);
     }

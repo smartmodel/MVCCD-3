@@ -1,6 +1,7 @@
 package project;
 
 import console.Console;
+import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
@@ -238,7 +239,7 @@ public class ProjectSaverXml {
 
                 // Ajout des paquetage dans le document
                 Element packages = doc.createElement("package");
-                Attr name = doc.createAttribute("name");
+                Attr name = doc.createAttribute("name"); //TODO-STB: ajouter id de paquetage
                 name.setValue(pack.getName());
                 packages.setAttributeNode(name);
 
@@ -280,16 +281,26 @@ public class ProjectSaverXml {
                 diagramsTag.setAttributeNode(idAttrOfDiagramsTag);
                 racineTag.appendChild(diagramsTag);
 
-                ArrayList<MVCCDElement> diagramsChilds = mcdContDiagrams.getChilds();
+                ArrayList<MVCCDElement> diagrams = mcdContDiagrams.getChilds();
 
                 // Ajout des diagrammes dans le document
-                for (MVCCDElement childDiagram : diagramsChilds) {
-                    String nameDiagram = childDiagram.getName();
+                for (MVCCDElement diagram : diagrams) {
+                    if(diagram instanceof MCDDiagram) {
+                        // Création de la balise <diagramme>
+                        MCDDiagram mcdDiagram = (MCDDiagram) diagram;
+                        Element diagramTag = doc.createElement("diagramme");
+                        diagramsTag.appendChild(diagramTag);
 
-                    Element diagram = doc.createElement(nameDiagram);
+                        // Ajout de l'id à la balise <diagramme>
+                        Attr idAttrOfDiagramTag = doc.createAttribute("id");
+                        idAttrOfDiagramTag.setValue(String.valueOf(mcdDiagram.getIdProjectElement()));
+                        diagramTag.setAttributeNode(idAttrOfDiagramTag);
 
-                    diagramsTag.appendChild(diagram);
-
+                        // Ajout de l'attribut "name" à la balise <diagramme>
+                        Attr nameAttrOfDiagramTag = doc.createAttribute("name");
+                        nameAttrOfDiagramTag.setValue(mcdDiagram.getName());
+                        diagramTag.setAttributeNode(nameAttrOfDiagramTag);
+                    }
                 }
 
             }

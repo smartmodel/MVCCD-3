@@ -11,6 +11,10 @@ public class MCDDiagram extends MDDiagram {
         super(parent);
     }
 
+    public MCDDiagram(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MCDDiagram(ProjectElement parent, String name) {
         super(parent, name);
     }

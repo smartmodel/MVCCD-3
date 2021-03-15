@@ -228,7 +228,23 @@
 
 	<xs:element name="diagrammes">
 		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="diagramme" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="diagramme">
+		<xs:complexType>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 

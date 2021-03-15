@@ -86,6 +86,10 @@ public class MVCCDElementFactory {
         return new MCDContDiagrams(parent, name);
     }
 
+    public MCDDiagram createMCDDiagram(ProjectElement parent, int id){
+        return new MCDDiagram(parent, id);
+    }
+
     public MCDDiagram createMCDDiagram(ProjectElement parent, String name){
         return new MCDDiagram(parent, name);
     }
