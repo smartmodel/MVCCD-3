@@ -106,11 +106,6 @@ public abstract class MCDElement extends MDElement {
         return MCDElementService.getIMCDModelAccueil(this);
     }
 
-    public IMCDModel getMCDModelAccueil(){
-        return MCDElementService.getMCDModelAccueil(this);
-    }
-
-
     public MCDElement getMCDParent(){
         if (super.getParent() instanceof MCDElement){
             return (MCDElement) super.getParent();

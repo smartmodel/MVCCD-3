@@ -54,6 +54,11 @@ public class MCDElementService {
     }
 
 
+    /**
+     * Retourne le modèle MCD parent
+     * @param mcdElement N'importe quel élément d'un MCD.
+     * @return MCD parent
+     */
     public static IMCDModel getIMCDModelAccueil(MCDElement mcdElement) {
         if (mcdElement.getParent() instanceof MCDElement) {
             if (mcdElement.getParent() instanceof IMCDModel) {

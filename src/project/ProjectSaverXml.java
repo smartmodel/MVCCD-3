@@ -7,6 +7,8 @@ import main.MVCCDManager;
 import mcd.*;
 import messages.MessagesBuilder;
 import mldr.MLDRModel;
+import mldr.MLDRModelDT;
+import mldr.MLDRModelTI;
 import mldr.MLDRTable;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -882,9 +884,19 @@ public class ProjectSaverXml {
             if(model instanceof MLDRModel){
                 MLDRModel mldrModel = (MLDRModel) model;
 
-                //Création de la balise <MLDR>
-                Element mldrTag = doc.createElement("MLDR");
+                //Création de la balise <MLDR_xx>
+                Element mldrTag = null;
+                if(mldrModel instanceof MLDRModelDT) {
+                    mldrTag = doc.createElement("MLDR_DT");
+                }else if(mldrModel instanceof MLDRModelTI){
+                    mldrTag = doc.createElement("MLDR_TI");
+                }
                 racineTag.appendChild(mldrTag);
+
+                //Ajout de l'id à la balise <MLDR_xx>
+                Attr idAttrOfmldrTag = doc.createAttribute("id");
+                idAttrOfmldrTag.setValue(String.valueOf(mldrModel.getIdProjectElement()));
+                mldrTag.setAttributeNode(idAttrOfmldrTag);
 
                 //Création de la balise <tables>
                 Element tablesTag = doc.createElement("tables");
@@ -902,7 +914,7 @@ public class ProjectSaverXml {
                     tableNameAttr.setValue(mldrTable.getName());
                     tableTag.setAttributeNode(tableNameAttr);
 
-                    //TODO-STB: Continuer ici, et en premier lieu charger le MLDR et les tables
+                    //TODO-STB: Continuer ici, après la sauvegarde des tables, sauvegarder les colonnes
                 }
 
             }

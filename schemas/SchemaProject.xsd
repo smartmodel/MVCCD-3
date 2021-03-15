@@ -166,7 +166,8 @@
 					<xs:element ref="entities"/>
 					<xs:element ref="relations"/>
 					<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
-					<xs:element ref="MLDR" minOccurs="0"/>
+					<xs:element ref="MLDR_DT" minOccurs="0"/>
+					<xs:element ref="MLDR_TI" minOccurs="0"/>
 				</xs:sequence>
 			</xs:choice>
 			<xs:attribute name="id" use="required" type="xs:int"/>
@@ -181,7 +182,8 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="MLDR"/>
+				<xs:element ref="MLDR_DT"/>
+				<xs:element ref="MLDR_TI"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
@@ -202,7 +204,8 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="MLDR"/>
+				<xs:element ref="MLDR_DT"/>
+				<xs:element ref="MLDR_TI"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
@@ -662,11 +665,21 @@
 	<xs:element name="deleteCascade" type="xs:boolean"/>
 
 	<!-- MLDR -->
-	<xs:element name="MLDR">
+	<xs:element name="MLDR_DT">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="tables"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+
+	</xs:element>
+	<xs:element name="MLDR_TI">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tables"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 

@@ -62,6 +62,12 @@ public class MVCCDElementFactory {
         return new MCDContModels(project, name);
     }
 
+    public MCDModel createMCDModel(MCDContModels mcdContModels, int id){
+        MCDModel mcdModel = new MCDModel(mcdContModels, id);
+        createContentMCDModel(mcdModel);
+        return mcdModel;
+    }
+
     public MCDModel createMCDModel(MCDContModels mcdContModels){
         MCDModel mcdModel = new MCDModel(mcdContModels);
         createContentMCDModel(mcdModel);
@@ -246,12 +252,27 @@ public class MVCCDElementFactory {
     }
 
 
+    public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel, int id){
+        MLDRModelDT mldrModelDT = new MLDRModelDT((ProjectElement) imcdModel, id);
+        mldrModelDT.setName(Preferences.REPOSITORY_MLDR_MODEL_DT_NAME);
+        namingMLDRModel(mldrModelDT);
+        createContentMLDRModel(mldrModelDT);
+        return mldrModelDT;
+    }
 
     public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel){
         MLDRModelDT mldrModelDT = new MLDRModelDT((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_DT_NAME);
         namingMLDRModel(mldrModelDT);
         createContentMLDRModel(mldrModelDT);
         return mldrModelDT;
+    }
+
+    public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel, int id){
+        MLDRModelTI mldrModelTI = new MLDRModelTI((ProjectElement) imcdModel, id);
+        mldrModelTI.setName(Preferences.REPOSITORY_MLDR_MODEL_TI_NAME);
+        namingMLDRModel(mldrModelTI);
+        createContentMLDRModel(mldrModelTI);
+        return mldrModelTI;
     }
 
     public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel){

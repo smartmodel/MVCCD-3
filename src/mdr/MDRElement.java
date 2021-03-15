@@ -17,6 +17,10 @@ public abstract class MDRElement extends MDElement {
 
     private MDRElementNames names = new MDRElementNames(); //un élément a 3 noms: un court avec 30 caractères, un avec 60 et un avec 120. Selon le constructeur choisit lors de la génération, on choisit le bon.
 
+    public MDRElement(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MDRElement(ProjectElement parent, String name) {
         super(parent, name);
     }
