@@ -269,16 +269,16 @@ public class ProjectSaverXml {
 
     // *** Méthodes de sauvegarde du MCD ***
 
-    private void addDiagrams(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
+    private void addDiagrams(Document doc, ArrayList<MVCCDElement> listElements, Element racineTag) {
         // Ajout du package diagrammes dans le document
-        for (int i = 0; i < listElement.size(); i++) {
-            if(listElement.get(i) instanceof MCDContDiagrams){
-                MCDContDiagrams mcdContDiagrams = (MCDContDiagrams) listElement.get(i);
+        for (int i = 0; i < listElements.size(); i++) {
+            if(listElements.get(i) instanceof MCDContDiagrams){
+                MCDContDiagrams mcdContDiagrams = (MCDContDiagrams) listElements.get(i);
                 Element diagramsTag = doc.createElement("diagrammes");
                 Attr idAttrOfDiagramsTag = doc.createAttribute("id");
                 idAttrOfDiagramsTag.setValue(String.valueOf(mcdContDiagrams.getIdProjectElement()));
                 diagramsTag.setAttributeNode(idAttrOfDiagramsTag);
-                racine.appendChild(diagramsTag);
+                racineTag.appendChild(diagramsTag);
 
                 ArrayList<MVCCDElement> diagramsChilds = mcdContDiagrams.getChilds();
 
@@ -296,15 +296,15 @@ public class ProjectSaverXml {
         }
     }
 
-    private void addEntities(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
+    private void addEntities(Document doc, ArrayList<MVCCDElement> listElements, Element racineTag) {
         // ajout du package entités dans le document
-        for (int i = 0; i < listElement.size(); i++) {
-            MVCCDElement childElement = listElement.get(i);
+        for (int i = 0; i < listElements.size(); i++) {
+            MVCCDElement childElement = listElements.get(i);
             String nameModel = childElement.getName();
 
             if (nameModel.equals("Entités")) {
                 Element entities = doc.createElement("entities");
-                racine.appendChild(entities);
+                racineTag.appendChild(entities);
 
                 ArrayList<MVCCDElement> entitiesChilds = childElement.getChilds();
                 // Ajout des entités dans le document
@@ -321,7 +321,7 @@ public class ProjectSaverXml {
                     ArrayList<MVCCDElement> entityChilds = childEntity.getChilds();
 
                     // Ajout des éléments qui composent une entité
-                    addPropertiesEntity(doc, entity, childEntity, racine);
+                    addPropertiesEntity(doc, entity, childEntity, racineTag);
                     addAttributs(doc, entity, entityChilds);
 
                     addContraints(doc, entity, entityChilds);

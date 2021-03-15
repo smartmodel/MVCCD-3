@@ -138,6 +138,23 @@ public class Project extends ProjectElement {
         return idElementSequence;
     }
 
+    /**
+     * Attention, à n'utiliser que pour connaître le dernier numéro d'id qui a été donné par la séquence d'id unique
+     * d'éléments d'un projet.
+     * @return Retourne le dernier id que la séquence a donné.
+     */
+    public int getIdElementSequence() {
+        return idElementSequence;
+    }
+
+    /**
+     * Force la séquence d'id à repartir d'un certain numéro.
+     * @param id La séquence prendra le numéro passé en paramètre comme dernier numéro déjà attribué à un élément de projet.
+     */
+    public void setIdElementSequence(int id){
+        this.idElementSequence = id;
+    }
+
     public boolean isModelsMany() {
         return modelsMany;
     }
@@ -153,6 +170,7 @@ public class Project extends ProjectElement {
     public void setPackagesAutorizeds(boolean packagesAutorizeds) {
         this.packagesAutorizeds = packagesAutorizeds;
     }
+
 
 
     // Sauvegarde de l'état du projet
