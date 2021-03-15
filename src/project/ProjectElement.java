@@ -100,6 +100,25 @@ public abstract class ProjectElement extends MVCCDElement {
         return null;
     }
 
+    /**
+     * Retourne le premier élément enfant qui a l'id donné en paramètre. Effectue une recherche en profondeur,
+     * c'est-à-dire que l'élément est recherché automatiquement auprès des enfants, des enfants des enfants, etc.
+     * @param id Identifiant de l'enfant à rechercher
+     * @return L'élément retourné, s'il a un id, est forcément un ProjectElement. Retourne null si aucun élément n'est trouvé.
+     */
+    public ProjectElement getChildByIdProfondeur(int id){
+        for(MVCCDElement mvccdElement : this.getChilds()){
+            if(mvccdElement instanceof ProjectElement){
+                ProjectElement projectElement = (ProjectElement) mvccdElement;
+                if(projectElement.getIdProjectElement() == id){
+                    return (ProjectElement) mvccdElement;
+                }
+                return projectElement.getChildByIdProfondeur(id);
+            }
+        }
+        return null;
+    }
+
     //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
     //TransitoryProjectElement au lieu de Transitory
     public boolean isTransitoryProjectElement() {

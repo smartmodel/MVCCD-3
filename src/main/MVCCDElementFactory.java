@@ -296,6 +296,19 @@ public class MVCCDElementFactory {
         MLDRContRelations mldrContRelations = new MLDRContRelations(mldrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
     }
 
+    public MLDRContTables createMLDRContTables(MLDRModel mldrModel, int id) {
+        return new MLDRContTables(mldrModel, id);
+    }
+
+    public MLDRTable createMLDRTable(MDRContTables mdrContTables, MCDEntity entitySource, int id) {
+        MLDRTable mldrTable = new MLDRTable(mdrContTables, entitySource, id);
+        MLDRContColumns mldrContColumns = new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        MLDRContConstraints mldrContConstraints = new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+        MLDRContRelEnds mldrContRelEnds = new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
+
+        return mldrTable;
+    }
+
 
     public MLDRTable createMLDRTable(MDRContTables mdrContTables, MCDEntity entitySource) {
         MLDRTable mldrTable = new MLDRTable(mdrContTables, entitySource);
@@ -488,4 +501,5 @@ public class MVCCDElementFactory {
             return null;
         }
     }
+
 }

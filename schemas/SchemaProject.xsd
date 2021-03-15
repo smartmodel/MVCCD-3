@@ -688,6 +688,7 @@
 			<xs:sequence>
 				<xs:element ref="table" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -696,6 +697,7 @@
 			<!--<xs:sequence>
 				 <xs:element ref="colonnes"/>
 			</xs:sequence>-->
+			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -704,6 +706,7 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
+			<xs:attribute name="entity_source" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 </xs:schema>

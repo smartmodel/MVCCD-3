@@ -7,7 +7,10 @@ import main.MVCCDElementFactory;
 import main.MVCCDFactory;
 import mcd.*;
 import messages.MessagesBuilder;
+import mldr.MLDRContTables;
 import mldr.MLDRModel;
+import mldr.MLDRModelDT;
+import mldr.MLDRTable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -899,10 +902,48 @@ public class ProjectLoaderXml {
 
     // *** Méthode de chargement du MLD ***
 
-    private void loadMLDR(MCDContModels mcdContModels, Element mcdTag){
+    private void loadMLDR(MCDContModels mcd, Element mcdTag){
+        //Parcours des enfants de <MCD>
+        NodeList mcdTagChilds = mcdTag.getChildNodes();
 
-        //TODO-STB: CONTINUER ICI
+        for (int i = 0; i < mcdTagChilds.getLength(); i++) {
+            if (mcdTagChilds.item(i) instanceof Element) {
+                Element mcdTagChild = (Element) mcdTagChilds.item(i);
+
+                //Chargement de <MLDR_DT> ou <MLDR_TI>
+                if (mcdTagChild.getNodeName().equals("MLDR_DT") || mcdTagChild.getNodeName().equals("MLDR_TI")) {
+                    MLDRModel mldrModel = (MLDRModel) mcd.getChildById(Integer.parseInt(mcdTagChild.getAttribute("id"))); //Récupération du MLDR_DT ou MLDR_TI déjà chargé dans l'application
+
+                    //Parcours des balises enfants de <MLDR_DT> ou <MLDR_TI>
+                    NodeList mldrTagChilds = mcdTagChild.getChildNodes();
+                    for (int j = 0; j < mldrTagChilds.getLength(); j++) {
+                        if(mldrTagChilds.item(j) instanceof Element){
+                            Element mldrTagChild = (Element) mldrTagChilds.item(j);
+
+                            //Chargement de <tables>
+                            if(mldrTagChild.getNodeName().equals("tables")){
+                                MLDRContTables mldrContTables = (MLDRContTables) mldrModel.getMDRContTables();
+
+                                //Parcours des balises enfants de <tables>
+                                NodeList tablesTagChilds = mldrTagChild.getChildNodes();
+                                for (int k = 0; k < tablesTagChilds.getLength(); k++) {
+                                    if (tablesTagChilds.item(k) instanceof Element) {
+                                        Element tablesTagChild = (Element) tablesTagChilds.item(k);
+
+                                        //Chargement de <table>
+                                        if (tablesTagChild.getNodeName().equals("table")) {
+                                            int entitySourceId = Integer.parseInt(tablesTagChild.getAttribute("entity_source")); //Récupération de l'id de l'entité source de la table
+                                            MCDEntity mcdEntitySource = (MCDEntity) mcd.getChildByIdProfondeur(entitySourceId); //Recherche de l'entité source en fonction de son ID, parmis tous les enfants du MCD
+                                            MLDRTable mldrTable = MVCCDElementFactory.instance().createMLDRTable(mldrContTables, mcdEntitySource, Integer.parseInt(tablesTagChild.getAttribute("id")));
+                                            mldrTable.setName(tablesTagChild.getAttribute("name"));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
-
 }
-

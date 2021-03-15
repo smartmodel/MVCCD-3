@@ -902,6 +902,11 @@ public class ProjectSaverXml {
                 Element tablesTag = doc.createElement("tables");
                 mldrTag.appendChild(tablesTag);
 
+                //Ajout de l'id à la balise <tables>
+                Attr idAttrOfTablesTag = doc.createAttribute("id");
+                idAttrOfTablesTag.setValue(String.valueOf(mldrModel.getMDRContTables().getIdProjectElement()));
+                tablesTag.setAttributeNode(idAttrOfTablesTag);
+
                 //Persistance des tables
                 for(MLDRTable mldrTable : mldrModel.getMLDRTables()){
 
@@ -909,10 +914,20 @@ public class ProjectSaverXml {
                     Element tableTag = doc.createElement("table");
                     tablesTag.appendChild(tableTag);
 
+                    //Ajout de l'attribut "id" à <table>
+                    Attr tableIdAttr = doc.createAttribute("id");
+                    tableIdAttr.setValue(String.valueOf(mldrTable.getIdProjectElement()));
+                    tableTag.setAttributeNode(tableIdAttr);
+
                     //Ajout de l'attribut "name" à <table>
                     Attr tableNameAttr = doc.createAttribute("name");
                     tableNameAttr.setValue(mldrTable.getName());
                     tableTag.setAttributeNode(tableNameAttr);
+
+                    //Ajout de l'attribut "entity_source" à <table>
+                    Attr tableEntitySourceAttr = doc.createAttribute("entity_source");
+                    tableEntitySourceAttr.setValue(String.valueOf(mldrTable.getMcdElementSource().getIdProjectElement()));
+                    tableTag.setAttributeNode(tableEntitySourceAttr);
 
                     //TODO-STB: Continuer ici, après la sauvegarde des tables, sauvegarder les colonnes
                 }
