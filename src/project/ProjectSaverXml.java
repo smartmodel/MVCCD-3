@@ -197,7 +197,7 @@ public class ProjectSaverXml {
             Element model = doc.createElement("model");
             if (child instanceof MCDModel) {
                 mcd.appendChild(model);
-                Attr name = doc.createAttribute("name");
+                Attr name = doc.createAttribute("name"); //TODO-STB: ajouter id sur <model>
                 name.setValue(child.getName());
                 model.setAttributeNode(name);
             }
@@ -272,12 +272,15 @@ public class ProjectSaverXml {
     private void addDiagrams(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
         // Ajout du package diagrammes dans le document
         for (int i = 0; i < listElement.size(); i++) {
-            MVCCDElement childElement = listElement.get(i);
-            if (childElement.getName().equals("Diagrammes")) {
-                Element diagrams = doc.createElement("diagrammes");
-                racine.appendChild(diagrams);
+            if(listElement.get(i) instanceof MCDContDiagrams){
+                MCDContDiagrams mcdContDiagrams = (MCDContDiagrams) listElement.get(i);
+                Element diagramsTag = doc.createElement("diagrammes");
+                Attr idAttrOfDiagramsTag = doc.createAttribute("id");
+                idAttrOfDiagramsTag.setValue(String.valueOf(mcdContDiagrams.getIdProjectElement()));
+                diagramsTag.setAttributeNode(idAttrOfDiagramsTag);
+                racine.appendChild(diagramsTag);
 
-                ArrayList<MVCCDElement> diagramsChilds = childElement.getChilds();
+                ArrayList<MVCCDElement> diagramsChilds = mcdContDiagrams.getChilds();
 
                 // Ajout des diagrammes dans le document
                 for (MVCCDElement childDiagram : diagramsChilds) {
@@ -285,7 +288,7 @@ public class ProjectSaverXml {
 
                     Element diagram = doc.createElement(nameDiagram);
 
-                    diagrams.appendChild(diagram);
+                    diagramsTag.appendChild(diagram);
 
                 }
 

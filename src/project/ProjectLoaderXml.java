@@ -158,39 +158,39 @@ public class ProjectLoaderXml {
         preferences.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(mcdModeNamingAttributeShortName.getTextContent());
     }
 
-    private ArrayList<Element> loadModels(MCDContModels mcdCont, Element mcd) {
+    private ArrayList<Element> loadModels(MCDContModels mcdContModels, Element mcdTag) {
         // Créations de la listes des éléments modèles à renvoyer
-        ArrayList<Element> elementsModeles = new ArrayList<>();
+        ArrayList<Element> modelsTagsList = new ArrayList<>();
         // Parcours des enfants de MCD
-        NodeList mcdChilds = mcd.getChildNodes();
-        for (int i = 0; i < mcdChilds.getLength(); i++) {
-            Node mcdChild = mcdChilds.item(i);
-            if (mcdChild instanceof Element) {
-                if (mcdChild.getNodeName().equals("model")) {
-                    Element model = (Element) mcdChild;
+        NodeList childsOfMcdTag = mcdTag.getChildNodes();
+        for (int i = 0; i < childsOfMcdTag.getLength(); i++) {
+            if (childsOfMcdTag.item(i) instanceof Element) {
+                Element childOfMcdTag = (Element) childsOfMcdTag.item(i); //peut être <model>, <diagrammes>, <entities> ou <relations>
+                if (childOfMcdTag.getNodeName().equals("model")) {
                     // Alimentation de la listes des éléments modèles
-                    elementsModeles.add(model);
+                    modelsTagsList.add(childOfMcdTag);
 
                     //création du modèle
-                    MCDModel mcdModel = MVCCDElementFactory.instance().createMCDModel(mcdCont);
-                    mcdModel.setName(model.getAttribute("name"));
+                    MCDModel mcdModel = MVCCDElementFactory.instance().createMCDModel(mcdContModels);
+                    mcdModel.setName(childOfMcdTag.getAttribute("name"));
 
                     // Ajout des propriétés du modèle
-                    addPropertiesModelOrPackage(mcdModel, model);
+                    addPropertiesModelOrPackage(mcdModel, childOfMcdTag);
                 }
                 // Ajout des conteneurs sans modèles
-                if (mcdChild.getNodeName().equals("diagrammes")) {
-                    MVCCDElementFactory.instance().createMCDDiagrams(mcdCont, Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+                if (childOfMcdTag.getNodeName().equals("diagrammes")) {
+                    MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(mcdContModels, Integer.parseInt(childOfMcdTag.getAttribute("id")));
+                    mcdContDiagrams.setName(Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
                 }
-                if (mcdChild.getNodeName().equals("entities")) {
-                    MVCCDElementFactory.instance().createMCDEntities(mcdCont, Preferences.REPOSITORY_MCD_ENTITIES_NAME);
+                if (childOfMcdTag.getNodeName().equals("entities")) {
+                    MVCCDElementFactory.instance().createMCDEntities(mcdContModels, Preferences.REPOSITORY_MCD_ENTITIES_NAME);
                 }
-                if (mcdChild.getNodeName().equals("relations")) {
-                    MVCCDElementFactory.instance().createMCDContRelations(mcdCont, Preferences.REPOSITORY_MCD_RELATIONS_NAME);
+                if (childOfMcdTag.getNodeName().equals("relations")) {
+                    MVCCDElementFactory.instance().createMCDContRelations(mcdContModels, Preferences.REPOSITORY_MCD_RELATIONS_NAME);
                 }
             }
         }
-        return elementsModeles;
+        return modelsTagsList;
     }
 
     private void loadPackages(MCDContModels mcd, Element element) {

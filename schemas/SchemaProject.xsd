@@ -226,7 +226,11 @@
 		</xs:simpleType>
 	</xs:element>
 
-	<xs:element name="diagrammes"/>
+	<xs:element name="diagrammes">
+		<xs:complexType>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
 
 	<xs:element name="entities">
 		<xs:complexType>
