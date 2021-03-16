@@ -898,42 +898,65 @@ public class ProjectSaverXml {
                 idAttrOfmldrTag.setValue(String.valueOf(mldrModel.getIdProjectElement()));
                 mldrTag.setAttributeNode(idAttrOfmldrTag);
 
-                //Création de la balise <tables>
-                Element tablesTag = doc.createElement("tables");
-                mldrTag.appendChild(tablesTag);
-
-                //Ajout de l'id à la balise <tables>
-                Attr idAttrOfTablesTag = doc.createAttribute("id");
-                idAttrOfTablesTag.setValue(String.valueOf(mldrModel.getMDRContTables().getIdProjectElement()));
-                tablesTag.setAttributeNode(idAttrOfTablesTag);
-
                 //Persistance des tables
-                for(MLDRTable mldrTable : mldrModel.getMLDRTables()){
-
-                    //Création de la balise <table>
-                    Element tableTag = doc.createElement("table");
-                    tablesTag.appendChild(tableTag);
-
-                    //Ajout de l'attribut "id" à <table>
-                    Attr tableIdAttr = doc.createAttribute("id");
-                    tableIdAttr.setValue(String.valueOf(mldrTable.getIdProjectElement()));
-                    tableTag.setAttributeNode(tableIdAttr);
-
-                    //Ajout de l'attribut "name" à <table>
-                    Attr tableNameAttr = doc.createAttribute("name");
-                    tableNameAttr.setValue(mldrTable.getName());
-                    tableTag.setAttributeNode(tableNameAttr);
-
-                    //Ajout de l'attribut "entity_source" à <table>
-                    Attr tableEntitySourceAttr = doc.createAttribute("entity_source");
-                    tableEntitySourceAttr.setValue(String.valueOf(mldrTable.getMcdElementSource().getIdProjectElement()));
-                    tableTag.setAttributeNode(tableEntitySourceAttr);
-
-                    //TODO-STB: Continuer ici, après la sauvegarde des tables, sauvegarder les colonnes
-                }
-
+                this.addTables(doc, mldrModel, mldrTag);
             }
         }
+    }
+
+    /**
+     * Sauvegarde les tables dans une balise <tables> en parcourant le modèle MLDR
+     * @param doc Document XML dans lequel la persistance se fait
+     * @param mldrModel Modèle MLDR parcouru pour lequel toutes les tables qu'il contient seront persistées.
+     * @param mldrTag Balise racine <mldr> qui sera la balise parent de la balise <tables> enfant.
+     */
+    private void addTables(Document doc, MLDRModel mldrModel, Element mldrTag){
+
+        //Création de la balise <tables>
+        Element tablesTag = doc.createElement("tables");
+        mldrTag.appendChild(tablesTag);
+
+        //Ajout de l'id à la balise <tables>
+        Attr idAttrOfTablesTag = doc.createAttribute("id");
+        idAttrOfTablesTag.setValue(String.valueOf(mldrModel.getMDRContTables().getIdProjectElement()));
+        tablesTag.setAttributeNode(idAttrOfTablesTag);
+
+        //Parcours des tables
+        for(MLDRTable mldrTable : mldrModel.getMLDRTables()){
+
+            //Persistance d'une table
+            this.addTable(doc, mldrTable, tablesTag);
+
+        }
+    }
+
+    /**
+     * Sauvegarde d'une table dans une balise <table>.
+     * @param doc Document XML dans lequel la persistance se fait
+     * @param mldrTable Table à persister
+     * @param tablesTag Balise parent <tables> qui contient la nouvelle balise <table>
+     */
+    private void addTable(Document doc, MLDRTable mldrTable, Element tablesTag){
+        //Création de la balise <table>
+        Element tableTag = doc.createElement("table");
+        tablesTag.appendChild(tableTag);
+
+        //Ajout de l'attribut "id" à <table>
+        Attr tableIdAttr = doc.createAttribute("id");
+        tableIdAttr.setValue(String.valueOf(mldrTable.getIdProjectElement()));
+        tableTag.setAttributeNode(tableIdAttr);
+
+        //Ajout de l'attribut "name" à <table>
+        Attr tableNameAttr = doc.createAttribute("name");
+        tableNameAttr.setValue(mldrTable.getName());
+        tableTag.setAttributeNode(tableNameAttr);
+
+        //Ajout de l'attribut "entity_source" à <table>
+        Attr tableEntitySourceAttr = doc.createAttribute("entity_source");
+        tableEntitySourceAttr.setValue(String.valueOf(mldrTable.getMcdElementSource().getIdProjectElement()));
+        tableTag.setAttributeNode(tableEntitySourceAttr);
+
+        //TODO-STB: continuer ici avec la persistance des colonnes
     }
 
 }
