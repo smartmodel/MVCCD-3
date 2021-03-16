@@ -7,10 +7,7 @@ import main.MVCCDElementFactory;
 import main.MVCCDFactory;
 import mcd.*;
 import messages.MessagesBuilder;
-import mldr.MLDRContTables;
-import mldr.MLDRModel;
-import mldr.MLDRModelDT;
-import mldr.MLDRTable;
+import mldr.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -900,7 +897,7 @@ public class ProjectLoaderXml {
 
 
 
-    // *** Méthode de chargement du MLD ***
+    // *** Méthodes de chargement du MLD ***
 
     private void loadMLDR(MCDContModels mcd, Element mcdTag){
         //Parcours des enfants de <MCD>
@@ -922,7 +919,7 @@ public class ProjectLoaderXml {
 
                             //Chargement de <tables>
                             if(mldrTagChild.getNodeName().equals("tables")){
-                                MLDRContTables mldrContTables = (MLDRContTables) mldrModel.getMDRContTables();
+                                MLDRContTables mldrContTables = (MLDRContTables) mldrModel.getMDRContTables(); //Le conteneur de tables est déjà créé automatiquement avant
 
                                 //Parcours des balises enfants de <tables>
                                 NodeList tablesTagChilds = mldrTagChild.getChildNodes();
@@ -936,6 +933,19 @@ public class ProjectLoaderXml {
                                             MCDEntity mcdEntitySource = (MCDEntity) mcd.getChildByIdProfondeur(entitySourceId); //Recherche de l'entité source en fonction de son ID, parmis tous les enfants du MCD
                                             MLDRTable mldrTable = MVCCDElementFactory.instance().createMLDRTable(mldrContTables, mcdEntitySource, Integer.parseInt(tablesTagChild.getAttribute("id")));
                                             mldrTable.setName(tablesTagChild.getAttribute("name"));
+
+                                            //Parcours des balises enfants de <table>
+                                            NodeList tableTagChilds = tablesTagChild.getChildNodes();
+                                            for (int l = 0; l < tableTagChilds.getLength(); l++) {
+                                                if (tableTagChilds.item(l) instanceof Element) {
+                                                    Element tableTagChild = (Element) tableTagChilds.item(l);
+
+                                                    //Chargement de <columns>
+                                                    if (tableTagChild.getNodeName().equals("columns")) {
+                                                        MLDRContColumns mldrContColumns = (MLDRContColumns) mldrTable.getMDRContColumns();
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }

@@ -6,10 +6,7 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
 import messages.MessagesBuilder;
-import mldr.MLDRModel;
-import mldr.MLDRModelDT;
-import mldr.MLDRModelTI;
-import mldr.MLDRTable;
+import mldr.*;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -956,7 +953,32 @@ public class ProjectSaverXml {
         tableEntitySourceAttr.setValue(String.valueOf(mldrTable.getMcdElementSource().getIdProjectElement()));
         tableTag.setAttributeNode(tableEntitySourceAttr);
 
-        //TODO-STB: continuer ici avec la persistance des colonnes
+        //Persistance des colonnes
+        this.addColumns(doc, mldrTable, tableTag);
     }
 
+    /**
+     * Sauvegarde des colonnes d'une table.
+     * @param doc Document XML dans lequel les colonnes seront persistées
+     * @param mldrTable Table pour laquelle les colonnes qu'elle contient seront persistées
+     * @param tableTag Balise parent <table> qui contiendra la nouvelle balise <columns>
+     */
+    private void addColumns(Document doc, MLDRTable mldrTable, Element tableTag) {
+
+        //Création de la balise <columns>
+        Element columnsTag = doc.createElement("columns");
+        tableTag.appendChild(columnsTag);
+
+        //Ajout de l'id à la balise <columns>
+        Attr idAttrOfColumnsTag = doc.createAttribute("id");
+        idAttrOfColumnsTag.setValue(String.valueOf(mldrTable.getMDRContColumns().getIdProjectElement()));
+        columnsTag.setAttributeNode(idAttrOfColumnsTag);
+
+        //Parcours des colonnes
+        for(MLDRColumn mldrColumn : mldrTable.getMLDRColumns()){
+
+            //Persistance d'une colonne
+            //TODO-STB: continuer ici avec la persistance d'une colonne
+        }
+    }
 }

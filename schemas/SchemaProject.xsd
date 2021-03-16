@@ -694,9 +694,9 @@
 
 	<xs:element name="table">
 		<xs:complexType>
-			<!--<xs:sequence>
-				 <xs:element ref="colonnes"/>
-			</xs:sequence>-->
+			<xs:sequence>
+				<xs:element ref="columns"/>
+			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
@@ -709,4 +709,14 @@
 			<xs:attribute name="entity_source" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
+
+	<xs:element name="columns">
+		<xs:complexType>
+			<!-- <xs:sequence>
+				<xs:element ref="column" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence> -->
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
 </xs:schema>
+
