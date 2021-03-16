@@ -60,7 +60,7 @@ public class ProjectSaverXml {
             Element projectTag = document.createElement("project");
             document.appendChild(projectTag);
             Attr idAttrOfProjectTag = document.createAttribute("id");
-            idAttrOfProjectTag.setValue(String.valueOf(project.getIdProjectElement()));
+            idAttrOfProjectTag.setValue(project.getIdProjectElementAsString());
             projectTag.setAttributeNode(idAttrOfProjectTag);
 
             //Propriété du projet
@@ -74,7 +74,7 @@ public class ProjectSaverXml {
             Element mcdTag = document.createElement(mcdContModels.getName());
             projectTag.appendChild(mcdTag);
             Attr idAttrOfMcdTag = document.createAttribute("id");
-            idAttrOfMcdTag.setValue(String.valueOf(mcdContModels.getIdProjectElement()));
+            idAttrOfMcdTag.setValue(mcdContModels.getIdProjectElementAsString());
             mcdTag.setAttributeNode(idAttrOfMcdTag);
 
             ArrayList<MVCCDElement> mcdModels = mcdContModels.getChilds();
@@ -276,7 +276,7 @@ public class ProjectSaverXml {
                 MCDContDiagrams mcdContDiagrams = (MCDContDiagrams) listElements.get(i);
                 Element diagramsTag = doc.createElement("diagrammes");
                 Attr idAttrOfDiagramsTag = doc.createAttribute("id");
-                idAttrOfDiagramsTag.setValue(String.valueOf(mcdContDiagrams.getIdProjectElement()));
+                idAttrOfDiagramsTag.setValue(mcdContDiagrams.getIdProjectElementAsString());
                 diagramsTag.setAttributeNode(idAttrOfDiagramsTag);
                 racineTag.appendChild(diagramsTag);
 
@@ -292,7 +292,7 @@ public class ProjectSaverXml {
 
                         // Ajout de l'id à la balise <diagramme>
                         Attr idAttrOfDiagramTag = doc.createAttribute("id");
-                        idAttrOfDiagramTag.setValue(String.valueOf(mcdDiagram.getIdProjectElement()));
+                        idAttrOfDiagramTag.setValue(mcdDiagram.getIdProjectElementAsString());
                         diagramTag.setAttributeNode(idAttrOfDiagramTag);
 
                         // Ajout de l'attribut "name" à la balise <diagramme>
@@ -319,7 +319,7 @@ public class ProjectSaverXml {
 
                 // Ajout de l'id à la balise <entities>
                 Attr idAttrOfEntitiesTag = doc.createAttribute("id");
-                idAttrOfEntitiesTag.setValue(String.valueOf(mcdContEntities.getIdProjectElement()));
+                idAttrOfEntitiesTag.setValue(mcdContEntities.getIdProjectElementAsString());
                 entitiesTag.setAttributeNode(idAttrOfEntitiesTag);
 
                 // Parcours et ajout des entités
@@ -333,7 +333,7 @@ public class ProjectSaverXml {
 
                     // Ajout de l'attribut "id" à <entite>
                     Attr idAttrOfEntityTag = doc.createAttribute("id");
-                    idAttrOfEntityTag.setValue(String.valueOf(entity.getIdProjectElement()));
+                    idAttrOfEntityTag.setValue(entity.getIdProjectElementAsString());
                     entityTag.setAttributeNode(idAttrOfEntityTag);
 
                     // Ajout de l'attribut "name" à <entite>
@@ -478,7 +478,7 @@ public class ProjectSaverXml {
 
             // Ajout de l'attribut "id" à <attribut>
             Attr id = doc.createAttribute("id");
-            id.setValue(String.valueOf(childAttribut.getIdProjectElement()));
+            id.setValue(childAttribut.getIdProjectElementAsString());
             attributTag.setAttributeNode(id);
 
             // Ajout de l'attribut "name" à <attribut>
@@ -576,46 +576,51 @@ public class ProjectSaverXml {
 
     private void addContraintsChilds(Document doc, ArrayList<MVCCDElement> contraintsChilds, Element contraintes) {
         for (int i = 0; i < contraintsChilds.size(); i++) {
-            MVCCDElement contraintsChild = contraintsChilds.get(i);
-            // Récupération de la contrainte
-            MCDConstraint mcdConstraint = (MCDConstraint) contraintsChild;
-            // Création de la contrainte dans le document
-            Element constraint = doc.createElement("constraint");
-            contraintes.appendChild(constraint);
+            MCDConstraint mcdConstraint = (MCDConstraint) contraintsChilds.get(i);
 
-            Attr name = doc.createAttribute("name");
-            name.setValue(mcdConstraint.getName());
-            constraint.setAttributeNode(name);
+            // Création de la balise <constraint>
+            Element constraintTag = doc.createElement("constraint");
+            contraintes.appendChild(constraintTag);
+
+            // Ajout de l'attribut "id" à la balise <constraint>
+            Attr idAttrOfConstraintTag = doc.createAttribute("id");
+            idAttrOfConstraintTag.setValue(mcdConstraint.getIdProjectElementAsString());
+            constraintTag.setAttributeNode(idAttrOfConstraintTag);
+
+            // Ajout de l'attribut "name" à la balise <constraint>
+            Attr nameAttrOfConstraintTag = doc.createAttribute("name");
+            nameAttrOfConstraintTag.setValue(mcdConstraint.getName());
+            constraintTag.setAttributeNode(nameAttrOfConstraintTag);
 
             Element shortName = doc.createElement("shortName");
             shortName.appendChild(doc.createTextNode(mcdConstraint.getShortName()));
-            constraint.appendChild(shortName);
+            constraintTag.appendChild(shortName);
 
             // Récupération du type de contrainte
             if (mcdConstraint instanceof MCDNID) {
                 MCDNID nid = (MCDNID) mcdConstraint;
                 Element lienProg = doc.createElement("lienProg");
                 lienProg.appendChild(doc.createTextNode(String.valueOf(nid.isLienProg())));
-                constraint.appendChild(lienProg);
+                constraintTag.appendChild(lienProg);
 
                 Element typeConstrainte = doc.createElement("type");
                 typeConstrainte.appendChild(doc.createTextNode("NID"));
-                constraint.appendChild(typeConstrainte);
+                constraintTag.appendChild(typeConstrainte);
                 // Ajout des parameters ( encore pas implémenté dans l'application)
-                addParameters(doc, nid, constraint);
+                addParameters(doc, nid, constraintTag);
 
             }
             if (mcdConstraint instanceof MCDUnique) {
                 MCDUnique unique = (MCDUnique) mcdConstraint;
                 Element absolute = doc.createElement("absolute");
                 absolute.appendChild(doc.createTextNode(String.valueOf(unique.isAbsolute())));
-                constraint.appendChild(absolute);
+                constraintTag.appendChild(absolute);
 
                 Element typeConstrainte = doc.createElement("type");
                 typeConstrainte.appendChild(doc.createTextNode("Unique"));
-                constraint.appendChild(typeConstrainte);
+                constraintTag.appendChild(typeConstrainte);
                 // Ajout des parameters
-                addParameters(doc, unique, constraint);
+                addParameters(doc, unique, constraintTag);
             }
         }
     }
@@ -902,7 +907,7 @@ public class ProjectSaverXml {
 
                 //Ajout de l'id à la balise <MLDR_xx>
                 Attr idAttrOfmldrTag = doc.createAttribute("id");
-                idAttrOfmldrTag.setValue(String.valueOf(mldrModel.getIdProjectElement()));
+                idAttrOfmldrTag.setValue(mldrModel.getIdProjectElementAsString());
                 mldrTag.setAttributeNode(idAttrOfmldrTag);
 
                 //Persistance des tables
@@ -925,7 +930,7 @@ public class ProjectSaverXml {
 
         //Ajout de l'id à la balise <tables>
         Attr idAttrOfTablesTag = doc.createAttribute("id");
-        idAttrOfTablesTag.setValue(String.valueOf(mldrModel.getMDRContTables().getIdProjectElement()));
+        idAttrOfTablesTag.setValue(mldrModel.getMDRContTables().getIdProjectElementAsString());
         tablesTag.setAttributeNode(idAttrOfTablesTag);
 
         //Parcours des tables
@@ -950,7 +955,7 @@ public class ProjectSaverXml {
 
         //Ajout de l'attribut "id" à <table>
         Attr tableIdAttr = doc.createAttribute("id");
-        tableIdAttr.setValue(String.valueOf(mldrTable.getIdProjectElement()));
+        tableIdAttr.setValue(mldrTable.getIdProjectElementAsString());
         tableTag.setAttributeNode(tableIdAttr);
 
         //Ajout de l'attribut "name" à <table>
@@ -960,7 +965,7 @@ public class ProjectSaverXml {
 
         //Ajout de l'attribut "entity_source" à <table>
         Attr tableEntitySourceAttr = doc.createAttribute("entity_source");
-        tableEntitySourceAttr.setValue(String.valueOf(mldrTable.getMcdElementSource().getIdProjectElement()));
+        tableEntitySourceAttr.setValue(mldrTable.getMcdElementSource().getIdProjectElementAsString());
         tableTag.setAttributeNode(tableEntitySourceAttr);
 
         //Persistance des colonnes
@@ -981,7 +986,7 @@ public class ProjectSaverXml {
 
         //Ajout de l'id à la balise <columns>
         Attr idAttrOfColumnsTag = doc.createAttribute("id");
-        idAttrOfColumnsTag.setValue(String.valueOf(mldrTable.getMDRContColumns().getIdProjectElement()));
+        idAttrOfColumnsTag.setValue(mldrTable.getMDRContColumns().getIdProjectElementAsString());
         columnsTag.setAttributeNode(idAttrOfColumnsTag);
 
         //Parcours des colonnes

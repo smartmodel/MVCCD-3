@@ -19,11 +19,14 @@ public class MCDUnique extends MCDUnicity{
     //private boolean absolute = false;
 
     public MCDUnique(ProjectElement parent) {
-
         super(parent);
     }
-    public MCDUnique(ProjectElement parent, String name) {
 
+    public MCDUnique(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
+    public MCDUnique(ProjectElement parent, String name) {
         super(parent, name);
     }
 

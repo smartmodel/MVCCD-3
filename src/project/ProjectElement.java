@@ -84,6 +84,10 @@ public abstract class ProjectElement extends MVCCDElement {
         return id;
     }
 
+    public String getIdProjectElementAsString(){
+        return String.valueOf(this.getIdProjectElement());
+    }
+
     /**
      * Retourne le premier élément enfant qui a l'id donné en paramètre.
      * @param id Identifiant de l'enfant à rechercher

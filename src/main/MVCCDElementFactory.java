@@ -153,13 +153,19 @@ public class MVCCDElementFactory {
         return new MCDAttribute(parent, id);
     }
 
-    public MCDUnique createMCDUnique(MCDContConstraints parent){
+    public MCDUnique createMCDUnique(MCDContConstraints parent, int id){
+        return new MCDUnique(parent, id);
+    }
 
+    public MCDUnique createMCDUnique(MCDContConstraints parent){
         return new MCDUnique(parent);
     }
 
-    public MCDNID createMCDNID(MCDContConstraints parent){
+    public MCDNID createMCDNID(MCDContConstraints parent, int id){
+        return new MCDNID(parent, id);
+    }
 
+    public MCDNID createMCDNID(MCDContConstraints parent){
         return new MCDNID(parent);
     }
 

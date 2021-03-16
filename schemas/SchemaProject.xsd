@@ -423,6 +423,7 @@
 				<xs:element ref="type"/>
 				<xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">

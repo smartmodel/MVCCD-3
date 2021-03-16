@@ -24,6 +24,10 @@ public abstract class MCDConstraint extends MCDOperation{
         super(parent);
     }
 
+    public MCDConstraint(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MCDConstraint(ProjectElement parent, String name) {
         super(parent, name);
     }

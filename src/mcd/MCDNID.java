@@ -22,6 +22,10 @@ public class MCDNID extends MCDUnicity {
         super(parent);
     }
 
+    public MCDNID(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MCDNID(ProjectElement parent, String name) {
         super(parent, name);
     }

@@ -539,7 +539,7 @@ public class ProjectLoaderXml {
                     // Récupération des conteneurs des contraintes
                     mcdContConstraints = (MCDContConstraints) contConstraints;
                     for (Element child : elementsEntities) {
-                        // Ajout des contraintes si l'élément entité cré dans l'application est égal à celui du fichier
+                        // Ajout des contraintes si l'élément entité créé dans l'application est égal à celui du fichier
                         if (child.getAttribute("name").equals(mvccdElement.getName())) {
                             addContraints(mcdContConstraints, child);
                         }
@@ -555,10 +555,9 @@ public class ProjectLoaderXml {
         // Parcours des éléments enfant de la balise contraintes
         NodeList constraintsChilds = constraintsTag.getChildNodes();
         for (int i = 0; i < constraintsChilds.getLength(); i++) {
-            Node constraintChild = constraintsChilds.item(i);
-            if (constraintChild instanceof Element) {
+            if (constraintsChilds.item(i) instanceof Element) {
                 // Création de l'element attribut
-                Element constraintTag = (Element) constraintChild;
+                Element constraintTag = (Element) constraintsChilds.item(i);
                 // Ajout de la contrainte NID ou Unique en fonction de son type
                 addTypeConstraintes(constraintTag, mcdContConstraints);
             }
@@ -572,13 +571,13 @@ public class ProjectLoaderXml {
 
         // Contraintes de type NID
         if (typeConstraint.getTextContent().equals("NID")) {
-            mcdConstraint = MVCCDElementFactory.instance().createMCDNID(mcdContConstraints); // Création de la contrainte
+            mcdConstraint = MVCCDElementFactory.instance().createMCDNID(mcdContConstraints, Integer.parseInt(constraintTag.getAttribute("id"))); // Création de la contrainte
             Element lienProg = (Element) constraintTag.getElementsByTagName("lienProg").item(0); //Attribuer le "lienProg" de la contrainte
             ((MCDNID) mcdConstraint).setLienProg(Boolean.valueOf(lienProg.getTextContent()));           //idem suite
         }
         // Contraintes de type Unique
         else if (typeConstraint.getTextContent().equals("Unique")) {
-            mcdConstraint = MVCCDElementFactory.instance().createMCDUnique(mcdContConstraints); // Création de la contrainte
+            mcdConstraint = MVCCDElementFactory.instance().createMCDUnique(mcdContConstraints, Integer.parseInt(constraintTag.getAttribute("id"))); // Création de la contrainte
             Element absolute = (Element) constraintTag.getElementsByTagName("absolute").item(0); //Attribuer le "absolute" de la contrainte
             ((MCDUnique) mcdConstraint).setAbsolute(Boolean.valueOf(absolute.getTextContent()));        //idem suite
         }
