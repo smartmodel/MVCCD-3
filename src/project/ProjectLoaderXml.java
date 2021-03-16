@@ -399,23 +399,25 @@ public class ProjectLoaderXml {
 
     private void addEntities(MCDContEntities mcdContEntities, Element element) {
         // Récupération de la balise entities
-        Element entities = (Element) element.getElementsByTagName("entities").item(0);
+        Element entitiesTag = (Element) element.getElementsByTagName("entities").item(0);
         // Parcours des entités
-        NodeList entitiesChilds = entities.getChildNodes();
+        NodeList entitiesChilds = entitiesTag.getChildNodes();
         for (int i = 0; i < entitiesChilds.getLength(); i++) {
             Node entitiesChild = entitiesChilds.item(i);
             if (entitiesChild instanceof Element) {
                 // Création de l'element entité
-                Element entite = (Element) entitiesChild;
+                Element entityTag = (Element) entitiesChild;
                 // Remplissage de la listes des éléments pour les entités
-                elementsEntities.add(entite);
+                elementsEntities.add(entityTag);
+
                 // Création de l'entité
-                MCDEntity mcdEntity = MVCCDElementFactory.instance().createMCDEntity(mcdContEntities);
-                mcdEntity.setName(entite.getAttribute("name"));
+                MCDEntity mcdEntity = MVCCDElementFactory.instance().createMCDEntity(mcdContEntities, Integer.parseInt(entityTag.getAttribute("id")));
+                mcdEntity.setName(entityTag.getAttribute("name"));
+
                 // Remplissage de la listes des éléments MVCCD pour les entités
                 listeEntities.add(mcdEntity);
                 // // Ajout des propriétés des entités
-                addPropertiesEntities(mcdEntity, entite);
+                addPropertiesEntities(mcdEntity, entityTag);
             }
         }
 

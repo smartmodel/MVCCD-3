@@ -119,16 +119,22 @@ public class MVCCDElementFactory {
         return mcdContConstraints;
     }
 
+    public MCDEntity createMCDEntity(ProjectElement parent, int id){
+        MCDEntity mcdEntity = new MCDEntity(parent, id);
+        this.createMCDContOfEntity(mcdEntity);
+        return mcdEntity;
+    }
+
     public MCDEntity createMCDEntity(ProjectElement parent){
         MCDEntity mcdEntity = new MCDEntity(parent);
-        MCDContAttributes mcdContAttributes = MVCCDElementFactory.instance().createMCDAttributes(mcdEntity,
-                Preferences.REPOSITORY_MCD_ATTRIBUTES_NAME);
-        MCDContRelEnds mcdContRelEnds = MVCCDElementFactory.instance().createMCDContEndRels(mcdEntity,
-                Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME);
-        MCDContConstraints mcdContConstraints = MVCCDElementFactory.instance().createMCDConstraints(mcdEntity,
-                Preferences.REPOSITORY_MCD_CONSTRAINTS_NAME);
-
+        this.createMCDContOfEntity(mcdEntity);
         return mcdEntity;
+    }
+
+    private void createMCDContOfEntity(MCDEntity mcdEntity){
+        MVCCDElementFactory.instance().createMCDAttributes(mcdEntity, Preferences.REPOSITORY_MCD_ATTRIBUTES_NAME);
+        MVCCDElementFactory.instance().createMCDContEndRels(mcdEntity, Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME);
+        MVCCDElementFactory.instance().createMCDConstraints(mcdEntity, Preferences.REPOSITORY_MCD_CONSTRAINTS_NAME);
     }
 
     public MCDContAttributes createMCDAttributes(MCDEntity parent, String name){

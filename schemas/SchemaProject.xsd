@@ -256,6 +256,7 @@
 			<xs:sequence>
 				<xs:element ref="entite" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -266,6 +267,7 @@
 				<xs:element ref="attributs"/>
 				<xs:element ref="contraintes"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">

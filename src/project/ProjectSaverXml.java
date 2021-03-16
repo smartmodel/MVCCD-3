@@ -39,7 +39,7 @@ public class ProjectSaverXml {
 
     /*
     Le code commenté ci-dessous était celui de Giorgio Roncallo. Il chargeait d'office les préférences d'application,
-    qu'il faut à priori charger les bonnes préférences applicables (projet, sinon profile, sinon application...)
+    alors qu'il faut à priori charger les bonnes préférences applicables (projet, sinon profile, sinon application...)
     */
     //private Boolean packagesAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS();
     //private Boolean manyModelsAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
@@ -197,7 +197,7 @@ public class ProjectSaverXml {
             Element model = doc.createElement("model");
             if (child instanceof MCDModel) {
                 mcd.appendChild(model);
-                Attr name = doc.createAttribute("name"); //TODO-STB: ajouter id sur <model>
+                Attr name = doc.createAttribute("name");
                 name.setValue(child.getName());
                 model.setAttributeNode(name);
             }
@@ -238,7 +238,7 @@ public class ProjectSaverXml {
 
                 // Ajout des paquetage dans le document
                 Element packages = doc.createElement("package");
-                Attr name = doc.createAttribute("name"); //TODO-STB: ajouter id de paquetage
+                Attr name = doc.createAttribute("name");
                 name.setValue(pack.getName());
                 packages.setAttributeNode(name);
 
@@ -306,36 +306,46 @@ public class ProjectSaverXml {
         }
     }
 
-    private void addEntities(Document doc, ArrayList<MVCCDElement> listElements, Element racineTag) {
-        // ajout du package entités dans le document
-        for (int i = 0; i < listElements.size(); i++) {
-            MVCCDElement childElement = listElements.get(i);
-            String nameModel = childElement.getName();
+    private void addEntities(Document doc, ArrayList<MVCCDElement> mcdContModelsChilds, Element racineTag) {
+        // Parcours tous les conteneurs d'entités
+        for (int i = 0; i < mcdContModelsChilds.size(); i++) {
+            MVCCDElement mcdContModelsChild = mcdContModelsChilds.get(i);
+            if(mcdContModelsChild instanceof MCDContEntities){
+                MCDContEntities mcdContEntities = (MCDContEntities) mcdContModelsChild;
 
-            if (nameModel.equals("Entités")) {
-                Element entities = doc.createElement("entities");
-                racineTag.appendChild(entities);
+                // Création de la balise <entities>
+                Element entitiesTag = doc.createElement("entities");
+                racineTag.appendChild(entitiesTag);
 
-                ArrayList<MVCCDElement> entitiesChilds = childElement.getChilds();
-                // Ajout des entités dans le document
-                for (int j = 0; j < entitiesChilds.size(); j++) {
-                    MVCCDElement entitiesChild = entitiesChilds.get(j);
-                    MCDEntity childEntity = (MCDEntity) entitiesChild;
+                // Ajout de l'id à la balise <entities>
+                Attr idAttrOfEntitiesTag = doc.createAttribute("id");
+                idAttrOfEntitiesTag.setValue(String.valueOf(mcdContEntities.getIdProjectElement()));
+                entitiesTag.setAttributeNode(idAttrOfEntitiesTag);
 
-                    Element entity = doc.createElement("entite");
-                    Attr name = doc.createAttribute("name");
-                    name.setValue(childEntity.getName());
-                    entity.setAttributeNode(name);
+                // Parcours et ajout des entités
+                ArrayList<MVCCDElement> entities = mcdContEntities.getChilds();
+                for (int j = 0; j < entities.size(); j++) {
+                    MCDEntity entity = (MCDEntity) entities.get(j);
 
-                    entities.appendChild(entity);
-                    ArrayList<MVCCDElement> entityChilds = childEntity.getChilds();
+                    // Création de la balise <entite>
+                    Element entityTag = doc.createElement("entite");
+                    entitiesTag.appendChild(entityTag);
+
+                    // Ajout de l'attribut "id" à <entite>
+                    Attr idAttrOfEntityTag = doc.createAttribute("id");
+                    idAttrOfEntityTag.setValue(String.valueOf(entity.getIdProjectElement()));
+                    entityTag.setAttributeNode(idAttrOfEntityTag);
+
+                    // Ajout de l'attribut "name" à <entite>
+                    Attr nameAttrOfEntityTag = doc.createAttribute("name");
+                    nameAttrOfEntityTag.setValue(entity.getName());
+                    entityTag.setAttributeNode(nameAttrOfEntityTag);
 
                     // Ajout des éléments qui composent une entité
-                    addPropertiesEntity(doc, entity, childEntity, racineTag);
-                    addAttributs(doc, entity, entityChilds);
-
-                    addContraints(doc, entity, entityChilds);
-
+                    ArrayList<MVCCDElement> entityChilds = entity.getChilds();
+                    addPropertiesEntity(doc, entityTag, entity, racineTag);
+                    addAttributs(doc, entityTag, entityChilds);
+                    addContraints(doc, entityTag, entityChilds);
                 }
             }
         }
