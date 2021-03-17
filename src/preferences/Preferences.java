@@ -7,6 +7,19 @@ import mdr.MDRNamingLength;
 
 import java.awt.*;
 
+/**
+ * Regroupe l'ensemble des préférences développeur (les attributs statics de la classe), des préférences d'application
+ * (les attributs qui suivent ensuite) et des préférences de projet (les attributs plus bas dans la classe).
+ * Cette classe est instanciée plusieurs fois depuis MVCCDManager.
+ * Lorsqu'une préférence doit être utilisée, il est plus simple d'utiliser la méthode statique Preferences.preferences()
+ * qui se charge de retourner les bonnes préférences à utiliser en fonction du contexte de l'utilisateur (celles du
+ * projet, du profile, de l'appliation, etc.).
+ * Lorsque des préférences doivent être chargé spécifiquement pour le projet (préférences de projet) ou pour l'application
+ * (préférences d'application), il est conseillé d'utiliser PreferencesManager.instance().getProjectPref().
+ * L'utilisation de MVCCDManager.instance().getProject().getPreferences() n'est pas à privilégier. Elle est utile
+ * surtout dans le cas spécifique où le projet existe mais n'est pas encore créé dans le référentiel.
+ * @author PAS
+ */
 public class Preferences extends MVCCDElement {
 
     //TODO-STB: voir avec PAS si mon commentaire ci-dessous est correct

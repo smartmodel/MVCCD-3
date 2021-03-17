@@ -23,6 +23,10 @@ public abstract class MCDUnicity extends MCDConstraint{
         super(parent);
     }
 
+    public MCDUnicity(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MCDUnicity(ProjectElement parent, String name) {
         super(parent, name);
     }

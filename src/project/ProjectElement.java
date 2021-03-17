@@ -17,7 +17,7 @@ public abstract class ProjectElement extends MVCCDElement {
 
     public ProjectElement(ProjectElement parent) {
         super(parent); // Ceci appelle aussi de-facto la méthode init() de MVCCDElement.
-        init(parent);
+        initIdAndTransitory(parent);
     }
 
     /**
@@ -27,13 +27,19 @@ public abstract class ProjectElement extends MVCCDElement {
      * @param id
      */
     public ProjectElement(ProjectElement parent, int id){
-        this(parent);
-        this.id = id; //TODO-STB: voir avec PAS si ok
+        super(parent);
+        this.id = id;
+
+        //Mise à jour de la séquence de l'id du projet, pour quelle celle-ci soit augmentée à une valeur supérieur au nouvel id défini pour l'élément.
+        Project rootProject = ProjectService.getProjectRoot(this);
+        if(rootProject.getIdElementSequence() < id){ //TODO-STB: voir si la gestion de la séquence est ok pour PAS
+            rootProject.setIdElementSequence(id);
+        }
     }
 
     public ProjectElement(ProjectElement parent, String name) {
         super(parent, name); // Ceci appelle aussi de-facto la méthode init() de MVCCDElement.
-        init(parent);
+        initIdAndTransitory(parent);
     }
 
     /**
@@ -55,7 +61,7 @@ public abstract class ProjectElement extends MVCCDElement {
      * - order, valeur d'ordonnancement
      * </pre>
      */
-    private void init(ProjectElement parent) {
+    private void initIdAndTransitory(ProjectElement parent) {
         if (this instanceof Project) {
             // Le projet lui-même
             this.id = 0;
@@ -78,6 +84,10 @@ public abstract class ProjectElement extends MVCCDElement {
         return id;
     }
 
+    public String getIdProjectElementAsString(){
+        return String.valueOf(this.getIdProjectElement());
+    }
+
     /**
      * Retourne le premier élément enfant qui a l'id donné en paramètre.
      * @param id Identifiant de l'enfant à rechercher
@@ -89,6 +99,25 @@ public abstract class ProjectElement extends MVCCDElement {
                 if(((ProjectElement) mvccdElement).getIdProjectElement() == id){
                     return (ProjectElement) mvccdElement;
                 }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Retourne le premier élément enfant qui a l'id donné en paramètre. Effectue une recherche en profondeur,
+     * c'est-à-dire que l'élément est recherché automatiquement auprès des enfants, des enfants des enfants, etc.
+     * @param id Identifiant de l'enfant à rechercher
+     * @return L'élément retourné, s'il a un id, est forcément un ProjectElement. Retourne null si aucun élément n'est trouvé.
+     */
+    public ProjectElement getChildByIdProfondeur(int id){
+        for(MVCCDElement mvccdElement : this.getChilds()){
+            if(mvccdElement instanceof ProjectElement){
+                ProjectElement projectElement = (ProjectElement) mvccdElement;
+                if(projectElement.getIdProjectElement() == id){
+                    return (ProjectElement) mvccdElement;
+                }
+                return projectElement.getChildByIdProfondeur(id);
             }
         }
         return null;

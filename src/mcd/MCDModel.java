@@ -23,13 +23,15 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
     private boolean mcdAuditException = false;
 
 
-    public MCDModel(MCDContModels parent, String name) {
+    public MCDModel(MCDContModels parent, int id) {
+        super(parent, id);
+    }
 
+    public MCDModel(MCDContModels parent, String name) {
         super(parent, name);
     }
 
     public MCDModel(MCDContModels parent) {
-
         super (parent);
     }
 

@@ -18,6 +18,10 @@ public abstract class MDRModel extends MDRElement  {
 
     private Integer iteration = 0 ;
 
+    public MDRModel(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MDRModel(ProjectElement parent, String name) {
         super(parent, name);
     }

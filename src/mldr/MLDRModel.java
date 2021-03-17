@@ -23,6 +23,10 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
 
     private static final long serialVersionUID = 1000;
 
+    public MLDRModel(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MLDRModel(ProjectElement parent, String name) {
         super(parent, name);
     }

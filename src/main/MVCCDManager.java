@@ -133,7 +133,7 @@ public class MVCCDManager {
 
     public void completeNewProject() {
         //this.project = project;
-        PreferencesManager.instance().setProjectPref(project.getPreferences()); //TODO-STB: voir avec PAS pour comprendre
+        PreferencesManager.instance().setProjectPref(project.getPreferences()); //TODO-STB: voir avec PAS pour comprendre (PAS se renseigne sur le cheminement de chargement des préférences (projet, profile, etc.)
         PreferencesManager.instance().copyApplicationPref(Project.NEW);
         project.adjustProfile();
         projectToRepository();

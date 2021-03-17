@@ -33,8 +33,12 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
 
     private String mldrTableName = "";
 
+    public MCDEntity(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MCDEntity(ProjectElement parent, String name) {
-        super(parent,name);
+        super(parent, name);
         setMldrTableName(name);
     }
 

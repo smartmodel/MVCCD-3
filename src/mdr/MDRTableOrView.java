@@ -14,6 +14,9 @@ public abstract class MDRTableOrView extends MDRElement implements IMDRElementWi
     private  static final long serialVersionUID = 1000;
     private Integer iteration = null; // Si un objet est créé directement et non par transformation
 
+    public MDRTableOrView(ProjectElement parent, int id) {
+        super(parent, id);
+    }
 
     public MDRTableOrView(ProjectElement parent) {
         super(parent);

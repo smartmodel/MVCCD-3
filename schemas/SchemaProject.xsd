@@ -7,6 +7,7 @@
 				<xs:element ref="preferences"/>
 				<xs:element ref="MCD"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -165,9 +166,11 @@
 					<xs:element ref="entities"/>
 					<xs:element ref="relations"/>
 					<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
-					<xs:element ref="MLDR" minOccurs="0"/>
+					<xs:element ref="MLDR_DT" minOccurs="0"/>
+					<xs:element ref="MLDR_TI" minOccurs="0"/>
 				</xs:sequence>
 			</xs:choice>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -179,7 +182,8 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="MLDR"/>
+				<xs:element ref="MLDR_DT"/>
+				<xs:element ref="MLDR_TI"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
@@ -200,7 +204,8 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="MLDR"/>
+				<xs:element ref="MLDR_DT"/>
+				<xs:element ref="MLDR_TI"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
@@ -224,13 +229,34 @@
 		</xs:simpleType>
 	</xs:element>
 
-	<xs:element name="diagrammes"/>
+	<xs:element name="diagrammes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="diagramme" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="diagramme">
+		<xs:complexType>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
 
 	<xs:element name="entities">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="entite" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -241,6 +267,7 @@
 				<xs:element ref="attributs"/>
 				<xs:element ref="contraintes"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -280,11 +307,7 @@
 				<xs:element ref="derivedValue"/>
 				<xs:element ref="domain"/>
 			</xs:sequence>
-			<xs:attribute name="id" use="required">
-				<xs:simpleType>
-					<xs:restriction base="xs:int"/>
-				</xs:simpleType>
-			</xs:attribute>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -400,6 +423,7 @@
 				<xs:element ref="type"/>
 				<xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -432,11 +456,7 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
-			<xs:attribute name="target_id" use="required">
-				<xs:simpleType>
-					<xs:restriction base="xs:int"/>
-				</xs:simpleType>
-			</xs:attribute>
+			<xs:attribute name="target_id" use="required" type="xs:int"/>
 			<xs:attribute name="target_order" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:int"/>
@@ -648,11 +668,21 @@
 	<xs:element name="deleteCascade" type="xs:boolean"/>
 
 	<!-- MLDR -->
-	<xs:element name="MLDR">
+	<xs:element name="MLDR_DT">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="tables"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+
+	</xs:element>
+	<xs:element name="MLDR_TI">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tables"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -661,14 +691,16 @@
 			<xs:sequence>
 				<xs:element ref="table" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
 	<xs:element name="table">
 		<xs:complexType>
-			<!--<xs:sequence>
-				 <xs:element ref="colonnes"/>
-			</xs:sequence>-->
+			<xs:sequence>
+				<xs:element ref="columns"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -677,6 +709,17 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
+			<xs:attribute name="entity_source" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="columns">
+		<xs:complexType>
+			<!-- <xs:sequence>
+				<xs:element ref="column" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence> -->
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 </xs:schema>
+

@@ -1,12 +1,12 @@
 package project;
 
 import console.Console;
+import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
 import messages.MessagesBuilder;
-import mldr.MLDRModel;
-import mldr.MLDRTable;
+import mldr.*;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -33,8 +33,16 @@ import java.util.ArrayList;
 public class ProjectSaverXml {
 
     private Project project = MVCCDManager.instance().getProject();
-    private Boolean packagesAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(); //TODO-STB: valider avec PAS le fait qu'il faudrait plutôt utiliser PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()
-    private Boolean manyModelsAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
+    private Preferences projectPreferences = PreferencesManager.instance().getProjectPref(); //Il est mieux de récupérer les préférences par ce biais plutôt que project.getPreferences(): cela permet de s'assurer de récupérer des préférences si celles du projet n'existent pas (à priori, à confirmer avec PAS).
+    private Boolean packagesAuthorized = PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS();
+    private Boolean manyModelsAuthorized = PreferencesManager.instance().preferences().getREPOSITORY_MCD_MODELS_MANY();
+
+    /*
+    Le code commenté ci-dessous était celui de Giorgio Roncallo. Il chargeait d'office les préférences d'application,
+    alors qu'il faut à priori charger les bonnes préférences applicables (projet, sinon profile, sinon application...)
+    */
+    //private Boolean packagesAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS();
+    //private Boolean manyModelsAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
 
     //TODO-STB: vérifier que la version s'enregistre bien avec les préférences dans le fichier XML: Preferences.VERSION
 
@@ -48,20 +56,26 @@ public class ProjectSaverXml {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.newDocument();
 
-            //Création des éléments
-            Element racine = document.createElement("project");
-            document.appendChild(racine);
+            //Création de la balise racine <project>
+            Element projectTag = document.createElement("project");
+            document.appendChild(projectTag);
+            Attr idAttrOfProjectTag = document.createAttribute("id");
+            idAttrOfProjectTag.setValue(project.getIdProjectElementAsString());
+            projectTag.setAttributeNode(idAttrOfProjectTag);
 
             //Propriété du projet
-            addProperties(document, racine);
+            addProperties(document, projectTag);
 
             //Préférences du projet
-            addProjectPreferences(document, racine); //TODO-STB: adapter et utiliser plutôt PreferencesManager.getProjectPref() => à voir une fois que j'ai mieux compris avec PAS
+            addProjectPreferences(document, projectTag);
 
-            //Element MCD
+            //Création de la balise <MCD>
             MCDContModels mcdContModels = project.getMCDContModels();
             Element mcdTag = document.createElement(mcdContModels.getName());
-            racine.appendChild(mcdTag);
+            projectTag.appendChild(mcdTag);
+            Attr idAttrOfMcdTag = document.createAttribute("id");
+            idAttrOfMcdTag.setValue(mcdContModels.getIdProjectElementAsString());
+            mcdTag.setAttributeNode(idAttrOfMcdTag);
 
             ArrayList<MVCCDElement> mcdModels = mcdContModels.getChilds();
 
@@ -121,65 +135,56 @@ public class ProjectSaverXml {
 
         //Préférences Général
         Element generalRelationNotation = document.createElement("generalRelationNotation");
-        generalRelationNotation.appendChild(document.createTextNode(project.getPreferences().getGENERAL_RELATION_NOTATION().toString()));
+        generalRelationNotation.appendChild(document.createTextNode(projectPreferences.getGENERAL_RELATION_NOTATION().toString()));
         preferences.appendChild(generalRelationNotation);
-
-        //TODO-STB: voir avec PAS et ensuite supprimer
-        //Quelle différence entre les 2?
-        //À quel moment chacun des 2 est alimenté?
-        /*
-        MVCCDManager.instance().getProject().getPreferences().getMCD_JOURNALIZATION();
-        PreferencesManager.instance().getProjectPref().getMCD_JOURNALIZATION();
-        */
-
 
         //Préférences MCD
         Element mcdJournalization = document.createElement("mcdJournalization");
-        mcdJournalization.appendChild(document.createTextNode(project.getPreferences().getMCD_JOURNALIZATION().toString()));
+        mcdJournalization.appendChild(document.createTextNode(projectPreferences.getMCD_JOURNALIZATION().toString()));
         preferences.appendChild(mcdJournalization);
 
         Element mcdJournalizationException = document.createElement("mcdJournalizationException");
-        mcdJournalizationException.appendChild(document.createTextNode(project.getPreferences().getMCD_JOURNALIZATION_EXCEPTION().toString()));
+        mcdJournalizationException.appendChild(document.createTextNode(projectPreferences.getMCD_JOURNALIZATION_EXCEPTION().toString()));
         preferences.appendChild(mcdJournalizationException);
 
         Element mcdAudit = document.createElement("mcdAudit");
-        mcdAudit.appendChild(document.createTextNode(project.getPreferences().getMCD_AUDIT().toString()));
+        mcdAudit.appendChild(document.createTextNode(projectPreferences.getMCD_AUDIT().toString()));
         preferences.appendChild(mcdAudit);
 
         Element mcdAuditException = document.createElement("mcdAuditException");
-        mcdAuditException.appendChild(document.createTextNode(project.getPreferences().getMCD_AUDIT_EXCEPTION().toString()));
+        mcdAuditException.appendChild(document.createTextNode(projectPreferences.getMCD_AUDIT_EXCEPTION().toString()));
         preferences.appendChild(mcdAuditException);
 
         Element mcdAidDataTypeLienProg = document.createElement("mcdAidDataTypeLienProg");
-        mcdAidDataTypeLienProg.appendChild(document.createTextNode(project.getPreferences().getMCD_AID_DATATYPE_LIENPROG()));
+        mcdAidDataTypeLienProg.appendChild(document.createTextNode(projectPreferences.getMCD_AID_DATATYPE_LIENPROG()));
         preferences.appendChild(mcdAidDataTypeLienProg);
 
         Element mcdDataTypeNumberSizeMode = document.createElement("mcdDataTypeNumberSizeMode");
-        mcdDataTypeNumberSizeMode.appendChild(document.createTextNode(project.getPreferences().getMCDDATATYPE_NUMBER_SIZE_MODE()));
+        mcdDataTypeNumberSizeMode.appendChild(document.createTextNode(projectPreferences.getMCDDATATYPE_NUMBER_SIZE_MODE()));
         preferences.appendChild(mcdDataTypeNumberSizeMode);
 
         Element mcdAidIndColumnName = document.createElement("mcdAidIndColumnName");
-        mcdAidIndColumnName.appendChild(document.createTextNode(project.getPreferences().getMCD_AID_IND_COLUMN_NAME()));
+        mcdAidIndColumnName.appendChild(document.createTextNode(projectPreferences.getMCD_AID_IND_COLUMN_NAME()));
         preferences.appendChild(mcdAidIndColumnName);
 
         Element mcdAidDepColumnName = document.createElement("mcdAidDepColumnName");
-        mcdAidDepColumnName.appendChild(document.createTextNode(project.getPreferences().getMCD_AID_DEP_COLUMN_NAME()));
+        mcdAidDepColumnName.appendChild(document.createTextNode(projectPreferences.getMCD_AID_DEP_COLUMN_NAME()));
         preferences.appendChild(mcdAidDepColumnName);
 
         Element mcdAidWithDep = document.createElement("mcdAidWithDep");
-        mcdAidWithDep.appendChild(document.createTextNode(project.getPreferences().isMCD_AID_WITH_DEP().toString()));
+        mcdAidWithDep.appendChild(document.createTextNode(projectPreferences.isMCD_AID_WITH_DEP().toString()));
         preferences.appendChild(mcdAidWithDep);
 
         Element mcdTreeNamingAssociation = document.createElement("mcdTreeNamingAssociation");
-        mcdTreeNamingAssociation.appendChild(document.createTextNode(project.getPreferences().getMCD_TREE_NAMING_ASSOCIATION()));
+        mcdTreeNamingAssociation.appendChild(document.createTextNode(projectPreferences.getMCD_TREE_NAMING_ASSOCIATION()));
         preferences.appendChild(mcdTreeNamingAssociation);
 
         Element mcdModeNamingLongName = document.createElement("mcdModeNamingLongName");
-        mcdModeNamingLongName.appendChild(document.createTextNode(project.getPreferences().getMCD_MODE_NAMING_LONG_NAME()));
+        mcdModeNamingLongName.appendChild(document.createTextNode(projectPreferences.getMCD_MODE_NAMING_LONG_NAME()));
         preferences.appendChild(mcdModeNamingLongName);
 
         Element mcdModeNamingAttributeShortName = document.createElement("mcdModeNamingAttributeShortName");
-        mcdModeNamingAttributeShortName.appendChild(document.createTextNode(project.getPreferences().getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME()));
+        mcdModeNamingAttributeShortName.appendChild(document.createTextNode(projectPreferences.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME()));
         preferences.appendChild(mcdModeNamingAttributeShortName);
     }
 
@@ -264,60 +269,83 @@ public class ProjectSaverXml {
 
     // *** Méthodes de sauvegarde du MCD ***
 
-    private void addDiagrams(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
+    private void addDiagrams(Document doc, ArrayList<MVCCDElement> listElements, Element racineTag) {
         // Ajout du package diagrammes dans le document
-        for (int i = 0; i < listElement.size(); i++) {
-            MVCCDElement childElement = listElement.get(i);
-            if (childElement.getName().equals("Diagrammes")) {
-                Element diagrams = doc.createElement("diagrammes");
-                racine.appendChild(diagrams);
+        for (int i = 0; i < listElements.size(); i++) {
+            if(listElements.get(i) instanceof MCDContDiagrams){
+                MCDContDiagrams mcdContDiagrams = (MCDContDiagrams) listElements.get(i);
+                Element diagramsTag = doc.createElement("diagrammes");
+                Attr idAttrOfDiagramsTag = doc.createAttribute("id");
+                idAttrOfDiagramsTag.setValue(mcdContDiagrams.getIdProjectElementAsString());
+                diagramsTag.setAttributeNode(idAttrOfDiagramsTag);
+                racineTag.appendChild(diagramsTag);
 
-                ArrayList<MVCCDElement> diagramsChilds = childElement.getChilds();
+                ArrayList<MVCCDElement> diagrams = mcdContDiagrams.getChilds();
 
                 // Ajout des diagrammes dans le document
-                for (MVCCDElement childDiagram : diagramsChilds) {
-                    String nameDiagram = childDiagram.getName();
+                for (MVCCDElement diagram : diagrams) {
+                    if(diagram instanceof MCDDiagram) {
+                        // Création de la balise <diagramme>
+                        MCDDiagram mcdDiagram = (MCDDiagram) diagram;
+                        Element diagramTag = doc.createElement("diagramme");
+                        diagramsTag.appendChild(diagramTag);
 
-                    Element diagram = doc.createElement(nameDiagram);
+                        // Ajout de l'id à la balise <diagramme>
+                        Attr idAttrOfDiagramTag = doc.createAttribute("id");
+                        idAttrOfDiagramTag.setValue(mcdDiagram.getIdProjectElementAsString());
+                        diagramTag.setAttributeNode(idAttrOfDiagramTag);
 
-                    diagrams.appendChild(diagram);
-
+                        // Ajout de l'attribut "name" à la balise <diagramme>
+                        Attr nameAttrOfDiagramTag = doc.createAttribute("name");
+                        nameAttrOfDiagramTag.setValue(mcdDiagram.getName());
+                        diagramTag.setAttributeNode(nameAttrOfDiagramTag);
+                    }
                 }
 
             }
         }
     }
 
-    private void addEntities(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
-        // ajout du package entités dans le document
-        for (int i = 0; i < listElement.size(); i++) {
-            MVCCDElement childElement = listElement.get(i);
-            String nameModel = childElement.getName();
+    private void addEntities(Document doc, ArrayList<MVCCDElement> mcdContModelsChilds, Element racineTag) {
+        // Parcours tous les conteneurs d'entités
+        for (int i = 0; i < mcdContModelsChilds.size(); i++) {
+            MVCCDElement mcdContModelsChild = mcdContModelsChilds.get(i);
+            if(mcdContModelsChild instanceof MCDContEntities){
+                MCDContEntities mcdContEntities = (MCDContEntities) mcdContModelsChild;
 
-            if (nameModel.equals("Entités")) {
-                Element entities = doc.createElement("entities");
-                racine.appendChild(entities);
+                // Création de la balise <entities>
+                Element entitiesTag = doc.createElement("entities");
+                racineTag.appendChild(entitiesTag);
 
-                ArrayList<MVCCDElement> entitiesChilds = childElement.getChilds();
-                // Ajout des entités dans le document
-                for (int j = 0; j < entitiesChilds.size(); j++) {
-                    MVCCDElement entitiesChild = entitiesChilds.get(j);
-                    MCDEntity childEntity = (MCDEntity) entitiesChild;
+                // Ajout de l'id à la balise <entities>
+                Attr idAttrOfEntitiesTag = doc.createAttribute("id");
+                idAttrOfEntitiesTag.setValue(mcdContEntities.getIdProjectElementAsString());
+                entitiesTag.setAttributeNode(idAttrOfEntitiesTag);
 
-                    Element entity = doc.createElement("entite");
-                    Attr name = doc.createAttribute("name");
-                    name.setValue(childEntity.getName());
-                    entity.setAttributeNode(name);
+                // Parcours et ajout des entités
+                ArrayList<MVCCDElement> entities = mcdContEntities.getChilds();
+                for (int j = 0; j < entities.size(); j++) {
+                    MCDEntity entity = (MCDEntity) entities.get(j);
 
-                    entities.appendChild(entity);
-                    ArrayList<MVCCDElement> entityChilds = childEntity.getChilds();
+                    // Création de la balise <entite>
+                    Element entityTag = doc.createElement("entite");
+                    entitiesTag.appendChild(entityTag);
+
+                    // Ajout de l'attribut "id" à <entite>
+                    Attr idAttrOfEntityTag = doc.createAttribute("id");
+                    idAttrOfEntityTag.setValue(entity.getIdProjectElementAsString());
+                    entityTag.setAttributeNode(idAttrOfEntityTag);
+
+                    // Ajout de l'attribut "name" à <entite>
+                    Attr nameAttrOfEntityTag = doc.createAttribute("name");
+                    nameAttrOfEntityTag.setValue(entity.getName());
+                    entityTag.setAttributeNode(nameAttrOfEntityTag);
 
                     // Ajout des éléments qui composent une entité
-                    addPropertiesEntity(doc, entity, childEntity, racine);
-                    addAttributs(doc, entity, entityChilds);
-
-                    addContraints(doc, entity, entityChilds);
-
+                    ArrayList<MVCCDElement> entityChilds = entity.getChilds();
+                    addPropertiesEntity(doc, entityTag, entity, racineTag);
+                    addAttributs(doc, entityTag, entityChilds);
+                    addContraints(doc, entityTag, entityChilds);
                 }
             }
         }
@@ -450,7 +478,7 @@ public class ProjectSaverXml {
 
             // Ajout de l'attribut "id" à <attribut>
             Attr id = doc.createAttribute("id");
-            id.setValue(String.valueOf(childAttribut.getIdProjectElement()));
+            id.setValue(childAttribut.getIdProjectElementAsString());
             attributTag.setAttributeNode(id);
 
             // Ajout de l'attribut "name" à <attribut>
@@ -548,46 +576,51 @@ public class ProjectSaverXml {
 
     private void addContraintsChilds(Document doc, ArrayList<MVCCDElement> contraintsChilds, Element contraintes) {
         for (int i = 0; i < contraintsChilds.size(); i++) {
-            MVCCDElement contraintsChild = contraintsChilds.get(i);
-            // Récupération de la contrainte
-            MCDConstraint mcdConstraint = (MCDConstraint) contraintsChild;
-            // Création de la contrainte dans le document
-            Element constraint = doc.createElement("constraint");
-            contraintes.appendChild(constraint);
+            MCDConstraint mcdConstraint = (MCDConstraint) contraintsChilds.get(i);
 
-            Attr name = doc.createAttribute("name");
-            name.setValue(mcdConstraint.getName());
-            constraint.setAttributeNode(name);
+            // Création de la balise <constraint>
+            Element constraintTag = doc.createElement("constraint");
+            contraintes.appendChild(constraintTag);
+
+            // Ajout de l'attribut "id" à la balise <constraint>
+            Attr idAttrOfConstraintTag = doc.createAttribute("id");
+            idAttrOfConstraintTag.setValue(mcdConstraint.getIdProjectElementAsString());
+            constraintTag.setAttributeNode(idAttrOfConstraintTag);
+
+            // Ajout de l'attribut "name" à la balise <constraint>
+            Attr nameAttrOfConstraintTag = doc.createAttribute("name");
+            nameAttrOfConstraintTag.setValue(mcdConstraint.getName());
+            constraintTag.setAttributeNode(nameAttrOfConstraintTag);
 
             Element shortName = doc.createElement("shortName");
             shortName.appendChild(doc.createTextNode(mcdConstraint.getShortName()));
-            constraint.appendChild(shortName);
+            constraintTag.appendChild(shortName);
 
             // Récupération du type de contrainte
             if (mcdConstraint instanceof MCDNID) {
                 MCDNID nid = (MCDNID) mcdConstraint;
                 Element lienProg = doc.createElement("lienProg");
                 lienProg.appendChild(doc.createTextNode(String.valueOf(nid.isLienProg())));
-                constraint.appendChild(lienProg);
+                constraintTag.appendChild(lienProg);
 
                 Element typeConstrainte = doc.createElement("type");
                 typeConstrainte.appendChild(doc.createTextNode("NID"));
-                constraint.appendChild(typeConstrainte);
+                constraintTag.appendChild(typeConstrainte);
                 // Ajout des parameters ( encore pas implémenté dans l'application)
-                addParameters(doc, nid, constraint);
+                addParameters(doc, nid, constraintTag);
 
             }
             if (mcdConstraint instanceof MCDUnique) {
                 MCDUnique unique = (MCDUnique) mcdConstraint;
                 Element absolute = doc.createElement("absolute");
                 absolute.appendChild(doc.createTextNode(String.valueOf(unique.isAbsolute())));
-                constraint.appendChild(absolute);
+                constraintTag.appendChild(absolute);
 
                 Element typeConstrainte = doc.createElement("type");
                 typeConstrainte.appendChild(doc.createTextNode("Unique"));
-                constraint.appendChild(typeConstrainte);
+                constraintTag.appendChild(typeConstrainte);
                 // Ajout des parameters
-                addParameters(doc, unique, constraint);
+                addParameters(doc, unique, constraintTag);
             }
         }
     }
@@ -863,31 +896,104 @@ public class ProjectSaverXml {
             if(model instanceof MLDRModel){
                 MLDRModel mldrModel = (MLDRModel) model;
 
-                //Création de la balise <MLDR>
-                Element mldrTag = doc.createElement("MLDR");
+                //Création de la balise <MLDR_xx>
+                Element mldrTag = null;
+                if(mldrModel instanceof MLDRModelDT) {
+                    mldrTag = doc.createElement("MLDR_DT");
+                }else if(mldrModel instanceof MLDRModelTI){
+                    mldrTag = doc.createElement("MLDR_TI");
+                }
                 racineTag.appendChild(mldrTag);
 
-                //Création de la balise <tables>
-                Element tablesTag = doc.createElement("tables");
-                mldrTag.appendChild(tablesTag);
+                //Ajout de l'id à la balise <MLDR_xx>
+                Attr idAttrOfmldrTag = doc.createAttribute("id");
+                idAttrOfmldrTag.setValue(mldrModel.getIdProjectElementAsString());
+                mldrTag.setAttributeNode(idAttrOfmldrTag);
 
                 //Persistance des tables
-                for(MLDRTable mldrTable : mldrModel.getMLDRTables()){
-
-                    //Création de la balise <table>
-                    Element tableTag = doc.createElement("table");
-                    tablesTag.appendChild(tableTag);
-
-                    //Ajout de l'attribut "name" à <table>
-                    Attr tableNameAttr = doc.createAttribute("name");
-                    tableNameAttr.setValue(mldrTable.getName());
-                    tableTag.setAttributeNode(tableNameAttr);
-
-                    //TODO-STB: Continuer ici, et en premier lieu charger le MLDR et les tables
-                }
-
+                this.addTables(doc, mldrModel, mldrTag);
             }
         }
     }
 
+    /**
+     * Sauvegarde les tables dans une balise <tables> en parcourant le modèle MLDR
+     * @param doc Document XML dans lequel la persistance se fait
+     * @param mldrModel Modèle MLDR parcouru pour lequel toutes les tables qu'il contient seront persistées.
+     * @param mldrTag Balise racine <mldr> qui sera la balise parent de la balise <tables> enfant.
+     */
+    private void addTables(Document doc, MLDRModel mldrModel, Element mldrTag){
+
+        //Création de la balise <tables>
+        Element tablesTag = doc.createElement("tables");
+        mldrTag.appendChild(tablesTag);
+
+        //Ajout de l'id à la balise <tables>
+        Attr idAttrOfTablesTag = doc.createAttribute("id");
+        idAttrOfTablesTag.setValue(mldrModel.getMDRContTables().getIdProjectElementAsString());
+        tablesTag.setAttributeNode(idAttrOfTablesTag);
+
+        //Parcours des tables
+        for(MLDRTable mldrTable : mldrModel.getMLDRTables()){
+
+            //Persistance d'une table
+            this.addTable(doc, mldrTable, tablesTag);
+
+        }
+    }
+
+    /**
+     * Sauvegarde d'une table dans une balise <table>.
+     * @param doc Document XML dans lequel la persistance se fait
+     * @param mldrTable Table à persister
+     * @param tablesTag Balise parent <tables> qui contient la nouvelle balise <table>
+     */
+    private void addTable(Document doc, MLDRTable mldrTable, Element tablesTag){
+        //Création de la balise <table>
+        Element tableTag = doc.createElement("table");
+        tablesTag.appendChild(tableTag);
+
+        //Ajout de l'attribut "id" à <table>
+        Attr tableIdAttr = doc.createAttribute("id");
+        tableIdAttr.setValue(mldrTable.getIdProjectElementAsString());
+        tableTag.setAttributeNode(tableIdAttr);
+
+        //Ajout de l'attribut "name" à <table>
+        Attr tableNameAttr = doc.createAttribute("name");
+        tableNameAttr.setValue(mldrTable.getName());
+        tableTag.setAttributeNode(tableNameAttr);
+
+        //Ajout de l'attribut "entity_source" à <table>
+        Attr tableEntitySourceAttr = doc.createAttribute("entity_source");
+        tableEntitySourceAttr.setValue(mldrTable.getMcdElementSource().getIdProjectElementAsString());
+        tableTag.setAttributeNode(tableEntitySourceAttr);
+
+        //Persistance des colonnes
+        this.addColumns(doc, mldrTable, tableTag);
+    }
+
+    /**
+     * Sauvegarde des colonnes d'une table.
+     * @param doc Document XML dans lequel les colonnes seront persistées
+     * @param mldrTable Table pour laquelle les colonnes qu'elle contient seront persistées
+     * @param tableTag Balise parent <table> qui contiendra la nouvelle balise <columns>
+     */
+    private void addColumns(Document doc, MLDRTable mldrTable, Element tableTag) {
+
+        //Création de la balise <columns>
+        Element columnsTag = doc.createElement("columns");
+        tableTag.appendChild(columnsTag);
+
+        //Ajout de l'id à la balise <columns>
+        Attr idAttrOfColumnsTag = doc.createAttribute("id");
+        idAttrOfColumnsTag.setValue(mldrTable.getMDRContColumns().getIdProjectElementAsString());
+        columnsTag.setAttributeNode(idAttrOfColumnsTag);
+
+        //Parcours des colonnes
+        for(MLDRColumn mldrColumn : mldrTable.getMLDRColumns()){
+
+            //Persistance d'une colonne
+            //TODO-STB: continuer ici avec la persistance d'une colonne
+        }
+    }
 }

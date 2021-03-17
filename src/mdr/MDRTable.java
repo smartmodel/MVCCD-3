@@ -12,6 +12,10 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
 
     private  static final long serialVersionUID = 1000;
 
+    public MDRTable(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MDRTable(ProjectElement parent) {
         super(parent);
     }

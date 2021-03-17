@@ -1,10 +1,13 @@
 package project;
 
+import console.Console;
+import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDFactory;
 import mcd.*;
 import messages.MessagesBuilder;
+import mldr.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,7 +15,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import preferences.Preferences;
 import profile.Profile;
-import utilities.Trace;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -34,12 +36,10 @@ public class ProjectLoaderXml {
     private ArrayList<Element> elementsEntities = new ArrayList<>();
     private ArrayList<MVCCDElement> listeEntities = new ArrayList<>();
     private ArrayList<MVCCDElement> listeAssociations = new ArrayList<>();
+    private NodeList diagramTagsList = null; //Contient la liste des enfants de <diagrammes>
 
     public Project loadProjectFile(File fileProjectCurrent) {
-        // création du projet et initialisation des préférences du projet
-        Project project = new Project(null);
-        Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME);
-
+        Project project = null;
         try {
             // Création du document et du parseur pour récupérer les information du fichier
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -50,43 +50,47 @@ public class ProjectLoaderXml {
             Schema schema = factory.newSchema(new File("schemas/SchemaProject.xsd"));
             Validator validator = schema.newValidator();
 
+            // Récupération de la racine du fichier XML (balise <project>)
+            Element projectTag = document.getDocumentElement();
 
-            // Récupération de la racine du fichier
-            Element racine = document.getDocumentElement();
+            // Chargement du projet et du nom du projet
+            project = new Project(projectTag.getAttribute("id"));
+            project.setName(projectTag.getElementsByTagName("nameProject").item(0).getTextContent());
 
-            // Récupération du nom du projet
-            Element name = (Element) racine.getElementsByTagName("nameProject").item(0);
-            project.setName(name.getTextContent());
+            // Initialisation des préférences du projet
+            Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME);
 
             // Ajout des éléments du projet
-            addPropertiesProject(racine, project);
-            addPreferences(racine, preferences);
+            addPropertiesProject(projectTag, project);
+            addPreferences(projectTag, preferences);
 
-            // Création du conteneur MCD
-            MCDContModels mcdCont = MVCCDElementFactory.instance().createMCDModels(project, Preferences.REPOSITORY_MCD_MODELS_NAME);
-            // Récupération de la balise MCD du fichier
-            Element mcdTag = (Element) racine.getElementsByTagName("MCD").item(0);
+            // Chargement du modèle MCD
+            Element mcdTag = (Element) projectTag.getElementsByTagName("MCD").item(0);
+            MCDContModels mcd = MVCCDElementFactory.instance().createMCDModels(project, Integer.parseInt(mcdTag.getAttribute("id")));
+            mcd.setName(Preferences.REPOSITORY_MCD_MODELS_NAME);
+
             // Chargement des modèles ou des 3 conteneurs principaux
-            ArrayList<Element> elementsModeles = loadModels(mcdCont, mcdTag);
+            ArrayList<Element> elementsModeles = loadModels(mcd, mcdTag);
             // Chargement des packages
-            loadPackages(mcdCont, mcdTag);
+            loadPackages(mcd, mcdTag);
+            // Chargement des diagramme
+            loadDiagrams(mcd, mcdTag);
             // Chargement des entités
-            loadEntities(mcdCont, mcdTag, elementsModeles);
+            loadEntities(mcd, mcdTag, elementsModeles);
             // Chargement des attributs
             loadAttributs();
             // Chargements des contraintes
             loadContraints();
             // Chargements des rélations ( associations et généralisations)
-            loadRelations(mcdCont, mcdTag, elementsModeles);
+            loadRelations(mcd, mcdTag, elementsModeles);
             // Chargements des liens d'entités associatives
-            loadLinks(mcdCont, mcdTag, elementsModeles);
+            loadLinks(mcd, mcdTag, elementsModeles);
 
             //Chargement du (ou des) MLDR
-            loadMLDR(mcdCont, mcdTag); //TODO-STB: CONTINUER ICI
+            loadMLDR(mcd, mcdTag); //TODO-STB: CONTINUER ICI
 
             // Validation du fichier
             validator.validate(new DOMSource(document));
-
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
@@ -158,39 +162,52 @@ public class ProjectLoaderXml {
         preferences.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(mcdModeNamingAttributeShortName.getTextContent());
     }
 
-    private ArrayList<Element> loadModels(MCDContModels mcdCont, Element mcd) {
+    private ArrayList<Element> loadModels(MCDContModels mcd, Element mcdTag) {
         // Créations de la listes des éléments modèles à renvoyer
-        ArrayList<Element> elementsModeles = new ArrayList<>();
+        ArrayList<Element> modelsTagsList = new ArrayList<>();
         // Parcours des enfants de MCD
-        NodeList mcdChilds = mcd.getChildNodes();
-        for (int i = 0; i < mcdChilds.getLength(); i++) {
-            Node mcdChild = mcdChilds.item(i);
-            if (mcdChild instanceof Element) {
-                if (mcdChild.getNodeName().equals("model")) {
-                    Element model = (Element) mcdChild;
+        NodeList childsOfMcdTag = mcdTag.getChildNodes();
+        for (int i = 0; i < childsOfMcdTag.getLength(); i++) {
+            if (childsOfMcdTag.item(i) instanceof Element) {
+                Element childOfMcdTag = (Element) childsOfMcdTag.item(i); //peut être <model>, <diagrammes>, <entities>, <relations> ou <MLDR_DT>
+                /*
+                Chargement d'un modèle
+                 */
+                if (childOfMcdTag.getNodeName().equals("model")) {
                     // Alimentation de la listes des éléments modèles
-                    elementsModeles.add(model);
+                    modelsTagsList.add(childOfMcdTag);
 
-                    //création du modèle
-                    MCDModel mcdModel = MVCCDElementFactory.instance().createMCDModel(mcdCont);
-                    mcdModel.setName(model.getAttribute("name"));
+                    // Création du modèle MCD
+                    MCDModel mcdModel = MVCCDElementFactory.instance().createMCDModel(mcd, Integer.parseInt(childOfMcdTag.getAttribute("id")));
+                    mcdModel.setName(childOfMcdTag.getAttribute("name"));
 
                     // Ajout des propriétés du modèle
-                    addPropertiesModelOrPackage(mcdModel, model);
+                    addPropertiesModelOrPackage(mcdModel, childOfMcdTag);
                 }
-                // Ajout des conteneurs sans modèles
-                if (mcdChild.getNodeName().equals("diagrammes")) {
-                    MVCCDElementFactory.instance().createMCDDiagrams(mcdCont, Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+                /*
+                Chargement des conteneurs sans modèle
+                 */
+                //Chargement des diagrammes
+                if(childOfMcdTag.getNodeName().equals("diagrammes")) {
+                    MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(mcd, Integer.parseInt(childOfMcdTag.getAttribute("id")));
+                    mcdContDiagrams.setName(Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+                    this.diagramTagsList = childOfMcdTag.getChildNodes(); //Récupération des enfants de <diagrammes>, c'est-à-dire de la liste de chaque <diagramme>.
                 }
-                if (mcdChild.getNodeName().equals("entities")) {
-                    MVCCDElementFactory.instance().createMCDEntities(mcdCont, Preferences.REPOSITORY_MCD_ENTITIES_NAME);
+                else if(childOfMcdTag.getNodeName().equals("entities")) {
+                    MVCCDElementFactory.instance().createMCDEntities(mcd, Preferences.REPOSITORY_MCD_ENTITIES_NAME);
                 }
-                if (mcdChild.getNodeName().equals("relations")) {
-                    MVCCDElementFactory.instance().createMCDContRelations(mcdCont, Preferences.REPOSITORY_MCD_RELATIONS_NAME);
+                else if(childOfMcdTag.getNodeName().equals("relations")) {
+                    MVCCDElementFactory.instance().createMCDContRelations(mcd, Preferences.REPOSITORY_MCD_RELATIONS_NAME);
+                }
+                else if(childOfMcdTag.getNodeName().equals("MLDR_DT")) {
+                    MVCCDElementFactory.instance().createMLDRModelDT(mcd, Integer.parseInt(childOfMcdTag.getAttribute("id")));
+                }
+                else if(childOfMcdTag.getNodeName().equals("MLDR_TI")) {
+                    MVCCDElementFactory.instance().createMLDRModelTI(mcd, Integer.parseInt(childOfMcdTag.getAttribute("id")));
                 }
             }
         }
-        return elementsModeles;
+        return modelsTagsList;
     }
 
     private void loadPackages(MCDContModels mcd, Element element) {
@@ -226,7 +243,7 @@ public class ProjectLoaderXml {
                     // Récupération du nom du parent du paquetage
                     Element nameParent = (Element) pack.getElementsByTagName("parent").item(0);
 
-                    // Récuperation du modèle en lien avec le paquetage
+                    // Récupération du modèle en lien avec le paquetage
                     MCDModel mcdModel = null;
                     for (MVCCDElement mvccdElement : listModel) {
                         MCDModel child = (MCDModel) mvccdElement;
@@ -317,6 +334,24 @@ public class ProjectLoaderXml {
         }
     }
 
+    private void loadDiagrams(MCDContModels mcd, Element mcdTag){
+        //Recherche du conteneur de diagrammes au sein du modèle "MCD"
+        ArrayList<MVCCDElement> mcdElements = mcd.getChilds();
+        for(MVCCDElement mvccdElement : mcdElements){
+            if (mvccdElement instanceof MCDContDiagrams) {
+                MCDContDiagrams mcdContDiagrams = (MCDContDiagrams) mvccdElement;
+                //Parcours chaque diagramme pour chargement
+                for (int i = 0; i < this.diagramTagsList.getLength(); i++) {
+                    if(this.diagramTagsList.item(i) instanceof Element){
+                        Element diagramTag = (Element) this.diagramTagsList.item(i);
+                        MCDDiagram mcdDiagram = MVCCDElementFactory.instance().createMCDDiagram(mcdContDiagrams, Integer.parseInt(diagramTag.getAttribute("id")));
+                        mcdDiagram.setName(diagramTag.getAttribute("name"));
+                    }
+                }
+            }
+        }
+    }
+
     private void loadEntities(MCDContModels mcd, Element element, ArrayList<Element> elementsModeles) {
         //Chargement des entités
         ArrayList<MVCCDElement> mcdElements = mcd.getChilds();
@@ -364,23 +399,25 @@ public class ProjectLoaderXml {
 
     private void addEntities(MCDContEntities mcdContEntities, Element element) {
         // Récupération de la balise entities
-        Element entities = (Element) element.getElementsByTagName("entities").item(0);
+        Element entitiesTag = (Element) element.getElementsByTagName("entities").item(0);
         // Parcours des entités
-        NodeList entitiesChilds = entities.getChildNodes();
+        NodeList entitiesChilds = entitiesTag.getChildNodes();
         for (int i = 0; i < entitiesChilds.getLength(); i++) {
             Node entitiesChild = entitiesChilds.item(i);
             if (entitiesChild instanceof Element) {
                 // Création de l'element entité
-                Element entite = (Element) entitiesChild;
+                Element entityTag = (Element) entitiesChild;
                 // Remplissage de la listes des éléments pour les entités
-                elementsEntities.add(entite);
+                elementsEntities.add(entityTag);
+
                 // Création de l'entité
-                MCDEntity mcdEntity = MVCCDElementFactory.instance().createMCDEntity(mcdContEntities);
-                mcdEntity.setName(entite.getAttribute("name"));
+                MCDEntity mcdEntity = MVCCDElementFactory.instance().createMCDEntity(mcdContEntities, Integer.parseInt(entityTag.getAttribute("id")));
+                mcdEntity.setName(entityTag.getAttribute("name"));
+
                 // Remplissage de la listes des éléments MVCCD pour les entités
                 listeEntities.add(mcdEntity);
                 // // Ajout des propriétés des entités
-                addPropertiesEntities(mcdEntity, entite);
+                addPropertiesEntities(mcdEntity, entityTag);
             }
         }
 
@@ -502,7 +539,7 @@ public class ProjectLoaderXml {
                     // Récupération des conteneurs des contraintes
                     mcdContConstraints = (MCDContConstraints) contConstraints;
                     for (Element child : elementsEntities) {
-                        // Ajout des contraintes si l'élément entité cré dans l'application est égal à celui du fichier
+                        // Ajout des contraintes si l'élément entité créé dans l'application est égal à celui du fichier
                         if (child.getAttribute("name").equals(mvccdElement.getName())) {
                             addContraints(mcdContConstraints, child);
                         }
@@ -518,10 +555,9 @@ public class ProjectLoaderXml {
         // Parcours des éléments enfant de la balise contraintes
         NodeList constraintsChilds = constraintsTag.getChildNodes();
         for (int i = 0; i < constraintsChilds.getLength(); i++) {
-            Node constraintChild = constraintsChilds.item(i);
-            if (constraintChild instanceof Element) {
+            if (constraintsChilds.item(i) instanceof Element) {
                 // Création de l'element attribut
-                Element constraintTag = (Element) constraintChild;
+                Element constraintTag = (Element) constraintsChilds.item(i);
                 // Ajout de la contrainte NID ou Unique en fonction de son type
                 addTypeConstraintes(constraintTag, mcdContConstraints);
             }
@@ -535,13 +571,13 @@ public class ProjectLoaderXml {
 
         // Contraintes de type NID
         if (typeConstraint.getTextContent().equals("NID")) {
-            mcdConstraint = MVCCDElementFactory.instance().createMCDNID(mcdContConstraints); // Création de la contrainte
+            mcdConstraint = MVCCDElementFactory.instance().createMCDNID(mcdContConstraints, Integer.parseInt(constraintTag.getAttribute("id"))); // Création de la contrainte
             Element lienProg = (Element) constraintTag.getElementsByTagName("lienProg").item(0); //Attribuer le "lienProg" de la contrainte
             ((MCDNID) mcdConstraint).setLienProg(Boolean.valueOf(lienProg.getTextContent()));           //idem suite
         }
         // Contraintes de type Unique
         else if (typeConstraint.getTextContent().equals("Unique")) {
-            mcdConstraint = MVCCDElementFactory.instance().createMCDUnique(mcdContConstraints); // Création de la contrainte
+            mcdConstraint = MVCCDElementFactory.instance().createMCDUnique(mcdContConstraints, Integer.parseInt(constraintTag.getAttribute("id"))); // Création de la contrainte
             Element absolute = (Element) constraintTag.getElementsByTagName("absolute").item(0); //Attribuer le "absolute" de la contrainte
             ((MCDUnique) mcdConstraint).setAbsolute(Boolean.valueOf(absolute.getTextContent()));        //idem suite
         }
@@ -862,12 +898,63 @@ public class ProjectLoaderXml {
 
 
 
-    // *** Méthode de chargement du MLD ***
+    // *** Méthodes de chargement du MLD ***
 
-    private void loadMLDR(MCDContModels mcdContModels, Element mcdTag){
+    private void loadMLDR(MCDContModels mcd, Element mcdTag){
+        //Parcours des enfants de <MCD>
+        NodeList mcdTagChilds = mcdTag.getChildNodes();
 
-        //TODO-STB: CONTINUER ICI
+        for (int i = 0; i < mcdTagChilds.getLength(); i++) {
+            if (mcdTagChilds.item(i) instanceof Element) {
+                Element mcdTagChild = (Element) mcdTagChilds.item(i);
+
+                //Chargement de <MLDR_DT> ou <MLDR_TI>
+                if (mcdTagChild.getNodeName().equals("MLDR_DT") || mcdTagChild.getNodeName().equals("MLDR_TI")) {
+                    MLDRModel mldrModel = (MLDRModel) mcd.getChildById(Integer.parseInt(mcdTagChild.getAttribute("id"))); //Récupération du MLDR_DT ou MLDR_TI déjà chargé dans l'application
+
+                    //Parcours des balises enfants de <MLDR_DT> ou <MLDR_TI>
+                    NodeList mldrTagChilds = mcdTagChild.getChildNodes();
+                    for (int j = 0; j < mldrTagChilds.getLength(); j++) {
+                        if(mldrTagChilds.item(j) instanceof Element){
+                            Element mldrTagChild = (Element) mldrTagChilds.item(j);
+
+                            //Chargement de <tables>
+                            if(mldrTagChild.getNodeName().equals("tables")){
+                                MLDRContTables mldrContTables = (MLDRContTables) mldrModel.getMDRContTables(); //Le conteneur de tables est déjà créé automatiquement avant
+
+                                //Parcours des balises enfants de <tables>
+                                NodeList tablesTagChilds = mldrTagChild.getChildNodes();
+                                for (int k = 0; k < tablesTagChilds.getLength(); k++) {
+                                    if (tablesTagChilds.item(k) instanceof Element) {
+                                        Element tablesTagChild = (Element) tablesTagChilds.item(k);
+
+                                        //Chargement de <table>
+                                        if (tablesTagChild.getNodeName().equals("table")) {
+                                            int entitySourceId = Integer.parseInt(tablesTagChild.getAttribute("entity_source")); //Récupération de l'id de l'entité source de la table
+                                            MCDEntity mcdEntitySource = (MCDEntity) mcd.getChildByIdProfondeur(entitySourceId); //Recherche de l'entité source en fonction de son ID, parmis tous les enfants du MCD
+                                            MLDRTable mldrTable = MVCCDElementFactory.instance().createMLDRTable(mldrContTables, mcdEntitySource, Integer.parseInt(tablesTagChild.getAttribute("id")));
+                                            mldrTable.setName(tablesTagChild.getAttribute("name"));
+
+                                            //Parcours des balises enfants de <table>
+                                            NodeList tableTagChilds = tablesTagChild.getChildNodes();
+                                            for (int l = 0; l < tableTagChilds.getLength(); l++) {
+                                                if (tableTagChilds.item(l) instanceof Element) {
+                                                    Element tableTagChild = (Element) tableTagChilds.item(l);
+
+                                                    //Chargement de <columns>
+                                                    if (tableTagChild.getNodeName().equals("columns")) {
+                                                        MLDRContColumns mldrContColumns = (MLDRContColumns) mldrTable.getMDRContColumns();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
-
 }
-

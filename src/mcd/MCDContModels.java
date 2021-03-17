@@ -18,6 +18,10 @@ public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePa
     private static final long serialVersionUID = 1000;
     private MLDRModel lastTransformedMLDRModel;
 
+    public MCDContModels(ProjectElement parent, int id){
+        super(parent, id);
+    }
+
     public MCDContModels(ProjectElement parent, String name) {
         super(parent, name);
     }

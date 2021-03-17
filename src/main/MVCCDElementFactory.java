@@ -54,9 +54,18 @@ public class MVCCDElementFactory {
         return project;
     }
 
+    public MCDContModels createMCDModels(Project project, int id){
+        return new MCDContModels(project, id);
+    }
 
     public MCDContModels createMCDModels(Project project, String name){
         return new MCDContModels(project, name);
+    }
+
+    public MCDModel createMCDModel(MCDContModels mcdContModels, int id){
+        MCDModel mcdModel = new MCDModel(mcdContModels, id);
+        createContentMCDModel(mcdModel);
+        return mcdModel;
     }
 
     public MCDModel createMCDModel(MCDContModels mcdContModels){
@@ -75,8 +84,16 @@ public class MVCCDElementFactory {
         return new Preferences(parent, name);
     }
 
+    public MCDContDiagrams createMCDDiagrams(ProjectElement parent, int id){
+        return new MCDContDiagrams(parent, id);
+    }
+
     public MCDContDiagrams createMCDDiagrams(ProjectElement parent, String name){
         return new MCDContDiagrams(parent, name);
+    }
+
+    public MCDDiagram createMCDDiagram(ProjectElement parent, int id){
+        return new MCDDiagram(parent, id);
     }
 
     public MCDDiagram createMCDDiagram(ProjectElement parent, String name){
@@ -102,16 +119,22 @@ public class MVCCDElementFactory {
         return mcdContConstraints;
     }
 
+    public MCDEntity createMCDEntity(ProjectElement parent, int id){
+        MCDEntity mcdEntity = new MCDEntity(parent, id);
+        this.createMCDContOfEntity(mcdEntity);
+        return mcdEntity;
+    }
+
     public MCDEntity createMCDEntity(ProjectElement parent){
         MCDEntity mcdEntity = new MCDEntity(parent);
-        MCDContAttributes mcdContAttributes = MVCCDElementFactory.instance().createMCDAttributes(mcdEntity,
-                Preferences.REPOSITORY_MCD_ATTRIBUTES_NAME);
-        MCDContRelEnds mcdContRelEnds = MVCCDElementFactory.instance().createMCDContEndRels(mcdEntity,
-                Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME);
-        MCDContConstraints mcdContConstraints = MVCCDElementFactory.instance().createMCDConstraints(mcdEntity,
-                Preferences.REPOSITORY_MCD_CONSTRAINTS_NAME);
-
+        this.createMCDContOfEntity(mcdEntity);
         return mcdEntity;
+    }
+
+    private void createMCDContOfEntity(MCDEntity mcdEntity){
+        MVCCDElementFactory.instance().createMCDAttributes(mcdEntity, Preferences.REPOSITORY_MCD_ATTRIBUTES_NAME);
+        MVCCDElementFactory.instance().createMCDContEndRels(mcdEntity, Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME);
+        MVCCDElementFactory.instance().createMCDConstraints(mcdEntity, Preferences.REPOSITORY_MCD_CONSTRAINTS_NAME);
     }
 
     public MCDContAttributes createMCDAttributes(MCDEntity parent, String name){
@@ -130,13 +153,19 @@ public class MVCCDElementFactory {
         return new MCDAttribute(parent, id);
     }
 
-    public MCDUnique createMCDUnique(MCDContConstraints parent){
+    public MCDUnique createMCDUnique(MCDContConstraints parent, int id){
+        return new MCDUnique(parent, id);
+    }
 
+    public MCDUnique createMCDUnique(MCDContConstraints parent){
         return new MCDUnique(parent);
     }
 
-    public MCDNID createMCDNID(MCDContConstraints parent){
+    public MCDNID createMCDNID(MCDContConstraints parent, int id){
+        return new MCDNID(parent, id);
+    }
 
+    public MCDNID createMCDNID(MCDContConstraints parent){
         return new MCDNID(parent);
     }
 
@@ -235,12 +264,27 @@ public class MVCCDElementFactory {
     }
 
 
+    public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel, int id){
+        MLDRModelDT mldrModelDT = new MLDRModelDT((ProjectElement) imcdModel, id);
+        mldrModelDT.setName(Preferences.REPOSITORY_MLDR_MODEL_DT_NAME);
+        namingMLDRModel(mldrModelDT);
+        createContentMLDRModel(mldrModelDT);
+        return mldrModelDT;
+    }
 
     public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel){
         MLDRModelDT mldrModelDT = new MLDRModelDT((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_DT_NAME);
         namingMLDRModel(mldrModelDT);
         createContentMLDRModel(mldrModelDT);
         return mldrModelDT;
+    }
+
+    public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel, int id){
+        MLDRModelTI mldrModelTI = new MLDRModelTI((ProjectElement) imcdModel, id);
+        mldrModelTI.setName(Preferences.REPOSITORY_MLDR_MODEL_TI_NAME);
+        namingMLDRModel(mldrModelTI);
+        createContentMLDRModel(mldrModelTI);
+        return mldrModelTI;
     }
 
     public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel){
@@ -262,6 +306,19 @@ public class MVCCDElementFactory {
     private void createContentMLDRModel(MLDRModel mldrModel) {
         MLDRContTables mldrContTable = new MLDRContTables(mldrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
         MLDRContRelations mldrContRelations = new MLDRContRelations(mldrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
+    }
+
+    public MLDRContTables createMLDRContTables(MLDRModel mldrModel, int id) {
+        return new MLDRContTables(mldrModel, id);
+    }
+
+    public MLDRTable createMLDRTable(MDRContTables mdrContTables, MCDEntity entitySource, int id) {
+        MLDRTable mldrTable = new MLDRTable(mdrContTables, entitySource, id);
+        MLDRContColumns mldrContColumns = new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        MLDRContConstraints mldrContConstraints = new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+        MLDRContRelEnds mldrContRelEnds = new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
+
+        return mldrTable;
     }
 
 
@@ -456,4 +513,5 @@ public class MVCCDElementFactory {
             return null;
         }
     }
+
 }

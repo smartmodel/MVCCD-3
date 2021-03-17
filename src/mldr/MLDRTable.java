@@ -21,6 +21,11 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
     private MCDElement mcdElementSource ;
     private MCDEntityNature mcdEntitySourceNature ;
 
+    public MLDRTable(ProjectElement parent,  MCDElement mcdElementSource, int id) {
+        super(parent, id);
+        this.mcdElementSource = mcdElementSource;
+    }
+
     public MLDRTable(ProjectElement parent,  MCDElement mcdElementSource) {
         super(parent);
         this.mcdElementSource = mcdElementSource;

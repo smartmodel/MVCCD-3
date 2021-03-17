@@ -12,12 +12,14 @@ public abstract class MCDOperation extends MCDElement implements IMCompletness, 
     private static final long serialVersionUID = 1000;
 
     public MCDOperation(ProjectElement parent) {
-
         super(parent);
     }
 
-    public MCDOperation(ProjectElement parent, String name) {
+    public MCDOperation(ProjectElement parent, int id) {
+        super(parent, id);
+    }
 
+    public MCDOperation(ProjectElement parent, String name) {
         super(parent, name);
     }
 

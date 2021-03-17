@@ -14,6 +14,13 @@ public class ProjectService {
 
     }
 
+    /**
+     * Parcours l'arbre du référentiel en remontant chez le parent, ensuite chez le parent du parent, etc. jusqu'à
+     * atteindre l'élément racine qui représente le projet.
+     * @author PAS
+     * @param projectElement Élément du référentiel à partir duquel rechercher.
+     * @return Retourne le projet, qui est l'élément racine du référentiel.
+     */
     static Project getProjectRoot(ProjectElement projectElement) {
         if (projectElement instanceof Project) {
             return ((Project) projectElement);
