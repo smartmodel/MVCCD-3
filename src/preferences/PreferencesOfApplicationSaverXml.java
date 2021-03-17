@@ -57,15 +57,15 @@ public class PreferencesOfApplicationSaverXml {
             preferences.appendChild(debugInspectObjectInTree);
 
             Element debugEditorDatasChanged = document.createElement("debugEditorDatasChanged");
-            debugEditorDatasChanged.appendChild(document.createTextNode(prefApp.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
+            debugEditorDatasChanged.appendChild(document.createTextNode(prefApp.getDEBUG_EDITOR_DATAS_CHANGED().toString()));
             preferences.appendChild(debugEditorDatasChanged);
 
             Element debugTdPrint = document.createElement("debugTdPrint");
-            debugTdPrint.appendChild(document.createTextNode(prefApp.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
+            debugTdPrint.appendChild(document.createTextNode(prefApp.getDEBUG_TD_PRINT().toString()));
             preferences.appendChild(debugTdPrint);
 
             Element debugTdUnicityPrint = document.createElement("debugTdUnicityPrint");
-            debugTdUnicityPrint.appendChild(document.createTextNode(prefApp.getDEBUG_INSPECT_OBJECT_IN_TREE().toString()));
+            debugTdUnicityPrint.appendChild(document.createTextNode(prefApp.getDEBUG_TD_UNICITY_PRINT().toString()));
             preferences.appendChild(debugTdUnicityPrint);
 
             Element repositoryMcdModelsMny  = document.createElement("repositoryMcdModelsMany");
@@ -75,6 +75,10 @@ public class PreferencesOfApplicationSaverXml {
             Element repositoryMcdPackagesAuthorizeds  = document.createElement("repositoryMcdPackagesAuthorizeds");
             repositoryMcdPackagesAuthorizeds.appendChild(document.createTextNode(prefApp.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS().toString()));
             preferences.appendChild(repositoryMcdPackagesAuthorizeds);
+
+            Element persistenceSerialisationInsteadofXML  = document.createElement("persistenceSerialisationInsteadofXML");
+            persistenceSerialisationInsteadofXML.appendChild(document.createTextNode(prefApp.isPERSISTENCE_SERIALISATION_INSTEADOF_XML().toString()));
+            preferences.appendChild(persistenceSerialisationInsteadofXML);
 
             //Formatage du fichier
             Transformer transformer = new TranformerForXml().createTransformer();

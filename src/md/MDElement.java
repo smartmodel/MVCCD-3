@@ -9,6 +9,8 @@ import project.ProjectElement;
  */
 public abstract class MDElement extends MElement {
 
+    private static final long serialVersionUID = 1000;
+
     public MDElement(ProjectElement parent) {
         super(parent);
     }

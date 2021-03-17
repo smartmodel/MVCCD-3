@@ -6,6 +6,7 @@ import project.Project;
 import project.ProjectFileChooser;
 import utilities.Trace;
 import utilities.files.UtilFiles;
+import utilities.window.DialogMessage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -99,6 +100,38 @@ public class PreferencesManager {
         projectPref.setDEBUG_EDITOR_DATAS_CHANGED(applicationPref.getDEBUG_EDITOR_DATAS_CHANGED());
         projectPref.setDEBUG_TD_PRINT(applicationPref.getDEBUG_TD_PRINT());
         projectPref.setDEBUG_TD_UNICITY_PRINT(applicationPref.getDEBUG_TD_UNICITY_PRINT());
+
+        //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
+        projectPref.setPERSISTENCE_SERIALISATION_INSTEADOF_XML(
+                applicationPref.isPERSISTENCE_SERIALISATION_INSTEADOF_XML());
+        File fileProject = MVCCDManager.instance().getFileProjectCurrent();
+        if (MVCCDManager.instance().getFileProjectCurrent() != null){
+            String extensionAppl ;
+            if (PreferencesManager.instance().preferences().isPERSISTENCE_SERIALISATION_INSTEADOF_XML()){
+                extensionAppl =  Preferences.FILE_PROJECT_EXTENSION ;
+            } else {
+                extensionAppl = "xml";
+            }
+            String extensionProject = UtilFiles.getExtension(fileProject.getName()) ;
+            if (! extensionAppl.equals(extensionProject)){
+                String newNameFileProjet = UtilFiles.changeExtension(fileProject.getName(),extensionAppl);
+                String directory = UtilFiles.getStrDirectory(fileProject);
+                File newFileProject = UtilFiles.createFile(directory, newNameFileProjet);
+                MVCCDManager.instance().setFileProjectCurrent(newFileProject);
+                // Positionne le nouveau fichier comme dernier ouvert (Premier de la liste)
+                String message = "Le projet a été ouvert à partir d'un fichier au format : " +
+                        extensionProject + System.lineSeparator() +
+                        "La prochaine sauvegarde se fera au format de votre préférence d'application : " + extensionAppl;
+                if (extensionAppl.equals("xml")){
+                    message = message + System.lineSeparator() +
+                            "Tant que la sauvegarde xml n'est pas finalisée des données du projet peuvent être perdues!";
+                }
+                DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), message, "Changement de format");
+            }
+            // Indicateur pour pouvoir faire une sauvegarde avec le format changé
+            MVCCDManager.instance().setExtensionProjectFileNotEqual(! extensionAppl.equals(extensionProject));
+        }
+        // Fin provisoire !
 
         // Pour le moment pas de changement possible pour un projet existant
         // A analyser et reprendre plus tard
@@ -194,7 +227,7 @@ public class PreferencesManager {
      * @author PAS
     */
     public void loadOrCreateFileApplicationPreferences() {
-        boolean tempInutile = Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML; //Ligne créée uniquement dans le but de ne pas oublier de supprimer cette méthode lorsque la préférence sera supprimée.
+        boolean tempInutile = PreferencesManager.instance().preferences().isPERSISTENCE_SERIALISATION_INSTEADOF_XML(); //Ligne créée uniquement dans le but de ne pas oublier de supprimer cette méthode lorsque la préférence sera supprimée.
         try {
             PreferencesLoader loader = new PreferencesLoader();
             applicationPref = loader.load(new File(Preferences.FILE_APPLICATION_PREF_NAME));
@@ -211,7 +244,7 @@ public class PreferencesManager {
      * @author PAS
      */
     public void createProfile() {
-        boolean tempInutile = Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML; //Ligne créée uniquement dans le but de ne pas oublier de supprimer cette méthode lorsque la préférence sera supprimée.
+        boolean tempInutile = PreferencesManager.instance().preferences().isPERSISTENCE_SERIALISATION_INSTEADOF_XML(); //Ligne créée uniquement dans le but de ne pas oublier de supprimer cette méthode lorsque la préférence sera supprimée.
         ProfileFileChooser fileChooser = new ProfileFileChooser(ProjectFileChooser.SAVE);
         File fileChoose = fileChooser.fileChoose();
         if (fileChoose != null){

@@ -20,6 +20,11 @@ import java.nio.file.Paths;
 
 public class UtilFiles {
 
+    //TODO-1 Voir la libraire FileUtils de Apache !
+
+    //TODO-1 Voir pourquoi cela ne fonctionne pas dans le code avec cette constante
+    public final  String SEPEEXTENSION = "\\.";
+
     public static String getStrDirectory(File file) {
         String directory = StringUtils.removeEnd(file.getPath(), file.getName());
         directory = StringUtils.substring(directory, 0, directory.length() - 1);
@@ -36,6 +41,32 @@ public class UtilFiles {
         } else {
             return null;
         }
+    }
+
+    public static String getExtension(String fileName) {
+        String[] parts = fileName.split("\\.");
+        if (parts.length >1){
+            return parts[parts.length - 1];
+        }
+        return null;
+    }
+
+    /**
+     * Retourne un nouveau fileName avec l'extension modifiée
+     * @param fileName
+     * @param newExtension
+     * @return
+     */
+    public static String changeExtension(String fileName, String newExtension){
+        String newFileName = "";
+        String[] parts = fileName.split("\\.");
+        if (parts.length >1){
+            for (int i=0; i < parts.length -1; i++ ){
+                newFileName = newFileName  + parts[i];
+            }
+            newFileName = newFileName + "." + newExtension;
+        }
+        return newFileName;
     }
 
     public static boolean isFileProfil(String fileName) {
@@ -89,5 +120,9 @@ public class UtilFiles {
                     MVCCDManager.instance().getMvccdWindow(), message) == JOptionPane.YES_OPTION ;
         }
         return true;
+    }
+
+    public static File createFile(String directory, String fileName){
+        return new File (directory + File.separator + fileName);
     }
 }

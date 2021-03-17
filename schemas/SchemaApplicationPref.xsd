@@ -17,6 +17,8 @@
 	<xs:element name="debugTdUnicityPrint" type="xs:boolean"/>
 	<xs:element name="repositoryMcdModelsMany" type="xs:boolean"/>
 	<xs:element name="repositoryMcdPackagesAuthorizeds" type="xs:boolean"/>
+	<xs:element name="persistenceSerialisationInsteadofXML" type="xs:boolean"/>
+
 	<xs:element name="preferences">
 		<xs:complexType>
 			<xs:sequence>
@@ -30,6 +32,7 @@
 				<xs:element ref="debugTdUnicityPrint"/>
 				<xs:element ref="repositoryMcdModelsMany"/>
 				<xs:element ref="repositoryMcdPackagesAuthorizeds"/>
+				<xs:element ref="persistenceSerialisationInsteadofXML"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

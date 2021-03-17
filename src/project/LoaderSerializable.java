@@ -2,7 +2,6 @@ package project;
 
 import exceptions.CodeApplException;
 import main.MVCCDElement;
-import utilities.Trace;
 
 import java.io.EOFException;
 import java.io.File;
@@ -33,7 +32,6 @@ public class LoaderSerializable {
             }
         } catch (Exception e){
             //TODO-0 Traiter correctement l'erreur ... Attendre la sauvegarde XML
-            Trace.println(file.getPath().toString());
             throw (new CodeApplException(e));	// L'erreur est renvoyée
         } finally {
             if (reader != null) {

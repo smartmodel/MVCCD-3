@@ -137,10 +137,6 @@ public abstract class MDRColumn extends MDRElement implements
 
 
     public boolean isFk() {
-        Trace.println(getMDRTableAccueil().getClass().getName() + "   "+ getMDRTableAccueil().getName());
-        for (MDRColumn mdrColumn : getMDRTableAccueil().getMDRColumnsFK()){
-            Trace.println ("2 "+ mdrColumn.getClass().getName() + "  " + mdrColumn.getName() );
-        }
         return getMDRTableAccueil().getMDRColumnsFK().contains(this);
     }
 

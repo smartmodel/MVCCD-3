@@ -15,7 +15,6 @@ public class Preferences extends MVCCDElement {
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
     public static String APPLICATION_VERSION = "3.0.16"; //TODO-STB+PAS: sauvegarder également la version dans la sauvegarde du projet
-    public static boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = true; //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref //TODO-STB: mettre à false par défaut, et éventuellement supprimer la propriété lorsque la persistance XML est ok.
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
     public static Integer PANEL_REPOSITORY_WIDTH = 200;
@@ -621,6 +620,11 @@ public class Preferences extends MVCCDElement {
     private Boolean REPOSITORY_MCD_MODELS_MANY = false;
     private Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = false;
 
+    // Pendant la phase de développement
+    //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref
+    // TODO-STB: mettre à false par défaut, et éventuellement supprimer la propriété lorsque la persistance XML est ok.
+    private Boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = true;
+
 
     //private PreferencesDisplay GENERAL_PREFERENCES_DISPLAY = PreferencesDisplay.REPOSITORY;
 
@@ -707,6 +711,16 @@ public class Preferences extends MVCCDElement {
     }
 
     // Application
+
+
+    public Boolean isPERSISTENCE_SERIALISATION_INSTEADOF_XML() {
+        return PERSISTENCE_SERIALISATION_INSTEADOF_XML;
+    }
+
+    public void setPERSISTENCE_SERIALISATION_INSTEADOF_XML(Boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML) {
+        this.PERSISTENCE_SERIALISATION_INSTEADOF_XML = PERSISTENCE_SERIALISATION_INSTEADOF_XML;
+    }
+
     public Boolean isDEBUG() {
         return DEBUG;
     }

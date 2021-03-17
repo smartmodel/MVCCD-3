@@ -100,7 +100,7 @@ public class ProjectSaverXml {
 
             // Message de confirmation de la sauvegarde du fichier
             String message = MessagesBuilder.getMessagesProperty("project.saved",
-                    new String[]{MVCCDManager.instance().getProject().getName()});
+                    new String[]{MVCCDManager.instance().getProject().getName(), file.getPath()});
             DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), message);
 
         } catch (ParserConfigurationException | TransformerException | FileNotFoundException pce) {
