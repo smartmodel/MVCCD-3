@@ -189,36 +189,35 @@ public class ProjectSaverXml {
     }
 
 
-    private void addModelAndChilds(Document doc, Element mcd, ArrayList<MVCCDElement> mcdChilds) {
+    private void addModelAndChilds(Document doc, Element mcd, ArrayList<MVCCDElement> mcdModels) {
         // Parcours des enfants de l'élément mcd
-        for (int i = 0; i < mcdChilds.size(); i++) {
-            MVCCDElement child = mcdChilds.get(i);
+        for(MVCCDElement mcdModel : mcdModels){
             // Création du modèle dans le document
-            Element model = doc.createElement("model");
-            if (child instanceof MCDModel) {
-                mcd.appendChild(model);
+            Element modelTag = doc.createElement("model");
+            if (mcdModel instanceof MCDModel) {
+                mcd.appendChild(modelTag);
                 Attr name = doc.createAttribute("name");
-                name.setValue(child.getName());
-                model.setAttributeNode(name);
+                name.setValue(mcdModel.getName());
+                modelTag.setAttributeNode(name);
             }
 
-            ArrayList<MVCCDElement> modelsChilds = child.getChilds();
+            ArrayList<MVCCDElement> modelsChilds = mcdModel.getChilds();
 
             if (packagesAuthorized) {
                 // Création des différents éléments du modèle avec packages
-                addPropertiesModelsOrPackages(doc, model, child);
-                addDiagrams(doc, modelsChilds, model);
-                addEntities(doc, modelsChilds, model);
-                addRelations(doc, modelsChilds, model);
-                addPackages(doc, child, model);
-                addMLD(doc, modelsChilds, model);
+                addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
+                addDiagrams(doc, modelsChilds, modelTag);
+                addEntities(doc, modelsChilds, modelTag);
+                addRelations(doc, modelsChilds, modelTag);
+                addPackages(doc, mcdModel, modelTag);
+                addMLD(doc, modelsChilds, modelTag);
             } else {
                 // Création des différents éléments du modèle sans packages
-                addPropertiesModelsOrPackages(doc, model, child);
-                addDiagrams(doc, modelsChilds, model);
-                addEntities(doc, modelsChilds, model);
-                addRelations(doc, modelsChilds, model);
-                addMLD(doc, modelsChilds, model);
+                addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
+                addDiagrams(doc, modelsChilds, modelTag);
+                addEntities(doc, modelsChilds, modelTag);
+                addRelations(doc, modelsChilds, modelTag);
+                addMLD(doc, modelsChilds, modelTag);
             }
         }
 
@@ -625,17 +624,28 @@ public class ProjectSaverXml {
         }
     }
 
-    private void addRelations(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
-        // Ajout du package Relations au document
-        for (int i = 0; i < listElement.size(); i++) {
-            MVCCDElement childElement = listElement.get(i);
-            if (childElement.getName().equals("Relations")) {
-                Element relations = doc.createElement("relations");
-                racine.appendChild(relations);
+    /**
+     * Persiste en XML les relations du MCD.
+     * @param doc Document XML dans lequel seront persistées les relations.
+     * @param mcdModels Liste des éléments qui se trouvent sous le modèle "MCD" dans le référentiel.
+     * @param racineTag Balise parent sous laquelle les relations seront persistées.
+     */
+    private void addRelations(Document doc, ArrayList<MVCCDElement> mcdModels, Element racineTag) {
+        // Recherche du conteneur de relations sour le modèle MCD
+        for(MVCCDElement mcdModel : mcdModels){
+            if (mcdModel instanceof MCDContRelations) {
 
-                ArrayList<MVCCDElement> relationsChilds = childElement.getChilds();
-                // Ajout des rélations au document
-                addRelationsChilds(doc, relationsChilds, relations);
+                // Création de la balise <relations>
+                Element relationsTag = doc.createElement("relations");
+                racineTag.appendChild(relationsTag);
+
+                // Ajout de l'id à la balise <relations>
+                Attr idAttrOfRelationsTag = doc.createAttribute("id");
+                idAttrOfRelationsTag.setValue(((MCDContRelations) mcdModel).getIdProjectElementAsString());
+                relationsTag.setAttributeNode(idAttrOfRelationsTag);
+
+                // Ajout des relations au document
+                addRelationsChilds(doc, mcdModel.getChilds(), relationsTag);
 
             }
         }
