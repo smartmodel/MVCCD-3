@@ -174,10 +174,20 @@ public class MVCCDElementFactory {
     }
 
     public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
+                                                MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, int id) {
+        MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations, id);
+        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo);
+        return mcdAssociation;
+    }
+
+    public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
                                                 MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo) {
-
         MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations) ;
+        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo);
+        return mcdAssociation;
+    }
 
+    private void initMCDAssociation(MCDAssociation mcdAssociation, MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo){
         MCDContRelEnds mcdContRelEndsEntityFrom = mcdEntityFrom.getMCDContRelEnds();
         MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdContRelEndsEntityFrom) ;
 
@@ -195,8 +205,6 @@ public class MVCCDElementFactory {
 
         MCDContRelEnds mcdContRelEnds = MVCCDElementFactory.instance().createMCDContEndRels(mcdAssociation,
                 Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME);
-
-        return mcdAssociation;
     }
 
 

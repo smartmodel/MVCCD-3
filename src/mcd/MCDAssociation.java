@@ -33,18 +33,18 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
     private Boolean oriented = null;
 
     public MCDAssociation(MCDElement parent) {
-
         super(parent);
     }
 
+    public MCDAssociation(MCDElement parent, int id) {
+        super(parent, id);
+    }
 
     public MCDAssociation(MCDElement parent, String name) {
-
         super(parent, name);
     }
 
     public MCDAssEnd getFrom() {
-
         return (MCDAssEnd) super.getA();
     }
 

@@ -21,6 +21,10 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
         super(parent);
     }
 
+    public MCDRelation(MCDElement parent, int id) {
+        super(parent, id);
+    }
+
     public MCDRelation(MCDElement parent, String name) {
         super(parent, name);
     }

@@ -652,37 +652,34 @@ public class ProjectSaverXml {
     }
 
     private void addRelationsChilds(Document doc, ArrayList<MVCCDElement> relationsChilds, Element relations) {
-        // Création des 3 différents type de relation
+        // Création de la balise <associations>
         Element associations = doc.createElement("associations");
         relations.appendChild(associations);
 
+        // Création de la balise <generalisations>
         Element generalisations = doc.createElement("generalisations");
         relations.appendChild(generalisations);
 
+        // Création de la balise <links>
         Element links = doc.createElement("links");
         relations.appendChild(links);
 
-        // Récupération des valeurs pour chaque type
-        for (int i = 0; i < relationsChilds.size(); i++) {
-            MVCCDElement relationsChild = relationsChilds.get(i);
-            MCDRelation mcdRelation = (MCDRelation) relationsChild;
+        // Parcours de l'ensemble des relations qui se trouvent sous "Relations" dans le référentiel
+        for(MVCCDElement relationsChild : relationsChilds){
 
-            if (mcdRelation instanceof MCDAssociation) {
-                MCDAssociation mcdAssociation = (MCDAssociation) mcdRelation;
-                // Ajout des associations
-                addAssociations(doc, mcdAssociation, associations);
+            // Persistance d'une relation de type association
+            if (relationsChild instanceof MCDAssociation) {
+                addAssociations(doc, (MCDAssociation) relationsChild, associations);
             }
 
-            if (mcdRelation instanceof MCDGeneralization) {
-                MCDGeneralization mcdGeneralization = (MCDGeneralization) mcdRelation;
-                // Ajout des généralisations
-                addGeneralization(doc, mcdGeneralization, generalisations);
+            // Persistance d'une relation de type généralisation
+            else if (relationsChild instanceof MCDGeneralization) {
+                addGeneralization(doc, (MCDGeneralization) relationsChild, generalisations);
             }
 
-            if (mcdRelation instanceof MCDLink) {
-                MCDLink mcdLink = (MCDLink) mcdRelation;
-                //Ajout des liens d'entité associative
-                addlink(doc, mcdLink, links);
+            // Persistance d'une relation qui est uu lien d'entité associative
+            else if (relationsChild instanceof MCDLink) {
+                addlink(doc, (MCDLink) relationsChild, links);
             }
         }
     }
@@ -747,25 +744,31 @@ public class ProjectSaverXml {
         MCDAssEnd extremiteFrom = mcdAssociation.getFrom();
         MCDAssEnd extremiteTo = mcdAssociation.getTo();
 
-        Element association = doc.createElement("association");
-        // Association dans nom général ( noms dans les rôles)
-        if (mcdAssociation.getName().equals("")) {
+        // Création de la balise <association>
+        Element associationTag = doc.createElement("association");
+        associations.appendChild(associationTag);
 
-            addPropertiesAssociation(doc, association, mcdAssociation);
-            addExtremite(doc, association, extremiteFrom);
-            addExtremite(doc, association, extremiteTo);
+        // Ajout de l'id à la balise <association>
+        Attr idAttrOfAssociationTag = doc.createAttribute("id");
+        idAttrOfAssociationTag.setValue(mcdAssociation.getIdProjectElementAsString());
+        associationTag.setAttributeNode(idAttrOfAssociationTag);
+
+        // Association dans nom général (noms dans les rôles)
+        if (mcdAssociation.getName().equals("")) {
+            addPropertiesAssociation(doc, associationTag, mcdAssociation);
+            addExtremite(doc, associationTag, extremiteFrom);
+            addExtremite(doc, associationTag, extremiteTo);
 
         } else {
             // Association avec nom général
             Attr name = doc.createAttribute("name");
             name.setValue(mcdAssociation.getName());
-            association.setAttributeNode(name);
+            associationTag.setAttributeNode(name);
 
-            addPropertiesAssociation(doc, association, mcdAssociation);
-            addExtremite(doc, association, extremiteFrom);
-            addExtremite(doc, association, extremiteTo);
+            addPropertiesAssociation(doc, associationTag, mcdAssociation);
+            addExtremite(doc, associationTag, extremiteFrom);
+            addExtremite(doc, associationTag, extremiteTo);
         }
-        associations.appendChild(association);
     }
 
 
@@ -796,37 +799,39 @@ public class ProjectSaverXml {
 
     }
 
-    private void addExtremite(Document doc, Element association, MCDAssEnd extremite) {
+    private void addExtremite(Document doc, Element associationTag, MCDAssEnd assEnd) {
+
+        //TODO-STB: CONTINUER ICI: sauvegarder les ids des entités pointés par les extrémités d'associations
 
         // Récupération de l'extremité
         Element roleExtremite = doc.createElement("roleExtremiteFrom");
         // Si la direction du dessin a comme valeur 2 le rôle de l'extremité n'est pas "Tracée depuis" mais "Tracée vers"
-        if (extremite.getDrawingDirection() == 2) {
+        if (assEnd.getDrawingDirection() == 2) {
 
             roleExtremite = doc.createElement("roleExtremiteTo");
         }
 
-        association.appendChild(roleExtremite);
+        associationTag.appendChild(roleExtremite);
 
         // Récupération des éléments d'une extremité
         Element nameRole = doc.createElement("name");
-        nameRole.appendChild(doc.createTextNode(extremite.getName()));
+        nameRole.appendChild(doc.createTextNode(assEnd.getName()));
         roleExtremite.appendChild(nameRole);
 
         Element shortNameRole = doc.createElement("shortName");
-        shortNameRole.appendChild(doc.createTextNode(extremite.getShortName()));
+        shortNameRole.appendChild(doc.createTextNode(assEnd.getShortName()));
         roleExtremite.appendChild(shortNameRole);
 
         Element entity = doc.createElement("entiteNamePath");
-        entity.appendChild(doc.createTextNode(extremite.getMcdEntity().getNamePath(1)));
+        entity.appendChild(doc.createTextNode(assEnd.getMcdEntity().getNamePath(1)));
         roleExtremite.appendChild(entity);
 
         Element multiplicity = doc.createElement("multiplicity");
-        multiplicity.appendChild(doc.createTextNode(extremite.getMultiStr()));
+        multiplicity.appendChild(doc.createTextNode(assEnd.getMultiStr()));
         roleExtremite.appendChild((multiplicity));
 
         Element orderedRole = doc.createElement("ordered");
-        orderedRole.appendChild(doc.createTextNode(String.valueOf(extremite.isOrdered())));
+        orderedRole.appendChild(doc.createTextNode(String.valueOf(assEnd.isOrdered())));
         roleExtremite.appendChild(orderedRole);
 
     }

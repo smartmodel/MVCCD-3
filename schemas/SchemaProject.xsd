@@ -477,6 +477,7 @@
 				<xs:element ref="generalisations"/>
 				<xs:element ref="links"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -558,6 +559,7 @@
 					<xs:element ref="roleExtremiteTo"/>
 				</xs:sequence>
 			</xs:choice>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
