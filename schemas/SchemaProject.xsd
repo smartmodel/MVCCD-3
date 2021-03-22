@@ -599,6 +599,7 @@
 				<xs:element ref="multiplicity"/>
 				<xs:element ref="ordered"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -611,6 +612,7 @@
 				<xs:element ref="multiplicity"/>
 				<xs:element ref="ordered"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 

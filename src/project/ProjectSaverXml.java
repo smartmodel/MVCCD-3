@@ -801,38 +801,44 @@ public class ProjectSaverXml {
 
     private void addExtremite(Document doc, Element associationTag, MCDAssEnd assEnd) {
 
-        //TODO-STB: CONTINUER ICI: sauvegarder les ids des entités pointés par les extrémités d'associations
-
-        // Récupération de l'extremité
-        Element roleExtremite = doc.createElement("roleExtremiteFrom");
-        // Si la direction du dessin a comme valeur 2 le rôle de l'extremité n'est pas "Tracée depuis" mais "Tracée vers"
-        if (assEnd.getDrawingDirection() == 2) {
-
-            roleExtremite = doc.createElement("roleExtremiteTo");
+        // Création de la balise <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element roleExtremiteTag = null;
+        if (assEnd.getDrawingDirection() == 2) { // Si la direction du dessin a comme valeur 2 le rôle de l'extremité est "Tracée vers"
+            roleExtremiteTag = doc.createElement("roleExtremiteTo");
+        }else{
+            roleExtremiteTag = doc.createElement("roleExtremiteFrom");
         }
+        associationTag.appendChild(roleExtremiteTag);
 
-        associationTag.appendChild(roleExtremite);
+        // Création de l'attribut id sur la balise <roleExtremiteFrom> ou <roleExtremiteTo>
+        Attr idAttrOfRoleExtremiteTag = doc.createAttribute("id");
+        idAttrOfRoleExtremiteTag.setValue(assEnd.getIdProjectElementAsString());
+        roleExtremiteTag.setAttributeNode(idAttrOfRoleExtremiteTag);
 
-        // Récupération des éléments d'une extremité
-        Element nameRole = doc.createElement("name");
-        nameRole.appendChild(doc.createTextNode(assEnd.getName()));
-        roleExtremite.appendChild(nameRole);
+        // Création de la balise <name> sous <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element nameRoleTag = doc.createElement("name");
+        nameRoleTag.appendChild(doc.createTextNode(assEnd.getName()));
+        roleExtremiteTag.appendChild(nameRoleTag);
 
-        Element shortNameRole = doc.createElement("shortName");
-        shortNameRole.appendChild(doc.createTextNode(assEnd.getShortName()));
-        roleExtremite.appendChild(shortNameRole);
+        // Création de la balise <shortName> sous <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element shortNameRoleTag = doc.createElement("shortName");
+        shortNameRoleTag.appendChild(doc.createTextNode(assEnd.getShortName()));
+        roleExtremiteTag.appendChild(shortNameRoleTag);
 
-        Element entity = doc.createElement("entiteNamePath");
-        entity.appendChild(doc.createTextNode(assEnd.getMcdEntity().getNamePath(1)));
-        roleExtremite.appendChild(entity);
+        // Création de la balise <entiteNamePath> sous <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element entityTag = doc.createElement("entiteNamePath");
+        entityTag.appendChild(doc.createTextNode(assEnd.getMcdEntity().getNamePath(1))); //TODO-STB: CONTINUER ICI: sauvegarder les ids des entités pointés par les extrémités d'associations
+        roleExtremiteTag.appendChild(entityTag);
 
-        Element multiplicity = doc.createElement("multiplicity");
-        multiplicity.appendChild(doc.createTextNode(assEnd.getMultiStr()));
-        roleExtremite.appendChild((multiplicity));
+        // Création de la balise <multiplicity> sous <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element multiplicityTag = doc.createElement("multiplicity");
+        multiplicityTag.appendChild(doc.createTextNode(assEnd.getMultiStr()));
+        roleExtremiteTag.appendChild((multiplicityTag));
 
-        Element orderedRole = doc.createElement("ordered");
-        orderedRole.appendChild(doc.createTextNode(String.valueOf(assEnd.isOrdered())));
-        roleExtremite.appendChild(orderedRole);
+        // Création de la balise <ordered> sous <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element orderedRoleTag = doc.createElement("ordered");
+        orderedRoleTag.appendChild(doc.createTextNode(String.valueOf(assEnd.isOrdered())));
+        roleExtremiteTag.appendChild(orderedRoleTag);
 
     }
 

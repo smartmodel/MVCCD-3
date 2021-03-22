@@ -676,9 +676,9 @@ public class ProjectLoaderXml {
                 Element extremiteToTag = (Element) associationTag.getElementsByTagName("roleExtremiteTo").item(0);
                 Element entityNamepathToTag = (Element) extremiteToTag.getElementsByTagName("entiteNamePath").item(0);
 
-                //TODO-STB: CONTINUER ICI, charger les extrémités d'association en fonction des id d'entités et non des noms d'entités
+                //TODO-STB: CONTINUER ICI, charger les ids d'assEnd
 
-                // Création des entités en lien avec les extrémités de relation
+                // Création du lien entre l'association et les entités To et From de l'association (qui sont déjà créées dans l'application)
                 MCDEntity entityFrom = addRelationsEntities(entityNamePathFromTag);
                 MCDEntity entityTo = addRelationsEntities(entityNamepathToTag);
 
@@ -747,7 +747,7 @@ public class ProjectLoaderXml {
         // Parcours de la listes des entités
         for (MVCCDElement mvccdElement : listeEntities) {
             MCDEntity entity = (MCDEntity) mvccdElement;
-            // Compararion du namePath de l'entité de l'extremité de relation avec les entités créer dans l'aplication
+            // Comparaison du namePath de l'entité de l'extremité de relation avec les entités créées dans l'aplication
             if (entity.getNamePath(1).equals(element.getTextContent())) {
                 mcdEntity = entity;
             }
