@@ -600,6 +600,7 @@
 				<xs:element ref="ordered"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="target_entity_id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -613,6 +614,7 @@
 				<xs:element ref="ordered"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="target_entity_id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 

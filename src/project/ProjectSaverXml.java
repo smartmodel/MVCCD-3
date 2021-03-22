@@ -815,6 +815,11 @@ public class ProjectSaverXml {
         idAttrOfRoleExtremiteTag.setValue(assEnd.getIdProjectElementAsString());
         roleExtremiteTag.setAttributeNode(idAttrOfRoleExtremiteTag);
 
+        // Création de l'attribut target_entity_id sur la balise <roleExtremiteFrom> ou <roleExtremiteTo>
+        Attr targetEntityIdAttrOfRoleExtremiteTag = doc.createAttribute("target_entity_id");
+        targetEntityIdAttrOfRoleExtremiteTag.setValue(assEnd.getMcdEntity().getIdProjectElementAsString());
+        roleExtremiteTag.setAttributeNode(targetEntityIdAttrOfRoleExtremiteTag);
+
         // Création de la balise <name> sous <roleExtremiteFrom> ou <roleExtremiteTo>
         Element nameRoleTag = doc.createElement("name");
         nameRoleTag.appendChild(doc.createTextNode(assEnd.getName()));
@@ -827,7 +832,7 @@ public class ProjectSaverXml {
 
         // Création de la balise <entiteNamePath> sous <roleExtremiteFrom> ou <roleExtremiteTo>
         Element entityTag = doc.createElement("entiteNamePath");
-        entityTag.appendChild(doc.createTextNode(assEnd.getMcdEntity().getNamePath(1))); //TODO-STB: CONTINUER ICI: sauvegarder les ids des entités pointés par les extrémités d'associations
+        entityTag.appendChild(doc.createTextNode(assEnd.getMcdEntity().getNamePath(1)));
         roleExtremiteTag.appendChild(entityTag);
 
         // Création de la balise <multiplicity> sous <roleExtremiteFrom> ou <roleExtremiteTo>

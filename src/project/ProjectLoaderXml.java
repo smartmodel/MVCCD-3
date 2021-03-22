@@ -670,17 +670,21 @@ public class ProjectLoaderXml {
             if (associationChilds.item(i) instanceof Element) {
                 Element associationTag = (Element) associationChilds.item(i);
 
-                // Récupération des extrémités d'association et des namePath
+                // Récupération des extrémités d'association
                 Element extremiteFromTag = (Element) associationTag.getElementsByTagName("roleExtremiteFrom").item(0);
-                Element entityNamePathFromTag = (Element) extremiteFromTag.getElementsByTagName("entiteNamePath").item(0);
+                //Element entityNamePathFromTag = (Element) extremiteFromTag.getElementsByTagName("entiteNamePath").item(0);
                 Element extremiteToTag = (Element) associationTag.getElementsByTagName("roleExtremiteTo").item(0);
-                Element entityNamepathToTag = (Element) extremiteToTag.getElementsByTagName("entiteNamePath").item(0);
+                //Element entityNamepathToTag = (Element) extremiteToTag.getElementsByTagName("entiteNamePath").item(0);
+
+                // Récupération des id des entités cibles dans les 2 extrémités de l'association
+                int extremiteFromTargetEntityId = Integer.parseInt(extremiteFromTag.getAttribute("target_entity_id"));
+                int extremiteToTargetEntityId = Integer.parseInt(extremiteToTag.getAttribute("target_entity_id"));
 
                 //TODO-STB: CONTINUER ICI, charger les ids d'assEnd
 
                 // Création du lien entre l'association et les entités To et From de l'association (qui sont déjà créées dans l'application)
-                MCDEntity entityFrom = addRelationsEntities(entityNamePathFromTag);
-                MCDEntity entityTo = addRelationsEntities(entityNamepathToTag);
+                MCDEntity entityFrom = addRelationsEntities(extremiteFromTargetEntityId);
+                MCDEntity entityTo = addRelationsEntities(extremiteToTargetEntityId);
 
                 // Création de l'association dans l'application
                 MCDAssociation mcdAssociation = MVCCDElementFactory.instance().createMCDAssociation(mcdContRelations, entityFrom, entityTo, Integer.parseInt(associationTag.getAttribute("id")));
@@ -742,6 +746,25 @@ public class ProjectLoaderXml {
         }
     }
 
+    private MCDEntity addRelationsEntities(int targetEntityId) {
+        MCDEntity mcdEntity = null;
+        // Parcours de la listes des entités
+        for (MVCCDElement mvccdElement : listeEntities) {
+            MCDEntity entity = (MCDEntity) mvccdElement;
+            // Comparaison de l'id de l'entité de l'extremité de relation avec les entités créées dans l'aplication
+            if (entity.getIdProjectElement() == targetEntityId) {
+                mcdEntity = entity;
+            }
+        }
+        return mcdEntity;
+    }
+
+    /**
+     * @deprecated Méthode à supprimer
+     * @param element
+     * @return
+     */
+    @Deprecated
     private MCDEntity addRelationsEntities(Element element) {
         MCDEntity mcdEntity = null;
         // Parcours de la listes des entités
