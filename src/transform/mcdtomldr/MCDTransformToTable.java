@@ -3,9 +3,12 @@ package transform.mcdtomldr;
 import exceptions.CodeApplException;
 import exceptions.TransformMCDException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
+import main.MVCCDElement;
+import main.MVCCDElementConvert;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
+import mcd.interfaces.IMCDSourceMLDRTable;
 import mcd.services.IMCDModelService;
 import mcd.services.MCDRelEndService;
 import mdr.MDRElementNames;
@@ -97,9 +100,21 @@ public class MCDTransformToTable {
     }
 
     public void createOrModifyFromAllAssociationsNN() {
-        for (MCDAssociation mcdAssNN : IMCDModelService.getMCDAssociationsNN(imcdModel)){
-
+        for (MCDAssociation mcdAssNN : IMCDModelService.getMCDAssociationsNNWithoutEntity(imcdModel)){
+            createOrModifyFromAssociationNN(mcdAssNN);
         }
+    }
+
+    public void createOrModifyFromAssociationNN(MCDAssociation mcdAssNN) {
+            // Table
+            MLDRTable mldrTable = mldrModel.getMLDRTableByAssNNSource(mcdAssNN);
+            if (mldrTable == null){
+                mldrTable = mldrModel.createTable(mcdAssNN);
+                //mldrTable.setMcdEntitySourceNature(mcdEntity.getNature()); // Provient d'une association n:n
+                MVCCDManager.instance().addNewMVCCDElementInRepository(mldrTable);
+            }
+            modifyTable(mldrTable, mcdAssNN);
+            mldrTable.setIteration(mcdTransform.getIteration());
     }
 
     private boolean pkParentsExistsOld(MCDEntity mcdEntity) {
@@ -120,36 +135,6 @@ public class MCDTransformToTable {
             MCDEntity mcdEntityGeneralize = mcdGSEndGeneralize.getMcdEntity();
             MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(mcdEntityGeneralize);
             exist = exist && (mldrTable.getMLDRPK() != null);
-        }
-
-        return exist;
-    }
-
-    private boolean pkParentsExistsOld2(MCDEntity mcdEntity) {
-
-        boolean exist = true;
-
-        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getAssEndsIdCompChild();
-        ArrayList<MCDGSEnd> mcdAssEndsSpecialize = mcdEntity.getGSEndSpecialize();
-
-        ArrayList<MCDRelEnd> mcdRelEndsChild = MCDRelEndService.convertToMCDRelEnd(mcdAssEndsIdCompChild);
-        mcdRelEndsChild.addAll( MCDRelEndService.convertToMCDRelEnd(mcdAssEndsSpecialize));
-        for (MCDRelEnd mcdRelEndChild : mcdRelEndsChild){
-            MCDRelEnd mcdRelEndParent = mcdRelEndChild.getMCDRelEndOpposite() ;
-            MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getmElement();
-            MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(mcdEntityParent);
-            exist = exist && (mldrTable.getMLDRPK() != null);
-        }
-
-        return exist;
-    }
-
-    private boolean pkParentsExistsOld3(MCDEntity mcdEntity) {
-
-        boolean exist = true;
-
-        for (MLDRTable mldrTableParent : getMLDRTablesParentsOld(mcdEntity)){
-            exist = exist && (mldrTableParent.getMLDRPK() != null);
         }
 
         return exist;
@@ -221,14 +206,21 @@ public class MCDTransformToTable {
     }
 
 
-    public void modifyTable(MLDRTable mldrTable, MCDEntity mcdEntity){
+    public void modifyTable(MLDRTable mldrTable, IMCDSourceMLDRTable imcdSourceMLDRTable){
 
         // Nom
-        MCDTransformService.names(mldrTable, buildNameTable(mcdEntity), mldrModel);
-
-        if (mcdEntity.getNature() != mldrTable.getMcdEntitySourceNature()){
-
+        if ( imcdSourceMLDRTable instanceof MCDEntity) {
+            MCDTransformService.names(mldrTable, buildNameTable((MCDEntity) imcdSourceMLDRTable), mldrModel);
         }
+        if ( imcdSourceMLDRTable instanceof MCDAssociation) {
+            MCDTransformService.names(mldrTable, buildNameTable(mldrTable, (MCDAssociation) imcdSourceMLDRTable), mldrModel);
+        }
+
+        // A voir !
+        // Une table peut aussi provenir d'une association n:n sans entité associative
+        //if (mcdEntity.getNature() != mldrTable.getMcdEntitySourceNature()){
+
+        //}
     }
 
     protected MDRElementNames buildNameTable(MCDEntity mcdEntity){
@@ -255,6 +247,70 @@ public class MCDTransformToTable {
                 } else {
                     message = MessagesBuilder.getMessagesProperty("mldrtable.build.name.error",
                             new String[]{mcdEntity.getName()});
+                }
+                throw new TransformMCDException(message, e);
+            }
+            names.setElementName(name, element);
+        }
+        return names;
+
+    }
+
+
+    protected MDRElementNames buildNameTable(MLDRTable mldrTable, MCDAssociation mcdAssociationNN){
+
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        MDRElementNames names = new MDRElementNames();
+        for (MDRNamingLength element: MDRNamingLength.values()) {
+            MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
+            orderBuild.setFormat(preferences.getMDR_TABLE_NN_NAME_FORMAT());
+            orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_TABLE_NAME_LENGTH);
+            orderBuild.setTargetNaming(MDROrderBuildTargets.TABLENN);
+
+            MCDAssEnd assEndA = mcdAssociationNN.getFrom();
+            MCDAssEnd assEndB = mcdAssociationNN.getTo();
+
+            MCDEntity mcdEntityA = assEndA.getMcdEntity();
+            orderBuild.getTableShortNameA().setValue(mcdEntityA );
+            orderBuild.getTableSep().setValue();
+
+            String roleA = assEndA.getShortName(); // Le format du nom est libre
+            String roleB = assEndB.getShortName(); // Le format du nom est libre
+            if (StringUtils.isNotEmpty(roleA)  &&  StringUtils.isNotEmpty(roleB)){
+                orderBuild.getRoleShortNameA().setValue(roleA);
+                orderBuild.getRoleSep().setValue();
+                orderBuild.getRoleShortNameB().setValue(roleB);
+                orderBuild.getAssShortName().setValue("");
+            }else {
+                orderBuild.getRoleShortNameA().setValue("");
+                orderBuild.getRoleSep().setValue("");
+                orderBuild.getRoleShortNameB().setValue("");
+                orderBuild.getAssShortName().setValue(mcdAssociationNN.getShortName());
+            }
+
+            orderBuild.getTableSep().setValue();
+            MCDEntity mcdEntityB= assEndB.getMcdEntity();
+            orderBuild.getTableShortNameB().setValue(mcdEntityB);
+
+            // Pour le nommage indicé en cas de limite de taille
+            String nameNN = orderBuild.getTableShortNameA().getValue() +  orderBuild.getTableSep().getValue() +
+                            orderBuild.getTableShortNameB().getValue() ;
+
+            ArrayList<MVCCDElement> brothers = MVCCDElementConvert.to(mldrTable.getBrothers());
+            orderBuild.getIndTableNN().setValue(nameNN, brothers);
+
+            String name;
+
+            try {
+                name = orderBuild.buildNaming();
+            } catch (OrderBuildNameException e) {
+                String message = "";
+                if (StringUtils.isNotEmpty(e.getMessage())) {
+                    message = e.getMessage();
+                } else {
+                    message = MessagesBuilder.getMessagesProperty("mldrtable.build.name.error",
+                            new String[]{mcdAssociationNN.getName()});
                 }
                 throw new TransformMCDException(message, e);
             }

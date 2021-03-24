@@ -6,6 +6,7 @@ import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDNamePathParent;
+import mcd.interfaces.IMCDSourceMLDRTable;
 import mcd.services.MCDEntityService;
 import project.ProjectElement;
 
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  * d'associations (MCDAssEnd), que des extrémités de lien d'entité associative (MCDLinkEnd) ou que des extrémités
  * de liens de généralisation/spécialisation (MCDGSEnd).
  */
-public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompletness, IMCDElementWithTargets {
+public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompletness, IMCDElementWithTargets, IMCDSourceMLDRTable {
 
     private static final long serialVersionUID = 1000;
 

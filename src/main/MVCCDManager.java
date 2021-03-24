@@ -81,7 +81,6 @@ public class MVCCDManager {
         mvccdWindow.adjustPanelRepository();
         // Chargement des adresses disques des derniers fichiers de projets utilisés
         projectsRecents = new ProjectsRecentsLoader().load();
-        System.out.println("Après load  " + projectsRecents.getRecents().toString());
 
         // Création du menu contextuel des fichiers de projets récemment utilisés
         changeActivateProjectOpenRecentsItems();

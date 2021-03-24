@@ -50,7 +50,7 @@ public class MCDTransform extends MDTransform {
             MCDTransformToTable mcdTransformToTable = new MCDTransformToTable(this, imcdModel, mldrModel);
             mcdTransformToTable.createOrModifyFromAllEntities();
 
-            // transformation des associations n:n sans entités associatives
+            // Transformation des associations n:n sans entités associatives
             mcdTransformToTable.createOrModifyFromAllAssociationsNN();
 
             //Suppression des MLDRElement absents de l'itération

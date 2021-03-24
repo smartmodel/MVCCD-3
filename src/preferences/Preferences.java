@@ -593,13 +593,13 @@ public class Preferences extends MVCCDElement {
     public static String MDR_COLUMN_FK_NAME_FORMAT_DEFAULT = "{parentTableShortName}{tableSep}{parentRoleShortName}{roleSep}{colName}";
     public static String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT_DEFAULT = "{colNameOneAncestor}{indColFK}";
     public static String MDR_PK_NAME_FORMAT_DEFAULT = "{PK_}{tableShortName}";
-    public static String MDR_INDICE_REGEXPR = "([0-9]*)$";
+    public static String MDR_INDICE_REGEXPR = "([0-9]+)$";
     public static Integer MDR_INDICE_TABLENN_LENGTH = 1 ;
     public static Integer MDR_INDICE_COL_FK_LENGTH = 1 ;
     public static Integer MDR_INDICE_CONST_FK_LENGTH = 2 ;
     public static String MDR_FK_NAME_FORMAT_DEFAULT = "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}{tableSep}{parentRoleShortName}";
     public static String MDR_FK_NAME_WITHOUT_ROLE_FORMAT_DEFAULT = "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}";
-    public static String MDR_ROLE_GENERALIZE_MARKER_DEFAULT = "gener";
+    public static String MDR_ROLE_GENERALIZE_MARKER_DEFAULT = "gs";
     public static String MDR_SEPARATOR = "_" ;
     public static String MDR_PATH_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
     public static String MDR_PEA_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
@@ -609,7 +609,8 @@ public class Preferences extends MVCCDElement {
 
     public static Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DEFAULT = true;
 
-    public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK = "mdr.pref.column.fk.one.diff.indice.fk";
+    //A priori pas judicieux
+    //public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK = "mdr.pref.column.fk.one.diff.indice.fk";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1 = "mdr.pref.column.fk.one.diff.indice.start.1";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2 = "mdr.pref.column.fk.one.diff.indice.start.2";
 
@@ -1279,7 +1280,8 @@ public class Preferences extends MVCCDElement {
     // Modifier aussi l'interface utilisateur
     public String getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF() {
         if (MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF == null){
-            MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK;
+            //MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK;
+            MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2;
         }
         return MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF;
     }

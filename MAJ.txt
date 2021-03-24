@@ -27,3 +27,9 @@ Problèmes : Initialisation d'une relation en création
 //#MAJ 2021-03-12 Sauvegarde Serializable/XML
 
 //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
+
+//#MAJ 2021-03-19 Erreur indexation des contraintes FK (et autres)
+
+//#MAJ 2021-03-21 Toutes les colonnes au lieu de brothers
+
+

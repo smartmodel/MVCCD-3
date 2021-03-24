@@ -88,5 +88,9 @@ public class MCDLinkEnd extends MCDRelEnd  {
         }
     }
 
+    public MCDLinkEnd getMCDLinkEndOpposite (){
+        return (MCDLinkEnd) getMCDRelEndOpposite();
+    }
+
 
 }

@@ -38,7 +38,9 @@ public class MLDRContConstraintsService {
             if (aMDRConstraint != mdrConstraint) {
                 if (aMDRConstraint.getClass() == mdrConstraint.getClass()) {
                     if (mdrConstraint instanceof IMDRConstraintIndice) {
-                        IMDRConstraintIndice imdrConstraintIndice = (IMDRConstraintIndice) mdrConstraint;
+                        //#MAJ 2021-03-19 Erreur indexation des contraintes FK (et autres)
+                        //IMDRConstraintIndice imdrConstraintIndice = (IMDRConstraintIndice) mdrConstraint;
+                        IMDRConstraintIndice imdrConstraintIndice = (IMDRConstraintIndice) aMDRConstraint;
                         Integer indice = imdrConstraintIndice.getIndice();
                         brothers.add(indice);
                     }
@@ -47,7 +49,7 @@ public class MLDRContConstraintsService {
         }
 
 
-        return Indexing.indexInBrothers(brothers);
+        return Indexing.indexInSiblings(brothers);
 
     }
 }

@@ -1,19 +1,25 @@
 package window.editor.preferences.project.mdr;
 
 import main.MVCCDElement;
+import main.MVCCDManager;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.services.PrefMDRService;
+import utilities.Trace;
+import utilities.window.DialogMessage;
+import utilities.window.editor.PanelButtonsContent;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
+import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 
 public class PrefMDRInputContent extends PanelInputContent {
@@ -44,15 +50,18 @@ public class PrefMDRInputContent extends PanelInputContent {
 
         labelColumnFKOneAncestor = new JLabel("1 seul ancêtre");
         fieldColumnFKOneAncestor = new SCheckBox(this, labelColumnFKOneAncestor);
+        //fieldColumnFKOneAncestor.setToolTipText("Pour le modèle logique. Pour les modèles physiques adaptés automatiquement en f() de la taille maximale des noms");
         fieldColumnFKOneAncestor.setToolTipText("Seulement pour les modèles logiques. Pour les modèles physiques, c'est automatiquement un seul ancêtre.");
         fieldColumnFKOneAncestor.addItemListener(this);
         fieldColumnFKOneAncestor.addFocusListener(this);
 
+
         labelColumnFKOneAncestorDiff = new JLabel("Différenciation");
         fieldColumnFKOneAncestorDiff = new SComboBox(this, labelColumnFKOneAncestorDiff);
-        fieldColumnFKOneAncestorDiff.addItem(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK));
+        //fieldColumnFKOneAncestorDiff.addItem(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK));
         fieldColumnFKOneAncestorDiff.addItem(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1));
         fieldColumnFKOneAncestorDiff.addItem(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2));
+        //fieldColumnFKOneAncestorDiff.setToolTipText("La valeur de différenciation est reprise automatiquement pour les modèles physiques.");
         fieldColumnFKOneAncestorDiff.setToolTipText("La valeur de différenciation est prise automatiquement pour les modèles physiques.");
         fieldColumnFKOneAncestorDiff.addItemListener(this);
         fieldColumnFKOneAncestorDiff.addFocusListener(this);
@@ -97,7 +106,7 @@ public class PrefMDRInputContent extends PanelInputContent {
 
 
     private void createPanelColumnFKOneAncestor() {
-        GridBagConstraints gbcA = PanelService.createSubPanelGridBagConstraints(panelColumnFKOneAncestor, "Colonnes FK - ascendance");
+        GridBagConstraints gbcA = PanelService.createSubPanelGridBagConstraints(panelColumnFKOneAncestor, "Colonnes FK - ascendance | Tables ass. n:n");
 
         gbcA.gridx = 0;
         gbcA.gridy = 0;
@@ -147,14 +156,21 @@ public class PrefMDRInputContent extends PanelInputContent {
         return true;
     }
 
+
     @Override
     protected void changeFieldSelected(ItemEvent e) {
-
+       Object source = e.getSource();
+        if (source == fieldColumnFKOneAncestor) {
+            warningChangeOneAncestor();
+        }
     }
 
     @Override
     protected void changeFieldDeSelected(ItemEvent e) {
-
+        Object source = e.getSource();
+        if (source == fieldColumnFKOneAncestor) {
+            warningChangeOneAncestor();
+        }
     }
 
 
@@ -187,9 +203,12 @@ public class PrefMDRInputContent extends PanelInputContent {
 
         if (fieldColumnFKOneAncestorDiff.checkIfUpdated()){
             String text = (String) fieldColumnFKOneAncestorDiff.getSelectedItem();
+            /*
+            //L'indexage par la contrainte de FK est abandonnée car la succession de valeur des ascendants peut être ambig
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK))){
                 preferences.setMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK);
             }
+            */
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1))){
                 preferences.setMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1);
             }
@@ -214,13 +233,42 @@ public class PrefMDRInputContent extends PanelInputContent {
         }
     }
 
-
-
     @Override
     public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
-
     }
 
+    private boolean warningChangeOneAncestorTOInstall() {
+        //TODO-1
+        // Mettre en place un processus de mise à jour des index en reprenant les anciennes valeurs
+        // Le problème se pose pour les noms qui ne portent pas d'index (1er index avec départ à 2 !)
+        // Il faudrait certainement recalculer tous les noms en tenant compte des anciennes ou valeurs
+        // ou éventuellement stocker les valeurs d'index dans le objets MLDRColumn, MLDRTable...
+
+        Preferences preferences = (Preferences) getEditor().getMvccdElementCrt();
+
+        if (fieldColumnFKOneAncestor.isSelected() != preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()) {
+            String message = "En changeant l'option <<1 seul ancêtre>>, les index sont recalculés !";
+            //String title = "Mise en garde";
+            return DialogMessage.showConfirmYesNo_No(getEditor(), message) == JOptionPane.YES_OPTION;
+        }
+        return true;
+    }
+
+    private void warningChangeOneAncestor() {
+
+        //TODO-1
+        // Je n'arrive pas à appeler une fenêtre de confirmation (warningChangeOneAncestorTOInstall())
+        // car le changement au sein de la cas à cocher ne se fait pas !
+        // J'ai essayé focusLost mais, je n'ai pas de perte de focus simplement en qui la zone de la case à cocher sans
+        // donner le focus à un autre composant. Peut-être que c'est jouable en travaillant sur un événement mouse...
+
+        if (getEditor().getButtons() != null) {
+            PanelButtonsContent buttonsContent = (PanelButtonsContent) getEditor().getButtons().getPanelContent();
+            buttonsContent.clearMessages();
+            String message = "En changeant l'option <<1 seul ancêtre>>, les index sont recalculés !";
+            buttonsContent.addIfNotExistMessage(message);
+        }
+    }
 
 }
 

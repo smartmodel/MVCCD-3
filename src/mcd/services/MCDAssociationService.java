@@ -4,10 +4,7 @@ import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
 import m.services.MRelEndService;
-import mcd.MCDAssociation;
-import mcd.MCDAssociationNature;
-import mcd.MCDElement;
-import mcd.MCDEntity;
+import mcd.*;
 import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
@@ -165,4 +162,13 @@ public class MCDAssociationService {
                 MCDAssociation.class.getName(), nameTree);
     }
 
+    public static MCDLinkEnd getLinkEnd(MCDAssociation mcdAssociation) {
+        for (MCDRelEnd mcdRelEnd : mcdAssociation.getMCDContRelEnds().getMCDRelEnds()){
+            if (mcdRelEnd instanceof MCDLinkEnd){
+                // Un seul lien possible par association !
+                return (MCDLinkEnd) mcdRelEnd;
+            }
+        }
+        return null;
+    }
 }

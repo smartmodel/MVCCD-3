@@ -118,6 +118,8 @@ public class PreferencesManager {
                 String directory = UtilFiles.getStrDirectory(fileProject);
                 File newFileProject = UtilFiles.createFile(directory, newNameFileProjet);
                 MVCCDManager.instance().setFileProjectCurrent(newFileProject);
+                //Activation de la sauvegarde par défaut
+                MVCCDManager.instance().setDatasProjectChanged(true);
                 // Positionne le nouveau fichier comme dernier ouvert (Premier de la liste)
                 String message = "Le projet a été ouvert à partir d'un fichier au format : " +
                         extensionProject + System.lineSeparator() +
