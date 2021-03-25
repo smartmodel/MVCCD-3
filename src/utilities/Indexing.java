@@ -1,46 +1,29 @@
 package utilities;
 
+import main.MVCCDElement;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Indexing {
 
 
-    private static final int NO_INDEX = -1 ;
     private static final int MAX_INDEX = 99 ;
 
 
-    public static int indexInBrothers(ArrayList<Integer> brothers){
+    public static int indexInSiblings(ArrayList<Integer> indexBrothers){
 
-        int indexBrothers[] ;
-        indexBrothers = new int[MAX_INDEX];
-
-        int replaceIndex = NO_INDEX;
-        int maxIndex = 1;
-
-        int i = -1;
-        for (Integer brother : brothers) {
+        ArrayList<Integer> sortedIndexBrothers = indexBrothers;
+        Collections.sort(sortedIndexBrothers);
+        int i = 0 ;
+        for (Integer index : sortedIndexBrothers){
             i++;
-            indexBrothers[i] = brother;
-            maxIndex++;
-        }
-
-        // Parcours des indices frères
-        for (int k = 0 ; k < i ; k++){
-            boolean pit = true;
-            for (int j = 0 ; j <= i ; j++){
-                if (indexBrothers[j] == k ) {
-                    pit = false;
-                }
-            }
-            if (pit){
-                replaceIndex = k ;
-                break;
+            if (index > i ){
+                // Un trou existe. Il sera réutilisé
+                return i ;
             }
         }
-        if (replaceIndex != NO_INDEX) {
-            return replaceIndex;
-        } else{
-            return maxIndex;
-        }
+        // Pas de trou. Nouvel élément en fin de liste
+        return i + 1 ;
     }
 }

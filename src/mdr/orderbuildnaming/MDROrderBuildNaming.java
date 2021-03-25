@@ -8,6 +8,7 @@ import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -24,8 +25,8 @@ public class MDROrderBuildNaming {
 
     private MDROrderWordTableName tableName;
     private MDROrderWordTableShortName tableShortName;
-    private MDROrderWordTableShortName tableShortNameA;
-    private MDROrderWordTableShortName tableShortNameB;
+    private MDROrderWordTableShortNameA tableShortNameA;
+    private MDROrderWordTableShortNameB tableShortNameB;
     private MDROrderWordTableShortNameParent tableShortNameParent;
     private MDROrderWordTableShortNameChild tableShortNameChild;
 
@@ -37,19 +38,20 @@ public class MDROrderBuildNaming {
 
     private MDROrderWordAssociationShortName assShortName;
 
-    private MDROrderWordRoleShortName roleShortNameA;
-    private MDROrderWordRoleShortName roleShortNameB;
+    private MDROrderWordRoleShortNameA roleShortNameA;
+    private MDROrderWordRoleShortNameB roleShortNameB;
     private MDROrderWordRoleShortNameParent roleShortNameParent;
 
     private MDROrderWordPEA pea;
 
-    private MDROrderWordIndiceColFK indColFK;
-    private MDROrderWordIndiceConstFK indConstFK;
+    private MDROrderWordIndiceColFK indColFK;  // Colonne de FK
+    private MDROrderWordIndiceConstFK indConstFK;  //Contrainte de FK
     private MDROrderWordIndiceTableNN indTableNN;
     private MDROrderWordTableSep tableSep;
     private MDROrderWordPEASep peaSep;
     private MDROrderWordRoleSep roleSep;
     private MDROrderWordFKIndSep fkIndSep;
+
 
 
 
@@ -61,8 +63,8 @@ public class MDROrderBuildNaming {
     public void init() {
         tableName = new MDROrderWordTableName(Preferences.MDR_TABLE_NAME_WORD);
         tableShortName  = new MDROrderWordTableShortName(Preferences.MDR_TABLE_SHORT_NAME_WORD);
-        tableShortNameA = new MDROrderWordTableShortName(Preferences.MDR_TABLE_SHORT_NAME_A_WORD);
-        tableShortNameB = new MDROrderWordTableShortName(Preferences.MDR_TABLE_SHORT_NAME_B_WORD);
+        tableShortNameA = new MDROrderWordTableShortNameA(Preferences.MDR_TABLE_SHORT_NAME_A_WORD);
+        tableShortNameB = new MDROrderWordTableShortNameB(Preferences.MDR_TABLE_SHORT_NAME_B_WORD);
         tableShortNameParent = new MDROrderWordTableShortNameParent(Preferences.MDR_TABLE_SHORT_NAME_PARENT_WORD);
         tableShortNameChild = new MDROrderWordTableShortNameChild(Preferences.MDR_TABLE_SHORT_NAME_CHILD_WORD);
 
@@ -74,8 +76,8 @@ public class MDROrderBuildNaming {
 
         assShortName = new MDROrderWordAssociationShortName(Preferences.MDR_ASS_SHORT_NAME_WORD);
 
-        roleShortNameA = new MDROrderWordRoleShortName(Preferences.MDR_ROLE_SHORT_NAME_A_WORD);
-        roleShortNameB = new MDROrderWordRoleShortName(Preferences.MDR_ROLE_SHORT_NAME_B_WORD);
+        roleShortNameA = new MDROrderWordRoleShortNameA(Preferences.MDR_ROLE_SHORT_NAME_A_WORD);
+        roleShortNameB = new MDROrderWordRoleShortNameB(Preferences.MDR_ROLE_SHORT_NAME_B_WORD);
         roleShortNameParent = new MDROrderWordRoleShortNameParent(Preferences.MDR_ROLE_SHORT_NAME_PARENT_WORD);
 
         pea = new MDROrderWordPEA(Preferences.MDR_PEA_SHORT_NAME_WORD);
@@ -204,6 +206,12 @@ public class MDROrderBuildNaming {
             // Contrôle de la taille du nom
             newName = limitSize(newName);
 
+            // Provoquer une erreur pour faire un test d'alternative
+            if (targetNaming == MDROrderBuildTargets.TABLENN ){
+                throw new OrderBuildNameTableNNSizeLimitException();
+
+            }
+
             return newName;
 
         }
@@ -211,15 +219,6 @@ public class MDROrderBuildNaming {
             // Calcul du nom avec la variante indicée
             format = preferences.getMDR_TABLE_NN_NAME_INDICE_FORMAT();
             targetNaming = MDROrderBuildTargets.TABLENNINDICE;
-
-            String nameNN = tableShortNameA.getValue() + tableSep.getValue() + tableShortNameB.getValue();
-
-            //TODO-0
-            // A terminer le code lorsque la génération des tables n:n sera réalisée!
-            // Brohters devra être passé en paramètre par la f() de build initiale
-            // Il faudra vérifier l'unicité dans les 2 sens !
-            ArrayList<MVCCDElement> brothers = new ArrayList<MVCCDElement>();
-            indTableNN.setValue(nameNN, brothers);
             return buildNaming();
        }
 
@@ -272,7 +271,7 @@ public class MDROrderBuildNaming {
 
     private String pushValue (MDROrderWord orderWord) throws OrderBuildNameWordNullException {
         if (orderWord.getValue() != null) {
-           return  orderWord.getValue();
+            return  orderWord.getValue();
         } else {
             throw new OrderBuildNameWordNullException(orderWord.getName());
         }
@@ -302,8 +301,8 @@ public class MDROrderBuildNaming {
                 }
             }
 
-            if (newName.length() > lengthMax) {
 
+            if (newName.length() > lengthMax) {
                 if (tableNN || tableNNInd) {
                     return limitSizeTableNN(newName);
                 } else if (colAttr || colAttrShortName) {
@@ -456,6 +455,22 @@ public class MDROrderBuildNaming {
         this.tableShortName = tableShortName;
     }
 
+    public MDROrderWordTableShortNameA getTableShortNameA() {
+        return tableShortNameA;
+    }
+
+    public void setTableShortNameA(MDROrderWordTableShortNameA tableShortNameA) {
+        this.tableShortNameA = tableShortNameA;
+    }
+
+    public MDROrderWordTableShortNameB getTableShortNameB() {
+        return tableShortNameB;
+    }
+
+    public void setTableShortNameB(MDROrderWordTableShortNameB tableShortNameB) {
+        this.tableShortNameB = tableShortNameB;
+    }
+
     public MDROrderWordAttrName getAttrName() {
         return attrName;
     }
@@ -520,12 +535,36 @@ public class MDROrderBuildNaming {
         this.tableSep = tableSep;
     }
 
+    public MDROrderWordAssociationShortName getAssShortName() {
+        return assShortName;
+    }
+
+    public void setAssShortName(MDROrderWordAssociationShortName assShortName) {
+        this.assShortName = assShortName;
+    }
+
     public MDROrderWordRoleShortNameParent getRoleShortNameParent() {
         return roleShortNameParent;
     }
 
     public void setRoleShortNameParent(MDROrderWordRoleShortNameParent roleShortNameParent) {
         this.roleShortNameParent = roleShortNameParent;
+    }
+
+    public MDROrderWordRoleShortName getRoleShortNameA() {
+        return roleShortNameA;
+    }
+
+    public void setRoleShortNameA(MDROrderWordRoleShortNameA roleShortNameA) {
+        this.roleShortNameA = roleShortNameA;
+    }
+
+    public MDROrderWordRoleShortName getRoleShortNameB() {
+        return roleShortNameB;
+    }
+
+    public void setRoleShortNameB(MDROrderWordRoleShortNameB roleShortNameB) {
+        this.roleShortNameB = roleShortNameB;
     }
 
     public MDROrderWordRoleSep getRoleSep() {
@@ -572,11 +611,16 @@ public class MDROrderBuildNaming {
         return indConstFK;
     }
 
+    public void setIndConstFK(MDROrderWordIndiceConstFK indConstFK) {
+        this.indConstFK = indConstFK;
+    }
+
+    public void setIndTableNN(MDROrderWordIndiceTableNN indTableNN) {
+        this.indTableNN = indTableNN;
+    }
+
     public MDROrderWordIndiceTableNN getIndTableNN() {
         return indTableNN;
     }
 
-    public void setIndConstFK(MDROrderWordIndiceConstFK indConstFK) {
-        this.indConstFK = indConstFK;
-    }
 }

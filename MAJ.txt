@@ -23,3 +23,13 @@ Problèmes : Initialisation d'une relation en création
 //#MAJ 2021-03-03-A Empêcher le message de changement de valeur lors de la saisie de numDep comme nom de AID
 
 //#MAJ 2021-03-04-A Persistance des préférences d'application sous forme XML
+
+//#MAJ 2021-03-12 Sauvegarde Serializable/XML
+
+//#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
+
+//#MAJ 2021-03-19 Erreur indexation des contraintes FK (et autres)
+
+//#MAJ 2021-03-21 Toutes les colonnes au lieu de brothers
+
+

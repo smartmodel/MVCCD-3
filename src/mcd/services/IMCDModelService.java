@@ -7,6 +7,7 @@ import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
 import mldr.MLDRModelDT;
 import mldr.MLDRModelTI;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -262,10 +263,9 @@ public class IMCDModelService {
     public static ArrayList<MCDAssociation> getMCDAssociationsNNWithoutEntity(IMCDModel imcdModel) {
         ArrayList<MCDAssociation>  resultat = new ArrayList<MCDAssociation>() ;
         for (MCDAssociation mcdAssociationNN : getMCDAssociationsNN(imcdModel)){
-            /*
-            if () {
+            if (mcdAssociationNN.getLink() == null) {
                 resultat.add(mcdAssociationNN);
-            }*/
+            }
         }
         return resultat;
     }

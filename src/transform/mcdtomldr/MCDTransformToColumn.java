@@ -19,6 +19,7 @@ import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -307,7 +308,7 @@ public class MCDTransformToColumn {
             MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
             if (mldrColumnPK.isFk() && preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()) {
             //if (mcdEntityParent.isNoInd() && preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()) {
-                    orderBuild.setFormat(preferences.getMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT());
+                orderBuild.setFormat(preferences.getMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT());
                 orderBuild.setTargetNaming(MDROrderBuildTargets.COLUMNFKONEANCESTOR);
 
             } else {
@@ -320,9 +321,10 @@ public class MCDTransformToColumn {
             }
             orderBuild.getTableShortNameParent().setValue((MCDEntity) mcdRelEndParent.getmElement());
             orderBuild.getTableSep().setValue();
-            String roleParent = mcdRelEndParent.getNameNoFreeOrNameRelation();
-            orderBuild.getRoleShortNameParent().setValue(roleParent);
-            if (StringUtils.isNotEmpty(roleParent)) {
+            //String roleParent = mcdRelEndParent.getNameNoFreeOrNameRelation();
+            //orderBuild.getRoleShortNameParent().setValue(roleParent);
+            orderBuild.getRoleShortNameParent().setValue(mcdRelEndParent);
+            if (StringUtils.isNotEmpty(orderBuild.getRoleShortNameParent().getValue())) {
                 orderBuild.getRoleSep().setValue();
             } else {
                 orderBuild.getRoleSep().setValue("");
@@ -331,8 +333,13 @@ public class MCDTransformToColumn {
             String namePK = mldrColumnPK.getNames().getNameByNameLength(element);
             orderBuild.getColName().setValue(namePK);
             orderBuild.getColNameOneAncestor().setValue(namePK);
-            ArrayList<MVCCDElement> brothers = MVCCDElementConvert.to(
-                    mldrColumnFK.getMDRTableAccueil().getMDRColumns());
+
+            //#MAJ 2021-03-21 Toutes les colonnes au lieu de brothers
+            //ArrayList<MVCCDElement> brothers = MVCCDElementConvert.to(
+            //        mldrColumnFK.getMDRTableAccueil().getMDRColumns());
+            ArrayList<MVCCDElement> brothers = MVCCDElementConvert.to( mldrColumnFK.getBrothers());
+            //        mldrColumnFK.getMDRTableAccueil().getBrothers());
+
             orderBuild.getIndColFK().setValue(namePK, brothers, indiceFK);
 
             String name;

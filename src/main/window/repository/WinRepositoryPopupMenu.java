@@ -413,7 +413,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             preferencesExportProfil.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
+                    if(PreferencesManager.instance().preferences().isPERSISTENCE_SERIALISATION_INSTEADOF_XML()){
                         PreferencesManager.instance().createProfile(); //Persistance avec sérialisation
                     }else{
                         new ProfileSaverXml().createFileProfileXML(); //Ajout de Giorgio

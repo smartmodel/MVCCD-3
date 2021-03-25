@@ -123,7 +123,6 @@ public class MLDRTransform extends MDTransform {
     private void referencingBetweenElements() {
         for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()){
             for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumns()){
-                Trace.println ("1 "+ mpdrColumn.getClass().getName() + "  " + mpdrColumn.getName() + "  - Fk : " + mpdrColumn.isFk() );
                 if (mpdrColumn.isFk()) {
                     referencingColumnFK(mpdrColumn);
                 }

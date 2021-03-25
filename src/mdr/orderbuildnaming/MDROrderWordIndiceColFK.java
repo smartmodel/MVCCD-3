@@ -16,32 +16,21 @@ public class MDROrderWordIndiceColFK extends MDROrderWord{
 
     public void setValue(String name, ArrayList<MVCCDElement> brothers, int indiceFK){
         Preferences preferences = PreferencesManager.instance().preferences();
+        String strIndex ;
 
-        int indice = 0;
+        // indiceFK est abandoné car la succession de valeur de FK en remontant l'ascendance peut être ambigue!
+        // A voir
+        boolean c1 = preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2);
 
-        boolean c1 = preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK);
-        boolean c2 = preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1);
-        boolean c3 = preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF().equals(Preferences.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2);
-
-        if (c1){
-            indice = indiceFK ;
+        IndexingName indexingName = new IndexingName(Preferences.MDR_INDICE_REGEXPR);
+        int index = indexingName.indexInSiblings(name, MVCCDElementService.convertArrayMVCCDElementsToNames(brothers));
+        boolean noShowIndex = c1  && (index < 2) ;
+        if (noShowIndex) {
+            strIndex = "";
+        } else{
+            strIndex = "" + index;
         }
-
-        if (c2 || c3) {
-            IndexingName indexingName = new IndexingName(Preferences.MDR_INDICE_REGEXPR);
-            indice = indexingName.indexInBrothers(name, MVCCDElementService.convertArrayMVCCDElementsToNames(brothers));
-            if (c3) {
-                if (indice < 2) {
-                    indice = 0;
-                };
-            }
-        }
-
-        if (indice != 0){
-            super.setValue("" + indice);
-        } else {
-            super.setValue("");
-        }
+        super.setValue(strIndex);
     }
 
 }

@@ -37,6 +37,10 @@ public class MCDLink extends MCDRelation {
         return  (MCDLinkEnd)  super.getA();
     }
 
+    public MCDEntity getEntity() {
+        return  (MCDEntity)  getEndEntity().getmElement();
+    }
+
     public void setEndEntity(MCDRelEnd endEntity) {
         super.setA(endEntity);
         endEntity.setDrawingDirection(MCDRelEnd.ELEMENT);
@@ -47,6 +51,10 @@ public class MCDLink extends MCDRelation {
      */
     public MCDLinkEnd getEndAssociation() {
         return (MCDLinkEnd) super.getB();
+    }
+
+    public MCDAssociation getAssociation() {
+        return (MCDAssociation) getEndAssociation().getmElement();
     }
 
     public void setEndAssociation(MCDRelEnd endAssociation) {

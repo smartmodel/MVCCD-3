@@ -22,12 +22,12 @@ import java.awt.*;
  */
 public class Preferences extends MVCCDElement {
 
+    //TODO-STB: voir avec PAS si mon commentaire ci-dessous est correct
     //Toutes les préférences statics sont des préférences développeurs, qui ne doivent pas être sauvegardées dans les fichiers.
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
-    public static String APPLICATION_VERSION = "3.0.16"; //TODO-STB+PAS: sauvegarder également la version dans le projet. Prévoir des versions pour les XSD.
-    public static boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = true; //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref //TODO-STB: mettre à false par défaut, et éventuellement supprimer la propriété lorsque la persistance XML est ok.
+    public static String APPLICATION_VERSION = "3.0.16"; //TODO-STB+PAS: sauvegarder également la version dans la sauvegarde du projet
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
     public static Integer PANEL_REPOSITORY_WIDTH = 200;
@@ -593,13 +593,13 @@ public class Preferences extends MVCCDElement {
     public static String MDR_COLUMN_FK_NAME_FORMAT_DEFAULT = "{parentTableShortName}{tableSep}{parentRoleShortName}{roleSep}{colName}";
     public static String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT_DEFAULT = "{colNameOneAncestor}{indColFK}";
     public static String MDR_PK_NAME_FORMAT_DEFAULT = "{PK_}{tableShortName}";
-    public static String MDR_INDICE_REGEXPR = "([0-9]*)$";
+    public static String MDR_INDICE_REGEXPR = "([0-9]+)$";
     public static Integer MDR_INDICE_TABLENN_LENGTH = 1 ;
     public static Integer MDR_INDICE_COL_FK_LENGTH = 1 ;
     public static Integer MDR_INDICE_CONST_FK_LENGTH = 2 ;
     public static String MDR_FK_NAME_FORMAT_DEFAULT = "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}{tableSep}{parentRoleShortName}";
     public static String MDR_FK_NAME_WITHOUT_ROLE_FORMAT_DEFAULT = "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}";
-    public static String MDR_ROLE_GENERALIZE_MARKER_DEFAULT = "gener";
+    public static String MDR_ROLE_GENERALIZE_MARKER_DEFAULT = "gs";
     public static String MDR_SEPARATOR = "_" ;
     public static String MDR_PATH_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
     public static String MDR_PEA_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
@@ -609,7 +609,8 @@ public class Preferences extends MVCCDElement {
 
     public static Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DEFAULT = true;
 
-    public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK = "mdr.pref.column.fk.one.diff.indice.fk";
+    //A priori pas judicieux
+    //public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK = "mdr.pref.column.fk.one.diff.indice.fk";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1 = "mdr.pref.column.fk.one.diff.indice.start.1";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2 = "mdr.pref.column.fk.one.diff.indice.start.2";
 
@@ -632,6 +633,11 @@ public class Preferences extends MVCCDElement {
     private Boolean DEBUG_TD_UNICITY_PRINT = null;
     private Boolean REPOSITORY_MCD_MODELS_MANY = false;
     private Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = false;
+
+    // Pendant la phase de développement
+    //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref
+    // TODO-STB: mettre à false par défaut, et éventuellement supprimer la propriété lorsque la persistance XML est ok.
+    private Boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = false;
 
 
     //private PreferencesDisplay GENERAL_PREFERENCES_DISPLAY = PreferencesDisplay.REPOSITORY;
@@ -719,6 +725,16 @@ public class Preferences extends MVCCDElement {
     }
 
     // Application
+
+
+    public Boolean isPERSISTENCE_SERIALISATION_INSTEADOF_XML() {
+        return PERSISTENCE_SERIALISATION_INSTEADOF_XML;
+    }
+
+    public void setPERSISTENCE_SERIALISATION_INSTEADOF_XML(Boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML) {
+        this.PERSISTENCE_SERIALISATION_INSTEADOF_XML = PERSISTENCE_SERIALISATION_INSTEADOF_XML;
+    }
+
     public Boolean isDEBUG() {
         return DEBUG;
     }
@@ -1264,7 +1280,8 @@ public class Preferences extends MVCCDElement {
     // Modifier aussi l'interface utilisateur
     public String getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF() {
         if (MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF == null){
-            MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK;
+            //MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK;
+            MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2;
         }
         return MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF;
     }

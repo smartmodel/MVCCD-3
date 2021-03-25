@@ -1,6 +1,7 @@
 package mldr.services;
 
 import main.MVCCDElement;
+import mcd.MCDAssociation;
 import mcd.MCDElement;
 import mcd.MCDEntity;
 import mcd.MCDRelation;
@@ -52,6 +53,17 @@ public class MLDRModelService {
         }
         return null ;
     }
+
+
+    public static MLDRTable getMLDRTableByAssNNSource(MLDRModel mldrModel, MCDAssociation mcdAssociation) {
+        for (MLDRTable mldrTable : getMLDRTables(mldrModel)){
+            if (mldrTable.getMcdElementSource() == mcdAssociation){
+                return mldrTable;
+            }
+        }
+        return null ;
+    }
+
 
 
     public static MLDRContRelations getMLDRContRelations(MLDRModel mldrModel) {
@@ -189,6 +201,5 @@ public class MLDRModelService {
         }
 
     }
-
 
 }

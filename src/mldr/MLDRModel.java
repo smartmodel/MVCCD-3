@@ -3,6 +3,7 @@ package mldr;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import main.window.repository.WinRepositoryTree;
+import mcd.MCDAssociation;
 import mcd.MCDEntity;
 import mcd.MCDRelation;
 import mdr.MDRContTables;
@@ -39,6 +40,13 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
         return newTable;
     }
 
+    public MLDRTable createTable(MCDAssociation mcdAssNN) {
+        MLDRTable newTable = MVCCDElementFactory.instance().createMLDRTable(
+                getMDRContTables(), mcdAssNN);
+
+        return newTable;
+    }
+
     public MDRContTables getMDRContTables() {
         return MLDRModelService.getMDRContTables(this);
     }
@@ -49,6 +57,10 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
 
     public MLDRTable getMLDRTableByEntitySource(MCDEntity mcdEntity) {
         return MLDRModelService.getMLDRTableByEntitySource(this, mcdEntity);
+    }
+
+    public MLDRTable getMLDRTableByAssNNSource(MCDAssociation mcdAssociation) {
+        return MLDRModelService.getMLDRTableByAssNNSource(this, mcdAssociation);
     }
 
 
@@ -135,5 +147,6 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
     public void refreshTreeMLDR(){
         MVCCDManager.instance().getWinRepositoryContent().reload(this.getNode());
     }
+
 
 }

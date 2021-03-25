@@ -1,5 +1,6 @@
 package utilities;
 
+import exceptions.CodeApplException;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 
@@ -150,5 +151,29 @@ public class UtilDivers {
 
     public static <T> boolean isEmpty(ArrayList<T> arrayList) {
         return !isNotEmpty(arrayList);
+    }
+
+    public boolean equals(String str1, String str2){
+        boolean c1 = str1 == null;
+        boolean c2 = str2 == null;
+
+        if ( c1 && c2 ) {
+            return true;
+        }
+        if ( c1 && !c2){
+                return false;
+        }
+        if ( !c1 && c2){
+            return false;
+        }
+        if ( !c1 && !c2){
+            if ( str1.equals(str2)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        throw new CodeApplException("UtilsDivers.equals - Erreur interne   str1:" + str1 +  "  -  str2:" + str2);
     }
 }

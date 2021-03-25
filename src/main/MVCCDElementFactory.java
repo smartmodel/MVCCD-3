@@ -3,6 +3,7 @@ package main;
 import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
+import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.MDRConstraint;
 import mdr.MDRContColumns;
 import mdr.MDRContConstraints;
@@ -333,12 +334,11 @@ public class MVCCDElementFactory {
     }
 
 
-    public MLDRTable createMLDRTable(MDRContTables mdrContTables, MCDEntity entitySource) {
-        MLDRTable mldrTable = new MLDRTable(mdrContTables, entitySource);
+    public MLDRTable createMLDRTable(MDRContTables mdrContTables, IMCDSourceMLDRTable imcdSourceMLDRTable) {
+        MLDRTable mldrTable = new MLDRTable(mdrContTables, (MCDElement) imcdSourceMLDRTable);
         MLDRContColumns mldrContColumns = new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         MLDRContConstraints mldrContConstraints = new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
         MLDRContRelEnds mldrContRelEnds = new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
-
         return mldrTable;
     }
 

@@ -35,7 +35,7 @@ public class MCDTransform extends MDTransform {
                 PreferencesManager.instance().preferences().getMCDTOMLDR_MODE());
 
         //Clonage du modèle avant transformation
-        //TODO-1 Faut-il s'arr^ter au niveau MLD-R ou descendre vers tous les MPD-R ?
+        //TODO-1 Faut-il s'arrêter au niveau MLD-R ou descendre vers tous les MPD-R ?
         MLDRModel mldrModelClone = (MLDRModel) mldrModel.cloneDeep();
 
         try {
@@ -50,7 +50,7 @@ public class MCDTransform extends MDTransform {
             MCDTransformToTable mcdTransformToTable = new MCDTransformToTable(this, imcdModel, mldrModel);
             mcdTransformToTable.createOrModifyFromAllEntities();
 
-            // transformation des associations n:n sans entités associatives
+            // Transformation des associations n:n sans entités associatives
             mcdTransformToTable.createOrModifyFromAllAssociationsNN();
 
             //Suppression des MLDRElement absents de l'itération

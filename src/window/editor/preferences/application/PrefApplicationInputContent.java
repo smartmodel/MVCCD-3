@@ -37,7 +37,8 @@ public class PrefApplicationInputContent extends PanelInputContent {
     private SCheckBox fieldRepMCDModelsMany = new SCheckBox(this);
     private SCheckBox fieldRepMCDPackagesAuthorizeds = new SCheckBox(this );
 
-
+    // Pendant la phase de développement
+    private SCheckBox fieldInsteadofXML = new SCheckBox(this );
 
     public PrefApplicationInputContent(PrefApplicationInput prefApplicationInput) {
         super(prefApplicationInput);
@@ -72,10 +73,8 @@ public class PrefApplicationInputContent extends PanelInputContent {
         fieldRepMCDPackagesAuthorizeds.addItemListener(this);
         fieldRepMCDPackagesAuthorizeds.addFocusListener(this);
 
-        //debugBackgroundPanel.addChangeListener(this);
-
-
-        //debugBackgroundPanel.addChangeListener(this);
+        fieldInsteadofXML.addItemListener(this);
+        fieldInsteadofXML.addFocusListener(this);
 
         super.getSComponents().add(debug);
         super.getSComponents().add(debugPrintMVCCDElement);
@@ -86,7 +85,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
         super.getSComponents().add(debugTDPrint);
         super.getSComponents().add(debugTDUniquePrint);
         super.getSComponents().add(fieldRepMCDModelsMany);
-        super.getSComponents().add(fieldRepMCDPackagesAuthorizeds);
+        super.getSComponents().add(fieldInsteadofXML);
 
 
         panelInputContentCustom.setLayout(new GridBagLayout());
@@ -185,6 +184,17 @@ public class PrefApplicationInputContent extends PanelInputContent {
         panelInputContentCustom.add(new JLabel ("Paquetages autorisés"), gbc);
         gbc.gridx++;
         panelInputContentCustom.add(fieldRepMCDPackagesAuthorizeds, gbc);
+
+        gbc.gridy++ ;
+        gbc.gridx = 0;
+        panelInputContentCustom.add(new JLabel ("Sauvegarde Sérialisée"), gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldInsteadofXML, gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(new JLabel ("Vrai : sérialisation  - Faux : XML"), gbc);
+
+
+
     }
 
 
@@ -226,6 +236,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
         debugTDUniquePrint.setSelected(preferences.getDEBUG_TD_UNICITY_PRINT());
         fieldRepMCDModelsMany.setSelected(preferences.getREPOSITORY_MCD_MODELS_MANY());
         fieldRepMCDPackagesAuthorizeds.setSelected(preferences.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
+        fieldInsteadofXML.setSelected(preferences.isPERSISTENCE_SERIALISATION_INSTEADOF_XML());
     }
 
     @Override
@@ -262,6 +273,9 @@ public class PrefApplicationInputContent extends PanelInputContent {
         }
         if (debugTDUniquePrint.checkIfUpdated()){
             applicationPref.setDEBUG_TD_UNICITY_PRINT(debugTDUniquePrint.isSelected());
+        }
+        if (fieldInsteadofXML.checkIfUpdated()){
+            applicationPref.setPERSISTENCE_SERIALISATION_INSTEADOF_XML(fieldInsteadofXML.isSelected());
         }
 
         // Copie dans les préférences de pojet

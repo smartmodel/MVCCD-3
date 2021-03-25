@@ -2,6 +2,7 @@ package main;
 
 import console.Console;
 import datatypes.MDDatatypesManager;
+import exceptions.CodeApplException;
 import main.window.console.WinConsoleContent;
 import main.window.diagram.WinDiagram;
 import main.window.diagram.WinDiagramContent;
@@ -18,6 +19,7 @@ import project.*;
 import repository.Repository;
 import utilities.Trace;
 import utilities.files.UtilFiles;
+import utilities.window.DialogMessage;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -41,6 +43,9 @@ public class MVCCDManager {
     private File fileProjectCurrent = null; //Fichier de sauvegarde du projet en cours de traitement
     private boolean datasProjectChanged = false; //Indicateur de changement de données propres au projet
     //private boolean datasEdited = true; //Indicateur d'édition de données y-compris les préférences d'application
+
+    //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
+    private boolean extensionProjectFileNotEqual = false; // Si l'extension du fichier correspond à la préférence d'application
 
     public static synchronized MVCCDManager instance() {
         if (instance == null) {
@@ -76,6 +81,7 @@ public class MVCCDManager {
         mvccdWindow.adjustPanelRepository();
         // Chargement des adresses disques des derniers fichiers de projets utilisés
         projectsRecents = new ProjectsRecentsLoader().load();
+
         // Création du menu contextuel des fichiers de projets récemment utilisés
         changeActivateProjectOpenRecentsItems();
         // Ouverture du dernier fichier de projet utilisés
@@ -132,6 +138,10 @@ public class MVCCDManager {
         projectToRepository();
         mvccdWindow.adjustPanelRepository();
         setFileProjectCurrent(null);
+        setDatasProjectChanged(true);
+        getWinMenuContent().getProjectEdit().setEnabled(true);
+        getWinMenuContent().getProjectSaveAs().setEnabled(true);
+        getWinMenuContent().getProjectClose().setEnabled(true);
     }
 
     //TODO-0  A remplacer par même méthode sans nodeParent
@@ -198,8 +208,8 @@ public class MVCCDManager {
 
     public void openProject() {
         ProjectFileChooser fileChooser = new ProjectFileChooser(ProjectFileChooser.OPEN);
-        File fileChoose = fileChooser.fileChoose();
-        openProjectBase(fileChoose);
+        File fileChoosed = fileChooser.fileChoose(false);
+        openProjectBase(fileChoosed);
     }
 
     public void openProjectRecent(String filePath) {
@@ -210,6 +220,8 @@ public class MVCCDManager {
     /**
      * Recherche un éventuel dernier projet utilisé et en demande l'ouverture.
      */
+
+
     private void openLastProject() {
         if (projectsRecents.getRecents().size() > 0) {
             File file = projectsRecents.getRecents().get(0);
@@ -221,67 +233,130 @@ public class MVCCDManager {
      * Ouvre un projet à partir de son fichier de sauvegarde et le charge dans le référentiel.
      */
     private void openProjectBase(File file) {
-        //Mémorise le fichier associé au projet
-        setFileProjectCurrent(file);
+
 
         if (file != null) {
-            // Lecture du fichier de sauvegarde
-            if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
-                project = new LoaderSerializable().load(fileProjectCurrent); //Persistance avec sérialisation
-            }else{
-                project = new ProjectLoaderXml().loadProjectFile(fileProjectCurrent); //Ajout de Giorgio Roncallo
+            //Mémorise le fichier associé au projet
+            setFileProjectCurrent(file);
+
+            //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
+            String extensionOpenFile = UtilFiles.getExtension(file.getName());
+            if ( extensionOpenFile != null) {
+                //openProjectMessageChangeFormat(extensionOpenFile);
+                // Lecture du fichier de sauvegarde
+                if (extensionOpenFile.equals(Preferences.FILE_PROJECT_EXTENSION)) {
+                    project = new LoaderSerializable().load(file); //Persistance avec sérialisation
+
+                } else if (extensionOpenFile.equals("xml")) {
+                    project = new ProjectLoaderXml().loadProjectFile(file); //Ajout de Giorgio Roncallo
+                } else {
+                    throw new CodeApplException("Seules les extensions mvccd et xml sont reconnues");
+                }
+                // Fin provisoire !
+
+                // Mémorisation du fichier de projet ouvert
+                projectsRecents.add(fileProjectCurrent);
+                // Mise à jour du menu contextuel des fichiers de projets récemment utilisés
+                changeActivateProjectOpenRecentsItems();
+
+                // Chargement des préférences du projet
+                PreferencesManager.instance().setProjectPref(project.getPreferences());
+
+                // Copie des préférences d'application au sein des préférences du projet
+                PreferencesManager.instance().copyApplicationPref(Project.EXISTING);
+            } else {
+                //TODO-1 Voir lorsque la sauvegarde xml sera terminée s'il y aura lieu de vérifier l'extension...
+                throw new CodeApplException("Le format du fichier de projet doit être : mvccd ou xml");
             }
-            // Chargement des préférences du projet
-            PreferencesManager.instance().setProjectPref(project.getPreferences());
-            // Copie des préférences d'application au sein des préférences du projet
-            PreferencesManager.instance().copyApplicationPref(Project.EXISTING);
+
+
+            if (project != null) {
+                // Reprise des préférences de profil (si existant)
+                project.adjustProfile();
+                // Copie du projet au sein du référentiel
+                projectToRepository();
+                project.debugCheckLoadDeep(); //Provisoire pour le test de sérialisation/déséralisation
+                // Ajustement de la taille de la zone d'affichage du référentiel
+                mvccdWindow.adjustPanelRepository();
+
+                //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
+                //Le bouton peut être valide après l'ouverture d'un fichier avec changement d'extension
+                //setDatasProjectChanged(false);  //Commande à remetrre après le provisoire
+                setDatasProjectChanged(false || isExtensionProjectFileNotEqual());
+                //Fin provisoire
+
+                getWinMenuContent().getProjectEdit().setEnabled(true);
+                getWinMenuContent().getProjectSaveAs().setEnabled(true);
+                getWinMenuContent().getProjectClose().setEnabled(true);
+            }
+
 
         }
-        if (project != null) {
-            // Reprise des préférences de profil (si existant)
-            project.adjustProfile();
-            // Copie du projet au sein du référentiel
-            projectToRepository();
-            project.debugCheckLoadDeep(); //Provisoire pour le test de sérialisation/déséralisation
-            // Mémorisation du fichier de projet utilisé
-            projectsRecents.add(fileProjectCurrent);
-            // Mise à jour du menu contextuel des fichiers de projets récemment utilisés
-            changeActivateProjectOpenRecentsItems();
-            // Ajustement de la taille de la zone d'affichage du référentiel
-            mvccdWindow.adjustPanelRepository();
+   }
+
+    /**
+     * Provisoire en attendant la sauvegarde XML finalisée
+     *
+     * @param extensionOpenFile
+     */
+    private void openProjectMessageChangeFormat(String extensionOpenFile) {
+        String extensionApplicationFile = "";
+        if (PreferencesManager.instance().preferences().isPERSISTENCE_SERIALISATION_INSTEADOF_XML()) {
+            extensionApplicationFile = Preferences.FILE_PROJECT_EXTENSION;
+        } else {
+            extensionApplicationFile = "xml";
+        }
+        if (!extensionOpenFile.equals (extensionApplicationFile)){
+            String message = "Le fichier a été ouvert à partir du format : " + extensionOpenFile + System.lineSeparator() +
+                             "La prochaine sauvegarde se fera au format : " + extensionApplicationFile;
+            if (extensionApplicationFile.equals("xml")){
+                message = message + System.lineSeparator() + "Tant que la sauvegarde xml n'est pas finalisée des données du projet peuvent être perdues!";
+            }
+            DialogMessage.showOk(mvccdWindow,message, "Changement de format");
         }
     }
 
 
     public void saveProject() {
         if (fileProjectCurrent != null) {
-            if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
-                new SaverSerializable().save(fileProjectCurrent); //Persistance avec sérialisation
-            }else{
-                new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
+            saveProjectBase();
+            //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
+            if (isExtensionProjectFileNotEqual()) {
+                projectsRecents.add(fileProjectCurrent);
+                changeActivateProjectOpenRecentsItems();
             }
-
+            //Fin provisoire
         } else {
-            saveAsProject();
+            saveAsProject(true);
         }
         setDatasProjectChanged(false);
     }
 
-    public void saveAsProject() {
+
+    public void saveAsProject(boolean nameProposed) {
         ProjectFileChooser fileChooser = new ProjectFileChooser(ProjectFileChooser.SAVE);
-        File fileChoose = fileChooser.fileChoose();
+        File fileChoose = fileChooser.fileChoose(nameProposed);
         if (fileChoose != null){
             if (UtilFiles.confirmIfExist(mvccdWindow, fileChoose)) {
                 fileProjectCurrent = fileChoose;
-                if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
-                    new SaverSerializable().save(fileProjectCurrent); //Persistance avec sérialisation
-                }else{
-                    new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
-                }
+                saveProjectBase();
                 projectsRecents.add(fileProjectCurrent);
                 changeActivateProjectOpenRecentsItems();
             }
         }
+    }
+
+    private void saveProjectBase(){
+        //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
+        String extensionOpenFile = UtilFiles.getExtension(fileProjectCurrent.getName());
+        if ( extensionOpenFile.equals(Preferences.FILE_PROJECT_EXTENSION)) {
+            new SaverSerializable().save(fileProjectCurrent); //Persistance avec sérialisation
+        } else if ( extensionOpenFile.equals("xml")) {
+            new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
+        } else {
+            throw new CodeApplException("Seules les extensions mvccd et xml sont reconnues");
+        }
+        // Fin provisoire !
     }
 
 
@@ -291,7 +366,10 @@ public class MVCCDManager {
         PreferencesManager.instance().setProfilePref(null);
         repository.removeProfile();
         setFileProjectCurrent(null);
-
+        getWinMenuContent().getProjectEdit().setEnabled(false);
+        getWinMenuContent().getProjectSave().setEnabled(false);
+        getWinMenuContent().getProjectSaveAs().setEnabled(false);
+        getWinMenuContent().getProjectClose().setEnabled(false);
     }
 
 
@@ -401,8 +479,8 @@ public class MVCCDManager {
     }
 
     public void setDatasProjectChanged(boolean datasProjectChanged) {
-        getWinMenuContent().getProjectSave().setEnabled(datasProjectChanged);
         this.datasProjectChanged = datasProjectChanged;
+        getWinMenuContent().getProjectSave().setEnabled(datasProjectChanged);
     }
 
 
@@ -425,4 +503,13 @@ public class MVCCDManager {
         }
     }
 
+    //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
+    public boolean isExtensionProjectFileNotEqual() {
+        return extensionProjectFileNotEqual;
+    }
+
+    public void setExtensionProjectFileNotEqual(boolean extensionProjectFileNotEqual) {
+        this.extensionProjectFileNotEqual = extensionProjectFileNotEqual;
+    }
+    //Fin provisoire !
 }

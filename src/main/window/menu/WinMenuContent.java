@@ -5,6 +5,7 @@ import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import repository.editingTreat.ProjectEditingTreat;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 
 import javax.swing.*;
@@ -62,6 +63,7 @@ public class WinMenuContent implements ActionListener {
         project.add(projectNew);
         projectEdit = new JMenuItem("Propriétés");
         projectEdit.addActionListener(this);
+        projectEdit.setEnabled(false);
         project.add(projectEdit);
         projectOpen = new JMenuItem("Ouvrir...");
         projectOpen.addActionListener(this);
@@ -81,17 +83,17 @@ public class WinMenuContent implements ActionListener {
 
         projectClose = new JMenuItem("Fermer");
         projectClose.addActionListener(this);
-        projectClose.setEnabled(true);
+        projectClose.setEnabled(false);
         project.add(projectClose);
 
         project.addSeparator();
         projectSave = new JMenuItem("Sauver");
         projectSave.addActionListener(this);
-        projectSave.setEnabled(true);
+        projectSave.setEnabled(false);
         project.add(projectSave);
         projectSaveAs = new JMenuItem("Sauver comme copie");
         projectSaveAs.addActionListener(this);
-        projectSaveAs.setEnabled(true);
+        projectSaveAs.setEnabled(false);
         project.add(projectSaveAs);
 
         project.addSeparator();
@@ -129,7 +131,7 @@ public class WinMenuContent implements ActionListener {
         }
         if (source == projectOpen) {
             openProject();
-         }
+        }
         for (int i = 0; i < Preferences.FILES_RECENTS_AUTHORIZED; i++) {
             if (source == projectOpenRecentsItems[i]) {
                 openProjectRecent(projectOpenRecentsItems[i].getText());
@@ -150,7 +152,7 @@ public class WinMenuContent implements ActionListener {
             MVCCDManager.instance().saveProject();
         }
         if (source == projectSaveAs){
-            MVCCDManager.instance().saveAsProject();
+            MVCCDManager.instance().saveAsProject(false);
         }
 
 
@@ -198,6 +200,10 @@ public class WinMenuContent implements ActionListener {
             projectOpenRecentsItems[i].setVisible(false);
         }
         projectOpenRecents.setEnabled(false);
+    }
+
+    public JMenuItem getProjectEdit() {
+        return projectEdit;
     }
 
     public JMenuItem getProjectSaveAs() {

@@ -6,9 +6,9 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
-public class MDROrderWordRoleShortNameParent extends MDROrderWordRoleShortName{
+public class MDROrderWordRoleShortNameA extends MDROrderWordRoleShortName{
 
-    public MDROrderWordRoleShortNameParent(String name) {
+    public MDROrderWordRoleShortNameA(String name) {
         super(name);
     }
 

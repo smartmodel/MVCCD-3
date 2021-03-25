@@ -9,6 +9,7 @@ import m.interfaces.IMCompletness;
 import m.services.MRelationService;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
+import mcd.interfaces.IMCDSourceMLDRTable;
 import mcd.services.MCDAssociationService;
 import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
@@ -20,7 +21,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDParameter {
+public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDParameter, IMCDSourceMLDRTable {
 
     private  static final long serialVersionUID = 1000;
 
@@ -60,6 +61,24 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
     public void setTo(MCDAssEnd to) {
         super.setB(to);
         to.setDrawingDirection(MCDAssEnd.TO);
+    }
+
+    public MCDLinkEnd getLinkEnd(){
+        return  MCDAssociationService.getLinkEnd(this);
+    }
+
+    public MCDLink getLink() {
+        if (getLinkEnd() != null) {
+            return getLinkEnd().getMcdLink();
+        }
+        return null;
+    }
+
+    public MCDEntity getLinkedEntity() {
+        if (getLink() != null) {
+            return getLink().getEntity();
+        }
+        return  null;
     }
 
     public String getNameId(){

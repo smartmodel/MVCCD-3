@@ -52,6 +52,8 @@ public class PreferencesOfApplicationLoaderXml {
             Element debugTdUnicityPrint = (Element) racine.getElementsByTagName("debugTdUnicityPrint").item(0);
             Element repositoryMcdModelsMany = (Element) racine.getElementsByTagName("repositoryMcdModelsMany").item(0);
             Element repositoryMcdPackagesAuthorizeds = (Element) racine.getElementsByTagName("repositoryMcdPackagesAuthorizeds").item(0);
+            Element persistenceSerialisationInsteadofXML = (Element) racine.getElementsByTagName("persistenceSerialisationInsteadofXML").item(0);
+
 
             // Instantiation des préférences de l'application
             applicationPrefs.setDEBUG(Boolean.valueOf(debug.getTextContent()));
@@ -64,6 +66,8 @@ public class PreferencesOfApplicationLoaderXml {
             applicationPrefs.setDEBUG_TD_UNICITY_PRINT(Boolean.valueOf(debugTdUnicityPrint.getTextContent()));
             applicationPrefs.setREPOSITORY_MCD_MODELS_MANY(Boolean.valueOf(repositoryMcdModelsMany.getTextContent()));
             applicationPrefs.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(Boolean.valueOf(repositoryMcdPackagesAuthorizeds.getTextContent()));
+            applicationPrefs.setPERSISTENCE_SERIALISATION_INSTEADOF_XML(Boolean.valueOf(
+                    persistenceSerialisationInsteadofXML.getTextContent()));
 
             // Validation du fichier
             validator.validate(new DOMSource(document));
