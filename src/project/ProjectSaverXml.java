@@ -106,9 +106,8 @@ public class ProjectSaverXml {
 
             //Création du fichier
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new FileOutputStream(file)); //Génère un FileNotFoundException si le fichier ne peut pas être créé, s'il existe mais ne peut pas être modifié ou si un répertoire du même nom existe.
+            StreamResult result = new StreamResult(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)); //Génère un FileNotFoundException si le fichier ne peut pas être créé, s'il existe mais ne peut pas être modifié ou si un répertoire du même nom existe.
             transformer.transform(source, result);
-            //Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8); //à creuser pour forcer la sauvegarde en UTF-8
 
             // Message de confirmation de la sauvegarde du fichier
             String message = MessagesBuilder.getMessagesProperty("project.saved",
