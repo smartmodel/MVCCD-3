@@ -1,6 +1,5 @@
 package project;
 
-import console.Console;
 import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDManager;
@@ -666,7 +665,7 @@ public class ProjectSaverXml {
 
             // Persistance d'une relation de type association
             if (relationsChild instanceof MCDAssociation) {
-                addAssociations(doc, (MCDAssociation) relationsChild, associations);
+                addAssociation(doc, (MCDAssociation) relationsChild, associations);
             }
 
             // Persistance d'une relation de type généralisation
@@ -717,26 +716,33 @@ public class ProjectSaverXml {
     }
 
     private void addGeneralization(Document doc, MCDGeneralization mcdGeneralization, Element generalisations) {
+
+        // Création de la balise <generalisation>
         Element generalisation = doc.createElement("generalisation");
         generalisations.appendChild(generalisation);
 
-        // Récupération de l'entité de généralisation
-        MCDGSEnd gen = mcdGeneralization.getGen();
-        MCDEntity genEntity = gen.getMcdEntity();
+        // Création de la balise <genEntite>
         Element entityGen = doc.createElement("genEntite");
-        entityGen.appendChild(doc.createTextNode(genEntity.getNamePath(1)));
+        entityGen.appendChild(doc.createTextNode(mcdGeneralization.getGen().getMcdEntity().getNamePath(1)));
         generalisation.appendChild(entityGen);
 
-        // Récupération de l'entité de spécialisation
-        MCDGSEnd spec = mcdGeneralization.getSpec();
-        MCDEntity specEntity = spec.getMcdEntity();
+        // Ajout de l'attribut target_entity_id sur la balise <genEntity>
+        Attr targetIdAttrOfGenEntityTag = doc.createAttribute("target_entity_id");
+        targetIdAttrOfGenEntityTag.setValue(mcdGeneralization.getGen().getMcdEntity().getIdProjectElementAsString());
+        entityGen.setAttributeNode(targetIdAttrOfGenEntityTag);
+
+        // Création de la balise <specEntite>
         Element entitySpec = doc.createElement("specEntite");
-        entitySpec.appendChild(doc.createTextNode(specEntity.getNamePath(1)));
+        entitySpec.appendChild(doc.createTextNode(mcdGeneralization.getSpec().getMcdEntity().getNamePath(1)));
         generalisation.appendChild(entitySpec);
 
+        // Ajout de l'attribut target_entity_id sur la balise <specEntity>
+        Attr targetIdAttrOfSpecEntityTag = doc.createAttribute("target_entity_id");
+        targetIdAttrOfSpecEntityTag.setValue(mcdGeneralization.getSpec().getMcdEntity().getIdProjectElementAsString());
+        entitySpec.setAttributeNode(targetIdAttrOfSpecEntityTag);
     }
 
-    private void addAssociations(Document doc, MCDAssociation mcdAssociation, Element associations) {
+    private void addAssociation(Document doc, MCDAssociation mcdAssociation, Element associations) {
         // Récupération des extrémité d'association
         MCDAssEnd extremiteFrom = mcdAssociation.getFrom();
         MCDAssEnd extremiteTo = mcdAssociation.getTo();

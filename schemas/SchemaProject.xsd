@@ -500,17 +500,23 @@
 	</xs:element>
 
 	<xs:element name="specEntite">
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-			</xs:restriction>
-		</xs:simpleType>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="target_entity_id" type="xs:int" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
 	</xs:element>
 
 	<xs:element name="genEntite">
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-			</xs:restriction>
-		</xs:simpleType>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="target_entity_id" type="xs:int" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
 	</xs:element>
 
 	<xs:element name="links">

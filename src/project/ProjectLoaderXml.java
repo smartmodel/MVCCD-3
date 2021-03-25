@@ -684,8 +684,6 @@ public class ProjectLoaderXml {
                 int extremiteFromTargetEntityId = Integer.parseInt(extremiteFromTag.getAttribute("target_entity_id"));
                 int extremiteToTargetEntityId = Integer.parseInt(extremiteToTag.getAttribute("target_entity_id"));
 
-                //TODO-STB: CONTINUER ICI, charger les ids d'assEnd
-
                 // Création du lien entre l'association et les entités To et From de l'association (qui sont déjà créées dans l'application)
                 MCDEntity entityFrom = addRelationsEntities(extremiteFromTargetEntityId);
                 MCDEntity entityTo = addRelationsEntities(extremiteToTargetEntityId);
@@ -736,13 +734,17 @@ public class ProjectLoaderXml {
                 // Création de l'element generalisation
                 Element generalisation = (Element) generalisationChild;
 
-                // Récupération du contenu de généralisation
-                Element gen = (Element) generalisation.getElementsByTagName("genEntite").item(0);
-                Element spec = (Element) generalisation.getElementsByTagName("specEntite").item(0);
+                // Récupération des balises des extrémités de l'association de généralisation-spécialisation
+                Element genEntiteTag = (Element) generalisation.getElementsByTagName("genEntite").item(0);
+                Element specEntiteTag = (Element) generalisation.getElementsByTagName("specEntite").item(0);
+
+                // Récupération des id des entités cibles dans les 2 extrémités de la généralisation-spécialisation
+                int genTargetEntityid = Integer.parseInt(genEntiteTag.getAttribute("target_entity_id"));
+                int specTargetEntityid = Integer.parseInt(specEntiteTag.getAttribute("target_entity_id"));
 
                 // Création des entités en lien avec le contenu de généralisation
-                MCDEntity entityGen = addRelationsEntities(gen);
-                MCDEntity entitySpec = addRelationsEntities(spec);
+                MCDEntity entityGen = addRelationsEntities(genTargetEntityid);
+                MCDEntity entitySpec = addRelationsEntities(specTargetEntityid);
 
                 // Création de la généralisation dans l'application
                 MVCCDElementFactory.instance().createMCDGeneralization(mcdContRelations, entityGen, entitySpec);
@@ -765,17 +767,17 @@ public class ProjectLoaderXml {
 
     /**
      * @deprecated Méthode à supprimer
-     * @param element
+     * @param entiteTag
      * @return
      */
     @Deprecated
-    private MCDEntity addRelationsEntities(Element element) {
+    private MCDEntity addRelationsEntities(Element entiteTag) {
         MCDEntity mcdEntity = null;
         // Parcours de la listes des entités
         for (MVCCDElement mvccdElement : listeEntities) {
             MCDEntity entity = (MCDEntity) mvccdElement;
             // Comparaison du namePath de l'entité de l'extremité de relation avec les entités créées dans l'aplication
-            if (entity.getNamePath(1).equals(element.getTextContent())) {
+            if (entity.getNamePath(1).equals(entiteTag.getTextContent())) {
                 mcdEntity = entity;
             }
         }
