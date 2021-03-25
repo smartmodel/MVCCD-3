@@ -673,7 +673,7 @@ public class ProjectSaverXml {
                 addGeneralization(doc, (MCDGeneralization) relationsChild, generalisations);
             }
 
-            // Persistance d'une relation qui est uu lien d'entité associative
+            // Persistance d'une relation qui est un lien d'entité associative
             else if (relationsChild instanceof MCDLink) {
                 addlink(doc, (MCDLink) relationsChild, links);
             }
@@ -682,37 +682,42 @@ public class ProjectSaverXml {
 
     private void addlink(Document doc, MCDLink mcdLink, Element links) {
 
-        Element link = doc.createElement("lienDEntiteAssociative");
-        links.appendChild(link);
+        // Création de la balise <lienDEntiteAssociative>
+        Element lienEATag = doc.createElement("lienDEntiteAssociative");
+        links.appendChild(lienEATag);
 
-        // Récupération de l'association
-        MCDLinkEnd linkEnd = mcdLink.getEndAssociation(); //TODO-STB: peut-être prévoir une méthode qui retourne directement l'association MCD et pas le End. //Dans la méthode, le A est l'entité associative et le B est l'association
-        Element association = doc.createElement("association");
-        Element name = doc.createElement("name");
-        association.appendChild(name);
-        if (!linkEnd.getName().equals("")) {
-            name.appendChild(doc.createTextNode((linkEnd.getNamePath(1))));
-        } else {
-            MCDAssociation mcdAssociation = (MCDAssociation) linkEnd.getmElement();
-            MCDAssEnd from = mcdAssociation.getFrom();
-            MCDAssEnd to = mcdAssociation.getTo();
+        // Ajout de l'attribut "id" à la balise <lienDEntiteAssociative>
+        Attr idAttrOfLienEATag = doc.createAttribute("id");
+        idAttrOfLienEATag.setValue(mcdLink.getIdProjectElementAsString());
+        lienEATag.setAttributeNode(idAttrOfLienEATag);
 
-            Element extremiteFrom = doc.createElement("extremiteFrom");
-            extremiteFrom.appendChild(doc.createTextNode(from.getNamePath(1)));
-            association.appendChild(extremiteFrom);
+        // Création de la balise <extremiteAssociation>
+        Element extremiteAssociationTag = doc.createElement("extremiteAssociation");
+        lienEATag.appendChild(extremiteAssociationTag);
 
-            Element extremiteTo = doc.createElement("extremiteTo");
-            extremiteTo.appendChild(doc.createTextNode(to.getNamePath(1)));
-            association.appendChild(extremiteTo);
-        }
-        link.appendChild(association);
+        // Ajout de l'attribut "id" à la balise <extremiteAssociation>
+        Attr idAttrOfExtremiteAssTag = doc.createAttribute("id");
+        idAttrOfExtremiteAssTag.setValue(mcdLink.getEndAssociation().getIdProjectElementAsString());
+        extremiteAssociationTag.setAttributeNode(idAttrOfExtremiteAssTag);
 
-        // Récupération de l'entité
-        MCDLinkEnd endEntity = mcdLink.getEndEntity();
-        Element entity = doc.createElement("entity");
-        entity.appendChild(doc.createTextNode(((MCDElement) endEntity.getmElement()).getNamePath(1)));
-        link.appendChild(entity);
+        // Ajout de l'attribut "association_target_id" à la balise <extremiteAssociation>
+        Attr assTargetIdOfExtremiteAssTag = doc.createAttribute("association_target_id");
+        assTargetIdOfExtremiteAssTag.setValue(mcdLink.getEndAssociation().getAssociation().getIdProjectElementAsString());
+        extremiteAssociationTag.setAttributeNode(assTargetIdOfExtremiteAssTag);
 
+        // Création de la balise <extremiteEntite>
+        Element extremiteEntiteTag = doc.createElement("extremiteEntite");
+        lienEATag.appendChild(extremiteEntiteTag);
+
+        // Ajout de l'attribut "id" à la balise <extremiteEntite>
+        Attr idAttrOfExtremiteEntiteTag = doc.createAttribute("id");
+        idAttrOfExtremiteEntiteTag.setValue(mcdLink.getEndEntity().getIdProjectElementAsString());
+        extremiteEntiteTag.setAttributeNode(idAttrOfExtremiteEntiteTag);
+
+        // Ajout de l'attribut "entite_target_id" à la balise <extremiteEntite>
+        Attr entiteTargetIdOfExtremiteAssTag = doc.createAttribute("entite_target_id");
+        entiteTargetIdOfExtremiteAssTag.setValue(mcdLink.getEndEntity().getEntity().getIdProjectElementAsString());
+        extremiteEntiteTag.setAttributeNode(entiteTargetIdOfExtremiteAssTag);
     }
 
     private void addGeneralization(Document doc, MCDGeneralization mcdGeneralization, Element generalisations) {

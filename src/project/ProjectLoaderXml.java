@@ -1,6 +1,5 @@
 package project;
 
-import console.Console;
 import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
@@ -32,10 +31,10 @@ import java.util.ArrayList;
 public class ProjectLoaderXml {
     // listes d'éléments nécessaires pour récupérer les conteneurs des paquetages, des entités et les associations
     private ArrayList<Element> elementsPackages = new ArrayList<>();
-    private ArrayList<MVCCDElement> listPackages = new ArrayList<>();
     private ArrayList<Element> elementsEntities = new ArrayList<>();
-    private ArrayList<MVCCDElement> listeEntities = new ArrayList<>();
-    private ArrayList<MVCCDElement> listeAssociations = new ArrayList<>();
+    private ArrayList<MVCCDElement> loadedPackages = new ArrayList<>();
+    private ArrayList<MVCCDElement> loadedEntities = new ArrayList<>();
+    private ArrayList<MVCCDElement> loadedAssociations = new ArrayList<>();
     private NodeList diagramTagsList = null; //Contient la liste des enfants de <diagrammes>
 
     public Project loadProjectFile(File fileProjectCurrent) {
@@ -260,7 +259,7 @@ public class ProjectLoaderXml {
                         MCDPackage mcdPackage = MVCCDElementFactory.instance().createMCDPackage(mcdModel);
                         mcdPackage.setName(pack.getAttribute("name"));
                         // Remplissage de la listes des MVCCDElements pour les paquetages
-                        listPackages.add(mcdPackage);
+                        loadedPackages.add(mcdPackage);
                         // Ajout des propriétés du paquetage
                         addPropertiesModelOrPackage(mcdPackage, pack);
                         // Ajout d'autres paquetages
@@ -294,7 +293,7 @@ public class ProjectLoaderXml {
             MCDPackage mcdPackage = MVCCDElementFactory.instance().createMCDPackage(paquetage);
             mcdPackage.setName(pack.getAttribute("name"));
             // Remplissage de la listes des MVCCDElements pour les paquetages
-            listPackages.add(mcdPackage);
+            loadedPackages.add(mcdPackage);
             // Ajout des propriétés du paquetage
             addPropertiesModelOrPackage(mcdPackage, pack);
             // Ajout d'autres paquetages
@@ -369,7 +368,7 @@ public class ProjectLoaderXml {
             }
         }
         // entités avec paquetages
-        for (MVCCDElement mvccdElement : listPackages) {
+        for (MVCCDElement mvccdElement : loadedPackages) {
             ArrayList<MVCCDElement> childsPackage = mvccdElement.getChilds();
             addEntitiesPackagesOrModels(childsPackage, elementsPackages, mvccdElement);
 
@@ -419,7 +418,7 @@ public class ProjectLoaderXml {
                 mcdEntity.setName(entityTag.getAttribute("name"));
 
                 // Remplissage de la listes des éléments MVCCD pour les entités
-                listeEntities.add(mcdEntity);
+                loadedEntities.add(mcdEntity);
                 // // Ajout des propriétés des entités
                 addPropertiesEntities(mcdEntity, entityTag);
             }
@@ -450,7 +449,7 @@ public class ProjectLoaderXml {
         // Chargement des attributs
         MCDContAttributes mcdContAttributes;
         // Parcours des éléments MVCCD afin de récupérer les conteneurs d'attributs de chaque entité
-        for (MVCCDElement mvccdElement : listeEntities) {
+        for (MVCCDElement mvccdElement : loadedEntities) {
             ArrayList<MVCCDElement> childEntities = mvccdElement.getChilds();
             for (MVCCDElement contEntities : childEntities) {
                 if (contEntities instanceof MCDContAttributes) {
@@ -536,7 +535,7 @@ public class ProjectLoaderXml {
         // Chargement des contraintes
         MCDContConstraints mcdContConstraints;
         // Parcours des éléments MVCCD afin de récupérer les conteneurs des contraintes de chaque entité
-        for (MVCCDElement mvccdElement : listeEntities) {
+        for (MVCCDElement mvccdElement : loadedEntities) {
             ArrayList<MVCCDElement> childEntities = mvccdElement.getChilds();
             for (MVCCDElement contConstraints : childEntities) {
                 if (contConstraints instanceof MCDContConstraints) {
@@ -613,7 +612,7 @@ public class ProjectLoaderXml {
         }
 
         // relations avec paquetages
-        for (MVCCDElement mvccdElement : listPackages) {
+        for (MVCCDElement mvccdElement : loadedPackages) {
             ArrayList<MVCCDElement> childsPackage = mvccdElement.getChilds();
             addRelationsPackagesOrModels(childsPackage, elementsPackages, mvccdElement);
         }
@@ -685,15 +684,15 @@ public class ProjectLoaderXml {
                 int extremiteToTargetEntityId = Integer.parseInt(extremiteToTag.getAttribute("target_entity_id"));
 
                 // Création du lien entre l'association et les entités To et From de l'association (qui sont déjà créées dans l'application)
-                MCDEntity entityFrom = addRelationsEntities(extremiteFromTargetEntityId);
-                MCDEntity entityTo = addRelationsEntities(extremiteToTargetEntityId);
+                MCDEntity entityFrom = getAlreadyLoadedEntityById(extremiteFromTargetEntityId);
+                MCDEntity entityTo = getAlreadyLoadedEntityById(extremiteToTargetEntityId);
 
                 // Création de l'association dans l'application
                 MCDAssociation mcdAssociation = MVCCDElementFactory.instance().createMCDAssociation(mcdContRelations, entityFrom, entityTo, Integer.parseInt(associationTag.getAttribute("id")));
                 if (!associationTag.getAttribute("name").equals("")) {
                     mcdAssociation.setName(associationTag.getAttribute("name"));
                 }
-                listeAssociations.add(mcdAssociation);
+                loadedAssociations.add(mcdAssociation);
 
                 // Ajout des extrémités d'associations
                 addExtremiteElement(extremiteFromTag, mcdAssociation, associationTag);
@@ -743,8 +742,8 @@ public class ProjectLoaderXml {
                 int specTargetEntityid = Integer.parseInt(specEntiteTag.getAttribute("target_entity_id"));
 
                 // Création des entités en lien avec le contenu de généralisation
-                MCDEntity entityGen = addRelationsEntities(genTargetEntityid);
-                MCDEntity entitySpec = addRelationsEntities(specTargetEntityid);
+                MCDEntity entityGen = getAlreadyLoadedEntityById(genTargetEntityid);
+                MCDEntity entitySpec = getAlreadyLoadedEntityById(specTargetEntityid);
 
                 // Création de la généralisation dans l'application
                 MVCCDElementFactory.instance().createMCDGeneralization(mcdContRelations, entityGen, entitySpec);
@@ -752,17 +751,16 @@ public class ProjectLoaderXml {
         }
     }
 
-    private MCDEntity addRelationsEntities(int targetEntityId) {
-        MCDEntity mcdEntity = null;
+    private MCDEntity getAlreadyLoadedEntityById(int entityId) {
         // Parcours de la listes des entités
-        for (MVCCDElement mvccdElement : listeEntities) {
+        for (MVCCDElement mvccdElement : loadedEntities) {
             MCDEntity entity = (MCDEntity) mvccdElement;
             // Comparaison de l'id de l'entité de l'extremité de relation avec les entités créées dans l'aplication
-            if (entity.getIdProjectElement() == targetEntityId) {
-                mcdEntity = entity;
+            if (entity.getIdProjectElement() == entityId) {
+                return entity;
             }
         }
-        return mcdEntity;
+        return null;
     }
 
     /**
@@ -774,7 +772,7 @@ public class ProjectLoaderXml {
     private MCDEntity addRelationsEntities(Element entiteTag) {
         MCDEntity mcdEntity = null;
         // Parcours de la listes des entités
-        for (MVCCDElement mvccdElement : listeEntities) {
+        for (MVCCDElement mvccdElement : loadedEntities) {
             MCDEntity entity = (MCDEntity) mvccdElement;
             // Comparaison du namePath de l'entité de l'extremité de relation avec les entités créées dans l'aplication
             if (entity.getNamePath(1).equals(entiteTag.getTextContent())) {
@@ -809,29 +807,27 @@ public class ProjectLoaderXml {
         assEnd.setOrdered(Boolean.valueOf(ordered.getTextContent()));
     }
 
-    private void loadLinks(MCDContModels mcd, Element element, ArrayList<Element> elementsModeles) {
+    private void loadLinks(MCDContModels mcd, Element mcdTag, ArrayList<Element> modelsTagsList) {
         // Chargement des liens d'entités associatives
-        ArrayList<MVCCDElement> mcdElements = mcd.getChilds();
+        ArrayList<MVCCDElement> mcdChilds = mcd.getChilds();
         MCDContRelations mcdContRelations;
 
         //  Relations général
-        for (MVCCDElement mvccdElement : mcdElements) {
-            if (mvccdElement instanceof MCDContRelations) {
-                mcdContRelations = (MCDContRelations) mvccdElement;
-                loadRelationsLink(mcdContRelations, element);
+        for (MVCCDElement mcdChild : mcdChilds) {
+            if (mcdChild instanceof MCDContRelations) {
+                loadRelationsLink((MCDContRelations) mcdChild, mcdTag);
             }
         }
         //  Relations avec paquetages
-        for (MVCCDElement mvccdElement : listPackages) {
-            ArrayList<MVCCDElement> childsPackage = mvccdElement.getChilds();
-            addLinksPackagesOrModels(childsPackage, elementsPackages, mvccdElement);
+        for (MVCCDElement packagee : loadedPackages) { //remarque: le nommage "packagee" est volontaire, car "package" est un nom réservé.
+            ArrayList<MVCCDElement> childsPackage = packagee.getChilds();
+            addLinksPackagesOrModels(childsPackage, elementsPackages, packagee);
 
         }
         // Relations avec modèles
-        for (MVCCDElement mcdChild : mcdElements) {
+        for (MVCCDElement mcdChild : mcdChilds) {
             if (mcdChild instanceof MCDModel) {
-                ArrayList<MVCCDElement> childModel = mcdChild.getChilds();
-                addLinksPackagesOrModels(childModel, elementsModeles, mcdChild);
+                addLinksPackagesOrModels(mcdChild.getChilds(), modelsTagsList, mcdChild);
             }
         }
     }
@@ -853,61 +849,73 @@ public class ProjectLoaderXml {
             }
     }
 
-    private void loadRelationsLink(MCDContRelations mcdContRelations, Element element) {
-        Element relations = (Element) element.getElementsByTagName("relations").item(0);
-        // parcours des rélations
-        NodeList relationsChilds = relations.getChildNodes();
+    private void loadRelationsLink(MCDContRelations mcdContRelations, Element mcdTag) {
+        // Récupération de la balise <relations>
+        Element relationsTag = (Element) mcdTag.getElementsByTagName("relations").item(0);
+
+        // Parcours des balises enfants de <relations> pour trouver la balise <links>
+        NodeList relationsChilds = relationsTag.getChildNodes();
         for (int i = 0; i < relationsChilds.getLength(); i++) {
-            Node relationsChild = relationsChilds.item(i);
-            if (relationsChild instanceof Element) {
-                Element relation = (Element) relationsChild;
-                // Ajout des liens d'entités associatives
-                if (relation.getNodeName().equals("links")) {
-                    addLink(mcdContRelations, relation);
-                }
+            if (relationsChilds.item(i) instanceof Element) {
+                if (relationsChilds.item(i).getNodeName().equals("links")) {
 
+                    // Ajout des liens d'entités associatives
+                    addLink(mcdContRelations, (Element) relationsChilds.item(i)); //passage en 2e paramètre de la balise <links>
+                }
             }
         }
     }
 
-    private void addLink(MCDContRelations mcdContRelations, Element relation) {
-        // Parcours des enfants de la balise links
-        NodeList linksChilds = relation.getChildNodes();
+    private void addLink(MCDContRelations mcdContRelations, Element linksTag) {
+        // Parcours des balises <lienDEntiteAssociative> qui sont les enfants de la balise <links>
+        NodeList linksChilds = linksTag.getChildNodes();
         for (int i = 0; i < linksChilds.getLength(); i++) {
-            Node linkChild = linksChilds.item(i);
-            if (linkChild instanceof Element) {
-                // Création de l'element de lien d'entité associative
-                Element link = (Element) linkChild;
-                // Récupération de l'entité de lien sauvegardée dans le fichier
-                Element entite = (Element) link.getElementsByTagName("entity").item(0);
-                // Récupération de l'association de lien sauvegardée dans le fichier
-                Element association = (Element) link.getElementsByTagName("association").item(0);
-                // Récupération du nom de l'association
-                Element name = (Element) association.getElementsByTagName("name").item(0);
+            if (linksChilds.item(i) instanceof Element) {
+                Element lienDEntiteAssociativeTag = (Element) linksChilds.item(i);
 
-                // Récupération des extremités de l'association si le nom est vide
-                Element from = null;
-                Element to = null;
-                if (name.getTextContent().equals("")) {
-                    from = (Element) association.getElementsByTagName("extremiteFrom").item(0);
-                    to = (Element) association.getElementsByTagName("extremiteTo").item(0);
-                }
+                // Récupération de l'id de <lienDEntiteAssociative>
+                int idAttrOfLienEATag = Integer.parseInt(lienDEntiteAssociativeTag.getAttribute("id"));
 
-                // Récupération de l'entité
-                MCDEntity mcdEntity = addRelationsEntities(entite);
-                // Récupération de l'association
-                MCDAssociation mcdAssociation = addAssociationsForLinks(name, from, to);
+                // Récupération des balises <extremiteEntite> et <extremiteAssociation>
+                Element extremiteEntiteTag = (Element) lienDEntiteAssociativeTag.getElementsByTagName("extremiteEntite").item(0);
+                Element extremiteAssociationTag = (Element) lienDEntiteAssociativeTag.getElementsByTagName("extremiteAssociation").item(0);
+
+                // Récupération des attributs id et target_id des balises <extremiteEntite> et <extremiteAssociation>
+                int idAttrOfExtremiteEntiteTag = Integer.parseInt(extremiteEntiteTag.getAttribute("id"));
+                int idAttrOfExtremiteAssociationTag = Integer.parseInt(extremiteAssociationTag.getAttribute("id"));
+                int targetEntiteIdOfExtremiteEntiteTag = Integer.parseInt(extremiteEntiteTag.getAttribute("entite_target_id"));
+                int targetAssIdOfExtremiteAssTag = Integer.parseInt(extremiteAssociationTag.getAttribute("association_target_id"));
+
+                // Récupération de l'entité déjà chargée dans l'application
+                MCDEntity mcdEntity = this.getAlreadyLoadedEntityById(targetEntiteIdOfExtremiteEntiteTag);
+
+                // Récupération de l'association déjà chargé dans l'application
+                MCDAssociation mcdAssociation = this.getAlreadyLoadedAssociationById(targetAssIdOfExtremiteAssTag);
+
                 // Création du lien d'entité dans l'application
-                MVCCDElementFactory.instance().createMCDLink(mcdContRelations, mcdEntity, mcdAssociation);
+                MVCCDElementFactory.instance().createMCDLink(mcdContRelations, mcdEntity, mcdAssociation, idAttrOfLienEATag);
             }
 
         }
     }
 
+    private MCDAssociation getAlreadyLoadedAssociationById(int associationId) {
+        // Parcours de la listes des associations déjà chargées
+        for (MVCCDElement mvccdElement : loadedAssociations) {
+            MCDAssociation association = (MCDAssociation) mvccdElement;
+            // Comparaison de l'id de l'association donné avec l'id de l'association parcourue
+            if(association.getIdProjectElement() == associationId){
+                return association;
+            }
+        }
+        return null;
+    }
+
+    @Deprecated
     private MCDAssociation addAssociationsForLinks(Element element, Element from, Element to) {
         MCDAssociation mcdAssociation = null;
 
-        for (MVCCDElement mvccdElement : listeAssociations) {
+        for (MVCCDElement mvccdElement : loadedAssociations) {
             MCDAssociation association = (MCDAssociation) mvccdElement;
             if (element.getTextContent().equals("")) {
                 // Comparatif des noms des extremités de l'association du lien d'entité associative avec les associations crées dans l'application

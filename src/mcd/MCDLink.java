@@ -19,12 +19,14 @@ public class MCDLink extends MCDRelation {
 
 
     public MCDLink(MCDElement parent) {
-
         super(parent);
     }
 
-    public MCDLink(MCDElement parent, String name) {
+    public MCDLink(MCDElement parent, int id) {
+        super(parent, id);
+    }
 
+    public MCDLink(MCDElement parent, String name) {
         super(parent, name);
     }
 
@@ -32,7 +34,6 @@ public class MCDLink extends MCDRelation {
      * Retourne l'extrémité du lien d'entité associative (c'est-à-dire MCDLinkEnd) se trouvant du côté de l'entité associative.
      */
     public MCDLinkEnd getEndEntity() {
-
         return  (MCDLinkEnd)  super.getA();
     }
 

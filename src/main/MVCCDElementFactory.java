@@ -234,14 +234,19 @@ public class MVCCDElementFactory {
         return mcdGeneralization;
     }
 
+    public MCDLink createMCDLink( MCDContRelations mcdContRelations, MCDEntity mcdEntity, MCDAssociation mcdAssociation) {
+        MCDLink mcdLink = new MCDLink(mcdContRelations);
+        this.initMCDLink(mcdLink, mcdEntity, mcdAssociation);
+        return mcdLink;
+    }
 
+    public MCDLink createMCDLink( MCDContRelations mcdContRelations, MCDEntity mcdEntity, MCDAssociation mcdAssociation, int id) {
+        MCDLink mcdLink = new MCDLink(mcdContRelations, id);
+        this.initMCDLink(mcdLink, mcdEntity, mcdAssociation);
+        return mcdLink;
+    }
 
-    public MCDLink createMCDLink( MCDContRelations mcdContRelations,
-                                  MCDEntity mcdEntity,
-                                  MCDAssociation mcdAssociation) {
-
-        MCDLink mcdLink = new MCDLink(mcdContRelations) ;
-
+    private void initMCDLink(MCDLink mcdLink, MCDEntity mcdEntity, MCDAssociation mcdAssociation){
         MCDContRelEnds mcdContRelEndsEntity = mcdEntity.getMCDContRelEnds();
         MCDLinkEnd mcdLinkEndEntity = new MCDLinkEnd(mcdContRelEndsEntity) ;
 
@@ -256,8 +261,6 @@ public class MVCCDElementFactory {
 
         mcdLinkEndAssociation.setmElement(mcdAssociation);
         mcdLinkEndAssociation.setMcdLink(mcdLink);
-
-        return mcdLink;
     }
 
 

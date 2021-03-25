@@ -32,7 +32,29 @@ public class MCDLinkEnd extends MCDRelEnd  {
         super.setImRelation(mcdLink);
     }
 
+    /**
+     * Retourne l'association reliée à l'extrémité du lien d'entité associative (EA)
+     * Attention, si l'extrémité de lien d'EA n'est pas celle qui se trouve du côté de l'association, la méthode
+     * retournera une exception de type ClassCastException, car l'élément reliée au bout du lien d'EA n'est pas une
+     * association mais une entité. Dans ce cas, il faut utiliser la méthode getEntity() pour récupérer l'entité plutôt
+     * que l'association.
+     * @return L'association de l'extrémité du lien d'EA
+     */
+    public MCDAssociation getAssociation(){
+        return (MCDAssociation) this.getmElement();
+    }
 
+    /**
+     * Retourne l'entité reliée à l'extrémité du lien d'entité associative (EA)
+     * Attention, si l'extrémité de lien d'EA n'est pas celle qui se trouve du côté de l'entité, la méthode
+     * retournera une exception de type ClassCastException, car l'élément reliée au bout du lien d'EA n'est pas une
+     * entité mais une association. Dans ce cas, il faut utiliser la méthode getAssociation () pour récupérer
+     * l'association plutôt que l'entité.
+     * @return L'entité de l'extrémité du lien d'EA
+     */
+    public MCDEntity getEntity(){
+        return (MCDEntity) this.getmElement();
+    }
 
     @Override
     public String getNameTree() {
