@@ -12,6 +12,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import preferences.Preferences;
 import profile.Profile;
@@ -24,9 +25,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class ProjectLoaderXml {
@@ -41,9 +41,13 @@ public class ProjectLoaderXml {
     public Project loadProjectFile(File fileProjectCurrent) {
         Project project = null;
         try {
-            // Création du document et du parseur pour récupérer les information du fichier
+            // Création du document et du parser pour récupérer les information du fichier
+            FileInputStream fis = new FileInputStream(fileProjectCurrent);
+            Reader reader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            InputSource is = new InputSource(reader);
+            //is.setEncoding("UTF-8"); //à priori pas nécessaire
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document = builder.parse(new FileInputStream(fileProjectCurrent));
+            Document document = builder.parse(is);
 
             // Assignation du schéma XSD au fichier pour validation
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
