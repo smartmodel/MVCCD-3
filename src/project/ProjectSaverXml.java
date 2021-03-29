@@ -915,6 +915,13 @@ public class ProjectSaverXml {
 
 
     // *** Méthodes de sauvegarde du MCD ***
+    /*
+    Règles appliquées:
+    - Si un élément X contient un élément Y qui est placé directement sous X de manière visible dans l'arborescence du
+    référentiel, alors cet élément Y sera une nouvelle balise placé sous la balise XML correspondante à l'élément X.
+    - Si un élément X contient un élément Y accessible dans les propriétés de X dans le référentiel, alors l'élément Y
+    sera un attribut de la balise XML correspondant à l'élément X.
+     */
 
 
     /**
@@ -940,9 +947,7 @@ public class ProjectSaverXml {
                 racineTag.appendChild(mldrTag);
 
                 //Ajout de l'id à la balise <MLDR_xx>
-                Attr idAttrOfmldrTag = doc.createAttribute("id");
-                idAttrOfmldrTag.setValue(mldrModel.getIdProjectElementAsString());
-                mldrTag.setAttributeNode(idAttrOfmldrTag);
+                mldrTag.setAttribute("id", mldrModel.getIdProjectElementAsString());
 
                 //Persistance des tables
                 this.addTables(doc, mldrModel, mldrTag);
@@ -963,9 +968,7 @@ public class ProjectSaverXml {
         mldrTag.appendChild(tablesTag);
 
         //Ajout de l'id à la balise <tables>
-        Attr idAttrOfTablesTag = doc.createAttribute("id");
-        idAttrOfTablesTag.setValue(mldrModel.getMDRContTables().getIdProjectElementAsString());
-        tablesTag.setAttributeNode(idAttrOfTablesTag);
+        tablesTag.setAttribute("id", mldrModel.getMDRContTables().getIdProjectElementAsString());
 
         //Parcours des tables
         for(MLDRTable mldrTable : mldrModel.getMLDRTables()){
@@ -987,20 +990,10 @@ public class ProjectSaverXml {
         Element tableTag = doc.createElement("table");
         tablesTag.appendChild(tableTag);
 
-        //Ajout de l'attribut "id" à <table>
-        Attr tableIdAttr = doc.createAttribute("id");
-        tableIdAttr.setValue(mldrTable.getIdProjectElementAsString());
-        tableTag.setAttributeNode(tableIdAttr);
-
-        //Ajout de l'attribut "name" à <table>
-        Attr tableNameAttr = doc.createAttribute("name");
-        tableNameAttr.setValue(mldrTable.getName());
-        tableTag.setAttributeNode(tableNameAttr);
-
-        //Ajout de l'attribut "entity_source" à <table>
-        Attr tableEntitySourceAttr = doc.createAttribute("entity_source");
-        tableEntitySourceAttr.setValue(mldrTable.getMcdElementSource().getIdProjectElementAsString());
-        tableTag.setAttributeNode(tableEntitySourceAttr);
+        //Ajout des attributs à la balise <table>
+        tableTag.setAttribute("id", mldrTable.getIdProjectElementAsString());
+        tableTag.setAttribute("name", mldrTable.getName());
+        tableTag.setAttribute("entity_source", mldrTable.getMcdElementSource().getIdProjectElementAsString());
 
         //Persistance des colonnes
         this.addColumns(doc, mldrTable, tableTag);
@@ -1019,15 +1012,34 @@ public class ProjectSaverXml {
         tableTag.appendChild(columnsTag);
 
         //Ajout de l'id à la balise <columns>
-        Attr idAttrOfColumnsTag = doc.createAttribute("id");
-        idAttrOfColumnsTag.setValue(mldrTable.getMDRContColumns().getIdProjectElementAsString());
-        columnsTag.setAttributeNode(idAttrOfColumnsTag);
+        columnsTag.setAttribute("id", mldrTable.getMDRContColumns().getIdProjectElementAsString());
 
         //Parcours des colonnes
         for(MLDRColumn mldrColumn : mldrTable.getMLDRColumns()){
 
             //Persistance d'une colonne
-            //TODO-STB: continuer ici avec la persistance d'une colonne
+            this.addColumn(doc, mldrColumn, columnsTag);
         }
+    }
+
+    /**
+     * Sauvegarde d'une colonne parmi la liste des colonnes d'une table
+     * @param doc Document XML dans lequel la colonne sera persistée.
+     * @param mldrColumn Colonne qui sera persistée.
+     * @param columnsTag Balise parent <columns> qui contiendra la nouvelle balise <column>.
+     */
+    private void addColumn(Document doc, MLDRColumn mldrColumn, Element columnsTag) {
+        //Création de la balise <column>
+        Element columnTag = doc.createElement("column");
+        columnsTag.appendChild(columnTag);
+
+        //Ajout des attributs d'identification d'une colonne à la balise <column>
+        columnTag.setAttribute("id", mldrColumn.getIdProjectElementAsString());
+        columnTag.setAttribute("name", mldrColumn.getName());
+        columnTag.setAttribute("shortname", mldrColumn.getShortName());
+        columnTag.setAttribute("longname", mldrColumn.getLongName());
+        columnTag.setAttribute("attribute_source", mldrColumn.getMcdElementSource().getIdProjectElementAsString());
+
+        //TODO-STB: continuer ici avec la persistance d'une colonne
     }
 }
