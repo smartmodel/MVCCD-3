@@ -167,6 +167,19 @@ public class IMCDModelService {
         return resultat;
     }
 
+    public static ArrayList<MCDAssociation> getMCDAssociationNoIdOrIdNatural(IMCDModel imcdModel) {
+        ArrayList<MCDAssociation> resultat = new ArrayList<MCDAssociation>();
+        for (MCDElement mcdElement : getAllMCDAssociationsInIModel(imcdModel)){
+            MCDAssociation mcdAssociation = (MCDAssociation) mcdElement;
+            boolean c1 = mcdAssociation.isIdNatural();
+            boolean c2 = mcdAssociation.isNoId();
+            boolean c3 = mcdAssociation.getDegree()  != MRelationDegree.DEGREE_MANY_MANY;
+            if (c1 || (c2 && c3)) {
+                resultat.add(mcdAssociation);
+            }
+        }
+        return resultat;
+    }
 
     public static MCDElement getMCDElementByClassAndNamePath(IMCDModel imcdModel, boolean withModel, String className, int pathMode, String namePath){
         for (MCDElement mcdElement: getMCDElementsByClassName(imcdModel, withModel, className)){
@@ -312,6 +325,7 @@ public class IMCDModelService {
         }
         return null;
     }
+
 
 
 }

@@ -8,6 +8,7 @@ import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAssEndService;
 import mcd.services.MCDElementService;
 import messages.MessagesBuilder;
+import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
 import repository.editingTreat.mcd.*;
 import utilities.TD;
@@ -26,15 +27,32 @@ public class MCDCompliant {
         return resultat;
     }
 
+
+    //TODO-1 Appeler la méthode de check unitaire depuis le menu contextuel de MCDAssociation ou
+    // autre spécialisation de MRelation
+    public ArrayList<String> check(MCDRelation mcdRelation){
+        // Teste la relation pour elle-même
+        ArrayList<String> resultat = checkRelation(mcdRelation, false);
+        if (resultat.size() == 0) {
+            // Teste la relation dans son contexte
+            resultat.addAll(checkRelationInContext(mcdRelation));
+        }
+
+        return resultat;
+    }
+
     public ArrayList<String> check(ArrayList<MCDEntity> mcdEntities, boolean showDialogCompletness){
         ArrayList<String> resultat = new ArrayList<String>();
-        Console.clearMessages();
+        //#MAJ 2021-03-26 Console.clearMessages est appelé à chaque invocation de menu conceptuel du référentiel
+        //Console.clearMessages();
         for (MCDEntity mcdEntity : mcdEntities) {
             // Teste l'entité pour elle-même
             resultat.addAll(checkEntityOutContext(mcdEntity, showDialogCompletness));
         }
 
-        for (MCDRelation mcdRelation : getMCDRelations(mcdEntities)){
+        ArrayList<MCDRelation> mcdRelations = getMCDRelations(mcdEntities);
+
+        for (MCDRelation mcdRelation : mcdRelations){
             // Teste la relation pour elle-même
             resultat.addAll(checkRelation(mcdRelation, showDialogCompletness));
         }
@@ -44,8 +62,15 @@ public class MCDCompliant {
                 // Teste la conformité entité et relations attachées
                 resultat.addAll(checkEntityInContext(mcdEntity));
             }
+            for (MCDRelation mcdRelation : mcdRelations){
+                // Teste la relation dans son contexte
+                resultat.addAll(checkRelationInContext(mcdRelation));
+            }
         }
 
+
+
+        // TODO-PAS mettre le print dans la sortie de l'appel du menu contextuel...
         Console.printMessages(resultat);
         return resultat;
     }
@@ -113,9 +138,32 @@ public class MCDCompliant {
                 resultat.addAll(checkConstraintInContext(mcdConstraint));
             }
         }
+        return resultat;
+    }
 
+    public ArrayList<String> checkRelationInContext(MCDRelation mcdRelation) {
+        ArrayList<String> resultat = new ArrayList<String>();
 
+        // Traitement des associations
+        if ( mcdRelation instanceof MCDAssociation){
+            MCDAssociation mcdAssociation = (MCDAssociation) mcdRelation;
+            String mcdAssociationNamePath = mcdAssociation.getNamePath(MCDElementService.PATHSHORTNAME);
 
+            // Association n:n sans entité associative adossée
+            if (mcdAssociation.isDegreeNN()) {
+                if (mcdAssociation.getLink() == null) {
+                    if (StringUtils.isEmpty(mcdAssociation.getName())){
+                        resultat.add(MessagesBuilder.getMessagesProperty("asociation.compliant.nn.without.entity.name.error",
+                                new String[]{mcdAssociationNamePath}));
+                    }
+                    if (StringUtils.isEmpty(mcdAssociation.getShortName())){
+                        resultat.add(MessagesBuilder.getMessagesProperty("asociation.compliant.nn.without.entity.shortname.error",
+                                new String[]{mcdAssociationNamePath}));
+                    }
+                }
+            }
+
+        }
         return resultat;
     }
 

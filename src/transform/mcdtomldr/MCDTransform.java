@@ -26,8 +26,9 @@ public class MCDTransform extends MDTransform {
 
 
     public ArrayList<String> transform(IMCDModel imcdModel)  throws TransformMCDException {
-        ArrayList<String> resultat = new ArrayList<String>();
-        Console.clearMessages();
+        ArrayList<String> resultat = new ArrayList<String>(); // Pour les erreurs provoquant un arrêt du processus
+        //#MAJ 2021-03-26 Console.clearMessages est appelé à chaque invocation de menu conceptuel du référentiel
+        //Console.clearMessages();
 
         this.imcdModel = imcdModel;
         // Création du modèle logique si inexistant
@@ -53,6 +54,10 @@ public class MCDTransform extends MDTransform {
             // Transformation des associations n:n sans entités associatives
             mcdTransformToTable.createOrModifyFromAllAssociationsNN();
 
+            // Transformation des associations non identifiantes de composition
+            MCDTransformToFK mcdTransformToFK = new MCDTransformToFK(this);
+            mcdTransformToFK.createOrModifyFromAllAssNoIdOrIdNatural(imcdModel, mldrModel);
+
             //Suppression des MLDRElement absents de l'itération
             deleteMDRElementNotInIteration();
 
@@ -67,8 +72,10 @@ public class MCDTransform extends MDTransform {
              resultat.add(e.getMessage());
              undoTransform(mldrModelClone);
              Console.printMessages(resultat);
+        } finally {
             return resultat;
         }
+
 
         //TODO-0 Voir le traitement d'erreur fatale (A quel niveau ?)
         /*catch (Exception e){
@@ -78,7 +85,6 @@ public class MCDTransform extends MDTransform {
         }
 
          */
-        return resultat;
     }
 
     private void undoTransform(MLDRModel mldrModelClone) {
@@ -143,10 +149,10 @@ public class MCDTransform extends MDTransform {
                 // Si la table est corrompue par une précédente erreur (pas de PK ou de colonne de PK)
                 //TODO-0 Mettre en place une journalisation pour tracer cette suppression
                 Delete.deleteMVCCDElement(mldrTable);
+                Console.printMessage("La table " + mldrTable.getName() +" a été supprimée car sa contrainte de clé primaire est erronée ou manquante");
             }
             indTable++;
         }
-
     }
 
     /*

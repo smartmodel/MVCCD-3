@@ -207,10 +207,11 @@ public class MDROrderBuildNaming {
             newName = limitSize(newName);
 
             // Provoquer une erreur pour faire un test d'alternative
+            /*
             if (targetNaming == MDROrderBuildTargets.TABLENN ){
                 throw new OrderBuildNameTableNNSizeLimitException();
-
             }
+            */
 
             return newName;
 

@@ -1,5 +1,6 @@
 package main.window.repository;
 
+import console.Console;
 import datatypes.MDDatatype;
 import diagram.mcd.MCDDiagram;
 import m.interfaces.IMCompletness;
@@ -10,6 +11,7 @@ import main.MVCCDWindow;
 import mcd.*;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.services.MCDElementService;
+import mdr.MDRRelationFK;
 import messages.MessagesBuilder;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
@@ -33,6 +35,7 @@ import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
 import repository.editingTreat.preferences.*;
 import utilities.DefaultMutableTreeNodeService;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
@@ -60,6 +63,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
     private void init() {
 
+        Console.clearMessages();
         if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
             if (PreferencesManager.instance().getApplicationPref().getDEBUG_INSPECT_OBJECT_IN_TREE()) {
                 treatInspectObject();
@@ -172,8 +176,14 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             treatGeneric(this, new MCDNIDEditingTreat());
         }
 
+
         if (node.getUserObject() instanceof MCDAssociation) {
             treatGeneric(this, new MCDAssociationEditingTreat());
+            //TODO-1 Développer la classe MCDAssociationCompliantEditingTreat
+            // à l'image de MCDEntityCompliantEditingTreat
+            // treatGenericRead(this, new MCDAssociationCompliantEditingTreat(),
+            //            MessagesBuilder.getMessagesProperty("menu.compliant"));
+
         }
 
         if (node.getUserObject() instanceof MCDAssEnd) {
@@ -269,12 +279,16 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 String message = "Classe : " + mvccdElement.getClass().getName();
                 if (mvccdElement instanceof ProjectElement){
                     ProjectElement projectElement = (ProjectElement) mvccdElement;
-                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id : " + projectElement.getIdProjectElement();
+                }
+                if (mvccdElement instanceof MDRRelationFK){
+                    MDRRelationFK mdrRelationFK = (MDRRelationFK) mvccdElement;
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - nom : " + mdrRelationFK.getMDRFK().getName();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - id : " + mdrRelationFK.getMDRFK().getIdProjectElement();
                 }
                 new DialogMessage().showOk(mvccdWindow, message);
             }
         });
-
     }
 
 

@@ -142,7 +142,7 @@ public class Preferences extends MVCCDElement {
 
     public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
     public static Integer MVCCD_WINDOW_WIDTH = 1200;
-    public static Integer MVCCD_WINDOW_HEIGHT = 1000;
+    public static Integer MVCCD_WINDOW_HEIGHT = 900; // Limité à 900 pour l'utilisation portable
     public static Integer PROJECT_WINDOW_WIDTH = 800;
     public static Integer PROJECT_WINDOW_HEIGHT = 400;
     public static Integer MODEL_WINDOW_WIDTH = 800;
@@ -151,9 +151,9 @@ public class Preferences extends MVCCDElement {
     public static Integer ENTITY_WINDOW_HEIGHT = 600;
     public static Integer ATTRIBUTE_WINDOW_WIDTH = 800;
     public static Integer ATTRIBUTE_WINDOW_HEIGHT = 600;
-    public static Integer ASSOCIATION_WINDOW_WIDTH = 1000;
+    public static Integer ASSOCIATION_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
     public static Integer ASSOCIATION_WINDOW_HEIGHT = 600;
-    public static Integer UNICITY_WINDOW_WIDTH = 1000;
+    public static Integer UNICITY_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
     public static Integer UNIQUE_WINDOW_HEIGHT = 600;
     public static Integer PARAMETER_WINDOW_WIDTH = 400;
     public static Integer PARAMETER_WINDOW_HEIGHT = 300;
@@ -165,11 +165,11 @@ public class Preferences extends MVCCDElement {
     public static Integer LINK_WINDOW_HEIGHT = 600;
     public static Integer HELP_WINDOW_WIDTH = 600;
     public static Integer HELP_WINDOW_HEIGHT = 300;
-    public static Integer PREFERENCES_WINDOW_WIDTH = 1000;
+    public static Integer PREFERENCES_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
     public static Integer PREFERENCES_WINDOW_HEIGHT = 600;
     public static Integer MCDDATATYPE_WINDOW_WIDTH = 800;
     public static Integer MCDDATATYPE_WINDOW_HEIGHT = 600;
-    public static Integer MDRTABLE_WINDOW_WIDTH = 1000;
+    public static Integer MDRTABLE_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
     public static Integer MDRTABLE_WINDOW_HEIGHT = 600;
 
 

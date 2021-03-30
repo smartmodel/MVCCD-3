@@ -8,6 +8,7 @@ import md.MDElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -73,7 +74,7 @@ public abstract class MCDElement extends MDElement {
     public String getShortNameSmartPath() {
         String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
         String path = getPath( MCDElementService.PATHSHORTNAME, separator);
-        if (path !=null){
+        if (StringUtils.isNotEmpty(path)){
             return path + separator + getShortNameSmart();
         } else {
             return getShortNameSmart();

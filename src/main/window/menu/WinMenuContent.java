@@ -83,7 +83,7 @@ public class WinMenuContent implements ActionListener {
 
         projectClose = new JMenuItem("Fermer");
         projectClose.addActionListener(this);
-        projectClose.setEnabled(false);
+        projectClose.setEnabled(true);
         project.add(projectClose);
 
         project.addSeparator();

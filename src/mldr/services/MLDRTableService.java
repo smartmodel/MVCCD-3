@@ -8,6 +8,7 @@ import mdr.MDRContConstraints;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
 import mldr.MLDRTable;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -90,9 +91,9 @@ public class MLDRTableService {
     }
 
 
-    public static MLDRFK getMLDRFKByMCDElementSource(MLDRTable mldrTable, MCDElement mcdElement) {
+    public static MLDRFK getMLDRFKByMCDElementSource(MLDRTable mldrTable, MCDElement mcdElementSource) {
         for (MLDRFK mldrFK : getMLDRFKs(mldrTable)){
-            if (mldrFK.getMcdElementSource() == mcdElement){
+            if (mldrFK.getMcdElementSource() == mcdElementSource){
                 return mldrFK;
             }
         }

@@ -79,6 +79,9 @@ public class MLDRModelService {
         ArrayList<IMLDRRelation> resultat = new ArrayList<IMLDRRelation>();
         MLDRContRelations mldrContRelations = getMLDRContRelations(mldrModel);
         for (MVCCDElement mvccdElement: mldrContRelations.getChilds()){
+            if (mvccdElement instanceof MLDRRelationFK){
+                MLDRRelationFK mldrRelationFK = (MLDRRelationFK) mvccdElement;
+            }
             if (mvccdElement instanceof IMLDRRelation){
                 resultat.add((IMLDRRelation) mvccdElement);
             }
@@ -152,6 +155,14 @@ public class MLDRModelService {
 
             boolean c1 = (mldrTable1 == mldrTableA) && (mldrTable2 == mldrTableB);
             boolean c2 = (mldrTable1 == mldrTableB) && (mldrTable2 == mldrTableA);
+
+            /*
+            boolean c1 = (mldrTable1.getIdProjectElement() == mldrTableA.getIdProjectElement())
+                    && (mldrTable2.getIdProjectElement()  == mldrTableB.getIdProjectElement()) ;
+            boolean c2 = (mldrTable1.getIdProjectElement() == mldrTableB.getIdProjectElement())
+                    && (mldrTable2.getIdProjectElement()  == mldrTableA.getIdProjectElement()) ;
+
+             */
 
             boolean sameTables = c1 || c2;
             if (sameTables){

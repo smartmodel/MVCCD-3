@@ -2,6 +2,7 @@ package mdr;
 
 import project.ProjectElement;
 import project.ProjectService;
+import utilities.Trace;
 
 public abstract class MDRRelationFK extends MDRRelation{
 

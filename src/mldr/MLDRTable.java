@@ -111,24 +111,21 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         return MLDRTableService.getMLDRFKByMCDElementSource(this, mcdElement);
     }
 
-
     public MLDRPK createPK(MCDEntity mcdEntity) {
         MLDRPK mldrPK= MVCCDElementFactory.instance().createMLDRPK(
                 getMDRContConstraints(), mcdEntity);
         return mldrPK;
     }
 
-    public MLDRPK createPK(MCDEntity mcdEntity, ArrayList<MCDAssociation> mcdAssociationsId) {
+    public MLDRPK createPK(MCDAssociation mcdAssNN) {
         MLDRPK mldrPK= MVCCDElementFactory.instance().createMLDRPK(
-                getMDRContConstraints(), mcdEntity);
+                getMDRContConstraints(), mcdAssNN);
         return mldrPK;
     }
-
 
     public MLDRPK getMLDRPK(){
         return MLDRPKService.to (getMDRPK());
     }
-
 
     public ArrayList<MLDRFK> getMLDRFKs(){
         return MLDRFKService.to(getMDRFKs());
@@ -140,17 +137,4 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
                 (MLDRContConstraints) getMDRContConstraints(), mcdRelEnd);
         return mldrFK;
     }
-
-    //TODO-0
-    // Une association n:n sans entité associative doit avoir Name et shortName!
-
-    /*
-    @Override
-    public String getShortName() {
-        //TODO-0
-        // Une association n:n sans entité associative doit avoir Name et shortName!
-        return getMcdElementSource().getShortName();
-    }
-
-     */
 }

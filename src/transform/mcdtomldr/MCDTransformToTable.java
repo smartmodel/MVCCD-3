@@ -16,12 +16,14 @@ import mdr.MDRNamingLength;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
 import mdr.orderbuildnaming.MDROrderBuildTargets;
 import messages.MessagesBuilder;
+import mldr.MLDRFK;
 import mldr.MLDRModel;
 import mldr.MLDRPK;
 import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -106,15 +108,21 @@ public class MCDTransformToTable {
     }
 
     public void createOrModifyFromAssociationNN(MCDAssociation mcdAssNN) {
-            // Table
-            MLDRTable mldrTable = mldrModel.getMLDRTableByAssNNSource(mcdAssNN);
-            if (mldrTable == null){
-                mldrTable = mldrModel.createTable(mcdAssNN);
-                //mldrTable.setMcdEntitySourceNature(mcdEntity.getNature()); // Provient d'une association n:n
-                MVCCDManager.instance().addNewMVCCDElementInRepository(mldrTable);
-            }
-            modifyTable(mldrTable, mcdAssNN);
-            mldrTable.setIteration(mcdTransform.getIteration());
+        // Table
+        MLDRTable mldrTable = mldrModel.getMLDRTableByAssNNSource(mcdAssNN);
+        if (mldrTable == null){
+            mldrTable = mldrModel.createTable(mcdAssNN);
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrTable);
+         }
+        modifyTable(mldrTable, mcdAssNN);
+        mldrTable.setIteration(mcdTransform.getIteration());
+
+        // 2 FKs
+        MCDTransformToFK mcdTransformToFK = new MCDTransformToFK(mcdTransform);
+        ArrayList<MLDRFK> mldrFKs = mcdTransformToFK.createOrModifyFromAssNN(mcdAssNN, mldrTable);
+
+        //PK
+        MLDRPK mldrPK = new MCDTransformToPK(mcdTransform).createOrModifyFromAssNN(mldrModel, mcdAssNN, mldrTable, mldrFKs);
     }
 
     private boolean pkParentsExistsOld(MCDEntity mcdEntity) {

@@ -941,22 +941,30 @@ public class AssociationInputContent extends PanelInputContentId {
         boolean r3 = r3a || r3b;
 
         String message = "";
+        //#MAJ 2021-03-30 Nommage d'association nom et/ou role
+        //Restriction levée
+        /*
         if ( r1 ) {
-            message = MessagesBuilder.getMessagesProperty("association.name.or.role.short.name.error");
+            message = MessagesBuilder.getMessagesProperty("association.name.or.role.name.error");
             fieldName.setColor(SComponent.COLORERROR);
             fieldFromRoleName.setColor(SComponent.COLORERROR);
             fieldToRoleName.setColor(SComponent.COLORERROR);
         }
+         */
 
+        //#MAJ 2021-03-30 Nommage d'association nom et/ou role
+        //Restriction levée
+        /*
         if ( r2 ) {
-            message = MessagesBuilder.getMessagesProperty("association.name.and.role.short.name.error");
+            message = MessagesBuilder.getMessagesProperty("association.name.and.role.name.error");
             fieldName.setColor(SComponent.COLORERROR);
             fieldFromRoleName.setColor(SComponent.COLORERROR);
             fieldToRoleName.setColor(SComponent.COLORERROR);
         }
+         */
 
         if ( r3 ) {
-            message = MessagesBuilder.getMessagesProperty("association.role.short.name.error");
+            message = MessagesBuilder.getMessagesProperty("association.role.name.error");
             fieldFromRoleName.setColor(SComponent.COLORERROR);
             fieldToRoleName.setColor(SComponent.COLORERROR);
         }
