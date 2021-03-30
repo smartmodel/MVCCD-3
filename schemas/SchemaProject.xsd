@@ -477,6 +477,7 @@
 				<xs:element ref="generalisations"/>
 				<xs:element ref="links"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -499,17 +500,23 @@
 	</xs:element>
 
 	<xs:element name="specEntite">
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-			</xs:restriction>
-		</xs:simpleType>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="target_entity_id" type="xs:int" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
 	</xs:element>
 
 	<xs:element name="genEntite">
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-			</xs:restriction>
-		</xs:simpleType>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="target_entity_id" type="xs:int" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
 	</xs:element>
 
 	<xs:element name="links">
@@ -523,9 +530,24 @@
 	<xs:element name="lienDEntiteAssociative">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="association"/>
-				<xs:element ref="entity"/>
+				<xs:element ref="extremiteAssociation"/>
+				<xs:element ref="extremiteEntite"/>
 			</xs:sequence>
+			<xs:attribute name="id" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="extremiteAssociation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:int" />
+			<xs:attribute name="association_target_id" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="extremiteEntite">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:int" />
+			<xs:attribute name="entite_target_id" type="xs:int" />
 		</xs:complexType>
 	</xs:element>
 
@@ -558,6 +580,7 @@
 					<xs:element ref="roleExtremiteTo"/>
 				</xs:sequence>
 			</xs:choice>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -597,6 +620,8 @@
 				<xs:element ref="multiplicity"/>
 				<xs:element ref="ordered"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="target_entity_id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -609,6 +634,8 @@
 				<xs:element ref="multiplicity"/>
 				<xs:element ref="ordered"/>
 			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="target_entity_id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 

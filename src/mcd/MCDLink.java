@@ -19,12 +19,14 @@ public class MCDLink extends MCDRelation {
 
 
     public MCDLink(MCDElement parent) {
-
         super(parent);
     }
 
-    public MCDLink(MCDElement parent, String name) {
+    public MCDLink(MCDElement parent, int id) {
+        super(parent, id);
+    }
 
+    public MCDLink(MCDElement parent, String name) {
         super(parent, name);
     }
 

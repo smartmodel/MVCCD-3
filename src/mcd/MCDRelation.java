@@ -14,11 +14,15 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
 
     private  static final long serialVersionUID = 1000;
 
-    private IMRelEnd a ;
-    private IMRelEnd b ;
+    private IMRelEnd a ; //dans le cas du lien (link) d'entité associative, correspond à l'entité reliée par le lien
+    private IMRelEnd b ; //dans le cas du lien (link) d'entité associative, correspond à l'association reliée par le lien
 
     public MCDRelation(MCDElement parent) {
         super(parent);
+    }
+
+    public MCDRelation(MCDElement parent, int id) {
+        super(parent, id);
     }
 
     public MCDRelation(MCDElement parent, String name) {

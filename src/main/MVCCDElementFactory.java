@@ -175,10 +175,20 @@ public class MVCCDElementFactory {
     }
 
     public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
+                                                MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, int id) {
+        MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations, id);
+        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo);
+        return mcdAssociation;
+    }
+
+    public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
                                                 MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo) {
-
         MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations) ;
+        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo);
+        return mcdAssociation;
+    }
 
+    private void initMCDAssociation(MCDAssociation mcdAssociation, MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo){
         MCDContRelEnds mcdContRelEndsEntityFrom = mcdEntityFrom.getMCDContRelEnds();
         MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdContRelEndsEntityFrom) ;
 
@@ -196,8 +206,6 @@ public class MVCCDElementFactory {
 
         MCDContRelEnds mcdContRelEnds = MVCCDElementFactory.instance().createMCDContEndRels(mcdAssociation,
                 Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME);
-
-        return mcdAssociation;
     }
 
 
@@ -227,14 +235,19 @@ public class MVCCDElementFactory {
         return mcdGeneralization;
     }
 
+    public MCDLink createMCDLink( MCDContRelations mcdContRelations, MCDEntity mcdEntity, MCDAssociation mcdAssociation) {
+        MCDLink mcdLink = new MCDLink(mcdContRelations);
+        this.initMCDLink(mcdLink, mcdEntity, mcdAssociation);
+        return mcdLink;
+    }
 
+    public MCDLink createMCDLink( MCDContRelations mcdContRelations, MCDEntity mcdEntity, MCDAssociation mcdAssociation, int id) {
+        MCDLink mcdLink = new MCDLink(mcdContRelations, id);
+        this.initMCDLink(mcdLink, mcdEntity, mcdAssociation);
+        return mcdLink;
+    }
 
-    public MCDLink createMCDLink( MCDContRelations mcdContRelations,
-                                  MCDEntity mcdEntity,
-                                  MCDAssociation mcdAssociation) {
-
-        MCDLink mcdLink = new MCDLink(mcdContRelations) ;
-
+    private void initMCDLink(MCDLink mcdLink, MCDEntity mcdEntity, MCDAssociation mcdAssociation){
         MCDContRelEnds mcdContRelEndsEntity = mcdEntity.getMCDContRelEnds();
         MCDLinkEnd mcdLinkEndEntity = new MCDLinkEnd(mcdContRelEndsEntity) ;
 
@@ -249,8 +262,6 @@ public class MVCCDElementFactory {
 
         mcdLinkEndAssociation.setmElement(mcdAssociation);
         mcdLinkEndAssociation.setMcdLink(mcdLink);
-
-        return mcdLink;
     }
 
 

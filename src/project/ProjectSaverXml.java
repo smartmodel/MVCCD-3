@@ -1,6 +1,5 @@
 package project;
 
-import console.Console;
 import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDManager;
@@ -22,9 +21,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /**
@@ -106,10 +104,8 @@ public class ProjectSaverXml {
             Transformer transformer = new TranformerForXml().createTransformer();
 
             //Création du fichier
-
             DOMSource source = new DOMSource(document);
-
-            StreamResult result = new StreamResult(new FileOutputStream(file)); //Génère un FileNotFoundException si le fichier ne peut pas être créé, s'il existe mais ne peut pas être modifié ou si un répertoire du même nom existe.
+            StreamResult result = new StreamResult(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)); //Génère un FileNotFoundException si le fichier ne peut pas être créé, s'il existe mais ne peut pas être modifié ou si un répertoire du même nom existe.
             transformer.transform(source, result);
 
             // Message de confirmation de la sauvegarde du fichier
@@ -189,36 +185,35 @@ public class ProjectSaverXml {
     }
 
 
-    private void addModelAndChilds(Document doc, Element mcd, ArrayList<MVCCDElement> mcdChilds) {
+    private void addModelAndChilds(Document doc, Element mcd, ArrayList<MVCCDElement> mcdModels) {
         // Parcours des enfants de l'élément mcd
-        for (int i = 0; i < mcdChilds.size(); i++) {
-            MVCCDElement child = mcdChilds.get(i);
+        for(MVCCDElement mcdModel : mcdModels){
             // Création du modèle dans le document
-            Element model = doc.createElement("model");
-            if (child instanceof MCDModel) {
-                mcd.appendChild(model);
+            Element modelTag = doc.createElement("model");
+            if (mcdModel instanceof MCDModel) {
+                mcd.appendChild(modelTag);
                 Attr name = doc.createAttribute("name");
-                name.setValue(child.getName());
-                model.setAttributeNode(name);
+                name.setValue(mcdModel.getName());
+                modelTag.setAttributeNode(name);
             }
 
-            ArrayList<MVCCDElement> modelsChilds = child.getChilds();
+            ArrayList<MVCCDElement> modelsChilds = mcdModel.getChilds();
 
             if (packagesAuthorized) {
                 // Création des différents éléments du modèle avec packages
-                addPropertiesModelsOrPackages(doc, model, child);
-                addDiagrams(doc, modelsChilds, model);
-                addEntities(doc, modelsChilds, model);
-                addRelations(doc, modelsChilds, model);
-                addPackages(doc, child, model);
-                addMLD(doc, modelsChilds, model);
+                addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
+                addDiagrams(doc, modelsChilds, modelTag);
+                addEntities(doc, modelsChilds, modelTag);
+                addRelations(doc, modelsChilds, modelTag);
+                addPackages(doc, mcdModel, modelTag);
+                addMLD(doc, modelsChilds, modelTag);
             } else {
                 // Création des différents éléments du modèle sans packages
-                addPropertiesModelsOrPackages(doc, model, child);
-                addDiagrams(doc, modelsChilds, model);
-                addEntities(doc, modelsChilds, model);
-                addRelations(doc, modelsChilds, model);
-                addMLD(doc, modelsChilds, model);
+                addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
+                addDiagrams(doc, modelsChilds, modelTag);
+                addEntities(doc, modelsChilds, modelTag);
+                addRelations(doc, modelsChilds, modelTag);
+                addMLD(doc, modelsChilds, modelTag);
             }
         }
 
@@ -625,137 +620,163 @@ public class ProjectSaverXml {
         }
     }
 
-    private void addRelations(Document doc, ArrayList<MVCCDElement> listElement, Element racine) {
-        // Ajout du package Relations au document
-        for (int i = 0; i < listElement.size(); i++) {
-            MVCCDElement childElement = listElement.get(i);
-            if (childElement.getName().equals("Relations")) {
-                Element relations = doc.createElement("relations");
-                racine.appendChild(relations);
+    /**
+     * Persiste en XML les relations du MCD.
+     * @param doc Document XML dans lequel seront persistées les relations.
+     * @param mcdModels Liste des éléments qui se trouvent sous le modèle "MCD" dans le référentiel.
+     * @param racineTag Balise parent sous laquelle les relations seront persistées.
+     */
+    private void addRelations(Document doc, ArrayList<MVCCDElement> mcdModels, Element racineTag) {
+        // Recherche du conteneur de relations sour le modèle MCD
+        for(MVCCDElement mcdModel : mcdModels){
+            if (mcdModel instanceof MCDContRelations) {
 
-                ArrayList<MVCCDElement> relationsChilds = childElement.getChilds();
-                // Ajout des rélations au document
-                addRelationsChilds(doc, relationsChilds, relations);
+                // Création de la balise <relations>
+                Element relationsTag = doc.createElement("relations");
+                racineTag.appendChild(relationsTag);
+
+                // Ajout de l'id à la balise <relations>
+                Attr idAttrOfRelationsTag = doc.createAttribute("id");
+                idAttrOfRelationsTag.setValue(((MCDContRelations) mcdModel).getIdProjectElementAsString());
+                relationsTag.setAttributeNode(idAttrOfRelationsTag);
+
+                // Ajout des relations au document
+                addRelationsChilds(doc, mcdModel.getChilds(), relationsTag);
 
             }
         }
     }
 
     private void addRelationsChilds(Document doc, ArrayList<MVCCDElement> relationsChilds, Element relations) {
-        // Création des 3 différents type de relation
+        // Création de la balise <associations>
         Element associations = doc.createElement("associations");
         relations.appendChild(associations);
 
+        // Création de la balise <generalisations>
         Element generalisations = doc.createElement("generalisations");
         relations.appendChild(generalisations);
 
+        // Création de la balise <links>
         Element links = doc.createElement("links");
         relations.appendChild(links);
 
-        // Récupération des valeurs pour chaque type
-        for (int i = 0; i < relationsChilds.size(); i++) {
-            MVCCDElement relationsChild = relationsChilds.get(i);
-            MCDRelation mcdRelation = (MCDRelation) relationsChild;
+        // Parcours de l'ensemble des relations qui se trouvent sous "Relations" dans le référentiel
+        for(MVCCDElement relationsChild : relationsChilds){
 
-            if (mcdRelation instanceof MCDAssociation) {
-                MCDAssociation mcdAssociation = (MCDAssociation) mcdRelation;
-                // Ajout des associations
-                addAssociations(doc, mcdAssociation, associations);
+            // Persistance d'une relation de type association
+            if (relationsChild instanceof MCDAssociation) {
+                addAssociation(doc, (MCDAssociation) relationsChild, associations);
             }
 
-            if (mcdRelation instanceof MCDGeneralization) {
-                MCDGeneralization mcdGeneralization = (MCDGeneralization) mcdRelation;
-                // Ajout des généralisations
-                addGeneralization(doc, mcdGeneralization, generalisations);
+            // Persistance d'une relation de type généralisation
+            else if (relationsChild instanceof MCDGeneralization) {
+                addGeneralization(doc, (MCDGeneralization) relationsChild, generalisations);
             }
 
-            if (mcdRelation instanceof MCDLink) {
-                MCDLink mcdLink = (MCDLink) mcdRelation;
-                //Ajout des liens d'entité associative
-                addlink(doc, mcdLink, links);
+            // Persistance d'une relation qui est un lien d'entité associative
+            else if (relationsChild instanceof MCDLink) {
+                addlink(doc, (MCDLink) relationsChild, links);
             }
         }
     }
 
     private void addlink(Document doc, MCDLink mcdLink, Element links) {
 
-        Element link = doc.createElement("lienDEntiteAssociative");
-        links.appendChild(link);
+        // Création de la balise <lienDEntiteAssociative>
+        Element lienEATag = doc.createElement("lienDEntiteAssociative");
+        links.appendChild(lienEATag);
 
-        // Récupération de l'association
-        MCDLinkEnd linkEnd = mcdLink.getEndAssociation(); //TODO-STB: peut-être prévoir une méthode qui retourne directement l'association MCD et pas le End. //Dans la méthode, le A est l'entité associative et le B est l'association
-        Element association = doc.createElement("association");
-        Element name = doc.createElement("name");
-        association.appendChild(name);
-        if (!linkEnd.getName().equals("")) {
-            name.appendChild(doc.createTextNode((linkEnd.getNamePath(1))));
-        } else {
-            MCDAssociation mcdAssociation = (MCDAssociation) linkEnd.getmElement();
-            MCDAssEnd from = mcdAssociation.getFrom();
-            MCDAssEnd to = mcdAssociation.getTo();
+        // Ajout de l'attribut "id" à la balise <lienDEntiteAssociative>
+        Attr idAttrOfLienEATag = doc.createAttribute("id");
+        idAttrOfLienEATag.setValue(mcdLink.getIdProjectElementAsString());
+        lienEATag.setAttributeNode(idAttrOfLienEATag);
 
-            Element extremiteFrom = doc.createElement("extremiteFrom");
-            extremiteFrom.appendChild(doc.createTextNode(from.getNamePath(1)));
-            association.appendChild(extremiteFrom);
+        // Création de la balise <extremiteAssociation>
+        Element extremiteAssociationTag = doc.createElement("extremiteAssociation");
+        lienEATag.appendChild(extremiteAssociationTag);
 
-            Element extremiteTo = doc.createElement("extremiteTo");
-            extremiteTo.appendChild(doc.createTextNode(to.getNamePath(1)));
-            association.appendChild(extremiteTo);
-        }
-        link.appendChild(association);
+        // Ajout de l'attribut "id" à la balise <extremiteAssociation>
+        Attr idAttrOfExtremiteAssTag = doc.createAttribute("id");
+        idAttrOfExtremiteAssTag.setValue(mcdLink.getEndAssociation().getIdProjectElementAsString());
+        extremiteAssociationTag.setAttributeNode(idAttrOfExtremiteAssTag);
 
-        // Récupération de l'entité
-        MCDLinkEnd endEntity = mcdLink.getEndEntity();
-        Element entity = doc.createElement("entity");
-        entity.appendChild(doc.createTextNode(((MCDElement) endEntity.getmElement()).getNamePath(1)));
-        link.appendChild(entity);
+        // Ajout de l'attribut "association_target_id" à la balise <extremiteAssociation>
+        Attr assTargetIdOfExtremiteAssTag = doc.createAttribute("association_target_id");
+        assTargetIdOfExtremiteAssTag.setValue(mcdLink.getEndAssociation().getAssociation().getIdProjectElementAsString());
+        extremiteAssociationTag.setAttributeNode(assTargetIdOfExtremiteAssTag);
 
+        // Création de la balise <extremiteEntite>
+        Element extremiteEntiteTag = doc.createElement("extremiteEntite");
+        lienEATag.appendChild(extremiteEntiteTag);
+
+        // Ajout de l'attribut "id" à la balise <extremiteEntite>
+        Attr idAttrOfExtremiteEntiteTag = doc.createAttribute("id");
+        idAttrOfExtremiteEntiteTag.setValue(mcdLink.getEndEntity().getIdProjectElementAsString());
+        extremiteEntiteTag.setAttributeNode(idAttrOfExtremiteEntiteTag);
+
+        // Ajout de l'attribut "entite_target_id" à la balise <extremiteEntite>
+        Attr entiteTargetIdOfExtremiteAssTag = doc.createAttribute("entite_target_id");
+        entiteTargetIdOfExtremiteAssTag.setValue(mcdLink.getEndEntity().getEntity().getIdProjectElementAsString());
+        extremiteEntiteTag.setAttributeNode(entiteTargetIdOfExtremiteAssTag);
     }
 
     private void addGeneralization(Document doc, MCDGeneralization mcdGeneralization, Element generalisations) {
+
+        // Création de la balise <generalisation>
         Element generalisation = doc.createElement("generalisation");
         generalisations.appendChild(generalisation);
 
-        // Récupération de l'entité de généralisation
-        MCDGSEnd gen = mcdGeneralization.getGen();
-        MCDEntity genEntity = gen.getMcdEntity();
+        // Création de la balise <genEntite>
         Element entityGen = doc.createElement("genEntite");
-        entityGen.appendChild(doc.createTextNode(genEntity.getNamePath(1)));
+        entityGen.appendChild(doc.createTextNode(mcdGeneralization.getGen().getMcdEntity().getNamePath(1)));
         generalisation.appendChild(entityGen);
 
-        // Récupération de l'entité de spécialisation
-        MCDGSEnd spec = mcdGeneralization.getSpec();
-        MCDEntity specEntity = spec.getMcdEntity();
+        // Ajout de l'attribut target_entity_id sur la balise <genEntity>
+        Attr targetIdAttrOfGenEntityTag = doc.createAttribute("target_entity_id");
+        targetIdAttrOfGenEntityTag.setValue(mcdGeneralization.getGen().getMcdEntity().getIdProjectElementAsString());
+        entityGen.setAttributeNode(targetIdAttrOfGenEntityTag);
+
+        // Création de la balise <specEntite>
         Element entitySpec = doc.createElement("specEntite");
-        entitySpec.appendChild(doc.createTextNode(specEntity.getNamePath(1)));
+        entitySpec.appendChild(doc.createTextNode(mcdGeneralization.getSpec().getMcdEntity().getNamePath(1)));
         generalisation.appendChild(entitySpec);
 
+        // Ajout de l'attribut target_entity_id sur la balise <specEntity>
+        Attr targetIdAttrOfSpecEntityTag = doc.createAttribute("target_entity_id");
+        targetIdAttrOfSpecEntityTag.setValue(mcdGeneralization.getSpec().getMcdEntity().getIdProjectElementAsString());
+        entitySpec.setAttributeNode(targetIdAttrOfSpecEntityTag);
     }
 
-    private void addAssociations(Document doc, MCDAssociation mcdAssociation, Element associations) {
+    private void addAssociation(Document doc, MCDAssociation mcdAssociation, Element associations) {
         // Récupération des extrémité d'association
         MCDAssEnd extremiteFrom = mcdAssociation.getFrom();
         MCDAssEnd extremiteTo = mcdAssociation.getTo();
 
-        Element association = doc.createElement("association");
-        // Association dans nom général ( noms dans les rôles)
-        if (mcdAssociation.getName().equals("")) {
+        // Création de la balise <association>
+        Element associationTag = doc.createElement("association");
+        associations.appendChild(associationTag);
 
-            addPropertiesAssociation(doc, association, mcdAssociation);
-            addExtremite(doc, association, extremiteFrom);
-            addExtremite(doc, association, extremiteTo);
+        // Ajout de l'id à la balise <association>
+        Attr idAttrOfAssociationTag = doc.createAttribute("id");
+        idAttrOfAssociationTag.setValue(mcdAssociation.getIdProjectElementAsString());
+        associationTag.setAttributeNode(idAttrOfAssociationTag);
+
+        // Association dans nom général (noms dans les rôles)
+        if (mcdAssociation.getName().equals("")) {
+            addPropertiesAssociation(doc, associationTag, mcdAssociation);
+            addExtremite(doc, associationTag, extremiteFrom);
+            addExtremite(doc, associationTag, extremiteTo);
 
         } else {
             // Association avec nom général
             Attr name = doc.createAttribute("name");
             name.setValue(mcdAssociation.getName());
-            association.setAttributeNode(name);
+            associationTag.setAttributeNode(name);
 
-            addPropertiesAssociation(doc, association, mcdAssociation);
-            addExtremite(doc, association, extremiteFrom);
-            addExtremite(doc, association, extremiteTo);
+            addPropertiesAssociation(doc, associationTag, mcdAssociation);
+            addExtremite(doc, associationTag, extremiteFrom);
+            addExtremite(doc, associationTag, extremiteTo);
         }
-        associations.appendChild(association);
     }
 
 
@@ -786,38 +807,51 @@ public class ProjectSaverXml {
 
     }
 
-    private void addExtremite(Document doc, Element association, MCDAssEnd extremite) {
+    private void addExtremite(Document doc, Element associationTag, MCDAssEnd assEnd) {
 
-        // Récupération de l'extremité
-        Element roleExtremite = doc.createElement("roleExtremiteFrom");
-        // Si la direction du dessin a comme valeur 2 le rôle de l'extremité n'est pas "Tracée depuis" mais "Tracée vers"
-        if (extremite.getDrawingDirection() == 2) {
-
-            roleExtremite = doc.createElement("roleExtremiteTo");
+        // Création de la balise <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element roleExtremiteTag = null;
+        if (assEnd.getDrawingDirection() == 2) { // Si la direction du dessin a comme valeur 2 le rôle de l'extremité est "Tracée vers"
+            roleExtremiteTag = doc.createElement("roleExtremiteTo");
+        }else{
+            roleExtremiteTag = doc.createElement("roleExtremiteFrom");
         }
+        associationTag.appendChild(roleExtremiteTag);
 
-        association.appendChild(roleExtremite);
+        // Création de l'attribut id sur la balise <roleExtremiteFrom> ou <roleExtremiteTo>
+        Attr idAttrOfRoleExtremiteTag = doc.createAttribute("id");
+        idAttrOfRoleExtremiteTag.setValue(assEnd.getIdProjectElementAsString());
+        roleExtremiteTag.setAttributeNode(idAttrOfRoleExtremiteTag);
 
-        // Récupération des éléments d'une extremité
-        Element nameRole = doc.createElement("name");
-        nameRole.appendChild(doc.createTextNode(extremite.getName()));
-        roleExtremite.appendChild(nameRole);
+        // Création de l'attribut target_entity_id sur la balise <roleExtremiteFrom> ou <roleExtremiteTo>
+        Attr targetEntityIdAttrOfRoleExtremiteTag = doc.createAttribute("target_entity_id");
+        targetEntityIdAttrOfRoleExtremiteTag.setValue(assEnd.getMcdEntity().getIdProjectElementAsString());
+        roleExtremiteTag.setAttributeNode(targetEntityIdAttrOfRoleExtremiteTag);
 
-        Element shortNameRole = doc.createElement("shortName");
-        shortNameRole.appendChild(doc.createTextNode(extremite.getShortName()));
-        roleExtremite.appendChild(shortNameRole);
+        // Création de la balise <name> sous <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element nameRoleTag = doc.createElement("name");
+        nameRoleTag.appendChild(doc.createTextNode(assEnd.getName()));
+        roleExtremiteTag.appendChild(nameRoleTag);
 
-        Element entity = doc.createElement("entiteNamePath");
-        entity.appendChild(doc.createTextNode(extremite.getMcdEntity().getNamePath(1)));
-        roleExtremite.appendChild(entity);
+        // Création de la balise <shortName> sous <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element shortNameRoleTag = doc.createElement("shortName");
+        shortNameRoleTag.appendChild(doc.createTextNode(assEnd.getShortName()));
+        roleExtremiteTag.appendChild(shortNameRoleTag);
 
-        Element multiplicity = doc.createElement("multiplicity");
-        multiplicity.appendChild(doc.createTextNode(extremite.getMultiStr()));
-        roleExtremite.appendChild((multiplicity));
+        // Création de la balise <entiteNamePath> sous <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element entityTag = doc.createElement("entiteNamePath");
+        entityTag.appendChild(doc.createTextNode(assEnd.getMcdEntity().getNamePath(1)));
+        roleExtremiteTag.appendChild(entityTag);
 
-        Element orderedRole = doc.createElement("ordered");
-        orderedRole.appendChild(doc.createTextNode(String.valueOf(extremite.isOrdered())));
-        roleExtremite.appendChild(orderedRole);
+        // Création de la balise <multiplicity> sous <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element multiplicityTag = doc.createElement("multiplicity");
+        multiplicityTag.appendChild(doc.createTextNode(assEnd.getMultiStr()));
+        roleExtremiteTag.appendChild((multiplicityTag));
+
+        // Création de la balise <ordered> sous <roleExtremiteFrom> ou <roleExtremiteTo>
+        Element orderedRoleTag = doc.createElement("ordered");
+        orderedRoleTag.appendChild(doc.createTextNode(String.valueOf(assEnd.isOrdered())));
+        roleExtremiteTag.appendChild(orderedRoleTag);
 
     }
 

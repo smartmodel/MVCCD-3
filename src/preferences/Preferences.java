@@ -637,7 +637,7 @@ public class Preferences extends MVCCDElement {
     // Pendant la phase de développement
     //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref
     // TODO-STB: mettre à false par défaut, et éventuellement supprimer la propriété lorsque la persistance XML est ok.
-    private Boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = true;
+    private Boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = false;
 
 
     //private PreferencesDisplay GENERAL_PREFERENCES_DISPLAY = PreferencesDisplay.REPOSITORY;
