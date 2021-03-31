@@ -1,6 +1,7 @@
 package mcd;
 
 import exceptions.TransformMCDException;
+import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDContContainer;
 import mcd.interfaces.IMCDContPackages;
@@ -12,6 +13,10 @@ import transform.mcdtomldr.MCDTransform;
 
 import java.util.ArrayList;
 
+/**
+ * L'instance correspond au modèle "MCD" existant dans le référentiel. Ce modèle MCD contient potentiellement lui-même
+ * plusieurs modèles (MLDR).
+ */
 public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePathParent, */IMCDContPackages,
         IMCDContContainer {
 
@@ -48,6 +53,18 @@ public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePa
         return mcdTransform.transform(this);
     }
 
+    /**
+     * Parcourt les enfants du modèle MCD, et retourne le premier qui est de type conteneur d'entités.
+     * @return Le conteneur d'entités du modèle MCD. Si aucun conteneur d'entités n'est trouvé, null est retourné.
+     */
+    public MCDContEntities getEntities(){
+        for(MVCCDElement childOfContEntities : this.getChilds()){
+            if(childOfContEntities instanceof MCDContEntities){
+                return (MCDContEntities) childOfContEntities;
+            }
+        }
+        return null;
+    }
 
 
     @Override

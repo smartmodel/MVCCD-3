@@ -1033,12 +1033,37 @@ public class ProjectSaverXml {
         Element columnTag = doc.createElement("column");
         columnsTag.appendChild(columnTag);
 
-        //Ajout des attributs d'identification d'une colonne à la balise <column>
+        //Ajout des propriétés d'identification d'une colonne à la balise <column>
         columnTag.setAttribute("id", mldrColumn.getIdProjectElementAsString());
         columnTag.setAttribute("name", mldrColumn.getName());
         columnTag.setAttribute("shortname", mldrColumn.getShortName());
         columnTag.setAttribute("longname", mldrColumn.getLongName());
         columnTag.setAttribute("attribute_source", mldrColumn.getMcdElementSource().getIdProjectElementAsString());
+
+        //Ajout des autres propriétés relatives à une colonne
+        columnTag.setAttribute("mandatory", mldrColumn.isMandatory() ? "true" : "false");
+        columnTag.setAttribute("frozen", mldrColumn.isFrozen() ? "true" : "false");
+        columnTag.setAttribute("uppercase", mldrColumn.isUppercase() ? "true" : "false");
+        columnTag.setAttribute("iteration", String.valueOf(mldrColumn.getIteration()));
+        columnTag.setAttribute("initValue", mldrColumn.getInitValue());
+        columnTag.setAttribute("derivedValue", mldrColumn.getDerivedValue());
+
+        //Ajout de l'id de la colonne PK pointée dans le cas d'une colonne FK
+        if(mldrColumn.getMDRColumnPK() != null){
+            columnTag.setAttribute("target_column_pk", mldrColumn.getMDRColumnPK().getIdProjectElementAsString());
+        }
+
+        //Ajout du type de données
+        columnTag.setAttribute("datatype_lienprog", mldrColumn.getDatatypeLienProg());
+        columnTag.setAttribute("datatype_constraint_lienprog", mldrColumn.getDatatypeConstraintLienProg());
+
+        //Ajout de size et scale, qui sont des propriétés optionnelles
+        if(mldrColumn.getSize() != null){
+            columnTag.setAttribute("size", String.valueOf(mldrColumn.getSize()));
+        }
+        if(mldrColumn.getScale() != null){
+            columnTag.setAttribute("scale", String.valueOf(mldrColumn.getScale()));
+        }
 
         //TODO-STB: continuer ici avec la persistance d'une colonne
     }

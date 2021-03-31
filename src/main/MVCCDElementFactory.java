@@ -342,6 +342,10 @@ public class MVCCDElementFactory {
         return mldrTable;
     }
 
+    public MLDRColumn createMLDRColumn(MDRContColumns mdrContColumns, MCDElement mcdElementSource, int id) {
+        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource, id);
+        return mldrColumn;
+    }
 
     public MLDRColumn createMLDRColumn(MDRContColumns mdrContColumns, MCDElement mcdElementSource) {
         MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource);

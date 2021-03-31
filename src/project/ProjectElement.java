@@ -107,17 +107,23 @@ public abstract class ProjectElement extends MVCCDElement {
     /**
      * Retourne le premier élément enfant qui a l'id donné en paramètre. Effectue une recherche en profondeur,
      * c'est-à-dire que l'élément est recherché automatiquement auprès des enfants, des enfants des enfants, etc.
+     * Attention cette méthode n'a pas encore été testé dans le cas d'enfants sur plusieurs niveaux.
      * @param id Identifiant de l'enfant à rechercher
      * @return L'élément retourné, s'il a un id, est forcément un ProjectElement. Retourne null si aucun élément n'est trouvé.
      */
     public ProjectElement getChildByIdProfondeur(int id){
-        for(MVCCDElement mvccdElement : this.getChilds()){
-            if(mvccdElement instanceof ProjectElement){
-                ProjectElement projectElement = (ProjectElement) mvccdElement;
-                if(projectElement.getIdProjectElement() == id){
-                    return (ProjectElement) mvccdElement;
+        ProjectElement childProjectElement = null;
+        ProjectElement foundedChildOfChild = null;
+        for(MVCCDElement childElement : this.getChilds()){
+            if(childElement instanceof ProjectElement){
+                childProjectElement = (ProjectElement) childElement;
+                if(childProjectElement.getIdProjectElement() == id){
+                    return childProjectElement;
                 }
-                return projectElement.getChildByIdProfondeur(id);
+                foundedChildOfChild = childProjectElement.getChildByIdProfondeur(id);
+                if(foundedChildOfChild != null){
+                    return foundedChildOfChild;
+                }
             }
         }
         return null;

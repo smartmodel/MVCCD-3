@@ -1,5 +1,6 @@
 package project;
 
+import console.Console;
 import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
@@ -27,6 +28,7 @@ import javax.xml.validation.Validator;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectLoaderXml {
     // listes d'éléments nécessaires pour récupérer les conteneurs des paquetages, des entités et les associations
@@ -971,9 +973,9 @@ public class ProjectLoaderXml {
     private void loadMLDR(MCDContModels mcdSource, MLDRModel mldrModel, Element mldrTag){
         //Parcours des balises enfants de <MLDR_DT> ou <MLDR_TI>
         NodeList mldrTagChilds = mldrTag.getChildNodes();
-        for (int j = 0; j < mldrTagChilds.getLength(); j++) {
-            if(mldrTagChilds.item(j) instanceof Element){
-                Element mldrTagChild = (Element) mldrTagChilds.item(j);
+        for (int i = 0; i < mldrTagChilds.getLength(); i++) {
+            if(mldrTagChilds.item(i) instanceof Element){
+                Element mldrTagChild = (Element) mldrTagChilds.item(i);
 
                 //Recherche et chargement de <tables>
                 if(mldrTagChild.getNodeName().equals("tables")){
@@ -994,9 +996,9 @@ public class ProjectLoaderXml {
     private void loadTables(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tablesTag){
         //Parcours des balises enfants de <tables>
         NodeList tablesTagChilds = tablesTag.getChildNodes();
-        for (int k = 0; k < tablesTagChilds.getLength(); k++) {
-            if (tablesTagChilds.item(k) instanceof Element) {
-                Element tablesTagChild = (Element) tablesTagChilds.item(k);
+        for (int i = 0; i < tablesTagChilds.getLength(); i++) {
+            if (tablesTagChilds.item(i) instanceof Element) {
+                Element tablesTagChild = (Element) tablesTagChilds.item(i);
 
                 //Recherche et chargement de <table>
                 if (tablesTagChild.getNodeName().equals("table")){
@@ -1015,19 +1017,19 @@ public class ProjectLoaderXml {
      */
     private void loadTable(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tableTag){
         int entitySourceId = Integer.parseInt(tableTag.getAttribute("entity_source")); //Récupération de l'id de l'entité source de la table
-        MCDEntity mcdEntitySource = (MCDEntity) mcdSource.getChildByIdProfondeur(entitySourceId); //Recherche de l'entité source en fonction de son ID, parmis tous les enfants du MCD
+        MCDEntity mcdEntitySource = (MCDEntity) mcdSource.getEntities().getChildById(entitySourceId); //Recherche de l'entité source en fonction de son ID, parmi tous les enfants du MCD
         MLDRTable mldrTable = MVCCDElementFactory.instance().createMLDRTable(mldrContTables, mcdEntitySource, Integer.parseInt(tableTag.getAttribute("id")));
         mldrTable.setName(tableTag.getAttribute("name"));
 
         //Parcours des balises enfants de <table>
         NodeList tableTagChilds = tableTag.getChildNodes();
-        for (int l = 0; l < tableTagChilds.getLength(); l++) {
-            if (tableTagChilds.item(l) instanceof Element) {
-                Element tableTagChild = (Element) tableTagChilds.item(l);
+        for (int i = 0; i < tableTagChilds.getLength(); i++) {
+            if (tableTagChilds.item(i) instanceof Element) {
+                Element tableTagChild = (Element) tableTagChilds.item(i);
 
                 //Chargement de <columns>
                 if (tableTagChild.getNodeName().equals("columns")) {
-                    this.loadColumns(mcdSource, mldrTable, tableTagChild);
+                    this.loadColumns(mcdEntitySource, mldrTable, tableTagChild);
                 }
             }
         }
@@ -1035,11 +1037,84 @@ public class ProjectLoaderXml {
 
     /**
      * À partir de la balise <columns>, cette méthode charge l'ensemble des colonnes d'une table.
-     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mcdEntitySource Il s'agit de l'entité source (MCD) à partir de laquelle la colonne (MLDR) a été générée.
      * @param table Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les colonnes.
      * @param columnsTag Balise <columns>
      */
-    private void loadColumns(MCDContModels mcdSource, MLDRTable table, Element columnsTag){
+    private void loadColumns(MCDEntity mcdEntitySource, MLDRTable table, Element columnsTag){
         MLDRContColumns mldrContColumns = (MLDRContColumns) table.getMDRContColumns();
+
+        //Création d'un conteneur pour mémoriser les colonnes détectées comme colonnes de FK
+        List<MLDRColumn> fkColumnsList = new ArrayList<MLDRColumn>();
+
+        //Parcours des balises enfants de <columns>
+        NodeList columnsTagChilds = columnsTag.getChildNodes();
+        for (int i = 0; i < columnsTagChilds.getLength(); i++) {
+            if (columnsTagChilds.item(i) instanceof Element) {
+                Element columnsTagChild = (Element) columnsTagChilds.item(i);
+
+                //Chargement de <column>
+                if (columnsTagChild.getNodeName().equals("column")) {
+                    MLDRColumn fkColumn = this.loadColumn(mcdEntitySource, mldrContColumns, columnsTagChild); //La méthode retourne les colonnes qui sont FK
+                    if(fkColumn != null){
+                        fkColumnsList.add(fkColumn); //Si la colonne est une colonne FK, on l'ajoute à la liste des colonnes FK
+                    }
+                }
+            }
+        }
+
+        //TODO-STB: Parcours des balises enfants de <columns>, pour détecter les colonnes de FK et ajouter les liens vers les colonnes PK
+    }
+
+    /**
+     * À partir de la balise <column>, cette méthode charge une colonne de table avec tous ses attributs.
+     * @param mcdEntitySource Il s'agit de l'entité source (MCD) à partir de laquelle la colonne (MLDR) a été générée.
+     * @param mldrContColumns Il s'agit du conteneur de colonne déjà existant dans l'application, dans lequel la nouvelle colonne qui sera créée sera placée.
+     * @param columnTag balise <column>
+     * @return Si la colonne est détectée comme étant une colonne de FK, alors la colonne est retournée
+     */
+    private MLDRColumn loadColumn(MCDEntity mcdEntitySource, MLDRContColumns mldrContColumns, Element columnTag) {
+
+        //Récupération de l'attribut (MCD) source en utilisant l'id de l'attribut source de la colonne
+        MCDAttribute mcdAttributeSource = mcdEntitySource.getMCDAttributeById(Integer.parseInt(columnTag.getAttribute("attribute_source")));
+
+        //Chargement et création de la colonne, y compris son id et son attribut (MCD) source
+        MLDRColumn mldrColumn = MVCCDElementFactory.instance().createMLDRColumn(mldrContColumns, mcdAttributeSource, Integer.parseInt(columnTag.getAttribute("id")));
+
+        //Chargement des autres propriétés d'identification de la colonne
+        mldrColumn.setName(columnTag.getAttribute("name"));
+        mldrColumn.setShortName(columnTag.getAttribute("shortname"));
+        mldrColumn.setLongName(columnTag.getAttribute("longname"));
+
+        //Chargement des autres propriétés de la colonne
+        mldrColumn.setMandatory(Boolean.getBoolean(columnTag.getAttribute("mandatory")));
+        mldrColumn.setFrozen(Boolean.getBoolean(columnTag.getAttribute("frozen")));
+        mldrColumn.setUppercase(Boolean.getBoolean(columnTag.getAttribute("uppercase")));
+        mldrColumn.setIteration(Integer.parseInt(columnTag.getAttribute("iteration")));
+        mldrColumn.setInitValue(columnTag.getAttribute("initValue"));
+        mldrColumn.setDerivedValue(columnTag.getAttribute("derivedValue"));
+
+        //Chargement de l'id de la colonne PK pointée (cas d'une colonne FK)
+        if(columnTag.hasAttribute("target_column_pk")) {
+            mldrColumn.setTempTargetColumnPkId(columnTag.getAttribute("target_column_pk"));
+        }
+
+        //Chargement du type de données
+        mldrColumn.setDatatypeLienProg(columnTag.getAttribute("datatype_lienprog"));
+        mldrColumn.setDatatypeConstraintLienProg(columnTag.getAttribute("datatype_constraint_lienprog"));
+
+        //Chargement de size et scale
+        if(columnTag.hasAttribute("size")){
+            mldrColumn.setSize(Integer.valueOf(columnTag.getAttribute("size")));
+        }
+        if(columnTag.hasAttribute("scale")){
+            mldrColumn.setScale(Integer.valueOf(columnTag.getAttribute("scale")));
+        }
+
+        //Si la colonne est une colonne FK, on la retourne de façon à la mémoriser dans les colonne FK à traiter plus tard.
+        if(mldrColumn.getTempTargetColumnPkId() != null){
+            return mldrColumn;
+        }
+        return null;
     }
 }

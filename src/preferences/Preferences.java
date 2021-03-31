@@ -22,7 +22,6 @@ import java.awt.*;
  */
 public class Preferences extends MVCCDElement {
 
-    //TODO-STB: voir avec PAS si mon commentaire ci-dessous est correct
     //Toutes les préférences statics sont des préférences développeurs, qui ne doivent pas être sauvegardées dans les fichiers.
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";

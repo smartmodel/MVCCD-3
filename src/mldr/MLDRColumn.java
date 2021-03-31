@@ -18,6 +18,10 @@ public class MLDRColumn extends MDRColumn implements IMLDRElement, IMLDRElementW
         this.mcdElementSource = mcdElementSource;
     }
 
+    public MLDRColumn(ProjectElement parent, MCDElement mcdElementSource, int id) {
+        super(parent, id);
+        this.mcdElementSource = mcdElementSource;
+    }
 
     public MLDRColumn(ProjectElement parent, MCDElement mcdElementSource, MLDRColumn mldrColumnPK) {
         super(parent, mldrColumnPK);

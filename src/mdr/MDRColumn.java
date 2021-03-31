@@ -35,13 +35,20 @@ public abstract class MDRColumn extends MDRElement implements
 
     private MDRColumn mdrColumnPK = null;
 
+    private String tempTargetColumnPkId = null;
+
+    public MDRColumn(ProjectElement parent, int id) {
+        super(parent, id);
+    }
 
     public MDRColumn(ProjectElement parent) {
         super(parent);
     }
 
-
-
+    public MDRColumn(ProjectElement parent, MLDRColumn mdrColumnPK, int id) {
+        super(parent, id);
+        this.mdrColumnPK = mdrColumnPK;
+    }
 
     public MDRColumn(ProjectElement parent, MLDRColumn mdrColumnPK) {
         super(parent);
@@ -166,5 +173,16 @@ public abstract class MDRColumn extends MDRElement implements
 
     public MDRTable getMDRTableAccueil(){
         return (MDRTable) getParent().getParent();
+    }
+
+    /**
+     * Dans le cas d'une colonne FK, cette variable permet de stocker temporairement l'id de la colonne PK pointée par la FK durant le processus de chargement du projet depuis le fichier de sauvegarde XML.
+     */
+    public String getTempTargetColumnPkId() {
+        return tempTargetColumnPkId;
+    }
+
+    public void setTempTargetColumnPkId(String tempTargetColumnPkId) {
+        this.tempTargetColumnPkId = tempTargetColumnPkId;
     }
 }
