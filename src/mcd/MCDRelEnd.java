@@ -43,6 +43,10 @@ public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElem
         super(parent);
     }
 
+    public MCDRelEnd(MCDElement parent, int id) {
+        super(parent, id);
+    }
+
     public MCDRelEnd(MCDElement parent, String name) {
         super(parent, name);
     }

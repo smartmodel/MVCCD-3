@@ -17,7 +17,7 @@ import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.IOException;
 
-//TODO-STB: voir le code de Giorgio
+//TODO-STB: Gérer si possible le format des profile avec le même XSD que celui des projets
 /**
  * @author Giorgio Roncallo
  */

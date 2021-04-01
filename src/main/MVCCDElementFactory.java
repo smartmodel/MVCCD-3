@@ -175,26 +175,24 @@ public class MVCCDElementFactory {
     }
 
     public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
-                                                MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, int id) {
-        MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations, id);
-        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo);
+                                                MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, int idAssociation, int idAssEndFrom, int idAssEndTo) {
+        MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations, idAssociation);
+        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdEntityFrom.getMCDContRelEnds(), idAssEndFrom);
+        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdEntityTo.getMCDContRelEnds(), idAssEndTo);
+        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo, mcdAssEndFrom, mcdAssEndTo);
         return mcdAssociation;
-    }
+}
 
     public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
                                                 MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo) {
         MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations) ;
-        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo);
+        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdEntityFrom.getMCDContRelEnds()) ;
+        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdEntityTo.getMCDContRelEnds()) ;
+        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo, mcdAssEndFrom, mcdAssEndTo);
         return mcdAssociation;
     }
 
-    private void initMCDAssociation(MCDAssociation mcdAssociation, MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo){
-        MCDContRelEnds mcdContRelEndsEntityFrom = mcdEntityFrom.getMCDContRelEnds();
-        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdContRelEndsEntityFrom) ;
-
-        MCDContRelEnds mcdContRelEndsEntityTo = mcdEntityTo.getMCDContRelEnds();
-        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdContRelEndsEntityTo) ;
-
+    private void initMCDAssociation(MCDAssociation mcdAssociation, MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, MCDAssEnd mcdAssEndFrom, MCDAssEnd mcdAssEndTo){
         mcdAssociation.setFrom(mcdAssEndFrom);
         mcdAssociation.setTo(mcdAssEndTo);
 

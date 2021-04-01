@@ -35,15 +35,6 @@ public class ProjectSaverXml {
     private Boolean packagesAuthorized = PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS();
     private Boolean manyModelsAuthorized = PreferencesManager.instance().preferences().getREPOSITORY_MCD_MODELS_MANY();
 
-    /*
-    Le code commenté ci-dessous était celui de Giorgio Roncallo. Il chargeait d'office les préférences d'application,
-    alors qu'il faut à priori charger les bonnes préférences applicables (projet, sinon profile, sinon application...)
-    */
-    //private Boolean packagesAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS();
-    //private Boolean manyModelsAuthorized = PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY();
-
-    //TODO-STB: vérifier que la version s'enregistre bien avec les préférences dans le fichier XML: Preferences.VERSION
-
     /**
      * Méthode principale qui se charge de créer un fichier XML contenant la sauvegarde du projet utilisateur.
      * @param file Chemin d'accès au fichier (y compris le nom du fichier) qui sera créé ou qui sera modifié.
@@ -859,11 +850,7 @@ public class ProjectSaverXml {
      * Méthode pour ajouter les paramètres (les attributs référencés) des contraintes
      */
     private void addParameters(Document doc, MCDConstraint mcdConstraint, Element constraint) {
-        //ArrayList<MCDParameter> parametersChilds = mcdConstraint.getMcdParameters(); //old: à supprimer
-        //for (int i = 0; i < parametersChilds.size(); i++) { //old: à supprimer
         for(MCDParameter parameterOfConstraint : mcdConstraint.getMcdParameters()){
-            //MCDParameter parameterOfConstraint = parametersChilds.get(i); //old: à supprimer
-            // TODO-STB: implémenter les paramètres de contraintes Unique et UID.
 
             // Créer la balise <parameter> pour chaque paramètre (donc pour chaque attribut)
             Element parameterTag = doc.createElement("parameter");
@@ -888,28 +875,6 @@ public class ProjectSaverXml {
             Attr targetClassShortNameUIAttributeOfParameterTag = doc.createAttribute("target_ClassShortNameUI");
             targetClassShortNameUIAttributeOfParameterTag.setValue(parameterOfConstraint.getTarget().getClassShortNameUI());
             parameterTag.setAttributeNode(targetClassShortNameUIAttributeOfParameterTag);
-
-            //Old: développements de Giorgio Roncallo (semblent inutiles/trop compliqué)
-            /*
-            Element target = doc.createElement("target");
-            Attr targetName = doc.createAttribute("name");
-            nameAttributeOfParameterTag.setValue(parameterOfConstraint.getTarget().getName());
-            target.setAttributeNode(targetName);
-
-            Element id = doc.createElement("id");
-            id.appendChild(doc.createTextNode(String.valueOf(parameterOfConstraint.getTarget().getIdProjectElement())));
-            target.appendChild(id);
-
-            Element order = doc.createElement("order");
-            order.appendChild(doc.createTextNode(String.valueOf(parameterOfConstraint.getTarget().getOrder())));
-            target.appendChild(order);
-
-            Element classShortNameUi = doc.createElement("classShortNameUi");
-            classShortNameUi.appendChild(doc.createTextNode(parameterOfConstraint.getTarget().getClassShortNameUI()));
-            target.appendChild(classShortNameUi);
-
-             */
-
         }
     }
 
@@ -993,7 +958,7 @@ public class ProjectSaverXml {
         //Ajout des attributs à la balise <table>
         tableTag.setAttribute("id", mldrTable.getIdProjectElementAsString());
         tableTag.setAttribute("name", mldrTable.getName());
-        tableTag.setAttribute("entity_source", mldrTable.getMcdElementSource().getIdProjectElementAsString());
+        tableTag.setAttribute("mcdelement_source", mldrTable.getMcdElementSource().getIdProjectElementAsString());
 
         //Persistance des colonnes
         this.addColumns(doc, mldrTable, tableTag);
@@ -1038,7 +1003,7 @@ public class ProjectSaverXml {
         columnTag.setAttribute("name", mldrColumn.getName());
         columnTag.setAttribute("shortname", mldrColumn.getShortName());
         columnTag.setAttribute("longname", mldrColumn.getLongName());
-        columnTag.setAttribute("attribute_source", mldrColumn.getMcdElementSource().getIdProjectElementAsString());
+        columnTag.setAttribute("mcdelement_source", mldrColumn.getMcdElementSource().getIdProjectElementAsString());
 
         //Ajout des autres propriétés relatives à une colonne
         columnTag.setAttribute("mandatory", mldrColumn.isMandatory() ? "true" : "false");
@@ -1064,7 +1029,5 @@ public class ProjectSaverXml {
         if(mldrColumn.getScale() != null){
             columnTag.setAttribute("scale", String.valueOf(mldrColumn.getScale()));
         }
-
-        //TODO-STB: continuer ici avec la persistance d'une colonne
     }
 }

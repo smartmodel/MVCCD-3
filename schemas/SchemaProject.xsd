@@ -735,7 +735,7 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
-			<xs:attribute name="entity_source" use="required" type="xs:int"/>
+			<xs:attribute name="mcdelement_source" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -754,7 +754,7 @@
 			<xs:attribute name="name" type="xs:string" />
 			<xs:attribute name="shortname" type="xs:string" />
 			<xs:attribute name="longname" type="xs:string" />
-			<xs:attribute name="attribute_source" type="xs:int" />
+			<xs:attribute name="mcdelement_source" type="xs:int" />
 			<xs:attribute name="mandatory" type="xs:boolean" />
 			<xs:attribute name="frozen" type="xs:boolean" />
 			<xs:attribute name="uppercase" type="xs:boolean" />

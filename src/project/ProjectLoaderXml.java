@@ -684,6 +684,11 @@ public class ProjectLoaderXml {
 
                 //TODO-STB: Continuer ici: il faut charger également les id des extrémités d'association
 
+                // Récupération des id de l'association et des extrémités d'association
+                int assId = Integer.parseInt(associationTag.getAttribute("id"));
+                int assEndFromId = Integer.parseInt(extremiteFromTag.getAttribute("id"));
+                int assEndToId = Integer.parseInt(extremiteToTag.getAttribute("id"));
+
                 // Récupération des id des entités cibles dans les 2 extrémités de l'association
                 int extremiteFromTargetEntityId = Integer.parseInt(extremiteFromTag.getAttribute("target_entity_id"));
                 int extremiteToTargetEntityId = Integer.parseInt(extremiteToTag.getAttribute("target_entity_id"));
@@ -693,7 +698,7 @@ public class ProjectLoaderXml {
                 MCDEntity entityTo = getAlreadyLoadedEntityById(extremiteToTargetEntityId);
 
                 // Création de l'association dans l'application
-                MCDAssociation mcdAssociation = MVCCDElementFactory.instance().createMCDAssociation(mcdContRelations, entityFrom, entityTo, Integer.parseInt(associationTag.getAttribute("id")));
+                MCDAssociation mcdAssociation = MVCCDElementFactory.instance().createMCDAssociation(mcdContRelations, entityFrom, entityTo, assId, assEndFromId, assEndToId);
                 if (!associationTag.getAttribute("name").equals("")) {
                     mcdAssociation.setName(associationTag.getAttribute("name"));
                 }
@@ -1021,8 +1026,7 @@ public class ProjectLoaderXml {
     private void loadTable(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tableTag){
 
         //Récupération de l'élément MCD source de la table (peut être une
-        //TODO-STB: Remplacer entity_source par mcdelement_source
-        int entitySourceId = Integer.parseInt(tableTag.getAttribute("entity_source")); //Récupérer l'id de l'élément source
+        int entitySourceId = Integer.parseInt(tableTag.getAttribute("mcdelement_source")); //Récupérer l'id de l'élément source
         IMCDSourceMLDRTable mcdSourceElementOfTable = (IMCDSourceMLDRTable) mcdSource.getChildByIdProfondeur(entitySourceId); //Recherche l'élément source en fonction de son ID, parmi tous les enfants du MCD
         MLDRTable mldrTable = MVCCDElementFactory.instance().createMLDRTable(mldrContTables, mcdSourceElementOfTable, Integer.parseInt(tableTag.getAttribute("id")));
         mldrTable.setName(tableTag.getAttribute("name"));
@@ -1089,8 +1093,7 @@ public class ProjectLoaderXml {
 
         //Récupération de l'attribut (MCD) source en utilisant l'id de l'attribut source de la colonne
         System.out.println("loadColumn:" + columnTag.getAttribute("name"));
-        //TODO-STB: Remplacer attribute_source par mcdelement_source
-        int attributeSourceId = Integer.parseInt(columnTag.getAttribute("attribute_source"));
+        int attributeSourceId = Integer.parseInt(columnTag.getAttribute("mcdelement_source"));
         MCDElement mcdElementSourceOfColumn = (MCDElement) mcdSourceElementOfTable.getChildByIdProfondeur(attributeSourceId); //La source de la colonne peut être un attribut d'entité ou une extrémité d'association (si colonne FK)
         //TODO-STB: Attention cela ne semble pas marcher dans le cas des colonnes FK d'une table associative
         if(mcdElementSourceOfColumn == null){
