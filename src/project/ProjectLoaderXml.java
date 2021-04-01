@@ -6,8 +6,10 @@ import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDFactory;
 import mcd.*;
+import mdr.MDRColumn;
 import messages.MessagesBuilder;
 import mldr.*;
+import mpdr.MPDRColumn;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -1029,7 +1031,7 @@ public class ProjectLoaderXml {
 
                 //Chargement de <columns>
                 if (tableTagChild.getNodeName().equals("columns")) {
-                    this.loadColumns(mcdEntitySource, mldrTable, tableTagChild);
+                    this.loadColumns(mcdEntitySource, mldrContTables, mldrTable, tableTagChild);
                 }
             }
         }
@@ -1038,10 +1040,11 @@ public class ProjectLoaderXml {
     /**
      * À partir de la balise <columns>, cette méthode charge l'ensemble des colonnes d'une table.
      * @param mcdEntitySource Il s'agit de l'entité source (MCD) à partir de laquelle la colonne (MLDR) a été générée.
+     * @param mldrContTables Il s'agit du conteneur parent dans lequel se trouve la table. Est utilisée pour faire la recherche des colonnes PK pointées par les colonnes FK en fonction de leur id.
      * @param table Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les colonnes.
      * @param columnsTag Balise <columns>
      */
-    private void loadColumns(MCDEntity mcdEntitySource, MLDRTable table, Element columnsTag){
+    private void loadColumns(MCDEntity mcdEntitySource, MLDRContTables mldrContTables, MLDRTable table, Element columnsTag){
         MLDRContColumns mldrContColumns = (MLDRContColumns) table.getMDRContColumns();
 
         //Création d'un conteneur pour mémoriser les colonnes détectées comme colonnes de FK
@@ -1063,7 +1066,12 @@ public class ProjectLoaderXml {
             }
         }
 
-        //TODO-STB: Parcours des balises enfants de <columns>, pour détecter les colonnes de FK et ajouter les liens vers les colonnes PK
+        //Parcours des balises enfants de <columns>, pour détecter les colonnes de FK et ajouter les liens vers les colonnes PK
+        for(MLDRColumn fkColumn : fkColumnsList){
+            int targetColumnPkId = Integer.parseInt(fkColumn.getTempTargetColumnPkId());
+            MDRColumn foundedPkColumn = (MDRColumn) mldrContTables.getChildByIdProfondeur(targetColumnPkId);
+            fkColumn.setMdrColumnPK(foundedPkColumn);
+        }
     }
 
     /**
@@ -1077,6 +1085,7 @@ public class ProjectLoaderXml {
 
         //Récupération de l'attribut (MCD) source en utilisant l'id de l'attribut source de la colonne
         MCDAttribute mcdAttributeSource = mcdEntitySource.getMCDAttributeById(Integer.parseInt(columnTag.getAttribute("attribute_source")));
+        //TODO-STB: CONTINUER ICI: attention, une colonne FK peut avoir comme source une extrémité d'association (Com_comp_num)
 
         //Chargement et création de la colonne, y compris son id et son attribut (MCD) source
         MLDRColumn mldrColumn = MVCCDElementFactory.instance().createMLDRColumn(mldrContColumns, mcdAttributeSource, Integer.parseInt(columnTag.getAttribute("id")));

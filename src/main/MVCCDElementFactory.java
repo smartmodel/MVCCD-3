@@ -316,8 +316,8 @@ public class MVCCDElementFactory {
     }
 
     private void createContentMLDRModel(MLDRModel mldrModel) {
-        MLDRContTables mldrContTable = new MLDRContTables(mldrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
-        MLDRContRelations mldrContRelations = new MLDRContRelations(mldrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
+        new MLDRContTables(mldrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
+        new MLDRContRelations(mldrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
     }
 
     public MLDRContTables createMLDRContTables(MLDRModel mldrModel, int id) {
@@ -326,19 +326,18 @@ public class MVCCDElementFactory {
 
     public MLDRTable createMLDRTable(MDRContTables mdrContTables, MCDEntity entitySource, int id) {
         MLDRTable mldrTable = new MLDRTable(mdrContTables, entitySource, id);
-        MLDRContColumns mldrContColumns = new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
-        MLDRContConstraints mldrContConstraints = new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
-        MLDRContRelEnds mldrContRelEnds = new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
-
+        new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+        new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
         return mldrTable;
     }
 
 
     public MLDRTable createMLDRTable(MDRContTables mdrContTables, IMCDSourceMLDRTable imcdSourceMLDRTable) {
         MLDRTable mldrTable = new MLDRTable(mdrContTables, (MCDElement) imcdSourceMLDRTable);
-        MLDRContColumns mldrContColumns = new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
-        MLDRContConstraints mldrContConstraints = new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
-        MLDRContRelEnds mldrContRelEnds = new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
+        new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+        new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
         return mldrTable;
     }
 

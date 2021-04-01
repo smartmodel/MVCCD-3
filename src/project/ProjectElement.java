@@ -78,7 +78,7 @@ public abstract class ProjectElement extends MVCCDElement {
         }
     }
 
-    //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
+    //#MAJ 2021-02-14 Problème de nommage en Ingénierie inverse avec VP
     //IdProjectElement au lieu de Id
     public int getIdProjectElement() {
         return id;
