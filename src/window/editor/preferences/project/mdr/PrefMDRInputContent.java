@@ -243,6 +243,9 @@ public class PrefMDRInputContent extends PanelInputContent {
         // Le problème se pose pour les noms qui ne portent pas d'index (1er index avec départ à 2 !)
         // Il faudrait certainement recalculer tous les noms en tenant compte des anciennes ou valeurs
         // ou éventuellement stocker les valeurs d'index dans le objets MLDRColumn, MLDRTable...
+        // La sauvegarde de la valeur d'index peut se faire aisémenent au sein du calcul du nom
+        // (lors de l'appel de MDROrderBuildNaming) en récupérant la valeur calculée pour l'index
+        // via MDROrderWordIndice????.getValue()
 
         Preferences preferences = (Preferences) getEditor().getMvccdElementCrt();
 

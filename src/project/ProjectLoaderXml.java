@@ -6,6 +6,7 @@ import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDFactory;
 import mcd.*;
+import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.MDRColumn;
 import messages.MessagesBuilder;
 import mldr.*;
@@ -679,9 +680,9 @@ public class ProjectLoaderXml {
 
                 // Récupération des extrémités d'association
                 Element extremiteFromTag = (Element) associationTag.getElementsByTagName("roleExtremiteFrom").item(0);
-                //Element entityNamePathFromTag = (Element) extremiteFromTag.getElementsByTagName("entiteNamePath").item(0);
                 Element extremiteToTag = (Element) associationTag.getElementsByTagName("roleExtremiteTo").item(0);
-                //Element entityNamepathToTag = (Element) extremiteToTag.getElementsByTagName("entiteNamePath").item(0);
+
+                //TODO-STB: Continuer ici: il faut charger également les id des extrémités d'association
 
                 // Récupération des id des entités cibles dans les 2 extrémités de l'association
                 int extremiteFromTargetEntityId = Integer.parseInt(extremiteFromTag.getAttribute("target_entity_id"));
@@ -1018,9 +1019,12 @@ public class ProjectLoaderXml {
      * @param tableTag Balise <table> du document XML à partir de laquelle la table est chargée.
      */
     private void loadTable(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tableTag){
-        int entitySourceId = Integer.parseInt(tableTag.getAttribute("entity_source")); //Récupération de l'id de l'entité source de la table
-        MCDEntity mcdEntitySource = (MCDEntity) mcdSource.getEntities().getChildById(entitySourceId); //Recherche de l'entité source en fonction de son ID, parmi tous les enfants du MCD
-        MLDRTable mldrTable = MVCCDElementFactory.instance().createMLDRTable(mldrContTables, mcdEntitySource, Integer.parseInt(tableTag.getAttribute("id")));
+
+        //Récupération de l'élément MCD source de la table (peut être une
+        //TODO-STB: Remplacer entity_source par mcdelement_source
+        int entitySourceId = Integer.parseInt(tableTag.getAttribute("entity_source")); //Récupérer l'id de l'élément source
+        IMCDSourceMLDRTable mcdSourceElementOfTable = (IMCDSourceMLDRTable) mcdSource.getChildByIdProfondeur(entitySourceId); //Recherche l'élément source en fonction de son ID, parmi tous les enfants du MCD
+        MLDRTable mldrTable = MVCCDElementFactory.instance().createMLDRTable(mldrContTables, mcdSourceElementOfTable, Integer.parseInt(tableTag.getAttribute("id")));
         mldrTable.setName(tableTag.getAttribute("name"));
 
         //Parcours des balises enfants de <table>
@@ -1031,7 +1035,7 @@ public class ProjectLoaderXml {
 
                 //Chargement de <columns>
                 if (tableTagChild.getNodeName().equals("columns")) {
-                    this.loadColumns(mcdEntitySource, mldrContTables, mldrTable, tableTagChild);
+                    this.loadColumns((MCDElement) mcdSourceElementOfTable, mldrContTables, mldrTable, tableTagChild);
                 }
             }
         }
@@ -1039,12 +1043,12 @@ public class ProjectLoaderXml {
 
     /**
      * À partir de la balise <columns>, cette méthode charge l'ensemble des colonnes d'une table.
-     * @param mcdEntitySource Il s'agit de l'entité source (MCD) à partir de laquelle la colonne (MLDR) a été générée.
+     * @param mcdSourceElementOfTable Il s'agit de l'entité ou association source (MCD) à partir de laquelle la colonne (MLDR) a été générée.
      * @param mldrContTables Il s'agit du conteneur parent dans lequel se trouve la table. Est utilisée pour faire la recherche des colonnes PK pointées par les colonnes FK en fonction de leur id.
      * @param table Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les colonnes.
      * @param columnsTag Balise <columns>
      */
-    private void loadColumns(MCDEntity mcdEntitySource, MLDRContTables mldrContTables, MLDRTable table, Element columnsTag){
+    private void loadColumns(MCDElement mcdSourceElementOfTable, MLDRContTables mldrContTables, MLDRTable table, Element columnsTag){
         MLDRContColumns mldrContColumns = (MLDRContColumns) table.getMDRContColumns();
 
         //Création d'un conteneur pour mémoriser les colonnes détectées comme colonnes de FK
@@ -1058,7 +1062,7 @@ public class ProjectLoaderXml {
 
                 //Chargement de <column>
                 if (columnsTagChild.getNodeName().equals("column")) {
-                    MLDRColumn fkColumn = this.loadColumn(mcdEntitySource, mldrContColumns, columnsTagChild); //La méthode retourne les colonnes qui sont FK
+                    MLDRColumn fkColumn = this.loadColumn(mcdSourceElementOfTable, mldrContColumns, columnsTagChild); //La méthode retourne les colonnes qui sont FK
                     if(fkColumn != null){
                         fkColumnsList.add(fkColumn); //Si la colonne est une colonne FK, on l'ajoute à la liste des colonnes FK
                     }
@@ -1076,19 +1080,25 @@ public class ProjectLoaderXml {
 
     /**
      * À partir de la balise <column>, cette méthode charge une colonne de table avec tous ses attributs.
-     * @param mcdEntitySource Il s'agit de l'entité source (MCD) à partir de laquelle la colonne (MLDR) a été générée.
+     * @param mcdSourceElementOfTable Il s'agit de l'entité ou association source (MCD) à partir de laquelle la colonne (MLDR) a été générée.
      * @param mldrContColumns Il s'agit du conteneur de colonne déjà existant dans l'application, dans lequel la nouvelle colonne qui sera créée sera placée.
      * @param columnTag balise <column>
      * @return Si la colonne est détectée comme étant une colonne de FK, alors la colonne est retournée
      */
-    private MLDRColumn loadColumn(MCDEntity mcdEntitySource, MLDRContColumns mldrContColumns, Element columnTag) {
+    private MLDRColumn loadColumn(MCDElement mcdSourceElementOfTable, MLDRContColumns mldrContColumns, Element columnTag) {
 
         //Récupération de l'attribut (MCD) source en utilisant l'id de l'attribut source de la colonne
-        MCDAttribute mcdAttributeSource = mcdEntitySource.getMCDAttributeById(Integer.parseInt(columnTag.getAttribute("attribute_source")));
-        //TODO-STB: CONTINUER ICI: attention, une colonne FK peut avoir comme source une extrémité d'association (Com_comp_num)
+        System.out.println("loadColumn:" + columnTag.getAttribute("name"));
+        //TODO-STB: Remplacer attribute_source par mcdelement_source
+        int attributeSourceId = Integer.parseInt(columnTag.getAttribute("attribute_source"));
+        MCDElement mcdElementSourceOfColumn = (MCDElement) mcdSourceElementOfTable.getChildByIdProfondeur(attributeSourceId); //La source de la colonne peut être un attribut d'entité ou une extrémité d'association (si colonne FK)
+        //TODO-STB: Attention cela ne semble pas marcher dans le cas des colonnes FK d'une table associative
+        if(mcdElementSourceOfColumn == null){
+            System.out.println("Attention mcdElementSourceOfColumn est null pour cette colonne. L'id " + attributeSourceId + " ne semble pas être dans les enfants de l'élément MCD chargé " + mcdSourceElementOfTable.getName());
+        }
 
         //Chargement et création de la colonne, y compris son id et son attribut (MCD) source
-        MLDRColumn mldrColumn = MVCCDElementFactory.instance().createMLDRColumn(mldrContColumns, mcdAttributeSource, Integer.parseInt(columnTag.getAttribute("id")));
+        MLDRColumn mldrColumn = MVCCDElementFactory.instance().createMLDRColumn(mldrContColumns, mcdElementSourceOfColumn, Integer.parseInt(columnTag.getAttribute("id")));
 
         //Chargement des autres propriétés d'identification de la colonne
         mldrColumn.setName(columnTag.getAttribute("name"));

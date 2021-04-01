@@ -3,9 +3,9 @@ package transform.mcdtomldr;
 import exceptions.TransformMCDException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDManager;
-import mcd.MCDEntity;
-import mcd.MCDRelEnd;
-import mcd.MCDRelation;
+import mcd.*;
+import mcd.interfaces.IMCDModel;
+import mcd.services.IMCDModelService;
 import mdr.*;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
 import mdr.orderbuildnaming.MDROrderBuildTargets;
@@ -27,6 +27,25 @@ public class MCDTransformToFK {
         this.mcdTransform = mcdTransform;
     }
 
+    public void createOrModifyFromAllAssNoIdOrIdNatural(IMCDModel imcdModel, MLDRModel mldrModel) {
+        ArrayList<MCDAssociation> mcdAssociations = IMCDModelService.getMCDAssociationNoIdOrIdNatural(imcdModel);
+        for (MCDAssociation mcdAssociation : mcdAssociations){
+            MCDAssEnd mcdAssEndParent = mcdAssociation.getMCDAssEndParent();
+            MCDEntity mcdEntityChild = mcdAssociation.getMCDAssEndChild().getMcdEntity();
+            MLDRTable mldrTableChild = mldrModel.getMLDRTableByEntitySource(mcdEntityChild);
+            MDRFKNature fkNature = MCDTransformService.mapMCDAssociationNature(mcdAssociation);
+            createOrModifyFromRelEndParent(mldrModel, mcdAssEndParent , mldrTableChild, fkNature);
+        }
+    }
+
+    /**
+     *
+     * @param mldrModel
+     * @param mcdRelEndParent
+     * @param mldrTable  ! Table d'accueil de la FK
+     * @param fkNature
+     * @return
+     */
     public MLDRFK createOrModifyFromRelEndParent(MLDRModel mldrModel, MCDRelEnd mcdRelEndParent, MLDRTable mldrTable, MDRFKNature fkNature) {
 
         // Contrainte FK
@@ -35,9 +54,11 @@ public class MCDTransformToFK {
             mldrFK = mldrTable.createFK(mcdRelEndParent);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrFK);
         }
+
         // modification et Ajout des colonnes
         modifyFK(mldrModel, mcdRelEndParent, mldrTable, mldrFK, fkNature);
         mldrFK.setIteration(mcdTransform.getIteration());
+
 
         // Relation FK
         MCDRelation mcdRelation = (MCDRelation) mcdRelEndParent.getImRelation();
@@ -51,13 +72,12 @@ public class MCDTransformToFK {
         }
 
 
-        // Double lien entre contrainte FK et sa représentation sous forme de relation
+        // Lien entre contrainte FK et sa représentation sous forme de relation
+        // Double lien assuré par setMDRRelationFK
         if (mldrFK.getMDRRelationFK() != mldrRelationFK){
             mldrFK.setMDRRelationFK(mldrRelationFK);
         }
-        if (mldrRelationFK.getMDRFK() != mldrFK){
-            mldrRelationFK.setMDRFK(mldrFK);
-        }
+
 
         modifyRelationFK(mldrModel, mcdRelEndParent, mldrTable, mldrFK, fkNature);
         mldrRelationFK.setIteration(mcdTransform.getIteration());
@@ -65,6 +85,14 @@ public class MCDTransformToFK {
         return mldrFK;
     }
 
+    public ArrayList<MLDRFK> createOrModifyFromAssNN(MCDAssociation mcdAssNN, MLDRTable mldrTable) {
+        ArrayList<MLDRFK> resultat = new ArrayList<MLDRFK>();
+        MLDRFK mldrFKA = createOrModifyFromRelEndParent((MLDRModel) mldrTable.getMDRModelParent(), mcdAssNN.getFrom(), mldrTable, MDRFKNature.IDCOMP) ;
+        resultat.add(mldrFKA);
+        MLDRFK mldrFKB = createOrModifyFromRelEndParent((MLDRModel) mldrTable.getMDRModelParent(), mcdAssNN.getTo(), mldrTable, MDRFKNature.IDCOMP) ;
+        resultat.add(mldrFKB);
+        return resultat;
+    }
 
 
     private void modifyFK(MLDRModel mldrModel, MCDRelEnd mcdRelEndParent, MLDRTable mldrTable, MLDRFK mldrFK, MDRFKNature fkNature) {
@@ -73,10 +101,19 @@ public class MCDTransformToFK {
         MLDRPK mldrPKParent = mldrTableParent.getMLDRPK();
 
         // Nom
-        MDRElementNames nameFK = buildNameFK(mldrTable, mldrFK, mcdRelEndParent, mldrTableParent);
+        String tableShortNameChild = "";
+        MCDElement mcdElementSource = mldrTable.getMcdElementSource();
+        if (mcdElementSource instanceof MCDEntity){
+            tableShortNameChild = mcdElementSource.getShortName();
+        }
+        if (mcdElementSource instanceof MCDAssociation){
+            tableShortNameChild = mcdElementSource.getShortName();
+        }
+
+        MDRElementNames nameFK = buildNameFK(mldrTable, tableShortNameChild, mldrFK, mcdRelEndParent, mldrTableParent);
         MCDTransformService.names(mldrFK, nameFK, mldrModel);
 
-        //TODO-1 Faire les test de changements de valeurs
+        //TODO-PAS Faire les test de changements de valeurs
         // Nature
         mldrFK.setNature(fkNature);
         // Lien avec la PK
@@ -104,7 +141,8 @@ public class MCDTransformToFK {
     }
 
 
-    protected MDRElementNames buildNameFK(MDRTable mdrTable,
+    protected MDRElementNames buildNameFK(MDRTable mdrTableChild,
+                                          String tableShortNameChild,
                                           MDRFK mdrFK,
                                           MCDRelEnd mcdRelEndParent,
                                           MDRTable mdrTableParent  ) {
@@ -120,7 +158,8 @@ public class MCDTransformToFK {
             orderBuild.getIndConstFK().setValue(mdrFK.getIndice().toString());
             orderBuild.getFkIndSep().setValue();
 
-            orderBuild.getTableShortNameChild().setValue((MCDEntity) mcdRelEndParent.getMCDRelEndOpposite().getmElement());
+            //orderBuild.getTableShortNameChild().setValue((MCDEntity) mcdRelEndParent.getMCDRelEndOpposite().getmElement());
+            orderBuild.getTableShortNameChild().setValue(tableShortNameChild);
             orderBuild.getTableShortNameParent().setValue((MCDEntity) mcdRelEndParent.getmElement());
             orderBuild.getTableSep().setValue();
             orderBuild.getRoleShortNameParent().setValue(mcdRelEndParent);
@@ -136,7 +175,7 @@ public class MCDTransformToFK {
                     message = e.getMessage();
                 } else {
                     message = MessagesBuilder.getMessagesProperty("mdrfk.build.name.error",
-                            new String[]{mdrTable.getName(), mdrTableParent.getName(), mcdRelEndParent.getNameNoFreeOrNameRelation()});
+                            new String[]{mdrTableChild.getName(), mdrTableParent.getName(), mcdRelEndParent.getNameNoFreeOrNameRelation()});
                 }
                 throw new TransformMCDException(message, e);
             }

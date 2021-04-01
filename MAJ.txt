@@ -32,4 +32,7 @@ Problèmes : Initialisation d'une relation en création
 
 //#MAJ 2021-03-21 Toutes les colonnes au lieu de brothers
 
+//#MAJ 2021-03-26 Console.clearMessages est appelé à chaque invocation de menu conceptuel du référentiel
+
+//#MAJ 2021-03-30 Nommage d'association nom et/ou role
 

@@ -1,5 +1,6 @@
 package mcd.services;
 
+import exceptions.CodeApplException;
 import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
@@ -137,6 +138,7 @@ public class MCDAssociationService {
         for (MCDAssociation mcdAssociation :   getMCDAssociationsInIModel(iMCDModel)){
             if (mcdAssociation.getNature() == MCDAssociationNature.NOID) {
                 resultat.add(mcdAssociation);
+
             }
         }
         return resultat;
@@ -170,5 +172,49 @@ public class MCDAssociationService {
             }
         }
         return null;
+    }
+
+    public static MCDAssEnd getMCDAssEndParent(MCDAssociation mcdAssociation) {
+        if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_MANY_MANY){
+            throw new CodeApplException("MCDAssEnd.getMCDAssEndParent " + "L'association " + mcdAssociation.getNameTree() +
+                    " est de degré n:n et n'a pas d'extrémités parent/enfant ");
+        } else if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_ONE_MANY){
+            MCDAssEnd mcdAssEndFrom = mcdAssociation.getFrom();
+            MCDAssEnd mcdAssEndTo = mcdAssociation.getTo();
+            if (mcdAssEndFrom.getMultiMaxStd() == MRelEndMultiPart.MULTI_ONE) {
+                return mcdAssEndFrom;
+            } else {
+                return mcdAssEndTo;
+            }
+        } else if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_ONE_ONE){
+            MCDAssEnd mcdAssEndFrom = mcdAssociation.getFrom();
+            MCDAssEnd mcdAssEndTo = mcdAssociation.getTo();
+            return getMCDAssEndParentBeetweenTheTwo (mcdAssEndFrom, mcdAssEndTo);
+        }
+        throw new CodeApplException("MCDAssEnd.getMCDAssEndParent " + "Le degré d'association " +
+                mcdAssociation.getNameTree() + " est inconnu ");
+    }
+
+    private static MCDAssEnd getMCDAssEndParentBeetweenTheTwo(MCDAssEnd mcdAssEndFrom,
+                                                              MCDAssEnd mcdAssEndTo){
+        boolean c1 = mcdAssEndFrom.getMultiMinStd() == MRelEndMultiPart.MULTI_ONE  ;
+        boolean c2 = mcdAssEndTo.getMultiMinStd() == MRelEndMultiPart.MULTI_ONE  ;
+        if (c1) {
+            if (c2) {
+                // 1 - 1  L'entité de départ From est le parent par défaut
+                return mcdAssEndFrom;
+            } else {
+                // 1 - 0  La multiplicité max 1 est le parent par défaut
+                return mcdAssEndFrom;
+            }
+        } else {
+            if (c2) {
+                // 0 - 1  La multiplicité max 1 est le parent par défaut
+                return mcdAssEndTo;
+            } else {
+                // 0 - 0 L'entité de départ From est le parent par défaut
+                return mcdAssEndFrom;
+            }
+        }
     }
 }

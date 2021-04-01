@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.MDRAdjustParameters;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -70,6 +71,26 @@ public class MCDTransformToPK {
         return mldrPK;
     }
 
+    public MLDRPK createOrModifyFromAssNN(MLDRModel mldrModel,
+                                          MCDAssociation mcdAssNN,
+                                          MLDRTable mldrTable,
+                                          ArrayList<MLDRFK> mldrPFKs)  throws TransformMCDException{
+
+        // Ensemble des colonnes PFK
+        ArrayList<MDRColumn> mdrColumnPKs = new ArrayList<MDRColumn>();
+
+        // Reprise des colonnes de PFK !
+        for (MLDRFK mldrFK : mldrPFKs){
+            mdrColumnPKs.addAll(mldrFK.getMDRColumns());
+        }
+
+        MLDRPK mldrPK = createOrModifyPKAssNN(mcdAssNN,mldrTable);
+
+        MDRAdjustParameters.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
+
+        return mldrPK;
+    }
+
     private MLDRPK createOrModifyPKEntityBase(MCDEntity mcdEntity, MLDRTable mldrTable)  throws TransformMCDException{
         MLDRPK mldrPK = mldrTable.getMLDRPK();
         if (mldrPK == null) {
@@ -82,9 +103,28 @@ public class MCDTransformToPK {
         return mldrPK;
     }
 
+    private MLDRPK createOrModifyPKAssNN(MCDAssociation mcdAssNN, MLDRTable mldrTable)  throws TransformMCDException{
+        MLDRPK mldrPK = mldrTable.getMLDRPK();
+        if (mldrPK == null) {
+            mldrPK = mldrTable.createPK(mcdAssNN);
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrPK);
+        }
+
+        modifyPK(mldrPK, mcdAssNN);
+        mldrPK.setIteration(mcdTransform.getIteration());
+
+        return mldrPK;
+    }
 
 
-
+    /**
+     * Création d'une éventuelle colonne de clé primaire (autre que PFK)
+     * num pour une entité indépendante
+     * numDp pour une entité dépendante  (y-compris AssDep, NAireDep...)
+     * @param mcdEntity
+     * @param mldrTable
+     * @return
+     */
     public MLDRColumn createOrModifyColumnPKProper(MCDEntity mcdEntity, MLDRTable mldrTable) {
 
         // Crée ou modifie Colonne PK (num ou numDep)
@@ -116,19 +156,18 @@ public class MCDTransformToPK {
 
 
 
-    public void modifyPK(MLDRPK mldrPK, MCDEntity mcdEntity)  throws TransformMCDException {
+    public void modifyPK(MLDRPK mldrPK, MCDElement mcdElement)  throws TransformMCDException {
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrPK.getMDRTableAccueil().getMDRModelParent();
-        MCDTransformService.names(mldrPK, buildNamePK(mldrPK.getMDRTableAccueil(), mcdEntity), mldrModel);
+        MCDTransformService.names(mldrPK, buildNamePK(mldrPK.getMDRTableAccueil(), mcdElement), mldrModel);
     }
 
 
     public void modifyPK(MLDRPK mldrPK, MCDElement mcdElement, ArrayList<MCDAssociation> mcdAssociationsId) {
     }
 
-    protected MDRElementNames buildNamePK(MDRTable mdrTable, MCDEntity mcdEntity) throws TransformMCDException{
+    protected MDRElementNames buildNamePK(MDRTable mdrTable, MCDElement mcdElement) throws TransformMCDException{
         Preferences preferences = PreferencesManager.instance().preferences();
-        String path = mcdEntity.getShortPath(preferences.getMDR_PATH_SEP_FORMAT());
 
         MDRElementNames names = new MDRElementNames();
         for (MDRNamingLength element: MDRNamingLength.values()) {
@@ -138,7 +177,12 @@ public class MCDTransformToPK {
             orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_PK_LENGTH);
             orderBuild.setTargetNaming(MDROrderBuildTargets.PK);
 
-            orderBuild.getTableShortName().setValue(mcdEntity);
+            if (mcdElement instanceof MCDEntity) {
+                orderBuild.getTableShortName().setValue((MCDEntity) mcdElement);
+            }
+            if (mcdElement instanceof MCDAssociation) {
+                orderBuild.getTableShortName().setValue((MCDAssociation) mcdElement);
+            }
 
             String name;
 

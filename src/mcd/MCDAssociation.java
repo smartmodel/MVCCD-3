@@ -18,6 +18,7 @@ import preferences.PreferencesManager;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -131,6 +132,14 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
 
         throw new CodeApplException("L'extrémité d'association passée en paramètre n'existe pas pour cette association ");
 
+    }
+
+    public MCDAssEnd getMCDAssEndParent(){
+        return MCDAssociationService.getMCDAssEndParent(this);
+    }
+
+    public MCDAssEnd getMCDAssEndChild(){
+        return getMCDAssEndOpposite(getMCDAssEndParent());
     }
 
     public MCDContRelEnds getMCDContRelEnds() {

@@ -324,21 +324,23 @@ public class MVCCDElementFactory {
         return new MLDRContTables(mldrModel, id);
     }
 
-    public MLDRTable createMLDRTable(MDRContTables mdrContTables, MCDEntity entitySource, int id) {
-        MLDRTable mldrTable = new MLDRTable(mdrContTables, entitySource, id);
-        new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
-        new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
-        new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
+    public MLDRTable createMLDRTable(MDRContTables mdrContTables, IMCDSourceMLDRTable imcdSourceMLDRTable, int id) {
+        MLDRTable mldrTable = new MLDRTable(mdrContTables, (MCDElement) imcdSourceMLDRTable, id);
+        this.initMLDRTable(mldrTable);
         return mldrTable;
     }
 
 
     public MLDRTable createMLDRTable(MDRContTables mdrContTables, IMCDSourceMLDRTable imcdSourceMLDRTable) {
         MLDRTable mldrTable = new MLDRTable(mdrContTables, (MCDElement) imcdSourceMLDRTable);
+        this.initMLDRTable(mldrTable);
+        return mldrTable;
+    }
+
+    private void initMLDRTable(MLDRTable mldrTable){
         new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
         new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
-        return mldrTable;
     }
 
     public MLDRColumn createMLDRColumn(MDRContColumns mdrContColumns, MCDElement mcdElementSource, int id) {
