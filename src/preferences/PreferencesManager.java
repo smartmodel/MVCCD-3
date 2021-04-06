@@ -155,12 +155,6 @@ public class PreferencesManager {
      */
 
     private void copyPref(Preferences from, Preferences to) {
-        /*
-        TODO-STB: remplacer par une implémentation de la méthode abstraite clone, de sorte à faire simplement:
-        to = from.clone();
-        Analyser également la possibilité de boucler de manière générique les préférences, de sorte à éviter de devoir
-        ajouter une ligne ici à chaque nouvelle préférence créée.
-         */
 
         // Général
         //to.setPROJET_VERSION(from.getPROJET_VERSION());

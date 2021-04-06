@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-//TODO-STB: voir le code de Giorgio
 /**
  * @author Giorgio Roncallo
  */

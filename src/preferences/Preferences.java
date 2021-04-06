@@ -24,7 +24,6 @@ import java.awt.*;
  */
 public class Preferences extends MVCCDElement {
 
-    //TODO-STB: voir avec PAS si mon commentaire ci-dessous est correct
     //Toutes les préférences statics sont des préférences développeurs, qui ne doivent pas être sauvegardées dans les fichiers.
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";
@@ -649,9 +648,7 @@ public class Preferences extends MVCCDElement {
 
     // Pendant la phase de développement
     //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref
-    // TODO-STB: mettre à false par défaut, et éventuellement supprimer la propriété lorsque la persistance XML est ok.
     private Boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = false;
-
 
     //private PreferencesDisplay GENERAL_PREFERENCES_DISPLAY = PreferencesDisplay.REPOSITORY;
 

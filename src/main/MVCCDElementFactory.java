@@ -175,26 +175,24 @@ public class MVCCDElementFactory {
     }
 
     public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
-                                                MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, int id) {
-        MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations, id);
-        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo);
+                                                MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, int idAssociation, int idAssEndFrom, int idAssEndTo) {
+        MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations, idAssociation);
+        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdEntityFrom.getMCDContRelEnds(), idAssEndFrom);
+        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdEntityTo.getMCDContRelEnds(), idAssEndTo);
+        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo, mcdAssEndFrom, mcdAssEndTo);
         return mcdAssociation;
-    }
+}
 
     public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
                                                 MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo) {
         MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations) ;
-        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo);
+        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdEntityFrom.getMCDContRelEnds()) ;
+        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdEntityTo.getMCDContRelEnds()) ;
+        this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo, mcdAssEndFrom, mcdAssEndTo);
         return mcdAssociation;
     }
 
-    private void initMCDAssociation(MCDAssociation mcdAssociation, MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo){
-        MCDContRelEnds mcdContRelEndsEntityFrom = mcdEntityFrom.getMCDContRelEnds();
-        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdContRelEndsEntityFrom) ;
-
-        MCDContRelEnds mcdContRelEndsEntityTo = mcdEntityTo.getMCDContRelEnds();
-        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdContRelEndsEntityTo) ;
-
+    private void initMCDAssociation(MCDAssociation mcdAssociation, MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, MCDAssEnd mcdAssEndFrom, MCDAssEnd mcdAssEndTo){
         mcdAssociation.setFrom(mcdAssEndFrom);
         mcdAssociation.setTo(mcdAssEndTo);
 
@@ -316,32 +314,37 @@ public class MVCCDElementFactory {
     }
 
     private void createContentMLDRModel(MLDRModel mldrModel) {
-        MLDRContTables mldrContTable = new MLDRContTables(mldrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
-        MLDRContRelations mldrContRelations = new MLDRContRelations(mldrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
+        new MLDRContTables(mldrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
+        new MLDRContRelations(mldrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
     }
 
     public MLDRContTables createMLDRContTables(MLDRModel mldrModel, int id) {
         return new MLDRContTables(mldrModel, id);
     }
 
-    public MLDRTable createMLDRTable(MDRContTables mdrContTables, MCDEntity entitySource, int id) {
-        MLDRTable mldrTable = new MLDRTable(mdrContTables, entitySource, id);
-        MLDRContColumns mldrContColumns = new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
-        MLDRContConstraints mldrContConstraints = new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
-        MLDRContRelEnds mldrContRelEnds = new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
-
+    public MLDRTable createMLDRTable(MDRContTables mdrContTables, IMCDSourceMLDRTable imcdSourceMLDRTable, int id) {
+        MLDRTable mldrTable = new MLDRTable(mdrContTables, (MCDElement) imcdSourceMLDRTable, id);
+        this.initMLDRTable(mldrTable);
         return mldrTable;
     }
 
 
     public MLDRTable createMLDRTable(MDRContTables mdrContTables, IMCDSourceMLDRTable imcdSourceMLDRTable) {
         MLDRTable mldrTable = new MLDRTable(mdrContTables, (MCDElement) imcdSourceMLDRTable);
-        MLDRContColumns mldrContColumns = new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
-        MLDRContConstraints mldrContConstraints = new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
-        MLDRContRelEnds mldrContRelEnds = new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
+        this.initMLDRTable(mldrTable);
         return mldrTable;
     }
 
+    private void initMLDRTable(MLDRTable mldrTable){
+        new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+        new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
+    }
+
+    public MLDRColumn createMLDRColumn(MDRContColumns mdrContColumns, MCDElement mcdElementSource, int id) {
+        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource, id);
+        return mldrColumn;
+    }
 
     public MLDRColumn createMLDRColumn(MDRContColumns mdrContColumns, MCDElement mcdElementSource) {
         MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource);

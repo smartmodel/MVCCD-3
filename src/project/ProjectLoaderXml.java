@@ -1,12 +1,16 @@
 package project;
 
+import console.Console;
 import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDFactory;
 import mcd.*;
+import mcd.interfaces.IMCDSourceMLDRTable;
+import mdr.MDRColumn;
 import messages.MessagesBuilder;
 import mldr.*;
+import mpdr.MPDRColumn;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,6 +31,7 @@ import javax.xml.validation.Validator;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectLoaderXml {
     // listes d'éléments nécessaires pour récupérer les conteneurs des paquetages, des entités et les associations
@@ -90,7 +95,7 @@ public class ProjectLoaderXml {
             loadLinks(mcd, mcdTag, modelsTagsList);
 
             //Chargement du (ou des) MLDR
-            loadMLDR(mcd, mcdTag);
+            loadMLDRs(mcd, mcdTag);
 
             // Validation du fichier
             validator.validate(new DOMSource(document));
@@ -675,9 +680,12 @@ public class ProjectLoaderXml {
 
                 // Récupération des extrémités d'association
                 Element extremiteFromTag = (Element) associationTag.getElementsByTagName("roleExtremiteFrom").item(0);
-                //Element entityNamePathFromTag = (Element) extremiteFromTag.getElementsByTagName("entiteNamePath").item(0);
                 Element extremiteToTag = (Element) associationTag.getElementsByTagName("roleExtremiteTo").item(0);
-                //Element entityNamepathToTag = (Element) extremiteToTag.getElementsByTagName("entiteNamePath").item(0);
+
+                // Récupération des id de l'association et des extrémités d'association
+                int assId = Integer.parseInt(associationTag.getAttribute("id"));
+                int assEndFromId = Integer.parseInt(extremiteFromTag.getAttribute("id"));
+                int assEndToId = Integer.parseInt(extremiteToTag.getAttribute("id"));
 
                 // Récupération des id des entités cibles dans les 2 extrémités de l'association
                 int extremiteFromTargetEntityId = Integer.parseInt(extremiteFromTag.getAttribute("target_entity_id"));
@@ -688,7 +696,7 @@ public class ProjectLoaderXml {
                 MCDEntity entityTo = getAlreadyLoadedEntityById(extremiteToTargetEntityId);
 
                 // Création de l'association dans l'application
-                MCDAssociation mcdAssociation = MVCCDElementFactory.instance().createMCDAssociation(mcdContRelations, entityFrom, entityTo, Integer.parseInt(associationTag.getAttribute("id")));
+                MCDAssociation mcdAssociation = MVCCDElementFactory.instance().createMCDAssociation(mcdContRelations, entityFrom, entityTo, assId, assEndFromId, assEndToId);
                 if (!associationTag.getAttribute("name").equals("")) {
                     mcdAssociation.setName(associationTag.getAttribute("name"));
                 }
@@ -934,61 +942,195 @@ public class ProjectLoaderXml {
 
     // *** Méthodes de chargement du MLD ***
 
-    private void loadMLDR(MCDContModels mcd, Element mcdTag){
+    /**
+     * À partir de la balise MCD du document XML à charger dans l'application, cette méthode parcourt les balises
+     * enfants et charge tous les modèles de type MLDR trouvé.
+     * @param mcdSource Le modèle "MCD" (qui est lui-même un contenant d'autres modèles, notamment des modèles MLDR)
+     * @param mcdTag La balise <MCD> du document XML à charger, à partir duquel le chargement est effectué.
+     */
+    private void loadMLDRs(MCDContModels mcdSource, Element mcdTag){
         //Parcours des enfants de <MCD>
         NodeList mcdTagChilds = mcdTag.getChildNodes();
-
         for (int i = 0; i < mcdTagChilds.getLength(); i++) {
             if (mcdTagChilds.item(i) instanceof Element) {
                 Element mcdTagChild = (Element) mcdTagChilds.item(i);
 
-                //Chargement de <MLDR_DT> ou <MLDR_TI>
+                //Recherche et chargement de <MLDR_DT> ou <MLDR_TI>
                 if (mcdTagChild.getNodeName().equals("MLDR_DT") || mcdTagChild.getNodeName().equals("MLDR_TI")) {
-                    MLDRModel mldrModel = (MLDRModel) mcd.getChildById(Integer.parseInt(mcdTagChild.getAttribute("id"))); //Récupération du MLDR_DT ou MLDR_TI déjà chargé dans l'application
+                    MLDRModel mldrModel = (MLDRModel) mcdSource.getChildById(Integer.parseInt(mcdTagChild.getAttribute("id"))); //Récupération du MLDR_DT ou MLDR_TI déjà chargé dans l'application
+                    this.loadMLDR(mcdSource, mldrModel, mcdTagChild); //Chargement de <MLDR_DT> ou <MLDR_TI>
+                }
+            }
+        }
+    }
 
-                    //Parcours des balises enfants de <MLDR_DT> ou <MLDR_TI>
-                    NodeList mldrTagChilds = mcdTagChild.getChildNodes();
-                    for (int j = 0; j < mldrTagChilds.getLength(); j++) {
-                        if(mldrTagChilds.item(j) instanceof Element){
-                            Element mldrTagChild = (Element) mldrTagChilds.item(j);
 
-                            //Chargement de <tables>
-                            if(mldrTagChild.getNodeName().equals("tables")){
-                                MLDRContTables mldrContTables = (MLDRContTables) mldrModel.getMDRContTables(); //Le conteneur de tables est déjà créé automatiquement avant
+    /**
+     * À partir de la balise <MLDR_DT> ou <MLDR_TI>, cette méthode charge dans l'application le MLDR en parcourant toutes
+     * les balises enfants.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré. Le MCD est nécessaire, notamment
+     *                  pour pouvoir récupérer les ids de objets sources pour pouvoir recréer les pointeurs des éléments
+     *                  MLDR vers MCD. Par exemple, la table a un pointeur vers son entité source.
+     * @param mldrModel Le modèle MLDR de l'application, initialement vide et dans lequel les éléments sont chargés. À
+     *                  noter que le modèle MLDR est déjà créé dans l'application à ce stade.
+     * @param mldrTag Balise <MLDR_DT> ou <MLDR_TI> racine à partir de laquelle faire le parcourt et chargé le modèle
+     *                logique dans l'application.
+     */
+    private void loadMLDR(MCDContModels mcdSource, MLDRModel mldrModel, Element mldrTag){
+        //Parcours des balises enfants de <MLDR_DT> ou <MLDR_TI>
+        NodeList mldrTagChilds = mldrTag.getChildNodes();
+        for (int i = 0; i < mldrTagChilds.getLength(); i++) {
+            if(mldrTagChilds.item(i) instanceof Element){
+                Element mldrTagChild = (Element) mldrTagChilds.item(i);
 
-                                //Parcours des balises enfants de <tables>
-                                NodeList tablesTagChilds = mldrTagChild.getChildNodes();
-                                for (int k = 0; k < tablesTagChilds.getLength(); k++) {
-                                    if (tablesTagChilds.item(k) instanceof Element) {
-                                        Element tablesTagChild = (Element) tablesTagChilds.item(k);
+                //Recherche et chargement de <tables>
+                if(mldrTagChild.getNodeName().equals("tables")){
+                    MLDRContTables mldrContTables = (MLDRContTables) mldrModel.getMDRContTables(); //Le conteneur de tables est déjà créé automatiquement avant
+                    this.loadTables(mcdSource, mldrContTables, mldrTagChild); //Chargement de <tables>
+                }
+            }
+        }
+    }
 
-                                        //Chargement de <table>
-                                        if (tablesTagChild.getNodeName().equals("table")) {
-                                            int entitySourceId = Integer.parseInt(tablesTagChild.getAttribute("entity_source")); //Récupération de l'id de l'entité source de la table
-                                            MCDEntity mcdEntitySource = (MCDEntity) mcd.getChildByIdProfondeur(entitySourceId); //Recherche de l'entité source en fonction de son ID, parmis tous les enfants du MCD
-                                            MLDRTable mldrTable = MVCCDElementFactory.instance().createMLDRTable(mldrContTables, mcdEntitySource, Integer.parseInt(tablesTagChild.getAttribute("id")));
-                                            mldrTable.setName(tablesTagChild.getAttribute("name"));
+    /**
+     * À partir de la balise <tables>, cette méthode charge dans l'application l'ensembles des tables d'un MLDR.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mldrContTables Le conteneur de tables déjà existant dans l'application mais initialement vide. C'est ce
+     *                       conteneur qui sera alimenté par les nouvelles tables au fur et à mesure de leur chargement.
+     * @param tablesTag Balise racine <tables>
+     */
+    private void loadTables(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tablesTag){
+        //Parcours des balises enfants de <tables>
+        NodeList tablesTagChilds = tablesTag.getChildNodes();
+        for (int i = 0; i < tablesTagChilds.getLength(); i++) {
+            if (tablesTagChilds.item(i) instanceof Element) {
+                Element tablesTagChild = (Element) tablesTagChilds.item(i);
 
-                                            //Parcours des balises enfants de <table>
-                                            NodeList tableTagChilds = tablesTagChild.getChildNodes();
-                                            for (int l = 0; l < tableTagChilds.getLength(); l++) {
-                                                if (tableTagChilds.item(l) instanceof Element) {
-                                                    Element tableTagChild = (Element) tableTagChilds.item(l);
+                //Recherche et chargement de <table>
+                if (tablesTagChild.getNodeName().equals("table")){
+                    this.loadTable(mcdSource, mldrContTables, tablesTagChild);
+                }
+            }
+        }
+    }
 
-                                                    //Chargement de <columns>
-                                                    if (tableTagChild.getNodeName().equals("columns")) {
-                                                        MLDRContColumns mldrContColumns = (MLDRContColumns) mldrTable.getMDRContColumns();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+    /**
+     * À partir de la balise <table>, cette méthode charge une table et la créé dans l'application.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mldrContTables Le conteneur de tables déjà existant dans l'application. C'est dans ce conteneur que sera
+     *                       ajoutée la nouvelle table.
+     * @param tableTag Balise <table> du document XML à partir de laquelle la table est chargée.
+     */
+    private void loadTable(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tableTag){
+
+        //Récupération de l'élément MCD source de la table (peut être une
+        int entitySourceId = Integer.parseInt(tableTag.getAttribute("mcdelement_source")); //Récupérer l'id de l'élément source
+        IMCDSourceMLDRTable mcdSourceElementOfTable = (IMCDSourceMLDRTable) mcdSource.getChildByIdProfondeur(entitySourceId); //Recherche l'élément source en fonction de son ID, parmi tous les enfants du MCD
+        MLDRTable mldrTable = MVCCDElementFactory.instance().createMLDRTable(mldrContTables, mcdSourceElementOfTable, Integer.parseInt(tableTag.getAttribute("id")));
+        mldrTable.setName(tableTag.getAttribute("name"));
+
+        //Parcours des balises enfants de <table>
+        NodeList tableTagChilds = tableTag.getChildNodes();
+        for (int i = 0; i < tableTagChilds.getLength(); i++) {
+            if (tableTagChilds.item(i) instanceof Element) {
+                Element tableTagChild = (Element) tableTagChilds.item(i);
+
+                //Chargement de <columns>
+                if (tableTagChild.getNodeName().equals("columns")) {
+                    this.loadColumns(mcdSource, mldrContTables, mldrTable, tableTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <columns>, cette méthode charge l'ensemble des colonnes d'une table.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mldrContTables Il s'agit du conteneur parent dans lequel se trouve la table. Est utilisée pour faire la recherche des colonnes PK pointées par les colonnes FK en fonction de leur id.
+     * @param table Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les colonnes.
+     * @param columnsTag Balise <columns>
+     */
+    private void loadColumns(MCDElement mcdSource, MLDRContTables mldrContTables, MLDRTable table, Element columnsTag){
+        MLDRContColumns mldrContColumns = (MLDRContColumns) table.getMDRContColumns();
+
+        //Création d'un conteneur pour mémoriser les colonnes détectées comme colonnes de FK
+        List<MLDRColumn> fkColumnsList = new ArrayList<MLDRColumn>();
+
+        //Parcours des balises enfants de <columns>
+        NodeList columnsTagChilds = columnsTag.getChildNodes();
+        for (int i = 0; i < columnsTagChilds.getLength(); i++) {
+            if (columnsTagChilds.item(i) instanceof Element) {
+                Element columnsTagChild = (Element) columnsTagChilds.item(i);
+
+                //Chargement de <column>
+                if (columnsTagChild.getNodeName().equals("column")) {
+                    MLDRColumn fkColumn = this.loadColumn(mcdSource, mldrContColumns, columnsTagChild); //La méthode retourne les colonnes qui sont FK
+                    if(fkColumn != null){
+                        fkColumnsList.add(fkColumn); //Si la colonne est une colonne FK, on l'ajoute à la liste des colonnes FK
                     }
                 }
             }
         }
+
+        //Parcours des balises enfants de <columns>, pour détecter les colonnes de FK et ajouter les liens vers les colonnes PK
+        for(MLDRColumn fkColumn : fkColumnsList){
+            int targetColumnPkId = Integer.parseInt(fkColumn.getTempTargetColumnPkId());
+            MDRColumn foundedPkColumn = (MDRColumn) mldrContTables.getChildByIdProfondeur(targetColumnPkId);
+            fkColumn.setMdrColumnPK(foundedPkColumn);
+        }
+    }
+
+    /**
+     * À partir de la balise <column>, cette méthode charge une colonne de table avec tous ses attributs.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mldrContColumns Il s'agit du conteneur de colonne déjà existant dans l'application, dans lequel la nouvelle colonne qui sera créée sera placée.
+     * @param columnTag balise <column>
+     * @return Si la colonne est détectée comme étant une colonne de FK, alors la colonne est retournée
+     */
+    private MLDRColumn loadColumn(MCDElement mcdSource, MLDRContColumns mldrContColumns, Element columnTag) {
+
+        //Récupération de l'attribut (MCD) source en utilisant l'id de l'attribut source de la colonne
+        System.out.println("loadColumn:" + columnTag.getAttribute("name"));
+        int attributeSourceId = Integer.parseInt(columnTag.getAttribute("mcdelement_source"));
+        MCDElement mcdElementSourceOfColumn = (MCDElement) mcdSource.getChildByIdProfondeur(attributeSourceId); //La source de la colonne peut être un attribut d'entité ou une extrémité d'association (si colonne FK)
+
+        //Chargement et création de la colonne, y compris son id et son attribut (MCD) source
+        MLDRColumn mldrColumn = MVCCDElementFactory.instance().createMLDRColumn(mldrContColumns, mcdElementSourceOfColumn, Integer.parseInt(columnTag.getAttribute("id")));
+
+        //Chargement des autres propriétés d'identification de la colonne
+        mldrColumn.setName(columnTag.getAttribute("name"));
+        mldrColumn.setShortName(columnTag.getAttribute("shortname"));
+        mldrColumn.setLongName(columnTag.getAttribute("longname"));
+
+        //Chargement des autres propriétés de la colonne
+        mldrColumn.setMandatory(Boolean.getBoolean(columnTag.getAttribute("mandatory")));
+        mldrColumn.setFrozen(Boolean.getBoolean(columnTag.getAttribute("frozen")));
+        mldrColumn.setUppercase(Boolean.getBoolean(columnTag.getAttribute("uppercase")));
+        mldrColumn.setIteration(Integer.parseInt(columnTag.getAttribute("iteration")));
+        mldrColumn.setInitValue(columnTag.getAttribute("initValue"));
+        mldrColumn.setDerivedValue(columnTag.getAttribute("derivedValue"));
+
+        //Chargement de l'id de la colonne PK pointée (cas d'une colonne FK)
+        if(columnTag.hasAttribute("target_column_pk")) {
+            mldrColumn.setTempTargetColumnPkId(columnTag.getAttribute("target_column_pk"));
+        }
+
+        //Chargement du type de données
+        mldrColumn.setDatatypeLienProg(columnTag.getAttribute("datatype_lienprog"));
+        mldrColumn.setDatatypeConstraintLienProg(columnTag.getAttribute("datatype_constraint_lienprog"));
+
+        //Chargement de size et scale
+        if(columnTag.hasAttribute("size")){
+            mldrColumn.setSize(Integer.valueOf(columnTag.getAttribute("size")));
+        }
+        if(columnTag.hasAttribute("scale")){
+            mldrColumn.setScale(Integer.valueOf(columnTag.getAttribute("scale")));
+        }
+
+        //Si la colonne est une colonne FK, on la retourne de façon à la mémoriser dans les colonne FK à traiter plus tard.
+        if(mldrColumn.getTempTargetColumnPkId() != null){
+            return mldrColumn;
+        }
+        return null;
     }
 }

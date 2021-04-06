@@ -36,6 +36,10 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
         super(parent);
     }
 
+    public MCDAssEnd(MCDElement parent, int id) {
+        super(parent, id);
+    }
+
     public MCDAssEnd(MCDElement parent, String name) {
         super(parent, name);
     }
