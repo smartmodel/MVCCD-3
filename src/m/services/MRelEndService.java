@@ -1,6 +1,6 @@
 package m.services;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import preferences.Preferences;
@@ -41,7 +41,7 @@ public class MRelEndService {
                 }
                 return null;
             } catch (Exception e ){
-                throw new CodeApplException(messageErrorMulti(multi) + " Minimum custom.");
+                throw new TransformMCDException(messageErrorMulti(multi) + " Minimum custom.");
             }
         }
     }
@@ -58,7 +58,7 @@ public class MRelEndService {
                 }
                 return MRelEndMultiPart.MULTI_ONE;
             } catch (Exception e ){
-                throw new CodeApplException(messageErrorMulti(multi) + " Minimum standard.");
+                throw new TransformMCDException(messageErrorMulti(multi) + " Minimum standard.");
             }
         }
     }
@@ -77,7 +77,7 @@ public class MRelEndService {
                 }
                 return null;
             } catch (Exception e ){
-                throw new CodeApplException(messageErrorMulti(multi) + " Maximum custom.");
+                throw new TransformMCDException(messageErrorMulti(multi) + " Maximum custom.");
             }
         }
     }
@@ -95,7 +95,7 @@ public class MRelEndService {
                 }
                 return MRelEndMultiPart.MULTI_ONE;
             } catch (Exception e ){
-                throw new CodeApplException(messageErrorMulti(multi) + " Maximum standard.");
+                throw new TransformMCDException(messageErrorMulti(multi) + " Maximum standard.");
             }
         }
     }

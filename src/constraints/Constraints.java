@@ -1,6 +1,6 @@
 package constraints;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 
@@ -39,7 +39,7 @@ public class Constraints extends MVCCDElement {
         }
         String message = MessagesBuilder.getMessagesProperty("error.constraint.lienProg",
                 new String[] {lienProg, className} );
-        throw new CodeApplException(this.getClass().getName() + " - " + message);
+        throw new TransformMCDException(this.getClass().getName() + " - " + message);
     }
 
     public Constraint getConstraintByName(String className, String name){
@@ -50,7 +50,7 @@ public class Constraints extends MVCCDElement {
         }
         String message = MessagesBuilder.getMessagesProperty("error.constraint.name",
                 new String[] {name, className} );
-        throw new CodeApplException(this.getClass().getName() + " - " + message);
+        throw new TransformMCDException(this.getClass().getName() + " - " + message);
     }
 
     public ArrayList<Constraint> getConstraintByClassNameAndNames(String className,

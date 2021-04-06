@@ -9,7 +9,9 @@ import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import mcd.*;
+import mcd.interfaces.IMCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
+import mcd.interfaces.IMCDModel;
 import mcd.services.MCDElementService;
 import mdr.MDRRelationFK;
 import messages.MessagesBuilder;
@@ -25,7 +27,7 @@ import profile.ProfileSaverXml;
 import project.Project;
 import project.ProjectElement;
 import repository.editingTreat.EditingTreat;
-import repository.editingTreat.EditingTreatTransform;
+import repository.editingTreat.EditingTreatCompliant;
 import repository.editingTreat.ProjectEditingTreat;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.*;
@@ -109,7 +111,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 packageNew(this, "menu.new.package");
             }
             treatGenericCompliant(this, new MCDModelEditingTreat());
-            treatGenericTransform(this, new MCDModelEditingTreat(),
+            treatGenericTransformMCD(this, new MCDModelEditingTreat(),
                     "menu.transform.mcd.to.mldr");
         }
 
@@ -221,9 +223,16 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         if (node.getUserObject() instanceof MLDRModel) {
             treatGeneric(this, new MLDRModelEditingTreat());
-            treatGenericTransform(this, new MLDRModelEditingTreat(),
-                    "menu.transform.mldr.to.mpdr");
-        }
+
+                JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.transform.mldr.to.mpdr"));
+                addItem(this, menuItem);
+                menuItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        (new MLDRModelEditingTreat()).treatTransform(mvccdWindow, mvccdElement);
+                    }
+                });
+       }
 
         if (node.getUserObject() instanceof MLDRTable) {
             treatGenericRead(this, new MDRTableEditingTreat());
@@ -460,7 +469,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 packageNew(menu, "menu.new.package");
             }
             treatGenericCompliant(menu, new MCDContModelsEditingTreat());
-            treatGenericTransform(menu, new MCDContModelsEditingTreat(),
+            treatGenericTransformMCD(menu, new MCDContModelsEditingTreat(),
                     "menu.transform.mcd.to.mldr");
         }
     }
@@ -594,24 +603,24 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         });
     }
 
-    private void treatGenericCompliant(ISMenu menu, EditingTreatTransform editingTreatTransform) {
+    private void treatGenericCompliant(ISMenu menu, EditingTreatCompliant editingTreatCompliant) {
         JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
         addItem(menu, menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                editingTreatTransform.treatCompliant(mvccdWindow, mvccdElement);
+                editingTreatCompliant.treatCompliant(mvccdWindow, (IMCDCompliant) mvccdElement);
             }
         });
     }
 
-    private void treatGenericTransform(ISMenu menu, EditingTreatTransform editingTreatTransform, String propertyTextMenu) {
+    private void treatGenericTransformMCD(ISMenu menu, MCDIModelsEditingTreat mcdiModelsEditingTreat, String propertyTextMenu) {
         JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(propertyTextMenu));
         addItem(menu, menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                editingTreatTransform.treatTransform(mvccdWindow, mvccdElement);
+                mcdiModelsEditingTreat.treatTransform(mvccdWindow, (IMCDModel)mvccdElement);
             }
         });
     }

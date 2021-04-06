@@ -1,6 +1,5 @@
 package transform.mcdtomldr;
 
-import console.Console;
 import delete.Delete;
 import exceptions.TransformMCDException;
 import main.MVCCDElement;
@@ -12,9 +11,13 @@ import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
 import mdr.interfaces.IMDRElementWithIteration;
+import messages.MessagesBuilder;
 import mldr.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
 import transform.MDTransform;
 
 import java.util.ArrayList;
@@ -25,11 +28,8 @@ public class MCDTransform extends MDTransform {
     private MLDRModel mldrModel ;
 
 
-    public ArrayList<String> transform(IMCDModel imcdModel)  throws TransformMCDException {
-        ArrayList<String> resultat = new ArrayList<String>(); // Pour les erreurs provoquant un arrêt du processus
-        //#MAJ 2021-03-26 Console.clearMessages est appelé à chaque invocation de menu conceptuel du référentiel
-        //Console.clearMessages();
-
+    public Resultat transform(IMCDModel imcdModel)  throws TransformMCDException {
+        Resultat resultat = new Resultat();
         this.imcdModel = imcdModel;
         // Création du modèle logique si inexistant
         mldrModel = foundOrCreateMLDRModel(
@@ -43,7 +43,7 @@ public class MCDTransform extends MDTransform {
             mldrModel.incrementeIteration();
 
             // Change source MCD pour mldrColumnPK (Attribut AID <--> Entité)
-            changeSourceMLDRColumnPK();
+            resultat.addAll(changeSourceMLDRColumnPK());
             //TODO-0 chgt entre n:n et entité associative
             //TODO-0 Ajouter le traitement d'erreur comme pour changeSourceMLDRColumnPK();
 
@@ -68,23 +68,12 @@ public class MCDTransform extends MDTransform {
             mldrModel.refreshTreeMLDR();
 
 
-        } catch(TransformMCDException e){
-             resultat.add(e.getMessage());
-             undoTransform(mldrModelClone);
-             Console.printMessages(resultat);
+        } catch(Exception e){
+            undoTransform(mldrModelClone);
+            throw e ;
         } finally {
             return resultat;
         }
-
-
-        //TODO-0 Voir le traitement d'erreur fatale (A quel niveau ?)
-        /*catch (Exception e){
-            resultat.add(e.getMessage());
-            //TODO-0 Affiner les erreurs nécessitant un appel au support!
-            resultat.add("Veuillez signaler cette erreur au support...");
-        }
-
-         */
     }
 
     private void undoTransform(MLDRModel mldrModelClone) {
@@ -117,7 +106,8 @@ public class MCDTransform extends MDTransform {
         return null;
     }
 
-    private void changeSourceMLDRColumnPK() {
+    private Resultat changeSourceMLDRColumnPK() {
+        Resultat resultat = new Resultat();
         int indTable = 0;
         //for (MLDRTable mldrTable : mldrModel.getMLDRTables()) {
         while (indTable < mldrModel.getMLDRTables().size()) {
@@ -146,13 +136,15 @@ public class MCDTransform extends MDTransform {
                 }
             }
             catch (Exception e){
-                // Si la table est corrompue par une précédente erreur (pas de PK ou de colonne de PK)
-                //TODO-0 Mettre en place une journalisation pour tracer cette suppression
                 Delete.deleteMVCCDElement(mldrTable);
-                Console.printMessage("La table " + mldrTable.getName() +" a été supprimée car sa contrainte de clé primaire est erronée ou manquante");
+                // Information de suppression
+                String message = MessagesBuilder.getMessagesProperty ("transform.mcdtomldr.mtable.without.pk",
+                        new String[] {mldrTable.getName() });
+                resultat.add(new ResultatElement(message, ResultatLevel.NO_FATAL));
             }
             indTable++;
         }
+        return resultat ;
     }
 
     /*

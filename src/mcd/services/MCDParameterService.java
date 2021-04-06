@@ -2,7 +2,7 @@ package mcd.services;
 
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
@@ -161,7 +161,7 @@ public class MCDParameterService {
             }
         }
 
-        throw new CodeApplException("La méthode getTargetByTypeAndName ne trouve pas de cible de type "+
+        throw new TransformMCDException("La méthode getTargetByTypeAndName ne trouve pas de cible de type "+
                 type + " et de nom " + nameTree + " pour l'entité " + mcdEntity.getName());
     }
 

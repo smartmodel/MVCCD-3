@@ -1,5 +1,6 @@
 package preferences;
 
+import console.WarningLevel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -50,6 +51,7 @@ public class PreferencesOfApplicationLoaderXml {
             Element debugEditorDatasChanged = (Element) racine.getElementsByTagName("debugEditorDatasChanged").item(0);
             Element debugTdPrint = (Element) racine.getElementsByTagName("debugTdPrint").item(0);
             Element debugTdUnicityPrint = (Element) racine.getElementsByTagName("debugTdUnicityPrint").item(0);
+            Element warningLevel = (Element) racine.getElementsByTagName("warningLevel").item(0);
             Element repositoryMcdModelsMany = (Element) racine.getElementsByTagName("repositoryMcdModelsMany").item(0);
             Element repositoryMcdPackagesAuthorizeds = (Element) racine.getElementsByTagName("repositoryMcdPackagesAuthorizeds").item(0);
             Element persistenceSerialisationInsteadofXML = (Element) racine.getElementsByTagName("persistenceSerialisationInsteadofXML").item(0);
@@ -64,6 +66,8 @@ public class PreferencesOfApplicationLoaderXml {
             applicationPrefs.setDEBUG_EDITOR_DATAS_CHANGED(Boolean.valueOf(debugEditorDatasChanged.getTextContent()));
             applicationPrefs.setDEBUG_TD_PRINT(Boolean.valueOf(debugTdPrint.getTextContent()));
             applicationPrefs.setDEBUG_TD_UNICITY_PRINT(Boolean.valueOf(debugTdUnicityPrint.getTextContent()));
+            //Lire la constante de texte (warning.level.info par exemple) et non le texte (info)
+            applicationPrefs.setWARNING_LEVEL(WarningLevel.findByName(warningLevel.getTextContent()));
             applicationPrefs.setREPOSITORY_MCD_MODELS_MANY(Boolean.valueOf(repositoryMcdModelsMany.getTextContent()));
             applicationPrefs.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(Boolean.valueOf(repositoryMcdPackagesAuthorizeds.getTextContent()));
             applicationPrefs.setPERSISTENCE_SERIALISATION_INSTEADOF_XML(Boolean.valueOf(

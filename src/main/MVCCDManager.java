@@ -1,8 +1,10 @@
 package main;
 
 import console.Console;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import datatypes.MDDatatypesManager;
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import main.window.console.WinConsoleContent;
 import main.window.diagram.WinDiagram;
 import main.window.diagram.WinDiagramContent;
@@ -13,11 +15,11 @@ import main.window.repository.WinRepositoryTree;
 import mcd.MCDRelEnd;
 import mcd.MCDRelation;
 import messages.LoadMessages;
+import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.*;
 import repository.Repository;
-import utilities.Trace;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
 
@@ -79,6 +81,11 @@ public class MVCCDManager {
         startRepository();
         // Ajustement de la taille de la zone d'affichage du référentiel
         mvccdWindow.adjustPanelRepository();
+
+        // Quittance de démarrage de l'application
+        String message = MessagesBuilder.getMessagesProperty ("mvccd.start");
+        ViewLogsManager.newText(message, WarningLevel.WARNING);
+
         // Chargement des adresses disques des derniers fichiers de projets utilisés
         projectsRecents = new ProjectsRecentsLoader().load();
 
@@ -250,9 +257,12 @@ public class MVCCDManager {
                 } else if (extensionOpenFile.equals("xml")) {
                     project = new ProjectLoaderXml().loadProjectFile(file); //Ajout de Giorgio Roncallo
                 } else {
-                    throw new CodeApplException("Seules les extensions mvccd et xml sont reconnues");
+                    throw new TransformMCDException("Seules les extensions mvccd et xml sont reconnues");
                 }
-                // Fin provisoire !
+               // Fin provisoire !
+                String message = MessagesBuilder.getMessagesProperty("project.open", new String[] {project.getName(), file.getPath()});
+                Console.clearMessages();
+                ViewLogsManager.newText(message, WarningLevel.WARNING);
 
                 // Mémorisation du fichier de projet ouvert
                 projectsRecents.add(fileProjectCurrent);
@@ -266,7 +276,7 @@ public class MVCCDManager {
                 PreferencesManager.instance().copyApplicationPref(Project.EXISTING);
             } else {
                 //TODO-1 Voir lorsque la sauvegarde xml sera terminée s'il y aura lieu de vérifier l'extension...
-                throw new CodeApplException("Le format du fichier de projet doit être : mvccd ou xml");
+                throw new TransformMCDException("Le format du fichier de projet doit être : mvccd ou xml");
             }
 
 
@@ -354,13 +364,22 @@ public class MVCCDManager {
         } else if ( extensionOpenFile.equals("xml")) {
             new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
         } else {
-            throw new CodeApplException("Seules les extensions mvccd et xml sont reconnues");
+            throw new TransformMCDException("Seules les extensions mvccd et xml sont reconnues");
         }
         // Fin provisoire !
+
+
+        // Quittance de fin
+        String message = MessagesBuilder.getMessagesProperty ("project.save",
+                new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() });
+        DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(),message);
+        ViewLogsManager.newText(message, WarningLevel.WARNING);
     }
 
 
     public void closeProject() {
+        String message = MessagesBuilder.getMessagesProperty("project.close", new String[] {project.getName()});
+        ViewLogsManager.newText(message, WarningLevel.WARNING);
         project = null;
         repository.removeProject();
         PreferencesManager.instance().setProfilePref(null);
@@ -370,6 +389,7 @@ public class MVCCDManager {
         getWinMenuContent().getProjectSave().setEnabled(false);
         getWinMenuContent().getProjectSaveAs().setEnabled(false);
         getWinMenuContent().getProjectClose().setEnabled(false);
+
     }
 
 

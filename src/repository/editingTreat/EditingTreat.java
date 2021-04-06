@@ -7,6 +7,9 @@ import mcd.MCDElement;
 import mcd.services.MCDElementService;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -94,8 +97,8 @@ public abstract class EditingTreat {
         }
     }
 
-    public ArrayList<String> treatCompletness(Window owner, MVCCDElement mvccdElement, boolean showDialog) {
-        ArrayList <String> resultat = new ArrayList <String>();
+    public Resultat treatCompletness(Window owner, MVCCDElement mvccdElement, boolean showDialog) {
+        Resultat resultat = new Resultat();
         PanelInputContent panelInputContent = loadPanelInput(mvccdElement);
 
         String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
@@ -104,7 +107,7 @@ public abstract class EditingTreat {
             String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.completness");
             String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
                     new String[] {messageMode});
-            resultat.add(message);
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             if (showDialog) {
                 if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
                     DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
@@ -121,7 +124,7 @@ public abstract class EditingTreat {
                 }
                String message = MessagesBuilder.getMessagesProperty("dialog.completness.error",
                         new String[]{messageElement, elementNameInContext});
-                resultat.add(message);
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
                 if (showDialog) {
                     message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.question.input");
                     if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {

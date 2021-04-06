@@ -1,6 +1,6 @@
 package mdr;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import md.MDElement;
 import mdr.services.MDRElementConvert;
 import mdr.services.MDRElementService;
@@ -34,7 +34,7 @@ public abstract class MDRElement extends MDElement {
         if (super.getParent() instanceof MDRElement){
             return (MDRElement) super.getParent();
         } else {
-            throw new CodeApplException("MDRElement.getParent() - Le parent n'est pas descendant de MDRElement");
+            throw new TransformMCDException("MDRElement.getParent() - Le parent n'est pas descendant de MDRElement");
         }
     }
 

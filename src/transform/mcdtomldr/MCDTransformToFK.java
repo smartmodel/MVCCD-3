@@ -15,7 +15,6 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.MDRAdjustParameters;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

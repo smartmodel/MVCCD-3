@@ -1,22 +1,19 @@
 package exceptions;
 
+public class TransformMCDException extends RuntimeException{
 
-public class TransformMCDException extends RuntimeException {
+    public TransformMCDException() {
+    }
 
+    public TransformMCDException(String message) {
+        super(message);
+    }
 
-	public TransformMCDException() {
-		super();
-	}
+    public TransformMCDException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public TransformMCDException(String msg) {
-		super(msg);
-	}
-
-	public TransformMCDException(Throwable e) {
-		super(e);
-	}
-
-	public TransformMCDException(String msg, Throwable e) {
-		super(msg, e);
-	}
+    public TransformMCDException(Throwable cause) {
+        super(cause);
+    }
 }

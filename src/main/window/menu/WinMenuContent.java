@@ -1,9 +1,12 @@
 package main.window.menu;
 
+import console.ViewLogsManager;
+import console.WarningLevel;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import preferences.Preferences;
+import project.Project;
 import repository.editingTreat.ProjectEditingTreat;
 import utilities.Trace;
 import utilities.window.DialogMessage;
@@ -160,8 +163,12 @@ public class WinMenuContent implements ActionListener {
 
     private void newProject() {
         if (MVCCDManager.instance().getProject() == null) {
-            ProjectEditingTreat.treatNew(mvccdWindow);
-
+            Project project = ProjectEditingTreat.treatNew(mvccdWindow);
+            if (project != null){
+                // Quittance de création d'un nouveau projet
+                String message = MessagesBuilder.getMessagesProperty ("project.new", project.getName());
+                ViewLogsManager.newText(message, WarningLevel.WARNING);
+            }
         } else {
             String message = MessagesBuilder.getMessagesProperty ("project.new.not.close");
             DialogMessage.showOk(mvccdWindow,message);

@@ -1,6 +1,6 @@
 package mldr.services;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import mdr.MDRColumn;
 import mdr.MDROperation;
 import mldr.MLDRColumn;
@@ -17,12 +17,12 @@ public class MLDROperationService {
                 if ( mdrColumn instanceof MLDRColumn) {
                     resultat.add((MLDRColumn) mdrColumn);
                 } else {
-                    throw new CodeApplException("MLDROperationService - L'opération " + mdrOperation.getName() + " contient la colonne " +mdrColumn.getName() + " qui n'est pas de classe " + MLDRColumn.class.getName());
+                    throw new TransformMCDException("MLDROperationService - L'opération " + mdrOperation.getName() + " contient la colonne " +mdrColumn.getName() + " qui n'est pas de classe " + MLDRColumn.class.getName());
                 }
             }
             return resultat;
         } else {
-            throw new CodeApplException("MLDROperationService - L'opération " + mdrOperation.getName() + " doit implanter l'interface " + IMLDRElement.class.getName());
+            throw new TransformMCDException("MLDROperationService - L'opération " + mdrOperation.getName() + " doit implanter l'interface " + IMLDRElement.class.getName());
         }
     }
 }

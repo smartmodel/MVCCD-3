@@ -1,15 +1,10 @@
 package mpdr.services;
 
-import exceptions.CodeApplException;
 import mdr.MDRConstraint;
 import mdr.MDRParameter;
-import mldr.MLDRColumn;
 import mldr.MLDRParameter;
-import mpdr.MPDRColumn;
 import mpdr.MPDRParameter;
-import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRElementWithSource;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

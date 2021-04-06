@@ -1,6 +1,6 @@
 package datatypes;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 
@@ -214,7 +214,7 @@ public abstract class MDDatatype extends MVCCDElement {
 
 
 
-    public Object getPropertyWithInherit(int property) throws CodeApplException {
+    public Object getPropertyWithInherit(int property) throws TransformMCDException {
         if (property == SIZEMANDATORY) {
             if (sizeMandatory != null) {
                 return sizeMandatory;
@@ -250,7 +250,7 @@ public abstract class MDDatatype extends MVCCDElement {
         } else {
             String message = MessagesBuilder.getMessagesProperty("error.mddatatypes.property",
                     String.valueOf(property));
-            throw new CodeApplException(this.getClass().getName() + " - " + message);
+            throw new TransformMCDException(this.getClass().getName() + " - " + message);
         }
         if (getParent() != null){
             if (getParent() instanceof MDDatatype){
@@ -263,7 +263,7 @@ public abstract class MDDatatype extends MVCCDElement {
         }
     }
 
-    public MDDatatype getPropertyNotNullFrom(int property) throws CodeApplException {
+    public MDDatatype getPropertyNotNullFrom(int property) throws TransformMCDException {
         if (property == SIZEMANDATORY) {
             if (sizeMandatory != null) {
                 return this;
@@ -299,7 +299,7 @@ public abstract class MDDatatype extends MVCCDElement {
         } else {
             String message = MessagesBuilder.getMessagesProperty("error.mddatatypes.property",
                     String.valueOf(property));
-            throw new CodeApplException(this.getClass().getName() + " - " + message);
+            throw new TransformMCDException(this.getClass().getName() + " - " + message);
         }
         if (getParent() != null){
             if (getParent() instanceof MDDatatype){

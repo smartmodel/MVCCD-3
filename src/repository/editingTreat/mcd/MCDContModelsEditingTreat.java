@@ -1,15 +1,13 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import mcd.MCDContModels;
-import repository.editingTreat.EditingTreatTransform;
+import mcd.interfaces.IMCDModel;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 
 import java.awt.*;
-import java.util.ArrayList;
 
-public class MCDContModelsEditingTreat extends EditingTreatTransform {
+public class MCDContModelsEditingTreat extends MCDIModelsEditingTreat {
 
 
     @Override
@@ -27,27 +25,6 @@ public class MCDContModelsEditingTreat extends EditingTreatTransform {
     // A voir si cela s'avère imprécis!
     protected String getPropertyTheElement() {
         return "the.container.models";
-    }
-
-    @Override
-    public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
-        MCDContModels mcdContModels = (MCDContModels) mvccdElement;
-        ArrayList<String> resultat = mcdContModels.treatCompliant();
-        super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
-    }
-
-
-    @Override
-    public void treatTransform(Window owner, MVCCDElement mvccdElement) {
-        MCDContModels mcdContModels = (MCDContModels) mvccdElement;
-        ArrayList<String> resultat = new ArrayList<String>();
-        resultat = mcdContModels.treatCompliant();
-        if (resultat.size() > 0) {
-                super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
-        } else {
-            resultat = mcdContModels.treatTransform();
-            super.treatTransformFinishMessages(owner, mvccdElement, resultat);
-        }
     }
 
 }

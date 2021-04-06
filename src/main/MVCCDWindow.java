@@ -1,5 +1,7 @@
 package main;
 
+import console.ViewLogsManager;
+import console.WarningLevel;
 import main.window.console.WinConsole;
 import main.window.diagram.WinDiagram;
 import main.window.haut.Haut;
@@ -114,18 +116,25 @@ public class MVCCDWindow extends JFrame implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
+        boolean exit = false ;
         if (MVCCDManager.instance().isDatasProjectChanged()){
             String message = MessagesBuilder.getMessagesProperty ("project.close.change.not.saved");
             boolean confirmClose = DialogMessage.showConfirmYesNo_No(this, message) == JOptionPane.YES_OPTION;
             if (confirmClose){
                 setDefaultCloseOperation(DISPOSE_ON_CLOSE);//no
                 new ProjectsRecentsSaver().save();
-                System.exit(0);
+                exit = true;
             } else {
                 setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);//cancel
             }
         } else {
             new ProjectsRecentsSaver().save();
+            exit = true;
+        }
+        if (exit) {
+            // Quittance de sortie de l'application
+            String message = MessagesBuilder.getMessagesProperty ("mvccd.close");
+            ViewLogsManager.newText(message, WarningLevel.WARNING);
             System.exit(0);
         }
     }

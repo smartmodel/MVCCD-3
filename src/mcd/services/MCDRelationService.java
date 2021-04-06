@@ -1,16 +1,11 @@
 package mcd.services;
 
-import exceptions.CodeApplException;
-import m.MRelationDegree;
 import main.MVCCDElement;
-import mcd.MCDAssEnd;
-import mcd.MCDAssociation;
 import mcd.MCDElement;
 import mcd.MCDRelation;
 import mcd.interfaces.IMCDModel;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

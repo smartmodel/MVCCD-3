@@ -1,0 +1,120 @@
+============================================================
+10:11:48 - MVCCD a été ouvert.
+============================================================
+10:11:48 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+10:29:37 - MVCCD a été ouvert.
+============================================================
+10:29:37 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+10:29:40 - MVCCD a été fermé.
+============================================================
+18:30:27 - MVCCD a été ouvert.
+============================================================
+18:30:27 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+21:23:41 - MVCCD a été ouvert.
+============================================================
+21:23:41 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+21:25:08 - La table Art_fourni_Four a été supprimée car sa contrainte de clé primaire est erronée ou manquante.
+Le modèle MCD n'a pas pu être transformé.
+Les erreurs sont affichées dans la console.
+============================================================
+21:28:12 - MVCCD a été ouvert.
+============================================================
+21:28:12 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+21:28:25 - La table Art_fourni_Four a été supprimée car sa contrainte de clé primaire est erronée ou manquante.
+Le modèle MCD n'a pas pu être transformé.
+============================================================
+22:15:29 - MVCCD a été ouvert.
+============================================================
+22:15:30 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+22:15:43 - La transformation du modèle conceptuel {1} en modèle logique a été démarrée.
+La table Art_fourni_Four a été supprimée car sa contrainte de clé primaire est erronée ou manquante.
+Le modèle MCD n'a pas pu être transformé.
+============================================================
+22:18:13 - MVCCD a été fermé.
+============================================================
+22:18:21 - MVCCD a été ouvert.
+============================================================
+22:18:21 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+22:19:21 - La transformation du modèle conceptuel MCD en modèle logique a été démarrée.
+La table Art_fourni_Four a été supprimée car sa contrainte de clé primaire est erronée ou manquante.
+Le modèle MCD n'a pas pu être transformé.
+============================================================
+22:22:31 - MVCCD a été ouvert.
+============================================================
+22:22:31 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+22:22:53 - L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+============================================================
+22:35:02 - MVCCD a été ouvert.
+============================================================
+22:35:03 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+22:35:13 - La transformation du modèle conceptuel MCD en modèle logique a été démarrée.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+============================================================
+22:38:45 - MVCCD a été ouvert.
+============================================================
+22:38:45 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+22:39:17 - La transformation du modèle conceptuel MCD en modèle logique a été démarrée.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+============================================================
+22:39:19 - La transformation du modèle conceptuel MCD en modèle logique a été démarrée.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+Le modèle MCD n'a pas pu être transformé.
+============================================================
+22:39:51 - MVCCD a été fermé.
+============================================================
+22:40:01 - MVCCD a été ouvert.
+============================================================
+22:40:01 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+22:40:08 - La transformation du modèle conceptuel MCD en modèle logique a été démarrée.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+============================================================
+22:50:08 - MVCCD a été ouvert.
+============================================================
+22:50:08 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+22:50:18 - La transformation du modèle conceptuel MCD en modèle logique a été démarrée.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+============================================================
+22:50:18 - La transformation du modèle conceptuel MCD en modèle logique a été démarrée.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+La transformation du modèle conceptuel {0} en modèle logique a été démarrée.
+============================================================
+22:51:24 - MVCCD a été ouvert.
+============================================================
+22:51:24 - Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+22:51:37 - La transformation du modèle conceptuel MCD en modèle logique a été démarrée.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+============================================================
+22:51:37 - La transformation du modèle conceptuel MCD en modèle logique a été démarrée.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+La transformation du modèle conceptuel MCD est annulée.

@@ -1,6 +1,6 @@
 package project;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import preferences.Preferences;
 
 import java.io.*;
@@ -30,7 +30,7 @@ public class ProjectsRecentsLoader {
         } catch (FileNotFoundException e ){
             projectsRecents = new ProjectsRecents();
         } catch (Exception e){
-            throw (new CodeApplException(e));	// L'erreur est renvoyée
+            throw (new TransformMCDException(e));	// L'erreur est renvoyée
         } finally {
             if (reader != null) {
                 try {

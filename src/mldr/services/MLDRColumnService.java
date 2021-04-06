@@ -1,6 +1,6 @@
 package mldr.services;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import mdr.MDRColumn;
 import mldr.MLDRColumn;
 
@@ -28,7 +28,7 @@ public class MLDRColumnService {
         if (mdrColumn instanceof MLDRColumn) {
             return (MLDRColumn) mdrColumn;
         } else {
-            throw new CodeApplException("MLDRColumnService.to() : La colonne " + mdrColumn.getName() + " n'est pas de la classe " + MLDRColumn.class.getName());
+            throw new TransformMCDException("MLDRColumnService.to() : La colonne " + mdrColumn.getName() + " n'est pas de la classe " + MLDRColumn.class.getName());
         }
     }
 

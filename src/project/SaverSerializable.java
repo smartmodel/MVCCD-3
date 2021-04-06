@@ -1,10 +1,8 @@
 package project;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import main.MVCCDManager;
-import messages.MessagesBuilder;
-import utilities.window.DialogMessage;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
@@ -21,13 +19,8 @@ public class SaverSerializable {
             writer = new ObjectOutputStream(new FileOutputStream(file));
             saveNode(MVCCDManager.instance().getRepository().getNodeProject(), 0);
 
-            // Quittance de fin
-            String message = MessagesBuilder.getMessagesProperty ("project.saved",
-                    new String[] {MVCCDManager.instance().getProject().getName(), file.getPath() });
-            DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(),message);
-
         } catch (Exception  ex) {
-                throw(new CodeApplException(ex));	// L'erreur est renvoyée
+                throw(new TransformMCDException(ex));	// L'erreur est renvoyée
         } finally{
                 if(writer != null){
                     try {
@@ -60,7 +53,7 @@ public class SaverSerializable {
                 }
             }
         } catch(Exception e){
-            throw (new CodeApplException(e));	// L'erreur est renvoyée
+            throw (new TransformMCDException(e));	// L'erreur est renvoyée
         }
     }
 

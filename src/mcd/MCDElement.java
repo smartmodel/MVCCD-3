@@ -1,6 +1,6 @@
 package mcd;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDElementConvert;
 import mcd.services.MCDElementService;
@@ -8,7 +8,6 @@ import md.MDElement;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -90,7 +89,7 @@ public abstract class MCDElement extends MDElement {
         else if (getShortName() != null) {
             return getShortName();
         } else {
-            throw new CodeApplException("MCDElement.getMainSource - Impossible de créer un nom") ;
+            throw new TransformMCDException("MCDElement.getMainSource - Impossible de créer un nom") ;
         }
     }
 
@@ -111,7 +110,7 @@ public abstract class MCDElement extends MDElement {
         if (super.getParent() instanceof MCDElement){
             return (MCDElement) super.getParent();
         } else {
-            throw new CodeApplException("MCDElement.getParent() - Le parent n'est pas descendant de MCDElement");
+            throw new TransformMCDException("MCDElement.getParent() - Le parent n'est pas descendant de MCDElement");
         }
     }
 

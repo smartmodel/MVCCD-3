@@ -1,6 +1,8 @@
 package mcd.compliant;
 
 import console.Console;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import m.MElement;
 import main.MVCCDManager;
 import mcd.*;
@@ -11,18 +13,20 @@ import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
 import repository.editingTreat.mcd.*;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
 import utilities.TD;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class MCDCompliant {
 
 
-    public ArrayList<String> check(MCDEntity mcdEntity){
+    public Resultat check(MCDEntity mcdEntity){
         ArrayList<MCDEntity> mcdEntities = new ArrayList<MCDEntity>();
         mcdEntities.add(mcdEntity);
-        ArrayList<String> resultat = check (mcdEntities, false);
+        Resultat resultat = check (mcdEntities, false);
 
         return resultat;
     }
@@ -30,10 +34,10 @@ public class MCDCompliant {
 
     //TODO-1 Appeler la méthode de check unitaire depuis le menu contextuel de MCDAssociation ou
     // autre spécialisation de MRelation
-    public ArrayList<String> check(MCDRelation mcdRelation){
+    public Resultat check(MCDRelation mcdRelation){
         // Teste la relation pour elle-même
-        ArrayList<String> resultat = checkRelation(mcdRelation, false);
-        if (resultat.size() == 0) {
+        Resultat resultat = checkRelation(mcdRelation, false);
+        if (resultat.isWithoutElementFatal()) {
             // Teste la relation dans son contexte
             resultat.addAll(checkRelationInContext(mcdRelation));
         }
@@ -41,8 +45,8 @@ public class MCDCompliant {
         return resultat;
     }
 
-    public ArrayList<String> check(ArrayList<MCDEntity> mcdEntities, boolean showDialogCompletness){
-        ArrayList<String> resultat = new ArrayList<String>();
+    public Resultat check(ArrayList<MCDEntity> mcdEntities, boolean showDialogCompletness){
+        Resultat resultat = new Resultat();
         //#MAJ 2021-03-26 Console.clearMessages est appelé à chaque invocation de menu conceptuel du référentiel
         //Console.clearMessages();
         for (MCDEntity mcdEntity : mcdEntities) {
@@ -57,7 +61,7 @@ public class MCDCompliant {
             resultat.addAll(checkRelation(mcdRelation, showDialogCompletness));
         }
 
-        if (resultat.size() == 0) {
+        if (resultat.isWithoutElementFatal()) {
             for (MCDEntity mcdEntity : mcdEntities) {
                 // Teste la conformité entité et relations attachées
                 resultat.addAll(checkEntityInContext(mcdEntity));
@@ -67,18 +71,13 @@ public class MCDCompliant {
                 resultat.addAll(checkRelationInContext(mcdRelation));
             }
         }
-
-
-
-        // TODO-PAS mettre le print dans la sortie de l'appel du menu contextuel...
-        Console.printMessages(resultat);
-        return resultat;
+       return resultat;
     }
 
 
 
-    public ArrayList<String> checkEntityOutContext(MCDEntity mcdEntity, boolean showDialogCompletness) {
-        ArrayList<String> resultat =new MCDEntityEditingTreat().treatCompletness(
+    public  Resultat checkEntityOutContext(MCDEntity mcdEntity, boolean showDialogCompletness) {
+        Resultat resultat =new MCDEntityEditingTreat().treatCompletness(
                 MVCCDManager.instance().getMvccdWindow(),
                 mcdEntity, showDialogCompletness);
 
@@ -86,14 +85,15 @@ public class MCDCompliant {
 
         // Un seul attribut aid (l'erreur peut venir d'un import ou de la modification du fichier de sauvegarde du projet
         if (mcdEntity.isDuplicateMCDAttributeAID()){
-            resultat.add(MessagesBuilder.getMessagesProperty("entity.aid.duplicate.error",
-                    new String[]{mcdEntityNamePath}));
-
+            String message = MessagesBuilder.getMessagesProperty("entity.aid.duplicate.error",
+                    new String[]{mcdEntityNamePath});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
         // aid ou nid exclusivement
         if ((mcdEntity.getMCDAttributeAID() != null) && (mcdEntity.getMCDNIDs().size() > 0)) {
-            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.identifier.aid.and.nid.error",
-                    new String[]{mcdEntityNamePath}));
+            String message = MessagesBuilder.getMessagesProperty("entity.compliant.identifier.aid.and.nid.error",
+                    new String[]{mcdEntityNamePath});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
 
         for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()){
@@ -106,43 +106,45 @@ public class MCDCompliant {
         return resultat;
     }
 
-    public ArrayList<String> checkEntityInContext(MCDEntity mcdEntity) {
-        ArrayList<String> resultat = new ArrayList<String>();
+    public Resultat checkEntityInContext(MCDEntity mcdEntity) {
+        Resultat resultat = new Resultat();
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
 
         // Spécialise une seule entité générale
         if (mcdEntity.getGSEndSpecialize().size() > 1) {
-            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.specialized.only.one.error",
-                    new String[]{mcdEntityNamePath}));
+            String message = MessagesBuilder.getMessagesProperty("entity.compliant.specialized.only.one.error",
+                    new String[]{mcdEntityNamePath});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
 
         // Entité associative ou pseudo d'une seule association
         if (mcdEntity.getLinkEnds().size() > 1){
-            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.linkea.only.one.error",
-                    new String[] {mcdEntityNamePath}));
+            String message = MessagesBuilder.getMessagesProperty("entity.compliant.linkea.only.one.error",
+                    new String[] {mcdEntityNamePath});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
 
         // Nature d'entité
-        if (resultat.size() == 0) {
+        if (resultat.isWithoutElementFatal()) {
             resultat.addAll(checkEntityNature(mcdEntity));
-        }
+         }
 
         // Pas de redondances entre MCDUnicity
-        if (resultat.size() == 0) {
+        if (resultat.isWithoutElementFatal()) {
             resultat.addAll(checkMCDUnicities(mcdEntity));
         }
 
         // Contraintes dans le contexte
         for (MCDConstraint mcdConstraint : mcdEntity.getMCDConstraints()){
-            if (resultat.size() == 0) {
+            if (resultat.isWithoutElementFatal()) {
                 resultat.addAll(checkConstraintInContext(mcdConstraint));
             }
         }
         return resultat;
     }
 
-    public ArrayList<String> checkRelationInContext(MCDRelation mcdRelation) {
-        ArrayList<String> resultat = new ArrayList<String>();
+    public Resultat checkRelationInContext(MCDRelation mcdRelation) {
+        Resultat resultat = new Resultat();
 
         // Traitement des associations
         if ( mcdRelation instanceof MCDAssociation){
@@ -153,12 +155,15 @@ public class MCDCompliant {
             if (mcdAssociation.isDegreeNN()) {
                 if (mcdAssociation.getLink() == null) {
                     if (StringUtils.isEmpty(mcdAssociation.getName())){
-                        resultat.add(MessagesBuilder.getMessagesProperty("asociation.compliant.nn.without.entity.name.error",
-                                new String[]{mcdAssociationNamePath}));
+                        String message = MessagesBuilder.getMessagesProperty("asociation.compliant.nn.without.entity.name.error",
+                                new String[]{mcdAssociationNamePath});
+                        resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
                     }
                     if (StringUtils.isEmpty(mcdAssociation.getShortName())){
-                        resultat.add(MessagesBuilder.getMessagesProperty("asociation.compliant.nn.without.entity.shortname.error",
-                                new String[]{mcdAssociationNamePath}));
+                        String message = MessagesBuilder.getMessagesProperty("asociation.compliant.nn.without.entity.shortname.error",
+                                new String[]{mcdAssociationNamePath});
+                        resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+
                     }
                 }
             }
@@ -170,24 +175,24 @@ public class MCDCompliant {
 
 
 
-    private ArrayList<String> checkEntityNature(MCDEntity mcdEntity) {
-        ArrayList<String> resultat = new ArrayList<String>();
+    private Resultat checkEntityNature(MCDEntity mcdEntity) {
+        Resultat resultat = new Resultat();
         resultat.addAll(CheckEntitynNaturePseudoEA(mcdEntity));
         resultat.addAll(CheckEntityNatureDep(mcdEntity));
         resultat.addAll(CheckEntityNatureEntAss(mcdEntity));
         resultat.addAll(CheckEntityOrdered(mcdEntity));
         resultat.addAll(CheckEntityAbstract(mcdEntity));
-
         resultat.addAll(CheckEntityNaturePotential(mcdEntity));
 
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
         // Nature indéterminée
         if (mcdEntity.getNature() == null){
             // Pas de message lié à une éventulle nature potentielle
-            if (resultat.size() == 0 ){
+            if (resultat.isWithoutElementFatal()){
                 // Erreur - Nature indéterminée
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.nature.unknow",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.nature.unknow",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
                 //TODO-1 Mettre une indication pour signaler l'erreur aux développeurs
             }
         }
@@ -195,179 +200,197 @@ public class MCDCompliant {
     }
 
 
-    private ArrayList<String> CheckEntitynNaturePseudoEA(MCDEntity mcdEntity) {
-        ArrayList<String> resultat = new ArrayList<String>();
+    private Resultat CheckEntitynNaturePseudoEA(MCDEntity mcdEntity) {
+        Resultat resultat = new Resultat();
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
 
         if (mcdEntity.isPseudoEntAss()){
             if (mcdEntity.isDep()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.dep",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.dep",
+                        new String[] {mcdEntityNamePath});
             }
             if (mcdEntity.isEntAss()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.entass",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.entass",
+                        new String[] {mcdEntityNamePath});
             }
             if (mcdEntity.isNAire()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.naire",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.naire",
+                        new String[] {mcdEntityNamePath});
             }
             if (mcdEntity.isSpecialized()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.specialized",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.specialized",
+                        new String[] {mcdEntityNamePath});
             }
             if (mcdEntity.getAssEndsIdCompParent().size() > 0){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.parentasspk",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.parentasspk",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
             if (mcdEntity.isGeneralized()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.generalized",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.generalized",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
             // Pas d'association avec une pseudo entité associative
             if (mcdEntity.getMCDAssEnds().size() > 0){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.association",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.association",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
         }
 
         return resultat;
     }
 
-    private ArrayList<String> CheckEntityNatureDep(MCDEntity mcdEntity) {
-        ArrayList<String> resultat = new ArrayList<String>();
+    private Resultat CheckEntityNatureDep(MCDEntity mcdEntity) {
+        Resultat resultat = new Resultat();
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
 
         if (mcdEntity.isDep()){
             if (mcdEntity.isEntAss()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.dep.entass",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.dep.entass",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
             if (mcdEntity.isNAire()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.dep.naire",
-                        new String[] {mcdEntityNamePath}));
-            }
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.dep.naire",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+             }
             if (mcdEntity.isSpecialized()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.dep.specialized",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.dep.specialized",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
         }
         return resultat;
     }
 
-    private ArrayList<String> CheckEntityNatureEntAss(MCDEntity mcdEntity) {
-        ArrayList<String> resultat = new ArrayList<String>();
+    private Resultat CheckEntityNatureEntAss(MCDEntity mcdEntity) {
+        Resultat resultat = new Resultat();
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
 
         if (mcdEntity.isEntAss()){
             if (mcdEntity.isNAire()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.entass.naire",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.entass.naire",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
             if (mcdEntity.isSpecialized()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.entass.specialized",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.entass.specialized",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
         }
         return resultat;
     }
 
-    private ArrayList<String> CheckEntityNatureNAire(MCDEntity mcdEntity) {
-        ArrayList<String> resultat = new ArrayList<String>();
+    private ArrayList<ResultatElement> CheckEntityNatureNAire(MCDEntity mcdEntity) {
+        ArrayList<ResultatElement> resultat = new ArrayList<ResultatElement>();
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
 
         if (mcdEntity.isNAire()){
            if (mcdEntity.isSpecialized()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.naire.specialized",
-                        new String[] {mcdEntityNamePath}));
+               String message = MessagesBuilder.getMessagesProperty("entity.compliant.naire.specialized",
+                        new String[] {mcdEntityNamePath});
+               resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
         }
         return resultat;
     }
 
-    private ArrayList<String> CheckEntityOrdered(MCDEntity mcdEntity) {
-        ArrayList<String> resultat = new ArrayList<String>();
+    private Resultat CheckEntityOrdered(MCDEntity mcdEntity) {
+        Resultat resultat = new Resultat();
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
 
         if (mcdEntity.isOrdered()){
             if (mcdEntity.isPseudoEntAss()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.ordered.pseudoea",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.pseudoea",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
             if (mcdEntity.isEntAssDep()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.ordered.eadep",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.eadep",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
             if (mcdEntity.isNAireDep()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.ordered.nairedep",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.nairedep",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
             if (mcdEntity.isSpecialized()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.ordered.specialized",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.specialized",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
         }
         return resultat;
     }
 
-    private ArrayList<String> CheckEntityAbstract(MCDEntity mcdEntity) {
-        ArrayList<String> resultat = new ArrayList<String>();
+    private Resultat CheckEntityAbstract(MCDEntity mcdEntity) {
+        Resultat resultat = new Resultat();
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
 
         if (mcdEntity.isEntAbstract()){
             if (! mcdEntity.isSpecialized()){
-                resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.abstract.not.generalized",
-                        new String[] {mcdEntityNamePath}));
+                String message = MessagesBuilder.getMessagesProperty("entity.compliant.abstract.not.generalized",
+                        new String[] {mcdEntityNamePath});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
         }
         return resultat;
     }
 
 
-    private ArrayList<String> CheckEntityNaturePotential(MCDEntity mcdEntity) {
-        ArrayList<String> resultat = new ArrayList<String>();
+    private Resultat CheckEntityNaturePotential(MCDEntity mcdEntity) {
+        Resultat resultat = new Resultat();
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
 
         if (mcdEntity.isPotentialInd()){
-            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.potential.ind",
-                    new String[] {mcdEntityNamePath}));
-        }
-        if (mcdEntity.isPotentialDep()){
-            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.potential.dep",
-                    new String[] {mcdEntityNamePath}));
+            String message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.ind",
+                    new String[] {mcdEntityNamePath});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+        }        if (mcdEntity.isPotentialDep()){
+            String message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.dep",
+                    new String[] {mcdEntityNamePath});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
         if (mcdEntity.isPotentialSpecAttrAID()){
-            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.potential.specialized.attribute.aid",
-                    new String[] {mcdEntityNamePath}));
+            String message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.specialized.attribute.aid",
+                    new String[] {mcdEntityNamePath});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
         if (mcdEntity.isPotentialSpecAssIdComp()){
-            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.potential.specialized.association.idcomp",
-                    new String[] {mcdEntityNamePath}));
+            String message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.specialized.association.idcomp",
+                    new String[] {mcdEntityNamePath});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
         if (mcdEntity.isPotentialPseudoEntAss()){
-            resultat.add(MessagesBuilder.getMessagesProperty("entity.compliant.potential.pseudoass.with.id",
-                    new String[] {mcdEntityNamePath}));
+            String message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.pseudoass.with.id",
+                    new String[] {mcdEntityNamePath});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
         return resultat;
     }
 
-    public ArrayList<String> checkAttributeOutContext(MCDAttribute mcdAttribute, boolean showDialogCompletness) {
-        ArrayList<String> resultat =new MCDAttributeEditingTreat().treatCompletness(
+    public Resultat checkAttributeOutContext(MCDAttribute mcdAttribute, boolean showDialogCompletness) {
+        Resultat resultat =new MCDAttributeEditingTreat().treatCompletness(
                 MVCCDManager.instance().getMvccdWindow(),
                 mcdAttribute, showDialogCompletness);
         return resultat;
     }
 
-    private Collection<? extends String> checkConstraintOutContext(MCDConstraint mcdConstraint, boolean showDialogCompletness) {
+    private Resultat checkConstraintOutContext(MCDConstraint mcdConstraint, boolean showDialogCompletness) {
         //TODO-1 A factoriser (Voir checkConstraintInContext)
         if (mcdConstraint instanceof MCDNID){
-            ArrayList<String> resultat =new MCDNIDEditingTreat().treatCompletness(
+            Resultat resultat =new MCDNIDEditingTreat().treatCompletness(
                     MVCCDManager.instance().getMvccdWindow(),
                     mcdConstraint, showDialogCompletness);
             return resultat;
         }
         if (mcdConstraint instanceof MCDUnique){
-            ArrayList<String> resultat =new MCDUniqueEditingTreat().treatCompletness(
+            Resultat resultat =new MCDUniqueEditingTreat().treatCompletness(
                     MVCCDManager.instance().getMvccdWindow(),
                     mcdConstraint, showDialogCompletness);
             return resultat;
@@ -376,9 +399,8 @@ public class MCDCompliant {
         return null;
     }
 
-    private Collection<? extends String> checkConstraintInContext(MCDConstraint mcdConstraint) {
-        ArrayList<String>  resultat = new ArrayList<String>();
-
+    private Resultat checkConstraintInContext(MCDConstraint mcdConstraint) {
+        Resultat resultat = new Resultat();
         if (mcdConstraint instanceof MCDUnicity) {
                 resultat.addAll(checkMCDUnicityInContext((MCDUnicity) mcdConstraint));
         }
@@ -386,8 +408,8 @@ public class MCDCompliant {
         return resultat;
     }
 
-    private Collection<? extends String> checkMCDUnicityInContext(MCDUnicity mcdUnicity) {
-        ArrayList<String>  resultat = new ArrayList<String>();
+    private Resultat checkMCDUnicityInContext(MCDUnicity mcdUnicity) {
+        Resultat resultat = new Resultat();
         MCDEntity mcdEntity = mcdUnicity.getEntityParent();
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
 
@@ -400,20 +422,21 @@ public class MCDCompliant {
             }
         } else {
             if (mcdEntity.isPseudoEntAss()) {
-                resultat.add(MessagesBuilder.getMessagesProperty("constraint.compliant.pseudoass.unicity",
-                        new String[]{mcdEntityNamePath, mcdUnicity.getOfUnicity(), mcdUnicity.getName()}));
+                String message = MessagesBuilder.getMessagesProperty("constraint.compliant.pseudoass.unicity",
+                        new String[]{mcdEntityNamePath, mcdUnicity.getOfUnicity(), mcdUnicity.getName()});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             } else {
-                resultat.add(MessagesBuilder.getMessagesPropertyError("constraint.compliant.entity.not.concrete.unknow",
-                        new String[]{mcdEntityNamePath, mcdUnicity.getName()}));
-
+                String message = MessagesBuilder.getMessagesPropertyError("constraint.compliant.entity.not.concrete.unknow",
+                        new String[]{mcdEntityNamePath, mcdUnicity.getName()});
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
         }
 
         return resultat;
     }
 
-    private Collection<? extends String> checkMCDNIDInContextEntConcrete(MCDNID mcdNID) {
-        ArrayList<String>  resultat = new ArrayList<String>();
+    private Resultat checkMCDNIDInContextEntConcrete(MCDNID mcdNID) {
+        Resultat resultat = new Resultat();
         boolean c1 = mcdNID.isAbsolute();
         boolean c2 = rolesIdInStructureEntity(mcdNID) ;
         boolean c3 = rolesNoIdInUnicity(mcdNID) ;
@@ -444,7 +467,7 @@ public class MCDCompliant {
                             actions[3],
                             actions[1],
                             actions[0]};
-                    Console.printMessages(TD.printResultats(context, conditions, rules, rules_actions));
+                    resultat.addAll(TD.printResultats(context, conditions, rules, rules_actions));
                 }
             }
         }
@@ -460,27 +483,30 @@ public class MCDCompliant {
 
         // Erreur - L'association non identifiante doit éventuellement devenir identifiante
         if (r1 || r5){
-            resultat.add(MessagesBuilder.getMessagesProperty("constraint.nid.decision.table.error.assnoid.to.assid",
-                    new String[]{nameEntity, mcdNID.getName()}));
+            String message = MessagesBuilder.getMessagesProperty("constraint.nid.decision.table.error.assnoid.to.assid",
+                    new String[]{nameEntity, mcdNID.getName()});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
 
         // Erreur - L'identifiant naturel devrait être absolu
         if (r2){
-            resultat.add(MessagesBuilder.getMessagesProperty("constraint.nid.decision.table.error.abolute.to.nonabsolute",
-                    new String[]{nameEntity, mcdNID.getName()}));
+            String message = MessagesBuilder.getMessagesProperty("constraint.nid.decision.table.error.abolute.to.nonabsolute",
+                    new String[]{nameEntity, mcdNID.getName()});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
 
         //Illogique
         if (r4){
-            resultat.add(MessagesBuilder.getMessagesProperty("constraint.nid.decision.table.illogique",
-                    new String[]{nameEntity, mcdNID.getName()}));
+            String message = MessagesBuilder.getMessagesProperty("constraint.nid.decision.table.illogique",
+                    new String[]{nameEntity, mcdNID.getName()});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
 
         return resultat;
     }
 
-    private Collection<? extends String> checkMCDUniqueInContextEntConcrete(MCDUnique mcdUnique) {
-        ArrayList<String>  resultat = new ArrayList<String>();
+    private Resultat checkMCDUniqueInContextEntConcrete(MCDUnique mcdUnique) {
+        Resultat resultat = new Resultat();
         boolean c1 = mcdUnique.isAbsolute();
         boolean c2 = rolesIdInStructureEntity(mcdUnique) ;
         boolean c3 = rolesNoIdInUnicity(mcdUnique) || (mcdUnique.getMcdAttributes().size() > 0);
@@ -511,7 +537,7 @@ public class MCDCompliant {
                             actions[3],
                             actions[1],
                             actions[0]};
-                    Console.printMessages(TD.printResultats(context, conditions, rules, rules_actions));
+                    resultat.addAll(TD.printResultats(context, conditions, rules, rules_actions));
                 }
             }
         }
@@ -527,20 +553,23 @@ public class MCDCompliant {
 
         // Erreur - La contrainte d'unicité doit éventuellement devenir un identifiant naturel
         if (r1 ){
-            resultat.add(MessagesBuilder.getMessagesProperty("constraint.nid.decision.table.error.unique.to.nid" ,
-                    new String[]{nameEntity, mcdUnique.getName()}));
+            String message = MessagesBuilder.getMessagesProperty("constraint.nid.decision.table.error.unique.to.nid" ,
+                    new String[]{nameEntity, mcdUnique.getName()});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
 
         // Erreur - La contrainte d'unicité est redondante avec la structure de base de l'entité
         if (r2){
-            resultat.add(MessagesBuilder.getMessagesProperty("constraint.nid.decision.table.error.redondant.struc",
-                    new String[]{nameEntity, mcdUnique.getName()}));
+            String message = MessagesBuilder.getMessagesProperty("constraint.nid.decision.table.error.redondant.struc",
+                    new String[]{nameEntity, mcdUnique.getName()});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
 
         //Illogique
         if (r4){
-            resultat.add(MessagesBuilder.getMessagesProperty("constraint.unique.decision.table.illogique",
-                    new String[]{nameEntity, mcdUnique.getName()}));
+            String message = MessagesBuilder.getMessagesProperty("constraint.unique.decision.table.illogique",
+                    new String[]{nameEntity, mcdUnique.getName()});
+            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
         return resultat;
     }
@@ -677,8 +706,8 @@ public class MCDCompliant {
     }
 
 
-    private Collection<? extends String> checkMCDUnicities(MCDEntity mcdEntity) {
-        ArrayList<String>  resultat = new ArrayList<String>();
+    private Resultat checkMCDUnicities(MCDEntity mcdEntity) {
+        Resultat resultat = new Resultat();
         // Pas de redondance entre les contraintes MCDUnicity
         if ( mcdEntity.isEntConcret()){
             ArrayList<MCDUnicity> mcdUnicities = mcdEntity.getMCDUnicities();
@@ -690,10 +719,11 @@ public class MCDCompliant {
                         MCDUnicity mcdUnicityInt = mcdUnicities.get(interior);
                         ArrayList<IMCDParameter> mcdTargetsInt = mcdUnicityInt.getMcdTargets();
                         if (mcdTargetsExt.containsAll(mcdTargetsInt)){
-                            resultat.add(MessagesBuilder.getMessagesProperty("constraint.contain.another",
+                            String message = MessagesBuilder.getMessagesProperty("constraint.contain.another",
                                     new String[]{mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME),
                                             mcdUnicityExt.getOfUnicity(), mcdUnicityExt.getName(),
-                                            mcdUnicityInt.getOfUnicity(), mcdUnicityInt.getName()}));
+                                            mcdUnicityInt.getOfUnicity(), mcdUnicityInt.getName()});
+                            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
                         }
                     }
                 }
@@ -703,22 +733,22 @@ public class MCDCompliant {
         return resultat;
     }
 
-    private ArrayList<String> checkRelation(MCDRelation mcdRelation, boolean showDialogCompletness) {
+    private Resultat checkRelation(MCDRelation mcdRelation, boolean showDialogCompletness) {
         //TODO-1 A factoriser
         if (mcdRelation instanceof MCDAssociation) {
-            ArrayList<String> resultat = new MCDAssociationEditingTreat().treatCompletness(
+            Resultat resultat = new MCDAssociationEditingTreat().treatCompletness(
                     MVCCDManager.instance().getMvccdWindow(),
                     mcdRelation, showDialogCompletness);
             return resultat;
         }
         if (mcdRelation instanceof MCDGeneralization) {
-            ArrayList<String> resultat = new MCDGeneralizationEditingTreat().treatCompletness(
+            Resultat resultat = new MCDGeneralizationEditingTreat().treatCompletness(
                     MVCCDManager.instance().getMvccdWindow(),
                     mcdRelation, showDialogCompletness);
             return resultat;
         }
         if (mcdRelation instanceof MCDLink) {
-            ArrayList<String> resultat = new MCDLinkEditingTreat().treatCompletness(
+            Resultat resultat = new MCDLinkEditingTreat().treatCompletness(
                     MVCCDManager.instance().getMvccdWindow(),
                     mcdRelation, showDialogCompletness);
             return resultat;

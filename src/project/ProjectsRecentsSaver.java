@@ -1,6 +1,6 @@
 package project;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import main.MVCCDManager;
 import preferences.Preferences;
 
@@ -23,7 +23,7 @@ public class ProjectsRecentsSaver {
                 writer = new ObjectOutputStream(new FileOutputStream(file));
                 writer.writeObject(projectsRecents);
             } catch (Exception e) {
-                throw (new CodeApplException(e));    // L'erreur est renvoyée
+                throw (new TransformMCDException(e));    // L'erreur est renvoyée
             } finally {
                 if (writer != null) {
                     try {

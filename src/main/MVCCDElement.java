@@ -1,6 +1,6 @@
 package main;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
 import utilities.Debug;
@@ -419,7 +419,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
             return clone;
         }
         catch (CloneNotSupportedException e) {
-            throw new CodeApplException("Le MVCCDElement de nom " + getName() + " n'est pas clonable");
+            throw new TransformMCDException("Le MVCCDElement de nom " + getName() + " n'est pas clonable");
         }
     }
 

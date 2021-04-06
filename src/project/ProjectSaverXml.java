@@ -108,11 +108,6 @@ public class ProjectSaverXml {
             StreamResult result = new StreamResult(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)); //Génère un FileNotFoundException si le fichier ne peut pas être créé, s'il existe mais ne peut pas être modifié ou si un répertoire du même nom existe.
             transformer.transform(source, result);
 
-            // Message de confirmation de la sauvegarde du fichier
-            String message = MessagesBuilder.getMessagesProperty("project.saved",
-                    new String[]{MVCCDManager.instance().getProject().getName(), file.getPath()});
-            DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), message);
-
         } catch (ParserConfigurationException | TransformerException | FileNotFoundException pce) {
             pce.printStackTrace();
         }

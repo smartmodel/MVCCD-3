@@ -1,6 +1,6 @@
 package mcd.services;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
@@ -176,7 +176,7 @@ public class MCDAssociationService {
 
     public static MCDAssEnd getMCDAssEndParent(MCDAssociation mcdAssociation) {
         if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_MANY_MANY){
-            throw new CodeApplException("MCDAssEnd.getMCDAssEndParent " + "L'association " + mcdAssociation.getNameTree() +
+            throw new TransformMCDException("MCDAssEnd.getMCDAssEndParent " + "L'association " + mcdAssociation.getNameTree() +
                     " est de degré n:n et n'a pas d'extrémités parent/enfant ");
         } else if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_ONE_MANY){
             MCDAssEnd mcdAssEndFrom = mcdAssociation.getFrom();
@@ -191,7 +191,7 @@ public class MCDAssociationService {
             MCDAssEnd mcdAssEndTo = mcdAssociation.getTo();
             return getMCDAssEndParentBeetweenTheTwo (mcdAssEndFrom, mcdAssEndTo);
         }
-        throw new CodeApplException("MCDAssEnd.getMCDAssEndParent " + "Le degré d'association " +
+        throw new TransformMCDException("MCDAssEnd.getMCDAssEndParent " + "Le degré d'association " +
                 mcdAssociation.getNameTree() + " est inconnu ");
     }
 

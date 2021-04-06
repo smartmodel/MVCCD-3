@@ -1,6 +1,6 @@
 package datatypes;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import main.MVCCDElementApplicationMDDatatypes;
 import main.MVCCDElementService;
 import main.MVCCDManager;
@@ -109,7 +109,7 @@ public class MDDatatypesManager {
         } else if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_POSTGRESQL)){
             defaultMPDRDatatypeRoot = defaultMPDRPostgreSQLDatatypeRoot;
         } else {
-            throw new CodeApplException("mpdrDatatypeRoot () "+ " - La BD n'est pas trouvée");
+            throw new TransformMCDException("mpdrDatatypeRoot () "+ " - La BD n'est pas trouvée");
         }
         if (projectMPDRDatatypeRoot!= null){
             return projectMPDRDatatypeRoot;

@@ -1,6 +1,6 @@
 package mcd.services;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import mcd.MCDElement;
 import mcd.MCDModel;
 import mcd.interfaces.IMCDModel;
@@ -71,7 +71,7 @@ public class MCDElementService {
             //Il ne faut pas remonter au parent
             return (IMCDModel) mcdElement ;
         } else{
-            throw new CodeApplException("MCDElementService.getIMCDModelAccueil  - Erreur de parcours");
+            throw new TransformMCDException("MCDElementService.getIMCDModelAccueil  - Erreur de parcours");
         }
     }
 

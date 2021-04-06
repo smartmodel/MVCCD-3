@@ -1,12 +1,5 @@
 package transform.mldrtompdr;
 
-import datatypes.MPDRDatatype;
-import exceptions.CodeApplException;
-import mldr.MLDRColumn;
-import mpdr.MPDRDB;
-import preferences.Preferences;
-import preferences.PreferencesManager;
-
 public class MLDRTransformToMPDRDatatype {
 
     /*

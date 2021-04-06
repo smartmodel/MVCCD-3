@@ -1,6 +1,6 @@
 package messages;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import preferences.Preferences;
 
 import java.util.HashMap;
@@ -52,11 +52,11 @@ public class LoadMessages {
 			messagesProperties.clear();
 			messagesProperties = loadProperties("messages");
 		}	
-		catch (CodeApplException e ) {
+		catch (TransformMCDException e ) {
 			throw e;
 		}	
 		catch (Exception e ) {
-			throw new CodeApplException(crtClass + " - " + messageException, e);
+			throw new TransformMCDException(crtClass + " - " + messageException, e);
 		}
 	}
 	
@@ -76,7 +76,7 @@ public class LoadMessages {
 		if(language!= null){ //if plugin.properties
 			bundle = ResourceBundle.getBundle(fileName, new Locale(language));
 		}else{
-			throw new CodeApplException(crtClass + " - " + messageExceptionLanguage);
+			throw new TransformMCDException(crtClass + " - " + messageExceptionLanguage);
 		}
 
 		//Store properties to the map

@@ -111,12 +111,7 @@ public class EntityNavBtnContentPanel extends PanelNavBtnContent implements Acti
             getEditor().myDispose();
             new MCDEntMLDREditingTreat().treatUpdate(getEditor().getOwner(),
                     getMCDEntity());
-            /*
-            new MCDEntCompliantEditingTreat().treatCompliant(getEditor().getOwner(),
-                    getMCDEntity());
-
-             */
-        }
+         }
     }
 
     private MCDEntity getMCDEntity(){

@@ -68,6 +68,11 @@ public class PreferencesOfApplicationSaverXml {
             debugTdUnicityPrint.appendChild(document.createTextNode(prefApp.getDEBUG_TD_UNICITY_PRINT().toString()));
             preferences.appendChild(debugTdUnicityPrint);
 
+            Element warningLevel  = document.createElement("warningLevel");
+            //Sauver la constante de texte (warning.level.info par exemple) et non le texte (info)
+            warningLevel.appendChild(document.createTextNode(prefApp.getWARNING_LEVEL().getName()));
+            preferences.appendChild(warningLevel);
+
             Element repositoryMcdModelsMny  = document.createElement("repositoryMcdModelsMany");
             repositoryMcdModelsMny.appendChild(document.createTextNode(prefApp.getREPOSITORY_MCD_MODELS_MANY().toString()));
             preferences.appendChild(repositoryMcdModelsMny);

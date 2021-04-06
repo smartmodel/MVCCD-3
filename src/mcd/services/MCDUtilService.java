@@ -1,6 +1,6 @@
 package mcd.services;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import main.MVCCDElementService;
 import mcd.MCDElement;
@@ -228,19 +228,19 @@ public class MCDUtilService {
                                                 String namingAndBrothersElementsSelf,
                                                 String namingAndBrothersElementsOther) {
         if (lengthMax == -1) {
-            throw new CodeApplException("La méthode getLengthMax() ne rend pas de valeur ");
+            throw new TransformMCDException("La méthode getLengthMax() ne rend pas de valeur ");
         }
         if (naming == null) {
-            throw new CodeApplException("La méthode getNaming() ne rend pas de valeur ");
+            throw new TransformMCDException("La méthode getNaming() ne rend pas de valeur ");
         }
         if (element == null) {
-            throw new CodeApplException("La méthode getElement() ne rend pas de valeur ");
+            throw new TransformMCDException("La méthode getElement() ne rend pas de valeur ");
         }
         if (namingAndBrothersElementsSelf == null) {
-            throw new CodeApplException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
+            throw new TransformMCDException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
         }
         if (namingAndBrothersElementsOther == null) {
-            throw new CodeApplException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
+            throw new TransformMCDException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
         }
         ArrayList<String> messages = MCDUtilService.checkString(name, mandatory, lengthMax,
                 Preferences.NAME_REGEXPR, naming, element);
@@ -277,16 +277,16 @@ public class MCDUtilService {
                                                      String namingAndBrothersElements) {
 
         if (lengthMax == -1){
-            throw new CodeApplException("La méthode getLengthMax() ne rend pas de valeur ");
+            throw new TransformMCDException("La méthode getLengthMax() ne rend pas de valeur ");
         }
         if (naming == null){
-            throw new CodeApplException("La méthode getNaming() ne rend pas de valeur ");
+            throw new TransformMCDException("La méthode getNaming() ne rend pas de valeur ");
         }
         if (element == null){
-            throw new CodeApplException("La méthode getElement() ne rend pas de valeur ");
+            throw new TransformMCDException("La méthode getElement() ne rend pas de valeur ");
         }
         if (namingAndBrothersElements == null){
-            throw new CodeApplException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
+            throw new TransformMCDException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
         }
 
 
@@ -312,16 +312,16 @@ public class MCDUtilService {
                                                     String element,
                                                     String namingAndBrothersElements) {
         if (lengthMax == -1){
-            throw new CodeApplException("La méthode getLengthMax() ne rend pas de valeur ");
+            throw new TransformMCDException("La méthode getLengthMax() ne rend pas de valeur ");
         }
         if (naming == null){
-               throw new CodeApplException("La méthode getNaming() ne rend pas de valeur ");
+               throw new TransformMCDException("La méthode getNaming() ne rend pas de valeur ");
         }
         if (element == null){
-                throw new CodeApplException("La méthode getElement() ne rend pas de valeur ");
+                throw new TransformMCDException("La méthode getElement() ne rend pas de valeur ");
         }
          if (namingAndBrothersElements == null){
-            throw new CodeApplException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
+            throw new TransformMCDException("La méthode getNamingAndBrothersElements() ne rend pas de valeur ");
         }
 
         ArrayList<String> messages = MCDUtilService.checkString(longName, mandatory, lengthMax,

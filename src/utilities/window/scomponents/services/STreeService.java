@@ -1,6 +1,6 @@
 package utilities.window.scomponents.services;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import utilities.window.scomponents.STree;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -31,7 +31,7 @@ public class STreeService {
         } else if (resultat.size() == 1) {
             return resultat.get(0);
         } else {
-            throw new CodeApplException("L'objet est trouvé dans l'arbre en plusieurs exemplaires." +
+            throw new TransformMCDException("L'objet est trouvé dans l'arbre en plusieurs exemplaires." +
                     "\r\n" + object.toString());
         }
     }

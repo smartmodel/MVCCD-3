@@ -1,6 +1,6 @@
 package mldr.services;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import mdr.MDRPK;
 import mldr.MLDRPK;
 
@@ -20,7 +20,7 @@ public class MLDRPKService {
         if (mdrPK instanceof MLDRPK) {
             return (MLDRPK) mdrPK;
         } else {
-            throw new CodeApplException("MLDRPKService.to() : La PK " + mdrPK.getName() + " n'est pas de la classe " + MLDRPK.class.getName());
+            throw new TransformMCDException("MLDRPKService.to() : La PK " + mdrPK.getName() + " n'est pas de la classe " + MLDRPK.class.getName());
         }
     }
 

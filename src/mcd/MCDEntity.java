@@ -4,11 +4,14 @@ import m.MRelationDegree;
 import m.interfaces.IMCompletness;
 import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
+import mcd.interfaces.IMCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDNamePathParent;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mcd.services.MCDEntityService;
 import project.ProjectElement;
+import resultat.Resultat;
+import resultat.ResultatElement;
 
 import java.util.ArrayList;
 
@@ -21,7 +24,8 @@ import java.util.ArrayList;
  * d'associations (MCDAssEnd), que des extrémités de lien d'entité associative (MCDLinkEnd) ou que des extrémités
  * de liens de généralisation/spécialisation (MCDGSEnd).
  */
-public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompletness, IMCDElementWithTargets, IMCDSourceMLDRTable {
+public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompletness, IMCDElementWithTargets, IMCDSourceMLDRTable,
+        IMCDCompliant {
 
     private static final long serialVersionUID = 1000;
 
@@ -200,10 +204,9 @@ public class MCDEntity extends MCDElement implements IMCDNamePathParent, IMCompl
         return "Entité";
     }
 
-    public ArrayList<String> treatCompliant(){
+    public Resultat treatCompliant(){
         MCDCompliant mcdCompliant = new MCDCompliant();
-        ArrayList<String> resultat = mcdCompliant.check(this);
-        return resultat;
+        return mcdCompliant.check(this);
     }
 
     public boolean isDuplicateMCDAttributeAID(){

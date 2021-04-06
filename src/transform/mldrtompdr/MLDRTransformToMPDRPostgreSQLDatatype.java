@@ -2,7 +2,7 @@ package transform.mldrtompdr;
 
 import datatypes.MDDatatypeService;
 import datatypes.MPDRDatatype;
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import mldr.MLDRColumn;
 import preferences.Preferences;
 
@@ -45,7 +45,7 @@ public class MLDRTransformToMPDRPostgreSQLDatatype {
             return MDDatatypeService.getMPDRDatatypeByLienProg(Preferences.MPDRORACLEDATATYPE_DATE_LIENPROG);
         }
 
-        throw new CodeApplException("fromMLDRDatatype () "+ " - Le type de données " + mldrDatatypeLienProg + " ne peut pas être transformé");
+        throw new TransformMCDException("fromMLDRDatatype () "+ " - Le type de données " + mldrDatatypeLienProg + " ne peut pas être transformé");
 
     }
 }

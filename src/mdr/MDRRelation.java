@@ -1,6 +1,6 @@
 package mdr;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
 import mdr.interfaces.IMDRElementWithIteration;
@@ -59,7 +59,7 @@ public abstract class MDRRelation extends MDRElement implements IMRelation, IMDR
         if (this.getB() == mdrRelEnd){
             return (MDRRelEnd)this.getA();
         }
-        throw new CodeApplException("L'extrémité de relation passée en paramètre n'existe pas pour cette relation ");
+        throw new TransformMCDException("L'extrémité de relation passée en paramètre n'existe pas pour cette relation ");
     }
 
 

@@ -1,6 +1,5 @@
 package transform.mcdtomldr;
 
-import exceptions.CodeApplException;
 import exceptions.TransformMCDException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDElement;
@@ -23,7 +22,6 @@ import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -96,7 +94,7 @@ public class MCDTransformToTable {
                  }
             }
             if (controle == mcdEntitiesToTransform.size()){
-                throw new CodeApplException("Erreur interne dans la boucle de transformation des entités non indépendantes");
+                throw new TransformMCDException("Erreur interne dans la boucle de transformation des entités non indépendantes");
             }
         }
     }

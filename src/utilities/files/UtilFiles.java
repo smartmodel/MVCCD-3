@@ -1,6 +1,6 @@
 package utilities.files;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
@@ -77,9 +77,16 @@ public class UtilFiles {
         }
     }
 
+    public static String fileName(String shortName, String extName){
+         return shortName + "." + extName;
+    }
+
     public static String filePath(String directory, String fileName){
         StringBuilder filePath = new StringBuilder(directory);
-        filePath.append(System.getProperty("path.separator")).append(fileName);
+
+        //#MAJ 2021-04-03 Remplacé le text "path.separator" par File.separator
+        //filePath.append(System.getProperty("path.separator")).append(fileName);
+        filePath.append(File.separator).append(fileName);
         return filePath.toString();
     }
 
@@ -98,7 +105,7 @@ public class UtilFiles {
                 content = content + line;
             }
         } catch (IOException e) {
-            throw (new CodeApplException(e));	// L'erreur est renvoyée
+            throw (new TransformMCDException(e));	// L'erreur est renvoyée
         }
         return content;
     }

@@ -1,6 +1,6 @@
 package mdr;
 
-import exceptions.CodeApplException;
+import exceptions.TransformMCDException;
 
 import java.io.Serializable;
 
@@ -61,7 +61,7 @@ public class MDRElementNames implements Serializable {
             return getName120();
         }
         else {
-            throw new CodeApplException("MDRElementNames :  Paramètre nameLength inconnu !" );
+            throw new TransformMCDException("MDRElementNames :  Paramètre nameLength inconnu !" );
         }
     }
 
@@ -76,7 +76,7 @@ public class MDRElementNames implements Serializable {
             setName120(name);
         }
         else {
-            throw new CodeApplException("MDRElementNames :  Paramètre nameLength inconnu !" );
+            throw new TransformMCDException("MDRElementNames :  Paramètre nameLength inconnu !" );
         }
     }
 }

@@ -2,13 +2,10 @@ package transform.mldrtompdr;
 
 import console.Console;
 import delete.Delete;
-import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
-import mdr.MDRColumn;
 import mdr.MDRConstraint;
-import mdr.MDRFK;
 import mdr.interfaces.IMDRElementWithIteration;
 import mldr.*;
 import mldr.services.MLDRModelService;
@@ -18,8 +15,8 @@ import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import resultat.Resultat;
 import transform.MDTransform;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -28,9 +25,9 @@ public class MLDRTransform extends MDTransform {
     private MLDRModel mldrModel ;
     private MPDRModel mpdrModel ;
 
-    public ArrayList<String> transform(MLDRModel mldrModel) {
+    public Resultat transform(MLDRModel mldrModel) {
+        Resultat resultat = new Resultat();
         this.mldrModel = mldrModel ;
-        ArrayList<String> resultat = new ArrayList<String>();
 
         // Création du modèle physique si inexistant
         mpdrModel = foundOrCreateMPDRModel(
@@ -54,14 +51,12 @@ public class MLDRTransform extends MDTransform {
             //Rafraichir l'arbre
             mpdrModel.refreshTreeMPDR();
 
-        } catch(TransformMCDException e){
-            resultat.add(e.getMessage());
+        } catch(Exception e){
             undoTransform(mpdrModelClone);
-            Console.printMessages(resultat);
+            throw e ;
+        } finally {
             return resultat;
         }
-
-        return resultat;
     }
 
     private void undoTransform(MPDRModel mpdrModelClone) {
