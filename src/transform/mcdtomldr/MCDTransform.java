@@ -1,6 +1,7 @@
 package transform.mcdtomldr;
 
 import delete.Delete;
+import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
@@ -69,7 +70,8 @@ public class MCDTransform extends MDTransform {
 
         } catch(Exception e){
             undoTransform(mldrModelClone);
-            throw e ;
+            throw new TransformMCDException(e);
+            //throw e ;
         } finally {
             return resultat;
         }
