@@ -49,7 +49,7 @@ public class ViewManager {
 //        if(LogsManager.isTextAddedToLog() && PreferencesService.toBoolean(Preferences.PRINT_LOGS)){
         if(LogsManager.isTextAddedToLog() ){
             String message = MessagesBuilder.getMessagesProperty("file.add.text", LogsManager.getlogFilePath());
-           Console.printMessage(message, WarningLevel.WARNING);
+            Console.printMessage(message);
         }
     }
 

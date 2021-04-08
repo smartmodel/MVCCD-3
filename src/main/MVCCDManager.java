@@ -4,7 +4,7 @@ import console.Console;
 import console.ViewLogsManager;
 import console.WarningLevel;
 import datatypes.MDDatatypesManager;
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import main.window.console.WinConsoleContent;
 import main.window.diagram.WinDiagram;
 import main.window.diagram.WinDiagramContent;
@@ -257,11 +257,10 @@ public class MVCCDManager {
                 } else if (extensionOpenFile.equals("xml")) {
                     project = new ProjectLoaderXml().loadProjectFile(file); //Ajout de Giorgio Roncallo
                 } else {
-                    throw new TransformMCDException("Seules les extensions mvccd et xml sont reconnues");
+                    throw new CodeApplException("Seules les extensions mvccd et xml sont reconnues");
                 }
                // Fin provisoire !
                 String message = MessagesBuilder.getMessagesProperty("project.open", new String[] {project.getName(), file.getPath()});
-                Console.clearMessages();
                 ViewLogsManager.newText(message, WarningLevel.WARNING);
 
                 // Mémorisation du fichier de projet ouvert
@@ -276,7 +275,7 @@ public class MVCCDManager {
                 PreferencesManager.instance().copyApplicationPref(Project.EXISTING);
             } else {
                 //TODO-1 Voir lorsque la sauvegarde xml sera terminée s'il y aura lieu de vérifier l'extension...
-                throw new TransformMCDException("Le format du fichier de projet doit être : mvccd ou xml");
+                throw new CodeApplException("Le format du fichier de projet doit être : mvccd ou xml");
             }
 
 
@@ -364,7 +363,7 @@ public class MVCCDManager {
         } else if ( extensionOpenFile.equals("xml")) {
             new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
         } else {
-            throw new TransformMCDException("Seules les extensions mvccd et xml sont reconnues");
+            throw new CodeApplException("Seules les extensions mvccd et xml sont reconnues");
         }
         // Fin provisoire !
 

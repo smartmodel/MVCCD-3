@@ -1,6 +1,6 @@
 package window.editor.mcd.operation.parameter;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
@@ -261,7 +261,7 @@ public class ParameterInputContent extends PanelInputContent {
             if (iMCDParameterTarget != null) {
                 mcdParameter.setTarget(iMCDParameterTarget);
             } else {
-                throw new TransformMCDException("Aucune cible de paramètre n'a été trouvée pour le nom: " + nameTreeTarget);
+                throw new CodeApplException("Aucune cible de paramètre n'a été trouvée pour le nom: " + nameTreeTarget);
             }
         }
     }

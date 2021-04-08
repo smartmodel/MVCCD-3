@@ -1,6 +1,5 @@
 package mcd;
 
-import exceptions.TransformMCDException;
 import m.interfaces.IMCompletness;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
@@ -86,7 +85,7 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
         return  mcdCompliant.check(getMCDEntities(), false);
     }
 
-    public Resultat treatTransform()  throws TransformMCDException {
+    public Resultat treatTransform()  {
         MCDTransform mcdTransform = new MCDTransform();
         return mcdTransform.transform(this);
     }

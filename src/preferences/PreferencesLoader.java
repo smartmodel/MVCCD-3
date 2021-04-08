@@ -1,6 +1,6 @@
 package preferences;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 
 import java.io.*;
 
@@ -31,7 +31,7 @@ public class PreferencesLoader {
         } catch (FileNotFoundException e){
             throw (e);	// L'erreur est renvoyée
         } catch (Exception e){
-            throw (new TransformMCDException(e));	// L'erreur est renvoyée
+            throw (new CodeApplException(e));	// L'erreur est renvoyée
         } finally {
             if (reader != null) {
                 try {

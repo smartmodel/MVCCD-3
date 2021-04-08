@@ -1,6 +1,6 @@
 package utilities.files;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
@@ -105,7 +105,7 @@ public class UtilFiles {
                 content = content + line;
             }
         } catch (IOException e) {
-            throw (new TransformMCDException(e));	// L'erreur est renvoyée
+            throw (new CodeApplException(e));	// L'erreur est renvoyée
         }
         return content;
     }

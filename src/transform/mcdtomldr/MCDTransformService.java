@@ -1,6 +1,6 @@
 package transform.mcdtomldr;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import mcd.MCDAssociation;
 import mcd.MCDAssociationNature;
 import mdr.MDRElement;
@@ -35,7 +35,7 @@ public class MCDTransformService {
             if (! mcdAssociation.isDegreeNN()) {
                 fkNature = MDRFKNature.NOID;
             } else {
-                throw new TransformMCDException("MCDTransformService.MDRFKNature  " + "L'association " + mcdAssociation.getNameTree() + " est de degré n:n et n'est pas transformée en FK");
+                throw new CodeApplException("MCDTransformService.MDRFKNature  " + "L'association " + mcdAssociation.getNameTree() + " est de degré n:n et n'est pas transformée en FK");
             }
         }
 
@@ -52,7 +52,7 @@ public class MCDTransformService {
         }
 
         if (fkNature == null) {
-            throw new TransformMCDException("MCDTransformService.MDRFKNature  " + "La nature de l'association " + mcdAssociation.getNameTree() + " est inconnue");
+            throw new CodeApplException("MCDTransformService.MDRFKNature  " + "La nature de l'association " + mcdAssociation.getNameTree() + " est inconnue");
         }
         return fkNature;
     }

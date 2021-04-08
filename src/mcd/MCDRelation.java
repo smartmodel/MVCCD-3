@@ -1,7 +1,7 @@
 package mcd;
 
 import constraints.Constraint;
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
 import mcd.interfaces.IMCDElementWithTargets;
@@ -57,7 +57,7 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
             return (MCDRelEnd)this.getA();
         }
 
-        throw new TransformMCDException("L'extrémité de relation passée en paramètre n'existe pas pour cette relation ");
+        throw new CodeApplException("L'extrémité de relation passée en paramètre n'existe pas pour cette relation ");
 
     }
 

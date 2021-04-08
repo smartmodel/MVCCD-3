@@ -1,6 +1,6 @@
 package stereotypes;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import preferences.Preferences;
@@ -38,7 +38,7 @@ public class Stereotypes extends MVCCDElement {
         }
         String message = MessagesBuilder.getMessagesProperty("error.stereotype.lienProg",
                 new String[] {lienProg, className} );
-        throw new TransformMCDException(this.getClass().getName() + " - " + message);
+        throw new CodeApplException(this.getClass().getName() + " - " + message);
     }
 
     public Stereotype getStereotypeByLienProg(String className, String lienProgBase, int position){

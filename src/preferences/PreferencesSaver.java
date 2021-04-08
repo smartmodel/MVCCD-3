@@ -1,6 +1,6 @@
 package preferences;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,7 +21,7 @@ public class PreferencesSaver {
             writer = new ObjectOutputStream(new FileOutputStream(file));
             writer.writeObject(preferences);
         } catch (Exception e) {
-            throw (new TransformMCDException(e));    // L'erreur est renvoyée
+            throw (new CodeApplException(e));    // L'erreur est renvoyée
         } finally {
             if (writer != null) {
                 try {

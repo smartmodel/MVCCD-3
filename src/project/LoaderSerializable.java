@@ -1,6 +1,6 @@
 package project;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import main.MVCCDElement;
 
 import java.io.EOFException;
@@ -32,7 +32,7 @@ public class LoaderSerializable {
             }
         } catch (Exception e){
             //TODO-0 Traiter correctement l'erreur ... Attendre la sauvegarde XML
-            throw (new TransformMCDException(e));	// L'erreur est renvoyée
+            throw (new CodeApplException(e));	// L'erreur est renvoyée
         } finally {
             if (reader != null) {
                 try {

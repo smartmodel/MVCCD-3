@@ -1,6 +1,6 @@
 package project;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import main.MVCCDElement;
 import main.MVCCDManager;
 
@@ -20,7 +20,7 @@ public class SaverSerializable {
             saveNode(MVCCDManager.instance().getRepository().getNodeProject(), 0);
 
         } catch (Exception  ex) {
-                throw(new TransformMCDException(ex));	// L'erreur est renvoyée
+                throw(new CodeApplException(ex));	// L'erreur est renvoyée
         } finally{
                 if(writer != null){
                     try {
@@ -53,7 +53,7 @@ public class SaverSerializable {
                 }
             }
         } catch(Exception e){
-            throw (new TransformMCDException(e));	// L'erreur est renvoyée
+            throw (new CodeApplException(e));	// L'erreur est renvoyée
         }
     }
 

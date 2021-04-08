@@ -24,9 +24,9 @@ public class MLDRTransform extends MDTransform {
 
     private MLDRModel mldrModel ;
     private MPDRModel mpdrModel ;
+    private Resultat resultat = new Resultat();
 
     public Resultat transform(MLDRModel mldrModel) {
-        Resultat resultat = new Resultat();
         this.mldrModel = mldrModel ;
 
         // Création du modèle physique si inexistant
@@ -165,5 +165,9 @@ public class MLDRTransform extends MDTransform {
         if (mpdrFK.getMdrPK() != mldrFK.getMdrPK()) {
             mpdrFK.setMdrPK(mpdrPK);
         }
+    }
+
+    public Resultat getResultat() {
+        return resultat;
     }
 }

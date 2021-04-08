@@ -3,7 +3,7 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import m.MRelationDegree;
 import m.interfaces.IMCompletness;
 import m.services.MRelationService;
@@ -129,7 +129,7 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
             return this.getFrom();
         }
 
-        throw new TransformMCDException("L'extrémité d'association passée en paramètre n'existe pas pour cette association ");
+        throw new CodeApplException("L'extrémité d'association passée en paramètre n'existe pas pour cette association ");
 
     }
 

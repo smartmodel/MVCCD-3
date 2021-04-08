@@ -1,6 +1,6 @@
 package utilities;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 
@@ -174,6 +174,6 @@ public class UtilDivers {
                 return false;
             }
         }
-        throw new TransformMCDException("UtilsDivers.equals - Erreur interne   str1:" + str1 +  "  -  str2:" + str2);
+        throw new CodeApplException("UtilsDivers.equals - Erreur interne   str1:" + str1 +  "  -  str2:" + str2);
     }
 }

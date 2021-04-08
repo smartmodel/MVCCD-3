@@ -1,6 +1,6 @@
 package messages;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import org.apache.commons.lang.StringUtils;
 
 import java.text.MessageFormat;
@@ -76,7 +76,7 @@ public class MessagesBuilder {
 	public static String getMessagesProperty(String property, Object[] params) {
 		String message = LoadMessages.getMessageBrut(property);
 		if (StringUtils.isEmpty(message)) {
-			throw new TransformMCDException("Le message de nom : >" + property
+			throw new CodeApplException("Le message de nom : >" + property
 					+
 					"< n'a pas été trouvé dans le fichier de messages ou est vide");
 		}

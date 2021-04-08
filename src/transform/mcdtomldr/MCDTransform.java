@@ -1,7 +1,6 @@
 package transform.mcdtomldr;
 
 import delete.Delete;
-import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
@@ -26,10 +25,10 @@ public class MCDTransform extends MDTransform {
 
     private IMCDModel  imcdModel ;
     private MLDRModel mldrModel ;
+    private Resultat resultat = new Resultat();
 
 
-    public Resultat transform(IMCDModel imcdModel)  throws TransformMCDException {
-        Resultat resultat = new Resultat();
+    public Resultat transform(IMCDModel imcdModel)   {
         this.imcdModel = imcdModel;
         // Création du modèle logique si inexistant
         mldrModel = foundOrCreateMLDRModel(

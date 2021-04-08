@@ -3,7 +3,7 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import m.interfaces.IMCompletness;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAssociationService;
@@ -77,7 +77,7 @@ public class MCDGeneralization extends MCDRelation implements IMCompletness, IMC
             return this.getGen();
         }
 
-        throw new TransformMCDException("L'extrémité de généralisation-spécialisation passée en paramètre n'existe pas pour cette généralisation ");
+        throw new CodeApplException("L'extrémité de généralisation-spécialisation passée en paramètre n'existe pas pour cette généralisation ");
 
     }
 

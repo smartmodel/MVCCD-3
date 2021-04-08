@@ -1,6 +1,6 @@
 package console;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -66,7 +66,7 @@ public class LogsManager {
                     }
                     fm.addLineToFile(Preferences.DIRECTORY_LOGGING_NAME + File.separator, fileName, text);
                     textAddedToLog = true;
-                }catch(TransformMCDException e){
+                }catch(CodeApplException e){
                     throw e;
                 } catch (Throwable e){
                     fileError = true;
@@ -112,7 +112,7 @@ public class LogsManager {
             return nameFile;
         }else{
             String msg = MessagesBuilder.getMessagesProperty(Preferences.LOGGING_FILE_NAME_FORMAT_ERROR_NULL);
-            throw new TransformMCDException(msg);
+            throw new CodeApplException(msg);
         }
     }
 
@@ -126,7 +126,7 @@ public class LogsManager {
             return UtilFiles.filePath(Preferences.DIRECTORY_LOGGING_NAME, getLogFileName());
        }else{
             String msg = MessagesBuilder.getMessagesProperty("plugin.logging.folder.path.null");
-            throw new TransformMCDException(msg);
+            throw new CodeApplException(msg);
         }
     }
 

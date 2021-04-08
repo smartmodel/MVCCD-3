@@ -1,6 +1,5 @@
 package mcd;
 
-import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDCompliant;
@@ -12,8 +11,6 @@ import mldr.MLDRModel;
 import project.ProjectElement;
 import resultat.Resultat;
 import transform.mcdtomldr.MCDTransform;
-
-import java.util.ArrayList;
 
 /**
  * L'instance correspond au modèle "MCD" existant dans le référentiel. Ce modèle MCD contient potentiellement lui-même
@@ -48,7 +45,7 @@ public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePa
     }
 
 
-    public Resultat treatTransform()  throws TransformMCDException {
+    public Resultat treatTransform()   {
         MCDTransform mcdTransform = new MCDTransform();
         // Il n'y a pas de modèles. Il faut donc tester toutes les entités
         return mcdTransform.transform(this);

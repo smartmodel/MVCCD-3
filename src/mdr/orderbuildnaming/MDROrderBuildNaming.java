@@ -1,6 +1,6 @@
 package mdr.orderbuildnaming;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import exceptions.orderbuildnaming.*;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
@@ -320,14 +320,14 @@ public class MDROrderBuildNaming {
 
     private void limitCodeError(String newName) {
         int gap =  newName.length() - namingLength.getLength() ;
-        throw new TransformMCDException("MDROrderBuildNaming - " + targetNaming.getText() +
+        throw new CodeApplException("MDROrderBuildNaming - " + targetNaming.getText() +
                 " - Le nom calculé " + newName + " dépasse de " + gap +
                 " caractères la taille maximale autorisée de " + namingLength.getLength());
     }
 
     private String limitComputedCodeError(String newName){
         if (newName.length() > namingLength.getLength()) {
-            throw new TransformMCDException("MDROrderBuildNaming - " + targetNaming.getText() +
+            throw new CodeApplException("MDROrderBuildNaming - " + targetNaming.getText() +
                     " - Le nom calculé " + newName + " n'a pu être limité qu'à " + newName.length() +
                     " caractères au lieu de " + namingLength.getLength());
         }
@@ -356,7 +356,7 @@ public class MDROrderBuildNaming {
         } else {
             limitCodeError(newName);
         }
-        throw new TransformMCDException("MDROrderBuildNaming - Erreur limitSizeColumnAttr");
+        throw new CodeApplException("MDROrderBuildNaming - Erreur limitSizeColumnAttr");
     }
 
     private String limitSizeTableNN(String newName){
@@ -373,12 +373,12 @@ public class MDROrderBuildNaming {
                     limitComputedCodeError(newName);
                 }
             } else {
-                throw new TransformMCDException(error);
+                throw new CodeApplException(error);
             }
         } else {
             limitCodeError(newName);
         }
-        throw new TransformMCDException(error);
+        throw new CodeApplException(error);
     }
 
     private String limitSizeFK(String newName){
@@ -396,12 +396,12 @@ public class MDROrderBuildNaming {
                 }
             }
             else {
-                throw new TransformMCDException(error);
+                throw new CodeApplException(error);
             }
         } else {
             limitCodeError(newName);
         }
-        throw new TransformMCDException(error);
+        throw new CodeApplException(error);
     }
 
 

@@ -1,6 +1,6 @@
 package utilities.window.editor;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
@@ -512,7 +512,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
                 return mElement;
             }
         }
-        throw new TransformMCDException("L'id >" + id + "< n'a pas été trouvé dans les éléments transitoires" );
+        throw new CodeApplException("L'id >" + id + "< n'a pas été trouvé dans les éléments transitoires" );
     }
 
     public boolean checkDatas(SComponent sComponent){

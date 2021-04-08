@@ -65,7 +65,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
     private void init() {
 
-        Console.clearMessages();
+        //Console.clearMessages();
+        // Réalisé par ViewLogManager.newText()
         if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
             if (PreferencesManager.instance().getApplicationPref().getDEBUG_INSPECT_OBJECT_IN_TREE()) {
                 treatInspectObject();
