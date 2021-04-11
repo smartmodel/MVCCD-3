@@ -79,6 +79,8 @@ public class PreferencesOfApplicationLoaderXml {
         } catch (FileNotFoundException e) {
             throw (e);
         } catch (ParserConfigurationException | IOException | SAXException e) {
+            //TODO-PAS STB faire un throw(e) - Intégration dans la transaction d'ouverture (A checker)
+            // et transaction d'édition
             e.printStackTrace();
         }
     return applicationPrefs;

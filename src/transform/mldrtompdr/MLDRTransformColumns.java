@@ -9,6 +9,7 @@ import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.Trace;
 
 public class MLDRTransformColumns {
 
@@ -74,7 +75,9 @@ public class MLDRTransformColumns {
         }
         
         // Datatype size
-        pushSize(mpdrColumn, mldrColumn.getSize().intValue());
+        if (mpdrColumn.getSize() != null) {
+            pushSize(mpdrColumn, mldrColumn.getSize().intValue());
+        }
 
 
         // Datatype scale

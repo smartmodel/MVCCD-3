@@ -1,7 +1,6 @@
 package transform.mcdtomldr;
 
 import delete.Delete;
-import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
@@ -66,13 +65,10 @@ public class MCDTransform extends MDTransform {
 
             //Rafraichir l'arbre
             mldrModel.refreshTreeMLDR();
-
-
+            return resultat;
         } catch(Exception e){
             undoTransform(mldrModelClone);
-            throw new TransformMCDException(e);
-            //throw e ;
-        } finally {
+            resultat.addException(e) ;
             return resultat;
         }
     }

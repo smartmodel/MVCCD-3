@@ -3,7 +3,9 @@ package repository.editingTreat.mcd;
 import main.MVCCDElement;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
-import repository.editingTreat.EditingTreatCompliant;
+import mcd.interfaces.IMCDCompliant;
+import messages.MessagesBuilder;
+import resultat.Resultat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.entity.compliant.EntCompliantEditorBtn;
@@ -11,7 +13,7 @@ import window.editor.mcd.entity.compliant.EntCompliantInputContent;
 
 import java.awt.*;
 
-public class MCDEntCompliantEditingTreat extends EditingTreatCompliant {
+public class MCDEntCompliantEditingTreat extends MCDCompliantEditingTreat {
 
 
     @Override
@@ -30,7 +32,5 @@ public class MCDEntCompliantEditingTreat extends EditingTreatCompliant {
     protected String getPropertyTheElement() {
         return "the.entity";
     }
-
-
 
 }

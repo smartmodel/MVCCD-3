@@ -1,11 +1,9 @@
 package main.window.repository;
 
-import console.Console;
 import console.ViewLogsManager;
+import console.WarningLevel;
 import datatypes.MDDatatype;
 import diagram.mcd.MCDDiagram;
-import exceptions.CodeApplException;
-import exceptions.TransformMCDException;
 import m.interfaces.IMCompletness;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationPreferences;
@@ -30,7 +28,7 @@ import profile.ProfileSaverXml;
 import project.Project;
 import project.ProjectElement;
 import repository.editingTreat.EditingTreat;
-import repository.editingTreat.EditingTreatCompliant;
+import repository.editingTreat.mcd.MCDTransformEditingTreat;
 import repository.editingTreat.ProjectEditingTreat;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.*;
@@ -39,8 +37,8 @@ import repository.editingTreat.mdr.*;
 import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
 import repository.editingTreat.preferences.*;
+import resultat.Resultat;
 import utilities.DefaultMutableTreeNodeService;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
@@ -115,14 +113,14 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 if (mcdModel.isPackagesAutorizeds()) {
                     packageNew(this, "menu.new.package");
                 }
-                treatGenericCompliant(this, new MCDModelEditingTreat());
+                treatGenericCompliantMCD(this, new MCDModelEditingTreat());
                 treatGenericTransformMCD(this, new MCDModelEditingTreat(),
                         "menu.transform.mcd.to.mldr");
             }
 
             if (node.getUserObject() instanceof MCDPackage) {
                 treatGeneric(this, new MCDPackageEditingTreat());
-                treatGenericCompliant(this, new MCDPackageEditingTreat());
+                treatGenericCompliantMCD(this, new MCDPackageEditingTreat());
                 MCDPackage mcdPackage = (MCDPackage) node.getUserObject();
                 // Pas nécessaire de vérifier les droits de créer unpackage puisque le parent est déjà un package
                 packageNew(this, "menu.new.subpackage");
@@ -278,15 +276,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             if (node.getUserObject() instanceof MPDRParameter) {
                 treatGenericRead(this, new MDRParameterEditingTreat());
             }
-        } catch (TransformMCDException e){
-            //TODO-PAS
-            Console.printStackTrace(e);
-        } catch (CodeApplException e){
-            //TODO-PAS
-            Console.printStackTrace(e);
         } catch (Exception e){
             //TODO-PAS
-            Console.printStackTrace(e);
+            Resultat resultat = new Resultat();
+            resultat.addException(e);
+            ViewLogsManager.resultat(resultat, WarningLevel.WARNING);
         }
 
     }
@@ -482,7 +476,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()) {
                 packageNew(menu, "menu.new.package");
             }
-            treatGenericCompliant(menu, new MCDContModelsEditingTreat());
+            treatGenericCompliantMCD(menu, new MCDContModelsEditingTreat());
             treatGenericTransformMCD(menu, new MCDContModelsEditingTreat(),
                     "menu.transform.mcd.to.mldr");
         }
@@ -617,24 +611,25 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         });
     }
 
-    private void treatGenericCompliant(ISMenu menu, EditingTreatCompliant editingTreatCompliant) {
-        JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
+    //private void treatGenericCompliantMCD(ISMenu menu, MCDIModelsEditingTreat mcdiModelsEditingTreat) {
+    private void treatGenericCompliantMCD(ISMenu menu, MCDCompliantEditingTreat mcdCompliantEditingTreat) {
+            JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
         addItem(menu, menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                editingTreatCompliant.treatCompliant(mvccdWindow, (IMCDCompliant) mvccdElement);
+                mcdCompliantEditingTreat.treatCompliant(mvccdWindow, (IMCDCompliant) mvccdElement);
             }
         });
     }
 
-    private void treatGenericTransformMCD(ISMenu menu, MCDIModelsEditingTreat mcdiModelsEditingTreat, String propertyTextMenu) {
+    private void treatGenericTransformMCD(ISMenu menu, MCDTransformEditingTreat mcdTransformEditingTreat, String propertyTextMenu) {
         JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(propertyTextMenu));
         addItem(menu, menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                mcdiModelsEditingTreat.treatTransform(mvccdWindow, (IMCDModel)mvccdElement);
+                mcdTransformEditingTreat.treatTransform(mvccdWindow, (IMCDModel)mvccdElement);
             }
         });
     }

@@ -1,22 +1,20 @@
 package repository.editingTreat.mldr;
 
 import main.MVCCDElement;
-import mcd.interfaces.IMCDModel;
 import mdr.MDRModel;
 import messages.MessagesBuilder;
 import mldr.MLDRModel;
 import preferences.PreferencesManager;
-import repository.editingTreat.EditingTreatCompliant;
+import repository.editingTreat.EditingTreat;
 import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
+import transaction.services.TransactionService;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mdr.model.MDRModelEditor;
 
 import java.awt.*;
 
-public class MLDRModelEditingTreat extends EditingTreatCompliant {
+public class MLDRModelEditingTreat extends EditingTreat {
 
 
     @Override
@@ -36,7 +34,6 @@ public class MLDRModelEditingTreat extends EditingTreatCompliant {
         return "the.model.logical";
     }
 
-
     public void treatTransform(Window owner, MVCCDElement mvccdElement) {
         MLDRModel mldrModel = (MLDRModel) mvccdElement;
 
@@ -46,11 +43,14 @@ public class MLDRModelEditingTreat extends EditingTreatCompliant {
                         MessagesBuilder.getMessagesProperty(PreferencesManager.instance().preferences().getMLDRTOMPDR_DB()),
                         MessagesBuilder.getMessagesProperty(getPropertyTheElement()),
                         mvccdElement.getName()} );
-        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+        resultat.startTransaction(message);
 
         //TODO-1 Contrôle de conformité à prévoir !
         resultat.addAll(mldrModel.treatTransform());
-        treatTransformFinishMessages(owner, mldrModel, resultat);
-     }
+
+        TransactionService.treatFinishTransaction(owner, mvccdElement, resultat,
+                getPropertyTheElement(), "transform.mldrtompdr.ok", "transform.mldrtompdr.abort") ;
+
+    }
 
 }

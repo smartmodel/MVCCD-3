@@ -47,8 +47,6 @@ public class LogsManager {
 
     static private void logText(String text, boolean newText , WarningLevel warningLevel){
         if (!fileError){
-            Trace.println("Ecriture de log");
-
             WarningLevelManager wlm = WarningLevelManager.instance();
 
             WarningLevel prefWarningLevel = PreferencesManager.instance().preferences().getWARNING_LEVEL();
