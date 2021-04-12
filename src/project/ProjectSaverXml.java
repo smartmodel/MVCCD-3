@@ -342,9 +342,15 @@ public class ProjectSaverXml {
         Element properties = document.createElement("proprietes");
         racine.appendChild(properties);
 
+        // Persistance du nom du projet
         Element name = document.createElement("nameProject");
         name.appendChild(document.createTextNode(project.getName()));
         properties.appendChild(name);
+
+        // Persistance de la version de l'application utilisée par le projet
+        Element version = document.createElement("version");
+        version.appendChild(document.createTextNode(Preferences.APPLICATION_VERSION));
+        properties.appendChild(version);
 
         Element profileFileName = document.createElement("profileFileName");
         properties.appendChild(profileFileName);
