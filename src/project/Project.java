@@ -36,7 +36,7 @@ public class Project extends ProjectElement {
     private boolean packagesAutorizeds;
 
     // Dernier numéro de séquence donné
-    private int idElementSequence = 0;
+    private int idElementSequence = 0; //TODO-STB: Sauvegarder la valeur dans le fichier persisté du projet
 
     // Sauvegarde de l'état du projet
     // Dernier noeud du référentiel visité
