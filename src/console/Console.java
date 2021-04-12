@@ -26,10 +26,13 @@ public class Console {
         winConsoleContent().getTextArea().setText("");
     }
 
+    /**
+     * Utilisé pour envoyé la pile d'erreur sur la console de MVCCD si le fichier de log pose problème
+     * @param e
+     */
     public static void printStackTrace(Throwable e) {
         StackTraceElement[] stackTrace = e.getStackTrace();
         for (int i=0 ; i < stackTrace.length; i++){
-            //TODO-1 A voir ce que l'on evoie à qui !
             Console.printMessage(stackTrace[i].toString());
         }
     }

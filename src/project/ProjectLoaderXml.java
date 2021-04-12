@@ -42,7 +42,7 @@ public class ProjectLoaderXml {
     private ArrayList<MVCCDElement> loadedAssociations = new ArrayList<>();
     private NodeList diagramTagsList = null; //Contient la liste des enfants de <diagrammes>
 
-    public Project loadProjectFile(File fileProjectCurrent) {
+    public Project loadProjectFile(File fileProjectCurrent) throws IOException, SAXException, ParserConfigurationException {
         Project project = null;
         try {
             // Création du document et du parser pour récupérer les information du fichier
@@ -101,7 +101,9 @@ public class ProjectLoaderXml {
             validator.validate(new DOMSource(document));
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+            //TODO-PAS STB faire un throw(e) - Intégration dans la transaction
+            throw (e);
+            //e.printStackTrace();
         }
         return project;
     }

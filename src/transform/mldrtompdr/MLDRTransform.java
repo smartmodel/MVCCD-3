@@ -1,6 +1,5 @@
 package transform.mldrtompdr;
 
-import console.Console;
 import delete.Delete;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
@@ -17,6 +16,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import resultat.Resultat;
 import transform.MDTransform;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -50,11 +50,10 @@ public class MLDRTransform extends MDTransform {
 
             //Rafraichir l'arbre
             mpdrModel.refreshTreeMPDR();
-
+            return resultat;
         } catch(Exception e){
             undoTransform(mpdrModelClone);
-            throw e ;
-        } finally {
+            resultat.addException(e);
             return resultat;
         }
     }

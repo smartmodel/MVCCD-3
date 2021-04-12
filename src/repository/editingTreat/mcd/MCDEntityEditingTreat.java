@@ -3,7 +3,6 @@ package repository.editingTreat.mcd;
 import main.MVCCDElement;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
-import repository.editingTreat.EditingTreatCompliant;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.entity.EntityEditor;
@@ -11,7 +10,7 @@ import window.editor.mcd.entity.EntityInputContent;
 
 import java.awt.*;
 
-public class MCDEntityEditingTreat extends EditingTreatCompliant {
+public class MCDEntityEditingTreat extends MCDCompliantEditingTreat {
 
 
     @Override

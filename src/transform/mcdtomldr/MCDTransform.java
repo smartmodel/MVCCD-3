@@ -65,12 +65,10 @@ public class MCDTransform extends MDTransform {
 
             //Rafraichir l'arbre
             mldrModel.refreshTreeMLDR();
-
-
+            return resultat;
         } catch(Exception e){
             undoTransform(mldrModelClone);
-            throw e ;
-        } finally {
+            resultat.addException(e) ;
             return resultat;
         }
     }

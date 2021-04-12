@@ -1,0 +1,350 @@
+============================================================
+08:36:52 - MVCCD a été ouvert.
+============================================================
+08:36:53 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd a démarré.
+Le projet CommerceBase a été ouvert à partir du fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.
+============================================================
+08:37:28 - Le projet CommerceBase a été fermé.
+============================================================
+08:37:37 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\TestTrois.mvccd a démarré.
+Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+08:37:52 - Le contrôle de conformité a été démarré pour : L'entité Client.
+L'entité Vente.Client est potentiellement indépendante mais, il lui manque un identifiant naturel ou artificiel.
+La transformation en modèle logique a été est annulée pour : L'entité Vente.Client.
+============================================================
+08:42:23 - MVCCD a été ouvert.
+============================================================
+08:42:24 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd a démarré.
+Le projet CommerceBase a été ouvert à partir du fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.
+============================================================
+08:42:35 - Le projet CommerceBase a été fermé.
+============================================================
+08:42:42 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\TestTrois.mvccd a démarré.
+Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+08:42:51 - Le contrôle de conformité a été démarré pour : L'entité Client.
+L'entité Vente.Client est potentiellement indépendante mais, il lui manque un identifiant naturel ou artificiel.
+L'entité Vente.Client n'est pas conforme.
+============================================================
+08:43:07 - Le contrôle de conformité a été démarré pour : L'entité Article.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+L'entité Article n'est pas conforme.
+============================================================
+08:44:33 - Le projet TestTrois a été enregistré comme fichier : C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+08:44:41 - Le contrôle de conformité a été démarré pour : L'entité ArtInt.
+L'entité ArtInt est conforme.
+============================================================
+08:45:05 - Le contrôle de conformité a été démarré pour : Le paquetage Vente.
+L'entité Vente.Client est potentiellement indépendante mais, il lui manque un identifiant naturel ou artificiel.
+Le paquetage Vente n'est pas conforme.
+============================================================
+08:46:11 - Le contrôle de conformité a été démarré pour : Le modèle MCD.
+L'entité Vente.Client est potentiellement indépendante mais, il lui manque un identifiant naturel ou artificiel.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+============================================================
+08:47:57 - La transformation en modèle logique a été démarrée pour : Le modèle MCD.
+Le contrôle de conformité a été démarré pour : Le modèle MCD.
+L'entité Vente.Client est potentiellement indépendante mais, il lui manque un identifiant naturel ou artificiel.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+La transformation en modèle logique a été est annulée pour : Le modèle MCD.
+============================================================
+08:59:16 - Le projet TestTrois a été enregistré comme fichier : C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+08:59:17 - MVCCD a été fermé.
+============================================================
+08:59:25 - MVCCD a été ouvert.
+============================================================
+08:59:26 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\TestTrois.mvccd a démarré.
+Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+08:59:44 - La transformation en modèle logique a été démarrée pour : Le modèle MCD.
+Le contrôle de conformité a été démarré pour : Le modèle MCD.
+L'entité Vente.Client est potentiellement indépendante mais, il lui manque un identifiant naturel ou artificiel.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+La transformation en modèle logique a été est annulée pour : Le modèle MCD.
+============================================================
+09:00:01 - Le projet TestTrois a été fermé.
+============================================================
+09:00:06 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd a démarré.
+Le projet CommerceBase a été ouvert à partir du fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.
+============================================================
+09:00:20 - La transformation en modèle logique a été démarrée pour : Le modèle MCD.
+Le contrôle de conformité a été démarré pour : Le modèle MCD.
+MCD - Table de décision
+Identifiant naturel NID_Usa_code pour entité : Usage
+------------
+Condition 1  :  false
+Condition 2  :  false
+Condition 3  :  false
+------------
+Règle valide :  6
+------------
+Action       :  Identifiant naturel correct
+------------
+MCD - Table de décision
+Identifiant naturel NID_Art_code pour entité : Article
+------------
+Condition 1  :  false
+Condition 2  :  false
+Condition 3  :  false
+------------
+Règle valide :  6
+------------
+Action       :  Identifiant naturel correct
+------------
+Le modèle MCD est conforme.
+Le modèle MCD a été transformé.
+============================================================
+09:00:31 - La transformation en modèle physique Oracle a été démarrée pour : Le modèle logique MLDR_DT.
+Le modèle logique MLDR_DT a été transformé.
+============================================================
+09:01:26 - La transformation en modèle physique MySQL a été démarrée pour : Le modèle logique MLDR_DT.
+Un arrêt intempestif du traitement en cours est provoqué par l'erreur ci-dessous :
+java.lang.NullPointerException
+main.MVCCDManager.addNewMVCCDElementInRepository(MVCCDManager.java:166)
+transform.mldrtompdr.MLDRTransformConstraints.transformConstraint(MLDRTransformConstraints.java:73)
+transform.mldrtompdr.MLDRTransformConstraints.transformConstraints(MLDRTransformConstraints.java:61)
+transform.mldrtompdr.MLDRTransformTables.transformTable(MLDRTransformTables.java:58)
+transform.mldrtompdr.MLDRTransformTables.transformTables(MLDRTransformTables.java:25)
+transform.mldrtompdr.MLDRTransform.transform(MLDRTransform.java:44)
+mldr.MLDRModel.treatTransform(MLDRModel.java:98)
+repository.editingTreat.mldr.MLDRModelEditingTreat.treatTransform(MLDRModelEditingTreat.java:49)
+main.window.repository.WinRepositoryPopupMenu$1.actionPerformed(WinRepositoryPopupMenu.java:235)
+java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+java.desktop/javax.swing.AbstractButton.doClick(AbstractButton.java:369)
+java.desktop/javax.swing.plaf.basic.BasicMenuItemUI.doClick(BasicMenuItemUI.java:980)
+java.desktop/javax.swing.plaf.basic.BasicMenuItemUI$Handler.mouseReleased(BasicMenuItemUI.java:1024)
+java.desktop/java.awt.Component.processMouseEvent(Component.java:6651)
+java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+java.desktop/java.awt.Component.processEvent(Component.java:6416)
+java.desktop/java.awt.Container.processEvent(Container.java:2263)
+java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5026)
+java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+java.desktop/java.awt.Component.dispatchEvent(Component.java:4858)
+java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2773)
+java.desktop/java.awt.Component.dispatchEvent(Component.java:4858)
+java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:778)
+java.desktop/java.awt.EventQueue$4.run(EventQueue.java:727)
+java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+java.base/java.security.AccessController.doPrivileged(Native Method)
+java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+java.desktop/java.awt.EventQueue$5.run(EventQueue.java:751)
+java.desktop/java.awt.EventQueue$5.run(EventQueue.java:749)
+java.base/java.security.AccessController.doPrivileged(Native Method)
+java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:748)
+java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+La transformation en modèle logique a été est annulée pour : Le modèle logique MLDR_DT.
+============================================================
+09:04:07 - La transformation en modèle physique PostgreSQL a été démarrée pour : Le modèle logique MLDR_DT.
+Un arrêt intempestif du traitement en cours est provoqué par l'erreur ci-dessous :
+java.lang.NullPointerException
+main.MVCCDManager.addNewMVCCDElementInRepository(MVCCDManager.java:166)
+transform.mldrtompdr.MLDRTransformConstraints.transformConstraint(MLDRTransformConstraints.java:73)
+transform.mldrtompdr.MLDRTransformConstraints.transformConstraints(MLDRTransformConstraints.java:61)
+transform.mldrtompdr.MLDRTransformTables.transformTable(MLDRTransformTables.java:58)
+transform.mldrtompdr.MLDRTransformTables.transformTables(MLDRTransformTables.java:25)
+transform.mldrtompdr.MLDRTransform.transform(MLDRTransform.java:44)
+mldr.MLDRModel.treatTransform(MLDRModel.java:98)
+repository.editingTreat.mldr.MLDRModelEditingTreat.treatTransform(MLDRModelEditingTreat.java:49)
+main.window.repository.WinRepositoryPopupMenu$1.actionPerformed(WinRepositoryPopupMenu.java:235)
+java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+java.desktop/javax.swing.AbstractButton.doClick(AbstractButton.java:369)
+java.desktop/javax.swing.plaf.basic.BasicMenuItemUI.doClick(BasicMenuItemUI.java:980)
+java.desktop/javax.swing.plaf.basic.BasicMenuItemUI$Handler.mouseReleased(BasicMenuItemUI.java:1024)
+java.desktop/java.awt.Component.processMouseEvent(Component.java:6651)
+java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+java.desktop/java.awt.Component.processEvent(Component.java:6416)
+java.desktop/java.awt.Container.processEvent(Container.java:2263)
+java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5026)
+java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+java.desktop/java.awt.Component.dispatchEvent(Component.java:4858)
+java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2773)
+java.desktop/java.awt.Component.dispatchEvent(Component.java:4858)
+java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:778)
+java.desktop/java.awt.EventQueue$4.run(EventQueue.java:727)
+java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+java.base/java.security.AccessController.doPrivileged(Native Method)
+java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+java.desktop/java.awt.EventQueue$5.run(EventQueue.java:751)
+java.desktop/java.awt.EventQueue$5.run(EventQueue.java:749)
+java.base/java.security.AccessController.doPrivileged(Native Method)
+java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:748)
+java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+La transformation en modèle logique a été est annulée pour : Le modèle logique MLDR_DT.
+============================================================
+09:08:08 - MVCCD a été ouvert.
+============================================================
+09:08:08 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\TestTrois.mvccd a démarré.
+Le projet TestTrois a été ouvert à partir du fichier C:\Users\pasun\Documents\TestTrois.mvccd.
+============================================================
+09:08:21 - La transformation en modèle logique a été démarrée pour : Le modèle MCD.
+Le contrôle de conformité a été démarré pour : Le modèle MCD.
+L'entité Vente.Client est potentiellement indépendante mais, il lui manque un identifiant naturel ou artificiel.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom.
+L'association Art -> par ... livre <- Four de degrée n:n sans entité associative adossée doit avoir un nom court.
+Le modèle MCD n'est pas conforme.
+La transformation en modèle logique a été est annulée pour : Le modèle MCD.
+============================================================
+09:08:46 - Le projet TestTrois a été fermé.
+============================================================
+09:08:52 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd a démarré.
+Le projet CommerceBase a été ouvert à partir du fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.
+============================================================
+09:08:59 - La transformation en modèle physique Oracle a été démarrée pour : Le modèle logique MLDR_DT.
+Le modèle logique MLDR_DT a été transformé.
+============================================================
+09:10:13 - Le projet CommerceBase a été enregistré comme fichier : C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.
+============================================================
+09:10:15 - MVCCD a été fermé.
+============================================================
+09:10:33 - MVCCD a été ouvert.
+============================================================
+09:10:33 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd a démarré.
+Le projet CommerceBase a été ouvert à partir du fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.
+============================================================
+09:10:47 - La transformation en modèle physique Oracle a été démarrée pour : Le modèle logique MLDR_DT.
+Le modèle logique MLDR_DT a été transformé.
+============================================================
+09:11:18 - La transformation en modèle physique MySQL a été démarrée pour : Le modèle logique MLDR_DT.
+Le modèle logique MLDR_DT a été transformé.
+============================================================
+09:12:08 - La transformation en modèle physique PostgreSQL a été démarrée pour : Le modèle logique MLDR_DT.
+Le modèle logique MLDR_DT a été transformé.
+============================================================
+09:12:50 - Le projet CommerceBase a été enregistré comme fichier : C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.
+============================================================
+09:13:00 - MVCCD a été fermé.
+============================================================
+09:15:52 - MVCCD a été ouvert.
+============================================================
+09:15:52 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd a démarré.
+Le projet CommerceBase a été ouvert à partir du fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.
+============================================================
+09:16:02 - Le projet CommerceBase a été fermé.
+============================================================
+09:17:02 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\CommerceBase_erreursUK-Bug.xml a démarré.
+Un arrêt intempestif du traitement en cours est provoqué par l'erreur ci-dessous :
+org.xml.sax.SAXParseException; cvc-datatype-valid.1.2.1 : 'falsee' n'est pas une valeur valide pour 'boolean'.
+cvc-datatype-valid.1.2.1 : 'falsee' n'est pas une valeur valide pour 'boolean'.
+java.xml/com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:204)
+java.xml/com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.error(ErrorHandlerWrapper.java:135)
+java.xml/com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:396)
+java.xml/com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:327)
+java.xml/com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:284)
+java.xml/com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator$XSIErrorReporter.reportError(XMLSchemaValidator.java:511)
+java.xml/com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.reportSchemaError(XMLSchemaValidator.java:3587)
+java.xml/com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.elementLocallyValidType(XMLSchemaValidator.java:3424)
+java.xml/com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.processElementContent(XMLSchemaValidator.java:3334)
+java.xml/com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.handleEndElement(XMLSchemaValidator.java:2372)
+java.xml/com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.endElement(XMLSchemaValidator.java:943)
+java.xml/com.sun.org.apache.xerces.internal.jaxp.validation.DOMValidatorHelper.finishNode(DOMValidatorHelper.java:341)
+java.xml/com.sun.org.apache.xerces.internal.jaxp.validation.DOMValidatorHelper.validate(DOMValidatorHelper.java:246)
+java.xml/com.sun.org.apache.xerces.internal.jaxp.validation.DOMValidatorHelper.validate(DOMValidatorHelper.java:189)
+java.xml/com.sun.org.apache.xerces.internal.jaxp.validation.ValidatorImpl.validate(ValidatorImpl.java:108)
+java.xml/javax.xml.validation.Validator.validate(Validator.java:124)
+project.ProjectLoaderXml.loadProjectFile(ProjectLoaderXml.java:101)
+main.MVCCDManager.openProjectBase(MVCCDManager.java:266)
+main.MVCCDManager.openProject(MVCCDManager.java:222)
+main.window.menu.WinMenuContent.openProject(WinMenuContent.java:180)
+main.window.menu.WinMenuContent.actionPerformed(WinMenuContent.java:136)
+java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+java.desktop/javax.swing.AbstractButton.doClick(AbstractButton.java:369)
+java.desktop/javax.swing.plaf.basic.BasicMenuItemUI.doClick(BasicMenuItemUI.java:980)
+java.desktop/javax.swing.plaf.basic.BasicMenuItemUI$Handler.mouseReleased(BasicMenuItemUI.java:1024)
+java.desktop/java.awt.Component.processMouseEvent(Component.java:6651)
+java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+java.desktop/java.awt.Component.processEvent(Component.java:6416)
+java.desktop/java.awt.Container.processEvent(Container.java:2263)
+java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5026)
+java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+java.desktop/java.awt.Component.dispatchEvent(Component.java:4858)
+java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2773)
+java.desktop/java.awt.Component.dispatchEvent(Component.java:4858)
+java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:778)
+java.desktop/java.awt.EventQueue$4.run(EventQueue.java:727)
+java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+java.base/java.security.AccessController.doPrivileged(Native Method)
+java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+java.desktop/java.awt.EventQueue$5.run(EventQueue.java:751)
+java.desktop/java.awt.EventQueue$5.run(EventQueue.java:749)
+java.base/java.security.AccessController.doPrivileged(Native Method)
+java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:748)
+java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Le fichier C:\Users\pasun\Documents\CommerceBase_erreursUK-Bug.xml de projet n'a pas pu être ouvert.
+============================================================
+09:17:47 - MVCCD a été fermé.
+============================================================
+09:18:14 - MVCCD a été ouvert.
+============================================================
+09:18:24 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd a démarré.
+Le projet CommerceBase a été ouvert à partir du fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.
+============================================================
+09:20:25 - MVCCD a été fermé.
+============================================================
+09:20:32 - MVCCD a été ouvert.
+============================================================
+09:20:53 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd a démarré.
+Le projet CommerceBase a été ouvert à partir du fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.
+============================================================
+10:30:54 - MVCCD a été ouvert correctement.
+============================================================
+10:36:32 - MVCCD a été ouvert correctement.
+============================================================
+10:36:52 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd a démarré.
+Le projet CommerceBase a été ouvert à partir du fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.
+============================================================
+10:47:59 - MVCCD a été ouvert correctement.
+============================================================
+10:48:26 - L'ouverture du projet du projet associé au fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd a démarré.
+Le projet CommerceBase a été ouvert à partir du fichier C:\Users\pasun\Documents\CommerceBase_erreursUK.mvccd.

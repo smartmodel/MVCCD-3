@@ -5,6 +5,7 @@ import mldr.MLDRModel;
 import mldr.MLDRTable;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
+import mpdr.oracle.MPDROracleModel;
 
 public class MLDRTransformTables {
 
@@ -55,8 +56,10 @@ public class MLDRTransformTables {
         //Transformation des opérations
         MLDRTransformConstraints mldrTransformConstraints = new MLDRTransformConstraints(
                 mldrTransform, mldrTable, mpdrModel, mpdrTable);
-        mldrTransformConstraints.transformConstraints();
-
+        //TODO-PAS En cours de développement
+        if (mpdrModel instanceof MPDROracleModel) {
+            mldrTransformConstraints.transformConstraints();
+        }
     }
 
     private void modifyTable(MLDRTable mldrTable, MPDRTable mpdrTable ) {

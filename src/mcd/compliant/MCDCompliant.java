@@ -1,8 +1,5 @@
 package mcd.compliant;
 
-import console.Console;
-import console.ViewLogsManager;
-import console.WarningLevel;
 import m.MElement;
 import main.MVCCDManager;
 import mcd.*;

@@ -1,6 +1,7 @@
 package main.window.repository;
 
-import console.Console;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import datatypes.MDDatatype;
 import diagram.mcd.MCDDiagram;
 import m.interfaces.IMCompletness;
@@ -27,7 +28,7 @@ import profile.ProfileSaverXml;
 import project.Project;
 import project.ProjectElement;
 import repository.editingTreat.EditingTreat;
-import repository.editingTreat.EditingTreatCompliant;
+import repository.editingTreat.mcd.MCDTransformEditingTreat;
 import repository.editingTreat.ProjectEditingTreat;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.*;
@@ -36,8 +37,8 @@ import repository.editingTreat.mdr.*;
 import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
 import repository.editingTreat.preferences.*;
+import resultat.Resultat;
 import utilities.DefaultMutableTreeNodeService;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
@@ -67,163 +68,164 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         //Console.clearMessages();
         // Réalisé par ViewLogManager.newText()
-        if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
-            if (PreferencesManager.instance().getApplicationPref().getDEBUG_INSPECT_OBJECT_IN_TREE()) {
-                treatInspectObject();
+        try {
+            if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
+                if (PreferencesManager.instance().getApplicationPref().getDEBUG_INSPECT_OBJECT_IN_TREE()) {
+                    treatInspectObject();
+                }
             }
-        }
 
-        if (node.getUserObject() instanceof IMLDRElementWithSource) {
-            treatSourceMLDRElementWithSource();
-        }
-
-        if (node.getUserObject() instanceof IMPDRElementWithSource) {
-            treatSourceMPDRElementWithSource();
-        }
-
-        if (node.getUserObject() instanceof MVCCDElementApplicationPreferences) {
-            treatGenericUpdate(this, new PrefApplEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof MDDatatype) {
-            treatGenericRead(this, new MDDatatypeEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof Preferences) {
-            treatPreferences(this);
-        }
-
-        if (node.getUserObject() instanceof Profile) {
-            treatProfile(this);
-        }
-
-        if (node.getUserObject() instanceof Project) {
-            treatProject(this);
-        }
-
-        if (node.getUserObject() instanceof MCDContModels) {
-            treatMCDModels(this);
-        }
-
-        if (node.getUserObject() instanceof MCDModel) {
-            treatGeneric(this, new MCDModelEditingTreat());
-            MCDModel mcdModel = (MCDModel) node.getUserObject();
-            if (mcdModel.isPackagesAutorizeds()) {
-                packageNew(this, "menu.new.package");
+            if (node.getUserObject() instanceof IMLDRElementWithSource) {
+                treatSourceMLDRElementWithSource();
             }
-            treatGenericCompliant(this, new MCDModelEditingTreat());
-            treatGenericTransformMCD(this, new MCDModelEditingTreat(),
-                    "menu.transform.mcd.to.mldr");
-        }
 
-        if (node.getUserObject() instanceof MCDPackage) {
-            treatGeneric(this, new MCDPackageEditingTreat());
-            treatGenericCompliant(this, new MCDPackageEditingTreat());
-            MCDPackage mcdPackage = (MCDPackage) node.getUserObject();
-            // Pas nécessaire de vérifier les droits de créer unpackage puisque le parent est déjà un package
-            packageNew(this, "menu.new.subpackage");
+            if (node.getUserObject() instanceof IMPDRElementWithSource) {
+                treatSourceMPDRElementWithSource();
+            }
 
-        }
+            if (node.getUserObject() instanceof MVCCDElementApplicationPreferences) {
+                treatGenericUpdate(this, new PrefApplEditingTreat());
+            }
 
+            if (node.getUserObject() instanceof MDDatatype) {
+                treatGenericRead(this, new MDDatatypeEditingTreat());
+            }
 
-        if (node.getUserObject() instanceof MCDContDiagrams) {
-            treatGenericNew(this, new MCDDiagramEditingTreat(),
-                    MessagesBuilder.getMessagesProperty("menu.new.diagram"));
-        }
-        if (node.getUserObject() instanceof MCDDiagram) {
-            treatGeneric(this, new MCDDiagramEditingTreat());
-        }
+            if (node.getUserObject() instanceof Preferences) {
+                treatPreferences(this);
+            }
 
-        if (node.getUserObject() instanceof MCDContEntities) {
-            treatGenericNew( this, new MCDEntityEditingTreat());
-        }
+            if (node.getUserObject() instanceof Profile) {
+                treatProfile(this);
+            }
 
-        if (node.getUserObject() instanceof MCDEntity) {
-            treatGeneric(this, new MCDEntityEditingTreat());
-            //treatGenericCompliant(this, new MCDEntityEditingTreat());
-            treatGenericRead(this, new MCDEntCompliantEditingTreat(),
-                    MessagesBuilder.getMessagesProperty("menu.compliant"));
-        }
+            if (node.getUserObject() instanceof Project) {
+                treatProject(this);
+            }
 
-        if (node.getUserObject() instanceof MCDContAttributes) {
-            treatGenericNew( this, new MCDAttributeEditingTreat());
-            treatGenericRead( this, new MCDAttributesEditingTreat());
-        }
+            if (node.getUserObject() instanceof MCDContModels) {
+                treatMCDModels(this);
+            }
 
-        if (node.getUserObject() instanceof MCDContConstraints) {
-            treatConstraints( this);
-        }
+            if (node.getUserObject() instanceof MCDModel) {
+                treatGeneric(this, new MCDModelEditingTreat());
+                MCDModel mcdModel = (MCDModel) node.getUserObject();
+                if (mcdModel.isPackagesAutorizeds()) {
+                    packageNew(this, "menu.new.package");
+                }
+                treatGenericCompliantMCD(this, new MCDModelEditingTreat());
+                treatGenericTransformMCD(this, new MCDModelEditingTreat(),
+                        "menu.transform.mcd.to.mldr");
+            }
 
-        if (node.getUserObject() instanceof MCDAttribute) {
-            treatGeneric(this, new MCDAttributeEditingTreat());
-        }
+            if (node.getUserObject() instanceof MCDPackage) {
+                treatGeneric(this, new MCDPackageEditingTreat());
+                treatGenericCompliantMCD(this, new MCDPackageEditingTreat());
+                MCDPackage mcdPackage = (MCDPackage) node.getUserObject();
+                // Pas nécessaire de vérifier les droits de créer unpackage puisque le parent est déjà un package
+                packageNew(this, "menu.new.subpackage");
 
-        if (node.getUserObject() instanceof MCDContRelEnds) {
-            treatGenericRead( this, new MCDRelEndsEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof MCDContRelations) {
-            treatRelations(this);
-        }
-
-        if ( (node.getUserObject() instanceof MCDUnique) &&
-                (!(node.getUserObject() instanceof MCDNID))){
-            treatGenericNew( this, new MCDUniqueParameterEditingTreat(),
-                    MessagesBuilder.getMessagesProperty("menu.new.operation.parameter"));
-            treatGeneric(this, new MCDUniqueEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof MCDNID) {
-            treatGenericNew( this, new MCDNIDParameterEditingTreat(),
-                    MessagesBuilder.getMessagesProperty("menu.new.operation.parameter"));
-            treatGeneric(this, new MCDNIDEditingTreat());
-        }
+            }
 
 
-        if (node.getUserObject() instanceof MCDAssociation) {
-            treatGeneric(this, new MCDAssociationEditingTreat());
-            //TODO-1 Développer la classe MCDAssociationCompliantEditingTreat
-            // à l'image de MCDEntityCompliantEditingTreat
-            // treatGenericRead(this, new MCDAssociationCompliantEditingTreat(),
-            //            MessagesBuilder.getMessagesProperty("menu.compliant"));
+            if (node.getUserObject() instanceof MCDContDiagrams) {
+                treatGenericNew(this, new MCDDiagramEditingTreat(),
+                        MessagesBuilder.getMessagesProperty("menu.new.diagram"));
+            }
+            if (node.getUserObject() instanceof MCDDiagram) {
+                treatGeneric(this, new MCDDiagramEditingTreat());
+            }
 
-        }
+            if (node.getUserObject() instanceof MCDContEntities) {
+                treatGenericNew(this, new MCDEntityEditingTreat());
+            }
 
-        if (node.getUserObject() instanceof MCDAssEnd) {
-            //mvccdElement = ((MCDAssEnd) node.getUserObject()).getMcdAssociation();
-            //treatGeneric(this, new MCDAssociationEditingTreat());
-            treatGeneric(this, new MCDAssEndEditingTreat());
-        }
+            if (node.getUserObject() instanceof MCDEntity) {
+                treatGeneric(this, new MCDEntityEditingTreat());
+                //treatGenericCompliant(this, new MCDEntityEditingTreat());
+                treatGenericRead(this, new MCDEntCompliantEditingTreat(),
+                        MessagesBuilder.getMessagesProperty("menu.compliant"));
+            }
 
-        if (node.getUserObject() instanceof MCDGeneralization) {
-            treatGeneric(this, new MCDGeneralizationEditingTreat());
-        }
+            if (node.getUserObject() instanceof MCDContAttributes) {
+                treatGenericNew(this, new MCDAttributeEditingTreat());
+                treatGenericRead(this, new MCDAttributesEditingTreat());
+            }
 
-        if (node.getUserObject() instanceof MCDGSEnd) {
-            //mvccdElement = ((MCDGSEnd) node.getUserObject()).getMcdGeneralization();
-            //treatGeneric(this, new MCDGeneralizationEditingTreat());
-            treatGeneric(this, new MCDGSEndEditingTreat());
-        }
+            if (node.getUserObject() instanceof MCDContConstraints) {
+                treatConstraints(this);
+            }
 
-        if (node.getUserObject() instanceof MCDLink) {
-            treatGeneric(this, new MCDLinkEditingTreat());
-        }
+            if (node.getUserObject() instanceof MCDAttribute) {
+                treatGeneric(this, new MCDAttributeEditingTreat());
+            }
 
-        if (node.getUserObject() instanceof MCDLinkEnd) {
-            //mvccdElement = ((MCDLinkEnd) node.getUserObject()).getMcdLink();
-            //treatGeneric(this, new MCDLinkEditingTreat());
-            treatGeneric(this, new MCDLinkEndEditingTreat());
+            if (node.getUserObject() instanceof MCDContRelEnds) {
+                treatGenericRead(this, new MCDRelEndsEditingTreat());
+            }
 
-        }
+            if (node.getUserObject() instanceof MCDContRelations) {
+                treatRelations(this);
+            }
+
+            if ((node.getUserObject() instanceof MCDUnique) &&
+                    (!(node.getUserObject() instanceof MCDNID))) {
+                treatGenericNew(this, new MCDUniqueParameterEditingTreat(),
+                        MessagesBuilder.getMessagesProperty("menu.new.operation.parameter"));
+                treatGeneric(this, new MCDUniqueEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MCDNID) {
+                treatGenericNew(this, new MCDNIDParameterEditingTreat(),
+                        MessagesBuilder.getMessagesProperty("menu.new.operation.parameter"));
+                treatGeneric(this, new MCDNIDEditingTreat());
+            }
 
 
-        if (node.getUserObject() instanceof IMCDElementWithTargets) {
-            String textMenu = MessagesBuilder.getMessagesProperty("menu.mcd.targets.read");
-            treatGenericRead( this, new MCDTargetsEditingTreat(), textMenu);
-        }
+            if (node.getUserObject() instanceof MCDAssociation) {
+                treatGeneric(this, new MCDAssociationEditingTreat());
+                //TODO-1 Développer la classe MCDAssociationCompliantEditingTreat
+                // à l'image de MCDEntityCompliantEditingTreat
+                // treatGenericRead(this, new MCDAssociationCompliantEditingTreat(),
+                //            MessagesBuilder.getMessagesProperty("menu.compliant"));
 
-        if (node.getUserObject() instanceof MLDRModel) {
-            treatGeneric(this, new MLDRModelEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MCDAssEnd) {
+                //mvccdElement = ((MCDAssEnd) node.getUserObject()).getMcdAssociation();
+                //treatGeneric(this, new MCDAssociationEditingTreat());
+                treatGeneric(this, new MCDAssEndEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MCDGeneralization) {
+                treatGeneric(this, new MCDGeneralizationEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MCDGSEnd) {
+                //mvccdElement = ((MCDGSEnd) node.getUserObject()).getMcdGeneralization();
+                //treatGeneric(this, new MCDGeneralizationEditingTreat());
+                treatGeneric(this, new MCDGSEndEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MCDLink) {
+                treatGeneric(this, new MCDLinkEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MCDLinkEnd) {
+                //mvccdElement = ((MCDLinkEnd) node.getUserObject()).getMcdLink();
+                //treatGeneric(this, new MCDLinkEditingTreat());
+                treatGeneric(this, new MCDLinkEndEditingTreat());
+
+            }
+
+
+            if (node.getUserObject() instanceof IMCDElementWithTargets) {
+                String textMenu = MessagesBuilder.getMessagesProperty("menu.mcd.targets.read");
+                treatGenericRead(this, new MCDTargetsEditingTreat(), textMenu);
+            }
+
+            if (node.getUserObject() instanceof MLDRModel) {
+                treatGeneric(this, new MLDRModelEditingTreat());
 
                 JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.transform.mldr.to.mpdr"));
                 addItem(this, menuItem);
@@ -233,48 +235,53 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                         (new MLDRModelEditingTreat()).treatTransform(mvccdWindow, mvccdElement);
                     }
                 });
-       }
+            }
 
-        if (node.getUserObject() instanceof MLDRTable) {
-            treatGenericRead(this, new MDRTableEditingTreat());
+            if (node.getUserObject() instanceof MLDRTable) {
+                treatGenericRead(this, new MDRTableEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MLDRColumn) {
+                treatGenericRead(this, new MDRColumnEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MLDRPK) {
+                treatGenericRead(this, new MDRPKEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MLDRFK) {
+                treatGenericRead(this, new MDRFKEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MLDRParameter) {
+                treatGenericRead(this, new MDRParameterEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MPDRModel) {
+                treatGeneric(this, new MPDRModelEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MPDRTable) {
+                treatGenericRead(this, new MDRTableEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MPDRColumn) {
+                treatGenericRead(this, new MDRColumnEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MPDRFK) {
+                treatGenericRead(this, new MDRFKEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MPDRParameter) {
+                treatGenericRead(this, new MDRParameterEditingTreat());
+            }
+        } catch (Exception e){
+            //TODO-PAS
+            Resultat resultat = new Resultat();
+            resultat.addException(e);
+            ViewLogsManager.resultat(resultat, WarningLevel.WARNING);
         }
-
-        if (node.getUserObject() instanceof MLDRColumn) {
-            treatGenericRead(this, new MDRColumnEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof MLDRPK) {
-            treatGenericRead(this, new MDRPKEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof MLDRFK) {
-            treatGenericRead(this, new MDRFKEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof MLDRParameter) {
-            treatGenericRead(this, new MDRParameterEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof MPDRModel) {
-            treatGeneric(this, new MPDRModelEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof MPDRTable) {
-            treatGenericRead(this, new MDRTableEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof MPDRColumn) {
-            treatGenericRead(this, new MDRColumnEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof MPDRFK) {
-            treatGenericRead(this, new MDRFKEditingTreat());
-        }
-
-        if (node.getUserObject() instanceof MPDRParameter) {
-            treatGenericRead(this, new MDRParameterEditingTreat());
-        }
-
 
     }
 
@@ -469,7 +476,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()) {
                 packageNew(menu, "menu.new.package");
             }
-            treatGenericCompliant(menu, new MCDContModelsEditingTreat());
+            treatGenericCompliantMCD(menu, new MCDContModelsEditingTreat());
             treatGenericTransformMCD(menu, new MCDContModelsEditingTreat(),
                     "menu.transform.mcd.to.mldr");
         }
@@ -604,24 +611,25 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         });
     }
 
-    private void treatGenericCompliant(ISMenu menu, EditingTreatCompliant editingTreatCompliant) {
-        JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
+    //private void treatGenericCompliantMCD(ISMenu menu, MCDIModelsEditingTreat mcdiModelsEditingTreat) {
+    private void treatGenericCompliantMCD(ISMenu menu, MCDCompliantEditingTreat mcdCompliantEditingTreat) {
+            JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
         addItem(menu, menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                editingTreatCompliant.treatCompliant(mvccdWindow, (IMCDCompliant) mvccdElement);
+                mcdCompliantEditingTreat.treatCompliant(mvccdWindow, (IMCDCompliant) mvccdElement);
             }
         });
     }
 
-    private void treatGenericTransformMCD(ISMenu menu, MCDIModelsEditingTreat mcdiModelsEditingTreat, String propertyTextMenu) {
+    private void treatGenericTransformMCD(ISMenu menu, MCDTransformEditingTreat mcdTransformEditingTreat, String propertyTextMenu) {
         JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(propertyTextMenu));
         addItem(menu, menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                mcdiModelsEditingTreat.treatTransform(mvccdWindow, (IMCDModel)mvccdElement);
+                mcdTransformEditingTreat.treatTransform(mvccdWindow, (IMCDModel)mvccdElement);
             }
         });
     }

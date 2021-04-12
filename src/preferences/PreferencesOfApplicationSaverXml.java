@@ -94,6 +94,8 @@ public class PreferencesOfApplicationSaverXml {
             transformer.transform(source, result);
 
         } catch (ParserConfigurationException | TransformerException pce) {
+            //TODO-PAS STB faire un throw(e) - Intégration dans la transaction d'ouverture (Si fichier inexistant - A checker)
+            // et transaction d'édition
             pce.printStackTrace();
         }
 

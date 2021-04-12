@@ -1,13 +1,12 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
-import mcd.interfaces.IMCDModel;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 
 import java.awt.*;
 
-public class MCDContModelsEditingTreat extends MCDIModelsEditingTreat {
+public class MCDContModelsEditingTreat extends MCDTransformEditingTreat {
 
 
     @Override

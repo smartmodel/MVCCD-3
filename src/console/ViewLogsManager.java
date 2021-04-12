@@ -3,6 +3,7 @@ package console;
 
 import resultat.Resultat;
 import resultat.ResultatElement;
+import resultat.ResultatLevel;
 
 /**
  * This class have to be used when you want to tell something to user right now.
@@ -38,22 +39,16 @@ public class ViewLogsManager {
     }
 
 
-    public static void newResultat(Resultat resultat, WarningLevel warningLevel) {
+    public static void resultat(Resultat resultat, WarningLevel warningLevel) {
         int i = 0 ;
         for (ResultatElement resultatElement : resultat.getElementsAllLevel()){
-            ViewManager.showTextLine(resultatElement.getText(), warningLevel);
+            String text = resultatElement.getText();
             if (i == 0){
-                LogsManager.newText(resultatElement.getText(), warningLevel);
+                ViewLogsManager.newText(text, warningLevel);
             }else {
-                LogsManager.continueText(resultatElement.getText(), warningLevel);
+                ViewLogsManager.continueText(text, warningLevel);
             }
             i++ ;
-        }
-    }
-
-    public static void continueResultat(Resultat resultat, WarningLevel warningLevel) {
-        for (ResultatElement resultatElement : resultat.getElementsAllLevel()){
-            LogsManager.continueText(resultatElement.getText(), warningLevel);
         }
     }
 }
