@@ -1,5 +1,6 @@
 package window.editor.preferences.application;
 
+import console.WarningLevel;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import preferences.Preferences;
@@ -9,6 +10,8 @@ import project.Project;
 import utilities.window.DialogMessage;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
+import utilities.window.scomponents.SComboBox;
+import utilities.window.scomponents.services.SComboBoxService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -34,6 +37,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
     private SCheckBox debugTDUniquePrint = new SCheckBox(this );
 
 
+    private SComboBox fieldWarningLevel = new SComboBox(this);
     private SCheckBox fieldRepMCDModelsMany = new SCheckBox(this);
     private SCheckBox fieldRepMCDPackagesAuthorizeds = new SCheckBox(this );
 
@@ -68,6 +72,14 @@ public class PrefApplicationInputContent extends PanelInputContent {
         debugTDUniquePrint.addFocusListener(this);
 
 
+        fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DEBUG));
+        fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DETAILS));
+        fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_INFO));
+        fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_WARNING));
+        fieldWarningLevel.addItemListener(this);
+        fieldWarningLevel.addFocusListener(this);
+
+
         fieldRepMCDModelsMany.addItemListener(this);
         fieldRepMCDModelsMany.addFocusListener(this);
         fieldRepMCDPackagesAuthorizeds.addItemListener(this);
@@ -84,6 +96,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
         super.getSComponents().add(debugEditorDatasChanged);
         super.getSComponents().add(debugTDPrint);
         super.getSComponents().add(debugTDUniquePrint);
+        super.getSComponents().add(fieldWarningLevel);
         super.getSComponents().add(fieldRepMCDModelsMany);
         super.getSComponents().add(fieldInsteadofXML);
 
@@ -193,8 +206,11 @@ public class PrefApplicationInputContent extends PanelInputContent {
         gbc.gridx++;
         panelInputContentCustom.add(new JLabel ("Vrai : sérialisation  - Faux : XML"), gbc);
 
-
-
+        gbc.gridy++ ;
+        gbc.gridx = 0;
+        panelInputContentCustom.add(new JLabel ("Niveau de messages console"), gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldWarningLevel, gbc);
     }
 
 
@@ -235,6 +251,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
         debugTDPrint.setSelected(preferences.getDEBUG_TD_PRINT());
         debugTDUniquePrint.setSelected(preferences.getDEBUG_TD_UNICITY_PRINT());
         fieldRepMCDModelsMany.setSelected(preferences.getREPOSITORY_MCD_MODELS_MANY());
+        SComboBoxService.selectByText(fieldWarningLevel, preferences.getWARNING_LEVEL().getText());
         fieldRepMCDPackagesAuthorizeds.setSelected(preferences.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
         fieldInsteadofXML.setSelected(preferences.isPERSISTENCE_SERIALISATION_INSTEADOF_XML());
     }
@@ -274,6 +291,24 @@ public class PrefApplicationInputContent extends PanelInputContent {
         if (debugTDUniquePrint.checkIfUpdated()){
             applicationPref.setDEBUG_TD_UNICITY_PRINT(debugTDUniquePrint.isSelected());
         }
+
+
+        if (fieldWarningLevel.checkIfUpdated()){
+            String text = (String) fieldWarningLevel.getSelectedItem();
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DEBUG))){
+                applicationPref.setWARNING_LEVEL(WarningLevel.DEBUG_MODE);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DETAILS))){
+                applicationPref.setWARNING_LEVEL(WarningLevel.DETAILS);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_INFO))){
+                applicationPref.setWARNING_LEVEL(WarningLevel.INFO);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_WARNING))){
+                applicationPref.setWARNING_LEVEL(WarningLevel.WARNING);
+            }
+        }
+
         if (fieldInsteadofXML.checkIfUpdated()){
             applicationPref.setPERSISTENCE_SERIALISATION_INSTEADOF_XML(fieldInsteadofXML.isSelected());
         }

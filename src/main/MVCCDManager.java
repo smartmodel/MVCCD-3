@@ -1,6 +1,8 @@
 package main;
 
 import console.Console;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import datatypes.MDDatatypesManager;
 import exceptions.CodeApplException;
 import main.window.console.WinConsoleContent;
@@ -13,11 +15,15 @@ import main.window.repository.WinRepositoryTree;
 import mcd.MCDRelEnd;
 import mcd.MCDRelation;
 import messages.LoadMessages;
+import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.*;
 import repository.Repository;
-import utilities.Trace;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
+import resultat.ResultatService;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
 
@@ -58,27 +64,43 @@ public class MVCCDManager {
      * Lance MVC-CD-3
      */
     public void start() {
-        // Chargement des messages de traduction
-        LoadMessages.main();
+        // Start Transacrion implicite
+        Resultat resultat = new Resultat();
+        String message ;
+        //try {
 
-        //Chargement des préférences de l'application
-        PreferencesManager.instance().loadOrCreateFileXMLApplicationPref(); //Ajout de Giorgio Roncallo
-        /*
-        if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
-            PreferencesManager.instance().loadOrCreateFileApplicationPreferences(); //Persistance avec sérialisation
-        }else{
+            // Chargement des messages de traduction
+            LoadMessages.main();
+
+            //Chargement des préférences de l'application
             PreferencesManager.instance().loadOrCreateFileXMLApplicationPref(); //Ajout de Giorgio Roncallo
-        }
-         */
+            /*
+            if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
+                PreferencesManager.instance().loadOrCreateFileApplicationPreferences(); //Persistance avec sérialisation
+            }else{
+                PreferencesManager.instance().loadOrCreateFileXMLApplicationPref(); //Ajout de Giorgio Roncallo
+            }
+             */
 
-        // Création et affichage de l'écran d'accueil
-        startMVCCDWindow();
-        // Création de la console
-        startConsole();
-        // Création du référentiel
-        startRepository();
-        // Ajustement de la taille de la zone d'affichage du référentiel
-        mvccdWindow.adjustPanelRepository();
+            // Création et affichage de l'écran d'accueil
+            startMVCCDWindow();
+            // Création de la console
+            startConsole();
+            // Création du référentiel
+            startRepository();
+            // Ajustement de la taille de la zone d'affichage du référentiel
+            mvccdWindow.adjustPanelRepository();
+
+            message = MessagesBuilder.getMessagesProperty("mvccd.start.ok");
+        /*
+        } catch (Exception e){
+            resultat.addException(e);
+            message = MessagesBuilder.getMessagesProperty("mvccd.start.error");
+        }
+        */
+        // Quittance de fin
+        ResultatService.finishTransaction(resultat, message, mvccdWindow,true);
+
         // Chargement des adresses disques des derniers fichiers de projets utilisés
         projectsRecents = new ProjectsRecentsLoader().load();
 
@@ -132,7 +154,7 @@ public class MVCCDManager {
 
     public void completeNewProject() {
         //this.project = project;
-        PreferencesManager.instance().setProjectPref(project.getPreferences()); //TODO-STB: voir avec PAS pour comprendre (PAS se renseigne sur le cheminement de chargement des préférences (projet, profile, etc.)
+        PreferencesManager.instance().setProjectPref(project.getPreferences()); //Envoi les préférences du projet dans les préférences statiques du manager, pour que le manager ait accès aux préférences.
         PreferencesManager.instance().copyApplicationPref(Project.NEW);
         project.adjustProfile();
         projectToRepository();
@@ -234,6 +256,10 @@ public class MVCCDManager {
      */
     private void openProjectBase(File file) {
 
+        Resultat resultat = new Resultat();
+        String message = MessagesBuilder.getMessagesProperty("project.open.start", new String[] {file.getPath()});
+        resultat.startTransaction(message);
+
 
         if (file != null) {
             //Mémorise le fichier associé au projet
@@ -242,18 +268,26 @@ public class MVCCDManager {
             //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
             String extensionOpenFile = UtilFiles.getExtension(file.getName());
             if ( extensionOpenFile != null) {
-                //openProjectMessageChangeFormat(extensionOpenFile);
-                // Lecture du fichier de sauvegarde
-                if (extensionOpenFile.equals(Preferences.FILE_PROJECT_EXTENSION)) {
-                    project = new LoaderSerializable().load(file); //Persistance avec sérialisation
+                try {
+                    //openProjectMessageChangeFormat(extensionOpenFile);
+                    // Lecture du fichier de sauvegarde
+                    if (extensionOpenFile.equals(Preferences.FILE_PROJECT_EXTENSION)) {
+                        project = new LoaderSerializable().load(file); //Persistance avec sérialisation
 
-                } else if (extensionOpenFile.equals("xml")) {
-                    project = new ProjectLoaderXml().loadProjectFile(file); //Ajout de Giorgio Roncallo
-                } else {
-                    throw new CodeApplException("Seules les extensions mvccd et xml sont reconnues");
+                    } else if (extensionOpenFile.equals("xml")) {
+                        project = new ProjectLoaderXml().loadProjectFile(file); //Ajout de Giorgio Roncallo
+                    } else {
+                        resultat.add( new ResultatElement("Seules les extensions mvccd et xml sont reconnues.", ResultatLevel.FATAL));
+                    }
+                } catch (Exception e){
+                    resultat.addException(e);
                 }
-                // Fin provisoire !
+            } else {
+                resultat.add( new ResultatElement("Le fichier à lire doit avoir une extension mvccd et xml.", ResultatLevel.FATAL));
+            }
+            // Fin provisoire !
 
+            if (project != null) {
                 // Mémorisation du fichier de projet ouvert
                 projectsRecents.add(fileProjectCurrent);
                 // Mise à jour du menu contextuel des fichiers de projets récemment utilisés
@@ -264,13 +298,6 @@ public class MVCCDManager {
 
                 // Copie des préférences d'application au sein des préférences du projet
                 PreferencesManager.instance().copyApplicationPref(Project.EXISTING);
-            } else {
-                //TODO-1 Voir lorsque la sauvegarde xml sera terminée s'il y aura lieu de vérifier l'extension...
-                throw new CodeApplException("Le format du fichier de projet doit être : mvccd ou xml");
-            }
-
-
-            if (project != null) {
                 // Reprise des préférences de profil (si existant)
                 project.adjustProfile();
                 // Copie du projet au sein du référentiel
@@ -291,8 +318,17 @@ public class MVCCDManager {
             }
 
 
+        } else {
+            resultat.add( new ResultatElement("Aucun fichier n''est passé en paramètre de la méthode", ResultatLevel.FATAL));
         }
-   }
+
+        if(resultat.isNotError()){
+            message = MessagesBuilder.getMessagesProperty("project.open.ok", new String[]{project.getName(), file.getPath()});
+        } else{
+            message = MessagesBuilder.getMessagesProperty("project.open.abort", new String[]{file.getPath()});
+        }
+        resultat.finishTransaction(message, getMvccdWindow(), true);
+    }
 
     /**
      * Provisoire en attendant la sauvegarde XML finalisée
@@ -347,20 +383,39 @@ public class MVCCDManager {
     }
 
     private void saveProjectBase(){
-        //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
-        String extensionOpenFile = UtilFiles.getExtension(fileProjectCurrent.getName());
-        if ( extensionOpenFile.equals(Preferences.FILE_PROJECT_EXTENSION)) {
-            new SaverSerializable().save(fileProjectCurrent); //Persistance avec sérialisation
-        } else if ( extensionOpenFile.equals("xml")) {
-            new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
-        } else {
-            throw new CodeApplException("Seules les extensions mvccd et xml sont reconnues");
+        Resultat resultat = new Resultat();
+        String message = MessagesBuilder.getMessagesProperty("project.save.start",
+                new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() } );
+        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+
+        try {
+            //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
+            String extensionOpenFile = UtilFiles.getExtension(fileProjectCurrent.getName());
+            if (extensionOpenFile.equals(Preferences.FILE_PROJECT_EXTENSION)) {
+                new SaverSerializable().save(fileProjectCurrent); //Persistance avec sérialisation
+            } else if (extensionOpenFile.equals("xml")) {
+                new ProjectSaverXml().createProjectFile(fileProjectCurrent); //Ajout de Giorgio
+            } else {
+                throw new CodeApplException("Seules les extensions mvccd et xml sont reconnues");
+            }
+            // Fin provisoire !
+            message = MessagesBuilder.getMessagesProperty ("project.save.finish.ok",
+                    new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() });
+
+        } catch (Exception e){
+            resultat.addException(e);
+            // pas de référence aux noms du projet et du fichier qui peuvent être une source d'erreur
+            message = MessagesBuilder.getMessagesProperty ("project.save.finish.abort");
         }
-        // Fin provisoire !
+
+        // Quittance de fin
+        ResultatService.finishTransaction(resultat, message,mvccdWindow,true);
     }
 
 
     public void closeProject() {
+        String message = MessagesBuilder.getMessagesProperty("project.close", new String[] {project.getName()});
+        ViewLogsManager.newText(message, WarningLevel.WARNING);
         project = null;
         repository.removeProject();
         PreferencesManager.instance().setProfilePref(null);
@@ -370,6 +425,7 @@ public class MVCCDManager {
         getWinMenuContent().getProjectSave().setEnabled(false);
         getWinMenuContent().getProjectSaveAs().setEnabled(false);
         getWinMenuContent().getProjectClose().setEnabled(false);
+
     }
 
 

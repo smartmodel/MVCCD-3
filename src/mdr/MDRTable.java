@@ -4,7 +4,6 @@ import exceptions.CodeApplException;
 import main.MVCCDElement;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import project.ProjectElement;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

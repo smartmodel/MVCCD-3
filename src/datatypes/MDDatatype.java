@@ -214,7 +214,7 @@ public abstract class MDDatatype extends MVCCDElement {
 
 
 
-    public Object getPropertyWithInherit(int property) throws CodeApplException {
+    public Object getPropertyWithInherit(int property)  {
         if (property == SIZEMANDATORY) {
             if (sizeMandatory != null) {
                 return sizeMandatory;
@@ -263,7 +263,7 @@ public abstract class MDDatatype extends MVCCDElement {
         }
     }
 
-    public MDDatatype getPropertyNotNullFrom(int property) throws CodeApplException {
+    public MDDatatype getPropertyNotNullFrom(int property)  {
         if (property == SIZEMANDATORY) {
             if (sizeMandatory != null) {
                 return this;

@@ -39,7 +39,7 @@ public class ProjectSaverXml {
      * Méthode principale qui se charge de créer un fichier XML contenant la sauvegarde du projet utilisateur.
      * @param file Chemin d'accès au fichier (y compris le nom du fichier) qui sera créé ou qui sera modifié.
      */
-    public void createProjectFile(File file) {
+    public void createProjectFile(File file) throws FileNotFoundException, TransformerException, ParserConfigurationException {
         try {
             //Creation du document XML en mémoire;
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -99,13 +99,10 @@ public class ProjectSaverXml {
             StreamResult result = new StreamResult(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)); //Génère un FileNotFoundException si le fichier ne peut pas être créé, s'il existe mais ne peut pas être modifié ou si un répertoire du même nom existe.
             transformer.transform(source, result);
 
-            // Message de confirmation de la sauvegarde du fichier
-            String message = MessagesBuilder.getMessagesProperty("project.saved",
-                    new String[]{MVCCDManager.instance().getProject().getName(), file.getPath()});
-            DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), message);
-
         } catch (ParserConfigurationException | TransformerException | FileNotFoundException pce) {
-            pce.printStackTrace();
+            //TODO-PAS STB faire un throw(e) - Intégration dans la transaction
+            throw (pce);
+            //pce.printStackTrace();
         }
     }
 

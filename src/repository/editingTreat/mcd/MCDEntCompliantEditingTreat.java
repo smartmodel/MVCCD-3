@@ -3,16 +3,17 @@ package repository.editingTreat.mcd;
 import main.MVCCDElement;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
-import repository.editingTreat.EditingTreatTransform;
+import mcd.interfaces.IMCDCompliant;
+import messages.MessagesBuilder;
+import resultat.Resultat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.entity.compliant.EntCompliantEditorBtn;
 import window.editor.mcd.entity.compliant.EntCompliantInputContent;
 
 import java.awt.*;
-import java.util.ArrayList;
 
-public class MCDEntCompliantEditingTreat extends EditingTreatTransform {
+public class MCDEntCompliantEditingTreat extends MCDCompliantEditingTreat {
 
 
     @Override
@@ -31,15 +32,5 @@ public class MCDEntCompliantEditingTreat extends EditingTreatTransform {
     protected String getPropertyTheElement() {
         return "the.entity";
     }
-
-    @Override
-    public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
-        MCDEntity mcdEntity = (MCDEntity) mvccdElement;
-        ArrayList<String> resultat = mcdEntity.treatCompliant();
-    }
-
-    @Override
-    public void treatTransform(Window owner, MVCCDElement mvccdElement) { }
-
 
 }

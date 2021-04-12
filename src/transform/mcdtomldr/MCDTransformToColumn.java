@@ -1,7 +1,7 @@
 package transform.mcdtomldr;
 
 import datatypes.MLDRDatatype;
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
@@ -19,7 +19,6 @@ import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -258,7 +257,7 @@ public class MCDTransformToColumn {
                 if (StringUtils.isNotEmpty(e.getMessage())) {
                     message += System.lineSeparator() + e.getMessage();
                 }
-                throw new TransformMCDException(message, e);
+                throw new CodeApplException(message, e);
             }
             names.setElementName(name, element);
         }
@@ -290,7 +289,7 @@ public class MCDTransformToColumn {
                     message = MessagesBuilder.getMessagesProperty("mdrcolumn.build.name.pk.error",
                             new String[]{mcdEntity.getName()});
                 }
-                throw new TransformMCDException(message, e);
+                throw new CodeApplException(message, e);
             }
             names.setElementName(name, element);
         }
@@ -357,7 +356,7 @@ public class MCDTransformToColumn {
                                     mldrColumnFK.getMDRTableAccueil().getName(),
                                     mcdRelEndParent.getNameNoFreeOrNameRelation()});
                 }
-                throw new TransformMCDException(message, e);
+                throw new CodeApplException(message, e);
 
             }
             names.setElementName(name, element);

@@ -1,6 +1,8 @@
 package preferences;
 
 
+import console.WarningLevel;
+import console.WarningLevelManager;
 import main.MVCCDElement;
 import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
@@ -26,7 +28,7 @@ public class Preferences extends MVCCDElement {
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
-    public static String APPLICATION_VERSION = "3.0.16"; //TODO-STB+PAS: sauvegarder également la version dans la sauvegarde du projet
+    public static String APPLICATION_VERSION = "3.0.16";
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
     public static Integer PANEL_REPOSITORY_WIDTH = 200;
@@ -137,6 +139,13 @@ public class Preferences extends MVCCDElement {
     public static String SYSTEM_FILE_SEPARATOR =System.getProperty("file.separator");
     public static String CHARSET_FILES_TEXT = "UTF-8";
 
+    public static String LOGGING_FILE_NAME_FORMAT = "yyyy-MM-dd" ;
+    public static String LOGGING_FILE_NAME_EXTENSION = "log" ;
+    public static String LOGGING_FILE_NAME_FORMAT_ERROR_NULL = "Le format de nommage du fichier de log est inexistant";
+    public static String LOGGING_FOLDER_PATH = "log" ;
+    public static String DIRECTORY_LOGGING_NAME = "logs";
+
+    // Path de nommage au niveau des objets du MCD (Modèle.paquetatge.entité....
     public static String MODEL_NAME_PATH_SEPARATOR = ".";
 
     public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
@@ -613,7 +622,10 @@ public class Preferences extends MVCCDElement {
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1 = "mdr.pref.column.fk.one.diff.indice.start.1";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2 = "mdr.pref.column.fk.one.diff.indice.start.2";
 
-
+    public static String WARNING_LEVEL_DEBUG = "warning.level.debug";
+    public static String WARNING_LEVEL_DETAILS = "warning.level.details";
+    public static String WARNING_LEVEL_INFO = "warning.level.info";
+    public static String WARNING_LEVEL_WARNING = "warning.level.warning";
 
     /*
      * Préférences de l'application
@@ -630,6 +642,7 @@ public class Preferences extends MVCCDElement {
     private Boolean DEBUG_EDITOR_DATAS_CHANGED = null;
     private Boolean DEBUG_TD_PRINT = null;
     private Boolean DEBUG_TD_UNICITY_PRINT = null;
+    private WarningLevel WARNING_LEVEL = null;
     private Boolean REPOSITORY_MCD_MODELS_MANY = false;
     private Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = false;
 
@@ -804,6 +817,17 @@ public class Preferences extends MVCCDElement {
 
     public void setDEBUG_TD_UNICITY_PRINT(Boolean DEBUG_TD_UNICITY_PRINT) {
         this.DEBUG_TD_UNICITY_PRINT = DEBUG_TD_UNICITY_PRINT;
+    }
+
+    public WarningLevel getWARNING_LEVEL() {
+        if (WARNING_LEVEL == null){
+           WARNING_LEVEL = WarningLevel.WARNING;
+        }
+        return WARNING_LEVEL;
+    }
+
+    public void setWARNING_LEVEL(WarningLevel WARNING_LEVEL) {
+        this.WARNING_LEVEL = WARNING_LEVEL;
     }
 
     public Boolean getREPOSITORY_MCD_MODELS_MANY() {

@@ -1,14 +1,10 @@
 package transform.mldrtompdr;
 
-import console.Console;
 import delete.Delete;
-import exceptions.TransformMCDException;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
-import mdr.MDRColumn;
 import mdr.MDRConstraint;
-import mdr.MDRFK;
 import mdr.interfaces.IMDRElementWithIteration;
 import mldr.*;
 import mldr.services.MLDRModelService;
@@ -18,6 +14,7 @@ import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import resultat.Resultat;
 import transform.MDTransform;
 import utilities.Trace;
 
@@ -27,10 +24,10 @@ public class MLDRTransform extends MDTransform {
 
     private MLDRModel mldrModel ;
     private MPDRModel mpdrModel ;
+    private Resultat resultat = new Resultat();
 
-    public ArrayList<String> transform(MLDRModel mldrModel) {
+    public Resultat transform(MLDRModel mldrModel) {
         this.mldrModel = mldrModel ;
-        ArrayList<String> resultat = new ArrayList<String>();
 
         // Création du modèle physique si inexistant
         mpdrModel = foundOrCreateMPDRModel(
@@ -53,15 +50,12 @@ public class MLDRTransform extends MDTransform {
 
             //Rafraichir l'arbre
             mpdrModel.refreshTreeMPDR();
-
-        } catch(TransformMCDException e){
-            resultat.add(e.getMessage());
+            return resultat;
+        } catch(Exception e){
             undoTransform(mpdrModelClone);
-            Console.printMessages(resultat);
+            resultat.addException(e);
             return resultat;
         }
-
-        return resultat;
     }
 
     private void undoTransform(MPDRModel mpdrModelClone) {
@@ -170,5 +164,9 @@ public class MLDRTransform extends MDTransform {
         if (mpdrFK.getMdrPK() != mldrFK.getMdrPK()) {
             mpdrFK.setMdrPK(mpdrPK);
         }
+    }
+
+    public Resultat getResultat() {
+        return resultat;
     }
 }

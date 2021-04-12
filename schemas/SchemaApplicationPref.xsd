@@ -15,6 +15,18 @@
 	<xs:element name="debugEditorDatasChanged" type="xs:boolean"/>
 	<xs:element name="debugTdPrint" type="xs:boolean"/>
 	<xs:element name="debugTdUnicityPrint" type="xs:boolean"/>
+
+	<xs:element name="warningLevel">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="warning.level.debug"/>
+				<xs:enumeration value="warning.level.details"/>
+				<xs:enumeration value="warning.level.info"/>
+				<xs:enumeration value="warning.level.warning"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
 	<xs:element name="repositoryMcdModelsMany" type="xs:boolean"/>
 	<xs:element name="repositoryMcdPackagesAuthorizeds" type="xs:boolean"/>
 	<xs:element name="persistenceSerialisationInsteadofXML" type="xs:boolean"/>
@@ -30,6 +42,7 @@
 				<xs:element ref="debugEditorDatasChanged"/>
 				<xs:element ref="debugTdPrint"/>
 				<xs:element ref="debugTdUnicityPrint"/>
+				<xs:element ref="warningLevel"/>
 				<xs:element ref="repositoryMcdModelsMany"/>
 				<xs:element ref="repositoryMcdPackagesAuthorizeds"/>
 				<xs:element ref="persistenceSerialisationInsteadofXML"/>

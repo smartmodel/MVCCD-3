@@ -505,27 +505,4 @@ public class MVCCDElementFactory {
         MPDRContTables mpdrContTable = new MPDRContTables(mpdrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
     }
 
-
-
-
-
-    public ProjectElement createMVCCDElementFromXML(String baliseName, ProjectElement ancestor){
-        if (baliseName.equals(Preferences.XML_BALISE_PROJECT)) {
-            return new Project(null);
-        } else if (baliseName.equals(Preferences.XML_BALISE_MODELS)) {
-            return new MCDContModels(ancestor);
-        } else if (baliseName.equals(Preferences.XML_BALISE_DIAGRAMS)) {
-            return new MCDContDiagrams(ancestor);
-        } else if (baliseName.equals(Preferences.XML_BALISE_ENTITIES)) {
-            return new MCDContEntities(ancestor);
-        } else if (baliseName.equals(Preferences.XML_BALISE_ENTITY)) {
-            return new MCDEntity(ancestor);
-        } else {
-            String message = MessagesBuilder.getMessagesProperty("load.xml.balise.unknow", new String[] {
-                    baliseName, ancestor.getName(), ancestor.getClass().getName()});
-            MVCCDManager.instance().getConsole().printMessage(message);
-            return null;
-        }
-    }
-
 }

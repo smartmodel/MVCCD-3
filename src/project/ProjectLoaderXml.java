@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectLoaderXml {
+    // Version de l'application utilisée par le projet XML chargé
+    private String version = null;
+
     // listes d'éléments nécessaires pour récupérer les conteneurs des paquetages, des entités et les associations
     private ArrayList<Element> elementsPackages = new ArrayList<>();
     private ArrayList<Element> elementsEntities = new ArrayList<>();
@@ -42,7 +45,7 @@ public class ProjectLoaderXml {
     private ArrayList<MVCCDElement> loadedAssociations = new ArrayList<>();
     private NodeList diagramTagsList = null; //Contient la liste des enfants de <diagrammes>
 
-    public Project loadProjectFile(File fileProjectCurrent) {
+    public Project loadProjectFile(File fileProjectCurrent) throws IOException, SAXException, ParserConfigurationException {
         Project project = null;
         try {
             // Création du document et du parser pour récupérer les information du fichier
@@ -64,6 +67,9 @@ public class ProjectLoaderXml {
             // Chargement du projet et du nom du projet
             project = new Project(projectTag.getAttribute("id"));
             project.setName(projectTag.getElementsByTagName("nameProject").item(0).getTextContent());
+
+            // Chargement de la version
+            this.version = projectTag.getElementsByTagName("version").item(0).getTextContent();
 
             // Initialisation des préférences du projet
             Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME);
@@ -101,7 +107,9 @@ public class ProjectLoaderXml {
             validator.validate(new DOMSource(document));
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+            //TODO-PAS STB faire un throw(e) - Intégration dans la transaction
+            throw (e);
+            //e.printStackTrace();
         }
         return project;
     }
@@ -1090,7 +1098,7 @@ public class ProjectLoaderXml {
     private MLDRColumn loadColumn(MCDElement mcdSource, MLDRContColumns mldrContColumns, Element columnTag) {
 
         //Récupération de l'attribut (MCD) source en utilisant l'id de l'attribut source de la colonne
-        System.out.println("loadColumn:" + columnTag.getAttribute("name"));
+        //System.out.println("loadColumn:" + columnTag.getAttribute("name")); //TODO-STB: remettre le log si nécessaire
         int attributeSourceId = Integer.parseInt(columnTag.getAttribute("mcdelement_source"));
         MCDElement mcdElementSourceOfColumn = (MCDElement) mcdSource.getChildByIdProfondeur(attributeSourceId); //La source de la colonne peut être un attribut d'entité ou une extrémité d'association (si colonne FK)
 

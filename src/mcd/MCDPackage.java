@@ -6,11 +6,13 @@ import mcd.interfaces.*;
 import mcd.services.MCDElementService;
 import mcd.services.MCDPackageService;
 import project.ProjectElement;
+import resultat.Resultat;
+import resultat.ResultatElement;
 
 import java.util.ArrayList;
 
 public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDNamePathParent,
-        IMCDContPackages, IMCDContContainer, IMCDContainer, IMCompletness {
+        IMCDContPackages, IMCDContContainer, IMCDContainer, IMCompletness, IMCDCompliant {
 
     private static final long serialVersionUID = 1000;
 
@@ -66,10 +68,9 @@ public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDName
         return MCDPackageService.getMCDEntities(this);
     }
 
-    public ArrayList<String> treatCompliant(){
+    public Resultat treatCompliant(){
         MCDCompliant mcdCompliant = new MCDCompliant();
-        ArrayList<String> resultat = mcdCompliant.check(getMCDEntities(), false);
-        return resultat;
+        return mcdCompliant.check(getMCDEntities(), false);
     }
 
     public int getLevel(){

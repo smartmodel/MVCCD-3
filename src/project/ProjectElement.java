@@ -32,7 +32,7 @@ public abstract class ProjectElement extends MVCCDElement {
 
         //Mise à jour de la séquence de l'id du projet, pour quelle celle-ci soit augmentée à une valeur supérieur au nouvel id défini pour l'élément.
         Project rootProject = ProjectService.getProjectRoot(this);
-        if(rootProject.getIdElementSequence() < id){ //TODO-STB: voir si la gestion de la séquence est ok pour PAS
+        if(rootProject.getIdElementSequence() < id){ //TODO-STB: supprimer et à la place charger la séquence avec le chargement du projet
             rootProject.setIdElementSequence(id);
         }
     }
@@ -112,7 +112,6 @@ public abstract class ProjectElement extends MVCCDElement {
      * @return L'élément retourné, s'il a un id, est forcément un ProjectElement. Retourne null si aucun élément n'est trouvé.
      */
     public ProjectElement getChildByIdProfondeur(int id){
-        System.out.println("getChildByIdProfondeur:" + this.getName());
         ProjectElement childProjectElement = null;
         ProjectElement foundedChildOfChild = null;
         for(MVCCDElement childElement : this.getChilds()){

@@ -14,6 +14,7 @@ import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRRelation;
 import mldr.services.MLDRModelService;
 import project.ProjectElement;
+import resultat.Resultat;
 import transform.mldrtompdr.MLDRTransform;
 import utilities.Trace;
 
@@ -92,12 +93,9 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
     }
 
 
-    public ArrayList<String> treatTransform() {
+    public Resultat treatTransform() {
         MLDRTransform mldrTransform = new MLDRTransform();
-        ArrayList<String> resultat = mldrTransform.transform(this);
-
-        return resultat;
-
+        return  mldrTransform.transform(this);
     }
 
 

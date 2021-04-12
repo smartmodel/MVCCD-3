@@ -1,6 +1,6 @@
 package transform.mcdtomldr;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDManager;
 import mcd.*;
@@ -15,7 +15,6 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.MDRAdjustParameters;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -177,7 +176,7 @@ public class MCDTransformToFK {
                     message = MessagesBuilder.getMessagesProperty("mdrfk.build.name.error",
                             new String[]{mdrTableChild.getName(), mdrTableParent.getName(), mcdRelEndParent.getNameNoFreeOrNameRelation()});
                 }
-                throw new TransformMCDException(message, e);
+                throw new CodeApplException(message, e);
             }
             names.setElementName(name, element);
         }

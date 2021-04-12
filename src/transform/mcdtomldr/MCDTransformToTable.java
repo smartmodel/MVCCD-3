@@ -1,7 +1,6 @@
 package transform.mcdtomldr;
 
 import exceptions.CodeApplException;
-import exceptions.TransformMCDException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
@@ -23,7 +22,6 @@ import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -39,7 +37,7 @@ public class MCDTransformToTable {
         this.mldrModel = mldrModel;
     }
 
-    public void createOrModifyFromAllEntities()  throws TransformMCDException{
+    public void createOrModifyFromAllEntities()  {
         createOrModifyFromEntities(IMCDModelService.getMCDEntitiesConcrets(imcdModel));
         createOrModifyPKEntitiesInd(IMCDModelService.getMCDEntitiesIndependants(imcdModel));
         createOrModifyPKEntitiesNoInd(IMCDModelService.getMCDEntitiesConcretsNoInd(imcdModel));
@@ -67,14 +65,14 @@ public class MCDTransformToTable {
         mcdTransformToColumn.createOrModifyFromAttributes(mcdEntity, mldrTable);
     }
 
-    private void createOrModifyPKEntitiesInd(ArrayList<MCDEntity> mcdEntitiesIndependants)  throws TransformMCDException{
+    private void createOrModifyPKEntitiesInd(ArrayList<MCDEntity> mcdEntitiesIndependants)  {
         for (MCDEntity mcdEntityIndependant : mcdEntitiesIndependants){
             MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(mcdEntityIndependant);
             new MCDTransformToPK(mcdTransform).createOrModifyFromEntityInd(mcdEntityIndependant, mldrTable);
         }
     }
 
-    private void createOrModifyPKEntitiesNoInd(ArrayList<MCDEntity> mcdEntitiesNoIndNoEntAss)  throws TransformMCDException {
+    private void createOrModifyPKEntitiesNoInd(ArrayList<MCDEntity> mcdEntitiesNoIndNoEntAss)   {
 
         ArrayList<MCDEntity> mcdEntitiesToTransform = (ArrayList<MCDEntity>) mcdEntitiesNoIndNoEntAss.clone();
         int controle = mcdEntitiesToTransform.size();
@@ -256,7 +254,7 @@ public class MCDTransformToTable {
                     message = MessagesBuilder.getMessagesProperty("mldrtable.build.name.error",
                             new String[]{mcdEntity.getName()});
                 }
-                throw new TransformMCDException(message, e);
+                throw new CodeApplException(message, e);
             }
             names.setElementName(name, element);
         }
@@ -320,7 +318,7 @@ public class MCDTransformToTable {
                     message = MessagesBuilder.getMessagesProperty("mldrtable.build.name.error",
                             new String[]{mcdAssociationNN.getName()});
                 }
-                throw new TransformMCDException(message, e);
+                throw new CodeApplException(message, e);
             }
             names.setElementName(name, element);
         }

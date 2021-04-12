@@ -2,15 +2,19 @@ package repository.editingTreat.mldr;
 
 import main.MVCCDElement;
 import mdr.MDRModel;
+import messages.MessagesBuilder;
 import mldr.MLDRModel;
-import repository.editingTreat.EditingTreatTransform;
+import preferences.PreferencesManager;
+import repository.editingTreat.EditingTreat;
+import resultat.Resultat;
+import transaction.services.TransactionService;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mdr.model.MDRModelEditor;
 
 import java.awt.*;
 
-public class MLDRModelEditingTreat extends EditingTreatTransform {
+public class MLDRModelEditingTreat extends EditingTreat {
 
 
     @Override
@@ -30,22 +34,23 @@ public class MLDRModelEditingTreat extends EditingTreatTransform {
         return "the.model.logical";
     }
 
-    @Override
-    public void treatCompliant(Window owner, MVCCDElement mvccdElement) {
-}
-
-    @Override
     public void treatTransform(Window owner, MVCCDElement mvccdElement) {
         MLDRModel mldrModel = (MLDRModel) mvccdElement;
 
-        /*
-        ArrayList<String> resultat = mldrModel.treatCompliant();
-        if (resultat.size() > 0) {
-            super.treatCompliantFinishMessages(owner, mvccdElement, resultat);
-        } else {
+        Resultat resultat = new Resultat();
+        String message = MessagesBuilder.getMessagesProperty("transform.mldrtompdr.start",
+                new String[] {
+                        MessagesBuilder.getMessagesProperty(PreferencesManager.instance().preferences().getMLDRTOMPDR_DB()),
+                        MessagesBuilder.getMessagesProperty(getPropertyTheElement()),
+                        mvccdElement.getName()} );
+        resultat.startTransaction(message);
 
-         */
-        mldrModel.treatTransform();
-     }
+        //TODO-1 Contrôle de conformité à prévoir !
+        resultat.addAll(mldrModel.treatTransform());
+
+        TransactionService.treatFinishTransaction(owner, mvccdElement, resultat,
+                getPropertyTheElement(), "transform.mldrtompdr.ok", "transform.mldrtompdr.abort") ;
+
+    }
 
 }

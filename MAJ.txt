@@ -36,3 +36,5 @@ Problèmes : Initialisation d'une relation en création
 
 //#MAJ 2021-03-30 Nommage d'association nom et/ou role
 
+//#MAJ 2021-04-03 Remplacé le text "path.separator" par File.separator
+

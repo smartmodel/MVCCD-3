@@ -16,6 +16,7 @@
 			<xs:choice>
 				<xs:sequence>
 					<xs:element ref="nameProject"/>
+					<xs:element ref="version"/>
 					<xs:element ref="profileFileName"/>
 					<xs:element ref="modelsMany"/>
 					<xs:element ref="packagesAutorizeds"/>
@@ -56,6 +57,14 @@
 			<xs:restriction base="xs:string">
 				<xs:pattern value="[a-zA-Z][a-zA-Z0-9_]*"/>
 				<xs:maxLength value="50"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="version">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}"/>
+				<xs:maxLength value="8"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>

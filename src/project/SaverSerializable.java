@@ -3,8 +3,6 @@ package project;
 import exceptions.CodeApplException;
 import main.MVCCDElement;
 import main.MVCCDManager;
-import messages.MessagesBuilder;
-import utilities.window.DialogMessage;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
@@ -20,11 +18,6 @@ public class SaverSerializable {
         try {
             writer = new ObjectOutputStream(new FileOutputStream(file));
             saveNode(MVCCDManager.instance().getRepository().getNodeProject(), 0);
-
-            // Quittance de fin
-            String message = MessagesBuilder.getMessagesProperty ("project.saved",
-                    new String[] {MVCCDManager.instance().getProject().getName(), file.getPath() });
-            DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(),message);
 
         } catch (Exception  ex) {
                 throw(new CodeApplException(ex));	// L'erreur est renvoyée

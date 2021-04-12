@@ -1,6 +1,6 @@
 package transform.mcdtomldr;
 
-import exceptions.TransformMCDException;
+import exceptions.CodeApplException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDManager;
 import mcd.*;
@@ -13,7 +13,6 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.MDRAdjustParameters;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -30,7 +29,7 @@ public class MCDTransformToPK {
         this.mcdTransform = mcdTransform;
     }
 
-    public void createOrModifyFromEntityInd(MCDEntity mcdEntity, MLDRTable mldrTable)  throws TransformMCDException{
+    public void createOrModifyFromEntityInd(MCDEntity mcdEntity, MLDRTable mldrTable)  {
 
         MLDRPK mldrPK = createOrModifyPKEntityBase(mcdEntity, mldrTable);
 
@@ -44,7 +43,7 @@ public class MCDTransformToPK {
     public MLDRPK createOrModifyFromEntityConcretNoInd(MLDRModel mldrModel,
                                                        MCDEntity mcdEntity,
                                                        MLDRTable mldrTable,
-                                                       ArrayList<MCDRelEnd> mcdRelEndsParents)  throws TransformMCDException{
+                                                       ArrayList<MCDRelEnd> mcdRelEndsParents)  {
 
         // Ensemble des colonnes PK
         ArrayList<MDRColumn> mdrColumnPKs = new ArrayList<MDRColumn>();
@@ -74,7 +73,7 @@ public class MCDTransformToPK {
     public MLDRPK createOrModifyFromAssNN(MLDRModel mldrModel,
                                           MCDAssociation mcdAssNN,
                                           MLDRTable mldrTable,
-                                          ArrayList<MLDRFK> mldrPFKs)  throws TransformMCDException{
+                                          ArrayList<MLDRFK> mldrPFKs)  {
 
         // Ensemble des colonnes PFK
         ArrayList<MDRColumn> mdrColumnPKs = new ArrayList<MDRColumn>();
@@ -91,7 +90,7 @@ public class MCDTransformToPK {
         return mldrPK;
     }
 
-    private MLDRPK createOrModifyPKEntityBase(MCDEntity mcdEntity, MLDRTable mldrTable)  throws TransformMCDException{
+    private MLDRPK createOrModifyPKEntityBase(MCDEntity mcdEntity, MLDRTable mldrTable)  {
         MLDRPK mldrPK = mldrTable.getMLDRPK();
         if (mldrPK == null) {
             mldrPK = mldrTable.createPK(mcdEntity);
@@ -103,7 +102,7 @@ public class MCDTransformToPK {
         return mldrPK;
     }
 
-    private MLDRPK createOrModifyPKAssNN(MCDAssociation mcdAssNN, MLDRTable mldrTable)  throws TransformMCDException{
+    private MLDRPK createOrModifyPKAssNN(MCDAssociation mcdAssNN, MLDRTable mldrTable){
         MLDRPK mldrPK = mldrTable.getMLDRPK();
         if (mldrPK == null) {
             mldrPK = mldrTable.createPK(mcdAssNN);
@@ -156,7 +155,7 @@ public class MCDTransformToPK {
 
 
 
-    public void modifyPK(MLDRPK mldrPK, MCDElement mcdElement)  throws TransformMCDException {
+    public void modifyPK(MLDRPK mldrPK, MCDElement mcdElement) {
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrPK.getMDRTableAccueil().getMDRModelParent();
         MCDTransformService.names(mldrPK, buildNamePK(mldrPK.getMDRTableAccueil(), mcdElement), mldrModel);
@@ -166,7 +165,7 @@ public class MCDTransformToPK {
     public void modifyPK(MLDRPK mldrPK, MCDElement mcdElement, ArrayList<MCDAssociation> mcdAssociationsId) {
     }
 
-    protected MDRElementNames buildNamePK(MDRTable mdrTable, MCDElement mcdElement) throws TransformMCDException{
+    protected MDRElementNames buildNamePK(MDRTable mdrTable, MCDElement mcdElement) {
         Preferences preferences = PreferencesManager.instance().preferences();
 
         MDRElementNames names = new MDRElementNames();
@@ -196,7 +195,7 @@ public class MCDTransformToPK {
                     message = MessagesBuilder.getMessagesProperty("mdrpk.build.name.error",
                             new String[]{mdrTable.getName()});
                 }
-                throw new TransformMCDException(message, e);
+                throw new CodeApplException(message, e);
             }
             names.setElementName(name, element);
         }

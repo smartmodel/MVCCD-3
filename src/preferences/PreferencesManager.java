@@ -100,7 +100,7 @@ public class PreferencesManager {
         projectPref.setDEBUG_EDITOR_DATAS_CHANGED(applicationPref.getDEBUG_EDITOR_DATAS_CHANGED());
         projectPref.setDEBUG_TD_PRINT(applicationPref.getDEBUG_TD_PRINT());
         projectPref.setDEBUG_TD_UNICITY_PRINT(applicationPref.getDEBUG_TD_UNICITY_PRINT());
-
+        projectPref.setWARNING_LEVEL(applicationPref.getWARNING_LEVEL());
         //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
         projectPref.setPERSISTENCE_SERIALISATION_INSTEADOF_XML(
                 applicationPref.isPERSISTENCE_SERIALISATION_INSTEADOF_XML());

@@ -5,6 +5,9 @@ import mcd.MCDEntity;
 import mcd.MCDEntityNature;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import repository.editingTreat.mcd.MCDEntCompliantEditingTreat;
+import resultat.Resultat;
+import resultat.ResultatElement;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
@@ -17,7 +20,6 @@ import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
-import java.util.ArrayList;
 
 public class EntCompliantInputContent extends PanelInputContent {
 
@@ -135,7 +137,9 @@ public class EntCompliantInputContent extends PanelInputContent {
     @Override
     public void loadDatas(MVCCDElement mvccdElementCrt) {
         MCDEntity mcdEntity = (MCDEntity) mvccdElementCrt;
-        ArrayList<String> errors = mcdEntity.treatCompliant();
+
+        Resultat resultat = mcdEntity.treatCompliant();
+        ((MCDEntCompliantEditingTreat) getEditor().getEditingTreat()).treatCompliant(getEditor(), mcdEntity);
 
         MCDEntityNature nature = mcdEntity.getNature();
         if (nature != null){
@@ -147,9 +151,9 @@ public class EntCompliantInputContent extends PanelInputContent {
         fieldGeneralize.setSelected(mcdEntity.isGeneralized());
         //fieldAbstract.setSelected(mcdEntity.isEntAbstract());
 
-        if (errors.size() > 0 ){
-            for (String error : errors) {
-                fieldErrors.append(error + System.lineSeparator());
+        if (resultat.isWithElementFatal() ){
+            for (ResultatElement error : resultat.getElementsAllLevel()) {
+                fieldErrors.append(error.getText() + System.lineSeparator());
             }
         } else {
             fieldErrors.setVisible (false);

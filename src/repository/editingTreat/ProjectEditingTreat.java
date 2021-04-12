@@ -15,7 +15,7 @@ import java.awt.*;
 //TODO-1 A voir si l'extension est pertinente
 public class ProjectEditingTreat  extends EditingTreat {
 
-    public static void treatNew(Window owner) {
+    public static Project treatNew(Window owner) {
         ProjectEditor fen = new ProjectEditor(owner, null, DialogEditor.NEW, new ProjectEditingTreat());
         fen.setVisible(true);
 
@@ -24,6 +24,7 @@ public class ProjectEditingTreat  extends EditingTreat {
             MVCCDManager.instance().setProject(project);
             MVCCDManager.instance().completeNewProject();
         }
+        return project;
     }
 
 
