@@ -9,3 +9,6 @@
 
 # Preferences of the application chosen by user
 /application.pref
+
+# Logs files
+/logs/*
