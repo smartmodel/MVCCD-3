@@ -4,6 +4,8 @@ import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
+import mdr.MDRColumn;
+import mdr.MDRConstraint;
 import messages.MessagesBuilder;
 import mldr.*;
 import org.w3c.dom.Attr;
@@ -996,6 +998,20 @@ public class ProjectSaverXml {
             //Persistance d'une colonne
             this.addColumn(doc, mldrColumn, columnsTag);
         }
+
+        //Création de la balise <constraints>
+        Element tableConstraintsTag = doc.createElement("tableConstraints");
+        tableTag.appendChild(tableConstraintsTag);
+
+        //Ajout de l'id à la balise <constraints>
+        tableConstraintsTag.setAttribute("id", mldrTable.getMDRContConstraints().getIdProjectElementAsString());
+
+        //Parcours des contraintes
+        for(MDRConstraint mdrConstraint : mldrTable.getMDRContConstraints().getMDRConstraints()){
+
+            //Persistance d'une contrainte
+            this.addTableConstraint(doc, mdrConstraint, tableConstraintsTag);
+        }
     }
 
     /**
@@ -1040,5 +1056,67 @@ public class ProjectSaverXml {
         if(mldrColumn.getScale() != null){
             columnTag.setAttribute("scale", String.valueOf(mldrColumn.getScale()));
         }
+    }
+
+
+    /**
+     * Sauvegarde d'une contrainte de table (qu'elle soit PK, FK, etc.)
+     * @param doc Document XML dans lequel la contrainte sera persistée.
+     * @param tableConstraint La contrainte de table qui sera persistée.
+     * @param tableConstraintsTag Balise parent <tableConstraints> qui contiendra la nouvelle balise <constraint>
+     */
+    private void addTableConstraint(Document doc, MDRConstraint tableConstraint, Element tableConstraintsTag) {
+
+        //Préparation de la balise <xxxConstraint>
+        Element constraintTag = null;
+
+        //Sauvegarde d'une contrainte PK
+        if(tableConstraint instanceof MLDRPK){
+            MLDRPK pkConstraint = (MLDRPK) tableConstraint;
+
+            //Création de la balise <pk>
+            constraintTag = doc.createElement("pk");
+            tableConstraintsTag.appendChild(constraintTag);
+
+            //Ajout des propriétés d'identification spécifiques à une contrainte PK
+            constraintTag.setAttribute("mcdelement_source", pkConstraint.getMcdElementSource().getIdProjectElementAsString());
+        }
+
+        if(constraintTag != null) {
+
+            //Ajout des propriétés d'identification d'une contrainte de table
+            constraintTag.setAttribute("id", tableConstraint.getIdProjectElementAsString());
+            constraintTag.setAttribute("name", tableConstraint.getName());
+            constraintTag.setAttribute("shortName", tableConstraint.getShortName());
+            constraintTag.setAttribute("longName", tableConstraint.getLongName());
+
+            //Ajout de la balise <targetColumns>
+            Element targetColumnsTag = doc.createElement("targetColumns");
+            constraintTag.appendChild(targetColumnsTag);
+
+            //Parcours des colonnes contenues dans la contrainte
+            for(MDRColumn targetMdrColumn : tableConstraint.getMDRColumns()){
+
+                //Persistance d'une référence vers une colonne
+                this.addTargetColumnOfTableConstraint(doc, targetMdrColumn, targetColumnsTag);
+            }
+        }
+    }
+
+    /**
+     * Persistance d'une référence de colonne cible d'une contrainte de table. Par exemple, persistance de la référence
+     * vers la colonne pointée par une PK.
+     * @param doc Document XML dans lequel la contrainte sera persistée.
+     * @param targetMdrColumn La colonne cible, dont la référence sera persistée.
+     * @param targetColumnsTag La balise parent <targetColumns> dans laquelle sera créé une nouvelle balise <targetColumn>
+     */
+    private void addTargetColumnOfTableConstraint(Document doc, MDRColumn targetMdrColumn, Element targetColumnsTag) {
+
+        //Création de la balise <targetColumn>
+        Element targetColumnTag = doc.createElement("targetColumn");
+        targetColumnsTag.appendChild(targetColumnTag);
+
+        //Ajout des propriétés d'une colonne cible
+        targetColumnTag.setAttribute("target_column_id", targetMdrColumn.getIdProjectElementAsString());
     }
 }

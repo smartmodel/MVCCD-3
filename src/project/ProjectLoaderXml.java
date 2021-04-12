@@ -1,6 +1,5 @@
 package project;
 
-import console.Console;
 import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
@@ -8,9 +7,10 @@ import main.MVCCDFactory;
 import mcd.*;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.MDRColumn;
+import mdr.MDRConstraint;
+import mdr.interfaces.IMDRParameter;
 import messages.MessagesBuilder;
 import mldr.*;
-import mpdr.MPDRColumn;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -1001,7 +1001,7 @@ public class ProjectLoaderXml {
                 //Recherche et chargement de <tables>
                 if(mldrTagChild.getNodeName().equals("tables")){
                     MLDRContTables mldrContTables = (MLDRContTables) mldrModel.getMDRContTables(); //Le conteneur de tables est déjà créé automatiquement avant
-                    this.loadTables(mcdSource, mldrContTables, mldrTagChild); //Chargement de <tables>
+                    this.loadMldTables(mcdSource, mldrContTables, mldrTagChild); //Chargement de <tables>
                 }
             }
         }
@@ -1014,7 +1014,7 @@ public class ProjectLoaderXml {
      *                       conteneur qui sera alimenté par les nouvelles tables au fur et à mesure de leur chargement.
      * @param tablesTag Balise racine <tables>
      */
-    private void loadTables(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tablesTag){
+    private void loadMldTables(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tablesTag){
         //Parcours des balises enfants de <tables>
         NodeList tablesTagChilds = tablesTag.getChildNodes();
         for (int i = 0; i < tablesTagChilds.getLength(); i++) {
@@ -1023,7 +1023,7 @@ public class ProjectLoaderXml {
 
                 //Recherche et chargement de <table>
                 if (tablesTagChild.getNodeName().equals("table")){
-                    this.loadTable(mcdSource, mldrContTables, tablesTagChild);
+                    this.loadMldTable(mcdSource, mldrContTables, tablesTagChild);
                 }
             }
         }
@@ -1036,7 +1036,7 @@ public class ProjectLoaderXml {
      *                       ajoutée la nouvelle table.
      * @param tableTag Balise <table> du document XML à partir de laquelle la table est chargée.
      */
-    private void loadTable(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tableTag){
+    private void loadMldTable(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tableTag){
 
         //Récupération de l'élément MCD source de la table (peut être une
         int entitySourceId = Integer.parseInt(tableTag.getAttribute("mcdelement_source")); //Récupérer l'id de l'élément source
@@ -1052,7 +1052,12 @@ public class ProjectLoaderXml {
 
                 //Chargement de <columns>
                 if (tableTagChild.getNodeName().equals("columns")) {
-                    this.loadColumns(mcdSource, mldrContTables, mldrTable, tableTagChild);
+                    this.loadMldColumns(mcdSource, mldrContTables, mldrTable, tableTagChild);
+                }
+
+                //Chargement de <tableConstraints>
+                else if(tableTagChild.getNodeName().equals("tableConstraints")){
+                    this.loadMldTableConstraints(mcdSource, mldrTable, tableTagChild);
                 }
             }
         }
@@ -1061,11 +1066,11 @@ public class ProjectLoaderXml {
     /**
      * À partir de la balise <columns>, cette méthode charge l'ensemble des colonnes d'une table.
      * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
-     * @param mldrContTables Il s'agit du conteneur parent dans lequel se trouve la table. Est utilisée pour faire la recherche des colonnes PK pointées par les colonnes FK en fonction de leur id.
+     * @param mldrContTables Il s'agit du conteneur parent dans lequel se trouve la table. Est utilisé pour faire la recherche des colonnes PK pointées par les colonnes FK en fonction de leur id.
      * @param table Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les colonnes.
      * @param columnsTag Balise <columns>
      */
-    private void loadColumns(MCDElement mcdSource, MLDRContTables mldrContTables, MLDRTable table, Element columnsTag){
+    private void loadMldColumns(MCDElement mcdSource, MLDRContTables mldrContTables, MLDRTable table, Element columnsTag){
         MLDRContColumns mldrContColumns = (MLDRContColumns) table.getMDRContColumns();
 
         //Création d'un conteneur pour mémoriser les colonnes détectées comme colonnes de FK
@@ -1079,7 +1084,7 @@ public class ProjectLoaderXml {
 
                 //Chargement de <column>
                 if (columnsTagChild.getNodeName().equals("column")) {
-                    MLDRColumn fkColumn = this.loadColumn(mcdSource, mldrContColumns, columnsTagChild); //La méthode retourne les colonnes qui sont FK
+                    MLDRColumn fkColumn = this.loadMldColumn(mcdSource, mldrContColumns, columnsTagChild); //La méthode retourne les colonnes qui sont FK
                     if(fkColumn != null){
                         fkColumnsList.add(fkColumn); //Si la colonne est une colonne FK, on l'ajoute à la liste des colonnes FK
                     }
@@ -1102,10 +1107,9 @@ public class ProjectLoaderXml {
      * @param columnTag balise <column>
      * @return Si la colonne est détectée comme étant une colonne de FK, alors la colonne est retournée
      */
-    private MLDRColumn loadColumn(MCDElement mcdSource, MLDRContColumns mldrContColumns, Element columnTag) {
+    private MLDRColumn loadMldColumn(MCDElement mcdSource, MLDRContColumns mldrContColumns, Element columnTag) {
 
         //Récupération de l'attribut (MCD) source en utilisant l'id de l'attribut source de la colonne
-        //System.out.println("loadColumn:" + columnTag.getAttribute("name")); //TODO-STB: remettre le log si nécessaire
         int attributeSourceId = Integer.parseInt(columnTag.getAttribute("mcdelement_source"));
         MCDElement mcdElementSourceOfColumn = (MCDElement) mcdSource.getChildByIdProfondeur(attributeSourceId); //La source de la colonne peut être un attribut d'entité ou une extrémité d'association (si colonne FK)
 
@@ -1147,5 +1151,93 @@ public class ProjectLoaderXml {
             return mldrColumn;
         }
         return null;
+    }
+
+    /**
+     * À partir de la balise <tableConstraintsTag>, cette méthode charge l'ensemble des contraintes d'une table
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mldrTable Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les contraintes.
+     * @param tableConstraintsTag Balise <tableConstraints>
+     */
+    private void loadMldTableConstraints(MCDContModels mcdSource, MLDRTable mldrTable, Element tableConstraintsTag) {
+
+        //Parcours des balises enfants de <tableConstraints>
+        NodeList constraintsTagChilds = tableConstraintsTag.getChildNodes();
+        for (int i = 0; i < constraintsTagChilds.getLength(); i++) {
+            if (constraintsTagChilds.item(i) instanceof Element) {
+                Element ConstraintsTagChild = (Element) constraintsTagChilds.item(i);
+
+                //Chargement de <pk>
+                if (ConstraintsTagChild.getNodeName().equals("pk")) {
+                    this.loadMldPk(mcdSource, mldrTable, ConstraintsTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <pk>, cette méthode charge une contrainte PK de table avec toutes les références vers les
+     * colonnes incluses.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mldrTable Il s'agit de la table MLD contenant déjà un conteneur de contraintes dans l'application, dans lequel la nouvelle PK qui sera créée sera placée.
+     * @param pkTag Balise <pk>
+     */
+    private void loadMldPk(MCDContModels mcdSource, MLDRTable mldrTable, Element pkTag) {
+        MLDRContConstraints mldrContConstraints = (MLDRContConstraints) mldrTable.getMDRContConstraints();
+
+        //Récupération de l'entité (MCD) source en utilisant l'id de l'entité source de la pk
+        int entitySourceId = Integer.parseInt(pkTag.getAttribute("mcdelement_source"));
+        MCDElement mcdElementSourceOfPk = (MCDElement) mcdSource.getChildByIdProfondeur(entitySourceId); //Peut être l'entité source (MCD) de la PK ou l'association source de la PK (cas d'une association n:n)
+
+        //Chargement et création de la PK, y compris son id et son entité (MCD) source
+        MLDRPK mldrPk = MVCCDElementFactory.instance().createMLDRPK(mldrContConstraints, mcdElementSourceOfPk, Integer.parseInt(pkTag.getAttribute("id")));
+
+        //Chargement des autres propriétés d'identification de la colonne
+        mldrPk.setName(pkTag.getAttribute("name"));
+        mldrPk.setShortName(pkTag.getAttribute("shortname"));
+        mldrPk.setLongName(pkTag.getAttribute("longname"));
+
+        //Parcours des balises enfants de <pk>
+        NodeList pkTagChilds = pkTag.getChildNodes();
+        for (int i = 0; i < pkTagChilds.getLength(); i++) {
+            if (pkTagChilds.item(i) instanceof Element) {
+                Element pkTagChild = (Element) pkTagChilds.item(i);
+
+                //Chargement de <targetColumns>
+                if (pkTagChild.getNodeName().equals("targetColumns")) {
+                    this.loadMldTargetColumnsOfPk(mcdElementSourceOfPk, mldrTable, mldrPk, pkTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <targetColumns>, cette méthode charge les références des colonnes incluses dans une
+     * contrainte PK.
+     * @param mcdEntityOrAssociationSource Il s'agit de l'entité ou de l'association source (MCD) à partir de laquelle la PK a été générée.
+     * @param mldrTable Il s'agit de la table (MLD) déjà chargée, dans laquelle se trouve déjà les colonnes référencés par la PK.
+     * @param mldrPk Il s'agit de la PK (MLD) déjà créé précédemment dans l'application, à qui sera ajouté les colonnes ciblées par les balises enfants <targetColumn>.
+     * @param targetColumnsTag Balise <targetColumns> contenant des sous-balises avec les références vers les colonnes de la PK
+     */
+    private void loadMldTargetColumnsOfPk(MCDElement mcdEntityOrAssociationSource, MLDRTable mldrTable, MLDRPK mldrPk, Element targetColumnsTag) {
+        //Parcours des balises enfants de <targetColumns>
+        NodeList targetColumnsTagChilds = targetColumnsTag.getChildNodes();
+        for (int i = 0; i < targetColumnsTagChilds.getLength(); i++) {
+            if (targetColumnsTagChilds.item(i) instanceof Element) {
+                Element targetColumnsTagChild = (Element) targetColumnsTagChilds.item(i);
+
+                //Chargement de <targetColumn>
+                if(targetColumnsTagChild.getNodeName().equals("targetColumn")) {
+                    Element targetColumnTag = targetColumnsTagChild;
+
+                    //Récupération de la colonne cible de la PK
+                    int targetColumnId = Integer.parseInt(targetColumnTag.getAttribute("target_column_id"));
+                    MLDRColumn targetMldrColumn = (MLDRColumn) mldrTable.getMDRColumnById(targetColumnId);
+
+                    //Ajout de la colonne référencée à la contrainte PK (ce qui passe par la création d'un Parameter)
+                    MVCCDElementFactory.instance().createMLDRParameter(mldrPk, targetMldrColumn, mcdEntityOrAssociationSource);
+                }
+            }
+        }
     }
 }

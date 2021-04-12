@@ -342,29 +342,27 @@ public class MVCCDElementFactory {
     }
 
     public MLDRColumn createMLDRColumn(MDRContColumns mdrContColumns, MCDElement mcdElementSource, int id) {
-        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource, id);
-        return mldrColumn;
+        return new MLDRColumn(mdrContColumns, mcdElementSource, id);
     }
 
     public MLDRColumn createMLDRColumn(MDRContColumns mdrContColumns, MCDElement mcdElementSource) {
-        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource);
-        return mldrColumn;
+        return new MLDRColumn(mdrContColumns, mcdElementSource);
     }
 
     public MLDRColumn createMLDRColumnFK(MDRContColumns mdrContColumns, MCDElement mcdElementSource, MLDRColumn mldrColumnPK) {
-        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource, mldrColumnPK);
-        return mldrColumn;
+        return new MLDRColumn(mdrContColumns, mcdElementSource, mldrColumnPK);
     }
 
-
     public MLDRPK createMLDRPK(MDRContConstraints mdrContConstraints, MCDElement mcdElementSource) {
-        MLDRPK mldrPK= new MLDRPK(mdrContConstraints, mcdElementSource);
-        return mldrPK;
+        return new MLDRPK(mdrContConstraints, mcdElementSource);
+    }
+
+    public MLDRPK createMLDRPK(MDRContConstraints mdrContConstraints, MCDElement mcdElementSource, int id) {
+        return new MLDRPK(mdrContConstraints, mcdElementSource, id);
     }
 
     public MLDRParameter createMLDRParameter(MDRConstraint mdrConstraint, IMDRParameter target, MCDElement mcdElementSource) {
-        MLDRParameter mldrParameter = new MLDRParameter(mdrConstraint, target, mcdElementSource);
-        return mldrParameter;
+        return new MLDRParameter(mdrConstraint, target, mcdElementSource);
     }
 
 

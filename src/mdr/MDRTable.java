@@ -122,4 +122,18 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
         }
         return null;
     }
+
+    /**
+     * Parcourt les colonnes de la table et recherche la colonne portant l'id donné en paramètre.
+     * @param id Id utilisé pour effectuer la recherche.
+     * @return Retourne la colonne trouvée. Retourne null si aucune colonne n'est trouvée.
+     */
+    public MDRColumn getMDRColumnById(int id){
+        for(MDRColumn mdrColumn : this.getMDRColumns()){
+            if(mdrColumn.getIdProjectElement() == id){
+                return mdrColumn;
+            }
+        }
+        return null;
+    }
 }

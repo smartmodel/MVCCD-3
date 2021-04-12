@@ -732,6 +732,7 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="columns"/>
+				<xs:element ref="tableConstraints"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
@@ -773,6 +774,42 @@
 			<xs:attribute name="datatype_constraint_lienprog" type="xs:string" />
 			<xs:attribute name="size" type="xs:int" />
 			<xs:attribute name="scale" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="tableConstraints">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="pk" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:choice>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="pk">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="targetColumns" minOccurs="1" maxOccurs="1"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="shortName" type="xs:string" />
+			<xs:attribute name="longName" type="xs:string" />
+			<xs:attribute name="mcdelement_source" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="targetColumns">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="targetColumn" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="targetColumn">
+		<xs:complexType>
+			<xs:attribute name="target_column_id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 

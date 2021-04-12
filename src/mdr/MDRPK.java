@@ -13,5 +13,9 @@ public abstract class MDRPK extends MDRConstraint{
         super(parent);
     }
 
+    public MDRPK(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public abstract MLDRParameter createParameter(IMDRParameter target);
 }
