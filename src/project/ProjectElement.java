@@ -112,7 +112,6 @@ public abstract class ProjectElement extends MVCCDElement {
      * @return L'élément retourné, s'il a un id, est forcément un ProjectElement. Retourne null si aucun élément n'est trouvé.
      */
     public ProjectElement getChildByIdProfondeur(int id){
-        System.out.println("getChildByIdProfondeur:" + this.getName());
         ProjectElement childProjectElement = null;
         ProjectElement foundedChildOfChild = null;
         for(MVCCDElement childElement : this.getChilds()){

@@ -1092,7 +1092,7 @@ public class ProjectLoaderXml {
     private MLDRColumn loadColumn(MCDElement mcdSource, MLDRContColumns mldrContColumns, Element columnTag) {
 
         //Récupération de l'attribut (MCD) source en utilisant l'id de l'attribut source de la colonne
-        System.out.println("loadColumn:" + columnTag.getAttribute("name"));
+        //System.out.println("loadColumn:" + columnTag.getAttribute("name")); //TODO-STB: remettre le log si nécessaire
         int attributeSourceId = Integer.parseInt(columnTag.getAttribute("mcdelement_source"));
         MCDElement mcdElementSourceOfColumn = (MCDElement) mcdSource.getChildByIdProfondeur(attributeSourceId); //La source de la colonne peut être un attribut d'entité ou une extrémité d'association (si colonne FK)
 
