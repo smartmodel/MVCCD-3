@@ -29,12 +29,6 @@ public abstract class ProjectElement extends MVCCDElement {
     public ProjectElement(ProjectElement parent, int id){
         super(parent);
         this.id = id;
-
-        //Mise à jour de la séquence de l'id du projet, pour quelle celle-ci soit augmentée à une valeur supérieur au nouvel id défini pour l'élément.
-        /*Project rootProject = ProjectService.getProjectRoot(this);
-        if(rootProject.getIdElementSequence() < id){ //TODO-STB: supprimer et à la place charger la séquence avec le chargement du projet
-            rootProject.setIdElementSequence(id);
-        }*/
     }
 
     public ProjectElement(ProjectElement parent, String name) {

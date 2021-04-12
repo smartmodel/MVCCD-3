@@ -712,6 +712,9 @@ public class ProjectLoaderXml {
                 if (!associationTag.getAttribute("name").equals("")) {
                     mcdAssociation.setName(associationTag.getAttribute("name"));
                 }
+                if (!associationTag.getAttribute("shortName").equals("")) {
+                    mcdAssociation.setShortName(associationTag.getAttribute("shortName"));
+                }
                 loadedAssociations.add(mcdAssociation);
 
                 // Ajout des extrémités d'associations

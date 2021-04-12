@@ -772,6 +772,10 @@ public class ProjectSaverXml {
             name.setValue(mcdAssociation.getName());
             associationTag.setAttributeNode(name);
 
+            Attr shortName = doc.createAttribute("shortName");
+            shortName.setValue(mcdAssociation.getShortName());
+            associationTag.setAttributeNode(shortName);
+
             addPropertiesAssociation(doc, associationTag, mcdAssociation);
             addExtremite(doc, associationTag, extremiteFrom);
             addExtremite(doc, associationTag, extremiteTo);
@@ -948,7 +952,6 @@ public class ProjectSaverXml {
 
             //Persistance d'une table
             this.addTable(doc, mldrTable, tablesTag);
-
         }
     }
 
