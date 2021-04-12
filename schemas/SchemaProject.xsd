@@ -20,6 +20,7 @@
 					<xs:element ref="profileFileName"/>
 					<xs:element ref="modelsMany"/>
 					<xs:element ref="packagesAutorizeds"/>
+					<xs:element ref="idElementSequence"/>
 				</xs:sequence>
 				<xs:sequence>
 					<xs:element ref="nature"/>
@@ -71,6 +72,7 @@
 	<xs:element name="profileFileName"/>
 	<xs:element name="modelsMany" type="xs:boolean"/>
 	<xs:element name="packagesAutorizeds" type="xs:boolean"/>
+	<xs:element name="idElementSequence" type="xs:int"/>
 
 	<xs:element name="preferences">
 		<xs:complexType>

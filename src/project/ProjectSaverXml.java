@@ -363,6 +363,11 @@ public class ProjectSaverXml {
         Element packagesAutorizeds = document.createElement("packagesAutorizeds");
         packagesAutorizeds.appendChild(document.createTextNode(Boolean.toString(project.isPackagesAutorizeds())));
         properties.appendChild(packagesAutorizeds);
+
+        // Persistance de la séquence permettant d'incrémenter les ids de nouveaux éléments créés dans le projet
+        Element idElementSequence = document.createElement("idElementSequence");
+        idElementSequence.appendChild(document.createTextNode(String.valueOf(this.project.getIdElementSequence())));
+        properties.appendChild(idElementSequence);
     }
 
     private void addPropertiesEntity(Document doc, Element entity, MCDEntity mcdEntity, Element racine) {

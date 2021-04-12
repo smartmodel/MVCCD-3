@@ -130,6 +130,10 @@ public class ProjectLoaderXml {
 
         Element packagesAutorizeds = (Element) racine.getElementsByTagName("packagesAutorizeds").item(0);
         project.setPackagesAutorizeds(Boolean.valueOf(packagesAutorizeds.getTextContent()));
+
+        // Récupération de la dernière valeur de la séquence des éléments du projet
+        Element idElementSequence = (Element) racine.getElementsByTagName("idElementSequence").item(0);
+        project.setIdElementSequence(Integer.parseInt(idElementSequence.getTextContent()));
     }
 
     public void addPreferences(Element racine, Preferences preferences) {
