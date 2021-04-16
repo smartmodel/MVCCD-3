@@ -3,6 +3,8 @@ package mdr;
 import md.MDElement;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.services.MDRModelService;
+import mldr.MLDRContRelations;
+import mldr.services.MLDRModelService;
 import project.ProjectElement;
 
 import java.util.ArrayList;
@@ -84,6 +86,10 @@ public abstract class MDRModel extends MDRElement  {
 
     public ArrayList<MDRTable> getMDRTables(){
         return MDRModelService.getMDRTables(this);
+    }
+
+    public MDRContRelations getMDRContRelations() {
+        return MDRModelService.getMDRContRelations(this);
     }
 
     public void adjustNaming(){

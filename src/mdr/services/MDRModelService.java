@@ -6,6 +6,8 @@ import md.interfaces.IMDElementWithSource;
 import mdr.*;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
+import mldr.MLDRContRelations;
+import mldr.MLDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 
@@ -93,6 +95,15 @@ public class MDRModelService {
     }
 
      */
+
+    public static MDRContRelations getMDRContRelations(MDRModel mdrModel) {
+        for (MVCCDElement mvccdElement : mdrModel.getChilds()){
+            if (mvccdElement instanceof MDRContRelations){
+                return (MDRContRelations) mvccdElement ;
+            }
+        }
+        return null;
+    }
 
     public static void adjustNaming(MDRModel mdrModel){
         // Il faudra faire le changement de longueur en premier!

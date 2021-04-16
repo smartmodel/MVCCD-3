@@ -4,9 +4,7 @@ import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
-import mdr.MDRColumn;
-import mdr.MDRConstraint;
-import messages.MessagesBuilder;
+import mdr.*;
 import mldr.*;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -14,7 +12,6 @@ import org.w3c.dom.Element;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.files.TranformerForXml;
-import utilities.window.DialogMessage;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -80,7 +77,7 @@ public class ProjectSaverXml {
 
                 addDiagrams(document, mcdModels, mcdTag);
                 addEntities(document, mcdModels, mcdTag);
-                addRelations(document, mcdModels, mcdTag);
+                addMCDRelations(document, mcdModels, mcdTag);
                 addPackages(document, mcdContModels, mcdTag);
                 addMLD(document, mcdModels, mcdTag);
 
@@ -89,7 +86,7 @@ public class ProjectSaverXml {
 
                 addDiagrams(document, mcdModels, mcdTag);
                 addEntities(document, mcdModels, mcdTag);
-                addRelations(document, mcdModels, mcdTag);
+                addMCDRelations(document, mcdModels, mcdTag);
                 addMLD(document, mcdModels, mcdTag);
             }
 
@@ -194,7 +191,7 @@ public class ProjectSaverXml {
                 addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
                 addDiagrams(doc, modelsChilds, modelTag);
                 addEntities(doc, modelsChilds, modelTag);
-                addRelations(doc, modelsChilds, modelTag);
+                addMCDRelations(doc, modelsChilds, modelTag);
                 addPackages(doc, mcdModel, modelTag);
                 addMLD(doc, modelsChilds, modelTag);
             } else {
@@ -202,7 +199,7 @@ public class ProjectSaverXml {
                 addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
                 addDiagrams(doc, modelsChilds, modelTag);
                 addEntities(doc, modelsChilds, modelTag);
-                addRelations(doc, modelsChilds, modelTag);
+                addMCDRelations(doc, modelsChilds, modelTag);
                 addMLD(doc, modelsChilds, modelTag);
             }
         }
@@ -231,7 +228,7 @@ public class ProjectSaverXml {
                 addPropertiesModelsOrPackages(doc, packages, pack);
                 addDiagrams(doc, packageChilds, packages);
                 addEntities(doc, packageChilds, packages);
-                addRelations(doc, packageChilds, packages);
+                addMCDRelations(doc, packageChilds, packages);
                 addPackages(doc, pack, packages);
                 racine.appendChild(packages);
             }
@@ -627,7 +624,7 @@ public class ProjectSaverXml {
      * @param mcdModels Liste des éléments qui se trouvent sous le modèle "MCD" dans le référentiel.
      * @param racineTag Balise parent sous laquelle les relations seront persistées.
      */
-    private void addRelations(Document doc, ArrayList<MVCCDElement> mcdModels, Element racineTag) {
+    private void addMCDRelations(Document doc, ArrayList<MVCCDElement> mcdModels, Element racineTag) {
         // Recherche du conteneur de relations sour le modèle MCD
         for(MVCCDElement mcdModel : mcdModels){
             if (mcdModel instanceof MCDContRelations) {
@@ -930,6 +927,9 @@ public class ProjectSaverXml {
 
                 //Persistance des tables (y compris les FKs)
                 this.addTables(doc, mldrModel, mldrTag);
+
+                //Persistance des relations (les relations sont les liens entre tables, conservant les cardinalités et faisant ainsi redondance avec les FK (volontairement)
+                this.addMDRelations(doc, mldrModel, mldrTag);
             }
         }
     }
@@ -1146,5 +1146,60 @@ public class ProjectSaverXml {
 
         //Ajout des propriétés d'une colonne cible
         targetColumnTag.setAttribute("target_column_id", targetMdrColumn.getIdProjectElementAsString());
+    }
+
+    /**
+     * Sauvegarde les relations du MLD dans le fichier de sauvegarde XML du projet. Remarque: les relations ne sont pas
+     * les FKs. Il s'agit réellement des liens dessinés entre les tables, contenant les cardinalités. Cela fait
+     * redondance avec les FKs, mais cela est volontaire.
+     * @param doc Document XML dans lequel la contrainte sera persistée.
+     * @param mdrModel Modèle relationnel déjà créé dans l'application, dans lequel seront ajoutés les relations.
+     * @param mdrTag Balise racine du modèle relationnel (par exemple MLDR_DT...), qui contiendra les nouvelles balises
+     *                des relations.
+     */
+    private void addMDRelations(Document doc, MDRModel mdrModel, Element mdrTag) {
+
+        //Création de la balise <mdrRelations>
+        Element mdrRelationsTag = doc.createElement("mdrRelations");
+        mdrTag.appendChild(mdrRelationsTag);
+
+        //Ajout de l'id à la balise <mdrRelations>
+        mdrRelationsTag.setAttribute("id", mdrModel.getMDRContRelations().getIdProjectElementAsString());
+
+        //Parcours des relations FK
+        for(MDRRelationFK mdrRelationFK : mdrModel.getMDRContRelations().getMDRRelationsFK()){
+
+            //Persistance d'une relation FK
+            this.addMDRRelationFK(doc, mdrRelationFK, mdrRelationsTag);
+        }
+    }
+
+    /**
+     * Persistance d'une relation FK.
+     * @param doc Document XML dans lequel la contrainte sera persistée.
+     * @param mdrRelationFK La relation FK à persister.
+     * @param mdrRelationsTag La balise racine <mdrRelations> sous laquelle il faut ajouter la nouvelle balise pour la
+     *                        relation FK à persister.
+     */
+    private void addMDRRelationFK(Document doc, MDRRelationFK mdrRelationFK, Element mdrRelationsTag) {
+
+        //Création de la balise <mdrRelation>
+        Element mdrRelationTag = doc.createElement("mdrRelation");
+        mdrRelationsTag.appendChild(mdrRelationTag);
+
+        //Ajout des attributs à la balise <mdrRelation>
+        mdrRelationTag.setAttribute("id", mdrRelationFK.getIdProjectElementAsString());
+        mdrRelationTag.setAttribute("name", mdrRelationFK.getName());
+        mdrRelationTag.setAttribute("shortName", mdrRelationFK.getShortName());
+        mdrRelationTag.setAttribute("longName", mdrRelationFK.getLongName());
+
+        //Ajout des attributs spécifiques à une relation FK de niveau MLD
+        if(mdrRelationFK instanceof MLDRRelationFK){
+            //Ajout de la référence (id) vers l'élément MCD source dans le cas d'une relation MLDR
+            mdrRelationTag.setAttribute("mcdelement_source", ((MLDRRelationFK) mdrRelationFK).getMcdElementSource().getIdProjectElementAsString());
+        }
+
+        //TODO-STB: Continuer ici (persister les 2 extrémités de la relation. Pour cela simplement ajouter des attributs à <mdrRelation> (pas besoin de créer des balises enfants)
+        //mdrRelationFK.getA()
     }
 }

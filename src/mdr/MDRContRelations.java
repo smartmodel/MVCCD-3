@@ -21,4 +21,14 @@ public abstract class MDRContRelations extends MDRElement {
         return resultat;
     }
 
+    public ArrayList<MDRRelationFK> getMDRRelationsFK() {
+        ArrayList<MDRRelationFK> resultat = new ArrayList<MDRRelationFK>();
+        for(MVCCDElement mvccdElement : getChilds()) {
+            if(mvccdElement instanceof MDRRelationFK){
+                resultat.add((MDRRelationFK) mvccdElement);
+            }
+        }
+        return resultat;
+    }
+
 }
