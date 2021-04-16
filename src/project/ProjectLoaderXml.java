@@ -1210,42 +1210,11 @@ public class ProjectLoaderXml {
 
                 //Chargement de <targetColumns>
                 if (pkTagChild.getNodeName().equals("targetColumns")) {
-                    this.loadMldTargetColumnsOfPk(mcdElementSourceOfPk, mldrTable, mldrPk, pkTagChild);
+                    this.loadMldTargetColumnsOfConstraint(mcdElementSourceOfPk, mldrTable, mldrPk, pkTagChild);
                 }
             }
         }
     }
-
-    /**
-     * À partir de la balise <targetColumns>, cette méthode charge les références des colonnes incluses dans une
-     * contrainte PK.
-     * @param mcdEntityOrAssociationSource Il s'agit de l'entité ou de l'association source (MCD) à partir de laquelle la PK a été générée.
-     * @param mldrTable Il s'agit de la table (MLD) déjà chargée, dans laquelle se trouve déjà les colonnes référencés par la PK.
-     * @param mldrPk Il s'agit de la PK (MLD) déjà créé précédemment dans l'application, à qui sera ajouté les colonnes ciblées par les balises enfants <targetColumn>.
-     * @param targetColumnsTag Balise <targetColumns> contenant des sous-balises avec les références vers les colonnes de la PK
-     */
-    private void loadMldTargetColumnsOfPk(MCDElement mcdEntityOrAssociationSource, MLDRTable mldrTable, MLDRPK mldrPk, Element targetColumnsTag) {
-        //Parcours des balises enfants de <targetColumns>
-        NodeList targetColumnsTagChilds = targetColumnsTag.getChildNodes();
-        for (int i = 0; i < targetColumnsTagChilds.getLength(); i++) {
-            if (targetColumnsTagChilds.item(i) instanceof Element) {
-                Element targetColumnsTagChild = (Element) targetColumnsTagChilds.item(i);
-
-                //Chargement de <targetColumn>
-                if(targetColumnsTagChild.getNodeName().equals("targetColumn")) {
-                    Element targetColumnTag = targetColumnsTagChild;
-
-                    //Récupération de la colonne cible de la PK
-                    int targetColumnId = Integer.parseInt(targetColumnTag.getAttribute("target_column_id"));
-                    MLDRColumn targetMldrColumn = (MLDRColumn) mldrTable.getMDRColumnById(targetColumnId);
-
-                    //Ajout de la colonne référencée à la contrainte PK (ce qui passe par la création d'un Parameter)
-                    MVCCDElementFactory.instance().createMLDRParameter(mldrPk, targetMldrColumn, mcdEntityOrAssociationSource);
-                }
-            }
-        }
-    }
-
 
     /**
      * À partir de la balise <tables>, cette méthode charge dans l'application l'ensembles des contraintes FKs des
@@ -1346,7 +1315,7 @@ public class ProjectLoaderXml {
 
                 //Chargement de <targetColumns>
                 if (fkTagChild.getNodeName().equals("targetColumns")) {
-                    this.loadMldTargetColumnsOfFk(mcdElementSourceOfFk, mdrTable, mldrFk, fkTagChild);
+                    this.loadMldTargetColumnsOfConstraint(mcdElementSourceOfFk, mdrTable, mldrFk, fkTagChild);
                 }
             }
         }
@@ -1354,13 +1323,18 @@ public class ProjectLoaderXml {
 
     /**
      * À partir de la balise <targetColumns>, cette méthode charge les références des colonnes incluses dans une
-     * contrainte FK.
-     * @param mcdAssEndSource Il s'agit de l'extrémité d'association (MCD) à partir de laquelle la FK a été générée.
-     * @param mdrTable Il s'agit de la table (MLD) déjà chargée, dans laquelle se trouve déjà les colonnes sur lesquelles la FK est mise. Attention il ne s'agit ici pas des colonnes de PK pointée par la FK.
-     * @param mldrFk Il s'agit de la FK (MLD) déjà créé précédemment dans l'application, à qui sera ajouté les colonnes ciblées par les balises enfants <targetColumn>.
-     * @param targetColumnsTag Balise <targetColumns> contenant des sous-balises avec les références vers les colonnes de la FK
+     * contrainte (PK et FK notamment).
+     * @param mcdElementSource Il s'agit de l'élément MCD source à partir duquel la contrainte a été générée (par
+     *                         exemple, pour une PK: une entité ou une association n:n; pour une FK: une extrémité
+     *                         d'association).
+     * @param mdrTable Il s'agit de la table (MLD) déjà chargée, dans laquelle se trouve déjà les colonnes sur
+     *                 lesquelles la FK est mise. Attention il ne s'agit ici pas des colonnes de PK pointée par la FK.
+     * @param mdrConstraint Il s'agit de la contraint (PK ou FK) déjà créé précédemment dans l'application, à qui sera
+     *                      ajouté les colonnes ciblées par les balises enfants <targetColumn>.
+     * @param targetColumnsTag Balise <targetColumns> contenant des sous-balises avec les références vers les colonnes
+     *                         de la FK
      */
-    private void loadMldTargetColumnsOfFk(MCDElement mcdAssEndSource, MDRTable mdrTable, MLDRFK mldrFk, Element targetColumnsTag) {
+    private void loadMldTargetColumnsOfConstraint(MCDElement mcdElementSource, MDRTable mdrTable, MDRConstraint mdrConstraint, Element targetColumnsTag) {
         //Parcours des balises enfants de <targetColumns>
         NodeList targetColumnsTagChilds = targetColumnsTag.getChildNodes();
         for (int i = 0; i < targetColumnsTagChilds.getLength(); i++) {
@@ -1376,10 +1350,9 @@ public class ProjectLoaderXml {
                     MLDRColumn targetMldrColumn = (MLDRColumn) mdrTable.getMDRColumnById(targetColumnId);
 
                     //Ajout de la colonne référencée à la contrainte PK (ce qui passe par la création d'un Parameter)
-                    MVCCDElementFactory.instance().createMLDRParameter(mldrFk, targetMldrColumn, mcdAssEndSource);
+                    MVCCDElementFactory.instance().createMLDRParameter(mdrConstraint, targetMldrColumn, mcdElementSource);
                 }
             }
         }
     }
-
 }
