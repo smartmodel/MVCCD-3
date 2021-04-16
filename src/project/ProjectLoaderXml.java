@@ -6,9 +6,7 @@ import main.MVCCDElementFactory;
 import main.MVCCDFactory;
 import mcd.*;
 import mcd.interfaces.IMCDSourceMLDRTable;
-import mdr.MDRColumn;
-import mdr.MDRConstraint;
-import mdr.interfaces.IMDRParameter;
+import mdr.*;
 import messages.MessagesBuilder;
 import mldr.*;
 import org.w3c.dom.Document;
@@ -1000,8 +998,13 @@ public class ProjectLoaderXml {
 
                 //Recherche et chargement de <tables>
                 if(mldrTagChild.getNodeName().equals("tables")){
-                    MLDRContTables mldrContTables = (MLDRContTables) mldrModel.getMDRContTables(); //Le conteneur de tables est déjà créé automatiquement avant
-                    this.loadMldTables(mcdSource, mldrContTables, mldrTagChild); //Chargement de <tables>
+                    MDRContTables mldrContTables = (MDRContTables) mldrModel.getMDRContTables(); //Le conteneur de tables est déjà créé automatiquement avant
+
+                    //Chargement des tables sous <tables>
+                    this.loadMldTables(mcdSource, mldrContTables, mldrTagChild);
+
+                    //Chargement des contraintes FK des tables sous <tables>
+                    this.loadMldFKsOfAllTables(mcdSource, mldrContTables, mldrTagChild);
                 }
             }
         }
@@ -1014,7 +1017,7 @@ public class ProjectLoaderXml {
      *                       conteneur qui sera alimenté par les nouvelles tables au fur et à mesure de leur chargement.
      * @param tablesTag Balise racine <tables>
      */
-    private void loadMldTables(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tablesTag){
+    private void loadMldTables(MCDContModels mcdSource, MDRContTables mldrContTables, Element tablesTag){
         //Parcours des balises enfants de <tables>
         NodeList tablesTagChilds = tablesTag.getChildNodes();
         for (int i = 0; i < tablesTagChilds.getLength(); i++) {
@@ -1036,7 +1039,7 @@ public class ProjectLoaderXml {
      *                       ajoutée la nouvelle table.
      * @param tableTag Balise <table> du document XML à partir de laquelle la table est chargée.
      */
-    private void loadMldTable(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tableTag){
+    private void loadMldTable(MCDContModels mcdSource, MDRContTables mldrContTables, Element tableTag){
 
         //Récupération de l'élément MCD source de la table (peut être une
         int entitySourceId = Integer.parseInt(tableTag.getAttribute("mcdelement_source")); //Récupérer l'id de l'élément source
@@ -1070,7 +1073,7 @@ public class ProjectLoaderXml {
      * @param table Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les colonnes.
      * @param columnsTag Balise <columns>
      */
-    private void loadMldColumns(MCDElement mcdSource, MLDRContTables mldrContTables, MLDRTable table, Element columnsTag){
+    private void loadMldColumns(MCDElement mcdSource, MDRContTables mldrContTables, MLDRTable table, Element columnsTag){
         MLDRContColumns mldrContColumns = (MLDRContColumns) table.getMDRContColumns();
 
         //Création d'un conteneur pour mémoriser les colonnes détectées comme colonnes de FK
@@ -1154,7 +1157,9 @@ public class ProjectLoaderXml {
     }
 
     /**
-     * À partir de la balise <tableConstraintsTag>, cette méthode charge l'ensemble des contraintes d'une table
+     * À partir de la balise <tableConstraintsTag>, cette méthode charge l'ensemble des contraintes d'une table, hormis
+     * les contraintes FK qui sont chargées ultérieurement dans le processus (après que toutes les tables aient été
+     * chargées).
      * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
      * @param mldrTable Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les contraintes.
      * @param tableConstraintsTag Balise <tableConstraints>
@@ -1240,4 +1245,141 @@ public class ProjectLoaderXml {
             }
         }
     }
+
+
+    /**
+     * À partir de la balise <tables>, cette méthode charge dans l'application l'ensembles des contraintes FKs des
+     * tables d'un MLDR.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrContTables Le conteneur de tables déjà existant dans l'application, contenant déjà l'ensemble des
+     *                       tables chargées dans lesquelles seront ajoutées les contraintes FKs.
+     * @param tablesTag Balise racine <tables>
+     */
+    private void loadMldFKsOfAllTables(MCDContModels mcdSource, MDRContTables mdrContTables, Element tablesTag){
+        //Parcours des balises enfants de <tables>
+        NodeList tablesTagChilds = tablesTag.getChildNodes();
+        for (int i = 0; i < tablesTagChilds.getLength(); i++) {
+            if (tablesTagChilds.item(i) instanceof Element) {
+                Element tablesTagChild = (Element) tablesTagChilds.item(i);
+
+                //Recherche de <table>
+                if (tablesTagChild.getNodeName().equals("table")){
+                    Element tableTag = tablesTagChild;
+
+                    //Parcours des balises enfants de <table>
+                    NodeList tableTagChilds = tableTag.getChildNodes();
+                    for (int j = 0; j < tableTagChilds.getLength(); j++) {
+                        if (tableTagChilds.item(j) instanceof Element) {
+                            Element tableTagChild = (Element) tableTagChilds.item(j);
+
+                            //Recherche de <tableConstraints>
+                            if(tableTagChild.getNodeName().equals("tableConstraints")){
+                                MDRTable mdrTable = mdrContTables.getMDRTableById(Integer.parseInt(tableTag.getAttribute("id"))); //Récupérer la table déjà chargée dans laquelle il faudra placer les contraintes FK
+                                this.loadMldFksOfTable(mcdSource, mdrContTables, mdrTable, tableTagChild); //Charger les contraintes FK dans cette table déjà chargée
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <tableConstraints>, cette méthode charge dans l'application l'ensembles des contraintes FKs
+     * d'une table.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrContTables Le conteneur de tables déjà existant dans l'application, contenant déjà l'ensemble de
+     *                      tables chargées dans lesquelles seront ajoutées les contraintes FKs.
+     * @param mdrTable La table dans laquelle placer les contraintes FKs à charger.
+     * @param tableConstraintsTag Balise racine <tableConstraints>
+     */
+    private void loadMldFksOfTable(MCDContModels mcdSource, MDRContTables mdrContTables, MDRTable mdrTable, Element tableConstraintsTag) {
+        //Parcours des balises enfants de <tableConstraints>
+        NodeList constraintsTagChilds = tableConstraintsTag.getChildNodes();
+        for (int i = 0; i < constraintsTagChilds.getLength(); i++) {
+            if (constraintsTagChilds.item(i) instanceof Element) {
+                Element ConstraintsTagChild = (Element) constraintsTagChilds.item(i);
+
+                //Chargement de <fk>
+                if (ConstraintsTagChild.getNodeName().equals("fk")) {
+                    this.loadMldFkOfTable(mcdSource, mdrContTables, mdrTable, ConstraintsTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <fk>, cette méthode charge dans l'application une contrainte de table FK.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrContTables Le conteneur de tables déjà existant dans l'application, contenant déjà l'ensemble de
+     *                      tables chargées dont celle dans laquelle sera créée la contrainte FK. Cet élément est utile
+     *                      à la méthode pour pouvoir parcourir les tables chargées à la recherche de la PK cible de la
+     *                      FK.
+     * @param mdrTable Il s'agit de la table déjà chargée en mémoire, dans laquelle ajouter la contrainte FK à charger.
+     * @param fkTag Il s'agit de la balise <fk> à charger.
+     */
+    private void loadMldFkOfTable(MCDContModels mcdSource, MDRContTables mdrContTables, MDRTable mdrTable, Element fkTag) {
+        MLDRContConstraints mldrContConstraints = (MLDRContConstraints) mdrTable.getMDRContConstraints();
+
+        //Récupération de l'extrémité d'association (MCD) source de la FK
+        int assEndSourceId = Integer.parseInt(fkTag.getAttribute("mcdelement_source"));
+        MCDElement mcdElementSourceOfFk = (MCDElement) mcdSource.getChildByIdProfondeur(assEndSourceId);
+
+        //Chargement et création de la FK, y compris son id et son extrémité d'association source (MCD)
+        MLDRFK mldrFk = MVCCDElementFactory.instance().createMLDRFK(mldrContConstraints, mcdElementSourceOfFk, Integer.parseInt(fkTag.getAttribute("id")));
+
+        //Chargement des autres propriétés d'identification de la FK
+        mldrFk.setName(fkTag.getAttribute("name"));
+        mldrFk.setShortName(fkTag.getAttribute("shortname"));
+        mldrFk.setLongName(fkTag.getAttribute("longname"));
+
+        //Chargement de la référence vers la contrainte PK
+        int targetPkId = Integer.parseInt(fkTag.getAttribute("target_pk"));
+        MDRPK mdrPk = (MDRPK) mdrContTables.getChildByIdProfondeur(targetPkId); //Recherche de la PK dans l'ensemble des tables déjà chargées
+        mldrFk.setMdrPK(mdrPk);
+
+        //Parcours des balises enfants de <fk>
+        NodeList fkTagChilds = fkTag.getChildNodes();
+        for (int i = 0; i < fkTagChilds.getLength(); i++) {
+            if (fkTagChilds.item(i) instanceof Element) {
+                Element fkTagChild = (Element) fkTagChilds.item(i);
+
+                //Chargement de <targetColumns>
+                if (fkTagChild.getNodeName().equals("targetColumns")) {
+                    this.loadMldTargetColumnsOfFk(mcdElementSourceOfFk, mdrTable, mldrFk, fkTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <targetColumns>, cette méthode charge les références des colonnes incluses dans une
+     * contrainte FK.
+     * @param mcdAssEndSource Il s'agit de l'extrémité d'association (MCD) à partir de laquelle la FK a été générée.
+     * @param mdrTable Il s'agit de la table (MLD) déjà chargée, dans laquelle se trouve déjà les colonnes sur lesquelles la FK est mise. Attention il ne s'agit ici pas des colonnes de PK pointée par la FK.
+     * @param mldrFk Il s'agit de la FK (MLD) déjà créé précédemment dans l'application, à qui sera ajouté les colonnes ciblées par les balises enfants <targetColumn>.
+     * @param targetColumnsTag Balise <targetColumns> contenant des sous-balises avec les références vers les colonnes de la FK
+     */
+    private void loadMldTargetColumnsOfFk(MCDElement mcdAssEndSource, MDRTable mdrTable, MLDRFK mldrFk, Element targetColumnsTag) {
+        //Parcours des balises enfants de <targetColumns>
+        NodeList targetColumnsTagChilds = targetColumnsTag.getChildNodes();
+        for (int i = 0; i < targetColumnsTagChilds.getLength(); i++) {
+            if (targetColumnsTagChilds.item(i) instanceof Element) {
+                Element targetColumnsTagChild = (Element) targetColumnsTagChilds.item(i);
+
+                //Chargement de <targetColumn>
+                if(targetColumnsTagChild.getNodeName().equals("targetColumn")) {
+                    Element targetColumnTag = targetColumnsTagChild;
+
+                    //Récupération de la colonne de FK
+                    int targetColumnId = Integer.parseInt(targetColumnTag.getAttribute("target_column_id"));
+                    MLDRColumn targetMldrColumn = (MLDRColumn) mdrTable.getMDRColumnById(targetColumnId);
+
+                    //Ajout de la colonne référencée à la contrainte PK (ce qui passe par la création d'un Parameter)
+                    MVCCDElementFactory.instance().createMLDRParameter(mldrFk, targetMldrColumn, mcdAssEndSource);
+                }
+            }
+        }
+    }
+
 }

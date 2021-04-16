@@ -26,6 +26,10 @@ public class MLDRFK extends MDRFK implements IMLDRElement, IMLDRElementWithSourc
         this.mcdElementSource = mcdElementSource;
     }
 
+    public MLDRFK(ProjectElement parent, MCDElement mcdElementSource, int id) {
+        super(parent, id);
+        this.mcdElementSource = mcdElementSource;
+    }
 
     @Override
     public MCDElement getMcdElementSource() {

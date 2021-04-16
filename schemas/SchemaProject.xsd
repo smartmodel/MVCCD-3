@@ -780,7 +780,8 @@
 	<xs:element name="tableConstraints">
 		<xs:complexType>
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="pk" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="pk" minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="fk" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:choice>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -796,6 +797,20 @@
 			<xs:attribute name="shortName" type="xs:string" />
 			<xs:attribute name="longName" type="xs:string" />
 			<xs:attribute name="mcdelement_source" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="fk">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="targetColumns" minOccurs="1" maxOccurs="1"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="shortName" type="xs:string" />
+			<xs:attribute name="longName" type="xs:string" />
+			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="target_pk" type="xs:int" />
 		</xs:complexType>
 	</xs:element>
 

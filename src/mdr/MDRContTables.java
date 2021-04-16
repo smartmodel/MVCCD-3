@@ -22,6 +22,10 @@ public class MDRContTables extends MDRElement {
         return MDRContTablesService.getMDRTables(this);
     }
 
+    public MDRTable getMDRTableById(int id){
+        return MDRContTablesService.getMDRTableById(this, id);
+    }
+
 
 
 }

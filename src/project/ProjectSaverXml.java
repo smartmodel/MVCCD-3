@@ -928,14 +928,15 @@ public class ProjectSaverXml {
                 //Ajout de l'id à la balise <MLDR_xx>
                 mldrTag.setAttribute("id", mldrModel.getIdProjectElementAsString());
 
-                //Persistance des tables
+                //Persistance des tables (y compris les FKs)
                 this.addTables(doc, mldrModel, mldrTag);
             }
         }
     }
 
     /**
-     * Sauvegarde les tables dans une balise <tables> en parcourant le modèle MLDR
+     * Sauvegarde les tables dans une balise <tables> en parcourant le modèle MLDR. Toutes les contraintes de tables, y
+     * compris les FK, sont persistées également.
      * @param doc Document XML dans lequel la persistance se fait
      * @param mldrModel Modèle MLDR parcouru pour lequel toutes les tables qu'il contient seront persistées.
      * @param mldrTag Balise racine <mldr> qui sera la balise parent de la balise <tables> enfant.
@@ -958,7 +959,8 @@ public class ProjectSaverXml {
     }
 
     /**
-     * Sauvegarde d'une table dans une balise <table>.
+     * Sauvegarde d'une table dans une balise <table>. Inclut également la persistance des contraintes de la table (y
+     * conpris les FKs).
      * @param doc Document XML dans lequel la persistance se fait
      * @param mldrTable Table à persister
      * @param tablesTag Balise parent <tables> qui contient la nouvelle balise <table>
@@ -975,6 +977,9 @@ public class ProjectSaverXml {
 
         //Persistance des colonnes
         this.addColumns(doc, mldrTable, tableTag);
+
+        //Persistance des contraintes de la table
+        this.addTableConstraints(doc, mldrTable, tableTag);
     }
 
     /**
@@ -997,20 +1002,6 @@ public class ProjectSaverXml {
 
             //Persistance d'une colonne
             this.addColumn(doc, mldrColumn, columnsTag);
-        }
-
-        //Création de la balise <constraints>
-        Element tableConstraintsTag = doc.createElement("tableConstraints");
-        tableTag.appendChild(tableConstraintsTag);
-
-        //Ajout de l'id à la balise <constraints>
-        tableConstraintsTag.setAttribute("id", mldrTable.getMDRContConstraints().getIdProjectElementAsString());
-
-        //Parcours des contraintes
-        for(MDRConstraint mdrConstraint : mldrTable.getMDRContConstraints().getMDRConstraints()){
-
-            //Persistance d'une contrainte
-            this.addTableConstraint(doc, mdrConstraint, tableConstraintsTag);
         }
     }
 
@@ -1058,6 +1049,27 @@ public class ProjectSaverXml {
         }
     }
 
+    /**
+     * Sauvegarde des contraintes d'une table.
+     * @param doc Document XML dans lequel la persistance se fait
+     * @param mldrTable Table pour laquelle les contraintes qu'elle contient seront persistées
+     * @param tableTag Balise parent <table> qui contiendra la nouvelle balise <constraints>
+     */
+    private void addTableConstraints(Document doc, MLDRTable mldrTable, Element tableTag) {
+        //Création de la balise <constraints>
+        Element tableConstraintsTag = doc.createElement("tableConstraints");
+        tableTag.appendChild(tableConstraintsTag);
+
+        //Ajout de l'id à la balise <constraints>
+        tableConstraintsTag.setAttribute("id", mldrTable.getMDRContConstraints().getIdProjectElementAsString());
+
+        //Parcours des contraintes
+        for(MDRConstraint mdrConstraint : mldrTable.getMDRContConstraints().getMDRConstraints()){
+
+            //Persistance d'une contrainte
+            this.addTableConstraint(doc, mdrConstraint, tableConstraintsTag);
+        }
+    }
 
     /**
      * Sauvegarde d'une contrainte de table (qu'elle soit PK, FK, etc.)
@@ -1080,6 +1092,22 @@ public class ProjectSaverXml {
 
             //Ajout des propriétés d'identification spécifiques à une contrainte PK
             constraintTag.setAttribute("mcdelement_source", pkConstraint.getMcdElementSource().getIdProjectElementAsString());
+        }
+
+        //Sauvegarde d'une contrainte FK
+        else if(tableConstraint instanceof MLDRFK){
+            MLDRFK fkConstraint = (MLDRFK) tableConstraint;
+
+            //Création de la balise <fk>
+            constraintTag = doc.createElement("fk");
+            tableConstraintsTag.appendChild(constraintTag);
+
+            //Ajout des propriétés d'identification spécifiques à une contrainte FK
+            constraintTag.setAttribute("mcdelement_source", fkConstraint.getMcdElementSource().getIdProjectElementAsString());
+
+            //Ajout de la référence vers la PK (id de la PK)
+            constraintTag.setAttribute("target_pk", fkConstraint.getMdrPK().getIdProjectElementAsString());
+
         }
 
         if(constraintTag != null) {

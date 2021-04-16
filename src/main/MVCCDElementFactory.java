@@ -4,12 +4,8 @@ import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDSourceMLDRTable;
-import mdr.MDRConstraint;
-import mdr.MDRContColumns;
-import mdr.MDRContConstraints;
-import mdr.MDRContTables;
+import mdr.*;
 import mdr.interfaces.IMDRParameter;
-import messages.MessagesBuilder;
 import mldr.*;
 import mldr.services.MLDRContConstraintsService;
 import mpdr.*;
@@ -25,7 +21,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
-import utilities.Trace;
 
 public class MVCCDElementFactory {
 
@@ -365,13 +360,21 @@ public class MVCCDElementFactory {
         return new MLDRParameter(mdrConstraint, target, mcdElementSource);
     }
 
-
-
     public MLDRFK createMLDRFK(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
-        MLDRFK mldrFK= new MLDRFK(mldrContConstraints, mcdElementSource);
+        MLDRFK mldrFK = new MLDRFK(mldrContConstraints, mcdElementSource);
+        this.initMLDRFK(mldrFK, mldrContConstraints);
+        return mldrFK;
+    }
+
+    public MLDRFK createMLDRFK(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource, int id) {
+        MLDRFK mldrFK = new MLDRFK(mldrContConstraints, mcdElementSource, id);
+        this.initMLDRFK(mldrFK, mldrContConstraints);
+        return mldrFK;
+    }
+
+    public void initMLDRFK(MLDRFK mldrFK, MLDRContConstraints mldrContConstraints){
         Integer indice = MLDRContConstraintsService.nextIndice(mldrContConstraints, mldrFK);
         mldrFK.setIndice(indice);
-        return mldrFK;
     }
 
 
