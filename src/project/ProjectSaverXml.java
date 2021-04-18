@@ -1,6 +1,7 @@
 package project;
 
 import diagram.mcd.MCDDiagram;
+import m.interfaces.IMRelEnd;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
@@ -960,7 +961,7 @@ public class ProjectSaverXml {
 
     /**
      * Sauvegarde d'une table dans une balise <table>. Inclut également la persistance des contraintes de la table (y
-     * conpris les FKs).
+     * compris les FKs) et les extrémités de relations.
      * @param doc Document XML dans lequel la persistance se fait
      * @param mldrTable Table à persister
      * @param tablesTag Balise parent <tables> qui contient la nouvelle balise <table>
@@ -980,6 +981,9 @@ public class ProjectSaverXml {
 
         //Persistance des contraintes de la table
         this.addTableConstraints(doc, mldrTable, tableTag);
+
+        //Persistance des extrémités de relations de la table
+        this.addTableRelEnds(doc, mldrTable, tableTag);
     }
 
     /**
@@ -1149,6 +1153,48 @@ public class ProjectSaverXml {
     }
 
     /**
+     * Sauvegarde les extrémités de relation rattachées à chaque table du MLD.
+     * Remarque: les extrémités de relations ne sont pas les FK. Ce sont des objets qui permettent de rattacher une
+     * relation et une table du MLD.
+     * @param doc Document XML dans lequel la persistance se fait
+     * @param mdrTable Table pour laquelle les extrémités de relations seront persistées
+     * @param tableTag Balise parent <table> qui contiendra la nouvelle balise <extremitesRelations>
+     */
+    private void addTableRelEnds(Document doc, MDRTable mdrTable, Element tableTag) {
+        //Création de la balise <extremitesRelations>
+        Element extremitesRelationsTag = doc.createElement("extremitesRelations");
+        tableTag.appendChild(extremitesRelationsTag);
+
+        //Ajout de l'id à la balise <extremitesRelations>
+        extremitesRelationsTag.setAttribute("id", mdrTable.getMDRContRelEnds().getIdProjectElementAsString());
+
+        //Parcours des extrémités de relations
+        for(MDRRelEnd mdrRelEnd : mdrTable.getMDRContRelEnds().getMDRRelEnds()){
+
+            //Persistance d'une extrémité de relation
+            this.addTableRelEnd(doc, mdrRelEnd, extremitesRelationsTag);
+        }
+    }
+
+    /**
+     * Sauvegarde d'une extrémité de relation d'une table.
+     * @param doc Document XML dans lequel la contrainte sera persistée.
+     * @param mdrRelEnd L'extrémité de relation qui sera persistée.
+     * @param extremitesRelationsTag Balise parent <extremitesRelationsTag> qui contiendra la nouvelle balise <extremiteRelation>
+     */
+    private void addTableRelEnd(Document doc, MDRRelEnd mdrRelEnd, Element extremitesRelationsTag) {
+        //Création de la balise <extremiteRelation>
+        Element extremiteRelationTag = doc.createElement("extremiteRelation");
+        extremitesRelationsTag.appendChild(extremiteRelationTag);
+
+        //Ajout des propriétés d'identification d'une extrémité de relation
+        extremiteRelationTag.setAttribute("id", mdrRelEnd.getIdProjectElementAsString());
+        extremiteRelationTag.setAttribute("name", mdrRelEnd.getName());
+        extremiteRelationTag.setAttribute("shortName", mdrRelEnd.getShortName());
+        extremiteRelationTag.setAttribute("longName", mdrRelEnd.getLongName());
+    }
+
+    /**
      * Sauvegarde les relations du MLD dans le fichier de sauvegarde XML du projet. Remarque: les relations ne sont pas
      * les FKs. Il s'agit réellement des liens dessinés entre les tables, contenant les cardinalités. Cela fait
      * redondance avec les FKs, mais cela est volontaire.
@@ -1195,11 +1241,13 @@ public class ProjectSaverXml {
 
         //Ajout des attributs spécifiques à une relation FK de niveau MLD
         if(mdrRelationFK instanceof MLDRRelationFK){
+
             //Ajout de la référence (id) vers l'élément MCD source dans le cas d'une relation MLDR
             mdrRelationTag.setAttribute("mcdelement_source", ((MLDRRelationFK) mdrRelationFK).getMcdElementSource().getIdProjectElementAsString());
-        }
 
-        //TODO-STB: Continuer ici (persister les 2 extrémités de la relation. Pour cela simplement ajouter des attributs à <mdrRelation> (pas besoin de créer des balises enfants)
-        //mdrRelationFK.getA()
+            //Ajout de la référence (id) vers les 2 extrémités de la relation (A et B)
+            mdrRelationTag.setAttribute("extremiteRelA_target_id", ((MDRRelFKEnd) mdrRelationFK.getA()).getIdProjectElementAsString());
+            mdrRelationTag.setAttribute("extremiteRelB_target_id", ((MDRRelFKEnd) mdrRelationFK.getB()).getIdProjectElementAsString());
+        }
     }
 }

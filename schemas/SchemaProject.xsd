@@ -705,6 +705,7 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="tables"/>
+				<xs:element ref="mdrRelations"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -714,6 +715,7 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="tables"/>
+				<xs:element ref="mdrRelations"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -733,6 +735,7 @@
 			<xs:sequence>
 				<xs:element ref="columns"/>
 				<xs:element ref="tableConstraints"/>
+				<xs:element ref="extremitesRelations"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
@@ -825,6 +828,45 @@
 	<xs:element name="targetColumn">
 		<xs:complexType>
 			<xs:attribute name="target_column_id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="extremitesRelations">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="extremiteRelation" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="extremiteRelation">
+		<xs:complexType>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="name" use="required" type="xs:string"/>
+			<xs:attribute name="shortName" type="xs:string"/>
+			<xs:attribute name="longName" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mdrRelations">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="mdrRelation" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mdrRelation">
+		<xs:complexType>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="name" use="required" type="xs:string"/>
+			<xs:attribute name="shortName" type="xs:string"/>
+			<xs:attribute name="longName" type="xs:string"/>
+			<xs:attribute name="mcdelement_source" type="xs:int"/>
+			<xs:attribute name="extremiteRelA_target_id" use="required" type="xs:int"/>
+			<xs:attribute name="extremiteRelB_target_id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 
