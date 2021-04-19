@@ -80,7 +80,7 @@ public class ProjectSaverXml {
                 addEntities(document, mcdModels, mcdTag);
                 addMCDRelations(document, mcdModels, mcdTag);
                 addPackages(document, mcdContModels, mcdTag);
-                //addMLD(document, mcdModels, mcdTag); //TODO-STB: remettre lorsque le bug sera corrigé
+                addMLD(document, mcdModels, mcdTag);
 
             //projet simple
             } else {
@@ -88,7 +88,7 @@ public class ProjectSaverXml {
                 addDiagrams(document, mcdModels, mcdTag);
                 addEntities(document, mcdModels, mcdTag);
                 addMCDRelations(document, mcdModels, mcdTag);
-                //addMLD(document, mcdModels, mcdTag); //TODO-STB: remettre lorsque le bug sera corrigé
+                addMLD(document, mcdModels, mcdTag);
             }
 
             //Formatage du fichier
@@ -194,14 +194,14 @@ public class ProjectSaverXml {
                 addEntities(doc, modelsChilds, modelTag);
                 addMCDRelations(doc, modelsChilds, modelTag);
                 addPackages(doc, mcdModel, modelTag);
-                //addMLD(doc, modelsChilds, modelTag); //TODO-STB: remettre lorsque le bug sera corrigé
+                addMLD(doc, modelsChilds, modelTag);
             } else {
                 // Création des différents éléments du modèle sans packages
                 addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
                 addDiagrams(doc, modelsChilds, modelTag);
                 addEntities(doc, modelsChilds, modelTag);
                 addMCDRelations(doc, modelsChilds, modelTag);
-                //addMLD(doc, modelsChilds, modelTag); //TODO-STB: remettre lorsque le bug sera corrigé
+                addMLD(doc, modelsChilds, modelTag);
             }
         }
 
@@ -1244,10 +1244,13 @@ public class ProjectSaverXml {
 
             //Ajout de la référence (id) vers l'élément MCD source dans le cas d'une relation MLDR
             mdrRelationTag.setAttribute("mcdelement_source", ((MLDRRelationFK) mdrRelationFK).getMcdElementSource().getIdProjectElementAsString());
-
-            //Ajout de la référence (id) vers les 2 extrémités de la relation (A et B)
-            mdrRelationTag.setAttribute("extremiteRelA_target_id", ((MDRRelFKEnd) mdrRelationFK.getA()).getIdProjectElementAsString());
-            mdrRelationTag.setAttribute("extremiteRelB_target_id", ((MDRRelFKEnd) mdrRelationFK.getB()).getIdProjectElementAsString());
         }
+
+        //Ajout de la référence (id) vers les 2 extrémités de la relation (A et B)
+        mdrRelationTag.setAttribute("extremiteRelA_target_id", ((MDRRelFKEnd) mdrRelationFK.getA()).getIdProjectElementAsString());
+        mdrRelationTag.setAttribute("extremiteRelB_target_id", ((MDRRelFKEnd) mdrRelationFK.getB()).getIdProjectElementAsString());
+
+        //Ajout de la référence (id) vers la FK
+        mdrRelationTag.setAttribute("fk_target_id", String.valueOf(mdrRelationFK.getMdrFKId()));
     }
 }

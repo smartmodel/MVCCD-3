@@ -377,8 +377,6 @@ public class MVCCDElementFactory {
         mldrFK.setIndice(indice);
     }
 
-
-
     public MLDRRelationFK createMLDRRelationFK( MLDRContRelations mldrContRelations,
                                                 MCDRelation mcdRelation,
                                                 MLDRTable mldrTableParent,
@@ -405,8 +403,27 @@ public class MVCCDElementFactory {
         return mldrRelationFK;
     }
 
-    public MLDRRelFKEnd createMLDRRelFKEnd(MLDRContRelEnds mldrContRelEnds, int id) {
-        return new MLDRRelFKEnd(mldrContRelEnds, id);
+    public MLDRRelFKEnd createMLDRRelFKEnd(MLDRContRelEnds mldrContRelEnds, MDRTable mdrTableParent, int id) {
+        MLDRRelFKEnd mldrRelFKEnd = new MLDRRelFKEnd(mldrContRelEnds, id);
+        mldrRelFKEnd.setMDRTable(mdrTableParent);
+        return mldrRelFKEnd;
+    }
+
+    public MLDRRelationFK createMLDRRelationFK( MLDRContRelations mldrContRelations,
+                                                MCDRelation mcdRelation,
+                                                MLDRRelFKEnd mldrRelFKEndParent,
+                                                MLDRRelFKEnd mldrRelFKEndChild,
+                                                int id) {
+
+        MLDRRelationFK mldrRelationFK = new MLDRRelationFK(mldrContRelations, mcdRelation) ;
+
+        //Affectation de la relation avec chacune des extrémités de la relation et inversement
+        mldrRelationFK.setEndParent(mldrRelFKEndParent);
+        mldrRelationFK.setEndChild(mldrRelFKEndChild);
+        mldrRelFKEndParent.setMDRRelationFK(mldrRelationFK);
+        mldrRelFKEndChild.setMDRRelationFK(mldrRelationFK);
+
+        return mldrRelationFK;
     }
 
     // Oracle

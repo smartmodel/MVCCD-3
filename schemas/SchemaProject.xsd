@@ -867,6 +867,7 @@
 			<xs:attribute name="mcdelement_source" type="xs:int"/>
 			<xs:attribute name="extremiteRelA_target_id" use="required" type="xs:int"/>
 			<xs:attribute name="extremiteRelB_target_id" use="required" type="xs:int"/>
+			<xs:attribute name="fk_target_id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 

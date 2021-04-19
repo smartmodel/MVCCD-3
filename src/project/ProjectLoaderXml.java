@@ -99,7 +99,7 @@ public class ProjectLoaderXml {
             loadLinks(mcd, mcdTag, modelsTagsList);
 
             //Chargement du (ou des) MLDR
-            //loadMLDRs(mcd, mcdTag); //TODO-STB: remettre lorsque le bug sera corrigé
+            loadMLDRs(mcd, mcdTag);
 
             // Validation du fichier
             validator.validate(new DOMSource(document));
@@ -1009,7 +1009,9 @@ public class ProjectLoaderXml {
 
                 //Recherche et chargement de <mdrRelations> (des relations FK)
                 else if(mldrTagChild.getNodeName().equals("mdrRelations")){
-                    //TODO-STB: Voir si la gestion de ce cas est bien prise en compte
+
+                    //Chargement des relations sour <mdrRelations>
+                    this.loadMdrRelations(mcdSource, mldrModel, mldrTagChild);
                 }
             }
         }
@@ -1075,8 +1077,6 @@ public class ProjectLoaderXml {
             }
         }
     }
-
-
 
     /**
      * À partir de la balise <columns>, cette méthode charge l'ensemble des colonnes d'une table.
@@ -1406,12 +1406,72 @@ public class ProjectLoaderXml {
 
         //Chargement et création de l'extrémité de relation dans le cas du MLD
         if(mdrContRelEnds instanceof MLDRContRelEnds){
-            mdrRelFKEnd = MVCCDElementFactory.instance().createMLDRRelFKEnd((MLDRContRelEnds) mdrContRelEnds, Integer.parseInt(extremiteRelationTag.getAttribute("id")));
+            mdrRelFKEnd = MVCCDElementFactory.instance().createMLDRRelFKEnd((MLDRContRelEnds) mdrContRelEnds, mdrTable, Integer.parseInt(extremiteRelationTag.getAttribute("id")));
         }
 
-        //Chargement des autres propriétés d'identification de l'extrémité de relation'
+        //Chargement des autres propriétés d'identification de l'extrémité de relation
         mdrRelFKEnd.setName(extremiteRelationTag.getAttribute("name"));
         mdrRelFKEnd.setShortName(extremiteRelationTag.getAttribute("shortname"));
         mdrRelFKEnd.setLongName(extremiteRelationTag.getAttribute("longname"));
+    }
+
+    /**
+     * À partir de la balise <mdrRelations>, cette méthode charge dans l'application l'ensembles des relations MDR.
+     * Il s'agit des liens entre tables.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrModel Le modèle qui lui-même contient les tables et les relations. C'est dans le conteneur de
+     *                  relations de ce modèle que sera créé les nouvelles relations.
+     * @param mdrRelationsTag Balise racine <mdrRelations>
+     */
+    private void loadMdrRelations(MCDContModels mcdSource, MDRModel mdrModel, Element mdrRelationsTag) {
+
+        //Parcours des balises enfants de <mdrRelationsTag>
+        NodeList mdrRelationsTagChilds = mdrRelationsTag.getChildNodes();
+        for (int i = 0; i < mdrRelationsTagChilds.getLength(); i++) {
+            if (mdrRelationsTagChilds.item(i) instanceof Element) {
+                Element mdrRelationsTagChild = (Element) mdrRelationsTagChilds.item(i);
+
+                //Recherche et chargement de <mdrRelation>
+                if (mdrRelationsTagChild.getNodeName().equals("mdrRelation")){
+                    this.loadMldRelation(mcdSource, mdrModel, mdrRelationsTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <mdrRelation>, cette méthode charge une relation et la créé dans l'application.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrModel Le modèle qui lui-même contient les tables et les relations. C'est dans le conteneur de
+     *                  relations de ce modèle que sera créé la nouvelle relation.
+     * @param mdrRelationTag Balise <mdrRelation> du document XML à partir de laquelle la relation est chargée.
+     */
+    private void loadMldRelation(MCDContModels mcdSource, MDRModel mdrModel, Element mdrRelationTag){
+
+        //Récupération de l'élément MCD source de la relation (une association)
+        int mcdAssociationSourceId = Integer.parseInt(mdrRelationTag.getAttribute("mcdelement_source")); //Récupérer l'id de l'élément source
+        MCDAssociation mcdAssociationSource = (MCDAssociation) mcdSource.getChildByIdProfondeur(mcdAssociationSourceId); //Recherche l'élément source en fonction de son ID, parmi tous les enfants du MCD
+
+        //Récupération des 2 extrémités de relations
+        int relEndAId = Integer.parseInt(mdrRelationTag.getAttribute("extremiteRelA_target_id"));
+        int relEndBId = Integer.parseInt(mdrRelationTag.getAttribute("extremiteRelB_target_id"));
+        MDRRelFKEnd mdrRelFKEndA = (MDRRelFKEnd) mdrModel.getMDRContTables().getChildByIdProfondeur(relEndAId);
+        MDRRelFKEnd mdrRelFKEndB = (MDRRelFKEnd) mdrModel.getMDRContTables().getChildByIdProfondeur(relEndBId);
+
+        //Création de la relation MLDR
+        MDRRelationFK mdrRelationFK = null;
+        if(mdrModel instanceof MLDRModel){
+            MLDRContRelations mldrContRelations = ((MLDRModel) mdrModel).getMLDRContRelations(); //Le conteneur de relations est déjà créé automatiquement avant
+            mdrRelationFK = MVCCDElementFactory.instance().createMLDRRelationFK(mldrContRelations, mcdAssociationSource, (MLDRRelFKEnd)mdrRelFKEndA, (MLDRRelFKEnd)mdrRelFKEndB, Integer.parseInt(mdrRelationTag.getAttribute("id")));
+        }
+
+        //Récupération de la FK et affectation de la FK à la relation MDR
+        MDRFK mdrFK = (MDRFK) mdrModel.getMDRContTables().getChildByIdProfondeur(Integer.parseInt(mdrRelationTag.getAttribute("fk_target_id")));
+        mdrRelationFK.setMDRFK(mdrFK);
+
+        //Chargement des autres propriétés de la relation
+        mdrRelationFK.setName(mdrRelationTag.getAttribute("name"));
+        mdrRelationFK.setShortName(mdrRelationTag.getAttribute("shortName"));
+        mdrRelationFK.setLongName(mdrRelationTag.getAttribute("longName"));
     }
 }
