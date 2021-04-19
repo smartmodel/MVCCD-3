@@ -22,6 +22,10 @@ public abstract class MDRRelEnd extends MDRElement implements IMRelEnd, IMDRElem
         super(parent);
     }
 
+    public MDRRelEnd(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MDRRelEnd(ProjectElement parent, String name) {
         super(parent, name);
     }

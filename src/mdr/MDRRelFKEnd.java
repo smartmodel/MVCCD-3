@@ -10,6 +10,10 @@ public abstract class MDRRelFKEnd extends MDRRelEnd{
         super(parent);
     }
 
+    public MDRRelFKEnd(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MDRRelFKEnd(ProjectElement parent, String name) {
         super(parent, name);
     }

@@ -405,6 +405,10 @@ public class MVCCDElementFactory {
         return mldrRelationFK;
     }
 
+    public MLDRRelFKEnd createMLDRRelFKEnd(MLDRContRelEnds mldrContRelEnds, int id) {
+        return new MLDRRelFKEnd(mldrContRelEnds, id);
+    }
+
     // Oracle
     public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {
         MPDROracleModel mpdrOracleModel = new MPDROracleModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_ORACLE_NAME);

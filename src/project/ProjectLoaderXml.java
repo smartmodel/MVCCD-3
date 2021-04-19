@@ -99,7 +99,7 @@ public class ProjectLoaderXml {
             loadLinks(mcd, mcdTag, modelsTagsList);
 
             //Chargement du (ou des) MLDR
-            loadMLDRs(mcd, mcdTag);
+            //loadMLDRs(mcd, mcdTag); //TODO-STB: remettre lorsque le bug sera corrigé
 
             // Validation du fichier
             validator.validate(new DOMSource(document));
@@ -1006,6 +1006,11 @@ public class ProjectLoaderXml {
                     //Chargement des contraintes FK des tables sous <tables>
                     this.loadMldFKsOfAllTables(mcdSource, mldrContTables, mldrTagChild);
                 }
+
+                //Recherche et chargement de <mdrRelations> (des relations FK)
+                else if(mldrTagChild.getNodeName().equals("mdrRelations")){
+                    //TODO-STB: Voir si la gestion de ce cas est bien prise en compte
+                }
             }
         }
     }
@@ -1062,9 +1067,16 @@ public class ProjectLoaderXml {
                 else if(tableTagChild.getNodeName().equals("tableConstraints")){
                     this.loadMldTableConstraints(mcdSource, mldrTable, tableTagChild);
                 }
+
+                //Chargement de <extremitesRelations>
+                else if(tableTagChild.getNodeName().equals("extremitesRelations")){
+                    this.loadMldTableRelEnds(mcdSource, mldrTable, tableTagChild);
+                }
             }
         }
     }
+
+
 
     /**
      * À partir de la balise <columns>, cette méthode charge l'ensemble des colonnes d'une table.
@@ -1354,5 +1366,52 @@ public class ProjectLoaderXml {
                 }
             }
         }
+    }
+
+    /**
+     * À partir de la balise <extremitesRelations>, cette méthode charge l'ensemble des extrémités de relation attachées
+     * à la table.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrTable Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les extrémités
+     *                 de relation.
+     * @param extremitesRelationsTag Balise <extremitesRelations>
+     */
+    private void loadMldTableRelEnds(MCDContModels mcdSource, MDRTable mdrTable, Element extremitesRelationsTag) {
+        //Parcours des balises enfants de <extremitesRelationsTag>
+        NodeList  extremitesRelationsTagChilds = extremitesRelationsTag.getChildNodes();
+        for (int i = 0; i < extremitesRelationsTagChilds.getLength(); i++) {
+            if (extremitesRelationsTagChilds.item(i) instanceof Element) {
+                Element extremitesRelationsTagChild = (Element) extremitesRelationsTagChilds.item(i);
+
+                //Chargement de <extremiteRelation>
+                if (extremitesRelationsTagChild.getNodeName().equals("extremiteRelation")) {
+                    this.loadMldTableRelEnd(mcdSource, mdrTable, extremitesRelationsTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <extremiteRelation>, cette méthode charge une extrémité de relation attachée à une table.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrTable Il s'agit de la table contenant déjà un conteneur d'extrémités de relations dans l'application,
+     *                 dans lequel la nouvelle extrémité de relation qui sera créée sera placée.
+     * @param extremiteRelationTag Balise <extremiteRelation>
+     */
+    private void loadMldTableRelEnd(MCDContModels mcdSource, MDRTable mdrTable, Element extremiteRelationTag) {
+        MDRContRelEnds mdrContRelEnds = mdrTable.getMDRContRelEnds();
+
+        //Préparation de la nouvelle extrémité de relation à créer dans l'application
+        MDRRelFKEnd mdrRelFKEnd = null;
+
+        //Chargement et création de l'extrémité de relation dans le cas du MLD
+        if(mdrContRelEnds instanceof MLDRContRelEnds){
+            mdrRelFKEnd = MVCCDElementFactory.instance().createMLDRRelFKEnd((MLDRContRelEnds) mdrContRelEnds, Integer.parseInt(extremiteRelationTag.getAttribute("id")));
+        }
+
+        //Chargement des autres propriétés d'identification de l'extrémité de relation'
+        mdrRelFKEnd.setName(extremiteRelationTag.getAttribute("name"));
+        mdrRelFKEnd.setShortName(extremiteRelationTag.getAttribute("shortname"));
+        mdrRelFKEnd.setLongName(extremiteRelationTag.getAttribute("longname"));
     }
 }
