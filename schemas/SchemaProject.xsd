@@ -77,6 +77,7 @@
 	<xs:element name="preferences">
 		<xs:complexType>
 			<xs:sequence>
+				<!-- Préférences MCD -->
 				<xs:element ref="generalRelationNotation"/>
 				<xs:element ref="mcdJournalization"/>
 				<xs:element ref="mcdJournalizationException"/>
@@ -90,6 +91,36 @@
 				<xs:element ref="mcdTreeNamingAssociation"/>
 				<xs:element ref="mcdModeNamingLongName"/>
 				<xs:element ref="mcdModeNamingAttributeShortName"/>
+
+				<!-- Préférences MCDToMLDR -->
+				<xs:element name="mcdToMldrMode" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MLDRToMPDR -->
+				<xs:element name="mldrToMpdrDb" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MDR Format -->
+				<xs:element name="mdrTableNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrTableNNNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrTableNNNameIndiceFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnAttrNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnAttrShortNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnDerivedMarker" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrPkNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnPkNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnfkNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnFkNameOneAncestorFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrFkNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrFkNameWithoutRoleFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrRoleGeneralizeMarker" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrPathSepFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrPEASepFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrTableSepFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrRoleSepFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrFkIndSepFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MDR -->
+				<xs:element name="mdrPrefColumnFkOneAncestor" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrPrefColumnFkOneAncestorDiff" type="xs:string" minOccurs="0" maxOccurs="1" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

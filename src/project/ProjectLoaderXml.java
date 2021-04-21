@@ -129,7 +129,7 @@ public class ProjectLoaderXml {
         Element packagesAutorizeds = (Element) racine.getElementsByTagName("packagesAutorizeds").item(0);
         project.setPackagesAutorizeds(Boolean.valueOf(packagesAutorizeds.getTextContent()));
 
-        // Récupération de la dernière valeur de la séquence des éléments du projet
+         // Récupération de la dernière valeur de la séquence des éléments du projet
         Element idElementSequence = (Element) racine.getElementsByTagName("idElementSequence").item(0);
         project.setIdElementSequence(Integer.parseInt(idElementSequence.getTextContent()));
     }
@@ -139,45 +139,71 @@ public class ProjectLoaderXml {
         //Récupération et instantiation des préférences de projet
 
         //Préférences général
-        Element generalRelationNotation = (Element) racine.getElementsByTagName("generalRelationNotation").item(0);
-        preferences.setGENERAL_RELATION_NOTATION(generalRelationNotation.getTextContent());
+        preferences.setGENERAL_RELATION_NOTATION(this.getTextInTag(racine, "generalRelationNotation"));
 
         //Préférences MCD
-        Element mcdJournalization = (Element) racine.getElementsByTagName("mcdJournalization").item(0);
-        preferences.setMCD_JOURNALIZATION(Boolean.valueOf(mcdJournalization.getTextContent()));
+        preferences.setMCD_JOURNALIZATION(this.getBooleanInTag(racine, "mcdJournalization"));
+        preferences.setMCD_JOURNALIZATION_EXCEPTION(this.getBooleanInTag(racine, "mcdJournalizationException"));
+        preferences.setMCD_AUDIT(this.getBooleanInTag(racine, "mcdAudit"));
+        preferences.setMCD_AUDIT_EXCEPTION(this.getBooleanInTag(racine, "mcdAuditException"));
+        preferences.setMCD_AID_DATATYPE_LIENPROG(this.getTextInTag(racine, "mcdAidDataTypeLienProg"));
+        preferences.setMCDDATATYPE_NUMBER_SIZE_MODE(this.getTextInTag(racine, "mcdDataTypeNumberSizeMode"));
+        preferences.setMCD_AID_IND_COLUMN_NAME(this.getTextInTag(racine, "mcdAidIndColumnName"));
+        preferences.setMCD_AID_DEP_COLUMN_NAME(this.getTextInTag(racine, "mcdAidDepColumnName"));
+        preferences.setMCD_AID_WITH_DEP(this.getBooleanInTag(racine, "mcdAidWithDep"));
+        preferences.setMCD_TREE_NAMING_ASSOCIATION(this.getTextInTag(racine, "mcdTreeNamingAssociation"));
+        preferences.setMCD_MODE_NAMING_LONG_NAME(this.getTextInTag(racine, "mcdModeNamingLongName"));
+        preferences.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(this.getTextInTag(racine, "mcdModeNamingAttributeShortName"));
 
-        Element mcdJournalizationException = (Element) racine.getElementsByTagName("mcdJournalizationException").item(0);
-        preferences.setMCD_JOURNALIZATION_EXCEPTION(Boolean.valueOf(mcdJournalizationException.getTextContent()));
+        // Préférences MCDToMLDR
+        preferences.setMCDTOMLDR_MODE(this.getTextInTag(racine,"mcdToMldrMode"));
 
-        Element mcdAudit = (Element) racine.getElementsByTagName("mcdAudit").item(0);
-        preferences.setMCD_AUDIT(Boolean.valueOf(mcdAudit.getTextContent()));
+        //Préférences MLDRToMPDR
+        preferences.setMLDRTOMPDR_DB(this.getTextInTag(racine,"mldrToMpdrDb"));
 
-        Element mcdAuditException = (Element) racine.getElementsByTagName("mcdAuditException").item(0);
-        preferences.setMCD_AUDIT_EXCEPTION(Boolean.valueOf(mcdAuditException.getTextContent()));
+        //Préférences MDR Format
+        preferences.setMDR_TABLE_NAME_FORMAT(this.getTextInTag(racine,"mdrTableNameFormat"));
+        preferences.setMDR_TABLE_NN_NAME_FORMAT(this.getTextInTag(racine,"mdrTableNNNameFormat"));
+        preferences.setMDR_TABLE_NN_NAME_INDICE_FORMAT(this.getTextInTag(racine,"mdrTableNNNameIndiceFormat"));
+        preferences.setMDR_COLUMN_ATTR_NAME_FORMAT(this.getTextInTag(racine,"mdrColumnAttrNameFormat"));
+        preferences.setMDR_COLUMN_ATTR_SHORT_NAME_FORMAT(this.getTextInTag(racine,"mdrColumnAttrShortNameFormat"));
+        preferences.setMDR_COLUMN_DERIVED_MARKER(this.getTextInTag(racine,"mdrColumnDerivedMarker"));
+        preferences.setMDR_PK_NAME_FORMAT(this.getTextInTag(racine,"mdrPkNameFormat"));
+        preferences.setMDR_COLUMN_PK_NAME_FORMAT(this.getTextInTag(racine,"mdrColumnPkNameFormat"));
+        preferences.setMDR_COLUMN_FK_NAME_FORMAT(this.getTextInTag(racine,"mdrColumnfkNameFormat"));
+        preferences.setMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT(this.getTextInTag(racine,"mdrColumnFkNameOneAncestorFormat"));
+        preferences.setMDR_FK_NAME_FORMAT(this.getTextInTag(racine,"mdrFkNameFormat"));
+        preferences.setMDR_FK_NAME_WITHOUT_ROLE_FORMAT(this.getTextInTag(racine,"mdrFkNameWithoutRoleFormat"));
+        preferences.setMDR_ROLE_GENERALIZE_MARKER(this.getTextInTag(racine,"mdrRoleGeneralizeMarker"));
+        preferences.setMDR_PATH_SEP_FORMAT(this.getTextInTag(racine,"mdrPathSepFormat"));
+        preferences.setMDR_PEA_SEP_FORMAT(this.getTextInTag(racine,"mdrPEASepFormat"));
+        preferences.setMDR_TABLE_SEP_FORMAT(this.getTextInTag(racine,"mdrTableSepFormat"));
+        preferences.setMDR_ROLE_SEP_FORMAT(this.getTextInTag(racine,"mdrRoleSepFormat"));
+        preferences.setMDR_FKIND_SEP_FORMAT(this.getTextInTag(racine,"mdrFkIndSepFormat"));
 
-        Element mcdAidDataTypeLienProg = (Element) racine.getElementsByTagName("mcdAidDataTypeLienProg").item(0);
-        preferences.setMCD_AID_DATATYPE_LIENPROG(mcdAidDataTypeLienProg.getTextContent());
+        //Préférences MDR
+        preferences.setMDR_PREF_COLUMN_FK_ONE_ANCESTOR(this.getBooleanInTag(racine, "mdrPrefColumnFkOneAncestor"));
+        preferences.setMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF(this.getTextInTag(racine,"mdrPrefColumnFkOneAncestorDiff"));
+    }
 
-        Element mcdDataTypeNumberSizeMode = (Element) racine.getElementsByTagName("mcdDataTypeNumberSizeMode").item(0);
-        preferences.setMCDDATATYPE_NUMBER_SIZE_MODE(mcdDataTypeNumberSizeMode.getTextContent());
+    /**
+     * Retourne la valeur du premier noeud texte de la balise portant le nom donné.
+     * @param root Balise racine dans laquelle rechercher la balise portant le nom donné. La recherche se fait en profondeur.
+     * @param tagName Nom de la balise à rechercher.
+     * @return Valeur du texte contenu dans le premier noeud texte de la balise trouvée.
+     */
+    private String getTextInTag(Element root, String tagName){
+        return ((Element) root.getElementsByTagName(tagName).item(0)).getTextContent();
+    }
 
-        Element mcdAidIndColumnName = (Element) racine.getElementsByTagName("mcdAidIndColumnName").item(0);
-        preferences.setMCD_AID_IND_COLUMN_NAME(mcdAidIndColumnName.getTextContent());
-
-        Element mcdAidDepColumnName = (Element) racine.getElementsByTagName("mcdAidDepColumnName").item(0);
-        preferences.setMCD_AID_DEP_COLUMN_NAME(mcdAidDepColumnName.getTextContent());
-
-        Element mcdAidWithDep = (Element) racine.getElementsByTagName("mcdAidWithDep").item(0);
-        preferences.setMCD_AID_WITH_DEP(Boolean.valueOf(mcdAidWithDep.getTextContent()));
-
-        Element mcdTreeNamingAssociation = (Element) racine.getElementsByTagName("mcdTreeNamingAssociation").item(0);
-        preferences.setMCD_TREE_NAMING_ASSOCIATION(mcdTreeNamingAssociation.getTextContent());
-
-        Element mcdModeNamingLongName = (Element) racine.getElementsByTagName("mcdModeNamingLongName").item(0);
-        preferences.setMCD_MODE_NAMING_LONG_NAME(mcdModeNamingLongName.getTextContent());
-
-        Element mcdModeNamingAttributeShortName = (Element) racine.getElementsByTagName("mcdModeNamingAttributeShortName").item(0);
-        preferences.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(mcdModeNamingAttributeShortName.getTextContent());
+    /**
+     * Comme getTextInTag, sauf que la valeur retournée est castée en type Boolean.
+     * @param root Balise racine dans laquelle rechercher la balise portant le nom donné. La recherche se fait en profondeur.
+     * @param tagName Nom de la balise à rechercher.
+     * @return Valeur Boolean correspondant au texte contenu dans le premier noeud texte de la balise trouvée
+     */
+    private Boolean getBooleanInTag(Element root, String tagName){
+        return Boolean.valueOf(this.getTextInTag(root, tagName));
     }
 
     private ArrayList<Element> loadModels(MCDContModels mcd, Element mcdTag) {

@@ -587,7 +587,6 @@ public class Preferences extends MVCCDElement {
     public static Integer MDR_MARKER_CUSTOM_FK_LENGTH = 3;
     public static Integer MDR_SEPARATOR_NAMING_LENGTH = 1;
 
-
     public static String MDR_WORDS_BEGIN = "{";
     public static String MDR_WORDS_END = "}";
     public static String MDR_WORDS_PATTERN = "\\{[a-zA-Z_]+\\}";
@@ -654,8 +653,8 @@ public class Preferences extends MVCCDElement {
 
     // Préférences de projet (modifications User/Custom)
     // Général
-    //private String PROJET_VERSION;  //Directement comme propriété de projet
     private String GENERAL_RELATION_NOTATION ;
+    //private String PROJET_VERSION;  //Directement comme propriété de projet
 
     // MCD
     private Boolean MCD_JOURNALIZATION = false;
@@ -702,7 +701,6 @@ public class Preferences extends MVCCDElement {
     private String MDR_FK_NAME_FORMAT = null;
     private String MDR_FK_NAME_WITHOUT_ROLE_FORMAT = null;
     private String MDR_ROLE_GENERALIZE_MARKER = null;
-    private String MDR_INDICE_SEP_FORMAT = null;
     private String MDR_PATH_SEP_FORMAT = null;
     private String MDR_PEA_SEP_FORMAT = null;
     private String MDR_TABLE_SEP_FORMAT = null;
@@ -731,10 +729,7 @@ public class Preferences extends MVCCDElement {
 
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);
-
     }
-
-    // Application
 
 
     public Boolean isPERSISTENCE_SERIALISATION_INSTEADOF_XML() {

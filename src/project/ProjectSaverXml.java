@@ -118,60 +118,74 @@ public class ProjectSaverXml {
         racine.appendChild(preferences);
 
         //Préférences Général
-        Element generalRelationNotation = document.createElement("generalRelationNotation");
-        generalRelationNotation.appendChild(document.createTextNode(projectPreferences.getGENERAL_RELATION_NOTATION().toString()));
-        preferences.appendChild(generalRelationNotation);
+        this.addNewChildTag(document, preferences, "generalRelationNotation", projectPreferences.getGENERAL_RELATION_NOTATION());
 
         //Préférences MCD
-        Element mcdJournalization = document.createElement("mcdJournalization");
-        mcdJournalization.appendChild(document.createTextNode(projectPreferences.getMCD_JOURNALIZATION().toString()));
-        preferences.appendChild(mcdJournalization);
+        this.addNewChildTag(document, preferences, "mcdJournalization", projectPreferences.getMCD_JOURNALIZATION().toString());
+        this.addNewChildTag(document, preferences, "mcdJournalizationException", projectPreferences.getMCD_JOURNALIZATION_EXCEPTION().toString());
+        this.addNewChildTag(document, preferences, "mcdAudit", projectPreferences.getMCD_AUDIT().toString());
+        this.addNewChildTag(document, preferences, "mcdAuditException", projectPreferences.getMCD_AUDIT_EXCEPTION().toString());
+        this.addNewChildTag(document, preferences, "mcdAidDataTypeLienProg", projectPreferences.getMCD_AID_DATATYPE_LIENPROG());
+        this.addNewChildTag(document, preferences, "mcdDataTypeNumberSizeMode", projectPreferences.getMCDDATATYPE_NUMBER_SIZE_MODE());
+        this.addNewChildTag(document, preferences, "mcdAidIndColumnName", projectPreferences.getMCD_AID_IND_COLUMN_NAME());
+        this.addNewChildTag(document, preferences, "mcdAidDepColumnName", projectPreferences.getMCD_AID_DEP_COLUMN_NAME());
+        this.addNewChildTag(document, preferences, "mcdAidWithDep", projectPreferences.isMCD_AID_WITH_DEP().toString());
+        this.addNewChildTag(document, preferences, "mcdTreeNamingAssociation", projectPreferences.getMCD_TREE_NAMING_ASSOCIATION());
+        this.addNewChildTag(document, preferences, "mcdModeNamingLongName", projectPreferences.getMCD_MODE_NAMING_LONG_NAME());
+        this.addNewChildTag(document, preferences, "mcdModeNamingAttributeShortName", projectPreferences.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME());
 
-        Element mcdJournalizationException = document.createElement("mcdJournalizationException");
-        mcdJournalizationException.appendChild(document.createTextNode(projectPreferences.getMCD_JOURNALIZATION_EXCEPTION().toString()));
-        preferences.appendChild(mcdJournalizationException);
+        // Préférences MCDToMLDR
+        this.addNewChildTag(document, preferences, "mcdToMldrMode", projectPreferences.getMCDTOMLDR_MODE());
 
-        Element mcdAudit = document.createElement("mcdAudit");
-        mcdAudit.appendChild(document.createTextNode(projectPreferences.getMCD_AUDIT().toString()));
-        preferences.appendChild(mcdAudit);
+        //Préférences MLDRToMPDR
+        this.addNewChildTag(document, preferences, "mldrToMpdrDb", projectPreferences.getMLDRTOMPDR_DB());
 
-        Element mcdAuditException = document.createElement("mcdAuditException");
-        mcdAuditException.appendChild(document.createTextNode(projectPreferences.getMCD_AUDIT_EXCEPTION().toString()));
-        preferences.appendChild(mcdAuditException);
+        //Préférences MDR Format
+        this.addNewChildTag(document, preferences, "mdrTableNameFormat", projectPreferences.getMDR_TABLE_NAME_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrTableNNNameFormat", projectPreferences.getMDR_TABLE_NN_NAME_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrTableNNNameIndiceFormat", projectPreferences.getMDR_TABLE_NN_NAME_INDICE_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrColumnAttrNameFormat", projectPreferences.getMDR_COLUMN_ATTR_NAME_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrColumnAttrShortNameFormat", projectPreferences.getMDR_COLUMN_ATTR_SHORT_NAME_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrColumnDerivedMarker", projectPreferences.getMDR_COLUMN_DERIVED_MARKER());
+        this.addNewChildTag(document, preferences, "mdrPkNameFormat", projectPreferences.getMDR_PK_NAME_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrColumnPkNameFormat", projectPreferences.getMDR_COLUMN_PK_NAME_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrColumnfkNameFormat", projectPreferences.getMDR_COLUMN_FK_NAME_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrColumnFkNameOneAncestorFormat", projectPreferences.getMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrFkNameFormat", projectPreferences.getMDR_FK_NAME_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrFkNameWithoutRoleFormat", projectPreferences.getMDR_FK_NAME_WITHOUT_ROLE_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrRoleGeneralizeMarker", projectPreferences.getMDR_ROLE_GENERALIZE_MARKER());
+        this.addNewChildTag(document, preferences, "mdrPathSepFormat", projectPreferences.getMDR_PATH_SEP_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrPEASepFormat", projectPreferences.getMDR_PEA_SEP_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrTableSepFormat", projectPreferences.getMDR_TABLE_SEP_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrRoleSepFormat", projectPreferences.getMDR_ROLE_SEP_FORMAT());
+        this.addNewChildTag(document, preferences, "mdrFkIndSepFormat", projectPreferences.getMDR_FKIND_SEP_FORMAT());
 
-        Element mcdAidDataTypeLienProg = document.createElement("mcdAidDataTypeLienProg");
-        mcdAidDataTypeLienProg.appendChild(document.createTextNode(projectPreferences.getMCD_AID_DATATYPE_LIENPROG()));
-        preferences.appendChild(mcdAidDataTypeLienProg);
+        //Préférences MDR
+        this.addNewChildTag(document, preferences, "mdrPrefColumnFkOneAncestor", projectPreferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR().toString());
+        this.addNewChildTag(document, preferences, "mdrPrefColumnFkOneAncestorDiff", projectPreferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF());
 
-        Element mcdDataTypeNumberSizeMode = document.createElement("mcdDataTypeNumberSizeMode");
-        mcdDataTypeNumberSizeMode.appendChild(document.createTextNode(projectPreferences.getMCDDATATYPE_NUMBER_SIZE_MODE()));
-        preferences.appendChild(mcdDataTypeNumberSizeMode);
-
-        Element mcdAidIndColumnName = document.createElement("mcdAidIndColumnName");
-        mcdAidIndColumnName.appendChild(document.createTextNode(projectPreferences.getMCD_AID_IND_COLUMN_NAME()));
-        preferences.appendChild(mcdAidIndColumnName);
-
-        Element mcdAidDepColumnName = document.createElement("mcdAidDepColumnName");
-        mcdAidDepColumnName.appendChild(document.createTextNode(projectPreferences.getMCD_AID_DEP_COLUMN_NAME()));
-        preferences.appendChild(mcdAidDepColumnName);
-
-        Element mcdAidWithDep = document.createElement("mcdAidWithDep");
-        mcdAidWithDep.appendChild(document.createTextNode(projectPreferences.isMCD_AID_WITH_DEP().toString()));
-        preferences.appendChild(mcdAidWithDep);
-
-        Element mcdTreeNamingAssociation = document.createElement("mcdTreeNamingAssociation");
-        mcdTreeNamingAssociation.appendChild(document.createTextNode(projectPreferences.getMCD_TREE_NAMING_ASSOCIATION()));
-        preferences.appendChild(mcdTreeNamingAssociation);
-
-        Element mcdModeNamingLongName = document.createElement("mcdModeNamingLongName");
-        mcdModeNamingLongName.appendChild(document.createTextNode(projectPreferences.getMCD_MODE_NAMING_LONG_NAME()));
-        preferences.appendChild(mcdModeNamingLongName);
-
-        Element mcdModeNamingAttributeShortName = document.createElement("mcdModeNamingAttributeShortName");
-        mcdModeNamingAttributeShortName.appendChild(document.createTextNode(projectPreferences.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME()));
-        preferences.appendChild(mcdModeNamingAttributeShortName);
+        //TODO-STB: A voir s'il faut persister les préférences de type enum également. Exemple ci-dessous.
+        /*
+        projectPreferences.getMPDRMYSQL_PREF_NAMING_LENGTH().getName();
+        .getLength();
+        .isRequired();
+        */
     }
 
+    /**
+     * Create a new tag and add it as a child of the given parent tag.
+     * @param doc Document into with the tag will be created.
+     * @param parentTag The parent tag that will have the child tag as new child.
+     * @param childTagName The name of the new child tag that will be created.
+     * @param childTagText The text content of the new child tag. If null, no text node will be created for the child tag.
+     * @return The new child tag is returned.
+     */
+    private Element addNewChildTag(Document doc, Element parentTag, String childTagName, String childTagText){
+        Element childTag = doc.createElement(childTagName);
+        if(childTagText != null) childTag.appendChild(doc.createTextNode(childTagText));
+        parentTag.appendChild(childTag);
+        return childTag;
+    }
 
     private void addModelAndChilds(Document doc, Element mcd, ArrayList<MVCCDElement> mcdModels) {
         // Parcours des enfants de l'élément mcd
