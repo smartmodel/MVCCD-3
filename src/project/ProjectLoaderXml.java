@@ -72,8 +72,7 @@ public class ProjectLoaderXml {
 
             // Initialisation des préférences du projet
             Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME); //Ceci va automatiquement créer un objet "Preferences" qui se trouve dans le référentiel sous le Project.
-            //PreferencesManager.instance().setProjectPref(preferences); //TODO-STB: ajouter cette ligne serait une piste qui pourrait résoudre le problème de préférences qui ne se chargement pas
-
+            
             // Ajout des éléments du projet
             addPropertiesProject(projectTag, project);
             addPreferences(projectTag, preferences);
