@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import profile.Profile;
 
 import javax.xml.XMLConstants;
@@ -70,7 +71,8 @@ public class ProjectLoaderXml {
             this.version = projectTag.getElementsByTagName("version").item(0).getTextContent();
 
             // Initialisation des préférences du projet
-            Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME);
+            Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME); //Ceci va automatiquement créer un objet "Preferences" qui se trouve dans le référentiel sous le Project.
+            //PreferencesManager.instance().setProjectPref(preferences); //TODO-STB: ajouter cette ligne serait une piste qui pourrait résoudre le problème de préférences qui ne se chargement pas
 
             // Ajout des éléments du projet
             addPropertiesProject(projectTag, project);
@@ -184,6 +186,58 @@ public class ProjectLoaderXml {
         //Préférences MDR
         preferences.setMDR_PREF_COLUMN_FK_ONE_ANCESTOR(this.getBooleanInTag(racine, "mdrPrefColumnFkOneAncestor"));
         preferences.setMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF(this.getTextInTag(racine,"mdrPrefColumnFkOneAncestorDiff"));
+
+        // Préférences MLDR (préférences de type enum)
+        switch(this.getIntegerInTag(racine, "mldrPrefNamingLengthLength")){
+            case 30: preferences.setMLDR_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH30); break;
+            case 60: preferences.setMLDR_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH60); break;
+            case 120: preferences.setMLDR_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
+        }
+        switch(this.getTextInTag(racine, "mldrPrefNamingFormatName")){
+            case "mdr.naming.format.nothing": preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+        }
+
+        // Préférences MPDR Oracle (préférences de type enum)
+        switch(this.getIntegerInTag(racine, "mpdrOraclePrefNamingLengthLength")){
+            case 30: preferences.setMPDRORACLE_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH30); break;
+            case 60: preferences.setMPDRORACLE_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH60); break;
+            case 120: preferences.setMPDRORACLE_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
+        }
+        switch(this.getTextInTag(racine, "mpdrOraclePrefNamingFormatName")){
+            case "mdr.naming.format.nothing": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+        }
+
+        // Préférences MPDR MySQL (préférences de type enum)
+        switch(this.getIntegerInTag(racine, "mpdrMySQLPrefNamingLengthLength")){
+            case 30: preferences.setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH30); break;
+            case 60: preferences.setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH60); break;
+            case 120: preferences.setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
+        }
+        switch(this.getTextInTag(racine, "mpdrMySQLPrefNamingFormatName")){
+            case "mdr.naming.format.nothing": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+        }
+
+        // Préférences MPDR PostgreSQL (préférences de type enum)
+        switch(this.getIntegerInTag(racine, "mpdrPostgreSQLPrefNamingLengthLength")){
+            case 30: preferences.setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH30); break;
+            case 60: preferences.setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH60); break;
+            case 120: preferences.setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
+        }
+        switch(this.getTextInTag(racine, "mpdrPostgreSQLPrefNamingFormatName")){
+            case "mdr.naming.format.nothing": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+        }
     }
 
     /**
@@ -204,6 +258,16 @@ public class ProjectLoaderXml {
      */
     private Boolean getBooleanInTag(Element root, String tagName){
         return Boolean.valueOf(this.getTextInTag(root, tagName));
+    }
+
+    /**
+     * Comme getTextInTag, sauf que la valeur retournée est castée en type Integer.
+     * @param root Balise racine dans laquelle rechercher la balise portant le nom donné. La recherche se fait en profondeur.
+     * @param tagName Nom de la balise à rechercher.
+     * @return Valeur Integer correspondant au texte contenu dans le premier noeud texte de la balise trouvée
+     */
+    private Integer getIntegerInTag(Element root, String tagName){
+        return Integer.valueOf(this.getTextInTag(root, tagName));
     }
 
     private ArrayList<Element> loadModels(MCDContModels mcd, Element mcdTag) {

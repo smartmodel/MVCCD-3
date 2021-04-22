@@ -121,6 +121,30 @@
 				<!-- Préférences MDR -->
 				<xs:element name="mdrPrefColumnFkOneAncestor" type="xs:boolean" minOccurs="0" maxOccurs="1" />
 				<xs:element name="mdrPrefColumnFkOneAncestorDiff" type="xs:string" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MLDR -->
+				<xs:element name="mldrPrefNamingLengthName" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mldrPrefNamingLengthLength" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mldrPrefNamingLengthRequired" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mldrPrefNamingFormatName" type="xs:string" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MPDR Oracle -->
+				<xs:element name="mpdrOraclePrefNamingLengthName" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrOraclePrefNamingLengthLength" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrOraclePrefNamingLengthRequired" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrOraclePrefNamingFormatName" type="xs:string" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MPDR MySQL -->
+				<xs:element name="mpdrMySQLPrefNamingLengthName" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrMySQLPrefNamingLengthLength" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrMySQLPrefNamingLengthRequired" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrMySQLPrefNamingFormatName" type="xs:string" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MPDR PostgreSQL -->
+				<xs:element name="mpdrPostgreSQLPrefNamingLengthName" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrPostgreSQLPrefNamingLengthLength" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrPostgreSQLPrefNamingLengthRequired" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrPostgreSQLPrefNamingFormatName" type="xs:string" minOccurs="0" maxOccurs="1" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

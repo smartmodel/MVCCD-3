@@ -532,10 +532,10 @@ public class Preferences extends MVCCDElement {
     public static String MDR_NAMING_LENGTH_60 = "mdr.naming.length.60";
     public static String MDR_NAMING_LENGTH_120 = "mdr.naming.length.120";
 
-    public static String MDR_NAMING_FORMAT_NOTHING = "mdr.naming.format.nothing";
-    public static String MDR_NAMING_FORMAT_UPPERCASE = "mdr.naming.format.uppercase";
-    public static String MDR_NAMING_FORMAT_LOWERCASE = "mdr.naming.format.lowercase";
-    public static String MDR_NAMING_FORMAT_CAPITALIZE = "mdr.naming.format.capitalize";
+    public static String MDR_NAMING_FORMAT_NOTHING = "mdr.naming.format.nothing"; //Attention, si cette valeur est changée, elle doit également être changée dans ProjectLoaderXML.
+    public static String MDR_NAMING_FORMAT_UPPERCASE = "mdr.naming.format.uppercase"; //Idem
+    public static String MDR_NAMING_FORMAT_LOWERCASE = "mdr.naming.format.lowercase"; //Idem
+    public static String MDR_NAMING_FORMAT_CAPITALIZE = "mdr.naming.format.capitalize"; //Idem
 
     public static String MDR_NAMING_TABLE = "mdr.table";
     public static String MDR_NAMING_TABLE_NN = "mdr.table.nn";

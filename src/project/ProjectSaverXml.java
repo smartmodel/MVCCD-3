@@ -139,7 +139,7 @@ public class ProjectSaverXml {
 
         //Préférences MLDRToMPDR
         this.addNewChildTag(document, preferences, "mldrToMpdrDb", projectPreferences.getMLDRTOMPDR_DB());
-
+l
         //Préférences MDR Format
         this.addNewChildTag(document, preferences, "mdrTableNameFormat", projectPreferences.getMDR_TABLE_NAME_FORMAT());
         this.addNewChildTag(document, preferences, "mdrTableNNNameFormat", projectPreferences.getMDR_TABLE_NN_NAME_FORMAT());
@@ -164,12 +164,29 @@ public class ProjectSaverXml {
         this.addNewChildTag(document, preferences, "mdrPrefColumnFkOneAncestor", projectPreferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR().toString());
         this.addNewChildTag(document, preferences, "mdrPrefColumnFkOneAncestorDiff", projectPreferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF());
 
-        //TODO-STB: A voir s'il faut persister les préférences de type enum également. Exemple ci-dessous.
-        /*
-        projectPreferences.getMPDRMYSQL_PREF_NAMING_LENGTH().getName();
-        .getLength();
-        .isRequired();
-        */
+        // Préférences MLDR (préférences de type enum)
+        this.addNewChildTag(document, preferences, "mldrPrefNamingLengthName", projectPreferences.getMLDR_PREF_NAMING_LENGTH().getName());
+        this.addNewChildTag(document, preferences, "mldrPrefNamingLengthLength", projectPreferences.getMLDR_PREF_NAMING_LENGTH().getLength().toString());
+        this.addNewChildTag(document, preferences, "mldrPrefNamingLengthRequired", Boolean.toString(projectPreferences.getMLDR_PREF_NAMING_LENGTH().isRequired()));
+        this.addNewChildTag(document, preferences, "mldrPrefNamingFormatName", projectPreferences.getMLDR_PREF_NAMING_FORMAT().getName());
+
+        // Préférences MPDR Oracle (préférences de type enum)
+        this.addNewChildTag(document, preferences, "mpdrOraclePrefNamingLengthName", projectPreferences.getMPDRORACLE_PREF_NAMING_LENGTH().getName());
+        this.addNewChildTag(document, preferences, "mpdrOraclePrefNamingLengthLength", projectPreferences.getMPDRORACLE_PREF_NAMING_LENGTH().getLength().toString());
+        this.addNewChildTag(document, preferences, "mpdrOraclePrefNamingLengthRequired", Boolean.toString(projectPreferences.getMPDRORACLE_PREF_NAMING_LENGTH().isRequired()));
+        this.addNewChildTag(document, preferences, "mpdrOraclePrefNamingFormatName", projectPreferences.getMPDRORACLE_PREF_NAMING_FORMAT().getName());
+
+        // Préférences MPDR MySQL (préférences de type enum)
+        this.addNewChildTag(document, preferences, "mpdrMySQLPrefNamingLengthName", projectPreferences.getMPDRMYSQL_PREF_NAMING_LENGTH().getName());
+        this.addNewChildTag(document, preferences, "mpdrMySQLPrefNamingLengthLength", projectPreferences.getMPDRMYSQL_PREF_NAMING_LENGTH().getLength().toString());
+        this.addNewChildTag(document, preferences, "mpdrMySQLPrefNamingLengthRequired", Boolean.toString(projectPreferences.getMPDRMYSQL_PREF_NAMING_LENGTH().isRequired()));
+        this.addNewChildTag(document, preferences, "mpdrMySQLPrefNamingFormatName", projectPreferences.getMPDRMYSQL_PREF_NAMING_FORMAT().getName());
+
+        // Préférences MPDR PostgreSQL (préférences de type enum)
+        this.addNewChildTag(document, preferences, "mpdrPostgreSQLPrefNamingLengthName", projectPreferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH().getName());
+        this.addNewChildTag(document, preferences, "mpdrPostgreSQLPrefNamingLengthLength", projectPreferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH().getLength().toString());
+        this.addNewChildTag(document, preferences, "mpdrPostgreSQLPrefNamingLengthRequired", Boolean.toString(projectPreferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH().isRequired()));
+        this.addNewChildTag(document, preferences, "mpdrPostgreSQLPrefNamingFormatName", projectPreferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT().getName());
     }
 
     /**
