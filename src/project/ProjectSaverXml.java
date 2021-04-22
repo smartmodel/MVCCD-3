@@ -139,7 +139,7 @@ public class ProjectSaverXml {
 
         //Préférences MLDRToMPDR
         this.addNewChildTag(document, preferences, "mldrToMpdrDb", projectPreferences.getMLDRTOMPDR_DB());
-l
+
         //Préférences MDR Format
         this.addNewChildTag(document, preferences, "mdrTableNameFormat", projectPreferences.getMDR_TABLE_NAME_FORMAT());
         this.addNewChildTag(document, preferences, "mdrTableNNNameFormat", projectPreferences.getMDR_TABLE_NN_NAME_FORMAT());
@@ -1005,7 +1005,12 @@ l
         //Ajout des attributs à la balise <table>
         tableTag.setAttribute("id", mldrTable.getIdProjectElementAsString());
         tableTag.setAttribute("name", mldrTable.getName());
+        tableTag.setAttribute("shortName", mldrTable.getShortName());
+        tableTag.setAttribute("longName", mldrTable.getShortName());
         tableTag.setAttribute("mcdelement_source", mldrTable.getMcdElementSource().getIdProjectElementAsString());
+        tableTag.setAttribute("name30", mldrTable.getNames().getName30());
+        tableTag.setAttribute("name60", mldrTable.getNames().getName60());
+        tableTag.setAttribute("name120", mldrTable.getNames().getName120());
 
         //Persistance des colonnes
         this.addColumns(doc, mldrTable, tableTag);
@@ -1054,9 +1059,12 @@ l
         //Ajout des propriétés d'identification d'une colonne à la balise <column>
         columnTag.setAttribute("id", mldrColumn.getIdProjectElementAsString());
         columnTag.setAttribute("name", mldrColumn.getName());
-        columnTag.setAttribute("shortname", mldrColumn.getShortName());
-        columnTag.setAttribute("longname", mldrColumn.getLongName());
+        columnTag.setAttribute("shortName", mldrColumn.getShortName());
+        columnTag.setAttribute("longName", mldrColumn.getLongName());
         columnTag.setAttribute("mcdelement_source", mldrColumn.getMcdElementSource().getIdProjectElementAsString());
+        columnTag.setAttribute("name30", mldrColumn.getNames().getName30());
+        columnTag.setAttribute("name60", mldrColumn.getNames().getName60());
+        columnTag.setAttribute("name120", mldrColumn.getNames().getName120());
 
         //Ajout des autres propriétés relatives à une colonne
         columnTag.setAttribute("mandatory", mldrColumn.isMandatory() ? "true" : "false");
@@ -1152,6 +1160,9 @@ l
             constraintTag.setAttribute("name", tableConstraint.getName());
             constraintTag.setAttribute("shortName", tableConstraint.getShortName());
             constraintTag.setAttribute("longName", tableConstraint.getLongName());
+            constraintTag.setAttribute("name30", tableConstraint.getNames().getName30());
+            constraintTag.setAttribute("name60", tableConstraint.getNames().getName60());
+            constraintTag.setAttribute("name120", tableConstraint.getNames().getName120());
 
             //Ajout de la balise <targetColumns>
             Element targetColumnsTag = doc.createElement("targetColumns");
@@ -1223,6 +1234,9 @@ l
         extremiteRelationTag.setAttribute("name", mdrRelEnd.getName());
         extremiteRelationTag.setAttribute("shortName", mdrRelEnd.getShortName());
         extremiteRelationTag.setAttribute("longName", mdrRelEnd.getLongName());
+        extremiteRelationTag.setAttribute("name30", mdrRelEnd.getNames().getName30());
+        extremiteRelationTag.setAttribute("name60", mdrRelEnd.getNames().getName60());
+        extremiteRelationTag.setAttribute("name120", mdrRelEnd.getNames().getName120());
     }
 
     /**
@@ -1269,6 +1283,9 @@ l
         mdrRelationTag.setAttribute("name", mdrRelationFK.getName());
         mdrRelationTag.setAttribute("shortName", mdrRelationFK.getShortName());
         mdrRelationTag.setAttribute("longName", mdrRelationFK.getLongName());
+        mdrRelationTag.setAttribute("name30", mdrRelationFK.getNames().getName30());
+        mdrRelationTag.setAttribute("name60", mdrRelationFK.getNames().getName60());
+        mdrRelationTag.setAttribute("name120", mdrRelationFK.getNames().getName120());
 
         //Ajout des attributs spécifiques à une relation FK de niveau MLD
         if(mdrRelationFK instanceof MLDRRelationFK){

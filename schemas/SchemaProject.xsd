@@ -801,7 +801,12 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
+			<xs:attribute name="shortName" type="xs:string"/>
+			<xs:attribute name="longName" type="xs:string"/>
 			<xs:attribute name="mcdelement_source" use="required" type="xs:int"/>
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -818,9 +823,12 @@
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:int" />
 			<xs:attribute name="name" type="xs:string" />
-			<xs:attribute name="shortname" type="xs:string" />
-			<xs:attribute name="longname" type="xs:string" />
+			<xs:attribute name="shortName" type="xs:string"/>
+			<xs:attribute name="longName" type="xs:string"/>
 			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
 			<xs:attribute name="mandatory" type="xs:boolean" />
 			<xs:attribute name="frozen" type="xs:boolean" />
 			<xs:attribute name="uppercase" type="xs:boolean" />
@@ -855,6 +863,9 @@
 			<xs:attribute name="shortName" type="xs:string" />
 			<xs:attribute name="longName" type="xs:string" />
 			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -868,6 +879,9 @@
 			<xs:attribute name="shortName" type="xs:string" />
 			<xs:attribute name="longName" type="xs:string" />
 			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
 			<xs:attribute name="target_pk" type="xs:int" />
 		</xs:complexType>
 	</xs:element>
@@ -901,6 +915,9 @@
 			<xs:attribute name="name" use="required" type="xs:string"/>
 			<xs:attribute name="shortName" type="xs:string"/>
 			<xs:attribute name="longName" type="xs:string"/>
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -920,6 +937,9 @@
 			<xs:attribute name="shortName" type="xs:string"/>
 			<xs:attribute name="longName" type="xs:string"/>
 			<xs:attribute name="mcdelement_source" type="xs:int"/>
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
 			<xs:attribute name="extremiteRelA_target_id" use="required" type="xs:int"/>
 			<xs:attribute name="extremiteRelB_target_id" use="required" type="xs:int"/>
 			<xs:attribute name="fk_target_id" use="required" type="xs:int"/>

@@ -874,25 +874,6 @@ public class ProjectLoaderXml {
         return null;
     }
 
-    /**
-     * @deprecated Méthode à supprimer
-     * @param entiteTag
-     * @return
-     */
-    @Deprecated
-    private MCDEntity addRelationsEntities(Element entiteTag) {
-        MCDEntity mcdEntity = null;
-        // Parcours de la listes des entités
-        for (MVCCDElement mvccdElement : loadedEntities) {
-            MCDEntity entity = (MCDEntity) mvccdElement;
-            // Comparaison du namePath de l'entité de l'extremité de relation avec les entités créées dans l'aplication
-            if (entity.getNamePath(1).equals(entiteTag.getTextContent())) {
-                mcdEntity = entity;
-            }
-        }
-        return mcdEntity;
-    }
-
     private void addExtremiteElement(Element extremite, MCDAssociation mcdAssociation, Element association) {
         // Création des extremités
         MCDAssEnd assEnd;
@@ -1022,25 +1003,6 @@ public class ProjectLoaderXml {
         return null;
     }
 
-    @Deprecated
-    private MCDAssociation addAssociationsForLinks(Element element, Element from, Element to) {
-        MCDAssociation mcdAssociation = null;
-
-        for (MVCCDElement mvccdElement : loadedAssociations) {
-            MCDAssociation association = (MCDAssociation) mvccdElement;
-            if (element.getTextContent().equals("")) {
-                // Comparatif des noms des extremités de l'association du lien d'entité associative avec les associations crées dans l'application
-                if (association.getFrom().getNamePath(1).equals(from.getTextContent()) && association.getTo().getNamePath(1).equals(to.getTextContent())) {
-                    mcdAssociation = association;
-                }
-                // Comparatif du nom de l'association du lien d'entité associative avec les associations crées dans l'application
-            } else if (association.getNamePath(1).equals(element.getTextContent())) {
-                mcdAssociation = association;
-            }
-        }
-        return mcdAssociation;
-    }
-
 
 
     // *** Méthodes de chargement du MLD ***
@@ -1138,11 +1100,20 @@ public class ProjectLoaderXml {
      */
     private void loadMldTable(MCDContModels mcdSource, MDRContTables mldrContTables, Element tableTag){
 
-        //Récupération de l'élément MCD source de la table (peut être une
+        //Récupération de l'élément MCD source de la table
         int entitySourceId = Integer.parseInt(tableTag.getAttribute("mcdelement_source")); //Récupérer l'id de l'élément source
         IMCDSourceMLDRTable mcdSourceElementOfTable = (IMCDSourceMLDRTable) mcdSource.getChildByIdProfondeur(entitySourceId); //Recherche l'élément source en fonction de son ID, parmi tous les enfants du MCD
+
+        //Création de la table et de ses attributs
         MLDRTable mldrTable = MVCCDElementFactory.instance().createMLDRTable(mldrContTables, mcdSourceElementOfTable, Integer.parseInt(tableTag.getAttribute("id")));
         mldrTable.setName(tableTag.getAttribute("name"));
+        mldrTable.setShortName(tableTag.getAttribute("shortName"));
+        mldrTable.setLongName(tableTag.getAttribute("longName"));
+        mldrTable.setNames(new MDRElementNames(
+            tableTag.getAttribute("name30"),
+            tableTag.getAttribute("name60"),
+            tableTag.getAttribute("name120"))
+        );
 
         //Parcours des balises enfants de <table>
         NodeList tableTagChilds = tableTag.getChildNodes();
@@ -1223,8 +1194,13 @@ public class ProjectLoaderXml {
 
         //Chargement des autres propriétés d'identification de la colonne
         mldrColumn.setName(columnTag.getAttribute("name"));
-        mldrColumn.setShortName(columnTag.getAttribute("shortname"));
-        mldrColumn.setLongName(columnTag.getAttribute("longname"));
+        mldrColumn.setShortName(columnTag.getAttribute("shortName"));
+        mldrColumn.setLongName(columnTag.getAttribute("longName"));
+        mldrColumn.setNames(new MDRElementNames(
+            columnTag.getAttribute("name30"),
+            columnTag.getAttribute("name60"),
+            columnTag.getAttribute("name120"))
+        );
 
         //Chargement des autres propriétés de la colonne
         mldrColumn.setMandatory(Boolean.getBoolean(columnTag.getAttribute("mandatory")));
@@ -1301,8 +1277,14 @@ public class ProjectLoaderXml {
 
         //Chargement des autres propriétés d'identification de la colonne
         mldrPk.setName(pkTag.getAttribute("name"));
-        mldrPk.setShortName(pkTag.getAttribute("shortname"));
-        mldrPk.setLongName(pkTag.getAttribute("longname"));
+        mldrPk.setShortName(pkTag.getAttribute("shortName"));
+        mldrPk.setLongName(pkTag.getAttribute("longName"));
+        mldrPk.setNames(new MDRElementNames(
+                pkTag.getAttribute("name30"),
+                pkTag.getAttribute("name60"),
+                pkTag.getAttribute("name120"))
+        );
+
 
         //Parcours des balises enfants de <pk>
         NodeList pkTagChilds = pkTag.getChildNodes();
@@ -1401,8 +1383,13 @@ public class ProjectLoaderXml {
 
         //Chargement des autres propriétés d'identification de la FK
         mldrFk.setName(fkTag.getAttribute("name"));
-        mldrFk.setShortName(fkTag.getAttribute("shortname"));
-        mldrFk.setLongName(fkTag.getAttribute("longname"));
+        mldrFk.setShortName(fkTag.getAttribute("shortName"));
+        mldrFk.setLongName(fkTag.getAttribute("longName"));
+        mldrFk.setNames(new MDRElementNames(
+                fkTag.getAttribute("name30"),
+                fkTag.getAttribute("name60"),
+                fkTag.getAttribute("name120"))
+        );
 
         //Chargement de la référence vers la contrainte PK
         int targetPkId = Integer.parseInt(fkTag.getAttribute("target_pk"));
@@ -1501,8 +1488,13 @@ public class ProjectLoaderXml {
 
         //Chargement des autres propriétés d'identification de l'extrémité de relation
         mdrRelFKEnd.setName(extremiteRelationTag.getAttribute("name"));
-        mdrRelFKEnd.setShortName(extremiteRelationTag.getAttribute("shortname"));
-        mdrRelFKEnd.setLongName(extremiteRelationTag.getAttribute("longname"));
+        mdrRelFKEnd.setShortName(extremiteRelationTag.getAttribute("shortName"));
+        mdrRelFKEnd.setLongName(extremiteRelationTag.getAttribute("longName"));
+        mdrRelFKEnd.setNames(new MDRElementNames(
+                extremiteRelationTag.getAttribute("name30"),
+                extremiteRelationTag.getAttribute("name60"),
+                extremiteRelationTag.getAttribute("name120"))
+        );
     }
 
     /**
@@ -1563,5 +1555,10 @@ public class ProjectLoaderXml {
         mdrRelationFK.setName(mdrRelationTag.getAttribute("name"));
         mdrRelationFK.setShortName(mdrRelationTag.getAttribute("shortName"));
         mdrRelationFK.setLongName(mdrRelationTag.getAttribute("longName"));
+        mdrRelationFK.setNames(new MDRElementNames(
+                mdrRelationTag.getAttribute("name30"),
+                mdrRelationTag.getAttribute("name60"),
+                mdrRelationTag.getAttribute("name120"))
+        );
     }
 }
