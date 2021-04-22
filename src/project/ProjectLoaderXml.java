@@ -75,7 +75,7 @@ public class ProjectLoaderXml {
             
             // Ajout des éléments du projet
             addPropertiesProject(projectTag, project);
-            addPreferences(projectTag, preferences);
+            addPreferences(projectTag, preferences);//TODO-STB: Ajout pour test de droits d'envoi sur une branche restrictifs à seulement certains users
 
             // Chargement du modèle MCD
             Element mcdTag = (Element) projectTag.getElementsByTagName("MCD").item(0);
