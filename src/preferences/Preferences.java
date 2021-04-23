@@ -28,7 +28,7 @@ public class Preferences extends MVCCDElement {
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
-    public static String APPLICATION_VERSION = "3.0.16"; //TODO-STB+PAS: sauvegarder également la version dans la sauvegarde du projet
+    public static String APPLICATION_VERSION = "3.0.16";
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
     public static Integer PANEL_REPOSITORY_WIDTH = 200;
@@ -532,10 +532,10 @@ public class Preferences extends MVCCDElement {
     public static String MDR_NAMING_LENGTH_60 = "mdr.naming.length.60";
     public static String MDR_NAMING_LENGTH_120 = "mdr.naming.length.120";
 
-    public static String MDR_NAMING_FORMAT_NOTHING = "mdr.naming.format.nothing";
-    public static String MDR_NAMING_FORMAT_UPPERCASE = "mdr.naming.format.uppercase";
-    public static String MDR_NAMING_FORMAT_LOWERCASE = "mdr.naming.format.lowercase";
-    public static String MDR_NAMING_FORMAT_CAPITALIZE = "mdr.naming.format.capitalize";
+    public static String MDR_NAMING_FORMAT_NOTHING = "mdr.naming.format.nothing"; //Attention, si cette valeur est changée, elle doit également être changée dans ProjectLoaderXML.
+    public static String MDR_NAMING_FORMAT_UPPERCASE = "mdr.naming.format.uppercase"; //Idem
+    public static String MDR_NAMING_FORMAT_LOWERCASE = "mdr.naming.format.lowercase"; //Idem
+    public static String MDR_NAMING_FORMAT_CAPITALIZE = "mdr.naming.format.capitalize"; //Idem
 
     public static String MDR_NAMING_TABLE = "mdr.table";
     public static String MDR_NAMING_TABLE_NN = "mdr.table.nn";
@@ -586,7 +586,6 @@ public class Preferences extends MVCCDElement {
     public static Integer MDR_MARKER_CUSTOM_PK_LENGTH = 3;
     public static Integer MDR_MARKER_CUSTOM_FK_LENGTH = 3;
     public static Integer MDR_SEPARATOR_NAMING_LENGTH = 1;
-
 
     public static String MDR_WORDS_BEGIN = "{";
     public static String MDR_WORDS_END = "}";
@@ -664,8 +663,8 @@ public class Preferences extends MVCCDElement {
 
     // Préférences de projet (modifications User/Custom)
     // Général
-    //private String PROJET_VERSION;  //Directement comme propriété de projet
     private String GENERAL_RELATION_NOTATION ;
+    //private String PROJET_VERSION;  //Directement comme propriété de projet
 
     // MCD
     private Boolean MCD_JOURNALIZATION = false;
@@ -712,7 +711,6 @@ public class Preferences extends MVCCDElement {
     private String MDR_FK_NAME_FORMAT = null;
     private String MDR_FK_NAME_WITHOUT_ROLE_FORMAT = null;
     private String MDR_ROLE_GENERALIZE_MARKER = null;
-    private String MDR_INDICE_SEP_FORMAT = null;
     private String MDR_PATH_SEP_FORMAT = null;
     private String MDR_PEA_SEP_FORMAT = null;
     private String MDR_TABLE_SEP_FORMAT = null;
@@ -741,10 +739,7 @@ public class Preferences extends MVCCDElement {
 
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);
-
     }
-
-    // Application
 
 
     public Boolean isPERSISTENCE_SERIALISATION_INSTEADOF_XML() {

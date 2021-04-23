@@ -4,12 +4,8 @@ import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDSourceMLDRTable;
-import mdr.MDRConstraint;
-import mdr.MDRContColumns;
-import mdr.MDRContConstraints;
-import mdr.MDRContTables;
+import mdr.*;
 import mdr.interfaces.IMDRParameter;
-import messages.MessagesBuilder;
 import mldr.*;
 import mldr.services.MLDRContConstraintsService;
 import mpdr.*;
@@ -25,7 +21,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
-import utilities.Trace;
 
 public class MVCCDElementFactory {
 
@@ -342,41 +337,45 @@ public class MVCCDElementFactory {
     }
 
     public MLDRColumn createMLDRColumn(MDRContColumns mdrContColumns, MCDElement mcdElementSource, int id) {
-        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource, id);
-        return mldrColumn;
+        return new MLDRColumn(mdrContColumns, mcdElementSource, id);
     }
 
     public MLDRColumn createMLDRColumn(MDRContColumns mdrContColumns, MCDElement mcdElementSource) {
-        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource);
-        return mldrColumn;
+        return new MLDRColumn(mdrContColumns, mcdElementSource);
     }
 
     public MLDRColumn createMLDRColumnFK(MDRContColumns mdrContColumns, MCDElement mcdElementSource, MLDRColumn mldrColumnPK) {
-        MLDRColumn mldrColumn= new MLDRColumn(mdrContColumns, mcdElementSource, mldrColumnPK);
-        return mldrColumn;
+        return new MLDRColumn(mdrContColumns, mcdElementSource, mldrColumnPK);
     }
 
-
     public MLDRPK createMLDRPK(MDRContConstraints mdrContConstraints, MCDElement mcdElementSource) {
-        MLDRPK mldrPK= new MLDRPK(mdrContConstraints, mcdElementSource);
-        return mldrPK;
+        return new MLDRPK(mdrContConstraints, mcdElementSource);
+    }
+
+    public MLDRPK createMLDRPK(MDRContConstraints mdrContConstraints, MCDElement mcdElementSource, int id) {
+        return new MLDRPK(mdrContConstraints, mcdElementSource, id);
     }
 
     public MLDRParameter createMLDRParameter(MDRConstraint mdrConstraint, IMDRParameter target, MCDElement mcdElementSource) {
-        MLDRParameter mldrParameter = new MLDRParameter(mdrConstraint, target, mcdElementSource);
-        return mldrParameter;
+        return new MLDRParameter(mdrConstraint, target, mcdElementSource);
     }
 
-
-
     public MLDRFK createMLDRFK(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
-        MLDRFK mldrFK= new MLDRFK(mldrContConstraints, mcdElementSource);
-        Integer indice = MLDRContConstraintsService.nextIndice(mldrContConstraints, mldrFK);
-        mldrFK.setIndice(indice);
+        MLDRFK mldrFK = new MLDRFK(mldrContConstraints, mcdElementSource);
+        this.initMLDRFK(mldrFK, mldrContConstraints);
         return mldrFK;
     }
 
+    public MLDRFK createMLDRFK(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource, int id) {
+        MLDRFK mldrFK = new MLDRFK(mldrContConstraints, mcdElementSource, id);
+        this.initMLDRFK(mldrFK, mldrContConstraints);
+        return mldrFK;
+    }
 
+    public void initMLDRFK(MLDRFK mldrFK, MLDRContConstraints mldrContConstraints){
+        Integer indice = MLDRContConstraintsService.nextIndice(mldrContConstraints, mldrFK);
+        mldrFK.setIndice(indice);
+    }
 
     public MLDRRelationFK createMLDRRelationFK( MLDRContRelations mldrContRelations,
                                                 MCDRelation mcdRelation,
@@ -399,6 +398,29 @@ public class MVCCDElementFactory {
         mldrRelFKEndParent.setMDRRelationFK(mldrRelationFK);
 
         mldrRelFKEndChild.setMDRTable(mldrTableChild);
+        mldrRelFKEndChild.setMDRRelationFK(mldrRelationFK);
+
+        return mldrRelationFK;
+    }
+
+    public MLDRRelFKEnd createMLDRRelFKEnd(MLDRContRelEnds mldrContRelEnds, MDRTable mdrTableParent, int id) {
+        MLDRRelFKEnd mldrRelFKEnd = new MLDRRelFKEnd(mldrContRelEnds, id);
+        mldrRelFKEnd.setMDRTable(mdrTableParent);
+        return mldrRelFKEnd;
+    }
+
+    public MLDRRelationFK createMLDRRelationFK( MLDRContRelations mldrContRelations,
+                                                MCDRelation mcdRelation,
+                                                MLDRRelFKEnd mldrRelFKEndParent,
+                                                MLDRRelFKEnd mldrRelFKEndChild,
+                                                int id) {
+
+        MLDRRelationFK mldrRelationFK = new MLDRRelationFK(mldrContRelations, mcdRelation) ;
+
+        //Affectation de la relation avec chacune des extrémités de la relation et inversement
+        mldrRelationFK.setEndParent(mldrRelFKEndParent);
+        mldrRelationFK.setEndChild(mldrRelFKEndChild);
+        mldrRelFKEndParent.setMDRRelationFK(mldrRelationFK);
         mldrRelFKEndChild.setMDRRelationFK(mldrRelationFK);
 
         return mldrRelationFK;

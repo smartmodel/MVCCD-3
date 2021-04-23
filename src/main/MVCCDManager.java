@@ -164,7 +164,7 @@ public class MVCCDManager {
 
     public void completeNewProject() {
         //this.project = project;
-        PreferencesManager.instance().setProjectPref(project.getPreferences()); //TODO-STB: voir avec PAS pour comprendre (PAS se renseigne sur le cheminement de chargement des préférences (projet, profile, etc.)
+        PreferencesManager.instance().setProjectPref(project.getPreferences()); //Envoi les préférences du projet dans les préférences statiques du manager, pour que le manager ait accès aux préférences.
         PreferencesManager.instance().copyApplicationPref(Project.NEW);
         project.adjustProfile();
         projectToRepository();

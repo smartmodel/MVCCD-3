@@ -35,6 +35,10 @@ public abstract class MDRRelationFK extends MDRRelation{
         super.setB(endChild);
     }
 
+    public int getMdrFKId(){
+        return this.mdrFKId;
+    }
+
     public MDRFK getMDRFK() {
         return (MDRFK) ProjectService.getElementById(mdrFKId);
     }

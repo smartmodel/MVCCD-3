@@ -20,6 +20,10 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
         super(parent);
     }
 
+    public MDRFK(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MDRFKNature getNature() {
         return nature;
     }

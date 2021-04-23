@@ -22,6 +22,10 @@ public abstract class MDROperation extends MDRElement implements IMDRElementWith
         super(parent);
     }
 
+    public MDROperation(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     @Override
     public Integer getIteration() {
         return iteration;

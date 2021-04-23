@@ -16,9 +16,11 @@
 			<xs:choice>
 				<xs:sequence>
 					<xs:element ref="nameProject"/>
+					<xs:element ref="version"/>
 					<xs:element ref="profileFileName"/>
 					<xs:element ref="modelsMany"/>
 					<xs:element ref="packagesAutorizeds"/>
+					<xs:element ref="idElementSequence"/>
 				</xs:sequence>
 				<xs:sequence>
 					<xs:element ref="nature"/>
@@ -59,13 +61,23 @@
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
+	<xs:element name="version">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}"/>
+				<xs:maxLength value="8"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
 	<xs:element name="profileFileName"/>
 	<xs:element name="modelsMany" type="xs:boolean"/>
 	<xs:element name="packagesAutorizeds" type="xs:boolean"/>
+	<xs:element name="idElementSequence" type="xs:int"/>
 
 	<xs:element name="preferences">
 		<xs:complexType>
 			<xs:sequence>
+				<!-- Préférences MCD -->
 				<xs:element ref="generalRelationNotation"/>
 				<xs:element ref="mcdJournalization"/>
 				<xs:element ref="mcdJournalizationException"/>
@@ -79,6 +91,60 @@
 				<xs:element ref="mcdTreeNamingAssociation"/>
 				<xs:element ref="mcdModeNamingLongName"/>
 				<xs:element ref="mcdModeNamingAttributeShortName"/>
+
+				<!-- Préférences MCDToMLDR -->
+				<xs:element name="mcdToMldrMode" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MLDRToMPDR -->
+				<xs:element name="mldrToMpdrDb" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MDR Format -->
+				<xs:element name="mdrTableNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrTableNNNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrTableNNNameIndiceFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnAttrNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnAttrShortNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnDerivedMarker" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrPkNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnPkNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnfkNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrColumnFkNameOneAncestorFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrFkNameFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrFkNameWithoutRoleFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrRoleGeneralizeMarker" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrPathSepFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrPEASepFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrTableSepFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrRoleSepFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrFkIndSepFormat" type="xs:string" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MDR -->
+				<xs:element name="mdrPrefColumnFkOneAncestor" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mdrPrefColumnFkOneAncestorDiff" type="xs:string" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MLDR -->
+				<xs:element name="mldrPrefNamingLengthName" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mldrPrefNamingLengthLength" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mldrPrefNamingLengthRequired" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mldrPrefNamingFormatName" type="xs:string" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MPDR Oracle -->
+				<xs:element name="mpdrOraclePrefNamingLengthName" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrOraclePrefNamingLengthLength" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrOraclePrefNamingLengthRequired" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrOraclePrefNamingFormatName" type="xs:string" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MPDR MySQL -->
+				<xs:element name="mpdrMySQLPrefNamingLengthName" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrMySQLPrefNamingLengthLength" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrMySQLPrefNamingLengthRequired" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrMySQLPrefNamingFormatName" type="xs:string" minOccurs="0" maxOccurs="1" />
+
+				<!-- Préférences MPDR PostgreSQL -->
+				<xs:element name="mpdrPostgreSQLPrefNamingLengthName" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrPostgreSQLPrefNamingLengthLength" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrPostgreSQLPrefNamingLengthRequired" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="mpdrPostgreSQLPrefNamingFormatName" type="xs:string" minOccurs="0" maxOccurs="1" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -580,12 +646,8 @@
 				</xs:sequence>
 			</xs:choice>
 			<xs:attribute name="id" use="required" type="xs:int"/>
-			<xs:attribute name="name">
-				<xs:simpleType>
-					<xs:restriction base="xs:string">
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
+			<xs:attribute name="name" use="optional" type="xs:string"/>
+			<xs:attribute name="shortName" use="optional" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -698,6 +760,7 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="tables"/>
+				<xs:element ref="mdrRelations"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -707,6 +770,7 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="tables"/>
+				<xs:element ref="mdrRelations"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -725,6 +789,8 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="columns"/>
+				<xs:element ref="tableConstraints"/>
+				<xs:element ref="extremitesRelations"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
@@ -735,7 +801,12 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
+			<xs:attribute name="shortName" type="xs:string"/>
+			<xs:attribute name="longName" type="xs:string"/>
 			<xs:attribute name="mcdelement_source" use="required" type="xs:int"/>
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -752,9 +823,12 @@
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:int" />
 			<xs:attribute name="name" type="xs:string" />
-			<xs:attribute name="shortname" type="xs:string" />
-			<xs:attribute name="longname" type="xs:string" />
+			<xs:attribute name="shortName" type="xs:string"/>
+			<xs:attribute name="longName" type="xs:string"/>
 			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
 			<xs:attribute name="mandatory" type="xs:boolean" />
 			<xs:attribute name="frozen" type="xs:boolean" />
 			<xs:attribute name="uppercase" type="xs:boolean" />
@@ -766,6 +840,109 @@
 			<xs:attribute name="datatype_constraint_lienprog" type="xs:string" />
 			<xs:attribute name="size" type="xs:int" />
 			<xs:attribute name="scale" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="tableConstraints">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="pk" minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="fk" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:choice>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="pk">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="targetColumns" minOccurs="1" maxOccurs="1"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="shortName" type="xs:string" />
+			<xs:attribute name="longName" type="xs:string" />
+			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="fk">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="targetColumns" minOccurs="1" maxOccurs="1"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="shortName" type="xs:string" />
+			<xs:attribute name="longName" type="xs:string" />
+			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
+			<xs:attribute name="target_pk" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="targetColumns">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="targetColumn" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="targetColumn">
+		<xs:complexType>
+			<xs:attribute name="target_column_id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="extremitesRelations">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="extremiteRelation" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="extremiteRelation">
+		<xs:complexType>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="name" use="required" type="xs:string"/>
+			<xs:attribute name="shortName" type="xs:string"/>
+			<xs:attribute name="longName" type="xs:string"/>
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mdrRelations">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="mdrRelation" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mdrRelation">
+		<xs:complexType>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="name" use="required" type="xs:string"/>
+			<xs:attribute name="shortName" type="xs:string"/>
+			<xs:attribute name="longName" type="xs:string"/>
+			<xs:attribute name="mcdelement_source" type="xs:int"/>
+			<xs:attribute name="name30" type="xs:string"/>
+			<xs:attribute name="name60" type="xs:string"/>
+			<xs:attribute name="name120" type="xs:string"/>
+			<xs:attribute name="extremiteRelA_target_id" use="required" type="xs:int"/>
+			<xs:attribute name="extremiteRelB_target_id" use="required" type="xs:int"/>
+			<xs:attribute name="fk_target_id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 

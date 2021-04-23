@@ -6,7 +6,7 @@ import main.MVCCDElementFactory;
 import main.MVCCDFactory;
 import mcd.*;
 import mcd.interfaces.IMCDSourceMLDRTable;
-import mdr.MDRColumn;
+import mdr.*;
 import messages.MessagesBuilder;
 import mldr.*;
 import org.w3c.dom.Document;
@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import profile.Profile;
 
 import javax.xml.XMLConstants;
@@ -32,6 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectLoaderXml {
+    // Version de l'application utilisée par le projet XML chargé
+    private String version = null;
+
     // listes d'éléments nécessaires pour récupérer les conteneurs des paquetages, des entités et les associations
     private ArrayList<Element> elementsPackages = new ArrayList<>();
     private ArrayList<Element> elementsEntities = new ArrayList<>();
@@ -63,9 +67,12 @@ public class ProjectLoaderXml {
             project = new Project(projectTag.getAttribute("id"));
             project.setName(projectTag.getElementsByTagName("nameProject").item(0).getTextContent());
 
-            // Initialisation des préférences du projet
-            Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME);
+            // Chargement de la version
+            this.version = projectTag.getElementsByTagName("version").item(0).getTextContent();
 
+            // Initialisation des préférences du projet
+            Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME); //Ceci va automatiquement créer un objet "Preferences" qui se trouve dans le référentiel sous le Project.
+            
             // Ajout des éléments du projet
             addPropertiesProject(projectTag, project);
             addPreferences(projectTag, preferences);
@@ -122,6 +129,10 @@ public class ProjectLoaderXml {
 
         Element packagesAutorizeds = (Element) racine.getElementsByTagName("packagesAutorizeds").item(0);
         project.setPackagesAutorizeds(Boolean.valueOf(packagesAutorizeds.getTextContent()));
+
+         // Récupération de la dernière valeur de la séquence des éléments du projet
+        Element idElementSequence = (Element) racine.getElementsByTagName("idElementSequence").item(0);
+        project.setIdElementSequence(Integer.parseInt(idElementSequence.getTextContent()));
     }
 
     public void addPreferences(Element racine, Preferences preferences) {
@@ -129,45 +140,133 @@ public class ProjectLoaderXml {
         //Récupération et instantiation des préférences de projet
 
         //Préférences général
-        Element generalRelationNotation = (Element) racine.getElementsByTagName("generalRelationNotation").item(0);
-        preferences.setGENERAL_RELATION_NOTATION(generalRelationNotation.getTextContent());
+        preferences.setGENERAL_RELATION_NOTATION(this.getTextInTag(racine, "generalRelationNotation"));
 
         //Préférences MCD
-        Element mcdJournalization = (Element) racine.getElementsByTagName("mcdJournalization").item(0);
-        preferences.setMCD_JOURNALIZATION(Boolean.valueOf(mcdJournalization.getTextContent()));
+        preferences.setMCD_JOURNALIZATION(this.getBooleanInTag(racine, "mcdJournalization"));
+        preferences.setMCD_JOURNALIZATION_EXCEPTION(this.getBooleanInTag(racine, "mcdJournalizationException"));
+        preferences.setMCD_AUDIT(this.getBooleanInTag(racine, "mcdAudit"));
+        preferences.setMCD_AUDIT_EXCEPTION(this.getBooleanInTag(racine, "mcdAuditException"));
+        preferences.setMCD_AID_DATATYPE_LIENPROG(this.getTextInTag(racine, "mcdAidDataTypeLienProg"));
+        preferences.setMCDDATATYPE_NUMBER_SIZE_MODE(this.getTextInTag(racine, "mcdDataTypeNumberSizeMode"));
+        preferences.setMCD_AID_IND_COLUMN_NAME(this.getTextInTag(racine, "mcdAidIndColumnName"));
+        preferences.setMCD_AID_DEP_COLUMN_NAME(this.getTextInTag(racine, "mcdAidDepColumnName"));
+        preferences.setMCD_AID_WITH_DEP(this.getBooleanInTag(racine, "mcdAidWithDep"));
+        preferences.setMCD_TREE_NAMING_ASSOCIATION(this.getTextInTag(racine, "mcdTreeNamingAssociation"));
+        preferences.setMCD_MODE_NAMING_LONG_NAME(this.getTextInTag(racine, "mcdModeNamingLongName"));
+        preferences.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(this.getTextInTag(racine, "mcdModeNamingAttributeShortName"));
 
-        Element mcdJournalizationException = (Element) racine.getElementsByTagName("mcdJournalizationException").item(0);
-        preferences.setMCD_JOURNALIZATION_EXCEPTION(Boolean.valueOf(mcdJournalizationException.getTextContent()));
+        // Préférences MCDToMLDR
+        preferences.setMCDTOMLDR_MODE(this.getTextInTag(racine,"mcdToMldrMode"));
 
-        Element mcdAudit = (Element) racine.getElementsByTagName("mcdAudit").item(0);
-        preferences.setMCD_AUDIT(Boolean.valueOf(mcdAudit.getTextContent()));
+        //Préférences MLDRToMPDR
+        preferences.setMLDRTOMPDR_DB(this.getTextInTag(racine,"mldrToMpdrDb"));
 
-        Element mcdAuditException = (Element) racine.getElementsByTagName("mcdAuditException").item(0);
-        preferences.setMCD_AUDIT_EXCEPTION(Boolean.valueOf(mcdAuditException.getTextContent()));
+        //Préférences MDR Format
+        preferences.setMDR_TABLE_NAME_FORMAT(this.getTextInTag(racine,"mdrTableNameFormat"));
+        preferences.setMDR_TABLE_NN_NAME_FORMAT(this.getTextInTag(racine,"mdrTableNNNameFormat"));
+        preferences.setMDR_TABLE_NN_NAME_INDICE_FORMAT(this.getTextInTag(racine,"mdrTableNNNameIndiceFormat"));
+        preferences.setMDR_COLUMN_ATTR_NAME_FORMAT(this.getTextInTag(racine,"mdrColumnAttrNameFormat"));
+        preferences.setMDR_COLUMN_ATTR_SHORT_NAME_FORMAT(this.getTextInTag(racine,"mdrColumnAttrShortNameFormat"));
+        preferences.setMDR_COLUMN_DERIVED_MARKER(this.getTextInTag(racine,"mdrColumnDerivedMarker"));
+        preferences.setMDR_PK_NAME_FORMAT(this.getTextInTag(racine,"mdrPkNameFormat"));
+        preferences.setMDR_COLUMN_PK_NAME_FORMAT(this.getTextInTag(racine,"mdrColumnPkNameFormat"));
+        preferences.setMDR_COLUMN_FK_NAME_FORMAT(this.getTextInTag(racine,"mdrColumnfkNameFormat"));
+        preferences.setMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT(this.getTextInTag(racine,"mdrColumnFkNameOneAncestorFormat"));
+        preferences.setMDR_FK_NAME_FORMAT(this.getTextInTag(racine,"mdrFkNameFormat"));
+        preferences.setMDR_FK_NAME_WITHOUT_ROLE_FORMAT(this.getTextInTag(racine,"mdrFkNameWithoutRoleFormat"));
+        preferences.setMDR_ROLE_GENERALIZE_MARKER(this.getTextInTag(racine,"mdrRoleGeneralizeMarker"));
+        preferences.setMDR_PATH_SEP_FORMAT(this.getTextInTag(racine,"mdrPathSepFormat"));
+        preferences.setMDR_PEA_SEP_FORMAT(this.getTextInTag(racine,"mdrPEASepFormat"));
+        preferences.setMDR_TABLE_SEP_FORMAT(this.getTextInTag(racine,"mdrTableSepFormat"));
+        preferences.setMDR_ROLE_SEP_FORMAT(this.getTextInTag(racine,"mdrRoleSepFormat"));
+        preferences.setMDR_FKIND_SEP_FORMAT(this.getTextInTag(racine,"mdrFkIndSepFormat"));
 
-        Element mcdAidDataTypeLienProg = (Element) racine.getElementsByTagName("mcdAidDataTypeLienProg").item(0);
-        preferences.setMCD_AID_DATATYPE_LIENPROG(mcdAidDataTypeLienProg.getTextContent());
+        //Préférences MDR
+        preferences.setMDR_PREF_COLUMN_FK_ONE_ANCESTOR(this.getBooleanInTag(racine, "mdrPrefColumnFkOneAncestor"));
+        preferences.setMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF(this.getTextInTag(racine,"mdrPrefColumnFkOneAncestorDiff"));
 
-        Element mcdDataTypeNumberSizeMode = (Element) racine.getElementsByTagName("mcdDataTypeNumberSizeMode").item(0);
-        preferences.setMCDDATATYPE_NUMBER_SIZE_MODE(mcdDataTypeNumberSizeMode.getTextContent());
+        // Préférences MLDR (préférences de type enum)
+        switch(this.getIntegerInTag(racine, "mldrPrefNamingLengthLength")){
+            case 30: preferences.setMLDR_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH30); break;
+            case 60: preferences.setMLDR_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH60); break;
+            case 120: preferences.setMLDR_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
+        }
+        switch(this.getTextInTag(racine, "mldrPrefNamingFormatName")){
+            case "mdr.naming.format.nothing": preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+        }
 
-        Element mcdAidIndColumnName = (Element) racine.getElementsByTagName("mcdAidIndColumnName").item(0);
-        preferences.setMCD_AID_IND_COLUMN_NAME(mcdAidIndColumnName.getTextContent());
+        // Préférences MPDR Oracle (préférences de type enum)
+        switch(this.getIntegerInTag(racine, "mpdrOraclePrefNamingLengthLength")){
+            case 30: preferences.setMPDRORACLE_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH30); break;
+            case 60: preferences.setMPDRORACLE_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH60); break;
+            case 120: preferences.setMPDRORACLE_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
+        }
+        switch(this.getTextInTag(racine, "mpdrOraclePrefNamingFormatName")){
+            case "mdr.naming.format.nothing": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+        }
 
-        Element mcdAidDepColumnName = (Element) racine.getElementsByTagName("mcdAidDepColumnName").item(0);
-        preferences.setMCD_AID_DEP_COLUMN_NAME(mcdAidDepColumnName.getTextContent());
+        // Préférences MPDR MySQL (préférences de type enum)
+        switch(this.getIntegerInTag(racine, "mpdrMySQLPrefNamingLengthLength")){
+            case 30: preferences.setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH30); break;
+            case 60: preferences.setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH60); break;
+            case 120: preferences.setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
+        }
+        switch(this.getTextInTag(racine, "mpdrMySQLPrefNamingFormatName")){
+            case "mdr.naming.format.nothing": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+        }
 
-        Element mcdAidWithDep = (Element) racine.getElementsByTagName("mcdAidWithDep").item(0);
-        preferences.setMCD_AID_WITH_DEP(Boolean.valueOf(mcdAidWithDep.getTextContent()));
+        // Préférences MPDR PostgreSQL (préférences de type enum)
+        switch(this.getIntegerInTag(racine, "mpdrPostgreSQLPrefNamingLengthLength")){
+            case 30: preferences.setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH30); break;
+            case 60: preferences.setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH60); break;
+            case 120: preferences.setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
+        }
+        switch(this.getTextInTag(racine, "mpdrPostgreSQLPrefNamingFormatName")){
+            case "mdr.naming.format.nothing": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+        }
+    }
 
-        Element mcdTreeNamingAssociation = (Element) racine.getElementsByTagName("mcdTreeNamingAssociation").item(0);
-        preferences.setMCD_TREE_NAMING_ASSOCIATION(mcdTreeNamingAssociation.getTextContent());
+    /**
+     * Retourne la valeur du premier noeud texte de la balise portant le nom donné.
+     * @param root Balise racine dans laquelle rechercher la balise portant le nom donné. La recherche se fait en profondeur.
+     * @param tagName Nom de la balise à rechercher.
+     * @return Valeur du texte contenu dans le premier noeud texte de la balise trouvée.
+     */
+    private String getTextInTag(Element root, String tagName){
+        return ((Element) root.getElementsByTagName(tagName).item(0)).getTextContent();
+    }
 
-        Element mcdModeNamingLongName = (Element) racine.getElementsByTagName("mcdModeNamingLongName").item(0);
-        preferences.setMCD_MODE_NAMING_LONG_NAME(mcdModeNamingLongName.getTextContent());
+    /**
+     * Comme getTextInTag, sauf que la valeur retournée est castée en type Boolean.
+     * @param root Balise racine dans laquelle rechercher la balise portant le nom donné. La recherche se fait en profondeur.
+     * @param tagName Nom de la balise à rechercher.
+     * @return Valeur Boolean correspondant au texte contenu dans le premier noeud texte de la balise trouvée
+     */
+    private Boolean getBooleanInTag(Element root, String tagName){
+        return Boolean.valueOf(this.getTextInTag(root, tagName));
+    }
 
-        Element mcdModeNamingAttributeShortName = (Element) racine.getElementsByTagName("mcdModeNamingAttributeShortName").item(0);
-        preferences.setMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME(mcdModeNamingAttributeShortName.getTextContent());
+    /**
+     * Comme getTextInTag, sauf que la valeur retournée est castée en type Integer.
+     * @param root Balise racine dans laquelle rechercher la balise portant le nom donné. La recherche se fait en profondeur.
+     * @param tagName Nom de la balise à rechercher.
+     * @return Valeur Integer correspondant au texte contenu dans le premier noeud texte de la balise trouvée
+     */
+    private Integer getIntegerInTag(Element root, String tagName){
+        return Integer.valueOf(this.getTextInTag(root, tagName));
     }
 
     private ArrayList<Element> loadModels(MCDContModels mcd, Element mcdTag) {
@@ -700,6 +799,9 @@ public class ProjectLoaderXml {
                 if (!associationTag.getAttribute("name").equals("")) {
                     mcdAssociation.setName(associationTag.getAttribute("name"));
                 }
+                if (!associationTag.getAttribute("shortName").equals("")) {
+                    mcdAssociation.setShortName(associationTag.getAttribute("shortName"));
+                }
                 loadedAssociations.add(mcdAssociation);
 
                 // Ajout des extrémités d'associations
@@ -769,25 +871,6 @@ public class ProjectLoaderXml {
             }
         }
         return null;
-    }
-
-    /**
-     * @deprecated Méthode à supprimer
-     * @param entiteTag
-     * @return
-     */
-    @Deprecated
-    private MCDEntity addRelationsEntities(Element entiteTag) {
-        MCDEntity mcdEntity = null;
-        // Parcours de la listes des entités
-        for (MVCCDElement mvccdElement : loadedEntities) {
-            MCDEntity entity = (MCDEntity) mvccdElement;
-            // Comparaison du namePath de l'entité de l'extremité de relation avec les entités créées dans l'aplication
-            if (entity.getNamePath(1).equals(entiteTag.getTextContent())) {
-                mcdEntity = entity;
-            }
-        }
-        return mcdEntity;
     }
 
     private void addExtremiteElement(Element extremite, MCDAssociation mcdAssociation, Element association) {
@@ -919,25 +1002,6 @@ public class ProjectLoaderXml {
         return null;
     }
 
-    @Deprecated
-    private MCDAssociation addAssociationsForLinks(Element element, Element from, Element to) {
-        MCDAssociation mcdAssociation = null;
-
-        for (MVCCDElement mvccdElement : loadedAssociations) {
-            MCDAssociation association = (MCDAssociation) mvccdElement;
-            if (element.getTextContent().equals("")) {
-                // Comparatif des noms des extremités de l'association du lien d'entité associative avec les associations crées dans l'application
-                if (association.getFrom().getNamePath(1).equals(from.getTextContent()) && association.getTo().getNamePath(1).equals(to.getTextContent())) {
-                    mcdAssociation = association;
-                }
-                // Comparatif du nom de l'association du lien d'entité associative avec les associations crées dans l'application
-            } else if (association.getNamePath(1).equals(element.getTextContent())) {
-                mcdAssociation = association;
-            }
-        }
-        return mcdAssociation;
-    }
-
 
 
     // *** Méthodes de chargement du MLD ***
@@ -985,8 +1049,20 @@ public class ProjectLoaderXml {
 
                 //Recherche et chargement de <tables>
                 if(mldrTagChild.getNodeName().equals("tables")){
-                    MLDRContTables mldrContTables = (MLDRContTables) mldrModel.getMDRContTables(); //Le conteneur de tables est déjà créé automatiquement avant
-                    this.loadTables(mcdSource, mldrContTables, mldrTagChild); //Chargement de <tables>
+                    MDRContTables mldrContTables = (MDRContTables) mldrModel.getMDRContTables(); //Le conteneur de tables est déjà créé automatiquement avant
+
+                    //Chargement des tables sous <tables>
+                    this.loadMldTables(mcdSource, mldrContTables, mldrTagChild);
+
+                    //Chargement des contraintes FK des tables sous <tables>
+                    this.loadMldFKsOfAllTables(mcdSource, mldrContTables, mldrTagChild);
+                }
+
+                //Recherche et chargement de <mdrRelations> (des relations FK)
+                else if(mldrTagChild.getNodeName().equals("mdrRelations")){
+
+                    //Chargement des relations sour <mdrRelations>
+                    this.loadMdrRelations(mcdSource, mldrModel, mldrTagChild);
                 }
             }
         }
@@ -999,7 +1075,7 @@ public class ProjectLoaderXml {
      *                       conteneur qui sera alimenté par les nouvelles tables au fur et à mesure de leur chargement.
      * @param tablesTag Balise racine <tables>
      */
-    private void loadTables(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tablesTag){
+    private void loadMldTables(MCDContModels mcdSource, MDRContTables mldrContTables, Element tablesTag){
         //Parcours des balises enfants de <tables>
         NodeList tablesTagChilds = tablesTag.getChildNodes();
         for (int i = 0; i < tablesTagChilds.getLength(); i++) {
@@ -1008,7 +1084,7 @@ public class ProjectLoaderXml {
 
                 //Recherche et chargement de <table>
                 if (tablesTagChild.getNodeName().equals("table")){
-                    this.loadTable(mcdSource, mldrContTables, tablesTagChild);
+                    this.loadMldTable(mcdSource, mldrContTables, tablesTagChild);
                 }
             }
         }
@@ -1021,13 +1097,22 @@ public class ProjectLoaderXml {
      *                       ajoutée la nouvelle table.
      * @param tableTag Balise <table> du document XML à partir de laquelle la table est chargée.
      */
-    private void loadTable(MCDContModels mcdSource, MLDRContTables mldrContTables, Element tableTag){
+    private void loadMldTable(MCDContModels mcdSource, MDRContTables mldrContTables, Element tableTag){
 
-        //Récupération de l'élément MCD source de la table (peut être une
+        //Récupération de l'élément MCD source de la table
         int entitySourceId = Integer.parseInt(tableTag.getAttribute("mcdelement_source")); //Récupérer l'id de l'élément source
         IMCDSourceMLDRTable mcdSourceElementOfTable = (IMCDSourceMLDRTable) mcdSource.getChildByIdProfondeur(entitySourceId); //Recherche l'élément source en fonction de son ID, parmi tous les enfants du MCD
+
+        //Création de la table et de ses attributs
         MLDRTable mldrTable = MVCCDElementFactory.instance().createMLDRTable(mldrContTables, mcdSourceElementOfTable, Integer.parseInt(tableTag.getAttribute("id")));
         mldrTable.setName(tableTag.getAttribute("name"));
+        mldrTable.setShortName(tableTag.getAttribute("shortName"));
+        mldrTable.setLongName(tableTag.getAttribute("longName"));
+        mldrTable.setNames(new MDRElementNames(
+            tableTag.getAttribute("name30"),
+            tableTag.getAttribute("name60"),
+            tableTag.getAttribute("name120"))
+        );
 
         //Parcours des balises enfants de <table>
         NodeList tableTagChilds = tableTag.getChildNodes();
@@ -1037,7 +1122,17 @@ public class ProjectLoaderXml {
 
                 //Chargement de <columns>
                 if (tableTagChild.getNodeName().equals("columns")) {
-                    this.loadColumns(mcdSource, mldrContTables, mldrTable, tableTagChild);
+                    this.loadMldColumns(mcdSource, mldrContTables, mldrTable, tableTagChild);
+                }
+
+                //Chargement de <tableConstraints>
+                else if(tableTagChild.getNodeName().equals("tableConstraints")){
+                    this.loadMldTableConstraints(mcdSource, mldrTable, tableTagChild);
+                }
+
+                //Chargement de <extremitesRelations>
+                else if(tableTagChild.getNodeName().equals("extremitesRelations")){
+                    this.loadMldTableRelEnds(mcdSource, mldrTable, tableTagChild);
                 }
             }
         }
@@ -1046,11 +1141,11 @@ public class ProjectLoaderXml {
     /**
      * À partir de la balise <columns>, cette méthode charge l'ensemble des colonnes d'une table.
      * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
-     * @param mldrContTables Il s'agit du conteneur parent dans lequel se trouve la table. Est utilisée pour faire la recherche des colonnes PK pointées par les colonnes FK en fonction de leur id.
+     * @param mldrContTables Il s'agit du conteneur parent dans lequel se trouve la table. Est utilisé pour faire la recherche des colonnes PK pointées par les colonnes FK en fonction de leur id.
      * @param table Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les colonnes.
      * @param columnsTag Balise <columns>
      */
-    private void loadColumns(MCDElement mcdSource, MLDRContTables mldrContTables, MLDRTable table, Element columnsTag){
+    private void loadMldColumns(MCDElement mcdSource, MDRContTables mldrContTables, MLDRTable table, Element columnsTag){
         MLDRContColumns mldrContColumns = (MLDRContColumns) table.getMDRContColumns();
 
         //Création d'un conteneur pour mémoriser les colonnes détectées comme colonnes de FK
@@ -1064,7 +1159,7 @@ public class ProjectLoaderXml {
 
                 //Chargement de <column>
                 if (columnsTagChild.getNodeName().equals("column")) {
-                    MLDRColumn fkColumn = this.loadColumn(mcdSource, mldrContColumns, columnsTagChild); //La méthode retourne les colonnes qui sont FK
+                    MLDRColumn fkColumn = this.loadMldColumn(mcdSource, mldrContColumns, columnsTagChild); //La méthode retourne les colonnes qui sont FK
                     if(fkColumn != null){
                         fkColumnsList.add(fkColumn); //Si la colonne est une colonne FK, on l'ajoute à la liste des colonnes FK
                     }
@@ -1087,10 +1182,9 @@ public class ProjectLoaderXml {
      * @param columnTag balise <column>
      * @return Si la colonne est détectée comme étant une colonne de FK, alors la colonne est retournée
      */
-    private MLDRColumn loadColumn(MCDElement mcdSource, MLDRContColumns mldrContColumns, Element columnTag) {
+    private MLDRColumn loadMldColumn(MCDElement mcdSource, MLDRContColumns mldrContColumns, Element columnTag) {
 
         //Récupération de l'attribut (MCD) source en utilisant l'id de l'attribut source de la colonne
-        System.out.println("loadColumn:" + columnTag.getAttribute("name"));
         int attributeSourceId = Integer.parseInt(columnTag.getAttribute("mcdelement_source"));
         MCDElement mcdElementSourceOfColumn = (MCDElement) mcdSource.getChildByIdProfondeur(attributeSourceId); //La source de la colonne peut être un attribut d'entité ou une extrémité d'association (si colonne FK)
 
@@ -1099,8 +1193,13 @@ public class ProjectLoaderXml {
 
         //Chargement des autres propriétés d'identification de la colonne
         mldrColumn.setName(columnTag.getAttribute("name"));
-        mldrColumn.setShortName(columnTag.getAttribute("shortname"));
-        mldrColumn.setLongName(columnTag.getAttribute("longname"));
+        mldrColumn.setShortName(columnTag.getAttribute("shortName"));
+        mldrColumn.setLongName(columnTag.getAttribute("longName"));
+        mldrColumn.setNames(new MDRElementNames(
+            columnTag.getAttribute("name30"),
+            columnTag.getAttribute("name60"),
+            columnTag.getAttribute("name120"))
+        );
 
         //Chargement des autres propriétés de la colonne
         mldrColumn.setMandatory(Boolean.getBoolean(columnTag.getAttribute("mandatory")));
@@ -1132,5 +1231,333 @@ public class ProjectLoaderXml {
             return mldrColumn;
         }
         return null;
+    }
+
+    /**
+     * À partir de la balise <tableConstraintsTag>, cette méthode charge l'ensemble des contraintes d'une table, hormis
+     * les contraintes FK qui sont chargées ultérieurement dans le processus (après que toutes les tables aient été
+     * chargées).
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mldrTable Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les contraintes.
+     * @param tableConstraintsTag Balise <tableConstraints>
+     */
+    private void loadMldTableConstraints(MCDContModels mcdSource, MLDRTable mldrTable, Element tableConstraintsTag) {
+
+        //Parcours des balises enfants de <tableConstraints>
+        NodeList constraintsTagChilds = tableConstraintsTag.getChildNodes();
+        for (int i = 0; i < constraintsTagChilds.getLength(); i++) {
+            if (constraintsTagChilds.item(i) instanceof Element) {
+                Element ConstraintsTagChild = (Element) constraintsTagChilds.item(i);
+
+                //Chargement de <pk>
+                if (ConstraintsTagChild.getNodeName().equals("pk")) {
+                    this.loadMldPk(mcdSource, mldrTable, ConstraintsTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <pk>, cette méthode charge une contrainte PK de table avec toutes les références vers les
+     * colonnes incluses.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mldrTable Il s'agit de la table MLD contenant déjà un conteneur de contraintes dans l'application, dans lequel la nouvelle PK qui sera créée sera placée.
+     * @param pkTag Balise <pk>
+     */
+    private void loadMldPk(MCDContModels mcdSource, MLDRTable mldrTable, Element pkTag) {
+        MLDRContConstraints mldrContConstraints = (MLDRContConstraints) mldrTable.getMDRContConstraints();
+
+        //Récupération de l'entité (MCD) source en utilisant l'id de l'entité source de la pk
+        int entitySourceId = Integer.parseInt(pkTag.getAttribute("mcdelement_source"));
+        MCDElement mcdElementSourceOfPk = (MCDElement) mcdSource.getChildByIdProfondeur(entitySourceId); //Peut être l'entité source (MCD) de la PK ou l'association source de la PK (cas d'une association n:n)
+
+        //Chargement et création de la PK, y compris son id et son entité (MCD) source
+        MLDRPK mldrPk = MVCCDElementFactory.instance().createMLDRPK(mldrContConstraints, mcdElementSourceOfPk, Integer.parseInt(pkTag.getAttribute("id")));
+
+        //Chargement des autres propriétés d'identification de la colonne
+        mldrPk.setName(pkTag.getAttribute("name"));
+        mldrPk.setShortName(pkTag.getAttribute("shortName"));
+        mldrPk.setLongName(pkTag.getAttribute("longName"));
+        mldrPk.setNames(new MDRElementNames(
+                pkTag.getAttribute("name30"),
+                pkTag.getAttribute("name60"),
+                pkTag.getAttribute("name120"))
+        );
+
+
+        //Parcours des balises enfants de <pk>
+        NodeList pkTagChilds = pkTag.getChildNodes();
+        for (int i = 0; i < pkTagChilds.getLength(); i++) {
+            if (pkTagChilds.item(i) instanceof Element) {
+                Element pkTagChild = (Element) pkTagChilds.item(i);
+
+                //Chargement de <targetColumns>
+                if (pkTagChild.getNodeName().equals("targetColumns")) {
+                    this.loadMldTargetColumnsOfConstraint(mcdElementSourceOfPk, mldrTable, mldrPk, pkTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <tables>, cette méthode charge dans l'application l'ensembles des contraintes FKs des
+     * tables d'un MLDR.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrContTables Le conteneur de tables déjà existant dans l'application, contenant déjà l'ensemble des
+     *                       tables chargées dans lesquelles seront ajoutées les contraintes FKs.
+     * @param tablesTag Balise racine <tables>
+     */
+    private void loadMldFKsOfAllTables(MCDContModels mcdSource, MDRContTables mdrContTables, Element tablesTag){
+        //Parcours des balises enfants de <tables>
+        NodeList tablesTagChilds = tablesTag.getChildNodes();
+        for (int i = 0; i < tablesTagChilds.getLength(); i++) {
+            if (tablesTagChilds.item(i) instanceof Element) {
+                Element tablesTagChild = (Element) tablesTagChilds.item(i);
+
+                //Recherche de <table>
+                if (tablesTagChild.getNodeName().equals("table")){
+                    Element tableTag = tablesTagChild;
+
+                    //Parcours des balises enfants de <table>
+                    NodeList tableTagChilds = tableTag.getChildNodes();
+                    for (int j = 0; j < tableTagChilds.getLength(); j++) {
+                        if (tableTagChilds.item(j) instanceof Element) {
+                            Element tableTagChild = (Element) tableTagChilds.item(j);
+
+                            //Recherche de <tableConstraints>
+                            if(tableTagChild.getNodeName().equals("tableConstraints")){
+                                MDRTable mdrTable = mdrContTables.getMDRTableById(Integer.parseInt(tableTag.getAttribute("id"))); //Récupérer la table déjà chargée dans laquelle il faudra placer les contraintes FK
+                                this.loadMldFksOfTable(mcdSource, mdrContTables, mdrTable, tableTagChild); //Charger les contraintes FK dans cette table déjà chargée
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <tableConstraints>, cette méthode charge dans l'application l'ensembles des contraintes FKs
+     * d'une table.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrContTables Le conteneur de tables déjà existant dans l'application, contenant déjà l'ensemble de
+     *                      tables chargées dans lesquelles seront ajoutées les contraintes FKs.
+     * @param mdrTable La table dans laquelle placer les contraintes FKs à charger.
+     * @param tableConstraintsTag Balise racine <tableConstraints>
+     */
+    private void loadMldFksOfTable(MCDContModels mcdSource, MDRContTables mdrContTables, MDRTable mdrTable, Element tableConstraintsTag) {
+        //Parcours des balises enfants de <tableConstraints>
+        NodeList constraintsTagChilds = tableConstraintsTag.getChildNodes();
+        for (int i = 0; i < constraintsTagChilds.getLength(); i++) {
+            if (constraintsTagChilds.item(i) instanceof Element) {
+                Element ConstraintsTagChild = (Element) constraintsTagChilds.item(i);
+
+                //Chargement de <fk>
+                if (ConstraintsTagChild.getNodeName().equals("fk")) {
+                    this.loadMldFkOfTable(mcdSource, mdrContTables, mdrTable, ConstraintsTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <fk>, cette méthode charge dans l'application une contrainte de table FK.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrContTables Le conteneur de tables déjà existant dans l'application, contenant déjà l'ensemble de
+     *                      tables chargées dont celle dans laquelle sera créée la contrainte FK. Cet élément est utile
+     *                      à la méthode pour pouvoir parcourir les tables chargées à la recherche de la PK cible de la
+     *                      FK.
+     * @param mdrTable Il s'agit de la table déjà chargée en mémoire, dans laquelle ajouter la contrainte FK à charger.
+     * @param fkTag Il s'agit de la balise <fk> à charger.
+     */
+    private void loadMldFkOfTable(MCDContModels mcdSource, MDRContTables mdrContTables, MDRTable mdrTable, Element fkTag) {
+        MLDRContConstraints mldrContConstraints = (MLDRContConstraints) mdrTable.getMDRContConstraints();
+
+        //Récupération de l'extrémité d'association (MCD) source de la FK
+        int assEndSourceId = Integer.parseInt(fkTag.getAttribute("mcdelement_source"));
+        MCDElement mcdElementSourceOfFk = (MCDElement) mcdSource.getChildByIdProfondeur(assEndSourceId);
+
+        //Chargement et création de la FK, y compris son id et son extrémité d'association source (MCD)
+        MLDRFK mldrFk = MVCCDElementFactory.instance().createMLDRFK(mldrContConstraints, mcdElementSourceOfFk, Integer.parseInt(fkTag.getAttribute("id")));
+
+        //Chargement des autres propriétés d'identification de la FK
+        mldrFk.setName(fkTag.getAttribute("name"));
+        mldrFk.setShortName(fkTag.getAttribute("shortName"));
+        mldrFk.setLongName(fkTag.getAttribute("longName"));
+        mldrFk.setNames(new MDRElementNames(
+                fkTag.getAttribute("name30"),
+                fkTag.getAttribute("name60"),
+                fkTag.getAttribute("name120"))
+        );
+
+        //Chargement de la référence vers la contrainte PK
+        int targetPkId = Integer.parseInt(fkTag.getAttribute("target_pk"));
+        MDRPK mdrPk = (MDRPK) mdrContTables.getChildByIdProfondeur(targetPkId); //Recherche de la PK dans l'ensemble des tables déjà chargées
+        mldrFk.setMdrPK(mdrPk);
+
+        //Parcours des balises enfants de <fk>
+        NodeList fkTagChilds = fkTag.getChildNodes();
+        for (int i = 0; i < fkTagChilds.getLength(); i++) {
+            if (fkTagChilds.item(i) instanceof Element) {
+                Element fkTagChild = (Element) fkTagChilds.item(i);
+
+                //Chargement de <targetColumns>
+                if (fkTagChild.getNodeName().equals("targetColumns")) {
+                    this.loadMldTargetColumnsOfConstraint(mcdElementSourceOfFk, mdrTable, mldrFk, fkTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <targetColumns>, cette méthode charge les références des colonnes incluses dans une
+     * contrainte (PK et FK notamment).
+     * @param mcdElementSource Il s'agit de l'élément MCD source à partir duquel la contrainte a été générée (par
+     *                         exemple, pour une PK: une entité ou une association n:n; pour une FK: une extrémité
+     *                         d'association).
+     * @param mdrTable Il s'agit de la table (MLD) déjà chargée, dans laquelle se trouve déjà les colonnes sur
+     *                 lesquelles la FK est mise. Attention il ne s'agit ici pas des colonnes de PK pointée par la FK.
+     * @param mdrConstraint Il s'agit de la contraint (PK ou FK) déjà créé précédemment dans l'application, à qui sera
+     *                      ajouté les colonnes ciblées par les balises enfants <targetColumn>.
+     * @param targetColumnsTag Balise <targetColumns> contenant des sous-balises avec les références vers les colonnes
+     *                         de la FK
+     */
+    private void loadMldTargetColumnsOfConstraint(MCDElement mcdElementSource, MDRTable mdrTable, MDRConstraint mdrConstraint, Element targetColumnsTag) {
+        //Parcours des balises enfants de <targetColumns>
+        NodeList targetColumnsTagChilds = targetColumnsTag.getChildNodes();
+        for (int i = 0; i < targetColumnsTagChilds.getLength(); i++) {
+            if (targetColumnsTagChilds.item(i) instanceof Element) {
+                Element targetColumnsTagChild = (Element) targetColumnsTagChilds.item(i);
+
+                //Chargement de <targetColumn>
+                if(targetColumnsTagChild.getNodeName().equals("targetColumn")) {
+                    Element targetColumnTag = targetColumnsTagChild;
+
+                    //Récupération de la colonne de FK
+                    int targetColumnId = Integer.parseInt(targetColumnTag.getAttribute("target_column_id"));
+                    MLDRColumn targetMldrColumn = (MLDRColumn) mdrTable.getMDRColumnById(targetColumnId);
+
+                    //Ajout de la colonne référencée à la contrainte PK (ce qui passe par la création d'un Parameter)
+                    MVCCDElementFactory.instance().createMLDRParameter(mdrConstraint, targetMldrColumn, mcdElementSource);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <extremitesRelations>, cette méthode charge l'ensemble des extrémités de relation attachées
+     * à la table.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrTable Il s'agit de la table déjà créé dans l'application, dans laquelle seront insérées les extrémités
+     *                 de relation.
+     * @param extremitesRelationsTag Balise <extremitesRelations>
+     */
+    private void loadMldTableRelEnds(MCDContModels mcdSource, MDRTable mdrTable, Element extremitesRelationsTag) {
+        //Parcours des balises enfants de <extremitesRelationsTag>
+        NodeList  extremitesRelationsTagChilds = extremitesRelationsTag.getChildNodes();
+        for (int i = 0; i < extremitesRelationsTagChilds.getLength(); i++) {
+            if (extremitesRelationsTagChilds.item(i) instanceof Element) {
+                Element extremitesRelationsTagChild = (Element) extremitesRelationsTagChilds.item(i);
+
+                //Chargement de <extremiteRelation>
+                if (extremitesRelationsTagChild.getNodeName().equals("extremiteRelation")) {
+                    this.loadMldTableRelEnd(mcdSource, mdrTable, extremitesRelationsTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <extremiteRelation>, cette méthode charge une extrémité de relation attachée à une table.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrTable Il s'agit de la table contenant déjà un conteneur d'extrémités de relations dans l'application,
+     *                 dans lequel la nouvelle extrémité de relation qui sera créée sera placée.
+     * @param extremiteRelationTag Balise <extremiteRelation>
+     */
+    private void loadMldTableRelEnd(MCDContModels mcdSource, MDRTable mdrTable, Element extremiteRelationTag) {
+        MDRContRelEnds mdrContRelEnds = mdrTable.getMDRContRelEnds();
+
+        //Préparation de la nouvelle extrémité de relation à créer dans l'application
+        MDRRelFKEnd mdrRelFKEnd = null;
+
+        //Chargement et création de l'extrémité de relation dans le cas du MLD
+        if(mdrContRelEnds instanceof MLDRContRelEnds){
+            mdrRelFKEnd = MVCCDElementFactory.instance().createMLDRRelFKEnd((MLDRContRelEnds) mdrContRelEnds, mdrTable, Integer.parseInt(extremiteRelationTag.getAttribute("id")));
+        }
+
+        //Chargement des autres propriétés d'identification de l'extrémité de relation
+        mdrRelFKEnd.setName(extremiteRelationTag.getAttribute("name"));
+        mdrRelFKEnd.setShortName(extremiteRelationTag.getAttribute("shortName"));
+        mdrRelFKEnd.setLongName(extremiteRelationTag.getAttribute("longName"));
+        mdrRelFKEnd.setNames(new MDRElementNames(
+                extremiteRelationTag.getAttribute("name30"),
+                extremiteRelationTag.getAttribute("name60"),
+                extremiteRelationTag.getAttribute("name120"))
+        );
+    }
+
+    /**
+     * À partir de la balise <mdrRelations>, cette méthode charge dans l'application l'ensembles des relations MDR.
+     * Il s'agit des liens entre tables.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrModel Le modèle qui lui-même contient les tables et les relations. C'est dans le conteneur de
+     *                  relations de ce modèle que sera créé les nouvelles relations.
+     * @param mdrRelationsTag Balise racine <mdrRelations>
+     */
+    private void loadMdrRelations(MCDContModels mcdSource, MDRModel mdrModel, Element mdrRelationsTag) {
+
+        //Parcours des balises enfants de <mdrRelationsTag>
+        NodeList mdrRelationsTagChilds = mdrRelationsTag.getChildNodes();
+        for (int i = 0; i < mdrRelationsTagChilds.getLength(); i++) {
+            if (mdrRelationsTagChilds.item(i) instanceof Element) {
+                Element mdrRelationsTagChild = (Element) mdrRelationsTagChilds.item(i);
+
+                //Recherche et chargement de <mdrRelation>
+                if (mdrRelationsTagChild.getNodeName().equals("mdrRelation")){
+                    this.loadMldRelation(mcdSource, mdrModel, mdrRelationsTagChild);
+                }
+            }
+        }
+    }
+
+    /**
+     * À partir de la balise <mdrRelation>, cette méthode charge une relation et la créé dans l'application.
+     * @param mcdSource Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mdrModel Le modèle qui lui-même contient les tables et les relations. C'est dans le conteneur de
+     *                  relations de ce modèle que sera créé la nouvelle relation.
+     * @param mdrRelationTag Balise <mdrRelation> du document XML à partir de laquelle la relation est chargée.
+     */
+    private void loadMldRelation(MCDContModels mcdSource, MDRModel mdrModel, Element mdrRelationTag){
+
+        //Récupération de l'élément MCD source de la relation (une association)
+        int mcdAssociationSourceId = Integer.parseInt(mdrRelationTag.getAttribute("mcdelement_source")); //Récupérer l'id de l'élément source
+        MCDAssociation mcdAssociationSource = (MCDAssociation) mcdSource.getChildByIdProfondeur(mcdAssociationSourceId); //Recherche l'élément source en fonction de son ID, parmi tous les enfants du MCD
+
+        //Récupération des 2 extrémités de relations
+        int relEndAId = Integer.parseInt(mdrRelationTag.getAttribute("extremiteRelA_target_id"));
+        int relEndBId = Integer.parseInt(mdrRelationTag.getAttribute("extremiteRelB_target_id"));
+        MDRRelFKEnd mdrRelFKEndA = (MDRRelFKEnd) mdrModel.getMDRContTables().getChildByIdProfondeur(relEndAId);
+        MDRRelFKEnd mdrRelFKEndB = (MDRRelFKEnd) mdrModel.getMDRContTables().getChildByIdProfondeur(relEndBId);
+
+        //Création de la relation MLDR
+        MDRRelationFK mdrRelationFK = null;
+        if(mdrModel instanceof MLDRModel){
+            MLDRContRelations mldrContRelations = ((MLDRModel) mdrModel).getMLDRContRelations(); //Le conteneur de relations est déjà créé automatiquement avant
+            mdrRelationFK = MVCCDElementFactory.instance().createMLDRRelationFK(mldrContRelations, mcdAssociationSource, (MLDRRelFKEnd)mdrRelFKEndA, (MLDRRelFKEnd)mdrRelFKEndB, Integer.parseInt(mdrRelationTag.getAttribute("id")));
+        }
+
+        //Récupération de la FK et affectation de la FK à la relation MDR
+        MDRFK mdrFK = (MDRFK) mdrModel.getMDRContTables().getChildByIdProfondeur(Integer.parseInt(mdrRelationTag.getAttribute("fk_target_id")));
+        mdrRelationFK.setMDRFK(mdrFK);
+
+        //Chargement des autres propriétés de la relation
+        mdrRelationFK.setName(mdrRelationTag.getAttribute("name"));
+        mdrRelationFK.setShortName(mdrRelationTag.getAttribute("shortName"));
+        mdrRelationFK.setLongName(mdrRelationTag.getAttribute("longName"));
+        mdrRelationFK.setNames(new MDRElementNames(
+                mdrRelationTag.getAttribute("name30"),
+                mdrRelationTag.getAttribute("name60"),
+                mdrRelationTag.getAttribute("name120"))
+        );
     }
 }

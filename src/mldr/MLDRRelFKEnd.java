@@ -12,6 +12,10 @@ public class MLDRRelFKEnd extends MDRRelFKEnd {
         super(parent);
     }
 
+    public MLDRRelFKEnd(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
     public MLDRRelFKEnd(ProjectElement parent, String name) {
         super(parent, name);
     }

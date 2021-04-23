@@ -17,14 +17,11 @@ public class MDRElementNames implements Serializable {
 
     }
 
-    /*
     public MDRElementNames(String name30, String name60, String name120) {
         this.name30 = name30;
         this.name60 = name60;
         this.name120 = name120;
     }
-
-     */
 
     public String getName30() {
         return name30;

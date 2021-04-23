@@ -9,3 +9,7 @@
 
 # Preferences of the application chosen by user
 /application.pref
+
+# Logs files and encoding charset specifications of logs files
+/logs/*
+/.idea/encodings.xml

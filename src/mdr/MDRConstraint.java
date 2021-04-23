@@ -11,6 +11,10 @@ public abstract class MDRConstraint extends MDROperation{
         super(parent);
     }
 
+    public MDRConstraint(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
 
     public MDRTable getMDRTableAccueil(){
         return (MDRTable) getParent().getParent();
