@@ -72,6 +72,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
         debugTDUniquePrint.addFocusListener(this);
 
 
+        fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DEVELOPMENT));
         fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DEBUG));
         fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DETAILS));
         fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_INFO));
