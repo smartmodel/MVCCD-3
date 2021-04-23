@@ -42,7 +42,7 @@ public class MCDTransform extends MDTransform {
             mldrModel.incrementeIteration();
 
             // Change source MCD pour mldrColumnPK (Attribut AID <--> Entité)
-            resultat.addAll(changeSourceMLDRColumnPK());
+            resultat.addResultat(changeSourceMLDRColumnPK());
             //TODO-0 chgt entre n:n et entité associative
             //TODO-0 Ajouter le traitement d'erreur comme pour changeSourceMLDRColumnPK();
 
@@ -68,7 +68,7 @@ public class MCDTransform extends MDTransform {
             return resultat;
         } catch(Exception e){
             undoTransform(mldrModelClone);
-            resultat.addException(e) ;
+            resultat.addExceptionUnhandled(e) ;
             return resultat;
         }
     }

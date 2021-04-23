@@ -1,10 +1,15 @@
 package preferences;
 
+import console.ViewLogsManager;
+import exceptions.CodeApplException;
 import main.MVCCDManager;
+import messages.MessagesBuilder;
 import profile.ProfileFileChooser;
 import project.Project;
 import project.ProjectFileChooser;
-import utilities.Trace;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
 
@@ -92,7 +97,9 @@ public class PreferencesManager {
     }
 
     public void copyApplicationPref(int projectState) {
+        System.out.println("avant set");
         projectPref.setDEBUG(applicationPref.isDEBUG());
+        System.out.println("après set");
         projectPref.setDEBUG_PRINT_MVCCDELEMENT(applicationPref.isDEBUG_PRINT_MVCCDELEMENT());
         projectPref.setDEBUG_BACKGROUND_PANEL(applicationPref.isDEBUG_BACKGROUND_PANEL());
         projectPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(applicationPref.isDEBUG_SHOW_TABLE_COL_HIDDEN());
@@ -128,6 +135,7 @@ public class PreferencesManager {
                     message = message + System.lineSeparator() +
                             "Tant que la sauvegarde xml n'est pas finalisée des données du projet peuvent être perdues!";
                 }
+                ViewLogsManager.printMessage(message, ResultatLevel.INFO);
                 DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), message, "Changement de format");
             }
             // Indicateur pour pouvoir faire une sauvegarde avec le format changé
@@ -257,12 +265,31 @@ public class PreferencesManager {
      * Cette méthode est créée dans le cadre de la persistance XML au lieu et place de la persistance avec sérialisation.
      * @author Giorgio Roncallo
      */
-    public void loadOrCreateFileXMLApplicationPref() {
+    public Resultat loadOrCreateFileXMLApplicationPref() {
+        Resultat resultat = new Resultat();
         try {
             applicationPref = new PreferencesOfApplicationLoaderXml().loadFileApplicationPref();
-        } catch (FileNotFoundException e) {
-            applicationPref = new Preferences(null, null);
-            new PreferencesOfApplicationSaverXml().createFileApplicationPref();
+            return resultat;
+        } catch (Exception eLoad) {
+            // Fichier pas trouvé ou corrompu
+            // Le fichier des préférences est réinitialisé
+            try {
+                String message= "";
+                if (eLoad instanceof FileNotFoundException ){
+                    message = MessagesBuilder.getMessagesProperty("pref.appl.load.not.file.error");
+                } else  if (eLoad instanceof CodeApplException){
+                    message = MessagesBuilder.getMessagesProperty("pref.appl.load.file.corrupt.error");
+                } else {
+                    message = MessagesBuilder.getMessagesProperty("pref.appl.load.error");
+                }
+                resultat.addExceptionCatched(eLoad, message);
+
+                applicationPref = new Preferences(null, null);
+                new PreferencesOfApplicationSaverXml().createFileApplicationPref();
+                return resultat ;
+            } catch(Exception eCreate) {
+                throw eCreate;
+            }
         }
     }
 }

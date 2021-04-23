@@ -36,7 +36,7 @@ public class MCDCompliant {
         Resultat resultat = checkRelation(mcdRelation, false);
         if (resultat.isWithoutElementFatal()) {
             // Teste la relation dans son contexte
-            resultat.addAll(checkRelationInContext(mcdRelation));
+            resultat.addResultat(checkRelationInContext(mcdRelation));
         }
 
         return resultat;
@@ -48,24 +48,24 @@ public class MCDCompliant {
         //Console.clearMessages();
         for (MCDEntity mcdEntity : mcdEntities) {
             // Teste l'entité pour elle-même
-            resultat.addAll(checkEntityOutContext(mcdEntity, showDialogCompletness));
+            resultat.addResultat(checkEntityOutContext(mcdEntity, showDialogCompletness));
         }
 
         ArrayList<MCDRelation> mcdRelations = getMCDRelations(mcdEntities);
 
         for (MCDRelation mcdRelation : mcdRelations){
             // Teste la relation pour elle-même
-            resultat.addAll(checkRelation(mcdRelation, showDialogCompletness));
+            resultat.addResultat(checkRelation(mcdRelation, showDialogCompletness));
         }
 
         if (resultat.isWithoutElementFatal()) {
             for (MCDEntity mcdEntity : mcdEntities) {
                 // Teste la conformité entité et relations attachées
-                resultat.addAll(checkEntityInContext(mcdEntity));
+                resultat.addResultat(checkEntityInContext(mcdEntity));
             }
             for (MCDRelation mcdRelation : mcdRelations){
                 // Teste la relation dans son contexte
-                resultat.addAll(checkRelationInContext(mcdRelation));
+                resultat.addResultat(checkRelationInContext(mcdRelation));
             }
         }
        return resultat;
@@ -94,11 +94,11 @@ public class MCDCompliant {
         }
 
         for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()){
-            resultat.addAll(checkAttributeOutContext(mcdAttribute, showDialogCompletness));
+            resultat.addResultat(checkAttributeOutContext(mcdAttribute, showDialogCompletness));
         }
 
         for (MCDConstraint mcdConstraint : mcdEntity.getMCDConstraints()){
-            resultat.addAll(checkConstraintOutContext(mcdConstraint, showDialogCompletness));
+            resultat.addResultat(checkConstraintOutContext(mcdConstraint, showDialogCompletness));
         }
         return resultat;
     }
@@ -123,18 +123,18 @@ public class MCDCompliant {
 
         // Nature d'entité
         if (resultat.isWithoutElementFatal()) {
-            resultat.addAll(checkEntityNature(mcdEntity));
+            resultat.addResultat(checkEntityNature(mcdEntity));
          }
 
         // Pas de redondances entre MCDUnicity
         if (resultat.isWithoutElementFatal()) {
-            resultat.addAll(checkMCDUnicities(mcdEntity));
+            resultat.addResultat(checkMCDUnicities(mcdEntity));
         }
 
         // Contraintes dans le contexte
         for (MCDConstraint mcdConstraint : mcdEntity.getMCDConstraints()){
             if (resultat.isWithoutElementFatal()) {
-                resultat.addAll(checkConstraintInContext(mcdConstraint));
+                resultat.addResultat(checkConstraintInContext(mcdConstraint));
             }
         }
         return resultat;
@@ -174,12 +174,12 @@ public class MCDCompliant {
 
     private Resultat checkEntityNature(MCDEntity mcdEntity) {
         Resultat resultat = new Resultat();
-        resultat.addAll(CheckEntitynNaturePseudoEA(mcdEntity));
-        resultat.addAll(CheckEntityNatureDep(mcdEntity));
-        resultat.addAll(CheckEntityNatureEntAss(mcdEntity));
-        resultat.addAll(CheckEntityOrdered(mcdEntity));
-        resultat.addAll(CheckEntityAbstract(mcdEntity));
-        resultat.addAll(CheckEntityNaturePotential(mcdEntity));
+        resultat.addResultat(CheckEntitynNaturePseudoEA(mcdEntity));
+        resultat.addResultat(CheckEntityNatureDep(mcdEntity));
+        resultat.addResultat(CheckEntityNatureEntAss(mcdEntity));
+        resultat.addResultat(CheckEntityOrdered(mcdEntity));
+        resultat.addResultat(CheckEntityAbstract(mcdEntity));
+        resultat.addResultat(CheckEntityNaturePotential(mcdEntity));
 
         String mcdEntityNamePath = mcdEntity.getNamePath(MCDElementService.PATHSHORTNAME);
         // Nature indéterminée
@@ -399,7 +399,7 @@ public class MCDCompliant {
     private Resultat checkConstraintInContext(MCDConstraint mcdConstraint) {
         Resultat resultat = new Resultat();
         if (mcdConstraint instanceof MCDUnicity) {
-                resultat.addAll(checkMCDUnicityInContext((MCDUnicity) mcdConstraint));
+                resultat.addResultat(checkMCDUnicityInContext((MCDUnicity) mcdConstraint));
         }
 
         return resultat;
@@ -412,10 +412,10 @@ public class MCDCompliant {
 
         if (mcdEntity.isEntConcret()) {
             if (mcdUnicity instanceof MCDNID) {
-                resultat.addAll(checkMCDNIDInContextEntConcrete((MCDNID)  mcdUnicity));
+                resultat.addResultat(checkMCDNIDInContextEntConcrete((MCDNID)  mcdUnicity));
             }
             if (mcdUnicity instanceof MCDUnique) {
-                resultat.addAll(checkMCDUniqueInContextEntConcrete((MCDUnique) mcdUnicity));
+                resultat.addResultat(checkMCDUniqueInContextEntConcrete((MCDUnique) mcdUnicity));
             }
         } else {
             if (mcdEntity.isPseudoEntAss()) {
@@ -464,7 +464,7 @@ public class MCDCompliant {
                             actions[3],
                             actions[1],
                             actions[0]};
-                    resultat.addAll(TD.printResultats(context, conditions, rules, rules_actions));
+                    resultat.addResultat(TD.printResultats(context, conditions, rules, rules_actions));
                 }
             }
         }
@@ -534,7 +534,7 @@ public class MCDCompliant {
                             actions[3],
                             actions[1],
                             actions[0]};
-                    resultat.addAll(TD.printResultats(context, conditions, rules, rules_actions));
+                    resultat.addResultat(TD.printResultats(context, conditions, rules, rules_actions));
                 }
             }
         }

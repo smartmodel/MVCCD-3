@@ -622,10 +622,20 @@ public class Preferences extends MVCCDElement {
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1 = "mdr.pref.column.fk.one.diff.indice.start.1";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2 = "mdr.pref.column.fk.one.diff.indice.start.2";
 
+    public static String WARNING_LEVEL_DEVELOPMENT= "warning.level.development";
     public static String WARNING_LEVEL_DEBUG = "warning.level.debug";
     public static String WARNING_LEVEL_DETAILS = "warning.level.details";
     public static String WARNING_LEVEL_INFO = "warning.level.info";
     public static String WARNING_LEVEL_WARNING = "warning.level.warning";
+
+
+    public static String RESULTAT_EXCEPTION_STACKTRACE = "resultat.exception.stacktrace" ;
+    public static String RESULTAT_EXCEPTION_UNHANDLED = "resultat.exception.unhandled";
+    public static String RESULTAT_EXCEPTION_CATCHED ="resultat.exception.catched";
+    public static String RESULTAT_FATAL = "resultat.error.fatal";
+    public static String RESULTAT_NO_FATAL = "resultat.error.no.fatal";
+    public static String RESULTAT_INFO = "resultat.info";
+
 
     /*
      * Préférences de l'application
@@ -821,7 +831,9 @@ public class Preferences extends MVCCDElement {
 
     public WarningLevel getWARNING_LEVEL() {
         if (WARNING_LEVEL == null){
-           WARNING_LEVEL = WarningLevel.WARNING;
+            //WARNING_LEVEL = WarningLevel.WARNING;
+            WARNING_LEVEL = WarningLevel.DETAILS;
+            //WARNING_LEVEL = WarningLevel.DEBUG_MODE;
         }
         return WARNING_LEVEL;
     }

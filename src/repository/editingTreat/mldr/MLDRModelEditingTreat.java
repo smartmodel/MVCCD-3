@@ -7,7 +7,9 @@ import mldr.MLDRModel;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
 import resultat.Resultat;
-import transaction.services.TransactionService;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
+import treatment.services.TreatmentService;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mdr.model.MDRModelEditor;
@@ -43,12 +45,12 @@ public class MLDRModelEditingTreat extends EditingTreat {
                         MessagesBuilder.getMessagesProperty(PreferencesManager.instance().preferences().getMLDRTOMPDR_DB()),
                         MessagesBuilder.getMessagesProperty(getPropertyTheElement()),
                         mvccdElement.getName()} );
-        resultat.startTransaction(message);
+        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
 
         //TODO-1 Contrôle de conformité à prévoir !
-        resultat.addAll(mldrModel.treatTransform());
+        resultat.addResultat(mldrModel.treatTransform());
 
-        TransactionService.treatFinishTransaction(owner, mvccdElement, resultat,
+        TreatmentService.treatmentFinish(owner, mvccdElement, resultat,
                 getPropertyTheElement(), "transform.mldrtompdr.ok", "transform.mldrtompdr.abort") ;
 
     }

@@ -16,7 +16,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import resultat.Resultat;
 import transform.MDTransform;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -53,7 +52,7 @@ public class MLDRTransform extends MDTransform {
             return resultat;
         } catch(Exception e){
             undoTransform(mpdrModelClone);
-            resultat.addException(e);
+            resultat.addExceptionUnhandled(e);
             return resultat;
         }
     }

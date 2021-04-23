@@ -279,8 +279,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         } catch (Exception e){
             //TODO-PAS
             Resultat resultat = new Resultat();
-            resultat.addException(e);
-            ViewLogsManager.resultat(resultat, WarningLevel.WARNING);
+            resultat.addExceptionUnhandled(e);
+            ViewLogsManager.printResultat(resultat);
         }
 
     }

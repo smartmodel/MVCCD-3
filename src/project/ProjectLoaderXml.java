@@ -1,6 +1,5 @@
 package project;
 
-import console.Console;
 import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
@@ -10,7 +9,6 @@ import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.MDRColumn;
 import messages.MessagesBuilder;
 import mldr.*;
-import mpdr.MPDRColumn;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

@@ -8,6 +8,7 @@ import messages.MessagesBuilder;
 import preferences.Preferences;
 import project.Project;
 import repository.editingTreat.ProjectEditingTreat;
+import resultat.ResultatLevel;
 import utilities.Trace;
 import utilities.window.DialogMessage;
 
@@ -167,7 +168,7 @@ public class WinMenuContent implements ActionListener {
             if (project != null){
                 // Quittance de création d'un nouveau projet
                 String message = MessagesBuilder.getMessagesProperty ("project.new", project.getName());
-                ViewLogsManager.newText(message, WarningLevel.WARNING);
+                ViewLogsManager.printMessage(message, ResultatLevel.INFO);
             }
         } else {
             String message = MessagesBuilder.getMessagesProperty ("project.new.not.close");

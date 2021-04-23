@@ -1,15 +1,40 @@
 package resultat;
 
-import main.MVCCDWindow;
 import org.apache.commons.lang.StringUtils;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Resultat {
     private ArrayList<ResultatElement> elements = new ArrayList<ResultatElement>();
 
     public Resultat() {
+    }
+
+
+    public void add(ResultatElement resultatElement){
+        if (resultatElement != null) {
+            elements.add(resultatElement);
+        }
+    }
+
+    public void addResultat(Resultat resultat){
+        elements.addAll(resultat.getElementsAllLevel());
+    }
+
+    public void addExceptionUnhandled(Exception e){
+        ResultatService.addExceptionUnhandled(this, e);
+        //TODO-1 Avant distribution d'un exécutable conditioner cet affichage à
+        // une valeur DEVElOPPEMENT de WARNINGLEVEL
+        if (StringUtils.isNotEmpty(e.getMessage())) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(e.toString());
+        e.printStackTrace();
+    }
+
+    public void addExceptionCatched (Exception e, String message){
+        add( new ResultatElement (message, ResultatLevel.EXCEPTION_CATCHED));
+        ResultatService.addExceptionCatched(this, e);
     }
 
     public ArrayList<ResultatElement> getElementsAllLevel() {
@@ -24,27 +49,8 @@ public class Resultat {
         return ResultatService.getElementsByLevel(this, ResultatLevel.FATAL);
     }
 
-    public ArrayList<ResultatElement> getElementsException(){
-        return ResultatService.getElementsByLevel(this, ResultatLevel.EXCEPTION_JAVA);
-    }
-
-    public void add(ResultatElement resultatElement){
-        elements.add(resultatElement);
-    }
-
-    public void addAll(Resultat resultat){
-        elements.addAll(resultat.getElementsAllLevel());
-    }
-
-    public void addException(Exception e){
-        ResultatService.addException(this, e);
-        //TODO-1 Avant distribution d'un exécutable conditioner cet affichage à
-        // une valeur DEVElOPPEMENT de WARNINGLEVEL
-        if (StringUtils.isNotEmpty(e.getMessage())) {
-            System.out.println(e.getMessage());
-        }
-        System.out.println(e.toString());
-        e.printStackTrace();
+    public ArrayList<ResultatElement> getElementsExceptionUnhandled(){
+        return ResultatService.getElementsByLevel(this, ResultatLevel.EXCEPTION_UNHANDLED);
     }
 
     public int getNbElementsAllLevels() {
@@ -64,7 +70,7 @@ public class Resultat {
     }
 
     public int getNbElementsException() {
-        return ResultatService.getNbElementsByLevel(this, ResultatLevel.EXCEPTION_JAVA);
+        return ResultatService.getNbElementsByLevel(this, ResultatLevel.EXCEPTION_UNHANDLED);
     }
 
     public boolean isWithoutElementFatal(){
@@ -75,36 +81,21 @@ public class Resultat {
         return getNbElementsFatal() > 0 ;
     }
 
-    public boolean isWithoutElementException(){
+    public boolean isWithoutElementExceptionUnhandled(){
         return getNbElementsException()== 0 ;
     }
 
-    public boolean isWithElementException(){
+    public boolean isWithElementExceptionUnhandled(){
         return getNbElementsException() > 0 ;
     }
 
-    /**
-     * Finalisation du transaction
-     * @param message  - Message de fin de transaction ok ou not ok
-     * @param window - Fenêtre parent pour l'affichage d'une boîte de dialogue d'affichage d'un des 2 messages
- *               - passés en paramètres
-     * @param onlyError - Boite de dialogue uniquement en cas d'erreur
-     */
-    public void finishTransaction(String message, Window window, boolean onlyError) {
-        ResultatService.finishTransaction(this, message, window, onlyError);
-    }
-
-    /**
-     * Démarrage d'une transaction
-     * Création de la première ligne d'information avec le message reçu
-     * @param message
-     */
-    public void startTransaction(String message) {
-        ResultatService.startTransaction(this,message);
+    public void finishTreatment(String propertyOk ,
+                                String propertyError ){
+        ResultatService.finishTreatment(this, propertyOk, propertyError);
     }
 
     public boolean isError(){
-        return isWithElementFatal() || isWithElementException();
+        return isWithElementFatal() || isWithElementExceptionUnhandled();
     }
 
     public boolean isNotError(){

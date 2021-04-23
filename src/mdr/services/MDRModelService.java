@@ -116,7 +116,7 @@ public class MDRModelService {
         if (namingLength == MDRNamingLength.LENGTH120) {
             name = mdrElement.getNames().getName120();
         }
-
+        //TODO-PAS Mettre un message si toujours name =""
         MDRNamingFormat mdrNamingFormat = mdrModel.getNamingFormatFuture();
         return formatNaming(name, mdrNamingFormat);
     }
