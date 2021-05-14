@@ -1,12 +1,15 @@
 package utilities.window.editor;
 
+import console.ViewLogsManager;
 import exceptions.CodeApplException;
+import exceptions.service.ExceptionService;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.MCDElement;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDUtilService;
+import messages.MessagesBuilder;
 import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
@@ -137,26 +140,32 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
             public void actionPerformed(ActionEvent e) {
 
-
-                if (getEditor().getMode().equals(DialogEditor.NEW)) {
-                    // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas confirmé
-                    if (DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageAdd()) == JOptionPane.YES_OPTION) {
-                        // Sauvegarde de l'enregistrement maitre
-                        getActionAddDetail(true);
-                    }
-                } else {
-                    boolean appendAuthorized = true;
-                    // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
-                    if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
-                        appendAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageUpdate()) == JOptionPane.YES_OPTION;
-                        if (appendAuthorized) {
-                            //getEditor().getButtons().getButtonsContent().treatUpdate();
+                try {
+                    if (getEditor().getMode().equals(DialogEditor.NEW)) {
+                        // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas confirmé
+                        if (DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageAdd()) == JOptionPane.YES_OPTION) {
                             // Sauvegarde de l'enregistrement maitre
-                            getActionAddDetail(false);
+                            getActionAddDetail(true);
                         }
                     } else {
-                        fenDetail();
+                        boolean appendAuthorized = true;
+                        // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
+                        if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
+                            appendAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageUpdate()) == JOptionPane.YES_OPTION;
+                            if (appendAuthorized) {
+                                //getEditor().getButtons().getButtonsContent().treatUpdate();
+                                // Sauvegarde de l'enregistrement maitre
+                                getActionAddDetail(false);
+                            }
+                        } else {
+                            fenDetail();
+                        }
                     }
+                } catch (Exception exception){
+                    ExceptionService.exceptionUnhandled(exception, getEditor(),
+                            getEditor().getMvccdElementCrt(),
+                            "editor.table.exception",
+                            "editor.table.exception.new");
                 }
             }
         });
@@ -166,21 +175,27 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         btnRemove.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e) {
-
-                boolean removedAuthorized = true;
-                // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
-                if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
-                    removedAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageDelete()) == JOptionPane.YES_OPTION;
-                    if (removedAuthorized) {
-                        //getEditor().getButtons().getButtonsContent().treatUpdate();
-                        // Sauvegarde de l'enregistrement maitre
-                        getActionAddDetail(false);
+                try {
+                    boolean removedAuthorized = true;
+                    // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
+                    if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
+                        removedAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageDelete()) == JOptionPane.YES_OPTION;
+                        if (removedAuthorized) {
+                            //getEditor().getButtons().getButtonsContent().treatUpdate();
+                            // Sauvegarde de l'enregistrement maitre
+                            getActionAddDetail(false);
+                        }
                     }
-                }
-                int posActual = table.getSelectedRow();
-                if (posActual >= 0){
-                    model.removeRow(posActual);
-                    tableContentChanged();
+                    int posActual = table.getSelectedRow();
+                    if (posActual >= 0){
+                        model.removeRow(posActual);
+                        tableContentChanged();
+                    }
+                } catch (Exception exception){
+                    ExceptionService.exceptionUnhandled(exception, getEditor(),
+                            getEditor().getMvccdElementCrt(),
+                            "editor.table.exception",
+                            "editor.table.exception.delete");
                 }
             }
         });
@@ -193,13 +208,20 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         btnEdit.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e) {
-                int posActual = table.getSelectedRow();
-                if (posActual >= 0){
-                    int posId = STableService.IDINDEX;
-                    //TODO-0 Faire appel treatEdit
+                try {
+                    int posActual = table.getSelectedRow();
+                    if (posActual >= 0) {
+                        int posId = STableService.IDINDEX;
+                        //TODO-0 Faire appel treatEdit
 
-                    //updateRow(mcdAttributeActual, table.getSelectedRow());
-                    tableContentChanged();
+                        //updateRow(mcdAttributeActual, table.getSelectedRow());
+                        tableContentChanged();
+                    }
+                } catch (Exception exception){
+                    ExceptionService.exceptionUnhandled(exception, getEditor(),
+                            getEditor().getMvccdElementCrt(),
+                            "editor.table.exception",
+                            "editor.table.exception.update");
                 }
             }
         });
@@ -210,12 +232,19 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
             public void actionPerformed(ActionEvent e) {
 
-                int posActual = table.getSelectedRow();
-                if (posActual > 0){
-                    model.moveRow(posActual, posActual, posActual-1);
-                    table.setRowSelectionInterval(posActual-1, posActual-1);
-                    permuteOrder(posActual, posActual - 1);
-                    tableContentChanged();
+                try {
+                    int posActual = table.getSelectedRow();
+                    if (posActual > 0) {
+                        model.moveRow(posActual, posActual, posActual - 1);
+                        table.setRowSelectionInterval(posActual - 1, posActual - 1);
+                        permuteOrder(posActual, posActual - 1);
+                        tableContentChanged();
+                    }
+                } catch (Exception exception){
+                    ExceptionService.exceptionUnhandled(exception, getEditor(),
+                            getEditor().getMvccdElementCrt(),
+                            "editor.table.exception",
+                            "editor.table.exception.up");
                 }
              }
         });
@@ -225,12 +254,19 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         btnDown.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                int posActual = table.getSelectedRow();
-                if (posActual < table.getRowCount()-1){
-                    model.moveRow(posActual, posActual, posActual+1);
-                    table.setRowSelectionInterval(posActual+1, posActual+1);
-                    permuteOrder(posActual, posActual + 1);
-                    tableContentChanged();
+                try {
+                    int posActual = table.getSelectedRow();
+                    if (posActual < table.getRowCount() - 1) {
+                        model.moveRow(posActual, posActual, posActual + 1);
+                        table.setRowSelectionInterval(posActual + 1, posActual + 1);
+                        permuteOrder(posActual, posActual + 1);
+                        tableContentChanged();
+                    }
+                } catch (Exception exception){
+                    ExceptionService.exceptionUnhandled(exception, getEditor(),
+                            getEditor().getMvccdElementCrt(),
+                            "editor.table.exception",
+                            "editor.table.exception.down");
                 }
             }
         });

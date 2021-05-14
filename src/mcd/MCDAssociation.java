@@ -122,6 +122,7 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
     }
 
     public MCDAssEnd getMCDAssEndOpposite(MCDAssEnd mcdAssEnd) {
+
         if (this.getFrom() == mcdAssEnd){
             return this.getTo();
         }
@@ -129,8 +130,7 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
             return this.getFrom();
         }
 
-        throw new CodeApplException("L'extrémité d'association passée en paramètre n'existe pas pour cette association ");
-
+        throw new CodeApplException("L'extrémité d'association passée en paramètre n'existe pas pour cette association");
     }
 
     public MCDAssEnd getMCDAssEndParent(){

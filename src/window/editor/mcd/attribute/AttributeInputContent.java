@@ -1,6 +1,8 @@
 package window.editor.mcd.attribute;
 
 import datatypes.*;
+import exceptions.CodeApplException;
+import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import mcd.MCDAttribute;
@@ -10,6 +12,7 @@ import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDAttributeService;
 import messages.MessagesBuilder;
+import mldr.MLDRColumn;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -37,7 +40,7 @@ import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class AttributeInputContent extends PanelInputContentId {
+public class AttributeInputContent extends PanelInputContentId implements ActionListener{
 
 
     private SComboBox attributeNameAID = new SComboBox(this);
@@ -107,12 +110,7 @@ public class AttributeInputContent extends PanelInputContentId {
         datatypeName.addFocusListener(this);
 
         btnDatatypeTree = new SButton(MessagesBuilder.getMessagesProperty("button.datatype.tree"));
-        btnDatatypeTree.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                actionDatatypeTree();
-            }
-        });
+        btnDatatypeTree.addActionListener(this);
 
         //labelDatatypeSize.setText(MessagesBuilder.getMessagesProperty("label.datatypesize.init.ui"));
         labelDatatypeSize.setText("");
@@ -123,12 +121,7 @@ public class AttributeInputContent extends PanelInputContentId {
         datatypeSize.addFocusListener(this);
 
         btnDatatypeSize = new SButton(MessagesBuilder.getMessagesProperty("button.datatype.default"));
-        btnDatatypeSize.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                actionDatatypeSize();
-            }
-        });
+        btnDatatypeSize.addActionListener(this);
 
         datatypeScale.setPreferredSize((new Dimension(30, Preferences.EDITOR_FIELD_HEIGHT)));
         datatypeScale.setToolTipText("Décimales...");
@@ -137,12 +130,7 @@ public class AttributeInputContent extends PanelInputContentId {
         datatypeScale.addFocusListener(this);
 
         btnDatatypeScale = new SButton(MessagesBuilder.getMessagesProperty("button.datatype.default"));
-        btnDatatypeScale.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                actionDatatypeScale();
-            }
-        });
+        btnDatatypeScale.addActionListener(this);
 
 
         mandatory.setToolTipText("Obligation de valeur");
@@ -344,26 +332,26 @@ public class AttributeInputContent extends PanelInputContentId {
 
 
     protected boolean changeField(DocumentEvent e) {
-        boolean ok = super.changeField(e);
+            boolean ok = super.changeField(e);
 
-        SComponent sComponent = null;
-        Document doc = e.getDocument();
-        if (doc == datatypeSize.getDocument()){
-            sComponent = datatypeSize;
-        }
-        if (doc == datatypeScale.getDocument()){
-            sComponent = datatypeScale;
-        }
+            SComponent sComponent = null;
+            Document doc = e.getDocument();
+            if (doc == datatypeSize.getDocument()) {
+                sComponent = datatypeSize;
+            }
+            if (doc == datatypeScale.getDocument()) {
+                sComponent = datatypeScale;
+            }
 
-        if (sComponent == attributeNameAID) {
-            changeFieldSelectedAttributeNameAID();
-        }
+            if (sComponent == attributeNameAID) {
+                changeFieldSelectedAttributeNameAID();
+            }
 
-        if (sComponent != null) {
-            ok = treatField(sComponent) ;
-        }
+            if (sComponent != null) {
+                ok = treatField(sComponent);
+            }
 
-        return ok;
+            return ok;
     }
 
 
@@ -976,5 +964,37 @@ public class AttributeInputContent extends PanelInputContentId {
         MCDDatatype money = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_MONEY_LIENPROG);
         boolean r2 = (mcdDatatype.isSelfOrDescendantOf(decimal) || mcdDatatype.isSelfOrDescendantOf(decimal));
         return r1 && r2;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        String propertyMessage = "";
+        String propertyAction = "";
+        MVCCDElement mvccdElementForCatchException = null;
+        if (getEditor().getMode().equals(DialogEditor.NEW)) {
+            propertyMessage = "editor.attribute.btn.exception.new";
+            mvccdElementForCatchException = getEditor().getMvccdElementParent();
+        } else {
+            propertyMessage = "editor.attribute.btn.exception.not.new" ;
+            mvccdElementForCatchException = getEditor().getMvccdElementCrt();
+        }
+        try {
+            Object source = actionEvent.getSource();
+            if (source == btnDatatypeTree) {
+                propertyAction = "editor.attribute.btn.exception.datatype.tree";
+                actionDatatypeTree();
+            }
+            if (source == btnDatatypeSize) {
+                actionDatatypeSize();
+            }
+            if (source == btnDatatypeScale) {
+                actionDatatypeScale();
+            }
+
+        } catch (Exception exception) {
+            ExceptionService.exceptionUnhandled(exception, getEditor(), mvccdElementForCatchException,
+                    propertyMessage, propertyAction);
+
+        }
     }
 }

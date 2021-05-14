@@ -1,9 +1,12 @@
 package utilities.window.editor;
 
+import console.ViewLogsManager;
+import exceptions.service.ExceptionService;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.MCDConstraint;
+import messages.MessagesBuilder;
 import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
@@ -141,67 +144,46 @@ public abstract class PanelInputContentTable extends PanelInputContent
 
         btnUp = new JButton("^");
         btnUp.setEnabled(false);
-        btnUp.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-                int posActual = table.getSelectedRow();
-                if (posActual > 0){
-                    model.moveRow(posActual, posActual, posActual-1);
-                    table.setRowSelectionInterval(posActual-1, posActual-1);
-                    permuteOrder(posActual, posActual - 1);
-                    // pour la mise à jour des  champs calculés comme les stéréotypes d'unicité
-                    if (specificRefreshRow()) {
-                        refreshRow(posActual);
-                        refreshRow(posActual - 1);
-                    }
-                }
-                enabledContent();
-                //TODO-1 Vérfier un changement effectif
-                //Détecter un changement au niveau de la table JTable --> STable et ensuite déclenechement automatique
-                enabledButtons();
-
-            }
-        });
+        btnUp.addActionListener(this);
 
         btnDown = new JButton("v");
         btnDown.setEnabled(false);
-        btnDown.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                int posActual = table.getSelectedRow();
-                if (posActual < table.getRowCount()-1){
-                    model.moveRow(posActual, posActual, posActual+1);
-                    table.setRowSelectionInterval(posActual+1, posActual+1);
-                    permuteOrder(posActual, posActual + 1);
-                    // pour la mise à jour des  champs calculés comme les stéréotypes d'unicité
-                    if (specificRefreshRow()) {
-                        refreshRow(posActual);
-                        refreshRow(posActual + 1);
-                    }
-                }
-                enabledContent();
-                //TODO-1 Vérfier un changement effectif
-                //Détecter un changement au niveau de la table JTable --> STable et ensuite déclenechement automatique
-                enabledButtons();
-
-            }
-        });
+        btnDown.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        MElement mElement = getMElementSelected();
+        String propertyAction = "";
+        try {
+            Object source = e.getSource();
+            MElement mElement = getMElementSelected();
 
-        if (source == btnAdd) {
-            actionAdd(e);
-        }
-        if (source == btnEdit) {
-            actionEdit(e, mElement);
-        }
-        if (source == btnRemove) {
-            actionDelete(e, mElement);
+            if (source == btnAdd) {
+                propertyAction = "editor.table.exception.new";
+                actionAdd(e);
+            }
+            if (source == btnEdit) {
+                propertyAction = "editor.table.exception.update";
+                actionEdit(e, mElement);
+            }
+            if (source == btnRemove) {
+                propertyAction = "editor.table.exception.delete";
+                actionDelete(e, mElement);
+            }
+            if (source == btnUp) {
+                propertyAction = "editor.table.exception.up";
+                actionUp(e);
+            }
+            if (source == btnDown) {
+                propertyAction = "editor.table.exception.down";
+                actionDown(e);
+            }
+        } catch (Exception exception){
+            ExceptionService.exceptionUnhandled(exception, getEditor(),
+                    getEditor().getMvccdElementCrt(),
+                    "editor.table.exception",
+                    propertyAction);
+
         }
     }
 
@@ -238,6 +220,43 @@ public abstract class PanelInputContentTable extends PanelInputContent
             }
         }
         return false;
+    }
+
+
+    private void actionUp(ActionEvent e){
+        int posActual = table.getSelectedRow();
+        if (posActual > 0){
+            model.moveRow(posActual, posActual, posActual-1);
+            table.setRowSelectionInterval(posActual-1, posActual-1);
+            permuteOrder(posActual, posActual - 1);
+            // pour la mise à jour des  champs calculés comme les stéréotypes d'unicité
+            if (specificRefreshRow()) {
+                refreshRow(posActual);
+                refreshRow(posActual - 1);
+            }
+        }
+        enabledContent();
+        //TODO-1 Vérfier un changement effectif
+        //Détecter un changement au niveau de la table JTable --> STable et ensuite déclenechement automatique
+        enabledButtons();
+    }
+
+    private void actionDown(ActionEvent e){
+        int posActual = table.getSelectedRow();
+        if (posActual < table.getRowCount()-1){
+            model.moveRow(posActual, posActual, posActual+1);
+            table.setRowSelectionInterval(posActual+1, posActual+1);
+            permuteOrder(posActual, posActual + 1);
+            // pour la mise à jour des  champs calculés comme les stéréotypes d'unicité
+            if (specificRefreshRow()) {
+                refreshRow(posActual);
+                refreshRow(posActual + 1);
+            }
+        }
+        enabledContent();
+        //TODO-1 Vérfier un changement effectif
+        //Détecter un changement au niveau de la table JTable --> STable et ensuite déclenechement automatique
+        enabledButtons();
     }
 
 
@@ -431,6 +450,8 @@ public abstract class PanelInputContentTable extends PanelInputContent
         }
         return null;
     }
+
+
 
 
 }

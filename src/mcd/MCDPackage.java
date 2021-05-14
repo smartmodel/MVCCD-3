@@ -7,11 +7,10 @@ import mcd.services.MCDElementService;
 import mcd.services.MCDPackageService;
 import project.ProjectElement;
 import resultat.Resultat;
-import resultat.ResultatElement;
 
 import java.util.ArrayList;
 
-public class MCDPackage extends MCDElement implements IMCDTraceability, IMCDNamePathParent,
+public class MCDPackage extends MCDElement implements IMCDTraceability,
         IMCDContPackages, IMCDContContainer, IMCDContainer, IMCompletness, IMCDCompliant {
 
     private static final long serialVersionUID = 1000;

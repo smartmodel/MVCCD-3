@@ -1,6 +1,8 @@
 package window.editor.mcd.entity;
 
+import console.ViewLogsManager;
 import mcd.MCDEntity;
+import messages.MessagesBuilder;
 import repository.editingTreat.mcd.*;
 import utilities.window.editor.PanelNavBtn;
 import utilities.window.editor.PanelNavBtnContent;
@@ -69,49 +71,57 @@ public class EntityNavBtnContentPanel extends PanelNavBtnContent implements Acti
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        String tabProperty = "";
 
-        Object source = e.getSource();
+        try {
+            Object source = e.getSource();
+            MCDEntity mcdEntity = getMCDEntity();
 
-        MCDEntity mcdEntity = getMCDEntity();
-
-        if (source == btnEntity) {
-            //MCDContAttributes mcdContAttributes = (MCDContAttributes) getEditor().getMvccdElementCrt();
             getEditor().myDispose();
-            new MCDEntityEditingTreat().treatUpdate(getEditor().getOwner(),
-                    getMCDEntity());
+
+            if (source == btnEntity) {
+                tabProperty = "editor.entity.tab.exception.properties";
+                new MCDEntityEditingTreat().treatUpdate(getEditor().getOwner(),
+                        getMCDEntity());
+            }
+
+            if (source == btnAttributes) {
+                tabProperty = "editor.entity.tab.exception.attributes";
+                new MCDAttributesEditingTreat().treatRead(getEditor().getOwner(),
+                        getMCDEntity().getMCDContAttributes());
+            }
+
+            if (source == btnConstraints) {
+                tabProperty = "editor.entity.tab.exception.constraints";
+                new MCDConstraintsEditingTreat().treatUpdate(getEditor().getOwner(),
+                        getMCDEntity().getMCDContConstraints());
+            }
+
+            if (source == btnRelations) {
+                tabProperty = "editor.entity.tab.exception.relations";
+                new MCDRelEndsEditingTreat().treatUpdate(getEditor().getOwner(),
+                        getMCDEntity().getMCDContRelEnds());
+            }
+
+            if (source == btnEntCompliant) {
+                // Le contrôle de conformité se fait au sein du formulaire
+                // EntCompliantInputContent
+                tabProperty = "editor.entity.tab.exception.compliant";
+                new MCDEntCompliantEditingTreat().treatRead(getEditor().getOwner(),
+                        getMCDEntity());
+            }
+
+            if (source == btnMLDR) {
+                tabProperty = "editor.entity.tab.exception.mldr";
+                new MCDEntMLDREditingTreat().treatUpdate(getEditor().getOwner(),
+                        getMCDEntity());
+            }
+        } catch (Exception exception ){
+            String tabMessage = MessagesBuilder.getMessagesProperty(tabProperty) ;
+            String message = MessagesBuilder.getMessagesProperty("editor.entity.tab.exception",
+                    new String[] {tabMessage, getMCDEntity().getName()} );
+            ViewLogsManager.catchException(exception, getEditor(), message);
         }
-
-        if (source == btnAttributes) {
-            getEditor().myDispose();
-            new MCDAttributesEditingTreat().treatRead(getEditor().getOwner(),
-                    getMCDEntity().getMCDContAttributes());
-        }
-
-        if (source == btnConstraints) {
-            getEditor().myDispose();
-            new MCDConstraintsEditingTreat().treatUpdate(getEditor().getOwner(),
-                    getMCDEntity().getMCDContConstraints());
-        }
-
-        if (source == btnRelations) {
-            getEditor().myDispose();
-            new MCDRelEndsEditingTreat().treatUpdate(getEditor().getOwner(),
-                    getMCDEntity().getMCDContRelEnds());
-        }
-
-        if (source == btnEntCompliant) {
-            getEditor().myDispose();
-            // Le contrôle de conformité se fait au sein du formulaire
-            // EntCompliantInputContent
-            new MCDEntCompliantEditingTreat().treatRead(getEditor().getOwner(),
-                    getMCDEntity());
-        }
-
-        if (source == btnMLDR) {
-            getEditor().myDispose();
-            new MCDEntMLDREditingTreat().treatUpdate(getEditor().getOwner(),
-                    getMCDEntity());
-         }
     }
 
     private MCDEntity getMCDEntity(){

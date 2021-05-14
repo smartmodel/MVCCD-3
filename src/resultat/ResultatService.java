@@ -3,6 +3,7 @@ package resultat;
 import console.WarningLevel;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -43,7 +44,7 @@ public class ResultatService {
         for (int i=0 ; i < stackTrace.length; i++){
             resultat.add (new ResultatElement(stackTrace[i].toString(), ResultatLevel.EXCEPTION_STACKTRACE));
         }
-    }
+     }
 
     public static void finishTreatment(Resultat resultat,
                                        String propertyOk ,

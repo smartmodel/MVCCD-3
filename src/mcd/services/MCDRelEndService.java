@@ -1,5 +1,6 @@
 package mcd.services;
 
+import m.services.MElementService;
 import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.MCDRelEnd;
@@ -53,7 +54,7 @@ public class MCDRelEndService {
         }
 
         if (r3){
-            nameElementOpposite = mcdElementOpposite.getNamePath(MCDElementService.PATHSHORTNAME);
+            nameElementOpposite = mcdElementOpposite.getNamePath(MElementService.PATHSHORTNAME);
         }
 
         if (r4){

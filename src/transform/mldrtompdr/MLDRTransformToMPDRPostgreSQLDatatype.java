@@ -45,7 +45,7 @@ public class MLDRTransformToMPDRPostgreSQLDatatype {
             return MDDatatypeService.getMPDRDatatypeByLienProg(Preferences.MPDRORACLEDATATYPE_DATE_LIENPROG);
         }
 
-        throw new CodeApplException("fromMLDRDatatype () "+ " - Le type de données " + mldrDatatypeLienProg + " ne peut pas être transformé");
+        throw new CodeApplException("Le type de données " + mldrDatatypeLienProg + " ne peut pas être transformé");
 
     }
 }

@@ -19,13 +19,8 @@ public class MVCCD  {
             MVCCDManager.instance().start();
         } catch(Exception e){
             if (MVCCDManager.instance().getConsoleManager() != null) {
-                Resultat resultat = new Resultat();
-                String message = MessagesBuilder.getMessagesProperty("main.open");
-                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
-                resultat.addExceptionUnhandled(e);
-                message = MessagesBuilder.getMessagesProperty("main.finish.error");
-                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
-                ViewLogsManager.printResultat(resultat);
+                String message = MessagesBuilder.getMessagesProperty("main.finish.error");
+                ViewLogsManager.catchException(e, MVCCDManager.instance().getMvccdWindow(), message);
             } else {
                 e.printStackTrace();
             }

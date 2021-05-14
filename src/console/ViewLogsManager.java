@@ -8,6 +8,7 @@ import resultat.ResultatElement;
 import resultat.ResultatLevel;
 import utilities.window.DialogMessage;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -61,15 +62,28 @@ public class ViewLogsManager {
         }
     }
 
-    public static void dialogQuittance(MVCCDWindow mvccdWindow, Resultat resultat) {
+    public static void dialogQuittance(Window window, Resultat resultat) {
         ArrayList<ResultatElement> elements = resultat.getElementsAllLevel();
         if (elements.size() > 0) {
             String message = elements.get(elements.size()-1).getText();
             if (resultat.isError()) {
-                message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.error.console");
+                message = message + System.lineSeparator() +
+                        MessagesBuilder.getMessagesProperty("dialog.error.console");
             }
-            DialogMessage.showOk(mvccdWindow, message);
+            DialogMessage.showOk(window, message);
         }
+    }
+
+    public static void dialogQuittance(Window window, String message) {
+        DialogMessage.showOk(window, message);
+    }
+
+    public static void catchException(Exception e, Window window, String message) {
+        Resultat resultat = new Resultat();
+        resultat.addExceptionUnhandled(e);
+        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+        ViewLogsManager.printResultat(resultat);
+        ViewLogsManager.dialogQuittance(window, resultat);
     }
 
 }

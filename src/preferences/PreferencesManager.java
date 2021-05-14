@@ -97,9 +97,7 @@ public class PreferencesManager {
     }
 
     public void copyApplicationPref(int projectState) {
-        System.out.println("avant set");
         projectPref.setDEBUG(applicationPref.isDEBUG());
-        System.out.println("après set");
         projectPref.setDEBUG_PRINT_MVCCDELEMENT(applicationPref.isDEBUG_PRINT_MVCCDELEMENT());
         projectPref.setDEBUG_BACKGROUND_PANEL(applicationPref.isDEBUG_BACKGROUND_PANEL());
         projectPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(applicationPref.isDEBUG_SHOW_TABLE_COL_HIDDEN());

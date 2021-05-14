@@ -4,6 +4,7 @@ import exceptions.CodeApplException;
 import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
+import m.services.MElementService;
 import m.services.MRelEndService;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
@@ -31,11 +32,11 @@ public class MCDAssociationService {
 
     public static String buildNamingId(MCDEntity entityFrom, MCDEntity entityTo, String naming) {
 
-        return  entityFrom.getNamePath(MCDElementService.PATHNAME) +
+        return  entityFrom.getNamePath(MElementService.PATHNAME) +
                 Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
                 naming +
                 Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
-                entityTo.getNamePath(MCDElementService.PATHNAME);
+                entityTo.getNamePath(MElementService.PATHNAME);
 
     }
 
@@ -176,7 +177,7 @@ public class MCDAssociationService {
 
     public static MCDAssEnd getMCDAssEndParent(MCDAssociation mcdAssociation) {
         if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_MANY_MANY){
-            throw new CodeApplException("MCDAssEnd.getMCDAssEndParent " + "L'association " + mcdAssociation.getNameTree() +
+            throw new CodeApplException("L'association " + mcdAssociation.getNameTree() +
                     " est de degré n:n et n'a pas d'extrémités parent/enfant ");
         } else if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_ONE_MANY){
             MCDAssEnd mcdAssEndFrom = mcdAssociation.getFrom();
@@ -191,7 +192,7 @@ public class MCDAssociationService {
             MCDAssEnd mcdAssEndTo = mcdAssociation.getTo();
             return getMCDAssEndParentBeetweenTheTwo (mcdAssEndFrom, mcdAssEndTo);
         }
-        throw new CodeApplException("MCDAssEnd.getMCDAssEndParent " + "Le degré d'association " +
+        throw new CodeApplException("Le degré d'association " +
                 mcdAssociation.getNameTree() + " est inconnu ");
     }
 

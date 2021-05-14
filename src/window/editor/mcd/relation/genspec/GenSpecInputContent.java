@@ -1,5 +1,6 @@
 package window.editor.mcd.relation.genspec;
 
+import m.services.MElementService;
 import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
@@ -40,7 +41,7 @@ public class GenSpecInputContent extends PanelInputContentId {
     private SComboBox factorizeFieldEntity = null;
 
     //TODO-0 MCDElementService.PATHNAME , remplacer par SHORT
-    private int modePathName =  MCDElementService.PATHNAME;
+    private int modePathName =  MElementService.PATHNAME;
 
 
     public GenSpecInputContent(GenSpecInput genSpecInput)     {
@@ -247,7 +248,7 @@ public class GenSpecInputContent extends PanelInputContentId {
     @Override
     protected MCDElement getParentByNamePath(int pathname, String text) {
         //return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
-        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, MCDElementService.PATHNAME, text);
+        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, MElementService.PATHNAME, text);
     }
 
 

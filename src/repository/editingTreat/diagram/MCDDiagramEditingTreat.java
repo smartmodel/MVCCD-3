@@ -46,6 +46,7 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
         mcdTitlePanel.getContent();
 
         //TODO-1  A reprendre (resize pour permettre le réaffichage des JPanel chargés dynamiquement
+        // Et voir le lien avec le paramètre Window owner
         //winDiagram.resizeContent();
         mvccdWindow.setSize(mvccdWindow.getWidth()-1, mvccdWindow.getHeight()-1);
         mvccdWindow.setSize(mvccdWindow.getWidth()+1, mvccdWindow.getHeight()+1);

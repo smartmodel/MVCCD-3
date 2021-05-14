@@ -320,14 +320,14 @@ public class MDROrderBuildNaming {
 
     private void limitCodeError(String newName) {
         int gap =  newName.length() - namingLength.getLength() ;
-        throw new CodeApplException("MDROrderBuildNaming - " + targetNaming.getText() +
+        throw new CodeApplException(targetNaming.getText() +
                 " - Le nom calculé " + newName + " dépasse de " + gap +
                 " caractères la taille maximale autorisée de " + namingLength.getLength());
     }
 
     private String limitComputedCodeError(String newName){
         if (newName.length() > namingLength.getLength()) {
-            throw new CodeApplException("MDROrderBuildNaming - " + targetNaming.getText() +
+            throw new CodeApplException(targetNaming.getText() +
                     " - Le nom calculé " + newName + " n'a pu être limité qu'à " + newName.length() +
                     " caractères au lieu de " + namingLength.getLength());
         }
@@ -356,11 +356,11 @@ public class MDROrderBuildNaming {
         } else {
             limitCodeError(newName);
         }
-        throw new CodeApplException("MDROrderBuildNaming - Erreur limitSizeColumnAttr");
+        throw new CodeApplException("Erreur limitSizeColumnAttr");
     }
 
     private String limitSizeTableNN(String newName){
-        String error = "MDROrderBuildNaming - Erreur limitSizeTableNN";
+        String error = "Erreur limitSizeTableNN";
         if (namingLength == MDRNamingLength.LENGTH30){
             if (targetNaming == MDROrderBuildTargets.TABLENN){
                 throw new OrderBuildNameTableNNSizeLimitException();
@@ -382,7 +382,7 @@ public class MDROrderBuildNaming {
     }
 
     private String limitSizeFK(String newName){
-        String error = "MDROrderBuildNaming - Erreur limitSizeFK";
+        String error = "Erreur limitSizeFK";
         if (namingLength == MDRNamingLength.LENGTH30){
             if (targetNaming == MDROrderBuildTargets.FK){
                 throw new OrderBuildNameFKSizeLimitException();

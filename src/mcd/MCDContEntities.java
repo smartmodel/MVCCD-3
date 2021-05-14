@@ -1,12 +1,13 @@
 package mcd;
 
 import main.MVCCDElement;
+import mcd.interfaces.IMPathOnlyRepositoryTree;
 import project.ProjectElement;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class MCDContEntities extends MCDElement{
+public class MCDContEntities extends MCDElement implements IMPathOnlyRepositoryTree {
 
     private static final long serialVersionUID = 1000;
     public MCDContEntities(ProjectElement parent, String name) {

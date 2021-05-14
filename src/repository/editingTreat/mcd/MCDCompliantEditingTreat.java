@@ -22,6 +22,7 @@ public abstract class MCDCompliantEditingTreat extends EditingTreat {
         resultat.add(new ResultatElement(message, ResultatLevel.INFO));
 
         resultat.addResultat(imcdCompliant.treatCompliant());
+
         TreatmentService.treatmentFinish(owner, (MVCCDElement) imcdCompliant, resultat,
                 getPropertyTheElement(), "compliant.mcd.ok", "compliant.mcd.error") ;
     }

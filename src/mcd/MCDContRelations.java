@@ -1,8 +1,9 @@
 package mcd;
 
+import mcd.interfaces.IMPathOnlyRepositoryTree;
 import project.ProjectElement;
 
-public class MCDContRelations extends MCDElement{
+public class MCDContRelations extends MCDElement implements IMPathOnlyRepositoryTree {
 
     private static final long serialVersionUID = 1000;
     public MCDContRelations(ProjectElement parent, String name) {

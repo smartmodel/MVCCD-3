@@ -15,4 +15,12 @@ public class Trace {
             System.out.print(text);
         }
     }
+
+    public static void printlnAlways(String text){
+        System.out.println(text);
+    }
+    public static void printAlways(String text){
+        System.out.print(text);
+    }
+
 }

@@ -52,8 +52,9 @@ public class LogsManager {
                     if (newResultat) {
                         String separator = "============================================================"
                                 + System.lineSeparator();
-                        String datation = new SimpleDateFormat("HH:mm:ss - ").format(new Date());
-                        text = separator + datation + text;
+                        String datation = new SimpleDateFormat("HH:mm:ss").format(new Date());
+                        text = separator + Preferences.APPLICATION_NAME+"-"+Preferences.APPLICATION_VERSION +
+                                "  " + datation + System.lineSeparator() + text;
                     }
                     fm.addLineToFile(Preferences.DIRECTORY_LOGGING_NAME + File.separator, fileName, text);
                     textAddedToLog = true;

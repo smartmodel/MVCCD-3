@@ -2,6 +2,7 @@ package treatment.services;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
+import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDWindow;
 import mcd.MCDElement;
@@ -29,7 +30,7 @@ public class TreatmentService {
         MDElement mdElement = (MDElement) mvccdElement;
         String mdElementName = mdElement.getName();
         if (mdElement instanceof MCDElement){
-            mdElementName = ((MCDElement) mdElement).getNamePath(MCDElementService.PATHSHORTNAME);
+            mdElementName = ((MCDElement) mdElement).getNamePath(MElementService.PATHSHORTNAME);
         }
 
         String messageElement = MessagesBuilder.getMessagesProperty(propertyTheElement);

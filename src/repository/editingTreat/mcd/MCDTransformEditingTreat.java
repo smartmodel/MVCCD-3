@@ -39,8 +39,6 @@ public abstract class MCDTransformEditingTreat extends MCDCompliantEditingTreat 
         }
         TreatmentService.treatmentFinish(owner, (MVCCDElement) imcdModel, resultat,
                 getPropertyTheElement(), "transform.mcdrtomldr.ok", "transform.mcdtomldr.abort") ;
-
-
     }
 
 

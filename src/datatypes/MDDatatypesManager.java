@@ -109,7 +109,7 @@ public class MDDatatypesManager {
         } else if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_POSTGRESQL)){
             defaultMPDRDatatypeRoot = defaultMPDRPostgreSQLDatatypeRoot;
         } else {
-            throw new CodeApplException("mpdrDatatypeRoot () "+ " - La BD n'est pas trouvée");
+            throw new CodeApplException("La BD " + preferences.getMLDRTOMPDR_DB() + " n'est pas trouvée");
         }
         if (projectMPDRDatatypeRoot!= null){
             return projectMPDRDatatypeRoot;

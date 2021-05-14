@@ -1,5 +1,6 @@
 package mcd.services;
 
+import m.services.MElementService;
 import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.MCDRelation;
@@ -54,8 +55,8 @@ public class MCDRelationService {
         }
 
         if (r3) {
-            nameElementA = elementA.getNamePath(MCDElementService.PATHSHORTNAME);
-            nameElementB = elementB.getNamePath(MCDElementService.PATHSHORTNAME);
+            nameElementA = elementA.getNamePath(MElementService.PATHSHORTNAME);
+            nameElementB = elementB.getNamePath(MElementService.PATHSHORTNAME);
         }
 
         if (r4) {
@@ -64,11 +65,11 @@ public class MCDRelationService {
         }
 
         if (forcePath) {
-            if (pathMode == MCDElementService.PATHNAME) {
-                nameElementA = elementA.getNamePath(MCDElementService.PATHSHORTNAME);
-                nameElementB = elementB.getNamePath(MCDElementService.PATHSHORTNAME);
+            if (pathMode == MElementService.PATHNAME) {
+                nameElementA = elementA.getNamePath(MElementService.PATHSHORTNAME);
+                nameElementB = elementB.getNamePath(MElementService.PATHSHORTNAME);
             }
-            if (pathMode == MCDElementService.PATHSHORTNAME) {
+            if (pathMode == MElementService.PATHSHORTNAME) {
                 nameElementA = elementA.getShortNameSmartPath();
                 nameElementB = elementB.getShortNameSmartPath();
             }

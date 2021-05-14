@@ -1,11 +1,12 @@
 package mdr;
 
+import mcd.interfaces.IMPathOnlyRepositoryTree;
 import mdr.services.MDRContTablesService;
 import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public class MDRContTables extends MDRElement {
+public class MDRContTables extends MDRElement implements IMPathOnlyRepositoryTree {
 
     private  static final long serialVersionUID = 1000;
 

@@ -2,6 +2,7 @@ package messages;
 
 import exceptions.CodeApplException;
 import preferences.Preferences;
+import utilities.Trace;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -27,14 +28,10 @@ public class LoadMessages {
 			
 	private static Map<String,String> messagesProperties = new HashMap<String,String>();
 	
-	// Traitement d'erreurs
-	//private static String crtClass = FilePropertiesPluginVPManager.class.getName();
-	//private static String messageException = "Erreur de traitement du fichier des messages: messages_xx.properties";
-	//private static String messageExceptionLanguage = "Le fichier plugin.properties ne contient pas la propri�t�: plugin.language";
 
 	private static String crtClass = LoadMessages.class.getName();
 	private static String messageException = "Erreur de traitement du fichier des messages: messages_xx.properties";
-	private static String messageExceptionLanguage = "Le fichier plugin.properties ne contient pas la propri�t�: plugin.language";
+	private static String messageExceptionLanguage = "Le choix de la langue n''est pas fixé dans Preferences.LANGUAGE ";
 
 	/**
 	 * Instantiate the unique instance of the class.
@@ -56,7 +53,7 @@ public class LoadMessages {
 			throw e;
 		}	
 		catch (Exception e ) {
-			throw new CodeApplException(crtClass + " - " + messageException, e);
+			throw new CodeApplException(messageException + " pour la langue : " + Preferences.LANGUAGE, e);
 		}
 	}
 	
@@ -73,10 +70,10 @@ public class LoadMessages {
 		//Load the properties file present at the root of the project.
 		ResourceBundle bundle = null;
 		String language = Preferences.LANGUAGE;
-		if(language!= null){ //if plugin.properties
+		if(language != null){ //if plugin.properties
 			bundle = ResourceBundle.getBundle(fileName, new Locale(language));
 		}else{
-			throw new CodeApplException(crtClass + " - " + messageExceptionLanguage);
+			throw new CodeApplException(messageExceptionLanguage);
 		}
 
 		//Store properties to the map

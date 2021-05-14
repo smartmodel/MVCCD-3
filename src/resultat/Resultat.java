@@ -69,7 +69,7 @@ public class Resultat {
         return ResultatService.getNbElementsByLevel(this, ResultatLevel.NO_FATAL);
     }
 
-    public int getNbElementsException() {
+    public int getNbElementsExceptionUnhandled() {
         return ResultatService.getNbElementsByLevel(this, ResultatLevel.EXCEPTION_UNHANDLED);
     }
 
@@ -82,11 +82,11 @@ public class Resultat {
     }
 
     public boolean isWithoutElementExceptionUnhandled(){
-        return getNbElementsException()== 0 ;
+        return getNbElementsExceptionUnhandled()== 0 ;
     }
 
     public boolean isWithElementExceptionUnhandled(){
-        return getNbElementsException() > 0 ;
+        return getNbElementsExceptionUnhandled() > 0 ;
     }
 
     public void finishTreatment(String propertyOk ,
