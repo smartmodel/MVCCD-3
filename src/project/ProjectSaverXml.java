@@ -1,12 +1,17 @@
 package project;
 
 import diagram.mcd.MCDDiagram;
-import m.interfaces.IMRelEnd;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
 import mdr.*;
 import mldr.*;
+import mpdr.MPDRColumn;
+import mpdr.MPDRModel;
+import mpdr.MPDRTable;
+import mpdr.mysql.MPDRMySQLModel;
+import mpdr.oracle.MPDROracleModel;
+import mpdr.postgresql.MPDRPostgreSQLModel;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -922,7 +927,7 @@ public class ProjectSaverXml {
     }
 
 
-    // *** Méthodes de sauvegarde du MCD ***
+    // *** Méthodes de sauvegarde du MLDR ***
     /*
     Règles appliquées pour définir la structure du XML généré:
     - Si un élément X contient un élément Y qui est placé directement sous X de manière visible dans l'arborescence du
@@ -958,7 +963,7 @@ public class ProjectSaverXml {
                 mldrTag.setAttribute("id", mldrModel.getIdProjectElementAsString());
 
                 //Persistance des tables (y compris les FKs)
-                this.addTables(doc, mldrModel, mldrTag);
+                this.addMDRTables(doc, mldrModel, mldrTag);
 
                 //Persistance des relations (les relations sont les liens entre tables, conservant les cardinalités et faisant ainsi redondance avec les FK (volontairement)
                 this.addMDRelations(doc, mldrModel, mldrTag);
@@ -969,6 +974,13 @@ public class ProjectSaverXml {
         }
     }
 
+
+    // *** Méthodes de sauvegarde du MPDR ***
+    /*
+    Règles appliquées pour définir la structure du XML généré:
+    => idem que pour la sauvegarde MLDR
+     */
+
     /**
      * Sauvegarde les modèles MPDR qui se trouvent sous MLDR, dans une balise <MPDR_XX> (XX correspondant au constructeur de BD)
      * @param doc Document XML dans lequel la persistance se fait
@@ -977,97 +989,116 @@ public class ProjectSaverXml {
      */
     private void addMPDRModel(Document doc, MLDRModel mldrModel, Element mldrTag) {
 
-        //TODO Continuer ici
-        /*
-        //Création de la balise <tables>
-        Element tablesTag = doc.createElement("tables");
-        mldrTag.appendChild(tablesTag);
+        //Parcours de tous les enfants du modèle MLDR
+        for(MVCCDElement mldrModelChild : mldrModel.getChilds()) {
 
-        //Ajout de l'id à la balise <tables>
-        tablesTag.setAttribute("id", mldrModel.getMDRContTables().getIdProjectElementAsString());
+            //Persistance de chaque élément de type MPDR
+            if (mldrModelChild instanceof MPDRModel) {
+                MPDRModel mpdrModel = (MPDRModel) mldrModelChild;
 
-        //Parcours des tables
-        for(MLDRTable mldrTable : mldrModel.getMLDRTables()){
+                //Création de la balise <MPDR_xx>
+                Element mpdrTag = null;
+                if(mpdrModel instanceof MPDROracleModel) {
+                    mpdrTag = doc.createElement("MPDR_Oracle");
+                }else if(mpdrModel instanceof MPDRPostgreSQLModel){
+                    mpdrTag = doc.createElement("MPDR_PostgreSQL");
+                }else if(mpdrModel instanceof MPDRMySQLModel){
+                    mpdrTag = doc.createElement("MPDR_MySQL");
+                }
+                mldrTag.appendChild(mpdrTag);
 
-            //Persistance d'une table
-            this.addTable(doc, mldrTable, tablesTag);
+                //Ajout de l'id à la balise <MPDR_xx>
+                mpdrTag.setAttribute("id", mpdrModel.getIdProjectElementAsString());
+
+                //Persistance des tables (y compris les FKs)
+                this.addMDRTables(doc, mpdrModel, mpdrTag);
+
+            }
         }
-        */
     }
 
+
+// *** Méthodes de sauvegarde génériques pour les MLD et MPD ***
+
     /**
-     * Sauvegarde les tables dans une balise <tables> en parcourant le modèle MLDR. Toutes les contraintes de tables, y
-     * compris les FK, sont persistées également.
+     * Sauvegarde les tables dans une balise <tables> en parcourant le modèle MDR (MLDR ou MPDR). Toutes les contraintes
+     * de tables, y compris les FK, sont persistées également.
      * @param doc Document XML dans lequel la persistance se fait
-     * @param mldrModel Modèle MLDR parcouru pour lequel toutes les tables qu'il contient seront persistées.
-     * @param mldrTag Balise racine <mldr> qui sera la balise parent de la balise <tables> enfant.
+     * @param mdrModel Modèle MDR (MLDR ou MPDR) parcouru pour lequel toutes les tables qu'il contient seront persistées.
+     * @param mdrTag Balise racine <mldr> ou <mldr> qui sera la balise parent de la balise <tables> enfant.
      */
-    private void addTables(Document doc, MLDRModel mldrModel, Element mldrTag){
+    private void addMDRTables(Document doc, MDRModel mdrModel, Element mdrTag){
 
         //Création de la balise <tables>
         Element tablesTag = doc.createElement("tables");
-        mldrTag.appendChild(tablesTag);
+        mdrTag.appendChild(tablesTag);
 
         //Ajout de l'id à la balise <tables>
-        tablesTag.setAttribute("id", mldrModel.getMDRContTables().getIdProjectElementAsString());
+        tablesTag.setAttribute("id", mdrModel.getMDRContTables().getIdProjectElementAsString());
 
         //Parcours des tables
-        for(MLDRTable mldrTable : mldrModel.getMLDRTables()){
+        for(MDRTable mdrTable : mdrModel.getMDRTables()){
 
             //Persistance d'une table
-            this.addTable(doc, mldrTable, tablesTag);
+            this.addTable(doc, mdrTable, tablesTag);
         }
     }
 
     /**
      * Sauvegarde d'une table dans une balise <table>. Inclut également la persistance des contraintes de la table (y
-     * compris les FKs) et les extrémités de relations.
+     * compris les FKs) et les extrémités de relations (pour les tables MLDR).
      * @param doc Document XML dans lequel la persistance se fait
-     * @param mldrTable Table à persister
+     * @param mdrTable Table à persister
      * @param tablesTag Balise parent <tables> qui contient la nouvelle balise <table>
      */
-    private void addTable(Document doc, MLDRTable mldrTable, Element tablesTag){
+    private void addTable(Document doc, MDRTable mdrTable, Element tablesTag){
+
         //Création de la balise <table>
         Element tableTag = doc.createElement("table");
         tablesTag.appendChild(tableTag);
 
         //Ajout des attributs à la balise <table>
-        tableTag.setAttribute("id", mldrTable.getIdProjectElementAsString());
-        tableTag.setAttribute("name", mldrTable.getName());
-        tableTag.setAttribute("shortName", mldrTable.getShortName());
-        tableTag.setAttribute("longName", mldrTable.getShortName());
-        tableTag.setAttribute("mcdelement_source", mldrTable.getMcdElementSource().getIdProjectElementAsString());
-        tableTag.setAttribute("name30", mldrTable.getNames().getName30());
-        tableTag.setAttribute("name60", mldrTable.getNames().getName60());
-        tableTag.setAttribute("name120", mldrTable.getNames().getName120());
+        tableTag.setAttribute("id", mdrTable.getIdProjectElementAsString());
+        tableTag.setAttribute("name", mdrTable.getName());
+        tableTag.setAttribute("shortName", mdrTable.getShortName());
+        tableTag.setAttribute("longName", mdrTable.getShortName());
+        tableTag.setAttribute("name30", mdrTable.getNames().getName30());
+        tableTag.setAttribute("name60", mdrTable.getNames().getName60());
+        tableTag.setAttribute("name120", mdrTable.getNames().getName120());
+
+        //Ajout de l'attribut "mcdelement_source" ou "mldrelement_source"
+        if(mdrTable instanceof MLDRTable) tableTag.setAttribute("mcdelement_source", ((MLDRTable) mdrTable).getMcdElementSource().getIdProjectElementAsString());
+        else if(mdrTable instanceof MPDRTable) tableTag.setAttribute("mldrelement_source", ((MPDRTable) mdrTable).getMldrElementSource().getIdProjectElementAsString());
 
         //Persistance des colonnes
-        this.addColumns(doc, mldrTable, tableTag);
+        this.addColumns(doc, mdrTable, tableTag);
 
         //Persistance des contraintes de la table
-        this.addTableConstraints(doc, mldrTable, tableTag);
+        this.addTableConstraints(doc, mdrTable, tableTag);
 
-        //Persistance des extrémités de relations de la table
-        this.addTableRelEnds(doc, mldrTable, tableTag);
+        //Persistance des extrémités de relations de la table (uniquement pour le MLDR, car les relations n'existent pas en MPDR)
+        if(mdrTable instanceof MLDRTable){
+            this.addTableRelEnds(doc, mdrTable, tableTag);
+        }
     }
 
     /**
      * Sauvegarde des colonnes d'une table.
      * @param doc Document XML dans lequel les colonnes seront persistées
-     * @param mldrTable Table pour laquelle les colonnes qu'elle contient seront persistées
+     * @param mdrTable Table pour laquelle les colonnes qu'elle contient seront persistées
      * @param tableTag Balise parent <table> qui contiendra la nouvelle balise <columns>
      */
-    private void addColumns(Document doc, MLDRTable mldrTable, Element tableTag) {
+    private void addColumns(Document doc, MDRTable mdrTable, Element tableTag) {
 
         //Création de la balise <columns>
         Element columnsTag = doc.createElement("columns");
         tableTag.appendChild(columnsTag);
 
         //Ajout de l'id à la balise <columns>
-        columnsTag.setAttribute("id", mldrTable.getMDRContColumns().getIdProjectElementAsString());
+        columnsTag.setAttribute("id", mdrTable.getMDRContColumns().getIdProjectElementAsString());
 
         //Parcours des colonnes
-        for(MLDRColumn mldrColumn : mldrTable.getMLDRColumns()){
+        for(MDRColumn mldrColumn : mdrTable.getMDRColumns()){
 
             //Persistance d'une colonne
             this.addColumn(doc, mldrColumn, columnsTag);
@@ -1077,66 +1108,70 @@ public class ProjectSaverXml {
     /**
      * Sauvegarde d'une colonne parmi la liste des colonnes d'une table
      * @param doc Document XML dans lequel la colonne sera persistée.
-     * @param mldrColumn Colonne qui sera persistée.
+     * @param mdrColumn Colonne qui sera persistée.
      * @param columnsTag Balise parent <columns> qui contiendra la nouvelle balise <column>.
      */
-    private void addColumn(Document doc, MLDRColumn mldrColumn, Element columnsTag) {
+    private void addColumn(Document doc, MDRColumn mdrColumn, Element columnsTag) {
         //Création de la balise <column>
         Element columnTag = doc.createElement("column");
         columnsTag.appendChild(columnTag);
 
         //Ajout des propriétés d'identification d'une colonne à la balise <column>
-        columnTag.setAttribute("id", mldrColumn.getIdProjectElementAsString());
-        columnTag.setAttribute("name", mldrColumn.getName());
-        columnTag.setAttribute("shortName", mldrColumn.getShortName());
-        columnTag.setAttribute("longName", mldrColumn.getLongName());
-        columnTag.setAttribute("mcdelement_source", mldrColumn.getMcdElementSource().getIdProjectElementAsString());
-        columnTag.setAttribute("name30", mldrColumn.getNames().getName30());
-        columnTag.setAttribute("name60", mldrColumn.getNames().getName60());
-        columnTag.setAttribute("name120", mldrColumn.getNames().getName120());
+        columnTag.setAttribute("id", mdrColumn.getIdProjectElementAsString());
+        columnTag.setAttribute("name", mdrColumn.getName());
+        columnTag.setAttribute("shortName", mdrColumn.getShortName());
+        columnTag.setAttribute("longName", mdrColumn.getLongName());
+        columnTag.setAttribute("name30", mdrColumn.getNames().getName30());
+        columnTag.setAttribute("name60", mdrColumn.getNames().getName60());
+        columnTag.setAttribute("name120", mdrColumn.getNames().getName120());
+
+        //Ajout de l'attribut "mcdelement_source" ou "mldrelement_source"
+        if(mdrColumn instanceof MLDRColumn) columnTag.setAttribute("mcdelement_source", ((MLDRColumn) mdrColumn).getMcdElementSource().getIdProjectElementAsString());
+        else if(mdrColumn instanceof MPDRColumn) columnTag.setAttribute("mldrelement_source", ((MPDRColumn) mdrColumn).getMldrElementSource().getIdProjectElementAsString());
 
         //Ajout des autres propriétés relatives à une colonne
-        columnTag.setAttribute("mandatory", mldrColumn.isMandatory() ? "true" : "false");
-        columnTag.setAttribute("frozen", mldrColumn.isFrozen() ? "true" : "false");
-        columnTag.setAttribute("uppercase", mldrColumn.isUppercase() ? "true" : "false");
-        columnTag.setAttribute("iteration", String.valueOf(mldrColumn.getIteration()));
-        columnTag.setAttribute("initValue", mldrColumn.getInitValue());
-        columnTag.setAttribute("derivedValue", mldrColumn.getDerivedValue());
+        columnTag.setAttribute("mandatory", mdrColumn.isMandatory() ? "true" : "false");
+        columnTag.setAttribute("frozen", mdrColumn.isFrozen() ? "true" : "false");
+        columnTag.setAttribute("uppercase", mdrColumn.isUppercase() ? "true" : "false");
+        columnTag.setAttribute("iteration", String.valueOf(mdrColumn.getIteration()));
+        columnTag.setAttribute("initValue", mdrColumn.getInitValue());
+        columnTag.setAttribute("derivedValue", mdrColumn.getDerivedValue());
 
         //Ajout de l'id de la colonne PK pointée dans le cas d'une colonne FK
-        if(mldrColumn.getMDRColumnPK() != null){
-            columnTag.setAttribute("target_column_pk", mldrColumn.getMDRColumnPK().getIdProjectElementAsString());
+        if(mdrColumn.getMDRColumnPK() != null){
+            columnTag.setAttribute("target_column_pk", mdrColumn.getMDRColumnPK().getIdProjectElementAsString());
         }
 
         //Ajout du type de données
-        columnTag.setAttribute("datatype_lienprog", mldrColumn.getDatatypeLienProg());
-        columnTag.setAttribute("datatype_constraint_lienprog", mldrColumn.getDatatypeConstraintLienProg());
+        columnTag.setAttribute("datatype_lienprog", mdrColumn.getDatatypeLienProg());
+        columnTag.setAttribute("datatype_constraint_lienprog", mdrColumn.getDatatypeConstraintLienProg());
 
         //Ajout de size et scale, qui sont des propriétés optionnelles
-        if(mldrColumn.getSize() != null){
-            columnTag.setAttribute("size", String.valueOf(mldrColumn.getSize()));
+        if(mdrColumn.getSize() != null){
+            columnTag.setAttribute("size", String.valueOf(mdrColumn.getSize()));
         }
-        if(mldrColumn.getScale() != null){
-            columnTag.setAttribute("scale", String.valueOf(mldrColumn.getScale()));
+        if(mdrColumn.getScale() != null){
+            columnTag.setAttribute("scale", String.valueOf(mdrColumn.getScale()));
         }
     }
 
     /**
      * Sauvegarde des contraintes d'une table.
      * @param doc Document XML dans lequel la persistance se fait
-     * @param mldrTable Table pour laquelle les contraintes qu'elle contient seront persistées
+     * @param mdrTable Table pour laquelle les contraintes qu'elle contient seront persistées
      * @param tableTag Balise parent <table> qui contiendra la nouvelle balise <constraints>
      */
-    private void addTableConstraints(Document doc, MLDRTable mldrTable, Element tableTag) {
+    private void addTableConstraints(Document doc, MDRTable mdrTable, Element tableTag) {
+
         //Création de la balise <constraints>
         Element tableConstraintsTag = doc.createElement("tableConstraints");
         tableTag.appendChild(tableConstraintsTag);
 
         //Ajout de l'id à la balise <constraints>
-        tableConstraintsTag.setAttribute("id", mldrTable.getMDRContConstraints().getIdProjectElementAsString());
+        tableConstraintsTag.setAttribute("id", mdrTable.getMDRContConstraints().getIdProjectElementAsString());
 
         //Parcours des contraintes
-        for(MDRConstraint mdrConstraint : mldrTable.getMDRContConstraints().getMDRConstraints()){
+        for (MDRConstraint mdrConstraint : mdrTable.getMDRContConstraints().getMDRConstraints()) {
 
             //Persistance d'une contrainte
             this.addTableConstraint(doc, mdrConstraint, tableConstraintsTag);
@@ -1330,11 +1365,5 @@ public class ProjectSaverXml {
         //Ajout de la référence (id) vers la FK
         mdrRelationTag.setAttribute("fk_target_id", String.valueOf(mdrRelationFK.getMdrFKId()));
     }
+
 }
-
-
-// *** Méthodes de sauvegarde du MPD ***
-
-
-
-// *** Méthodes de sauvegarde génériques pour les MLD et MPD ***
