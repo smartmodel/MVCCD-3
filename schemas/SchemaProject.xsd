@@ -796,7 +796,7 @@
 			<xs:sequence>
 				<xs:element ref="columns"/>
 				<xs:element ref="tableConstraints"/>
-				<xs:element ref="extremitesRelations"/>
+				<xs:element ref="extremitesRelations" minOccurs="0"/> <!-- Une table peut ne pas avoir d'extrémités (si elle n'a pas de relation ou si elle est MPDR) -->
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">

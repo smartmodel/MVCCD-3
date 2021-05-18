@@ -1064,6 +1064,15 @@ public class ProjectLoaderXml {
                     //Chargement des relations sour <mdrRelations>
                     this.loadMdrRelations(mcdSource, mldrModel, mldrTagChild);
                 }
+
+                //Recherche et chargement de <MPDR_xx> (pour chaque constructeur)
+                else if(mldrTagChild.getNodeName().equals("MPDR_Oracle")
+                        || mldrTagChild.getNodeName().equals("MPDR_PostgreSQL")
+                        || mldrTagChild.getNodeName().equals("MPDR_MySQL")){
+
+                    //Chargement des relations sour <mdrRelations>
+                    this.loadMPDR(mldrModel, mldrTagChild);
+                }
             }
         }
     }
@@ -1559,5 +1568,37 @@ public class ProjectLoaderXml {
                 mdrRelationTag.getAttribute("name60"),
                 mdrRelationTag.getAttribute("name120"))
         );
+    }
+
+    // *** Méthodes de chargement du MPD ***
+
+    /**
+     * À partir de la balise <MPDR_xx> (Oracle, PostgreSQL, MySQL, etc.), cette méthode charge dans l'application le
+     * MPDR en parcourant toutes les balises enfants.
+     * @param mldrModel Modèle MLDR source du MPDR, dans lequel sera ajouté le MPDR chargé à partir du fichier XML.
+     * @param mpdrTag Balise racine <MPDR_xx> à partir de laquelle le MPDR sera chargée.
+     */
+    private void loadMPDR(MLDRModel mldrModel, Element mpdrTag) {
+        //TODO-STB: continuer ici (et voir si on peut rendre générique)
+        //Parcours des balises enfants de <MLDR_DT> ou <MLDR_TI>
+        /*
+        NodeList mldrTagChilds = mldrTag.getChildNodes();
+        for (int i = 0; i < mldrTagChilds.getLength(); i++) {
+            if(mldrTagChilds.item(i) instanceof Element){
+                Element mldrTagChild = (Element) mldrTagChilds.item(i);
+
+                //Recherche et chargement de <tables>
+                if(mldrTagChild.getNodeName().equals("tables")){
+                    MDRContTables mldrContTables = (MDRContTables) mldrModel.getMDRContTables(); //Le conteneur de tables est déjà créé automatiquement avant
+
+                    //Chargement des tables sous <tables>
+                    this.loadMldTables(mcdSource, mldrContTables, mldrTagChild);
+
+                    //Chargement des contraintes FK des tables sous <tables>
+                    this.loadMldFKsOfAllTables(mcdSource, mldrContTables, mldrTagChild);
+                }
+            }
+        }
+        */
     }
 }
