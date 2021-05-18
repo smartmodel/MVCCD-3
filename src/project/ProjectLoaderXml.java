@@ -1100,7 +1100,7 @@ public class ProjectLoaderXml {
     private void loadMldTable(MCDContModels mcdSource, MDRContTables mldrContTables, Element tableTag){
 
         //Récupération de l'élément MCD source de la table
-        int entitySourceId = Integer.parseInt(tableTag.getAttribute("mcdelement_source")); //Récupérer l'id de l'élément source
+        int entitySourceId = Integer.parseInt(tableTag.getAttribute("element_source_id")); //Récupérer l'id de l'élément source
         IMCDSourceMLDRTable mcdSourceElementOfTable = (IMCDSourceMLDRTable) mcdSource.getChildByIdProfondeur(entitySourceId); //Recherche l'élément source en fonction de son ID, parmi tous les enfants du MCD
 
         //Création de la table et de ses attributs
@@ -1185,7 +1185,7 @@ public class ProjectLoaderXml {
     private MLDRColumn loadMldColumn(MCDElement mcdSource, MLDRContColumns mldrContColumns, Element columnTag) {
 
         //Récupération de l'attribut (MCD) source en utilisant l'id de l'attribut source de la colonne
-        int attributeSourceId = Integer.parseInt(columnTag.getAttribute("mcdelement_source"));
+        int attributeSourceId = Integer.parseInt(columnTag.getAttribute("element_source_id"));
         MCDElement mcdElementSourceOfColumn = (MCDElement) mcdSource.getChildByIdProfondeur(attributeSourceId); //La source de la colonne peut être un attribut d'entité ou une extrémité d'association (si colonne FK)
 
         //Chargement et création de la colonne, y compris son id et son attribut (MCD) source
@@ -1268,7 +1268,7 @@ public class ProjectLoaderXml {
         MLDRContConstraints mldrContConstraints = (MLDRContConstraints) mldrTable.getMDRContConstraints();
 
         //Récupération de l'entité (MCD) source en utilisant l'id de l'entité source de la pk
-        int entitySourceId = Integer.parseInt(pkTag.getAttribute("mcdelement_source"));
+        int entitySourceId = Integer.parseInt(pkTag.getAttribute("element_source_id"));
         MCDElement mcdElementSourceOfPk = (MCDElement) mcdSource.getChildByIdProfondeur(entitySourceId); //Peut être l'entité source (MCD) de la PK ou l'association source de la PK (cas d'une association n:n)
 
         //Chargement et création de la PK, y compris son id et son entité (MCD) source
@@ -1374,7 +1374,7 @@ public class ProjectLoaderXml {
         MLDRContConstraints mldrContConstraints = (MLDRContConstraints) mdrTable.getMDRContConstraints();
 
         //Récupération de l'extrémité d'association (MCD) source de la FK
-        int assEndSourceId = Integer.parseInt(fkTag.getAttribute("mcdelement_source"));
+        int assEndSourceId = Integer.parseInt(fkTag.getAttribute("element_source_id"));
         MCDElement mcdElementSourceOfFk = (MCDElement) mcdSource.getChildByIdProfondeur(assEndSourceId);
 
         //Chargement et création de la FK, y compris son id et son extrémité d'association source (MCD)
@@ -1530,7 +1530,7 @@ public class ProjectLoaderXml {
     private void loadMldRelation(MCDContModels mcdSource, MDRModel mdrModel, Element mdrRelationTag){
 
         //Récupération de l'élément MCD source de la relation (une association)
-        int mcdAssociationSourceId = Integer.parseInt(mdrRelationTag.getAttribute("mcdelement_source")); //Récupérer l'id de l'élément source
+        int mcdAssociationSourceId = Integer.parseInt(mdrRelationTag.getAttribute("element_source_id")); //Récupérer l'id de l'élément source
         MCDAssociation mcdAssociationSource = (MCDAssociation) mcdSource.getChildByIdProfondeur(mcdAssociationSourceId); //Recherche l'élément source en fonction de son ID, parmi tous les enfants du MCD
 
         //Récupération des 2 extrémités de relations

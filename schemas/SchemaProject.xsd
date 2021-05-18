@@ -761,6 +761,9 @@
 			<xs:sequence>
 				<xs:element ref="tables"/>
 				<xs:element ref="mdrRelations"/>
+				<xs:element ref="MPDR_Oracle" minOccurs="0"/>
+				<xs:element ref="MPDR_PostgreSQL" minOccurs="0"/>
+				<xs:element ref="MPDR_MySQL" minOccurs="0"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -771,6 +774,9 @@
 			<xs:sequence>
 				<xs:element ref="tables"/>
 				<xs:element ref="mdrRelations"/>
+				<xs:element ref="MPDR_Oracle" minOccurs="0"/>
+				<xs:element ref="MPDR_PostgreSQL" minOccurs="0"/>
+				<xs:element ref="MPDR_MySQL" minOccurs="0"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -803,7 +809,7 @@
 			</xs:attribute>
 			<xs:attribute name="shortName" type="xs:string"/>
 			<xs:attribute name="longName" type="xs:string"/>
-			<xs:attribute name="mcdelement_source" use="required" type="xs:int"/>
+			<xs:attribute name="element_source_id" use="required" type="xs:int"/>
 			<xs:attribute name="name30" type="xs:string"/>
 			<xs:attribute name="name60" type="xs:string"/>
 			<xs:attribute name="name120" type="xs:string"/>
@@ -825,7 +831,7 @@
 			<xs:attribute name="name" type="xs:string" />
 			<xs:attribute name="shortName" type="xs:string"/>
 			<xs:attribute name="longName" type="xs:string"/>
-			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="element_source_id" type="xs:int" />
 			<xs:attribute name="name30" type="xs:string"/>
 			<xs:attribute name="name60" type="xs:string"/>
 			<xs:attribute name="name120" type="xs:string"/>
@@ -862,7 +868,7 @@
 			<xs:attribute name="name" type="xs:string" />
 			<xs:attribute name="shortName" type="xs:string" />
 			<xs:attribute name="longName" type="xs:string" />
-			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="element_source_id" type="xs:int" />
 			<xs:attribute name="name30" type="xs:string"/>
 			<xs:attribute name="name60" type="xs:string"/>
 			<xs:attribute name="name120" type="xs:string"/>
@@ -878,7 +884,7 @@
 			<xs:attribute name="name" type="xs:string" />
 			<xs:attribute name="shortName" type="xs:string" />
 			<xs:attribute name="longName" type="xs:string" />
-			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="element_source_id" type="xs:int" />
 			<xs:attribute name="name30" type="xs:string"/>
 			<xs:attribute name="name60" type="xs:string"/>
 			<xs:attribute name="name120" type="xs:string"/>
@@ -936,13 +942,40 @@
 			<xs:attribute name="name" use="required" type="xs:string"/>
 			<xs:attribute name="shortName" type="xs:string"/>
 			<xs:attribute name="longName" type="xs:string"/>
-			<xs:attribute name="mcdelement_source" type="xs:int"/>
+			<xs:attribute name="element_source_id" type="xs:int"/>
 			<xs:attribute name="name30" type="xs:string"/>
 			<xs:attribute name="name60" type="xs:string"/>
 			<xs:attribute name="name120" type="xs:string"/>
 			<xs:attribute name="extremiteRelA_target_id" use="required" type="xs:int"/>
 			<xs:attribute name="extremiteRelB_target_id" use="required" type="xs:int"/>
 			<xs:attribute name="fk_target_id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="MPDR_Oracle">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tables"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="MPDR_PostgreSQL">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tables"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="MPDR_MySQL">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tables"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 

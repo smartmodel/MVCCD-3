@@ -1066,9 +1066,9 @@ public class ProjectSaverXml {
         tableTag.setAttribute("name60", mdrTable.getNames().getName60());
         tableTag.setAttribute("name120", mdrTable.getNames().getName120());
 
-        //Ajout de l'attribut "mcdelement_source" ou "mldrelement_source"
-        if(mdrTable instanceof MLDRTable) tableTag.setAttribute("mcdelement_source", ((MLDRTable) mdrTable).getMcdElementSource().getIdProjectElementAsString());
-        else if(mdrTable instanceof MPDRTable) tableTag.setAttribute("mldrelement_source", ((MPDRTable) mdrTable).getMldrElementSource().getIdProjectElementAsString());
+        //Ajout de l'attribut "element_source_id" (en récupérant le bon élément en fonction du cas MLDR ou MPDR)
+        if(mdrTable instanceof MLDRTable) tableTag.setAttribute("element_source_id", ((MLDRTable) mdrTable).getMcdElementSource().getIdProjectElementAsString());
+        else if(mdrTable instanceof MPDRTable) tableTag.setAttribute("element_source_id", ((MPDRTable) mdrTable).getMldrElementSource().getIdProjectElementAsString());
 
         //Persistance des colonnes
         this.addColumns(doc, mdrTable, tableTag);
@@ -1125,9 +1125,9 @@ public class ProjectSaverXml {
         columnTag.setAttribute("name60", mdrColumn.getNames().getName60());
         columnTag.setAttribute("name120", mdrColumn.getNames().getName120());
 
-        //Ajout de l'attribut "mcdelement_source" ou "mldrelement_source"
-        if(mdrColumn instanceof MLDRColumn) columnTag.setAttribute("mcdelement_source", ((MLDRColumn) mdrColumn).getMcdElementSource().getIdProjectElementAsString());
-        else if(mdrColumn instanceof MPDRColumn) columnTag.setAttribute("mldrelement_source", ((MPDRColumn) mdrColumn).getMldrElementSource().getIdProjectElementAsString());
+        //Ajout de l'attribut "element_source_id"
+        if(mdrColumn instanceof MLDRColumn) columnTag.setAttribute("element_source_id", ((MLDRColumn) mdrColumn).getMcdElementSource().getIdProjectElementAsString());
+        else if(mdrColumn instanceof MPDRColumn) columnTag.setAttribute("element_source_id", ((MPDRColumn) mdrColumn).getMldrElementSource().getIdProjectElementAsString());
 
         //Ajout des autres propriétés relatives à une colonne
         columnTag.setAttribute("mandatory", mdrColumn.isMandatory() ? "true" : "false");
@@ -1198,7 +1198,7 @@ public class ProjectSaverXml {
             tableConstraintsTag.appendChild(constraintTag);
 
             //Ajout des propriétés d'identification spécifiques à une contrainte PK
-            constraintTag.setAttribute("mcdelement_source", pkConstraint.getMcdElementSource().getIdProjectElementAsString());
+            constraintTag.setAttribute("element_source_id", pkConstraint.getMcdElementSource().getIdProjectElementAsString());
         }
 
         //Sauvegarde d'une contrainte FK
@@ -1210,7 +1210,7 @@ public class ProjectSaverXml {
             tableConstraintsTag.appendChild(constraintTag);
 
             //Ajout des propriétés d'identification spécifiques à une contrainte FK
-            constraintTag.setAttribute("mcdelement_source", fkConstraint.getMcdElementSource().getIdProjectElementAsString());
+            constraintTag.setAttribute("element_source_id", fkConstraint.getMcdElementSource().getIdProjectElementAsString());
 
             //Ajout de la référence vers la PK (id de la PK)
             constraintTag.setAttribute("target_pk", fkConstraint.getMdrPK().getIdProjectElementAsString());
@@ -1355,7 +1355,7 @@ public class ProjectSaverXml {
         if(mdrRelationFK instanceof MLDRRelationFK){
 
             //Ajout de la référence (id) vers l'élément MCD source dans le cas d'une relation MLDR
-            mdrRelationTag.setAttribute("mcdelement_source", ((MLDRRelationFK) mdrRelationFK).getMcdElementSource().getIdProjectElementAsString());
+            mdrRelationTag.setAttribute("element_source_id", ((MLDRRelationFK) mdrRelationFK).getMcdElementSource().getIdProjectElementAsString());
         }
 
         //Ajout de la référence (id) vers les 2 extrémités de la relation (A et B)

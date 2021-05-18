@@ -137,7 +137,7 @@ public class MLDRTransform extends MDTransform {
         // Niveau logique
         MLDRColumn mldrColumnFK = (MLDRColumn) mpdrColumnFK.getMdElementSource();
         MLDRColumn mldrColumnPK = (MLDRColumn) mldrColumnFK.getMDRColumnPK();
-        MLDRTable mldrTablePK = (MLDRTable) mldrColumnPK.getMDRTableAccueil();
+        //MLDRTable mldrTablePK = (MLDRTable) mldrColumnPK.getMDRTableAccueil();
 
         // Complément niveau physique
         MPDRColumn mpdrColumnPK = (MPDRColumn) mpdrModel.getIMPDRElementByMLDRElementSource(mldrColumnPK);
