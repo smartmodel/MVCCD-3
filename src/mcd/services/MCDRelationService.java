@@ -66,8 +66,8 @@ public class MCDRelationService {
 
         if (forcePath) {
             if (pathMode == MElementService.PATHNAME) {
-                nameElementA = elementA.getNamePath(MElementService.PATHSHORTNAME);
-                nameElementB = elementB.getNamePath(MElementService.PATHSHORTNAME);
+                nameElementA = elementA.getNamePath(MElementService.PATHNAME);
+                nameElementB = elementB.getNamePath(MElementService.PATHNAME);
             }
             if (pathMode == MElementService.PATHSHORTNAME) {
                 nameElementA = elementA.getShortNameSmartPath();

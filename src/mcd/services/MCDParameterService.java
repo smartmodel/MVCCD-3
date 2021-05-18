@@ -11,6 +11,7 @@ import mcd.interfaces.IMCDParameter;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.Trace;
 import window.editor.mcd.operation.parameter.ParameterEditor;
 
 import java.util.ArrayList;
@@ -85,7 +86,8 @@ public class MCDParameterService {
         return resultat;
     }
 
-
+    //#MAJ 2021-05-18 ParameterInputContent (Inversion)
+    /*
     public static Collection<? extends MVCCDElement> createTargetsAssEndsNoIdAndNoNN(MCDEntity mcdEntity) {
         ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
         // no Id
@@ -113,6 +115,8 @@ public class MCDParameterService {
 
         return resultat;
     }
+
+     */
 
     public static ArrayList<MCDAttribute> createTargetsAttributesNID(MCDEntity mcdEntity) {
         ArrayList<MCDAttribute> resultat = new  ArrayList<MCDAttribute>();

@@ -7,6 +7,7 @@ import mcd.MCDRelEnd;
 import mcd.MCDRelation;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -37,32 +38,28 @@ public class MCDRelEndService {
         boolean c3 = treeNaming.equals(Preferences.MCD_NAMING_NAME);
         boolean c4 = treeNaming.equals(Preferences.MCD_NAMING_SHORT_NAME);
 
-        boolean r1 = c1 && c3;
-        boolean r2 = c1 && c4;
-        boolean r3 = (!c1) && c3;
-        boolean r4 = (!c1) && c4;
+        boolean r1 = c1 ;
+        boolean r2 = (!c1) && c3;
+        boolean r3 = (!c1) && c4;
 
         String nameElementOpposite = "";
-
 
         if (r1){
             nameElementOpposite = mcdElementOpposite.getName();
         }
 
+
         if (r2){
-            nameElementOpposite = mcdElementOpposite.getShortNameSmart();
+            nameElementOpposite = mcdElementOpposite.getNamePath(MElementService.PATHNAME);
         }
 
         if (r3){
-            nameElementOpposite = mcdElementOpposite.getNamePath(MElementService.PATHSHORTNAME);
-        }
-
-        if (r4){
             nameElementOpposite = mcdElementOpposite.getShortNameSmartPath();
         }
 
+
         // Si l'élément opposé est l'association (une relation en général)
-        if (mcdElementOpposite instanceof MCDElement){
+        if (mcdElementOpposite instanceof MCDRelation){
             nameElementOpposite = mcdElementOpposite.getNameTree();
         }
 
@@ -70,7 +67,8 @@ public class MCDRelEndService {
             resultat = namingRelation + nameElementOpposite;
         }
         else if (scope == SOURCE) {
-            resultat = mcdRelEndStart.getmElement().getName() + "  " + namingRelation + "(" + nameElementOpposite + ")";
+            //resultat = mcdRelEndStart.getmElement().getName() + "  " + namingRelation + "(" + nameElementOpposite + ")";
+            resultat = namingRelation + "(" + nameElementOpposite + ")";
         } else {
             resultat = namingRelation ;
         }

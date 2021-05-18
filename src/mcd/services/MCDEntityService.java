@@ -157,6 +157,13 @@ public class MCDEntityService {
         return resultat;
     }
 
+
+    public static ArrayList<MCDAssEnd> getAssEndsIdAndNNParent(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = getAssEndsId(mcdEntity, true);
+        resultat.addAll(getAssEndsAssNNParent(mcdEntity));
+        return resultat;
+    }
+
     public static ArrayList<MCDAssEnd> getAssEndsIdComp(MCDEntity mcdEntity, boolean parent) {
         ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
         for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){

@@ -4,6 +4,7 @@ import exceptions.CodeApplException;
 import m.MElement;
 import mcd.MCDContModels;
 import mcd.MCDElement;
+import mcd.MCDModel;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMPathOnlyRepositoryTree;
 import org.apache.commons.lang.StringUtils;
@@ -16,30 +17,34 @@ public class MElementService {
 
     public static String getPath(MElement mElement, int pathMode, String separator) {
         if (mElement.getParent() instanceof MElement) {
-            return getPathIntern((MElement) mElement.getParent(), pathMode, separator);
+            if (!(mElement instanceof MCDContModels)) {
+                return getPathIntern((MElement) mElement.getParent(), pathMode, separator);
+            } else {
+                return "";
+            }
         } else {
-            if (mElement.getParent() instanceof Project) {
-                return ""
-;            }
+            if (mElement.getParent() instanceof Project ) {
+                return "";
+            }
         }
         throw new CodeApplException(mElement.getParent().getName() + " n'est pas une instance de MElement mais de " + mElement.getParent().getClass().getName());
-
     }
 
 
     private static String getPathIntern(MElement mElement, int pathMode, String separator) {
         String path = "";
-        if (!(mElement instanceof IMCDModel)) {
+        if (!(mElement instanceof MCDContModels)) {
             path = getPathIntern( (MElement)mElement.getParent(), pathMode, separator);
         }
-        String pathElement = getPathElement(mElement, pathMode, separator);
-        if (StringUtils.isNotEmpty(pathElement)) {
-            if (! path.equals("")) {
-                path = path + separator ;
+        if (!(mElement instanceof IMPathOnlyRepositoryTree)) {
+            String pathElement = getPathElement(mElement, pathMode, separator);
+            if (StringUtils.isNotEmpty(pathElement)) {
+                if (!path.equals("")) {
+                    path = path + separator;
+                }
+                path = path + pathElement;
             }
-            path = path + pathElement;
         }
-
         return path;
     }
 
@@ -47,7 +52,6 @@ public class MElementService {
 
 
     private static String getPathElement(MElement mElement, int pathMode, String separator) {
-        if (!(mElement instanceof IMPathOnlyRepositoryTree)) {
             if (pathMode == PATHNAME) {
                 return mElement.getName();
             }
@@ -55,9 +59,6 @@ public class MElementService {
                 return mElement.getShortNameSmart();
             }
             throw new CodeApplException("pathMode n'est pas passé en paramètre");
-        } else {
-            return "";
-        }
     }
 
 

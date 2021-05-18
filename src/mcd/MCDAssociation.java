@@ -6,11 +6,13 @@ import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import m.MRelationDegree;
 import m.interfaces.IMCompletness;
+import m.services.MElementService;
 import m.services.MRelationService;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mcd.services.MCDAssociationService;
+import mcd.services.MCDRelEndService;
 import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -98,6 +100,15 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
         String namingAssociation = computeNamingAssociation();
         return MCDRelationService.getNameTree(this, namingAssociation, false, null);
     }
+
+
+    @Override
+    public String getNameSource() {
+        String namingAssociation = computeNamingAssociation();
+        return MCDRelationService.getNameTree(this, namingAssociation, true, MElementService.PATHNAME);
+    }
+
+
 
     public String getNamePath(int pathMode){
         String namingAssociation = computeNamingAssociation();

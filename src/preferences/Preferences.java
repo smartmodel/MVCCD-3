@@ -28,7 +28,7 @@ public class Preferences extends MVCCDElement {
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
-    public static String APPLICATION_VERSION = "3.0.16";
+    public static String APPLICATION_VERSION = "3.0.16.a";
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
     public static Integer PANEL_REPOSITORY_WIDTH = 200;

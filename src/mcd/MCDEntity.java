@@ -261,6 +261,10 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
         return MCDEntityService.getAssEndsIdAndNNChild(this);
     }
 
+    public ArrayList<MCDAssEnd> getAssEndsIdAndNNParent() {
+        return MCDEntityService.getAssEndsIdAndNNParent(this);
+    }
+
     public ArrayList<MCDAssEnd> getAssEndsIdCompParent(){
 
         return MCDEntityService.getAssEndsIdCompParent(this);
@@ -306,6 +310,8 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
 
         return MCDEntityService.getAssEndsAssNNChild(this);
     }
+
+
 
     public ArrayList<MCDAssEnd> getAssEndsAssNNParent(){
 

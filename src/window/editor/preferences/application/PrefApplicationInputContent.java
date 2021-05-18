@@ -99,6 +99,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
         super.getSComponents().add(debugTDUniquePrint);
         super.getSComponents().add(fieldWarningLevel);
         super.getSComponents().add(fieldRepMCDModelsMany);
+        super.getSComponents().add(fieldRepMCDPackagesAuthorizeds);
         super.getSComponents().add(fieldInsteadofXML);
 
 

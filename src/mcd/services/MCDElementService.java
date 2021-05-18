@@ -5,6 +5,8 @@ import m.services.MElementService;
 import mcd.MCDElement;
 import mcd.MCDModel;
 import mcd.interfaces.IMCDModel;
+import org.apache.commons.lang.StringUtils;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -48,7 +50,7 @@ public class MCDElementService {
     public static String getNamePathSource(MCDElement mcdElement, int pathMode, String separator) {
         String nameSource = "";
         String path = mcdElement.getPath( pathMode, separator);
-        if (path !=null){
+        if (StringUtils.isNotEmpty(path)){
             nameSource = nameSource + path + separator ;
         }
         nameSource = nameSource +  mcdElement.getNameSource();

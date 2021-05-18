@@ -510,6 +510,7 @@ public class MCDCompliant {
     private Resultat checkMCDUniqueInContextEntConcrete(MCDUnique mcdUnique) {
         Resultat resultat = new Resultat();
         boolean c1 = mcdUnique.isAbsolute();
+
         boolean c2 = rolesIdInStructureEntity(mcdUnique) ;
         boolean c3 = rolesNoIdInUnicity(mcdUnique) || (mcdUnique.getMcdAttributes().size() > 0);
 

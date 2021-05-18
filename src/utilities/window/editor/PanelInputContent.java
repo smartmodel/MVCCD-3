@@ -4,6 +4,7 @@ import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import preferences.PreferencesManager;
 import utilities.Debug;
+import utilities.Trace;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 

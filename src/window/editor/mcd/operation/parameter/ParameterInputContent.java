@@ -8,6 +8,7 @@ import main.MVCCDElementFactory;
 import mcd.*;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDParameterService;
+import utilities.Trace;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
@@ -58,6 +59,7 @@ public class ParameterInputContent extends PanelInputContent {
                 fieldTarget.addItem(((IMCDParameter)targetPotentialChecked).getNameTree());
             }
         }
+
         fieldTarget.addItemListener(this);
         fieldTarget.addFocusListener(this);
 
@@ -79,9 +81,12 @@ public class ParameterInputContent extends PanelInputContent {
             if (mcdOperation instanceof MCDNID) {
                 if (((MCDNID) mcdOperation).isAbsolute()) {
                     // Associations identifiantes
-                    targetsPotential.addAll(MCDParameterService.createTargetsAssEndsIdAndNN(mcdEntity));
+                    //#MAJ 2021-05-18 ParameterInputContent (Inversion)
+                    //targetsPotential.addAll(MCDParameterService.createTargetsAssEndsIdAndNN(mcdEntity));
+                    targetsPotential.addAll(mcdEntity.getAssEndsIdAndNNChild());
                     // Associations non identifiantes
-                    targetsPotential.addAll(MCDParameterService.createTargetsAssEndsNoIdAndNoNN(mcdEntity));
+                    //targetsPotential.addAll(MCDParameterService.createTargetsAssEndsNoIdAndNoNN(mcdEntity));
+                    targetsPotential.addAll(mcdEntity.getAssEndsNoIdAndNoNNChild());
                 }
             }
 
@@ -92,11 +97,14 @@ public class ParameterInputContent extends PanelInputContent {
             targetsPotential = MVCCDElementConvert.to(
                     MCDParameterService.createTargetsAttributesUnique(mcdEntity));
             // Associations non identifiantes
-            targetsPotential.addAll(MCDParameterService.createTargetsAssEndsNoIdAndNoNN(mcdEntity));
+            //#MAJ 2021-05-18 ParameterInputContent (Inversion)
+            //targetsPotential.addAll(MCDParameterService.createTargetsAssEndsNoIdAndNoNN(mcdEntity));
             if (mcdOperation instanceof MCDUnique) {
                 if (((MCDUnique) mcdOperation).isAbsolute()) {
                     // Associations identifiantes
-                    targetsPotential.addAll(MCDParameterService.createTargetsAssEndsIdAndNN(mcdEntity));
+                    //#MAJ 2021-05-18 ParameterInputContent (Inversion)
+                    //targetsPotential.addAll(MCDParameterService.createTargetsAssEndsIdAndNN(mcdEntity));
+                    targetsPotential.addAll(mcdEntity.getAssEndsIdAndNNChild());
                 }
             }
         }
@@ -191,9 +199,9 @@ public class ParameterInputContent extends PanelInputContent {
         boolean notBatch = panelInput != null;
         boolean unitaire;
 
-
         unitaire = notBatch && (sComponent == fieldTarget);
         ok = checkTarget(unitaire) && ok ;
+
 
         super.setPreSaveOk(ok);
         return ok;
@@ -211,7 +219,6 @@ public class ParameterInputContent extends PanelInputContent {
     protected void enabledContent() {
 
     }
-
 
 
 
