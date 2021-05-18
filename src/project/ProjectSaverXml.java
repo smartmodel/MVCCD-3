@@ -924,7 +924,7 @@ public class ProjectSaverXml {
 
     // *** Méthodes de sauvegarde du MCD ***
     /*
-    Règles appliquées:
+    Règles appliquées pour définir la structure du XML généré:
     - Si un élément X contient un élément Y qui est placé directement sous X de manière visible dans l'arborescence du
     référentiel, alors cet élément Y sera une nouvelle balise placé sous la balise XML correspondante à l'élément X.
     - Si un élément X contient un élément Y accessible dans les propriétés de X dans le référentiel, alors l'élément Y
@@ -962,8 +962,37 @@ public class ProjectSaverXml {
 
                 //Persistance des relations (les relations sont les liens entre tables, conservant les cardinalités et faisant ainsi redondance avec les FK (volontairement)
                 this.addMDRelations(doc, mldrModel, mldrTag);
+
+                //Persistance des MPDRs
+                this.addMPDRModel(doc, mldrModel, mldrTag);
             }
         }
+    }
+
+    /**
+     * Sauvegarde les modèles MPDR qui se trouvent sous MLDR, dans une balise <MPDR_XX> (XX correspondant au constructeur de BD)
+     * @param doc Document XML dans lequel la persistance se fait
+     * @param mldrModel Modèle MLDR parcouru pour lequel tous les modèles physiques qu'il contient seront persistés.
+     * @param mldrTag Balise racine <mldr> qui sera la balise parent des balises <MPDR_XX> enfant.
+     */
+    private void addMPDRModel(Document doc, MLDRModel mldrModel, Element mldrTag) {
+
+        //TODO Continuer ici
+        /*
+        //Création de la balise <tables>
+        Element tablesTag = doc.createElement("tables");
+        mldrTag.appendChild(tablesTag);
+
+        //Ajout de l'id à la balise <tables>
+        tablesTag.setAttribute("id", mldrModel.getMDRContTables().getIdProjectElementAsString());
+
+        //Parcours des tables
+        for(MLDRTable mldrTable : mldrModel.getMLDRTables()){
+
+            //Persistance d'une table
+            this.addTable(doc, mldrTable, tablesTag);
+        }
+        */
     }
 
     /**
@@ -1302,3 +1331,10 @@ public class ProjectSaverXml {
         mdrRelationTag.setAttribute("fk_target_id", String.valueOf(mdrRelationFK.getMdrFKId()));
     }
 }
+
+
+// *** Méthodes de sauvegarde du MPD ***
+
+
+
+// *** Méthodes de sauvegarde génériques pour les MLD et MPD ***
