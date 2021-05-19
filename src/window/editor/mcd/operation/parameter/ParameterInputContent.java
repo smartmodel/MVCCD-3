@@ -83,9 +83,9 @@ public class ParameterInputContent extends PanelInputContent {
                     // Associations identifiantes
                     //#MAJ 2021-05-18 ParameterInputContent (Inversion)
                     //targetsPotential.addAll(MCDParameterService.createTargetsAssEndsIdAndNN(mcdEntity));
-                    targetsPotential.addAll(mcdEntity.getAssEndsIdAndNNChild());
+                    //targetsPotential.addAll(mcdEntity.getAssEndsIdAndNNChild());
                     // Associations non identifiantes
-                    //targetsPotential.addAll(MCDParameterService.createTargetsAssEndsNoIdAndNoNN(mcdEntity));
+                    targetsPotential.addAll(mcdEntity.getAssEndsIdAndNNChild());
                     targetsPotential.addAll(mcdEntity.getAssEndsNoIdAndNoNNChild());
                 }
             }
@@ -105,6 +105,7 @@ public class ParameterInputContent extends PanelInputContent {
                     //#MAJ 2021-05-18 ParameterInputContent (Inversion)
                     //targetsPotential.addAll(MCDParameterService.createTargetsAssEndsIdAndNN(mcdEntity));
                     targetsPotential.addAll(mcdEntity.getAssEndsIdAndNNChild());
+                    targetsPotential.addAll(mcdEntity.getAssEndsNoIdAndNoNNChild());
                 }
             }
         }

@@ -128,7 +128,9 @@ public class MCDParameterService {
                 MCDDatatype token = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_TOKEN_LIENPROG);
                 MCDDatatype positiveInteger = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_POSITIVEINTEGER_LIENPROG);
                 boolean c1 = mcdDatatype.isSelfOrDescendantOf(token) || mcdDatatype.isSelfOrDescendantOf(positiveInteger);
-                if (c1) {
+                // Il doit y avoir un attribut obligatoire mais, d'autres optionnels
+                //boolean c2 = attributePotential.isMandatory();
+                if (c1 ) {
                         resultat.add(attributePotential);
                 }
             }
