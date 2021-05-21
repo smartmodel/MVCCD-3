@@ -760,9 +760,11 @@
 			<xs:sequence>
 				<xs:element ref="tables"/>
 				<xs:element ref="mdrRelations"/>
-				<xs:element ref="MPDR_Oracle" minOccurs="0"/>
-				<xs:element ref="MPDR_PostgreSQL" minOccurs="0"/>
-				<xs:element ref="MPDR_MySQL" minOccurs="0"/>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="MPDR_Oracle" minOccurs="0"/>
+					<xs:element ref="MPDR_PostgreSQL" minOccurs="0"/>
+					<xs:element ref="MPDR_MySQL" minOccurs="0"/>
+				</xs:choice>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -773,9 +775,11 @@
 			<xs:sequence>
 				<xs:element ref="tables"/>
 				<xs:element ref="mdrRelations"/>
-				<xs:element ref="MPDR_Oracle" minOccurs="0"/>
-				<xs:element ref="MPDR_PostgreSQL" minOccurs="0"/>
-				<xs:element ref="MPDR_MySQL" minOccurs="0"/>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="MPDR_Oracle" minOccurs="0"/>
+					<xs:element ref="MPDR_PostgreSQL" minOccurs="0"/>
+					<xs:element ref="MPDR_MySQL" minOccurs="0"/>
+				</xs:choice>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
