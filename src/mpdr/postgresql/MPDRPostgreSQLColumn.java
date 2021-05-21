@@ -12,5 +12,9 @@ public class MPDRPostgreSQLColumn extends MPDRColumn {
         super(parent, mldrElementSource);
     }
 
+    public MPDRPostgreSQLColumn(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+        super(parent, mldrElementSource, id);
+    }
+
 
 }

@@ -1240,7 +1240,7 @@ public class ProjectSaverXml {
         }
     }
 
-    /**
+     /**
      * Persistance d'une référence de colonne cible d'une contrainte de table. Par exemple, persistance de la référence
      * vers la colonne pointée par une PK.
      * @param doc Document XML dans lequel la contrainte sera persistée.

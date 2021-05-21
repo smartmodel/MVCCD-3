@@ -123,6 +123,17 @@ public abstract class ProjectElement extends MVCCDElement {
         return null;
     }
 
+    /**
+     * Imprime directement dans la console Java les enfants de l'élément.
+     * À utiliser uniquement pour faire des Débug
+     */
+    public void printChilds(){
+        System.out.println("Enfants de " + this.getName() + " (" + getClass().getName() + ") portant l'id " + this.getIdProjectElementAsString() + ":");
+        for(MVCCDElement child : this.getChilds()){
+            System.out.println(" * " + child.getName() + " (" + child.getClass().getName() + ") ");
+        }
+    }
+
     //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
     //TransitoryProjectElement au lieu de Transitory
     public boolean isTransitoryProjectElement() {

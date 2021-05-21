@@ -7,6 +7,7 @@ import mpdr.oracle.interfaces.IMPDROracleElement;
 import project.ProjectElement;
 
 public class MPDROracleParameter extends MPDRParameter {
+
     public MPDROracleParameter(IMPDROracleElement parent, IMLDRElement mldrElementSource) {
         super((ProjectElement) parent, mldrElementSource);
     }
