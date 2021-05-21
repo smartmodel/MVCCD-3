@@ -6,9 +6,7 @@ import main.MVCCDManager;
 import mcd.*;
 import mdr.*;
 import mldr.*;
-import mpdr.MPDRColumn;
-import mpdr.MPDRModel;
-import mpdr.MPDRTable;
+import mpdr.*;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
@@ -1190,31 +1188,32 @@ public class ProjectSaverXml {
         Element constraintTag = null;
 
         //Sauvegarde d'une contrainte PK
-        if(tableConstraint instanceof MLDRPK){
-            MLDRPK pkConstraint = (MLDRPK) tableConstraint;
+        if(tableConstraint instanceof MDRPK){
+            MDRPK pkConstraint = (MDRPK) tableConstraint;
 
             //Création de la balise <pk>
             constraintTag = doc.createElement("pk");
             tableConstraintsTag.appendChild(constraintTag);
 
             //Ajout des propriétés d'identification spécifiques à une contrainte PK
-            constraintTag.setAttribute("element_source_id", pkConstraint.getMcdElementSource().getIdProjectElementAsString());
+            if(pkConstraint instanceof MLDRPK) constraintTag.setAttribute("element_source_id", ((MLDRPK) pkConstraint).getMcdElementSource().getIdProjectElementAsString());
+            else if(pkConstraint instanceof MPDRPK) constraintTag.setAttribute("element_source_id", ((MPDRPK) pkConstraint).getMldrElementSource().getIdProjectElementAsString());
         }
 
         //Sauvegarde d'une contrainte FK
-        else if(tableConstraint instanceof MLDRFK){
-            MLDRFK fkConstraint = (MLDRFK) tableConstraint;
+        else if(tableConstraint instanceof MDRFK){
+            MDRFK fkConstraint = (MDRFK) tableConstraint;
 
             //Création de la balise <fk>
             constraintTag = doc.createElement("fk");
             tableConstraintsTag.appendChild(constraintTag);
 
             //Ajout des propriétés d'identification spécifiques à une contrainte FK
-            constraintTag.setAttribute("element_source_id", fkConstraint.getMcdElementSource().getIdProjectElementAsString());
+            if(fkConstraint instanceof MLDRFK) constraintTag.setAttribute("element_source_id", ((MLDRFK) fkConstraint).getMcdElementSource().getIdProjectElementAsString());
+            else if(fkConstraint instanceof MPDRFK) constraintTag.setAttribute("element_source_id", ((MPDRFK) fkConstraint).getMldrElementSource().getIdProjectElementAsString());
 
             //Ajout de la référence vers la PK (id de la PK)
             constraintTag.setAttribute("target_pk", fkConstraint.getMdrPK().getIdProjectElementAsString());
-
         }
 
         if(constraintTag != null) {
