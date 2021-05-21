@@ -80,14 +80,6 @@ public class MessagesBuilder {
 					+
 					"< n'a pas été trouvé dans le fichier de messages ou est vide");
 		}
-		// Remplacement des � par des espaces
-		message = message.replaceAll("£", "\\ ");
 		return format(message, params);
-	}
-
-	public static String getMessagesPropertyError(String property, Object[] params) {
-		String message = getMessagesProperty(property, params);
-		message = message + "\r\n" + getMessagesProperty("error.contact.support");
-		return message;
 	}
 }

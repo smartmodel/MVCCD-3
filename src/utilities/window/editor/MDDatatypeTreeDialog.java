@@ -1,6 +1,8 @@
 package utilities.window.editor;
 
+import console.ViewLogsManager;
 import datatypes.MDDatatype;
+import messages.MessagesBuilder;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -71,7 +73,12 @@ public class MDDatatypeTreeDialog extends JDialog {
         buttonCancel.addActionListener( new ActionListener(){
 
             public void actionPerformed(ActionEvent e) {
-                canClosed();
+                String property = "mddatatype.dialog.btn.exception.close";
+                try {
+                    canClosed();
+                } catch (Exception exception){
+                    exceceptionUnhandled( exception, property);
+                }
             }
         });
         panelButton.add(buttonCancel);
@@ -81,14 +88,26 @@ public class MDDatatypeTreeDialog extends JDialog {
         buttonOk.addActionListener(new ActionListener(){
 
             public void actionPerformed(ActionEvent e) {
-                canClosed();
+                String property = "mddatatype.dialog.btn.exception.ok";
+                try {
+                    canClosed();
+                } catch (Exception exception){
+                    exceceptionUnhandled( exception, property);
+                }
             }
-
         });
 
         panelButton.add(buttonOk);
     }
 
+    private void exceceptionUnhandled(Exception exception,
+                                      String property) {
+
+        String action = MessagesBuilder.getMessagesProperty(property);
+        String message = MessagesBuilder.getMessagesProperty("mddatatype.dialog.btn.exception",
+                new String[] {action} );
+        ViewLogsManager.catchException(exception, this, message);
+    }
 
     public void setPosition(Point position) {
         if (position != null){

@@ -1,10 +1,12 @@
 package main.window.repository;
 
+import console.ConsoleManager;
 import console.ViewLogsManager;
-import console.WarningLevel;
 import datatypes.MDDatatype;
 import diagram.mcd.MCDDiagram;
+import exceptions.service.ExceptionService;
 import m.interfaces.IMCompletness;
+import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
@@ -38,6 +40,8 @@ import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
 import repository.editingTreat.preferences.*;
 import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
 import utilities.DefaultMutableTreeNodeService;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
@@ -66,9 +70,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
     private void init() {
 
-        //Console.clearMessages();
-        // Réalisé par ViewLogManager.newText()
         try {
+            // Effacement des anciens contenus qui ne devraient plus subsister si aucune erreur ne survient
+            ConsoleManager.clearMessages();
             if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
                 if (PreferencesManager.instance().getApplicationPref().getDEBUG_INSPECT_OBJECT_IN_TREE()) {
                     treatInspectObject();
@@ -142,7 +146,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             if (node.getUserObject() instanceof MCDEntity) {
                 treatGeneric(this, new MCDEntityEditingTreat());
-                //treatGenericCompliant(this, new MCDEntityEditingTreat());
+                //Contrôle de complétude
                 treatGenericRead(this, new MCDEntCompliantEditingTreat(),
                         MessagesBuilder.getMessagesProperty("menu.compliant"));
             }
@@ -227,12 +231,17 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             if (node.getUserObject() instanceof MLDRModel) {
                 treatGeneric(this, new MLDRModelEditingTreat());
 
-                JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.transform.mldr.to.mpdr"));
+                JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(
+                        "menu.transform.mldr.to.mpdr"));
                 addItem(this, menuItem);
                 menuItem.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
-                        (new MLDRModelEditingTreat()).treatTransform(mvccdWindow, mvccdElement);
+                        try {
+                            (new MLDRModelEditingTreat()).treatTransform(mvccdWindow, mvccdElement);
+                        } catch (Exception e){
+                            exceptionUnhandled(e, mvccdElement, "repository.menu.exception.transform");
+                        }
                     }
                 });
             }
@@ -277,12 +286,13 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 treatGenericRead(this, new MDRParameterEditingTreat());
             }
         } catch (Exception e){
-            //TODO-PAS
-            Resultat resultat = new Resultat();
-            resultat.addException(e);
-            ViewLogsManager.resultat(resultat, WarningLevel.WARNING);
-        }
+            //TODO-PAS A terme ce bloc de traitement d'exception devrait pouvoir être supprimé
+            // si toutes les actionPerformed() qui modifient la présentation du référentiel
+            // traitent les exceptions
 
+            String message = MessagesBuilder.getMessagesProperty("repository.create.menu.exception");
+            ViewLogsManager.catchException(e, mvccdWindow, message);
+        }
     }
 
 
@@ -293,17 +303,21 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         inspecter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String message = "Classe : " + mvccdElement.getClass().getName();
-                if (mvccdElement instanceof ProjectElement){
-                    ProjectElement projectElement = (ProjectElement) mvccdElement;
-                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id : " + projectElement.getIdProjectElement();
+                try {
+                    String message = "Classe : " + mvccdElement.getClass().getName();
+                    if (mvccdElement instanceof ProjectElement) {
+                        ProjectElement projectElement = (ProjectElement) mvccdElement;
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id : " + projectElement.getIdProjectElement();
+                    }
+                    if (mvccdElement instanceof MDRRelationFK) {
+                        MDRRelationFK mdrRelationFK = (MDRRelationFK) mvccdElement;
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - nom : " + mdrRelationFK.getMDRFK().getName();
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - id : " + mdrRelationFK.getMDRFK().getIdProjectElement();
+                    }
+                    new DialogMessage().showOk(mvccdWindow, message);
+                }catch (Exception e){
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.inspector");
                 }
-                if (mvccdElement instanceof MDRRelationFK){
-                    MDRRelationFK mdrRelationFK = (MDRRelationFK) mvccdElement;
-                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - nom : " + mdrRelationFK.getMDRFK().getName();
-                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - id : " + mdrRelationFK.getMDRFK().getIdProjectElement();
-                }
-                new DialogMessage().showOk(mvccdWindow, message);
             }
         });
     }
@@ -315,15 +329,20 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         source.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                IMLDRElementWithSource imldrElementWithSource = (IMLDRElementWithSource) mvccdElement ;
-                MCDElement mcdElementSource = imldrElementWithSource.getMcdElementSource();
-                String message = "Classe : " +  mcdElementSource.getClass().getName();
-                message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNamePath(MCDElementService.PATHNAME);
-                ProjectElement projectElement = (ProjectElement) mvccdElement;
-                message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
+                try {
+                    IMLDRElementWithSource imldrElementWithSource = (IMLDRElementWithSource) mvccdElement;
+                    MCDElement mcdElementSource = imldrElementWithSource.getMcdElementSource();
+                    String message = "Classe : " + mcdElementSource.getClass().getName();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNamePath(MElementService.PATHNAME);
+                    ProjectElement projectElement = (ProjectElement) mvccdElement;
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
 
-                new DialogMessage().showOk(mvccdWindow, message,
-                        "Source de niveau conceptuel de l'objet : " + mvccdElement.getName());
+                    new DialogMessage().showOk(mvccdWindow, message,
+                            "Source de niveau conceptuel de l'objet : " + mvccdElement.getName());
+
+                } catch (Exception e) {
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.source.mcd");
+                }
             }
         });
 
@@ -336,15 +355,17 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         source.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                IMPDRElementWithSource impdrElementWithSource = (IMPDRElementWithSource) mvccdElement ;
-                IMLDRElement mldrElementSource = impdrElementWithSource.getMldrElementSource();
-                String message = "Classe : " +  mldrElementSource.getClass().getName();
-                message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mldrElementSource.getName();
-                message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mldrElementSource.getIdProjectElement();
-
-
-                new DialogMessage().showOk(mvccdWindow, message,
-                        "Source de niveau logique de l'objet : " + mvccdElement.getName());
+                try {
+                    IMPDRElementWithSource impdrElementWithSource = (IMPDRElementWithSource) mvccdElement;
+                    IMLDRElement mldrElementSource = impdrElementWithSource.getMldrElementSource();
+                    String message = "Classe : " + mldrElementSource.getClass().getName();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mldrElementSource.getName();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mldrElementSource.getIdProjectElement();
+                    new DialogMessage().showOk(mvccdWindow, message,
+                            "Source de niveau logique de l'objet : " + mvccdElement.getName());
+                } catch(Exception e){
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.source.mldr");
+                }
             }
         });
 
@@ -444,10 +465,14 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             preferencesExportProfil.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    if(PreferencesManager.instance().preferences().isPERSISTENCE_SERIALISATION_INSTEADOF_XML()){
-                        PreferencesManager.instance().createProfile(); //Persistance avec sérialisation
-                    }else{
-                        new ProfileSaverXml().createFileProfileXML(); //Ajout de Giorgio
+                    try {
+                       if (PreferencesManager.instance().preferences().isPERSISTENCE_SERIALISATION_INSTEADOF_XML()) {
+                            PreferencesManager.instance().createProfile(); //Persistance avec sérialisation
+                        } else {
+                            new ProfileSaverXml().createFileProfileXML(); //Ajout de Giorgio
+                        }
+                    } catch (Exception e){
+                        exceptionUnhandled(e, mvccdElement, "repository.menu.exception.export.pref");
                     }
                 }
             });
@@ -462,8 +487,12 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         editProject.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                // Pas d'extension de la classe EditingTreat
-                ProjectEditingTreat.treatUpdate(mvccdWindow);
+                try {
+                    // Pas d'extension de la classe EditingTreat
+                    ProjectEditingTreat.treatUpdate(mvccdWindow);
+                } catch (Exception e){
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.update");
+                }
             }
         });
     }
@@ -529,7 +558,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                editingTreat.treatNew(mvccdWindow, mvccdElement);
+                try {
+                    editingTreat.treatNew(mvccdWindow, mvccdElement);
+                } catch (Exception e) {
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.new");
+                }
             }
         });
     }
@@ -546,8 +579,17 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                editingTreat.treatRead(mvccdWindow, mvccdElement);
+                try {
+                    editingTreat.treatRead(mvccdWindow, mvccdElement);
+                } catch (Exception e){
+                    String propertyMessage ;
+                    if ( editingTreat instanceof MCDEntCompliantEditingTreat){
+                        propertyMessage = "repository.menu.exception.compliant";
+                    }else {
+                        propertyMessage = "repository.menu.exception.read";
+                    }
+                    exceptionUnhandled(e, mvccdElement, propertyMessage);
+                }
             }
         });
     }
@@ -563,7 +605,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                editingTreat.treatUpdate(mvccdWindow, mvccdElement);
+                try {
+                    editingTreat.treatUpdate(mvccdWindow, mvccdElement);
+                } catch (Exception e){
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.update");
+                }
             }
         });
     }
@@ -579,7 +625,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                editingTreat.treatDelete(mvccdWindow, mvccdElement);
+                try {
+                    editingTreat.treatDelete(mvccdWindow, mvccdElement);
+                } catch (Exception e){
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.delete");
+                }
             }
         });
     }
@@ -595,7 +645,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                editingTreat.treatDeleteChilds(mvccdWindow, mvccdElement);
+                try {
+                    editingTreat.treatDeleteChilds(mvccdWindow, mvccdElement);
+                } catch (Exception e){
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.delete.childs");
+                }
             }
         });
     }
@@ -606,19 +660,30 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                editingTreat.treatCompletness(mvccdWindow, mvccdElement, true);
+                try {
+                    Resultat resultat = editingTreat.treatCompletness(mvccdWindow, mvccdElement, true);
+                    ViewLogsManager.printResultat(resultat);
+                } catch (Exception e) {
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.completness");
+                }
             }
         });
     }
 
-    //private void treatGenericCompliantMCD(ISMenu menu, MCDIModelsEditingTreat mcdiModelsEditingTreat) {
-    private void treatGenericCompliantMCD(ISMenu menu, MCDCompliantEditingTreat mcdCompliantEditingTreat) {
-            JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
+    private void treatGenericCompliantMCD(ISMenu menu,
+                                          MCDCompliantEditingTreat mcdCompliantEditingTreat) {
+
+        JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
         addItem(menu, menuItem);
+
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                mcdCompliantEditingTreat.treatCompliant(mvccdWindow, (IMCDCompliant) mvccdElement);
+                try {
+                    mcdCompliantEditingTreat.treatCompliant(mvccdWindow, (IMCDCompliant) mvccdElement);
+                } catch (Exception e) {
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.compliant");
+                }
             }
         });
     }
@@ -629,9 +694,20 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                mcdTransformEditingTreat.treatTransform(mvccdWindow, (IMCDModel)mvccdElement);
+                try {
+                    mcdTransformEditingTreat.treatTransform(mvccdWindow, (IMCDModel)mvccdElement);
+                } catch (Exception e) {
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.transform");
+                }
             }
         });
+    }
+
+    private void exceptionUnhandled(Exception e,
+                                    MVCCDElement mvccdElement,
+                                    String propertyAction) {
+        ExceptionService.exceptionUnhandled(e, mvccdWindow, mvccdElement,
+                "repository.menu.exception" ,propertyAction);
     }
 
     private void addItem(ISMenu menu, JMenuItem menuItem) {

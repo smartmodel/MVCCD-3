@@ -5,6 +5,7 @@ import constraints.Constraints;
 import constraints.ConstraintsManager;
 import m.MRelEndMulti;
 import m.MRelEndMultiPart;
+import m.services.MElementService;
 import m.services.MRelEndService;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDRelEndService;
@@ -14,6 +15,7 @@ import preferences.PreferencesManager;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -102,18 +104,18 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
 
     @Override
     public String getNameTree() {
-        return getNameTreeOrSource(MCDRelEndService.TREE);
+        return getNameTreeOrSource(MCDRelEndService.TREE, false, null);
     }
 
     @Override
     public String getNameSource() {
-        return getNameTreeOrSource(MCDRelEndService.SOURCE);
+        return getNameTreeOrSource(MCDRelEndService.SOURCE, true, MElementService.PATHNAME);
     }
 
 
-    public String getNameTreeOrSource(int scope) {
-
-
+    public String getNameTreeOrSource(int scope,
+                                      boolean forcePath,
+                                      Integer pathMode) {
 
         String namingAssociation ;
         if (StringUtils.isNotEmpty(this.getName()) && StringUtils.isNotEmpty(this.getMCDAssEndOpposite().getName())){
@@ -126,11 +128,11 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
                 namingAssociation = namingAssociation  +
                         Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT ;
             }
+
         } else {
             namingAssociation =
                     this.getMcdAssociation().getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
         }
-
         return MCDRelEndService.getNameTreeOrSource(scope, this, namingAssociation);
     }
 

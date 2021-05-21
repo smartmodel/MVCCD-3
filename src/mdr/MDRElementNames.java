@@ -58,7 +58,7 @@ public class MDRElementNames implements Serializable {
             return getName120();
         }
         else {
-            throw new CodeApplException("MDRElementNames :  Paramètre nameLength inconnu !" );
+            throw new CodeApplException(nameLength + " est une valeur de paramètre nameLength inconnue !" );
         }
     }
 
@@ -73,7 +73,7 @@ public class MDRElementNames implements Serializable {
             setName120(name);
         }
         else {
-            throw new CodeApplException("MDRElementNames :  Paramètre nameLength inconnu !" );
+            throw new CodeApplException(nameLength + " est une valeur de paramètre nameLength inconnue !" );
         }
     }
 }

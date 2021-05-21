@@ -21,6 +21,7 @@ public enum WarningLevel {
      */
     //DEBUG_MODE, DETAILS, INFO, WARNING;
 
+    DEVELOPMENT (Preferences.WARNING_LEVEL_DEVELOPMENT),
     DEBUG_MODE (Preferences.WARNING_LEVEL_DEBUG),
     DETAILS (Preferences.WARNING_LEVEL_DETAILS),
     INFO (Preferences.WARNING_LEVEL_INFO),

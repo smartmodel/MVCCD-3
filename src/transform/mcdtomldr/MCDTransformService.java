@@ -35,7 +35,7 @@ public class MCDTransformService {
             if (! mcdAssociation.isDegreeNN()) {
                 fkNature = MDRFKNature.NOID;
             } else {
-                throw new CodeApplException("MCDTransformService.MDRFKNature  " + "L'association " + mcdAssociation.getNameTree() + " est de degré n:n et n'est pas transformée en FK");
+                throw new CodeApplException("L'association " + mcdAssociation.getNameTree() + " est de degré n:n et n'est pas transformée en FK");
             }
         }
 
@@ -52,7 +52,7 @@ public class MCDTransformService {
         }
 
         if (fkNature == null) {
-            throw new CodeApplException("MCDTransformService.MDRFKNature  " + "La nature de l'association " + mcdAssociation.getNameTree() + " est inconnue");
+            throw new CodeApplException("La nature de l'association " + mcdAssociation.getNameTree() + " est inconnue");
         }
         return fkNature;
     }

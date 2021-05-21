@@ -1,5 +1,6 @@
 package window.editor.mcd.model;
 
+import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.MCDElement;
@@ -289,7 +290,7 @@ public class ModelInputContent extends PanelInputContentId {
             if (getEditor().getMvccdElementParent() instanceof MCDPackage) {
                 MCDPackage mcdPackage = (MCDPackage) getEditor().getMvccdElementParent();
                 return (MCDElement) IMCDContPackages.getIMCDContPackagesByNamePath(mcdPackage.getIMCDModelAccueil()
-                        , MCDElementService.PATHNAME, text);
+                        , MElementService.PATHNAME, text);
             } else {
                 return (MCDElement) getEditor().getMvccdElementParent();
             }

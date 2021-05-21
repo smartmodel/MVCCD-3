@@ -11,6 +11,7 @@ import main.window.reserve.Reserve;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import project.ProjectsRecentsSaver;
+import resultat.ResultatLevel;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 import utilities.window.services.ComponentService;
@@ -134,7 +135,7 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         if (exit) {
             // Quittance de sortie de l'application
             String message = MessagesBuilder.getMessagesProperty ("mvccd.close");
-            ViewLogsManager.newText(message, WarningLevel.WARNING);
+            ViewLogsManager.printMessage(message, ResultatLevel.INFO);
             System.exit(0);
         }
     }

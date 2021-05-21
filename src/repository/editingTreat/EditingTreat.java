@@ -1,6 +1,8 @@
 package repository.editingTreat;
 
+import console.ViewLogsManager;
 import m.MElement;
+import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.MCDElement;
@@ -107,12 +109,13 @@ public abstract class EditingTreat {
             String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.completness");
             String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
                     new String[] {messageMode});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             if (showDialog) {
                 if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
                     DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
                     fen.setVisible(true);
                 }
+            } else {
+                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
         } else {
             if (!checkInput(panelInputContent)) {
@@ -120,22 +123,25 @@ public abstract class EditingTreat {
                 if (showDialog) {
                     elementNameInContext = mvccdElement.getNameTree();
                 } else {
-                    elementNameInContext = ((MCDElement) mvccdElement).getNamePath(MCDElementService.PATHSHORTNAME);
+                    elementNameInContext = ((MCDElement) mvccdElement).getNamePath(MElementService.PATHSHORTNAME);
                 }
                String message = MessagesBuilder.getMessagesProperty("dialog.completness.error",
                         new String[]{messageElement, elementNameInContext});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
                 if (showDialog) {
                     message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.question.input");
                     if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
                         DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
                         fen.setVisible(true);
                     }
+                } else {
+                    resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
                 }
             } else {
                 if (showDialog) {
                     String message = MessagesBuilder.getMessagesProperty("dialog.completness.ok",
                             new String[]{messageElement, mvccdElement.getNameTree()});
+                    resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                    ViewLogsManager.printResultat(resultat);
                     DialogMessage.showOk(owner, message);
                 }
             }

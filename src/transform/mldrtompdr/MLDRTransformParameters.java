@@ -1,24 +1,15 @@
 package transform.mldrtompdr;
 
-import console.Console;
 import main.MVCCDManager;
 import mdr.MDRConstraint;
-import mdr.MDRParameter;
-import mdr.interfaces.IMDRParameter;
 import mldr.MLDRColumn;
-import mldr.MLDRPK;
 import mldr.MLDRParameter;
-import mldr.MLDRTable;
-import mldr.interfaces.IMLDRElement;
-import mldr.interfaces.IMLDRElementWithSource;
 import mldr.services.MLDRConstraintService;
 import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRParameter;
 import mpdr.MPDRTable;
-import mpdr.interfaces.IMPDRElement;
 import mpdr.services.MPDRConstraintService;
-import utilities.Trace;
 
 public class MLDRTransformParameters {
 

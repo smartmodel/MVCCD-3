@@ -2,10 +2,7 @@ package mcd;
 
 import main.MVCCDElement;
 import mcd.compliant.MCDCompliant;
-import mcd.interfaces.IMCDCompliant;
-import mcd.interfaces.IMCDContContainer;
-import mcd.interfaces.IMCDContPackages;
-import mcd.interfaces.IMCDModel;
+import mcd.interfaces.*;
 import mcd.services.IMCDModelService;
 import mldr.MLDRModel;
 import project.ProjectElement;
@@ -17,7 +14,7 @@ import transform.mcdtomldr.MCDTransform;
  * plusieurs modèles (MLDR).
  */
 public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePathParent, */IMCDContPackages,
-        IMCDContContainer, IMCDCompliant {
+        IMCDContContainer, IMCDCompliant, IMPathOnlyRepositoryTree {
 
     private static final long serialVersionUID = 1000;
     private MLDRModel lastTransformedMLDRModel;

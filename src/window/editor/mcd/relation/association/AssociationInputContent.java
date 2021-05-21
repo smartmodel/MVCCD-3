@@ -3,6 +3,7 @@ package window.editor.mcd.relation.association;
 import m.MRelEndMultiPart;
 import m.MRelEndMultiStr;
 import m.MRelationDegree;
+import m.services.MElementService;
 import m.services.MRelEndService;
 import m.services.MRelationService;
 import main.MVCCDElement;
@@ -62,7 +63,7 @@ public class AssociationInputContent extends PanelInputContentId {
     private AssEndInputContent assEndInputContent = new AssEndInputContent();
 
     //TODO-0 MCDElementService.PATHNAME , remplacer par SHORT
-    private int modePathName =  MCDElementService.PATHNAME;
+    private int modePathName =  MElementService.PATHNAME;
 
     // Pour la factorisation des 2 extrémités
     private String factorizeTitle = "";
@@ -901,7 +902,7 @@ public class AssociationInputContent extends PanelInputContentId {
     @Override
     protected MCDElement getParentByNamePath(int pathname, String text) {
         //return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
-        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, MCDElementService.PATHNAME, text);
+        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, MElementService.PATHNAME, text);
     }
 
 

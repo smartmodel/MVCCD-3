@@ -16,6 +16,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
+// Pas utilisé ...
+// Si utilisé, Il faut mettre le traitement d'exception des méthodes actionPerformed()
+
 public class AttributeStereotypesEditorForJTable extends AbstractCellEditor
         implements TableCellEditor, ActionListener {
 

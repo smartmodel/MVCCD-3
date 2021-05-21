@@ -1,5 +1,6 @@
 package window.editor.mcd.entity;
 
+import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import mcd.MCDContEntities;
@@ -196,7 +197,7 @@ public class EntityInputContent extends PanelInputContentId {
 
     @Override
     protected MCDElement getParentByNamePath(int pathname, String text) {
-        return IMCDModelService.getMCDContEntitiesByNamePath(iMCDModelContainer, MCDElementService.PATHNAME, text);
+        return IMCDModelService.getMCDContEntitiesByNamePath(iMCDModelContainer, MElementService.PATHNAME, text);
     }
 
     @Override

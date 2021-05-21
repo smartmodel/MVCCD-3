@@ -2,6 +2,7 @@ package console;
 
 import messages.MessagesBuilder;
 import preferences.PreferencesManager;
+import resultat.ResultatElement;
 
 /**
  * This class allow you to send messages to the final user.
@@ -14,42 +15,29 @@ import preferences.PreferencesManager;
 
 public class ViewManager {
 
-
     /**
      * Show a message to the user through the console.
      * Plusieurs lignes dans cette version
-     * @param text
-     * @param warningLevel
+     * @param resultatElement
      */
-    static public void showTextLine(String text, WarningLevel warningLevel){
-        boolean show = true;
-        if(warningLevel != null){
-            WarningLevel prefWarningLevel = PreferencesManager.instance().preferences().getWARNING_LEVEL();
-            show = WarningLevelManager.instance().OneIsAsImportantAsSecond(warningLevel, prefWarningLevel);
-        }
-        if(show){
-            Console.printMessage(text);
+
+    static public void printResultatElement(ResultatElement resultatElement){
+        WarningLevelManager wlm = WarningLevelManager.instance();
+        WarningLevel prefWarningLevel = PreferencesManager.instance().preferences().getWARNING_LEVEL();
+        WarningLevel resultatWarningLevel = resultatElement.getLevel().getWarningLevel();
+        if(resultatWarningLevel == null || wlm.oneIsAsImportantAsSecond(resultatWarningLevel,prefWarningLevel)){
+            ConsoleManager.printMessage(resultatElement.getText());
         }
     }
-
-
-    /**
-     * Show a message to the user through the console, using the root VP instruction.
-     * @param text
-     */
-    static public void showTextLine(String text){
-        showTextLine(text, null);
-    }
-
 
     /**
      * Print assLink the console that a new text has been added to the log file.
      */
+    //TODO-1 A voir si et/ou mettre un appel (STB)
     static public void informUserNewTextAddToFileLog(){
-//        if(LogsManager.isTextAddedToLog() && PreferencesService.toBoolean(Preferences.PRINT_LOGS)){
         if(LogsManager.isTextAddedToLog() ){
             String message = MessagesBuilder.getMessagesProperty("file.add.text", LogsManager.getlogFilePath());
-            Console.printMessage(message);
+            ConsoleManager.printMessage(message);
         }
     }
 

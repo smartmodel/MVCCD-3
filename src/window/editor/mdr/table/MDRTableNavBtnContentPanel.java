@@ -1,6 +1,9 @@
 package window.editor.mdr.table;
 
+import console.ViewLogsManager;
+import exceptions.service.ExceptionService;
 import mdr.MDRTable;
+import messages.MessagesBuilder;
 import repository.editingTreat.mdr.MDRTableEditingTreat;
 import utilities.window.editor.PanelNavBtn;
 import utilities.window.editor.PanelNavBtnContent;
@@ -79,13 +82,15 @@ public class MDRTableNavBtnContentPanel extends PanelNavBtnContent implements Ac
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        String tabProperty = "";
 
+        try {
         Object source = e.getSource();
 
         MDRTable mdrTable = getMDRTable();
 
         if (source == btnTable) {
-            //MCDContAttributes mcdContAttributes = (MCDContAttributes) getEditor().getMvccdElementCrt();
+            tabProperty = "editor.table.tab.exception.properties";
             getEditor().myDispose();
             new MDRTableEditingTreat().treatUpdate(getEditor().getOwner(),
                     getMDRTable());
@@ -124,7 +129,12 @@ public class MDRTableNavBtnContentPanel extends PanelNavBtnContent implements Ac
 
         }
 
+
  */
+        } catch (Exception exception){
+            ExceptionService.exceptionUnhandled(exception, getEditor(), getMDRTable(),
+                    "editor.table.tab.exception", tabProperty);
+        }
     }
 
     private MDRTable getMDRTable(){

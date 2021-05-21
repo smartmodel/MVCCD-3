@@ -1,13 +1,10 @@
 package resultat;
 
-import console.Console;
-import console.ViewLogsManager;
 import console.WarningLevel;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
-import utilities.window.DialogMessage;
+import utilities.Trace;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class ResultatService {
@@ -27,43 +24,38 @@ public class ResultatService {
         return newResultatElements ;
     }
 
-    public static void addException(Resultat resultat, Exception e) {
+    public static void addExceptionUnhandled(Resultat resultat, Exception e) {
         String message = MessagesBuilder.getMessagesProperty("exception.unhandled");
-        resultat.add (new ResultatElement(message, ResultatLevel.EXCEPTION_JAVA));
-        resultat.add (new ResultatElement(e.toString(), ResultatLevel.INFO));
+        addExceptionInternal(resultat, e, message, ResultatLevel.EXCEPTION_UNHANDLED);
+    }
+
+    public static void addExceptionCatched(Resultat resultat, Exception e) {
+        String message = MessagesBuilder.getMessagesProperty("exception.catched");
+        addExceptionInternal(resultat, e, message, ResultatLevel.EXCEPTION_CATCHED);
+    }
+
+    private static void addExceptionInternal (Resultat resultat, Exception e, String message, ResultatLevel level) {
+        resultat.add (new ResultatElement(message, level));
+        resultat.add (new ResultatElement(e.toString(), level));
         if (StringUtils.isNotEmpty(e.getMessage())) {
-            resultat.add (new ResultatElement(e.getMessage(), ResultatLevel.INFO));
+            resultat.add (new ResultatElement(e.getMessage(), ResultatLevel.EXCEPTION_STACKTRACE));
         }
         StackTraceElement[] stackTrace = e.getStackTrace();
         for (int i=0 ; i < stackTrace.length; i++){
-            resultat.add (new ResultatElement(stackTrace[i].toString(), ResultatLevel.INFO));
+            resultat.add (new ResultatElement(stackTrace[i].toString(), ResultatLevel.EXCEPTION_STACKTRACE));
         }
-    }
+     }
 
-    public static void finishTransaction(Resultat resultat,
-                                         String message,
-                                         Window window,
-                                         boolean onlyError) {
-        boolean fatal = resultat.isWithElementFatal();
-        boolean exceptionJava = resultat.isWithElementException();
-        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
-        ViewLogsManager.resultat(resultat, WarningLevel.WARNING);
-        if ( window != null) {
-            if ( resultat.isError()) {
-                message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.error.console");
-            }
-            if (onlyError){
-                if (resultat.isError()){
-                    DialogMessage.showOk(window, message);
-                }
-            } else {
-                DialogMessage.showOk(window, message);
-            }
+    public static void finishTreatment(Resultat resultat,
+                                       String propertyOk ,
+                                       String propertyError ) {
+        String message = "";
+        if ( resultat.isNotError()){
+            message = MessagesBuilder.getMessagesProperty(propertyOk);
+        } else {
+            message = MessagesBuilder.getMessagesProperty(propertyError);
         }
-
+        resultat.add(new ResultatElement (message, ResultatLevel.INFO));
     }
 
-    public static void startTransaction(Resultat resultat, String message) {
-        resultat.add( new ResultatElement(message, ResultatLevel.INFO));
-    }
 }

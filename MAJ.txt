@@ -38,3 +38,17 @@ Problèmes : Initialisation d'une relation en création
 
 //#MAJ 2021-04-03 Remplacé le text "path.separator" par File.separator
 
+//#MAJ 2021-05-14 Rajouté return PanelInputContentId
+
+//#MAJ 2021-05-15 MCDAssEnd getNameTree() Affinement
+
+//#MAJ 2021-05-18 ParameterInputContent (Inversion)
+
+//Exception provoquée
+//int i = 0 ;
+//int j = 2 /i ;
+
+//Exception provoquée
+throw new CodeApplicationException("Exception artificielle");
+
+//CodeApplException provoquée

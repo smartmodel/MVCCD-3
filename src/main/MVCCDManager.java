@@ -1,8 +1,7 @@
 package main;
 
-import console.Console;
+import console.ConsoleManager;
 import console.ViewLogsManager;
-import console.WarningLevel;
 import datatypes.MDDatatypesManager;
 import exceptions.CodeApplException;
 import main.window.console.WinConsoleContent;
@@ -23,7 +22,7 @@ import repository.Repository;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
-import resultat.ResultatService;
+import utilities.Trace;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
 
@@ -44,7 +43,7 @@ public class MVCCDManager {
     private Repository repository;  //Référentiel
     private MVCCDElementRepositoryRoot rootMVCCDElement; //Elément root du référentiel repository.root.name=Application MVCCD
     private Project project;    //Projet en cours de traitement
-    private Console console;    //Classe d'accès à la console d'affichage de messages
+    private ConsoleManager consoleManager;    //Classe d'accès à la console d'affichage de messages
     private ProjectsRecents projectsRecents = null; //Projets ouverts  récemment
     private File fileProjectCurrent = null; //Fichier de sauvegarde du projet en cours de traitement
     private boolean datasProjectChanged = false; //Indicateur de changement de données propres au projet
@@ -64,50 +63,54 @@ public class MVCCDManager {
      * Lance MVC-CD-3
      */
     public void start() {
-        // Start Transacrion implicite
+        // Initialise la pile de Resultat
         Resultat resultat = new Resultat();
-        String message ;
-        //try {
+        String message = "MVCCD est en cours de démarrage";
+        resultat.add(new  ResultatElement(message, ResultatLevel.INFO));
 
-            // Chargement des messages de traduction
-            LoadMessages.main();
+        // Chargement des messages de traduction
+        LoadMessages.main();
 
-            //Chargement des préférences de l'application
-            PreferencesManager.instance().loadOrCreateFileXMLApplicationPref(); //Ajout de Giorgio Roncallo
-            /*
-            if(Preferences.PERSISTENCE_SERIALISATION_INSTEADOF_XML){
-                PreferencesManager.instance().loadOrCreateFileApplicationPreferences(); //Persistance avec sérialisation
-            }else{
-                PreferencesManager.instance().loadOrCreateFileXMLApplicationPref(); //Ajout de Giorgio Roncallo
-            }
-             */
-
-            // Création et affichage de l'écran d'accueil
-            startMVCCDWindow();
-            // Création de la console
-            startConsole();
-            // Création du référentiel
-            startRepository();
-            // Ajustement de la taille de la zone d'affichage du référentiel
-            mvccdWindow.adjustPanelRepository();
-
-            message = MessagesBuilder.getMessagesProperty("mvccd.start.ok");
-        /*
+        //Chargement des préférences de l'application
+        try {
+            resultat.addResultat(PreferencesManager.instance().loadOrCreateFileXMLApplicationPref()); //Ajout de Giorgio Roncallo
         } catch (Exception e){
-            resultat.addException(e);
-            message = MessagesBuilder.getMessagesProperty("mvccd.start.error");
+            message = MessagesBuilder.getMessagesProperty("mvccd.treat.pref.appl.error");
+            resultat.addExceptionCatched(e, message);
         }
-        */
-        // Quittance de fin
-        ResultatService.finishTransaction(resultat, message, mvccdWindow,true);
 
-        // Chargement des adresses disques des derniers fichiers de projets utilisés
-        projectsRecents = new ProjectsRecentsLoader().load();
+        // Création et affichage de l'écran d'accueil
+        startMVCCDWindow();
 
-        // Création du menu contextuel des fichiers de projets récemment utilisés
-        changeActivateProjectOpenRecentsItems();
+        // Création de la console
+        startConsole();
+
+        // Création du référentiel
+        startRepository();
+
+        // Ajustement de la taille de la zone d'affichage du référentiel
+        mvccdWindow.adjustPanelRepository();
+
         // Ouverture du dernier fichier de projet utilisés
-        openLastProject();
+        try {
+            // Chargement des adresses disques des derniers fichiers de projets utilisés
+            projectsRecents = new ProjectsRecentsLoader().load();
+
+            // Création du menu contextuel des fichiers de projets récemment utilisés
+            changeActivateProjectOpenRecentsItems();
+
+            // Ouverture du fichier
+            resultat.addResultat(openLastProject());
+        } catch (Exception e ){
+            throw e ;
+        }
+
+
+        // Quittance de fin
+        resultat.finishTreatment("mvccd.finish.ok", "mvccd.finish.error");
+        ViewLogsManager.printResultat(resultat);
+        ViewLogsManager.dialogQuittance(mvccdWindow, resultat);
+
     }
 
 
@@ -131,7 +134,7 @@ public class MVCCDManager {
 
     private void startConsole() {
 
-        console = new Console();
+        consoleManager = new ConsoleManager();
     }
 
     /**
@@ -228,15 +231,15 @@ public class MVCCDManager {
         removeMVCCDElementInRepository((MCDRelEnd)mcdRelation.getB(), ((MCDRelEnd) mcdRelation.getB()).getParent());
     }
 
-    public void openProject() {
+    public Resultat openProject() {
         ProjectFileChooser fileChooser = new ProjectFileChooser(ProjectFileChooser.OPEN);
         File fileChoosed = fileChooser.fileChoose(false);
-        openProjectBase(fileChoosed);
+        return openProjectBase(fileChoosed);
     }
 
-    public void openProjectRecent(String filePath) {
+    public Resultat openProjectRecent(String filePath) {
         File file = new File(filePath);
-        openProjectBase(file);
+        return openProjectBase(file);
     }
 
     /**
@@ -244,21 +247,33 @@ public class MVCCDManager {
      */
 
 
-    private void openLastProject() {
+    private Resultat openLastProject() {
+        String message ="";
+        Resultat resultat = new Resultat();
         if (projectsRecents.getRecents().size() > 0) {
             File file = projectsRecents.getRecents().get(0);
-            openProjectBase(file);
+            Resultat resultatOpen  =  openProjectBase(file);
+             if (resultatOpen.isNotError()){
+                message = MessagesBuilder.getMessagesProperty("mvccd.treat.last.project.ok",file.getPath());
+             } else {
+                 message = MessagesBuilder.getMessagesProperty("mvccd.treat.last.project.error",file.getPath());
+             }
+        } else {
+            message = MessagesBuilder.getMessagesProperty("mvccd.treat.last.project.null");
         }
+        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+        return resultat;
     }
 
     /**
      * Ouvre un projet à partir de son fichier de sauvegarde et le charge dans le référentiel.
      */
-    private void openProjectBase(File file) {
+    private Resultat openProjectBase(File file) {
 
         Resultat resultat = new Resultat();
-        String message = MessagesBuilder.getMessagesProperty("project.open.start", new String[] {file.getPath()});
-        resultat.startTransaction(message);
+        String message = MessagesBuilder.getMessagesProperty("project.open.start",
+                new String[]{file.getPath()});
+        resultat.add(new  ResultatElement(message, ResultatLevel.INFO));
 
 
         if (file != null) {
@@ -267,7 +282,7 @@ public class MVCCDManager {
 
             //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
             String extensionOpenFile = UtilFiles.getExtension(file.getName());
-            if ( extensionOpenFile != null) {
+            if (extensionOpenFile != null) {
                 try {
                     //openProjectMessageChangeFormat(extensionOpenFile);
                     // Lecture du fichier de sauvegarde
@@ -277,13 +292,15 @@ public class MVCCDManager {
                     } else if (extensionOpenFile.equals("xml")) {
                         project = new ProjectLoaderXml().loadProjectFile(file); //Ajout de Giorgio Roncallo
                     } else {
-                        resultat.add( new ResultatElement("Seules les extensions mvccd et xml sont reconnues.", ResultatLevel.FATAL));
+                        resultat.add(new ResultatElement("Seules les extensions mvccd et xml sont reconnues.",
+                                ResultatLevel.FATAL));
                     }
-                } catch (Exception e){
-                    resultat.addException(e);
+                } catch (Exception e) {
+                    resultat.addExceptionUnhandled(e);
                 }
             } else {
-                resultat.add( new ResultatElement("Le fichier à lire doit avoir une extension mvccd et xml.", ResultatLevel.FATAL));
+                resultat.add(new ResultatElement("Le fichier à lire doit avoir une extension mvccd et xml.",
+                        ResultatLevel.FATAL));
             }
             // Fin provisoire !
 
@@ -297,7 +314,17 @@ public class MVCCDManager {
                 PreferencesManager.instance().setProjectPref(project.getPreferences());
 
                 // Copie des préférences d'application au sein des préférences du projet
-                PreferencesManager.instance().copyApplicationPref(Project.EXISTING);
+                try {
+                    PreferencesManager.instance().copyApplicationPref(Project.EXISTING);
+                } catch (Exception e) {
+                    String messageInterne = MessagesBuilder.getMessagesProperty("project.open.pref.appl.error");
+                    message = MessagesBuilder.getMessagesProperty("project.open.treat.error.message",
+                            new String[]{project.getName(), messageInterne});
+                    resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+                    resultat.addExceptionUnhandled(e);
+
+                }
+
                 // Reprise des préférences de profil (si existant)
                 project.adjustProfile();
                 // Copie du projet au sein du référentiel
@@ -319,15 +346,18 @@ public class MVCCDManager {
 
 
         } else {
-            resultat.add( new ResultatElement("Aucun fichier n''est passé en paramètre de la méthode", ResultatLevel.FATAL));
+            resultat.add(new ResultatElement("Aucun fichier n''est passé en paramètre de la méthode", ResultatLevel.FATAL));
         }
 
-        if(resultat.isNotError()){
-            message = MessagesBuilder.getMessagesProperty("project.open.ok", new String[]{project.getName(), file.getPath()});
-        } else{
-            message = MessagesBuilder.getMessagesProperty("project.open.abort", new String[]{file.getPath()});
+        if (resultat.isNotError()) {
+            message = MessagesBuilder.getMessagesProperty("project.open.ok",
+                    new String[]{project.getName(), file.getPath()});
+        } else {
+            message = MessagesBuilder.getMessagesProperty("project.open.abort",
+                    new String[]{file.getPath()});
         }
-        resultat.finishTransaction(message, getMvccdWindow(), true);
+        resultat.add(new  ResultatElement(message, ResultatLevel.INFO));
+        return resultat;
     }
 
     /**
@@ -353,9 +383,10 @@ public class MVCCDManager {
     }
 
 
-    public void saveProject() {
+    public Resultat saveProject() {
+        Resultat resultat ;
         if (fileProjectCurrent != null) {
-            saveProjectBase();
+            resultat = saveProjectBase();
             //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
             if (isExtensionProjectFileNotEqual()) {
                 projectsRecents.add(fileProjectCurrent);
@@ -363,26 +394,29 @@ public class MVCCDManager {
             }
             //Fin provisoire
         } else {
-            saveAsProject(true);
+            resultat = saveAsProject(true);
         }
         setDatasProjectChanged(false);
+        return resultat;
     }
 
 
-    public void saveAsProject(boolean nameProposed) {
+    public Resultat saveAsProject(boolean nameProposed) {
+        Resultat resultat = new Resultat() ;
         ProjectFileChooser fileChooser = new ProjectFileChooser(ProjectFileChooser.SAVE);
         File fileChoose = fileChooser.fileChoose(nameProposed);
         if (fileChoose != null){
             if (UtilFiles.confirmIfExist(mvccdWindow, fileChoose)) {
                 fileProjectCurrent = fileChoose;
-                saveProjectBase();
+                resultat = saveProjectBase();
                 projectsRecents.add(fileProjectCurrent);
                 changeActivateProjectOpenRecentsItems();
             }
         }
+        return resultat;
     }
 
-    private void saveProjectBase(){
+    private Resultat saveProjectBase(){
         Resultat resultat = new Resultat();
         String message = MessagesBuilder.getMessagesProperty("project.save.start",
                 new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() } );
@@ -403,19 +437,21 @@ public class MVCCDManager {
                     new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() });
 
         } catch (Exception e){
-            resultat.addException(e);
+            resultat.addExceptionUnhandled(e);
             // pas de référence aux noms du projet et du fichier qui peuvent être une source d'erreur
             message = MessagesBuilder.getMessagesProperty ("project.save.finish.abort");
         }
 
         // Quittance de fin
-        ResultatService.finishTransaction(resultat, message,mvccdWindow,true);
+        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+        return resultat;
     }
 
 
-    public void closeProject() {
+    public Resultat closeProject() {
+        Resultat resultat = new Resultat();
         String message = MessagesBuilder.getMessagesProperty("project.close", new String[] {project.getName()});
-        ViewLogsManager.newText(message, WarningLevel.WARNING);
+        resultat.add( new ResultatElement(message, ResultatLevel.INFO));
         project = null;
         repository.removeProject();
         PreferencesManager.instance().setProfilePref(null);
@@ -425,7 +461,7 @@ public class MVCCDManager {
         getWinMenuContent().getProjectSave().setEnabled(false);
         getWinMenuContent().getProjectSaveAs().setEnabled(false);
         getWinMenuContent().getProjectClose().setEnabled(false);
-
+        return resultat;
     }
 
 
@@ -504,8 +540,8 @@ public class MVCCDManager {
         this.project = project;
     }
 
-    public Console getConsole() {
-        return console;
+    public ConsoleManager getConsoleManager() {
+        return consoleManager;
     }
 
     public File getFileProjectCurrent() {

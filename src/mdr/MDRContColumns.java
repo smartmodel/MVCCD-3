@@ -1,11 +1,12 @@
 package mdr;
 
 import main.MVCCDElement;
+import mcd.interfaces.IMPathOnlyRepositoryTree;
 import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public abstract class MDRContColumns extends MDRElement{
+public abstract class MDRContColumns extends MDRElement implements IMPathOnlyRepositoryTree {
 
     private  static final long serialVersionUID = 1000;
 

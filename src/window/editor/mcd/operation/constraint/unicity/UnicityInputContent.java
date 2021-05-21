@@ -11,6 +11,7 @@ import preferences.Preferences;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
+import utilities.Trace;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentIdTable;
 import utilities.window.scomponents.SCheckBox;

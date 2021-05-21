@@ -1,5 +1,6 @@
 package utilities.window.editor;
 
+import m.services.MElementService;
 import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.interfaces.IMCDModel;
@@ -67,7 +68,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
         if (getParentCandidates(iMCDModelContainer) != null) {
             for (MCDElement parentCandidate : getParentCandidates(iMCDModelContainer)) {
-                fieldParent.addItem(parentCandidate.getNamePath(MCDElementService.PATHNAME));
+                fieldParent.addItem(parentCandidate.getNamePath(MElementService.PATHNAME));
             }
         }
 
@@ -225,11 +226,13 @@ public abstract class PanelInputContentId extends PanelInputContent {
         }
 
         if (doc == fieldShortName.getDocument()) {
-            checkDatas(fieldShortName);
+            //#MAJ 2021-05-14 Rajouté return PanelInputContentId
+            return checkDatas(fieldShortName);
         }
 
         if (doc == fieldLongName.getDocument()) {
-            checkDatas(fieldLongName);
+            //#MAJ 2021-05-14 Rajouté return PanelInputContentId
+            return checkDatas(fieldLongName);
         }
 
         return true;
@@ -307,7 +310,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
     protected void initDatas() {
         MCDElement parent = (MCDElement) getEditor().getMvccdElementParent() ;
-        SComboBoxService.selectByText(fieldParent, parent.getNamePath(MCDElementService.PATHNAME));
+        SComboBoxService.selectByText(fieldParent, parent.getNamePath(MElementService.PATHNAME));
 
         fieldName.setText("");
         fieldShortName.setText("");
@@ -327,7 +330,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
         parent = (MCDElement) mvccdElement.getParent();
 
 
-        SComboBoxService.selectByText(fieldParent, parent.getNamePath(MCDElementService.PATHNAME));
+        SComboBoxService.selectByText(fieldParent, parent.getNamePath(MElementService.PATHNAME));
 
         fieldName.setText(mvccdElement.getName());
 
@@ -362,7 +365,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
     public MCDElement getParentChoosed()     {
         String text = (String) fieldParent.getSelectedItem();
-        return getParentByNamePath(MCDElementService.PATHNAME, text);
+        return getParentByNamePath(MElementService.PATHNAME, text);
     }
 
     public String getShortNameMode() {

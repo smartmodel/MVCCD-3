@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+// Pas utilisé ...
+// Si utilisé, Il faut mettre le traitement d'exception des méthodes actionPerformed()
 public class ShuttleDialog extends JDialog {
 
     private boolean closeProperly=false;

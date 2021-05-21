@@ -8,6 +8,9 @@ import messages.MessagesBuilder;
 import preferences.Preferences;
 import project.Project;
 import repository.editingTreat.ProjectEditingTreat;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
 import utilities.Trace;
 import utilities.window.DialogMessage;
 
@@ -125,72 +128,99 @@ public class WinMenuContent implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        if (source == projectNew) {
-            newProject();
-        }
-        if (source == projectEdit) {
-            ProjectEditingTreat.treatUpdate(mvccdWindow);
-        }
-        if (source == projectOpen) {
-            openProject();
-        }
-        for (int i = 0; i < Preferences.FILES_RECENTS_AUTHORIZED; i++) {
-            if (source == projectOpenRecentsItems[i]) {
-                openProjectRecent(projectOpenRecentsItems[i].getText());
+        Resultat resultat = new Resultat() ;
+        String messageExceptionTarget = "";
+        Boolean dialogQuittance = false;
+        try {
+            Object source = e.getSource();
+            if (source == projectNew) {
+                messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.new.exception");
+                resultat = newProject();
             }
-        }
-
-        if (source == projectClose){
-            boolean confirmClose = true;
-            if (MVCCDManager.instance().isDatasProjectChanged()){
-                String message = MessagesBuilder.getMessagesProperty ("project.close.change.not.saved");
-                confirmClose = DialogMessage.showConfirmYesNo_No(mvccdWindow, message) == JOptionPane.YES_OPTION;
+            if (source == projectEdit) {
+                messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.edit.exception");
+                resultat = ProjectEditingTreat.treatUpdate(mvccdWindow);
             }
-            if (confirmClose) {
-                MVCCDManager.instance().closeProject();
+            if (source == projectOpen) {
+                messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.open.exception");
+                resultat = openProject();
+             }
+            for (int i = 0; i < Preferences.FILES_RECENTS_AUTHORIZED; i++) {
+                messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.recent.open.exception");
+                if (source == projectOpenRecentsItems[i]) {
+                    resultat = openProjectRecent(projectOpenRecentsItems[i].getText());
+                }
             }
-        }
-        if (source == projectSave){
-            MVCCDManager.instance().saveProject();
-        }
-        if (source == projectSaveAs){
-            MVCCDManager.instance().saveAsProject(false);
-        }
 
+            if (source == projectClose) {
+                messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.close.exception");
+                boolean confirmClose = true;
+                if (MVCCDManager.instance().isDatasProjectChanged()) {
+                    String message = MessagesBuilder.getMessagesProperty("project.close.change.not.saved");
+                    confirmClose = DialogMessage.showConfirmYesNo_No(mvccdWindow, message) == JOptionPane.YES_OPTION;
+                }
+                if (confirmClose) {
+                    resultat = MVCCDManager.instance().closeProject();
+                }
+            }
 
+            if (source == projectSave) {
+                messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.save.exception");
+                dialogQuittance = true;
+                resultat = MVCCDManager.instance().saveProject();
+            }
+            if (source == projectSaveAs) {
+                messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.save.as.exception");
+                dialogQuittance = true;
+                resultat = MVCCDManager.instance().saveAsProject(false);
+            }
+
+            // Quittance ok
+            ViewLogsManager.printResultat(resultat);
+            if (dialogQuittance) {
+                ViewLogsManager.dialogQuittance(mvccdWindow, resultat);
+            }
+
+        } catch(Exception exception){
+            String messageException = MessagesBuilder.getMessagesProperty("bar.menu.exception",
+                    messageExceptionTarget);
+            ViewLogsManager.catchException(exception, mvccdWindow, messageException);
+        }
     }
 
-    private void newProject() {
+    private Resultat newProject() {
+        Resultat resultat = new Resultat();
         if (MVCCDManager.instance().getProject() == null) {
             Project project = ProjectEditingTreat.treatNew(mvccdWindow);
             if (project != null){
                 // Quittance de création d'un nouveau projet
                 String message = MessagesBuilder.getMessagesProperty ("project.new", project.getName());
-                ViewLogsManager.newText(message, WarningLevel.WARNING);
+                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
             }
         } else {
             String message = MessagesBuilder.getMessagesProperty ("project.new.not.close");
             DialogMessage.showOk(mvccdWindow,message);
         }
+        return resultat;
     }
 
-    private void openProject() {
+    private Resultat openProject() {
         if (MVCCDManager.instance().getProject() == null) {
-            MVCCDManager.instance().openProject();
+            return MVCCDManager.instance().openProject();
         } else {
             String message = MessagesBuilder.getMessagesProperty ("project.open.not.close");
             DialogMessage.showOk(mvccdWindow,message);
+            return new Resultat();
         }
     }
 
-    private void openProjectRecent(String fileName) {
+    private Resultat openProjectRecent(String fileName) {
         if (MVCCDManager.instance().getProject() == null) {
-            MVCCDManager.instance().openProjectRecent(fileName);
-
+            return MVCCDManager.instance().openProjectRecent(fileName);
         } else {
             String message = MessagesBuilder.getMessagesProperty ("project.open.not.close");
             DialogMessage.showOk(mvccdWindow,message);
+            return new Resultat();
         }
 
     }

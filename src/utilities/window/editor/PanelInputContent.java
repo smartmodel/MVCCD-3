@@ -1,8 +1,10 @@
 package utilities.window.editor;
 
+import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import preferences.PreferencesManager;
 import utilities.Debug;
+import utilities.Trace;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 
@@ -95,42 +97,40 @@ public abstract class PanelInputContent
 
     @Override
     public void insertUpdate(DocumentEvent e) {
-        //SComponent sComponent = changeFieldId(e);
-        //sComponent = changeField(e);
-        //SComponent sComponent = changeField(e);
-        if (alreadyFocusGained) {
-            changeField(e);
-            enabledButtons();
-            enabledContent();
+        try {
+            if (alreadyFocusGained) {
+                changeField(e);
+                enabledButtons();
+                enabledContent();
+            }
+        } catch (Exception exception){
+            exceptionUnhandled(exception, "panelInputContent.exception.insertupdate");
         }
     }
 
     @Override
     public void removeUpdate(DocumentEvent e) {
-        /*
-        if (e.getDocument() instanceof  STextField){
-            STextField sTextField = (STextField) e.getDocument();
-            sTextField.setColorNormal();
-        } */
-        //SComponent sComponent = changeFieldId(e);
-        //sComponent = changeField(e);
-        //SComponent sComponent = changeField(e);
-        if (alreadyFocusGained) {
-            changeField(e);
-            enabledButtons();
-            enabledContent();
+        try {
+            if (alreadyFocusGained) {
+                changeField(e);
+                enabledButtons();
+                enabledContent();
+            }
+        } catch (Exception exception){
+            exceptionUnhandled(exception, "panelInputContent.exception.removeupdate");
         }
     }
 
     @Override
     public void changedUpdate(DocumentEvent e) {
-        //SComponent sComponent = changeFieldId(e);
-        //sComponent = changeField(e);
-        //SComponent sComponent = changeField(e);
-        if (alreadyFocusGained) {
-            changeField(e);
-            enabledButtons();
-            enabledContent();
+        try {
+            if (alreadyFocusGained) {
+                changeField(e);
+                enabledButtons();
+                enabledContent();
+            }
+        } catch (Exception exception){
+            exceptionUnhandled(exception, "panelInputContent.exception.changeupdate");
         }
     }
 
@@ -138,28 +138,51 @@ public abstract class PanelInputContent
     @Override
     public void itemStateChanged(ItemEvent e) {
 
-
-        if (alreadyFocusGained) {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                //changeFieldIdSelected(e);
-                changeFieldSelected(e);
+        try {
+            if (alreadyFocusGained) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    //changeFieldIdSelected(e);
+                    changeFieldSelected(e);
+                }
+                if (e.getStateChange() == ItemEvent.DESELECTED) {
+                    changeFieldDeSelected(e);
+                }
+                if (e.getSource() instanceof SCheckBox) {
+                    SCheckBox checkBox = (SCheckBox) e.getSource();
+                    enableSubPanels(checkBox);
+                }
+                if (e.getSource() instanceof SComboBox) {
+                }
+                enabledButtons();
+                enabledContent();
             }
-            if (e.getStateChange() == ItemEvent.DESELECTED) {
-                changeFieldDeSelected(e);
-            }
-            if (e.getSource() instanceof SCheckBox) {
-                SCheckBox checkBox = (SCheckBox) e.getSource();
-                enableSubPanels(checkBox);
-            }
-            if (e.getSource() instanceof SComboBox) {
-            }
-            enabledButtons();
-            enabledContent();
+        } catch(Exception exception){
+            exceptionUnhandled(exception, "panelInputContent.exception.itemstatechange");
         }
 
     }
 
+    private void exceptionUnhandled(Exception exception, String propertyAction){
+        ExceptionService.exceptionUnhandled(exception, getEditor(),this,
+                getMvccdElementForCatchException(),
+                getMessageExceptionUnhandled(), propertyAction);
+    }
 
+    private String getMessageExceptionUnhandled(){
+        if (getEditor().getMode().equals(DialogEditor.NEW)){
+            return "panelInputContent.new.exception";
+        } else {
+            return "panelInputContent.update.exception";
+        }
+    }
+
+    private MVCCDElement getMvccdElementForCatchException(){
+        if (getEditor().getMode().equals(DialogEditor.NEW)) {
+            return getEditor().getMvccdElementParent();
+        } else {
+            return getEditor().getMvccdElementCrt();
+        }
+    }
 
     public void enabledButtons() {
 

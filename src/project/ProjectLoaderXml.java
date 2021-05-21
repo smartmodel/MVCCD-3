@@ -76,7 +76,7 @@ public class ProjectLoaderXml {
             // Ajout des éléments du projet
             addPropertiesProject(projectTag, project);
             addPreferences(projectTag, preferences);
-
+            
             // Chargement du modèle MCD
             Element mcdTag = (Element) projectTag.getElementsByTagName("MCD").item(0);
             MCDContModels mcd = MVCCDElementFactory.instance().createMCDModels(project, Integer.parseInt(mcdTag.getAttribute("id")));

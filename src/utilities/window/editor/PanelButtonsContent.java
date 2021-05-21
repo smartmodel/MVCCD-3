@@ -1,7 +1,10 @@
 package utilities.window.editor;
 
+import console.ViewLogsManager;
+import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import main.MVCCDManager;
+import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -181,44 +184,77 @@ public abstract class PanelButtonsContent extends PanelContent
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        if (source == btnOk) {
-            if (getEditor().getMode().equals(DialogEditor.NEW)) {
-                treatCreate();
-             }
-            if (getEditor().getMode().equals(DialogEditor.UPDATE)) {
-                treatUpdate();
+        String property = "";
+        MVCCDElement mvccdElementForCatchException = null;
+        try {
+            Object source = e.getSource();
+            if (source == btnOk) {
+                if (getEditor().getMode().equals(DialogEditor.NEW)) {
+                    property = "editor.btn.exception.ok.new";
+                    mvccdElementForCatchException = getEditor().getMvccdElementParent();
+                    treatCreate();
+                }
+                if (getEditor().getMode().equals(DialogEditor.UPDATE)) {
+                    property = "editor.btn.exception.ok.update";
+                    mvccdElementForCatchException = getEditor().getMvccdElementCrt();
+                    treatUpdate();
+                }
+                getEditor().myDispose();
             }
-            getEditor().myDispose();
-        }
-        if (source == btnApply) {
-            MVCCDElement mvccdElementForUpate = null;
-            if (getEditor().getMode().equals(DialogEditor.NEW)) {
-                treatCreate();
-                mvccdElementForUpate = getEditor().getMvccdElementNew();
+            if (source == btnApply) {
+                MVCCDElement mvccdElementForUpate = null;
+                if (getEditor().getMode().equals(DialogEditor.NEW)) {
+                    property = "editor.btn.exception.apply.new";
+                    mvccdElementForCatchException = getEditor().getMvccdElementParent();
+                    treatCreate();
+                    mvccdElementForUpate = getEditor().getMvccdElementNew();
+                }
+                if (getEditor().getMode().equals(DialogEditor.UPDATE)) {
+                    property = "editor.btn.exception.ok.update";
+                    mvccdElementForCatchException = getEditor().getMvccdElementCrt();
+                    treatUpdate();
+                    mvccdElementForUpate = getEditor().getMvccdElementCrt();
+                }
+                getEditor().myDispose();
+                if (getEditor().getEditingTreat() != null){
+                    getEditor().getEditingTreat().treatUpdate(getEditor().getOwner(), mvccdElementForUpate);
+                }
             }
-            if (getEditor().getMode().equals(DialogEditor.UPDATE)) {
-                treatUpdate();
-                mvccdElementForUpate = getEditor().getMvccdElementCrt();
+            if (source == btnUndo) {
+                // Seulement en update
+                property = "editor.btn.exception.apply.undo";
+                mvccdElementForCatchException = getEditor().getMvccdElementCrt();
+                treatReset();
             }
-            getEditor().myDispose();
-            if (getEditor().getEditingTreat() != null){
-                getEditor().getEditingTreat().treatUpdate(getEditor().getOwner(), mvccdElementForUpate);
+            if (source == btnReInit) {
+                // Seulement en update
+                property = "editor.btn.exception.apply.reinit";
+                mvccdElementForCatchException = getEditor().getMvccdElementCrt();
+                treatReInit();
             }
-        }
-        if (source == btnUndo) {
-            // Seulement en update
-            treatReset();
-        }
-        if (source == btnReInit) {
-            // Seulement en update
-            treatReInit();
-        }
-        if (source == btnClose) {
-            getEditor().confirmClose();
-        }
-        if (source == btnHelp) {
-            treatHelp();
+            if (source == btnClose) {
+                if (getEditor().getMode().equals(DialogEditor.NEW)) {
+                    property = "editor.btn.exception.apply.close.new";
+                    mvccdElementForCatchException = getEditor().getMvccdElementParent();
+                } else {
+                    property = "editor.btn.exception.apply.close.not.new";
+                    mvccdElementForCatchException = getEditor().getMvccdElementCrt();
+                }
+                getEditor().confirmClose();
+            }
+            if (source == btnHelp) {
+                if (getEditor().getMode().equals(DialogEditor.NEW)) {
+                    property = "editor.btn.exception.apply.help.new";
+                    mvccdElementForCatchException = getEditor().getMvccdElementParent();
+                } else {
+                    property = "editor.btn.exception.apply.help.not.new";
+                    mvccdElementForCatchException = getEditor().getMvccdElementCrt();
+                }
+                treatHelp();
+            }
+
+        } catch (Exception exception) {
+            exceptionUnhandled(exception, mvccdElementForCatchException, property);
         }
     }
 
@@ -304,4 +340,17 @@ public abstract class PanelButtonsContent extends PanelContent
             btnUndo.setReadOnly(readOnly);
          }
     }
+    private void exceptionUnhandled(Exception e,
+                                    MVCCDElement mvccdElement,
+                                    String property) {
+
+        String action = MessagesBuilder.getMessagesProperty(property);
+        String nameMVCCDElement = mvccdElement.getNameTree();
+        String nameClassMVCCDElement = mvccdElement.getClass().getName();
+        String message = MessagesBuilder.getMessagesProperty("editor.btn.exception",
+                new String[] {action, nameMVCCDElement, nameClassMVCCDElement} );
+        ViewLogsManager.catchException(e, getEditor(), message);
+    }
+
+
 }

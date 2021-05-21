@@ -2,6 +2,7 @@ package mcd;
 
 import mcd.interfaces.IMCDParameter;
 import project.ProjectElement;
+import utilities.Trace;
 
 public class MCDParameter extends MCDElement {
 

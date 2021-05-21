@@ -1,11 +1,13 @@
 package diagram.mcd;
 
+import console.ViewLogsManager;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
+import messages.MessagesBuilder;
 import preferences.Preferences;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.MCDAssociationEditingTreat;
@@ -67,89 +69,93 @@ public class MCDTitlePanel {
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String message = "Choisisez la sorte d'élément à ajouter dans le projet";
-                Object[] options = {"Annuler", "Entité", "Association", "Généralisation","Entité ass."};
-                MVCCDWindow mvccdWindow = MVCCDManager.instance().getMvccdWindow();
-                int posOption = DialogMessage.showOptions(mvccdWindow,
-                        message, options, JOptionPane.UNINITIALIZED_VALUE);
-
-                if (posOption > 0) {
-                    MCDElement newElement = null;
-                    DialogEditor fen = null;
-                    if (posOption == 1) {
-                        MCDContEntities mcdContEntities = (MCDContEntities) parent.getBrotherByClassName(MCDContEntities.class.getName());
-                        MCDEntityEditingTreat mcdEntityEditingTreat = new MCDEntityEditingTreat();
-                        MCDEntity newMCDEntity = (MCDEntity) mcdEntityEditingTreat.treatNew(mvccdWindow, mcdContEntities);
-                    }
-
-                    if (posOption == 2) {
-                        //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
-                        IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
-                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
-
-                        MCDEntity mcdEntityFrom = null;
-                        MCDEntity mcdEntityTo= null;
-                        if (mcdEntities.size() == 1 ){
-                            mcdEntityFrom = mcdEntities.get(0);
-                            mcdEntityTo = mcdEntities.get(0);
-                        } else if (mcdEntities.size() > 1 ){
-                            mcdEntityFrom = mcdEntities.get(0);
-                            mcdEntityTo = mcdEntities.get(1);
+                String propertyBtn = "diagram.btn.exception.simulation";
+                try {
+                    String message = "Choisisez la sorte d'élément à ajouter dans le projet";
+                    Object[] options = {"Annuler", "Entité", "Association", "Généralisation", "Entité ass."};
+                    MVCCDWindow mvccdWindow = MVCCDManager.instance().getMvccdWindow();
+                    int posOption = DialogMessage.showOptions(mvccdWindow,
+                            message, options, JOptionPane.UNINITIALIZED_VALUE);
+                    if (posOption > 0) {
+                        MCDElement newElement = null;
+                        DialogEditor fen = null;
+                        if (posOption == 1) {
+                            MCDContEntities mcdContEntities = (MCDContEntities) parent.getBrotherByClassName(MCDContEntities.class.getName());
+                            MCDEntityEditingTreat mcdEntityEditingTreat = new MCDEntityEditingTreat();
+                            MCDEntity newMCDEntity = (MCDEntity) mcdEntityEditingTreat.treatNew(mvccdWindow, mcdContEntities);
                         }
 
-                        MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
-                        MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
-                        MCDAssociation newMCDAssociation = mcdAssociationEditingTreat.treatNew(mvccdWindow, mcdContRelations,
-                                mcdEntityFrom, mcdEntityTo, MCDAssociationNature.NOID, false);
-                    }
+                        if (posOption == 2) {
+                            //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
+                            IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
+                            ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
 
-                    if (posOption == 3) {
-                        //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
-                        IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
-                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
+                            MCDEntity mcdEntityFrom = null;
+                            MCDEntity mcdEntityTo = null;
+                            if (mcdEntities.size() == 1) {
+                                mcdEntityFrom = mcdEntities.get(0);
+                                mcdEntityTo = mcdEntities.get(0);
+                            } else if (mcdEntities.size() > 1) {
+                                mcdEntityFrom = mcdEntities.get(0);
+                                mcdEntityTo = mcdEntities.get(1);
+                            }
 
-                        MCDEntity mcdEntityGen = null;
-                        MCDEntity mcdEntitySpec= null;
-                        if (mcdEntities.size() == 1 ){
-                            mcdEntityGen = mcdEntities.get(0);
-                            mcdEntitySpec = mcdEntities.get(0);
-                        } else if (mcdEntities.size() > 1 ){
-                            mcdEntityGen = mcdEntities.get(0);
-                            mcdEntitySpec = mcdEntities.get(1);
+                            MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
+                            MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
+                            MCDAssociation newMCDAssociation = mcdAssociationEditingTreat.treatNew(mvccdWindow, mcdContRelations,
+                                    mcdEntityFrom, mcdEntityTo, MCDAssociationNature.NOID, false);
                         }
 
-                        MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
-                        MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
-                        MCDGeneralization newMCDGeneralization = mcdGeneralizationEditingTreat.treatNew(mvccdWindow, mcdContRelations,
-                                mcdEntityGen, mcdEntitySpec, false);
-                    }
+                        if (posOption == 3) {
+                            //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
+                            IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
+                            ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
 
-                    if (posOption == 4) {
-                        //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
-                        IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
-                        ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
-                        ArrayList<MCDAssociation> mcdAssociations = IMCDModelService.getAllMCDAssociationsInIModel(iMCDModel);
+                            MCDEntity mcdEntityGen = null;
+                            MCDEntity mcdEntitySpec = null;
+                            if (mcdEntities.size() == 1) {
+                                mcdEntityGen = mcdEntities.get(0);
+                                mcdEntitySpec = mcdEntities.get(0);
+                            } else if (mcdEntities.size() > 1) {
+                                mcdEntityGen = mcdEntities.get(0);
+                                mcdEntitySpec = mcdEntities.get(1);
+                            }
 
-                        MCDEntity mcdEntity = null;
-                        MCDAssociation mcdAssociation= null;
-                        if (mcdEntities.size() >= 1 ){
-                            mcdEntity = mcdEntities.get(0);
+                            MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
+                            MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
+                            MCDGeneralization newMCDGeneralization = mcdGeneralizationEditingTreat.treatNew(mvccdWindow, mcdContRelations,
+                                    mcdEntityGen, mcdEntitySpec, false);
                         }
-                        if (mcdAssociations.size() >= 1 ){
-                            mcdAssociation = mcdAssociations.get(0);
+
+                        if (posOption == 4) {
+                            //IMCDModel iMCDModel = IMCDModelService.getIMCDModelContainer((MCDElement) parent);
+                            IMCDModel iMCDModel = ((MCDElement) parent).getIMCDModelAccueil();
+                            ArrayList<MCDEntity> mcdEntities = IMCDModelService.getMCDEntities(iMCDModel);
+                            ArrayList<MCDAssociation> mcdAssociations = IMCDModelService.getAllMCDAssociationsInIModel(iMCDModel);
+
+                            MCDEntity mcdEntity = null;
+                            MCDAssociation mcdAssociation = null;
+                            if (mcdEntities.size() >= 1) {
+                                mcdEntity = mcdEntities.get(0);
+                            }
+                            if (mcdAssociations.size() >= 1) {
+                                mcdAssociation = mcdAssociations.get(0);
+                            }
+
+                            MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
+                            MCDLinkEditingTreat mcdLinkEditingTreat = new MCDLinkEditingTreat();
+                            MCDLink newMCDLink = mcdLinkEditingTreat.treatNew(mvccdWindow, mcdContRelations,
+                                    mcdEntity, mcdAssociation, false);
                         }
 
-                        MCDContRelations mcdContRelations = (MCDContRelations) parent.getBrotherByClassName(MCDContRelations.class.getName());
-                        MCDLinkEditingTreat mcdLinkEditingTreat = new MCDLinkEditingTreat();
-                        MCDLink newMCDLink= mcdLinkEditingTreat.treatNew(mvccdWindow, mcdContRelations,
-                                mcdEntity, mcdAssociation, false);
-                    }
+                        if (fen != null) {
+                            fen.setVisible(true);
+                            newElement = (MCDElement) fen.getMvccdElementNew();
+                        }
 
-                    if (fen != null) {
-                        fen.setVisible(true);
-                        newElement = (MCDElement) fen.getMvccdElementNew();
                     }
-
+                } catch (Exception exception) {
+                    exceptionUnhandled(exception, propertyBtn);
                 }
             }
         });
@@ -159,7 +165,12 @@ public class MCDTitlePanel {
         btnCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                new MCDDiagramEditingTreat().treatClose(MVCCDManager.instance().getMvccdWindow());
+                String propertyBtn = "diagram.btn.exception.close";
+                try {
+                   new MCDDiagramEditingTreat().treatClose(MVCCDManager.instance().getMvccdWindow());
+                } catch (Exception exception){
+                    exceptionUnhandled(exception, propertyBtn);
+                }
             }
         });
 
@@ -168,19 +179,25 @@ public class MCDTitlePanel {
         btnApply.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if ( mode.equals(DialogEditor.NEW) && (!created)){
-                    // le diagram transitoire est persisté
-                    diagram.setParent(parent);
-                    diagram.setName(fieldName.getText());
-                    MVCCDManager.instance().addNewMVCCDElementInRepository(diagram);
-                    created = true;
-                } else {
-                    // Mise à jour
-                    diagram.setName(fieldName.getText());
-                    MVCCDManager.instance().showMVCCDElementInRepository(diagram);
+                String propertyBtn = "diagram.btn.exception.apply";
+                try {
+                    if (mode.equals(DialogEditor.NEW) && (!created)) {
+                        // le diagram transitoire est persisté
+                        diagram.setParent(parent);
+                        diagram.setName(fieldName.getText());
+                        MVCCDManager.instance().addNewMVCCDElementInRepository(diagram);
+                        created = true;
+                    } else {
+                        // Mise à jour
+                        diagram.setName(fieldName.getText());
+                        MVCCDManager.instance().showMVCCDElementInRepository(diagram);
+                    }
+                    //TODO-1 Véfier la mise à jour effective
+                    MVCCDManager.instance().setDatasProjectChanged(true);
+                } catch(Exception exception) {
+                    exceptionUnhandled(exception, propertyBtn);
                 }
-                //TODO-1 Véfier la mise à jour effective
-                MVCCDManager.instance().setDatasProjectChanged(true);
+
             }
         });
 
@@ -197,7 +214,15 @@ public class MCDTitlePanel {
 
     }
 
-
-
+    private void exceptionUnhandled(Exception exception,
+                                    String property) {
+        //TODO-1 A voir si window doit être passé en paramètre par la création du panneau
+        String action = MessagesBuilder.getMessagesProperty(property);
+        String message = MessagesBuilder.getMessagesProperty("diagram.btn.exception",
+                new String[] {action} );
+        //TODO-1 A voir si window doit être passé en paramètre par la création du panneau
+        Window window = MVCCDManager.instance().getMvccdWindow();
+        ViewLogsManager.catchException(exception, window, message);
+    }
 
 }

@@ -1,16 +1,18 @@
 package mcd.services;
 
 import exceptions.CodeApplException;
+import m.services.MElementService;
 import mcd.MCDElement;
 import mcd.MCDModel;
 import mcd.interfaces.IMCDModel;
-import mcd.interfaces.IMCDNamePathParent;
 import org.apache.commons.lang.StringUtils;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
 public class MCDElementService {
 
+    /*
     public static final int PATHNAME = 1;
     public static final int PATHSHORTNAME = 2;
 
@@ -41,12 +43,14 @@ public class MCDElementService {
         return path;
     }
 
+     */
+
 
 
     public static String getNamePathSource(MCDElement mcdElement, int pathMode, String separator) {
         String nameSource = "";
-        String path = getPath( mcdElement, pathMode, separator);
-        if (path !=null){
+        String path = mcdElement.getPath( pathMode, separator);
+        if (StringUtils.isNotEmpty(path)){
             nameSource = nameSource + path + separator ;
         }
         nameSource = nameSource +  mcdElement.getNameSource();
@@ -71,7 +75,7 @@ public class MCDElementService {
             //Il ne faut pas remonter au parent
             return (IMCDModel) mcdElement ;
         } else{
-            throw new CodeApplException("MCDElementService.getIMCDModelAccueil  - Erreur de parcours");
+            throw new CodeApplException("Erreur de parcours  pour " + mcdElement.getNamePath(MElementService.PATHNAME));
         }
     }
 

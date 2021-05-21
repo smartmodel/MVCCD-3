@@ -174,6 +174,6 @@ public class UtilDivers {
                 return false;
             }
         }
-        throw new CodeApplException("UtilsDivers.equals - Erreur interne   str1:" + str1 +  "  -  str2:" + str2);
+        throw new CodeApplException("str1:" + str1 +  "  -  str2:" + str2);
     }
 }

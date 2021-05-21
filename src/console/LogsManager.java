@@ -4,7 +4,7 @@ import exceptions.CodeApplException;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
+import resultat.ResultatElement;
 import utilities.files.UtilFiles;
 
 import java.io.File;
@@ -15,9 +15,7 @@ public class LogsManager {
 
 
     static private boolean textAddedToLog = false;
-
     static private boolean fileError = false;  //Vrai  dès qu'une erreur survient dans la session
-
     static private String fileErrorMessage; // Message d'erreur reçu de gestionnaire de fichier
 
     /**
@@ -40,27 +38,23 @@ public class LogsManager {
      * or has the same importance than the value set assLink the property PLUGIN_LOGGING_WARNINGLEVEL.
      * The log is written into a file present at the path specified by PLUGIN_LOGGING_FOLDER_PATH,
      * and the file name is given by PLUGIN_LOGGING_FILE_NAME_FORMAT.
-     * @param text
-     * @param warningLevel
+     * @param resultatElement
+     * @param newResultat
      */
 
 
-    static private void logText(String text, boolean newText , WarningLevel warningLevel){
+    static private void logResultatElement(ResultatElement resultatElement, boolean newResultat){
         if (!fileError){
-            WarningLevelManager wlm = WarningLevelManager.instance();
-
-            WarningLevel prefWarningLevel = PreferencesManager.instance().preferences().getWARNING_LEVEL();
-
-            if(warningLevel == null || wlm.OneIsAsImportantAsSecond(warningLevel,prefWarningLevel)){
                 FilesManager fm = FilesManager.instance();
                 try{
-                    //String pluginId = FilePropertiesPluginVPManager.instance().getPluginProperty("plugin.id");
-                    //String pluginDir = ApplicationManager.instance().getPluginInfo(pluginId).getPluginDir().toString();
                     String fileName = getLogFileName();
-                    if (newText) {
-                        String separator = "============================================================" + System.lineSeparator();
-                        String datation = new SimpleDateFormat("HH:mm:ss - ").format(new Date());
-                        text = separator + datation + text;
+                    String text = resultatElement.getText();
+                    if (newResultat) {
+                        String separator = "============================================================"
+                                + System.lineSeparator();
+                        String datation = new SimpleDateFormat("HH:mm:ss").format(new Date());
+                        text = separator + Preferences.APPLICATION_NAME+"-"+Preferences.APPLICATION_VERSION +
+                                "  " + datation + System.lineSeparator() + text;
                     }
                     fm.addLineToFile(Preferences.DIRECTORY_LOGGING_NAME + File.separator, fileName, text);
                     textAddedToLog = true;
@@ -75,28 +69,16 @@ public class LogsManager {
                     fileErrorMessage = message ;
                     noLogFileAvailable(e);
                 }
-            }
         }
     }
 
-    static public void newText(String text, WarningLevel warningLevel){
-        logText(text, true, warningLevel);
+    static public void newResultatElement(ResultatElement resultatElement){
+        logResultatElement(resultatElement, true);
     }
 
-    static public void continueText(String text, WarningLevel warningLevel){
-        logText(text, false, warningLevel);
+    static public void continueResultatElement(ResultatElement resultatElement){
+        logResultatElement(resultatElement, false);
     }
-
-
-    /**
-     * Log a text into file.
-     * It doesn't worry to the warning level.
-     */
-
-	/*
-	static public void logTextBloc(String text){
-		logTextBloc(text, null);
-	} */
 
 
     /**
@@ -132,18 +114,17 @@ public class LogsManager {
         if (fileError) {
             // Comme l'erreur est lié au fichier de log, il nous faut envoyer les messages directement sur la console
             // la classe MessageManager ne peut pas être utilisée.
-            ViewManager.showTextLine("****  Traçabilité impossible  ****");
+            ConsoleManager.printMessage("****  Traçabilité impossible  ****");
             // Message d'erreur système
-            ViewManager.showTextLine("Attention:  " + fileErrorMessage);
-            // Message d'info de démarrage de VP en mode administrateur
-            ViewManager.showTextLine("Cette erreur empêche MVC-CD de tracer son activité dans son fichier de log");
-            ViewManager.showTextLine("Si l'erreur est liée à un problème d'accès aux ressources, il faut alors vous assurer de lancer MVC-CD davec les privilèges d'administrateur");
-            ViewManager.showTextLine("---------------------------------");
+            ConsoleManager.printMessage("Attention:  " + fileErrorMessage);
+            ConsoleManager.printMessage("Cette erreur empêche MVC-CD de tracer son activité dans son fichier de log");
+            ConsoleManager.printMessage("Si l'erreur est liée à un problème d'accès aux ressources, il faut alors vous assurer de lancer MVC-CD davec les privilèges d'administrateur");
+            ConsoleManager.printMessage("---------------------------------");
             //TODO-1 A voir aussi le manque de place et autres...
             // Affinier le traitement pour donner une indication précise de l'erreur
 
             // Affichage de la pile d'erreur dans la console
-            Console.printStackTrace(e);
+            ConsoleManager.printStackTrace(e);
         }
     }
 
