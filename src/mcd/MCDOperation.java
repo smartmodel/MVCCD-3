@@ -32,4 +32,8 @@ public abstract class MCDOperation extends MCDElement implements IMCompletness, 
         }
         return parameters;
     }
+
+    public MCDEntity getEntityAccueil(){
+        return (MCDEntity) getParent().getParent();
+    }
 }

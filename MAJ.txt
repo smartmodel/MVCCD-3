@@ -44,6 +44,9 @@ Problèmes : Initialisation d'une relation en création
 
 //#MAJ 2021-05-18 ParameterInputContent (Inversion)
 
+//#MAJ 2021-05-19 Affinement MCDUnicity
+//#MAJ 2021-05-21 Affinement MCDUnicity
+
 //Exception provoquée
 //int i = 0 ;
 //int j = 2 /i ;

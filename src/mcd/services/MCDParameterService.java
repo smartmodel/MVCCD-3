@@ -75,6 +75,21 @@ public class MCDParameterService {
     }
 
 
+    public static ArrayList<MCDAttribute> createTargetsAttributesOptionnalUnique(MCDEntity mcdEntity) {
+        ArrayList<MCDAttribute> resultat = new  ArrayList<MCDAttribute>();
+        ArrayList<MCDAttribute> targetsPotential = createTargetsAttributesUnique(mcdEntity);
+        for (MVCCDElement targetPotential : targetsPotential) {
+            if (targetPotential instanceof MCDAttribute) {
+                MCDAttribute attributePotential = (MCDAttribute) targetPotential;
+                if (! attributePotential.isMandatory() ) {
+                    resultat.add(attributePotential);
+                }
+            }
+        }
+        return resultat;
+    }
+
+
 
     public static ArrayList<MCDAssEnd> createTargetsNonExisting(ArrayList <MCDAssEnd> mcdAssEnds, ArrayList<MCDParameter> parameters) {
         ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
@@ -151,8 +166,12 @@ public class MCDParameterService {
             // Extrémités d'association
             // Sans entité associative
             for (MCDAssEnd mcdAssEnd : mcdEntity.getMCDAssEnds()) {
-                if (mcdAssEnd.getMCDAssEndOpposite().getNameTree().equals(nameTree)) {
-                    return mcdAssEnd.getMCDAssEndOpposite();
+                //#MAJ 2021-05-19 Affinement MCDUnicity
+
+                //if (mcdAssEnd.getMCDAssEndOpposite().getNameTree().equals(nameTree)) {
+                if (mcdAssEnd.getNameTree().equals(nameTree)) {
+                    //return mcdAssEnd.getMCDAssEndOpposite();
+                    return mcdAssEnd;
                 }
             }
             // Avec entité associative

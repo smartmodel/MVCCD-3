@@ -14,6 +14,7 @@ import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
+import window.editor.mcd.operation.constraint.unicity.UnicityInputContent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -78,6 +79,8 @@ public class ParameterInputContent extends PanelInputContent {
             // Attributs
             targetsPotential = MVCCDElementConvert.to(
                     MCDParameterService.createTargetsAttributesNID(mcdEntity));
+            //#MAJ 2021-05-19 Affinement MCDUnicity
+            /*
             if (mcdOperation instanceof MCDNID) {
                 if (((MCDNID) mcdOperation).isAbsolute()) {
                     // Associations identifiantes
@@ -90,12 +93,42 @@ public class ParameterInputContent extends PanelInputContent {
                 }
             }
 
+             */
+
         }
 
         if (getEditor().getScope() == ParameterEditor.UNIQUE){
+            //#MAJ 2021-05-21 Affinement MCDUnicity
+            MCDUnique mcdUnique = (MCDUnique) mcdOperation ;
+            if (((MCDUnique) mcdOperation).isAbsolute()){
+                // Contrainte absolue
+
+                // Attribut
+                targetsPotential = MVCCDElementConvert.to(
+                        MCDParameterService.createTargetsAttributesUnique(mcdEntity));
+
+                // Extrémités d'associations
+                targetsPotential.addAll(mcdEntity.getAssEndsIdChild());
+                targetsPotential.addAll(mcdEntity.getAssEndsNoIdChild());
+                targetsPotential.addAll(mcdEntity.getAssEndsAssNNChild());
+            } else {
+                //Contrainte non absolue
+
+                // Attribut
+                targetsPotential = MVCCDElementConvert.to(
+                        MCDParameterService.createTargetsAttributesOptionnalUnique(mcdEntity));
+
+                // Extrémités d'associations
+                targetsPotential.addAll(mcdEntity.getAssEndsNoIdOptionnalChild());
+            }
+            //#MAJ 2021-05-21 Affinement MCDUnicity
+            /*
             // Attributs
             targetsPotential = MVCCDElementConvert.to(
                     MCDParameterService.createTargetsAttributesUnique(mcdEntity));
+            //#MAJ 2021-05-19 Affinement MCDUnicity
+            targetsPotential.addAll(mcdEntity.getAssEndsNoIdAndNoNNChild());
+
             // Associations non identifiantes
             //#MAJ 2021-05-18 ParameterInputContent (Inversion)
             //targetsPotential.addAll(MCDParameterService.createTargetsAssEndsNoIdAndNoNN(mcdEntity));
@@ -105,9 +138,10 @@ public class ParameterInputContent extends PanelInputContent {
                     //#MAJ 2021-05-18 ParameterInputContent (Inversion)
                     //targetsPotential.addAll(MCDParameterService.createTargetsAssEndsIdAndNN(mcdEntity));
                     targetsPotential.addAll(mcdEntity.getAssEndsIdAndNNChild());
-                    targetsPotential.addAll(mcdEntity.getAssEndsNoIdAndNoNNChild());
                 }
             }
+
+             */
         }
 
         for (MVCCDElement mvccdElement : targetsPotential) {

@@ -301,10 +301,15 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
         return MCDEntityService.getAssEndsNoIdChild(this);
     }
 
+    public ArrayList<MCDAssEnd> getAssEndsNoIdOptionnalChild() {
+        return MCDEntityService.getAssEndsNoIdOptionnalChild(this);
+    }
+
     public ArrayList<MCDAssEnd> getAssEndsNoIdAndNoNNChild(){
 
         return MCDEntityService.getAssEndsNoIdAndNoNNChild(this);
     }
+
 
     public ArrayList<MCDAssEnd> getAssEndsAssNNChild(){
 

@@ -128,6 +128,8 @@ public class NIDInputContent extends UnicityInputContent {
 
     @Override
     protected void changeFieldDeSelectedAbsolute() {
+        //#MAJ 2021-05-21 Affinement MCDUnicity
+        /*
         Object [] row = new Object[table.getRowCount()];
         int line = 0 ;
         while (line < table.getRowCount()){
@@ -139,6 +141,8 @@ public class NIDInputContent extends UnicityInputContent {
             line++;
         }
         tableContentChanged();
+
+         */
     }
 
 
@@ -152,7 +156,9 @@ public class NIDInputContent extends UnicityInputContent {
 /*
         unitaire = notBatch  && (sComponent == fieldTarget);
         ok = checkTarget(unitaire) && ok ;
-*/
+
+ */
+
         super.setPreSaveOk(ok);
 
         btnAdd.setEnabled(ok);
@@ -164,8 +170,11 @@ public class NIDInputContent extends UnicityInputContent {
 
     public boolean checkDatas(SComponent sComponent){
         boolean ok = super.checkDatas(sComponent);
+
         return ok;
     }
+
+
 
 
     protected boolean checkDetails(boolean unitaire, MVCCDElement mvccdElement) {
@@ -181,7 +190,6 @@ public class NIDInputContent extends UnicityInputContent {
         return ok;
     }
 
-
     protected boolean checkDetails(boolean unitaire) {
         boolean ok = super.checkDetails(unitaire);
         if (ok) {
@@ -191,6 +199,7 @@ public class NIDInputContent extends UnicityInputContent {
             } else {
                 mvccdElement = this.elementForCheckInput;
             }
+                // Au moins un attribut obligatoire
                 ok = super.checkInput(table, unitaire, MCDNIDService.checkParameters(
                         //(MCDNID) getEditor().getMvccdElementCrt(),
                         (MCDNID) mvccdElement,
