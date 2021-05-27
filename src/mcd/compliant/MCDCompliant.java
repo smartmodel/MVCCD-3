@@ -11,6 +11,7 @@ import repository.editingTreat.mcd.*;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
+import utilities.Trace;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;
@@ -519,12 +520,14 @@ public class MCDCompliant {
         // Absolue uniquement si Entité parent : != Indépendante et != Spécialisée
         if (mcdUnique.isAbsolute()){
             if (mcdEntity.isInd()){
-                String message = MessagesBuilder.getMessagesProperty("constraint.unique.entity.ind.error",
-                        new String[]{nameEntity, mcdUnique.getName()});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                if (! mcdEntity.isChildOfIdNat()) {
+                    String message = MessagesBuilder.getMessagesProperty("constraint.unique.entity.ind.error",
+                            new String[]{nameEntity, mcdUnique.getName()});
+                    resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                }
             }
             if (mcdEntity.isSpecialized()){
-                String message = MessagesBuilder.getMessagesProperty("constraint.unique.entity.ind.error",
+                String message = MessagesBuilder.getMessagesProperty("constraint.unique.entity.specialized.error",
                         new String[]{nameEntity, mcdUnique.getName()});
                 resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }

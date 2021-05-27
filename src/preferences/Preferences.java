@@ -28,7 +28,7 @@ public class Preferences extends MVCCDElement {
     private static final long serialVersionUID = 1000;
     public static String APPLICATION_NAME = "MVCCD";
     public static String LANGUAGE = "fr";
-    public static String APPLICATION_VERSION = "3.0.17"; //Format: x.y.z (x, y et z devait être des chiffres ou des nombres)
+    public static String APPLICATION_VERSION = "3.0.17"; //Format: x.y.z (x, y et z devaient être des chiffres ou des nombres)
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
     public static Integer PANEL_REPOSITORY_WIDTH = 200;
@@ -89,6 +89,7 @@ public class Preferences extends MVCCDElement {
     public static Integer ASSOCIATION_SHORT_NAME_LENGTH = ASSEND_ROLE_SHORT_NAME_LENGTH;
     public static Integer ASSOCIATION_LONG_NAME_LENGTH = 50;
     public static Integer UNIQUE_NAME_LENGTH = 20;
+    public static Integer UNIQUE_NATURE_NAME_LENGTH = 6;
     public static Integer UNIQUE_SHORT_NAME_LENGTH = 6;
     public static Integer UNIQUE_LONG_NAME_LENGTH = 50;
     public static String MCD_AID_IND_COLUMN_NAME_DEFAULT = "num";
@@ -431,6 +432,13 @@ public class Preferences extends MVCCDElement {
     public static String MCDTOMLDR_MODE_DT = "mcdtomldr.mode.dt";
     public static String MCDTOMLDR_MODE_TI = "mcdtomldr.mode.ti";
 
+    public static String MDR_UNIQUE_NATURE_UNIQUE = "mdr.unique.nature.unique";
+    public static String MDR_UNIQUE_NATURE_NID = "mdr.unique.nature.nid";
+    public static String MDR_UNIQUE_NATURE_LP = "mdr.unique.nature.lp";
+    public static String MDR_UNIQUE_NATURE_SIMPK = "mdr.unique.nature.simpk";
+    public static String MDR_UNIQUE_NATURE_SIMCP = "mdr.unique.nature.simcp";
+    public static String MDR_UNIQUE_NATURE_FKMAXONECHILD = "mdr.unique.nature.fkmaxonechild";
+
     public static String MPDR_DB_ORACLE = "mpdr.db.oracle";
     public static String MPDR_DB_MYSQL = "mpdr.db.mysql";
     public static String MPDR_DB_POSTGRESQL = "mpdr.db.postgresql";
@@ -545,6 +553,7 @@ public class Preferences extends MVCCDElement {
     public static String MDR_NAMING_COLUMN_FK = "mdr.column.fk";
     public static String MDR_NAMING_PK = "mdr.pk";
     public static String MDR_NAMING_FK = "mdr.fk";
+    public static String MDR_NAMING_UNIQUE = "mdr.unique";
 
     public static String MDR_PATH_WORD = "path";
     public static String MDR_PATH_SEP_WORD = "pathSep";
@@ -571,6 +580,10 @@ public class Preferences extends MVCCDElement {
 
     public static String MDR_PEA_SHORT_NAME_WORD = "peaShortName";
 
+    public static String MDR_UNIQUE_NATURE_NAME_WORD = "uniqueNature";
+    public static String MDR_UNIQUE_NAME_WORD = "uniqueName";
+    public static String MDR_UNIQUE_SHORT_NAME_WORD = "uniqueShortName";
+
     public static String MDR_INDICE_TABLENN_WORD = "indTableNN";
     public static String MDR_INDICE_COL_FK_WORD = "indColFK";
     public static String MDR_INDICE_CONST_FK_WORD = "indConstFK";
@@ -579,6 +592,7 @@ public class Preferences extends MVCCDElement {
     public static String MDR_TABLE_SEP_WORD = "tableSep";
     public static String MDR_PEA_SEP_WORD = "peaSep";
     public static String MDR_FKIND_SEP_WORD = "fkIndSep";
+    public static String MDR_UNIQUE_NATURE_SEP_WORD = "uniqueNatSep";
 
     public static Integer MDR_MARKER_DERIVED_LENGTH = 4;
     public static Integer MDR_MARKER_CUSTOM_TABLE_NAME_LENGTH = 3;
@@ -606,6 +620,8 @@ public class Preferences extends MVCCDElement {
     public static Integer MDR_INDICE_CONST_FK_LENGTH = 2 ;
     public static String MDR_FK_NAME_FORMAT_DEFAULT = "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}{tableSep}{parentRoleShortName}";
     public static String MDR_FK_NAME_WITHOUT_ROLE_FORMAT_DEFAULT = "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}";
+    public static String MDR_UNIQUE_NAME_FORMAT_DEFAULT = "{uniqueNature}{uniqueNatSep}{tableShortName}{tableSep}{uniqueName}";
+    public static String MDR_UNIQUE_NAME_MAX30_FORMAT_DEFAULT = "{uniqueNature}{uniqueNatSep}{tableShortName}{tableSep}{uniqueShortName}";
     public static String MDR_ROLE_GENERALIZE_MARKER_DEFAULT = "gs";
     public static String MDR_SEPARATOR = "_" ;
     public static String MDR_PATH_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
@@ -613,6 +629,7 @@ public class Preferences extends MVCCDElement {
     public static String MDR_TABLE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
     public static String MDR_ROLE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
     public static String MDR_FKIND_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
+    public static String MDR_UNIQUE_NATURE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
 
     public static Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DEFAULT = true;
 
@@ -710,12 +727,15 @@ public class Preferences extends MVCCDElement {
     private String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT = null;
     private String MDR_FK_NAME_FORMAT = null;
     private String MDR_FK_NAME_WITHOUT_ROLE_FORMAT = null;
+    private String MDR_UNIQUE_NAME_FORMAT = null;
+    private String MDR_UNIQUE_NAME_MAX30_FORMAT = null;
     private String MDR_ROLE_GENERALIZE_MARKER = null;
     private String MDR_PATH_SEP_FORMAT = null;
     private String MDR_PEA_SEP_FORMAT = null;
     private String MDR_TABLE_SEP_FORMAT = null;
     private String MDR_ROLE_SEP_FORMAT = null ;
     private String MDR_FKIND_SEP_FORMAT = null ;
+    private String MDR_UNIQUE_NATURE_SEP_FORMAT = null ;
 
     // MDR Préférences
     private Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR = null ;
@@ -1227,6 +1247,28 @@ public class Preferences extends MVCCDElement {
         this.MDR_FK_NAME_WITHOUT_ROLE_FORMAT = MDR_FK_NAME_WITHOUT_ROLE_FORMAT;
     }
 
+    public String getMDR_UNIQUE_NAME_FORMAT() {
+        if (MDR_UNIQUE_NAME_FORMAT == null){
+            MDR_UNIQUE_NAME_FORMAT = MDR_UNIQUE_NAME_FORMAT_DEFAULT;
+        }
+        return MDR_UNIQUE_NAME_FORMAT;
+    }
+
+    public void setMDR_UNIQUE_NAME_FORMAT(String MDR_UNIQUE_NAME_FORMAT) {
+        this.MDR_UNIQUE_NAME_FORMAT = MDR_UNIQUE_NAME_FORMAT;
+    }
+
+    public String getMDR_UNIQUE_NAME_MAX30_FORMAT() {
+        if (MDR_UNIQUE_NAME_MAX30_FORMAT == null) {
+            MDR_UNIQUE_NAME_MAX30_FORMAT = MDR_UNIQUE_NAME_MAX30_FORMAT_DEFAULT;
+        }
+        return MDR_UNIQUE_NAME_MAX30_FORMAT;
+    }
+
+    public void setMDR_UNIQUE_NAME_MAX30_FORMAT(String MDR_UNIQUE_NAME_MAX30_FORMAT) {
+        this.MDR_UNIQUE_NAME_MAX30_FORMAT = MDR_UNIQUE_NAME_MAX30_FORMAT;
+    }
+
     public String getMDR_ROLE_GENERALIZE_MARKER() {
         if (MDR_ROLE_GENERALIZE_MARKER == null){
             MDR_ROLE_GENERALIZE_MARKER = MDR_ROLE_GENERALIZE_MARKER_DEFAULT;
@@ -1290,6 +1332,17 @@ public class Preferences extends MVCCDElement {
 
     public void setMDR_FKIND_SEP_FORMAT(String MDR_FKIND_SEP_FORMAT) {
         this.MDR_FKIND_SEP_FORMAT = MDR_FKIND_SEP_FORMAT;
+    }
+
+    public String getMDR_UNIQUE_NATURE_SEP_FORMAT() {
+        if (MDR_UNIQUE_NATURE_SEP_FORMAT == null){
+            MDR_UNIQUE_NATURE_SEP_FORMAT = MDR_UNIQUE_NATURE_SEP_FORMAT_DEFAULT;
+        }
+            return MDR_UNIQUE_NATURE_SEP_FORMAT;
+    }
+
+    public void setMDR_UNIQUE_NATURE_SEP_FORMAT(String MDR_UNIQUE_NATURE_SEP_FORMAT) {
+        this.MDR_UNIQUE_NATURE_SEP_FORMAT = MDR_UNIQUE_NATURE_SEP_FORMAT;
     }
 
     public Boolean getMDR_PREF_COLUMN_FK_ONE_ANCESTOR() {

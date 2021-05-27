@@ -50,8 +50,6 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
         }
         return null;
     }
-
-
     public String getName(){
         String name = super.getName();
         if (getTarget() != null){

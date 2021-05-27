@@ -9,4 +9,5 @@ public interface IMCDParameter {
     public int getOrder();
     public String getClassShortNameUI();
 
+    String getNamePath(int pathMode);
 }

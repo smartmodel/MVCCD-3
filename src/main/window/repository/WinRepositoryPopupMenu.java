@@ -262,6 +262,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 treatGenericRead(this, new MDRFKEditingTreat());
             }
 
+            if (node.getUserObject() instanceof MLDRUnique) {
+                treatGenericRead(this, new MDRUniqueEditingTreat());
+            }
+
             if (node.getUserObject() instanceof MLDRParameter) {
                 treatGenericRead(this, new MDRParameterEditingTreat());
             }
@@ -334,8 +338,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     MCDElement mcdElementSource = imldrElementWithSource.getMcdElementSource();
                     String message = "Classe : " + mcdElementSource.getClass().getName();
                     message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNamePath(MElementService.PATHNAME);
-                    ProjectElement projectElement = (ProjectElement) mvccdElement;
-                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
+                    //ProjectElement projectElement = (ProjectElement) mvccdElement;
+                    //message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mcdElementSource.getIdProjectElement();
 
                     new DialogMessage().showOk(mvccdWindow, message,
                             "Source de niveau conceptuel de l'objet : " + mvccdElement.getName());

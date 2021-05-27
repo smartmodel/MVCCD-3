@@ -73,8 +73,18 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
     }
 
 
-        public ArrayList<MDRColumn> getMDRColumnsPK() {
 
+    public ArrayList<MDRFK> getMDRFKsIdNat(){
+        ArrayList<MDRFK> resultat = new ArrayList<MDRFK>();
+        for (MDRFK mdrFK : getMDRFKs()){
+            if (mdrFK.getNature() == MDRFKNature.IDNATURAL){
+                resultat.add (mdrFK);
+            }
+        }
+        return resultat;
+    }
+
+    public ArrayList<MDRColumn> getMDRColumnsPK() {
         return getMDRPK().getMDRColumns();
     }
 
@@ -82,6 +92,15 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
         ArrayList<MDRColumn>  resultat = new ArrayList<MDRColumn>();
         for (MDRFK mdrfk : getMDRFKs()){
             resultat.addAll(mdrfk.getMDRColumns());
+        }
+        return resultat;
+    }
+
+
+    public ArrayList<MDRColumn> getMDRColumnsFKIdNat() {
+        ArrayList<MDRColumn>  resultat = new ArrayList<MDRColumn>();
+        for (MDRFK mdrfkIdNat : getMDRFKsIdNat()){
+            resultat.addAll(mdrfkIdNat.getMDRColumns());
         }
         return resultat;
     }
@@ -105,6 +124,7 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
         throw new CodeApplException("La table  " + this.getNamePath(MElementService.PATHNAME) + "retourne : " + mdrColumnsPKProper.size() + " colonnes PK propres.");
 
     }
+
 
     //TODO-0 A voir !!!  Erreur?
     //public abstract String getShortName();

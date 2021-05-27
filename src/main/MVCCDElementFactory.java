@@ -377,6 +377,7 @@ public class MVCCDElementFactory {
         mldrFK.setIndice(indice);
     }
 
+
     public MLDRRelationFK createMLDRRelationFK( MLDRContRelations mldrContRelations,
                                                 MCDRelation mcdRelation,
                                                 MLDRTable mldrTableParent,
@@ -425,6 +426,13 @@ public class MVCCDElementFactory {
 
         return mldrRelationFK;
     }
+
+
+    public MLDRUnique createMLDRUnique(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
+        MLDRUnique mldrUnique = new MLDRUnique(mldrContConstraints, mcdElementSource);
+        return mldrUnique;
+    }
+
 
     // Oracle
     public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {

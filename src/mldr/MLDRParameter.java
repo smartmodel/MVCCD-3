@@ -1,6 +1,7 @@
 package mldr;
 
 import mcd.MCDElement;
+import mcd.interfaces.IMCDParameter;
 import md.MDElement;
 import mdr.MDRParameter;
 import mdr.interfaces.IMDRParameter;
@@ -33,6 +34,25 @@ public class MLDRParameter extends MDRParameter implements IMLDRElement, IMLDREl
     public MDElement getMdElementSource() {
         return mcdElementSource;
     }
+
+
+    public String getTargetMCDType() {
+        IMDRParameter imdrTarget = getTarget();
+        if (imdrTarget != null) {
+            if (imdrTarget instanceof MLDRColumn) {
+                MLDRColumn mldrColumn = (MLDRColumn) imdrTarget;
+                MCDElement mcdElement = mldrColumn.getMcdElementSource();
+                if (mcdElement != null){
+                    if (mcdElement instanceof IMCDParameter){
+                        IMCDParameter imcdParameter = (IMCDParameter) mcdElement;
+                        return imcdParameter.getClassShortNameUI();
+                    }
+                }
+            }
+        }
+        return "Type de cible non déterminée";
+    }
+
 
 
 }

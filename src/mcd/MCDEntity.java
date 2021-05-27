@@ -361,6 +361,10 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
         return (getAssEndsIdCompChild().size() == 0) && (! isLinkedEA()) && (! isSpecialized())
                 && contentIdentifier();
     }
+
+    public boolean isChildOfIdNat(){
+        return (getAssEndsIdNatChild().size() > 0) ;
+    }
     public boolean isNoInd(){
         return ! isInd();
     }

@@ -198,8 +198,6 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
 
         col = OperationParamTableColumn.NAME.getPosition();
         if (parameter.getTarget() != null) {
-            row[col] = parameter.getTarget().getNameTree();
-        } else {
             row[col] = parameter.getName();
         }
 

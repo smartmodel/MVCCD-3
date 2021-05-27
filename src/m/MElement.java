@@ -45,6 +45,16 @@ public abstract class MElement extends ProjectElement {
         }
     }
 
+    public String getShortNamePath(int pathMode) {
+        String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
+        String path = getPath(pathMode, separator);
+        if (StringUtils.isNotEmpty(path)){
+            return path + separator + getShortName();
+        } else {
+            return getShortName();
+        }
+    }
+
 
     /**
      * Au même titre que getNamePath(), retourne le path et le shortName d'un objet.

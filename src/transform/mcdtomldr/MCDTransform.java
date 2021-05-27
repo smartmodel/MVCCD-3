@@ -57,6 +57,12 @@ public class MCDTransform extends MDTransform {
             MCDTransformToFK mcdTransformToFK = new MCDTransformToFK(this);
             mcdTransformToFK.createOrModifyFromAllAssNoIdOrIdNatural(imcdModel, mldrModel);
 
+            // Transformation des contraintes d'unicité
+            MCDTransformToUnique mcdTransformToUnique = new MCDTransformToUnique(this);
+            mcdTransformToUnique.createOrModifyFromAllUnicities(imcdModel, mldrModel);
+
+            // Transformation des LP - liens de programmation
+
             //Suppression des MLDRElement absents de l'itération
             deleteMDRElementNotInIteration();
 

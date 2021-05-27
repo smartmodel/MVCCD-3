@@ -66,6 +66,11 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         return MLDRColumnService.to(getMDRColumnsFK());
     }
 
+
+    public ArrayList<MLDRColumn> getMLDRColumnsFKIdNat() {
+        return MLDRColumnService.to(getMDRColumnsFKIdNat());
+    }
+
     public ArrayList<MLDRColumn> getMLDRColumnsPFK() {
         return MLDRColumnService.to(getMDRColumnsPFK());
     }
@@ -131,10 +136,25 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         return MLDRFKService.to(getMDRFKs());
     }
 
+    public ArrayList<MLDRFK> getMLDRFKsIdNat(){
+        return MLDRFKService.to(getMDRFKsIdNat());
+    }
+
 
     public MLDRFK createFK(MCDRelEnd mcdRelEnd) {
         MLDRFK mldrFK= MVCCDElementFactory.instance().createMLDRFK(
                 (MLDRContConstraints) getMDRContConstraints(), mcdRelEnd);
         return mldrFK;
+    }
+
+
+    public MLDRUnique getMLDRUniqueByMCDElementSource(MCDElement mcdElement){
+        return MLDRTableService.getMLDRUniqueByMCDElementSource(this, mcdElement);
+    }
+
+    public MLDRUnique createUnique(MCDUnicity mcdUnicity) {
+        MLDRUnique mldrUnique= MVCCDElementFactory.instance().createMLDRUnique(
+                (MLDRContConstraints) getMDRContConstraints(), mcdUnicity);
+        return mldrUnique;
     }
 }

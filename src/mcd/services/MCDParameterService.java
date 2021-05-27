@@ -4,6 +4,7 @@ import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import exceptions.CodeApplException;
 import m.MElement;
+import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import mcd.*;
@@ -153,11 +154,11 @@ public class MCDParameterService {
         return resultat;
     }
 
-    public static IMCDParameter getTargetByTypeAndNameTree(MCDEntity mcdEntity, String type, String nameTree) {
+    public static IMCDParameter getTargetByTypeAndNameTree(MCDEntity mcdEntity, String type, String name) {
         if ( type.equals(MCDAttribute.CLASSSHORTNAMEUI)) {
             // Attributs
             for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()) {
-                if (mcdAttribute.getNameTree().equals(nameTree)) {
+                if (mcdAttribute.getName().equals(name)) {
                     return mcdAttribute;
                 }
             }
@@ -169,7 +170,7 @@ public class MCDParameterService {
                 //#MAJ 2021-05-19 Affinement MCDUnicity
 
                 //if (mcdAssEnd.getMCDAssEndOpposite().getNameTree().equals(nameTree)) {
-                if (mcdAssEnd.getNameTree().equals(nameTree)) {
+                if (mcdAssEnd.getNamePath(MElementService.PATHSHORTNAME).equals(name)) {
                     //return mcdAssEnd.getMCDAssEndOpposite();
                     return mcdAssEnd;
                 }
@@ -177,17 +178,17 @@ public class MCDParameterService {
             // Avec entité associative
             for (MCDLinkEnd mcdLinkEnd : mcdEntity.getMCDLinkEnds()) {
                 MCDAssociation mcdAssociation = (MCDAssociation) mcdLinkEnd.getMcdLink().getEndAssociation().getParent().getParent();
-                if (mcdAssociation.getFrom().getNameTree().equals(nameTree)) {
+                if (mcdAssociation.getFrom().getNamePath(MElementService.PATHSHORTNAME).equals(name)) {
                     return mcdAssociation.getFrom();
                 }
-                if (mcdAssociation.getTo().getNameTree().equals(nameTree)) {
+                if (mcdAssociation.getTo().getNamePath(MElementService.PATHSHORTNAME).equals(name)) {
                     return mcdAssociation.getTo();
                 }
             }
         }
 
         throw new CodeApplException("La méthode getTargetByTypeAndName ne trouve pas de cible de type "+
-                type + " et de nom " + nameTree + " pour l'entité " + mcdEntity.getName());
+                type + " et de nom " + name + " pour l'entité " + mcdEntity.getName());
     }
 
     public static boolean existTargetInParameters(ArrayList<MCDParameter> parameters,

@@ -109,8 +109,8 @@ public class MCDTransformToFK {
             tableShortNameChild = mcdElementSource.getShortName();
         }
 
-        MDRElementNames nameFK = buildNameFK(mldrTable, tableShortNameChild, mldrFK, mcdRelEndParent, mldrTableParent);
-        MCDTransformService.names(mldrFK, nameFK, mldrModel);
+        MDRElementNames namesFK = buildNameFK(mldrTable, tableShortNameChild, mldrFK, mcdRelEndParent, mldrTableParent);
+        MCDTransformService.names(mldrFK, namesFK, mldrModel);
 
         //TODO-PAS Faire les test de changements de valeurs
         // Nature
