@@ -9,17 +9,14 @@ import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.*;
 import messages.MessagesBuilder;
 import mldr.*;
-import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.mysql.MPDRMySQLTable;
 import mpdr.oracle.MPDROracleColumn;
-import mpdr.oracle.MPDROracleFK;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.oracle.MPDROracleTable;
 import mpdr.oracle.interfaces.IMPDROracleElement;
-import mpdr.postgresql.MPDRPostgreSQLColumn;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 import mpdr.postgresql.MPDRPostgreSQLTable;
 import org.w3c.dom.Document;
@@ -1538,9 +1535,9 @@ public class ProjectLoaderXml {
             if (pkTagChilds.item(i) instanceof Element) {
                 Element pkTagChild = (Element) pkTagChilds.item(i);
 
-                //Chargement de <targetColumns>
-                if (pkTagChild.getNodeName().equals("targetColumns")) {
-                    this.loadMldTargetColumnsOfConstraint(mcdElementSourceOfPk, mdrTable, mdrPk, pkTagChild);
+                //Chargement de <targetParameters>
+                if (pkTagChild.getNodeName().equals("targetParameters")) {
+                    this.loadMldTargetParametersOfConstraint(mcdElementSourceOfPk, mdrTable, mdrPk, pkTagChild);
                 }
             }
         }
@@ -1671,36 +1668,36 @@ public class ProjectLoaderXml {
             if (fkTagChilds.item(i) instanceof Element) {
                 Element fkTagChild = (Element) fkTagChilds.item(i);
 
-                //Chargement de <targetColumns>
-                if (fkTagChild.getNodeName().equals("targetColumns")) {
-                    this.loadMldTargetColumnsOfConstraint(mcdElementSourceOfFk, mdrTable, mdrFk, fkTagChild);
+                //Chargement de <targetParameters>
+                if (fkTagChild.getNodeName().equals("targetParameters")) {
+                    this.loadMldTargetParametersOfConstraint(mcdElementSourceOfFk, mdrTable, mdrFk, fkTagChild);
                 }
             }
         }
     }
 
     /**
-     * À partir de la balise <targetColumns>, cette méthode charge les références des colonnes incluses dans une
-     * contrainte (PK et FK notamment).
+     * À partir de la balise <targetParameters>, cette méthode charge les références des colonnes (Parameters) incluses
+     * dans une contrainte (PK et FK notamment).
      * @param mcdElementSource Il s'agit de l'élément MCD source à partir duquel la contrainte a été générée (par
      *                         exemple, pour une PK: une entité ou une association n:n; pour une FK: une extrémité
      *                         d'association).
      *                 lesquelles la FK est mise. Attention il ne s'agit ici pas des colonnes de PK pointée par la FK.
      * @param mdrConstraint Il s'agit de la contraint (PK ou FK) déjà créé précédemment dans l'application, à qui sera
      *                      ajouté les colonnes ciblées par les balises enfants <targetColumn>.
-     * @param targetColumnsTag Balise <targetColumns> contenant des sous-balises avec les références vers les colonnes
-     *                         de la FK
+     * @param targetParametersTag Balise <targetParameters> contenant des sous-balises avec les références vers les colonnes
+     *                            de la FK
      */
-    private void loadMldTargetColumnsOfConstraint(MCDElement mcdElementSource, MDRTable mdrTable, MDRConstraint mdrConstraint, Element targetColumnsTag) {
-        //Parcours des balises enfants de <targetColumns>
-        NodeList targetColumnsTagChilds = targetColumnsTag.getChildNodes();
-        for (int i = 0; i < targetColumnsTagChilds.getLength(); i++) {
-            if (targetColumnsTagChilds.item(i) instanceof Element) {
-                Element targetColumnsTagChild = (Element) targetColumnsTagChilds.item(i);
+    private void loadMldTargetParametersOfConstraint(MCDElement mcdElementSource, MDRTable mdrTable, MDRConstraint mdrConstraint, Element targetParametersTag) {
+        //Parcours des balises enfants de <targetParameters>
+        NodeList targetParametersTagChilds = targetParametersTag.getChildNodes();
+        for (int i = 0; i < targetParametersTagChilds.getLength(); i++) {
+            if (targetParametersTagChilds.item(i) instanceof Element) {
+                Element targetParametersTagChild = (Element) targetParametersTagChilds.item(i);
 
                 //Chargement de <targetColumn>
-                if(targetColumnsTagChild.getNodeName().equals("targetColumn")) {
-                    Element targetColumnTag = targetColumnsTagChild;
+                if(targetParametersTagChild.getNodeName().equals("targetColumn")) {
+                    Element targetColumnTag = targetParametersTagChild;
 
                     //Récupération de la colonne de FK
                     int targetColumnId = Integer.parseInt(targetColumnTag.getAttribute("target_column_id"));

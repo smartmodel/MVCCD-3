@@ -865,7 +865,7 @@
 	<xs:element name="pk">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="targetColumns" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="targetParameters" minOccurs="1" maxOccurs="1"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" type="xs:string" />
@@ -881,7 +881,7 @@
 	<xs:element name="fk">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="targetColumns" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="targetParameters" minOccurs="1" maxOccurs="1"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" type="xs:string" />
@@ -895,7 +895,7 @@
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="targetColumns">
+	<xs:element name="targetParameters">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="targetColumn" minOccurs="0" maxOccurs="unbounded"/>

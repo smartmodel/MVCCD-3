@@ -1228,26 +1228,26 @@ public class ProjectSaverXml {
             constraintTag.setAttribute("name60", tableConstraint.getNames().getName60());
             constraintTag.setAttribute("name120", tableConstraint.getNames().getName120());
 
-            //Ajout de la balise <targetColumns>
-            Element targetColumnsTag = doc.createElement("targetColumns");
-            constraintTag.appendChild(targetColumnsTag);
+            //Ajout de la balise <targetParameters>
+            Element targetParametersTag = doc.createElement("targetParameters");
+            constraintTag.appendChild(targetParametersTag);
 
             //Parcours des colonnes contenues dans la contrainte
             for(MDRColumn targetMdrColumn : tableConstraint.getMDRColumns()){
 
                 //Persistance d'une référence vers une colonne
-                this.addTargetColumnOfTableConstraint(doc, targetMdrColumn, targetColumnsTag);
+                this.addTargetColumnOfTableConstraint(doc, targetMdrColumn, targetParametersTag);
             }
 
-
-            for(MDRParameter mdrParameter : tableConstraint.getMDRParameters()){
+            //TODO: intégrer ceci à la place de la boucle ci-dessus, pour persister les parameters.
+            /*for(MDRParameter mdrParameter : tableConstraint.getMDRParameters()){
                 mdrParameter.getIdProjectElement(); //ip parameter
                 IMDRParameter imdrParameter = mdrParameter.getTarget(); //id colonne pointée
                 if(imdrParameter instanceof MDRColumn){
                     MDRColumn mdrColumn = (MDRColumn) imdrParameter;
                     mdrColumn.getIdProjectElement();
                 }
-            }
+            }*/
         }
     }
 
