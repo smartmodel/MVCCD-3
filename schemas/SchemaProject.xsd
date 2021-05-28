@@ -248,8 +248,8 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="MLDR_DT"/>
-				<xs:element ref="MLDR_TI"/>
+				<xs:element ref="MLDR_DT" minOccurs="0"/>
+				<xs:element ref="MLDR_TI" minOccurs="0"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
@@ -270,8 +270,8 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="MLDR_DT"/>
-				<xs:element ref="MLDR_TI"/>
+				<xs:element ref="MLDR_DT" minOccurs="0"/>
+				<xs:element ref="MLDR_TI" minOccurs="0"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
