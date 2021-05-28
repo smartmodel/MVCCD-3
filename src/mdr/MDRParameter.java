@@ -20,7 +20,7 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
         this.targetId = target.getIdProjectElement();
     }
 
-    // Pour le niveau physique
+    // Utilisé pour le parameter de niveau MPDR lors de la transformation MLDR=>MPDR. En effet dans ce cas le Parameter de niveau physique est d'abord créé "vide" (sans target) et le target est setté par la suite.
     public MDRParameter(ProjectElement parent) {
         super(parent);
     }

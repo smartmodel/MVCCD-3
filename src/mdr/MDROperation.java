@@ -114,7 +114,7 @@ public abstract class MDROperation extends MDRElement implements IMDRElementWith
 
 
     // Utilisé pour les paramètres de niveau logique
-    public abstract MDRParameter createParameter(IMDRParameter target);
+    public abstract MDRParameter createParameter(IMDRParameter target); //Devrait rendre un objet logique
 
     // Utilisé pour les paramètres de niveau physique
     public abstract MPDRParameter createParameter(MLDRParameter mldrParameter);

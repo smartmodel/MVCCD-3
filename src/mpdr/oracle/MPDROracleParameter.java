@@ -11,4 +11,8 @@ public class MPDROracleParameter extends MPDRParameter {
     public MPDROracleParameter(IMPDROracleElement parent, IMLDRElement mldrElementSource) {
         super((ProjectElement) parent, mldrElementSource);
     }
+
+    public MPDROracleParameter(IMPDROracleElement parent, IMDRParameter target, IMLDRElement mldrElementSource) {
+        super((ProjectElement) parent, target, mldrElementSource);
+    }
 }

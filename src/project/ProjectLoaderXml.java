@@ -15,6 +15,7 @@ import mpdr.MPDRTable;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.mysql.MPDRMySQLTable;
 import mpdr.oracle.MPDROracleColumn;
+import mpdr.oracle.MPDROracleFK;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.oracle.MPDROracleTable;
 import mpdr.oracle.interfaces.IMPDROracleElement;
@@ -1706,8 +1707,14 @@ public class ProjectLoaderXml {
                     MDRColumn targetMdrColumn = mdrTable.getMDRColumnById(targetColumnId);
 
                     //Ajout de la colonne référencée à la contrainte PK (ce qui passe par la création d'un Parameter)
-                    if(targetMdrColumn instanceof MLDRColumn) MVCCDElementFactory.instance().createMLDRParameter(mdrConstraint, targetMdrColumn, mcdElementSource);
-                    else if(targetMdrColumn instanceof MPDROracleColumn) MVCCDElementFactory.instance().createMPDROracleParameter(mdrConstraint, null); //TODO-STB: Corriger dès que PAS aura résolu le souci des MPDRParameter qui ne renseignent pas les colonnes MPDR.
+                    if(targetMdrColumn instanceof MLDRColumn){
+                        MVCCDElementFactory.instance().createMLDRParameter(mdrConstraint, targetMdrColumn, mcdElementSource);
+                    }
+                    else if(targetMdrColumn instanceof MPDROracleColumn){
+                        MVCCDElementFactory.instance().createMPDROracleParameter((IMPDROracleElement) mdrConstraint, targetMdrColumn, null);
+                        //TODO: persister les parameters, en plus des colonnes targets. Ensuite, je pourrai ici récupérer le MLDParameter source.
+                    }
+
                     //else if(targetMdrColumn instanceof MPDRPostgreSQLColumn) MVCCDElementFactory.instance().createMPDRPostgreSQLParameter(); //TODO-STB: créer méthode manquante (structure vide) avec un todo pour PAS
                     //else if(targetMdrColumn instanceof MPDRMySQLColumn) MVCCDElementFactory.instance().createMPDRMySQLParameter();
                 }

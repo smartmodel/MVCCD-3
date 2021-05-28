@@ -5,6 +5,7 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
 import mdr.*;
+import mdr.interfaces.IMDRParameter;
 import mldr.*;
 import mpdr.*;
 import mpdr.mysql.MPDRMySQLModel;
@@ -1236,6 +1237,16 @@ public class ProjectSaverXml {
 
                 //Persistance d'une référence vers une colonne
                 this.addTargetColumnOfTableConstraint(doc, targetMdrColumn, targetColumnsTag);
+            }
+
+
+            for(MDRParameter mdrParameter : tableConstraint.getMDRParameters()){
+                mdrParameter.getIdProjectElement(); //ip parameter
+                IMDRParameter imdrParameter = mdrParameter.getTarget(); //id colonne pointée
+                if(imdrParameter instanceof MDRColumn){
+                    MDRColumn mdrColumn = (MDRColumn) imdrParameter;
+                    mdrColumn.getIdProjectElement();
+                }
             }
         }
     }

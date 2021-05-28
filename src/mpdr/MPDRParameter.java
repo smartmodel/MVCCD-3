@@ -21,6 +21,11 @@ public abstract class MPDRParameter extends MDRParameter implements IMPDRElement
         this.mldrElementSource = mldrElementSource;
     }
 
+    public MPDRParameter(ProjectElement parent, IMDRParameter target, IMLDRElement mldrElementSource) {
+        super(parent, target);
+        this.mldrElementSource = mldrElementSource;
+    }
+
 
     @Override
     public IMLDRElement getMldrElementSource() {

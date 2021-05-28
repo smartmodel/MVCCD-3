@@ -486,15 +486,31 @@ public class MVCCDElementFactory {
         return mpdrOracleFK;
     }
 
-    /*public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, MLDRParameter mldrParameter) {
+    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, MLDRParameter mldrParameter){
         return new MPDROracleParameter( impdrOracleElement, mldrParameter);
-    }*/
+    }
 
+    /**
+     * Créer un nouveau parameter Oracle, qui est l'objet permettant de référencer une colonne. Par exemple, une
+     * contrainte FK a un (ou plusieurs) parameter comme enfant, et c'est ce parameter qui va permettre de définir
+     * la (ou les) colonne cible pointé par la FK.
+     * @param impdrOracleElement L'élément parent pour qui le parameter est ajouté, par exemple la contrainte FK.
+     * @param target Élément cible du paramètre (généralement une colonne).
+     * @param mldrParameter Il s'agit de l'élément MLDR qui est la source du parameter MPDR lors de la transformation
+     *                      MLDR => MPDR.
+     * @return Retourne le parameter de niveau MPDR Oracle créé.
+     */
+    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMDRParameter target, MLDRParameter mldrParameter){
+        return new MPDROracleParameter(impdrOracleElement, target, mldrParameter);
+    }
+
+    /*
     public MPDRParameter createMPDROracleParameter(MDRConstraint mdrConstraint, MLDRParameter mldrParameter) {
         if(mdrConstraint instanceof MPDROraclePK) return new MPDROracleParameter((MPDROraclePK) mdrConstraint, mldrParameter);
         else if(mdrConstraint instanceof MPDROracleFK) return new MPDROracleParameter((MPDROracleFK) mdrConstraint, mldrParameter);
         return null; //Il n'existe que des contraintes PK et FK
     }
+    */
 
 
     // MySQL
