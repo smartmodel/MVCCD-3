@@ -1256,16 +1256,16 @@ public class ProjectSaverXml {
      * vers la colonne pointée par une PK.
      * @param doc Document XML dans lequel la contrainte sera persistée.
      * @param targetMdrColumn La colonne cible, dont la référence sera persistée.
-     * @param targetColumnsTag La balise parent <targetColumns> dans laquelle sera créé une nouvelle balise <targetColumn>
+     * @param targetParametersTag La balise parent <targetParameters> dans laquelle sera créé une nouvelle balise <targetParameter>
      */
-    private void addTargetColumnOfTableConstraint(Document doc, MDRColumn targetMdrColumn, Element targetColumnsTag) {
+    private void addTargetColumnOfTableConstraint(Document doc, MDRColumn targetMdrColumn, Element targetParametersTag) {
 
-        //Création de la balise <targetColumn>
-        Element targetColumnTag = doc.createElement("targetColumn");
-        targetColumnsTag.appendChild(targetColumnTag);
+        //Création de la balise <targetParameter>
+        Element targetParameterTag = doc.createElement("targetParameter");
+        targetParametersTag.appendChild(targetParameterTag);
 
         //Ajout des propriétés d'une colonne cible
-        targetColumnTag.setAttribute("target_column_id", targetMdrColumn.getIdProjectElementAsString());
+        targetParameterTag.setAttribute("target_column_id", targetMdrColumn.getIdProjectElementAsString());
     }
 
     /**

@@ -1684,7 +1684,7 @@ public class ProjectLoaderXml {
      *                         d'association).
      *                 lesquelles la FK est mise. Attention il ne s'agit ici pas des colonnes de PK pointée par la FK.
      * @param mdrConstraint Il s'agit de la contraint (PK ou FK) déjà créé précédemment dans l'application, à qui sera
-     *                      ajouté les colonnes ciblées par les balises enfants <targetColumn>.
+     *                      ajouté les colonnes ciblées par les balises enfants <targetParameter>.
      * @param targetParametersTag Balise <targetParameters> contenant des sous-balises avec les références vers les colonnes
      *                            de la FK
      */
@@ -1695,12 +1695,12 @@ public class ProjectLoaderXml {
             if (targetParametersTagChilds.item(i) instanceof Element) {
                 Element targetParametersTagChild = (Element) targetParametersTagChilds.item(i);
 
-                //Chargement de <targetColumn>
-                if(targetParametersTagChild.getNodeName().equals("targetColumn")) {
-                    Element targetColumnTag = targetParametersTagChild;
+                //Chargement de <targetParameter>
+                if(targetParametersTagChild.getNodeName().equals("targetParameter")) {
+                    Element targetParameterTag = targetParametersTagChild;
 
                     //Récupération de la colonne de FK
-                    int targetColumnId = Integer.parseInt(targetColumnTag.getAttribute("target_column_id"));
+                    int targetColumnId = Integer.parseInt(targetParameterTag.getAttribute("target_column_id"));
                     MDRColumn targetMdrColumn = mdrTable.getMDRColumnById(targetColumnId);
 
                     //Ajout de la colonne référencée à la contrainte PK (ce qui passe par la création d'un Parameter)
