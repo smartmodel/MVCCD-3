@@ -1257,6 +1257,16 @@ public class ProjectSaverXml {
         //Ajout des propriétés d'un Parameter
         targetParameterTag.setAttribute("id", targetMdrParameter.getIdProjectElementAsString());
 
+        //Ajout des propriétés d'un Parameter MLDR
+        if(targetMdrParameter instanceof MLDRParameter) {
+            targetParameterTag.setAttribute("element_source_id", ((MLDRParameter) targetMdrParameter).getMcdElementSource().getIdProjectElementAsString());
+        }
+
+        //Ajout des propriétés d'un Parameter MPDR
+        if(targetMdrParameter instanceof MPDRParameter) {
+            targetParameterTag.setAttribute("element_source_id", ((MPDRParameter) targetMdrParameter).getMldrElementSource().getIdProjectElementAsString());
+        }
+
         //Ajout des propriétés de la colonne pointée par le Parameter
         if(targetMdrParameter.getTarget() instanceof MDRColumn){
             MDRColumn targetColumn = (MDRColumn) targetMdrParameter.getTarget();

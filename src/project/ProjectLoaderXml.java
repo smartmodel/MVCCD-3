@@ -9,14 +9,17 @@ import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.*;
 import messages.MessagesBuilder;
 import mldr.*;
+import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
+import mpdr.mysql.MPDRMySQLColumn;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.mysql.MPDRMySQLTable;
 import mpdr.oracle.MPDROracleColumn;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.oracle.MPDROracleTable;
 import mpdr.oracle.interfaces.IMPDROracleElement;
+import mpdr.postgresql.MPDRPostgreSQLColumn;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 import mpdr.postgresql.MPDRPostgreSQLTable;
 import org.w3c.dom.Document;
@@ -1537,7 +1540,7 @@ public class ProjectLoaderXml {
 
                 //Chargement de <targetParameters>
                 if (pkTagChild.getNodeName().equals("targetParameters")) {
-                    this.loadMldTargetParametersOfConstraint(mcdElementSourceOfPk, mdrTable, mdrPk, pkTagChild);
+                    this.loadMldTargetParametersOfConstraint(mcdSource, mldrSource, mdrTable, mdrPk, pkTagChild);
                 }
             }
         }
@@ -1670,7 +1673,7 @@ public class ProjectLoaderXml {
 
                 //Chargement de <targetParameters>
                 if (fkTagChild.getNodeName().equals("targetParameters")) {
-                    this.loadMldTargetParametersOfConstraint(mcdElementSourceOfFk, mdrTable, mdrFk, fkTagChild);
+                    this.loadMldTargetParametersOfConstraint(mcdSource, mldrSource, mdrTable, mdrFk, fkTagChild);
                 }
             }
         }
@@ -1679,16 +1682,15 @@ public class ProjectLoaderXml {
     /**
      * À partir de la balise <targetParameters>, cette méthode charge les références des colonnes (Parameters) incluses
      * dans une contrainte (PK et FK notamment).
-     * @param mcdElementSource Il s'agit de l'élément MCD source à partir duquel la contrainte a été générée (par
-     *                         exemple, pour une PK: une entité ou une association n:n; pour une FK: une extrémité
-     *                         d'association).
-     *                 lesquelles la FK est mise. Attention il ne s'agit ici pas des colonnes de PK pointée par la FK.
+     * @param mcdSource À renseigner dans le cas du chargement d'un MLDR. Il s'agit du MCD source à partir duquel le MLDR a été généré.
+     * @param mldrSource À renseigner dans le cas du chargement d'un MPDR. Il s'agit du MLDR source à partir duquel le MPDR a été généré.
+     * @param mdrTable Il s'agit de la table déjà chargée en mémoire, dans laquelle est ajoutée la contrainte en cours de chargement.
      * @param mdrConstraint Il s'agit de la contraint (PK ou FK) déjà créé précédemment dans l'application, à qui sera
      *                      ajouté les colonnes ciblées par les balises enfants <targetParameter>.
      * @param targetParametersTag Balise <targetParameters> contenant des sous-balises avec les références vers les colonnes
      *                            de la FK
      */
-    private void loadMldTargetParametersOfConstraint(MCDElement mcdElementSource, MDRTable mdrTable, MDRConstraint mdrConstraint, Element targetParametersTag) {
+    private void loadMldTargetParametersOfConstraint(MCDContModels mcdSource, MLDRModel mldrSource, MDRTable mdrTable, MDRConstraint mdrConstraint, Element targetParametersTag) {
         //Parcours des balises enfants de <targetParameters>
         NodeList targetParametersTagChilds = targetParametersTag.getChildNodes();
         for (int i = 0; i < targetParametersTagChilds.getLength(); i++) {
@@ -1699,8 +1701,9 @@ public class ProjectLoaderXml {
                 if(targetParametersTagChild.getNodeName().equals("targetParameter")) {
                     Element targetParameterTag = targetParametersTagChild;
 
-                    //Récupération de l'id du Parameter
+                    //Récupération de l'id du Parameter et de l'id élément source du Parameter
                     int parameterId = Integer.parseInt(targetParameterTag.getAttribute("id"));
+                    int elementSourceId = Integer.parseInt(targetParameterTag.getAttribute("element_source_id"));
 
                     //Récupération de la colonne sur laquelle est mise la contrainte
                     int targetColumnId = Integer.parseInt(targetParameterTag.getAttribute("target_column_id"));
@@ -1709,16 +1712,26 @@ public class ProjectLoaderXml {
                     //Ajout du parameter comme enfant de la contrainte (ce qui ajoute la colonne à la contrainte)
                     //Pour MLDR
                     if(targetMdrColumn instanceof MLDRColumn){
+                        MCDElement mcdElementSource = (MCDElement) mcdSource.getChildByIdProfondeur(elementSourceId); //Recherche l'élément source en fonction de son ID, parmi tous les enfants du MCD
                         MVCCDElementFactory.instance().createMLDRParameter(mdrConstraint, targetMdrColumn, mcdElementSource, parameterId);
                     }
-                    //Pour chaque constructeur MPDR
-                    else if(targetMdrColumn instanceof MPDROracleColumn){
-                        MVCCDElementFactory.instance().createMPDROracleParameter((IMPDROracleElement) mdrConstraint, targetMdrColumn, null, parameterId);
-                        //TODO: persister les parameters, en plus des colonnes targets. Ensuite, je pourrai ici récupérer le MLDParameter source.
-                    }
+                    //Pour MPDR
+                    else if(targetMdrColumn instanceof MPDRColumn){
+                        MLDRParameter mldrParameterSource = (MLDRParameter) mldrSource.getChildByIdProfondeur(elementSourceId); //Recherche l'élément source en fonction de son ID, parmi tous les enfants du MLD
 
-                    //else if(targetMdrColumn instanceof MPDRPostgreSQLColumn) MVCCDElementFactory.instance().createMPDRPostgreSQLParameter(); //TODO-STB: créer méthode manquante (structure vide) avec un todo pour PAS
-                    //else if(targetMdrColumn instanceof MPDRMySQLColumn) MVCCDElementFactory.instance().createMPDRMySQLParameter();
+                        //Oracle
+                        if(targetMdrColumn instanceof MPDROracleColumn){
+                            MVCCDElementFactory.instance().createMPDROracleParameter((IMPDROracleElement) mdrConstraint, targetMdrColumn, mldrParameterSource, parameterId);
+                        }
+                        //PostgreSQL
+                        else if(targetMdrColumn instanceof MPDRPostgreSQLColumn){
+                            MVCCDElementFactory.instance().createMPDRPostgreSQLParameter(mdrConstraint, targetMdrColumn, mldrParameterSource, parameterId);
+                        }
+                        //MySQL
+                        else if(targetMdrColumn instanceof MPDRMySQLColumn){
+                            MVCCDElementFactory.instance().createMPDRMySQLParameter(mdrConstraint, targetMdrColumn, mldrParameterSource, parameterId);
+                        }
+                    }
                 }
             }
         }

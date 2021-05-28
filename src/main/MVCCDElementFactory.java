@@ -509,15 +509,6 @@ public class MVCCDElementFactory {
         return new MPDROracleParameter(impdrOracleElement, target, mldrParameter, id);
     }
 
-    /*
-    public MPDRParameter createMPDROracleParameter(MDRConstraint mdrConstraint, MLDRParameter mldrParameter) {
-        if(mdrConstraint instanceof MPDROraclePK) return new MPDROracleParameter((MPDROraclePK) mdrConstraint, mldrParameter);
-        else if(mdrConstraint instanceof MPDROracleFK) return new MPDROracleParameter((MPDROracleFK) mdrConstraint, mldrParameter);
-        return null; //Il n'existe que des contraintes PK et FK
-    }
-    */
-
-
     // MySQL
     public MPDRMySQLModel createMPDRModelMySQL(MLDRModel mldrModel) {
         MPDRMySQLModel mpdrMySQLModel = new MPDRMySQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_MYSQL_NAME);
@@ -567,6 +558,11 @@ public class MVCCDElementFactory {
         return null;
     }
 
+    //TODO-PAS: Parameter pour MySQL
+    public MPDRParameter createMPDRMySQLParameter(MDRConstraint mdrConstraint, IMDRParameter target, MLDRParameter mldrParameterSource, int parameterId) {
+        return null;
+    }
+
     // PostgreSQL
     public MPDRPostgreSQLModel createMPDRModelPostgreSQL(MLDRModel mldrModel) {
         MPDRPostgreSQLModel mpdrPostgreSQLModel = new MPDRPostgreSQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME);
@@ -613,6 +609,11 @@ public class MVCCDElementFactory {
 
     //TODO-PAS: FK pour PostgreSQL
     public MDRFK createMPDRPostgreSQLFK(MDRContConstraints mdrContConstraints, MLDRFK mldrFkSourceOfMpdFk, int id) {
+        return null;
+    }
+
+    //TODO-PAS: Parameter pour PostgreSQL
+    public MPDRParameter createMPDRPostgreSQLParameter(MDRConstraint mdrConstraint, IMDRParameter target, MLDRParameter mldrParameterSource, int parameterId) {
         return null;
     }
 

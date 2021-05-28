@@ -906,6 +906,7 @@
 	<xs:element name="targetParameter">
 		<xs:complexType>
 			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="element_source_id" use="required" type="xs:int"/>
 			<xs:attribute name="target_column_id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
