@@ -360,6 +360,10 @@ public class MVCCDElementFactory {
         return new MLDRParameter(mdrConstraint, target, mcdElementSource);
     }
 
+    public MLDRParameter createMLDRParameter(MDRConstraint mdrConstraint, IMDRParameter target, MCDElement mcdElementSource, int id) {
+        return new MLDRParameter(mdrConstraint, target, mcdElementSource, id);
+    }
+
     public MLDRFK createMLDRFK(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
         MLDRFK mldrFK = new MLDRFK(mldrContConstraints, mcdElementSource);
         this.initMLDRFK(mldrFK, mldrContConstraints);
@@ -498,10 +502,11 @@ public class MVCCDElementFactory {
      * @param target Élément cible du paramètre (généralement une colonne).
      * @param mldrParameter Il s'agit de l'élément MLDR qui est la source du parameter MPDR lors de la transformation
      *                      MLDR => MPDR.
+     * @param id Id déjà connu (lors du chargement du projet depuis le fichier XML) du parameter.
      * @return Retourne le parameter de niveau MPDR Oracle créé.
      */
-    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMDRParameter target, MLDRParameter mldrParameter){
-        return new MPDROracleParameter(impdrOracleElement, target, mldrParameter);
+    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMDRParameter target, MLDRParameter mldrParameter, int id){
+        return new MPDROracleParameter(impdrOracleElement, target, mldrParameter, id);
     }
 
     /*

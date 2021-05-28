@@ -1699,16 +1699,21 @@ public class ProjectLoaderXml {
                 if(targetParametersTagChild.getNodeName().equals("targetParameter")) {
                     Element targetParameterTag = targetParametersTagChild;
 
-                    //Récupération de la colonne de FK
+                    //Récupération de l'id du Parameter
+                    int parameterId = Integer.parseInt(targetParameterTag.getAttribute("id"));
+
+                    //Récupération de la colonne sur laquelle est mise la contrainte
                     int targetColumnId = Integer.parseInt(targetParameterTag.getAttribute("target_column_id"));
                     MDRColumn targetMdrColumn = mdrTable.getMDRColumnById(targetColumnId);
 
-                    //Ajout de la colonne référencée à la contrainte PK (ce qui passe par la création d'un Parameter)
+                    //Ajout du parameter comme enfant de la contrainte (ce qui ajoute la colonne à la contrainte)
+                    //Pour MLDR
                     if(targetMdrColumn instanceof MLDRColumn){
-                        MVCCDElementFactory.instance().createMLDRParameter(mdrConstraint, targetMdrColumn, mcdElementSource);
+                        MVCCDElementFactory.instance().createMLDRParameter(mdrConstraint, targetMdrColumn, mcdElementSource, parameterId);
                     }
+                    //Pour chaque constructeur MPDR
                     else if(targetMdrColumn instanceof MPDROracleColumn){
-                        MVCCDElementFactory.instance().createMPDROracleParameter((IMPDROracleElement) mdrConstraint, targetMdrColumn, null);
+                        MVCCDElementFactory.instance().createMPDROracleParameter((IMPDROracleElement) mdrConstraint, targetMdrColumn, null, parameterId);
                         //TODO: persister les parameters, en plus des colonnes targets. Ensuite, je pourrai ici récupérer le MLDParameter source.
                     }
 

@@ -1232,40 +1232,36 @@ public class ProjectSaverXml {
             Element targetParametersTag = doc.createElement("targetParameters");
             constraintTag.appendChild(targetParametersTag);
 
-            //Parcours des colonnes contenues dans la contrainte
-            for(MDRColumn targetMdrColumn : tableConstraint.getMDRColumns()){
+            //Parcours des parameters contenus dans la contrainte (chaque Parameter correspondant à une colonne de la contrainte)
+            for(MDRParameter mdrParameter : tableConstraint.getMDRParameters()){
 
                 //Persistance d'une référence vers une colonne
-                this.addTargetColumnOfTableConstraint(doc, targetMdrColumn, targetParametersTag);
+                this.addTargetParameterOfTableConstraint(doc, mdrParameter, targetParametersTag);
             }
-
-            //TODO: intégrer ceci à la place de la boucle ci-dessus, pour persister les parameters.
-            /*for(MDRParameter mdrParameter : tableConstraint.getMDRParameters()){
-                mdrParameter.getIdProjectElement(); //ip parameter
-                IMDRParameter imdrParameter = mdrParameter.getTarget(); //id colonne pointée
-                if(imdrParameter instanceof MDRColumn){
-                    MDRColumn mdrColumn = (MDRColumn) imdrParameter;
-                    mdrColumn.getIdProjectElement();
-                }
-            }*/
         }
     }
 
      /**
-     * Persistance d'une référence de colonne cible d'une contrainte de table. Par exemple, persistance de la référence
-     * vers la colonne pointée par une PK.
+     * Persistance d'une référence de colonne cible (d'un Parameter) d'une contrainte de table. Par exemple, persistance
+      * de la référence vers la colonne pointée par une PK.
      * @param doc Document XML dans lequel la contrainte sera persistée.
-     * @param targetMdrColumn La colonne cible, dont la référence sera persistée.
+     * @param targetMdrParameter Le parameter contenant la colonne cible. Ce parameter est utilisé pour persister la référence vers la colonne.
      * @param targetParametersTag La balise parent <targetParameters> dans laquelle sera créé une nouvelle balise <targetParameter>
      */
-    private void addTargetColumnOfTableConstraint(Document doc, MDRColumn targetMdrColumn, Element targetParametersTag) {
+    private void addTargetParameterOfTableConstraint(Document doc, MDRParameter targetMdrParameter, Element targetParametersTag) {
 
         //Création de la balise <targetParameter>
         Element targetParameterTag = doc.createElement("targetParameter");
         targetParametersTag.appendChild(targetParameterTag);
 
-        //Ajout des propriétés d'une colonne cible
-        targetParameterTag.setAttribute("target_column_id", targetMdrColumn.getIdProjectElementAsString());
+        //Ajout des propriétés d'un Parameter
+        targetParameterTag.setAttribute("id", targetMdrParameter.getIdProjectElementAsString());
+
+        //Ajout des propriétés de la colonne pointée par le Parameter
+        if(targetMdrParameter.getTarget() instanceof MDRColumn){
+            MDRColumn targetColumn = (MDRColumn) targetMdrParameter.getTarget();
+            targetParameterTag.setAttribute("target_column_id", targetColumn.getIdProjectElementAsString());
+        }
     }
 
     /**

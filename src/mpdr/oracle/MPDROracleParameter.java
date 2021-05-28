@@ -12,7 +12,7 @@ public class MPDROracleParameter extends MPDRParameter {
         super((ProjectElement) parent, mldrElementSource);
     }
 
-    public MPDROracleParameter(IMPDROracleElement parent, IMDRParameter target, IMLDRElement mldrElementSource) {
-        super((ProjectElement) parent, target, mldrElementSource);
+    public MPDROracleParameter(IMPDROracleElement parent, IMDRParameter target, IMLDRElement mldrElementSource, int id) {
+        super((ProjectElement) parent, target, mldrElementSource, id);
     }
 }
