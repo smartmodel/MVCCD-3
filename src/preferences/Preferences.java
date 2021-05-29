@@ -146,8 +146,8 @@ public class Preferences extends MVCCDElement {
     public static String LOGGING_FOLDER_PATH = "log" ;
     public static String DIRECTORY_LOGGING_NAME = "logs";
 
-    // Path de nommage au niveau des objets du MCD (Modèle.paquetatge.entité....
-    public static String MODEL_NAME_PATH_SEPARATOR = ".";
+    // Path de nommage au niveau des objets  (Modèle.paquetatge.entité....
+    public static String PATH_NAMING_SEPARATOR = ".";
 
     public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
     public static Integer MVCCD_WINDOW_WIDTH = 1200;

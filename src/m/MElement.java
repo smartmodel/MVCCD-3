@@ -36,7 +36,7 @@ public abstract class MElement extends ProjectElement {
      *                 possibles: MVCCDElementService.PATHNAME et PATHSHORTNAME.
      */
     public String getNamePath(int pathMode) {
-        String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
+        String separator = Preferences.PATH_NAMING_SEPARATOR;
         String path = getPath(pathMode, separator);
         if (StringUtils.isNotEmpty(path)){
             return path + separator + getName();
@@ -45,8 +45,13 @@ public abstract class MElement extends ProjectElement {
         }
     }
 
+    public String getNamePathReverse(int pathMode) {
+        return MElementService.reversePath(getNamePath(pathMode));
+    }
+
+
     public String getShortNamePath(int pathMode) {
-        String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
+        String separator = Preferences.PATH_NAMING_SEPARATOR;
         String path = getPath(pathMode, separator);
         if (StringUtils.isNotEmpty(path)){
             return path + separator + getShortName();
@@ -55,13 +60,17 @@ public abstract class MElement extends ProjectElement {
         }
     }
 
+    public String getShortNamePathReverse(int pathMode) {
+        return MElementService.reversePath(getShortNamePath(pathMode));
+    }
+
 
     /**
      * Au même titre que getNamePath(), retourne le path et le shortName d'un objet.
      * La différence est que le namePath est construit avec la méthode getShortNameSmart(), afin d'utiliser le name si shortName est nul.
      */
     public String getShortNameSmartPath() {
-        String separator = Preferences.MODEL_NAME_PATH_SEPARATOR;
+        String separator = Preferences.PATH_NAMING_SEPARATOR;
         String path = getPath( MElementService.PATHSHORTNAME, separator);
         if (StringUtils.isNotEmpty(path)){
             return path + separator + getShortNameSmart();
@@ -69,6 +78,11 @@ public abstract class MElement extends ProjectElement {
             return getShortNameSmart();
         }
     }
+
+    public String getShortNameSmartPathReverse() {
+        return MElementService.reversePath(getShortNameSmartPath());
+    }
+
 
 
     /**

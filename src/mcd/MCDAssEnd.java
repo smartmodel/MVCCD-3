@@ -103,17 +103,6 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
     }
 
 
-    //TODO-1 Il faudrait une méthode qui rende un nom utilisable dans le cas des associations, rôles ou autre
-    // éléments qui peuvent avoir une absence de nom
-    public String getNamePath(int pathMode){
-        String name = getName();
-        if (StringUtils.isEmpty(getName())){
-           name = this.getMcdAssociation().getName() ;
-        }
-        return getPath(MElementService.PATHNAME, Preferences.MODEL_NAME_PATH_SEPARATOR) +
-                Preferences.MODEL_NAME_PATH_SEPARATOR + name ;
-    }
-
 
     @Override
     public String getNameTree() {
@@ -131,8 +120,11 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
                                       Integer pathMode) {
 
         String namingAssociation ;
+
         if (StringUtils.isNotEmpty(this.getName()) && StringUtils.isNotEmpty(this.getMCDAssEndOpposite().getName())){
             namingAssociation = this.getName();
+            // Erreur - Ne pas donner le From To qui est incompréhensible pour l'utilisateur
+            /*
             if (this.getDrawingDirection() == MCDAssEnd.FROM){
                 namingAssociation = namingAssociation +
                         Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT ;
@@ -141,11 +133,13 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
                 namingAssociation = namingAssociation  +
                         Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT ;
             }
+            */
 
         } else {
-            namingAssociation =
-                    this.getMcdAssociation().getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
+            namingAssociation = getMcdAssociation().getName() ;
         }
+        namingAssociation = namingAssociation +  Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
+
         return MCDRelEndService.getNameTreeOrSource(scope, this, namingAssociation);
     }
 

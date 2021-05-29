@@ -8,6 +8,7 @@ import mcd.MCDModel;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMPathOnlyRepositoryTree;
 import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
 import project.Project;
 import utilities.Trace;
 
@@ -62,4 +63,21 @@ public class MElementService {
     }
 
 
+    public static String reversePath(String namingPath) {
+        String resultat = "";
+        Trace.println("Entré " + namingPath);
+
+        if (StringUtils.isNotEmpty(namingPath)) {
+            String[] parts = namingPath.split("\\" + Preferences.PATH_NAMING_SEPARATOR);
+            Trace.println(""+ parts.length);
+            for (int i = parts.length -1 ; i >= 0 ; i--) {
+                resultat = resultat + parts[i] ;
+                Trace.println(resultat + " " + parts[i]);
+                if (i > 0){
+                    resultat = resultat + Preferences.PATH_NAMING_SEPARATOR;
+                }
+            }
+        }
+        return resultat;
+    }
 }

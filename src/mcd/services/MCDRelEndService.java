@@ -5,9 +5,9 @@ import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.MCDRelEnd;
 import mcd.MCDRelation;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -50,11 +50,15 @@ public class MCDRelEndService {
 
 
         if (r2){
-            nameElementOpposite = mcdElementOpposite.getNamePath(MElementService.PATHNAME);
+            nameElementOpposite = mcdElementOpposite.getNamePathReverse(MElementService.PATHNAME);
         }
 
         if (r3){
-            nameElementOpposite = mcdElementOpposite.getShortNameSmartPath();
+            nameElementOpposite = mcdElementOpposite.getShortNameSmartPathReverse();
+        }
+
+        if (StringUtils.isNotEmpty(mcdRelEndOpposite.getName())){
+            nameElementOpposite = mcdRelEndOpposite.getName() + Preferences.PATH_NAMING_SEPARATOR + nameElementOpposite ;
         }
 
 
