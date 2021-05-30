@@ -30,7 +30,6 @@ public class MLDRTransformColumns {
     void transformColumns() {
         for (MLDRColumn mldrColumn : mldrTable.getMLDRColumns()){
             MPDRColumn mpdrColumn = transformColumn(mldrColumn);
-            exceptionsColumnBoolean(mpdrColumn, mldrColumn);
         }
     }
 
@@ -77,7 +76,12 @@ public class MLDRTransformColumns {
         // Datatype size
         //#MAJ 2021-05-30 MLDR-> MPDR Transformation size
         //if (mpdrColumn.getSize() != null) {
+        // Boolean
+        if (mldrColumn.getDatatypeLienProg().equals(Preferences.MLDRDATATYPE_BOOLEAN_LIENPROG)) {
+            exceptionsColumnBoolean(mpdrColumn, mldrColumn);
+        } else {
             pushSize(mpdrColumn, mldrColumn.getSize());
+        }
         //}
 
 
@@ -143,10 +147,7 @@ public class MLDRTransformColumns {
 
     private void exceptionsColumnBoolean(MPDRColumn mpdrColumn, MLDRColumn mldrColumn) {
         Preferences preferences = PreferencesManager.instance().preferences();
-        // Boolean
-        if (mldrColumn.getDatatypeLienProg().equals(Preferences.MLDRDATATYPE_BOOLEAN_LIENPROG)){
-            Trace.println("Boolean");
-            // Oracle
+             // Oracle
             if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_ORACLE)){
                 //#MAJ 2021-05-30 MLDR-> MPDR Transformation size
                 if (mpdrColumn.getDatatypeLienProg().equals(Preferences.MPDRORACLEDATATYPE_VARCHAR2_LIENPROG)){
@@ -160,7 +161,6 @@ public class MLDRTransformColumns {
                     pushSize(mpdrColumn, 1);
                 }
             }
-        }
     }
 
 
