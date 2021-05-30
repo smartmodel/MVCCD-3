@@ -75,9 +75,10 @@ public class MLDRTransformColumns {
         }
         
         // Datatype size
-        if (mpdrColumn.getSize() != null) {
-            pushSize(mpdrColumn, mldrColumn.getSize().intValue());
-        }
+        //#MAJ 2021-05-30 MLDR-> MPDR Transformation size
+        //if (mpdrColumn.getSize() != null) {
+            pushSize(mpdrColumn, mldrColumn.getSize());
+        //}
 
 
         // Datatype scale
@@ -126,29 +127,36 @@ public class MLDRTransformColumns {
         }
     }
 
-    private void pushSize(MPDRColumn mpdrColumn, int value) {
+
+    //#MAJ 2021-05-30 MLDR-> MPDR Transformation size
+    private void pushSize(MPDRColumn mpdrColumn, Integer mldrSize) {
         if (mpdrColumn.getSize() != null) {
-            if (mpdrColumn.getSize().intValue() != value) {
-                mpdrColumn.setSize(value);
+            if (mpdrColumn.getSize().intValue() != mldrSize.intValue()) {
+                mpdrColumn.setSize(mldrSize);
             }
         } else {
-            mpdrColumn.setSize(value);
+            mpdrColumn.setSize(mldrSize);
         }
     }
+
+
 
     private void exceptionsColumnBoolean(MPDRColumn mpdrColumn, MLDRColumn mldrColumn) {
         Preferences preferences = PreferencesManager.instance().preferences();
         // Boolean
         if (mldrColumn.getDatatypeLienProg().equals(Preferences.MLDRDATATYPE_BOOLEAN_LIENPROG)){
+            Trace.println("Boolean");
             // Oracle
             if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_ORACLE)){
-                if (mldrColumn.getDatatypeLienProg().equals(Preferences.MPDRORACLEDATATYPE_VARCHAR2_LIENPROG)){
+                //#MAJ 2021-05-30 MLDR-> MPDR Transformation size
+                if (mpdrColumn.getDatatypeLienProg().equals(Preferences.MPDRORACLEDATATYPE_VARCHAR2_LIENPROG)){
                     pushSize(mpdrColumn, 1);
                 }
             }
             // MySQL
             if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_MYSQL)){
-                if (mldrColumn.getDatatypeLienProg().equals(Preferences.MPDRMySQLDATATYPE_TINYINT_LIENPROG)){
+                //#MAJ 2021-05-30 MLDR-> MPDR Transformation size
+                if (mpdrColumn.getDatatypeLienProg().equals(Preferences.MPDRMySQLDATATYPE_TINYINT_LIENPROG)){
                     pushSize(mpdrColumn, 1);
                 }
             }
