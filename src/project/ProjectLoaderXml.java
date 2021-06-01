@@ -560,7 +560,7 @@ public class ProjectLoaderXml {
         mcdEntity.setAudit(Boolean.valueOf(audit.getTextContent()));
 
         Element mldrTableName = (Element) entite.getElementsByTagName("mldrTableName").item(0);
-        mcdEntity.setMldrTableName(mldrTableName.getTextContent());
+        if(mldrTableName != null) mcdEntity.setMldrTableName(mldrTableName.getTextContent());
 
     }
 
