@@ -19,7 +19,9 @@ public class MPDROracleTable extends MPDRTable {
         super(parent, mldrElementSource);
     }
 
-
+    public MPDROracleTable(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+        super(parent, mldrElementSource, id);
+    }
 
     @Override
     public MPDRColumn createColumn(MLDRColumn mldrColumn) {

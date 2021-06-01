@@ -17,6 +17,11 @@ public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPD
         this.mldrElementSource = mldrElementSource;
     }
 
+    public MPDRColumn(ProjectElement parent,  IMLDRElement mldrElementSource, int id) {
+        super(parent, id);
+        this.mldrElementSource = mldrElementSource;
+    }
+
 
     @Override
     public IMLDRElement getMldrElementSource() {

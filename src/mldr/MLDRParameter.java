@@ -20,6 +20,10 @@ public class MLDRParameter extends MDRParameter implements IMLDRElement, IMLDREl
         this.mcdElementSource = mcdElementSource;
     }
 
+    public MLDRParameter(ProjectElement parent, IMDRParameter target, MCDElement mcdElementSource, int id) {
+        super(parent, target, id);
+        this.mcdElementSource = mcdElementSource;
+    }
 
     @Override
     public MCDElement getMcdElementSource() {

@@ -46,6 +46,7 @@
 							<xs:element ref="entityAbstract"/>
 							<xs:element ref="journal"/>
 							<xs:element ref="audit"/>
+							<xs:element ref="mldrTableName" minOccurs="0"/>
 						</xs:sequence>
 					</xs:choice>
 				</xs:sequence>
@@ -248,8 +249,8 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="MLDR_DT"/>
-				<xs:element ref="MLDR_TI"/>
+				<xs:element ref="MLDR_DT" minOccurs="0"/>
+				<xs:element ref="MLDR_TI" minOccurs="0"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
@@ -270,8 +271,8 @@
 				<xs:element ref="entities"/>
 				<xs:element ref="relations"/>
 				<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="MLDR_DT"/>
-				<xs:element ref="MLDR_TI"/>
+				<xs:element ref="MLDR_DT" minOccurs="0"/>
+				<xs:element ref="MLDR_TI" minOccurs="0"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
@@ -288,6 +289,7 @@
 	<xs:element name="auditException" type="xs:boolean"/>
 	<xs:element name="journalization" type="xs:boolean"/>
 	<xs:element name="journalizationException" type="xs:boolean"/>
+	<xs:element name="mldrTableName" type="xs:string"/>
 	<xs:element name="parent">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
@@ -760,6 +762,11 @@
 			<xs:sequence>
 				<xs:element ref="tables"/>
 				<xs:element ref="mdrRelations"/>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="MPDR_Oracle" minOccurs="0"/>
+					<xs:element ref="MPDR_PostgreSQL" minOccurs="0"/>
+					<xs:element ref="MPDR_MySQL" minOccurs="0"/>
+				</xs:choice>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -770,6 +777,11 @@
 			<xs:sequence>
 				<xs:element ref="tables"/>
 				<xs:element ref="mdrRelations"/>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="MPDR_Oracle" minOccurs="0"/>
+					<xs:element ref="MPDR_PostgreSQL" minOccurs="0"/>
+					<xs:element ref="MPDR_MySQL" minOccurs="0"/>
+				</xs:choice>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -789,7 +801,7 @@
 			<xs:sequence>
 				<xs:element ref="columns"/>
 				<xs:element ref="tableConstraints"/>
-				<xs:element ref="extremitesRelations"/>
+				<xs:element ref="extremitesRelations" minOccurs="0"/> <!-- Une table peut ne pas avoir d'extrémités (si elle n'a pas de relation ou si elle est MPDR) -->
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
@@ -802,7 +814,7 @@
 			</xs:attribute>
 			<xs:attribute name="shortName" type="xs:string"/>
 			<xs:attribute name="longName" type="xs:string"/>
-			<xs:attribute name="mcdelement_source" use="required" type="xs:int"/>
+			<xs:attribute name="element_source_id" use="required" type="xs:int"/>
 			<xs:attribute name="name30" type="xs:string"/>
 			<xs:attribute name="name60" type="xs:string"/>
 			<xs:attribute name="name120" type="xs:string"/>
@@ -824,7 +836,7 @@
 			<xs:attribute name="name" type="xs:string" />
 			<xs:attribute name="shortName" type="xs:string"/>
 			<xs:attribute name="longName" type="xs:string"/>
-			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="element_source_id" type="xs:int" />
 			<xs:attribute name="name30" type="xs:string"/>
 			<xs:attribute name="name60" type="xs:string"/>
 			<xs:attribute name="name120" type="xs:string"/>
@@ -855,13 +867,13 @@
 	<xs:element name="pk">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="targetColumns" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="targetParameters" minOccurs="1" maxOccurs="1"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" type="xs:string" />
 			<xs:attribute name="shortName" type="xs:string" />
 			<xs:attribute name="longName" type="xs:string" />
-			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="element_source_id" type="xs:int" />
 			<xs:attribute name="name30" type="xs:string"/>
 			<xs:attribute name="name60" type="xs:string"/>
 			<xs:attribute name="name120" type="xs:string"/>
@@ -871,13 +883,13 @@
 	<xs:element name="fk">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="targetColumns" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="targetParameters" minOccurs="1" maxOccurs="1"/>
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" type="xs:string" />
 			<xs:attribute name="shortName" type="xs:string" />
 			<xs:attribute name="longName" type="xs:string" />
-			<xs:attribute name="mcdelement_source" type="xs:int" />
+			<xs:attribute name="element_source_id" type="xs:int" />
 			<xs:attribute name="name30" type="xs:string"/>
 			<xs:attribute name="name60" type="xs:string"/>
 			<xs:attribute name="name120" type="xs:string"/>
@@ -885,16 +897,18 @@
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="targetColumns">
+	<xs:element name="targetParameters">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="targetColumn" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="targetParameter" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="targetColumn">
+	<xs:element name="targetParameter">
 		<xs:complexType>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="element_source_id" use="required" type="xs:int"/>
 			<xs:attribute name="target_column_id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
@@ -935,13 +949,40 @@
 			<xs:attribute name="name" use="required" type="xs:string"/>
 			<xs:attribute name="shortName" type="xs:string"/>
 			<xs:attribute name="longName" type="xs:string"/>
-			<xs:attribute name="mcdelement_source" type="xs:int"/>
+			<xs:attribute name="element_source_id" type="xs:int"/>
 			<xs:attribute name="name30" type="xs:string"/>
 			<xs:attribute name="name60" type="xs:string"/>
 			<xs:attribute name="name120" type="xs:string"/>
 			<xs:attribute name="extremiteRelA_target_id" use="required" type="xs:int"/>
 			<xs:attribute name="extremiteRelB_target_id" use="required" type="xs:int"/>
 			<xs:attribute name="fk_target_id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="MPDR_Oracle">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tables"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="MPDR_PostgreSQL">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tables"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="MPDR_MySQL">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tables"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 

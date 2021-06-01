@@ -12,5 +12,9 @@ public class MPDRMySQLColumn extends MPDRColumn {
         super(parent, mldrElementSource);
     }
 
+    public MPDRMySQLColumn(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+        super(parent, mldrElementSource, id);
+    }
+
 
 }

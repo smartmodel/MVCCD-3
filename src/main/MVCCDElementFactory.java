@@ -360,20 +360,24 @@ public class MVCCDElementFactory {
         return new MLDRParameter(mdrConstraint, target, mcdElementSource);
     }
 
+    public MLDRParameter createMLDRParameter(MDRConstraint mdrConstraint, IMDRParameter target, MCDElement mcdElementSource, int id) {
+        return new MLDRParameter(mdrConstraint, target, mcdElementSource, id);
+    }
+
     public MLDRFK createMLDRFK(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
         MLDRFK mldrFK = new MLDRFK(mldrContConstraints, mcdElementSource);
         this.initMLDRFK(mldrFK, mldrContConstraints);
         return mldrFK;
     }
 
-    public MLDRFK createMLDRFK(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource, int id) {
-        MLDRFK mldrFK = new MLDRFK(mldrContConstraints, mcdElementSource, id);
-        this.initMLDRFK(mldrFK, mldrContConstraints);
+    public MLDRFK createMLDRFK(MDRContConstraints mdrContConstraints, MCDElement mcdElementSource, int id) {
+        MLDRFK mldrFK = new MLDRFK(mdrContConstraints, mcdElementSource, id);
+        this.initMLDRFK(mldrFK, mdrContConstraints);
         return mldrFK;
     }
 
-    public void initMLDRFK(MLDRFK mldrFK, MLDRContConstraints mldrContConstraints){
-        Integer indice = MLDRContConstraintsService.nextIndice(mldrContConstraints, mldrFK);
+    public void initMLDRFK(MLDRFK mldrFK, MDRContConstraints mdrContConstraints){
+        Integer indice = MLDRContConstraintsService.nextIndice(mdrContConstraints, mldrFK);
         mldrFK.setIndice(indice);
     }
 
@@ -446,21 +450,40 @@ public class MVCCDElementFactory {
         return mpdrOracleModel;
     }
 
-    public MPDROracleTable createMPDROracleTable(MPDRContTables mpdrContTables, MLDRTable mldrTable) {
-        MPDROracleTable mpdrOracleTable = new MPDROracleTable(mpdrContTables, mldrTable);
-        MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrOracleTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
-        MPDRContConstraints mpdrConstraints = new MPDRContConstraints(mpdrOracleTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+    public MPDROracleTable createMPDROracleTable(MDRContTables mdrContTables, MLDRTable mldrTable, int id) {
+        MPDROracleTable mpdrOracleTable = new MPDROracleTable(mdrContTables, mldrTable, id);
+        this.initMPDROracleTable(mpdrOracleTable);
         return mpdrOracleTable;
     }
 
+    public MPDROracleTable createMPDROracleTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
+        MPDROracleTable mpdrOracleTable = new MPDROracleTable(mdrContTables, mldrTable);
+        this.initMPDROracleTable(mpdrOracleTable);
+        return mpdrOracleTable;
+    }
+
+    private void initMPDROracleTable(MPDROracleTable mpdrOracleTable){
+        new MPDRContColumns(mpdrOracleTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        new MPDRContConstraints(mpdrOracleTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+    }
 
     public MPDROracleColumn createMPDROracleColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn) {
         MPDROracleColumn mpdrOracleColumn = new MPDROracleColumn(mdrContColumns, mldrColumn);
         return mpdrOracleColumn;
     }
 
+    public MPDROracleColumn createMPDROracleColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn, int id) {
+        MPDROracleColumn mpdrOracleColumn = new MPDROracleColumn(mdrContColumns, mldrColumn, id);
+        return mpdrOracleColumn;
+    }
+
     public MPDROraclePK createMPDROraclePK(MDRContConstraints mdrContConstraints, MLDRPK mldrPK) {
         MPDROraclePK mpdrOraclePK = new MPDROraclePK(mdrContConstraints, mldrPK);
+        return mpdrOraclePK;
+    }
+
+    public MPDROraclePK createMPDROraclePK(MDRContConstraints mdrContConstraints, MLDRPK mldrPK, int id) {
+        MPDROraclePK mpdrOraclePK = new MPDROraclePK(mdrContConstraints, mldrPK, id);
         return mpdrOraclePK;
     }
 
@@ -470,12 +493,29 @@ public class MVCCDElementFactory {
         return mpdrOracleFK;
     }
 
-    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement,
-                                                   MLDRParameter mldrParameter) {
-        MPDROracleParameter mpdrOracleParameter = new MPDROracleParameter( impdrOracleElement, mldrParameter);
-        return mpdrOracleParameter;
+    public MPDROracleFK createMPDROracleFK(MDRContConstraints mdrContConstraints, MLDRFK mldrFK, int id) {
+        MPDROracleFK mpdrOracleFK = new MPDROracleFK(mdrContConstraints, mldrFK, id);
+        return mpdrOracleFK;
     }
 
+    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, MLDRParameter mldrParameter){
+        return new MPDROracleParameter( impdrOracleElement, mldrParameter);
+    }
+
+    /**
+     * Créer un nouveau parameter Oracle, qui est l'objet permettant de référencer une colonne. Par exemple, une
+     * contrainte FK a un (ou plusieurs) parameter comme enfant, et c'est ce parameter qui va permettre de définir
+     * la (ou les) colonne cible pointé par la FK.
+     * @param impdrOracleElement L'élément parent pour qui le parameter est ajouté, par exemple la contrainte FK.
+     * @param target Élément cible du paramètre (généralement une colonne).
+     * @param mldrParameter Il s'agit de l'élément MLDR qui est la source du parameter MPDR lors de la transformation
+     *                      MLDR => MPDR.
+     * @param id Id déjà connu (lors du chargement du projet depuis le fichier XML) du parameter.
+     * @return Retourne le parameter de niveau MPDR Oracle créé.
+     */
+    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMDRParameter target, MLDRParameter mldrParameter, int id){
+        return new MPDROracleParameter(impdrOracleElement, target, mldrParameter, id);
+    }
 
     // MySQL
     public MPDRMySQLModel createMPDRModelMySQL(MLDRModel mldrModel) {
@@ -489,20 +529,47 @@ public class MVCCDElementFactory {
         return mpdrMySQLModel;
     }
 
-    public MPDRMySQLTable createMPDRMySQLTable(MPDRContTables mpdrContTables, MLDRTable mldrTable) {
-        MPDRMySQLTable mpdrMySQLTable = new MPDRMySQLTable(mpdrContTables, mldrTable);
-        MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrMySQLTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
-        MPDRContConstraints mpdrConstraints = new MPDRContConstraints(mpdrMySQLTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+    public MPDRMySQLTable createMPDRMySQLTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
+        MPDRMySQLTable mpdrMySQLTable = new MPDRMySQLTable(mdrContTables, mldrTable);
+        this.initMPDRMySQLTable(mpdrMySQLTable);
         return mpdrMySQLTable;
     }
 
+    public MPDRMySQLTable createMPDRMySQLTable(MDRContTables mdrContTables, MLDRTable mldrTable, int id) {
+        MPDRMySQLTable mpdrMySQLTable = new MPDRMySQLTable(mdrContTables, mldrTable, id);
+        this.initMPDRMySQLTable(mpdrMySQLTable);
+        return mpdrMySQLTable;
+    }
+
+    private void initMPDRMySQLTable(MPDRMySQLTable mpdrMySQLTable){
+        new MPDRContColumns(mpdrMySQLTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        new MPDRContConstraints(mpdrMySQLTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+    }
 
     public MPDRMySQLColumn createMPDRMySQLColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn) {
         MPDRMySQLColumn mpdrMySQLColumn = new MPDRMySQLColumn(mdrContColumns, mldrColumn);
         return mpdrMySQLColumn;
     }
 
+    public MPDRMySQLColumn createMPDRMySQLColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn, int id) {
+        MPDRMySQLColumn mpdrMySQLColumn = new MPDRMySQLColumn(mdrContColumns, mldrColumn, id);
+        return mpdrMySQLColumn;
+    }
 
+    //TODO-PAS: PK pour MySQL
+    public MDRPK createMPDRMySQLPK(MDRContConstraints mdrContConstraints, MLDRPK mldrPkSourceOfMpdPk, int id) {
+        return null;
+    }
+
+    //TODO-PAS: FK pour MySQL
+    public MDRFK createMPDRMySQLFK(MDRContConstraints mdrContConstraints, MLDRFK mldrFkSourceOfMpdFk, int id) {
+        return null;
+    }
+
+    //TODO-PAS: Parameter pour MySQL
+    public MPDRParameter createMPDRMySQLParameter(MDRConstraint mdrConstraint, IMDRParameter target, MLDRParameter mldrParameterSource, int parameterId) {
+        return null;
+    }
 
     // PostgreSQL
     public MPDRPostgreSQLModel createMPDRModelPostgreSQL(MLDRModel mldrModel) {
@@ -516,23 +583,51 @@ public class MVCCDElementFactory {
         return mpdrPostgreSQLModel;
     }
 
-    public MPDRPostgreSQLTable createMPDRPostgreSQLTable(MPDRContTables mpdrContTables, MLDRTable mldrTable) {
-        MPDRPostgreSQLTable mpdrPostgreSQLTable = new MPDRPostgreSQLTable(mpdrContTables, mldrTable);
-        MPDRContColumns mpdrContColumns = new MPDRContColumns(mpdrPostgreSQLTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
-        MPDRContConstraints mpdrConstraints = new MPDRContConstraints(mpdrPostgreSQLTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+    public MPDRPostgreSQLTable createMPDRPostgreSQLTable(MDRContTables mdrContTables, MLDRTable mldrTable) {
+        MPDRPostgreSQLTable mpdrPostgreSQLTable = new MPDRPostgreSQLTable(mdrContTables, mldrTable);
+        this.initMPDRPostgreSQLTable(mpdrPostgreSQLTable);
         return mpdrPostgreSQLTable;
     }
 
+    public MPDRPostgreSQLTable createMPDRPostgreSQLTable(MDRContTables mdrContTables, MLDRTable mldrTable, int id) {
+        MPDRPostgreSQLTable mpdrPostgreSQLTable = new MPDRPostgreSQLTable(mdrContTables, mldrTable, id);
+        this.initMPDRPostgreSQLTable(mpdrPostgreSQLTable);
+        return mpdrPostgreSQLTable;
+    }
+
+    private void initMPDRPostgreSQLTable(MPDRPostgreSQLTable mpdrPostgreSQLTable){
+        new MPDRContColumns(mpdrPostgreSQLTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        new MPDRContConstraints(mpdrPostgreSQLTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
+    }
 
     public MPDRPostgreSQLColumn createMPDRPostgreSQLColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn) {
         MPDRPostgreSQLColumn mpdrPostgreSQLColumn = new MPDRPostgreSQLColumn(mdrContColumns, mldrColumn);
         return mpdrPostgreSQLColumn;
     }
 
+    public MPDRPostgreSQLColumn createMPDRPostgreSQLColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn, int id) {
+        MPDRPostgreSQLColumn mpdrPostgreSQLColumn = new MPDRPostgreSQLColumn(mdrContColumns, mldrColumn, id);
+        return mpdrPostgreSQLColumn;
+    }
+
+    //TODO-PAS: PK pour PostgreSQL
+    public MDRPK createMPDRPostgreSQLPK(MDRContConstraints mdrContConstraints, MLDRPK mldrPkSourceOfMpdPk, int id) {
+        return null;
+    }
+
+    //TODO-PAS: FK pour PostgreSQL
+    public MDRFK createMPDRPostgreSQLFK(MDRContConstraints mdrContConstraints, MLDRFK mldrFkSourceOfMpdFk, int id) {
+        return null;
+    }
+
+    //TODO-PAS: Parameter pour PostgreSQL
+    public MPDRParameter createMPDRPostgreSQLParameter(MDRConstraint mdrConstraint, IMDRParameter target, MLDRParameter mldrParameterSource, int parameterId) {
+        return null;
+    }
 
     //Tous les MPDR
     private void createContentMPDRModel(MPDRModel mpdrModel) {
-        MPDRContTables mpdrContTable = new MPDRContTables(mpdrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
+        new MPDRContTables(mpdrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
     }
 
 }
