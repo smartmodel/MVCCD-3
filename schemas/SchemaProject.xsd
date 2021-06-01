@@ -46,6 +46,7 @@
 							<xs:element ref="entityAbstract"/>
 							<xs:element ref="journal"/>
 							<xs:element ref="audit"/>
+							<xs:element ref="mldrTableName" minOccurs="0"/>
 						</xs:sequence>
 					</xs:choice>
 				</xs:sequence>
@@ -288,6 +289,7 @@
 	<xs:element name="auditException" type="xs:boolean"/>
 	<xs:element name="journalization" type="xs:boolean"/>
 	<xs:element name="journalizationException" type="xs:boolean"/>
+	<xs:element name="mldrTableName" type="xs:string"/>
 	<xs:element name="parent">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">

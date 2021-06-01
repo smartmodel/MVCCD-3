@@ -429,6 +429,10 @@ public class ProjectSaverXml {
         Element audit = doc.createElement("audit");
         audit.appendChild(doc.createTextNode(String.valueOf(mcdEntity.isAudit())));
         properties.appendChild(audit);
+
+        Element mldrTableName = doc.createElement("mldrTableName");
+        mldrTableName.appendChild(doc.createTextNode(String.valueOf(mcdEntity.getMldrTableName())));
+        properties.appendChild(mldrTableName);
     }
 
     private void addPropertiesModelsOrPackages(Document doc, Element element, MVCCDElement child) {

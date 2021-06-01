@@ -559,6 +559,9 @@ public class ProjectLoaderXml {
         Element audit = (Element) entite.getElementsByTagName("audit").item(0);
         mcdEntity.setAudit(Boolean.valueOf(audit.getTextContent()));
 
+        Element mldrTableName = (Element) entite.getElementsByTagName("mldrTableName").item(0);
+        mcdEntity.setMldrTableName(mldrTableName.getTextContent());
+
     }
 
     private void loadAttributs() {
