@@ -56,22 +56,22 @@ public class MCDRelationService {
 
         if (r3) {
             nameElementA = elementA.getNamePath(MElementService.PATHSHORTNAME);
-            nameElementB = elementB.getNamePath(MElementService.PATHSHORTNAME);
+            nameElementB = elementB.getNamePathReverse(MElementService.PATHSHORTNAME);
         }
 
         if (r4) {
             nameElementA = elementA.getShortNameSmartPath();
-            nameElementB = elementB.getShortNameSmartPath();
+            nameElementB = elementB.getShortNameSmartPathReverse();
         }
 
         if (forcePath) {
             if (pathMode == MElementService.PATHNAME) {
                 nameElementA = elementA.getNamePath(MElementService.PATHNAME);
-                nameElementB = elementB.getNamePath(MElementService.PATHNAME);
+                nameElementB = elementB.getNamePathReverse(MElementService.PATHNAME);
             }
             if (pathMode == MElementService.PATHSHORTNAME) {
                 nameElementA = elementA.getShortNameSmartPath();
-                nameElementB = elementB.getShortNameSmartPath();
+                nameElementB = elementB.getShortNameSmartPathReverse();
             }
         }
 

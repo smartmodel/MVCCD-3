@@ -34,7 +34,7 @@ public class MCDUniqueService {
             boolean oneAttributeOptional = false;
             boolean oneAssEndOptional = false;
             for (int line = 0; line < table.getRowCount(); line++) {
-                IMCDParameter target = MCDParameterService.getTargetByTypeAndNameTree(mcdEntity,
+                IMCDParameter target = MCDParameterService.getTargetByTypeAndNameTarget(mcdEntity,
                         (String) table.getValueAt(line, OperationParamTableColumn.TYPE.getPosition()),
                         (String) table.getValueAt(line, OperationParamTableColumn.NAME.getPosition()));
                 if (target instanceof MCDAttribute) {

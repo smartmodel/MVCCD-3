@@ -2,12 +2,10 @@ package mcd;
 
 import exceptions.CodeApplException;
 import m.services.MElementService;
-import main.MVCCDElementService;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDElementConvert;
 import mcd.services.MCDElementService;
 import md.MDElement;
-import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
 
@@ -46,13 +44,8 @@ public abstract class MCDElement extends MDElement {
         }
     }
 
-    public String getNamePathSource(int pathMode, String separator) {
-        return MCDElementService.getNamePathSource(this, pathMode, separator);
-    }
-
-    public String getNamePathSourceDefault() {
-        return MCDElementService.getNamePathSource(this, MElementService.PATHNAME,
-                Preferences.MODEL_NAME_PATH_SEPARATOR);
+    public String getNamePathSource() {
+        return MCDElementService.getNamePathSource(this);
     }
 
     public IMCDModel getIMCDModelAccueil(){

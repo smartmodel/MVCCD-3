@@ -76,7 +76,7 @@ public class MCDLinkEnd extends MCDRelEnd  {
             namingLink = Preferences.MCD_NAMING_LINK_ELEMENT ;
         }
 
-        return MCDRelEndService.getNameTreeOrSource(scope, this, namingLink);
+        return MCDRelEndService.getNameTree(this, namingLink);
     }
 
 

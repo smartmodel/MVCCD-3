@@ -216,6 +216,12 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         return CLASSSHORTNAMEUI;
     }
 
+    @Override
+    public String getNameTarget() {
+        //#MAJ 2021-05-30 NameTarget
+        return getNameTree();
+    }
+
     public MCDEntity getEntityAccueil(){
         return (MCDEntity) getParent().getParent();
     }

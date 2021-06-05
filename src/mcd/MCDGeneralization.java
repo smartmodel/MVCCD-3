@@ -69,6 +69,12 @@ public class MCDGeneralization extends MCDRelation implements IMCompletness, IMC
         return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_GENERALIZATION, true, pathMode);
     }
 
+    @Override
+    public String getNameTarget() {
+        //#MAJ 2021-05-30 NameTarget
+        return null;
+    }
+
     public MCDGSEnd getMCDAssGSOpposite(MCDGSEnd mcdGSEnd) {
         if (this.getGen() == mcdGSEnd){
             return this.getSpec();

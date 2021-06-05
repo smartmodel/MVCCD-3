@@ -179,15 +179,6 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
         return null;
     }
 
-    public ArrayList<MCDAssEnd> getMCDAssEnds() {
-        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
-        for (MVCCDElement mvccdElement : getMCDContRelEnds().getChilds()){
-            if (mvccdElement instanceof MCDAssEnd){
-                resultat.add((MCDAssEnd) mvccdElement);
-            }
-        }
-        return resultat;
-    }
 
     public ArrayList<MCDLinkEnd> getMCDLinkEnds() {
         ArrayList<MCDLinkEnd> resultat = new ArrayList<MCDLinkEnd>();
@@ -246,83 +237,6 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
         return MCDEntityService.getGSEndsSpecialize(this);
     }
 
-    public ArrayList<MCDAssEnd> getAssEndsIdParent(){
-
-        return MCDEntityService.getAssEndsIdParent(this);
-    }
-
-
-    public ArrayList<MCDAssEnd> getAssEndsIdChild(){
-
-        return MCDEntityService.getAssEndsIdChild(this);
-    }
-
-    public ArrayList<MCDAssEnd> getAssEndsIdAndNNChild() {
-        return MCDEntityService.getAssEndsIdAndNNChild(this);
-    }
-
-    public ArrayList<MCDAssEnd> getAssEndsIdAndNNParent() {
-        return MCDEntityService.getAssEndsIdAndNNParent(this);
-    }
-
-    public ArrayList<MCDAssEnd> getAssEndsIdCompParent(){
-
-        return MCDEntityService.getAssEndsIdCompParent(this);
-    }
-
-
-    public ArrayList<MCDAssEnd> getAssEndsIdCompChild(){
-
-        return MCDEntityService.getAssEndsIdCompChild(this);
-    }
-
-    public ArrayList<MCDAssEnd> getAssEndsIdNatParent(){
-
-        return MCDEntityService.getAssEndsIdNatParent(this);
-    }
-
-    public ArrayList<MCDAssEnd> getAssEndsIdNatChild(){
-
-        return MCDEntityService.getAssEndsIdNatChild(this);
-    }
-
-    public ArrayList<MCDAssEnd> getAssEndsCPParent(){
-
-        return MCDEntityService.getAssEndsCPParent(this);
-    }
-
-    public ArrayList<MCDAssEnd> getAssEndsCPChild(){
-
-        return MCDEntityService.getAssEndsCPChild(this);
-    }
-
-    public ArrayList<MCDAssEnd> getAssEndsNoIdChild(){
-
-        return MCDEntityService.getAssEndsNoIdChild(this);
-    }
-
-    public ArrayList<MCDAssEnd> getAssEndsNoIdOptionnalChild() {
-        return MCDEntityService.getAssEndsNoIdOptionnalChild(this);
-    }
-
-    public ArrayList<MCDAssEnd> getAssEndsNoIdAndNoNNChild(){
-
-        return MCDEntityService.getAssEndsNoIdAndNoNNChild(this);
-    }
-
-
-    public ArrayList<MCDAssEnd> getAssEndsAssNNChild(){
-
-        return MCDEntityService.getAssEndsAssNNChild(this);
-    }
-
-
-
-    public ArrayList<MCDAssEnd> getAssEndsAssNNParent(){
-
-        return MCDEntityService.getAssEndsAssNNParent(this);
-    }
-
     // Un tableau est retourné car lors de la saisie plusieurs liens peuvent être établis!
     // C'est lors du contrôle de conformité que je vérifie qu'il n'y a qu'un lien d'entité associative
     public ArrayList<MCDLinkEnd> getLinkEnds(){
@@ -358,39 +272,39 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
     }
 
     public boolean isInd(){
-        return (getAssEndsIdCompChild().size() == 0) && (! isLinkedEA()) && (! isSpecialized())
+        return (getMCDAssEndsIdCompChild().size() == 0) && (! isLinkedEA()) && (! isSpecialized())
                 && contentIdentifier();
     }
 
     public boolean isChildOfIdNat(){
-        return (getAssEndsIdNatChild().size() > 0) ;
+        return (getMCDAssEndsIdNatChild().size() > 0) ;
     }
     public boolean isNoInd(){
         return ! isInd();
     }
 
     public boolean isPotentialInd(){
-        return (getAssEndsIdCompChild().size() == 0) && (! isLinkedEA()) && (! isSpecialized())
+        return (getMCDAssEndsIdCompChild().size() == 0) && (! isLinkedEA()) && (! isSpecialized())
                 && (!contentIdentifier());
     }
 
     public boolean isDep(){
-        return (getAssEndsIdCompChild().size() == 1) && (! isLinkedEA()) && (! isSpecialized())
+        return (getMCDAssEndsIdCompChild().size() == 1) && (! isLinkedEA()) && (! isSpecialized())
                 && contentIdentifier();
     }
 
     public boolean isPotentialDep(){
-        return (getAssEndsIdCompChild().size() == 1) && (! isLinkedEA()) && (! isSpecialized())
+        return (getMCDAssEndsIdCompChild().size() == 1) && (! isLinkedEA()) && (! isSpecialized())
                 && (!contentIdentifier());
     }
 
     public boolean isNAire(){
-        return (getAssEndsIdCompChild().size() > 1) && (! isLinkedEA()) && (! isSpecialized())
+        return (getMCDAssEndsIdCompChild().size() > 1) && (! isLinkedEA()) && (! isSpecialized())
                 && (!contentIdentifier());
     }
 
     public boolean isNAireDep(){
-        return (getAssEndsIdCompChild().size() > 1) && (! isLinkedEA()) && (! isSpecialized())
+        return (getMCDAssEndsIdCompChild().size() > 1) && (! isLinkedEA()) && (! isSpecialized())
                 && contentIdentifier();
     }
 
@@ -411,7 +325,7 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
     }
 
     public boolean isPotentialSpecAssIdComp(){
-        return isSpecialized() && (getAssEndsIdCompChild().size() > 0);
+        return isSpecialized() && (getMCDAssEndsIdCompChild().size() > 0);
     }
 
     public boolean isPseudoEntAss(){
@@ -444,6 +358,97 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
         }
         return resultat;
     }
+
+    // Nouveaux getMCDAssEnd...
+
+    public ArrayList<MCDAssEnd> getMCDAssEnds() {
+        return MCDEntityService.getMCDAssEnds(this);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsNN() {
+        return MCDEntityService.getMCDAssEndsNN(this);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEnds1NParent() {
+        return MCDEntityService.getMCDAssEnds1N(this, true);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEnds1NChild() {
+        return MCDEntityService.getMCDAssEnds1N(this, false);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEnds11Parent() {
+        return MCDEntityService.getMCDAssEnds11(this, true);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEnds11Child() {
+        return MCDEntityService.getMCDAssEnds11(this, false);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsNotNNParent() {
+        return MCDEntityService.getMCDAssEndsNotNN(this, true);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsNotNNChild() {
+        return MCDEntityService.getMCDAssEndsNotNN(this, false);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsIdCompParent() {
+        return MCDEntityService.getMCDAssEndsAssNature(this, true, MCDAssociationNature.IDCOMP);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsIdCompChild() {
+        return MCDEntityService.getMCDAssEndsAssNature(this, false, MCDAssociationNature.IDCOMP);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsIdNatParent() {
+        return MCDEntityService.getMCDAssEndsAssNature(this, true, MCDAssociationNature.IDNATURAL);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsIdNatChild() {
+        return MCDEntityService.getMCDAssEndsAssNature(this, false, MCDAssociationNature.IDNATURAL);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsSimCPParent() {
+        return MCDEntityService.getMCDAssEndsAssNature(this, true, MCDAssociationNature.CP);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsSimCPChild() {
+        return MCDEntityService.getMCDAssEndsAssNature(this, false, MCDAssociationNature.CP);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsNoIdParent() {
+        return MCDEntityService.getMCDAssEndsAssNature(this, true, MCDAssociationNature.NOID);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsNoIdChild() {
+        return MCDEntityService.getMCDAssEndsAssNature(this, false, MCDAssociationNature.NOID);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsNoIdOptionnalParent() {
+        return MCDEntityService.getMCDAssEndsNoIdOptionnal(this, true);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsNoIdOptionnalChild() {
+        return MCDEntityService.getMCDAssEndsNoIdOptionnal(this, false);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsIdParent() {
+        return MCDEntityService.getMCDAssEndsId(this, true);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsIdChild() {
+        return MCDEntityService.getMCDAssEndsId(this, false);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsLinkNN(){
+        return MCDEntityService.getMCDAssEndsLinkNN(this);
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEndsStructureIdForParameters(){
+        return MCDEntityService.getMCDAssEndsStructureIdForParameters(this);
+    }
+
 
 
 }
