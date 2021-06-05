@@ -30,30 +30,19 @@ public class MCDParameter extends MCDElement {
 
     public String getName() {
         if (target != null){
-            if (target instanceof MCDRelEnd) {
-                return target.getNamePath(MElementService.PATHSHORTNAME);
-            } else {
-                return target.getName();
-            }
+            //#MAJ 2021-05-30 NameTarget
+            return target.getNameTarget();
         } else {
             return super.getName();
         }
     }
 
     public String getNameTree() {
-        if (target != null){
-            if (target instanceof MCDRelEnd) {
-                return target.getNamePath(MElementService.PATHSHORTNAME);
-            } else {
-                return target.getNameTree();
-            }
-        } else {
-            return super.getNameTree();
-        }
+        return getName();
     }
 
     public String toString(){
-        return getNameTree();
+        return getName();
     }
 
     public static String getClassShortNameUI() {

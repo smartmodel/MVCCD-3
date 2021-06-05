@@ -5,6 +5,7 @@ import main.MVCCDElementConvert;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDParameter;
+import mcd.services.MCDAssEndService;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import repository.editingTreat.mcd.*;
@@ -220,7 +221,7 @@ public class MCDCompliant {
                 String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.specialized",
                         new String[] {mcdEntityNamePath});
             }
-            if (mcdEntity.getAssEndsIdCompParent().size() > 0){
+            if (mcdEntity.getMCDAssEndsIdCompParent().size() > 0){
                 String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.parentasspk",
                         new String[] {mcdEntityNamePath});
                 resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
@@ -596,13 +597,24 @@ public class MCDCompliant {
     private Resultat checkUniqueAbsolute(MCDUnique mcdUnique){
         Resultat resultat = new Resultat();
         MCDEntity mcdEntityAccueil = mcdUnique.getEntityParent();
-        // Extrémités identifiants côté (child) entité contenant la contrainte
-        ArrayList<MCDAssEnd> mcdAssEndIdsChilds =  mcdEntityAccueil.getAssEndsIdAndNNChild();
+        ArrayList<MCDAssEnd> mcdAssEndsStructureIdForParameters = mcdEntityAccueil.getMCDAssEndsStructureIdForParameters();
+        /*
+        // Extrémités identifiantes côté (Child) entité contenant la contrainte
+        ArrayList<MCDAssEnd> mcdAssEndIdsChild =  mcdEntityAccueil.getMCDAssEndsIdChild();
+        // Extrémités opposée
+        ArrayList<MCDAssEnd> mcdAssEndIdsChildOpposite = MCDAssEndService.getMCDAssEndsOpposites(mcdAssEndIdsChild);
+        // Extrémités d'association LinkNN
+        ArrayList<MCDAssEnd> mcdAssEndLinkNNs =  mcdEntityAccueil.getMCDAssEndsLinkNN();
+        // Extrémités identifiantes opposées à Child et LinkNN
+        ArrayList<MCDAssEnd> mcdAssEndIdsChildOppositeAndLinKNN = mcdAssEndIdsChildOpposite;
+        mcdAssEndIdsChildOppositeAndLinKNN.addAll(mcdAssEndLinkNNs);
+
+         */
         // Extrémités d'associations en paramètres de la contraintes
         ArrayList<MCDAssEnd> paramsMCDAssEnd =  mcdUnique.getMcdAssEnds();
 
-        boolean c1 = paramsMCDAssEnd.containsAll(mcdAssEndIdsChilds);
-        boolean c2 = paramsMCDAssEnd.size() > mcdAssEndIdsChilds.size();
+        boolean c1 = paramsMCDAssEnd.containsAll(mcdAssEndsStructureIdForParameters);
+        boolean c2 = paramsMCDAssEnd.size() > mcdAssEndsStructureIdForParameters.size();
         boolean c3 = mcdUnique.getMcdAttributes().size() > 0 ;
 
         boolean r1 = c1 && c2 ;

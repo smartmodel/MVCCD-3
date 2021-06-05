@@ -66,6 +66,7 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
         fieldAssEndIdParents = new STextArea (this, labelAssEndIdParents);
 
         fieldAssEndIdParents.setPreferredSize((new Dimension(300, 50)));
+        fieldAssEndIdParents.setEnabled(false);
 
 
 
@@ -378,9 +379,9 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
 
         MCDUnicity mcdUnicity = (MCDUnicity) mvccdElement;
         fieldAbsolute.setSelected(mcdUnicity.isAbsolute());
-        if (! mcdUnicity.isAbsolute()) {
+        //if (! mcdUnicity.isAbsolute()) {
             loadAssEndIdParents(mcdUnicity);
-        }
+        //}
 
         fieldStereotype.setText(computeStereotype().getName());
 
@@ -392,16 +393,17 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
         //boolean c2 = (mcdUnicity instanceof MCDUnique) &&  (!(((MCDUnique) mcdUnicity).isAbsolute())) ;
 
         //if (c1 || c2 ){
-        if (! mcdUnicity.isAbsolute()){
+        //if (! mcdUnicity.isAbsolute()){
             MCDEntity mcdEntity = mcdUnicity.getEntityParent();
-            ArrayList<MCDAssEnd> mcdAssEndsIdCompParent = mcdEntity.getAssEndsIdCompParent();
-            ArrayList<MCDAssEnd> mcdAssEndsIdParent = mcdAssEndsIdCompParent;
-            ArrayList<MCDAssEnd> mcdAssEndsIdNatParent = mcdEntity.getAssEndsIdNatParent();
-            mcdAssEndsIdParent.addAll(mcdAssEndsIdNatParent);
-            for (MCDAssEnd mcdAssEnd : mcdAssEndsIdParent){
-                fieldAssEndIdParents.append(mcdAssEnd.getNameTree());
+            int i = 0;
+            for (MCDAssEnd mcdAssEnd : mcdEntity.getMCDAssEndsStructureIdForParameters()){
+                if (i > 0) {
+                    fieldAssEndIdParents.append(System.lineSeparator());
+                }
+                i++;
+                fieldAssEndIdParents.append(mcdAssEnd.getNameTarget());
             }
-        }
+        //}
     }
 
 
@@ -468,7 +470,7 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
 
         MCDUnicity mcdUnicity = (MCDUnicity) getEditor().getMvccdElementCrt();
         MCDEntity mcdEntity = (MCDEntity) mcdUnicity.getParent().getParent();
-        IMCDParameter target = MCDParameterService.getTargetByTypeAndNameTree(mcdEntity,
+        IMCDParameter target = MCDParameterService.getTargetByTypeAndNameTarget(mcdEntity,
                 (String) model.getValueAt(line, OperationParamTableColumn.TYPE.getPosition()),
                 (String) model.getValueAt(line, OperationParamTableColumn.NAME.getPosition()));
 

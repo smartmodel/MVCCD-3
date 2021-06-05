@@ -14,6 +14,7 @@ public class MCDTargetsEditingTreat extends EditingTreat {
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
+        //TODO-0 A voir : return null au lieu de NIDINput... (A priori dû à une recopie du code!)
         return new NIDInputContent(element);
     }
 

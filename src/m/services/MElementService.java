@@ -7,8 +7,10 @@ import mcd.MCDElement;
 import mcd.MCDModel;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMPathOnlyRepositoryTree;
+import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.Project;
 import utilities.Trace;
 
@@ -65,19 +67,38 @@ public class MElementService {
 
     public static String reversePath(String namingPath) {
         String resultat = "";
-        Trace.println("Entré " + namingPath);
 
         if (StringUtils.isNotEmpty(namingPath)) {
             String[] parts = namingPath.split("\\" + Preferences.PATH_NAMING_SEPARATOR);
-            Trace.println(""+ parts.length);
             for (int i = parts.length -1 ; i >= 0 ; i--) {
                 resultat = resultat + parts[i] ;
-                Trace.println(resultat + " " + parts[i]);
                 if (i > 0){
                     resultat = resultat + Preferences.PATH_NAMING_SEPARATOR;
                 }
             }
         }
         return resultat;
+    }
+
+    public static int getPathNamingFromUI ( String namingUI){
+        if (namingUI.equals(MessagesBuilder.getMessagesProperty(Preferences.MCD_NAMING_NAME))){
+            return PATHNAME;
+        }
+        if (namingUI.equals(MessagesBuilder.getMessagesProperty(Preferences.MCD_NAMING_SHORT_NAME))){
+            return PATHSHORTNAME;
+        }
+        throw new CodeApplException ("La constante " + namingUI + " n'est pas connue.");
+    }
+
+    public static int getPathNamingFromPreference (){
+        String pathNamingPref = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
+        if (pathNamingPref.equals(Preferences.MCD_NAMING_NAME)){
+            return PATHNAME;
+        }
+        if (pathNamingPref.equals(Preferences.MCD_NAMING_SHORT_NAME)){
+            return PATHSHORTNAME;
+        }
+
+        throw new CodeApplException ("La préférence de nommage d'un chemin n'est pas connue.");
     }
 }

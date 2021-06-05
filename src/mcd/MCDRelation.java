@@ -4,8 +4,10 @@ import constraints.Constraint;
 import exceptions.CodeApplException;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
+import m.services.MElementService;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.services.MCDRelationService;
+import preferences.Preferences;
 import stereotypes.Stereotype;
 
 import java.util.ArrayList;
@@ -93,6 +95,15 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
     public abstract ArrayList<Stereotype> getToStereotypes();
 
     public abstract ArrayList<Constraint> getToConstraints(); // Contraintes UML
+
+    public abstract String getNameTree();
+
+    // A voir où cette méthode est utilisée
+    public String getNamePath(int pathMode){
+        String path = MElementService.getPath(this, pathMode, Preferences.PATH_NAMING_SEPARATOR);
+        String nameTree = getNameTree();
+        return path + "(" + nameTree + ")";
+    }
 
 
 }

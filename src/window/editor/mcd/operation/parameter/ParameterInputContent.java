@@ -7,6 +7,7 @@ import main.MVCCDElementConvert;
 import main.MVCCDElementFactory;
 import mcd.*;
 import mcd.interfaces.IMCDParameter;
+import mcd.services.MCDAssEndService;
 import mcd.services.MCDParameterService;
 import utilities.Trace;
 import utilities.window.editor.PanelInputContent;
@@ -14,7 +15,6 @@ import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
-import window.editor.mcd.operation.constraint.unicity.UnicityInputContent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -57,7 +57,7 @@ public class ParameterInputContent extends PanelInputContent {
         fieldTarget.addItem(SComboBox.LINEWHITE);
         for (MVCCDElement targetPotentialChecked : targets){
             if (targetPotentialChecked instanceof IMCDParameter) {
-                fieldTarget.addItem(((IMCDParameter)targetPotentialChecked).getNameTree());
+                fieldTarget.addItem(((IMCDParameter)targetPotentialChecked).getNameTarget());
             }
         }
 
@@ -108,9 +108,16 @@ public class ParameterInputContent extends PanelInputContent {
                         MCDParameterService.createTargetsAttributesUnique(mcdEntity));
 
                 // Extrémités d'associations
+                //#MAJ 2021-05-30 NameTarget
+                /*
                 targetsPotential.addAll(mcdEntity.getAssEndsIdChild());
                 targetsPotential.addAll(mcdEntity.getAssEndsNoIdChild());
                 targetsPotential.addAll(mcdEntity.getAssEndsAssNNChild());
+
+                 */
+                targetsPotential.addAll(MCDAssEndService.getMCDAssEndsOpposites(mcdEntity.getMCDAssEndsIdChild()));
+                targetsPotential.addAll(MCDAssEndService.getMCDAssEndsOpposites(mcdEntity.getMCDAssEndsNoIdChild()));
+                targetsPotential.addAll(MCDAssEndService.getMCDAssEndsOpposites(mcdEntity.getMCDAssEndsNN()));
             } else {
                 //Contrainte non absolue
 
@@ -119,7 +126,7 @@ public class ParameterInputContent extends PanelInputContent {
                         MCDParameterService.createTargetsAttributesOptionnalUnique(mcdEntity));
 
                 // Extrémités d'associations
-                targetsPotential.addAll(mcdEntity.getAssEndsNoIdOptionnalChild());
+                targetsPotential.addAll(MCDAssEndService.getMCDAssEndsOpposites(mcdEntity.getMCDAssEndsNoIdOptionnalChild()));
             }
             //#MAJ 2021-05-21 Affinement MCDUnicity
             /*
@@ -258,7 +265,7 @@ public class ParameterInputContent extends PanelInputContent {
 
 
     private boolean checkTarget(boolean unitaire) {
-        IMCDParameter iMCDParameterTarget = getTargetByNameTree((String) fieldTarget.getSelectedItem());
+        IMCDParameter iMCDParameterTarget = getTargetByNameTarget((String) fieldTarget.getSelectedItem());
         
         return super.checkInput(fieldTarget, unitaire,
                 MCDParameterService.checkTarget(
@@ -297,7 +304,7 @@ public class ParameterInputContent extends PanelInputContent {
 
         if (fieldTarget.checkIfUpdated()) {
             String nameTreeTarget = (String) fieldTarget.getSelectedItem();
-            IMCDParameter iMCDParameterTarget = getTargetByNameTree(nameTreeTarget);
+            IMCDParameter iMCDParameterTarget = getTargetByNameTarget(nameTreeTarget);
             mcdParameter.setTarget(iMCDParameterTarget);
 
             if (iMCDParameterTarget != null) {
@@ -320,11 +327,11 @@ public class ParameterInputContent extends PanelInputContent {
         return null;
     }
 
-    private IMCDParameter getTargetByNameTree(String nameTreeTarget) {
+    private IMCDParameter getTargetByNameTarget(String nameTarget) {
         for (MVCCDElement target : targets) {
             if (target instanceof IMCDParameter) {
                 IMCDParameter iMCDParameterTarget = (IMCDParameter) target;
-                if (iMCDParameterTarget.getNameTree().equals(nameTreeTarget)) {
+                if (iMCDParameterTarget.getNameTarget().equals(nameTarget)) {
                     return iMCDParameterTarget;
                 }
             }

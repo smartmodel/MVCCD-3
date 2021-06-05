@@ -1,7 +1,11 @@
 package utilities.window.editor;
 
+import m.MElement;
+import m.services.MElementService;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
@@ -323,7 +327,14 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     protected abstract String getPropertyTitleRead();
 
     protected String getElementNameTitle(){
-        return getMvccdElementCrt().getName();
+        if ( getMvccdElementCrt() instanceof MElement){
+            //String treeNaming = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
+            //TODO-1 A paramétrer avec treeNaming
+            return ((MElement) getMvccdElementCrt()).getNameTreePath(MElementService.PATHNAME);
+        } else {
+            return getMvccdElementCrt().getNameTree();
+        }
+
     }
 
     public boolean isReadOnly() {
@@ -367,6 +378,9 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     }
 
     void confirmClose() {
+
+        //#MAJ 2021-06-05 Formulaire Read avec changement de valeurs de paramétrage - NamingInputContent
+
         if (getInput().getInputContent().datasChangedNow()){
             String message = MessagesBuilder.getMessagesProperty ("editor.close.change.not.saved");
             boolean confirm = DialogMessage.showConfirmYesNo_No(this, message) == JOptionPane.YES_OPTION;

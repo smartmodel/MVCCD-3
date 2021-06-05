@@ -152,6 +152,9 @@ public class Preferences extends MVCCDElement {
     public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
     public static Integer MVCCD_WINDOW_WIDTH = 1200;
     public static Integer MVCCD_WINDOW_HEIGHT = 900; // Limité à 900 pour l'utilisation portable
+    public static Integer NAMING_WINDOW_WIDTH = 1200;
+    public static Integer NAMING_WINDOW_HEIGHT = 900; // Limité à 900 pour l'utilisation portable
+
     public static Integer PROJECT_WINDOW_WIDTH = 800;
     public static Integer PROJECT_WINDOW_HEIGHT = 400;
     public static Integer MODEL_WINDOW_WIDTH = 800;
@@ -694,6 +697,8 @@ public class Preferences extends MVCCDElement {
     private String MCD_AID_DEP_COLUMN_NAME = null;
     private Boolean MCD_AID_WITH_DEP = true;
     private Integer MCD_AID_SIZEDEFAULT = MCDDOMAIN_AID_SIZEDEFAULT;
+    //TODO-0 --> Est devenue une préférence de portée générale
+    // Par exemple PATH_NAMING et renommer aussi les 2 constantes MCD_NAMING_NAME et MCD_NAMING_SHORT_NAME
     private String MCD_TREE_NAMING_ASSOCIATION = null;
     private String MCD_MODE_NAMING_LONG_NAME = null;
     private String MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = null;

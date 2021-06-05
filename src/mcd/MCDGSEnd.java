@@ -67,7 +67,7 @@ public class MCDGSEnd extends MCDRelEnd  {
             namingGeneralization = Preferences.MCD_NAMING_GENERALIZATION_GENERALIZE ;
         }
 
-        return MCDRelEndService.getNameTreeOrSource(scope,this, namingGeneralization);
+        return MCDRelEndService.getNameTree(this, namingGeneralization);
     }
 
 

@@ -8,6 +8,7 @@ import mcd.MCDRelation;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -17,9 +18,8 @@ public class MCDRelEndService {
     public static final int SOURCE = 2 ;
 
 
-    public static String getNameTreeOrSource(int scope,
-                                             MCDRelEnd mcdRelEndStart,
-                                             String namingRelation){
+    public static String getNameTree(MCDRelEnd mcdRelEndStart,
+                                     String namingRelation){
         String resultat = "";
 
         MCDElement containerElementStart = (MCDElement) mcdRelEndStart.getmElement().getParent().getParent();
@@ -30,6 +30,13 @@ public class MCDRelEndService {
         MCDRelEnd mcdRelEndOpposite = mcdRelation.getMCDRelEndOpposite(mcdRelEndStart);
         MCDElement mcdElementOpposite = (MCDElement) mcdRelEndOpposite.getmElement();
         MVCCDElement containerElementOpposite = mcdElementOpposite.getParent().getParent();
+        /*
+        String roleOppositeName = "";
+        if (mcdRelEndOpposite.getName() != null){
+            roleOppositeName = mcdRelEndOpposite.getName();
+        }
+
+         */
 
         boolean c1a = containerElementStart == containerRelation;
         boolean c1b = containerElementOpposite == containerRelation;
@@ -42,43 +49,56 @@ public class MCDRelEndService {
         boolean r2 = (!c1) && c3;
         boolean r3 = (!c1) && c4;
 
-        String nameElementOpposite = "";
+        String elementOppositeName = "";
 
         if (r1){
-            nameElementOpposite = mcdElementOpposite.getName();
+            elementOppositeName = mcdElementOpposite.getName();
         }
 
 
         if (r2){
-            nameElementOpposite = mcdElementOpposite.getNamePathReverse(MElementService.PATHNAME);
+            elementOppositeName = mcdElementOpposite.getNamePathReverse(MElementService.PATHNAME);
         }
 
         if (r3){
-            nameElementOpposite = mcdElementOpposite.getShortNameSmartPathReverse();
+            elementOppositeName = mcdElementOpposite.getShortNameSmartPathReverse();
         }
 
         if (StringUtils.isNotEmpty(mcdRelEndOpposite.getName())){
-            nameElementOpposite = mcdRelEndOpposite.getName() + Preferences.PATH_NAMING_SEPARATOR + nameElementOpposite ;
+            elementOppositeName = mcdRelEndOpposite.getName() + Preferences.PATH_NAMING_SEPARATOR + elementOppositeName ;
         }
 
 
         // Si l'élément opposé est l'association (une relation en général)
         if (mcdElementOpposite instanceof MCDRelation){
-            nameElementOpposite = mcdElementOpposite.getNameTree();
+            elementOppositeName = mcdElementOpposite.getNameTree();
         }
 
-        if (scope == TREE) {
-            resultat = namingRelation + nameElementOpposite;
-        }
-        else if (scope == SOURCE) {
-            //resultat = mcdRelEndStart.getmElement().getName() + "  " + namingRelation + "(" + nameElementOpposite + ")";
-            resultat = namingRelation + "(" + nameElementOpposite + ")";
-        } else {
-            resultat = namingRelation ;
-        }
+        resultat = namingRelation + elementOppositeName;
 
         return resultat;
     }
+
+    // Mise du rôle/entité opposés entre parenthèses
+    public static String getNameSource(String nameTree) {
+        String resultat = "";
+        //TODO-0 A reprendre!
+        String[] parts = nameTree.split("\\ \\.\\.\\.\\ ");
+        //String[] parts = nameTree.split(Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR);
+        if (parts.length > 1){
+            for (int i=0 ; i <= parts.length- 1 ; i++){
+                if (i < parts.length - 1){
+                    resultat = resultat + parts[i] + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
+                } else {
+                    resultat = resultat +  "(" + parts[i] + ")";
+                }
+            }
+        } else {
+            resultat = nameTree ;
+        }
+        return resultat;
+    }
+
 
     public static <T> ArrayList<MCDRelEnd> convertToMCDRelEnd(ArrayList<T> mcdTEnds){
         ArrayList<MCDRelEnd> resultat = new ArrayList<MCDRelEnd>();
@@ -89,4 +109,6 @@ public class MCDRelEndService {
         }
         return resultat;
     }
+
+
 }

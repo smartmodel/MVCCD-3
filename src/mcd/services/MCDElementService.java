@@ -6,6 +6,8 @@ import mcd.MCDElement;
 import mcd.MCDModel;
 import mcd.interfaces.IMCDModel;
 import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import utilities.Trace;
 
 import java.util.ArrayList;
@@ -47,14 +49,21 @@ public class MCDElementService {
 
 
 
-    public static String getNamePathSource(MCDElement mcdElement, int pathMode, String separator) {
-        String nameSource = "";
-        String path = mcdElement.getPath( pathMode, separator);
-        if (StringUtils.isNotEmpty(path)){
-            nameSource = nameSource + path + separator ;
+    public static String getNamePathSource(MCDElement mcdElement) {
+        String resultat = "";
+        //TODO-1 Prévoir une préfrérence propre à MCDElement getNamePathSource
+        //Path de MCDElement
+        String sourceNaming = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
+        int pathNamingDefault = MElementService.getPathNamingFromPreference();
+        resultat = mcdElement.getPath(pathNamingDefault, Preferences.PATH_NAMING_SEPARATOR);
+
+        if (StringUtils.isNotEmpty(resultat)){
+            resultat = resultat + Preferences.PATH_NAMING_SEPARATOR ;
         }
-        nameSource = nameSource +  mcdElement.getNameSource();
-        return nameSource ;
+
+        // MCDElement lui-même
+        resultat = resultat +  mcdElement.getNameSource();
+        return resultat ;
     }
 
 

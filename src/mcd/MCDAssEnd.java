@@ -3,10 +3,12 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import exceptions.CodeApplException;
 import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.services.MElementService;
 import m.services.MRelEndService;
+import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDRelEndService;
 import mcd.services.MCDRelationService;
@@ -103,26 +105,13 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
     }
 
 
-
     @Override
     public String getNameTree() {
-        return getNameTreeOrSource(MCDRelEndService.TREE, false, null);
-    }
 
-    @Override
-    public String getNameSource() {
-        return getNameTreeOrSource(MCDRelEndService.SOURCE, true, MElementService.PATHNAME);
-    }
-
-
-    public String getNameTreeOrSource(int scope,
-                                      boolean forcePath,
-                                      Integer pathMode) {
-
-        String namingAssociation ;
+        String namingRelation ;
 
         if (StringUtils.isNotEmpty(this.getName()) && StringUtils.isNotEmpty(this.getMCDAssEndOpposite().getName())){
-            namingAssociation = this.getName();
+            namingRelation = this.getName();
             // Erreur - Ne pas donner le From To qui est incompréhensible pour l'utilisateur
             /*
             if (this.getDrawingDirection() == MCDAssEnd.FROM){
@@ -136,16 +125,52 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
             */
 
         } else {
-            namingAssociation = getMcdAssociation().getName() ;
+            namingRelation =  Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR + getMcdAssociation().getName() ;
         }
-        namingAssociation = namingAssociation +  Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
+        namingRelation = namingRelation +  Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
 
-        return MCDRelEndService.getNameTreeOrSource(scope, this, namingAssociation);
+        return MCDRelEndService.getNameTree(this, namingRelation);
     }
 
     @Override
     public String getClassShortNameUI() {
         return CLASSSHORTNAMEUI;
+    }
+
+    @Override
+    public String getNameTarget() {
+        //#MAJ 2021-05-30 NameTarget
+
+        String nameTarget = "";
+        if (StringUtils.isNotEmpty(this.getName()) ){
+            nameTarget = this.getName();
+        } else {
+            nameTarget =  getMcdAssociation().getName();
+        }
+        nameTarget = nameTarget + Preferences.PATH_NAMING_SEPARATOR;
+
+        MCDElement containerElement = (MCDElement) this.getmElement().getParent().getParent();
+        MVCCDElement containerElementOpposite = this.getMCDAssEndOpposite().getParent().getParent();
+
+        if (containerElement !=  containerElementOpposite){
+            //TODO-1 Prévoir une préfrérence propre à nameTarget
+            String targetNaming = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
+            boolean c1 = targetNaming.equals(Preferences.MCD_NAMING_NAME);
+            boolean c2 = targetNaming.equals(Preferences.MCD_NAMING_SHORT_NAME);
+
+            if (c1) {
+                nameTarget = nameTarget + this.getMcdEntity().getNamePathReverse(MElementService.PATHNAME);
+            } else if (c2){
+                nameTarget = nameTarget + this.getMcdEntity().getShortNameSmartPathReverse();
+            } else {
+                throw new CodeApplException("La préférence " + targetNaming + " est inexistante");
+            }
+        } else {
+            nameTarget = nameTarget + this.getMcdEntity().getName();
+        }
+
+        return nameTarget;
+
     }
 
 

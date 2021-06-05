@@ -104,26 +104,34 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
 
     @Override
     public String getNameSource() {
-        String namingAssociation = computeNamingAssociation();
-        return MCDRelationService.getNameTree(this, namingAssociation, true, MElementService.PATHNAME);
+        // Le service offert par MCDRelEndService convient pour une relation
+        return MCDRelEndService.getNameSource(getNameTree());
     }
 
-
-
-    public String getNamePath(int pathMode){
-        String namingAssociation = computeNamingAssociation();
-        return MCDRelationService.getNameTree(this, namingAssociation, true, pathMode);
+    @Override
+    public String getNameTarget() {
+        //#MAJ 2021-05-30 NameTarget
+        // A voir la pertinence d'implémentation de l'interface IMDRParamater
+        return null;
     }
 
     private String computeNamingAssociation(){
         String namingAssociation ;
 
         if (StringUtils.isNotEmpty(getFrom().getName())  && StringUtils.isNotEmpty(getTo().getName())){
+          /*
             namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT +
                     getFrom().getName() +
                     Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR  +
                     getTo().getName() +
                     Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT;
+
+           */
+            namingAssociation = Preferences.PATH_NAMING_SEPARATOR + getFrom().getName() +
+                    Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR  +
+                    getTo().getName() + Preferences.PATH_NAMING_SEPARATOR;
+
+
         } else {
             namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
                     this.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;

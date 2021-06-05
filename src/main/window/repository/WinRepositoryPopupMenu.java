@@ -38,6 +38,7 @@ import repository.editingTreat.md.MDDatatypeEditingTreat;
 import repository.editingTreat.mdr.*;
 import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
+import repository.editingTreat.naming.NamingEditingTreat;
 import repository.editingTreat.preferences.*;
 import resultat.Resultat;
 import resultat.ResultatElement;
@@ -78,6 +79,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     treatInspectObject();
                 }
             }
+
+            //TODO-1 A terme, mettre une restriction Debug ou autre
+            treatNaming(this);
 
             if (node.getUserObject() instanceof IMLDRElementWithSource) {
                 treatSourceMLDRElementWithSource();
@@ -337,7 +341,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     IMLDRElementWithSource imldrElementWithSource = (IMLDRElementWithSource) mvccdElement;
                     MCDElement mcdElementSource = imldrElementWithSource.getMcdElementSource();
                     String message = "Classe : " + mcdElementSource.getClass().getName();
-                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNamePath(MElementService.PATHNAME);
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNamePathSource();
                     //ProjectElement projectElement = (ProjectElement) mvccdElement;
                     //message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
                     message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mcdElementSource.getIdProjectElement();
@@ -707,6 +711,25 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             }
         });
     }
+
+
+
+    private void treatNaming(ISMenu menu) {
+        String textMenu = MessagesBuilder.getMessagesProperty("menu.mvccdelement.naming");
+        JMenuItem menuItem = new JMenuItem(textMenu);
+        addItem(menu, menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    (new NamingEditingTreat()).treatNaming(mvccdWindow, mvccdElement);
+                } catch (Exception e) {
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.naming");
+                }
+            }
+        });
+    }
+
 
     private void exceptionUnhandled(Exception e,
                                     MVCCDElement mvccdElement,

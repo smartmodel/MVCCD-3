@@ -86,8 +86,8 @@ public abstract class MElement extends ProjectElement {
 
 
     /**
-     * Retourne le nom d'un élément avec le chemin d'accès.
-     * Par exemple: le nom d'une entité préfixé du ou des paquetages qui la contiennent.
+     * Retourne le chemin d'accès d'un élément .
+     * Par exemple: le ou les paquetages qui contiennent uner entité.
      */
     public String getPath(int pathMode, String separator) {
         return MElementService.getPath((MElement) this, pathMode, separator);
@@ -101,4 +101,7 @@ public abstract class MElement extends ProjectElement {
         return MElementService.getPath((MElement) this, MElementService.PATHNAME, separator);
     }
 
+    public String getNameTreePath(int pathMode){
+        return  this.getPath(pathMode, Preferences.PATH_NAMING_SEPARATOR) + Preferences.PATH_NAMING_SEPARATOR +getNameTree();
+    }
 }

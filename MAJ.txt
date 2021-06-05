@@ -48,11 +48,6 @@ Problèmes : Initialisation d'une relation en création
 
 //#MAJ 2021-05-30 MLDR-> MPDR Transformation size
 
-//Exception provoquée
-//int i = 0 ;
-//int j = 2 /i ;
+//#MAJ 2021-05-30 NameTarget
 
-//Exception provoquée
-throw new CodeApplicationException("Exception artificielle");
-
-//CodeApplException provoquée
+//#MAJ 2021-06-05 Formulaire Read avec changement de valeurs de paramétrage - NamingInputContent

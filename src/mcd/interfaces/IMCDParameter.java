@@ -10,4 +10,8 @@ public interface IMCDParameter {
     public String getClassShortNameUI();
 
     String getNamePath(int pathMode);
+
+    //#MAJ 2021-05-30 NameTarget
+    // A voir l'utilité de getName(), getNameTree(), getNamePath()
+    String getNameTarget();
 }

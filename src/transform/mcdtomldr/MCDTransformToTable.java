@@ -82,7 +82,7 @@ public class MCDTransformToTable {
             ArrayList<MCDEntity> mcdEntitiesToTransformInner = (ArrayList<MCDEntity>) mcdEntitiesToTransform.clone();
             for (MCDEntity mcdEntity : mcdEntitiesToTransformInner){
                 ArrayList<MCDRelEnd> mcdRelEndsParents = getMCDRRelEndsParentsNotNN(mcdEntity);
-                mcdRelEndsParents.addAll(getMCDRRelEndsParentsNN(mcdEntity));
+                mcdRelEndsParents.addAll(getMCDRRelEndsLinkNN(mcdEntity));
                 ArrayList<MLDRTable> mldrTablesParents = getMLDRTablesParents(mcdRelEndsParents);
                 if (pkParentsExists(mldrTablesParents)){
                     MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(mcdEntity);
@@ -127,7 +127,7 @@ public class MCDTransformToTable {
 
         boolean exist = true;
 
-        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getAssEndsIdCompChild();
+        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getMCDAssEndsIdCompChild();
         for (MCDAssEnd mcdAssEndIdCompChild : mcdAssEndsIdCompChild){
             MCDAssEnd mcdAssEndIdCompParent = mcdAssEndIdCompChild.getMCDAssEndOpposite() ;
             MCDEntity mcdEntityParent = mcdAssEndIdCompParent.getMcdEntity();
@@ -161,7 +161,7 @@ public class MCDTransformToTable {
 
         ArrayList<MLDRTable> resultat = new ArrayList<MLDRTable>();
 
-        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getAssEndsIdCompChild();
+        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getMCDAssEndsIdCompChild();
         ArrayList<MCDGSEnd> mcdAssEndsSpecialize = mcdEntity.getGSEndSpecialize();
 
         ArrayList<MCDRelEnd> mcdRelEndsChild = MCDRelEndService.convertToMCDRelEnd(mcdAssEndsIdCompChild);
@@ -191,7 +191,7 @@ public class MCDTransformToTable {
 
         ArrayList<MCDRelEnd> resultat = new ArrayList<MCDRelEnd>();
 
-        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getAssEndsIdCompChild();
+        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getMCDAssEndsIdCompChild();
         ArrayList<MCDGSEnd> mcdAssEndsSpecialize = mcdEntity.getGSEndSpecialize();
 
         ArrayList<MCDRelEnd> mcdRelEndsChild = MCDRelEndService.convertToMCDRelEnd(mcdAssEndsIdCompChild);
@@ -203,12 +203,12 @@ public class MCDTransformToTable {
         return resultat;
     }
 
-    private ArrayList<MCDRelEnd> getMCDRRelEndsParentsNN(MCDEntity mcdEntity) {
+    private ArrayList<MCDRelEnd> getMCDRRelEndsLinkNN(MCDEntity mcdEntity) {
 
-        ArrayList<MCDAssEnd> mcdAssEndsNNParent = mcdEntity.getAssEndsAssNNParent();
-        ArrayList<MCDRelEnd> mcdRelEndsParent = MCDRelEndService.convertToMCDRelEnd(mcdAssEndsNNParent);
+        ArrayList<MCDAssEnd> mcdAssEndsNN = mcdEntity.getMCDAssEndsLinkNN();
+        ArrayList<MCDRelEnd> mcdRelEnds = MCDRelEndService.convertToMCDRelEnd(mcdAssEndsNN);
 
-        return mcdRelEndsParent;
+        return mcdRelEnds;
     }
 
 

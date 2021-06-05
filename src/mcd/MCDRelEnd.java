@@ -5,6 +5,7 @@ import m.MElement;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
 import mcd.interfaces.IMCDElementWithTargets;
+import mcd.services.MCDRelEndService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import stereotypes.Stereotype;
@@ -114,6 +115,10 @@ public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElem
     public abstract ArrayList<Stereotype> getToStereotypes();
 
     public abstract ArrayList<Constraint> getToConstraints(); // Contraintes UML
+
+    public String getNameSource() {
+        return MCDRelEndService.getNameSource(getNameTree());
+    }
 
 
 

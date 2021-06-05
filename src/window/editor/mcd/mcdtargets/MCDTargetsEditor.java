@@ -95,6 +95,6 @@ public class MCDTargetsEditor extends DialogEditor {
         if (getMvccdElementCrt() instanceof MCDRelEnd){
             theElement = MessagesBuilder.getMessagesProperty("of.relend");
         }
-        return theElement + " " +((MCDElement)getMvccdElementCrt()).getNamePathSourceDefault();
+        return theElement + " " +((MCDElement)getMvccdElementCrt()).getNamePathSource();
     }
 }
