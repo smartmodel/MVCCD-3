@@ -737,6 +737,10 @@ public class Preferences extends MVCCDElement {
     private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
     private MDRNamingFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT = null;
 
+    // Zone de dessin Préférences
+    private int GRID_SIZE = 10;
+
+
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);
     }
@@ -1404,5 +1408,13 @@ public class Preferences extends MVCCDElement {
 
     public void setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT) {
         this.MPDRPOSTGRESQL_PREF_NAMING_FORMAT = MPDRPOSTGRESQL_PREF_NAMING_FORMAT;
+    }
+
+    public int getGRID_SIZE() {
+        return GRID_SIZE;
+    }
+
+    public void setGRID_SIZE(int GRID_SIZE) {
+        this.GRID_SIZE = GRID_SIZE;
     }
 }

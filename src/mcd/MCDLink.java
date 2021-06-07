@@ -96,4 +96,6 @@ public class MCDLink extends MCDRelation {
         return resultat;
     }
 
+
+
 }

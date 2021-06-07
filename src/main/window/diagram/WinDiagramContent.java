@@ -3,6 +3,8 @@ package main.window.diagram;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import utilities.window.PanelContent;
+import window.editor.diagrammer.DrawPanel;
+import window.editor.diagrammer.DrawPanelComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +22,7 @@ public class WinDiagramContent extends PanelContent {
     JPanel content = new JPanel();          //Diagrammeur dans son ensemble
     JPanel panelTitle = new JPanel();       //En-tête du diagrammeur
     JPanel panelPalette = new JPanel();     //Palette du diagrammeur
-    JPanel panelDraw = new JPanel();        //Zone de dessin du diagrammeur
+    DrawPanelComponent panelDraw = new DrawPanelComponent(new DrawPanel());        //Zone de dessin du diagrammeur
 
     JButton btnAdd;
 
@@ -28,7 +30,7 @@ public class WinDiagramContent extends PanelContent {
         super(diagram);
         mvccdWindow = MVCCDManager.instance().getMvccdWindow();
         //Création des panneaux du diagrammeur
-        BorderLayout bl = new BorderLayout(5,5);
+        BorderLayout bl = new BorderLayout();
         content.setLayout(bl);
         content.add(panelPalette, BorderLayout.WEST);
         content.add(panelDraw, BorderLayout.CENTER);
@@ -39,6 +41,12 @@ public class WinDiagramContent extends PanelContent {
 
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        System.out.println(panelDraw.getSize());
+    }
+
     public JPanel getPanelTitle() {
         return panelTitle;
     }
@@ -47,11 +55,11 @@ public class WinDiagramContent extends PanelContent {
         return panelPalette;
     }
 
-    public JPanel getPanelDraw() {
-        return panelDraw;
-    }
-
     public Dimension  resizeContent(){
          return super.resizeContent();
+    }
+
+    public DrawPanelComponent getPanelDraw() {
+        return panelDraw;
     }
 }
