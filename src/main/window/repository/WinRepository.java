@@ -2,6 +2,10 @@ package main.window.repository;
 
 import utilities.window.PanelBorderLayout;
 import utilities.window.PanelBorderLayoutResizer;
+import utilities.window.PanelContent;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * La classe met en place le redimensionnement en faisant appel aux méthodes de son ancêtre PanelBorderLayout.
@@ -18,8 +22,11 @@ public class WinRepository extends PanelBorderLayout {
         startLayout();
 
         content = new WinRepositoryContent(this);
-        super.setPanelContent(content);
 
+        // Code ajouté par Antoine
+        content.setBackground(Color.WHITE);
+
+        super.setPanelContent(content);
     }
 
 }
