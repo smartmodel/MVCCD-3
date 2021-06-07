@@ -17,6 +17,7 @@ import utilities.window.DialogMessage;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 public class WinMenuContent implements ActionListener {
 
@@ -96,6 +97,9 @@ public class WinMenuContent implements ActionListener {
         projectSave = new JMenuItem("Sauver");
         projectSave.addActionListener(this);
         projectSave.setEnabled(false);
+        projectSave.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_S, ActionEvent.CTRL_MASK
+        ));
         project.add(projectSave);
         projectSaveAs = new JMenuItem("Sauver comme copie");
         projectSaveAs.addActionListener(this);
