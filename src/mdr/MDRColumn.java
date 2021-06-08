@@ -33,6 +33,7 @@ public abstract class MDRColumn extends MDRElement implements
 
     private  static final long serialVersionUID = 1000;
 
+    //TODO-0 A voir avec Steve pour la sauvegarde XML car en principe, je stocke un id !!!
     private MDRColumn mdrColumnPK = null;
 
     private String tempTargetColumnPkId = null;

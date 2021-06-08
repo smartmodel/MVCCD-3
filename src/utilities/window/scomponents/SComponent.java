@@ -33,7 +33,7 @@ public interface  SComponent {
     // Indicateur d'erreur de saisie
     void setErrorInput(boolean errorInput);
     boolean isErrorInput();
-    // Si oui, ce composant empêche la validation du formulaire en cs d'erreur de saisie
+    // Si oui, ce composant empêche la validation du formulaire en cas d'erreur de saisie
     void setCheckPreSave(boolean checkPreSave);
     boolean isCheckPreSave();
     //Etiquette associée
