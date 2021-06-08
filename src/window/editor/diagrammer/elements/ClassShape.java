@@ -25,16 +25,12 @@ public abstract class ClassShape extends JPanel implements IShape {
         int newHeight = this.getBounds().height * toFactor / fromFactor;
 
         // Set la nouvelle position et taille de l'élément
-        System.out.println("Factor : " + toFactor);
         this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
         this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
-        System.out.println();
-        System.out.println();
     }
 
     @Override
     public void setLocationDifference(int differenceX, int differenceY) {
         this.setLocation(this.getBounds().x + differenceX, this.getBounds().y + differenceY);
-
     }
 }

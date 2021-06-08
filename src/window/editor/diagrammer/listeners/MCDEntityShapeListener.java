@@ -36,7 +36,6 @@ public class MCDEntityShapeListener extends MouseAdapter {
                 this.component.setCursor(Cursor.getPredefinedCursor(cursor));
             }
             this.drawPanel.getHandler().updatePanelAndScrollbars();
-            this.drawPanel.repaint();
         }
     }
 

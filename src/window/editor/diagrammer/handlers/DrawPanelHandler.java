@@ -83,28 +83,24 @@ public class DrawPanelHandler {
             newWidth = (int) (contentBounds.getX() + contentBounds.getWidth());
         }
 
-         int newHeight = (int) this.drawPanel.getVisibleRect().getMaxY();
+         int newHeight = (int) this.drawPanel.getVisibleRect().getHeight();
 
         // Si le maxY de contentBounds dépasse le maxY de la view, on adapte la hauteur
         if (contentBounds.getMaxY() > this.drawPanel.getVisibleRect().getMaxY()) {
             newHeight = (int) (contentBounds.getY() + contentBounds.getHeight());
         }
 
-        moveOrigin(newX, newY);
+        this.moveOrigin(newX, newY);
 
         for (IShape element : this.drawPanel.getElements()) {
             element.setLocation(GridUtils.alignToGrid(element.getBounds().x - newX, this.drawPanel.getGridSize()), GridUtils.alignToGrid(element.getBounds().y - newY, this.drawPanel.getGridSize()));
         }
 
-        // On ajoute une marge pour que les éléments du drawPanel ne soit pas collé au bord de celui-ci
-        newWidth += DiagrammerConstants.DEFAULT_DRAW_PANEL_MARGIN;
-        newHeight += DiagrammerConstants.DEFAULT_DRAW_PANEL_MARGIN;
-
         // On change la position de la vue
         this.changeViewPosition(-newX, -newY);
         this.drawPanel.setPreferredSize(new Dimension(newWidth - newX, newHeight - newY));
 
-        //this.checkIfScrollbarsAreNecessary();
+        this.checkIfScrollbarsAreNecessary();
     }
 
     private boolean isHorizontalScrollbarVisible() {
@@ -138,23 +134,23 @@ public class DrawPanelHandler {
 
         // La scrollbar est inclut dans la zone visible -> on la masque
         if (parent.getHorizontalScrollBar().getValue() < this.drawPanel.getGridSize() && diaWithoutWhite.getX() + diaWithoutWhite.getWidth() <= viewSize.getWidth() + verSbWidth) {
-            //setHorizontalScrollbarVisibility(false);
+            this.setHorizontalScrollbarVisibility(false);
         }
         else if (parent.getHorizontalScrollBar().getValue() < this.drawPanel.getGridSize() && getViewableDiagrampanelSize().width + parent.getHorizontalScrollBar().getValue() == diaWithoutWhite.getX() + diaWithoutWhite.getWidth()) {
-           // setHorizontalScrollbarVisibility(false);
+           setHorizontalScrollbarVisibility(false);
         }
         else {
-            //setHorizontalScrollbarVisibility(true);
+           setHorizontalScrollbarVisibility(true);
         }
 
         if (parent.getVerticalScrollBar().getValue() < this.drawPanel.getGridSize() && diaWithoutWhite.getY() + diaWithoutWhite.getHeight() <= viewSize.getHeight() + horSbHeight) {
-           // setVerticalScrollbarVisibility(false);
+            setVerticalScrollbarVisibility(false);
         }
         else if (parent.getVerticalScrollBar().getValue() < this.drawPanel.getGridSize() && getViewableDiagrampanelSize().height + parent.getVerticalScrollBar().getValue() == diaWithoutWhite.getY() + diaWithoutWhite.getHeight()) {
-            //setVerticalScrollbarVisibility(false);
+            setVerticalScrollbarVisibility(false);
         }
         else {
-            //setVerticalScrollbarVisibility(true);
+            setVerticalScrollbarVisibility(true);
         }
 
 
@@ -208,6 +204,7 @@ public class DrawPanelHandler {
     public void updatePanelAndScrollbars() {
         this.insertWhiteSpaceInUpperLeftCorner();
         this.removeUnnecessaryWhitespaceAroundDiagram();
+        this.drawPanel.repaint();
     }
 
     private void insertWhiteSpaceInUpperLeftCorner() {
@@ -227,22 +224,18 @@ public class DrawPanelHandler {
 
         moveOrigin(adjustWidth, adjustHeight);
 
-
-
         for (IShape element : this.drawPanel.getElements()){
             Component component = element.getComponent();
             component.setLocation(GridUtils.alignToGrid(component.getX() - adjustWidth, this.drawPanel.getGridSize()), GridUtils.alignToGrid(component.getY() - adjustHeight, this.drawPanel.getGridSize()));
         }
 
-
-/*
         if (adjustWidth < 0) {
             this.setHorizontalScrollbarVisibility(true);
         }
         if (adjustHeight < 0) {
             this.setVerticalScrollbarVisibility(true);
         }
-*/
+
 
         int width = (int) (parent.getHorizontalScrollBar().getValue() + getViewableDiagrampanelSize().getWidth() - adjustWidth);
         int height = (int) (parent.getVerticalScrollBar().getValue() + getViewableDiagrampanelSize().getHeight() - adjustHeight);
@@ -251,10 +244,9 @@ public class DrawPanelHandler {
         changeViewPosition(-adjustWidth, -adjustHeight);
     }
 
-/*
-    private void setHorizontalScrollbarVisibility(boolean isVisible) {
+    private void setHorizontalScrollbarVisibility(boolean visible) {
         DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
-        if (isVisible) {
+        if (visible) {
             parent.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         }
         else {
@@ -262,15 +254,24 @@ public class DrawPanelHandler {
         }
     }
 
-    private void setVerticalScrollbarVisibility(boolean isVisible) {
+    private void setVerticalScrollbarVisibility(boolean visible) {
         DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
-        if (isVisible) {
+        if (visible) {
             parent.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         }
         else {
             parent.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         }
     }
-*/
 
+    public void scroll(int differenceX, int differenceY){
+        for (IShape element : this.drawPanel.getElements()) {
+            element.setLocationDifference(differenceX, differenceY);
+        }
+    }
+
+    public void endScroll(){
+        // Mise à jour du panel et des scrollbars
+        this.updatePanelAndScrollbars();
+    }
 }

@@ -1,5 +1,6 @@
 package window.editor.diagrammer;
 
+import jdk.swing.interop.SwingInterOpUtils;
 import window.editor.diagrammer.interfaces.IShape;
 import window.editor.diagrammer.elements.MCDEntityShape;
 import window.editor.diagrammer.handlers.DrawPanelHandler;
@@ -53,7 +54,6 @@ public class DrawPanel extends JLayeredPane {
         this.setLayout(null);
         this.setBackground(Color.WHITE);
         this.setOpaque(true);
-
     }
 
     @Override
@@ -61,9 +61,10 @@ public class DrawPanel extends JLayeredPane {
         super.paintComponent(g);
         Graphics2D graphics2D = (Graphics2D) g;
         this.handler.drawGrid(graphics2D);
+        System.out.println("SIZE ZONE = " + this.getPreferredSize());
     }
 
-    public void setGridAndZoom(int zoomFactor){
+    public void zoom(int zoomFactor){
 
         int oldGridSize = this.gridSize;
 
@@ -76,22 +77,21 @@ public class DrawPanel extends JLayeredPane {
         DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this);
 
         Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-        System.out.println("Mouse " + mouseLocation);
         Point viewportLocation = parent.getViewport().getLocationOnScreen();
 
         double x = mouseLocation.x - viewportLocation.x;
         double y = mouseLocation.y - viewportLocation.y;
 
-        // And add any space on the upper left corner which is not visible but reachable by scrollbar
+        // Ajoute l'espace accessible par la scrollbar
         x += parent.getViewport().getViewPosition().getX();
         y += parent.getViewport().getViewPosition().getY();
 
-        // The result is the point where we want to center the zoom of the diagram
+        // Le résultat est là où le zoom s'effectuera
         double differenceX, differenceY;
         differenceX = x - x * gridSize / oldGridSize;
         differenceY = y - y * gridSize / oldGridSize;
 
-        // AB: Move origin in opposite direction
+        // On déplace l'origine
         this.getHandler().moveOrigin(GridUtils.alignToGrid(-differenceX, this.gridSize), GridUtils.alignToGrid(-differenceY, this.gridSize));
 
 
