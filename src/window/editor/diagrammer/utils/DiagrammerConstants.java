@@ -24,4 +24,6 @@ public class DiagrammerConstants {
     public static final int DEFAULT_ENTITY_POSITION_Y = 60;
     public static final int DEFAULT_ENTITY_WIDTH = 200;
     public static final int DEFAULT_ENTITY_HEIGHT = 230;
+
+    public static final int DEFAULT_DRAW_PANEL_MARGIN = 50;
 }

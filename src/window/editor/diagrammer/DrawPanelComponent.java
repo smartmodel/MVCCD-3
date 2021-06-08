@@ -14,8 +14,8 @@ public class DrawPanelComponent extends JScrollPane {
         super(drawPanel);
         this.setName(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME);
 
-        this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
         this.setViewportView(drawPanel);
         this.getViewport().setPreferredSize(new Dimension(1,1)); // On set width = 1 et height = 1 pour éviter que le viewport prenne la dimension du DrawPanel (de la zone de dessin)

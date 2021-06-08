@@ -5,6 +5,7 @@ import window.editor.diagrammer.elements.MCDEntityShape;
 import window.editor.diagrammer.handlers.DrawPanelHandler;
 import window.editor.diagrammer.listeners.DrawPanelListener;
 import window.editor.diagrammer.utils.DiagrammerConstants;
+import window.editor.diagrammer.utils.GridUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,9 +26,11 @@ public class DrawPanel extends JLayeredPane {
 
         this.elements = new LinkedList<>();
         this.origin = new Point();
+        this.handler = new DrawPanelHandler(this);
 
         this.initUI();
         this.addListeners();
+
 
         MCDEntityShape entityComponent = new MCDEntityShape(this);
         MCDEntityShape entityComponent2 = new MCDEntityShape(this);
@@ -39,7 +42,6 @@ public class DrawPanel extends JLayeredPane {
         this.addElement(entityComponent2);
         this.addElement(entityComponent3);
 
-        this.handler = new DrawPanelHandler(this);
         this.repaint();
     }
 
@@ -51,7 +53,7 @@ public class DrawPanel extends JLayeredPane {
         this.setLayout(null);
         this.setBackground(Color.WHITE);
         this.setOpaque(true);
-        //this.setPreferredSize(new Dimension(3000, 2000));
+
     }
 
     @Override
@@ -59,15 +61,47 @@ public class DrawPanel extends JLayeredPane {
         super.paintComponent(g);
         Graphics2D graphics2D = (Graphics2D) g;
         this.handler.drawGrid(graphics2D);
-        graphics2D.setColor(Color.orange);
-        graphics2D.fill(this.handler.getContentBounds(this.elements, 0));
-
     }
 
     public void setGridAndZoom(int zoomFactor){
+
+        int oldGridSize = this.gridSize;
+
        if (zoomFactor >= DiagrammerConstants.MINIMUM_ALLOWED_ZOOM && zoomFactor <= DiagrammerConstants.MAXIMUM_ALLOWED_ZOOM){
             this.setGridSize(zoomFactor);
         }
+
+       this.handler.zoomElements(oldGridSize, this.gridSize);
+
+        DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this);
+
+        Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+        System.out.println("Mouse " + mouseLocation);
+        Point viewportLocation = parent.getViewport().getLocationOnScreen();
+
+        double x = mouseLocation.x - viewportLocation.x;
+        double y = mouseLocation.y - viewportLocation.y;
+
+        // And add any space on the upper left corner which is not visible but reachable by scrollbar
+        x += parent.getViewport().getViewPosition().getX();
+        y += parent.getViewport().getViewPosition().getY();
+
+        // The result is the point where we want to center the zoom of the diagram
+        double differenceX, differenceY;
+        differenceX = x - x * gridSize / oldGridSize;
+        differenceY = y - y * gridSize / oldGridSize;
+
+        // AB: Move origin in opposite direction
+        this.getHandler().moveOrigin(GridUtils.alignToGrid(-differenceX, this.gridSize), GridUtils.alignToGrid(-differenceY, this.gridSize));
+
+
+        for (IShape e : this.getElements()) {
+            e.setLocationDifference(GridUtils.alignToGrid(differenceX, this.gridSize), GridUtils.alignToGrid(differenceX, this.gridSize));
+        }
+
+
+        this.handler.updatePanelAndScrollbars();
+
     }
 
     public int getGridSize() {

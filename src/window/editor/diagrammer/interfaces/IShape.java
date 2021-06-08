@@ -5,6 +5,7 @@ import java.awt.*;
 
 public interface IShape {
     void setLocation(Point location);
+    void setLocationDifference(int differenceX, int differenceY);
     Point getLocation();
     void setSize(Dimension dimension);
     Dimension getSize();

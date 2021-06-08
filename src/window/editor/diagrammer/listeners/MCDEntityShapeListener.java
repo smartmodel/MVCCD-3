@@ -24,20 +24,22 @@ public class MCDEntityShapeListener extends MouseAdapter {
 
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
+        if (SwingUtilities.isLeftMouseButton(mouseEvent)){
+            if (startPos != null) {
 
-        if (startPos != null) {
+                int deltaX = mouseEvent.getX() - startPos.x;
+                int deltaY = mouseEvent.getY() - startPos.y;
 
-            int deltaX = mouseEvent.getX() - startPos.x;
-            int deltaY = mouseEvent.getY() - startPos.y;
-
-            Rectangle bounds = this.component.getBounds();
-            bounds.translate(GridUtils.alignToGrid(deltaX, this.drawPanel.getGridSize()), GridUtils.alignToGrid(deltaY, this.drawPanel.getGridSize()));
-            this.component.setBounds(bounds);
-            this.component.setCursor(Cursor.getPredefinedCursor(cursor));
+                Rectangle bounds = this.component.getBounds();
+                bounds.translate(GridUtils.alignToGrid(deltaX, this.drawPanel.getGridSize()), GridUtils.alignToGrid(deltaY, this.drawPanel.getGridSize()));
+                this.component.setBounds(bounds);
+                this.component.setCursor(Cursor.getPredefinedCursor(cursor));
+            }
+            this.drawPanel.getHandler().updatePanelAndScrollbars();
+            this.drawPanel.repaint();
         }
-        this.drawPanel.getHandler().resizeDrawPanel();
-        this.drawPanel.repaint();
     }
+
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {

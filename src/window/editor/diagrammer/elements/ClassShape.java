@@ -31,4 +31,10 @@ public abstract class ClassShape extends JPanel implements IShape {
         System.out.println();
         System.out.println();
     }
+
+    @Override
+    public void setLocationDifference(int differenceX, int differenceY) {
+        this.setLocation(this.getBounds().x + differenceX, this.getBounds().y + differenceY);
+
+    }
 }
