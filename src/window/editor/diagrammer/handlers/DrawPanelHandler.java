@@ -156,6 +156,7 @@ public class DrawPanelHandler {
 
         int adjustedX = 0;
         int adjustedY = 0;
+
         if (parent.getHorizontalScrollBar().getValue() != 0 && vertWasVisible && !isVerticalScrollbarVisible()) {
             adjustedX = GridUtils.alignToGrid(horSbHeight, this.drawPanel.getGridSize());
         }

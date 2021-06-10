@@ -61,7 +61,6 @@ public class DrawPanel extends JLayeredPane {
         super.paintComponent(g);
         Graphics2D graphics2D = (Graphics2D) g;
         this.handler.drawGrid(graphics2D);
-        System.out.println("SIZE ZONE = " + this.getPreferredSize());
     }
 
     public void zoom(int zoomFactor){
