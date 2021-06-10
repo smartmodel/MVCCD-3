@@ -1,7 +1,9 @@
 package window.editor.diagrammer.interfaces;
 
-import java.awt.*;
+import java.awt.Rectangle;
 
 public interface IResizable {
-    void manualResize(Cursor cursor);
+
+  void resize(Rectangle newBounds);
+
 }

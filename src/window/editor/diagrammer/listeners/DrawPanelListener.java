@@ -27,7 +27,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
         super.mouseWheelMoved(e);
 
         if (this.isZoomAllowed()){
-            int actualZoom = this.drawPanel.getGridSize();
+            int actualZoom = DrawPanel.getGridSize();
             this.drawPanel.zoom(actualZoom - e.getWheelRotation());
         }
     }

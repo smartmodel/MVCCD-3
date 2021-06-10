@@ -38,7 +38,6 @@ public class ResizableBorder implements Border {
         g.setColor(Color.black);
         //g.drawRect(0, 0, w, h-2);
 
-
         if (component.hasFocus()) {
             for (int location : locations) {
                 Rectangle rect = getRectangle(x, y, w, h, location);
@@ -51,6 +50,7 @@ public class ResizableBorder implements Border {
             }
         }
     }
+
     private Rectangle getRectangle(int x, int y, int width, int height, int location) {
 
         switch (location) {

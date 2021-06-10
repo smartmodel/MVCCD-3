@@ -8,9 +8,6 @@ public class GridUtils {
      * @return nouvelle valeur alignée à la grille
      */
     public static int alignToGrid(double valueToAlign, int gridSize){
-/*        System.out.println();
-        System.out.println("Valeur reçue : " + valueToAlign);
-        System.out.println("GridSize reçue : " + gridSize);*/
 
         double toAlign = valueToAlign;
         double mod = toAlign % gridSize;
@@ -18,7 +15,7 @@ public class GridUtils {
             toAlign -= mod;
             boolean roundToNextGridSizeMultiple = (mod >= (gridSize / 2));
             if(roundToNextGridSizeMultiple) {
-                // Coordinate needs to be rounded to the upper multiple of gridSize
+                // La coordonnée doit être arrondie au multiple supérieur de gridSize
                 return (int) toAlign + gridSize;
             }
         }
