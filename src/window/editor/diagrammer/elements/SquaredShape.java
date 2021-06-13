@@ -25,7 +25,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable 
     int newWidth = this.getBounds().width * toFactor / fromFactor;
     int newHeight = this.getBounds().height * toFactor / fromFactor;
 
-    // Set la nouvelle position, la nouvelle taille de l'élément et met à jour la nouvelle tailel minimale de l'élément
+    // Set la nouvelle position, la nouvelle taille de l'élément et met à jour la nouvelle taille minimale de l'élément
     this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
     this.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
     this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));

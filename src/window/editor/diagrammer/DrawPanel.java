@@ -23,7 +23,7 @@ import window.editor.diagrammer.utils.GridUtils;
  */
 public class DrawPanel extends JLayeredPane {
 
-  private static int gridSize = DiagrammerConstants.DEFAULT_GRID_SIZE;
+  private static int gridSize = DiagrammerConstants.DIAGRAMMER_DEFAULT_GRID_SIZE;
   private DrawPanelHandler handler;
   private Point origin;
   private List<IShape> elements;
@@ -62,7 +62,7 @@ public class DrawPanel extends JLayeredPane {
    * Initialise l'aspect graphique de la zone de dessin.
    */
   private void initUI() {
-    this.setName(DiagrammerConstants.DRAW_PANEL_NAME);
+    this.setName(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_NAME);
     this.setLayout(null);
     this.setBackground(Color.WHITE);
     this.setOpaque(true);
@@ -79,15 +79,14 @@ public class DrawPanel extends JLayeredPane {
 
     int oldGridSize = this.gridSize;
 
-    if (zoomFactor >= DiagrammerConstants.MINIMUM_ALLOWED_ZOOM
-        && zoomFactor <= DiagrammerConstants.MAXIMUM_ALLOWED_ZOOM) {
+    if (zoomFactor >= DiagrammerConstants.DIAGRAMMER_MINIMUM_ALLOWED_ZOOM
+        && zoomFactor <= DiagrammerConstants.DIAGRAMMER_MAXIMUM_ALLOWED_ZOOM) {
       this.setGridSize(zoomFactor);
     }
 
     this.handler.zoomElements(oldGridSize, this.gridSize);
 
-    DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities
-        .getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this);
+    DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
 
     Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
     Point viewportLocation = parent.getViewport().getLocationOnScreen();
@@ -141,5 +140,10 @@ public class DrawPanel extends JLayeredPane {
 
   public Point getOrigin() {
     return origin;
+  }
+
+  public void deleteElement(IShape shape) {
+    this.remove((JComponent) shape);
+    this.elements.remove(shape);
   }
 }

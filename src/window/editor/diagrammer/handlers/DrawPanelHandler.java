@@ -41,7 +41,7 @@ public class DrawPanelHandler {
   }
 
   public double getZoomFactor() {
-    return DrawPanel.getGridSize() / DiagrammerConstants.DEFAULT_GRID_SIZE;
+    return DrawPanel.getGridSize() / DiagrammerConstants.DIAGRAMMER_DEFAULT_GRID_SIZE;
   }
 
   /**
@@ -77,8 +77,8 @@ public class DrawPanelHandler {
    * @return Si le zoom est autorisé
    */
   private boolean zoomAllowed(int factor) {
-    return factor >= DiagrammerConstants.MINIMUM_ALLOWED_ZOOM
-        && factor <= DiagrammerConstants.MAXIMUM_ALLOWED_ZOOM;
+    return factor >= DiagrammerConstants.DIAGRAMMER_MINIMUM_ALLOWED_ZOOM
+        && factor <= DiagrammerConstants.DIAGRAMMER_MAXIMUM_ALLOWED_ZOOM;
   }
 
   private void removeUnnecessaryWhitespaceAroundDiagram() {
@@ -119,20 +119,20 @@ public class DrawPanelHandler {
 
   private boolean isHorizontalScrollbarVisible() {
     DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities
-        .getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
+        .getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
     return parent.getHorizontalScrollBarPolicy() == ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
   }
 
   private boolean isVerticalScrollbarVisible() {
     DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities
-        .getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
+        .getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
     return parent.getVerticalScrollBarPolicy() == ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
   }
 
   private void checkIfScrollbarsAreNecessary() {
 
     DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities
-        .getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
+        .getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
 
     Rectangle diaWithoutWhite = getContentBounds(this.drawPanel.getElements(), 0);
     Dimension viewSize = getViewableDiagrampanelSize();
@@ -216,13 +216,13 @@ public class DrawPanelHandler {
 
   public Dimension getViewableDiagrampanelSize() {
     DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities
-        .getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
+        .getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
     return parent.getVisibleRect().getSize();
   }
 
   public void changeViewPosition(int deltaX, int deltaY) {
     DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities
-        .getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
+        .getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
     Point viewportPosition = parent.getViewport().getViewPosition();
     parent.getViewport().setViewSize(this.drawPanel.getPreferredSize());
     parent.getViewport()
@@ -237,7 +237,7 @@ public class DrawPanelHandler {
 
   private void insertWhiteSpaceInUpperLeftCorner() {
     DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities
-        .getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
+        .getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
 
     Rectangle diaWithoutWhite = getContentBounds(this.drawPanel.getElements(), 0);
 
@@ -280,7 +280,7 @@ public class DrawPanelHandler {
 
   private void setHorizontalScrollbarVisibility(boolean visible) {
     DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities
-        .getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
+        .getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
     if (visible) {
       parent.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
     } else {
@@ -290,7 +290,7 @@ public class DrawPanelHandler {
 
   private void setVerticalScrollbarVisibility(boolean visible) {
     DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities
-        .getAncestorNamed(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
+        .getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this.drawPanel);
     if (visible) {
       parent.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     } else {

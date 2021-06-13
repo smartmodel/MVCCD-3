@@ -27,7 +27,7 @@ public class SquaredShapeListener extends MouseAdapter {
     this.handleMovements(mouseEvent.getPoint());
 
     // On met à jour le drawPanel
-    DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(DiagrammerConstants.DRAW_PANEL_NAME, this.component);
+    DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_NAME, this.component);
     drawPanel.getHandler().updatePanelAndScrollbars();
   }
 
@@ -61,7 +61,6 @@ public class SquaredShapeListener extends MouseAdapter {
     } else {
       // On redimensionne l'élément
       this.handleResize(mouseClick);
-
     }
   }
 

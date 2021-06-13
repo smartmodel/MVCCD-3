@@ -436,5 +436,15 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
         return resultat;
     }
 
+    public ArrayList<String> getAttributesForMCDDisplay(){
+        ArrayList<String> attributesToDisplay = new ArrayList<>();
+
+        for (MCDAttribute attribut : this.getMCDAttributes()){
+            attributesToDisplay.add(attribut.getMCDDisplay());
+        }
+
+        return attributesToDisplay;
+    }
+
 
 }

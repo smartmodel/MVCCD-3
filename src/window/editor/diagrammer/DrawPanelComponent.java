@@ -12,7 +12,7 @@ import java.awt.*;
 public class DrawPanelComponent extends JScrollPane {
     public DrawPanelComponent(DrawPanel drawPanel) {
         super(drawPanel);
-        this.setName(DiagrammerConstants.DRAW_PANEL_CONTAINER_NAME);
+        this.setName(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME);
 
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
