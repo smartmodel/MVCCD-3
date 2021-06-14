@@ -10,6 +10,7 @@ import java.awt.Font;
 public class DiagrammerConstants {
     public static final String DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME = "DrawPanelContainer";
     public static final String DIAGRAMMER_DRAW_PANEL_NAME = "DrawPanel";
+    public static final String DIAGRAMMER_PALETTE_PANEL_NAME = "PalettePanel";
 
     public static final int DIAGRAMMER_MINIMUM_ALLOWED_ZOOM = 4;
     public static final int DIAGRAMMER_MAXIMUM_ALLOWED_ZOOM = 25;
@@ -36,4 +37,5 @@ public class DiagrammerConstants {
     public static final Font DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT = new Font("Arial", Font.ITALIC + Font.BOLD, 13);
     public static final int DIAGRAMMER_CLASS_PADDING = 10;
 
+    public static final String DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT = "Entité";
 }

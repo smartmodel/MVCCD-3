@@ -1,16 +1,19 @@
 package window.editor.diagrammer.listeners;
 
-import window.editor.diagrammer.DrawPanel;
-import window.editor.diagrammer.interfaces.IShape;
+import main.MVCCDManager;
+import window.editor.diagrammer.elements.MCDEntityShape;
+import window.editor.diagrammer.palette.PalettePanel;
+import window.editor.diagrammer.panels.DrawPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import window.editor.diagrammer.services.DiagrammerService;
+import window.editor.diagrammer.utils.DiagrammerConstants;
+import window.editor.diagrammer.utils.GridUtils;
 
 
 public class DrawPanelListener extends MouseAdapter implements KeyListener {
-
-    private DrawPanel drawPanel;
 
     private boolean ctrlKeyPressed = false;
     private boolean mouseWheelPressed = false;
@@ -18,9 +21,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
     private Point origin;
 
-    public DrawPanelListener(DrawPanel drawPanel) {
-        this.drawPanel = drawPanel;
-    }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
@@ -28,20 +28,26 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
         if (this.isZoomAllowed()){
             int actualZoom = DrawPanel.getGridSize();
-            this.drawPanel.zoom(actualZoom - e.getWheelRotation());
+            DiagrammerService.getDrawPanel().zoom(actualZoom - e.getWheelRotation());
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         super.mouseClicked(e);
+        if (SwingUtilities.isLeftMouseButton(e)){
+            if (PalettePanel.activeButton != null){
+                this.executeButtonAction(e);
+                PalettePanel.setActiveButton(null);
+            }
+        }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         super.mouseMoved(e);
-        if (this.drawPanel.contains(e.getPoint())){
-            this.drawPanel.grabFocus();
+        if (DiagrammerService.getDrawPanel().contains(e.getPoint())){
+            DiagrammerService.getDrawPanel().grabFocus();
         }
     }
 
@@ -65,7 +71,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
         int differenceY = e.getPoint().y - this.origin.y;
 
         if (this.isScrollAllowed()){
-            this.drawPanel.getHandler().scroll(differenceX, differenceY);
+            DiagrammerService.getDrawPanel().getHandler().scroll(differenceX, differenceY);
         }
 
         this.origin = e.getPoint();
@@ -82,7 +88,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
         }
         this.updateCursor();
 
-        this.drawPanel.getHandler().endScroll();
+        DiagrammerService.getDrawPanel().getHandler().endScroll();
     }
 
     @Override
@@ -104,16 +110,16 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
         this.updateCursor();
 
-        this.drawPanel.getHandler().endScroll();
+        DiagrammerService.getDrawPanel().getHandler().endScroll();
     }
 
     private void updateCursor(){
         if(this.isScrollAllowed()){
             // Scroll autorisé -> cursor en forme de main
-            this.drawPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            DiagrammerService.getDrawPanel().setCursor(new Cursor(Cursor.HAND_CURSOR));
         } else {
             // Scroll non autorisé -> cursor basique en forme de flèche
-            this.drawPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            DiagrammerService.getDrawPanel().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
     private boolean isZoomAllowed(){
@@ -121,5 +127,18 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     }
     private boolean isScrollAllowed(){
         return this.spaceBarPressed || this.mouseWheelPressed;
+    }
+
+    private void createEntityShape(MouseEvent event){
+        Point mouseClick = event.getPoint();
+        MCDEntityShape shape = new MCDEntityShape();
+        shape.setLocation(GridUtils.alignToGrid(mouseClick.x, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(mouseClick.y, DiagrammerService.getDrawPanel().getGridSize()));
+        DiagrammerService.getDrawPanel().addElement(shape);
+        DiagrammerService.getDrawPanel().repaint();
+    }
+    private void executeButtonAction(MouseEvent event){
+        if (PalettePanel.activeButton.getText().equals(DiagrammerConstants.DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT)){
+            this.createEntityShape(event);
+        }
     }
 }

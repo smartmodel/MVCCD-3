@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
-import window.editor.diagrammer.DrawPanel;
+import window.editor.diagrammer.panels.DrawPanel;
 import window.editor.diagrammer.elements.SquaredShape;
 import window.editor.diagrammer.utils.DiagrammerConstants;
 import window.editor.diagrammer.utils.GridUtils;
@@ -33,6 +33,7 @@ public class SquaredShapeListener extends MouseAdapter {
 
   @Override
   public void mousePressed(MouseEvent mouseEvent) {
+    this.moveComponentToFront(mouseEvent);
 
     ResizableBorder resizableBorder = (ResizableBorder) this.component.getBorder();
     cursor = resizableBorder.getCursor(mouseEvent);
@@ -40,6 +41,12 @@ public class SquaredShapeListener extends MouseAdapter {
 
     this.component.requestFocus();
     this.component.repaint();
+  }
+
+  @Override
+  public void mouseClicked(MouseEvent e) {
+    super.mouseClicked(e);
+    this.moveComponentToFront(e);
   }
 
   @Override
@@ -225,5 +232,11 @@ public class SquaredShapeListener extends MouseAdapter {
     int differenceX = GridUtils.alignToGrid(mouseClick.x - startPoint.x, DrawPanel.getGridSize());
     int differenceY = GridUtils.alignToGrid(mouseClick.y - startPoint.y, DrawPanel.getGridSize());
     this.component.drag(differenceX, differenceY);
+  }
+
+  private void moveComponentToFront(MouseEvent event){
+    SquaredShape shape = (SquaredShape) event.getSource();
+    DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_NAME, shape);
+    drawPanel.moveToFront(shape);
   }
 }

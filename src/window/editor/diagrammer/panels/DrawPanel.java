@@ -1,4 +1,4 @@
-package window.editor.diagrammer;
+package window.editor.diagrammer.panels;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -29,7 +29,7 @@ public class DrawPanel extends JLayeredPane {
   private List<IShape> elements;
 
   public DrawPanel() {
-
+    
     this.elements = new LinkedList<>();
     this.origin = new Point();
     this.handler = new DrawPanelHandler(this);
@@ -122,7 +122,7 @@ public class DrawPanel extends JLayeredPane {
   }
 
   private void addListeners() {
-    DrawPanelListener listener = new DrawPanelListener(this);
+    DrawPanelListener listener = new DrawPanelListener();
 
     this.addMouseListener(listener);
     this.addMouseMotionListener(listener);

@@ -1,4 +1,4 @@
-package window.editor.diagrammer.elements;
+package window.editor.diagrammer.menus.actions;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -6,6 +6,7 @@ import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
+import window.editor.diagrammer.elements.MCDEntityShape;
 
 public class MCDEntityShapeEditAction extends AbstractAction {
 

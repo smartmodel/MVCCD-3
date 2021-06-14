@@ -1,7 +1,10 @@
-package window.editor.diagrammer.elements;
+package window.editor.diagrammer.menus;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import window.editor.diagrammer.elements.MCDEntityShape;
+import window.editor.diagrammer.menus.actions.MCDEntityShapeDeleteAction;
+import window.editor.diagrammer.menus.actions.MCDEntityShapeEditAction;
 
 public class EntityShapeMenu extends JPopupMenu {
 

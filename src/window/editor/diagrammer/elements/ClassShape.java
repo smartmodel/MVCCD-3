@@ -32,7 +32,6 @@ public abstract class ClassShape extends SquaredShape {
     this.drawZoneEnTete(graphics2D);
     this.drawZoneProprietes(graphics2D);
     this.updateMinimumSize(graphics2D);
-
   }
 
   // Draw zones
@@ -90,6 +89,7 @@ public abstract class ClassShape extends SquaredShape {
   protected abstract void setBackgroundColor();
 
   private void drawElements(Graphics2D graphics2D, ArrayList<String> elements, int y){
+    graphics2D.setFont(DiagrammerConstants.DIAGRAMMER_CLASS_FONT);
     int x = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING;
     for (String element : elements){
       graphics2D.drawString(element, x, y);

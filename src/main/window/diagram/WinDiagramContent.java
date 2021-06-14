@@ -3,11 +3,13 @@ package main.window.diagram;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import utilities.window.PanelContent;
-import window.editor.diagrammer.DrawPanel;
-import window.editor.diagrammer.DrawPanelComponent;
+import window.editor.diagrammer.panels.DrawPanel;
+import window.editor.diagrammer.panels.DrawPanelComponent;
 
 import javax.swing.*;
 import java.awt.*;
+import window.editor.diagrammer.palette.PalettePanel;
+import window.editor.diagrammer.services.DiagrammerService;
 
 /**
  * La classe crée les panneaux du diagrammeur (en-tête, palette et zone de dessin).
@@ -21,13 +23,15 @@ public class WinDiagramContent extends PanelContent {
     private MVCCDWindow mvccdWindow;
     JPanel content = new JPanel();          //Diagrammeur dans son ensemble
     JPanel panelTitle = new JPanel();       //En-tête du diagrammeur
-    JPanel panelPalette = new JPanel();     //Palette du diagrammeur
-    DrawPanelComponent panelDraw = new DrawPanelComponent(new DrawPanel());        //Zone de dessin du diagrammeur
-
-    JButton btnAdd;
+    PalettePanel panelPalette = new PalettePanel();     //Palette du diagrammeur
+    DrawPanelComponent panelDraw;        //Zone de dessin du diagrammeur
 
     public WinDiagramContent(WinDiagram diagram) {
         super(diagram);
+        DrawPanel drawPanel = new DrawPanel();
+        DiagrammerService diagrammerService = new DiagrammerService(drawPanel);
+        this.panelDraw = new DrawPanelComponent(drawPanel);
+
         mvccdWindow = MVCCDManager.instance().getMvccdWindow();
         //Création des panneaux du diagrammeur
         BorderLayout bl = new BorderLayout();
