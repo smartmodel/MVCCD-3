@@ -14,7 +14,7 @@ import java.awt.*;
  * Remarque: la palette et la zone de dessin du diagrammeur seront créés spécifiquement pour le genre de modèle à
  * réaliser (MCD, MLD-R, MPD-R ou autres).
  */
-public class WinDiagramContent extends PanelContent {
+public class WinDiagramContent extends JPanel {
 
     private MVCCDWindow mvccdWindow;
     JPanel content = new JPanel();          //Diagrammeur dans son ensemble
@@ -24,8 +24,7 @@ public class WinDiagramContent extends PanelContent {
 
     JButton btnAdd;
 
-    public WinDiagramContent(WinDiagram diagram) {
-        super(diagram);
+    public WinDiagramContent() {
         mvccdWindow = MVCCDManager.instance().getMvccdWindow();
         //Création des panneaux du diagrammeur
         BorderLayout bl = new BorderLayout(5,5);
@@ -34,9 +33,7 @@ public class WinDiagramContent extends PanelContent {
         content.add(panelDraw, BorderLayout.CENTER);
         content.add(panelTitle, BorderLayout.NORTH);
         //Place le diagrammeur (JPanel content) dans son ancêtre PanelBorder
-        super.addContent(content);
-
-
+        add(content);
     }
 
     public JPanel getPanelTitle() {
@@ -49,9 +46,5 @@ public class WinDiagramContent extends PanelContent {
 
     public JPanel getPanelDraw() {
         return panelDraw;
-    }
-
-    public Dimension  resizeContent(){
-         return super.resizeContent();
     }
 }

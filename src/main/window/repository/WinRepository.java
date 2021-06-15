@@ -8,7 +8,6 @@ import mcd.MCDContDiagrams;
 import mcd.MCDEntity;
 import mldr.MLDRModel;
 import mpdr.MPDRModel;
-import test.ImgUtils;
 import utilities.window.PanelBorderLayout;
 import utilities.window.PanelBorderLayoutResizer;
 
@@ -21,20 +20,16 @@ import java.awt.*;
  * La classe met en place le redimensionnement en faisant appel aux méthodes de son ancêtre PanelBorderLayout.
  * La classe crée ensuite le contenu et le place dans le panneau redimensionnable.
  */
-public class WinRepository extends PanelBorderLayout {
+public class WinRepository extends JPanel {
 
     private WinRepositoryContent content;
     private String uriImage = "ressources/images/icones/repository/";
 
-    public WinRepository(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer){
-        super();
-        super.setBorderLayoutPosition(borderLayoutPosition);
-        super.setPanelBLResizer(panelBLResizer);
-        startLayout();
+    public WinRepository(){
 
         IconFontSwing.register(FontAwesome.getIconFont());
 
-        content = new WinRepositoryContent(this);
+        content = new WinRepositoryContent();
 
         //region Code ajouté par Antoine Frey
         repositoryIcon(content);
@@ -44,7 +39,11 @@ public class WinRepository extends PanelBorderLayout {
         content.setBackground(Color.WHITE);
         //endregion
 
-        super.setPanelContent(content);
+        add(content);
+    }
+
+    public WinRepositoryContent getContent() {
+        return content;
     }
 
     private void repositoryIcon(WinRepositoryContent content){

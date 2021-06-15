@@ -3,18 +3,19 @@ package main.window.reserve;
 import utilities.window.PanelBorderLayout;
 import utilities.window.PanelBorderLayoutResizer;
 
-public class Reserve extends PanelBorderLayout {
+import javax.swing.*;
+
+public class Reserve extends JPanel {
 
     private ReserveContent content;
 
-    public Reserve(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer) {
-        super();
-        super.setBorderLayoutPosition(borderLayoutPosition);
-        super.setPanelBLResizer(panelBLResizer);
-        startLayout();
+    public Reserve() {
 
-        content = new ReserveContent(this);
-        super.setPanelContent(content);
+        content = new ReserveContent();
+        add(content);
     }
 
+    public ReserveContent getContent() {
+        return content;
+    }
 }

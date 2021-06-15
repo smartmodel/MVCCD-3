@@ -5,20 +5,17 @@ import utilities.window.PanelContent;
 import javax.swing.*;
 import java.awt.*;
 
-public class WinConsoleContent extends PanelContent {
+public class WinConsoleContent extends JPanel {
     private JTextArea textArea;
 
-
-    public WinConsoleContent(WinConsole console) {
-        super(console);
-        super.setLayout(new FlowLayout(FlowLayout.LEFT));
+    public WinConsoleContent() {
+        setBackground(Color.WHITE);
         textArea = new JTextArea();
         textArea.append(System.lineSeparator());
         textArea.append(System.lineSeparator());
         textArea.append(System.lineSeparator());
 
-        super.addContent(textArea);
-
+        add(textArea);
     }
 
     public JTextArea getTextArea() {

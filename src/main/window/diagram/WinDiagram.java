@@ -3,22 +3,20 @@ package main.window.diagram;
 import utilities.window.PanelBorderLayout;
 import utilities.window.PanelBorderLayoutResizer;
 
+import javax.swing.*;
+
 /**
  * La  lasse met en place le redimensionnement en faisant appel aux méthodes de son ancêtre PanelBorderLayout.
  * La classe crée ensuite le contenu et le place dans le panneau redimensionnable.
  */
-public class WinDiagram extends PanelBorderLayout {
+public class WinDiagram extends JPanel {
 
     private WinDiagramContent content;
 
-    public WinDiagram(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer){
-        super();
-        super.setBorderLayoutPosition(borderLayoutPosition);
-        super.setPanelBLResizer(panelBLResizer);
-        startLayout();
+    public WinDiagram(){
 
-        content = new WinDiagramContent(this);
-        super.setPanelContent(content);
+        content = new WinDiagramContent();
+        add(content);
     }
 
     public WinDiagramContent getContent() {
