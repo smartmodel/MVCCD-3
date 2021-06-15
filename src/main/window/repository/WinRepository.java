@@ -1,10 +1,20 @@
 package main.window.repository;
 
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
+import main.MVCCDElementApplicationPreferences;
+import mcd.MCDAttribute;
+import mcd.MCDContDiagrams;
+import mcd.MCDEntity;
+import mldr.MLDRModel;
+import mpdr.MPDRModel;
+import test.ImgUtils;
 import utilities.window.PanelBorderLayout;
 import utilities.window.PanelBorderLayoutResizer;
-import utilities.window.PanelContent;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
 
 /**
@@ -14,6 +24,7 @@ import java.awt.*;
 public class WinRepository extends PanelBorderLayout {
 
     private WinRepositoryContent content;
+    private String uriImage = "ressources/images/icones/repository/";
 
     public WinRepository(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer){
         super();
@@ -21,12 +32,52 @@ public class WinRepository extends PanelBorderLayout {
         super.setPanelBLResizer(panelBLResizer);
         startLayout();
 
+        IconFontSwing.register(FontAwesome.getIconFont());
+
         content = new WinRepositoryContent(this);
 
-        // Code ajouté par Antoine
+        //region Code ajouté par Antoine Frey
+        repositoryIcon(content);
+        //endregion
+
+        //region Code ajouté par Antoine Frey
         content.setBackground(Color.WHITE);
+        //endregion
 
         super.setPanelContent(content);
+    }
+
+    private void repositoryIcon(WinRepositoryContent content){
+        content.getTree().setCellRenderer(new DefaultTreeCellRenderer(){
+            @Override
+            public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean isLeaf, int row, boolean focused) {
+                Component c = super.getTreeCellRendererComponent(tree, value, selected, expanded, isLeaf, row, focused);
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+
+                if(node.getUserObject() instanceof MVCCDElementApplicationPreferences){
+                    Icon icon = IconFontSwing.buildIcon(FontAwesome.COG, 15);
+                    setIcon(icon);
+                }
+                if(node.getUserObject() instanceof MCDAttribute){
+                    Icon imageIcon = new ImageIcon(new ImageIcon(uriImage + "entity.png").getImage().getScaledInstance(12, 15, Image.SCALE_DEFAULT));
+                    setIcon(imageIcon);
+                }
+                if(node.getUserObject() instanceof MCDEntity){
+                    Icon imageIcon = new ImageIcon(new ImageIcon(uriImage + "entity.png").getImage().getScaledInstance(12, 15, Image.SCALE_DEFAULT));
+                    setIcon(imageIcon);
+                }
+                if(node.getUserObject() instanceof MCDContDiagrams || node.getUserObject() instanceof MLDRModel){
+                    Icon imageIcon = new ImageIcon(new ImageIcon(uriImage + "MLD-R.png").getImage().getScaledInstance(15,15, Image.SCALE_DEFAULT));
+                    setIcon(imageIcon);
+                }
+                if(node.getUserObject() instanceof MPDRModel){
+                    Icon imageIcon = new ImageIcon(new ImageIcon(uriImage + "MPD-R.png").getImage().getScaledInstance(15,15, Image.SCALE_DEFAULT));
+                    setIcon(imageIcon);
+                }
+
+                return c;
+            }
+        });
     }
 
 }
