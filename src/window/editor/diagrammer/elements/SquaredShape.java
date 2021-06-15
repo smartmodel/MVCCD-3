@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import window.editor.diagrammer.interfaces.IResizable;
 import window.editor.diagrammer.interfaces.IShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
+import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.ResizableBorder;
 
@@ -31,10 +32,6 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable 
     this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
   }
 
-  @Override
-  public void setLocationDifference(int differenceX, int differenceY) {
-    this.setLocation(this.getBounds().x + differenceX, this.getBounds().y + differenceY);
-  }
 
   @Override
   public void resize(Rectangle newBounds) {

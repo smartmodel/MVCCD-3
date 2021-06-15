@@ -3,7 +3,9 @@ package window.editor.diagrammer.interfaces;
 import java.awt.*;
 
 public interface IShape {
-    void setLocationDifference(int differenceX, int differenceY);
+    default void setLocationDifference(int differenceX, int differenceY){
+        this.setLocation(this.getBounds().x + differenceX, this.getBounds().y + differenceY);
+    }
 
 
     void setLocation(Point location);

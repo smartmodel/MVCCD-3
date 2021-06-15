@@ -101,4 +101,5 @@ public abstract class ClassShape extends SquaredShape {
     int height = this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements()) + this.getZoneMinHeight(graphics2D, this.zoneProprietes.getElements());
     this.setMinimumSize(new Dimension(this.getWidth(), height));
   }
+
 }

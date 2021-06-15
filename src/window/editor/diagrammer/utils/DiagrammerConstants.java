@@ -38,4 +38,5 @@ public class DiagrammerConstants {
     public static final int DIAGRAMMER_CLASS_PADDING = 10;
 
     public static final String DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT = "Entité";
+    public static final int DIAGRAMMER_RELATION_CLICK_AREA = 5;
 }

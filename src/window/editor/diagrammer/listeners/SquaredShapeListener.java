@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
 import window.editor.diagrammer.panels.DrawPanel;
 import window.editor.diagrammer.elements.SquaredShape;
+import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.DiagrammerConstants;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.ResizableBorder;
@@ -28,7 +29,7 @@ public class SquaredShapeListener extends MouseAdapter {
 
     // On met à jour le drawPanel
     DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_NAME, this.component);
-    drawPanel.getHandler().updatePanelAndScrollbars();
+    drawPanel.updatePanelAndScrollbars();
   }
 
   @Override
@@ -85,16 +86,16 @@ public class SquaredShapeListener extends MouseAdapter {
       int newWidth;
       int newHeight;
 
-      int differenceX = GridUtils.alignToGrid(mouseClick.x - startPoint.x, DrawPanel.getGridSize());
-      int differenceY = GridUtils.alignToGrid(mouseClick.y - startPoint.y, DrawPanel.getGridSize());
+      int differenceX = GridUtils.alignToGrid(mouseClick.x - startPoint.x, DiagrammerService.getDrawPanel().getGridSize());
+      int differenceY = GridUtils.alignToGrid(mouseClick.y - startPoint.y, DiagrammerService.getDrawPanel().getGridSize());
       System.out.println();
 
       switch (cursor) {
         case Cursor.N_RESIZE_CURSOR: {
-          newX = GridUtils.alignToGrid(x, DrawPanel.getGridSize());
-          newY = GridUtils.alignToGrid(y + differenceY, DrawPanel.getGridSize());
-          newWidth = GridUtils.alignToGrid(width, DrawPanel.getGridSize());
-          newHeight = GridUtils.alignToGrid(height - differenceY, DrawPanel.getGridSize());
+          newX = GridUtils.alignToGrid(x, DiagrammerService.getDrawPanel().getGridSize());
+          newY = GridUtils.alignToGrid(y + differenceY, DiagrammerService.getDrawPanel().getGridSize());
+          newWidth = GridUtils.alignToGrid(width, DiagrammerService.getDrawPanel().getGridSize());
+          newHeight = GridUtils.alignToGrid(height - differenceY, DiagrammerService.getDrawPanel().getGridSize());
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
 
           // On vérifie que la nouvelle hauteur est plus grande ou égale à la taille minimale du composant
@@ -108,7 +109,7 @@ public class SquaredShapeListener extends MouseAdapter {
           newX = x;
           newY = y;
           newWidth = width;
-          newHeight = GridUtils.alignToGrid(height + differenceY, DrawPanel.getGridSize());
+          newHeight = GridUtils.alignToGrid(height + differenceY, DiagrammerService.getDrawPanel().getGridSize());
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
 
           // On vérifie que la nouvelle hauteur est plus grande ou égale à la taille minimale du composant
@@ -121,9 +122,9 @@ public class SquaredShapeListener extends MouseAdapter {
           break;
         }
         case Cursor.W_RESIZE_CURSOR: {
-          newX = GridUtils.alignToGrid(x + differenceX, DrawPanel.getGridSize());
+          newX = GridUtils.alignToGrid(x + differenceX, DiagrammerService.getDrawPanel().getGridSize());
           newY = y;
-          newWidth = GridUtils.alignToGrid(width - differenceX, DrawPanel.getGridSize());
+          newWidth = GridUtils.alignToGrid(width - differenceX, DiagrammerService.getDrawPanel().getGridSize());
           newHeight = height;
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
 
@@ -137,7 +138,7 @@ public class SquaredShapeListener extends MouseAdapter {
         case Cursor.E_RESIZE_CURSOR: {
           newX = x;
           newY = y;
-          newWidth = GridUtils.alignToGrid(width + differenceX, DrawPanel.getGridSize());
+          newWidth = GridUtils.alignToGrid(width + differenceX, DiagrammerService.getDrawPanel().getGridSize());
           newHeight = height;
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
 
@@ -152,10 +153,10 @@ public class SquaredShapeListener extends MouseAdapter {
           break;
         }
         case Cursor.NW_RESIZE_CURSOR: {
-          newX = GridUtils.alignToGrid(x + differenceX, DrawPanel.getGridSize());
-          newY = GridUtils.alignToGrid(y + differenceY, DrawPanel.getGridSize());
-          newWidth = GridUtils.alignToGrid(width - differenceX, DrawPanel.getGridSize());
-          newHeight = GridUtils.alignToGrid(height - differenceY, DrawPanel.getGridSize());
+          newX = GridUtils.alignToGrid(x + differenceX, DiagrammerService.getDrawPanel().getGridSize());
+          newY = GridUtils.alignToGrid(y + differenceY, DiagrammerService.getDrawPanel().getGridSize());
+          newWidth = GridUtils.alignToGrid(width - differenceX, DiagrammerService.getDrawPanel().getGridSize());
+          newHeight = GridUtils.alignToGrid(height - differenceY, DiagrammerService.getDrawPanel().getGridSize());
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
 
           // On vérifie que la nouvelle largeur et la nouvelle hauteur sont plus grandes ou égales à la taille minimale du composant
@@ -168,9 +169,9 @@ public class SquaredShapeListener extends MouseAdapter {
         }
         case Cursor.NE_RESIZE_CURSOR: {
           newX = x;
-          newY = GridUtils.alignToGrid(y + differenceY, DrawPanel.getGridSize());
-          newWidth = GridUtils.alignToGrid(width + differenceX, DrawPanel.getGridSize());
-          newHeight = GridUtils.alignToGrid(height - differenceY, DrawPanel.getGridSize());
+          newY = GridUtils.alignToGrid(y + differenceY, DiagrammerService.getDrawPanel().getGridSize());
+          newWidth = GridUtils.alignToGrid(width + differenceX, DiagrammerService.getDrawPanel().getGridSize());
+          newHeight = GridUtils.alignToGrid(height - differenceY, DiagrammerService.getDrawPanel().getGridSize());
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
 
           // On vérifie que la nouvelle largeur et la nouvelle hauteur sont plus grandes ou égales à la taille minimale du composant
@@ -185,10 +186,10 @@ public class SquaredShapeListener extends MouseAdapter {
           break;
         }
         case Cursor.SW_RESIZE_CURSOR: {
-          newX = GridUtils.alignToGrid(x + differenceX, DrawPanel.getGridSize());
+          newX = GridUtils.alignToGrid(x + differenceX, DiagrammerService.getDrawPanel().getGridSize());
           newY = y;
-          newWidth = GridUtils.alignToGrid(width - differenceX, DrawPanel.getGridSize());
-          newHeight = GridUtils.alignToGrid(height + differenceY, DrawPanel.getGridSize());
+          newWidth = GridUtils.alignToGrid(width - differenceX, DiagrammerService.getDrawPanel().getGridSize());
+          newHeight = GridUtils.alignToGrid(height + differenceY, DiagrammerService.getDrawPanel().getGridSize());
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
 
           // On vérifie que la nouvelle largeur et la nouvelle hauteur sont plus grandes ou égales à la taille minimale du composant
@@ -205,8 +206,8 @@ public class SquaredShapeListener extends MouseAdapter {
         case Cursor.SE_RESIZE_CURSOR: {
           newX = x;
           newY = y;
-          newWidth = GridUtils.alignToGrid(width + differenceX, DrawPanel.getGridSize());
-          newHeight = GridUtils.alignToGrid(height + differenceY, DrawPanel.getGridSize());
+          newWidth = GridUtils.alignToGrid(width + differenceX, DiagrammerService.getDrawPanel().getGridSize());
+          newHeight = GridUtils.alignToGrid(height + differenceY, DiagrammerService.getDrawPanel().getGridSize());
 
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
 
@@ -229,8 +230,8 @@ public class SquaredShapeListener extends MouseAdapter {
   }
 
   private void handleDrag(Point mouseClick) {
-    int differenceX = GridUtils.alignToGrid(mouseClick.x - startPoint.x, DrawPanel.getGridSize());
-    int differenceY = GridUtils.alignToGrid(mouseClick.y - startPoint.y, DrawPanel.getGridSize());
+    int differenceX = GridUtils.alignToGrid(mouseClick.x - startPoint.x, DiagrammerService.getDrawPanel().getGridSize());
+    int differenceY = GridUtils.alignToGrid(mouseClick.y - startPoint.y, DiagrammerService.getDrawPanel().getGridSize());
     this.component.drag(differenceX, differenceY);
   }
 
