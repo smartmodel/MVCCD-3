@@ -1,8 +1,7 @@
 package window.editor.diagrammer.listeners;
 
 import java.awt.geom.Line2D;
-import java.awt.geom.Line2D.Double;
-import java.awt.geom.Line2D.Float;
+import window.editor.diagrammer.elements.ClassShape;
 import window.editor.diagrammer.elements.MCDEntityShape;
 import window.editor.diagrammer.elements.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.RelationShape;
@@ -48,7 +47,13 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
                 this.executeButtonAction(e);
                 PalettePanel.setActiveButton(null);
             }
-            this.relationClicked = this.getAssociationClicked(e);
+
+            this.relationClicked = this.setAssociationClicked(e);
+            this.pointAncrageClicked = this.getPointAncrageClicked(e);
+
+            if (this.relationClicked != null){
+                this.relationClicked.setSelected(true);
+            }
         }
 
         if (SwingUtilities.isRightMouseButton(e)){
@@ -82,13 +87,11 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     public void mouseDragged(MouseEvent e) {
         super.mouseDragged(e);
 
-
         int differenceX = e.getPoint().x - this.origin.x;
         int differenceY = e.getPoint().y - this.origin.y;
         if (this.isScrollAllowed()){
             DiagrammerService.drawPanel.scroll(differenceX, differenceY);
         }
-
 
         if (this.pointAncrageClicked != null){
             this.dragPointAncrageSelected(e);
@@ -103,11 +106,17 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     public void mouseReleased(MouseEvent e) {
         super.mouseReleased(e);
 
+        if (this.pointAncrageClicked != null){
+            this.deletePointsAncrageIfNecessary();
+        }
+
         if(this.mouseWheelPressed && SwingUtilities.isMiddleMouseButton(e)){
             this.mouseWheelPressed = false;
         }
-        this.updateCursor();
 
+        this.pointAncrageClicked = null;
+
+        this.updateCursor();
         DiagrammerService.drawPanel.endScroll();
     }
 
@@ -169,7 +178,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
             if (shape instanceof RelationShape){
                 for (RelationPointAncrageShape pointAncrage : ((RelationShape) shape).getPointsAncrage()){
                     if (pointAncrage.contains(event.getPoint())) {
-                        System.out.println("Point ancrage trouvé");
+                        System.out.println("Index du point d'ancrage cliqué : " + pointAncrage.getIndex());
                         return pointAncrage;
                     }
                 }
@@ -178,15 +187,15 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
         return null;
     }
 
-    private RelationShape getAssociationClicked(MouseEvent event){
+    private RelationShape setAssociationClicked(MouseEvent event){
         for (IShape shape : DiagrammerService.getDrawPanel().getElements()){
             if (shape instanceof RelationShape) {
-                for (int i = 0; i < ((RelationShape) shape).getPointsAncrage().size(); i++) {
-
+                RelationShape relation = (RelationShape) shape;
+                for (int i = 0; i < relation.getPointsAncrage().size() - 1; i++) {
                     Line2D segment = new Line2D.Double();
-                    segment.setLine(((RelationShape) shape).getPointsAncrage().get(i).getX(),((RelationShape) shape).getPointsAncrage().get(i).getY(),((RelationShape) shape).getPointsAncrage().get(i + 1).getX(),((RelationShape) shape).getPointsAncrage().get(i + 1).getY());
+                    segment.setLine(relation.getPointsAncrage().get(i).getX(),relation.getPointsAncrage().get(i).getY(),relation.getPointsAncrage().get(i + 1).getX(),relation.getPointsAncrage().get(i + 1).getY());
                     if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, event.getPoint()) <= DiagrammerConstants.DIAGRAMMER_RELATION_CLICK_AREA) {
-                        return (RelationShape) shape;
+                        return relation;
                     }
                 }
             }
@@ -197,10 +206,10 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     private Line2D getNearestSegment(MouseEvent event){
         for (IShape shape : DiagrammerService.getDrawPanel().getElements()){
             if (shape instanceof RelationShape) {
-                for (int i = 0; i < ((RelationShape) shape).getPointsAncrage().size(); i++) {
-
+                RelationShape relation = (RelationShape) shape;
+                for (int i = 0; i < relation.getPointsAncrage().size(); i++) {
                     Line2D segment = new Line2D.Double();
-                    segment.setLine(((RelationShape) shape).getPointsAncrage().get(i).getX(),((RelationShape) shape).getPointsAncrage().get(i).getY(),((RelationShape) shape).getPointsAncrage().get(i + 1).getX(),((RelationShape) shape).getPointsAncrage().get(i + 1).getY());
+                    segment.setLine(relation.getPointsAncrage().get(i).getX(), relation.getPointsAncrage().get(i).getY(), relation.getPointsAncrage().get(i + 1).getX(), relation.getPointsAncrage().get(i + 1).getY());
                     if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, event.getPoint()) <= DiagrammerConstants.DIAGRAMMER_RELATION_CLICK_AREA) {
                         return segment;
                     }
@@ -213,7 +222,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     private void addPointAncrage(MouseEvent e){
         Line2D nearestSegment = this.getNearestSegment(e);
         int newIndex = this.relationClicked.getPointAncrageIndex(this.relationClicked.convertPoint2DToPointAncrage(nearestSegment.getP2()));
-        System.out.println(newIndex);
         Point nearestPointOnSegment = GeometryUtils.getNearestPointOnLine(
             nearestSegment.getX1(),
             nearestSegment.getY1(),
@@ -224,14 +232,113 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
             true,
             null
         );
-        RelationPointAncrageShape newPointAncrage = new RelationPointAncrageShape(nearestPointOnSegment);
+        RelationPointAncrageShape newPointAncrage = new RelationPointAncrageShape(nearestPointOnSegment, newIndex);
         this.relationClicked.addPointAncrage(newPointAncrage, newIndex);
+        this.relationClicked.reindexAllPointsAncrage();
         DiagrammerService.drawPanel.repaint();
     }
 
     private void dragPointAncrageSelected(MouseEvent e){
-        int x = GridUtils.alignToGrid(e.getX(), DiagrammerService.getDrawPanel().getGridSize());
-        int y = GridUtils.alignToGrid(e.getY(), DiagrammerService.getDrawPanel().getGridSize());
-        this.pointAncrageClicked.drag(x, y);
+        int newX = GridUtils.alignToGrid(e.getX(), DiagrammerService.getDrawPanel().getGridSize());
+        int newY = GridUtils.alignToGrid(e.getY(), DiagrammerService.getDrawPanel().getGridSize());
+        int currentIndex = this.pointAncrageClicked.getIndex();
+
+        RelationPointAncrageShape firstPoint = this.relationClicked.getPointsAncrage().getFirst();
+        RelationPointAncrageShape lastPoint = this.relationClicked.getPointsAncrage().getLast();
+
+        ClassShape rightShape = (ClassShape) GeometryUtils.getShapeOnTheRight(this.relationClicked.getSource(), this.relationClicked.getDestination());
+        ClassShape leftShape = (ClassShape) GeometryUtils.getShapeOnTheLeft(this.relationClicked.getSource(), this.relationClicked.getDestination());
+
+        ClassShape nearestShape = this.relationClicked.getNearestClassShape(this.pointAncrageClicked);
+
+        RelationPointAncrageShape nearestShapePoint;
+        if (nearestShape == this.relationClicked.getSource()){
+            nearestShapePoint = firstPoint;
+        } else{
+            nearestShapePoint = lastPoint;
+        }
+
+        // Si le premier ou le dernier point d'ancrage est cliqué
+        if (this.pointAncrageClicked.equals(firstPoint) || this.pointAncrageClicked.equals(lastPoint)){
+            if (GeometryUtils.pointIsAroundBounds(new Point(newX, newY), nearestShape)) {
+                this.pointAncrageClicked.drag(newX, newY);
+                if (this.relationClicked.getPointsAncrage().size() > 2){
+                    // Si le premier point est cliqué
+                    RelationPointAncrageShape pointToAdapt = this.pointAncrageClicked.equals(firstPoint) ? this.relationClicked.getPointsAncrage().get(1) : this.relationClicked.getPointsAncrage().get(lastPoint.getIndex() - 1);
+                    // On met à jour le pointà l'index 1 ou le point à l'index n-1 pour l'aligner avec le point cliqué
+                    if (this.pointAncrageClicked.y > pointToAdapt.y || this.pointAncrageClicked.y < pointToAdapt.y){
+                        pointToAdapt.drag(pointToAdapt.x, newY);
+                    }
+
+                    if (this.pointAncrageClicked.x > pointToAdapt.x || this.pointAncrageClicked.x < pointToAdapt.x){
+                        pointToAdapt.drag(newX, pointToAdapt.y);
+                    }
+                }
+            }
+        } else{
+                this.pointAncrageClicked.drag(newX, newY);
+        }
+
+        // S'il n'y a que 3 points d'ancrage dans l'association
+        if (this.relationClicked.getPointsAncrage().size() == 3){
+
+            if (newX >= leftShape.getBounds().getMinX() && newX <= leftShape.getBounds().getMaxX() &&
+                newY >= rightShape.getBounds().getMinY() && newY <= rightShape.getBounds().getMaxY() ){
+
+                firstPoint.drag(newX, (int) leftShape.getBounds().getMaxY());
+                lastPoint.drag((int) rightShape.getBounds().getMinX(), newY);
+
+            } else if (newX >= rightShape.getBounds().getMinX() && newX <= rightShape.getBounds().getMaxX() &&
+                newY >= leftShape.getBounds().getMinY() && newY <= leftShape.getBounds().getMaxY() ){
+
+                firstPoint.drag((int) leftShape.getBounds().getMaxX(), newY);
+                lastPoint.drag(newX, (int) rightShape.getBounds().getMinY());
+            }
+        }
+
+        if (this.relationClicked.getPointsAncrage().size() > 2){
+            // Le deuxième point d'ancrage de l'association doit aligner le point de l'entité sur sa coordonnée Y
+            if (currentIndex == 1 || currentIndex == lastPoint.getIndex()-1 && currentIndex < lastPoint.getIndex()){
+                if (newY >= nearestShape.getBounds().getMinY() && newY <= nearestShape.getBounds().getMaxY()){
+                    nearestShapePoint.drag(nearestShapePoint.x, newY);
+                    if (newY < nearestShape.getBounds().getMinY()){
+                        nearestShapePoint.drag(nearestShapePoint.x, (int) nearestShape.getBounds().getMinY());
+                    } else if (newY > nearestShape.getBounds().getMaxY()){
+                        nearestShapePoint.drag(nearestShapePoint.x, (int) nearestShape.getBounds().getMaxY());
+                    }
+                }
+
+                //  Le deuxième point d'ancrage de l'association doit aligner le point de l'entité sur sa coordonnée X
+                if (newX >= nearestShape.getBounds().getMinX() && newX <= nearestShape.getBounds().getMaxX()){
+                    nearestShapePoint.drag(newX, nearestShapePoint.y);
+                   if (newX < nearestShape.getBounds().getMinX()){
+                        nearestShapePoint.drag((int) nearestShape.getBounds().getMinX(), nearestShapePoint.y);
+                    } else if (newX > nearestShape.getBounds().getMaxX()){
+                        nearestShapePoint.drag((int) nearestShape.getBounds().getMaxX(), nearestShapePoint.y);
+                    }
+                }
+            }
+        }
+
+        DiagrammerService.drawPanel.repaint();
+    }
+
+    private void deletePointsAncrageIfNecessary(){
+        for (int i = 1; i < this.relationClicked.getPointsAncrage().size() - 1; i++) {
+            RelationPointAncrageShape actualPoint = this.relationClicked.getPointsAncrage().get(i);
+            RelationPointAncrageShape previousPoint = this.relationClicked.getPointsAncrage().get(i - 1);
+            RelationPointAncrageShape nextPoint = this.relationClicked.getPointsAncrage().get(i + 1);
+
+            if (actualPoint.y == previousPoint.y && actualPoint.y == nextPoint.y){
+                this.relationClicked.getPointsAncrage().remove(actualPoint);
+            }
+
+            if (actualPoint.x == previousPoint.x && actualPoint.x == nextPoint.x){
+                this.relationClicked.getPointsAncrage().remove(actualPoint);
+            }
+        }
+
+        this.relationClicked.reindexAllPointsAncrage();
+        DiagrammerService.drawPanel.repaint();
     }
 }

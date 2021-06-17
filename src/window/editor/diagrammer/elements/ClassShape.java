@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
+import window.editor.diagrammer.interfaces.IShape;
+import window.editor.diagrammer.listeners.ClassShapeListener;
+import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.DiagrammerConstants;
 
 public abstract class ClassShape extends SquaredShape {
@@ -21,6 +24,7 @@ public abstract class ClassShape extends SquaredShape {
         DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH,
         DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT);
     this.zoneEnTete.setBounds(0, 0, this.getWidth(), 30);
+    this.addListeners();
   }
 
   @Override
@@ -32,6 +36,12 @@ public abstract class ClassShape extends SquaredShape {
     this.drawZoneEnTete(graphics2D);
     this.drawZoneProprietes(graphics2D);
     this.updateMinimumSize(graphics2D);
+  }
+
+  private void addListeners(){
+    ClassShapeListener listener = new ClassShapeListener();
+    this.addMouseMotionListener(listener);
+    this.addMouseListener(listener);
   }
 
   // Draw zones
@@ -102,4 +112,14 @@ public abstract class ClassShape extends SquaredShape {
     this.setMinimumSize(new Dimension(this.getWidth(), height));
   }
 
+  public void updateRelations(int differenceX, int differenceY){
+    for (IShape shape : DiagrammerService.drawPanel.getElements()){
+      if (shape instanceof RelationShape){
+        RelationShape relation = (RelationShape) shape;
+        if (relation.getSource() == this || relation.getDestination() == this){
+          relation.updateFirstAndLastPointsAncrage(differenceX, differenceY, this);
+        }
+      }
+    }
+  }
 }

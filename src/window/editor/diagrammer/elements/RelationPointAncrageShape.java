@@ -11,24 +11,39 @@ import window.editor.diagrammer.utils.GridUtils;
 
 public class RelationPointAncrageShape extends Point implements IShape {
 
-  public final int DIAMETER = 10;
+  public int DIAMETER = 10;
+  private int index;
 
-  public RelationPointAncrageShape(Point p) {
+  public RelationPointAncrageShape(int index) {
+    this.index = index;
+  }
+
+  public RelationPointAncrageShape(Point p, int index) {
     super(p);
+    this.index = index;
   }
 
   public RelationPointAncrageShape(int x, int y) {
     super(x, y);
   }
 
+  public RelationPointAncrageShape(Point p) {
+    super(p);
+  }
+
+  public RelationPointAncrageShape(int x, int y, int index) {
+    super(x, y);
+    this.index = index;
+  }
+
   @Override
   public void setLocationDifference(int differenceX, int differenceY) {
-    this.setLocation(this.getBounds().x + differenceX, this.getBounds().y + differenceY);
+    this.setLocation(this.getX() + differenceX, this.getY() + differenceY);
   }
 
   @Override
   public void setSize(Dimension dimension) {
-    this.setSize(dimension.width, dimension.height);
+    DIAMETER = dimension.height;
   }
 
   public Rectangle getBounds() {
@@ -37,24 +52,34 @@ public class RelationPointAncrageShape extends Point implements IShape {
 
   @Override
   public void zoom(int fromFactor, int toFactor) {
+    System.out.println("zoom");
+    int newXPosition = this.getBounds().x * toFactor / fromFactor;
+    int newYPosition = this.getBounds().y * toFactor / fromFactor;
+    int newWidth = this.getBounds().width * toFactor / fromFactor;
+    int newHeight = this.getBounds().height * toFactor / fromFactor;
 
+    // Set la nouvelle position, la nouvelle taille de l'élément et met à jour la nouvelle taille minimale de l'élément
+    this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
+    this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
   }
 
   @Override
   public void drag(int x, int y) {
     this.move(x, y);
-    //this.translate(x, y);
     DiagrammerService.drawPanel.repaint();
   }
 
-  @Override
-  public void setSize(int width, int height) {
-    IShape.super.setSize(width, height);
-  }
 
   public boolean contains(Point point){
     Rectangle bounds = this.getBounds();
     return bounds.contains(point);
   }
 
+  public int getIndex() {
+    return index;
+  }
+
+  public void setIndex(int index) {
+    this.index = index;
+  }
 }

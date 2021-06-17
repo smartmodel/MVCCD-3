@@ -2,6 +2,7 @@ package window.editor.diagrammer.elements;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import window.editor.diagrammer.listeners.ClassShapeListener;
 
 public class ClassShapeZone extends Rectangle {
 

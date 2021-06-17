@@ -45,7 +45,7 @@ public class DrawPanel extends JLayeredPane {
     MCDEntityShape entityComponent2 = new MCDEntityShape();
     MCDEntityShape entityComponent3 = new MCDEntityShape();
     entityComponent2.setLocation(560, 340);
-    entityComponent3.setLocation(300, 230);
+    entityComponent3.setLocation(300, 700);
 
     RelationShape relationShape = new RelationShape(entityComponent, entityComponent2);
 
@@ -155,9 +155,11 @@ public class DrawPanel extends JLayeredPane {
     graphics2D.setColor(Color.BLACK);
     for (IShape association : this.elements) {
       if (association instanceof RelationShape) {
-        ((RelationShape) association).drawPointsAncrage(graphics2D);
-        ((RelationShape) association).drawSegments(graphics2D);
-
+        RelationShape relation = (RelationShape) association;
+        if (relation.isSelected()){
+          relation.drawPointsAncrage(graphics2D);
+        }
+        relation.drawSegments(graphics2D);
       }
     }
   }
@@ -194,6 +196,7 @@ public class DrawPanel extends JLayeredPane {
         element.zoom(fromFactor, toFactor);
       }
     }
+    this.repaint();
   }
 
   public void moveOrigin(int differenceX, int differenceY) {

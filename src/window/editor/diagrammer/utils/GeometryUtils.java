@@ -1,10 +1,16 @@
 package window.editor.diagrammer.utils;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import javax.swing.SwingUtilities;
+import window.editor.diagrammer.elements.ClassShape;
+import window.editor.diagrammer.elements.RelationPointAncrageShape;
+import window.editor.diagrammer.interfaces.IShape;
+import window.editor.diagrammer.services.DiagrammerService;
 
 public class GeometryUtils {
 
@@ -67,8 +73,6 @@ public class GeometryUtils {
   }
 
   public static Point getNearestPointOnLine(double ax, double ay, double bx, double by, double px, double py, boolean clampToSegment, Point2D dest) {
-    // Thanks StackOverflow!
-    // https://stackoverflow.com/questions/1459368/snap-point-to-a-line-java
     if (dest == null) {
       dest = new Point2D.Double();
     }
@@ -91,5 +95,60 @@ public class GeometryUtils {
     dest.setLocation(ax + abx * t, ay + aby * t);
 
     return new Point((int)  dest.getX(), (int) dest.getY());
+  }
+
+  public static IShape getShapeOnTheRight(IShape firstShape, IShape secondShape){
+    if (firstShape.getBounds().x < secondShape.getBounds().x){
+      return secondShape;
+    } else if(secondShape.getBounds().x < firstShape.getBounds().x){
+      return firstShape;
+    } else{
+      return null;
+    }
+  }
+
+  public static IShape getShapeOnTheLeft(IShape firstShape, IShape secondShape){
+    if (firstShape.getBounds().x > secondShape.getBounds().x){
+      return secondShape;
+    } else if(secondShape.getBounds().x > firstShape.getBounds().x){
+      return firstShape;
+    } else{
+      return null;
+    }
+  }
+
+  public static boolean pointIsAroundBounds(Point point, ClassShape shape){
+    Point converted = SwingUtilities.convertPoint(DiagrammerService.drawPanel, point, shape);
+    return (converted.x >= 0 && converted.x <= shape.getWidth() && (converted.y == 0 || converted.y == shape.getHeight())) ||
+        (converted.y >= 0 && converted.y <= shape.getHeight() && (converted.x == 0 || converted.x == shape.getWidth()));
+  }
+
+  public static boolean pointIsInsideBounds(Point point, ClassShape shape){
+    Point converted = SwingUtilities.convertPoint(DiagrammerService.drawPanel, point, shape);
+    Rectangle bounds = SwingUtilities.convertRectangle(DiagrammerService.drawPanel, shape.getBounds(), shape);
+    return bounds.contains(converted);
+  }
+
+  public static Point alignToClassShapeBounds(Point point, ClassShape shape){
+    int xAligned = Integer.MAX_VALUE;
+    int yAligned = Integer.MAX_VALUE;
+
+    if (point.x <= shape.getWidth() / 2){
+      xAligned = (int) shape.getBounds().getMinX();
+    }
+
+    if (point.x > shape.getWidth() / 2){
+      xAligned = (int) shape.getBounds().getMaxX();
+    }
+
+    if (point.y <= shape.getHeight() / 2){
+      yAligned = (int) shape.getBounds().getMinY();
+    }
+
+    if (point.y > shape.getHeight() / 2){
+      yAligned = (int) shape.getBounds().getMaxY();
+    }
+    Point newPoint = new Point(xAligned, yAligned);
+    return newPoint;
   }
 }
