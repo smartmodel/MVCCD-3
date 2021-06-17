@@ -376,7 +376,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
     }
 
     @Override
-    protected MCDElement getParentByNamePath(int pathname, String text) {
+    protected MCDElement getParentByNamePath(String namePath) {
         return null;
     }
 

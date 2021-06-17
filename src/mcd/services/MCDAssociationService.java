@@ -32,11 +32,11 @@ public class MCDAssociationService {
 
     public static String buildNamingId(MCDEntity entityFrom, MCDEntity entityTo, String naming) {
 
-        return  entityFrom.getNamePath(MElementService.PATHNAME) +
+        return  entityFrom.getNamePath() +
                 Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
                 naming +
                 Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
-                entityTo.getNamePath(MElementService.PATHNAME);
+                entityTo.getNamePath();
 
     }
 

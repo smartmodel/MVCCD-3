@@ -196,8 +196,8 @@ public class EntityInputContent extends PanelInputContentId {
     }
 
     @Override
-    protected MCDElement getParentByNamePath(int pathname, String text) {
-        return IMCDModelService.getMCDContEntitiesByNamePath(iMCDModelContainer, MElementService.PATHNAME, text);
+    protected MCDElement getParentByNamePath(String namePath) {
+        return IMCDModelService.getMCDContEntitiesByNamePath(iMCDModelContainer, namePath);
     }
 
     @Override

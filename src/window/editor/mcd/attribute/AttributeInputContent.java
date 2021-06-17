@@ -652,7 +652,7 @@ public class AttributeInputContent extends PanelInputContentId implements Action
     }
 
     @Override
-    protected MCDElement getParentByNamePath(int pathname, String text) {
+    protected MCDElement getParentByNamePath(String namePath) {
         return null;
     }
 

@@ -118,7 +118,7 @@ public class ProjectLoaderXml {
             validator.validate(new DOMSource(document));
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            //TODO-PAS STB faire un throw(e) - Intégration dans la transaction
+            //#MAJ 2021-06-06 TODO-PAS STB faire un throw(e) - Intégration dans la transaction
             throw (e);
             //e.printStackTrace();
         }

@@ -62,8 +62,6 @@ public class AssociationInputContent extends PanelInputContentId {
 
     private AssEndInputContent assEndInputContent = new AssEndInputContent();
 
-    //TODO-0 MCDElementService.PATHNAME , remplacer par SHORT
-    private int modePathName =  MElementService.PATHNAME;
 
     // Pour la factorisation des 2 extrémités
     private String factorizeTitle = "";
@@ -170,7 +168,7 @@ public class AssociationInputContent extends PanelInputContentId {
 
         factorizeFieldEntity.addItem(SComboBox.LINEWHITE);
         for (MCDEntity mcdEntity : mcdEntities) {
-            factorizeFieldEntity.addItem(mcdEntity.getNamePath(modePathName));
+            factorizeFieldEntity.addItem(mcdEntity.getNamePath());
         }
         factorizeFieldEntity.addFocusListener(this);
         factorizeFieldEntity.addItemListener(this);
@@ -733,9 +731,9 @@ public class AssociationInputContent extends PanelInputContentId {
         //IMCDModel imcdModel = mcdAssociation.getIMCDModelAccueil();
 
         String text = (String) fieldFromEntity.getSelectedItem();
-        MCDEntity mcdEntity = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, modePathName, text);
+        MCDEntity mcdEntity = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, text);
         text = (String) fieldToEntity.getSelectedItem();
-        MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, modePathName, text);
+        MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, text);
 
         MCDAssEnd mcdAssEnd = null;
         if (mcdAssociation != null){
@@ -775,9 +773,9 @@ public class AssociationInputContent extends PanelInputContentId {
         // IMCDModel imcdModel = mcdAssociation.getIMCDModelAccueil();
 
         String text = (String) fieldToEntity.getSelectedItem();
-        MCDEntity mcdEntity = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, modePathName, text);
+        MCDEntity mcdEntity = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, text);
         text = (String) fieldFromEntity.getSelectedItem();
-        MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, modePathName, text);
+        MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, text);
 
 
         MCDAssEnd mcdAssEnd= null;
@@ -900,9 +898,9 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
     @Override
-    protected MCDElement getParentByNamePath(int pathname, String text) {
+    protected MCDElement getParentByNamePath(String namePath) {
         //return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
-        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, MElementService.PATHNAME, text);
+        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, namePath);
     }
 
 
@@ -1072,7 +1070,7 @@ public class AssociationInputContent extends PanelInputContentId {
     private void loadDatasAssEnd(int direction, MCDAssEnd mcdAssEnd) {
         factorizeAssEnd(direction);
         if (mcdAssEnd.getMcdEntity() != null) {
-            SComboBoxService.selectByText(factorizeFieldEntity, mcdAssEnd.getMcdEntity().getNamePath(modePathName));
+            SComboBoxService.selectByText(factorizeFieldEntity, mcdAssEnd.getMcdEntity().getNamePath());
         }
         factorizeFieldRoleName.setText(mcdAssEnd.getName());
         factorizeFieldRoleShortName.setText(mcdAssEnd.getShortName());
@@ -1195,12 +1193,12 @@ public class AssociationInputContent extends PanelInputContentId {
 
     public MCDEntity getMCDEntityTo(){
         return IMCDModelService.getMCDEntityByNamePath(
-                iMCDModelContainer, modePathName, (String) fieldToEntity.getSelectedItem());
+                iMCDModelContainer, (String) fieldToEntity.getSelectedItem());
     }
 
     public MCDEntity getMCDEntityFrom(){
         return IMCDModelService.getMCDEntityByNamePath(
-                iMCDModelContainer, modePathName, (String) fieldFromEntity.getSelectedItem());
+                iMCDModelContainer, (String) fieldFromEntity.getSelectedItem());
     }
 
     public void factorizeAssEnd(int direction){
@@ -1252,9 +1250,5 @@ public class AssociationInputContent extends PanelInputContentId {
 
     public SComboBox getFieldNature() {
         return fieldNature;
-    }
-
-    public int getModePathName() {
-        return modePathName;
     }
 }

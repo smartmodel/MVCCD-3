@@ -358,7 +358,7 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
     }
 
     @Override
-    protected MCDElement getParentByNamePath(int pathname, String text) {
+    protected MCDElement getParentByNamePath(String namePath) {
         return null;
     }
 

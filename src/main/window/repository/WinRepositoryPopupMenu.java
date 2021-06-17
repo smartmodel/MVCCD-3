@@ -6,7 +6,6 @@ import datatypes.MDDatatype;
 import diagram.mcd.MCDDiagram;
 import exceptions.service.ExceptionService;
 import m.interfaces.IMCompletness;
-import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
@@ -15,7 +14,6 @@ import mcd.*;
 import mcd.interfaces.IMCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDModel;
-import mcd.services.MCDElementService;
 import mdr.MDRRelationFK;
 import messages.MessagesBuilder;
 import mldr.*;
@@ -41,8 +39,6 @@ import repository.editingTreat.mpdr.MPDRModelEditingTreat;
 import repository.editingTreat.naming.NamingEditingTreat;
 import repository.editingTreat.preferences.*;
 import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 import utilities.DefaultMutableTreeNodeService;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
@@ -341,7 +337,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     IMLDRElementWithSource imldrElementWithSource = (IMLDRElementWithSource) mvccdElement;
                     MCDElement mcdElementSource = imldrElementWithSource.getMcdElementSource();
                     String message = "Classe : " + mcdElementSource.getClass().getName();
-                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNamePathSource();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNameSourcePath();
                     //ProjectElement projectElement = (ProjectElement) mvccdElement;
                     //message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
                     message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mcdElementSource.getIdProjectElement();
@@ -722,7 +718,19 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
+                    Preferences preferences = PreferencesManager.instance().preferences();
+
+                    // Mémorisation de la préférence qui peut être modifiée
+                    String pathNaming = preferences.getMCD_TREE_NAMING_ASSOCIATION();
+
+                    // Appel du formulaire
                     (new NamingEditingTreat()).treatNaming(mvccdWindow, mvccdElement);
+
+                    //Remise en l'état initial de la préférence
+                    if ( ! preferences.getMCD_TREE_NAMING_ASSOCIATION().equals(pathNaming)){
+                        preferences.setMCD_TREE_NAMING_ASSOCIATION(pathNaming);
+                    }
+
                 } catch (Exception e) {
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.naming");
                 }

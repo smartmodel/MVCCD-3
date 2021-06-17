@@ -36,8 +36,6 @@ public class LinkInputContent extends PanelInputContentId {
     private SComboBox fieldAssociation = new SComboBox(this, labelAssociation);
 
 
-    //TODO-0 MCDElementService.PATHNAME , remplacer par SHORT
-    private int modePathName =  MElementService.PATHNAME;
 
 
     public LinkInputContent(LinkInput linkInput)     {
@@ -65,7 +63,7 @@ public class LinkInputContent extends PanelInputContentId {
 
         fieldEntity.addItem(SComboBox.LINEWHITE);
         for (MCDEntity mcdEntity : mcdEntities) {
-            fieldEntity.addItem(mcdEntity.getNamePath(modePathName));
+            fieldEntity.addItem(mcdEntity.getNamePath());
         }
         fieldEntity.addFocusListener(this);
         fieldEntity.addItemListener(this);
@@ -234,9 +232,9 @@ public class LinkInputContent extends PanelInputContentId {
     }
 
     @Override
-    protected MCDElement getParentByNamePath(int pathname, String text) {
+    protected MCDElement getParentByNamePath(String namePath) {
         //return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
-        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, MElementService.PATHNAME, text);
+        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer,namePath);
     }
 
 
@@ -290,7 +288,7 @@ public class LinkInputContent extends PanelInputContentId {
         }
         if (mcdLinkEndEntity.getmElement() != null) {
             SComboBoxService.selectByText(fieldEntity,
-                    ((MCDEntity) mcdLinkEndEntity.getmElement()).getNamePath(modePathName));
+                    ((MCDEntity) mcdLinkEndEntity.getmElement()).getNamePath());
         }
 
         MCDLinkEnd  mcdLinkEndAssociation = null;
@@ -338,7 +336,7 @@ public class LinkInputContent extends PanelInputContentId {
 
     public MCDEntity getMCDEntity(){
         return IMCDModelService.getMCDEntityByNamePath(
-                iMCDModelContainer, modePathName, (String) fieldEntity.getSelectedItem());
+                iMCDModelContainer, (String) fieldEntity.getSelectedItem());
     }
 
     public MCDAssociation getMCDAssociation(){
@@ -354,9 +352,6 @@ public class LinkInputContent extends PanelInputContentId {
         return fieldAssociation;
     }
 
-    public int getModePathName() {
-        return modePathName;
-    }
 
     protected boolean checkName(boolean unitaire) { return true;};
     protected boolean checkShortName(boolean unitaire) { return true;};

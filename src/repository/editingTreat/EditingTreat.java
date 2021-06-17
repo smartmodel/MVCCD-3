@@ -125,7 +125,7 @@ public abstract class EditingTreat {
                 if (showDialog) {
                     elementNameInContext = mvccdElement.getNameTree();
                 } else {
-                    elementNameInContext = ((MCDElement) mvccdElement).getNamePath(MElementService.PATHSHORTNAME);
+                    elementNameInContext = ((MCDElement) mvccdElement).getNamePath();
                 }
                String message = MessagesBuilder.getMessagesProperty("dialog.completness.error",
                         new String[]{messageElement, elementNameInContext});

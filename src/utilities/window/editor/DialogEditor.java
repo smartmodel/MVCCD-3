@@ -330,7 +330,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         if ( getMvccdElementCrt() instanceof MElement){
             //String treeNaming = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
             //TODO-1 A paramétrer avec treeNaming
-            return ((MElement) getMvccdElementCrt()).getNameTreePath(MElementService.PATHNAME);
+            return ((MElement) getMvccdElementCrt()).getNameTreePath();
         } else {
             return getMvccdElementCrt().getNameTree();
         }

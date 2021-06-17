@@ -61,7 +61,7 @@ public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
 
         //Initialisation de l'entité de départ
         if (entityFrom  != null){
-            SComboBoxService.selectByText(content.getFieldFromEntity(), entityFrom.getNamePath(content.getModePathName()));
+            SComboBoxService.selectByText(content.getFieldFromEntity(), entityFrom.getNamePath());
             if (initFrozen)  {
                 content.getFieldFromEntity().setReadOnly(true);
             }
@@ -69,7 +69,7 @@ public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
 
         //Initialisation de l'entité d'arrivée
         if (entityTo  != null) {
-            SComboBoxService.selectByText(content.getFieldToEntity(), entityTo.getNamePath(content.getModePathName()));
+            SComboBoxService.selectByText(content.getFieldToEntity(), entityTo.getNamePath());
             if (initFrozen)  {
                 content.getFieldToEntity().setReadOnly(true);
             }

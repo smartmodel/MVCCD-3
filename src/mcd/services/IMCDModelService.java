@@ -127,10 +127,9 @@ public class IMCDModelService {
     }
 
     public static MCDEntity getMCDEntityByNamePath(IMCDModel imcdModel,
-                                                   int pathMode,
                                                    String namePath){
         return (MCDEntity) IMCDModelService.getMCDElementByClassAndNamePath(imcdModel, false,
-                MCDEntity.class.getName(), pathMode, namePath);
+                MCDEntity.class.getName(), namePath);
     }
 
 
@@ -210,9 +209,12 @@ public class IMCDModelService {
         return resultat;
     }
 
-    public static MCDElement getMCDElementByClassAndNamePath(IMCDModel imcdModel, boolean withModel, String className, int pathMode, String namePath){
+    public static MCDElement getMCDElementByClassAndNamePath(IMCDModel imcdModel,
+                                                             boolean withModel,
+                                                             String className,
+                                                             String namePath){
         for (MCDElement mcdElement: getMCDElementsByClassName(imcdModel, withModel, className)){
-            if (mcdElement.getNamePath(pathMode).equals(namePath)){
+            if (mcdElement.getNamePath().equals(namePath)){
                 return mcdElement;
             }
         }
@@ -324,9 +326,9 @@ public class IMCDModelService {
     }
 
 
-    public static MCDContEntities getMCDContEntitiesByNamePath(IMCDModel imcdModel, int pathMode, String namePath){
+    public static MCDContEntities getMCDContEntitiesByNamePath(IMCDModel imcdModel, String namePath){
         for (MCDContEntities mcdContEntities : IMCDModelService.getMCDContEntities(imcdModel)){
-            if (mcdContEntities.getNamePath(pathMode).equals(namePath)){
+            if (mcdContEntities.getNamePath().equals(namePath)){
                 return mcdContEntities;
             }
         }
@@ -345,10 +347,9 @@ public class IMCDModelService {
     }
 
     public static MCDContRelations getMCDContRelationsByNamePath(IMCDModel imcdModel,
-                                                                 int pathMode,
                                                                  String namePath){
         for (MCDContRelations mcdContRelation : IMCDModelService.getMCDContRelations(imcdModel)){
-            if (mcdContRelation.getNamePath(pathMode).equals(namePath)){
+            if (mcdContRelation.getNamePath().equals(namePath)){
                 return mcdContRelation;
             }
         }

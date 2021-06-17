@@ -32,12 +32,10 @@ public abstract class MElement extends ProjectElement {
      * Le path d'un objet est constitué de l'arborescence des ancêtres de l'objet.
      * Pour autant que name soit obligatoire pour une classe, cette méthode peut faire office d'identifiant unique
      * naturel (UID) ! (par ex: des entités de même nom dans des paquetages différents)
-     * @param pathMode Permet de choisir de créer le path avec le name ou le shortName des parents successifs. Valeurs
-     *                 possibles: MVCCDElementService.PATHNAME et PATHSHORTNAME.
-     */
-    public String getNamePath(int pathMode) {
+     * */
+    public String getNamePath() {
         String separator = Preferences.PATH_NAMING_SEPARATOR;
-        String path = getPath(pathMode, separator);
+        String path = getPath();
         if (StringUtils.isNotEmpty(path)){
             return path + separator + getName();
         } else {
@@ -45,14 +43,14 @@ public abstract class MElement extends ProjectElement {
         }
     }
 
-    public String getNamePathReverse(int pathMode) {
-        return MElementService.reversePath(getNamePath(pathMode));
+    public String getNamePathReverse() {
+        return MElementService.reversePath(getNamePath());
     }
 
-
-    public String getShortNamePath(int pathMode) {
+/*
+    public String getShortNamePath() {
         String separator = Preferences.PATH_NAMING_SEPARATOR;
-        String path = getPath(pathMode, separator);
+        String path = getPath();
         if (StringUtils.isNotEmpty(path)){
             return path + separator + getShortName();
         } else {
@@ -60,18 +58,26 @@ public abstract class MElement extends ProjectElement {
         }
     }
 
-    public String getShortNamePathReverse(int pathMode) {
-        return MElementService.reversePath(getShortNamePath(pathMode));
+
+
+    public String getShortNamePathReverse() {
+        return MElementService.reversePath(getShortNamePath());
     }
+
+ */
+
+
 
 
     /**
      * Au même titre que getNamePath(), retourne le path et le shortName d'un objet.
      * La différence est que le namePath est construit avec la méthode getShortNameSmart(), afin d'utiliser le name si shortName est nul.
      */
+
+    /*
     public String getShortNameSmartPath() {
         String separator = Preferences.PATH_NAMING_SEPARATOR;
-        String path = getPath( MElementService.PATHSHORTNAME, separator);
+        String path = getPath();
         if (StringUtils.isNotEmpty(path)){
             return path + separator + getShortNameSmart();
         } else {
@@ -83,16 +89,29 @@ public abstract class MElement extends ProjectElement {
         return MElementService.reversePath(getShortNameSmartPath());
     }
 
+     */
+
 
 
     /**
      * Retourne le chemin d'accès d'un élément .
      * Par exemple: le ou les paquetages qui contiennent uner entité.
      */
-    public String getPath(int pathMode, String separator) {
-        return MElementService.getPath((MElement) this, pathMode, separator);
+
+    public String getPath() {
+        return MElementService.getPath(this);
     }
 
+
+    public String getPathReverse() {
+        return MElementService.reversePath(getPath());
+    }
+
+    public String getPathFirstLevel() {
+        return MElementService.getPathFirstLevel(this);
+    }
+
+    /*
     public String getShortPath(String separator) {
         return MElementService.getPath((MElement) this, MElementService.PATHSHORTNAME, separator);
     }
@@ -101,7 +120,17 @@ public abstract class MElement extends ProjectElement {
         return MElementService.getPath((MElement) this, MElementService.PATHNAME, separator);
     }
 
-    public String getNameTreePath(int pathMode){
-        return  this.getPath(pathMode, Preferences.PATH_NAMING_SEPARATOR) + Preferences.PATH_NAMING_SEPARATOR +getNameTree();
+    */
+
+    public String getPathCustomized(String pathMode, String separator) {
+        return MElementService.getPathCustomized((MElement) this, pathMode, separator);
+    }
+
+    public String getNameTreePath(){
+        if (StringUtils.isEmpty(getPath())) {
+            return getNameTree();
+        } else {
+            return getPath() + Preferences.PATH_NAMING_SEPARATOR + getNameTree();
+        }
     }
 }

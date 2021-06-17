@@ -148,6 +148,8 @@ public class Preferences extends MVCCDElement {
 
     // Path de nommage au niveau des objets  (Modèle.paquetatge.entité....
     public static String PATH_NAMING_SEPARATOR = ".";
+    // Séparation entre conteneur de modèle et nommage d'association qui contient déjà des séparateurs "."
+    public static String PATH_NAMING_RELATION_SEPARATOR = "!";
 
     public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
     public static Integer MVCCD_WINDOW_WIDTH = 1200;

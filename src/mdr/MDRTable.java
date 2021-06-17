@@ -35,7 +35,7 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
         if (resultat.size() == 1){
             return resultat.get(0) ;
         }
-        throw new CodeApplException("La table  " + this.getNamePath(MElementService.PATHNAME) + "retourne : " + resultat.size() + " PK.");
+        throw new CodeApplException("La table  " + this.getNamePath() + "retourne : " + resultat.size() + " PK.");
     }
 
 
@@ -121,7 +121,7 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
         if (mdrColumnsPKProper.size() == 1){
             return mdrColumnsPKProper.get(0) ;
         }
-        throw new CodeApplException("La table  " + this.getNamePath(MElementService.PATHNAME) + "retourne : " + mdrColumnsPKProper.size() + " colonnes PK propres.");
+        throw new CodeApplException("La table  " + this.getNamePath() + "retourne : " + mdrColumnsPKProper.size() + " colonnes PK propres.");
 
     }
 

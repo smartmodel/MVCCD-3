@@ -46,18 +46,7 @@ public class MCDGSEnd extends MCDRelEnd  {
 
 
 
-    @Override
     public String getNameTree() {
-        return getNameTreeOrSource(MCDRelEndService.TREE);
-    }
-
-    @Override
-    public String getNameSource() {
-        return getNameTreeOrSource(MCDRelEndService.SOURCE);
-    }
-
-
-    public String getNameTreeOrSource(int scope) {
 
         String namingGeneralization ;
 
@@ -68,6 +57,21 @@ public class MCDGSEnd extends MCDRelEnd  {
         }
 
         return MCDRelEndService.getNameTree(this, namingGeneralization);
+    }
+
+
+    @Override
+    public String getNameSource() {
+
+        String namingGeneralization ;
+
+        if (this.getDrawingDirection() == MCDGSEnd.GEN){
+            namingGeneralization = Preferences.MCD_NAMING_GENERALIZATION_SPECIALIZE ;
+        } else {
+            namingGeneralization = Preferences.MCD_NAMING_GENERALIZATION_GENERALIZE ;
+        }
+
+        return MCDRelEndService.nameTreeToNameSource(getNameTree(), namingGeneralization);
     }
 
 

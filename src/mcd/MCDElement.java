@@ -1,12 +1,10 @@
 package mcd;
 
 import exceptions.CodeApplException;
-import m.services.MElementService;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDElementConvert;
 import mcd.services.MCDElementService;
 import md.MDElement;
-import preferences.Preferences;
 import project.ProjectElement;
 
 import java.util.ArrayList;
@@ -34,18 +32,22 @@ public abstract class MCDElement extends MDElement {
 
 
     public String getNameSource(){
+        /*
         if (getName() != null) {
             return getName();
         }
         else if (getShortName() != null) {
             return getShortName();
         } else {
-            throw new CodeApplException("Impossible de créer un nom") ;
+            throw new CodeApplException("Impossible de créer le résultat de getNameSource()") ;
         }
+
+         */
+         return getNameTree();
     }
 
-    public String getNamePathSource() {
-        return MCDElementService.getNamePathSource(this);
+    public String getNameSourcePath() {
+        return MCDElementService.getNameSourcePath(this);
     }
 
     public IMCDModel getIMCDModelAccueil(){
@@ -56,7 +58,7 @@ public abstract class MCDElement extends MDElement {
         if (super.getParent() instanceof MCDElement){
             return (MCDElement) super.getParent();
         } else {
-            throw new CodeApplException("Le parent de "  + this.getNamePath(MElementService.PATHNAME) + " n'est pas descendant de MCDElement");
+            throw new CodeApplException("Le parent de "  + this.getNamePath() + " n'est pas descendant de MCDElement");
         }
     }
 

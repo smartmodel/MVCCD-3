@@ -116,11 +116,7 @@ public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElem
 
     public abstract ArrayList<Constraint> getToConstraints(); // Contraintes UML
 
-    public String getNameSource() {
-        return MCDRelEndService.getNameSource(getNameTree());
-    }
-
-
+    public abstract String getNameSource();
 
     public  ImageIcon getImageIconLong(){
         String strFileImage = getFileImageIconLong();

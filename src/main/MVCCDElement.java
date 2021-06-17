@@ -4,6 +4,7 @@ import exceptions.CodeApplException;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
 import utilities.Debug;
+import utilities.Trace;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -142,7 +143,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
 
 
     public String getLongNameSmart() {
-        if (longName != null) {
+        if (StringUtils.isNotEmpty(longName)) {
             return longName;
         } else {
             return name;

@@ -26,7 +26,7 @@ public class ExceptionService {
             //String nameMVCCDElement = mvccdElement.getNameTree();
             String nameElement = mvccdElement.getName();
             if (mvccdElement instanceof MElement) {
-                nameElement = ((MElement)mvccdElement).getNamePath(MElementService.PATHNAME);
+                nameElement = ((MElement)mvccdElement).getNamePath();
             }
             String nameClassMVCCDElement = mvccdElement.getClass().getName();
             String message = MessagesBuilder.getMessagesProperty(propertyMessage,
@@ -49,7 +49,7 @@ public class ExceptionService {
             //String nameMVCCDElement = mvccdElement.getNameTree();
             String nameElement = mvccdElement.getName();
             if (mvccdElement instanceof MElement) {
-                nameElement = ((MElement)mvccdElement).getNamePath(MElementService.PATHNAME);
+                nameElement = ((MElement)mvccdElement).getNamePath();
             }
             String nameClassMVCCDElement = mvccdElement.getClass().getName();
             String message = MessagesBuilder.getMessagesProperty(propertyMessage,

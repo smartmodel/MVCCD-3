@@ -51,4 +51,7 @@ Problèmes : Initialisation d'une relation en création
 //#MAJ 2021-05-30 NameTarget
 
 //#MAJ 2021-06-05 Formulaire Read avec changement de valeurs de paramétrage - NamingInputContent
+
 //#MAJ 2021-06-06 Formulaire PrefApplButtonsContent - Propriété superflue
+
+//#MAJ 2021-06-06 Suppression du paramétrage MElement.getPath() ; automatiquement la préférence de l'application

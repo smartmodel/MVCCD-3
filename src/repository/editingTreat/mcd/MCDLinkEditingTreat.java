@@ -37,7 +37,7 @@ public class MCDLinkEditingTreat extends MCDRelationEditingTreat {
         LinkInputContent content = (LinkInputContent) fen.getInput().getInputContent();
 
         if (mcdEntity  != null){
-            SComboBoxService.selectByText(content.getFieldEntity(), mcdEntity.getNamePath(content.getModePathName()));
+            SComboBoxService.selectByText(content.getFieldEntity(), mcdEntity.getNamePath());
             if (initFrozen)  {
                 content.getFieldEntity().setReadOnly(true);
             }

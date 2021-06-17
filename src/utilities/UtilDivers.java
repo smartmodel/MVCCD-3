@@ -176,4 +176,78 @@ public class UtilDivers {
         }
         throw new CodeApplException("str1:" + str1 +  "  -  str2:" + str2);
     }
+
+    public static String toEscapedForRegex (String str){
+        /*
+        char BLANK = ' ';
+        char DOT = '.';
+        String ESCAPE = "\\\\";
+        if (str != null){
+            String resultat = "";
+            char[] chars = str.toCharArray();
+            for (int i = 0  ; i < chars.length ; i++){
+                if (chars[i] == BLANK){
+                    resultat += ESCAPE + BLANK;
+                } else if (chars[i] == DOT){
+                    resultat += ESCAPE + DOT;
+                } else {
+                    resultat += chars[i];
+                }
+            }
+
+            return resultat;
+        } else {
+            return null;
+        }
+
+         */
+
+        char SP = ' ';
+        String UC_SP = "\\u0020";
+        char DOT = '.';
+        String UC_DOT = "\\u002E";
+        char LT = '<';
+        String UC_LT = "\\u003C";
+        char GT = '>';
+        String UC_GT = "\\u003E";
+        char PIPE = '|';
+        String UC_PIPE = "\\u007C";
+        char LOB = '[';  // Left Opening Bracket
+        String UC_LOB = "\\u005B";
+        char RCB = ']'; // Right Closing Bracket
+        String UC_RCB = "\\u005D";
+        char MINUS = '-';
+        String UC_MINUS = "\\u002D";
+        if (str != null){
+            String resultat = "";
+            char[] chars = str.toCharArray();
+            for (int i = 0  ; i < chars.length ; i++){
+                if (chars[i] == SP){
+                    resultat += UC_SP;
+                } else if (chars[i] == DOT) {
+                    resultat += UC_DOT;
+                } else if (chars[i] == LT) {
+                    resultat += UC_LT;
+                } else if (chars[i] == GT){
+                    resultat += UC_GT;
+                } else if (chars[i] == PIPE){
+                    resultat += UC_PIPE;
+                } else if (chars[i] == LOB){
+                    resultat += UC_LOB;
+                } else if (chars[i] == RCB){
+                    resultat += UC_RCB;
+                } else if (chars[i] == MINUS){
+                    resultat += UC_MINUS;
+                } else {
+                    resultat += chars[i];
+                }
+            }
+
+            return resultat;
+        } else {
+            return null;
+        }
+
+
+    }
 }

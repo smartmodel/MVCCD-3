@@ -56,17 +56,8 @@ public class MCDLinkEnd extends MCDRelEnd  {
         return (MCDEntity) this.getmElement();
     }
 
-    @Override
-    public String getNameTree() {
-        return getNameTreeOrSource(MCDRelEndService.TREE);
-    }
 
-    @Override
-    public String getNameSource() {
-        return getNameTreeOrSource(MCDRelEndService.SOURCE);
-    }
-
-    public String getNameTreeOrSource(int scope) {
+    public String getNameTree () {
 
         String namingLink ;
 
@@ -79,6 +70,20 @@ public class MCDLinkEnd extends MCDRelEnd  {
         return MCDRelEndService.getNameTree(this, namingLink);
     }
 
+
+    @Override
+    public String getNameSource() {
+
+        String namingLink ;
+
+        if (this.getDrawingDirection() == MCDLinkEnd.ELEMENT){
+            namingLink = Preferences.MCD_NAMING_LINK_ASSOCIATION ;
+        } else {
+            namingLink = Preferences.MCD_NAMING_LINK_ELEMENT ;
+        }
+
+        return MCDRelEndService.nameTreeToNameSource(getNameTree(), namingLink);
+    }
 
 
     @Override

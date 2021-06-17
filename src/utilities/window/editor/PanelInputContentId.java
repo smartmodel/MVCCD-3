@@ -68,7 +68,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
         if (getParentCandidates(iMCDModelContainer) != null) {
             for (MCDElement parentCandidate : getParentCandidates(iMCDModelContainer)) {
-                fieldParent.addItem(parentCandidate.getNamePath(MElementService.PATHNAME));
+                fieldParent.addItem(parentCandidate.getNamePath());
             }
         }
 
@@ -197,7 +197,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
     protected abstract String getNamingAndBrothersElements(int naming);
 
     protected abstract ArrayList<MCDElement> getParentCandidates(IMCDModel iMCDModelContainer);
-    protected abstract MCDElement getParentByNamePath(int pathname, String text);
+    protected abstract MCDElement getParentByNamePath(String namePath);
 
     protected String getNaming(int naming) {
 
@@ -310,7 +310,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
 
     protected void initDatas() {
         MCDElement parent = (MCDElement) getEditor().getMvccdElementParent() ;
-        SComboBoxService.selectByText(fieldParent, parent.getNamePath(MElementService.PATHNAME));
+        SComboBoxService.selectByText(fieldParent, parent.getNamePath());
 
         fieldName.setText("");
         fieldShortName.setText("");
@@ -330,7 +330,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
         parent = (MCDElement) mvccdElement.getParent();
 
 
-        SComboBoxService.selectByText(fieldParent, parent.getNamePath(MElementService.PATHNAME));
+        SComboBoxService.selectByText(fieldParent, parent.getNamePath());
 
         fieldName.setText(mvccdElement.getName());
 
@@ -364,9 +364,9 @@ public abstract class PanelInputContentId extends PanelInputContent {
     }
 
     public MCDElement getParentChoosed()     {
-        String text = (String) fieldParent.getSelectedItem();
-        return getParentByNamePath(MElementService.PATHNAME, text);
-    }
+        String namePath = (String) fieldParent.getSelectedItem();
+        return getParentByNamePath(namePath);
+     }
 
     public String getShortNameMode() {
         return shortNameMode;

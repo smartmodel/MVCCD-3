@@ -16,7 +16,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MCDGeneralization extends MCDRelation implements IMCompletness, IMCDParameter {
+public class MCDGeneralization extends MCDRelation implements IMCompletness {
 
     private  static final long serialVersionUID = 1000;
 
@@ -62,17 +62,10 @@ public class MCDGeneralization extends MCDRelation implements IMCompletness, IMC
 
     @Override
     public String getNameTree(){
-        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_GENERALIZATION, false, null);
-    }
+        MCDGSEnd gen = this.getGen();
+        MCDGSEnd spec= this.getSpec();
 
-    public String getNamePath(int pathMode){
-        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_GENERALIZATION, true, pathMode);
-    }
-
-    @Override
-    public String getNameTarget() {
-        //#MAJ 2021-05-30 NameTarget
-        return null;
+        return gen.getPath() + Preferences.MCD_NAMING_GENERALIZATION + spec.getPathReverse();
     }
 
     public MCDGSEnd getMCDAssGSOpposite(MCDGSEnd mcdGSEnd) {

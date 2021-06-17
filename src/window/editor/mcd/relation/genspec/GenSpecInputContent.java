@@ -40,9 +40,6 @@ public class GenSpecInputContent extends PanelInputContentId {
     private JPanel factorizePanelEndGS = null;
     private SComboBox factorizeFieldEntity = null;
 
-    //TODO-0 MCDElementService.PATHNAME , remplacer par SHORT
-    private int modePathName =  MElementService.PATHNAME;
-
 
     public GenSpecInputContent(GenSpecInput genSpecInput)     {
         super(genSpecInput);
@@ -86,7 +83,7 @@ public class GenSpecInputContent extends PanelInputContentId {
 
         factorizeFieldEntity.addItem(SComboBox.LINEWHITE);
         for (MCDEntity mcdEntity : mcdEntities) {
-            factorizeFieldEntity.addItem(mcdEntity.getNamePath(modePathName));
+            factorizeFieldEntity.addItem(mcdEntity.getNamePath());
         }
         factorizeFieldEntity.addFocusListener(this);
         factorizeFieldEntity.addItemListener(this);
@@ -245,10 +242,12 @@ public class GenSpecInputContent extends PanelInputContentId {
         return MCDElementConvert.to(mcdContRelations);
     }
 
+
+
     @Override
-    protected MCDElement getParentByNamePath(int pathname, String text) {
+    protected MCDElement getParentByNamePath(String namePath) {
         //return (MCDElement) MCDContRelations.getMCDContRelationsByNamePath(modePathName, text);
-        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, MElementService.PATHNAME, text);
+        return IMCDModelService.getMCDContRelationsByNamePath(iMCDModelContainer, namePath);
     }
 
 
@@ -317,7 +316,7 @@ public class GenSpecInputContent extends PanelInputContentId {
     private void loadDatasGSEnd(int direction, MCDGSEnd mcdGSEnd) {
         factorizeAssEnd(direction);
         if (mcdGSEnd.getMcdEntity() != null) {
-            SComboBoxService.selectByText(factorizeFieldEntity, mcdGSEnd.getMcdEntity().getNamePath(modePathName));
+            SComboBoxService.selectByText(factorizeFieldEntity, mcdGSEnd.getMcdEntity().getNamePath());
         }
      }
 
@@ -361,12 +360,12 @@ public class GenSpecInputContent extends PanelInputContentId {
 
     public MCDEntity getMCDEntitySpec(){
         return IMCDModelService.getMCDEntityByNamePath(
-                iMCDModelContainer, modePathName, (String) fieldSpecEntity.getSelectedItem());
+                iMCDModelContainer, (String) fieldSpecEntity.getSelectedItem());
     }
 
     public MCDEntity getMCDEntityGen(){
         return IMCDModelService.getMCDEntityByNamePath(
-                iMCDModelContainer, modePathName, (String) fieldGenEntity.getSelectedItem());
+                iMCDModelContainer, (String) fieldGenEntity.getSelectedItem());
    }
 
    public void factorizeAssEnd(int direction){
@@ -396,9 +395,6 @@ public class GenSpecInputContent extends PanelInputContentId {
         return fieldSpecEntity;
     }
 
-    public int getModePathName() {
-        return modePathName;
-    }
 
     protected boolean checkName(boolean unitaire) { return true;};
     protected boolean checkShortName(boolean unitaire) { return true;};

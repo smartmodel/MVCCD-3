@@ -49,13 +49,11 @@ public class MCDElementService {
 
 
 
-    public static String getNamePathSource(MCDElement mcdElement) {
+    public static String getNameSourcePath(MCDElement mcdElement) {
         String resultat = "";
         //TODO-1 Prévoir une préfrérence propre à MCDElement getNamePathSource
         //Path de MCDElement
-        String sourceNaming = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
-        int pathNamingDefault = MElementService.getPathNamingFromPreference();
-        resultat = mcdElement.getPath(pathNamingDefault, Preferences.PATH_NAMING_SEPARATOR);
+        resultat = mcdElement.getPath();
 
         if (StringUtils.isNotEmpty(resultat)){
             resultat = resultat + Preferences.PATH_NAMING_SEPARATOR ;
@@ -84,7 +82,7 @@ public class MCDElementService {
             //Il ne faut pas remonter au parent
             return (IMCDModel) mcdElement ;
         } else{
-            throw new CodeApplException("Erreur de parcours  pour " + mcdElement.getNamePath(MElementService.PATHNAME));
+            throw new CodeApplException("Erreur de parcours  pour " + mcdElement.getNamePath());
         }
     }
 

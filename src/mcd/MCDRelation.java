@@ -7,6 +7,7 @@ import m.interfaces.IMRelation;
 import m.services.MElementService;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.services.MCDRelationService;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import stereotypes.Stereotype;
 
@@ -98,11 +99,20 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
 
     public abstract String getNameTree();
 
-    // A voir où cette méthode est utilisée
-    public String getNamePath(int pathMode){
-        String path = MElementService.getPath(this, pathMode, Preferences.PATH_NAMING_SEPARATOR);
-        String nameTree = getNameTree();
-        return path + "(" + nameTree + ")";
+    public String getNameTreePath(){
+        if (StringUtils.isEmpty(getPath())) {
+            return getNameTree();
+        } else {
+            return getPath() + Preferences.PATH_NAMING_RELATION_SEPARATOR + getNameTree();
+        }
+    }
+
+    public String getNameSourcePath(){
+        if (StringUtils.isEmpty(getPath())) {
+            return getNameSource();
+        } else {
+            return getPath() + Preferences.PATH_NAMING_RELATION_SEPARATOR + getNameSource();
+        }
     }
 
 

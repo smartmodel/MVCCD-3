@@ -37,13 +37,13 @@ public class MCDGeneralizationEditingTreat extends MCDRelationEditingTreat {
         GenSpecInputContent content = (GenSpecInputContent) fen.getInput().getInputContent();
 
         if (entityGen  != null){
-            SComboBoxService.selectByText(content.getFieldGenEntity(), entityGen.getNamePath(content.getModePathName()));
+            SComboBoxService.selectByText(content.getFieldGenEntity(), entityGen.getNamePath());
             if (initFrozen)  {
                 content.getFieldGenEntity().setReadOnly(true);
             }
         }
         if (entitySpec  != null) {
-            SComboBoxService.selectByText(content.getFieldSpecEntity(), entitySpec.getNamePath(content.getModePathName()));
+            SComboBoxService.selectByText(content.getFieldSpecEntity(), entitySpec.getNamePath());
             if (initFrozen)  {
                 content.getFieldSpecEntity().setReadOnly(true);
             }}

@@ -64,11 +64,10 @@ public class MCDLink extends MCDRelation {
 
     @Override
     public String getNameTree(){
-        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_LINK, false,null);
-    }
-
-    public String getNamePath(int pathMode){
-        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_LINK, true,pathMode);
+        MCDLinkEnd assEndEntity = this.getEndEntity();
+        MCDEntity entity = this.getEntity();
+        MCDAssociation association = this.getAssociation();
+        return assEndEntity.getPath() + Preferences.MCD_NAMING_LINK + association.getNameTreePath();
     }
 
     @Override

@@ -30,7 +30,7 @@ public class TreatmentService {
         MDElement mdElement = (MDElement) mvccdElement;
         String mdElementName = mdElement.getName();
         if (mdElement instanceof MCDElement){
-            mdElementName = ((MCDElement) mdElement).getNamePath(MElementService.PATHSHORTNAME);
+            mdElementName = ((MCDElement) mdElement).getNamePath();
         }
 
         String messageElement = MessagesBuilder.getMessagesProperty(propertyTheElement);

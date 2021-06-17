@@ -253,7 +253,7 @@ public class MCDTransformToColumn {
 
                  */
                 String message = MessagesBuilder.getMessagesProperty("mdrcolumn.build.name.attribute.error",
-                        new String[]{mcdEntityAccueil.getNamePath(MCDElement.SCOPESHORTNAME), mcdAttribute.getName()});
+                        new String[]{mcdEntityAccueil.getNamePath(), mcdAttribute.getName()});
                 if (StringUtils.isNotEmpty(e.getMessage())) {
                     message += System.lineSeparator() + e.getMessage();
                 }

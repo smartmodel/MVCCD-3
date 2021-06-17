@@ -107,23 +107,13 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
 
     @Override
     public String getNameTree() {
+        // rend en cas de de rôle (prioritaire) : nameRole ...
+        // rend en cas nom d'association : ... nameAss ...
 
         String namingRelation ;
 
         if (StringUtils.isNotEmpty(this.getName()) && StringUtils.isNotEmpty(this.getMCDAssEndOpposite().getName())){
             namingRelation = this.getName();
-            // Erreur - Ne pas donner le From To qui est incompréhensible pour l'utilisateur
-            /*
-            if (this.getDrawingDirection() == MCDAssEnd.FROM){
-                namingAssociation = namingAssociation +
-                        Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT ;
-
-            } else {
-                namingAssociation = namingAssociation  +
-                        Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT ;
-            }
-            */
-
         } else {
             namingRelation =  Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR + getMcdAssociation().getName() ;
         }
@@ -131,6 +121,13 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
 
         return MCDRelEndService.getNameTree(this, namingRelation);
     }
+
+
+    @Override
+    public String getNameSource() {
+        return MCDRelEndService.nameTreeToNameSource(getNameTree(), Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR);
+    }
+
 
     @Override
     public String getClassShortNameUI() {
@@ -141,35 +138,14 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
     public String getNameTarget() {
         //#MAJ 2021-05-30 NameTarget
 
-        String nameTarget = "";
+        String name = "";
         if (StringUtils.isNotEmpty(this.getName()) ){
-            nameTarget = this.getName();
+            name = this.getName();
         } else {
-            nameTarget =  getMcdAssociation().getName();
-        }
-        nameTarget = nameTarget + Preferences.PATH_NAMING_SEPARATOR;
-
-        MCDElement containerElement = (MCDElement) this.getmElement().getParent().getParent();
-        MVCCDElement containerElementOpposite = this.getMCDAssEndOpposite().getParent().getParent();
-
-        if (containerElement !=  containerElementOpposite){
-            //TODO-1 Prévoir une préfrérence propre à nameTarget
-            String targetNaming = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
-            boolean c1 = targetNaming.equals(Preferences.MCD_NAMING_NAME);
-            boolean c2 = targetNaming.equals(Preferences.MCD_NAMING_SHORT_NAME);
-
-            if (c1) {
-                nameTarget = nameTarget + this.getMcdEntity().getNamePathReverse(MElementService.PATHNAME);
-            } else if (c2){
-                nameTarget = nameTarget + this.getMcdEntity().getShortNameSmartPathReverse();
-            } else {
-                throw new CodeApplException("La préférence " + targetNaming + " est inexistante");
-            }
-        } else {
-            nameTarget = nameTarget + this.getMcdEntity().getName();
+            name =  getMcdAssociation().getName();
         }
 
-        return nameTarget;
+        return name + Preferences.PATH_NAMING_SEPARATOR + getPathReverse() ;
 
     }
 
