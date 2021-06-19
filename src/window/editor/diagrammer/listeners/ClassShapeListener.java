@@ -1,16 +1,17 @@
 package window.editor.diagrammer.listeners;
 
+import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.SwingUtilities;
 import window.editor.diagrammer.elements.ClassShape;
 import window.editor.diagrammer.services.DiagrammerService;
+import window.editor.diagrammer.utils.DiagrammerConstants;
 import window.editor.diagrammer.utils.GridUtils;
 
 public class ClassShapeListener extends MouseAdapter {
 
-  private Point origin;
+  private Point origin = null;
 
   @Override
   public void mousePressed(MouseEvent e) {
@@ -19,14 +20,30 @@ public class ClassShapeListener extends MouseAdapter {
   }
 
   @Override
+  public void mouseReleased(MouseEvent e) {
+    super.mouseReleased(e);
+    //origin = null;
+  }
+
+  @Override
   public void mouseDragged(MouseEvent e) {
-    super.mouseDragged(e);
+
     ClassShape shape = (ClassShape) e.getSource();
 
-    int differenceX = GridUtils.alignToGrid(e.getPoint().x - origin.x, DiagrammerService.getDrawPanel().getGridSize());
-    int differenceY = GridUtils.alignToGrid(e.getPoint().y - origin.y, DiagrammerService.getDrawPanel().getGridSize());
+    int differenceX = GridUtils.alignToGrid(e.getPoint().x - origin.x, DiagrammerService.getDrawPanel()
+        .getGridSize());
+    int differenceY = GridUtils.alignToGrid(e.getPoint().y - origin.y, DiagrammerService.getDrawPanel()
+        .getGridSize());
 
-    shape.updateRelations(differenceX, differenceY);
-  }
+
+
+    int cursor = shape.getCursor().getType();
+
+     if (cursor != Cursor.MOVE_CURSOR){
+        shape.updateRelations(0, 0, true);
+      } else{
+        shape.updateRelations(differenceX, differenceY, false);
+     }
+    }
 
 }

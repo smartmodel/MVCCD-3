@@ -35,7 +35,7 @@ public abstract class ClassShape extends SquaredShape {
     this.setBackgroundColor();
     this.drawZoneEnTete(graphics2D);
     this.drawZoneProprietes(graphics2D);
-    this.updateMinimumSize(graphics2D);
+   // this.updateMinimumSize(graphics2D);
   }
 
   private void addListeners(){
@@ -112,12 +112,12 @@ public abstract class ClassShape extends SquaredShape {
     this.setMinimumSize(new Dimension(this.getWidth(), height));
   }
 
-  public void updateRelations(int differenceX, int differenceY){
+  public void updateRelations(int differenceX, int differenceY, boolean isResize){
     for (IShape shape : DiagrammerService.drawPanel.getElements()){
       if (shape instanceof RelationShape){
         RelationShape relation = (RelationShape) shape;
         if (relation.getSource() == this || relation.getDestination() == this){
-          relation.updateFirstAndLastPointsAncrage(differenceX, differenceY, this);
+          relation.updateFirstAndLastPointsAncrage(differenceX, differenceY, this, isResize);
         }
       }
     }

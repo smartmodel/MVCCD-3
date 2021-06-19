@@ -447,6 +447,6 @@ public class DrawPanel extends JLayeredPane {
 
   public void endScroll() {
     // Mise à jour du panel et des scrollbars
-    //this.updatePanelAndScrollbars();
+    this.updatePanelAndScrollbars();
   }
 }

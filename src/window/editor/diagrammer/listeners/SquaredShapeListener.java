@@ -88,7 +88,6 @@ public class SquaredShapeListener extends MouseAdapter {
 
       int differenceX = GridUtils.alignToGrid(mouseClick.x - startPoint.x, DiagrammerService.getDrawPanel().getGridSize());
       int differenceY = GridUtils.alignToGrid(mouseClick.y - startPoint.y, DiagrammerService.getDrawPanel().getGridSize());
-      System.out.println();
 
       switch (cursor) {
         case Cursor.N_RESIZE_CURSOR: {
@@ -222,7 +221,6 @@ public class SquaredShapeListener extends MouseAdapter {
 
           break;
         }
-
       }
       this.component.setCursor(Cursor.getPredefinedCursor(cursor));
 

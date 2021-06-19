@@ -8,7 +8,6 @@ import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
 import window.editor.diagrammer.interfaces.IShape;
 import window.editor.diagrammer.listeners.RelationFocusListener;
 import window.editor.diagrammer.services.DiagrammerService;
@@ -107,84 +106,24 @@ public class RelationShape extends JComponent implements IShape {
     return new RelationPointAncrageShape((int) point2D.getX(), (int) point2D.getY());
   }
 
-  public void updateFirstAndLastPointsAncrage(int differenceX, int differenceY, ClassShape shape){
+  public void updateFirstAndLastPointsAncrage(int differenceX, int differenceY, ClassShape shape, boolean isResize){
+
 
     RelationPointAncrageShape point;
-    ClassShape leftShape = (ClassShape) GeometryUtils.getShapeOnTheLeft(this.source, this.destination);
-    ClassShape rightShape = (ClassShape) GeometryUtils.getShapeOnTheRight(this.source, this.destination);
-    RelationPointAncrageShape firstPoint = this.pointsAncrage.getFirst();
-    RelationPointAncrageShape lastPoint = this.pointsAncrage.getLast();
-
-    // Met à jour les points d'ancrage lorsque la ClassShape est déplacée ou resize
-    // TODO -> Faire les modifications lors d'un resize
-    if (shape == this.source){
-      point = this.pointsAncrage.getFirst();
-    } else{
-      point = this.pointsAncrage.getLast();
-    }
-
-/*
-    if (!GeometryUtils.pointIsInsideBounds(point, shape)){
-      point.setLocationDifference(differenceX, differenceY);
-
-
-    }*/
-
-/*
-    if (GeometryUtils.pointIsInsideBounds(point, shape)){
-      //Point p2 = SwingUtilities.convertPoint(source, point, DiagrammerService.drawPanel);
-      Point p = GeometryUtils.alignToClassShapeBounds(point, shape);
-      point.drag(p.x, p.y);
-      System.out.println("Point final : " + point);
-    }
-*/
-
-/*
-    if (this.pointsAncrage.size() == 2){
-      if (leftShape.getBounds().getMaxY() < rightShape.getBounds().getMinY()){
-        firstPoint.drag((int) leftShape.getBounds().getMaxX(), (int) leftShape.getBounds().getMaxY());
-        lastPoint.drag((int) rightShape.getBounds().getMinX(), (int) rightShape.getBounds().getMinY());
+     if (shape == this.source){
+        point = this.pointsAncrage.getFirst();
+      } else{
+        point = this.pointsAncrage.getLast();
       }
 
-      if (leftShape.getBounds().getMinY() > rightShape.getBounds().getMaxY()){
-        firstPoint.drag((int) leftShape.getBounds().getMaxX(), (int) leftShape.getBounds().getMinY());
-        lastPoint.drag((int) rightShape.getBounds().getMinX(), (int) rightShape.getBounds().getMaxY());
-      }
 
-      if (lastPoint.y > rightShape.getBounds().getMaxY()){
-        firstPoint.drag((int) leftShape.getBounds().getMaxX(), (int) rightShape.getBounds().getMaxY());
-        lastPoint.drag((int) rightShape.getBounds().getMinX(), (int) rightShape.getBounds().getMaxY());
-      }
+     // Todo -> Développer le traitement s'effectuant lors du resize d'une ClassShape
+     Point tempPoint = new Point(point.x + differenceX, point.y + differenceY);
+     if (GeometryUtils.pointIsAroundShape(tempPoint, shape)){
+       point.setLocationDifference(differenceX, differenceY);
+     }
 
-      if (lastPoint.y < rightShape.getBounds().getMinY()){
-        firstPoint.drag((int) leftShape.getBounds().getMaxX(), (int) rightShape.getBounds().getMinY());
-        lastPoint.drag((int) rightShape.getBounds().getMinX(), (int) rightShape.getBounds().getMinY());
-      }
-
-      if (firstPoint.y > leftShape.getBounds().getMaxY()){
-        firstPoint.drag((int) leftShape.getBounds().getMaxX(), (int) leftShape.getBounds().getMaxY());
-        lastPoint.drag((int) rightShape.getBounds().getMinX(), (int) leftShape.getBounds().getMaxY());
-      }
-
-      if (firstPoint.y < leftShape.getBounds().getMinY()){
-        firstPoint.drag((int) leftShape.getBounds().getMaxX(), (int) leftShape.getBounds().getMinY());
-        lastPoint.drag((int) rightShape.getBounds().getMinX(), (int) leftShape.getBounds().getMinY());
-      }
-    } else{
-      point.setLocationDifference(differenceX, differenceY);
-    }*/
-    point.setLocationDifference(differenceX, differenceY);
-
-
-
-
-/*    if (shape == this.source){
-      firstPoint.drag(firstPoint.x - differenceX, firstPoint.y);
-    } else if (shape == this.destination){
-      lastPoint.drag(lastPoint.x - differenceX, lastPoint.y);
-    }*/
-
-    DiagrammerService.drawPanel.repaint();
+     DiagrammerService.drawPanel.repaint();
 
   }
 
@@ -222,10 +161,12 @@ public class RelationShape extends JComponent implements IShape {
   }
 
   public void reindexAllPointsAncrage(){
-    for (int i = 0; i < this.pointsAncrage.size(); i++) {
-     this.pointsAncrage.get(i).setIndex(i);
-    }
+      for (int i = 0; i < this.pointsAncrage.size(); i++) {
+        this.pointsAncrage.get(i).setIndex(i);
+      }
+
   }
+
   public ClassShape getNearestClassShape(RelationPointAncrageShape pointAncrageIndex){
       Point sourcePoint = new Point((int) this.source.getBounds().getMaxX(), (int) this.source.getBounds().getMaxY());
       Point destinationPoint = new Point((int) this.destination.getBounds().getMinX(), (int) this.destination.getBounds().getMinY());

@@ -1,44 +1,40 @@
 package window.editor.diagrammer.elements;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.Objects;
 import window.editor.diagrammer.interfaces.IShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
 
 public class RelationPointAncrageShape extends Point implements IShape {
 
-  public int DIAMETER = 10;
+  public int DIAMETER = 7;
   private int index;
 
-  public RelationPointAncrageShape(int index) {
-    this.index = index;
-  }
 
   public RelationPointAncrageShape(Point p, int index) {
     super(p);
     this.index = index;
+    this.setSize(DIAMETER,DIAMETER);
+
   }
 
   public RelationPointAncrageShape(int x, int y) {
     super(x, y);
-  }
+    this.setSize(DIAMETER,DIAMETER);
 
-  public RelationPointAncrageShape(Point p) {
-    super(p);
   }
 
   public RelationPointAncrageShape(int x, int y, int index) {
     super(x, y);
     this.index = index;
+    this.setSize(DIAMETER,DIAMETER);
   }
 
   @Override
   public void setLocationDifference(int differenceX, int differenceY) {
-    this.setLocation(this.getX() + differenceX, this.getY() + differenceY);
+    this.translate(differenceX, differenceY);
   }
 
   @Override
@@ -52,7 +48,6 @@ public class RelationPointAncrageShape extends Point implements IShape {
 
   @Override
   public void zoom(int fromFactor, int toFactor) {
-    System.out.println("zoom");
     int newXPosition = this.getBounds().x * toFactor / fromFactor;
     int newYPosition = this.getBounds().y * toFactor / fromFactor;
     int newWidth = this.getBounds().width * toFactor / fromFactor;
@@ -62,6 +57,7 @@ public class RelationPointAncrageShape extends Point implements IShape {
     this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
     this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
   }
+
 
   @Override
   public void drag(int x, int y) {

@@ -7,6 +7,7 @@ import main.MVCCDManager;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
 import window.editor.diagrammer.elements.MCDEntityShape;
+import window.editor.diagrammer.services.DiagrammerService;
 
 public class MCDEntityShapeEditAction extends AbstractAction {
 
@@ -38,4 +39,6 @@ public class MCDEntityShapeEditAction extends AbstractAction {
     MCDEntity entity = (MCDEntity) mcdEntityEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getEntities());
     this.shape.setEntity(entity);
   }
+
+
 }
