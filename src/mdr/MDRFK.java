@@ -52,7 +52,7 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
     }
 
     public MDRRelationFK getMDRRelationFK() {
-        return (MDRRelationFK) ProjectService.getElementById(mdrRelationFKId);
+        return (MDRRelationFK) ProjectService.getProjectElementById(mdrRelationFKId);
     }
 
     public void setMDRRelationFK(MDRRelationFK mdrRelationFK) {
@@ -62,7 +62,7 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
     }
 
     public MDRPK getMdrPK() {
-        return (MDRPK) ProjectService.getElementById(mdrPKId);
+        return (MDRPK) ProjectService.getProjectElementById(mdrPKId);
     }
 
     public void setMdrPK(MDRPK mdrPK) {

@@ -2,7 +2,6 @@ package mdr;
 
 import project.ProjectElement;
 import project.ProjectService;
-import utilities.Trace;
 
 public abstract class MDRRelationFK extends MDRRelation{
 
@@ -40,7 +39,7 @@ public abstract class MDRRelationFK extends MDRRelation{
     }
 
     public MDRFK getMDRFK() {
-        return (MDRFK) ProjectService.getElementById(mdrFKId);
+        return (MDRFK) ProjectService.getProjectElementById(mdrFKId);
     }
 
     public void setMDRFK(MDRFK mdrfk) {

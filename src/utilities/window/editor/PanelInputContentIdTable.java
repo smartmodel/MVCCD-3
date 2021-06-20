@@ -1,6 +1,5 @@
 package utilities.window.editor;
 
-import console.ViewLogsManager;
 import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
 import m.MElement;
@@ -9,7 +8,6 @@ import main.MVCCDManager;
 import mcd.MCDElement;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDUtilService;
-import messages.MessagesBuilder;
 import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
@@ -517,7 +515,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
 
     private void updateOrderINProjectElement(Integer id, Integer order) {
-        ProjectElement projectElement = ProjectService.getElementById(id);
+        ProjectElement projectElement = ProjectService.getProjectElementById(id);
         projectElement.setOrder(order);
     }
 

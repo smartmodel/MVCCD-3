@@ -55,3 +55,8 @@ Problèmes : Initialisation d'une relation en création
 //#MAJ 2021-06-06 Formulaire PrefApplButtonsContent - Propriété superflue
 
 //#MAJ 2021-06-06 Suppression du paramétrage MElement.getPath() ; automatiquement la préférence de l'application
+
+//#MAJ 2021-06-18 Message intempestif relatif aux extension par défaut lors de la création d'un nouveau projet
+//#MAJ 2021-06-18B Save As - Message complémentaire de changement de nom de projet
+//#MAJ 2021-06-18C Attribut AID - pas d'affectation de propriété si dupliqué
+//#MAJ 2021-06-18D MCDDatatype autorisé pour NID (Généralisation)

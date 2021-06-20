@@ -404,7 +404,7 @@ public class MVCCDManager {
     public Resultat saveProject() {
         Resultat resultat ;
         if (fileProjectCurrent != null) {
-            resultat = saveProjectBase();
+            resultat = saveProjectBase("");
             //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
             if (isExtensionProjectFileNotEqual()) {
                 projectsRecents.add(fileProjectCurrent);
@@ -426,7 +426,8 @@ public class MVCCDManager {
         if (fileChoose != null){
             if (UtilFiles.confirmIfExist(mvccdWindow, fileChoose)) {
                 fileProjectCurrent = fileChoose;
-                resultat = saveProjectBase();
+                //#MAJ 2021-06-18B Save As - Message complémentaire de changement de nom de projet
+                resultat = saveProjectBase(MessagesBuilder.getMessagesProperty ("project.save.as.additionnal"));
                 projectsRecents.add(fileProjectCurrent);
                 changeActivateProjectOpenRecentsItems();
             }
@@ -434,7 +435,7 @@ public class MVCCDManager {
         return resultat;
     }
 
-    private Resultat saveProjectBase(){
+    private Resultat saveProjectBase(String messageAdditionnal){
         Resultat resultat = new Resultat();
         String message = MessagesBuilder.getMessagesProperty("project.save.start",
                 new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() } );
@@ -454,6 +455,7 @@ public class MVCCDManager {
             message = MessagesBuilder.getMessagesProperty ("project.save.finish.ok",
                     new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() });
 
+            message += System.lineSeparator() + messageAdditionnal;
         } catch (Exception e){
             resultat.addExceptionUnhandled(e);
             // pas de référence aux noms du projet et du fichier qui peuvent être une source d'erreur
@@ -471,6 +473,8 @@ public class MVCCDManager {
         String message = MessagesBuilder.getMessagesProperty("project.close", new String[] {project.getName()});
         resultat.add( new ResultatElement(message, ResultatLevel.INFO));
         project = null;
+        //#MAJ 2021-06-18 Message intempestif relatif aux extension par défaut lors de la création d'un nouveau projet
+        fileProjectCurrent = null;
         repository.removeProject();
         PreferencesManager.instance().setProfilePref(null);
         repository.removeProfile();

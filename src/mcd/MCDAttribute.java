@@ -3,6 +3,8 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import datatypes.MCDDatatype;
+import datatypes.MDDatatypeService;
 import m.interfaces.IMCompletness;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDParameter;
@@ -80,6 +82,10 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
 
     public String getDatatypeLienProg() {
         return datatypeLienProg;
+    }
+
+    public MCDDatatype getMCDDatatype() {
+        return MDDatatypeService.getMCDDatatypeByLienProg(datatypeLienProg);
     }
 
     public void setDatatypeLienProg(String datatypeLienProg) {

@@ -96,6 +96,7 @@ public class AttributeInputContent extends PanelInputContentId implements Action
         attributeNameAID.addFocusListener(this);
         //attributeNameAID.setCheckAdjustAutomatically(false);
 
+
         fieldName.setToolTipText("Nom de l'attribut");
 
         ArrayList<String> mcdDatatypesNames = MDDatatypesManager.instance().getMCDDatatypesNames(
@@ -438,43 +439,53 @@ public class AttributeInputContent extends PanelInputContentId implements Action
     private void changeFieldSelectedAid() {
         Preferences preferences = PreferencesManager.instance().preferences();
         if (panelInput != null) {
-            duplicateAid();
+            //#MAJ 2021-06-18C Attribut AID - pas d'affectation de propriété si dupliqué
+            if (!duplicateAid()){
+                //#MAJ 2021-03-03-A Empêcher le message de changement de valeur lors de la saisie de numDep comme nom de AID
+                if (StringUtils.isEmpty(fieldName.getText())){
+                    fieldName.setText((String) attributeNameAID.getFirstItem());
+                }
+                //TODO-1 Il faut présenter le nom dans l'interface utilisateur
+                SComboBoxService.selectByText(datatypeName, preferences.getMCD_AID_DATATYPE_LIENPROG());
+                datatypeSize.setText(preferences.getMCD_AID_SIZEDEFAULT());
+                mandatory.setSelected(true);
+                list.setSelected(false);
+                ordered.setSelected(false);
+                frozen.setSelected(true);
+                derivedValue.setText("");
+                initValue.setText("");
+            } else {
+                DialogMessage.showError(getEditor(),MessagesBuilder.getMessagesProperty("attribute.aid.duplicate.error"));
+            }
         }
-        //#MAJ 2021-03-03-A Empêcher le message de changement de valeur lors de la saisie de numDep comme nom de AID
-        if (StringUtils.isEmpty(fieldName.getText())){
-            fieldName.setText((String) attributeNameAID.getFirstItem());
-        }
-        //TODO-1 Il faut présenter le nomdans lé'interface utilisateur
-        SComboBoxService.selectByText(datatypeName, preferences.getMCD_AID_DATATYPE_LIENPROG());
-        datatypeSize.setText(preferences.getMCD_AID_SIZEDEFAULT());
-        mandatory.setSelected(true);
-        list.setSelected(false);
-        ordered.setSelected(false);
-        frozen.setSelected(true);
-        derivedValue.setText("");
-        initValue.setText("");
+
     }
 
 
-    private void duplicateAid() {
+    private boolean  duplicateAid() {
         MCDEntity mcdEntity = (MCDEntity) getEditor().getMvccdElementParent().getParent();
         MCDAttribute mcdAttributeAidExisting = mcdEntity.getMCDAttributeAID();
         boolean c1 = getEditor().getMode().equals(DialogEditor.NEW) &&
-                        (mcdAttributeAidExisting != null) ;
+                (mcdAttributeAidExisting != null) ;
         boolean c2 = getEditor().getMode().equals(DialogEditor.UPDATE) &&
-                        (mcdAttributeAidExisting != getEditor().getMvccdElementCrt());
+                (mcdAttributeAidExisting != getEditor().getMvccdElementCrt());
         if ( c1 || c2 ){
-            DialogMessage.showError(getEditor(),MessagesBuilder.getMessagesProperty("attribute.aid.duplicate.error"));
+            return true;
+        } else {
+            return false ;
         }
     }
 
     private void changeFieldDeSelectedAid() {
-        fieldName.setText("");
-        datatypeName.setSelectedFirst();
-        mandatory.setSelected(false);
-        list.setSelected(false);
-        ordered.setSelected(false);
-        frozen.setSelected(false);
+        //#MAJ 2021-06-18C Attribut AID - pas d'affectation de propriété si dupliqué
+        if (!duplicateAid()) {
+            fieldName.setText("");
+            datatypeName.setSelectedFirst();
+            mandatory.setSelected(false);
+            list.setSelected(false);
+            ordered.setSelected(false);
+            frozen.setSelected(false);
+        }
     }
 
 
@@ -869,6 +880,7 @@ public class AttributeInputContent extends PanelInputContentId implements Action
     @Override
     protected void enabledContent() {
         Preferences preferences = PreferencesManager.instance().preferences();
+
         fieldShortName.setEnabled( (!aid.isSelected()) &&
                 (!preferences.getMCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME().equals(Preferences.OPTION_NO)));
 
@@ -914,7 +926,7 @@ public class AttributeInputContent extends PanelInputContentId implements Action
 
     }
 
-   private void actionDatatypeTree() {
+    private void actionDatatypeTree() {
        MDDatatype mcdDatatypeRoot = MDDatatypesManager.instance().mcdDatatypeRoot();
        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(mcdDatatypeRoot);
 

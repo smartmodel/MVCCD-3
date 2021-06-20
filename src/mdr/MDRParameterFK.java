@@ -18,6 +18,6 @@ public abstract class MDRParameterFK extends MDRParameter {
     }
 
     public MDRColumn getColumnPK() {
-        return (MDRColumn) ProjectService.getElementById(columnPKId);
+        return (MDRColumn) ProjectService.getProjectElementById(columnPKId);
     }
 }

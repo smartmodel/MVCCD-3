@@ -120,7 +120,7 @@ public class UniqueInputContent extends UnicityInputContent {
                 boolean c2 = subType.equals(MCDAssociationNature.IDNATURAL.getText());
                 boolean c3 = subType.equals(MCDAssociationNature.CP.getText());
                 int idParam = (int) row[OperationParamTableColumn.ID.getPosition()];
-                MCDParameter mcdParam = (MCDParameter) ProjectService.getElementById(idParam);
+                MCDParameter mcdParam = (MCDParameter) ProjectService.getProjectElementById(idParam);
                 MCDAssEnd mcdAssEnd = (MCDAssEnd) mcdParam.getTarget();
                 MCDAssociation  mcdAssociation = (MCDAssociation) mcdAssEnd.getMcdAssociation();
                 boolean c4 = subType.equals(MCDAssociationNature.NOID.getText()) &&

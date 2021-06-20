@@ -69,7 +69,7 @@ public class LoadMessages {
 		
 		//Load the properties file present at the root of the project.
 		ResourceBundle bundle = null;
-		String language = Preferences.LANGUAGE;
+		String language = Preferences.LANGUAGE; //TODO-STB: tester avec autre langue que "fr": s'il n'y a pas de fichier de messages dans cette langue, une erreur devrait être générée.
 		if(language != null){ //if plugin.properties
 			bundle = ResourceBundle.getBundle(fileName, new Locale(language));
 		}else{

@@ -4,7 +4,6 @@ import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import exceptions.CodeApplException;
 import m.MElement;
-import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import mcd.*;
@@ -12,11 +11,9 @@ import mcd.interfaces.IMCDParameter;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.Trace;
 import window.editor.mcd.operation.parameter.ParameterEditor;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class MCDParameterService {
 
@@ -141,12 +138,15 @@ public class MCDParameterService {
             if (targetPotential instanceof MCDAttribute) {
                 MCDAttribute attributePotential = (MCDAttribute) targetPotential;
                 MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(attributePotential.getDatatypeLienProg());
+                //#MAJ 2021-06-18D MCDDatatype autorisé pour NID (Généralisation)
+                /*
                 MCDDatatype token = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_TOKEN_LIENPROG);
                 MCDDatatype positiveInteger = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_POSITIVEINTEGER_LIENPROG);
                 boolean c1 = mcdDatatype.isSelfOrDescendantOf(token) || mcdDatatype.isSelfOrDescendantOf(positiveInteger);
+                */
                 // Il doit y avoir un attribut obligatoire mais, d'autres optionnels
                 //boolean c2 = attributePotential.isMandatory();
-                if (c1 ) {
+                if (mcdDatatype.isAuthorizedForNID()) {
                         resultat.add(attributePotential);
                 }
             }

@@ -50,7 +50,7 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
 
     public IMDRParameter getTarget() {
         if (targetId != null) {
-            return (IMDRParameter) ProjectService.getElementById(targetId);
+            return (IMDRParameter) ProjectService.getProjectElementById(targetId);
         }
         return null;
     }

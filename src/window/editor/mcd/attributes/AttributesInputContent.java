@@ -4,23 +4,34 @@ import constraints.Constraint;
 import constraints.ConstraintService;
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
+import exceptions.service.ExceptionService;
 import m.MElement;
 import main.MVCCDElement;
-import mcd.MCDAttribute;
-import mcd.MCDContAttributes;
+import main.MVCCDElementFactory;
+import main.MVCCDManager;
+import mcd.*;
+import mcd.services.MCDNIDService;
+import preferences.Preferences;
+import project.ProjectElement;
+import project.ProjectService;
 import repository.editingTreat.mcd.MCDAttributeEditingTreat;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
+import utilities.Trace;
 import utilities.UtilDivers;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentTable;
 import utilities.window.services.PanelService;
 import window.editor.mcd.attribute.AttributeEditor;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class AttributesInputContent extends PanelInputContentTable {
+
+    protected JButton btnCreateNID1;
 
 
     public AttributesInputContent(AttributesInput attributesInput)    {
@@ -47,6 +58,12 @@ public class AttributesInputContent extends PanelInputContentTable {
     private void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
         panelInputContentCustom.add(panelTableComplete, gbc);
+
+        btnCreateNID1 = new JButton("Création de l'identifiant naturel");
+        btnCreateNID1.setEnabled(false);
+        btnCreateNID1.addActionListener(this);
+
+        panelButtons.add(btnCreateNID1);
 
         this.add(panelInputContentCustom);
     }
@@ -202,5 +219,42 @@ public class AttributesInputContent extends PanelInputContentTable {
         row[col] = defaultValue;
     }
 
+    protected void enabledContent() {
+        int pos = table.getSelectedRow();
+        if (pos >= 0){
+            btnCreateNID1.setEnabled(nid1Authorized(pos));
+        } else {
+            btnCreateNID1.setEnabled(false);
+        }
+        super.enabledContent();
+    }
+
+    private boolean nid1Authorized (int pos) {
+        MCDAttribute mcdAttribute = (MCDAttribute) getMElementSelected();
+
+        return MCDNIDService.attributeCandidateForNID1(mcdAttribute);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String propertyAction = "";
+        try {
+            Object source = e.getSource();
+            MCDAttribute mcdAttribute = (MCDAttribute) super.getMElementSelected();
+
+            if (source == btnCreateNID1) {
+                propertyAction = "editor.table.attributes.exception.createNID1";
+                if (MCDNIDService.confirmCreateNID1FromAttribute(getEditor().getOwner(), mcdAttribute)) {
+                    refreshRow(table.getSelectedRow());
+                }
+            }
+            super.actionPerformed(e);
+        } catch (Exception exception){
+            ExceptionService.exceptionUnhandled(exception, getEditor(),
+                    getEditor().getMvccdElementCrt(),
+                    "editor.table.attributes.exception",
+                    propertyAction);
+
+        }
+    }
 
 }

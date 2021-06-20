@@ -1,12 +1,10 @@
 package utilities.window.editor;
 
-import console.ViewLogsManager;
 import exceptions.service.ExceptionService;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.MCDConstraint;
-import messages.MessagesBuilder;
 import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
@@ -120,9 +118,7 @@ public abstract class PanelInputContentTable extends PanelInputContent
 
     protected void refreshRow(int selectedRow){
         int idElementSelected = (int) table.getValueAt(selectedRow, STableService.IDINDEX);
-        MElement mElementSelected = (MElement) ProjectService.getElementById(idElementSelected);
-
-        MCDConstraint constraint = (MCDConstraint) mElementSelected;
+        MElement mElementSelected = (MElement) ProjectService.getProjectElementById(idElementSelected);
 
         Object[] row = STableService.getRecord(table, selectedRow);
 
@@ -368,7 +364,7 @@ public abstract class PanelInputContentTable extends PanelInputContent
 
 
     private void updateOrderINProjectElement(Integer id, Integer order) {
-        ProjectElement projectElement = ProjectService.getElementById(id);
+        ProjectElement projectElement = ProjectService.getProjectElementById(id);
         projectElement.setOrder(order);
     }
 
@@ -440,12 +436,12 @@ public abstract class PanelInputContentTable extends PanelInputContent
         return newDimension;
     }
 
-    private MElement getMElementSelected() {
+    protected MElement getMElementSelected() {
         int posSelected = table.getSelectedRow();
         if (posSelected >= 0) {
             int idElementSelected = (int) table.getValueAt(posSelected, STableService.IDINDEX);
 
-            MElement mElementSelected = (MElement) ProjectService.getElementById(idElementSelected);
+            MElement mElementSelected = (MElement) ProjectService.getProjectElementById(idElementSelected);
             return mElementSelected;
         }
         return null;

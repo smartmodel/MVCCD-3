@@ -14,6 +14,7 @@ import mcd.*;
 import mcd.interfaces.IMCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDModel;
+import mcd.services.MCDNIDService;
 import mdr.MDRRelationFK;
 import messages.MessagesBuilder;
 import mldr.*;
@@ -162,6 +163,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             if (node.getUserObject() instanceof MCDAttribute) {
                 treatGeneric(this, new MCDAttributeEditingTreat());
+                MCDAttribute mcdAttribute = (MCDAttribute) node.getUserObject();
+                if (MCDNIDService.attributeCandidateForNID1(mcdAttribute)) {
+                    treatCreateNID1FromAttribute();
+                }
             }
 
             if (node.getUserObject() instanceof MCDContRelEnds) {
@@ -338,8 +343,6 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     MCDElement mcdElementSource = imldrElementWithSource.getMcdElementSource();
                     String message = "Classe : " + mcdElementSource.getClass().getName();
                     message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNameSourcePath();
-                    //ProjectElement projectElement = (ProjectElement) mvccdElement;
-                    //message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
                     message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mcdElementSource.getIdProjectElement();
 
                     new DialogMessage().showOk(mvccdWindow, message,
@@ -375,6 +378,27 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         });
 
     }
+
+
+
+    private void treatCreateNID1FromAttribute() {
+        JMenuItem source = new JMenuItem("Création NID-1");
+        this.add(source);
+        source.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    MCDNIDService.confirmCreateNID1FromAttribute(mvccdWindow, (MCDAttribute) node.getUserObject());
+                } catch (Exception e) {
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.attribute.nid1");
+                }
+            }
+        });
+
+    }
+
+
+
 
     private void treatProfile(ISMenu menu) {
     }
