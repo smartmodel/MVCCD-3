@@ -5,6 +5,8 @@ import main.MVCCDElement;
 import mdr.*;
 import mldr.MLDRParameter;
 import mldr.MLDRUnique;
+import mldr.interfaces.IMLDRElement;
+import mpdr.MPDRParameter;
 import mpdr.MPDRUnique;
 import preferences.Preferences;
 import utilities.window.scomponents.SCheckBox;
@@ -184,7 +186,10 @@ public class MDRUniqueInputContent extends PanelInputContentTableBasicIdMDR {
         }
 
         if (getEditor().getMvccdElementCrt() instanceof MPDRUnique){
-            row[col] = "Code à écrire !!!";
+            //row[col] = "Code à écrire !!!";
+            IMLDRElement imldrElement = ((MPDRParameter) mdrParameter).getMldrElementSource();
+            MLDRParameter mldrParameter = (MLDRParameter)  imldrElement;
+            row[col] = mldrParameter.getTargetMCDType();
         }
     }
 

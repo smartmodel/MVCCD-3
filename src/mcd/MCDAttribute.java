@@ -193,6 +193,12 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
             }
         }
 
+        if (partOfUniques().size()> 0){
+            for (MCDUnique unique : partOfUniques()){
+                resultat.add(unique.getDefaultStereotype());
+            }
+        }
+
         return resultat;
     }
 
@@ -230,7 +236,14 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
     public MCDEntity getEntityAccueil(){
         return (MCDEntity) getParent().getParent();
     }
+
     public ArrayList<MCDNID> partOfNIds(){
         return MCDAttributeService.partOfNIds(this);
     }
+
+
+    public ArrayList<MCDUnique> partOfUniques(){
+        return MCDAttributeService.partOfUniques(this);
+    }
+
 }

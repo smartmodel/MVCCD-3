@@ -2,10 +2,7 @@ package mcd.services;
 
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
-import mcd.MCDAttribute;
-import mcd.MCDEntity;
-import mcd.MCDNID;
-import mcd.MCDParameter;
+import mcd.*;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -62,6 +59,20 @@ public class MCDAttributeService {
             for (MCDParameter parameter : aNID.getMcdParameters()){
                 if ( parameter.getTarget() == mcdAttribute){
                     resultat.add(aNID);
+                }
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDUnique> partOfUniques(MCDAttribute mcdAttribute) {
+        ArrayList<MCDUnique> resultat = new ArrayList<MCDUnique>();
+        MCDEntity mcdEntity = mcdAttribute.getEntityAccueil();
+        ArrayList<MCDUnique>  allUniques = mcdEntity.getMCDContConstraints().getMCDUniques();
+        for (MCDUnique aUnique : allUniques){
+            for (MCDParameter parameter : aUnique.getMcdParameters()){
+                if ( parameter.getTarget() == mcdAttribute){
+                    resultat.add(aUnique);
                 }
             }
         }

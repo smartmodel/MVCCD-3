@@ -5,6 +5,7 @@ import mdr.MDRConstraint;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
 import mldr.MLDRPK;
+import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRPK;
@@ -38,6 +39,11 @@ public class MPDRPostgreSQLTable extends MPDRTable {
 
     @Override
     public MDRConstraint createFK(MLDRFK mldrFK) {
+        return null;
+    }
+
+    @Override
+    public MDRConstraint createUnique(MLDRUnique mldrUnique) {
         return null;
     }
 

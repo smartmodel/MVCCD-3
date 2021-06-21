@@ -498,6 +498,11 @@ public class MVCCDElementFactory {
         return mpdrOracleFK;
     }
 
+    public MPDROracleUnique createMPDROracleUnique(MDRContConstraints mdrContConstraints, MLDRUnique mldrUnique) {
+        MPDROracleUnique mpdrOracleUnique = new MPDROracleUnique(mdrContConstraints, mldrUnique);
+        return mpdrOracleUnique;
+    }
+
     public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, MLDRParameter mldrParameter){
         return new MPDROracleParameter( impdrOracleElement, mldrParameter);
     }

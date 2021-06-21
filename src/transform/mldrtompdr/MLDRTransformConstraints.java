@@ -5,6 +5,7 @@ import mdr.MDRConstraint;
 import mldr.MLDRFK;
 import mldr.MLDRPK;
 import mldr.MLDRTable;
+import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
 import mpdr.*;
 import mpdr.interfaces.IMPDRElement;
@@ -71,6 +72,11 @@ public class MLDRTransformConstraints {
                 mpdrConstraint = mpdrTable.createFK(mldrFK);
                 MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
             }
+            if (mldrConstraint instanceof MLDRUnique){
+                MLDRUnique mldrUnique = (MLDRUnique) mldrConstraint;
+                mpdrConstraint = mpdrTable.createUnique(mldrUnique);
+                MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
+            }
         }
 
         // Le temps de développement
@@ -104,6 +110,15 @@ public class MLDRTransformConstraints {
             MPDRFK mpdrFK = (MPDRFK) mpdrConstraint;
             if (mpdrFK.getNature() != mldrFK.getNature()) {
                 mpdrFK.setNature(mldrFK.getNature());
+            }
+        }
+
+        // Nature
+        if (mpdrConstraint instanceof MPDRUnique) {
+            MLDRUnique mldrUnique = (MLDRUnique) mldrConstraint;
+            MPDRUnique mpdrUnique = (MPDRUnique) mpdrConstraint;
+            if (mpdrUnique.getMdrUniqueNature() != mldrUnique.getMdrUniqueNature()) {
+                mpdrUnique.setMdrUniqueNature(mldrUnique.getMdrUniqueNature());
             }
         }
     }

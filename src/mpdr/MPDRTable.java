@@ -6,6 +6,7 @@ import mdr.MDRTable;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
 import mldr.MLDRPK;
+import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
 import mldr.services.MLDRColumnService;
 import mpdr.interfaces.IMPDRElement;
@@ -74,6 +75,9 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         return MPDRTableService.getMPDRConstraintByMLDRConstraintSource(this, mldrConstraint);
     }
 
+    public ArrayList<MPDRColumn> getMPDRColumns() {
+        return MPDRColumnService.to(getMDRColumns());
+    }
 
     public  abstract MPDRColumn createColumn(MLDRColumn mldrColumn);
 
@@ -82,7 +86,6 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public abstract MDRConstraint createFK(MLDRFK mldrFK);
 
-    public ArrayList<MPDRColumn> getMPDRColumns() {
-        return MPDRColumnService.to(getMDRColumns());
-    }
+
+    public abstract MDRConstraint createUnique(MLDRUnique mldrUnique);
 }

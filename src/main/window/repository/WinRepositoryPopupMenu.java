@@ -287,8 +287,16 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 treatGenericRead(this, new MDRColumnEditingTreat());
             }
 
+            if (node.getUserObject() instanceof MPDRPK) {
+                treatGenericRead(this, new MDRPKEditingTreat());
+            }
+
             if (node.getUserObject() instanceof MPDRFK) {
                 treatGenericRead(this, new MDRFKEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MPDRUnique) {
+                treatGenericRead(this, new MDRUniqueEditingTreat());
             }
 
             if (node.getUserObject() instanceof MPDRParameter) {

@@ -65,8 +65,6 @@ public class MCDNIDService {
 
 
     public static void createNID1FromAttribute(MCDAttribute mcdAttribute) {
-        Trace.println("Crée NID-1");
-
         // Création de la contrainte NID à partir de l'attribut
         MCDContConstraints mcdContConstraints = mcdAttribute.getEntityAccueil().getMCDContConstraints();
         MCDNID mcdNID = MVCCDElementFactory.instance().createMCDNID(mcdContConstraints);

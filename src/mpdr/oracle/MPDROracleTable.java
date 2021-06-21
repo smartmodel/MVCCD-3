@@ -5,6 +5,7 @@ import mdr.MDRConstraint;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
 import mldr.MLDRPK;
+import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRPK;
@@ -44,6 +45,13 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
         MPDROracleFK newFK = MVCCDElementFactory.instance().createMPDROracleFK(
                 getMDRContConstraints(), mldrFK);
         return newFK;
+    }
+
+    @Override
+    public MDRConstraint createUnique(MLDRUnique mldrUnique) {
+        MPDROracleUnique newUnique = MVCCDElementFactory.instance().createMPDROracleUnique(
+                getMDRContConstraints(), mldrUnique);
+        return newUnique;
     }
 }
 
