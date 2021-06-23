@@ -13,6 +13,7 @@ import project.ProjectElement;
 import resultat.Resultat;
 
 import java.util.ArrayList;
+import stereotypes.Stereotype;
 
 /**
  * Classe qui représente l'entité du modèle MCD.
@@ -438,11 +439,11 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
 
     public ArrayList<String> getAttributesForMCDDisplay(){
         ArrayList<String> attributesToDisplay = new ArrayList<>();
-
-        for (MCDAttribute attribut : this.getMCDAttributes()){
-            attributesToDisplay.add(attribut.getMCDDisplay());
+        if (!this.getMCDAttributes().isEmpty()){
+            for (MCDAttribute attribut : this.getMCDAttributes()){
+                attributesToDisplay.add(attribut.getMCDDisplay());
+            }
         }
-
         return attributesToDisplay;
     }
 

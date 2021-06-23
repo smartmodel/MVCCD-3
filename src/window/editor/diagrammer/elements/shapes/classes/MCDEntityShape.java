@@ -9,19 +9,37 @@ import window.editor.diagrammer.utils.DiagrammerConstants;
 
 public class MCDEntityShape extends ClassShape {
 
-  MCDEntity entity;
+  private MCDEntity entity;
 
   public MCDEntityShape() {
     super();
     this.addListeners();
-    this.setMinimumSize(new Dimension(DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH, DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT));
+    this.setMinimumSize(new Dimension(DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH,
+                                      DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT));
   }
 
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    this.setZoneEnTeteContent();
-    this.setZoneProprietesContent();
+  }
+
+  @Override
+  public void setZoneEnTeteContent() {
+    this.zoneEnTete.getElements().clear();
+    this.zoneEnTete.addElement(DiagrammerConstants.DIAGRAMMER_ENTITY_STEREOTYPE_TEXT);
+    if (this.entity != null) {
+      this.zoneEnTete.addElement(this.entity.getName());
+      if (this.entity.isOrdered()) {
+        this.zoneEnTete.addElement(DiagrammerConstants.DIAGRAMMER_ENTITY_ORDERED_TEXT);
+      }
+    }
+  }
+
+  @Override
+  public void setZoneProprietesContent() {
+    if (this.entity != null) {
+      this.zoneProprietes.setElements(this.entity.getAttributesForMCDDisplay());
+    }
   }
 
   @Override
@@ -31,31 +49,12 @@ public class MCDEntityShape extends ClassShape {
 
   @Override
   public void setNameFont(Graphics2D graphics2D) {
-    if (this.entity != null){
-      if (this.entity.isEntAbstract()){
+    if (this.entity != null) {
+      if (this.entity.isEntAbstract()) {
         graphics2D.setFont(DiagrammerConstants.DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT);
-      } else{
+      } else {
         graphics2D.setFont(DiagrammerConstants.DIAGRAMMER_CLASS_NAME_FONT);
       }
-    }
-  }
-
-  @Override
-  protected void setZoneEnTeteContent() {
-    this.zoneEnTete.getElements().clear();
-    this.zoneEnTete.addElement(DiagrammerConstants.DIAGRAMMER_ENTITY_STEREOTYPE_TEXT);
-    if (this.entity != null){
-      this.zoneEnTete.addElement(this.entity.getName());
-      if (this.entity.isOrdered()){
-        this.zoneEnTete.addElement(DiagrammerConstants.DIAGRAMMER_ENTITY_ORDERED_TEXT);
-      }
-    }
-  }
-
-  @Override
-  protected void setZoneProprietesContent() {
-    if (this.entity != null){
-      this.zoneProprietes.setElements(this.entity.getAttributesForMCDDisplay());
     }
   }
 
@@ -65,12 +64,11 @@ public class MCDEntityShape extends ClassShape {
     this.addMouseMotionListener(listener);
   }
 
-  public void setEntity(MCDEntity entity) {
-    this.entity = entity;
-    this.repaint();
-  }
-
   public MCDEntity getEntity() {
     return entity;
+  }
+
+  public void setEntity(MCDEntity entity) {
+    this.entity = entity;
   }
 }

@@ -224,14 +224,12 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
   public String getMCDDisplay() {
     StringBuilder builder = new StringBuilder();
 
-    if (this.aid) {
-      builder.append("<<AID>>");
+    for (Stereotype stereotype : this.getToStereotypes()){
+      builder.append("<<");
+      builder.append(stereotype);
+      builder.append(">>");
     }
 
-    if (this.isMandatory()) {
-      builder.append("<<M>>");
-    }
-    System.out.println(this);
     builder.append(" ");
     builder.append(this.getName());
     builder.append(" ");

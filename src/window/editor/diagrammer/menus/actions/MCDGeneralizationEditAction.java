@@ -10,7 +10,7 @@ import window.editor.diagrammer.elements.shapes.relations.MCDGeneralizationShape
 
 public class MCDGeneralizationEditAction extends AbstractAction {
 
-  MCDGeneralizationShape shape;
+  private MCDGeneralizationShape shape;
 
   public MCDGeneralizationEditAction(String name, Icon icon, MCDGeneralizationShape shape) {
     super(name, icon);

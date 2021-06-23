@@ -11,7 +11,7 @@ import window.editor.diagrammer.elements.shapes.relations.MCDReflexiveShape;
 
 public class MCDReflexiveEditAction extends AbstractAction {
 
-  MCDReflexiveShape shape;
+  private MCDReflexiveShape shape;
 
   public MCDReflexiveEditAction(String name, Icon icon, MCDReflexiveShape shape) {
     super(name, icon);

@@ -10,7 +10,7 @@ import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 
 public class MCDAssociationEditAction extends AbstractAction {
 
-  MCDAssociationShape shape;
+  private MCDAssociationShape shape;
 
   public MCDAssociationEditAction(String name, Icon icon, MCDAssociationShape shape) {
     super(name, icon);
@@ -19,23 +19,28 @@ public class MCDAssociationEditAction extends AbstractAction {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    if (this.shape.getAssociation() != null){
+    if (this.shape.getAssociation() != null) {
       this.edit();
-    } else{
+    } else {
       this.create();
     }
+    shape.repaint();
   }
 
-  private void edit(){
+  private void edit() {
     MVCCDManager manager = MVCCDManager.instance();
     MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
-    mcdAssociationEditingTreat.treatUpdate(manager.getMvccdWindow(),this.shape.getAssociation());
+    mcdAssociationEditingTreat.treatUpdate(manager.getMvccdWindow(), this.shape.getAssociation());
+    shape.setInformations();
   }
 
-  private void create(){
+  private void create() {
     MVCCDManager manager = MVCCDManager.instance();
     MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
-    MCDAssociation association = mcdAssociationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations());
+    MCDAssociation association = mcdAssociationEditingTreat.treatNew(manager.getMvccdWindow(),
+                                                                     manager.getProject()
+                                                                            .getMCDContModels()
+                                                                            .getRelations());
     this.shape.setAssociation(association);
   }
 }

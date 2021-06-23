@@ -19,25 +19,30 @@ public class MCDEntityShapeEditAction extends AbstractAction {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    if (this.shape.getEntity() != null){
+    if (this.shape.getEntity() != null) {
       this.edit();
-    } else{
+    } else {
       this.create();
     }
+    shape.setZoneEnTeteContent();
+    shape.setZoneProprietesContent();
+    shape.repaint();
   }
 
-  private void edit(){
+  private void edit() {
     MVCCDManager manager = MVCCDManager.instance();
     MCDEntityEditingTreat mcdEntityEditingTreat = new MCDEntityEditingTreat();
-    mcdEntityEditingTreat.treatUpdate(manager.getMvccdWindow(),this.shape.getEntity());
+    mcdEntityEditingTreat.treatUpdate(manager.getMvccdWindow(), this.shape.getEntity());
   }
 
-  private void create(){
+  private void create() {
     MVCCDManager manager = MVCCDManager.instance();
     MCDEntityEditingTreat mcdEntityEditingTreat = new MCDEntityEditingTreat();
-    MCDEntity entity = (MCDEntity) mcdEntityEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getEntities());
+    MCDEntity entity = (MCDEntity) mcdEntityEditingTreat.treatNew(manager.getMvccdWindow(),
+                                                                  manager.getProject()
+                                                                         .getMCDContModels()
+                                                                         .getEntities());
     this.shape.setEntity(entity);
   }
-
 
 }

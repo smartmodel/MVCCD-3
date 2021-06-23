@@ -8,8 +8,8 @@ import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
 public class RelationAddPointAncrageAction extends AbstractAction {
 
-  RelationShape relation;
-  Point point;
+  private RelationShape relation;
+  private Point point;
 
   public RelationAddPointAncrageAction(String name, Icon icon, RelationShape shape, Point point) {
     super(name, icon);
