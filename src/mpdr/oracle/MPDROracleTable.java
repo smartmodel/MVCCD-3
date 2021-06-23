@@ -9,9 +9,10 @@ import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
+import mpdr.oracle.interfaces.IMPDROracleElement;
 import project.ProjectElement;
 
-public class MPDROracleTable extends MPDRTable {
+public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
 
     private static final long serialVersionUID = 1000;
 
