@@ -3,8 +3,8 @@ package main.window.diagram;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import utilities.window.PanelContent;
-import window.editor.diagrammer.panels.DrawPanel;
-import window.editor.diagrammer.panels.DrawPanelComponent;
+import window.editor.diagrammer.drawpanel.DrawPanel;
+import window.editor.diagrammer.drawpanel.DrawPanelComponent;
 
 import javax.swing.*;
 import java.awt.*;

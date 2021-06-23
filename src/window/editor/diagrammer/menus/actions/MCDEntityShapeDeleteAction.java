@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
-import window.editor.diagrammer.panels.DrawPanel;
-import window.editor.diagrammer.elements.MCDEntityShape;
+import window.editor.diagrammer.drawpanel.DrawPanel;
+import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.utils.DiagrammerConstants;
 
 public class MCDEntityShapeDeleteAction extends AbstractAction {

@@ -1,15 +1,15 @@
-package window.editor.diagrammer.elements;
+package window.editor.diagrammer.elements.shapes.relations;
 
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import window.editor.diagrammer.interfaces.IShape;
+import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
 
 public class RelationPointAncrageShape extends Point implements IShape {
 
-  public int DIAMETER = 7;
+  public int DIAMETER = 10;
   private int index;
 
 
@@ -58,13 +58,11 @@ public class RelationPointAncrageShape extends Point implements IShape {
     this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
   }
 
-
   @Override
   public void drag(int x, int y) {
     this.move(x, y);
     DiagrammerService.drawPanel.repaint();
   }
-
 
   public boolean contains(Point point){
     Rectangle bounds = this.getBounds();

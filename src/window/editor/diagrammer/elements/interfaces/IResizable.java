@@ -1,4 +1,4 @@
-package window.editor.diagrammer.interfaces;
+package window.editor.diagrammer.elements.interfaces;
 
 import java.awt.Rectangle;
 

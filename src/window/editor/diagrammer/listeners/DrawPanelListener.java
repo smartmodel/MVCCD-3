@@ -10,11 +10,15 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Line2D;
 import java.util.ListIterator;
 import javax.swing.SwingUtilities;
-import window.editor.diagrammer.elements.ClassShape;
-import window.editor.diagrammer.elements.MCDEntityShape;
-import window.editor.diagrammer.elements.RelationPointAncrageShape;
-import window.editor.diagrammer.elements.RelationShape;
-import window.editor.diagrammer.interfaces.IShape;
+import window.editor.diagrammer.drawpanel.DrawPanel;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
+import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.menus.EntityShapeMenu;
+import window.editor.diagrammer.menus.RelationMenu;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.DiagrammerConstants;
@@ -33,7 +37,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
   private RelationPointAncrageShape pointAncrageClicked = null;
   private RelationShape relationClicked = null;
 
-
   @Override
   public void mouseWheelMoved(MouseWheelEvent e) {
     super.mouseWheelMoved(e);
@@ -47,10 +50,17 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
   @Override
   public void mouseClicked(MouseEvent e) {
     super.mouseClicked(e);
+
+
     if (SwingUtilities.isLeftMouseButton(e)) {
       if (PalettePanel.activeButton != null) {
         this.executeButtonAction(e);
         PalettePanel.setActiveButton(null);
+      }
+
+      // Désélectionne l'association cliquée
+      if (relationClicked != null){
+        relationClicked.setSelected(false);
       }
 
       this.relationClicked = this.setAssociationClicked(e);
@@ -63,7 +73,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
     if (SwingUtilities.isRightMouseButton(e)) {
       if (this.relationClicked != null) {
-        this.addPointAncrage(e);
+        this.showMenu(e);
       }
     }
   }
@@ -133,7 +143,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
     this.updateCursor();
 
-  }
+   }
 
   @Override
   public void keyReleased(KeyEvent e) {
@@ -177,9 +187,10 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
   }
 
   private void executeButtonAction(MouseEvent event) {
-    if (PalettePanel.activeButton.getText()
-        .equals(DiagrammerConstants.DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT)) {
+    if (PalettePanel.activeButton.getText().equals(DiagrammerConstants.DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT)) {
       this.createEntityShape(event);
+    } else if (PalettePanel.activeButton.getText().equals(DiagrammerConstants.DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT)){
+      //this.createAssociation();
     }
   }
 
@@ -188,7 +199,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
       if (shape instanceof RelationShape) {
         for (RelationPointAncrageShape pointAncrage : ((RelationShape) shape).getPointsAncrage()) {
           if (pointAncrage.contains(event.getPoint())) {
-            System.out.println("Index du point d'ancrage cliqué : " + pointAncrage.getIndex());
             return pointAncrage;
           }
         }
@@ -217,42 +227,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     return null;
   }
 
-  private Line2D getNearestSegment(MouseEvent event) {
-    for (IShape shape : DiagrammerService.getDrawPanel().getElements()) {
-      if (shape instanceof RelationShape) {
-        RelationShape relation = (RelationShape) shape;
-        for (int i = 0; i < relation.getPointsAncrage().size(); i++) {
-          Line2D segment = new Line2D.Double();
-          segment.setLine(relation.getPointsAncrage().get(i).getX(), relation.getPointsAncrage().get(i).getY(), relation.getPointsAncrage().get(i + 1).getX(), relation.getPointsAncrage().get(i + 1).getY());
-          if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, event.getPoint()) <= DiagrammerConstants.DIAGRAMMER_RELATION_CLICK_AREA) {
-            return segment;
-          }
-        }
-      }
-    }
-    return null;
-  }
-
-  private void addPointAncrage(MouseEvent e) {
-    Line2D nearestSegment = this.getNearestSegment(e);
-    int newIndex = this.relationClicked.getPointAncrageIndex(
-        this.relationClicked.convertPoint2DToPointAncrage(nearestSegment.getP2()));
-    Point nearestPointOnSegment = GeometryUtils.getNearestPointOnLine(
-        nearestSegment.getX1(),
-        nearestSegment.getY1(),
-        nearestSegment.getX2(),
-        nearestSegment.getY2(),
-        e.getX(),
-        e.getY(),
-        true,
-        null
-    );
-    RelationPointAncrageShape newPointAncrage = new RelationPointAncrageShape(nearestPointOnSegment,
-        newIndex);
-    this.relationClicked.addPointAncrage(newPointAncrage, newIndex);
-    this.relationClicked.reindexAllPointsAncrage();
-    DiagrammerService.drawPanel.repaint();
-  }
 
   private void dragPointAncrageSelected(MouseEvent e) {
     Point newPoint = new Point(
@@ -320,15 +294,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
       // S'il n'y a que 3 points d'ancrage dans l'association
       ClassShape leftShape = (ClassShape) GeometryUtils.getShapeOnTheLeft(relationClicked.getSource(), relationClicked.getDestination());
       ClassShape rightShape = (ClassShape) GeometryUtils.getShapeOnTheRight(relationClicked.getSource(), relationClicked.getDestination());
-/*
-
-      if (leftShape == relationClicked.getSource()){
-        System.out.println("L'entité de gauche est source");
-      } else{
-        System.out.println("L'entité de gauche est destination");
-
-      }
-*/
 
       RelationPointAncrageShape previousPoint;
       RelationPointAncrageShape nextPoint;
@@ -395,7 +360,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
         else if (newPoint.y > leftShape.getBounds().getMaxY()) {
           // Si le point précédent est celui croché sur la ClassShape, on le met à jour
           if (previousPoint == relationClicked.getPointsAncrage().getFirst() || previousPoint == relationClicked.getPointsAncrage().getLast()){
-          System.out.println("2322222");
             newPointLeft = new Point(newPoint.x, (int) leftShape.getBounds().getMaxY());
             newPointRight = new Point((int) rightShape.getBounds().getMinX(), newPoint.y);
           }
@@ -409,7 +373,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
         // Si les nouveaux points se situent autour des ClassShape
         if (GeometryUtils.pointIsAroundShape(newPointLeft, leftShape) && GeometryUtils.pointIsAroundShape(newPointRight, rightShape)) {
-          System.out.println("asjmdlkjmaklsd");
           // Si le prochain point est le dernier, celui croché sur la ClassShape, on met à jour le point sur l'entité
             previousPoint.drag(newPointLeft.x, newPointLeft.y);
             nextPoint.drag(newPointRight.x, newPointRight.y);
@@ -417,4 +380,20 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
       }
     }
   }
+
+  private void createAssociation(MCDEntityShape source, MCDEntityShape destination){
+    MCDAssociationShape association = new MCDAssociationShape(source, destination);
+    DiagrammerService.getDrawPanel().addElement(association);
+    DiagrammerService.getDrawPanel().repaint();
+  }
+
+  private void showMenu(MouseEvent event){
+    if (this.relationClicked != null){
+      Point converted = SwingUtilities.convertPoint(this.relationClicked, event.getPoint(), DiagrammerService.drawPanel);
+
+      RelationMenu menu = new RelationMenu(this.relationClicked, converted.x, converted.y);
+      menu.show(DiagrammerService.drawPanel, converted.x, converted.y);
+    }
+  }
+
 }

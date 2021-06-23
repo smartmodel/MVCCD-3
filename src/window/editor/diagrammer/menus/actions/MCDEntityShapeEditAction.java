@@ -6,8 +6,7 @@ import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
-import window.editor.diagrammer.elements.MCDEntityShape;
-import window.editor.diagrammer.services.DiagrammerService;
+import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 
 public class MCDEntityShapeEditAction extends AbstractAction {
 

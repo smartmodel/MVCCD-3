@@ -2,7 +2,7 @@ package window.editor.diagrammer.listeners;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import window.editor.diagrammer.elements.RelationShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
 public class RelationFocusListener extends FocusAdapter {
 

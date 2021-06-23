@@ -1,12 +1,11 @@
-package window.editor.diagrammer.elements;
+package window.editor.diagrammer.elements.shapes.classes;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import javax.swing.JPanel;
-import window.editor.diagrammer.interfaces.IResizable;
-import window.editor.diagrammer.interfaces.IShape;
+import window.editor.diagrammer.elements.interfaces.IResizable;
+import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
-import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.ResizableBorder;
 

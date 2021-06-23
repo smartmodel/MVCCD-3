@@ -1,4 +1,4 @@
-package window.editor.diagrammer.panels;
+package window.editor.diagrammer.drawpanel;
 
 import window.editor.diagrammer.utils.DiagrammerConstants;
 

@@ -6,8 +6,8 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
-import window.editor.diagrammer.panels.DrawPanel;
-import window.editor.diagrammer.elements.SquaredShape;
+import window.editor.diagrammer.drawpanel.DrawPanel;
+import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.DiagrammerConstants;
 import window.editor.diagrammer.utils.GridUtils;
@@ -151,7 +151,8 @@ public class SquaredShapeListener extends MouseAdapter {
 
           break;
         }
-        case Cursor.NW_RESIZE_CURSOR: {
+        // TODO -> Décommenter pour autoriser le resize dans les coins. Ne pas oublier de décommenter les locations et cursors dans ResizableBorder
+/*        case Cursor.NW_RESIZE_CURSOR: {
           newX = GridUtils.alignToGrid(x + differenceX, DiagrammerService.getDrawPanel().getGridSize());
           newY = GridUtils.alignToGrid(y + differenceY, DiagrammerService.getDrawPanel().getGridSize());
           newWidth = GridUtils.alignToGrid(width - differenceX, DiagrammerService.getDrawPanel().getGridSize());
@@ -220,7 +221,7 @@ public class SquaredShapeListener extends MouseAdapter {
           this.startPoint = new Point(newWidth, newHeight);
 
           break;
-        }
+        }*/
       }
       this.component.setCursor(Cursor.getPredefinedCursor(cursor));
 

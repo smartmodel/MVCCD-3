@@ -1,7 +1,8 @@
-package window.editor.diagrammer.elements;
+package window.editor.diagrammer.elements.shapes.classes;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import mcd.MCDEntity;
 import window.editor.diagrammer.listeners.MCDEntityShapeListener;
 import window.editor.diagrammer.utils.DiagrammerConstants;
@@ -28,6 +29,16 @@ public class MCDEntityShape extends ClassShape {
     this.setBackground(DiagrammerConstants.DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR);
   }
 
+  @Override
+  public void setNameFont(Graphics2D graphics2D) {
+    if (this.entity != null){
+      if (this.entity.isEntAbstract()){
+        graphics2D.setFont(DiagrammerConstants.DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT);
+      } else{
+        graphics2D.setFont(DiagrammerConstants.DIAGRAMMER_CLASS_NAME_FONT);
+      }
+    }
+  }
 
   @Override
   protected void setZoneEnTeteContent() {

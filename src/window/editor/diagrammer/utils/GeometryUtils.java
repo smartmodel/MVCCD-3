@@ -5,10 +5,10 @@ import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import javax.swing.SwingUtilities;
-import window.editor.diagrammer.elements.ClassShape;
-import window.editor.diagrammer.elements.RelationPointAncrageShape;
-import window.editor.diagrammer.elements.RelationShape;
-import window.editor.diagrammer.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.services.DiagrammerService;
 
 public class GeometryUtils {
@@ -114,74 +114,6 @@ public class GeometryUtils {
    Point converted = SwingUtilities.convertPoint(DiagrammerService.drawPanel, point, shape);
     return (converted.x >= 0 && converted.x <= shape.getWidth() && (converted.y == 0 || converted.y == shape.getHeight())) ||
         (converted.y >= 0 && converted.y <= shape.getHeight() && (converted.x == 0 || converted.x == shape.getWidth()));
-/*    Point2D converted = new Point2D.Double();
-    converted.setLocation(point.x, point.y);
-
-    Line2D left = new Line2D.Double();
-    Line2D right = new Line2D.Double();
-    Line2D top = new Line2D.Double();
-    Line2D bottom = new Line2D.Double();
-
-    left.setLine(shape.getBounds().getMinX(), shape.getBounds().getMinY(), shape.getBounds().getMinX(), shape.getBounds().getMaxY());
-    right.setLine(shape.getBounds().getMaxX(), shape.getBounds().getMinY(), shape.getBounds().getMaxX(), shape.getBounds().getMaxY());
-    top.setLine(shape.getBounds().getMinX(), shape.getBounds().getMinY(), shape.getBounds().getMaxX(), shape.getBounds().getMinY());
-    bottom.setLine(shape.getBounds().getMinX(), shape.getBounds().getMaxY(), shape.getBounds().getMaxX(), shape.getBounds().getMaxY());
-
-    System.out.println();
-    System.out.println("Bottom : " + (bottom.ptLineDist(converted) == 0));
-    System.out.println("Top : " + (top.ptLineDist(converted) == 0));
-    System.out.println("Left : " + (left.ptLineDist(converted) == 0));
-    System.out.println("Right : " + (right.ptLineDist(converted) == 0));
-
-
-    return left.ptLineDist(converted) == 0 || right.ptLineDist(converted) == 0 || top.ptLineDist(converted) == 0 || bottom.ptLineDist(converted) == 0 ;*/
-  }
-
-  public static boolean pointIsInsideBounds(Point point, ClassShape shape){
-    Point converted = SwingUtilities.convertPoint(DiagrammerService.drawPanel, point, shape);
-    Rectangle bounds = SwingUtilities.convertRectangle(DiagrammerService.drawPanel, shape.getBounds(), shape);
-    System.out.println("Contains ? " + bounds.contains(converted));
-    return bounds.contains(converted);
-  }
-
-  public static Point alignToClassShapeBounds(Point point, ClassShape shape){
-    int xAligned = Integer.MAX_VALUE;
-    int yAligned = Integer.MAX_VALUE;
-
-    if (point.x < shape.getBounds().getMinX() && coordinateIsAroundShape(point.y, shape)){
-      System.out.println("1");
-      yAligned = point.y;
-      xAligned = (int) shape.getBounds().getMinX();
-    } else if(point.x < shape.getBounds().getMinX()){
-      System.out.println("2");
-      xAligned = (int) shape.getBounds().getMinX();
-    } else if (point.x > shape.getBounds().getMaxX() && coordinateIsAroundShape(point.y, shape)){
-      System.out.println("3");
-      yAligned = point.y;
-      xAligned = (int) shape.getBounds().getMaxX();
-    } else if(point.x > shape.getBounds().getMaxX()){
-      System.out.println("4");
-      xAligned = (int) shape.getBounds().getMaxX();
-    }
-
-    if (point.y <= shape.getBounds().getMinY() && coordinateIsAroundShape(point.x, shape)){
-      System.out.println("5");
-      xAligned = point.x;
-      yAligned = (int) shape.getBounds().getMinY();
-    } else if(point.y <= shape.getBounds().getMinY()){
-      System.out.println("6");
-      yAligned = (int) shape.getBounds().getMinY();
-    } else if (point.y >= shape.getBounds().getMaxY() && coordinateIsAroundShape(point.x, shape)){
-      System.out.println("7");
-      xAligned = point.x;
-      yAligned = (int) shape.getBounds().getMaxY();
-    } else if(point.y >= shape.getBounds().getMaxY()){
-      System.out.println("8");
-      yAligned = (int) shape.getBounds().getMaxY();
-
-    }
-    Point newPoint = new Point(xAligned, yAligned);
-    return newPoint;
   }
 
   public static boolean coordinateIsAroundShape(int coordinate, ClassShape shape){
@@ -206,5 +138,89 @@ public class GeometryUtils {
     return getDistanceBetweenLineAndPoint(start.x, start.y, end.x, end.y, pointToCheck.x, pointToCheck.y);
   }
 
+  public static RelationPointAncrageShape getLeftPoint(RelationPointAncrageShape firstPoint, RelationPointAncrageShape secondPoint){
+    if (firstPoint.x < secondPoint.x){
+      return firstPoint;
+    } else if (secondPoint.x < firstPoint.x){
+      return secondPoint;
+    } else{
+      return firstPoint;
+    }
+  }
 
+  public static RelationPointAncrageShape getRightPoint(RelationPointAncrageShape firstPoint, RelationPointAncrageShape secondPoint){
+    if (firstPoint.x > secondPoint.x){
+      return firstPoint;
+    } else if (secondPoint.x > firstPoint.x){
+      return secondPoint;
+    } else{
+      return firstPoint;
+    }
+  }
+
+  public static boolean pointIsInCorner(Point point, ClassShape shape){
+    return
+        // Top Right
+        point.x == shape.getBounds().getMaxX() && point.y == shape.getBounds().getMinY() ||
+        // Top left
+        point.x == shape.getBounds().getMinX() && point.y == shape.getBounds().getMinY() ||
+        // Bottom Right
+        point.x == shape.getBounds().getMaxX() && point.y == shape.getBounds().getMaxY() ||
+        // Bottom Left
+        point.x == shape.getBounds().getMinX() && point.y == shape.getBounds().getMaxY();
+  }
+
+  public static Point getCornerContainingPoint(Point point, ClassShape shape) {
+    if (point.x == shape.getBounds().getMaxX() && point.y == shape.getBounds().getMinY()) {
+        return new Point((int) shape.getBounds().getMaxX(), (int) shape.getBounds().getMinY());
+    } else if (point.x == shape.getBounds().getMinX() && point.y == shape.getBounds().getMinY()) {
+        return new Point((int) shape.getBounds().getMinX(), (int) shape.getBounds().getMinY());
+    } else if (point.x == shape.getBounds().getMaxX() && point.y == shape.getBounds().getMaxY()) {
+        return new Point((int) shape.getBounds().getMaxX(), (int) shape.getBounds().getMaxY());
+    } else if (point.x == shape.getBounds().getMinX() && point.y == shape.getBounds().getMaxY()) {
+        return new Point((int) shape.getBounds().getMinX(), (int) shape.getBounds().getMaxY());
+    } else {
+        return null;
+    }
+  }
+
+  public static Point getPointOnLineWithDistance(Point start, Point end, double distance) {
+    double xDiff = end.getX() - start.getX();
+    double yDiff = end.getY() - start.getY();
+    double length = distanceBetweenTwoPoints(start.x, start.y, end.x, end.y);
+    double distanceToGo = distance / length;
+    return new Point( (int) (start.getX() + xDiff * distanceToGo),  (int) (start.getY() + yDiff * distanceToGo));
+  }
+
+  public static boolean isVertical(Line2D segment){
+    return segment.getX1() == segment.getX2();
+  }
+
+  public static boolean isHorizontal(Line2D segment){
+    return segment.getY1() == segment.getY2();
+  }
+
+  public static Point getPointOnTheRight(Point p1, Point p2){
+    if (p2.x > p1.x){
+      return p2;
+    } else{
+      return p1;
+    }
+  }
+
+  public static boolean pointIsOnRightSideOfBounds(Point p, Rectangle bounds){
+    return p.x == bounds.getMaxX() && p.y >= bounds.getMinY() && p.y <= bounds.getMaxY();
+  }
+
+  public static boolean pointIsOnLeftSideOfBounds(Point p, Rectangle bounds){
+    return p.x == bounds.getMinX() && p.y >= bounds.getMinY() && p.y <= bounds.getMaxY();
+  }
+
+  public static boolean pointIsOnTopSideOfBounds(Point p, Rectangle bounds){
+    return p.y == bounds.getMinY() && p.x >= bounds.getMinX() && p.x <= bounds.getMaxX();
+  }
+
+  public static boolean pointIsOnBottomSideOfBounds(Point p, Rectangle bounds){
+    return p.y == bounds.getMaxY() && p.x >= bounds.getMinX() && p.x <= bounds.getMaxX();
+  }
 }

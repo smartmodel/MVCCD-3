@@ -1,11 +1,12 @@
-package window.editor.diagrammer.elements;
+package window.editor.diagrammer.elements.shapes.classes;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
-import window.editor.diagrammer.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.DiagrammerConstants;
@@ -16,6 +17,8 @@ public abstract class ClassShape extends SquaredShape {
   protected ClassShapeZone zoneProprietes = new ClassShapeZone();
   protected ClassShapeZone zoneOperations = new ClassShapeZone();
   protected ClassShapeZone zoneServices = new ClassShapeZone();
+
+  protected boolean isClicked = false;
 
   public ClassShape() {
     super();
@@ -35,7 +38,6 @@ public abstract class ClassShape extends SquaredShape {
     this.setBackgroundColor();
     this.drawZoneEnTete(graphics2D);
     this.drawZoneProprietes(graphics2D);
-   // this.updateMinimumSize(graphics2D);
   }
 
   private void addListeners(){
@@ -49,7 +51,7 @@ public abstract class ClassShape extends SquaredShape {
     int y = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
     for (int i = 0; i < this.zoneEnTete.getElements().size(); i++) {
       if (i == 1){
-        graphics2D.setFont(DiagrammerConstants.DIAGRAMMER_CLASS_NAME_FONT);
+        this.setNameFont(graphics2D);
       } else{
         graphics2D.setFont(DiagrammerConstants.DIAGRAMMER_CLASS_FONT);
       }
@@ -122,4 +124,14 @@ public abstract class ClassShape extends SquaredShape {
       }
     }
   }
+
+  public boolean isClicked() {
+    return isClicked;
+  }
+
+  public void setClicked(boolean clicked) {
+    isClicked = clicked;
+  }
+
+  public abstract void setNameFont(Graphics2D graphics2D);
 }

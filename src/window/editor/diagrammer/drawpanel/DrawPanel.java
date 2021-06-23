@@ -1,4 +1,4 @@
-package window.editor.diagrammer.panels;
+package window.editor.diagrammer.drawpanel;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,11 +16,12 @@ import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
-import window.editor.diagrammer.elements.ClassShape;
-import window.editor.diagrammer.elements.MCDEntityShape;
-import window.editor.diagrammer.elements.RelationShape;
-import window.editor.diagrammer.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.listeners.DrawPanelListener;
+import window.editor.diagrammer.menus.EntityShapeMenu;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.DiagrammerConstants;
 import window.editor.diagrammer.utils.GridUtils;
@@ -47,12 +50,16 @@ public class DrawPanel extends JLayeredPane {
     entityComponent2.setLocation(560, 340);
     entityComponent3.setLocation(300, 700);
 
-    RelationShape relationShape = new RelationShape(entityComponent, entityComponent2);
+/*
+    MCDAssociationShape relationShape = new MCDAssociationShape(entityComponent, entityComponent2);
+    MCDAssociationShape relationShape2 = new MCDAssociationShape(entityComponent, entityComponent2);
+*/
 
     this.addElement(entityComponent);
     this.addElement(entityComponent2);
     this.addElement(entityComponent3);
-    this.addElement(relationShape);
+/*    this.addElement(relationShape);
+    this.addElement(relationShape2);*/
 
     this.repaint();
   }
@@ -127,6 +134,7 @@ public class DrawPanel extends JLayeredPane {
   public void addElement(IShape element) {
     this.add((JComponent) element);
     this.elements.add(element);
+    this.repaint();
   }
 
   private void addListeners() {
@@ -153,13 +161,10 @@ public class DrawPanel extends JLayeredPane {
 
   public void drawRelations(Graphics2D graphics2D) {
     graphics2D.setColor(Color.BLACK);
-    for (IShape association : this.elements) {
-      if (association instanceof RelationShape) {
-        RelationShape relation = (RelationShape) association;
-        if (relation.isSelected()){
-          relation.drawPointsAncrage(graphics2D);
-        }
-        relation.drawSegments(graphics2D);
+    for (RelationShape relationShape : this.getRelationShapes()) {
+      relationShape.draw(graphics2D);
+      if (relationShape.isSelected()) {
+        relationShape.drawPointsAncrage(graphics2D);
       }
     }
   }
@@ -449,4 +454,45 @@ public class DrawPanel extends JLayeredPane {
     // Mise à jour du panel et des scrollbars
     this.updatePanelAndScrollbars();
   }
+
+  public ArrayList<RelationShape> getRelationShapes(){
+    ArrayList relations = new ArrayList();
+    for (IShape shape : this.elements){
+      if (shape instanceof RelationShape){
+        relations.add(shape);
+      }
+    }
+    return relations;
+  }
+
+  public ArrayList<ClassShape> getClassShapes(){
+    ArrayList classes = new ArrayList();
+    for (IShape shape : this.elements){
+      if (shape instanceof ClassShape){
+        classes.add(shape);
+      }
+    }
+    return classes;
+  }
+
+  public ClassShape getClassShapeContainingPoint(MouseEvent event){
+    for (ClassShape classShape : this.getClassShapes()){
+      if (classShape.getBounds().contains(event.getPoint())){
+        return classShape;
+      }
+    }
+    return null;
+  }
+
+  public ClassShape getClickedClassShape(){
+    for (ClassShape classShape : this.getClassShapes()){
+      if (classShape.isClicked()){
+        return classShape;
+      }
+    }
+    return null;
+  }
+
+
+
 }

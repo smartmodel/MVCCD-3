@@ -11,15 +11,15 @@ public class ResizableBorder implements Border {
 
     int[] locations = {
             SwingConstants.NORTH, SwingConstants.SOUTH, SwingConstants.WEST,
-            SwingConstants.EAST, SwingConstants.NORTH_WEST,
-            SwingConstants.NORTH_EAST, SwingConstants.SOUTH_WEST,
-            SwingConstants.SOUTH_EAST
+            SwingConstants.EAST, //SwingConstants.NORTH_WEST,
+        //SwingConstants.NORTH_EAST, //SwingConstants.SOUTH_WEST,
+        //SwingConstants.SOUTH_EAST
     };
 
     int[] cursors = {
             Cursor.N_RESIZE_CURSOR, Cursor.S_RESIZE_CURSOR, Cursor.W_RESIZE_CURSOR,
-            Cursor.E_RESIZE_CURSOR, Cursor.NW_RESIZE_CURSOR, Cursor.NE_RESIZE_CURSOR,
-            Cursor.SW_RESIZE_CURSOR, Cursor.SE_RESIZE_CURSOR
+            Cursor.E_RESIZE_CURSOR, //Cursor.NW_RESIZE_CURSOR, //Cursor.NE_RESIZE_CURSOR,
+        // Cursor.SW_RESIZE_CURSOR,// Cursor.SE_RESIZE_CURSOR
     };
 
     @Override
