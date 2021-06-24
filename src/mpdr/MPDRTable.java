@@ -11,6 +11,7 @@ import mldr.services.MLDRColumnService;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.services.MPDRColumnService;
+import mpdr.services.MPDRConstraintService;
 import mpdr.services.MPDRTableService;
 import project.ProjectElement;
 
@@ -85,4 +86,8 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     public ArrayList<MPDRColumn> getMPDRColumns() {
         return MPDRColumnService.to(getMDRColumns());
     }
+
+    public MPDRPK getMPDRPK() { return MPDRConstraintService.getMPDRPK(getMDRConstraints()); }
+
+    public ArrayList<MPDRFK> getMPDRFKs() { return MPDRConstraintService.getMPDRFKs(getMDRConstraints()); }
 }
