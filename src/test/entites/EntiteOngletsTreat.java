@@ -28,9 +28,9 @@ public class EntiteOngletsTreat  extends MCDCompliantEditingTreat {
      */
     @Override
     protected DialogEditor getDialogEditor(Window owner,
-                                           MCDContEntities mcdContEntities, MCDEntity mcdEntity,
+                                           MCDEntity mcdEntity, MCDContEntities mcdContEntities,
                                            String mode) {
-        return new EntiteOnglets(owner, mcdContEntities, mcdEntity, mode,
+        return new EntiteOnglets(owner, mcdEntity, mcdContEntities, mode,
                 new EntiteOngletsTreat());
     }
 

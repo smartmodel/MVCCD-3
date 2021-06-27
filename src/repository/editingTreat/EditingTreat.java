@@ -48,7 +48,7 @@ public abstract class EditingTreat {
     // version onglets
     public MVCCDElement treatNew(Window owner, MCDContEntities mcdContEntities) {
 
-        DialogEditor fen = getDialogEditor(owner, mcdContEntities, null, DialogEditor.NEW); //Ouvre l'éditeur attendu
+        DialogEditor fen = getDialogEditor(owner, null, mcdContEntities, DialogEditor.NEW); //Ouvre l'éditeur attendu
         fen.setVisible(true);
         return fen.getMvccdElementNew();
     }
@@ -74,12 +74,12 @@ public abstract class EditingTreat {
     public boolean treatUpdate(Window owner, MCDEntity mcdEntity) {
         MCDContEntities mcdContEntities = (MCDContEntities) mcdEntity.getParent();
 
-        DialogEditor fen = getDialogEditor(owner, mcdContEntities, mcdEntity, DialogEditor.UPDATE);
+        DialogEditor fen = getDialogEditor(owner, mcdEntity, mcdContEntities, DialogEditor.UPDATE);
 
         fen.setVisible(true);
 
-        MCDContEntities mcdContEntities1 = (MCDContEntities) mcdContEntities.getParent();
-        if (mcdContEntities != mcdContEntities1) {
+        MVCCDElement parentAfter = mcdContEntities.getParent();
+        if (mcdContEntities != parentAfter) {
             MVCCDManager.instance().changeParentMVCCDElementInRepository(mcdEntity, mcdContEntities);
         }
         return fen.isDatasChanged();
@@ -98,7 +98,7 @@ public abstract class EditingTreat {
     public DialogEditor treatRead(Window owner, MCDEntity mcdEntity) {
         MCDContEntities mcdContEntities = (MCDContEntities) mcdEntity.getParent();
 
-        DialogEditor fen = getDialogEditor(owner, mcdContEntities, mcdEntity,
+        DialogEditor fen = getDialogEditor(owner, mcdEntity, mcdContEntities,
                 DialogEditor.READ);
         fen.setVisible(true);
         return fen;
@@ -319,7 +319,7 @@ public abstract class EditingTreat {
 
     // version onglets
     protected DialogEditor getDialogEditor(Window owner,
-                                           MCDContEntities mcdContEntities, MCDEntity mcdEntity,
+                                           MCDEntity mcdEntity, MCDContEntities mcdContEntities,
                                            String mode) {
         return null;
     }
