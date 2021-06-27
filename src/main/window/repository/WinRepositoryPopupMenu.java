@@ -621,8 +621,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    System.out.println(mvccdElement);
-                    editingTreat.treatUpdate(mvccdWindow, mvccdElement);
+                    if(editingTreat instanceof EntiteOngletsTreat)
+                        editingTreat.treatUpdate(mvccdWindow, mcdEntity);
+                    else
+                        editingTreat.treatUpdate(mvccdWindow, mvccdElement);
                 } catch (Exception e){
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.update");
                 }
