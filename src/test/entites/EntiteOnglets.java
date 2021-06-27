@@ -15,18 +15,19 @@ import utilities.window.editor.PanelInput;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 
 public class EntiteOnglets extends DialogEditor {
 
     public EntiteOnglets(Window owner,
-                         MCDContEntities mcdContEntities, MCDEntity mcdEntity,
-                         String mode,
+                         MCDEntity mcdEntity,
+                         MCDContEntities mcdContEntities, String mode,
                          EditingTreat editingTreat){
-        super(owner, mcdContEntities, mcdEntity,
+        super(owner, mcdEntity, mcdContEntities,
                 mode, DialogEditor.SCOPE_NOTHING, editingTreat);
 
-        setSize(new Dimension(850,700));
         setLocationRelativeTo(null);
+        setResizable(false);
     }
 
     @Override
@@ -41,19 +42,19 @@ public class EntiteOnglets extends DialogEditor {
 
     @Override
     protected Dimension getSizeCustom() {
-        return PreferencesManager.instance().preferences().getENTITY_WINDOW_SIZE_CUSTOM();
+        return new Dimension(700,650);
+        //return PreferencesManager.instance().preferences().getENTITY_WINDOW_SIZE_CUSTOM();
         //return new Dimension(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
     }
 
     @Override
     protected void setSizeCustom(Dimension dimension) {
-        PreferencesManager.instance().preferences().setENTITY_WINDOW_SIZE_CUSTOM(getSize());
+        PreferencesManager.instance().preferences().setENTITY_WINDOW_SIZE_CUSTOM(new Dimension(700,650));
     }
 
     @Override
     protected Point getLocationCustom() {
         return PreferencesManager.instance().preferences().getENTITY_WINDOW_LOCATION_ONSCREEN();
-
     }
 
     @Override
@@ -78,7 +79,12 @@ public class EntiteOnglets extends DialogEditor {
 
     @Override
     public void confirmClose(){
-        if (getInput().getInputContent().datasChangedNow()) {
+        Onglets onglets = (Onglets) getInput();
+
+        // Test si les onglets Général, Conformité et MLDR ont des données qui on changé
+        if (onglets.getGeneralite().getInputContent().datasChangedNow() ||
+                onglets.getNewConformiteInput().getInputContent().datasChangedNow() ||
+                onglets.getNewMldrInput().getInputContent().datasChangedNow() ) {
             String message = MessagesBuilder.getMessagesProperty("editor.close.change.not.saved");
             boolean confirm = DialogMessage.showConfirmYesNo_No(this, message) == JOptionPane.YES_OPTION;
             if (confirm) {
@@ -89,6 +95,34 @@ public class EntiteOnglets extends DialogEditor {
             }
         } else {
             myDispose();
+        }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent windowEvent) {
+        // Les données ont peut-être été ajustées par les méthodes changeXXX de l'éditeur
+        // Changement avant que l'utilisateur ne fasse quoi que ce soit
+
+        Onglets onglets = (Onglets) getInput();
+
+        if (!mode.equals(DialogEditor.NEW)) {
+            if((onglets.getGeneralite().getInputContent().datasChangedNow() && (onglets.getGeneralite() != null) ||
+                    onglets.getNewConformiteInput().getInputContent().datasChangedNow() && (onglets.getNewConformiteInput() != null) ||
+                    onglets.getNewMldrInput().getInputContent().datasChangedNow() && (onglets.getNewMldrInput() != null))) {
+                String messageMode;
+                if (mode.equals(UPDATE)) {
+                    messageMode = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.update");
+                } else {
+                    messageMode = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.not.update");
+                }
+                String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
+                        new String[]{messageMode});
+                DialogMessage.showOk(this, message);
+                //#MAJ 2020-12-05 - Instruction manquante
+                onglets.getGeneralite().getInputContent().enabledButtons();
+
+
+            }
         }
     }
 }
