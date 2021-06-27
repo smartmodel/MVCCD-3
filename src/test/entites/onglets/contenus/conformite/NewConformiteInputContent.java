@@ -158,7 +158,7 @@ public class NewConformiteInputContent extends PanelInputContent {
                 fieldErrors.append(error.getText() + System.lineSeparator());
             }
         } else {
-            fieldErrors.setVisible (false);
+            fieldErrors.setVisible(false);
             labelErrors.setText("L'entité est conforme !");
         }
     }

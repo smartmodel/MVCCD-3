@@ -33,6 +33,7 @@ public class NewGeneraliteInputContent extends PanelInputContentId{
 
     public NewGeneraliteInputContent(NewGeneraliteInput newGeneraliteInput)     {
         super(newGeneraliteInput);
+
     }
 
     public NewGeneraliteInputContent(MCDEntity element){
