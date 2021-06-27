@@ -80,7 +80,7 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         repository.setLayout(new FlowLayout(FlowLayout.LEFT));
         repository.setBackground(Color.WHITE);
         JScrollPane scrollPaneRepo = new JScrollPane(repository);
-        scrollPaneRepo.setPreferredSize(new Dimension(150,600));
+        scrollPaneRepo.setPreferredSize(new Dimension(200,600));
         scrollPaneRepo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRepo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -97,7 +97,7 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         console.setBackground(Color.WHITE);
         console.setLayout(new FlowLayout(FlowLayout.LEFT));
         JScrollPane scrollPaneConsole = new JScrollPane(console);
-        scrollPaneConsole.setPreferredSize(new Dimension(1000,100));
+        scrollPaneConsole.setPreferredSize(new Dimension(1100,100));
         scrollPaneConsole.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneConsole.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
