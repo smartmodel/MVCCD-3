@@ -104,19 +104,25 @@ public class MLDRTransformConstraints {
         MLDRTransformService.modifyNames((IMLDRElement) mldrConstraint, (IMPDRElement) mpdrConstraint);
         MLDRTransformService.modifyName(mpdrModel, mpdrConstraint);
 
-        // Nature
+        // FK
         if (mpdrConstraint instanceof MPDRFK) {
             MLDRFK mldrFK = (MLDRFK) mldrConstraint;
             MPDRFK mpdrFK = (MPDRFK) mpdrConstraint;
+            // Nature
             if (mpdrFK.getNature() != mldrFK.getNature()) {
                 mpdrFK.setNature(mldrFK.getNature());
             }
+            if (mpdrFK.getIndice() != mldrFK.getIndice()) {
+                mpdrFK.setIndice(mldrFK.getIndice());
+            }
+
         }
 
-        // Nature
+        // Unique
         if (mpdrConstraint instanceof MPDRUnique) {
             MLDRUnique mldrUnique = (MLDRUnique) mldrConstraint;
             MPDRUnique mpdrUnique = (MPDRUnique) mpdrConstraint;
+            // Nature
             if (mpdrUnique.getMdrUniqueNature() != mldrUnique.getMdrUniqueNature()) {
                 mpdrUnique.setMdrUniqueNature(mldrUnique.getMdrUniqueNature());
             }

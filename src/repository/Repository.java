@@ -1,12 +1,19 @@
 package repository;
 
+import delete.Delete;
 import main.MVCCDElement;
 import main.MVCCDElementProfileEntry;
+import main.MVCCDElementService;
+import main.MVCCDManager;
+import mdr.MDRTable;
+import mpdr.MPDRContTables;
 import profile.Profile;
 import project.Project;
+import utilities.Trace;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import java.util.ArrayList;
 
 public class Repository extends DefaultTreeModel{
 
@@ -23,16 +30,45 @@ public class Repository extends DefaultTreeModel{
     }
 
     public void addChildsNodes(DefaultMutableTreeNode nodeParent, MVCCDElement mvccdElementParent) {
+
+
+        /*
         for ( MVCCDElement mvccdElement : mvccdElementParent.getChilds()){
+            Trace.println("Elément Classe: " +mvccdElement.getClass().getName());
+            //Trace.println("Elément name : " + mvccdElement.getName() );
+            // La trace ci-dessous provoque une erreur !
+            //Trace.println("Elément : " + mvccdElement.getName() );
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(mvccdElement);
-             if (mvccdElement instanceof MVCCDElementProfileEntry){
+            if (mvccdElement instanceof MVCCDElementProfileEntry){
                 nodeProfileEntry = node ;
             }
             nodeParent.add (node);
-            if (mvccdElement.getChilds().size()>0){
+            //#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
+            //if (mvccdElement.getChildsSortedDefault().size()>0){
                 addChildsNodes(node, mvccdElement);
-            }
+            //}
         }
+
+         */
+
+
+        //#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
+        ArrayList <? extends MVCCDElement> childs = mvccdElementParent.getChildsSortDefault();
+        int i = 0 ;
+        while ( i < childs.size() ){
+            // La trace ci-dessous provoque une erreur !
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(childs.get(i));
+            if (childs.get(i) instanceof MVCCDElementProfileEntry){
+                nodeProfileEntry = node ;
+            }
+            nodeParent.add (node);
+            //#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
+            if (childs.get(i).getChilds().size()>0){
+                addChildsNodes(node, childs.get(i));
+            }
+            i++;
+        }
+
     }
 
     public DefaultMutableTreeNode addNode (DefaultMutableTreeNode nodeParent, MVCCDElement mvccdElement) {

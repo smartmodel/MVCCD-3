@@ -12,6 +12,7 @@ import preferences.Preferences;
 import project.ProjectElement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class MDROperation extends MDRElement implements IMDRElementWithIteration, IMDElementWithSource {
 
@@ -76,18 +77,6 @@ public abstract class MDROperation extends MDRElement implements IMDRElementWith
         }
         return resultat;
     }
-
-
-    public ArrayList<MDRColumn> getMDRColumns(){
-        ArrayList<MDRColumn> resultat = new ArrayList<MDRColumn>();
-        for (IMDRParameter imdrParameter : getTargets()){
-            if (imdrParameter instanceof MDRColumn) {
-                resultat.add((MDRColumn) imdrParameter);
-            }
-        }
-        return resultat;
-    }
-
 
     public ArrayList<String> getParametersName(){
         ArrayList<String> resultat = new ArrayList<String>();

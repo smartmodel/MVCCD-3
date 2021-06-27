@@ -60,3 +60,7 @@ Problèmes : Initialisation d'une relation en création
 //#MAJ 2021-06-18B Save As - Message complémentaire de changement de nom de projet
 //#MAJ 2021-06-18C Attribut AID - pas d'affectation de propriété si dupliqué
 //#MAJ 2021-06-18D MCDDatatype autorisé pour NID (Généralisation)
+//#MAJ 2021-06-21 IMCDModelService - getMCDAssociationNoIdOrIdNatural remplacé par getMCDAssociationNotIdCompAndNotNN
+//#MAJ 2021-06-21B MCDDatatype - type date autorisé poue NID
+//#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
+

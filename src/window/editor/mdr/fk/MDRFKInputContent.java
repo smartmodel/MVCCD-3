@@ -73,17 +73,16 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
     protected void specificColumnsDisplay() {
         int col;
 
-        int widthColName = 400;
+        int widthColName = 300;
 
         col = MDRFKTableColumn.COLUMNFK.getPosition();
         table.getColumnModel().getColumn(col).setPreferredWidth(widthColName);
-        //table.getColumnModel().getColumn(col).setMinWidth(widthColName);
-        //table.getColumnModel().getColumn(col).setMaxWidth(widthColName);
 
         col = MDRFKTableColumn.COLUMNPK.getPosition();
         table.getColumnModel().getColumn(col).setPreferredWidth(widthColName);
-        //table.getColumnModel().getColumn(col).setMinWidth(widthColName);
-        //table.getColumnModel().getColumn(col).setMaxWidth(widthColName);
+
+        col = MDRFKTableColumn.LEVELREFPK.getPosition();
+        table.getColumnModel().getColumn(col).setPreferredWidth(200);
 
     }
 
@@ -91,7 +90,7 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
     protected void specificInitOrLoadTable() {
         MDRFK mdrFK = (MDRFK) getEditor().getMvccdElementCrt();
 
-        ArrayList<MDRColumn> mdrColumns =mdrFK.getMDRColumns();
+        ArrayList<MDRColumn> mdrColumns =mdrFK.getMDRColumnsSortDefault();
 
         int datasSize;
         if (mdrColumns != null){
@@ -115,7 +114,8 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
     protected String[] specificColumnsNames() {
         return  new String[]{
                 MDRFKTableColumn.COLUMNFK.getLabel(),
-                MDRFKTableColumn.COLUMNPK.getLabel()
+                MDRFKTableColumn.COLUMNPK.getLabel(),
+                MDRFKTableColumn.LEVELREFPK.getLabel()
         };
     }
 
@@ -155,6 +155,16 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
 
         col = MDRFKTableColumn.COLUMNPK.getPosition();
         row[col] = mdrColumn.getMDRColumnPK().getName();
+
+        col = MDRFKTableColumn.LEVELREFPK.getPosition();
+        String level = "";
+        //if(mdrColumn.isPk() && mdrColumn.isFk()){
+        if(mdrColumn.isFk()){
+                level = ""+ mdrColumn.getLevelForPK();
+                if (mdrColumn.getMDRColumnPK().isFk())
+                    level += " in parent FK-" + mdrColumn.getMDRColumnPK().getFk().getIndice() ;
+        }
+        row[col] = level;
     }
 
 

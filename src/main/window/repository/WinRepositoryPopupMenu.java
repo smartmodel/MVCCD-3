@@ -326,6 +326,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                         ProjectElement projectElement = (ProjectElement) mvccdElement;
                         message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id : " + projectElement.getIdProjectElement();
                     }
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Ordre dans la fraterie : " + mvccdElement.getOrder();
                     if (mvccdElement instanceof MDRRelationFK) {
                         MDRRelationFK mdrRelationFK = (MDRRelationFK) mvccdElement;
                         message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - nom : " + mdrRelationFK.getMDRFK().getName();

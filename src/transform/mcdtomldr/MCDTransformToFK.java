@@ -27,7 +27,7 @@ public class MCDTransformToFK {
     }
 
     public void createOrModifyFromAllAssNoIdOrIdNatural(IMCDModel imcdModel, MLDRModel mldrModel) {
-        ArrayList<MCDAssociation> mcdAssociations = IMCDModelService.getMCDAssociationNoIdOrIdNatural(imcdModel);
+        ArrayList<MCDAssociation> mcdAssociations = IMCDModelService.getMCDAssociationNotIdCompAndNotNN(imcdModel);
         for (MCDAssociation mcdAssociation : mcdAssociations){
             MCDAssEnd mcdAssEndParent = mcdAssociation.getMCDAssEndParent();
             MCDEntity mcdEntityChild = mcdAssociation.getMCDAssEndChild().getMcdEntity();

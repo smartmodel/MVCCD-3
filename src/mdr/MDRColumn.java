@@ -3,11 +3,9 @@ package mdr;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
+import mdr.services.MDRColumnsService;
 import mldr.MLDRColumn;
 import project.ProjectElement;
-import utilities.Trace;
-
-import java.util.ArrayList;
 
 public abstract class MDRColumn extends MDRElement implements
         IMDRParameter, IMDRElementNamingPreferences, IMDRElementWithIteration {
@@ -148,6 +146,14 @@ public abstract class MDRColumn extends MDRElement implements
         return getMDRTableAccueil().getMDRColumnsFK().contains(this);
     }
 
+    public boolean isPFk() {
+        return isPk() && isFk();
+    }
+
+    public boolean isPkNotFk() {
+        return isPk() && (!isFk());
+    }
+
     public MDRFK getFk() {
         for (MDRFK mdrFK : getMDRTableAccueil().getMDRFKs()) {
             if (mdrFK.getMDRColumns().contains(this)){
@@ -186,4 +192,25 @@ public abstract class MDRColumn extends MDRElement implements
     public void setTempTargetColumnPkId(String tempTargetColumnPkId) {
         this.tempTargetColumnPkId = tempTargetColumnPkId;
     }
+
+    // Applicale aux colonnes PFK
+    // retourne le niveau de la source colonne PK d'une colonne PFK
+    public Integer getLevelForPK(){
+        //if (isPk() && isFk()) {
+        if (isFk()) {
+            return MDRColumnsService.getLevelForPK(this.getMDRColumnPK());
+        } else {
+            return null;
+        }
+    }
+
+
+
+    public int compareToDefault(MDRColumn o) {
+        return MDRColumnsService.compareToDefault(this, o);
+    }
+
+
+    
+
 }

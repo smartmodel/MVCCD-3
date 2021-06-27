@@ -195,6 +195,8 @@ public class IMCDModelService {
         return resultat;
     }
 
+    //#MAJ 2021-06-21 IMCDModelService - getMCDAssociationNoIdOrIdNatural remplacé par getMCDAssociationNotIdCompAndNotNN
+/*
     public static ArrayList<MCDAssociation> getMCDAssociationNoIdOrIdNatural(IMCDModel imcdModel) {
         ArrayList<MCDAssociation> resultat = new ArrayList<MCDAssociation>();
         for (MCDElement mcdElement : getAllMCDAssociationsInIModel(imcdModel)){
@@ -203,6 +205,21 @@ public class IMCDModelService {
             boolean c2 = mcdAssociation.isNoId();
             boolean c3 = mcdAssociation.getDegree()  != MRelationDegree.DEGREE_MANY_MANY;
             if (c1 || (c2 && c3)) {
+                resultat.add(mcdAssociation);
+            }
+        }
+        return resultat;
+    }
+
+ */
+
+    public static ArrayList<MCDAssociation> getMCDAssociationNotIdCompAndNotNN(IMCDModel imcdModel) {
+        ArrayList<MCDAssociation> resultat = new ArrayList<MCDAssociation>();
+        for (MCDElement mcdElement : getAllMCDAssociationsInIModel(imcdModel)){
+            MCDAssociation mcdAssociation = (MCDAssociation) mcdElement;
+            boolean c1 = ! mcdAssociation.isIdComp();
+            boolean c2 = mcdAssociation.getDegree()  != MRelationDegree.DEGREE_MANY_MANY;
+            if (c1 && c2) {
                 resultat.add(mcdAssociation);
             }
         }

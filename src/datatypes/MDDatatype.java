@@ -334,4 +334,12 @@ public abstract class MDDatatype extends MVCCDElement {
             return isDescendantOf(ancestor);
         }
     }
+
+    public boolean isOf(MDDatatype comparator){
+        if (this == comparator){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

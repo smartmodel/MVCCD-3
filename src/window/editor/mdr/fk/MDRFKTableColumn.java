@@ -4,7 +4,8 @@ public enum MDRFKTableColumn {
 
 
     COLUMNFK("Colonne FK"),
-    COLUMNPK("Colonne de référence (PK)");
+    COLUMNPK("Colonne de référence (PK)"),
+    LEVELREFPK("Prof. réf. PK");
 
     private final String label;
 

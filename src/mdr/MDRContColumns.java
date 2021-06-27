@@ -5,6 +5,7 @@ import mcd.interfaces.IMPathOnlyRepositoryTree;
 import project.ProjectElement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class MDRContColumns extends MDRElement implements IMPathOnlyRepositoryTree {
 
@@ -20,5 +21,22 @@ public abstract class MDRContColumns extends MDRElement implements IMPathOnlyRep
             resultat.add((MDRColumn) mvccdElement);
         }
         return resultat;
+    }
+
+    public ArrayList<MDRColumn> getMDRColumnsSortDefault(){
+        ArrayList<MDRColumn> mdrColumnsSorted = new ArrayList<MDRColumn>();
+        for (MDRColumn mdrColumn : getMDRColumns()){
+            mdrColumnsSorted.add(mdrColumn);
+        }
+        Collections.sort(mdrColumnsSorted, MDRColumn::compareToDefault);
+        return mdrColumnsSorted;
+    }
+
+
+
+    // Surcharge pour l'affichage trié PFK - PK - FK
+    public ArrayList<? extends  MVCCDElement> getChildsSortDefault() {
+        ArrayList<MDRColumn> mdrColumns = getMDRColumnsSortDefault();
+        return mdrColumns ;
     }
 }

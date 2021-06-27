@@ -155,14 +155,30 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
      * Retourne une liste ordonnée des enfants.
      * @return
      */
+
     public ArrayList<MVCCDElement> getChilds() {
         Collections.sort(childs, MVCCDElement::compareToOrder);
         return childs;
     }
 
-    public ArrayList<MVCCDElement> getChildsSortName() {
+    public ArrayList<? extends MVCCDElement> getChildsSortName() {
+        ArrayList<MVCCDElement> childsSortName = new ArrayList<MVCCDElement>();
+        for (MVCCDElement child : getChilds()){
+            childsSortName.add(child);
+        }
+        Collections.sort(childsSortName, MVCCDElement::compareToName);
+        return childsSortName;
+
+        /*
         Collections.sort(childs, MVCCDElement::compareToName);
         return childs;
+
+         */
+    }
+
+    //#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
+    public ArrayList<? extends MVCCDElement> getChildsSortDefault() {
+        return getChilds();
     }
 
     /**
@@ -170,6 +186,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
      * @return
      */
     public ArrayList<MVCCDElement> getSiblings(){
+
         return getParent().getChilds();
     }
 
@@ -341,13 +358,13 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
     }
 
     public int compareToOrder(MVCCDElement o) {
-        if ( this.getOrder() > o.getOrder()){
-            return 1;
-        } else if (this.getOrder() == o.getOrder()){
-            return 0;
-        } else {
-            return -1;
-        }
+            if (this.getOrder() > o.getOrder()) {
+                return 1;
+            } else if (this.getOrder() == o.getOrder()) {
+                return 0;
+            } else {
+                return -1;
+            }
     }
 
     public  int compareToName(MVCCDElement o) {
