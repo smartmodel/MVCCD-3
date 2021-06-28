@@ -33,6 +33,8 @@ import java.awt.event.WindowListener;
 public class MVCCDWindow extends JFrame implements WindowListener {
 
     private JPanel panel= new JPanel();;
+
+
     private Haut menu ;
     private WinRepository repository ;
     private WinDiagram diagram ;
@@ -68,15 +70,19 @@ public class MVCCDWindow extends JFrame implements WindowListener {
 
         panelBLResizer = new PanelBorderLayoutResizer();
 
+        // Initilisation des panels
+        repository = new WinRepository();
+        diagram = new WinDiagram();
+        console = new WinConsole();
+        palette = new Reserve();
+        reserve = new Reserve();
 
         String borderLayoutPositionMenu = BorderLayout.NORTH;
         String borderLayoutPositionContent = BorderLayout.CENTER;
-        String borderLayoutPositionReserve = BorderLayout.EAST;
 
-        menu = new Haut(borderLayoutPositionMenu, panelBLResizer);
+        menu = new Haut(borderLayoutPositionMenu, panelBLResizer, this, repository, diagram, console, reserve, palette);
 
         // Référentiel
-        repository = new WinRepository();
         repository.setLayout(new FlowLayout(FlowLayout.LEFT));
         repository.setBackground(Color.WHITE);
         JScrollPane scrollPaneRepo = new JScrollPane(repository);
@@ -85,7 +91,6 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         scrollPaneRepo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Diagrammeur
-        diagram = new WinDiagram();
         diagram.setBackground(Color.WHITE);
         JScrollPane scrollPaneDiagram = new JScrollPane(diagram);
         scrollPaneDiagram.setPreferredSize(new Dimension(800,600));
@@ -93,7 +98,6 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         scrollPaneDiagram.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Console
-        console = new WinConsole();
         console.setBackground(Color.WHITE);
         console.setLayout(new FlowLayout(FlowLayout.LEFT));
         JScrollPane scrollPaneConsole = new JScrollPane(console);
@@ -102,7 +106,6 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         scrollPaneConsole.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Future palette
-        palette = new Reserve();
         palette.setBackground(Color.WHITE);
         palette.setLayout(new FlowLayout(FlowLayout.LEFT));
         JScrollPane scrollPanePalette = new JScrollPane(palette);
@@ -111,7 +114,6 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         scrollPanePalette.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Zone de reserve
-        reserve = new Reserve();
         JScrollPane scrollPaneReserve = new JScrollPane(reserve);
         scrollPaneReserve.setPreferredSize(new Dimension(50,600));
         scrollPaneReserve.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -126,12 +128,12 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         splitRepoDiagra.setRightComponent(splitDiagrammeurPalette);
 
         // Zone Reserve et Palette/Diagrammeur, référentiel
-        splitReserveRepoDiagraPalette.setRightComponent(scrollPaneReserve);
         splitReserveRepoDiagraPalette.setLeftComponent(splitRepoDiagra);
+        splitReserveRepoDiagraPalette.setRightComponent(scrollPaneReserve);
 
         // Zone Console et Référentiel/Diagrammeur
-        splitMessageRepoDiagra.setBottomComponent(scrollPaneConsole);
         splitMessageRepoDiagra.setTopComponent(splitReserveRepoDiagraPalette);
+        splitMessageRepoDiagra.setBottomComponent(scrollPaneConsole);
 
 
         // Permet de garder la bonne taille après redimensionnement

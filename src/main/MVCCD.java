@@ -1,5 +1,6 @@
 package main;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import console.ViewLogsManager;
 import messages.MessagesBuilder;
