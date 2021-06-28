@@ -279,6 +279,19 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     if (pointAncrageClicked.getIndex() == 0 || pointAncrageClicked.getIndex() == relationClicked.getPointsAncrage().getLast().getIndex()) {
       if (GeometryUtils.pointIsAroundShape(newPoint, nearestClassShape)) {
         pointAncrageClicked.drag(newPoint.x, newPoint.y);
+      } else {
+        // Si la nouvelle coordonnée X est hors du contour de la ClassShape, on met quand même à jour le point d'ancrage sans modifier sa position X
+        if (newPoint.x < nearestClassShape.getBounds().getMinX() || newPoint.x > nearestClassShape.getBounds().getMaxX()) {
+          if (GeometryUtils.pointIsAroundShape(new Point(pointAncrageClicked.x, newPoint.y), nearestClassShape)) {
+            pointAncrageClicked.drag(pointAncrageClicked.x, newPoint.y);
+          }
+        }
+        // Si la nouvelle coordonnée Y est hors du contour de la ClassShape, on met quand même à jour le point d'ancrage sans modifier sa position Y
+        if (newPoint.y < nearestClassShape.getBounds().getMinY() || newPoint.y > nearestClassShape.getBounds().getMaxY()) {
+          if (GeometryUtils.pointIsAroundShape(new Point(newPoint.x, pointAncrageClicked.y), nearestClassShape)) {
+            pointAncrageClicked.drag(newPoint.x, pointAncrageClicked.y);
+          }
+        }
       }
     }
   }
