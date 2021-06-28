@@ -52,7 +52,6 @@ public class ClassShapeListener extends MouseAdapter {
     if (RelationCreator.source != null && RelationCreator.destination != null) {
       RelationCreator.createRelation();
     }
-
   }
 
 }

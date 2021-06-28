@@ -1,6 +1,7 @@
 package window.editor.diagrammer.elements.shapes.classes;
 
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -20,10 +21,9 @@ public abstract class ClassShape extends SquaredShape {
 
   public ClassShape() {
     super();
-    this.setBounds(DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_POSITION_X, DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_POSITION_Y, DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH, DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT);
-    this.zoneEnTete.setBounds(0, 0, this.getWidth(), 30);
+    this.initUI();
     this.addListeners();
-    this.setZoneEnTeteContent();
+
   }
 
   @Override
@@ -54,6 +54,13 @@ public abstract class ClassShape extends SquaredShape {
     }
   }
 
+  private void initUI() {
+    // Lorsque la ClassShape est créée, seule la zone d'en-tête est affichée
+    this.setZoneEnTeteContent();
+    this.setMinimumSize(new Dimension(DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH, DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT));
+    this.setSize(this.getMinimumSize());
+  }
+
   private void addListeners() {
     ClassShapeListener listener = new ClassShapeListener();
     this.addMouseMotionListener(listener);
@@ -76,7 +83,7 @@ public abstract class ClassShape extends SquaredShape {
   }
 
   protected void drawZoneProprietes(Graphics2D graphics2D) {
-    int y = this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements()) + DiagrammerConstants.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    int y = this.getZoneMinHeight(this.zoneEnTete.getElements()) + DiagrammerConstants.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
     this.drawElements(graphics2D, this.zoneProprietes.getElements(), y);
     this.drawZoneProprietesBorder(graphics2D);
   }
@@ -85,14 +92,15 @@ public abstract class ClassShape extends SquaredShape {
     return this.getWidth() / 2 - graphics2D.getFontMetrics().stringWidth(element) / 2;
   }
 
-  private int getZoneMinHeight(Graphics2D graphics2D, ArrayList<String> elements) {
+  private int getZoneMinHeight(ArrayList<String> elements) {
+    FontMetrics fontMetrics = this.getFontMetrics(DiagrammerConstants.DIAGRAMMER_CLASS_FONT);
     int minHeight = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING * 2;
-    minHeight += graphics2D.getFontMetrics().getHeight() * elements.size();
+    minHeight += fontMetrics.getHeight() * elements.size();
     return minHeight;
   }
 
   private void drawZoneEnTeteBorder(Graphics2D graphics2D) {
-    int height = this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements());
+    int height = this.getZoneMinHeight(this.zoneEnTete.getElements());
     graphics2D.drawRect(0, 0, this.getWidth() - 1, height);
 
   }
@@ -100,11 +108,11 @@ public abstract class ClassShape extends SquaredShape {
   private void drawZoneProprietesBorder(Graphics2D graphics2D) {
     int height;
     if (this.zoneOperations.getElements().isEmpty() && this.zoneServices.getElements().isEmpty()) {
-      height = this.getHeight() - this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements());
+      height = this.getHeight() - this.getZoneMinHeight(this.zoneEnTete.getElements());
     } else {
       height = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING * 2 + this.zoneProprietes.getElements().size() * graphics2D.getFontMetrics().getHeight();
     }
-    graphics2D.drawRect(0, this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements()), this.getWidth() - 1, height - 1);
+    graphics2D.drawRect(0, this.getZoneMinHeight(this.zoneEnTete.getElements()), this.getWidth() - 1, height - 1);
   }
 
   public abstract void setZoneEnTeteContent();
@@ -120,20 +128,36 @@ public abstract class ClassShape extends SquaredShape {
     }
   }
 
-  private void updateMinimumSize(Graphics2D graphics2D) {
-    int height = this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements()) + this.getZoneMinHeight(graphics2D, this.zoneProprietes.getElements());
-    this.setMinimumSize(new Dimension(this.getWidth(), height));
+  protected Dimension calculateMinimumSize() {
+    FontMetrics fontMetrics = this.getFontMetrics(DiagrammerConstants.DIAGRAMMER_CLASS_FONT);
+    int height = this.getZoneMinHeight(this.zoneEnTete.getElements()) + this.getZoneMinHeight(this.zoneProprietes.getElements());
+    String longestProperty = this.getLongestProperty();
+    int width = DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH;
+    if (longestProperty != null) {
+      if (longestProperty.isEmpty()) {
+        width = DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH;
+      } else {
+        width = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING * 2 + fontMetrics.stringWidth(longestProperty);
+      }
+    }
+    return new Dimension(width, height);
   }
+
+  protected abstract String getLongestProperty();
 
   public void updateRelations() {
     for (RelationShape relation : DiagrammerService.drawPanel.getRelationShapes()) {
       if (relation.getSource() == this || relation.getDestination() == this) {
         relation.updateFirstAndLastPointsAncrage(this, true);
-        //relation.updatePoints(mouseX, mouseY, this);
       }
     }
   }
 
   public abstract void setNameFont(Graphics2D graphics2D);
 
+  protected void updateSizeAndMinimumSize() {
+    Dimension minimumSize = this.calculateMinimumSize();
+    this.setMinimumSize(minimumSize);
+    this.setSize(minimumSize);
+  }
 }

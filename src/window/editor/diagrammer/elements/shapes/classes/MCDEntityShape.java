@@ -1,6 +1,5 @@
 package window.editor.diagrammer.elements.shapes.classes;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import mcd.MCDEntity;
@@ -14,7 +13,6 @@ public class MCDEntityShape extends ClassShape {
   public MCDEntityShape() {
     super();
     this.addListeners();
-    this.setMinimumSize(new Dimension(DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH, DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT));
   }
 
   @Override
@@ -36,6 +34,7 @@ public class MCDEntityShape extends ClassShape {
       if (this.entity.isOrdered()) {
         this.zoneEnTete.addElement(DiagrammerConstants.DIAGRAMMER_ENTITY_ORDERED_TEXT);
       }
+      this.updateSizeAndMinimumSize();
     }
   }
 
@@ -43,12 +42,28 @@ public class MCDEntityShape extends ClassShape {
   public void setZoneProprietesContent() {
     if (this.entity != null) {
       this.zoneProprietes.setElements(this.entity.getAttributesForMCDDisplay());
+      this.updateSizeAndMinimumSize();
     }
   }
 
   @Override
   protected void setBackgroundColor() {
     this.setBackground(DiagrammerConstants.DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR);
+  }
+
+  @Override
+  protected String getLongestProperty() {
+    if (this.entity != null) {
+      String longestProperty = "";
+      for (String property : this.entity.getAttributesForMCDDisplay()) {
+        if (property.length() > longestProperty.length()) {
+          longestProperty = property;
+        }
+      }
+      return longestProperty;
+    } else {
+      return null;
+    }
   }
 
   @Override
@@ -74,5 +89,6 @@ public class MCDEntityShape extends ClassShape {
 
   public void setEntity(MCDEntity entity) {
     this.entity = entity;
+    this.updateSizeAndMinimumSize();
   }
 }

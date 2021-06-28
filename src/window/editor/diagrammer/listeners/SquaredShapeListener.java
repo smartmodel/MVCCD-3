@@ -52,14 +52,13 @@ public class SquaredShapeListener extends MouseAdapter {
   public void mouseDragged(MouseEvent mouseEvent) {
     this.handleMovements(mouseEvent.getPoint());
     // On met à jour le drawPanel
-    DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_NAME, this.shape);
-    drawPanel.updatePanelAndScrollbars();
+    DiagrammerService.drawPanel.updatePanelAndScrollbars();
   }
 
   @Override
   public void mouseMoved(MouseEvent e) {
     if (this.shape.isSelected()) {
-      ResizableBorder resizableBorder = (ResizableBorder) this.shape.getBorder();
+      ResizableBorder resizableBorder = this.shape.getBorder();
       this.shape.setCursor(Cursor.getPredefinedCursor(resizableBorder.getCursor(e)));
     }
   }
