@@ -8,8 +8,22 @@ public class MCDAssociationShape extends RelationShape {
 
   MCDAssociation association;
 
-  public MCDAssociationShape(MCDEntityShape source, MCDEntityShape destination) {
+  public MCDAssociationShape(MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
     super(source, destination);
+    if (isReflexive) {
+      this.pointsAncrage.clear(); // On supprime les points d'ancrage ajoutés par la classe parente
+      RelationPointAncrageShape p1 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() - 50, (int) source.getBounds().getMinY());
+      RelationPointAncrageShape p2 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() - 50, (int) source.getBounds().getMinY() - 50);
+      RelationPointAncrageShape p3 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() + 50, (int) source.getBounds().getMinY() - 50);
+      RelationPointAncrageShape p4 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() + 50, (int) source.getBounds().getMinY() + 50);
+      RelationPointAncrageShape p5 = new RelationPointAncrageShape((int) source.getBounds().getMaxX(), (int) source.getBounds().getMinY() + 50);
+      this.addPointAncrage(p1, 0);
+      this.addPointAncrage(p2, 1);
+      this.addPointAncrage(p3, 2);
+      this.addPointAncrage(p4, 3);
+      this.addPointAncrage(p5, 4);
+      this.isReflexive = true;
+    }
   }
 
   @Override
@@ -97,4 +111,5 @@ public class MCDAssociationShape extends RelationShape {
     this.association = association;
     this.setInformations();
   }
+
 }

@@ -11,25 +11,25 @@ public class RelationPointAncrageShape extends Point implements IShape {
 
   public int DIAMETER = 10;
   private int index;
-
+  private boolean isSelected = false;
 
   public RelationPointAncrageShape(Point p, int index) {
     super(p);
     this.index = index;
-    this.setSize(DIAMETER,DIAMETER);
+    this.setSize(DIAMETER, DIAMETER);
 
   }
 
   public RelationPointAncrageShape(int x, int y) {
     super(x, y);
-    this.setSize(DIAMETER,DIAMETER);
+    this.setSize(DIAMETER, DIAMETER);
 
   }
 
   public RelationPointAncrageShape(int x, int y, int index) {
     super(x, y);
     this.index = index;
-    this.setSize(DIAMETER,DIAMETER);
+    this.setSize(DIAMETER, DIAMETER);
   }
 
   @Override
@@ -42,6 +42,7 @@ public class RelationPointAncrageShape extends Point implements IShape {
     DIAMETER = dimension.height;
   }
 
+  @Override
   public Rectangle getBounds() {
     return new Rectangle(x - DIAMETER / 2, y - DIAMETER / 2, DIAMETER, DIAMETER);
   }
@@ -52,7 +53,6 @@ public class RelationPointAncrageShape extends Point implements IShape {
     int newYPosition = this.getBounds().y * toFactor / fromFactor;
     int newWidth = this.getBounds().width * toFactor / fromFactor;
     int newHeight = this.getBounds().height * toFactor / fromFactor;
-
     // Set la nouvelle position, la nouvelle taille de l'élément et met à jour la nouvelle taille minimale de l'élément
     this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
     this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
@@ -64,7 +64,17 @@ public class RelationPointAncrageShape extends Point implements IShape {
     DiagrammerService.drawPanel.repaint();
   }
 
-  public boolean contains(Point point){
+  @Override
+  public boolean isSelected() {
+    return this.isSelected;
+  }
+
+  @Override
+  public void setSelected(boolean isSelected) {
+    this.isSelected = isSelected;
+  }
+
+  public boolean contains(Point point) {
     Rectangle bounds = this.getBounds();
     return bounds.contains(point);
   }

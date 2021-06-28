@@ -25,7 +25,10 @@ public class PointAncrageDeleteAction extends AbstractAction {
   }
 
   private void delete() {
-    this.relation.deletePointAncrage(this.pointAncrage);
-    DiagrammerService.drawPanel.repaint();
+    // Suppression possible uniquement s'il y a plus de 2 points d'ancrage dans l'association
+    if (relation.getPointsAncrage().size() > 2) {
+      this.relation.deletePointAncrage(this.pointAncrage);
+      DiagrammerService.drawPanel.repaint();
+    }
   }
 }

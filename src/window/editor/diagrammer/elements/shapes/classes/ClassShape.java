@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
-import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
@@ -17,14 +17,10 @@ public abstract class ClassShape extends SquaredShape {
   protected ClassShapeZone zoneProprietes = new ClassShapeZone();
   protected ClassShapeZone zoneOperations = new ClassShapeZone();
   protected ClassShapeZone zoneServices = new ClassShapeZone();
-  protected boolean isClicked = false;
 
   public ClassShape() {
     super();
-    this.setBounds(DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_POSITION_X,
-                   DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_POSITION_Y,
-                   DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH,
-                   DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT);
+    this.setBounds(DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_POSITION_X, DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_POSITION_Y, DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH, DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT);
     this.zoneEnTete.setBounds(0, 0, this.getWidth(), 30);
     this.addListeners();
     this.setZoneEnTeteContent();
@@ -34,11 +30,28 @@ public abstract class ClassShape extends SquaredShape {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     Graphics2D graphics2D = (Graphics2D) g;
-    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     this.setBackgroundColor();
     this.drawZoneEnTete(graphics2D);
     this.drawZoneProprietes(graphics2D);
+  }
+
+  @Override
+  public void drag(int differenceX, int differenceY) {
+    super.drag(differenceX, differenceY);
+    for (RelationShape relation : DiagrammerService.drawPanel.getRelationShapesByClassShape(this)) {
+      if (relation.isReflexive()) {
+        for (RelationPointAncrageShape pointAncrage : relation.getPointsAncrage()) {
+          pointAncrage.setLocationDifference(differenceX, differenceY);
+        }
+      } else {
+        if (relation.getSource() == this) {
+          relation.getPointsAncrage().getFirst().setLocationDifference(differenceX, differenceY);
+        } else if (relation.getDestination() == this) {
+          relation.getPointsAncrage().getLast().setLocationDifference(differenceX, differenceY);
+        }
+      }
+    }
   }
 
   private void addListeners() {
@@ -63,8 +76,7 @@ public abstract class ClassShape extends SquaredShape {
   }
 
   protected void drawZoneProprietes(Graphics2D graphics2D) {
-    int y = this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements()) +
-            DiagrammerConstants.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    int y = this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements()) + DiagrammerConstants.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
     this.drawElements(graphics2D, this.zoneProprietes.getElements(), y);
     this.drawZoneProprietesBorder(graphics2D);
   }
@@ -90,11 +102,9 @@ public abstract class ClassShape extends SquaredShape {
     if (this.zoneOperations.getElements().isEmpty() && this.zoneServices.getElements().isEmpty()) {
       height = this.getHeight() - this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements());
     } else {
-      height = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING * 2 +
-               this.zoneProprietes.getElements().size() * graphics2D.getFontMetrics().getHeight();
+      height = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING * 2 + this.zoneProprietes.getElements().size() * graphics2D.getFontMetrics().getHeight();
     }
-    graphics2D.drawRect(0, this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements()),
-                        this.getWidth() - 1, height - 1);
+    graphics2D.drawRect(0, this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements()), this.getWidth() - 1, height - 1);
   }
 
   public abstract void setZoneEnTeteContent();
@@ -111,29 +121,19 @@ public abstract class ClassShape extends SquaredShape {
   }
 
   private void updateMinimumSize(Graphics2D graphics2D) {
-    int height = this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements()) +
-                 this.getZoneMinHeight(graphics2D, this.zoneProprietes.getElements());
+    int height = this.getZoneMinHeight(graphics2D, this.zoneEnTete.getElements()) + this.getZoneMinHeight(graphics2D, this.zoneProprietes.getElements());
     this.setMinimumSize(new Dimension(this.getWidth(), height));
   }
 
-  public void updateRelations(int differenceX, int differenceY, boolean isResize) {
-    for (IShape shape : DiagrammerService.drawPanel.getElements()) {
-      if (shape instanceof RelationShape) {
-        RelationShape relation = (RelationShape) shape;
-        if (relation.getSource() == this || relation.getDestination() == this) {
-          relation.updateFirstAndLastPointsAncrage(differenceX, differenceY, this, isResize);
-        }
+  public void updateRelations() {
+    for (RelationShape relation : DiagrammerService.drawPanel.getRelationShapes()) {
+      if (relation.getSource() == this || relation.getDestination() == this) {
+        relation.updateFirstAndLastPointsAncrage(this, true);
+        //relation.updatePoints(mouseX, mouseY, this);
       }
     }
   }
 
-  public boolean isClicked() {
-    return isClicked;
-  }
-
-  public void setClicked(boolean clicked) {
-    isClicked = clicked;
-  }
-
   public abstract void setNameFont(Graphics2D graphics2D);
+
 }

@@ -16,50 +16,52 @@ import window.editor.diagrammer.utils.ResizableBorder;
 public class SquaredShapeListener extends MouseAdapter {
 
   private int cursor;
-  private SquaredShape component;
+  private SquaredShape shape;
   private Point startPoint = null;
 
-  public SquaredShapeListener(SquaredShape component) {
-    this.component = component;
-  }
-
-  @Override
-  public void mouseDragged(MouseEvent mouseEvent) {
-    this.handleMovements(mouseEvent.getPoint());
-
-    // On met à jour le drawPanel
-    DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_NAME, this.component);
-    drawPanel.updatePanelAndScrollbars();
-  }
-
-  @Override
-  public void mousePressed(MouseEvent mouseEvent) {
-    this.moveComponentToFront(mouseEvent);
-
-    ResizableBorder resizableBorder = (ResizableBorder) this.component.getBorder();
-    cursor = resizableBorder.getCursor(mouseEvent);
-    this.startPoint = mouseEvent.getPoint();
-
-    this.component.requestFocus();
-    this.component.repaint();
+  public SquaredShapeListener(SquaredShape shape) {
+    this.shape = shape;
   }
 
   @Override
   public void mouseClicked(MouseEvent e) {
     super.mouseClicked(e);
+    this.shape.setSelected(true);
+    DiagrammerService.drawPanel.deselectAllOtherShape(this.shape);
     this.moveComponentToFront(e);
   }
 
   @Override
-  public void mouseMoved(MouseEvent e) {
-      ResizableBorder resizableBorder = (ResizableBorder) this.component.getBorder();
-      this.component.setCursor(Cursor.getPredefinedCursor(resizableBorder.getCursor(e)));
+  public void mousePressed(MouseEvent mouseEvent) {
+    this.shape.setSelected(true);
+    DiagrammerService.drawPanel.deselectAllOtherShape(this.shape);
+    this.moveComponentToFront(mouseEvent);
+    ResizableBorder resizableBorder = this.shape.getBorder();
+    cursor = resizableBorder.getCursor(mouseEvent);
+    this.startPoint = mouseEvent.getPoint();
+    this.shape.repaint();
   }
 
   @Override
   public void mouseReleased(MouseEvent e) {
     super.mouseReleased(e);
     this.startPoint = null;
+  }
+
+  @Override
+  public void mouseDragged(MouseEvent mouseEvent) {
+    this.handleMovements(mouseEvent.getPoint());
+    // On met à jour le drawPanel
+    DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_NAME, this.shape);
+    drawPanel.updatePanelAndScrollbars();
+  }
+
+  @Override
+  public void mouseMoved(MouseEvent e) {
+    if (this.shape.isSelected()) {
+      ResizableBorder resizableBorder = (ResizableBorder) this.shape.getBorder();
+      this.shape.setCursor(Cursor.getPredefinedCursor(resizableBorder.getCursor(e)));
+    }
   }
 
   private void handleMovements(Point mouseClick) {
@@ -73,22 +75,17 @@ public class SquaredShapeListener extends MouseAdapter {
   }
 
   private void handleResize(Point mouseClick) {
-
     if (startPoint != null) {
-
-      int x = this.component.getX();
-      int y = this.component.getY();
-      int width = this.component.getWidth();
-      int height = this.component.getHeight();
-
+      int x = this.shape.getX();
+      int y = this.shape.getY();
+      int width = this.shape.getWidth();
+      int height = this.shape.getHeight();
       int newX;
       int newY;
       int newWidth;
       int newHeight;
-
       int differenceX = GridUtils.alignToGrid(mouseClick.x - startPoint.x, DiagrammerService.getDrawPanel().getGridSize());
       int differenceY = GridUtils.alignToGrid(mouseClick.y - startPoint.y, DiagrammerService.getDrawPanel().getGridSize());
-
       switch (cursor) {
         case Cursor.N_RESIZE_CURSOR: {
           newX = GridUtils.alignToGrid(x, DiagrammerService.getDrawPanel().getGridSize());
@@ -96,12 +93,10 @@ public class SquaredShapeListener extends MouseAdapter {
           newWidth = GridUtils.alignToGrid(width, DiagrammerService.getDrawPanel().getGridSize());
           newHeight = GridUtils.alignToGrid(height - differenceY, DiagrammerService.getDrawPanel().getGridSize());
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
-
           // On vérifie que la nouvelle hauteur est plus grande ou égale à la taille minimale du composant
-          if (newBounds.height >= this.component.getMinimumSize().height) {
-            this.component.resize(newBounds);
+          if (newBounds.height >= this.shape.getMinimumSize().height) {
+            this.shape.resize(newBounds);
           }
-
           break;
         }
         case Cursor.S_RESIZE_CURSOR: {
@@ -110,12 +105,10 @@ public class SquaredShapeListener extends MouseAdapter {
           newWidth = width;
           newHeight = GridUtils.alignToGrid(height + differenceY, DiagrammerService.getDrawPanel().getGridSize());
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
-
           // On vérifie que la nouvelle hauteur est plus grande ou égale à la taille minimale du composant
-          if (newBounds.height >= this.component.getMinimumSize().height) {
-            this.component.resize(newBounds);
+          if (newBounds.height >= this.shape.getMinimumSize().height) {
+            this.shape.resize(newBounds);
           }
-
           // On met à jour le point de départ
           this.startPoint = new Point(mouseClick.x, newHeight);
           break;
@@ -126,12 +119,10 @@ public class SquaredShapeListener extends MouseAdapter {
           newWidth = GridUtils.alignToGrid(width - differenceX, DiagrammerService.getDrawPanel().getGridSize());
           newHeight = height;
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
-
           // On vérifie que la nouvelle largeur est plus grande ou égale à la taille minimale du composant
-          if (newBounds.width >= this.component.getMinimumSize().width) {
-            this.component.resize(newBounds);
+          if (newBounds.width >= this.shape.getMinimumSize().width) {
+            this.shape.resize(newBounds);
           }
-
           break;
         }
         case Cursor.E_RESIZE_CURSOR: {
@@ -140,15 +131,12 @@ public class SquaredShapeListener extends MouseAdapter {
           newWidth = GridUtils.alignToGrid(width + differenceX, DiagrammerService.getDrawPanel().getGridSize());
           newHeight = height;
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
-
           // On vérifie que la nouvelle largeur est plus grande ou égale à la taille minimale du composant
-          if (newBounds.width >= this.component.getMinimumSize().width) {
-            this.component.resize(newBounds);
+          if (newBounds.width >= this.shape.getMinimumSize().width) {
+            this.shape.resize(newBounds);
           }
-
           // On met à jour le point de départ
           this.startPoint = new Point(newWidth, mouseClick.y);
-
           break;
         }
         // TODO -> Décommenter pour autoriser le resize dans les coins. Ne pas oublier de décommenter les locations et cursors dans ResizableBorder
@@ -223,7 +211,7 @@ public class SquaredShapeListener extends MouseAdapter {
           break;
         }*/
       }
-      this.component.setCursor(Cursor.getPredefinedCursor(cursor));
+      this.shape.setCursor(Cursor.getPredefinedCursor(cursor));
 
     }
   }
@@ -231,10 +219,10 @@ public class SquaredShapeListener extends MouseAdapter {
   private void handleDrag(Point mouseClick) {
     int differenceX = GridUtils.alignToGrid(mouseClick.x - startPoint.x, DiagrammerService.getDrawPanel().getGridSize());
     int differenceY = GridUtils.alignToGrid(mouseClick.y - startPoint.y, DiagrammerService.getDrawPanel().getGridSize());
-    this.component.drag(differenceX, differenceY);
+    this.shape.drag(differenceX, differenceY);
   }
 
-  private void moveComponentToFront(MouseEvent event){
+  private void moveComponentToFront(MouseEvent event) {
     SquaredShape shape = (SquaredShape) event.getSource();
     DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_NAME, shape);
     drawPanel.moveToFront(shape);

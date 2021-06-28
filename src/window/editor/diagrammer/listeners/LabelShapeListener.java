@@ -3,7 +3,7 @@ package window.editor.diagrammer.listeners;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import window.editor.diagrammer.elements.shapes.LabelShape;
+import window.editor.diagrammer.elements.shapes.relations.LabelShape;
 
 public class LabelShapeListener extends MouseAdapter {
 

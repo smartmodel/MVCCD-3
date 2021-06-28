@@ -14,13 +14,17 @@ public class MCDEntityShape extends ClassShape {
   public MCDEntityShape() {
     super();
     this.addListeners();
-    this.setMinimumSize(new Dimension(DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH,
-                                      DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT));
+    this.setMinimumSize(new Dimension(DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH, DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT));
   }
 
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
+  }
+
+  @Override
+  public void drag(int differenceX, int differenceY) {
+    super.drag(differenceX, differenceY);
   }
 
   @Override

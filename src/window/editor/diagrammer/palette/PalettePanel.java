@@ -4,11 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import window.editor.diagrammer.utils.DiagrammerConstants;
 
 public class PalettePanel extends JPanel {
 
   public static PaletteButton activeButton;
+  private final int alignment = SwingConstants.CENTER;
 
   public PalettePanel() {
     this.activeButton = null;
@@ -21,12 +23,12 @@ public class PalettePanel extends JPanel {
     this.add(new PaletteButton(DiagrammerConstants.DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT));
   }
 
+  public static void setActiveButton(PaletteButton activeButton) {
+    PalettePanel.activeButton = activeButton;
+  }
+
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-  }
-
-  public static void setActiveButton(PaletteButton activeButton) {
-    PalettePanel.activeButton = activeButton;
   }
 }
