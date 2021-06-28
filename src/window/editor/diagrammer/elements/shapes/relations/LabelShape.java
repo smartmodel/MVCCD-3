@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
 import window.editor.diagrammer.utils.DiagrammerConstants;
 import window.editor.diagrammer.utils.GeometryUtils;
@@ -14,7 +15,7 @@ public class LabelShape extends JLabel {
 
   private int distanceInXFromPointAncrage = 0;
   private int distanceInYFromPointAncrage = 0;
-  private Point pointAncrage;
+  private RelationPointAncrageShape pointAncrage;
   private RelationShape relationShape;
   private boolean isRole;
   private boolean firstDisplay;
@@ -24,15 +25,16 @@ public class LabelShape extends JLabel {
     this.addListeners();
   }
 
-  public LabelShape(Point pointAncrage, RelationShape relationShape, boolean isRole) {
+  public LabelShape(RelationPointAncrageShape pointAncrage, RelationShape relationShape, boolean isRole) {
     this();
     this.pointAncrage = pointAncrage;
     this.relationShape = relationShape;
     this.isRole = isRole;
     this.firstDisplay = true;
-    this.setSize(new Dimension(100, 30));
+    // this.setSize(new Dimension(100, 30));
     Point location = this.calculateLocation(this.firstDisplay);
-    this.setLocation(location);
+    //   this.setLocation(location);
+    this.setBounds(location.x, location.y, 100, 30);
     this.repaint();
   }
 
@@ -54,7 +56,9 @@ public class LabelShape extends JLabel {
   private Point calculateDestionationInformationsFirstDisplay() {
     int x;
     int y;
-    if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, this.relationShape.getDestination().getBounds())) {
+    ClassShape nearestClassShape = relationShape.getNearestClassShape(this.pointAncrage);
+
+    if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté gauche de la ClassShape
       if (isRole) {
         x = pointAncrage.x - this.getWidth() - 10;
@@ -63,7 +67,7 @@ public class LabelShape extends JLabel {
         x = this.pointAncrage.x - this.getWidth() - 10;
         y = this.pointAncrage.y + 10;
       }
-    } else if (GeometryUtils.pointIsOnRightSideOfBounds(this.pointAncrage, this.relationShape.getDestination().getBounds())) {
+    } else if (GeometryUtils.pointIsOnRightSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté droit de la ClassShape
       if (isRole) {
         x = pointAncrage.x + 10;
@@ -72,7 +76,7 @@ public class LabelShape extends JLabel {
         x = pointAncrage.x + 10;
         y = pointAncrage.y - this.getHeight() - 10;
       }
-    } else if (GeometryUtils.pointIsOnBottomSideOfBounds(this.pointAncrage, this.relationShape.getDestination().getBounds())) {
+    } else if (GeometryUtils.pointIsOnBottomSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le bas de la ClassShape
       if (isRole) {
         x = pointAncrage.x + 10;
@@ -97,7 +101,9 @@ public class LabelShape extends JLabel {
   private Point calculateSourceInformationsFirstDisplay() {
     int x;
     int y;
-    if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, this.relationShape.getSource().getBounds())) {
+    ClassShape nearestClassShape = relationShape.getNearestClassShape(this.pointAncrage);
+
+    if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté gauche de la ClassShape
       if (isRole) {
         x = pointAncrage.x - this.getWidth() - 10;
@@ -106,7 +112,7 @@ public class LabelShape extends JLabel {
         x = this.pointAncrage.x - this.getWidth() - 10;
         y = this.pointAncrage.y - this.getHeight() - 10;
       }
-    } else if (GeometryUtils.pointIsOnRightSideOfBounds(this.pointAncrage, this.relationShape.getSource().getBounds())) {
+    } else if (GeometryUtils.pointIsOnRightSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté droit de la ClassShape
       if (isRole) {
         x = pointAncrage.x + 10;
@@ -115,13 +121,13 @@ public class LabelShape extends JLabel {
         x = pointAncrage.x + 10;
         y = pointAncrage.y - this.getHeight() - 10;
       }
-    } else if (GeometryUtils.pointIsOnBottomSideOfBounds(this.pointAncrage, this.relationShape.getSource().getBounds())) {
+    } else if (GeometryUtils.pointIsOnBottomSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le bas de la ClassShape
       if (isRole) {
-        x = pointAncrage.x + 10;
+        x = pointAncrage.x - this.getWidth() - 10;
         y = pointAncrage.y + 10;
       } else {
-        x = pointAncrage.x - this.getWidth() - 10;
+        x = pointAncrage.x + 10;
         y = pointAncrage.y + 10;
       }
     } else {

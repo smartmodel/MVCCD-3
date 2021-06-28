@@ -38,20 +38,25 @@ public abstract class RelationShape extends JComponent implements IShape {
   public RelationShape(MCDEntityShape source, MCDEntityShape destination) {
     this.source = source;
     this.destination = destination;
-    this.pointsAncrage.add(new RelationPointAncrageShape(source.getX() + source.getWidth(), source.getY() + source.getHeight() / 2, 0));
-    this.pointsAncrage.add(new RelationPointAncrageShape(destination.getX(), destination.getY() + destination.getHeight() / 2, 1));
+
+    this.createPointsAncrage(isReflexive);
+    this.createLabels();
+
     this.setFocusable(true);
     this.addListeners();
-    sourceRole = new LabelShape(this.pointsAncrage.getFirst(), this, true);
-    sourceCardinalite = new LabelShape(this.pointsAncrage.getLast(), this, false);
-    destinationRole = new LabelShape(this.pointsAncrage.getLast(), this, true);
-    destinationCardinalite = new LabelShape(this.pointsAncrage.getFirst(), this, false);
-    associationName = new LabelShape(this.getCenter(), this, false);
-    DiagrammerService.drawPanel.add(sourceRole, JLayeredPane.DRAG_LAYER);
-    DiagrammerService.drawPanel.add(sourceCardinalite, JLayeredPane.DRAG_LAYER);
-    DiagrammerService.drawPanel.add(destinationRole, JLayeredPane.DRAG_LAYER);
-    DiagrammerService.drawPanel.add(destinationCardinalite, JLayeredPane.DRAG_LAYER);
-    DiagrammerService.drawPanel.add(associationName, JLayeredPane.DRAG_LAYER);
+
+  }
+
+  public RelationShape(MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+    this.source = source;
+    this.destination = destination;
+    this.isReflexive = isReflexive;
+
+    this.createPointsAncrage(isReflexive);
+    this.createLabels();
+
+    this.setFocusable(true);
+    this.addListeners();
 
   }
 
@@ -220,12 +225,7 @@ public abstract class RelationShape extends JComponent implements IShape {
 
   }
 
-  public ClassShape getNearestClassShape(RelationPointAncrageShape pointAncrageIndex) {
-/*    Point sourcePoint = new Point((int) this.source.getBounds().getMaxX(), (int) this.source.getBounds().getMaxY());
-    Point destinationPoint = new Point((int) this.destination.getBounds().getMinX(), (int) this.destination.getBounds().getMinY());
-    int distanceFromSource = (int) GeometryUtils.getDistanceBetweenTwoPoints(pointAncrageIndex, sourcePoint);
-    int distanceFromDestination = (int) GeometryUtils.getDistanceBetweenTwoPoints(pointAncrageIndex, destinationPoint);
-    return distanceFromSource < distanceFromDestination ? this.source : this.destination;*/
+  public ClassShape getNearestClassShape(Point pointAncrageIndex) {
     if (GeometryUtils.pointIsAroundShape(pointAncrageIndex, this.source)) {
       return this.source;
     } else {
@@ -295,5 +295,38 @@ public abstract class RelationShape extends JComponent implements IShape {
 
   public boolean isReflexive() {
     return isReflexive;
+  }
+
+  private void createPointsAncrage(boolean isReflexive) {
+    if (isReflexive) {
+      RelationPointAncrageShape p1 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() - 50, (int) source.getBounds().getMinY());
+      RelationPointAncrageShape p2 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() - 50, (int) source.getBounds().getMinY() - 50);
+      RelationPointAncrageShape p3 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() + 50, (int) source.getBounds().getMinY() - 50);
+      RelationPointAncrageShape p4 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() + 50, (int) source.getBounds().getMinY() + 50);
+      RelationPointAncrageShape p5 = new RelationPointAncrageShape((int) source.getBounds().getMaxX(), (int) source.getBounds().getMinY() + 50);
+      this.addPointAncrage(p1, 0);
+      this.addPointAncrage(p2, 1);
+      this.addPointAncrage(p3, 2);
+      this.addPointAncrage(p4, 3);
+      this.addPointAncrage(p5, 4);
+      this.isReflexive = true;
+    } else {
+      this.pointsAncrage.add(new RelationPointAncrageShape(source.getX() + source.getWidth(), source.getY() + source.getHeight() / 2, 0));
+      this.pointsAncrage.add(new RelationPointAncrageShape(destination.getX(), destination.getY() + destination.getHeight() / 2, 1));
+    }
+  }
+
+  private void createLabels() {
+    sourceRole = new LabelShape(this.pointsAncrage.getFirst(), this, true);
+    sourceCardinalite = new LabelShape(this.pointsAncrage.getLast(), this, false);
+    destinationRole = new LabelShape(this.pointsAncrage.getLast(), this, true);
+    destinationCardinalite = new LabelShape(this.pointsAncrage.getFirst(), this, false);
+    associationName = new LabelShape(new RelationPointAncrageShape(this.getCenter().x, this.getCenter().y), this, false);
+
+    DiagrammerService.drawPanel.add(sourceRole, JLayeredPane.DRAG_LAYER);
+    DiagrammerService.drawPanel.add(sourceCardinalite, JLayeredPane.DRAG_LAYER);
+    DiagrammerService.drawPanel.add(destinationRole, JLayeredPane.DRAG_LAYER);
+    DiagrammerService.drawPanel.add(destinationCardinalite, JLayeredPane.DRAG_LAYER);
+    DiagrammerService.drawPanel.add(associationName, JLayeredPane.DRAG_LAYER);
   }
 }
