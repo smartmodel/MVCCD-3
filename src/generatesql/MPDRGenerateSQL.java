@@ -1,12 +1,17 @@
 package generatesql;
 
+import generatesql.window.GenerateSQLWindow;
 import main.MVCCDManager;
 import mpdr.MPDRModel;
 import resultat.Resultat;
 import utilities.files.UtilFiles;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 
 public class MPDRGenerateSQL {
 
@@ -22,6 +27,10 @@ public class MPDRGenerateSQL {
 
             MPDRGenerateSQLTables mpdrGenerateSQLTables = new MPDRGenerateSQLTables(this, mpdrModel);
             String code = mpdrGenerateSQLTables.generateSQLTables();
+
+            MPDRGenerateSQLConstraints mpdrGenerateSQLConstraints = new MPDRGenerateSQLConstraints(this, mpdrModel);
+            code += mpdrGenerateSQLConstraints.generateSQLFKs();
+
             String cleanCode = MPDRGenerateSQLUtil.cleanCode(code);
 
             fileWriter.write(cleanCode);
