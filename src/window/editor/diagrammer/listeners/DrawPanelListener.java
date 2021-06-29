@@ -2,6 +2,7 @@ package window.editor.diagrammer.listeners;
 
 import java.awt.Cursor;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -9,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Line2D;
 import java.util.ListIterator;
+import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
@@ -32,6 +34,11 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
   private Point origin;
   private RelationPointAncrageShape pointAncrageClicked = null;
   private RelationShape relationClicked = null;
+  private Cursor cursorEntityIcon;
+
+  public DrawPanelListener() {
+    this.cursorEntityIcon = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("ressources/icons-diagrammer/palette/icon_entity.png").getImage(), new Point(0, 0), "cursorEntityIcon");
+  }
 
   @Override
   public void mouseClicked(MouseEvent e) {
@@ -149,6 +156,10 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
     if (DiagrammerService.drawPanel.isShowRelationProjectionLine()) {
       DiagrammerService.drawPanel.repaint();
+    }
+
+    if (PalettePanel.activeButton != null && PalettePanel.activeButton.getText().equals(Preferences.DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT)) {
+      DiagrammerService.drawPanel.setCursor(this.cursorEntityIcon);
     }
 
   }

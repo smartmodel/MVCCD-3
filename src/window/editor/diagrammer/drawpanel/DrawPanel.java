@@ -37,6 +37,7 @@ public class DrawPanel extends JLayeredPane {
   private Point origin;
   private List<IShape> elements;
   private boolean showRelationProjectionLine = false;
+  private boolean showEntityIconFollowingMouse = false;
 
   public DrawPanel() {
     this.elements = new LinkedList<>();
@@ -65,13 +66,14 @@ public class DrawPanel extends JLayeredPane {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     Graphics2D graphics2D = (Graphics2D) g;
-    System.out.println("On redessine le panel");
+    // Si l'option "Afficher la grille" est cochée dans les préférences, on affiche la grille dans le diagrammeur
     if (PreferencesManager.instance().getApplicationPref().isDIAGRAMMER_SHOW_GRID()) {
-      System.out.println("Dessine la grid");
       this.drawGrid(graphics2D);
     }
     this.drawRelations(graphics2D);
-    if (this.isShowRelationProjectionLine()) {
+
+    // Si on crée une association, une ligne de projection est reliée de l'entité source au curseur de la souris
+    if (this.showRelationProjectionLine) {
       this.showRelationProjectionLine(graphics2D);
     }
   }
@@ -426,4 +428,5 @@ public class DrawPanel extends JLayeredPane {
     this.showRelationProjectionLine = showRelationProjectionLine;
     this.repaint();
   }
+
 }

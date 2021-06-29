@@ -23,4 +23,5 @@ public class PaletteButton extends JButton {
     this.setOpaque(false);
     this.setBackground(new Color(Color.TRANSLUCENT));
   }
+
 }
