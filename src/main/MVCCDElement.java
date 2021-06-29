@@ -217,7 +217,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
 
     public int getChildOrderIndexSameClass(MVCCDElement child){
         int index = -1 ;
-        for (MVCCDElement aChild : getChilds()){
+        for (MVCCDElement aChild : getChildsSortDefault()){
             if (aChild.getClass() == child.getClass()) {
                 index++;
                 if (aChild == child) {

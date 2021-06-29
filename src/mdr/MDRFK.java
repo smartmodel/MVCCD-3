@@ -1,6 +1,7 @@
 package mdr;
 
 import mdr.interfaces.IMDRConstraintIndice;
+import mdr.services.MDRFKService;
 import project.ProjectElement;
 import project.ProjectService;
 
@@ -67,5 +68,9 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
 
     public void setMdrPK(MDRPK mdrPK) {
         this.mdrPKId = mdrPK.getIdProjectElement();
+    }
+
+    public int compareToDefault(MDRFK other) {
+        return MDRFKService.compareToDefault(this,  other);
     }
 }

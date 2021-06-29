@@ -1,5 +1,9 @@
 package mdr;
 
+import mcd.MCDAttribute;
+import mcd.MCDUnicity;
+import mdr.services.MDRFKService;
+import mdr.services.MDRUniqueService;
 import project.ProjectElement;
 
 public abstract class MDRUnique extends MDRConstraint {
@@ -42,4 +46,16 @@ public abstract class MDRUnique extends MDRConstraint {
     public void setFrozen(boolean frozen) {
         this.frozen = frozen;
     }
+
+    public int compareToDefault(MDRUnique other) {
+        return MDRUniqueService.compareToDefault(this,  other);
+    }
+
+    public abstract MCDUnicity getMcdUnicitySource();
+
+    public boolean isFromMcdUnicitySource(){
+        return getMcdUnicitySource() != null;
+    }
+
 }
+

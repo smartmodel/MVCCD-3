@@ -5,6 +5,8 @@ import m.MRelationDegree;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDConstraintService;
+import mdr.MDRColumn;
+import mdr.services.MDRColumnsService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
@@ -183,4 +185,9 @@ public abstract class MCDConstraint extends MCDOperation{
         }
         return resultat;
     }
+
+    public int compareToDefault(MCDConstraint other) {
+        return MCDConstraintService.compareToDefault(this, other);
+    }
+
 }

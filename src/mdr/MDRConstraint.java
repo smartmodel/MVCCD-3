@@ -1,6 +1,8 @@
 package mdr;
 
 import main.MVCCDElement;
+import mcd.MCDConstraint;
+import mcd.services.MCDConstraintService;
 import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRConstraintService;
 import project.ProjectElement;
@@ -45,6 +47,11 @@ public abstract class MDRConstraint extends MDROperation{
 
     public ArrayList<? extends MVCCDElement> getChildsSortDefault() {
         return getMDRColumnsSortDefault();
+    }
+
+
+    public int compareToDefault(MDRConstraint other) {
+        return MDRConstraintService.compareToDefault(this, other);
     }
 
 }

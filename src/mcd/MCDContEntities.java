@@ -28,14 +28,6 @@ public class MCDContEntities extends MCDElement implements IMPathOnlyRepositoryT
         return resultat;
     }
 
-    public ArrayList<MVCCDElement> getChildsRepository() {
-        ArrayList<MVCCDElement> childs = getChilds();
-        Collections.sort(childs, MVCCDElement::compareToName);
-
-
-        return childs;
-    }
-
 
     public ArrayList<? extends MVCCDElement> getChildsSortDefault() {
         return getChildsSortName();

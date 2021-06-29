@@ -1,6 +1,7 @@
 package mldr;
 
 import main.MVCCDElement;
+import mcd.MCDAttribute;
 import mcd.MCDElement;
 import mdr.MDRColumn;
 import mdr.MDRContColumns;
@@ -16,6 +17,8 @@ public class MLDRContColumns extends MDRContColumns implements IMLDRElement {
     public MLDRContColumns(ProjectElement parent, String name) {
         super(parent, name);
     }
+
+
 
     public MCDElement getMcdElementSource() {
         return null;

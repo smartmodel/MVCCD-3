@@ -89,7 +89,7 @@ public class ConstraintsInputContent extends PanelInputContentTable {
     protected void specificInitOrLoadTable() {
 
         MCDContConstraints mcdContConstraints = (MCDContConstraints) getEditor().getMvccdElementCrt();
-        ArrayList<MCDConstraint> mcdConstraints = mcdContConstraints.getMCDConstraints();
+        ArrayList<MCDConstraint> mcdConstraints = mcdContConstraints.getMCDConstraintsSortDefault();
 
         datas = new Object[mcdConstraints.size()][ConstraintsTableColumn.getNbColumns()];
         int line=-1;

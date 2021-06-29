@@ -1,5 +1,6 @@
 package mdr;
 
+import mcd.MCDAttribute;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
@@ -204,13 +205,14 @@ public abstract class MDRColumn extends MDRElement implements
         }
     }
 
-
-
-    public int compareToDefault(MDRColumn o) {
-        return MDRColumnsService.compareToDefault(this, o);
+    public int compareToDefault(MDRColumn other) {
+        return MDRColumnsService.compareToDefault(this, other);
     }
 
+    public abstract MCDAttribute getMcdAttributeSource();
 
-    
+    public boolean isFromMcdAttributeSource(){
+        return getMcdAttributeSource() != null;
+    }
 
 }

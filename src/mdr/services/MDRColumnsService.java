@@ -13,6 +13,7 @@ public class MDRColumnsService {
 
     final static int HAUT = -1 ;
     final static int BAS = 1;
+    final static int COMPARE_DEFAULT = 0 ;
 
     // A l'appel la colonne est bien PK et FK
     public static Integer getLevelForPK(MDRColumn columnRefPK) {
@@ -42,10 +43,13 @@ public class MDRColumnsService {
  */
 
 
-
-
-
     public static int compareToDefault(MDRColumn courant, MDRColumn other) {
+        return compareToInternal(courant, other, COMPARE_DEFAULT);
+    }
+
+
+
+    private static int compareToInternal(MDRColumn courant, MDRColumn other, int mode) {
 
         //Surcharge getChilds pour présenter :
         // 1. Les PFK
@@ -80,7 +84,7 @@ public class MDRColumnsService {
             if (other.isPFk() || other.isPkNotFk() || other.isFk()) {
                 return BAS;
             } else {
-                return compareNotKey(courant, other);
+                return compareNotKey(courant, other, mode);
             }
         }
     }
@@ -108,8 +112,20 @@ public class MDRColumnsService {
     }
 
 
-    private static int compareNotKey(MDRColumn courant, MDRColumn other) {
-        return 0 ;
-    }
+    private static int compareNotKey(MDRColumn courant, MDRColumn other, int mode) {
+        if (courant.isFromMcdAttributeSource() ){
+            if (other.isFromMcdAttributeSource()) {
+                if (mode == COMPARE_DEFAULT) {
+                    return courant.getMcdAttributeSource().compareToOrder(other.getMcdAttributeSource());
+                } else {
+                    return 0 ;
+                }
+            } else {
+                return HAUT;
+            }
+        } else {
+            return BAS;
+        }
+     }
 
 }
