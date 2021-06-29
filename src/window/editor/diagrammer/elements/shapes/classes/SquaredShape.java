@@ -2,6 +2,7 @@ package window.editor.diagrammer.elements.shapes.classes;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 import javax.swing.JPanel;
 import window.editor.diagrammer.elements.interfaces.IResizable;
@@ -59,6 +60,10 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable 
   public void setSelected(boolean selected) {
     this.isSelected = selected;
     this.border.setVisible(selected);
+  }
+
+  public Point getCenter() {
+    return new Point((int) this.getBounds().getMinX() + this.getWidth() / 2, (int) this.getBounds().getMinY() + this.getHeight() / 2);
   }
 
   @Override

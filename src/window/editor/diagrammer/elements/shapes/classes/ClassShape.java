@@ -6,11 +6,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
+import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.DiagrammerConstants;
 
 public abstract class ClassShape extends SquaredShape {
 
@@ -57,7 +57,7 @@ public abstract class ClassShape extends SquaredShape {
   private void initUI() {
     // Lorsque la ClassShape est créée, seule la zone d'en-tête est affichée
     this.setZoneEnTeteContent();
-    this.setMinimumSize(new Dimension(DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH, DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT));
+    this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_ENTITY_WIDTH, Preferences.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT));
     this.setSize(this.getMinimumSize());
   }
 
@@ -68,12 +68,12 @@ public abstract class ClassShape extends SquaredShape {
   }
 
   protected void drawZoneEnTete(Graphics2D graphics2D) {
-    int y = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    int y = Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
     for (int i = 0; i < this.zoneEnTete.getElements().size(); i++) {
       if (i == 1) {
         this.setNameFont(graphics2D);
       } else {
-        graphics2D.setFont(DiagrammerConstants.DIAGRAMMER_CLASS_FONT);
+        graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
       }
       int x = this.getCenterTextPositionX(this.zoneEnTete.getElements().get(i), graphics2D);
       graphics2D.drawString(this.zoneEnTete.getElements().get(i), x, y);
@@ -83,7 +83,7 @@ public abstract class ClassShape extends SquaredShape {
   }
 
   protected void drawZoneProprietes(Graphics2D graphics2D) {
-    int y = this.getZoneMinHeight(this.zoneEnTete.getElements()) + DiagrammerConstants.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    int y = this.getZoneMinHeight(this.zoneEnTete.getElements()) + Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
     this.drawElements(graphics2D, this.zoneProprietes.getElements(), y);
     this.drawZoneProprietesBorder(graphics2D);
   }
@@ -93,8 +93,8 @@ public abstract class ClassShape extends SquaredShape {
   }
 
   private int getZoneMinHeight(ArrayList<String> elements) {
-    FontMetrics fontMetrics = this.getFontMetrics(DiagrammerConstants.DIAGRAMMER_CLASS_FONT);
-    int minHeight = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING * 2;
+    FontMetrics fontMetrics = this.getFontMetrics(Preferences.DIAGRAMMER_CLASS_FONT);
+    int minHeight = Preferences.DIAGRAMMER_CLASS_PADDING * 2;
     minHeight += fontMetrics.getHeight() * elements.size();
     return minHeight;
   }
@@ -110,7 +110,7 @@ public abstract class ClassShape extends SquaredShape {
     if (this.zoneOperations.getElements().isEmpty() && this.zoneServices.getElements().isEmpty()) {
       height = this.getHeight() - this.getZoneMinHeight(this.zoneEnTete.getElements());
     } else {
-      height = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING * 2 + this.zoneProprietes.getElements().size() * graphics2D.getFontMetrics().getHeight();
+      height = Preferences.DIAGRAMMER_CLASS_PADDING * 2 + this.zoneProprietes.getElements().size() * graphics2D.getFontMetrics().getHeight();
     }
     graphics2D.drawRect(0, this.getZoneMinHeight(this.zoneEnTete.getElements()), this.getWidth() - 1, height - 1);
   }
@@ -120,8 +120,8 @@ public abstract class ClassShape extends SquaredShape {
   protected abstract void setBackgroundColor();
 
   private void drawElements(Graphics2D graphics2D, ArrayList<String> elements, int y) {
-    graphics2D.setFont(DiagrammerConstants.DIAGRAMMER_CLASS_FONT);
-    int x = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING;
+    graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
+    int x = Preferences.DIAGRAMMER_CLASS_PADDING;
     for (String element : elements) {
       graphics2D.drawString(element, x, y);
       y += graphics2D.getFontMetrics().getHeight();
@@ -129,15 +129,15 @@ public abstract class ClassShape extends SquaredShape {
   }
 
   protected Dimension calculateMinimumSize() {
-    FontMetrics fontMetrics = this.getFontMetrics(DiagrammerConstants.DIAGRAMMER_CLASS_FONT);
+    FontMetrics fontMetrics = this.getFontMetrics(Preferences.DIAGRAMMER_CLASS_FONT);
     int height = this.getZoneMinHeight(this.zoneEnTete.getElements()) + this.getZoneMinHeight(this.zoneProprietes.getElements());
     String longestProperty = this.getLongestProperty();
-    int width = DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH;
+    int width = Preferences.DIAGRAMMER_DEFAULT_ENTITY_WIDTH;
     if (longestProperty != null) {
       if (longestProperty.isEmpty()) {
-        width = DiagrammerConstants.DIAGRAMMER_DEFAULT_ENTITY_WIDTH;
+        width = Preferences.DIAGRAMMER_DEFAULT_ENTITY_WIDTH;
       } else {
-        width = DiagrammerConstants.DIAGRAMMER_CLASS_PADDING * 2 + fontMetrics.stringWidth(longestProperty);
+        width = Preferences.DIAGRAMMER_CLASS_PADDING * 2 + fontMetrics.stringWidth(longestProperty);
       }
     }
     return new Dimension(width, height);

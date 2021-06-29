@@ -3,8 +3,8 @@ package window.editor.diagrammer.elements.shapes.classes;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import mcd.MCDEntity;
+import preferences.Preferences;
 import window.editor.diagrammer.listeners.MCDEntityShapeListener;
-import window.editor.diagrammer.utils.DiagrammerConstants;
 
 public class MCDEntityShape extends ClassShape {
 
@@ -28,11 +28,11 @@ public class MCDEntityShape extends ClassShape {
   @Override
   public void setZoneEnTeteContent() {
     this.zoneEnTete.getElements().clear();
-    this.zoneEnTete.addElement(DiagrammerConstants.DIAGRAMMER_ENTITY_STEREOTYPE_TEXT);
+    this.zoneEnTete.addElement(Preferences.DIAGRAMMER_ENTITY_STEREOTYPE_TEXT);
     if (this.entity != null) {
       this.zoneEnTete.addElement(this.entity.getName());
       if (this.entity.isOrdered()) {
-        this.zoneEnTete.addElement(DiagrammerConstants.DIAGRAMMER_ENTITY_ORDERED_TEXT);
+        this.zoneEnTete.addElement(Preferences.DIAGRAMMER_ENTITY_ORDERED_TEXT);
       }
       this.updateSizeAndMinimumSize();
     }
@@ -48,7 +48,7 @@ public class MCDEntityShape extends ClassShape {
 
   @Override
   protected void setBackgroundColor() {
-    this.setBackground(DiagrammerConstants.DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR);
+    this.setBackground(Preferences.DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR);
   }
 
   @Override
@@ -70,9 +70,9 @@ public class MCDEntityShape extends ClassShape {
   public void setNameFont(Graphics2D graphics2D) {
     if (this.entity != null) {
       if (this.entity.isEntAbstract()) {
-        graphics2D.setFont(DiagrammerConstants.DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT);
+        graphics2D.setFont(Preferences.DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT);
       } else {
-        graphics2D.setFont(DiagrammerConstants.DIAGRAMMER_CLASS_NAME_FONT);
+        graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_NAME_FONT);
       }
     }
   }

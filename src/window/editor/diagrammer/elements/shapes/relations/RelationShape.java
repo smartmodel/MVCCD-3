@@ -13,12 +13,12 @@ import java.util.LinkedList;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import m.interfaces.IMRelation;
+import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.listeners.RelationFocusListener;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.DiagrammerConstants;
 import window.editor.diagrammer.utils.GeometryUtils;
 
 public abstract class RelationShape extends JComponent implements IShape {
@@ -284,7 +284,7 @@ public abstract class RelationShape extends JComponent implements IShape {
 
   private Line2D getNearestSegment(Point point) {
     for (Line2D segment : this.getSegments()) {
-      if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, point) <= DiagrammerConstants.DIAGRAMMER_RELATION_CLICK_AREA) {
+      if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, point) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
         return segment;
       }
     }

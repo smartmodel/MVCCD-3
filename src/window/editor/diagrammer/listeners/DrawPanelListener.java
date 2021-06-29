@@ -10,6 +10,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Line2D;
 import java.util.ListIterator;
 import javax.swing.SwingUtilities;
+import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
@@ -19,7 +20,6 @@ import window.editor.diagrammer.menus.PointAncrageMenu;
 import window.editor.diagrammer.menus.RelationShapeMenu;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.DiagrammerConstants;
 import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.RelationCreator;
@@ -139,12 +139,16 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     // Change le curseur lors du survol de l'association cliquée
     if (this.relationClicked != null) {
       for (Line2D segment : this.relationClicked.getSegments()) {
-        if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, e.getPoint()) <= DiagrammerConstants.DIAGRAMMER_RELATION_CLICK_AREA) {
+        if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, e.getPoint()) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
           DiagrammerService.drawPanel.setCursor(new Cursor(Cursor.MOVE_CURSOR));
         } else {
           DiagrammerService.drawPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
       }
+    }
+
+    if (DiagrammerService.drawPanel.isShowRelationProjectionLine()) {
+      DiagrammerService.drawPanel.repaint();
     }
 
   }
@@ -197,9 +201,9 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
   }
 
   private void executeButtonAction(MouseEvent event) {
-    if (PalettePanel.activeButton.getText().equals(DiagrammerConstants.DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT)) {
+    if (PalettePanel.activeButton.getText().equals(Preferences.DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT)) {
       this.createEntityShape(event);
-    } else if (PalettePanel.activeButton.getText().equals(DiagrammerConstants.DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT)) {
+    } else if (PalettePanel.activeButton.getText().equals(Preferences.DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT)) {
       //this.createAssociation();
     }
   }
@@ -224,7 +228,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
         for (int i = 0; i < relation.getPointsAncrage().size() - 1; i++) {
           Line2D segment = new Line2D.Double();
           segment.setLine(relation.getPointsAncrage().get(i).getX(), relation.getPointsAncrage().get(i).getY(), relation.getPointsAncrage().get(i + 1).getX(), relation.getPointsAncrage().get(i + 1).getY());
-          if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, event.getPoint()) <= DiagrammerConstants.DIAGRAMMER_RELATION_CLICK_AREA) {
+          if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, event.getPoint()) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
             return relation;
           }
         }
@@ -235,8 +239,8 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
   private void dragPointAncrageSelected(MouseEvent e) {
     Point newPoint = new Point(GridUtils.alignToGrid(e.getX(), DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(e.getY(), DiagrammerService.getDrawPanel().getGridSize()));
-    ClassShape nearestClassShape = relationClicked.getNearestClassShape(pointAncrageClicked);
     if (pointAncrageClicked.getIndex() == 0 || pointAncrageClicked.getIndex() == relationClicked.getPointsAncrage().getLast().getIndex()) {
+      ClassShape nearestClassShape = relationClicked.getNearestClassShape(pointAncrageClicked);
       this.dragFirstOrLastPointAncrage(newPoint, nearestClassShape);
       // Met à jour les points aux index 1 ou n-1 si nécessaire
     } else {
@@ -256,7 +260,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
       RelationPointAncrageShape pointToCheck = iterator.next();
       while (iterator.hasNext()) {
         RelationPointAncrageShape rightNeighbour = iterator.next();
-        if (GeometryUtils.getDistanceBetweenLineAndPoint(leftNeighbour, rightNeighbour, pointToCheck) < DiagrammerConstants.DIAGRAMMER_RELATION_CLICK_AREA) {
+        if (GeometryUtils.getDistanceBetweenLineAndPoint(leftNeighbour, rightNeighbour, pointToCheck) < Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
           updateNecessary = true;
           iterator.previous();
           iterator.previous();

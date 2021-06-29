@@ -6,9 +6,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
-import window.editor.diagrammer.utils.DiagrammerConstants;
 import window.editor.diagrammer.utils.GeometryUtils;
 
 public class LabelShape extends JLabel {
@@ -148,7 +148,7 @@ public class LabelShape extends JLabel {
     this.setVisible(false);
     this.setHorizontalAlignment(SwingConstants.CENTER);
     this.setVerticalAlignment(SwingConstants.CENTER);
-    this.setFont(DiagrammerConstants.DIAGRAMMER_CLASS_FONT);
+    this.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
   }
 
   private Dimension calculateSize(Graphics2D graphics2D) {

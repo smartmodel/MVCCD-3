@@ -6,10 +6,10 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
+import preferences.Preferences;
 import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.DiagrammerConstants;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.ResizableBorder;
 
@@ -223,7 +223,7 @@ public class SquaredShapeListener extends MouseAdapter {
 
   private void moveComponentToFront(MouseEvent event) {
     SquaredShape shape = (SquaredShape) event.getSource();
-    DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(DiagrammerConstants.DIAGRAMMER_DRAW_PANEL_NAME, shape);
+    DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_NAME, shape);
     drawPanel.moveToFront(shape);
   }
 }
