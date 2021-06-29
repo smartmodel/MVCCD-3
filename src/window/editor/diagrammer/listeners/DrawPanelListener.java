@@ -49,7 +49,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     RelationCreator.resetSourceAndDestination();
 
     this.relationClicked = this.setAssociationClicked(e);
-    this.pointAncrageClicked = this.getPointAncrageClicked(e);
 
     // Aucune association n'est cliquée
     if (this.relationClicked == null) {
@@ -58,8 +57,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
       // Sélectionne l'association et déselectionne toutes les autres shapes
       this.relationClicked.setSelected(true);
       DiagrammerService.drawPanel.deselectAllOtherShape(this.relationClicked);
-
-      // Sélectionne le potentiel point ancrage cliqué
       this.pointAncrageClicked = this.getPointAncrageClicked(e);
 
     }
@@ -253,11 +250,12 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     if (pointAncrageClicked.getIndex() == 0 || pointAncrageClicked.getIndex() == relationClicked.getPointsAncrage().getLast().getIndex()) {
       ClassShape nearestClassShape = relationClicked.getNearestClassShape(pointAncrageClicked);
       this.dragFirstOrLastPointAncrage(newPoint, nearestClassShape);
-      // Met à jour les points aux index 1 ou n-1 si nécessaire
     } else {
       this.dragPointAncrage(newPoint);
     }
-    if (relationClicked.getPointsAncrage().size() > 2) {
+    // TODO -> Enlever le !relationClicked.isReflexive() lorsque le comportement des points d'ancrage d'une association réflexive aura été implémenté.
+    if (relationClicked.getPointsAncrage().size() > 2 && !relationClicked.isReflexive()) {
+      // Met à jour les points aux index 1 ou n-1 si nécessaire
       this.dragPointAtIndex1orNMinus1(newPoint);
     }
     DiagrammerService.drawPanel.repaint();

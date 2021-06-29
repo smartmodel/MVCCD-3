@@ -299,17 +299,20 @@ public abstract class RelationShape extends JComponent implements IShape {
 
   private void createPointsAncrage(boolean isReflexive) {
     if (isReflexive) {
-      RelationPointAncrageShape p1 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() - 50, (int) source.getBounds().getMinY());
-      RelationPointAncrageShape p2 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() - 50, (int) source.getBounds().getMinY() - 50);
-      RelationPointAncrageShape p3 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() + 50, (int) source.getBounds().getMinY() - 50);
-      RelationPointAncrageShape p4 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() + 50, (int) source.getBounds().getMinY() + 50);
-      RelationPointAncrageShape p5 = new RelationPointAncrageShape((int) source.getBounds().getMaxX(), (int) source.getBounds().getMinY() + 50);
-      this.addPointAncrage(p1, 0);
-      this.addPointAncrage(p2, 1);
-      this.addPointAncrage(p3, 2);
-      this.addPointAncrage(p4, 3);
-      this.addPointAncrage(p5, 4);
+      RelationPointAncrageShape p1 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() - 50, (int) source.getBounds().getMinY(), 0);
+      RelationPointAncrageShape p2 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() - 50, (int) source.getBounds().getMinY() - 50, 1);
+      RelationPointAncrageShape p3 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() + 50, (int) source.getBounds().getMinY() - 50, 2);
+      RelationPointAncrageShape p4 = new RelationPointAncrageShape((int) source.getBounds().getMaxX() + 50, (int) source.getBounds().getMinY() + 50, 3);
+      RelationPointAncrageShape p5 = new RelationPointAncrageShape((int) source.getBounds().getMaxX(), (int) source.getBounds().getMinY() + 50, 4);
+
+      this.addPointAncrage(p1, p1.getIndex());
+      this.addPointAncrage(p2, p2.getIndex());
+      this.addPointAncrage(p3, p3.getIndex());
+      this.addPointAncrage(p4, p4.getIndex());
+      this.addPointAncrage(p5, p5.getIndex());
+
       this.isReflexive = true;
+
     } else {
       this.pointsAncrage.add(new RelationPointAncrageShape(source.getX() + source.getWidth(), source.getY() + source.getHeight() / 2, 0));
       this.pointsAncrage.add(new RelationPointAncrageShape(destination.getX(), destination.getY() + destination.getHeight() / 2, 1));
@@ -328,5 +331,14 @@ public abstract class RelationShape extends JComponent implements IShape {
     DiagrammerService.drawPanel.add(destinationRole, JLayeredPane.DRAG_LAYER);
     DiagrammerService.drawPanel.add(destinationCardinalite, JLayeredPane.DRAG_LAYER);
     DiagrammerService.drawPanel.add(associationName, JLayeredPane.DRAG_LAYER);
+  }
+
+  public void deleteLabels() {
+    DiagrammerService.drawPanel.remove(this.sourceRole);
+    DiagrammerService.drawPanel.remove(this.destinationRole);
+    DiagrammerService.drawPanel.remove(this.associationName);
+    DiagrammerService.drawPanel.remove(this.sourceCardinalite);
+    DiagrammerService.drawPanel.remove(this.destinationCardinalite);
+    this.repaint();
   }
 }
