@@ -1,5 +1,6 @@
 package repository.editingTreat.mpdr;
 
+import generatesql.window.GenerateSQLWindow;
 import main.MVCCDElement;
 import mdr.MDRModel;
 import messages.MessagesBuilder;
@@ -36,10 +37,13 @@ public class MPDRModelEditingTreat extends EditingTreat {
         return "the.model.physical";
     }
 
-    public void treatGenerate(Window owner, MVCCDElement mvccdElement) {
+    public void treatGenerate(MVCCDElement mvccdElement) {
         MPDRModel mpdrModel = (MPDRModel) mvccdElement;
 
-        Resultat resultat = new Resultat();
+        GenerateSQLWindow dialog = new GenerateSQLWindow(mpdrModel);
+        dialog.pack();
+        dialog.setVisible(true);
+        /*Resultat resultat = new Resultat();
         String message = MessagesBuilder.getMessagesProperty("generatesql.mpdrtosql.start",
             new String[] {
                 MessagesBuilder.getMessagesProperty(getPropertyTheElement()),
@@ -51,6 +55,6 @@ public class MPDRModelEditingTreat extends EditingTreat {
         resultat.addResultat(mpdrModel.treatGenerate());
 
         TreatmentService.treatmentFinish(owner, mvccdElement, resultat,
-            getPropertyTheElement(), "generatesql.mpdrtosql.ok", "generatesql.mpdrtosql.abort");
+            getPropertyTheElement(), "generatesql.mpdrtosql.ok", "generatesql.mpdrtosql.abort");*/
     }
 }

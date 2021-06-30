@@ -1,12 +1,23 @@
 package generatesql.window;
 
 import main.MVCCDElement;
+import messages.MessagesBuilder;
+import mpdr.MPDRModel;
+import repository.editingTreat.mpdr.MPDRModelEditingTreat;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
+import treatment.services.TreatmentService;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class GenerateSQLWindow extends JDialog {
+
+    private Window owner;
+    private MPDRModel mpdrModel;
+
     private JPanel contentPane;
     private JPasswordField passwordFieldUserPassword;
     private JTextField textFieldUserName;
@@ -26,9 +37,30 @@ public class GenerateSQLWindow extends JDialog {
     private JPanel panelBottom;
     private JButton buttonExecuter;
 
-    public GenerateSQLWindow(Window owner, MVCCDElement parent) {
-        setContentPane(contentPane);
+    public GenerateSQLWindow(MPDRModel mpdrModel) {
+        this.owner = owner;
+        this.mpdrModel = mpdrModel;
+
         setModal(true);
+        setLocation(100,100);
+
+        setTitle("Génération du code SQL-DDL");
+
+        setContentPane(contentPane);
+
+        Resultat resultat = new Resultat();
+        String message = MessagesBuilder.getMessagesProperty("generatesql.mpdrtosql.start",
+                new String[] {
+                        MessagesBuilder.getMessagesProperty(""),
+                        mpdrModel.getName()
+                }
+        );
+        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+
+        resultat.addResultat(mpdrModel.treatGenerate());
+
+        TreatmentService.treatmentFinish(owner, mpdrModel, resultat,
+                "", "generatesql.mpdrtosql.ok", "generatesql.mpdrtosql.abort");
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

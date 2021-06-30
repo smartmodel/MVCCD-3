@@ -5,6 +5,7 @@ import console.ViewLogsManager;
 import datatypes.MDDatatype;
 import diagram.mcd.MCDDiagram;
 import exceptions.service.ExceptionService;
+import generatesql.window.GenerateSQLWindow;
 import m.interfaces.IMCompletness;
 import m.services.MElementService;
 import main.MVCCDElement;
@@ -280,6 +281,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         try {
+                            /*JDialog dialog = new GenerateSQLWindow(mvccdWindow, mvccdElement);
+                            dialog.setVisible(true);*/
                             (new MPDRModelEditingTreat()).treatGenerate(mvccdWindow, mvccdElement);
                         } catch (Exception e){
                             exceptionUnhandled(e, mvccdElement, "repository.menu.exception.transform");
