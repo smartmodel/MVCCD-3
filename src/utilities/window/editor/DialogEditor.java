@@ -7,6 +7,7 @@ import mcd.MCDContEntities;
 import mcd.MCDEntity;
 import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
+import test.entites.EntiteOnglets;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 
@@ -38,6 +39,8 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     private boolean datasChanged = false;     // données modifiées
     private boolean datasProjectElementEdited = false;
     private boolean datasApplicationPreferencesEdited = false;
+
+    private JPanel panelOnglet;
 
     // version onglets
     private MCDContEntities mcdContEntities = null;
@@ -94,8 +97,8 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     // version onglets
     public DialogEditor(Window owner,
-                        MCDEntity mcdEntity,
                         MCDContEntities mcdContEntities,
+                        MCDEntity mcdEntity,
                         String mode,
                         int scope,
                         EditingTreat editingTreat) {
@@ -123,38 +126,20 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
         setSize(getSizeCustom());
 
-        setLocationRelativeTo(null);
-
         setInput(getInputCustom());
         setButtons(getButtonsCustom());
 
-        startOnglets();
-    }
-
-    public void startOnglets() {
         setTitle(getTitleByMode(mode));
-
-        String borderLayoutPositionEditor = BorderLayout.CENTER;
-        String borderLayoutPositionButtons = BorderLayout.SOUTH;
-
-        input.setBorderLayoutPosition(borderLayoutPositionEditor);
-        buttons.setBorderLayoutPosition(borderLayoutPositionButtons);
 
         if (input.getInputContent() != null)
             input.getInputContent().setComponentsReadOnly(readOnly);
 
         buttons.getButtonsContent().setButtonsReadOnly(readOnly);
 
-        if (input.getInputContent() instanceof PanelInputContentTable) {
-            buttons.getButtonsContent().btnUndo.setVisible(false);
-            buttons.getButtonsContent().btnApply.setVisible(false);
-            buttons.getButtonsContent().btnOk.setVisible(false);
-        }
+        input.setMinimumSize(new Dimension(700,550));
 
-        input.setSize(700,550);
-
-        add(input, borderLayoutPositionEditor);
-        add(buttons, borderLayoutPositionButtons);
+        add(input, BorderLayout.NORTH);
+        add(buttons, BorderLayout.SOUTH);
     }
 
 
@@ -239,8 +224,9 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         this.input = input;
     }
 
-    public PanelButtons getButtons() {
 
+
+    public PanelButtons getButtons() {
         return buttons;
     }
 
