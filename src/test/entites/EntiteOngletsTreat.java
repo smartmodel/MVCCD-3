@@ -1,5 +1,6 @@
 package test.entites;
 
+import main.MVCCDElement;
 import mcd.MCDContAttributes;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
@@ -15,11 +16,10 @@ import java.awt.*;
 public class EntiteOngletsTreat  extends MCDCompliantEditingTreat {
 
     @Override
-    protected PanelInputContent[] getPanelInputContents(MCDEntity mcdEntity, NewAttributsInput newAttributsInput) {
-        PanelInputContent[] pnlContent = new PanelInputContent[2];
-        pnlContent[0] = new NewGeneraliteInputContent(mcdEntity);
-        pnlContent[1] = new NewAttributsInputContent(newAttributsInput);
-        return pnlContent;
+    protected PanelInputContent[] getPanelInputContents(MCDEntity mcdEntity) {
+        PanelInputContent[] panelInputContents = new PanelInputContent[6];
+        panelInputContents[0] = new NewGeneraliteInputContent(mcdEntity);
+        return panelInputContents;
     }
 
     /**
@@ -27,10 +27,10 @@ public class EntiteOngletsTreat  extends MCDCompliantEditingTreat {
      * de la création d'une nouvelle entité.
      */
     @Override
-    protected DialogEditor getDialogEditor(Window owner,
-                                           MCDEntity mcdEntity, MCDContEntities mcdContEntities,
-                                           String mode) {
-        return new EntiteOnglets(owner, mcdEntity, mcdContEntities, mode,
+    protected DialogEditor getDialogEditorOnglets(Window owner,
+                                           MCDContEntities mcdContEntities, MCDEntity mcdEntity,
+                                                  String mode) {
+        return new EntiteOnglets(owner, mcdContEntities, mcdEntity, mode,
                 new EntiteOngletsTreat());
     }
 

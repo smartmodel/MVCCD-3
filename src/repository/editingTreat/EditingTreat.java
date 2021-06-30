@@ -12,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
+import test.entites.EntiteOnglets;
+import test.entites.EntiteOngletsTreat;
 import test.entites.onglets.contenus.attributs.NewAttributsInput;
 import test.entites.onglets.contenus.attributs.NewAttributsInputContent;
 import test.entites.onglets.contenus.conformite.NewConformiteInput;
@@ -46,9 +48,12 @@ public abstract class EditingTreat {
     }
 
     // version onglets
-    public MVCCDElement treatNew(Window owner, MCDContEntities mcdContEntities) {
+    public MVCCDElement treatNewOnglets(Window owner, MCDContEntities mcdContEntities) {
 
-        DialogEditor fen = getDialogEditor(owner, null, mcdContEntities, DialogEditor.NEW); //Ouvre l'éditeur attendu
+        /*MVCCDManager manager = MVCCDManager.instance();
+        EntiteOngletsTreat entiteOngletsTreat = new EntiteOngletsTreat();
+        EntiteOnglets fen = new EntiteOnglets(owner, mcdContEntities, null,DialogEditor.NEW, entiteOngletsTreat );*/
+        DialogEditor fen = getDialogEditorOnglets(owner, mcdContEntities, null, DialogEditor.NEW); //Ouvre l'éditeur attendu
         fen.setVisible(true);
         return fen.getMvccdElementNew();
     }
@@ -71,10 +76,10 @@ public abstract class EditingTreat {
     }
 
     // version onglets
-    public boolean treatUpdate(Window owner, MCDEntity mcdEntity) {
+    public boolean treatUpdateOnglets(Window owner, MCDEntity mcdEntity) {
         MCDContEntities mcdContEntities = (MCDContEntities) mcdEntity.getParent();
 
-        DialogEditor fen = getDialogEditor(owner, mcdEntity, mcdContEntities, DialogEditor.UPDATE);
+        DialogEditor fen = getDialogEditorOnglets(owner, mcdContEntities, mcdEntity, DialogEditor.UPDATE);
 
         fen.setVisible(true);
 
@@ -95,20 +100,19 @@ public abstract class EditingTreat {
     }
 
     // version onglets
-    public DialogEditor treatRead(Window owner, MCDEntity mcdEntity) {
+    public DialogEditor treatReadOnglets(Window owner, MCDEntity mcdEntity) {
         MCDContEntities mcdContEntities = (MCDContEntities) mcdEntity.getParent();
 
-        DialogEditor fen = getDialogEditor(owner, mcdEntity, mcdContEntities,
+        DialogEditor fen = getDialogEditorOnglets(owner, mcdContEntities, mcdEntity,
                 DialogEditor.READ);
         fen.setVisible(true);
         return fen;
     }
 
-
     /**
      * Déclenchement de traitement de données pour la suppression d'un élément.
      */
-    public boolean treatDelete (Window owner, MVCCDElement element) {
+    public boolean treatDelete(Window owner, MVCCDElement element) {
         String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
         String message = MessagesBuilder.getMessagesProperty ("editor.delete.confirm",
                 new String[] { messageTheElement, element.getName()});
@@ -125,7 +129,7 @@ public abstract class EditingTreat {
     /**
      * Déclenchement de traitement de données pour la suppression des éléments enfants d'un élément.
      */
-    public void treatDeleteChilds (Window owner, MVCCDElement element) {
+    public void treatDeleteChilds(Window owner, MVCCDElement element) {
         String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
         String message = MessagesBuilder.getMessagesProperty ("editor.delete.childs.confirm",
                 new String[] {element.getName()});
@@ -280,7 +284,7 @@ public abstract class EditingTreat {
 
         panelInputContents[4] = newConformiteInputContent;
 
-                // MLD-R
+        // MLD-R
         NewMldrInputContent newMldrInputContent = (NewMldrInputContent) getPanelInputContent(mcdEntity);
         newMldrInputContent.createContentCustom();
         newMldrInputContent.loadDatas(mcdEntity);
@@ -306,7 +310,7 @@ public abstract class EditingTreat {
     }
 
     // verison onglets
-    protected PanelInputContent[] getPanelInputContents(MCDEntity mcdEntity, NewAttributsInput newAttributsInput) {
+    protected PanelInputContent[] getPanelInputContents(MCDEntity mcdEntity) {
         return new PanelInputContent[0];
     }
 
@@ -318,9 +322,7 @@ public abstract class EditingTreat {
     }
 
     // version onglets
-    protected DialogEditor getDialogEditor(Window owner,
-                                           MCDEntity mcdEntity, MCDContEntities mcdContEntities,
-                                           String mode) {
+    protected DialogEditor getDialogEditorOnglets(Window owner, MCDContEntities mcdContEntities, MCDEntity mcdEntity, String mode) {
         return null;
     }
 
