@@ -1,14 +1,20 @@
 package utilities.window.editor;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import console.ViewLogsManager;
 import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import main.MVCCDManager;
+import mcd.MCDEntity;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
+import test.entites.EntiteOnglets;
+import test.entites.EntiteOngletsTreat;
+import test.entites.onglets.Onglets;
 import utilities.files.UtilFiles;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.SButton;
@@ -28,8 +34,9 @@ public abstract class PanelButtonsContent extends PanelContent
     protected SButton btnClose;
     protected SButton btnApply ;
     protected SButton btnUndo;
-    private SButton btnHelp ;
+    protected SButton btnHelp ;
     protected SButton btnReInit ;
+
     private JTextArea messages ;
     private JScrollPane messagesScroll;
     private PanelButtons panelButtons;
@@ -44,8 +51,6 @@ public abstract class PanelButtonsContent extends PanelContent
         //TODO-0 à adapter pour la customization
         createContent();
         super.addContent(panel, false);
-
-
     }
 
     protected void createContent() {
@@ -56,6 +61,14 @@ public abstract class PanelButtonsContent extends PanelContent
         messages = new JTextArea();
         messages.setText("");
         messages.setEditable(false);
+
+        if (UIManager.getLookAndFeel().equals(Preferences.FLATDARK)){
+            messages.setBackground(Preferences.GRIS);
+        }
+        if (UIManager.getLookAndFeel().equals(Preferences.FLATLIGHT)){
+            messages.setBackground(Preferences.BLANC);
+        }
+
         //messages.setComponentPopupMenu(new ButtonsContentMessagesPopupMenu());
         messagesScroll = new JScrollPane(messages);
         messagesScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -217,7 +230,10 @@ public abstract class PanelButtonsContent extends PanelContent
                 }
                 getEditor().myDispose();
                 if (getEditor().getEditingTreat() != null){
-                    getEditor().getEditingTreat().treatUpdate(getEditor().getOwner(), mvccdElementForUpate);
+                    if(getEditor() instanceof EntiteOnglets)
+                        getEditor().getEditingTreat().treatUpdateOnglets(getEditor().getOwner(), (MCDEntity) mvccdElementForUpate);
+                    else
+                        getEditor().getEditingTreat().treatUpdate(getEditor().getOwner(), mvccdElementForUpate);
                 }
             }
             if (source == btnUndo) {
@@ -263,30 +279,77 @@ public abstract class PanelButtonsContent extends PanelContent
         HelpWindow fen = new HelpWindow(getEditor());
         fen.setVisible(true);
         fen.setHelpText(helpText);
-
     }
 
 
     protected void treatReset(){
-        getInputContent().resetDatas();
+        Onglets onglets = (Onglets) getEditor().getInput();
+
+        // version onglets
+        if(getEditor() instanceof EntiteOnglets){
+            onglets.getGeneralite().getInputContent().resetDatas();
+            onglets.getNewMldrInput().getInputContent().resetDatas();
+            onglets.getNewConformiteInput().getInputContent().resetDatas();
+
+            clearMessages();
+
+            onglets.getGeneralite().getInputContent().enabledButtons();
+            onglets.getNewMldrInput().getInputContent().enabledButtons();
+            onglets.getNewConformiteInput().getInputContent().enabledButtons();
+        }else{
+
+            getInputContent().resetDatas();
+            clearMessages();
+            getInputContent().enabledButtons();
+        }
         // Effacement des éventuels anciens messages
-        clearMessages();
-        getInputContent().enabledButtons();
+
     }
 
 
     protected void treatReInit(){
-        getInputContent().reInitDatas(getEditor().getMvccdElementCrt());
-        // Effacement des éventuels anciens messages
-        clearMessages();
-        getInputContent().enabledButtons();
+        Onglets onglets = (Onglets) getEditor().getInput();
+
+        // version onglets
+        if(getEditor() instanceof EntiteOnglets){
+            onglets.getGeneralite().getInputContent().reInitDatas(getEditor().getMvccdElementCrt());
+            onglets.getNewMldrInput().getInputContent().reInitDatas(getEditor().getMvccdElementCrt());
+            onglets.getNewConformiteInput().getInputContent().reInitDatas(getEditor().getMvccdElementCrt());
+
+            // Effacement des éventuels anciens messages
+            clearMessages();
+            onglets.getGeneralite().getInputContent().enabledButtons();
+            onglets.getNewMldrInput().getInputContent().enabledButtons();
+            onglets.getNewConformiteInput().getInputContent().enabledButtons();
+        }else{
+            getInputContent().reInitDatas(getEditor().getMvccdElementCrt());
+            // Effacement des éventuels anciens messages
+            clearMessages();
+            getInputContent().enabledButtons();
+        }
+
     }
 
     public void treatUpdate(){
+        Onglets onglets = (Onglets) getEditor().getInput();
+
         saveDatas(getEditor().getMvccdElementCrt());
         getEditor().setDatasChanged(true);
-        getInputContent().restartChange();
-        getInputContent().enabledButtons();
+
+        // version onglets
+        if(getEditor() instanceof EntiteOnglets){
+            onglets.getGeneralite().getInputContent().restartChange();
+            onglets.getNewMldrInput().getInputContent().restartChange();
+            onglets.getNewConformiteInput().getInputContent().restartChange();
+
+            onglets.getGeneralite().getInputContent().enabledButtons();
+            onglets.getNewMldrInput().getInputContent().enabledButtons();
+            onglets.getNewConformiteInput().getInputContent().enabledButtons();
+        }else{
+            getInputContent().restartChange();
+            getInputContent().enabledButtons();
+        }
+
         getEditor().adjustTitle();
         MVCCDManager.instance().showMVCCDElementInRepository(getEditor().getMvccdElementCrt());
 
@@ -311,8 +374,14 @@ public abstract class PanelButtonsContent extends PanelContent
     }
 
     protected void saveDatas(MVCCDElement mvccdElement) {
-        getEditor().getInput().getInputContent().saveDatas(mvccdElement);
+        Onglets onglets = (Onglets) getEditor().getInput();
 
+        if(getEditor() instanceof EntiteOnglets) {
+            onglets.getGeneralite().getInputContent().saveDatas(mvccdElement);
+            onglets.getNewMldrInput().getInputContent().saveDatas(mvccdElement);
+            onglets.getNewConformiteInput().getInputContent().saveDatas(mvccdElement);
+        }else
+            getEditor().getInput().getInputContent().saveDatas(mvccdElement);
     }
 
     protected abstract MVCCDElement createNewMVCCDElement(MVCCDElement parent);
@@ -340,9 +409,9 @@ public abstract class PanelButtonsContent extends PanelContent
             btnUndo.setReadOnly(readOnly);
          }
     }
-    private void exceptionUnhandled(Exception e,
-                                    MVCCDElement mvccdElement,
-                                    String property) {
+    protected void exceptionUnhandled(Exception e,
+                                      MVCCDElement mvccdElement,
+                                      String property) {
 
         String action = MessagesBuilder.getMessagesProperty(property);
         String nameMVCCDElement = mvccdElement.getNameTree();
@@ -352,5 +421,11 @@ public abstract class PanelButtonsContent extends PanelContent
         ViewLogsManager.catchException(e, getEditor(), message);
     }
 
+    public JTextArea getMessages() {
+        return messages;
+    }
 
+    public void setMessages(JTextArea messages) {
+        this.messages = messages;
+    }
 }

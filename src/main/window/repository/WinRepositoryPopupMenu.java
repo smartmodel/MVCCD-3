@@ -569,8 +569,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     if(editingTreat instanceof EntiteOngletsTreat)
-                        editingTreat.treatNew(mvccdWindow, (MCDContEntities) mvccdElement);
+                        editingTreat.treatNewOnglets(mvccdWindow, (MCDContEntities) mvccdElement);
                     else
+                        System.out.println("Test");
                         editingTreat.treatNew(mvccdWindow, mvccdElement);
                 } catch (Exception e) {
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.new");
@@ -593,7 +594,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     if(editingTreat instanceof EntiteOngletsTreat)
-                        editingTreat.treatRead(mvccdWindow, mcdEntity);
+                        editingTreat.treatReadOnglets(mvccdWindow, mcdEntity);
                     else
                         editingTreat.treatRead(mvccdWindow, mvccdElement);
                 } catch (Exception e){
@@ -622,7 +623,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     if(editingTreat instanceof EntiteOngletsTreat)
-                        editingTreat.treatUpdate(mvccdWindow, mcdEntity);
+                        editingTreat.treatUpdateOnglets(mvccdWindow, mcdEntity);
                     else
                         editingTreat.treatUpdate(mvccdWindow, mvccdElement);
                 } catch (Exception e){
