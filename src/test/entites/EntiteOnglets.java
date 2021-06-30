@@ -20,10 +20,11 @@ import java.awt.event.WindowEvent;
 public class EntiteOnglets extends DialogEditor {
 
     public EntiteOnglets(Window owner,
+                         MCDContEntities mcdContEntities,
                          MCDEntity mcdEntity,
-                         MCDContEntities mcdContEntities, String mode,
+                         String mode,
                          EditingTreat editingTreat){
-        super(owner, mcdEntity, mcdContEntities,
+        super(owner, mcdContEntities, mcdEntity,
                 mode, DialogEditor.SCOPE_NOTHING, editingTreat);
 
         setLocationRelativeTo(null);
@@ -89,40 +90,11 @@ public class EntiteOnglets extends DialogEditor {
             boolean confirm = DialogMessage.showConfirmYesNo_No(this, message) == JOptionPane.YES_OPTION;
             if (confirm) {
                 myDispose();
-                //setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             } else {
-                setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);//cancel
+                setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
             }
         } else {
             myDispose();
-        }
-    }
-
-    @Override
-    public void windowOpened(WindowEvent windowEvent) {
-        // Les données ont peut-être été ajustées par les méthodes changeXXX de l'éditeur
-        // Changement avant que l'utilisateur ne fasse quoi que ce soit
-
-        Onglets onglets = (Onglets) getInput();
-
-        if (!mode.equals(DialogEditor.NEW)) {
-            if((onglets.getGeneralite().getInputContent().datasChangedNow() && (onglets.getGeneralite() != null) ||
-                    onglets.getNewConformiteInput().getInputContent().datasChangedNow() && (onglets.getNewConformiteInput() != null) ||
-                    onglets.getNewMldrInput().getInputContent().datasChangedNow() && (onglets.getNewMldrInput() != null))) {
-                String messageMode;
-                if (mode.equals(UPDATE)) {
-                    messageMode = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.update");
-                } else {
-                    messageMode = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.not.update");
-                }
-                String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
-                        new String[]{messageMode});
-                DialogMessage.showOk(this, message);
-                //#MAJ 2020-12-05 - Instruction manquante
-                onglets.getGeneralite().getInputContent().enabledButtons();
-
-
-            }
         }
     }
 }

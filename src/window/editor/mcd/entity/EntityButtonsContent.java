@@ -4,7 +4,10 @@ import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import preferences.Preferences;
 import project.ProjectElement;
+import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelButtonsContent;
+
+import java.awt.event.ActionEvent;
 
 public class EntityButtonsContent extends PanelButtonsContent {
 
@@ -30,6 +33,4 @@ public class EntityButtonsContent extends PanelButtonsContent {
         super.createContent();
         btnApply.setVisible(true);
     }
-
-
 }
