@@ -36,6 +36,7 @@ public class GenerateSQLWindow extends JDialog {
     private JTextArea textAreaConsole;
     private JPanel panelBottom;
     private JButton buttonExecute;
+    private JButton buttonSaveFile;
 
     public GenerateSQLWindow(MPDRModel mpdrModel) {
         //this.owner = owner;
@@ -53,6 +54,13 @@ public class GenerateSQLWindow extends JDialog {
         textFieldSID.setText(DB_SID);
         textFieldUsername.setText(DB_USERNAME);
         passwordFieldUserPassword.setText(DB_USER_PASSWORD);
+
+        buttonSaveFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onSaveFile();
+            }
+        });
 
         buttonExecute.addActionListener(new ActionListener() {
             @Override
@@ -100,6 +108,10 @@ public class GenerateSQLWindow extends JDialog {
 
     private void onExecute() {
         MPDRGenerateSQLUtil.executeQuery(textAreaCode.getText(), textFieldHostName.getText(), textFieldPort.getText(), textFieldSID.getText(), textFieldUsername.getText(), new String(passwordFieldUserPassword.getPassword()));
+    }
+
+    private void onSaveFile() {
+        MPDRGenerateSQLUtil.generateSQLFile(textAreaCode.getText());
     }
 
     /*private void onOK() {
