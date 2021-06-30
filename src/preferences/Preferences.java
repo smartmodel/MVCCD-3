@@ -1,6 +1,8 @@
 package preferences;
 
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import console.WarningLevel;
 import console.WarningLevelManager;
 import main.MVCCDElement;
@@ -736,6 +738,12 @@ public class Preferences extends MVCCDElement {
     // MPDR PostgreSQL Préférences
     private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
     private MDRNamingFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT = null;
+
+    // Couleur et texte pour le thème
+    public static Color GRIS = Color.decode("#45494A");
+    public static Color BLANC = Color.WHITE;
+    public static FlatLightLaf FLATLIGHT;
+    public static FlatDarculaLaf FLATDARK;
 
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);

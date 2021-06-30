@@ -7,10 +7,13 @@ import main.window.console.WinConsole;
 import main.window.diagram.WinDiagram;
 import main.window.repository.WinRepository;
 import main.window.reserve.Reserve;
+import preferences.Preferences;
 import repository.Repository;
 import utilities.window.PanelBorderLayout;
 import utilities.window.PanelBorderLayoutResizer;
 import utilities.window.PanelContent;
+import utilities.window.editor.DialogEditor;
+import utilities.window.editor.PanelButtonsContent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,8 +25,6 @@ public class Haut extends PanelBorderLayout {
     private HautContent content ;
     Boolean theme = true;
     JButton modeSombre = new JButton("Mode sombre");
-    Color blanc = Color.WHITE;
-    Color gris = Color.decode("#45494A");
 
     public Haut(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer, JFrame frame, WinRepository repository, WinDiagram diagram, WinConsole winConsole, Reserve reserve, Reserve palette) {
         super();
@@ -44,36 +45,35 @@ public class Haut extends PanelBorderLayout {
                 if (theme) {
                     try {
                         // Couleur pour le référentiel
-                        repository.getContent().setBackground(gris);
-                        repository.setBackground(gris);
+                        repository.getContent().setBackground(Preferences.GRIS);
+                        repository.setBackground(Preferences.GRIS);
                         // Couleur pour le diagramme
-                        diagram.setBackground(gris);
+                        diagram.setBackground(Preferences.GRIS);
                         // Couleur pour la console
-                        winConsole.getContent().setBackground(gris);
-                        winConsole.setBackground(gris);
+                        winConsole.getContent().setBackground(Preferences.GRIS);
+                        winConsole.setBackground(Preferences.GRIS);
                         // Couleur pour la reserve
-                        reserve.setBackground(gris);
+                        reserve.setBackground(Preferences.GRIS);
                         // Couleur pour la palette
-                        palette.setBackground(gris);
+                        palette.setBackground(Preferences.GRIS);
                         UIManager.setLookAndFeel(new FlatDarculaLaf());
-
                     } catch (Exception ex) {
                         System.err.println("Failed to initialize LaF");
                     }
                 } else {
                     try {
                         // Couleur pour le référentiel
-                        repository.getContent().setBackground(blanc);
-                        repository.setBackground(blanc);
+                        repository.getContent().setBackground(Preferences.BLANC);
+                        repository.setBackground(Preferences.BLANC);
                         // Couleur pour le diagramme
-                        diagram.setBackground(blanc);
+                        diagram.setBackground(Preferences.BLANC);
                         // Couleur pour la console
-                        winConsole.getContent().setBackground(blanc);
-                        winConsole.setBackground(blanc);
+                        winConsole.getContent().setBackground(Preferences.BLANC);
+                        winConsole.setBackground(Preferences.BLANC);
                         // Couleur pour la reserve
-                        reserve.setBackground(blanc);
+                        reserve.setBackground(Preferences.BLANC);
                         // Couleur pour la palette
-                        palette.setBackground(blanc);
+                        palette.setBackground(Preferences.BLANC);
                         UIManager.setLookAndFeel(new FlatLightLaf());
                     } catch (Exception ex) {
                         System.err.println("Failed to initialize LaF");
@@ -83,12 +83,7 @@ public class Haut extends PanelBorderLayout {
                 SwingUtilities.updateComponentTreeUI(frame);
             }
         });
-
-
     }
-
-
-
 
     @Override
     public void resizeContent() {
@@ -99,6 +94,4 @@ public class Haut extends PanelBorderLayout {
     public PanelContent getPanelContent() {
         return null;
     }
-
-
 }
