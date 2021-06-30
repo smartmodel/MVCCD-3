@@ -1,7 +1,9 @@
 package mcd.services;
 
+import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
+import m.services.MRelationService;
 import mcd.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -85,7 +87,19 @@ public class MCDEntityService {
         ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
         for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
             if (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.NOID){
+                resultat.add((MCDAssEnd) mcdAssEnd);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDAssEnd> getAssEndsNoIdOptionnalChild(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
+            if (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.NOID){
+                if (mcdAssEnd.getMCDAssEndOpposite().getMultiMinStd() == MRelEndMultiPart.MULTI_ZERO) {
                     resultat.add((MCDAssEnd) mcdAssEnd);
+                }
             }
         }
         return resultat;
@@ -121,21 +135,6 @@ public class MCDEntityService {
         ArrayList<MCDAssEnd> resultat = getAssEndsIdComp(mcdEntity, parent);
         resultat.addAll(getAssEndsIdNat(mcdEntity, parent));
         resultat.addAll(getAssEndsCP(mcdEntity, parent));
-        /*
-        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
-            if ( (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.IDCOMP) ||
-                    (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.IDNATURAL)){
-                boolean c1 = mcdAssEnd.getMultiMaxStd() == MRelEndMultiPart.MULTI_MANY;
-                if ( c1 && parent ) {
-                    resultat.add((MCDAssEnd) mcdAssEnd);
-                }
-                if ( (!c1) && (!parent) ){
-                    resultat.add((MCDAssEnd) mcdAssEnd);
-                }
-            }
-        }
-
-         */
         return resultat;
     }
 

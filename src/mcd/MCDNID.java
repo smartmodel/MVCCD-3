@@ -1,5 +1,6 @@
 package mcd;
 
+import mdr.MDRUniqueNature;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -76,5 +77,10 @@ public class MCDNID extends MCDUnicity {
     @Override
     public String getOfUnicity() {
         return MessagesBuilder.getMessagesProperty("of.nid.2");
+    }
+
+    @Override
+    public MDRUniqueNature getMDRUniqueNature() {
+        return MDRUniqueNature.NID;
     }
 }

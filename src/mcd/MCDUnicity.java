@@ -3,6 +3,7 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import mdr.MDRUniqueNature;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -58,4 +59,5 @@ public abstract class MCDUnicity extends MCDConstraint{
         return resultat;
     }
 
+    public abstract MDRUniqueNature getMDRUniqueNature();
 }

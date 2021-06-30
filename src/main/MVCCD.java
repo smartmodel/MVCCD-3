@@ -11,7 +11,7 @@ import java.io.Console;
 public class MVCCD  {
 
     /**
-     * Démarre MVC-CD-3
+     * Démarre MVC-CD-3  
      */
     public static void main(String[] args) {
         Console console;

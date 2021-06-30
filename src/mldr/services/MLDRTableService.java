@@ -8,6 +8,7 @@ import mdr.MDRContConstraints;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
 import mldr.MLDRTable;
+import mldr.MLDRUnique;
 import utilities.Trace;
 
 import java.util.ArrayList;
@@ -95,6 +96,28 @@ public class MLDRTableService {
         for (MLDRFK mldrFK : getMLDRFKs(mldrTable)){
             if (mldrFK.getMcdElementSource() == mcdElementSource){
                 return mldrFK;
+            }
+        }
+        return null ;
+    }
+
+
+
+    public static ArrayList<MLDRUnique> getMLDRUniques(MLDRTable mldrTable){
+        ArrayList<MLDRUnique> resultat = new ArrayList<MLDRUnique>();
+        MDRContConstraints mdrContConstraints= getMDRContConstraints(mldrTable);
+        for (MVCCDElement mvccdElement: mdrContConstraints.getChilds()){
+            if (mvccdElement instanceof MLDRUnique){
+                resultat.add((MLDRUnique) mvccdElement);
+            }
+        }
+        return resultat;
+    }
+
+    public static MLDRUnique getMLDRUniqueByMCDElementSource(MLDRTable mldrTable, MCDElement mcdElementSource) {
+        for (MLDRUnique mldrUnique : getMLDRUniques(mldrTable)){
+            if (mldrUnique.getMcdElementSource() == mcdElementSource){
+                return mldrUnique;
             }
         }
         return null ;

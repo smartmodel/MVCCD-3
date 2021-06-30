@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -74,6 +75,7 @@ public abstract class EditingTreat {
         if (confirmDelete){
             removeMVCCDElementInRepository(element);
             element.removeInParent();
+            //TODO-0 Il faut supprimer aussi tous les descendants dans la structure arborescente du projet
             element = null;
         }
         return element == null;

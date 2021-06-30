@@ -24,6 +24,16 @@ public  class  MVCCDElementConvert {
         return resultat;
     }
 
+    public static <T> ArrayList<String> toNamesTreeString(ArrayList<T> source){
+        ArrayList<String> resultat = new ArrayList<String>();
+        for ( T t : source){
+            if (t instanceof MVCCDElement){
+                resultat.add(((MVCCDElement) t).getNameTree());
+            }
+        }
+        return resultat;
+    }
+
 
 
     //TODO-1  Pas encore testé

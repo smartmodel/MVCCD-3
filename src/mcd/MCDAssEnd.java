@@ -9,6 +9,7 @@ import m.services.MElementService;
 import m.services.MRelEndService;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDRelEndService;
+import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -99,6 +100,18 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
 
     public void setOrdered(boolean ordered) {
         this.ordered = ordered;
+    }
+
+
+    //TODO-1 Il faudrait une méthode qui rende un nom utilisable dans le cas des associations, rôles ou autre
+    // éléments qui peuvent avoir une absence de nom
+    public String getNamePath(int pathMode){
+        String name = getName();
+        if (StringUtils.isEmpty(getName())){
+           name = this.getMcdAssociation().getName() ;
+        }
+        return getPath(MElementService.PATHNAME, Preferences.MODEL_NAME_PATH_SEPARATOR) +
+                Preferences.MODEL_NAME_PATH_SEPARATOR + name ;
     }
 
 

@@ -22,6 +22,10 @@ public class MPDRMySQLTable extends MPDRTable {
         super(parent, mldrElementSource);
     }
 
+    public MPDRMySQLTable(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+        super(parent, mldrElementSource, id);
+    }
+
     @Override
     public MPDRMySQLColumn createColumn(MLDRColumn mldrColumn) {
         MPDRMySQLColumn newColumn = MVCCDElementFactory.instance().createMPDRMySQLColumn(
