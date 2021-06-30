@@ -59,7 +59,7 @@
                   <text value="SID"/>
                 </properties>
               </component>
-              <component id="10d24" class="javax.swing.JLabel" binding="labelUserName">
+              <component id="10d24" class="javax.swing.JLabel" binding="labelUsername">
                 <constraints>
                   <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -86,7 +86,7 @@
                 </constraints>
                 <properties/>
               </component>
-              <component id="5cfda" class="javax.swing.JTextField" binding="textFieldUserName">
+              <component id="5cfda" class="javax.swing.JTextField" binding="textFieldUsername">
                 <constraints>
                   <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -118,7 +118,7 @@
                 </constraints>
                 <properties/>
               </component>
-              <component id="e7c9c" class="javax.swing.JButton" binding="buttonExecuter">
+              <component id="e7c9c" class="javax.swing.JButton" binding="buttonExecute">
                 <constraints>
                   <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>

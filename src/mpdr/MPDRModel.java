@@ -62,7 +62,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         return (IMPDRElement) MPDRModelService.getIMPDRElementByMLDRElementSource(this, imldrElement);
     }
 
-    public Resultat treatGenerate() {
+    public String treatGenerate() {
         MPDRGenerateSQL mpdrGenerateSQL = new MPDRGenerateSQL();
         return mpdrGenerateSQL.generateSQL(this);
     }

@@ -41,8 +41,6 @@ public class MPDRModelEditingTreat extends EditingTreat {
         MPDRModel mpdrModel = (MPDRModel) mvccdElement;
 
         GenerateSQLWindow dialog = new GenerateSQLWindow(mpdrModel);
-        dialog.pack();
-        dialog.setVisible(true);
         /*Resultat resultat = new Resultat();
         String message = MessagesBuilder.getMessagesProperty("generatesql.mpdrtosql.start",
             new String[] {
