@@ -11,7 +11,7 @@ public class MCDGeneralizationShape extends RelationShape {
   private MCDGeneralization generalization;
 
   public MCDGeneralizationShape(MCDEntityShape source, MCDEntityShape destination) {
-    super(source, destination);
+    super(source, destination, false);
   }
 
   @Override

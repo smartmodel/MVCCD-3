@@ -9,7 +9,7 @@ public class MCDCompositionShape extends RelationShape {
   private final int DIAMOND_HEIGHT = 13;
 
   public MCDCompositionShape(MCDEntityShape source, MCDEntityShape destination) {
-    super(source, destination);
+    super(source, destination, false);
   }
 
   @Override
@@ -43,8 +43,7 @@ public class MCDCompositionShape extends RelationShape {
   }
 
   public void drawDiamond(Graphics2D graphics2D) {
-    RelationPointAncrageShape previousPoint = this.pointsAncrage
-                                                  .get(this.pointsAncrage.getLast().getIndex() - 1);
+    RelationPointAncrageShape previousPoint = this.pointsAncrage.get(this.pointsAncrage.getLast().getIndex() - 1);
     RelationPointAncrageShape lastPoint = this.pointsAncrage.getLast();
     int dx = lastPoint.x - previousPoint.x, dy = lastPoint.y - previousPoint.y;
     double D = Math.sqrt(dx * dx + dy * dy);
@@ -60,10 +59,8 @@ public class MCDCompositionShape extends RelationShape {
     x = xn * cos - yn * sin + previousPoint.x;
     yn = xn * sin + yn * cos + previousPoint.y;
     xn = x;
-    double xq =
-        (DIAMOND_HEIGHT * 2 / D) * previousPoint.x + ((D - DIAMOND_HEIGHT * 2) / D) * lastPoint.x;
-    double yq =
-        (DIAMOND_HEIGHT * 2 / D) * previousPoint.y + ((D - DIAMOND_HEIGHT * 2) / D) * lastPoint.y;
+    double xq = (DIAMOND_HEIGHT * 2 / D) * previousPoint.x + ((D - DIAMOND_HEIGHT * 2) / D) * lastPoint.x;
+    double yq = (DIAMOND_HEIGHT * 2 / D) * previousPoint.y + ((D - DIAMOND_HEIGHT * 2) / D) * lastPoint.y;
     int[] xpoints = {lastPoint.x, (int) xm, (int) xq, (int) xn};
     int[] ypoints = {lastPoint.y, (int) ym, (int) yq, (int) yn};
     graphics2D.fillPolygon(xpoints, ypoints, 4);

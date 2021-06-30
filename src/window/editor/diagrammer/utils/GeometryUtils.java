@@ -171,4 +171,42 @@ public class GeometryUtils {
   public static boolean pointIsOnBottomSideOfBounds(Point p, Rectangle bounds) {
     return p.y == bounds.getMaxY() && p.x >= bounds.getMinX() && p.x <= bounds.getMaxX();
   }
+
+  public static Position getClassShapePosition(ClassShape shape, ClassShape comparedTo) {
+
+    Rectangle shapeBounds = shape.getBounds();
+    Rectangle compBounds = comparedTo.getBounds();
+    boolean isTop = shapeBounds.getMaxY() <= compBounds.getMinY();
+    boolean isBottom = shapeBounds.getMinY() >= compBounds.getMaxY();
+    boolean isXCenteredTopLeft = shapeBounds.getMaxX() >= compBounds.getMinX() && shapeBounds.getMaxX() <= compBounds.getMaxX();
+    boolean isXCenteredTopRight = shapeBounds.getMinX() <= compBounds.getMaxX() && shapeBounds.getMinX() >= compBounds.getMinX();
+    boolean isYCenteredTop = shapeBounds.getMaxY() >= compBounds.getMinY() && shapeBounds.getMaxY() <= compBounds.getMaxY();
+    boolean isYCenteredBottom = shapeBounds.getMinY() <= compBounds.getMaxY() && shapeBounds.getMinY() >= compBounds.getMinY();
+    boolean isRight = shapeBounds.getMinX() >= compBounds.getMaxX();
+    boolean isLeft = shapeBounds.getMaxX() <= compBounds.getMinX();
+
+    if (isRight && isTop) {
+      return Position.TOP_RIGHT;
+    } else if (isLeft && isTop) {
+      return Position.TOP_LEFT;
+    } else if (isRight && isBottom) {
+      return Position.BOTTOM_RIGHT;
+    } else if (isLeft && isBottom) {
+      return Position.BOTTOM_LEFT;
+    } else if (isXCenteredTopLeft || isXCenteredTopRight) {
+      if (isTop) {
+        return isXCenteredTopLeft ? Position.TOP_CENTER_LEFT : Position.TOP_CENTER_RIGHT;
+      } else if (isBottom) {
+        return isXCenteredTopLeft ? Position.BOTTOM_CENTER_LEFT : Position.BOTTOM_CENTER_RIGHT;
+      }
+    } else if (isYCenteredTop || isYCenteredBottom) {
+      if (isLeft) {
+        return isYCenteredTop ? Position.LEFT_TOP : Position.LEFT_BOTTOM;
+      } else if (isRight) {
+        return isYCenteredTop ? Position.RIGHT_TOP : Position.RIGHT_BOTTOM;
+      }
+    }
+    return Position.UNHANDLED;
+
+  }
 }

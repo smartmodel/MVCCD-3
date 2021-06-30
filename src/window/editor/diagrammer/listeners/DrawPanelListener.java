@@ -58,6 +58,9 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
       this.relationClicked.setSelected(true);
       DiagrammerService.drawPanel.deselectAllOtherShape(this.relationClicked);
       this.pointAncrageClicked = this.getPointAncrageClicked(e);
+      if (this.pointAncrageClicked != null) {
+        System.out.println("Index : " + this.pointAncrageClicked.getIndex());
+      }
 
     }
 
