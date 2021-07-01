@@ -1,9 +1,8 @@
 package mpdr;
 
 import datatypes.MPDRDatatype;
+import generatesql.MPDRGenerateSQL;
 import main.MVCCDManager;
-import main.window.repository.WinRepositoryTree;
-import mdr.MDRConstraint;
 import mdr.MDRElement;
 import mdr.MDRModel;
 import mdr.interfaces.IMDRElementWithIteration;
@@ -13,6 +12,7 @@ import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.services.MPDRModelService;
 import project.ProjectElement;
+import resultat.Resultat;
 
 import java.util.ArrayList;
 
@@ -62,6 +62,10 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         return (IMPDRElement) MPDRModelService.getIMPDRElementByMLDRElementSource(this, imldrElement);
     }
 
+    public String treatGenerate() {
+        MPDRGenerateSQL mpdrGenerateSQL = new MPDRGenerateSQL();
+        return mpdrGenerateSQL.generateSQL(this);
+    }
 
 
     //TODO-1 A suppimer si la solution du listner est possible

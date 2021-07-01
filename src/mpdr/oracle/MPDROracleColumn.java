@@ -2,9 +2,10 @@ package mpdr.oracle;
 
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
+import mpdr.oracle.interfaces.IMPDROracleElement;
 import project.ProjectElement;
 
-public class MPDROracleColumn extends MPDRColumn {
+public class MPDROracleColumn extends MPDRColumn implements IMPDROracleElement {
 
     private  static final long serialVersionUID = 1000;
 

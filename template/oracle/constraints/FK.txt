@@ -1,0 +1,1 @@
+ALTER TABLE {table_name} ADD CONSTRAINT {constraint_name} FOREIGN KEY({constraint_column}) REFERENCES {constraint_reference_table}({constraint_reference_column});

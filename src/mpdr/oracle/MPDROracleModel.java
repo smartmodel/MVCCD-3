@@ -6,10 +6,11 @@ import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
+import mpdr.oracle.interfaces.IMPDROracleElement;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDROracleDatatype;
 
-public class MPDROracleModel extends MPDRModel {
+public class MPDROracleModel extends MPDRModel implements IMPDROracleElement {
 
     private  static final long serialVersionUID = 1000;
 
