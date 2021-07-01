@@ -22,6 +22,6 @@ public class RelationDeleteAction extends AbstractAction {
 
   private void delete() {
     this.shape.deleteLabels();
-    DiagrammerService.drawPanel.deleteElement(this.shape);
+    DiagrammerService.getDrawPanel().deleteElement(this.shape);
   }
 }

@@ -27,14 +27,14 @@ public class SquaredShapeListener extends MouseAdapter {
   public void mouseClicked(MouseEvent e) {
     super.mouseClicked(e);
     this.shape.setSelected(true);
-    DiagrammerService.drawPanel.deselectAllOtherShape(this.shape);
+    DiagrammerService.getDrawPanel().deselectAllOtherShape(this.shape);
     this.moveComponentToFront(e);
   }
 
   @Override
   public void mousePressed(MouseEvent mouseEvent) {
     this.shape.setSelected(true);
-    DiagrammerService.drawPanel.deselectAllOtherShape(this.shape);
+    DiagrammerService.getDrawPanel().deselectAllOtherShape(this.shape);
     this.moveComponentToFront(mouseEvent);
     ResizableBorder resizableBorder = this.shape.getBorder();
     cursor = resizableBorder.getCursor(mouseEvent);
@@ -52,7 +52,7 @@ public class SquaredShapeListener extends MouseAdapter {
   public void mouseDragged(MouseEvent mouseEvent) {
     this.handleMovements(mouseEvent.getPoint());
     // On met à jour le drawPanel
-    DiagrammerService.drawPanel.updatePanelAndScrollbars();
+    DiagrammerService.getDrawPanel().updatePanelAndScrollbars();
   }
 
   @Override

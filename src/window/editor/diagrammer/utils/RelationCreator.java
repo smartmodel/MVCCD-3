@@ -10,19 +10,19 @@ import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
 
-public class RelationCreator {
+public final class RelationCreator {
 
   public static ClassShape source = null;
   public static ClassShape destination = null;
 
   public static void setSource(ClassShape source) {
     RelationCreator.source = source;
-    DiagrammerService.drawPanel.setShowRelationProjectionLine(true);
+    DiagrammerService.getDrawPanel().setShowRelationProjectionLine(true);
   }
 
   public static void setDestination(ClassShape destination) {
     RelationCreator.destination = destination;
-    DiagrammerService.drawPanel.setShowRelationProjectionLine(false);
+    DiagrammerService.getDrawPanel().setShowRelationProjectionLine(false);
   }
 
   public static void createRelation() {
@@ -43,7 +43,7 @@ public class RelationCreator {
         relation = new MCDAssociationShape((MCDEntityShape) RelationCreator.source, (MCDEntityShape) RelationCreator.destination, true);
       }
       // Ajoute l'élément au DrawPanel
-      DiagrammerService.drawPanel.addElement(relation);
+      DiagrammerService.getDrawPanel().addElement(relation);
       resetSourceAndDestination();
     }
   }

@@ -11,7 +11,7 @@ import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageSh
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
 
-public class GeometryUtils {
+public final class GeometryUtils {
 
   public static double getDistanceBetweenTwoPoints(Point p1, Point p2) {
     double ac = Math.abs(p1.y - p2.y);
@@ -99,18 +99,18 @@ public class GeometryUtils {
 
   public static boolean pointIsAroundShape(Point point, ClassShape shape) {
     // On convertit le point pour le rendre relatif à la ClassShape
-    Point converted = SwingUtilities.convertPoint(DiagrammerService.drawPanel, point, shape);
+    Point converted = SwingUtilities.convertPoint(DiagrammerService.getDrawPanel(), point, shape);
     return (converted.x >= 0 && converted.x <= shape.getWidth() && (converted.y == 0 || converted.y == shape.getHeight())) || (converted.y >= 0 && converted.y <= shape.getHeight() && (converted.x == 0 || converted.x == shape.getWidth()));
   }
 
   public static RelationPointAncrageShape getNearestPointAncrage(ClassShape shape, RelationShape relation) {
-    RelationPointAncrageShape pointFound = relation.getPointsAncrage().getFirst();
-    for (RelationPointAncrageShape point : relation.getPointsAncrage()) {
+/*    for (RelationPointAncrageShape point : relation.getPointsAncrage()) {
       if (GeometryUtils.pointIsAroundShape(point, shape)) {
-        pointFound = point;
+        return point;
       }
     }
-    return pointFound;
+    return null;*/
+    return shape == relation.getSource() ? relation.getFirstPoint() : relation.getLastPoint();
   }
 
   public static double getDistanceBetweenLineAndPoint(RelationPointAncrageShape start, RelationPointAncrageShape end, RelationPointAncrageShape pointToCheck) {
@@ -171,39 +171,87 @@ public class GeometryUtils {
 
   public static Position getClassShapePosition(ClassShape shape, ClassShape comparedTo) {
 
-    Rectangle shapeBounds = shape.getBounds();
-    Rectangle compBounds = comparedTo.getBounds();
-    boolean isTop = shapeBounds.getMaxY() <= compBounds.getMinY();
-    boolean isBottom = shapeBounds.getMinY() >= compBounds.getMaxY();
-    boolean isXCenteredTopLeft = shapeBounds.getMaxX() >= compBounds.getMinX() && shapeBounds.getMaxX() <= compBounds.getMaxX();
-    boolean isXCenteredTopRight = shapeBounds.getMinX() <= compBounds.getMaxX() && shapeBounds.getMinX() >= compBounds.getMinX();
-    boolean isYCenteredTop = shapeBounds.getMaxY() >= compBounds.getMinY() && shapeBounds.getMaxY() <= compBounds.getMaxY();
-    boolean isYCenteredBottom = shapeBounds.getMinY() <= compBounds.getMaxY() && shapeBounds.getMinY() >= compBounds.getMinY();
-    boolean isRight = shapeBounds.getMinX() >= compBounds.getMaxX();
-    boolean isLeft = shapeBounds.getMaxX() <= compBounds.getMinX();
-
-    if (isRight && isTop) {
+    if (isRight(shape, comparedTo) && isTop(shape, comparedTo)) {
       return Position.TOP_RIGHT;
-    } else if (isLeft && isTop) {
+    } else if (isLeft(shape, comparedTo) && isTop(shape, comparedTo)) {
       return Position.TOP_LEFT;
-    } else if (isRight && isBottom) {
+    } else if (isRight(shape, comparedTo) && isBottom(shape, comparedTo)) {
       return Position.BOTTOM_RIGHT;
-    } else if (isLeft && isBottom) {
+    } else if (isLeft(shape, comparedTo) && isBottom(shape, comparedTo)) {
       return Position.BOTTOM_LEFT;
-    } else if (isXCenteredTopLeft || isXCenteredTopRight) {
-      if (isTop) {
-        return isXCenteredTopLeft ? Position.TOP_CENTER_LEFT : Position.TOP_CENTER_RIGHT;
-      } else if (isBottom) {
-        return isXCenteredTopLeft ? Position.BOTTOM_CENTER_LEFT : Position.BOTTOM_CENTER_RIGHT;
+    } else if (isXCenteredTopLeft(shape, comparedTo) || isXCenteredTopRight(shape, comparedTo)) {
+      if (isTop(shape, comparedTo)) {
+        return isXCenteredTopLeft(shape, comparedTo) ? Position.TOP_CENTER_LEFT : Position.TOP_CENTER_RIGHT;
+      } else if (isBottom(shape, comparedTo)) {
+        return isXCenteredTopLeft(shape, comparedTo) ? Position.BOTTOM_CENTER_LEFT : Position.BOTTOM_CENTER_RIGHT;
       }
-    } else if (isYCenteredTop || isYCenteredBottom) {
-      if (isLeft) {
-        return isYCenteredTop ? Position.LEFT_TOP : Position.LEFT_BOTTOM;
-      } else if (isRight) {
-        return isYCenteredTop ? Position.RIGHT_TOP : Position.RIGHT_BOTTOM;
+    } else if (isYCenteredTop(shape, comparedTo) || isYCenteredBottom(shape, comparedTo)) {
+      if (isLeft(shape, comparedTo)) {
+        return isYCenteredTop(shape, comparedTo) ? Position.LEFT_TOP : Position.LEFT_BOTTOM;
+      } else if (isRight(shape, comparedTo)) {
+        return isYCenteredTop(shape, comparedTo) ? Position.RIGHT_TOP : Position.RIGHT_BOTTOM;
       }
     }
     return Position.UNHANDLED;
+  }
 
+  public static boolean isTop(ClassShape shape, ClassShape comparedTo) {
+    return shape.getBounds().getMaxY() <= comparedTo.getBounds().getMinY();
+  }
+
+  public static boolean isBottom(ClassShape shape, ClassShape comparedTo) {
+    return shape.getBounds().getMinY() >= comparedTo.getBounds().getMaxY();
+  }
+
+  public static boolean isRight(ClassShape shape, ClassShape comparedTo) {
+    return shape.getBounds().getMinX() >= comparedTo.getBounds().getMaxX();
+  }
+
+  public static boolean isLeft(ClassShape shape, ClassShape comparedTo) {
+    return shape.getBounds().getMaxX() <= comparedTo.getBounds().getMinX();
+  }
+
+  public static boolean isXCenteredTopLeft(ClassShape shape, ClassShape comparedTo) {
+    return shape.getBounds().getMaxX() >= comparedTo.getBounds().getMinX() && shape.getBounds().getMaxX() <= comparedTo.getBounds().getMaxX();
+  }
+
+  public static boolean isXCenteredTopRight(ClassShape shape, ClassShape comparedTo) {
+    return shape.getBounds().getMinX() <= comparedTo.getBounds().getMaxX() && shape.getBounds().getMinX() >= comparedTo.getBounds().getMinX();
+  }
+
+  public static boolean isYCenteredTop(ClassShape shape, ClassShape comparedTo) {
+    return shape.getBounds().getMaxY() >= comparedTo.getBounds().getMinY() && shape.getBounds().getMaxY() <= comparedTo.getBounds().getMaxY();
+  }
+
+  public static boolean isYCenteredBottom(ClassShape shape, ClassShape comparedTo) {
+    return shape.getBounds().getMinY() <= comparedTo.getBounds().getMaxY() && shape.getBounds().getMinY() >= comparedTo.getBounds().getMinY();
+  }
+
+  public static boolean isHigher(ClassShape shape, ClassShape comparedTo) {
+    return shape.getBounds().getMinY() < comparedTo.getBounds().getMinY();
+  }
+
+  public static boolean pointIsAboveShape(Point point, IShape shape) {
+    return point.y < shape.getBounds().getMinY();
+  }
+
+  public static boolean pointIsUnderShape(Point point, IShape shape) {
+    return point.y > shape.getBounds().getMaxY();
+  }
+
+  public static boolean yCoordinateIsOutsideShape(double y, IShape shape) {
+    return y < shape.getBounds().getMinY() || y > shape.getBounds().getMaxY();
+  }
+
+  public static boolean xCoordinateIsOutsideShape(double x, IShape shape) {
+    return x < shape.getBounds().getMinX() || x > shape.getBounds().getMaxX();
+  }
+
+  public static boolean pointHasCommonYWithShapes(Point point, ClassShape leftShape, ClassShape rightShape) {
+    return (point.y >= leftShape.getBounds().getMinY() && point.y <= leftShape.getBounds().getMaxY()) && (point.y >= rightShape.getBounds().getMinY() && point.y <= rightShape.getBounds().getMaxY());
+  }
+
+  public static boolean pointHasCommonXWithShapes(Point point, ClassShape leftShape, ClassShape rightShape) {
+    return (point.x >= leftShape.getBounds().getMinX() && point.x <= leftShape.getBounds().getMaxX()) && (point.x >= rightShape.getBounds().getMinX() && point.x <= rightShape.getBounds().getMaxX());
   }
 }

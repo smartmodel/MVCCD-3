@@ -14,11 +14,21 @@ import window.editor.diagrammer.utils.ResizableBorder;
 public abstract class SquaredShape extends JPanel implements IShape, IResizable {
 
   protected boolean isSelected = false;
-  protected ResizableBorder border = new ResizableBorder();
+  protected final ResizableBorder BORDER = new ResizableBorder();
 
   public SquaredShape() {
     this.addListeners();
-    this.setBorder(border);
+    this.setBorder(this.BORDER);
+  }
+
+  public Point getCenter() {
+    return new Point((int) this.getBounds().getCenterX(), (int) this.getBounds().getCenterY());
+  }
+
+  private void addListeners() {
+    final SquaredShapeListener listener = new SquaredShapeListener(this);
+    this.addMouseListener(listener);
+    this.addMouseMotionListener(listener);
   }
 
   @Override
@@ -28,15 +38,16 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable 
 
   @Override
   public ResizableBorder getBorder() {
-    return border;
+    return this.BORDER;
   }
 
   @Override
   public void zoom(int fromFactor, int toFactor) {
-    int newXPosition = this.getBounds().x * toFactor / fromFactor;
-    int newYPosition = this.getBounds().y * toFactor / fromFactor;
-    int newWidth = this.getBounds().width * toFactor / fromFactor;
-    int newHeight = this.getBounds().height * toFactor / fromFactor;
+    final int newXPosition = this.getBounds().x * toFactor / fromFactor;
+    final int newYPosition = this.getBounds().y * toFactor / fromFactor;
+    final int newWidth = this.getBounds().width * toFactor / fromFactor;
+    final int newHeight = this.getBounds().height * toFactor / fromFactor;
+
     // Set la nouvelle position, la nouvelle taille de l'élément et met à jour la nouvelle taille minimale de l'élément
     this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
     this.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
@@ -45,7 +56,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable 
 
   @Override
   public void drag(int differenceX, int differenceY) {
-    Rectangle bounds = this.getBounds();
+    final Rectangle bounds = this.getBounds();
     bounds.translate(differenceX, differenceY);
     this.setBounds(bounds);
     this.repaint();
@@ -53,17 +64,13 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable 
 
   @Override
   public boolean isSelected() {
-    return isSelected;
+    return this.isSelected;
   }
 
   @Override
   public void setSelected(boolean selected) {
     this.isSelected = selected;
-    this.border.setVisible(selected);
-  }
-
-  public Point getCenter() {
-    return new Point((int) this.getBounds().getMinX() + this.getWidth() / 2, (int) this.getBounds().getMinY() + this.getHeight() / 2);
+    this.BORDER.setVisible(selected);
   }
 
   @Override
@@ -71,9 +78,4 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable 
     this.setBounds(newBounds.x, newBounds.y, newBounds.width, newBounds.height);
   }
 
-  private void addListeners() {
-    SquaredShapeListener listener = new SquaredShapeListener(this);
-    this.addMouseListener(listener);
-    this.addMouseMotionListener(listener);
-  }
 }

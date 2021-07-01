@@ -35,8 +35,8 @@ public class ClassShapeListener extends MouseAdapter {
 
   @Override
   public void mouseDragged(MouseEvent e) {
-    ClassShape shape = (ClassShape) e.getSource();
-    int cursor = shape.getCursor().getType();
+    final ClassShape shape = (ClassShape) e.getSource();
+    final int cursor = shape.getCursor().getType();
     if (cursor != Cursor.MOVE_CURSOR) {
       shape.updateRelations();
     }
@@ -51,6 +51,7 @@ public class ClassShapeListener extends MouseAdapter {
     // Création
     if (RelationCreator.source != null && RelationCreator.destination != null) {
       RelationCreator.createRelation();
+      PalettePanel.setActiveButton(null);
     }
   }
 

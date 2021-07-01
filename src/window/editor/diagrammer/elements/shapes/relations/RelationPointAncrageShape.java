@@ -16,20 +16,20 @@ public class RelationPointAncrageShape extends Point implements IShape {
   public RelationPointAncrageShape(Point p, int index) {
     super(p);
     this.index = index;
-    this.setSize(DIAMETER, DIAMETER);
+    this.setSize(this.DIAMETER, this.DIAMETER);
 
   }
 
   public RelationPointAncrageShape(int x, int y) {
     super(x, y);
-    this.setSize(DIAMETER, DIAMETER);
+    this.setSize(this.DIAMETER, this.DIAMETER);
 
   }
 
   public RelationPointAncrageShape(int x, int y, int index) {
     super(x, y);
     this.index = index;
-    this.setSize(DIAMETER, DIAMETER);
+    this.setSize(this.DIAMETER, this.DIAMETER);
   }
 
   @Override
@@ -39,12 +39,12 @@ public class RelationPointAncrageShape extends Point implements IShape {
 
   @Override
   public void setSize(Dimension dimension) {
-    DIAMETER = dimension.height;
+    this.DIAMETER = dimension.height;
   }
 
   @Override
   public Rectangle getBounds() {
-    return new Rectangle(x - DIAMETER / 2, y - DIAMETER / 2, DIAMETER, DIAMETER);
+    return new Rectangle(this.x - this.DIAMETER / 2, this.y - this.DIAMETER / 2, this.DIAMETER, this.DIAMETER);
   }
 
   @Override
@@ -61,7 +61,7 @@ public class RelationPointAncrageShape extends Point implements IShape {
   @Override
   public void drag(int x, int y) {
     this.move(x, y);
-    DiagrammerService.drawPanel.repaint();
+    DiagrammerService.getDrawPanel().repaint();
   }
 
   @Override
@@ -80,7 +80,7 @@ public class RelationPointAncrageShape extends Point implements IShape {
   }
 
   public int getIndex() {
-    return index;
+    return this.index;
   }
 
   public void setIndex(int index) {

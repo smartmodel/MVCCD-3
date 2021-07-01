@@ -90,7 +90,7 @@ public class MCDAssociationShape extends RelationShape {
   }
 
   public MCDAssociation getAssociation() {
-    return association;
+    return this.association;
   }
 
   public void setAssociation(MCDAssociation association) {

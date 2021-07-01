@@ -19,6 +19,7 @@ public class LabelShape extends JLabel {
   private RelationShape relationShape;
   private boolean isRole;
   private boolean firstDisplay;
+  private final int MARGIN = 10;
 
   public LabelShape() {
     this.initUI();
@@ -31,17 +32,17 @@ public class LabelShape extends JLabel {
     this.relationShape = relationShape;
     this.isRole = isRole;
     this.firstDisplay = true;
-    Point location = this.calculateLocation(this.firstDisplay);
-    this.setBounds(location.x, location.y, 100, 30);
+    final Point location = this.calculateLocation(this.firstDisplay);
+    this.setBounds(location.x, location.y, 110, 30);
     this.repaint();
   }
 
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    Graphics2D graphics2D = (Graphics2D) g;
-    Point location = this.calculateLocation(this.firstDisplay);
-    Dimension size = this.calculateSize(graphics2D);
+    final Graphics2D graphics2D = (Graphics2D) g;
+    final Point location = this.calculateLocation(this.firstDisplay);
+    final Dimension size = this.calculateSize(graphics2D);
     this.setBounds(location.x, location.y, size.width, size.height);
   }
 
@@ -54,43 +55,43 @@ public class LabelShape extends JLabel {
   private Point calculateDestionationInformationsFirstDisplay() {
     int x;
     int y;
-    ClassShape nearestClassShape = relationShape.getNearestClassShape(this.pointAncrage);
+    final ClassShape nearestClassShape = this.relationShape.getNearestClassShape(this.pointAncrage);
 
     if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté gauche de la ClassShape
-      if (isRole) {
-        x = pointAncrage.x - this.getWidth() - 10;
-        y = pointAncrage.y - this.getHeight() - 10;
+      if (this.isRole) {
+        x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
+        y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       } else {
-        x = this.pointAncrage.x - this.getWidth() - 10;
-        y = this.pointAncrage.y + 10;
+        x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
+        y = this.pointAncrage.y + this.MARGIN;
       }
     } else if (GeometryUtils.pointIsOnRightSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté droit de la ClassShape
-      if (isRole) {
-        x = pointAncrage.x + 10;
-        y = pointAncrage.y + 10;
+      if (this.isRole) {
+        x = this.pointAncrage.x + this.MARGIN;
+        y = this.pointAncrage.y + this.MARGIN;
       } else {
-        x = pointAncrage.x + 10;
-        y = pointAncrage.y - this.getHeight() - 10;
+        x = this.pointAncrage.x + this.MARGIN;
+        y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       }
     } else if (GeometryUtils.pointIsOnBottomSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le bas de la ClassShape
-      if (isRole) {
-        x = pointAncrage.x + 10;
-        y = pointAncrage.y + 10;
+      if (this.isRole) {
+        x = this.pointAncrage.x + this.MARGIN;
+        y = this.pointAncrage.y + this.MARGIN;
       } else {
-        x = pointAncrage.x - this.getWidth() - 10;
-        y = pointAncrage.y + 10;
+        x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
+        y = this.pointAncrage.y + this.MARGIN;
       }
     } else {
       // Le point d'ancrage est situé sur le haut de la ClassShape
-      if (isRole) {
-        x = pointAncrage.x + 10;
-        y = pointAncrage.y - this.getHeight() - 10;
+      if (this.isRole) {
+        x = this.pointAncrage.x + this.MARGIN;
+        y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       } else {
-        x = pointAncrage.x - this.getWidth() - 10;
-        y = pointAncrage.y - this.getHeight() - 10;
+        x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
+        y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       }
     }
     return new Point(x, y);
@@ -99,43 +100,43 @@ public class LabelShape extends JLabel {
   private Point calculateSourceInformationsFirstDisplay() {
     int x;
     int y;
-    ClassShape nearestClassShape = relationShape.getNearestClassShape(this.pointAncrage);
+    final ClassShape nearestClassShape = this.relationShape.getNearestClassShape(this.pointAncrage);
 
     if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté gauche de la ClassShape
-      if (isRole) {
-        x = pointAncrage.x - this.getWidth() - 10;
-        y = pointAncrage.y + this.getHeight() + 10;
+      if (this.isRole) {
+        x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
+        y = this.pointAncrage.y + this.getHeight() + this.MARGIN;
       } else {
-        x = this.pointAncrage.x - this.getWidth() - 10;
-        y = this.pointAncrage.y - this.getHeight() - 10;
+        x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
+        y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       }
     } else if (GeometryUtils.pointIsOnRightSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté droit de la ClassShape
-      if (isRole) {
-        x = pointAncrage.x + 10;
-        y = pointAncrage.y + 10;
+      if (this.isRole) {
+        x = this.pointAncrage.x + this.MARGIN;
+        y = this.pointAncrage.y + this.MARGIN;
       } else {
-        x = pointAncrage.x + 10;
-        y = pointAncrage.y - this.getHeight() - 10;
+        x = this.pointAncrage.x + this.MARGIN;
+        y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       }
     } else if (GeometryUtils.pointIsOnBottomSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le bas de la ClassShape
-      if (isRole) {
-        x = pointAncrage.x - this.getWidth() - 10;
-        y = pointAncrage.y + 10;
+      if (this.isRole) {
+        x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
+        y = this.pointAncrage.y + this.MARGIN;
       } else {
-        x = pointAncrage.x + 10;
-        y = pointAncrage.y + 10;
+        x = this.pointAncrage.x + this.MARGIN;
+        y = this.pointAncrage.y + this.MARGIN;
       }
     } else {
       // Le point d'ancrage est situé sur le haut de la ClassShape
-      if (isRole) {
-        x = pointAncrage.x + 10;
-        y = pointAncrage.y - this.getHeight() - 10;
+      if (this.isRole) {
+        x = this.pointAncrage.x + this.MARGIN;
+        y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       } else {
-        x = pointAncrage.x - this.getWidth() - 10;
-        y = pointAncrage.y - this.getHeight() - 10;
+        x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
+        y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       }
     }
     return new Point(x, y);
@@ -150,23 +151,23 @@ public class LabelShape extends JLabel {
   }
 
   private Dimension calculateSize(Graphics2D graphics2D) {
-    int width = graphics2D.getFontMetrics().stringWidth(this.getText());
-    int height = graphics2D.getFontMetrics().getHeight();
+    final int width = graphics2D.getFontMetrics().stringWidth(this.getText());
+    final int height = graphics2D.getFontMetrics().getHeight();
     return new Dimension(width, height);
   }
 
   public Point calculateLocation(boolean firstDisplay) {
     if (!firstDisplay) {
       // S'il s'agit du nom d'association
-      if (!(this.pointAncrage == relationShape.getPointsAncrage().getFirst()) && !(this.pointAncrage == relationShape.getPointsAncrage().getLast())) {
-        return new Point(relationShape.getCenter().x + distanceInXFromPointAncrage, relationShape.getCenter().y + distanceInYFromPointAncrage);
+      if (!(this.pointAncrage == this.relationShape.getPointsAncrage().get(0)) && !(this.pointAncrage == this.relationShape.getPointsAncrage().get(this.relationShape.getPointsAncrage().size() - 1))) {
+        return new Point(this.relationShape.getCenter().x + this.distanceInXFromPointAncrage, this.relationShape.getCenter().y + this.distanceInYFromPointAncrage);
       } else {
-        return new Point(this.pointAncrage.x + distanceInXFromPointAncrage, this.pointAncrage.y + distanceInYFromPointAncrage);
+        return new Point(this.pointAncrage.x + this.distanceInXFromPointAncrage, this.pointAncrage.y + this.distanceInYFromPointAncrage);
       }
     } else {
-      if (this.pointAncrage == this.relationShape.getPointsAncrage().getFirst()) {
+      if (this.pointAncrage == this.relationShape.getPointsAncrage().get(0)) {
         return this.calculateSourceInformationsFirstDisplay();
-      } else if (this.pointAncrage == this.relationShape.getPointsAncrage().getLast()) {
+      } else if (this.pointAncrage == this.relationShape.getPointsAncrage().get(this.relationShape.getPointsAncrage().size() - 1)) {
         return this.calculateDestionationInformationsFirstDisplay();
       } else {
         return this.relationShape.getCenter();
@@ -175,7 +176,7 @@ public class LabelShape extends JLabel {
   }
 
   public int getDistanceInXFromPointAncrage() {
-    return distanceInXFromPointAncrage;
+    return this.distanceInXFromPointAncrage;
   }
 
   public void setDistanceInXFromPointAncrage(int distanceInXFromPointAncrage) {
@@ -183,7 +184,7 @@ public class LabelShape extends JLabel {
   }
 
   public int getDistanceInYFromPointAncrage() {
-    return distanceInYFromPointAncrage;
+    return this.distanceInYFromPointAncrage;
   }
 
   public void setDistanceInYFromPointAncrage(int distanceInYFromPointAncrage) {

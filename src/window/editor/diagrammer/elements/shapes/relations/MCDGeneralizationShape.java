@@ -49,15 +49,15 @@ public class MCDGeneralizationShape extends RelationShape {
   }
 
   public void drawArrow(Graphics2D graphics2D) {
-    RelationPointAncrageShape previousPoint = this.pointsAncrage.get(this.pointsAncrage.getLast().getIndex() - 1);
-    RelationPointAncrageShape lastPoint = this.pointsAncrage.getLast();
+    RelationPointAncrageShape previousPoint = this.pointsAncrage.get(this.pointsAncrage.get(this.getPointsAncrage().size() - 1).getIndex() - 1);
+    RelationPointAncrageShape lastPoint = this.pointsAncrage.get(this.getPointsAncrage().size() - 1);
     int differenceX = lastPoint.x - previousPoint.x;
     int differenceY = lastPoint.y - previousPoint.y;
     double squareRoot = Math.sqrt(differenceX * differenceX + differenceY * differenceY);
-    double xm = squareRoot - ARROW_HEIGHT;
+    double xm = squareRoot - this.ARROW_HEIGHT;
     double xn = xm;
-    double ym = ARROW_WIDTH;
-    double yn = -ARROW_WIDTH, x;
+    double ym = this.ARROW_WIDTH;
+    double yn = -this.ARROW_WIDTH, x;
     double sin = differenceY / squareRoot;
     double cos = differenceX / squareRoot;
     x = xm * cos - ym * sin + previousPoint.x;
@@ -72,7 +72,7 @@ public class MCDGeneralizationShape extends RelationShape {
   }
 
   public MCDGeneralization getGeneralization() {
-    return generalization;
+    return this.generalization;
   }
 
   public void setGeneralization(MCDGeneralization generalization) {

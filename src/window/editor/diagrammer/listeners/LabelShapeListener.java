@@ -18,8 +18,8 @@ public class LabelShapeListener extends MouseAdapter {
   @Override
   public void mouseDragged(MouseEvent e) {
     LabelShape shape = (LabelShape) e.getSource();
-    int differenceX = e.getPoint().x - origin.x;
-    int differenceY = e.getPoint().y - origin.y;
+    final int differenceX = e.getPoint().x - this.origin.x;
+    final int differenceY = e.getPoint().y - this.origin.y;
     shape.setDistanceInXFromPointAncrage(shape.getDistanceInXFromPointAncrage() + differenceX);
     shape.setDistanceInYFromPointAncrage(shape.getDistanceInYFromPointAncrage() + differenceY);
     shape.setFirstDisplay(false);
