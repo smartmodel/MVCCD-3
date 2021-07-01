@@ -1,4 +1,4 @@
-package test.entites.onglets.contenus.general;
+package dialogOnglets.onglets.contenus.general;
 
 import m.services.MElementService;
 import main.MVCCDElement;

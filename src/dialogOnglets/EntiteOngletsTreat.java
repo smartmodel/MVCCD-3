@@ -1,13 +1,9 @@
-package test.entites;
+package dialogOnglets;
 
-import main.MVCCDElement;
-import mcd.MCDContAttributes;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDCompliantEditingTreat;
-import test.entites.onglets.contenus.attributs.NewAttributsInput;
-import test.entites.onglets.contenus.attributs.NewAttributsInputContent;
-import test.entites.onglets.contenus.general.NewGeneraliteInputContent;
+import dialogOnglets.onglets.contenus.general.NewGeneraliteInputContent;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 

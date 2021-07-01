@@ -1,19 +1,19 @@
-package test.entites.onglets.contenus.relations;
+package dialogOnglets.onglets.contenus.attributs;
 
-import test.entites.EntiteOnglets;
+import dialogOnglets.EntiteOnglets;
 import utilities.window.editor.PanelInput;
 import utilities.window.editor.PanelInputContent;
 
-public class NewRelationsInput extends PanelInput {
-    final String name = "Relations";
+public class NewAttributsInput extends PanelInput {
+    final String name = "Attributs";
 
-    public NewRelationsInput(EntiteOnglets entiteOnglets) {
+    public NewAttributsInput(EntiteOnglets entiteOnglets) {
         super(entiteOnglets);
     }
 
     @Override
     protected PanelInputContent createInputContentCustom() {
-        return new NewRelationsInputContent(this);
+        return new NewAttributsInputContent(this);
     }
 
     @Override

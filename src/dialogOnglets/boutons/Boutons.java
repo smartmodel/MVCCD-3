@@ -1,4 +1,4 @@
-package test.entites.boutons;
+package dialogOnglets.boutons;
 
 import main.MVCCDElement;
 import main.MVCCDElementFactory;

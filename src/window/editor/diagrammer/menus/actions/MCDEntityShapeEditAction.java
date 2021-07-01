@@ -6,7 +6,7 @@ import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
-import test.entites.EntiteOngletsTreat;
+import dialogOnglets.EntiteOngletsTreat;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 
 public class MCDEntityShapeEditAction extends AbstractAction {

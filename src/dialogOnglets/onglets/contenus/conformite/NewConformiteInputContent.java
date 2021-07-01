@@ -1,21 +1,19 @@
-package test.entites.onglets.contenus.conformite;
+package dialogOnglets.onglets.contenus.conformite;
 
 import main.MVCCDElement;
 import mcd.MCDEntity;
 import mcd.MCDEntityNature;
+import dialogOnglets.EntiteOngletsTreat;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import repository.editingTreat.mcd.MCDEntCompliantEditingTreat;
 import resultat.Resultat;
 import resultat.ResultatElement;
-import test.entites.EntiteOngletsTreat;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.STextArea;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
-import window.editor.mcd.entity.compliant.EntCompliantInput;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

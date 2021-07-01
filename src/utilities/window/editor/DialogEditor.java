@@ -7,7 +7,6 @@ import mcd.MCDContEntities;
 import mcd.MCDEntity;
 import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
-import test.entites.EntiteOnglets;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 
