@@ -34,9 +34,8 @@ import window.editor.diagrammer.utils.RelationCreator;
 public class DrawPanel extends JLayeredPane {
 
   private int gridSize = Preferences.DIAGRAMMER_DEFAULT_GRID_SIZE;
-  private Point origin;
-  private List<IShape> elements;
-  private boolean showRelationProjectionLine = false;
+  private final Point origin;
+  private final List<IShape> elements;
 
   public DrawPanel() {
     this.elements = new LinkedList<>();
@@ -72,7 +71,7 @@ public class DrawPanel extends JLayeredPane {
     this.drawRelations(graphics2D);
 
     // Si on crée une association, une ligne de projection est reliée de l'entité source au curseur de la souris
-    if (this.showRelationProjectionLine) {
+    if (RelationCreator.isCreating) {
       this.showRelationProjectionLine(graphics2D);
     }
   }
@@ -406,15 +405,6 @@ public class DrawPanel extends JLayeredPane {
     Point converted = SwingUtilities.convertPoint(MVCCDManager.instance().getMvccdWindow(), mouse, DiagrammerService.getDrawPanel());
 
     newGraphics2D.drawLine(RelationCreator.source.getCenter().x, RelationCreator.source.getCenter().y, converted.x, converted.y);
-  }
-
-  public boolean isShowRelationProjectionLine() {
-    return this.showRelationProjectionLine;
-  }
-
-  public void setShowRelationProjectionLine(boolean showRelationProjectionLine) {
-    this.showRelationProjectionLine = showRelationProjectionLine;
-    this.repaint();
   }
 
 }

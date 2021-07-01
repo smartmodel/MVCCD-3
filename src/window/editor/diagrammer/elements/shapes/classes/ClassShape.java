@@ -60,7 +60,7 @@ public abstract class ClassShape extends SquaredShape {
   }
 
   private void addListeners() {
-    ClassShapeListener listener = new ClassShapeListener();
+    ClassShapeListener listener = new ClassShapeListener(this);
     this.addMouseMotionListener(listener);
     this.addMouseListener(listener);
   }

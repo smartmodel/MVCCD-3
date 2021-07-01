@@ -14,15 +14,16 @@ public final class RelationCreator {
 
   public static ClassShape source = null;
   public static ClassShape destination = null;
+  public static boolean isCreating = false;
 
   public static void setSource(ClassShape source) {
+    isCreating = true;
     RelationCreator.source = source;
-    DiagrammerService.getDrawPanel().setShowRelationProjectionLine(true);
   }
 
   public static void setDestination(ClassShape destination) {
+    isCreating = false;
     RelationCreator.destination = destination;
-    DiagrammerService.getDrawPanel().setShowRelationProjectionLine(false);
   }
 
   public static void createRelation() {
@@ -53,4 +54,7 @@ public final class RelationCreator {
     destination = null;
   }
 
+  public static void setIsCreating(boolean isCreating) {
+    RelationCreator.isCreating = isCreating;
+  }
 }

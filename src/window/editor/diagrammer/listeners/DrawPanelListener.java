@@ -45,7 +45,10 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
     // Déselectionne toutes les formes et reset la création de relation
     DiagrammerService.getDrawPanel().deselectAllShapes();
-    RelationCreator.resetSourceAndDestination();
+    if (RelationCreator.isCreating) {
+      RelationCreator.resetSourceAndDestination();
+      RelationCreator.setIsCreating(false);
+    }
 
     this.relationClicked = this.setAssociationClicked(e);
 
@@ -149,7 +152,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
       }
     }
 
-    if (DiagrammerService.getDrawPanel().isShowRelationProjectionLine()) {
+    if (RelationCreator.isCreating) {
       DiagrammerService.getDrawPanel().repaint();
     }
 
