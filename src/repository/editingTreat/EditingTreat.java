@@ -12,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
+import test.entites.onglets.contenus.conformite.NewConformiteInputContent;
+import test.entites.onglets.contenus.mldr.NewMldrInputContent;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;

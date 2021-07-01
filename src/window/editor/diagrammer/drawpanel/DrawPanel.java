@@ -45,6 +45,7 @@ public class DrawPanel extends JLayeredPane {
     this.initUI();
     this.addListeners();
     this.repaint();
+    new DiagrammerService(this);
   }
 
   public int getGridSize() {
@@ -357,7 +358,7 @@ public class DrawPanel extends JLayeredPane {
 
   public void endScroll() {
     // Mise à jour du panel et des scrollbars
-    this.updatePanelAndScrollbars();
+   // this.updatePanelAndScrollbars();
   }
 
   public ArrayList<RelationShape> getRelationShapes() {

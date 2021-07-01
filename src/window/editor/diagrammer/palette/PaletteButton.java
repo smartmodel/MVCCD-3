@@ -21,7 +21,7 @@ public class PaletteButton extends JButton {
   private void initUI() {
     this.setBorderPainted(false);
     this.setOpaque(false);
-    this.setBackground(new Color(Color.TRANSLUCENT));
+    this.setBackground(Color.WHITE);
   }
 
 }

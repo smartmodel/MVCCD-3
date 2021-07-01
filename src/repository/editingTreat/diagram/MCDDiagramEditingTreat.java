@@ -38,7 +38,7 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
         //MVCCDWindow mvccdWindow = MVCCDManager.instance().getMvccdWindow();
         MVCCDWindow mvccdWindow = (MVCCDWindow) owner;
         WinDiagram  winDiagram = mvccdWindow.getDiagram();
-        JPanel panelTitle = winDiagram.getContent().getPanelTitle();
+        JPanel panelTitle = winDiagram.getPanelTitle();
         MCDTitlePanel mcdTitlePanel = new MCDTitlePanel(parent,
                 panelTitle,
                 DialogEditor.NEW,
@@ -59,7 +59,7 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
 
         MVCCDWindow mvccdWindow = (MVCCDWindow) owner;
         WinDiagram  winDiagram = mvccdWindow.getDiagram();
-        JPanel panelTitle = winDiagram.getContent().getPanelTitle();
+        JPanel panelTitle = winDiagram.getPanelTitle();
         MCDTitlePanel mcdTitlePanel = new MCDTitlePanel(parentBefore,
                 panelTitle,
                 DialogEditor.UPDATE,
@@ -86,7 +86,7 @@ public class MCDDiagramEditingTreat extends DiagramEditingTreat {
     public DialogEditor treatRead(Window owner, MVCCDElement element) {
         MVCCDWindow mvccdWindow = (MVCCDWindow) owner;
         WinDiagram  winDiagram = mvccdWindow.getDiagram();
-        JPanel panelTitle = winDiagram.getContent().getPanelTitle();
+        JPanel panelTitle = winDiagram.getPanelTitle();
         MCDTitlePanel mcdTitlePanel = new MCDTitlePanel(element.getParent(),
                 panelTitle,
                 DialogEditor.READ,

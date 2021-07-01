@@ -24,7 +24,7 @@ public abstract class DiagramEditingTreat extends EditingTreat {
 
         MVCCDWindow mvccdWindow = (MVCCDWindow) owner;
         WinDiagram winDiagram = mvccdWindow.getDiagram();
-        JPanel panelTitle = winDiagram.getContent().getPanelTitle();
+        JPanel panelTitle = winDiagram.getPanelTitle();
         CloseTitlePanel closeTitlePanel = new CloseTitlePanel(panelTitle);
         closeTitlePanel.getContent();
 

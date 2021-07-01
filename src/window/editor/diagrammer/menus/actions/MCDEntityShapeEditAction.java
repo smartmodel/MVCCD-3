@@ -6,6 +6,7 @@ import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
+import test.entites.EntiteOngletsTreat;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 
 public class MCDEntityShapeEditAction extends AbstractAction {
@@ -31,8 +32,10 @@ public class MCDEntityShapeEditAction extends AbstractAction {
 
   private void edit() {
     MVCCDManager manager = MVCCDManager.instance();
-    MCDEntityEditingTreat mcdEntityEditingTreat = new MCDEntityEditingTreat();
-    mcdEntityEditingTreat.treatUpdate(manager.getMvccdWindow(), this.shape.getEntity());
+/*    MCDEntityEditingTreat mcdEntityEditingTreat = new MCDEntityEditingTreat();
+    mcdEntityEditingTreat.treatUpdate(manager.getMvccdWindow(), this.shape.getEntity());*/
+    EntiteOngletsTreat entiteOngletsTreat = new EntiteOngletsTreat();
+    entiteOngletsTreat.treatUpdateOnglets(manager.getMvccdWindow(), this.shape.getEntity());
   }
 
   private void create() {

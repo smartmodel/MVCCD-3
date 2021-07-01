@@ -51,8 +51,9 @@ public class SquaredShapeListener extends MouseAdapter {
   @Override
   public void mouseDragged(MouseEvent mouseEvent) {
     this.handleMovements(mouseEvent.getPoint());
+    DiagrammerService.drawPanel.repaint();
     // On met à jour le drawPanel
-    DiagrammerService.drawPanel.updatePanelAndScrollbars();
+    //DiagrammerService.drawPanel.updatePanelAndScrollbars();
   }
 
   @Override

@@ -26,7 +26,7 @@ public class Haut extends PanelBorderLayout {
     Boolean theme = true;
     JButton modeSombre = new JButton("Mode sombre");
 
-    public Haut(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer, JFrame frame, WinRepository repository, WinDiagram diagram, WinConsole winConsole, Reserve reserve, Reserve palette) {
+    public Haut(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer, JFrame frame, WinRepository repository, WinDiagram diagram, WinConsole winConsole, Reserve reserve) {
         super();
         super.setBorderLayoutPosition(borderLayoutPosition);
         super.setPanelBLResizer(panelBLResizer);
@@ -54,8 +54,6 @@ public class Haut extends PanelBorderLayout {
                         winConsole.setBackground(Preferences.GRIS);
                         // Couleur pour la reserve
                         reserve.setBackground(Preferences.GRIS);
-                        // Couleur pour la palette
-                        palette.setBackground(Preferences.GRIS);
                         UIManager.setLookAndFeel(new FlatDarculaLaf());
                     } catch (Exception ex) {
                         System.err.println("Failed to initialize LaF");
@@ -72,8 +70,6 @@ public class Haut extends PanelBorderLayout {
                         winConsole.setBackground(Preferences.BLANC);
                         // Couleur pour la reserve
                         reserve.setBackground(Preferences.BLANC);
-                        // Couleur pour la palette
-                        palette.setBackground(Preferences.BLANC);
                         UIManager.setLookAndFeel(new FlatLightLaf());
                     } catch (Exception ex) {
                         System.err.println("Failed to initialize LaF");

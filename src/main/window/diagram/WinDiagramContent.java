@@ -3,6 +3,10 @@ package main.window.diagram;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import utilities.window.PanelContent;
+import window.editor.diagrammer.drawpanel.DrawPanel;
+import window.editor.diagrammer.drawpanel.DrawPanelComponent;
+import window.editor.diagrammer.palette.PalettePanel;
+import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,19 +23,21 @@ public class WinDiagramContent extends JPanel {
     private MVCCDWindow mvccdWindow;
     JPanel content = new JPanel();          //Diagrammeur dans son ensemble
     JPanel panelTitle = new JPanel();       //En-tête du diagrammeur
-    JPanel panelPalette = new JPanel();     //Palette du diagrammeur
-    JPanel panelDraw = new JPanel();        //Zone de dessin du diagrammeur
-
-    JButton btnAdd;
+    PalettePanel panelPalette = new PalettePanel();     //Palette du diagrammeur
+    DrawPanelComponent panelDraw;        //Zone de dessin du diagrammeur
 
     public WinDiagramContent() {
+        this.setBackground(Color.ORANGE);
         mvccdWindow = MVCCDManager.instance().getMvccdWindow();
+        DrawPanel drawPanel = new DrawPanel();
+        DiagrammerService s = new DiagrammerService(drawPanel);
+        panelDraw = new DrawPanelComponent(drawPanel);
         //Création des panneaux du diagrammeur
-        BorderLayout bl = new BorderLayout(5,5);
+       BorderLayout bl = new BorderLayout();
         content.setLayout(bl);
         content.add(panelPalette, BorderLayout.WEST);
         content.add(panelDraw, BorderLayout.CENTER);
-        content.add(panelTitle, BorderLayout.NORTH);
+        //content.add(panelTitle, BorderLayout.NORTH);
         //Place le diagrammeur (JPanel content) dans son ancêtre PanelBorder
         add(content);
     }
@@ -44,7 +50,7 @@ public class WinDiagramContent extends JPanel {
         return panelPalette;
     }
 
-    public JPanel getPanelDraw() {
+    public DrawPanelComponent getPanelDraw() {
         return panelDraw;
     }
 }

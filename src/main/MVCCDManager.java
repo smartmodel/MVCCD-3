@@ -526,10 +526,10 @@ public class MVCCDManager {
     public WinDiagram getWinDiagram() {
         return mvccdWindow.getDiagram();
     }
-
+/*
     public WinDiagramContent getWinDiagramContent() {
         return mvccdWindow.getDiagram().getContent();
-    }
+    }*/
 
 
     public WinMenuContent getWinMenuContent() {

@@ -15,6 +15,8 @@ import resultat.ResultatLevel;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 import utilities.window.services.ComponentService;
+import window.editor.diagrammer.drawpanel.DrawPanel;
+import window.editor.diagrammer.drawpanel.DrawPanelComponent;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -40,7 +42,6 @@ public class MVCCDWindow extends JFrame implements WindowListener {
     private WinDiagram diagram ;
     private WinConsole console ;
     private Reserve reserve ;
-    private Reserve palette ;
 
     private JSplitPane splitDiagrammeurPalette = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
     private JSplitPane splitRepoDiagra = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -74,13 +75,12 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         repository = new WinRepository();
         diagram = new WinDiagram();
         console = new WinConsole();
-        palette = new Reserve();
         reserve = new Reserve();
 
         String borderLayoutPositionMenu = BorderLayout.NORTH;
         String borderLayoutPositionContent = BorderLayout.CENTER;
 
-        menu = new Haut(borderLayoutPositionMenu, panelBLResizer, this, repository, diagram, console, reserve, palette);
+        menu = new Haut(borderLayoutPositionMenu, panelBLResizer, this, repository, diagram, console, reserve);
 
         // Référentiel
         repository.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -91,7 +91,7 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         scrollPaneRepo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Diagrammeur
-        diagram.setBackground(Color.WHITE);
+        diagram.setBackground(Color.GREEN);
         JScrollPane scrollPaneDiagram = new JScrollPane(diagram);
         scrollPaneDiagram.setPreferredSize(new Dimension(800,600));
         scrollPaneDiagram.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -105,27 +105,16 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         scrollPaneConsole.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneConsole.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        // Future palette
-        palette.setBackground(Color.WHITE);
-        palette.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JScrollPane scrollPanePalette = new JScrollPane(palette);
-        scrollPanePalette.setPreferredSize(new Dimension(50,600));
-        scrollPanePalette.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPanePalette.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-
         // Zone de reserve
         JScrollPane scrollPaneReserve = new JScrollPane(reserve);
         scrollPaneReserve.setPreferredSize(new Dimension(50,600));
         scrollPaneReserve.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneReserve.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        // Zone Palette et Diagrammeur
-        splitDiagrammeurPalette.setLeftComponent(scrollPanePalette);
-        splitDiagrammeurPalette.setRightComponent(scrollPaneDiagram);
 
         // Zone Référentiel et Palette/Diagrammeur
         splitRepoDiagra.setLeftComponent(scrollPaneRepo);
-        splitRepoDiagra.setRightComponent(splitDiagrammeurPalette);
+        splitRepoDiagra.setRightComponent(scrollPaneDiagram);
 
         // Zone Reserve et Palette/Diagrammeur, référentiel
         splitReserveRepoDiagraPalette.setLeftComponent(splitRepoDiagra);

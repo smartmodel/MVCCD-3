@@ -1,6 +1,6 @@
 package window.editor.diagrammer.drawpanel;
 
-import java.awt.Dimension;
+import java.awt.*;
 import javax.swing.JScrollPane;
 import preferences.Preferences;
 
@@ -17,4 +17,5 @@ public class DrawPanelComponent extends JScrollPane {
     this.setViewportView(drawPanel);
     this.getViewport().setPreferredSize(new Dimension(1, 1)); // On set width = 1 et height = 1 pour éviter que le viewport prenne la dimension du DrawPanel (de la zone de dessin)
   }
+
 }
