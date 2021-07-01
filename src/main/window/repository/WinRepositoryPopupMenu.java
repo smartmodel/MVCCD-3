@@ -576,7 +576,6 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     if(editingTreat instanceof EntiteOngletsTreat)
                         editingTreat.treatNewOnglets(mvccdWindow, (MCDContEntities) mvccdElement);
                     else
-                        System.out.println("Test");
                         editingTreat.treatNew(mvccdWindow, mvccdElement);
                 } catch (Exception e) {
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.new");
