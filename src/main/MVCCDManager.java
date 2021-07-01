@@ -197,10 +197,17 @@ public class MVCCDManager {
         ProjectElement child = (ProjectElement) mvccdElementToRemove;
         DefaultMutableTreeNode nodeChild= ProjectService.getNodeById(child.getIdProjectElement());
 
-        MVCCDManager.instance().getRepository().removeNodeFromParent(nodeChild);
-        getWinRepositoryContent().getTree().changeModel(repository);
-        //getWinRepositoryContent().getTree().getTreeModel().reload();
-        setDatasProjectChanged(true);
+        //TODO-0 A revoir le problème de suppression d'une relation qui aurait perdu une extrémité
+        // Méthode : removeMCDRelationAndDependantsInRepository
+        //  Pour provoquer l'erreur :
+        // Supprimer l'entité qui porte une extrémité... Pour mon cas cette entité était dans un paquetage différent
+        if (nodeChild != null) {
+            MVCCDManager.instance().getRepository().removeNodeFromParent(nodeChild);
+            getWinRepositoryContent().getTree().changeModel(repository);
+
+            //getWinRepositoryContent().getTree().getTreeModel().reload();
+            setDatasProjectChanged(true);
+        }
     }
 
     public void changeParentMVCCDElementInRepository(MVCCDElement mvccdElementChanged, MVCCDElement oldParent) {
@@ -223,8 +230,19 @@ public class MVCCDManager {
             removeMCDRelationAndDependantsInRepository(mcdRelationChild);
         }
         removeMVCCDElementInRepository(mcdRelation, mcdRelation.getParent());
-        removeMVCCDElementInRepository((MCDRelEnd)mcdRelation.getA(), ((MCDRelEnd) mcdRelation.getA()).getParent());
-        removeMVCCDElementInRepository((MCDRelEnd)mcdRelation.getB(), ((MCDRelEnd) mcdRelation.getB()).getParent());
+        //TODO-0 A voir La remarque ci-dessous
+        // Les tests sont mis car une seule extrémité peut avoir été supprimée suite à une erreur de programmation
+        // ou si le code n'est pas encore complètement terminé
+        if ((MCDRelEnd)mcdRelation.getA() != null) {
+            if (((MCDRelEnd) mcdRelation.getA()).getParent() != null) {
+                removeMVCCDElementInRepository((MCDRelEnd) mcdRelation.getA(), ((MCDRelEnd) mcdRelation.getA()).getParent());
+            }
+        }
+        if ((MCDRelEnd)mcdRelation.getB() != null) {
+            if (((MCDRelEnd) mcdRelation.getB()).getParent() != null){
+                removeMVCCDElementInRepository((MCDRelEnd) mcdRelation.getB(), ((MCDRelEnd) mcdRelation.getB()).getParent());
+            }
+        }
     }
 
     public Resultat openProject() {

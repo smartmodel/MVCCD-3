@@ -1,6 +1,7 @@
 package mldr.services;
 
 import mdr.MDRConstraint;
+import mdr.MDRContConstraints;
 import mdr.interfaces.IMDRConstraintIndice;
 import mldr.MLDRContConstraints;
 import utilities.Indexing;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 
 public class MLDRContConstraintsService {
 
-    public static Integer nextIndice (MLDRContConstraints mldrContConstraints, MDRConstraint mdrConstraint){
+    public static Integer nextIndice (MDRContConstraints mdrContConstraints, MDRConstraint mdrConstraint){
         /*
         Integer lastIndice = 0 ;
         for (MDRConstraint aMDRConstraint : mldrContConstraints.getMDRConstraints()){
@@ -33,7 +34,7 @@ public class MLDRContConstraintsService {
          */
 
         ArrayList<Integer> brothers = new ArrayList<Integer>();
-        for (MDRConstraint aMDRConstraint : mldrContConstraints.getMDRConstraints()){
+        for (MDRConstraint aMDRConstraint : mdrContConstraints.getMDRConstraints()){
             // L'élément lui-même doit être ignoré
             if (aMDRConstraint != mdrConstraint) {
                 if (aMDRConstraint.getClass() == mdrConstraint.getClass()) {

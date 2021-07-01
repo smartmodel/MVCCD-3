@@ -46,6 +46,11 @@ public class MCDNIDService {
                                 , new String[]{contextMessage}));
              }
         }
+
+        //TODO-1 Tester que d'autres paramètres que des attributs ne soient pas présents
+        // dans la perspective de l'import d'un fichier XML
+
+
         return messages;
     }
 

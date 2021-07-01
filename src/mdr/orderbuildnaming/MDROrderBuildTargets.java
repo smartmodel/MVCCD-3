@@ -15,7 +15,9 @@ public enum MDROrderBuildTargets {
     COLUMNFKONEANCESTOR (Preferences.MDR_NAMING_COLUMN_FK, "mdr.of.columns.fk"),
     PK (Preferences.MDR_NAMING_PK, "mdr.of.constraints.pk"),
     FK (Preferences.MDR_NAMING_FK, "mdr.of.constraints.fk"),
-    FKWITHOUTROLE(Preferences.MDR_NAMING_FK, "mdr.of.constraints.fk");
+    FKWITHOUTROLE(Preferences.MDR_NAMING_FK, "mdr.of.constraints.fk"),
+    UNIQUE(Preferences.MDR_NAMING_UNIQUE, "mdr.of.constraints.unique"),
+    UNIQUEMAX30(Preferences.MDR_NAMING_UNIQUE, "mdr.of.constraints.unique");
 
     private final String name;
     private final String propertyOfTarget;

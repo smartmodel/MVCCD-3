@@ -24,6 +24,7 @@ import test.entites.onglets.contenus.general.NewGeneraliteInputContent;
 import test.entites.onglets.contenus.mldr.NewMldrInputContent;
 import test.entites.onglets.contenus.relations.NewRelationsInput;
 import test.entites.onglets.contenus.relations.NewRelationsInputContent;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -120,6 +121,7 @@ public abstract class EditingTreat {
         if (confirmDelete){
             removeMVCCDElementInRepository(element);
             element.removeInParent();
+            //TODO-0 Il faut supprimer aussi tous les descendants dans la structure arborescente du projet
             element = null;
         }
         return element == null;

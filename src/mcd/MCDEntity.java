@@ -301,10 +301,15 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
         return MCDEntityService.getAssEndsNoIdChild(this);
     }
 
+    public ArrayList<MCDAssEnd> getAssEndsNoIdOptionnalChild() {
+        return MCDEntityService.getAssEndsNoIdOptionnalChild(this);
+    }
+
     public ArrayList<MCDAssEnd> getAssEndsNoIdAndNoNNChild(){
 
         return MCDEntityService.getAssEndsNoIdAndNoNNChild(this);
     }
+
 
     public ArrayList<MCDAssEnd> getAssEndsAssNNChild(){
 
@@ -355,6 +360,10 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
     public boolean isInd(){
         return (getAssEndsIdCompChild().size() == 0) && (! isLinkedEA()) && (! isSpecialized())
                 && contentIdentifier();
+    }
+
+    public boolean isChildOfIdNat(){
+        return (getAssEndsIdNatChild().size() > 0) ;
     }
     public boolean isNoInd(){
         return ! isInd();

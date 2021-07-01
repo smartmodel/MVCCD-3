@@ -19,6 +19,10 @@ public class MPDRPostgreSQLTable extends MPDRTable {
         super(parent, mldrElementSource);
     }
 
+    public MPDRPostgreSQLTable(ProjectElement parent,  IMLDRElement mldrElementSource, int id) {
+        super(parent, mldrElementSource, id);
+    }
+
     @Override
     public MPDRColumn createColumn(MLDRColumn mldrColumn) {
         MPDRPostgreSQLColumn newColumn = MVCCDElementFactory.instance().createMPDRPostgreSQLColumn(

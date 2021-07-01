@@ -150,6 +150,35 @@ public class IMCDModelService {
     }
 
 
+    public static ArrayList<MCDUnicity> getAllMCDUnicitiesInModel (IMCDModel imcdModel){
+        ArrayList<MCDUnicity> resultat = new ArrayList<MCDUnicity>();
+        for (MCDEntity aMCDEntity : getMCDEntities(imcdModel)) {
+            for (MCDUnicity aMCDUnicity : aMCDEntity.getMCDUnicities()) {
+                resultat.add(aMCDUnicity);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDNID> getAllMCDNIDsInModel (IMCDModel imcdModel){
+        ArrayList<MCDNID> resultat = new ArrayList<MCDNID>();
+        for (MCDEntity aMCDEntity : getMCDEntities(imcdModel)) {
+            for (MCDNID aMCDNID : aMCDEntity.getMCDNIDs()) {
+                resultat.add(aMCDNID);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDUnique> getAllMCDUniquesInModel (IMCDModel imcdModel){
+        ArrayList<MCDUnique> resultat = new ArrayList<MCDUnique>();
+        for (MCDEntity aMCDEntity : getMCDEntities(imcdModel)) {
+            for (MCDUnique aMCDUnique : aMCDEntity.getMCDUniques()) {
+                resultat.add(aMCDUnique);
+            }
+        }
+        return resultat;
+    }
 
     public static ArrayList<MCDRelation> getAllMCDRelationsInIModel(IMCDModel imcdModel){
         ArrayList<MCDRelation> resultat = new ArrayList<MCDRelation>();

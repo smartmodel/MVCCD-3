@@ -12,5 +12,9 @@ public class MPDROracleColumn extends MPDRColumn {
         super(parent, mldrElementSource);
     }
 
+    public MPDROracleColumn(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+        super(parent, mldrElementSource, id);
+    }
+
 
 }

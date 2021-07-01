@@ -1,5 +1,6 @@
 package mcd;
 
+import m.services.MElementService;
 import mcd.interfaces.IMCDParameter;
 import project.ProjectElement;
 import utilities.Trace;
@@ -29,7 +30,11 @@ public class MCDParameter extends MCDElement {
 
     public String getName() {
         if (target != null){
-            return target.getNameTree();
+            if (target instanceof MCDRelEnd) {
+                return target.getNamePath(MElementService.PATHSHORTNAME);
+            } else {
+                return target.getName();
+            }
         } else {
             return super.getName();
         }
@@ -37,7 +42,11 @@ public class MCDParameter extends MCDElement {
 
     public String getNameTree() {
         if (target != null){
-            return target.getNameTree();
+            if (target instanceof MCDRelEnd) {
+                return target.getNamePath(MElementService.PATHSHORTNAME);
+            } else {
+                return target.getNameTree();
+            }
         } else {
             return super.getNameTree();
         }

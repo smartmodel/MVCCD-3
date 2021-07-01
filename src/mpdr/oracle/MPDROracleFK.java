@@ -18,6 +18,10 @@ public class MPDROracleFK extends MPDRFK implements IMPDROracleElement {
         super(parent, mldrElementSource);
     }
 
+    public MPDROracleFK(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+        super(parent, mldrElementSource, id);
+    }
+
 
     @Override
     public MLDRParameter createParameter(IMDRParameter target) {

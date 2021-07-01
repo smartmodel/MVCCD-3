@@ -23,6 +23,11 @@ public abstract class MPDRFK extends MDRFK implements IMPDRElement, IMPDRElement
         this.mldrElementSource = mldrElementSource;
     }
 
+    public MPDRFK(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+        super(parent, id);
+        this.mldrElementSource = mldrElementSource;
+    }
+
     @Override
     public IMLDRElement getMldrElementSource() {
         return mldrElementSource;

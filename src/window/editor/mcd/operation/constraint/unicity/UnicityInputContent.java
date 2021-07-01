@@ -72,6 +72,12 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
         labelAbsolute = new JLabel("{absolute}");
         fieldAbsolute = new SCheckBox(this, labelAbsolute);
 
+        //#MAJ 2021-05-21 Affinement MCDUnicity
+        if (getEditor() instanceof NIDEditor) {
+            labelAbsolute.setVisible(false);
+            fieldAbsolute.setVisible(false);
+        }
+
         fieldAbsolute.addItemListener(this);
         fieldAbsolute.addFocusListener(this);
 
@@ -192,8 +198,6 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
 
         col = OperationParamTableColumn.NAME.getPosition();
         if (parameter.getTarget() != null) {
-            row[col] = parameter.getTarget().getNameTree();
-        } else {
             row[col] = parameter.getName();
         }
 

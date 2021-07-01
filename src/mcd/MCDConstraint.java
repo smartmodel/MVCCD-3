@@ -4,6 +4,7 @@ import constraints.Constraint;
 import m.MRelationDegree;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
+import mcd.services.MCDConstraintService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
@@ -56,6 +57,14 @@ public abstract class MCDConstraint extends MCDOperation{
         return resultat;
     }
 
+    public ArrayList<MCDAttribute> getMcdAttributesMandatory() {
+        return MCDConstraintService.getMcdAttributesMandatory(this);
+    }
+
+    public ArrayList<MCDAttribute> getMcdAttributesOptionnal() {
+        return MCDConstraintService.getMcdAttributesOptionnal(this);
+    }
+
     public ArrayList<MCDAssEnd> getMcdAssEnds() {
         ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
         for (MCDParameter mcdParameter: getMcdParameters()){
@@ -65,6 +74,15 @@ public abstract class MCDConstraint extends MCDOperation{
         }
         return resultat;
     }
+
+    public ArrayList<MCDAssEnd> getMcdAssEndsMandatory() {
+        return MCDConstraintService.getMcdAssEndsMandatory(this);
+    }
+
+    public ArrayList<MCDAssEnd> getMcdAssEndsOptionnal() {
+        return MCDConstraintService.getMcdAssEndsOptionnal(this);
+    }
+
 
     public ArrayList<MCDAssEnd> getMcdAssEndsId() {
         ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
@@ -120,6 +138,16 @@ public abstract class MCDConstraint extends MCDOperation{
 
         }
 
+        return resultat;
+    }
+
+    public ArrayList<MCDAssEnd> getMcdAssEndsOtherNoId() {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : getMcdAssEnds()){
+            if ( ! getMcdAssEndsNoId().contains(mcdAssEnd) ) {
+                resultat.add(mcdAssEnd) ;
+            }
+        }
         return resultat;
     }
 

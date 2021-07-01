@@ -20,6 +20,8 @@ public class MDRAdjustParameters {
             MDRParameter mdrParameter = mdrOperation.getParameter(mdrColumn);
             // Ajout des paramètres de colonnes manquants
             if (mdrParameter == null) {
+                    //TODO-1 Faire un insert positionné pour que les éléments de FK soient tj
+                    // en premier et correctement ordonnés.
                     mdrParameter = mdrOperation.createParameter(mdrColumn);
                     MVCCDManager.instance().addNewMVCCDElementInRepository(mdrParameter);
             }
