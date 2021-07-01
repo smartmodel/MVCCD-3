@@ -1,6 +1,8 @@
 package preferences;
 
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import console.WarningLevel;
 import console.WarningLevelManager;
 import main.MVCCDElement;
@@ -784,6 +786,12 @@ public class Preferences extends MVCCDElement {
 
     private boolean DIAGRAMMER_SHOW_GRID = true;
 
+
+    // Couleur et texte pour le thème
+    public static Color GRIS = Color.decode("#45494A");
+    public static Color BLANC = Color.WHITE;
+    public static FlatLightLaf FLATLIGHT;
+    public static FlatDarculaLaf FLATDARK;
 
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);

@@ -3,6 +3,7 @@ package main.window.repository;
 import preferences.PreferencesManager;
 import utilities.window.PanelContent;
 
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
@@ -14,12 +15,11 @@ import java.awt.event.ActionListener;
  * Elle ajoute ensuite l'arbre comme contenu de son ancêtre PanelContent.
  * L'ancêtre PanelContent crée la barre de défilement si nécessaire.
  */
-public class WinRepositoryContent extends PanelContent implements ActionListener {
+public class WinRepositoryContent extends JPanel {
 
     private WinRepositoryTree tree;
 
-    public WinRepositoryContent(WinRepository winRepository) {
-        super(winRepository);
+    public WinRepositoryContent() {
 
         // Création de l'arbre de représentation du référentiel
         tree = new WinRepositoryTree(null); //Remarque: l'arbre est créé vide. Le contenu est créé par les méthodes MVCCDManager.startRepository() puis MVCCDManager.openLastProject().
@@ -30,7 +30,7 @@ public class WinRepositoryContent extends PanelContent implements ActionListener
         tree.setShowsRootHandles(true);
 
         // Place l'arbre dans son ancêtre PanelBorder
-        super.addContent(tree);
+        add(tree);
     }
 
     private void colorBackground() {
@@ -39,11 +39,6 @@ public class WinRepositoryContent extends PanelContent implements ActionListener
                 tree.setBackground(Color.RED);
             }
         }
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
     }
 
     public WinRepositoryTree getTree() {

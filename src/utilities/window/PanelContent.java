@@ -2,6 +2,7 @@ package utilities.window;
 
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
 import java.awt.*;

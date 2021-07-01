@@ -10,6 +10,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.lang:2.6" level="project" />
     <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.io:2.4" level="project" />
+    <orderEntry type="library" name="com.formdev:flatlaf:1.2" level="project" />
+    <orderEntry type="library" name="com.github.jiconfont:jiconfont-swing:1.0.1" level="project" />
+    <orderEntry type="library" name="com.github.jiconfont:jiconfont-font_awesome:4.7.0.1" level="project" />
     <orderEntry type="library" name="ojdbc10" level="project" />
   </component>
 </module>

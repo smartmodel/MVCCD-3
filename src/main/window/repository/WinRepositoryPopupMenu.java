@@ -16,7 +16,6 @@ import mcd.*;
 import mcd.interfaces.IMCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDModel;
-import mcd.services.MCDElementService;
 import mdr.MDRRelationFK;
 import messages.MessagesBuilder;
 import mldr.*;
@@ -41,8 +40,8 @@ import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
 import repository.editingTreat.preferences.*;
 import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
+import test.entites.EntiteOnglets;
+import test.entites.EntiteOngletsTreat;
 import utilities.DefaultMutableTreeNodeService;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
@@ -60,12 +59,16 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
     private DefaultTreeModel treeModel;
     private MVCCDWindow mvccdWindow;
     private MVCCDElement mvccdElement;
+    private MCDEntity mcdEntity;
 
     public WinRepositoryPopupMenu(DefaultMutableTreeNode node) {
         this.treeModel = treeModel;
         this.node = node;
         mvccdWindow = MVCCDManager.instance().getMvccdWindow();
         mvccdElement = (MVCCDElement) node.getUserObject();
+        if(node.getUserObject() instanceof MCDEntity)
+            mcdEntity = (MCDEntity) node.getUserObject();
+
         init();
     }
 
@@ -143,10 +146,16 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             if (node.getUserObject() instanceof MCDContEntities) {
                 treatGenericNew(this, new MCDEntityEditingTreat());
+                //treatGenericNew(this, new EntiteOngletsTreat());
             }
 
             if (node.getUserObject() instanceof MCDEntity) {
-                treatGeneric(this, new MCDEntityEditingTreat());
+                /*treatGeneric(this, new MCDEntityEditingTreat());
+                //Contrôle de complétude
+                treatGenericRead(this, new MCDEntCompliantEditingTreat(),
+                        MessagesBuilder.getMessagesProperty("menu.compliant"));*/
+
+                treatGeneric(this, new EntiteOngletsTreat());
                 //Contrôle de complétude
                 treatGenericRead(this, new MCDEntCompliantEditingTreat(),
                         MessagesBuilder.getMessagesProperty("menu.compliant"));
@@ -579,7 +588,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    editingTreat.treatNew(mvccdWindow, mvccdElement);
+                    if(editingTreat instanceof EntiteOngletsTreat)
+                        editingTreat.treatNewOnglets(mvccdWindow, (MCDContEntities) mvccdElement);
+                    else
+                        System.out.println("Test");
+                        editingTreat.treatNew(mvccdWindow, mvccdElement);
                 } catch (Exception e) {
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.new");
                 }
@@ -600,7 +613,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    editingTreat.treatRead(mvccdWindow, mvccdElement);
+                    if(editingTreat instanceof EntiteOngletsTreat)
+                        editingTreat.treatReadOnglets(mvccdWindow, mcdEntity);
+                    else
+                        editingTreat.treatRead(mvccdWindow, mvccdElement);
                 } catch (Exception e){
                     String propertyMessage ;
                     if ( editingTreat instanceof MCDEntCompliantEditingTreat){
@@ -626,7 +642,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    editingTreat.treatUpdate(mvccdWindow, mvccdElement);
+                    if(editingTreat instanceof EntiteOngletsTreat)
+                        editingTreat.treatUpdateOnglets(mvccdWindow, mcdEntity);
+                    else
+                        editingTreat.treatUpdate(mvccdWindow, mvccdElement);
                 } catch (Exception e){
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.update");
                 }

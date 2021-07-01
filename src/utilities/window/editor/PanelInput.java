@@ -7,26 +7,29 @@ public abstract class PanelInput extends PanelBorderLayout implements IAccessDia
     private DialogEditor dialogEditor;
     private PanelInputContent inputContent;
 
-
     public PanelInput(DialogEditor dialogEditor) {
         this.dialogEditor = dialogEditor;
         PanelInputContent panelInputContent = createInputContentCustom();
-        setInputContent( panelInputContent);
+        setInputContent(panelInputContent);
         panelInputContent.start();
     }
-/*
+
+    public PanelInput() {
+
+    }
+
     public PanelInput(DialogEditor dialogEditor, PanelInputContent panelInputContent) {
 
         this.dialogEditor = dialogEditor;
         //PanelInputContent panelInputContent = createInputContentCustom();
-        setInputContent( panelInputContent);
+        setInputContent(panelInputContent);
         panelInputContent.start();
 
     }
 
- */
-
-    protected abstract PanelInputContent createInputContentCustom();
+    protected PanelInputContent createInputContentCustom() {
+        return null;
+    }
 
     public PanelInputContent getInputContent() {
         return inputContent;
@@ -36,15 +39,15 @@ public abstract class PanelInput extends PanelBorderLayout implements IAccessDia
         this.inputContent = inputContent;
     }
 
-    public DialogEditor getEditor(){
+    public DialogEditor getEditor() {
         return dialogEditor;
     }
 
-    public PanelButtons getButtons(){
+    public PanelButtons getButtons() {
         return dialogEditor.getButtons();
     }
 
-    public PanelButtonsContent getButtonsContent(){
+    public PanelButtonsContent getButtonsContent() {
         return getButtons().getButtonsContent();
     }
 

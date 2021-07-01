@@ -3,19 +3,19 @@ package main.window.console;
 import utilities.window.PanelBorderLayout;
 import utilities.window.PanelBorderLayoutResizer;
 
-public class WinConsole extends PanelBorderLayout {
+import javax.swing.*;
 
-     private WinConsoleContent content;
+public class WinConsole extends JPanel {
 
-    public WinConsole(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer){
-        super();
-        super.setBorderLayoutPosition(borderLayoutPosition);
-        super.setPanelBLResizer(panelBLResizer);
-        startLayout();
+    private WinConsoleContent content;
 
-        content = new WinConsoleContent(this);
-        super.setPanelContent(content);
+    public WinConsole(){
 
+        content = new WinConsoleContent();
+        add(content);
     }
 
+    public WinConsoleContent getContent() {
+        return content;
+    }
 }

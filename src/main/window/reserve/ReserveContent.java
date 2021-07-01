@@ -4,16 +4,14 @@ import utilities.window.PanelContent;
 
 import javax.swing.*;
 
-public class ReserveContent extends PanelContent {
+public class ReserveContent extends JPanel {
 
-    public ReserveContent(Reserve reserve) {
-        super(reserve);
+    public ReserveContent() {
 
         JPanel content = new JPanel();
 
         content.add (new JLabel ("Réserve"));
 
-        super.addContent(content);
-
+        add(content);
     }
 }

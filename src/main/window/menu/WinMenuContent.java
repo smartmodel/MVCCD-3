@@ -17,6 +17,7 @@ import utilities.window.DialogMessage;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 public class WinMenuContent implements ActionListener {
 
@@ -66,6 +67,11 @@ public class WinMenuContent implements ActionListener {
 
         projectNew = new JMenuItem("Nouveau");
         projectNew.addActionListener(this);
+
+        projectNew.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_N, ActionEvent.CTRL_MASK
+        ));
+
         project.add(projectNew);
         projectEdit = new JMenuItem("Propriétés");
         projectEdit.addActionListener(this);
@@ -87,15 +93,26 @@ public class WinMenuContent implements ActionListener {
         }
 
 
-        projectClose = new JMenuItem("Fermer");
+        projectClose = new JMenuItem("Fermer le projet en cours");
         projectClose.addActionListener(this);
         projectClose.setEnabled(true);
+
+        projectClose.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_W, ActionEvent.CTRL_MASK
+        ));
+
         project.add(projectClose);
 
         project.addSeparator();
         projectSave = new JMenuItem("Sauver");
         projectSave.addActionListener(this);
         projectSave.setEnabled(false);
+
+        projectSave.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_S, ActionEvent.CTRL_MASK
+        ));
+
+
         project.add(projectSave);
         projectSaveAs = new JMenuItem("Sauver comme copie");
         projectSaveAs.addActionListener(this);

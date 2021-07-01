@@ -22,7 +22,6 @@ import repository.Repository;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
-import utilities.Trace;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
 
@@ -87,9 +86,6 @@ public class MVCCDManager {
 
         // Création du référentiel
         startRepository();
-
-        // Ajustement de la taille de la zone d'affichage du référentiel
-        mvccdWindow.adjustPanelRepository();
 
         // Ouverture du dernier fichier de projet utilisés
         try {
@@ -161,7 +157,6 @@ public class MVCCDManager {
         PreferencesManager.instance().copyApplicationPref(Project.NEW);
         project.adjustProfile();
         projectToRepository();
-        mvccdWindow.adjustPanelRepository();
         setFileProjectCurrent(null);
         setDatasProjectChanged(true);
         getWinMenuContent().getProjectEdit().setEnabled(true);
@@ -183,6 +178,7 @@ public class MVCCDManager {
         DefaultMutableTreeNode nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
         getWinRepositoryContent().getTree().changeModel(repository);
         getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(nodeNew.getPath()));
+
         setDatasProjectChanged(true);
     }
 
@@ -348,8 +344,6 @@ public class MVCCDManager {
                 // Copie du projet au sein du référentiel
                 projectToRepository();
                 project.debugCheckLoadDeep(); //Provisoire pour le test de sérialisation/déséralisation
-                // Ajustement de la taille de la zone d'affichage du référentiel
-                mvccdWindow.adjustPanelRepository();
 
                 //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
                 //Le bouton peut être valide après l'ouverture d'un fichier avec changement d'extension
@@ -526,7 +520,7 @@ public class MVCCDManager {
     }
 
     public WinRepositoryContent getWinRepositoryContent() {
-        return (WinRepositoryContent) mvccdWindow.getRepository().getPanelContent();
+        return mvccdWindow.getRepository().getContent();
     }
 
     public WinDiagram getWinDiagram() {
@@ -534,7 +528,7 @@ public class MVCCDManager {
     }
 
     public WinDiagramContent getWinDiagramContent() {
-        return (WinDiagramContent) mvccdWindow.getDiagram().getPanelContent();
+        return mvccdWindow.getDiagram().getContent();
     }
 
 
@@ -543,7 +537,7 @@ public class MVCCDManager {
     }
 
     public WinConsoleContent getWinConsoleContent() {
-        return (WinConsoleContent) mvccdWindow.getConsole().getPanelContent();
+        return mvccdWindow.getConsole().getContent();
     }
 
     public Repository getRepository() {

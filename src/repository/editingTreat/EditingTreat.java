@@ -5,21 +5,19 @@ import m.MElement;
 import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDElement;
-import mcd.services.MCDElementService;
+import mcd.*;
+import mcd.interfaces.IMCDCompliant;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Fournit les méthodes génériques de déclenchement de traitement de données telles que treatNew(), treatUpdate(), treatRead(), etc.
@@ -33,6 +31,17 @@ public abstract class EditingTreat {
     public MVCCDElement treatNew(Window owner, MVCCDElement parent) {
 
         DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW); //Ouvre l'éditeur attendu
+        fen.setVisible(true);
+        return fen.getMvccdElementNew();
+    }
+
+    // version onglets
+    public MVCCDElement treatNewOnglets(Window owner, MCDContEntities mcdContEntities) {
+
+        /*MVCCDManager manager = MVCCDManager.instance();
+        EntiteOngletsTreat entiteOngletsTreat = new EntiteOngletsTreat();
+        EntiteOnglets fen = new EntiteOnglets(owner, mcdContEntities, null,DialogEditor.NEW, entiteOngletsTreat );*/
+        DialogEditor fen = getDialogEditorOnglets(owner, mcdContEntities, null, DialogEditor.NEW); //Ouvre l'éditeur attendu
         fen.setVisible(true);
         return fen.getMvccdElementNew();
     }
@@ -54,6 +63,21 @@ public abstract class EditingTreat {
         return fen.isDatasChanged();
     }
 
+    // version onglets
+    public boolean treatUpdateOnglets(Window owner, MCDEntity mcdEntity) {
+        MCDContEntities mcdContEntities = (MCDContEntities) mcdEntity.getParent();
+
+        DialogEditor fen = getDialogEditorOnglets(owner, mcdContEntities, mcdEntity, DialogEditor.UPDATE);
+
+        fen.setVisible(true);
+
+        MVCCDElement parentAfter = mcdContEntities.getParent();
+        if (mcdContEntities != parentAfter) {
+            MVCCDManager.instance().changeParentMVCCDElementInRepository(mcdEntity, mcdContEntities);
+        }
+        return fen.isDatasChanged();
+    }
+
     /**
      * Déclenchement de traitement de données pour la visualisation d'un élément.
      */
@@ -63,11 +87,20 @@ public abstract class EditingTreat {
         return fen;
     }
 
+    // version onglets
+    public DialogEditor treatReadOnglets(Window owner, MCDEntity mcdEntity) {
+        MCDContEntities mcdContEntities = (MCDContEntities) mcdEntity.getParent();
+
+        DialogEditor fen = getDialogEditorOnglets(owner, mcdContEntities, mcdEntity,
+                DialogEditor.READ);
+        fen.setVisible(true);
+        return fen;
+    }
 
     /**
      * Déclenchement de traitement de données pour la suppression d'un élément.
      */
-    public boolean treatDelete (Window owner, MVCCDElement element) {
+    public boolean treatDelete(Window owner, MVCCDElement element) {
         String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
         String message = MessagesBuilder.getMessagesProperty ("editor.delete.confirm",
                 new String[] { messageTheElement, element.getName()});
@@ -85,7 +118,7 @@ public abstract class EditingTreat {
     /**
      * Déclenchement de traitement de données pour la suppression des éléments enfants d'un élément.
      */
-    public void treatDeleteChilds (Window owner, MVCCDElement element) {
+    public void treatDeleteChilds(Window owner, MVCCDElement element) {
         String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
         String message = MessagesBuilder.getMessagesProperty ("editor.delete.childs.confirm",
                 new String[] {element.getName()});
@@ -151,6 +184,60 @@ public abstract class EditingTreat {
         return resultat;
     }
 
+    // version onglets
+    public Resultat treatCompletnessForAll(Window owner, MCDEntity mcdEntity, boolean showDialog) {
+        Resultat resultat = new Resultat();
+        PanelInputContent[] panelInputContents = loadPanelInputs(mcdEntity);
+
+        String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
+
+        for (int i = 0; i < panelInputContents.length; i++) {
+            if (datasAdjusted( panelInputContents[i])) {
+                String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.completness");
+                String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
+                        new String[] {messageMode});
+                if (showDialog) {
+                    if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
+                        DialogEditor fen = getDialogEditor(owner, (MElement) mcdEntity.getParent(), mcdEntity, DialogEditor.UPDATE);
+                        fen.setVisible(true);
+                    }
+                } else {
+                    resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                }
+            } else {
+                if (!checkInput(panelInputContents[i])) {
+                    String elementNameInContext ;
+                    if (showDialog) {
+                        elementNameInContext = mcdEntity.getNameTree();
+                    } else {
+                        elementNameInContext = ((MCDElement) mcdEntity).getNamePath(MElementService.PATHSHORTNAME);
+                    }
+                    String message = MessagesBuilder.getMessagesProperty("dialog.completness.error",
+                            new String[]{messageElement, elementNameInContext});
+                    if (showDialog) {
+                        message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.question.input");
+                        if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
+                            DialogEditor fen = getDialogEditor(owner, (MElement) mcdEntity.getParent(), mcdEntity, DialogEditor.UPDATE);
+                            fen.setVisible(true);
+                        }
+                    } else {
+                        resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                    }
+                } else {
+                    if (showDialog) {
+                        String message = MessagesBuilder.getMessagesProperty("dialog.completness.ok",
+                                new String[]{messageElement, mcdEntity.getNameTree()});
+                        resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                        ViewLogsManager.printResultat(resultat);
+                        DialogMessage.showOk(owner, message);
+                    }
+                }
+            }
+        }
+
+        return resultat;
+    }
+
 
     public PanelInputContent loadPanelInput(MVCCDElement element){
         PanelInputContent panelInputContent = getPanelInputContent((MVCCDElement) element);
@@ -162,6 +249,42 @@ public abstract class EditingTreat {
         return panelInputContent;
     }
 
+    // version onglets
+    public PanelInputContent[] loadPanelInputs(MCDEntity mcdEntity){
+        PanelInputContent[] panelInputContents = new PanelInputContent[6];
+        // Entite
+        panelInputContents[0] = loadPanelInput(mcdEntity);
+
+        // Attributs
+        panelInputContents[1] = loadPanelInput(mcdEntity.getMCDContAttributes());
+
+        // Contraintes
+        panelInputContents[2] = loadPanelInput(mcdEntity.getMCDContConstraints());
+
+        // Relations
+        panelInputContents[3] = loadPanelInput(mcdEntity.getMCDContRelEnds());
+
+        // Conformité
+        NewConformiteInputContent newConformiteInputContent = (NewConformiteInputContent) getPanelInputContent(mcdEntity);
+        newConformiteInputContent.createContentCustom();
+        newConformiteInputContent.loadDatas(mcdEntity);
+        newConformiteInputContent.setDataInitialized(true);
+        newConformiteInputContent.loadSimulationChange(mcdEntity);
+
+        panelInputContents[4] = newConformiteInputContent;
+
+        // MLD-R
+        NewMldrInputContent newMldrInputContent = (NewMldrInputContent) getPanelInputContent(mcdEntity);
+        newMldrInputContent.createContentCustom();
+        newMldrInputContent.loadDatas(mcdEntity);
+        newMldrInputContent.setDataInitialized(true);
+        newMldrInputContent.loadSimulationChange(mcdEntity);
+
+        panelInputContents[5] = newMldrInputContent;
+
+        return panelInputContents;
+    }
+
 
     public boolean checkInput(PanelInputContent panelInputContent){
          return panelInputContent.checkDatas(null);
@@ -171,12 +294,26 @@ public abstract class EditingTreat {
         return panelInputContent.datasChangedNow();
     }
 
-    protected abstract PanelInputContent getPanelInputContent(MVCCDElement element);
+    protected PanelInputContent getPanelInputContent(MVCCDElement element) {
+        return null;
+    }
+
+    // verison onglets
+    protected PanelInputContent[] getPanelInputContents(MCDEntity mcdEntity) {
+        return new PanelInputContent[0];
+    }
 
     /**
      * Chaque descendant de EditingTreat doit définir l'éditeur graphique à utiliser.
      */
-    protected abstract DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) ;
+    protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
+        return null;
+    }
+
+    // version onglets
+    protected DialogEditor getDialogEditorOnglets(Window owner, MCDContEntities mcdContEntities, MCDEntity mcdEntity, String mode) {
+        return null;
+    }
 
     protected abstract String getPropertyTheElement();
 
