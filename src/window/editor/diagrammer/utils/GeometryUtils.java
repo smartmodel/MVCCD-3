@@ -105,9 +105,6 @@ public class GeometryUtils {
 
   public static RelationPointAncrageShape getNearestPointAncrage(ClassShape shape, RelationShape relation) {
     RelationPointAncrageShape pointFound = relation.getPointsAncrage().getFirst();
-    System.out.println();
-    System.out.println("shape : " + (shape == relation.getSource() ? "source " : "destination"));
-    System.out.println("relation : " + (relation != null ? "différente de null" : "null"));
     for (RelationPointAncrageShape point : relation.getPointsAncrage()) {
       if (GeometryUtils.pointIsAroundShape(point, shape)) {
         pointFound = point;

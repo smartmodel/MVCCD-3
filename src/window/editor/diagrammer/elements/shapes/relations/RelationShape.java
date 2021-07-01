@@ -225,10 +225,19 @@ public abstract class RelationShape extends JComponent implements IShape {
   public Point getCenter() {
     RelationPointAncrageShape left = GeometryUtils.getLeftPoint(this.pointsAncrage.getFirst(), this.pointsAncrage.getLast());
     RelationPointAncrageShape right = GeometryUtils.getRightPoint(this.pointsAncrage.getFirst(), this.pointsAncrage.getLast());
+    Line2D segment = new Line2D.Double();
+    segment.setLine(this.pointsAncrage.getFirst().x, this.pointsAncrage.getFirst().y, this.pointsAncrage.getLast().x, this.pointsAncrage.getLast().y);
+
     if (pointsAncrage.size() == 2) {
-      int x = (right.x - left.x) / 2;
-      int y = (right.y - left.y) / 2;
-      return new Point(left.x + x, left.y + y);
+      if (GeometryUtils.isVertical(segment) || GeometryUtils.isHorizontal(segment)){
+        int x = (int) segment.getBounds().getCenterX();
+        int y = (int) segment.getBounds().getCenterY();
+        return new Point(x, y);
+      } else{
+        int x = (right.x - left.x) / 2;
+        int y = (right.y - left.y) / 2;
+        return new Point(left.x + x, left.y + y);
+      }
     } else if (pointsAncrage.size() % 2 != 0) {
       int indexCenter = Math.round(pointsAncrage.size() / 2);
       return new Point(pointsAncrage.get(indexCenter).x, pointsAncrage.get(indexCenter).y);
@@ -346,7 +355,6 @@ public abstract class RelationShape extends JComponent implements IShape {
     int x;
     int y;
 
-    System.out.println(sourcePosition.name());
     if (sourcePosition == Position.BOTTOM_CENTER_RIGHT) {
       x = (int) (sourceBounds.getMinX() + ((destBounds.getMaxX() - sourceBounds.getMinX()) / 2));
       pointsAncrage.add(new RelationPointAncrageShape(x, (int) sourceBounds.getMinY(), 0));

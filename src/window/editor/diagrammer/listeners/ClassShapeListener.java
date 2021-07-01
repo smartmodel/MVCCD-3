@@ -43,9 +43,9 @@ public class ClassShapeListener extends MouseAdapter {
   }
 
   public void handleRelationCreation(ClassShape shape) {
-    if (RelationCreator.source == null && RelationCreator.destination == null) {
+    if (RelationCreator.source == null) {
       RelationCreator.setSource(shape);
-    } else if (RelationCreator.source != null && RelationCreator.destination == null) {
+    } else if (RelationCreator.destination == null) {
       RelationCreator.setDestination(shape);
     }
     // Création

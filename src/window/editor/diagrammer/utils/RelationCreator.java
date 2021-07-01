@@ -17,13 +17,11 @@ public class RelationCreator {
 
   public static void setSource(ClassShape source) {
     RelationCreator.source = source;
-    System.out.println("Source set");
     DiagrammerService.drawPanel.setShowRelationProjectionLine(true);
   }
 
   public static void setDestination(ClassShape destination) {
     RelationCreator.destination = destination;
-    System.out.println("Destination set");
     DiagrammerService.drawPanel.setShowRelationProjectionLine(false);
   }
 

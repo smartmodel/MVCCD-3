@@ -31,9 +31,7 @@ public class LabelShape extends JLabel {
     this.relationShape = relationShape;
     this.isRole = isRole;
     this.firstDisplay = true;
-    // this.setSize(new Dimension(100, 30));
     Point location = this.calculateLocation(this.firstDisplay);
-    //   this.setLocation(location);
     this.setBounds(location.x, location.y, 100, 30);
     this.repaint();
   }
@@ -163,8 +161,7 @@ public class LabelShape extends JLabel {
       if (!(this.pointAncrage == relationShape.getPointsAncrage().getFirst()) && !(this.pointAncrage == relationShape.getPointsAncrage().getLast())) {
         return new Point(relationShape.getCenter().x + distanceInXFromPointAncrage, relationShape.getCenter().y + distanceInYFromPointAncrage);
       } else {
-        Point pointIfNotFirstDisplay = new Point(this.pointAncrage.x + distanceInXFromPointAncrage, this.pointAncrage.y + distanceInYFromPointAncrage);
-        return pointIfNotFirstDisplay;
+        return new Point(this.pointAncrage.x + distanceInXFromPointAncrage, this.pointAncrage.y + distanceInYFromPointAncrage);
       }
     } else {
       if (this.pointAncrage == this.relationShape.getPointsAncrage().getFirst()) {
