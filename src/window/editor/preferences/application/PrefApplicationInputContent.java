@@ -320,7 +320,6 @@ public class PrefApplicationInputContent extends PanelInputContent {
     }
 
     if (fieldShowGrid.checkIfUpdated()) {
-      System.out.println("updatedddddddddd");
       applicationPref.setDIAGRAMMER_SHOW_GRID(fieldShowGrid.isSelected());
     }
 

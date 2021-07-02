@@ -247,7 +247,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
       this.dragPointAncrage(newPoint);
     }
     // TODO -> Enlever le !relationClicked.isReflexive() lorsque le comportement des points d'ancrage d'une association réflexive aura été implémenté.
-    if (this.relationClicked.getPointsAncrage().size() > 2 && !this.relationClicked.isReflexive()) {
+    if (this.relationClicked.getPointsAncrage().size() == 3 && !this.relationClicked.isReflexive()) {
       // Met à jour les points aux index 1 ou n-1 si nécessaire
       this.dragPointAtIndex1orNMinus1(newPoint);
     }
@@ -381,7 +381,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
             // Si le prochain point est le dernier, celui croché sur la ClassShape, on met à jour le point sur l'entité
             previousPoint.drag(newPreviousPoint.x, newPreviousPoint.y);
             nextPoint.drag(newNextPoint.x, newNextPoint.y);
-
           }
         }
       }

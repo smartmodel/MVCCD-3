@@ -40,7 +40,6 @@ public class WinDiagramContent extends PanelContent {
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    System.out.println(this.panelDraw.getSize());
   }
 
   public JPanel getPanelTitle() {

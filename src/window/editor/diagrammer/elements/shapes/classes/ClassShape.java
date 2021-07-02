@@ -46,7 +46,6 @@ public abstract class ClassShape extends SquaredShape {
         }
       } else {
         final RelationPointAncrageShape nearestPointAncrage = GeometryUtils.getNearestPointAncrage(this, relation);
-        System.out.println(nearestPointAncrage.getIndex());
         nearestPointAncrage.setLocationDifference(differenceX, differenceY);
       }
     }
@@ -124,10 +123,11 @@ public abstract class ClassShape extends SquaredShape {
   protected Dimension calculateMinimumSize() {
     final FontMetrics fontMetrics = this.getFontMetrics(Preferences.DIAGRAMMER_CLASS_FONT);
     final int height = this.getZoneMinHeight(this.zoneEnTete.getElements()) + this.getZoneMinHeight(this.zoneProprietes.getElements());
-    String longestProperty = this.getLongestProperty();
+    final String longestProperty = this.getLongestProperty();
     int width = Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH;
     if (longestProperty != null) {
-      if (longestProperty.isEmpty()) {
+      int newWidth = Preferences.DIAGRAMMER_CLASS_PADDING * 2 + fontMetrics.stringWidth(longestProperty);
+      if (longestProperty.isEmpty() ||newWidth < Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH) {
         width = Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH;
       } else {
         width = Preferences.DIAGRAMMER_CLASS_PADDING * 2 + fontMetrics.stringWidth(longestProperty);
@@ -146,7 +146,7 @@ public abstract class ClassShape extends SquaredShape {
 
   protected void updateSizeAndMinimumSize() {
     final Dimension minimumSize = this.calculateMinimumSize();
-    if (minimumSize.width > Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH && minimumSize.height > Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT) {
+    if (minimumSize.width >= Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH && minimumSize.height >= Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT) {
       this.setMinimumSize(minimumSize);
       this.setSize(minimumSize);
     }
