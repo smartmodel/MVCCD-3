@@ -166,13 +166,13 @@ public final class GeometryUtils {
   public static Position getClassShapePosition(ClassShape shape, ClassShape comparedTo) {
 
     if (isRight(shape, comparedTo) && isTop(shape, comparedTo)) {
-      return Position.TOP_RIGHT;
+      return Position.TOP_CORNER_RIGHT;
     } else if (isLeft(shape, comparedTo) && isTop(shape, comparedTo)) {
-      return Position.TOP_LEFT;
+      return Position.TOP_CORNER_LEFT;
     } else if (isRight(shape, comparedTo) && isBottom(shape, comparedTo)) {
-      return Position.BOTTOM_RIGHT;
+      return Position.BOTTOM_CORNER_RIGHT;
     } else if (isLeft(shape, comparedTo) && isBottom(shape, comparedTo)) {
-      return Position.BOTTOM_LEFT;
+      return Position.BOTTOM_CORNER_LEFT;
     } else if (isXCenteredTopLeft(shape, comparedTo) || isXCenteredTopRight(shape, comparedTo)) {
       if (isTop(shape, comparedTo)) {
         return isXCenteredTopLeft(shape, comparedTo) ? Position.TOP_CENTER_LEFT : Position.TOP_CENTER_RIGHT;

@@ -378,19 +378,19 @@ public abstract class RelationShape extends JComponent implements IShape {
       y = (int) (sourceBounds.getMinY() + ((destBounds.getMaxY() - sourceBounds.getMinY()) / 2));
       pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getMinX(), y, 0));
       pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMaxX(), y, 1));
-    } else if (sourcePosition == Position.TOP_RIGHT) {
+    } else if (sourcePosition == Position.TOP_CORNER_RIGHT) {
       pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMaxY(), 0));
       pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
       pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMaxX(), (int) destBounds.getCenterY(), 2));
-    } else if (sourcePosition == Position.TOP_LEFT) {
+    } else if (sourcePosition == Position.TOP_CORNER_LEFT) {
       pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMaxY(), 0));
       pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
       pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMinX(), (int) destBounds.getCenterY(), 2));
-    } else if (sourcePosition == Position.BOTTOM_RIGHT) {
+    } else if (sourcePosition == Position.BOTTOM_CORNER_RIGHT) {
       pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMinY(), 0));
       pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
       pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMaxX(), (int) destBounds.getCenterY(), 2));
-    } else if (sourcePosition == Position.BOTTOM_LEFT) {
+    } else if (sourcePosition == Position.BOTTOM_CORNER_LEFT) {
       pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMinY(), 0));
       pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
       pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMinX(), (int) destBounds.getCenterY(), 2));
