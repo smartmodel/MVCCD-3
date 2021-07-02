@@ -771,12 +771,6 @@ public class Preferences extends MVCCDElement {
   private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT = null;
 
-    // Couleur et texte pour le thème
-    public static Color GRIS = Color.decode("#45494A");
-    public static Color BLANC = Color.WHITE;
-    public static Color TEXTE_THEMEFONCE = Color.decode("#ADADAD");
-    public static FlatLightLaf FLATLIGHT = new FlatLightLaf();
-    public static FlatDarculaLaf FLATDARK = new FlatDarculaLaf();
 
     private boolean DIAGRAMMER_SHOW_GRID = true;
 
