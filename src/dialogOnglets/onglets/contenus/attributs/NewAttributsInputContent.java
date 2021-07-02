@@ -1,4 +1,4 @@
-package test.entites.onglets.contenus.attributs;
+package dialogOnglets.onglets.contenus.attributs;
 
 import constraints.Constraint;
 import constraints.ConstraintService;

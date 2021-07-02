@@ -1,16 +1,15 @@
-package test.entites.onglets;
+package dialogOnglets.onglets;
 
-import test.entites.EntiteOnglets;
-import test.entites.onglets.contenus.attributs.NewAttributsInput;
-import test.entites.onglets.contenus.conformite.NewConformiteInput;
-import test.entites.onglets.contenus.contraintes.NewContraintesInput;
-import test.entites.onglets.contenus.general.NewGeneraliteInput;
-import test.entites.onglets.contenus.mldr.NewMldrInput;
-import test.entites.onglets.contenus.relations.NewRelationsInput;
+import dialogOnglets.onglets.contenus.attributs.NewAttributsInput;
+import dialogOnglets.onglets.contenus.general.NewGeneraliteInput;
+import dialogOnglets.onglets.contenus.mldr.NewMldrInput;
+import dialogOnglets.EntiteOnglets;
+import dialogOnglets.onglets.contenus.conformite.NewConformiteInput;
+import dialogOnglets.onglets.contenus.contraintes.NewContraintesInput;
+import dialogOnglets.onglets.contenus.relations.NewRelationsInput;
 import utilities.window.editor.PanelInput;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Onglets extends PanelInput {
     JTabbedPane jTabbedPane = new JTabbedPane();

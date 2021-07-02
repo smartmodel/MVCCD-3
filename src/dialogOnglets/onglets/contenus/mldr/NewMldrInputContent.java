@@ -1,4 +1,4 @@
-package test.entites.onglets.contenus.mldr;
+package dialogOnglets.onglets.contenus.mldr;
 
 import main.MVCCDElement;
 import mcd.MCDElement;
@@ -11,7 +11,6 @@ import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
-import window.editor.mcd.entity.mldr.EntMLDRInput;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

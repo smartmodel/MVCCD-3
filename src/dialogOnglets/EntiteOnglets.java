@@ -1,13 +1,12 @@
-package test.entites;
+package dialogOnglets;
 
-import mcd.MCDContAttributes;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
 import messages.MessagesBuilder;
+import dialogOnglets.boutons.PanelBoutons;
+import dialogOnglets.onglets.Onglets;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
-import test.entites.boutons.PanelBoutons;
-import test.entites.onglets.Onglets;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelButtons;
@@ -15,7 +14,6 @@ import utilities.window.editor.PanelInput;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
 
 public class EntiteOnglets extends DialogEditor {
 

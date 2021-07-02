@@ -1,4 +1,4 @@
-package test.entites.onglets.contenus.relations;
+package dialogOnglets.onglets.contenus.relations;
 
 import constraints.Constraint;
 import constraints.ConstraintService;
@@ -21,7 +21,6 @@ import utilities.window.services.PanelService;
 import window.editor.mcd.relation.association.AssociationEditor;
 import window.editor.mcd.relation.genspec.GenSpecEditor;
 import window.editor.mcd.relation.link.LinkEditor;
-import window.editor.mcd.relends.RelEndsInput;
 import window.editor.mcd.relends.RelEndsTableColumn;
 
 import javax.swing.*;
