@@ -1,12 +1,11 @@
 package generatesql;
 
+import java.util.ArrayList;
 import mpdr.MPDRFK;
 import mpdr.MPDRModel;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
 import utilities.TemplateFile;
-
-import java.util.ArrayList;
 
 public class MPDRGenerateSQLConstraints {
 
@@ -35,9 +34,10 @@ public class MPDRGenerateSQLConstraints {
 
     public String generateSQLFKs() {
         ArrayList<MPDRTable> mpdrTables = mpdrModel.getMPDRTables();
-        for(MPDRTable mpdrTable : mpdrTables) {
+
+        for (MPDRTable mpdrTable : mpdrTables) {
             ArrayList<MPDRFK> mpdrFks = mpdrTable.getMPDRFKs();
-            for(MPDRFK mpdrFk : mpdrFks) {
+            for (MPDRFK mpdrFk : mpdrFks) {
                 generateSQLFK(mpdrFk);
             }
         }
@@ -52,7 +52,7 @@ public class MPDRGenerateSQLConstraints {
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "constraint_column", mpdrfk.getParametersNameAsStr());
 
         //Contraite PK de référence
-        MPDRPK reference =  (MPDRPK) mpdrfk.getMdrPK();
+        MPDRPK reference = (MPDRPK) mpdrfk.getMdrPK();
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "constraint_reference_table", reference.getMDRTableAccueil().getName());
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "constraint_reference_column", reference.getParametersNameAsStr());
     }

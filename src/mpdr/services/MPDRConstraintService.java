@@ -1,5 +1,6 @@
 package mpdr.services;
 
+import java.util.ArrayList;
 import mdr.MDRConstraint;
 import mdr.MDRParameter;
 import mldr.MLDRParameter;
@@ -8,14 +9,13 @@ import mpdr.MPDRPK;
 import mpdr.MPDRParameter;
 import mpdr.interfaces.IMPDRElementWithSource;
 
-import java.util.ArrayList;
-
 public class MPDRConstraintService {
 
     public static MPDRPK getMPDRPK(ArrayList<MDRConstraint> mdrConstraints) {
         MPDRPK resultat = null;
-        for(MDRConstraint mdrConstraint : mdrConstraints) {
-            if(mdrConstraint instanceof MPDRPK) {
+
+        for (MDRConstraint mdrConstraint : mdrConstraints) {
+            if (mdrConstraint instanceof MPDRPK) {
                 resultat = (MPDRPK) mdrConstraint;
             }
         }
@@ -24,8 +24,9 @@ public class MPDRConstraintService {
 
     public static ArrayList<MPDRFK> getMPDRFKs(ArrayList<MDRConstraint> mdrConstraints) {
         ArrayList<MPDRFK> resultat = new ArrayList<MPDRFK>();
+
         for (MDRConstraint mdrConstraint : mdrConstraints) {
-            if(validMPDRFK(mdrConstraint)) {
+            if (validMPDRFK(mdrConstraint)) {
                 resultat.add((MPDRFK) mdrConstraint);
             }
         }
@@ -33,7 +34,7 @@ public class MPDRConstraintService {
     }
 
     private static boolean validMPDRFK(MDRConstraint mdrConstraint) {
-        if(mdrConstraint instanceof MPDRFK) {
+        if (mdrConstraint instanceof MPDRFK) {
             return true;
         } else {
             return false;
@@ -43,7 +44,7 @@ public class MPDRConstraintService {
     public static ArrayList<MPDRParameter> getMPDRParameters(MDRConstraint mdrConstraint) {
         ArrayList<MPDRParameter> resultat = new ArrayList<MPDRParameter>();
         for (MDRParameter mdrParameter : mdrConstraint.getMDRParameters()) {
-            if ( mdrParameter instanceof MPDRParameter){
+            if (mdrParameter instanceof MPDRParameter) {
                 resultat.add((MPDRParameter) mdrParameter);
             }
         }
@@ -51,8 +52,8 @@ public class MPDRConstraintService {
     }
 
     public static MPDRParameter getMPDRParameterByMLDRParameterSource(
-            MDRConstraint mdrConstraint, MLDRParameter mldrParameter) {
-        for (MPDRParameter mpdrParameter : getMPDRParameters(mdrConstraint)){
+        MDRConstraint mdrConstraint, MLDRParameter mldrParameter) {
+        for (MPDRParameter mpdrParameter : getMPDRParameters(mdrConstraint)) {
             if (mpdrParameter instanceof IMPDRElementWithSource) {
                 if (mpdrParameter.getMldrElementSource() == mldrParameter) {
                     return mpdrParameter;

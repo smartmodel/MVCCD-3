@@ -28,8 +28,8 @@ public class MPDRGenerateSQLColumns {
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "column_name", mpdrColumn.getName());
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "column_type", mpdrColumn.getDatatypeLienProg());
 
-        if(mpdrColumn.getSize() != null) {
-            if(mpdrColumn.getScale() != null) {
+        if (mpdrColumn.getSize() != null) {
+            if (mpdrColumn.getScale() != null) {
                 generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "column_size", "(" + mpdrColumn.getSize().toString());
                 generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "column_scale", ", " + mpdrColumn.getScale().toString() + ")");
             } else {
@@ -41,14 +41,14 @@ public class MPDRGenerateSQLColumns {
             generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "column_scale", "");
         }
 
-        if(mpdrColumn.isMandatory()) {
+        if (mpdrColumn.isMandatory()) {
             generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "column_mandatory", " NOT NULL");
         } else {
             generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "column_mandatory", "");
         }
 
-        if(mpdrColumn.getInitValue() != "" && mpdrColumn.getInitValue() != null) {
-            if(mpdrColumn.getDatatypeLienProg() == "NUMBER") {
+        if (mpdrColumn.getInitValue() != "" && mpdrColumn.getInitValue() != null) {
+            if (mpdrColumn.getDatatypeLienProg() == "NUMBER") {
                 generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "column_default", " DEFAULT " + mpdrColumn.getInitValue());
             } else {
                 generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "column_default", " DEFAULT '" + mpdrColumn.getInitValue() + "'");

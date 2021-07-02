@@ -12,9 +12,9 @@ public class TemplateFile {
         String content = "";
         Path path = Paths.get(templateDir, templateFileName);
 
-        try(BufferedReader bufferedReader = Files.newBufferedReader(path)) {
+        try (BufferedReader bufferedReader = Files.newBufferedReader(path)) {
             String line = null;
-            while((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 if (content != "") {
                     content += System.lineSeparator();
                 }
