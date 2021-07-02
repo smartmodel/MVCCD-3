@@ -41,7 +41,7 @@ public class EntiteOnglets extends DialogEditor {
 
     @Override
     protected Dimension getSizeCustom() {
-        return new Dimension(700,650);
+        return new Dimension(700,700);
     }
 
     @Override
