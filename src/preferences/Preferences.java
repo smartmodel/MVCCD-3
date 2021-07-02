@@ -1,5 +1,7 @@
 package preferences;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import console.WarningLevel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -49,6 +51,13 @@ public class Preferences extends MVCCDElement {
   public static String REPOSITORY_MPDR_MODEL_ORACLE_NAME = "MPDR_Oracle";
   public static String REPOSITORY_MPDR_MODEL_MYSQL_NAME = "MPDR_MySQL";
   public static String REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME = "MPDR_PostgreSQL";
+
+  // Couleur et texte pour le thème
+  public static Color GRIS = Color.decode("#45494A");
+  public static Color BLANC = Color.WHITE;
+  public static Color TEXTE_THEMEFONCE = Color.decode("#ADADAD");
+  public static FlatLightLaf FLATLIGHT = new FlatLightLaf();
+  public static FlatDarculaLaf FLATDARK = new FlatDarculaLaf();
 
   public static final String DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME = "DrawPanelContainer";
   public static final String DIAGRAMMER_DRAW_PANEL_NAME = "DrawPanel";

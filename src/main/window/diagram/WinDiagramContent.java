@@ -29,9 +29,7 @@ public class WinDiagramContent extends JPanel {
     public WinDiagramContent() {
         this.setBackground(Color.ORANGE);
         mvccdWindow = MVCCDManager.instance().getMvccdWindow();
-        DrawPanel drawPanel = new DrawPanel();
-        DiagrammerService s = new DiagrammerService(drawPanel);
-        panelDraw = new DrawPanelComponent(drawPanel);
+        panelDraw = new DrawPanelComponent(DiagrammerService.getDrawPanel());
         //Création des panneaux du diagrammeur
        BorderLayout bl = new BorderLayout();
         content.setLayout(bl);

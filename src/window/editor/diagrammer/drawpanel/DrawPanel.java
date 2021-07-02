@@ -43,7 +43,6 @@ public class DrawPanel extends JLayeredPane {
     this.initUI();
     this.addListeners();
     this.repaint();
-    new DiagrammerService(this);
   }
 
   public int getGridSize() {
@@ -298,7 +297,7 @@ public class DrawPanel extends JLayeredPane {
   }
 
   public void updatePanelAndScrollbars() {
-    this.insertWhiteSpaceInUpperLeftCorner();
+    //this.insertWhiteSpaceInUpperLeftCorner();
     //this.removeUnnecessaryWhitespaceAroundDiagram();
     this.repaint();
   }

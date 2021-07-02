@@ -29,14 +29,13 @@ public class WinDiagram extends JPanel {
         this.setLayout(new BorderLayout());
 /*        add(content, BorderLayout.CENTER);*/
 
-        DrawPanel drawPanel = new DrawPanel();
-        panelDraw = new DrawPanelComponent(drawPanel);
+        panelDraw = new DrawPanelComponent(DiagrammerService.getDrawPanel());
         //Création des panneaux du diagrammeur
         BorderLayout bl = new BorderLayout();
 
         //content.add(panelTitle, BorderLayout.NORTH);
         //Place le diagrammeur (JPanel content) dans son ancêtre PanelBorder
-        add(drawPanel, BorderLayout.CENTER);
+        add(DiagrammerService.getDrawPanel(), BorderLayout.CENTER);
         add(panelPalette, BorderLayout.WEST);
 /*        content.add(drawPanel);
         content.add(panelPalette);
