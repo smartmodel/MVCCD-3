@@ -14,7 +14,7 @@ public class MCDEntityShape extends ClassShape {
     super();
     this.addListeners();
   }
-
+  
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);

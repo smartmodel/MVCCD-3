@@ -10,8 +10,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-public class ResizableBorder implements Border {
+public final class ResizableBorder implements Border {
 
+  private final int DISTANCE = 8;
   int[] locations = {SwingConstants.NORTH, SwingConstants.SOUTH, SwingConstants.WEST, SwingConstants.EAST, //SwingConstants.NORTH_WEST,
       //SwingConstants.NORTH_EAST, //SwingConstants.SOUTH_WEST,
       //SwingConstants.SOUTH_EAST
@@ -20,27 +21,24 @@ public class ResizableBorder implements Border {
       // Cursor.SW_RESIZE_CURSOR,// Cursor.SE_RESIZE_CURSOR
   };
   private boolean isVisible = false;
-  private int dist = 8;
 
   @Override
   public void paintBorder(Component component, Graphics g, int x, int y, int w, int h) {
     if (this.isVisible) {
       g.setColor(Color.black);
-      for (int location : locations) {
-        Rectangle rect = getRectangle(x, y, w, h, location);
-        if (rect != null) {
-          g.setColor(Color.WHITE);
-          g.fillRect(rect.x, rect.y, rect.width - 1, rect.height - 1);
-          g.setColor(Color.BLACK);
-          g.drawRect(rect.x, rect.y, rect.width - 1, rect.height - 1);
-        }
+      for (int location : this.locations) {
+        Rectangle rect = this.getRectangle(x, y, w, h, location);
+        g.setColor(Color.WHITE);
+        g.fillRect(rect.x, rect.y, rect.width - 1, rect.height - 1);
+        g.setColor(Color.BLACK);
+        g.drawRect(rect.x, rect.y, rect.width - 1, rect.height - 1);
       }
     }
   }
 
   @Override
   public Insets getBorderInsets(Component component) {
-    return new Insets(dist, dist, dist, dist);
+    return new Insets(this.DISTANCE, this.DISTANCE, this.DISTANCE, this.DISTANCE);
   }
 
   @Override
@@ -51,21 +49,21 @@ public class ResizableBorder implements Border {
   private Rectangle getRectangle(int x, int y, int width, int height, int location) {
     switch (location) {
       case SwingConstants.NORTH:
-        return new Rectangle(x + width / 2 - dist / 2, y, dist, dist);
+        return new Rectangle(x + width / 2 - this.DISTANCE / 2, y, this.DISTANCE, this.DISTANCE);
       case SwingConstants.SOUTH:
-        return new Rectangle(x + width / 2 - dist / 2, y + height - dist, dist, dist);
+        return new Rectangle(x + width / 2 - this.DISTANCE / 2, y + height - this.DISTANCE, this.DISTANCE, this.DISTANCE);
       case SwingConstants.WEST:
-        return new Rectangle(x, y + height / 2 - dist / 2, dist, dist);
+        return new Rectangle(x, y + height / 2 - this.DISTANCE / 2, this.DISTANCE, this.DISTANCE);
       case SwingConstants.EAST:
-        return new Rectangle(x + width - dist, y + height / 2 - dist / 2, dist, dist);
+        return new Rectangle(x + width - this.DISTANCE, y + height / 2 - this.DISTANCE / 2, this.DISTANCE, this.DISTANCE);
       case SwingConstants.NORTH_WEST:
-        return new Rectangle(x, y, dist, dist);
+        return new Rectangle(x, y, this.DISTANCE, this.DISTANCE);
       case SwingConstants.NORTH_EAST:
-        return new Rectangle(x + width - dist, y, dist, dist);
+        return new Rectangle(x + width - this.DISTANCE, y, this.DISTANCE, this.DISTANCE);
       case SwingConstants.SOUTH_WEST:
-        return new Rectangle(x, y + height - dist, dist, dist);
+        return new Rectangle(x, y + height - this.DISTANCE, this.DISTANCE, this.DISTANCE);
       case SwingConstants.SOUTH_EAST:
-        return new Rectangle(x + width - dist, y + height - dist, dist, dist);
+        return new Rectangle(x + width - this.DISTANCE, y + height - this.DISTANCE, this.DISTANCE, this.DISTANCE);
       default:
         return new Rectangle();
     }
@@ -73,22 +71,22 @@ public class ResizableBorder implements Border {
 
   public int getCursor(MouseEvent me) {
     Component component = me.getComponent();
-    int width = component.getWidth();
-    int height = component.getHeight();
-    for (int i = 0; i < locations.length; i++) {
-      Rectangle rect = getRectangle(0, 0, width, height, locations[i]);
-      if (rect != null && rect.contains(me.getPoint())) {
-        return cursors[i];
+    final int width = component.getWidth();
+    final int height = component.getHeight();
+    for (int i = 0; i < this.locations.length; i++) {
+      Rectangle rect = this.getRectangle(0, 0, width, height, this.locations[i]);
+      if (rect.contains(me.getPoint())) {
+        return this.cursors[i];
       }
     }
     return Cursor.MOVE_CURSOR;
   }
 
   public boolean isVisible() {
-    return isVisible;
+    return this.isVisible;
   }
 
   public void setVisible(boolean visible) {
-    isVisible = visible;
+    this.isVisible = visible;
   }
 }

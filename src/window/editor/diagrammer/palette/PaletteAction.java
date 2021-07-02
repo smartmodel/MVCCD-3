@@ -8,7 +8,6 @@ public class PaletteAction extends AbstractAction {
   @Override
   public void actionPerformed(ActionEvent e) {
     PaletteButton clickedButton = (PaletteButton) e.getSource();
-    PalettePanel palette = (PalettePanel) clickedButton.getParent();
-    palette.setActiveButton(clickedButton);
+    PalettePanel.setActiveButton(clickedButton);
   }
 }

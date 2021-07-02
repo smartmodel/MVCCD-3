@@ -17,6 +17,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import main.MVCCDManager;
+import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.DialogMessage;
@@ -24,7 +25,6 @@ import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.DrawPanelListener;
-import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.RelationCreator;
 
@@ -33,11 +33,9 @@ import window.editor.diagrammer.utils.RelationCreator;
  */
 public class DrawPanel extends JLayeredPane {
 
+  private final Point origin;
+  private final List<IShape> elements;
   private int gridSize = Preferences.DIAGRAMMER_DEFAULT_GRID_SIZE;
-  private Point origin;
-  private List<IShape> elements;
-  private boolean showRelationProjectionLine = false;
-  private boolean showEntityIconFollowingMouse = false;
 
   public DrawPanel() {
     this.elements = new LinkedList<>();
@@ -74,7 +72,7 @@ public class DrawPanel extends JLayeredPane {
     this.drawRelations(graphics2D);
 
     // Si on crée une association, une ligne de projection est reliée de l'entité source au curseur de la souris
-    if (this.showRelationProjectionLine) {
+    if (RelationCreator.isCreating) {
       this.showRelationProjectionLine(graphics2D);
     }
   }
@@ -95,8 +93,8 @@ public class DrawPanel extends JLayeredPane {
     y += parent.getViewport().getViewPosition().getY();
     // Le résultat est là où le zoom s'effectuera
     double differenceX, differenceY;
-    differenceX = x - x * gridSize / oldGridSize;
-    differenceY = y - y * gridSize / oldGridSize;
+    differenceX = x - x * this.gridSize / oldGridSize;
+    differenceY = y - y * this.gridSize / oldGridSize;
     // On déplace l'origine
     this.moveOrigin(GridUtils.alignToGrid(-differenceX, this.gridSize), GridUtils.alignToGrid(-differenceY, this.gridSize));
     for (IShape e : this.getElements()) {
@@ -107,12 +105,16 @@ public class DrawPanel extends JLayeredPane {
   }
 
   public void addElement(IShape element) {
-    if (element != null) {
-      this.add((JComponent) element);
-      this.elements.add(element);
-      this.repaint();
+    if (MVCCDManager.instance().getProject() != null) {
+      if (element != null) {
+        this.add((JComponent) element);
+        this.elements.add(element);
+        this.repaint();
+      } else {
+        DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.add.null.element"));
+      }
     } else {
-      DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), "Impossible d'ajouter un élément null à la zone de dessin.");
+      DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.project.closed"));
     }
   }
 
@@ -125,11 +127,11 @@ public class DrawPanel extends JLayeredPane {
   }
 
   public List<IShape> getElements() {
-    return elements;
+    return this.elements;
   }
 
   public Point getOrigin() {
-    return origin;
+    return this.origin;
   }
 
   public void deleteElement(IShape shape) {
@@ -152,19 +154,18 @@ public class DrawPanel extends JLayeredPane {
     graphics2D.setColor(new Color(243, 243, 243));
     int width = this.getWidth();
     int height = this.getHeight();
-    for (int i = 0; i < width; i += DiagrammerService.getDrawPanel().getGridSize()) {
+    for (int i = 0; i < width; i += this.gridSize) {
       graphics2D.drawLine(i, 0, i, height);
     }
-    for (int i = 0; i < height; i += DiagrammerService.getDrawPanel().getGridSize()) {
+    for (int i = 0; i < height; i += this.gridSize) {
       graphics2D.drawLine(0, i, width, i);
     }
   }
 
   /**
    * Zoom les éléments du modèle.
-   *
    * @param fromFactor facteur de zoom initial
-   * @param toFactor   facteur de zoom final
+   * @param toFactor facteur de zoom final
    */
   public void zoomElements(int fromFactor, int toFactor) {
     if (this.zoomAllowed(toFactor)) {
@@ -176,14 +177,12 @@ public class DrawPanel extends JLayeredPane {
   }
 
   public void moveOrigin(int differenceX, int differenceY) {
-    this.getOrigin().translate(GridUtils.alignToGrid(differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(differenceY, DiagrammerService.getDrawPanel().getGridSize()));
+    this.getOrigin().translate(GridUtils.alignToGrid(differenceX, this.gridSize), GridUtils.alignToGrid(differenceY, this.gridSize));
   }
 
   /**
    * Vérifie que le zoom est autorisé. Exemple : Si le zoom maximal autorisé est de 25 et qu'un facteur de 26 est passé en paramètre, le zoom n'est pas autorisé.
-   *
-   * @param factor
-   *
+   * @param factor facteur de zoon à vérifier
    * @return Si le zoom est autorisé
    */
   private boolean zoomAllowed(int factor) {
@@ -191,7 +190,7 @@ public class DrawPanel extends JLayeredPane {
   }
 
   private void removeUnnecessaryWhitespaceAroundDiagram() {
-    Rectangle contentBounds = getContentBounds(this.getElements(), 0);
+    Rectangle contentBounds = this.getContentBounds(this.getElements(), 0);
     int newX = 0;
     int newY = 0;
     int newWidth = (int) this.getVisibleRect().getMaxX();
@@ -206,7 +205,7 @@ public class DrawPanel extends JLayeredPane {
     }
     this.moveOrigin(newX, newY);
     for (IShape element : this.getElements()) {
-      element.setLocation(GridUtils.alignToGrid(element.getBounds().x - newX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(element.getBounds().y - newY, DiagrammerService.getDrawPanel().getGridSize()));
+      element.setLocation(GridUtils.alignToGrid(element.getBounds().x - newX, this.gridSize), GridUtils.alignToGrid(element.getBounds().y - newY, this.gridSize));
     }
     // On change la position de la vue
     this.changeViewPosition(-newX, -newY);
@@ -215,59 +214,59 @@ public class DrawPanel extends JLayeredPane {
   }
 
   private boolean isHorizontalScrollbarVisible() {
-    DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
+    final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
     return parent.getHorizontalScrollBarPolicy() == ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
   }
 
   private boolean isVerticalScrollbarVisible() {
-    DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
+    final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
     return parent.getVerticalScrollBarPolicy() == ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
   }
 
   private void checkIfScrollbarsAreNecessary() {
-    DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
-    Rectangle diaWithoutWhite = getContentBounds(this.getElements(), 0);
-    Dimension viewSize = getViewableDiagrampanelSize();
-    boolean vertWasVisible = this.isVerticalScrollbarVisible();
-    boolean horWasVisible = this.isHorizontalScrollbarVisible();
-    int verSbWidth = 0;
-    int horSbHeight = 0;
+    final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
+    final Rectangle diaWithoutWhite = this.getContentBounds(this.getElements(), 0);
+    final Dimension viewSize = this.getViewableDiagrampanelSize();
+    final boolean vertWasVisible = this.isVerticalScrollbarVisible();
+    final boolean horWasVisible = this.isHorizontalScrollbarVisible();
+    int verticalScrollbarWidth = 0;
+    int horizontalScrollBarHeight = 0;
     if (vertWasVisible) {
-      verSbWidth = parent.getVerticalScrollBar().getWidth();
+      verticalScrollbarWidth = parent.getVerticalScrollBar().getWidth();
     }
     if (horWasVisible) {
-      horSbHeight = parent.getHorizontalScrollBar().getHeight();
+      horizontalScrollBarHeight = parent.getHorizontalScrollBar().getHeight();
     }
     // La scrollbar est inclut dans la zone visible -> on la masque
-    if (parent.getHorizontalScrollBar().getValue() < DiagrammerService.getDrawPanel().getGridSize() && diaWithoutWhite.getX() + diaWithoutWhite.getWidth() <= viewSize.getWidth() + verSbWidth) {
+    if (parent.getHorizontalScrollBar().getValue() < this.gridSize && diaWithoutWhite.getX() + diaWithoutWhite.getWidth() <= viewSize.getWidth() + verticalScrollbarWidth) {
       this.setHorizontalScrollbarVisibility(false);
-    } else if (parent.getHorizontalScrollBar().getValue() < DiagrammerService.getDrawPanel().getGridSize() && getViewableDiagrampanelSize().width + parent.getHorizontalScrollBar().getValue() == diaWithoutWhite.getX() + diaWithoutWhite.getWidth()) {
-      setHorizontalScrollbarVisibility(false);
+    } else if (parent.getHorizontalScrollBar().getValue() < this.gridSize && this.getViewableDiagrampanelSize().width + parent.getHorizontalScrollBar().getValue() == diaWithoutWhite.getX() + diaWithoutWhite.getWidth()) {
+      this.setHorizontalScrollbarVisibility(false);
     } else {
-      setHorizontalScrollbarVisibility(true);
+      this.setHorizontalScrollbarVisibility(true);
     }
-    if (parent.getVerticalScrollBar().getValue() < DiagrammerService.getDrawPanel().getGridSize() && diaWithoutWhite.getY() + diaWithoutWhite.getHeight() <= viewSize.getHeight() + horSbHeight) {
-      setVerticalScrollbarVisibility(false);
-    } else if (parent.getVerticalScrollBar().getValue() < DiagrammerService.getDrawPanel().getGridSize() && getViewableDiagrampanelSize().height + parent.getVerticalScrollBar().getValue() == diaWithoutWhite.getY() + diaWithoutWhite.getHeight()) {
-      setVerticalScrollbarVisibility(false);
+    if (parent.getVerticalScrollBar().getValue() < this.gridSize && diaWithoutWhite.getY() + diaWithoutWhite.getHeight() <= viewSize.getHeight() + horizontalScrollBarHeight) {
+      this.setVerticalScrollbarVisibility(false);
+    } else if (parent.getVerticalScrollBar().getValue() < this.gridSize && this.getViewableDiagrampanelSize().height + parent.getVerticalScrollBar().getValue() == diaWithoutWhite.getY() + diaWithoutWhite.getHeight()) {
+      this.setVerticalScrollbarVisibility(false);
     } else {
-      setVerticalScrollbarVisibility(true);
+      this.setVerticalScrollbarVisibility(true);
     }
     int adjustedX = 0;
     int adjustedY = 0;
-    if (parent.getHorizontalScrollBar().getValue() != 0 && vertWasVisible && !isVerticalScrollbarVisible()) {
-      adjustedX = GridUtils.alignToGrid(horSbHeight, DiagrammerService.getDrawPanel().getGridSize());
+    if (parent.getHorizontalScrollBar().getValue() != 0 && vertWasVisible && !this.isVerticalScrollbarVisible()) {
+      adjustedX = GridUtils.alignToGrid(horizontalScrollBarHeight, this.gridSize);
     }
-    if (parent.getVerticalScrollBar().getValue() != 0 && horWasVisible && !isHorizontalScrollbarVisible()) {
-      adjustedY = GridUtils.alignToGrid(verSbWidth, DiagrammerService.getDrawPanel().getGridSize());
+    if (parent.getVerticalScrollBar().getValue() != 0 && horWasVisible && !this.isHorizontalScrollbarVisible()) {
+      adjustedY = GridUtils.alignToGrid(verticalScrollbarWidth, this.gridSize);
     }
     if (adjustedX != 0 || adjustedY != 0) {
       this.setPreferredSize(new Dimension((int) (this.getPreferredSize().getWidth() + adjustedX), (int) this.getPreferredSize().getHeight() + adjustedY));
-      changeViewPosition(adjustedX, adjustedY);
+      this.changeViewPosition(adjustedX, adjustedY);
     }
   }
 
-  public Rectangle getContentBounds(Collection<IShape> elements, int border) {
+  public Rectangle getContentBounds(Collection<IShape> elements, int borderWidth) {
     if (elements.size() == 0) {
       return new Rectangle(0, 0, 0, 0);
     }
@@ -277,23 +276,23 @@ public class DrawPanel extends JLayeredPane {
     int maxy = 0;
     for (IShape element : elements) {
       if (element instanceof ClassShape) {
-        minx = Math.min(minx, element.getBounds().x - border);
-        miny = Math.min(miny, element.getBounds().y - border);
-        maxx = Math.max(maxx, element.getBounds().x + element.getBounds().width + border);
-        maxy = Math.max(maxy, element.getBounds().y + element.getBounds().height + border);
+        minx = Math.min(minx, element.getBounds().x - borderWidth);
+        miny = Math.min(miny, element.getBounds().y - borderWidth);
+        maxx = Math.max(maxx, element.getBounds().x + element.getBounds().width + borderWidth);
+        maxy = Math.max(maxy, element.getBounds().y + element.getBounds().height + borderWidth);
       }
     }
     return new Rectangle(minx, miny, maxx - minx, maxy - miny);
   }
 
   public Dimension getViewableDiagrampanelSize() {
-    DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
+    final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
     return parent.getVisibleRect().getSize();
   }
 
   public void changeViewPosition(int deltaX, int deltaY) {
-    DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
-    Point viewportPosition = parent.getViewport().getViewPosition();
+    final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
+    final Point viewportPosition = parent.getViewport().getViewPosition();
     parent.getViewport().setViewSize(this.getPreferredSize());
     parent.getViewport().setViewPosition(new Point(viewportPosition.x + deltaX, viewportPosition.y + deltaY));
   }
@@ -305,8 +304,8 @@ public class DrawPanel extends JLayeredPane {
   }
 
   private void insertWhiteSpaceInUpperLeftCorner() {
-    DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
-    Rectangle diaWithoutWhite = getContentBounds(this.getElements(), 0);
+    final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
+    final Rectangle diaWithoutWhite = this.getContentBounds(this.getElements(), 0);
     int adjustWidth = 0;
     if (diaWithoutWhite.getX() < 0) {
       adjustWidth = (int) diaWithoutWhite.getX();
@@ -315,10 +314,10 @@ public class DrawPanel extends JLayeredPane {
     if (diaWithoutWhite.getY() < 0) {
       adjustHeight = (int) diaWithoutWhite.getY();
     }
-    moveOrigin(adjustWidth, adjustHeight);
+    this.moveOrigin(adjustWidth, adjustHeight);
     for (IShape element : this.getElements()) {
       JComponent component = (JComponent) element;
-      component.setLocation(GridUtils.alignToGrid(component.getX() - adjustWidth, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(component.getY() - adjustHeight, DiagrammerService.getDrawPanel().getGridSize()));
+      component.setLocation(GridUtils.alignToGrid(component.getX() - adjustWidth, this.gridSize), GridUtils.alignToGrid(component.getY() - adjustHeight, this.gridSize));
     }
     if (adjustWidth < 0) {
       this.setHorizontalScrollbarVisibility(true);
@@ -326,14 +325,14 @@ public class DrawPanel extends JLayeredPane {
     if (adjustHeight < 0) {
       this.setVerticalScrollbarVisibility(true);
     }
-    int width = (int) (parent.getHorizontalScrollBar().getValue() + getViewableDiagrampanelSize().getWidth() - adjustWidth);
-    int height = (int) (parent.getVerticalScrollBar().getValue() + getViewableDiagrampanelSize().getHeight() - adjustHeight);
+    int width = (int) (parent.getHorizontalScrollBar().getValue() + this.getViewableDiagrampanelSize().getWidth() - adjustWidth);
+    int height = (int) (parent.getVerticalScrollBar().getValue() + this.getViewableDiagrampanelSize().getHeight() - adjustHeight);
     this.setPreferredSize(new Dimension(width, height));
-    changeViewPosition(-adjustWidth, -adjustHeight);
+    this.changeViewPosition(-adjustWidth, -adjustHeight);
   }
 
   private void setHorizontalScrollbarVisibility(boolean visible) {
-    DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
+    final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
     if (visible) {
       parent.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
     } else {
@@ -342,7 +341,7 @@ public class DrawPanel extends JLayeredPane {
   }
 
   private void setVerticalScrollbarVisibility(boolean visible) {
-    DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
+    final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
     if (visible) {
       parent.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     } else {
@@ -361,18 +360,18 @@ public class DrawPanel extends JLayeredPane {
    // this.updatePanelAndScrollbars();
   }
 
-  public ArrayList<RelationShape> getRelationShapes() {
-    ArrayList relations = new ArrayList();
+  public List<RelationShape> getRelationShapes() {
+    List<RelationShape> relations = new ArrayList<>();
     for (IShape shape : this.elements) {
       if (shape instanceof RelationShape) {
-        relations.add(shape);
+        relations.add((RelationShape) shape);
       }
     }
     return relations;
   }
 
-  public ArrayList<RelationShape> getRelationShapesByClassShape(ClassShape shape) {
-    ArrayList relations = new ArrayList();
+  public List<RelationShape> getRelationShapesByClassShape(ClassShape shape) {
+    List<RelationShape> relations = new ArrayList<>();
     for (RelationShape relation : this.getRelationShapes()) {
       if (relation.getSource() == shape || relation.getDestination() == shape) {
         relations.add(relation);
@@ -381,21 +380,11 @@ public class DrawPanel extends JLayeredPane {
     return relations;
   }
 
-  public ArrayList<ClassShape> getClassShapes() {
-    ArrayList classes = new ArrayList();
-    for (IShape shape : this.elements) {
-      if (shape instanceof ClassShape) {
-        classes.add(shape);
-      }
-    }
-    return classes;
-  }
-
   public void deselectAllShapes() {
     for (IShape shape : this.getElements()) {
       shape.setSelected(false);
     }
-    DiagrammerService.drawPanel.repaint();
+    this.repaint();
   }
 
   public void deselectAllOtherShape(IShape shapeToKeepSelected) {
@@ -404,30 +393,21 @@ public class DrawPanel extends JLayeredPane {
         shape.setSelected(false);
       }
     }
-    DiagrammerService.drawPanel.repaint();
+    this.repaint();
   }
 
   private void showRelationProjectionLine(Graphics2D graphics2D) {
-    float[] dash = {2f, 0f, 2f};
+    final float[] dash = {2f, 0f, 2f};
+    final Graphics2D newGraphics2D = (Graphics2D) graphics2D.create();
+    final BasicStroke stroke = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1.0f, dash, 2f);
 
-    Graphics2D newGraphics2D = (Graphics2D) graphics2D.create();
-    BasicStroke stroke = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1.0f, dash, 2f);
     newGraphics2D.setStroke(stroke);
     newGraphics2D.setColor(Color.GRAY);
 
     Point mouse = MouseInfo.getPointerInfo().getLocation();
-    Point converted = SwingUtilities.convertPoint(MVCCDManager.instance().getMvccdWindow(), mouse, DiagrammerService.drawPanel);
+    Point converted = SwingUtilities.convertPoint(MVCCDManager.instance().getMvccdWindow(), mouse, this);
 
     newGraphics2D.drawLine(RelationCreator.source.getCenter().x, RelationCreator.source.getCenter().y, converted.x, converted.y);
-  }
-
-  public boolean isShowRelationProjectionLine() {
-    return showRelationProjectionLine;
-  }
-
-  public void setShowRelationProjectionLine(boolean showRelationProjectionLine) {
-    this.showRelationProjectionLine = showRelationProjectionLine;
-    this.repaint();
   }
 
 }

@@ -4,10 +4,9 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
-import preferences.Preferences;
-import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.menus.EntityShapeMenu;
+import window.editor.diagrammer.services.DiagrammerService;
 
 public class MCDEntityShapeListener extends MouseAdapter {
 
@@ -20,11 +19,10 @@ public class MCDEntityShapeListener extends MouseAdapter {
   }
 
   private void showMenu(MouseEvent event) {
-    MCDEntityShape shape = (MCDEntityShape) event.getSource();
-    DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_NAME, shape);
-    Point converted = SwingUtilities.convertPoint(shape, event.getPoint(), drawPanel);
+    final MCDEntityShape shape = (MCDEntityShape) event.getSource();
+    final Point converted = SwingUtilities.convertPoint(shape, event.getPoint(), DiagrammerService.getDrawPanel());
+    final EntityShapeMenu menu = new EntityShapeMenu(shape);
 
-    EntityShapeMenu menu = new EntityShapeMenu(shape, converted.x, converted.y);
-    menu.show(drawPanel, converted.x, converted.y);
+    menu.show(DiagrammerService.getDrawPanel(), converted.x, converted.y);
   }
 }

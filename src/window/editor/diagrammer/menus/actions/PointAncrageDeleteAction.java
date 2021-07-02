@@ -9,11 +9,10 @@ import window.editor.diagrammer.services.DiagrammerService;
 
 public class PointAncrageDeleteAction extends AbstractAction {
 
-  RelationPointAncrageShape pointAncrage;
-  RelationShape relation;
+  private final RelationPointAncrageShape pointAncrage;
+  private final RelationShape relation;
 
-  public PointAncrageDeleteAction(String name, Icon icon, RelationPointAncrageShape shape,
-                                  RelationShape relation) {
+  public PointAncrageDeleteAction(String name, Icon icon, RelationPointAncrageShape shape, RelationShape relation) {
     super(name, icon);
     this.pointAncrage = shape;
     this.relation = relation;
@@ -26,9 +25,9 @@ public class PointAncrageDeleteAction extends AbstractAction {
 
   private void delete() {
     // Suppression possible uniquement s'il y a plus de 2 points d'ancrage dans l'association
-    if (relation.getPointsAncrage().size() > 2) {
+    if (this.relation.getPointsAncrage().size() > 2) {
       this.relation.deletePointAncrage(this.pointAncrage);
-      DiagrammerService.drawPanel.repaint();
+      DiagrammerService.getDrawPanel().repaint();
     }
   }
 }

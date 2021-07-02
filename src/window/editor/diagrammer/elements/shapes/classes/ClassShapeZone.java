@@ -2,24 +2,25 @@ package window.editor.diagrammer.elements.shapes.classes;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClassShapeZone extends Rectangle {
 
-  private ArrayList<String> elements;
+  private List<String> elements;
 
   public ClassShapeZone() {
     this.elements = new ArrayList<>();
   }
 
-  protected void addElement(String element){
+  protected void addElement(String element) {
     this.elements.add(element);
   }
 
-  public ArrayList<String> getElements() {
-    return elements;
+  public List<String> getElements() {
+    return this.elements;
   }
 
-  public void setElements(ArrayList<String> elements) {
+  public void setElements(List<String> elements) {
     this.elements = elements;
   }
 }

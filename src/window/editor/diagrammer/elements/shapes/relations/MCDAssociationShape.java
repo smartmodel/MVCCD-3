@@ -13,39 +13,7 @@ public class MCDAssociationShape extends RelationShape {
   }
 
   @Override
-  public void setDestinationRole(String role) {
-    this.destinationRole.setText(role);
-    this.destinationRole.repaint();
-  }
-
-  @Override
-  public void setSourceRole(String role) {
-    this.sourceRole.setText(role);
-    this.sourceRole.repaint();
-  }
-
-  @Override
-  public void setRelationName(String name) {
-    this.associationName.setText(name);
-    this.associationName.repaint();
-  }
-
-  @Override
-  public void setSourceCardinalite(String cardinalite) {
-    this.sourceCardinalite.setText(cardinalite);
-    this.sourceCardinalite.repaint();
-  }
-
-  @Override
-  public void setDestinationCardinalite(String cardinalite) {
-    this.destinationCardinalite.setText(cardinalite);
-    this.destinationCardinalite.repaint();
-  }
-
-  @Override
-  public void draw(Graphics2D graphics2D) {
-    this.drawSegments(graphics2D);
-  }
+  public void doDraw(Graphics2D graphics2D) {}
 
   @Override
   public void setInformations() {
@@ -89,12 +57,43 @@ public class MCDAssociationShape extends RelationShape {
     }
   }
 
+  @Override
+  public void setDestinationRole(String role) {
+    this.destinationRole.setText(role);
+    this.destinationRole.repaint();
+  }
+
+  @Override
+  public void setSourceRole(String role) {
+    this.sourceRole.setText(role);
+    this.sourceRole.repaint();
+  }
+
+  @Override
+  public void setRelationName(String name) {
+    this.associationName.setText(name);
+    this.associationName.repaint();
+  }
+
+  @Override
+  public void setSourceCardinalite(String cardinalite) {
+    this.sourceCardinalite.setText(cardinalite);
+    this.sourceCardinalite.repaint();
+  }
+
+  @Override
+  public void setDestinationCardinalite(String cardinalite) {
+    this.destinationCardinalite.setText(cardinalite);
+    this.destinationCardinalite.repaint();
+  }
+
   public MCDAssociation getAssociation() {
-    return association;
+    return this.association;
   }
 
   public void setAssociation(MCDAssociation association) {
     this.association = association;
+    // Ajoute les informations dans les labels
     this.setInformations();
   }
 

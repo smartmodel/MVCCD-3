@@ -2,14 +2,14 @@ package window.editor.diagrammer.services;
 
 import window.editor.diagrammer.drawpanel.DrawPanel;
 
-public class DiagrammerService {
-  public static DrawPanel drawPanel;
+public final class DiagrammerService {
 
-  public DiagrammerService(DrawPanel drawPanel) {
-    this.drawPanel = drawPanel;
-  }
+  private static DrawPanel drawPanel;
 
   public static DrawPanel getDrawPanel() {
+    if (drawPanel == null) {
+      drawPanel = new DrawPanel();
+    }
     return drawPanel;
   }
 
