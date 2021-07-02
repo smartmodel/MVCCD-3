@@ -2,6 +2,7 @@ package mpdr;
 
 import datatypes.MPDRDatatype;
 import generatesql.MPDRGenerateSQL;
+import generatesql.window.GenerateSQLWindow;
 import main.MVCCDManager;
 import mdr.MDRElement;
 import mdr.MDRModel;
@@ -14,6 +15,7 @@ import mpdr.services.MPDRModelService;
 import project.ProjectElement;
 import resultat.Resultat;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
@@ -62,9 +64,9 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         return (IMPDRElement) MPDRModelService.getIMPDRElementByMLDRElementSource(this, imldrElement);
     }
 
-    public String treatGenerate() {
+    public Resultat treatGenerate(GenerateSQLWindow owner) {
         MPDRGenerateSQL mpdrGenerateSQL = new MPDRGenerateSQL();
-        return mpdrGenerateSQL.generateSQL(this);
+        return mpdrGenerateSQL.generateSQL(owner, this);
     }
 
 

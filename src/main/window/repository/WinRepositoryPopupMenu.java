@@ -5,7 +5,6 @@ import console.ViewLogsManager;
 import datatypes.MDDatatype;
 import diagram.mcd.MCDDiagram;
 import exceptions.service.ExceptionService;
-import generatesql.window.GenerateSQLWindow;
 import m.interfaces.IMCompletness;
 import m.services.MElementService;
 import main.MVCCDElement;
