@@ -1,6 +1,6 @@
-package test.entites.onglets.contenus.conformite;
+package dialogOnglets.onglets.contenus.conformite;
 
-import test.entites.EntiteOnglets;
+import dialogOnglets.EntiteOnglets;
 import utilities.window.editor.PanelInput;
 import utilities.window.editor.PanelInputContent;
 

@@ -1,19 +1,19 @@
-package test.entites.onglets.contenus.attributs;
+package dialogOnglets.onglets.contenus.mldr;
 
-import test.entites.EntiteOnglets;
+import dialogOnglets.EntiteOnglets;
 import utilities.window.editor.PanelInput;
 import utilities.window.editor.PanelInputContent;
 
-public class NewAttributsInput extends PanelInput {
-    final String name = "Attributs";
+public class NewMldrInput extends PanelInput {
+    final String name = "MLD-R";
 
-    public NewAttributsInput(EntiteOnglets entiteOnglets) {
+    public NewMldrInput(EntiteOnglets entiteOnglets) {
         super(entiteOnglets);
     }
 
     @Override
     protected PanelInputContent createInputContentCustom() {
-        return new NewAttributsInputContent(this);
+        return new NewMldrInputContent(this);
     }
 
     @Override

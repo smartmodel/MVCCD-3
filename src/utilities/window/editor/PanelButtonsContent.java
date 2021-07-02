@@ -1,9 +1,6 @@
 package utilities.window.editor;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import console.ViewLogsManager;
-import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.MCDEntity;
@@ -12,9 +9,8 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
-import test.entites.EntiteOnglets;
-import test.entites.EntiteOngletsTreat;
-import test.entites.onglets.Onglets;
+import dialogOnglets.EntiteOnglets;
+import dialogOnglets.onglets.Onglets;
 import utilities.files.UtilFiles;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.SButton;

@@ -1,13 +1,12 @@
-package test.entites;
+package dialogOnglets;
 
-import mcd.MCDContAttributes;
+import dialogOnglets.boutons.PanelBoutons;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
 import messages.MessagesBuilder;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
-import test.entites.boutons.PanelBoutons;
-import test.entites.onglets.Onglets;
+import dialogOnglets.onglets.Onglets;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelButtons;
@@ -15,7 +14,6 @@ import utilities.window.editor.PanelInput;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
 
 public class EntiteOnglets extends DialogEditor {
 
@@ -44,8 +42,6 @@ public class EntiteOnglets extends DialogEditor {
     @Override
     protected Dimension getSizeCustom() {
         return new Dimension(700,650);
-        //return PreferencesManager.instance().preferences().getENTITY_WINDOW_SIZE_CUSTOM();
-        //return new Dimension(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
     }
 
     @Override

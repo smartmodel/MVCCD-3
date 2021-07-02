@@ -1,6 +1,6 @@
-package test.entites.onglets.contenus.general;
+package dialogOnglets.onglets.contenus.general;
 
-import test.entites.EntiteOnglets;
+import dialogOnglets.EntiteOnglets;
 import utilities.window.editor.PanelInput;
 import utilities.window.editor.PanelInputContent;
 

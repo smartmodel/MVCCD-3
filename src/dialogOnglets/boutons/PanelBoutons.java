@@ -1,6 +1,6 @@
-package test.entites.boutons;
+package dialogOnglets.boutons;
 
-import test.entites.EntiteOnglets;
+import dialogOnglets.EntiteOnglets;
 import utilities.window.editor.PanelButtons;
 
 public class PanelBoutons extends PanelButtons {
