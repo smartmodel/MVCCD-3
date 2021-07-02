@@ -2,6 +2,7 @@ package generatesql;
 
 import main.MVCCDManager;
 import preferences.Preferences;
+import resultat.Resultat;
 import utilities.files.UtilFiles;
 
 import java.io.File;
@@ -49,7 +50,8 @@ public class MPDRGenerateSQLUtil {
         return cleanCode;
     }
 
-    public static void generateSQLFile(String code) {
+    public static Resultat generateSQLFile(String code) {
+        Resultat resultat = new Resultat();
         try {
             File generateSQLFile = new File(UtilFiles.getStrDirectory(MVCCDManager.instance().getFileProjectCurrent()) + "\\" + MVCCDManager.instance().getProject() + ".ddl");
             FileWriter fileWriter = new FileWriter(generateSQLFile);
@@ -57,22 +59,27 @@ public class MPDRGenerateSQLUtil {
             fileWriter.write(code);
             fileWriter.close();
 
+            return resultat;
         } catch(IOException e) {
-            System.out.println(e);
+            resultat.addExceptionUnhandled(e);
+
+            return resultat;
         }
     }
 
-    public static void executeQuery(String code, String hostName, String port, String sid, String username, String userPassword) {
+    public static Resultat executeQuery(String code, String hostName, String port, String sid, String username, String userPassword) {
+        Resultat resultat = new Resultat();
         String[] tables = code.split(";");
         String databaseUrl = "jdbc:oracle:thin:@" + hostName + ":" + port + ":" + sid;
         for(String table : tables) {
             try(Connection connection = DriverManager.getConnection(databaseUrl, username, userPassword)) {
                 Statement statement = connection.createStatement();
-                int result = statement.executeUpdate(table);
+                statement.executeUpdate(table);
                 statement.close();
             } catch(SQLException e) {
-                System.out.println(e);
+                resultat.addExceptionUnhandled(e);
             }
         }
+        return resultat;
     }
 }

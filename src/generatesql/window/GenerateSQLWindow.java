@@ -1,7 +1,15 @@
 package generatesql.window;
 
+import console.LogsManager;
+import generatesql.MPDRGenerateSQL;
 import generatesql.MPDRGenerateSQLUtil;
+import messages.MessagesBuilder;
 import mpdr.MPDRModel;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
+import treatment.services.TreatmentService;
+import utilities.window.DialogMessage;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -38,6 +46,14 @@ public class GenerateSQLWindow extends JDialog {
     private JButton buttonExecute;
     private JButton buttonSaveFile;
 
+    public JTextArea getTextAreaCode() {
+        return textAreaCode;
+    }
+
+    public JTextArea getTextAreaConsole() {
+        return textAreaConsole;
+    }
+
     public GenerateSQLWindow(MPDRModel mpdrModel) {
         //this.owner = owner;
         this.mpdrModel = mpdrModel;
@@ -69,10 +85,9 @@ public class GenerateSQLWindow extends JDialog {
             }
         });
 
-        this.code = mpdrModel.treatGenerate();
-        textAreaCode.setText(code);
+        //this.code = mpdrModel.treatGenerate(this);
 
-        /*Resultat resultat = new Resultat();
+        Resultat resultat = new Resultat();
         String message = MessagesBuilder.getMessagesProperty("generatesql.mpdrtosql.start",
                 new String[] {
                         MessagesBuilder.getMessagesProperty("the.model.physical"),
@@ -81,47 +96,90 @@ public class GenerateSQLWindow extends JDialog {
         );
         resultat.add(new ResultatElement(message, ResultatLevel.INFO));
 
-        resultat.addResultat(mpdrModel.treatGenerate());
+        resultat.addResultat(mpdrModel.treatGenerate(this));
 
         TreatmentService.treatmentFinish(this, mpdrModel, resultat,
                 "the.model.physical", "generatesql.mpdrtosql.ok", "generatesql.mpdrtosql.abort");
-        */
 
-        // call onCancel() when cross is clicked
-        /*setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);*/
+        scrollPaneRight.getVerticalScrollBar().setValue(0);
 
         pack();
         setVisible(true);
     }
 
     private void onExecute() {
-        MPDRGenerateSQLUtil.executeQuery(textAreaCode.getText(), textFieldHostName.getText(), textFieldPort.getText(), textFieldSID.getText(), textFieldUsername.getText(), new String(passwordFieldUserPassword.getPassword()));
+        Resultat resultat = new Resultat();
+        String message = MessagesBuilder.getMessagesProperty("generatesql.sqlexecute.start",
+                new String[] {
+                        MessagesBuilder.getMessagesProperty("the.sql.code"),
+                        MessagesBuilder.getMessagesProperty("the.model.physical"),
+                        mpdrModel.getName()
+                }
+        );
+
+        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+
+        resultat.addResultat(MPDRGenerateSQLUtil.executeQuery(
+                textAreaCode.getText(),
+                textFieldHostName.getText(),
+                textFieldPort.getText(),
+                textFieldSID.getText(),
+                textFieldUsername.getText(),
+                new String(passwordFieldUserPassword.getPassword())));
+
+        treatResultat(this, resultat, "the.sql.code", "generatesql.sqlexecute.ok", "generatesql.sqlexecute.abort");
     }
 
     private void onSaveFile() {
-        MPDRGenerateSQLUtil.generateSQLFile(textAreaCode.getText());
+        Resultat resultat = new Resultat();
+        String message = MessagesBuilder.getMessagesProperty("generatesql.sqlfile.start",
+            new String[] {
+                MessagesBuilder.getMessagesProperty("the.sql.code"),
+                MessagesBuilder.getMessagesProperty("the.model.physical"),
+                mpdrModel.getName()
+            }
+        );
+
+        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+
+        resultat.addResultat(MPDRGenerateSQLUtil.generateSQLFile(textAreaCode.getText()));
+        //MPDRGenerateSQLUtil.generateSQLFile(textAreaCode.getText());
+
+        treatResultat(this, resultat, "the.sql.code", "generatesql.sqlfile.ok", "generatesql.sqlfile.abort");
+
+        //DialogMessage.showOk(this, message);
     }
 
-    /*private void onOK() {
-        // add your code here
-        dispose();
+    private void treatResultat(GenerateSQLWindow owner, Resultat resultat, String propertyTheElement, String propertyOk, String propertyError) {
+        String message = "";
+        String messageElement = MessagesBuilder.getMessagesProperty(propertyTheElement);
+
+        if (resultat.isNotError()) {
+            message = MessagesBuilder.getMessagesProperty(propertyOk,
+                new String[] {
+                    messageElement, MessagesBuilder.getMessagesProperty("the.model.physical"), mpdrModel.getName()});
+        } else {
+            message = MessagesBuilder.getMessagesProperty(propertyError,
+                    new String[]{messageElement, MessagesBuilder.getMessagesProperty("the.model.physical"), mpdrModel.getName()});
+        }
+        resultat.add(new ResultatElement (message, ResultatLevel.INFO));
+
+        printResultat(resultat);
+        DialogMessage.showOk(owner, message);
     }
 
-    private void onCancel() {
-        // add your code here if necessary
-        dispose();
-    }*/
-
+    private void printResultat(Resultat resultat) {
+        int i = 0;
+        for (ResultatElement resultatElement : resultat.getElementsAllLevel()) {
+            if (i == 0) {
+                this.getTextAreaConsole().setText("");
+                LogsManager.newResultatElement(resultatElement);
+                this.getTextAreaConsole().append(resultatElement.getText() + System.lineSeparator());
+            } else {
+                LogsManager.continueResultatElement(resultatElement);
+                this.getTextAreaConsole().append(resultatElement.getText() + System.lineSeparator());
+            }
+            i++;
+        }
+    }
 }
