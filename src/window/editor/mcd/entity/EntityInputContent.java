@@ -50,8 +50,6 @@ public class EntityInputContent extends PanelInputContentId {
         super.createContentCustom();
         fieldShortName.setToolTipText("Nom de l'entité");
 
-
-
         entityOrdered.setToolTipText("Ordonnancement des enregistrements");
         entityOrdered.addItemListener(this);
         entityOrdered.addFocusListener(this);

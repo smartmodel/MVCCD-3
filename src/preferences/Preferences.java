@@ -762,8 +762,9 @@ public class Preferences extends MVCCDElement {
     // Couleur et texte pour le thème
     public static Color GRIS = Color.decode("#45494A");
     public static Color BLANC = Color.WHITE;
-    public static FlatLightLaf FLATLIGHT;
-    public static FlatDarculaLaf FLATDARK;
+    public static Color TEXTE_THEMEFONCE = Color.decode("#ADADAD");
+    public static FlatLightLaf FLATLIGHT = new FlatLightLaf();
+    public static FlatDarculaLaf FLATDARK = new FlatDarculaLaf();
 
     public Preferences(MVCCDElement parent, String name) {
         super(parent, name);

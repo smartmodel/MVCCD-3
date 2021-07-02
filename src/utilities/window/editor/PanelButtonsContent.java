@@ -58,10 +58,10 @@ public abstract class PanelButtonsContent extends PanelContent
         messages.setText("");
         messages.setEditable(false);
 
-        if (UIManager.getLookAndFeel().equals(Preferences.FLATDARK)){
+        if (UIManager.getLookAndFeel().toString().equals(Preferences.FLATDARK.toString())){
             messages.setBackground(Preferences.GRIS);
         }
-        if (UIManager.getLookAndFeel().equals(Preferences.FLATLIGHT)){
+        if (UIManager.getLookAndFeel().toString().equals(Preferences.FLATLIGHT.toString())){
             messages.setBackground(Preferences.BLANC);
         }
 
