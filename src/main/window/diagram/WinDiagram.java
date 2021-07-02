@@ -4,6 +4,7 @@ import utilities.window.PanelBorderLayout;
 import utilities.window.PanelBorderLayoutResizer;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * La  lasse met en place le redimensionnement en faisant appel aux méthodes de son ancêtre PanelBorderLayout.
@@ -14,7 +15,7 @@ public class WinDiagram extends JPanel {
     private WinDiagramContent content;
 
     public WinDiagram(){
-
+        setBackground(Color.WHITE);
         content = new WinDiagramContent();
         add(content);
     }

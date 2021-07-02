@@ -83,31 +83,24 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         menu = new Haut(borderLayoutPositionMenu, panelBLResizer, this, repository, diagram, console, reserve, palette);
 
         // Référentiel
-        repository.setLayout(new FlowLayout(FlowLayout.LEFT));
-        repository.setBackground(Color.WHITE);
         JScrollPane scrollPaneRepo = new JScrollPane(repository);
         scrollPaneRepo.setPreferredSize(new Dimension(200,600));
         scrollPaneRepo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRepo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Diagrammeur
-        diagram.setBackground(Color.WHITE);
         JScrollPane scrollPaneDiagram = new JScrollPane(diagram);
         scrollPaneDiagram.setPreferredSize(new Dimension(800,600));
         scrollPaneDiagram.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneDiagram.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Console
-        console.setBackground(Color.WHITE);
-        console.setLayout(new FlowLayout(FlowLayout.LEFT));
         JScrollPane scrollPaneConsole = new JScrollPane(console);
         scrollPaneConsole.setPreferredSize(new Dimension(1100,100));
         scrollPaneConsole.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneConsole.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Future palette
-        palette.setBackground(Color.WHITE);
-        palette.setLayout(new FlowLayout(FlowLayout.LEFT));
         JScrollPane scrollPanePalette = new JScrollPane(palette);
         scrollPanePalette.setPreferredSize(new Dimension(50,600));
         scrollPanePalette.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);

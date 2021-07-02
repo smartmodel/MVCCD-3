@@ -25,6 +25,8 @@ public class WinRepository extends JPanel {
     private String uriImage = "ressources/images/icones/repository/";
 
     public WinRepository(){
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setBackground(Color.WHITE);
 
         IconFontSwing.register(FontAwesome.getIconFont());
 
