@@ -4,7 +4,9 @@
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/com/formdev/flatlaf/1.2/flatlaf-1.2.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/formdev/flatlaf/1.2/flatlaf-1.2-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES />
   </library>
 </component>

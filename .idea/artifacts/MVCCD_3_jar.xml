@@ -7,6 +7,12 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.4/commons-io-2.4.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/directory/studio/org.apache.commons.lang/2.6/org.apache.commons.lang-2.6.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" path-in-jar="/" />
+      <element id="library" level="project" name="org.apache.directory.studio:org.apache.commons.lang:2.6" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/flatlaf-1.2.jar" path-in-jar="/" />
+      <element id="library" level="project" name="org.apache.directory.studio:org.apache.commons.io:2.4" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont/1.0.0/jiconfont-1.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont-font_awesome/4.7.0.1/jiconfont-font_awesome-4.7.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/jiconfont/jiconfont-swing/1.0.1/jiconfont-swing-1.0.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
