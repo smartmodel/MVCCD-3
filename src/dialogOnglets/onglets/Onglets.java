@@ -1,11 +1,11 @@
 package dialogOnglets.onglets;
 
-import dialogOnglets.onglets.contenus.attributs.NewAttributsInput;
-import dialogOnglets.onglets.contenus.general.NewGeneraliteInput;
-import dialogOnglets.onglets.contenus.mldr.NewMldrInput;
 import dialogOnglets.EntiteOnglets;
+import dialogOnglets.onglets.contenus.attributs.NewAttributsInput;
 import dialogOnglets.onglets.contenus.conformite.NewConformiteInput;
 import dialogOnglets.onglets.contenus.contraintes.NewContraintesInput;
+import dialogOnglets.onglets.contenus.general.NewGeneraliteInput;
+import dialogOnglets.onglets.contenus.mldr.NewMldrInput;
 import dialogOnglets.onglets.contenus.relations.NewRelationsInput;
 import utilities.window.editor.PanelInput;
 

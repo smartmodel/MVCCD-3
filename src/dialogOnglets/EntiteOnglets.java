@@ -1,5 +1,6 @@
 package dialogOnglets;
 
+import dialogOnglets.boutons.PanelBoutons;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
 import messages.MessagesBuilder;
@@ -7,6 +8,7 @@ import dialogOnglets.boutons.PanelBoutons;
 import dialogOnglets.onglets.Onglets;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
+import dialogOnglets.onglets.Onglets;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelButtons;
@@ -41,9 +43,7 @@ public class EntiteOnglets extends DialogEditor {
 
     @Override
     protected Dimension getSizeCustom() {
-        return new Dimension(700,650);
-        //return PreferencesManager.instance().preferences().getENTITY_WINDOW_SIZE_CUSTOM();
-        //return new Dimension(Preferences.ENTITY_WINDOW_WIDTH, Preferences.ENTITY_WINDOW_HEIGHT);
+        return new Dimension(700,700);
     }
 
     @Override

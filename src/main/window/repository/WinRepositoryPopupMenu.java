@@ -4,6 +4,7 @@ import console.ConsoleManager;
 import console.ViewLogsManager;
 import datatypes.MDDatatype;
 import diagram.mcd.MCDDiagram;
+import dialogOnglets.EntiteOnglets;
 import exceptions.service.ExceptionService;
 import m.interfaces.IMCompletness;
 import m.services.MElementService;
@@ -130,7 +131,6 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 MCDPackage mcdPackage = (MCDPackage) node.getUserObject();
                 // Pas nécessaire de vérifier les droits de créer unpackage puisque le parent est déjà un package
                 packageNew(this, "menu.new.subpackage");
-
             }
 
 
@@ -589,7 +589,6 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     if(editingTreat instanceof EntiteOngletsTreat)
                         editingTreat.treatNewOnglets(mvccdWindow, (MCDContEntities) mvccdElement);
                     else
-                        System.out.println("Test");
                         editingTreat.treatNew(mvccdWindow, mvccdElement);
                 } catch (Exception e) {
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.new");

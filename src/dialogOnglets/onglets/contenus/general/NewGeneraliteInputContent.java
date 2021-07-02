@@ -33,7 +33,6 @@ public class NewGeneraliteInputContent extends PanelInputContentId{
 
     public NewGeneraliteInputContent(NewGeneraliteInput newGeneraliteInput)     {
         super(newGeneraliteInput);
-
     }
 
     public NewGeneraliteInputContent(MCDEntity element){
@@ -44,6 +43,7 @@ public class NewGeneraliteInputContent extends PanelInputContentId{
     @Override
     public void createContentCustom() {
         super.createContentCustom();
+
         fieldShortName.setToolTipText("Nom de l'entité");
 
         entityOrdered.setToolTipText("Ordonnancement des enregistrements");
@@ -93,7 +93,6 @@ public class NewGeneraliteInputContent extends PanelInputContentId{
         gbc.gridx = 1;
         panelInputContentCustom.add(entityAbstract, gbc);
 
-
         gbc.gridx = 0;
         gbc.gridy++;
         panelInputContentCustom.add(new JLabel("Journalisation :"),gbc);
@@ -105,7 +104,6 @@ public class NewGeneraliteInputContent extends PanelInputContentId{
         panelInputContentCustom.add(entityAudit, gbc);
 
         this.add(panelInputContentCustom);
-
     }
 
     protected GridBagConstraints createPanelId() {
@@ -153,16 +151,11 @@ public class NewGeneraliteInputContent extends PanelInputContentId{
     @Override
     protected void changeFieldSelected(ItemEvent e) {
         super.changeFieldSelected(e);
-        // Les champs impératifs sont testés sur la procédure checkDatasPreSave()
-
-        // Autres champs que les champs Id
-
     }
 
     @Override
     protected void changeFieldDeSelected(ItemEvent e) {
     }
-
 
     @Override
     public void focusGained(FocusEvent focusEvent) {

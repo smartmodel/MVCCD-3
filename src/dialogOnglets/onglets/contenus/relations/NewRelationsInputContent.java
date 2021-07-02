@@ -101,7 +101,8 @@ public class NewRelationsInputContent extends PanelInputContentTable {
     @Override
     protected MElement newElement() {
         MVCCDElement newElement = null;
-        MCDEntity mcdEntityContext = (MCDEntity) getEditor().getMvccdElementParent();
+
+        MCDEntity mcdEntityContext = (MCDEntity) getEditor().getMvccdElementCrt();
         MCDContRelations mcdContRelations = (MCDContRelations) mcdEntityContext.getParent().getBrotherByClassName(MCDContRelations.class.getName());
 
         String message = MessagesBuilder.getMessagesProperty("editor.relends.choice.nature");

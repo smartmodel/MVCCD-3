@@ -58,10 +58,10 @@ public abstract class PanelButtonsContent extends PanelContent
         messages.setText("");
         messages.setEditable(false);
 
-        if (UIManager.getLookAndFeel().equals(Preferences.FLATDARK)){
+        if (UIManager.getLookAndFeel().toString().equals(Preferences.FLATDARK.toString())){
             messages.setBackground(Preferences.GRIS);
         }
-        if (UIManager.getLookAndFeel().equals(Preferences.FLATLIGHT)){
+        if (UIManager.getLookAndFeel().toString().equals(Preferences.FLATLIGHT.toString())){
             messages.setBackground(Preferences.BLANC);
         }
 
@@ -279,10 +279,10 @@ public abstract class PanelButtonsContent extends PanelContent
 
 
     protected void treatReset(){
-
         // version onglets
         if(getEditor() instanceof EntiteOnglets){
             Onglets onglets = (Onglets) getEditor().getInput();
+
             onglets.getGeneralite().getInputContent().resetDatas();
             onglets.getNewMldrInput().getInputContent().resetDatas();
             onglets.getNewConformiteInput().getInputContent().resetDatas();
@@ -304,10 +304,10 @@ public abstract class PanelButtonsContent extends PanelContent
 
 
     protected void treatReInit(){
-
         // version onglets
         if(getEditor() instanceof EntiteOnglets){
             Onglets onglets = (Onglets) getEditor().getInput();
+
             onglets.getGeneralite().getInputContent().reInitDatas(getEditor().getMvccdElementCrt());
             onglets.getNewMldrInput().getInputContent().reInitDatas(getEditor().getMvccdElementCrt());
             onglets.getNewConformiteInput().getInputContent().reInitDatas(getEditor().getMvccdElementCrt());
@@ -327,13 +327,13 @@ public abstract class PanelButtonsContent extends PanelContent
     }
 
     public void treatUpdate(){
-
         saveDatas(getEditor().getMvccdElementCrt());
         getEditor().setDatasChanged(true);
 
         // version onglets
         if(getEditor() instanceof EntiteOnglets){
             Onglets onglets = (Onglets) getEditor().getInput();
+
             onglets.getGeneralite().getInputContent().restartChange();
             onglets.getNewMldrInput().getInputContent().restartChange();
             onglets.getNewConformiteInput().getInputContent().restartChange();
@@ -370,9 +370,9 @@ public abstract class PanelButtonsContent extends PanelContent
     }
 
     protected void saveDatas(MVCCDElement mvccdElement) {
-
         if(getEditor() instanceof EntiteOnglets) {
             Onglets onglets = (Onglets) getEditor().getInput();
+
             onglets.getGeneralite().getInputContent().saveDatas(mvccdElement);
             onglets.getNewMldrInput().getInputContent().saveDatas(mvccdElement);
             onglets.getNewConformiteInput().getInputContent().saveDatas(mvccdElement);

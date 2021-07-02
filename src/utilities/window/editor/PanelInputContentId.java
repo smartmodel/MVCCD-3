@@ -51,8 +51,6 @@ public abstract class PanelInputContentId extends PanelInputContent {
         fieldParent.addFocusListener(this);
         fieldParent.addItemListener(this);
 
-
-
         // Pour utilisation  uniquement checkDatas
         if (panelInput != null) {
             //TODO-1 Mettre un message d'erreur si elementCrt et parent sont nulls (Voir supprimer le parent de l'appel)

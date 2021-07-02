@@ -134,10 +134,8 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
             input.getInputContent().setComponentsReadOnly(readOnly);
 
         buttons.getButtonsContent().setButtonsReadOnly(readOnly);
-
-        input.setMinimumSize(new Dimension(700,550));
-
-        add(input, BorderLayout.NORTH);
+        
+        add(input, BorderLayout.CENTER);
         add(buttons, BorderLayout.SOUTH);
     }
 

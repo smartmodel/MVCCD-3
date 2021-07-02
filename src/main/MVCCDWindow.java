@@ -17,6 +17,7 @@ import utilities.window.PanelBorderLayoutResizer;
 import utilities.window.services.ComponentService;
 import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.drawpanel.DrawPanelComponent;
+import window.editor.diagrammer.palette.PalettePanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -83,23 +84,18 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         menu = new Haut(borderLayoutPositionMenu, panelBLResizer, this, repository, diagram, console, reserve);
 
         // Référentiel
-        repository.setLayout(new FlowLayout(FlowLayout.LEFT));
-        repository.setBackground(Color.WHITE);
         JScrollPane scrollPaneRepo = new JScrollPane(repository);
         scrollPaneRepo.setPreferredSize(new Dimension(200,600));
         scrollPaneRepo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRepo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Diagrammeur
-        diagram.setBackground(Color.GREEN);
         JScrollPane scrollPaneDiagram = new JScrollPane(diagram);
         scrollPaneDiagram.setPreferredSize(new Dimension(800,600));
         scrollPaneDiagram.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneDiagram.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Console
-        console.setBackground(Color.WHITE);
-        console.setLayout(new FlowLayout(FlowLayout.LEFT));
         JScrollPane scrollPaneConsole = new JScrollPane(console);
         scrollPaneConsole.setPreferredSize(new Dimension(1100,100));
         scrollPaneConsole.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);

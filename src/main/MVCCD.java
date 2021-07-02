@@ -1,15 +1,10 @@
 package main;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.*;
 import console.ViewLogsManager;
 import messages.MessagesBuilder;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 
 import javax.swing.*;
-import java.io.Console;
 
 public class MVCCD  {
 
