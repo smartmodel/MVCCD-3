@@ -1,5 +1,6 @@
 package dialogOnglets.onglets.contenus.conformite;
 
+import dialogOnglets.EntiteOnglets;
 import dialogOnglets.EntiteOngletsTreat;
 import main.MVCCDElement;
 import mcd.MCDEntity;
@@ -8,16 +9,16 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import resultat.Resultat;
 import resultat.ResultatElement;
+import treatment.services.TreatmentService;
 import utilities.window.editor.PanelInputContent;
-import utilities.window.scomponents.SCheckBox;
-import utilities.window.scomponents.SComboBox;
-import utilities.window.scomponents.STextArea;
-import utilities.window.scomponents.STextField;
+import utilities.window.scomponents.*;
 import utilities.window.services.PanelService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 
@@ -27,6 +28,7 @@ public class NewConformiteInputContent extends PanelInputContent {
     private STextField fieldNature;
     private JLabel labelGeneralize;
     private SCheckBox fieldGeneralize;
+    private SButton btnConfirm;
     //private JLabel labelAbstract;
     //private SCheckBox fieldAbstract;
     private JLabel labelErrors;
@@ -50,6 +52,8 @@ public class NewConformiteInputContent extends PanelInputContent {
         labelGeneralize = new JLabel("Généralisée");
         fieldGeneralize= new SCheckBox(this, labelGeneralize);
 
+        btnConfirm = new SButton("Vérifier la conformité");
+
         //labelAbstract = new JLabel("Abstraite");
         //fieldAbstract = new SCheckBox(this, labelAbstract);
 
@@ -58,6 +62,7 @@ public class NewConformiteInputContent extends PanelInputContent {
 
         super.getSComponents().add(fieldNature);
         super.getSComponents().add(fieldGeneralize);
+        super.getSComponents().add(btnConfirm);
         super.getSComponents().add(fieldErrors);
         createPanelMaster();
     }
@@ -74,6 +79,10 @@ public class NewConformiteInputContent extends PanelInputContent {
         panelInputContentCustom.add(labelGeneralize,gbc);
         gbc.gridx = 1;
         panelInputContentCustom.add(fieldGeneralize, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(btnConfirm,gbc);
 
         /*
         gbc.gridx = 0;
@@ -93,8 +102,6 @@ public class NewConformiteInputContent extends PanelInputContent {
         this.add(panelInputContentCustom);
 
     }
-
-
 
 
     protected boolean changeField(DocumentEvent e) {
