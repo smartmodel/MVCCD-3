@@ -8,7 +8,7 @@ import window.editor.diagrammer.services.DiagrammerService;
 
 public class RelationDeleteAction extends AbstractAction {
 
-  private RelationShape shape;
+  private final RelationShape shape;
 
   public RelationDeleteAction(String name, Icon icon, RelationShape shape) {
     super(name, icon);

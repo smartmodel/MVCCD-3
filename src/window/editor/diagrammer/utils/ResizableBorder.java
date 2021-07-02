@@ -12,6 +12,7 @@ import javax.swing.border.Border;
 
 public final class ResizableBorder implements Border {
 
+  private final int DISTANCE = 8;
   int[] locations = {SwingConstants.NORTH, SwingConstants.SOUTH, SwingConstants.WEST, SwingConstants.EAST, //SwingConstants.NORTH_WEST,
       //SwingConstants.NORTH_EAST, //SwingConstants.SOUTH_WEST,
       //SwingConstants.SOUTH_EAST
@@ -19,9 +20,7 @@ public final class ResizableBorder implements Border {
   int[] cursors = {Cursor.N_RESIZE_CURSOR, Cursor.S_RESIZE_CURSOR, Cursor.W_RESIZE_CURSOR, Cursor.E_RESIZE_CURSOR, //Cursor.NW_RESIZE_CURSOR, //Cursor.NE_RESIZE_CURSOR,
       // Cursor.SW_RESIZE_CURSOR,// Cursor.SE_RESIZE_CURSOR
   };
-
   private boolean isVisible = false;
-  private final int DISTANCE = 8;
 
   @Override
   public void paintBorder(Component component, Graphics g, int x, int y, int w, int h) {
@@ -29,12 +28,10 @@ public final class ResizableBorder implements Border {
       g.setColor(Color.black);
       for (int location : this.locations) {
         Rectangle rect = this.getRectangle(x, y, w, h, location);
-        if (rect != null) {
-          g.setColor(Color.WHITE);
-          g.fillRect(rect.x, rect.y, rect.width - 1, rect.height - 1);
-          g.setColor(Color.BLACK);
-          g.drawRect(rect.x, rect.y, rect.width - 1, rect.height - 1);
-        }
+        g.setColor(Color.WHITE);
+        g.fillRect(rect.x, rect.y, rect.width - 1, rect.height - 1);
+        g.setColor(Color.BLACK);
+        g.drawRect(rect.x, rect.y, rect.width - 1, rect.height - 1);
       }
     }
   }
@@ -74,11 +71,11 @@ public final class ResizableBorder implements Border {
 
   public int getCursor(MouseEvent me) {
     Component component = me.getComponent();
-    int width = component.getWidth();
-    int height = component.getHeight();
+    final int width = component.getWidth();
+    final int height = component.getHeight();
     for (int i = 0; i < this.locations.length; i++) {
       Rectangle rect = this.getRectangle(0, 0, width, height, this.locations[i]);
-      if (rect != null && rect.contains(me.getPoint())) {
+      if (rect.contains(me.getPoint())) {
         return this.cursors[i];
       }
     }

@@ -13,13 +13,13 @@ import window.editor.diagrammer.utils.GeometryUtils;
 
 public class LabelShape extends JLabel {
 
+  private final int MARGIN = 10;
   private int distanceInXFromPointAncrage = 0;
   private int distanceInYFromPointAncrage = 0;
   private RelationPointAncrageShape pointAncrage;
   private RelationShape relationShape;
   private boolean isRole;
   private boolean firstDisplay;
-  private final int MARGIN = 10;
 
   public LabelShape() {
     this.initUI();
@@ -159,15 +159,15 @@ public class LabelShape extends JLabel {
   public Point calculateLocation(boolean firstDisplay) {
     if (!firstDisplay) {
       // S'il s'agit du nom d'association
-      if (!(this.pointAncrage == this.relationShape.getPointsAncrage().get(0)) && !(this.pointAncrage == this.relationShape.getPointsAncrage().get(this.relationShape.getPointsAncrage().size() - 1))) {
+      if (!this.relationShape.isFirstOrLastPoint(this.pointAncrage)) {
         return new Point(this.relationShape.getCenter().x + this.distanceInXFromPointAncrage, this.relationShape.getCenter().y + this.distanceInYFromPointAncrage);
       } else {
         return new Point(this.pointAncrage.x + this.distanceInXFromPointAncrage, this.pointAncrage.y + this.distanceInYFromPointAncrage);
       }
     } else {
-      if (this.pointAncrage == this.relationShape.getPointsAncrage().get(0)) {
+      if (this.relationShape.isFirstPoint(this.pointAncrage)) {
         return this.calculateSourceInformationsFirstDisplay();
-      } else if (this.pointAncrage == this.relationShape.getPointsAncrage().get(this.relationShape.getPointsAncrage().size() - 1)) {
+      } else if (this.relationShape.isLastPoint(this.pointAncrage)) {
         return this.calculateDestionationInformationsFirstDisplay();
       } else {
         return this.relationShape.getCenter();

@@ -13,8 +13,8 @@ import window.editor.diagrammer.utils.ResizableBorder;
 
 public abstract class SquaredShape extends JPanel implements IShape, IResizable {
 
-  protected boolean isSelected = false;
   protected final ResizableBorder BORDER = new ResizableBorder();
+  protected boolean isSelected = false;
 
   public SquaredShape() {
     this.addListeners();

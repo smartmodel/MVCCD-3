@@ -21,8 +21,8 @@ public class MCDEntityShapeListener extends MouseAdapter {
   private void showMenu(MouseEvent event) {
     final MCDEntityShape shape = (MCDEntityShape) event.getSource();
     final Point converted = SwingUtilities.convertPoint(shape, event.getPoint(), DiagrammerService.getDrawPanel());
+    final EntityShapeMenu menu = new EntityShapeMenu(shape);
 
-    final EntityShapeMenu menu = new EntityShapeMenu(shape, converted.x, converted.y);
     menu.show(DiagrammerService.getDrawPanel(), converted.x, converted.y);
   }
 }

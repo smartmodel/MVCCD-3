@@ -135,9 +135,9 @@ public abstract class RelationShape extends JComponent implements IShape {
   public void updateFirstAndLastPointsAncrage(ClassShape shape, boolean isResize) {
     RelationPointAncrageShape point;
     if (shape == this.source) {
-      point = this.pointsAncrage.get(0);
+      point = this.getFirstPoint();
     } else {
-      point = this.pointsAncrage.get(this.getPointsAncrage().size() - 1);
+      point = this.getLastPoint();
     }
     if (isResize) {
       int cursor = shape.getCursor().getType();
@@ -207,18 +207,13 @@ public abstract class RelationShape extends JComponent implements IShape {
   }
 
   public ClassShape getNearestClassShape(RelationPointAncrageShape pointAncrage) {
-/*    if (GeometryUtils.pointIsAroundShape(pointAncrageIndex, this.source)) {
-      return this.source;
-    } else {
-      return this.destination;
-    }*/
     return pointAncrage == this.getFirstPoint() ? this.source : this.destination;
   }
 
   public Point getCenter() {
-    RelationPointAncrageShape left = GeometryUtils.getLeftPoint(this.pointsAncrage.get(0), this.pointsAncrage.get(this.getPointsAncrage().size() - 1));
-    RelationPointAncrageShape right = GeometryUtils.getRightPoint(this.pointsAncrage.get(0), this.pointsAncrage.get(this.getPointsAncrage().size() - 1));
-    Line2D segment = new Line2D.Double();
+    final RelationPointAncrageShape left = GeometryUtils.getLeftPoint(this.pointsAncrage.get(0), this.pointsAncrage.get(this.getPointsAncrage().size() - 1));
+    final RelationPointAncrageShape right = GeometryUtils.getRightPoint(this.pointsAncrage.get(0), this.pointsAncrage.get(this.getPointsAncrage().size() - 1));
+    final Line2D segment = new Line2D.Double();
     segment.setLine(this.pointsAncrage.get(0).x, this.pointsAncrage.get(0).y, this.pointsAncrage.get(this.getPointsAncrage().size() - 1).x, this.pointsAncrage.get(this.getPointsAncrage().size() - 1).y);
 
     if (this.pointsAncrage.size() == 2) {
@@ -233,23 +228,18 @@ public abstract class RelationShape extends JComponent implements IShape {
       }
     } else if (this.pointsAncrage.size() % 2 != 0) {
       int indexCenter = Math.round(this.pointsAncrage.size() / 2);
+
       return new Point(this.pointsAncrage.get(indexCenter).x, this.pointsAncrage.get(indexCenter).y);
     } else {
       int indexCenter = this.pointsAncrage.size() / 2 - 1;
-      RelationPointAncrageShape centerPoint = this.pointsAncrage.get(indexCenter);
-      RelationPointAncrageShape pointNextToCenter = this.pointsAncrage.get(indexCenter + 1);
+      final RelationPointAncrageShape centerPoint = this.pointsAncrage.get(indexCenter);
+      final RelationPointAncrageShape pointNextToCenter = this.pointsAncrage.get(indexCenter + 1);
       return new Point((centerPoint.x + pointNextToCenter.x) / 2, (centerPoint.y + pointNextToCenter.y) / 2);
     }
   }
 
-  public abstract void setDestinationRole(String role);
-  public abstract void setSourceRole(String role);
-  public abstract void setRelationName(String name);
-  public abstract void setSourceCardinalite(String cardinalite);
-  public abstract void setDestinationCardinalite(String cardinalite);
-
   public List<Line2D> getSegments() {
-    List<Line2D> segments = new ArrayList<>();
+    final List<Line2D> segments = new ArrayList<>();
     for (int i = 0; i < this.pointsAncrage.size() - 1; i++) {
       Line2D segment = new Line2D.Double();
       segment.setLine(this.pointsAncrage.get(i).getX(), this.pointsAncrage.get(i).getY(), this.pointsAncrage.get(i + 1).getX(), this.pointsAncrage.get(i + 1).getY());
@@ -258,10 +248,15 @@ public abstract class RelationShape extends JComponent implements IShape {
     return segments;
   }
 
-  public abstract void draw(Graphics2D graphics2D);
+  public void draw(Graphics2D graphics2D) {
+    this.drawSegments(graphics2D);
+    this.doDraw(graphics2D);
+  }
+
+  public abstract void doDraw(Graphics2D graphics2D);
 
   public void addPointAncrage(Point point) {
-    Line2D nearestSegment = this.getNearestSegment(point);
+    final Line2D nearestSegment = this.getNearestSegment(point);
     if (nearestSegment != null) {
       int newIndex = this.getPointAncrageIndex(this.convertPoint2DToPointAncrage(nearestSegment.getP2()));
       Point nearestPointOnSegment = GeometryUtils.getNearestPointOnLine(nearestSegment.getX1(), nearestSegment.getY1(), nearestSegment.getX2(), nearestSegment.getY2(), point.x, point.y, true, null);
@@ -311,17 +306,20 @@ public abstract class RelationShape extends JComponent implements IShape {
   }
 
   private void createLabels() {
-    this.sourceRole = new LabelShape(this.pointsAncrage.get(0), this, true);
-    this.sourceCardinalite = new LabelShape(this.pointsAncrage.get(this.getPointsAncrage().size() - 1), this, false);
-    this.destinationRole = new LabelShape(this.pointsAncrage.get(this.getPointsAncrage().size() - 1), this, true);
-    this.destinationCardinalite = new LabelShape(this.pointsAncrage.get(0), this, false);
-    this.associationName = new LabelShape(new RelationPointAncrageShape(this.getCenter().x, this.getCenter().y), this, false);
+    if (!this.pointsAncrage.isEmpty()) {
+      this.sourceRole = new LabelShape(this.pointsAncrage.get(0), this, true);
+      this.sourceCardinalite = new LabelShape(this.pointsAncrage.get(this.getPointsAncrage().size() - 1), this, false);
+      this.destinationRole = new LabelShape(this.pointsAncrage.get(this.getPointsAncrage().size() - 1), this, true);
+      this.destinationCardinalite = new LabelShape(this.pointsAncrage.get(0), this, false);
+      this.associationName = new LabelShape(new RelationPointAncrageShape(this.getCenter().x, this.getCenter().y), this, false);
 
-    DiagrammerService.getDrawPanel().add(this.sourceRole, JLayeredPane.DRAG_LAYER);
-    DiagrammerService.getDrawPanel().add(this.sourceCardinalite, JLayeredPane.DRAG_LAYER);
-    DiagrammerService.getDrawPanel().add(this.destinationRole, JLayeredPane.DRAG_LAYER);
-    DiagrammerService.getDrawPanel().add(this.destinationCardinalite, JLayeredPane.DRAG_LAYER);
-    DiagrammerService.getDrawPanel().add(this.associationName, JLayeredPane.DRAG_LAYER);
+      DiagrammerService.getDrawPanel().add(this.sourceRole, JLayeredPane.DRAG_LAYER);
+      DiagrammerService.getDrawPanel().add(this.sourceCardinalite, JLayeredPane.DRAG_LAYER);
+      DiagrammerService.getDrawPanel().add(this.destinationRole, JLayeredPane.DRAG_LAYER);
+      DiagrammerService.getDrawPanel().add(this.destinationCardinalite, JLayeredPane.DRAG_LAYER);
+      DiagrammerService.getDrawPanel().add(this.associationName, JLayeredPane.DRAG_LAYER);
+    }
+
   }
 
   public void deleteLabels() {
@@ -332,15 +330,18 @@ public abstract class RelationShape extends JComponent implements IShape {
     DiagrammerService.getDrawPanel().remove(this.destinationCardinalite);
   }
 
+  /**
+   * Génère les points d'ancrage lorsque l'association est créée
+   * @return Une liste contenant les points d'ancrage de l'association
+   */
   public List<RelationPointAncrageShape> generatePointAncrage() {
 
     this.pointsAncrage.clear();
 
-    Position sourcePosition = GeometryUtils.getClassShapePosition(this.source, this.destination);
-    Rectangle sourceBounds = this.source.getBounds();
-    Rectangle destBounds = this.destination.getBounds();
-
-    List<RelationPointAncrageShape> pointsAncrage = new ArrayList<>();
+    final Position sourcePosition = GeometryUtils.getClassShapePosition(this.source, this.destination);
+    final Rectangle sourceBounds = this.source.getBounds();
+    final Rectangle destBounds = this.destination.getBounds();
+    final List<RelationPointAncrageShape> pointsAncrage = new ArrayList<>();
 
     int x;
     int y;
@@ -411,6 +412,24 @@ public abstract class RelationShape extends JComponent implements IShape {
   }
 
   public boolean isFirstOrLastPoint(RelationPointAncrageShape pointAncrage) {
-    return pointAncrage == this.getLastPoint() || pointAncrage == this.getFirstPoint();
+    return this.isFirstPoint(pointAncrage) || this.isLastPoint(pointAncrage);
   }
+
+  public boolean isFirstPoint(RelationPointAncrageShape pointAncrage) {
+    return pointAncrage == this.getFirstPoint();
+  }
+
+  public boolean isLastPoint(RelationPointAncrageShape pointAncrage) {
+    return pointAncrage == this.getLastPoint();
+  }
+
+  public abstract void setDestinationRole(String role);
+
+  public abstract void setSourceRole(String role);
+
+  public abstract void setRelationName(String name);
+
+  public abstract void setSourceCardinalite(String cardinalite);
+
+  public abstract void setDestinationCardinalite(String cardinalite);
 }

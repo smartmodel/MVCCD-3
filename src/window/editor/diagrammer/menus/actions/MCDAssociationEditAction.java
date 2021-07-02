@@ -10,7 +10,7 @@ import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 
 public class MCDAssociationEditAction extends AbstractAction {
 
-  private MCDAssociationShape shape;
+  private final MCDAssociationShape shape;
 
   public MCDAssociationEditAction(String name, Icon icon, MCDAssociationShape shape) {
     super(name, icon);
@@ -24,23 +24,20 @@ public class MCDAssociationEditAction extends AbstractAction {
     } else {
       this.create();
     }
-    shape.repaint();
+    this.shape.repaint();
   }
 
   private void edit() {
-    MVCCDManager manager = MVCCDManager.instance();
-    MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
+    final MVCCDManager manager = MVCCDManager.instance();
+    final MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
     mcdAssociationEditingTreat.treatUpdate(manager.getMvccdWindow(), this.shape.getAssociation());
-    shape.setInformations();
+    this.shape.setInformations();
   }
 
   private void create() {
-    MVCCDManager manager = MVCCDManager.instance();
-    MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
-    MCDAssociation association = mcdAssociationEditingTreat.treatNew(manager.getMvccdWindow(),
-                                                                     manager.getProject()
-                                                                            .getMCDContModels()
-                                                                            .getRelations());
+    final MVCCDManager manager = MVCCDManager.instance();
+    final MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
+    final MCDAssociation association = mcdAssociationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations());
     this.shape.setAssociation(association);
   }
 }

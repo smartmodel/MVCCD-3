@@ -8,7 +8,7 @@ import window.editor.diagrammer.menus.actions.MCDEntityShapeEditAction;
 
 public class EntityShapeMenu extends JPopupMenu {
 
-  public EntityShapeMenu(MCDEntityShape shape, int x, int y) {
+  public EntityShapeMenu(MCDEntityShape shape) {
     super();
 
     JMenuItem edit = new JMenuItem(new MCDEntityShapeEditAction("Ouvrir l'assistant de modélisation", null, shape));

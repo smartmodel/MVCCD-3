@@ -27,13 +27,13 @@ import window.editor.diagrammer.utils.RelationCreator;
 
 public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
+  private final Cursor CURSOR_ENTITY_ICON;
   private boolean ctrlKeyPressed = false;
   private boolean mouseWheelPressed = false;
   private boolean spaceBarPressed = false;
   private Point origin;
   private RelationPointAncrageShape pointAncrageClicked = null;
   private RelationShape relationClicked = null;
-  private final Cursor CURSOR_ENTITY_ICON;
 
   public DrawPanelListener() {
     this.CURSOR_ENTITY_ICON = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("ressources/icons-diagrammer/palette/icon_entity.png").getImage(), new Point(0, 0), "cursorEntityIcon");
@@ -45,6 +45,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
     // Déselectionne toutes les formes et reset la création de relation
     DiagrammerService.getDrawPanel().deselectAllShapes();
+
     if (RelationCreator.isCreating) {
       RelationCreator.resetSourceAndDestination();
       RelationCreator.setIsCreating(false);
@@ -56,9 +57,8 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     if (this.relationClickedIsNull()) {
       DiagrammerService.getDrawPanel().deselectAllShapes();
     } else {
-      // Sélectionne l'association et déselectionne toutes les autres shapes
+      // Sélectionne l'association et vérifie si un point d'ancrage est cliqué
       this.relationClicked.setSelected(true);
-      DiagrammerService.getDrawPanel().deselectAllOtherShape(this.relationClicked);
       this.pointAncrageClicked = this.getPointAncrageClicked(e);
     }
 
@@ -84,7 +84,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     this.mouseWheelPressed = SwingUtilities.isMiddleMouseButton(e);
     this.pointAncrageClicked = this.getPointAncrageClicked(e);
     this.updateCursor();
-
   }
 
   @Override
@@ -98,22 +97,21 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     }
     this.pointAncrageClicked = null;
     this.updateCursor();
+
     DiagrammerService.getDrawPanel().endScroll();
   }
 
   @Override
   public void mouseEntered(MouseEvent e) {
     super.mouseEntered(e);
-    if (DiagrammerService.getDrawPanel().contains(e.getPoint())) {
-      DiagrammerService.getDrawPanel().grabFocus();
-    }
+    DiagrammerService.getDrawPanel().grabFocus();
   }
 
   @Override
   public void mouseWheelMoved(MouseWheelEvent e) {
     super.mouseWheelMoved(e);
     if (this.isZoomAllowed()) {
-      int actualZoom = DiagrammerService.getDrawPanel().getGridSize();
+      final int actualZoom = DiagrammerService.getDrawPanel().getGridSize();
       DiagrammerService.getDrawPanel().zoom(actualZoom - e.getWheelRotation());
     }
   }
@@ -134,6 +132,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     } else if (!this.relationClickedIsNull() && this.pointAncrageClickedIsNull()) {
       this.dragAssociation(differenceX, differenceY);
     }
+
     this.origin = e.getPoint();
   }
 
@@ -202,7 +201,9 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
   private void createEntityShape(MouseEvent event) {
     final Point mouseClick = event.getPoint();
     final MCDEntityShape shape = new MCDEntityShape();
+
     shape.setLocation(GridUtils.alignToGrid(mouseClick.x, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(mouseClick.y, DiagrammerService.getDrawPanel().getGridSize()));
+
     DiagrammerService.getDrawPanel().addElement(shape);
     DiagrammerService.getDrawPanel().repaint();
   }

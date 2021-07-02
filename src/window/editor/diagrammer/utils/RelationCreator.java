@@ -10,6 +10,9 @@ import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
 
+/**
+ * Cette classe permet la création d'une Relation entre deux ClassShape.
+ */
 public final class RelationCreator {
 
   public static ClassShape source = null;

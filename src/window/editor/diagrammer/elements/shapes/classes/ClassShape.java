@@ -55,7 +55,7 @@ public abstract class ClassShape extends SquaredShape {
   private void initUI() {
     // Lorsque la ClassShape est créée, seule la zone d'en-tête est affichée
     this.setZoneEnTeteContent();
-    this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_ENTITY_WIDTH, Preferences.DIAGRAMMER_DEFAULT_ENTITY_HEIGHT));
+    this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH, Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT));
     this.setSize(this.getMinimumSize());
   }
 
@@ -125,10 +125,10 @@ public abstract class ClassShape extends SquaredShape {
     final FontMetrics fontMetrics = this.getFontMetrics(Preferences.DIAGRAMMER_CLASS_FONT);
     final int height = this.getZoneMinHeight(this.zoneEnTete.getElements()) + this.getZoneMinHeight(this.zoneProprietes.getElements());
     String longestProperty = this.getLongestProperty();
-    int width = Preferences.DIAGRAMMER_DEFAULT_ENTITY_WIDTH;
+    int width = Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH;
     if (longestProperty != null) {
       if (longestProperty.isEmpty()) {
-        width = Preferences.DIAGRAMMER_DEFAULT_ENTITY_WIDTH;
+        width = Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH;
       } else {
         width = Preferences.DIAGRAMMER_CLASS_PADDING * 2 + fontMetrics.stringWidth(longestProperty);
       }
@@ -146,8 +146,10 @@ public abstract class ClassShape extends SquaredShape {
 
   protected void updateSizeAndMinimumSize() {
     final Dimension minimumSize = this.calculateMinimumSize();
-    this.setMinimumSize(minimumSize);
-    this.setSize(minimumSize);
+    if (minimumSize.width > Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH && minimumSize.height > Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT) {
+      this.setMinimumSize(minimumSize);
+      this.setSize(minimumSize);
+    }
   }
 
   protected abstract void setZoneEnTeteContent();

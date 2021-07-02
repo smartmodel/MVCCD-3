@@ -9,8 +9,8 @@ import window.editor.diagrammer.services.DiagrammerService;
 
 public class PointAncrageDeleteAction extends AbstractAction {
 
-  RelationPointAncrageShape pointAncrage;
-  RelationShape relation;
+  private final RelationPointAncrageShape pointAncrage;
+  private final RelationShape relation;
 
   public PointAncrageDeleteAction(String name, Icon icon, RelationPointAncrageShape shape, RelationShape relation) {
     super(name, icon);

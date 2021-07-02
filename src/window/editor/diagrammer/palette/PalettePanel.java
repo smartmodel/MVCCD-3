@@ -12,7 +12,7 @@ public class PalettePanel extends JPanel {
   public static PaletteButton activeButton;
 
   public PalettePanel() {
-    this.activeButton = null;
+    activeButton = null;
     this.setBackground(Color.WHITE);
     this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     this.add(new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT, new ImageIcon("ressources/icons-diagrammer/palette/icon_entity.png")));

@@ -17,7 +17,6 @@ public class RelationPointAncrageShape extends Point implements IShape {
     super(p);
     this.index = index;
     this.setSize(this.DIAMETER, this.DIAMETER);
-
   }
 
   public RelationPointAncrageShape(int x, int y) {

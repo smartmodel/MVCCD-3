@@ -104,12 +104,6 @@ public final class GeometryUtils {
   }
 
   public static RelationPointAncrageShape getNearestPointAncrage(ClassShape shape, RelationShape relation) {
-/*    for (RelationPointAncrageShape point : relation.getPointsAncrage()) {
-      if (GeometryUtils.pointIsAroundShape(point, shape)) {
-        return point;
-      }
-    }
-    return null;*/
     return shape == relation.getSource() ? relation.getFirstPoint() : relation.getLastPoint();
   }
 
