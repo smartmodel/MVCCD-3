@@ -114,6 +114,4 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
             return getPath() + Preferences.PATH_NAMING_RELATION_SEPARATOR + getNameSource();
         }
     }
-
-
 }

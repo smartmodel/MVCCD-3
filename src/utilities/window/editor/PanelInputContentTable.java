@@ -4,11 +4,13 @@ import exceptions.service.ExceptionService;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDConstraint;
 import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
 import repository.RepositoryService;
+import repository.editingTreat.EditingTreat;
+import repository.editingTreat.mcd.MCDAttributeEditingTreat;
+import utilities.Trace;
 import utilities.UtilDivers;
 import utilities.window.ReadTableModel;
 import utilities.window.editor.services.PanelInputContentTableService;
@@ -22,6 +24,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.*;
 
+//TODO-0 A voir - problème de renommage
+// la classe devrait être renommée : PanelInputContentTableWithoutTransaction !
 public abstract class PanelInputContentTable extends PanelInputContent
         implements ActionListener {
 
@@ -183,8 +187,10 @@ public abstract class PanelInputContentTable extends PanelInputContent
         }
     }
 
-    private MElement actionAdd(ActionEvent e) {
-        MElement mElement = newElement();
+    protected MElement actionAdd(ActionEvent e) {
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        //MElement mElement = newElement();
+        MElement mElement = (MElement) editingTreatDetail().treatNew(getEditor(), getEditor().getMvccdElementCrt());
         if (mElement != null) {
             Object[] row = newRow(mElement);
             model.addRow(row);
@@ -194,12 +200,17 @@ public abstract class PanelInputContentTable extends PanelInputContent
         return mElement;
     }
 
+    protected abstract EditingTreat editingTreatDetail();
+
 
     protected void actionEdit(ActionEvent e, MElement mElement) {
         if (mElement != null) {
             // Mise à jour du référentiel
-            updateElement(mElement);
-            // Mise à joue de la table
+            //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+            //updateElement(mElement);
+            editingTreatDetail().treatUpdate(getEditor(), mElement);
+
+            // Mise à jour de la table
             updateRow(mElement, table.getSelectedRow());
             enabledContent();
         }
@@ -208,8 +219,10 @@ public abstract class PanelInputContentTable extends PanelInputContent
     protected boolean actionDelete(ActionEvent e, MElement mElement) {
         if (mElement != null){
             // Mise à jour du référentiel
-            if (deleteElement(mElement)) {
-                // Mise à joue de la table
+            //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+            //if (deleteElement(mElement)) {
+            if (editingTreatDetail().treatDelete(getEditor(), mElement)) {
+                // Mise à jour de la table
                 model.removeRow(table.getSelectedRow());
                 enabledContent();
                 return true;
@@ -256,12 +269,11 @@ public abstract class PanelInputContentTable extends PanelInputContent
     }
 
 
-    protected abstract MElement newElement();
+    //protected abstract MElement newElement();
 
     protected abstract Object[] newRow(MElement mElement);
 
-    protected abstract void updateElement(MElement mElement);
-
+    
     protected void updateRow(MElement mElement, int selectedRow) {
 
         Object[] row = STableService.getRecord(table, selectedRow);
@@ -269,7 +281,6 @@ public abstract class PanelInputContentTable extends PanelInputContent
         UtilDivers.putValueRowInTable(table, selectedRow, row);
     }
 
-    protected abstract boolean deleteElement(MElement mElement);
 
 
     private void  makeLayout(){
@@ -354,9 +365,9 @@ public abstract class PanelInputContentTable extends PanelInputContent
         updateOrderINProjectElement(idActual, orderNew);
         updateOrderINProjectElement(idOther, orderActual);
 
-        if (getEditor().isDatasProjectElementEdited()) {
-            MVCCDManager.instance().setDatasProjectChanged(true);
-        }
+        // Le changeemt d'ordre n'est pas encapsulé dans la tzransaction !
+        MVCCDManager.instance().setDatasProjectChanged(true);
+
 
         // Mise à jour de l'affichage du référentiel
         swapNodes(idActual, idOther);

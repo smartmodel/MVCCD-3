@@ -1,11 +1,8 @@
 package utilities.window.editor;
 
 import m.MElement;
-import m.services.MElementService;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
-import preferences.Preferences;
-import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
@@ -35,9 +32,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     private MVCCDElement mvccdElementCrt = null;     // lui-même pour la modification, suppression, lecture
     private MVCCDElement mvccdElementNew = null;     // lui-même pour la modification
     private MVCCDElement mvccdElementParentChoosed = null;     // la parent effectivement choisi lors de la saisie
-    private boolean datasChanged = false;     // données modifiées
-    private boolean datasProjectElementEdited = false;
-    private boolean datasApplicationPreferencesEdited = false;
+    private boolean datasChanged = false;               // données modifiées par l'éditeur
 
 
     private boolean readOnly = false;
@@ -224,7 +219,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     @Override
     public void windowActivated(WindowEvent windowEvent) {
         //MVCCDManager.instance().setDatasEdited(true);
-        datasProjectElementEdited = true;
+        //datasProjectElementEdited = true;
     }
 
     @Override
@@ -279,22 +274,6 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     public void setDatasChanged(boolean datasChanged) {
         this.datasChanged = datasChanged;
-    }
-
-    public boolean isDatasProjectElementEdited() {
-        return datasProjectElementEdited;
-    }
-
-    public void setDatasProjectElementEdited(boolean datasProjectElementEdited) {
-        this.datasProjectElementEdited = datasProjectElementEdited;
-    }
-
-    public boolean isDatasApplicationPreferencesEdited() {
-        return datasApplicationPreferencesEdited;
-    }
-
-    public void setDatasApplicationPreferencesEdited(boolean datasApplicationPreferencesEdited) {
-        this.datasApplicationPreferencesEdited = datasApplicationPreferencesEdited;
     }
 
     public void adjustTitle() {

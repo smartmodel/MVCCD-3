@@ -33,8 +33,9 @@ import java.util.ArrayList;
 
 /**
  * Il s'agit de la classe d'orchestration du programme.
- * Les attributs permettent cette orchestration.
+ * Les propriétés permettent cette orchestration.
  */
+
 public class MVCCDManager {
 
     private static MVCCDManager instance;
@@ -47,7 +48,6 @@ public class MVCCDManager {
     private ProjectsRecents projectsRecents = null; //Projets ouverts  récemment
     private File fileProjectCurrent = null; //Fichier de sauvegarde du projet en cours de traitement
     private boolean datasProjectChanged = false; //Indicateur de changement de données propres au projet
-    //private boolean datasEdited = true; //Indicateur d'édition de données y-compris les préférences d'application
 
     //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
     private boolean extensionProjectFileNotEqual = false; // Si l'extension du fichier correspond à la préférence d'application
@@ -174,7 +174,9 @@ public class MVCCDManager {
         DefaultMutableTreeNode nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
         getWinRepositoryContent().getTree().changeModel(repository);
         getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(nodeNew.getPath()));
-        setDatasProjectChanged(true);
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        // Un changement Repository !--> changment projet
+        // setDatasProjectChanged(true);
     }
 
     public void addNewMVCCDElementInRepository(MVCCDElement mvccdElementNew) {
@@ -183,7 +185,9 @@ public class MVCCDManager {
         DefaultMutableTreeNode nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
         getWinRepositoryContent().getTree().changeModel(repository);
         getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(nodeNew.getPath()));
-        setDatasProjectChanged(true);
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        // Un changement Repository !--> changment projet
+        // setDatasProjectChanged(true);
     }
 
     public void showMVCCDElementInRepository(MVCCDElement mvccdElement) {

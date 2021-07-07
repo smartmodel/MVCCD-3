@@ -78,8 +78,6 @@ public class PrefApplicationEditor extends DialogEditor {
 
     @Override
     public void windowActivated(WindowEvent windowEvent) {
-        //MVCCDManager.instance().setDatasEdited(false);
-        super.setDatasApplicationPreferencesEdited(true);
     }
 
     @Override

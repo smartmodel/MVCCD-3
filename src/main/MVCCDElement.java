@@ -26,6 +26,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
     public static final int SCOPELONGNAME = 3;
     public static final int SCOPENOTNAME = 4;
     // Constantes postfixées ORDER : Utilisées pour générer le numéro d'ordred de l'enfant dans la fraterie
+    public static int NOORDERTRANSITORY = -1;
     public static int FIRSTVALUEORDER = 10;
     public static int INTERVALORDER = 10;
 

@@ -12,6 +12,8 @@ import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
 import repository.RepositoryService;
+import repository.editingTreat.EditingTreat;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.ReadTableModel;
 import utilities.window.editor.services.PanelInputContentTableService;
@@ -29,7 +31,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public abstract class PanelInputContentIdTable extends PanelInputContentId {
+//TODO-0 A voir - problème de renommage
+// la classe devrait être renommée : PanelInputContentTableWithTransaction !
+public abstract class PanelInputContentIdTable extends PanelInputContentId
+        implements ActionListener {
 
     protected JPanel panelIdTable = new JPanel();
 
@@ -134,154 +139,206 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
 
     protected void  makeButtons(){
         btnAdd = new JButton("Ajouter");
-        btnAdd.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-                try {
-                    if (getEditor().getMode().equals(DialogEditor.NEW)) {
-                        // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas confirmé
-                        if (DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageAdd()) == JOptionPane.YES_OPTION) {
-                            // Sauvegarde de l'enregistrement maitre
-                            getActionAddDetail(true);
-                        }
-                    } else {
-                        boolean appendAuthorized = true;
-                        // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
-                        if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
-                            appendAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageUpdate()) == JOptionPane.YES_OPTION;
-                            if (appendAuthorized) {
-                                //getEditor().getButtons().getButtonsContent().treatUpdate();
-                                // Sauvegarde de l'enregistrement maitre
-                                getActionAddDetail(false);
-                            }
-                        } else {
-                            fenDetail();
-                        }
-                    }
-                } catch (Exception exception){
-                    ExceptionService.exceptionUnhandled(exception, getEditor(),
-                            getEditor().getMvccdElementCrt(),
-                            "editor.table.exception",
-                            "editor.table.exception.new");
-                }
-            }
-        });
+        btnAdd.addActionListener(this);
 
         btnRemove = new JButton("Supprimer");
         btnRemove.setEnabled(false);
-        btnRemove.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    boolean removedAuthorized = true;
-                    // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
-                    if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
-                        removedAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageDelete()) == JOptionPane.YES_OPTION;
-                        if (removedAuthorized) {
-                            //getEditor().getButtons().getButtonsContent().treatUpdate();
-                            // Sauvegarde de l'enregistrement maitre
-                            getActionAddDetail(false);
-                        }
-                    }
-                    int posActual = table.getSelectedRow();
-                    if (posActual >= 0){
-                        model.removeRow(posActual);
-                        tableContentChanged();
-                    }
-                } catch (Exception exception){
-                    ExceptionService.exceptionUnhandled(exception, getEditor(),
-                            getEditor().getMvccdElementCrt(),
-                            "editor.table.exception",
-                            "editor.table.exception.delete");
-                }
-            }
-        });
+        btnRemove.addActionListener(this);
 
         btnEdit = new JButton("Editer");
         btnEdit.setEnabled(false);
         //TODO-1 Inactif tant que la modification n''est pas traitée
         // A priori, lorsqu'il qu'il y aura des paramètres personnaliés dans les opérations de service
         btnEdit.setVisible(false);
-        btnEdit.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    int posActual = table.getSelectedRow();
-                    if (posActual >= 0) {
-                        int posId = STableService.IDINDEX;
-                        //TODO-0 Faire appel treatEdit
+        btnEdit.addActionListener(this);
 
-                        //updateRow(mcdAttributeActual, table.getSelectedRow());
-                        tableContentChanged();
-                    }
-                } catch (Exception exception){
-                    ExceptionService.exceptionUnhandled(exception, getEditor(),
-                            getEditor().getMvccdElementCrt(),
-                            "editor.table.exception",
-                            "editor.table.exception.update");
-                }
-            }
-        });
 
         btnUp = new JButton("^");
         btnUp.setEnabled(false);
-        btnUp.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-                try {
-                    int posActual = table.getSelectedRow();
-                    if (posActual > 0) {
-                        model.moveRow(posActual, posActual, posActual - 1);
-                        table.setRowSelectionInterval(posActual - 1, posActual - 1);
-                        permuteOrder(posActual, posActual - 1);
-                        tableContentChanged();
-                    }
-                } catch (Exception exception){
-                    ExceptionService.exceptionUnhandled(exception, getEditor(),
-                            getEditor().getMvccdElementCrt(),
-                            "editor.table.exception",
-                            "editor.table.exception.up");
-                }
-             }
-        });
+        btnUp.addActionListener(this);
 
         btnDown = new JButton("v");
         btnDown.setEnabled(false);
-        btnDown.addActionListener(new ActionListener() {
+        btnDown.addActionListener( this);
 
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    int posActual = table.getSelectedRow();
-                    if (posActual < table.getRowCount() - 1) {
-                        model.moveRow(posActual, posActual, posActual + 1);
-                        table.setRowSelectionInterval(posActual + 1, posActual + 1);
-                        permuteOrder(posActual, posActual + 1);
-                        tableContentChanged();
-                    }
-                } catch (Exception exception){
-                    ExceptionService.exceptionUnhandled(exception, getEditor(),
-                            getEditor().getMvccdElementCrt(),
-                            "editor.table.exception",
-                            "editor.table.exception.down");
-                }
-            }
-        });
     }
 
-    public void fenDetail(){
-        // Appel de l'éditeur de création d'un nouvel élément
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String propertyAction = "";
+        try {
+            Object source = e.getSource();
+            MElement mElement = getMElementSelected();
 
-        MElement mElement = getNewElement();
+            if (source == btnAdd) {
+                propertyAction = "editor.table.exception.new";
+                actionAdd(e);
+            }
+
+            if (source == btnEdit) {
+                propertyAction = "editor.table.exception.update";
+                actionEdit(e, mElement);
+            }
+
+            if (source == btnRemove) {
+                propertyAction = "editor.table.exception.delete";
+                actionDelete(e, mElement);
+            }
+
+            if (source == btnUp) {
+                propertyAction = "editor.table.exception.up";
+                actionUp(e);
+            }
+
+            if (source == btnDown) {
+                propertyAction = "editor.table.exception.down";
+                actionDown(e);
+            }
+
+        } catch (Exception exception){
+            ExceptionService.exceptionUnhandled(exception, getEditor(),
+                    getEditor().getMvccdElementCrt(),
+                    "editor.table.exception",
+                    propertyAction);
+
+        }
+    }
+
+
+
+    protected MElement actionAdd(ActionEvent e) {
+        /*
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        if (getEditor().getMode().equals(DialogEditor.NEW)) {
+            // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas confirmé
+            if (DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageAdd()) == JOptionPane.YES_OPTION) {
+                // Sauvegarde de l'enregistrement maitre
+                saveElementMaster(true);
+            }
+        } else {
+            boolean appendAuthorized = true;
+            // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
+            //if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
+            if (noChangeOtherThanTable()) {
+                    appendAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageUpdate()) == JOptionPane.YES_OPTION;
+                if (appendAuthorized) {
+                    //getEditor().getButtons().getButtonsContent().treatUpdate();
+                    // Sauvegarde de l'enregistrement maitre
+                    saveElementMaster(false);
+                }
+            } else {
+                return actionAddValid(e);
+            }
+        }
+        return null;
+
+         */
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        //MElement mElement = newElement();
+        MElement mElement = (MElement) editingTreatDetail().treatNew(getEditor(), getEditor().getMvccdElementCrt());
         if (mElement != null) {
-            Object[] row = getNewRow(mElement);
+            Object[] row = newRow(mElement);
             model.addRow(row);
             table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
             newTransitoryElements.add(mElement);
             tableContentChanged();
         }
+        return mElement;
+
     }
+
+
+    /*
+    protected MElement actionAddValid(ActionEvent e) {
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        //MElement mElement = newElement();
+        MElement mElement = (MElement) editingTreatDetail().treatNew(getEditor(), getEditor().getMvccdElementCrt());
+        if (mElement != null) {
+            Object[] row = newRow(mElement);
+            model.addRow(row);
+            table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
+            newTransitoryElements.add(mElement);
+            tableContentChanged();
+        }
+        return mElement;
+    }
+
+     */
+
+    protected MElement actionEdit(ActionEvent e, MElement mElement) {
+        //TODO-1 Inactif tant que la modification n''est pas traitée
+        // A priori, lorsqu'il qu'il y aura des paramètres personnaliés dans les opérations de service
+
+        //editingTreatDetail().treatUpdate(getEditor(), mElement);
+
+        return mElement;
+    }
+
+    protected  void actionDelete(ActionEvent e, MElement mElement){
+        /*
+        boolean removedAuthorized = true;
+        // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
+        //if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
+        if (noChangeOtherThanTable()) {
+                removedAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageDelete()) == JOptionPane.YES_OPTION;
+            if (removedAuthorized) {
+                //getEditor().getButtons().getButtonsContent().treatUpdate();
+                // Sauvegarde de l'enregistrement maitre
+                saveElementMaster(false);
+            }
+        } else {
+            int posActual = table.getSelectedRow();
+            if (posActual >= 0) {
+                model.removeRow(posActual);
+                tableContentChanged();
+            }
+        }
+
+         */
+        int posActual = table.getSelectedRow();
+        if (posActual >= 0) {
+            model.removeRow(posActual);
+            tableContentChanged();
+        }
+    }
+
+    protected  void actionUp(ActionEvent e){
+        int posActual = table.getSelectedRow();
+        if (posActual > 0) {
+            model.moveRow(posActual, posActual, posActual - 1);
+            table.setRowSelectionInterval(posActual - 1, posActual - 1);
+            permuteOrder(posActual, posActual - 1);
+            tableContentChanged();
+        }
+    }
+
+    protected  void actionDown(ActionEvent e){
+        int posActual = table.getSelectedRow();
+        if (posActual < table.getRowCount() - 1) {
+            model.moveRow(posActual, posActual, posActual + 1);
+            table.setRowSelectionInterval(posActual + 1, posActual + 1);
+            permuteOrder(posActual, posActual + 1);
+            tableContentChanged();
+        }
+    }
+
+
+    protected abstract EditingTreat editingTreatDetail();
+
+    /*
+    protected  boolean noChangeOtherThanTable(){
+        boolean resultat = true ;
+        Trace.println("");
+        for ( SComponent sComponent : super.getSComponents()){
+            if (!(sComponent instanceof STable)) {
+                resultat = resultat && (!sComponent.checkIfUpdated());
+            }
+        }
+        return resultat;
+    }
+
+     */
+
 
     protected void tableContentChanged(){
         table.actionChangeActivated();
@@ -290,16 +347,13 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         checkDatas(table);
     }
 
-    protected abstract void getActionAddDetail(boolean masterNew);
+    protected abstract void saveElementMaster(boolean masterNew);
 
     protected abstract String getMessageAdd();
     protected abstract String getMessageUpdate();
     protected abstract String getMessageDelete();
 
-    protected abstract Object[] getNewRow(MElement mElement);
-
-    protected abstract MElement getNewElement();
-
+    protected abstract Object[] newRow(MElement mElement);
 
     private void  makeLayout(){
         panelTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -423,12 +477,19 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
     protected void saveDatas(MVCCDElement mvccdElement) {
         super.saveDatas(mvccdElement);
         if (table.checkIfUpdated()){
+            // Suppression des éléments
             deleteNoUsedRecord(mvccdElement);
             if (model.getRowCount()> 0){
+                // Ajout des nouveaux éléments
                 for (int i = 0; i < model.getRowCount() ; i++){
+                    // Nouvel élément (transitoire à ce stade)
                     if ((boolean) model.getValueAt(i, 1)) {
                         appendNewRecord(i);
                     }
+                }
+                for (int i = 0; i < model.getRowCount() ; i++){
+                    // Ordonnacement réactualisé (Complètement)
+                    fixeOrderFromPosInRecord(i);
                 }
             }
             getEditor().setDatasChanged(true);
@@ -436,17 +497,6 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
      }
 
     private void deleteNoUsedRecord(MVCCDElement mvccdElement) {
-        /*
-        for (int i = mvccdElement.getChilds().size() - 1; i >= 0; i--) {
-            ProjectElement projectChildElement = (project.ProjectElement) mvccdElement.getChilds().get(i);
-            if (!STableService.existRecordById(table, projectChildElement.getId())) {
-                MVCCDManager.instance().removeMVCCDElementInRepository(projectChildElement, projectChildElement.getParent());
-                projectChildElement.removeInParent();
-                projectChildElement = null;
-             }
-        }
-
-         */
 
         ArrayList<MVCCDElement> elementsInProject = mvccdElement.getChilds();
         for (int i = elementsInProject.size() - 1; i >= 0; i--) {
@@ -459,9 +509,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
             }
         }
 
-
     }
-
 
 
     private void appendNewRecord(int i) {
@@ -471,12 +519,18 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         newElement.setParent(getEditor().getMvccdElementCrt());
         newElement.setTransitoryProjectElement(false);
 
-        int order = STable.getOrderByLine(i);
-        newElement.setOrder(order);
+        newElement.setOrder(MVCCDElement.NOORDERTRANSITORY);
         specificSaveCompleteRecord(i, newElement);
 
         MVCCDManager.instance().addNewMVCCDElementInRepository(newElement);
     }
+
+    protected  void fixeOrderFromPosInRecord(int i){
+        Integer idCrt = (Integer) table.getModel().getValueAt(i, STableService.IDINDEX);
+        ProjectElement projectElement = ProjectService.getProjectElementById(idCrt);
+        projectElement.setOrder(MVCCDElement.FIRSTVALUEORDER + i * MVCCDElement.INTERVALORDER);
+    }
+
 
 
     protected abstract void specificSaveCompleteRecord(int line, MElement mElement);
@@ -502,22 +556,29 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         table.getModel().setValueAt(orderActual, posNew, posOrder);
 
         // Permutation dans les 2 instances de descendants de ProjectElement
+        //#MAJ 2021-07-03 Pas de persistence de tri dans la table de PanelInputContentIdTable
+        /*
         updateOrderINProjectElement(idActual, orderNew);
         updateOrderINProjectElement(idOther, orderActual);
 
-        if (getEditor().isDatasProjectElementEdited()) {
-            MVCCDManager.instance().setDatasProjectChanged(true);
-        }
+        // Le changement d'ordre n'est pas encapsulé dans la transaction !
+        MVCCDManager.instance().setDatasProjectChanged(true);
 
         // Mise à jour de l'affichage du référentiel
         swapNodes(idActual, idOther);
+
+         */
     }
 
 
+    //#MAJ 2021-07-03 Pas de persistence de tri dans la table de PanelInputContentIdTable
+/*
     private void updateOrderINProjectElement(Integer id, Integer order) {
         ProjectElement projectElement = ProjectService.getProjectElementById(id);
         projectElement.setOrder(order);
     }
+
+
 
     private void swapNodes(Integer idA, Integer idB) {
 
@@ -539,6 +600,8 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
         MVCCDManager.instance().showNewNodeInRepository(nodeB);
 
     }
+
+ */
 
     protected MElement getNewTransitoryElementById(int id){
         for (MElement mElement : newTransitoryElements){
@@ -575,5 +638,17 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId {
     protected abstract String getContextProperty();
 
     protected abstract String getRowContextProperty(Integer minRows);
+
+    protected MElement getMElementSelected() {
+        int posSelected = table.getSelectedRow();
+        if (posSelected >= 0) {
+            int idElementSelected = (int) table.getValueAt(posSelected, STableService.IDINDEX);
+
+            MElement mElementSelected = (MElement) ProjectService.getProjectElementById(idElementSelected);
+            return mElementSelected;
+        }
+        return null;
+    }
+
 
 }

@@ -49,6 +49,11 @@ public class MLDRTransform extends MDTransform {
 
             //Rafraichir l'arbre
             mpdrModel.refreshTreeMPDR();
+
+            // Traçage de changement de projet
+            //TODO-1 Véfier la mise à jour effective
+            MVCCDManager.instance().setDatasProjectChanged(true);
+
             return resultat;
         } catch(Exception e){
             undoTransform(mpdrModelClone);

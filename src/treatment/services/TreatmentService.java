@@ -41,6 +41,9 @@ public class TreatmentService {
         } else {
             message = MessagesBuilder.getMessagesProperty(propertyError,
                     new String[]{messageElement, mdElementName});
+            message += System.lineSeparator();
+            message += MessagesBuilder.getMessagesProperty("dialog.error.console",
+                    new String[]{messageElement, mdElementName});
         }
         resultat.add(new ResultatElement (message, ResultatLevel.INFO));
         ViewLogsManager.printResultat(resultat);

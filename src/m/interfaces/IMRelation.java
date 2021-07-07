@@ -19,5 +19,6 @@ public interface IMRelation {
 
     public void setB(IMRelEnd b);
 
+    public void removeInParent() ;
 
 }

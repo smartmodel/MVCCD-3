@@ -1,10 +1,12 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
+import main.MVCCDManager;
 import mcd.MCDAssociation;
 import mcd.MCDAssociationNature;
 import mcd.MCDContRelations;
 import mcd.MCDEntity;
+import project.ProjectElement;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.services.SComboBoxService;
@@ -88,6 +90,12 @@ public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
 
         if (mcdAssociationNew != null) {
             addRelEndsInRepository(mcdAssociationNew);
+        }
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        if (fen.getMvccdElementNew() != null) {
+            if (fen.getMvccdElementNew() instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
         }
         return mcdAssociationNew;
     }

@@ -14,6 +14,7 @@ import mcd.services.MCDNIDService;
 import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
+import repository.editingTreat.EditingTreat;
 import repository.editingTreat.mcd.MCDAttributeEditingTreat;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
@@ -121,19 +122,6 @@ public class AttributesInputContent extends PanelInputContentTable {
     }
 
 
-    @Override
-    protected MElement newElement() {
-        DialogEditor fen = null;
-        MCDContAttributes mcdContAttribute = (MCDContAttributes) getEditor().getMvccdElementCrt();
-
-        fen = new AttributeEditor(getEditor(), mcdContAttribute, null,
-                DialogEditor.NEW, new MCDAttributeEditingTreat());
-
-        fen.setVisible(true);
-        MVCCDElement newElement = fen.getMvccdElementNew();
-        return (MElement) newElement;
-    }
-
 
 
     @Override
@@ -143,18 +131,6 @@ public class AttributesInputContent extends PanelInputContentTable {
         return row;
     }
 
-    @Override
-    protected void updateElement(MElement mElement) {
-        DialogEditor fen = new AttributeEditor(getEditor(), (MCDContAttributes) mElement.getParent(),
-                (MCDAttribute) mElement,
-                DialogEditor.UPDATE, new MCDAttributeEditingTreat());
-        fen.setVisible(true);
-    }
-
-    @Override
-    protected boolean deleteElement(MElement mElement) {
-        return new MCDAttributeEditingTreat().treatDelete(getEditor(), mElement);
-    }
 
     @Override
     protected void putValueInRow(MElement mElement, Object[] row) {
@@ -255,6 +231,11 @@ public class AttributesInputContent extends PanelInputContentTable {
                     propertyAction);
 
         }
+    }
+
+    @Override
+    protected EditingTreat editingTreatDetail() {
+        return new MCDAttributeEditingTreat();
     }
 
 }

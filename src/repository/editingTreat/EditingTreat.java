@@ -9,6 +9,7 @@ import mcd.MCDElement;
 import mcd.services.MCDElementService;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
+import project.ProjectElement;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
@@ -34,6 +35,12 @@ public abstract class EditingTreat {
 
         DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW); //Ouvre l'éditeur attendu
         fen.setVisible(true);
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        if (fen.getMvccdElementNew() != null) {
+            if (fen.getMvccdElementNew() instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
+        }
         return fen.getMvccdElementNew();
     }
 
@@ -51,6 +58,14 @@ public abstract class EditingTreat {
         if (parentBefore != parentAfter) {
             MVCCDManager.instance().changeParentMVCCDElementInRepository(element, parentBefore);
         }
+
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        if (fen.isDatasChanged()) {
+            if (element instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
+        }
+
         return fen.isDatasChanged();
     }
 
@@ -69,11 +84,21 @@ public abstract class EditingTreat {
      */
     public boolean treatDelete (Window owner, MVCCDElement element) {
         String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
+        // Pour l'affichage des extrémités de relation avec un nom parlant
+        String elementName = element.getNameTree();
+        if (element instanceof MElement){
+            elementName = ((MElement)element).getNameTreePath();
+        }
         String message = MessagesBuilder.getMessagesProperty ("editor.delete.confirm",
-                new String[] { messageTheElement, element.getName()});
+                //new String[] { messageTheElement, element.getName()});
+                new String[] { messageTheElement, elementName});
         boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
         if (confirmDelete){
             removeMVCCDElementInRepository(element);
+            if (element instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
+            // removeInParent est surchargé pour IMRelation pour supprimer les extrémités de relations
             element.removeInParent();
             //TODO-0 Il faut supprimer aussi tous les descendants dans la structure arborescente du projet
             element = null;
@@ -91,6 +116,9 @@ public abstract class EditingTreat {
                 new String[] {element.getName()});
         boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
         if (confirmDelete){
+            if (element instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
             for (int i = element.getChilds().size() - 1  ; i >= 0 ;  i--) {
                 MVCCDElement child = element.getChilds().get(i);
                 removeMVVCCDChildInRepository(child);

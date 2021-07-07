@@ -3,6 +3,7 @@ package repository.editingTreat.mcd;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
+import project.ProjectElement;
 import project.ProjectService;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -53,17 +54,30 @@ public class MCDGeneralizationEditingTreat extends MCDRelationEditingTreat {
         MCDGeneralization mcdGeneralizationNew = (MCDGeneralization)  fen.getMvccdElementNew();
 
         if (mcdGeneralizationNew != null) {
-            addGSEndInRepository(mcdGeneralizationNew.getGen());
-            addGSEndInRepository(mcdGeneralizationNew.getSpec());
+            addRelEndsInRepository(mcdGeneralizationNew);
+            //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+            //addGSEndInRepository(mcdGeneralizationNew.getGen());
+            //addGSEndInRepository(mcdGeneralizationNew.getSpec());
+        }
+
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        if (fen.getMvccdElementNew() != null) {
+            if (fen.getMvccdElementNew() instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
         }
         return mcdGeneralizationNew;
     }
 
+    //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+    /*
     private void addGSEndInRepository(MCDGSEnd mcdGSEnd) {
         MCDContRelEnds parent = (MCDContRelEnds) mcdGSEnd.getParent();
         DefaultMutableTreeNode nodeParent = ProjectService.getNodeById((int) parent.getIdProjectElement());
         MVCCDManager.instance().addNewMVCCDElementInRepository(mcdGSEnd, nodeParent);
     }
+
+     */
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
