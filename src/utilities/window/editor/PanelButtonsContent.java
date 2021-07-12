@@ -10,6 +10,7 @@ import preferences.PreferencesManager;
 import project.Project;
 import utilities.Trace;
 import utilities.files.UtilFiles;
+import utilities.window.DialogMessage;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.SButton;
 import utilities.window.services.ComponentService;
@@ -288,7 +289,7 @@ public abstract class PanelButtonsContent extends PanelContent
         getInputContent().restartChange();
         getInputContent().enabledButtons();
         getEditor().adjustTitle();
-        //Trace.println("treatUpdate...");
+        DialogMessage.showOk(null, "Test");
         MVCCDManager.instance().showMVCCDElementInRepository(getEditor().getMvccdElementCrt());
     }
 

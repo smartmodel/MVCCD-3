@@ -196,7 +196,28 @@ public class MVCCDManager {
             DefaultMutableTreeNode node = ProjectService.getNodeById(projectElement.getIdProjectElement());
             //getWinRepositoryContent().getTree().changeModel(repository);
             getWinRepositoryContent().getTree().getTreeModel().reload(node);
+            //TreePath nodeTreePath = new TreePath(node.getPath());
+            //getWinRepositoryContent().getTree().scrollPathToVisible(nodeTreePath);
             getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
+        }
+    }
+
+    // A priori pour le remplacement des paramètres d'une contrainte/opération dont
+    // tous les paramètres sont gérés au sein d'une transaction propre à la contrainte/opération
+    // Attention : C'est le tri par défaut.
+
+    public void replaceChildsInRepository(MVCCDElement parent) {
+        if (parent instanceof ProjectElement) {
+            ProjectElement projectElement = (ProjectElement) parent;
+            DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(projectElement.getIdProjectElement());
+            nodeParent.removeAllChildren();
+            // Erreur Comodification...
+            // TODO-0 A voir !!!
+            // for (MVCCDElement child : parent.getChilds()){
+            for (int i = 0 ; i < parent.getChilds().size() ; i ++){
+                addNewMVCCDElementInRepository(parent.getChilds().get(i), nodeParent);
+            }
+            showMVCCDElementInRepository(parent);
         }
     }
 

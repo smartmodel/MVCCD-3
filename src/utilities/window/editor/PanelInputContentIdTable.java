@@ -298,6 +298,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
         int posActual = table.getSelectedRow();
         if (posActual >= 0) {
             model.removeRow(posActual);
+            newTransitoryElements.remove(mElement);
             tableContentChanged();
         }
     }
@@ -521,9 +522,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
 
         newElement.setOrder(MVCCDElement.NOORDERTRANSITORY);
         specificSaveCompleteRecord(i, newElement);
-
-        MVCCDManager.instance().addNewMVCCDElementInRepository(newElement);
-    }
+}
 
     protected  void fixeOrderFromPosInRecord(int i){
         Integer idCrt = (Integer) table.getModel().getValueAt(i, STableService.IDINDEX);
@@ -644,7 +643,11 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
         if (posSelected >= 0) {
             int idElementSelected = (int) table.getValueAt(posSelected, STableService.IDINDEX);
 
+            // Eléments enregistrés
             MElement mElementSelected = (MElement) ProjectService.getProjectElementById(idElementSelected);
+            if (mElementSelected == null){
+                mElementSelected = getNewTransitoryElementById(idElementSelected);
+            }
             return mElementSelected;
         }
         return null;

@@ -158,8 +158,22 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
      */
 
     public ArrayList<MVCCDElement> getChilds() {
+        // Création d'un nouveau tableau car erreur de comodification....
+/*
+        ArrayList<MVCCDElement> childsSortOrder = new ArrayList<MVCCDElement>();
+            for (MVCCDElement child : childs) {
+                childsSortOrder.add(child);
+            }
+
+        Collections.sort(childsSortOrder, MVCCDElement::compareToOrder);
+        return childsSortOrder;
+
+
+       */
+
         Collections.sort(childs, MVCCDElement::compareToOrder);
         return childs;
+
     }
 
     public ArrayList<? extends MVCCDElement> getChildsSortName() {
