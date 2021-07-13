@@ -15,7 +15,9 @@ import mcd.interfaces.IMCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDNIDService;
+import mdr.MDRElement;
 import mdr.MDRRelationFK;
+import mdr.interfaces.IMDRElementWithIteration;
 import messages.MessagesBuilder;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
@@ -327,6 +329,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                         message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id : " + projectElement.getIdProjectElement();
                     }
                     message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Ordre dans la fraterie : " + mvccdElement.getOrder();
+                    if (mvccdElement instanceof IMDRElementWithIteration) {
+                        IMDRElementWithIteration mdrElement = (IMDRElementWithIteration) mvccdElement;
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Itération : " + mdrElement.getIteration();
+                    }
                     if (mvccdElement instanceof MDRRelationFK) {
                         MDRRelationFK mdrRelationFK = (MDRRelationFK) mvccdElement;
                         message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - nom : " + mdrRelationFK.getMDRFK().getName();

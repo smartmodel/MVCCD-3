@@ -22,7 +22,8 @@ public abstract class MDTransform {
                 if (mdElementSource != null){
                     //Vérifier que les 2 itérations soient différentes
                     if (imdrElementWithIteration.getIteration() != getIteration()){
-                        Delete.deleteMVCCDElement((MVCCDElement) imdrElementWithIteration);
+                        //Delete.deleteMVCCDElement((MVCCDElement) imdrElementWithIteration);
+                        ((MVCCDElement) imdrElementWithIteration).delete();
                     }
                 }
             }

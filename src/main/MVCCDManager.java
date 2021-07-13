@@ -22,7 +22,6 @@ import repository.Repository;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
-import utilities.Trace;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
 
@@ -222,6 +221,7 @@ public class MVCCDManager {
     }
 
     public void removeMVCCDElementInRepository(MVCCDElement mvccdElementToRemove, MVCCDElement parent) {
+        // Suppression dans l'arbre de référentiel
         DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(((ProjectElement)parent).getIdProjectElement());
         ProjectElement child = (ProjectElement) mvccdElementToRemove;
         DefaultMutableTreeNode nodeChild= ProjectService.getNodeById(child.getIdProjectElement());
@@ -237,7 +237,7 @@ public class MVCCDManager {
             //getWinRepositoryContent().getTree().getTreeModel().reload();
             setDatasProjectChanged(true);
         }
-    }
+}
 
     public void changeParentMVCCDElementInRepository(MVCCDElement mvccdElementChanged, MVCCDElement oldParent) {
         removeMVCCDElementInRepository(mvccdElementChanged, oldParent);
@@ -252,11 +252,11 @@ public class MVCCDManager {
 
     }
 
-    public void removeMCDRelationAndDependantsInRepository(MCDRelation mcdRelation) {
+    public void removeMCDRelationAndChildsInRepository(MCDRelation mcdRelation) {
 
         ArrayList<MCDRelation> mcdRelationChilds = mcdRelation.getMCDRelationsChilds();
         for (MCDRelation mcdRelationChild : mcdRelationChilds) {
-            removeMCDRelationAndDependantsInRepository(mcdRelationChild);
+            removeMCDRelationAndChildsInRepository(mcdRelationChild);
         }
         removeMVCCDElementInRepository(mcdRelation, mcdRelation.getParent());
         //TODO-0 A voir La remarque ci-dessous

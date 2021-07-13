@@ -439,9 +439,14 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         if (this.getParent() != null){
             this.getParent().getChilds().remove(this);
         }
-   }
+    }
 
-   public void clearChilds(){
+    public void delete(){
+        MVCCDManager.instance().removeMVCCDElementInRepository(this, this.getParent());
+        this.removeInParent();
+    }
+
+    public void clearChilds(){
         childs =  new ArrayList<MVCCDElement>();
    }
 

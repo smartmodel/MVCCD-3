@@ -5,6 +5,7 @@ import exceptions.CodeApplException;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
 import m.services.MElementService;
+import main.MVCCDManager;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
@@ -114,4 +115,11 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
             return getPath() + Preferences.PATH_NAMING_RELATION_SEPARATOR + getNameSource();
         }
     }
+
+
+    public void delete(){
+        MVCCDManager.instance().removeMCDRelationAndChildsInRepository(this);
+        this.removeInParent();
+    }
+
 }

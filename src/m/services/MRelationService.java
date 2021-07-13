@@ -2,6 +2,11 @@ package m.services;
 
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
+import m.MRelationUMLConstraint;
+import m.MRelationUMLDependency;
+import m.interfaces.IMRelation;
+import mcd.MCDAssociation;
+import mcd.MCDLink;
 
 public class MRelationService {
 
@@ -21,4 +26,21 @@ public class MRelationService {
             }
         }
     }
+
+    // Utilisée pour éclencher la suppression de relations dépendantes d'autres relations
+    /* A priori pas nécessaire !
+    public static boolean isDescendingDependent (IMRelation parent , IMRelation descending){
+        if (descending instanceof MRelationUMLDependency) {
+            return true;
+        } else if (descending instanceof MRelationUMLConstraint) {
+            return true;
+        } else if (descending instanceof MCDLink) {
+            if (parent instanceof MCDAssociation) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+     */
 }

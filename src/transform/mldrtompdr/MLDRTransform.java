@@ -63,7 +63,8 @@ public class MLDRTransform extends MDTransform {
     }
 
     private void undoTransform(MPDRModel mpdrModelClone) {
-        Delete.deleteMVCCDElement(mpdrModel);
+        //Delete.deleteMVCCDElement(mpdrModel);
+        mpdrModel.delete();
         mpdrModelClone.setParent((MVCCDElement) mldrModel);
         MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrModelClone);
     }

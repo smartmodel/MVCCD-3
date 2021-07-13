@@ -28,10 +28,4 @@ public class MCDRelationsEditingTreat extends EditingTreat {
     }
 
 
-    @Override
-    protected void removeMVVCCDChildInRepository(MVCCDElement child) {
-        MCDRelation mcdRelation = (MCDRelation) child;
-        MVCCDManager.instance().removeMCDRelationAndDependantsInRepository(mcdRelation);
-    }
-
 }

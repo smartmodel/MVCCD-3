@@ -85,7 +85,8 @@ public class MCDTransform extends MDTransform {
     }
 
     private void undoTransform(MLDRModel mldrModelClone) {
-        Delete.deleteMVCCDElement(mldrModel);
+        //Delete.deleteMVCCDElement(mldrModel);
+        mldrModel.delete();
         mldrModelClone.setParent((MVCCDElement) imcdModel);
         MVCCDManager.instance().addNewMVCCDElementInRepository(mldrModelClone);
     }
@@ -144,7 +145,8 @@ public class MCDTransform extends MDTransform {
                 }
             }
             catch (Exception e){
-                Delete.deleteMVCCDElement(mldrTable);
+                //Delete.deleteMVCCDElement(mldrTable);
+                mldrTable.delete();
                 // Information de suppression
                 String message = MessagesBuilder.getMessagesProperty ("transform.mcdtomldr.mtable.without.pk",
                         new String[] {mldrTable.getName() });

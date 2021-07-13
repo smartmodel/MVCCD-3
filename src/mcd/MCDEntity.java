@@ -3,6 +3,7 @@ package mcd;
 import m.MRelationDegree;
 import m.interfaces.IMCompletness;
 import main.MVCCDElement;
+import main.MVCCDManager;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
@@ -449,6 +450,15 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
         return MCDEntityService.getMCDAssEndsStructureIdForParameters(this);
     }
 
+
+    public void delete(){
+        // Suppression des relations attachées à l'entité.
+        //TODO-0 A modifier en GetMRelations() pour intégrer OCLConstraint et OCLDependencies
+        for (MCDRelation mcdRelation : this.getMCDRelations()){
+            mcdRelation.delete();
+        }
+        super.delete();
+    }
 
 
 }

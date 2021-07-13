@@ -11,7 +11,7 @@ import window.editor.mcd.operation.constraint.unicity.unique.UniqueInputContent;
 
 import java.awt.*;
 
-public class MCDUniqueEditingTreat extends EditingTreat {
+public class MCDUniqueEditingTreat extends MCDTableTransitoryEditingTreat {
 
 
 

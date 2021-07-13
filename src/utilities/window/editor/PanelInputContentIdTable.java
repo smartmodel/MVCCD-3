@@ -11,10 +11,7 @@ import mcd.services.MCDUtilService;
 import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
-import repository.RepositoryService;
 import repository.editingTreat.EditingTreat;
-import utilities.Trace;
-import utilities.window.DialogMessage;
 import utilities.window.ReadTableModel;
 import utilities.window.editor.services.PanelInputContentTableService;
 import utilities.window.scomponents.SComponent;
@@ -23,7 +20,6 @@ import utilities.window.scomponents.services.STableService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

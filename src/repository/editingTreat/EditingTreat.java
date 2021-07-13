@@ -2,11 +2,9 @@ package repository.editingTreat;
 
 import console.ViewLogsManager;
 import m.MElement;
-import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.MCDElement;
-import mcd.services.MCDElementService;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
@@ -20,7 +18,6 @@ import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Fournit les méthodes génériques de déclenchement de traitement de données telles que treatNew(), treatUpdate(), treatRead(), etc.
@@ -94,16 +91,14 @@ public abstract class EditingTreat {
                 new String[] { messageTheElement, elementName});
         boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
         if (confirmDelete){
-            removeMVCCDElementInRepository(element);
+            //removeMVCCDElementInRepository(element);
+            element.delete();
             if (element instanceof ProjectElement) {
                 MVCCDManager.instance().setDatasProjectChanged(true);
             }
-            // removeInParent est surchargé pour IMRelation pour supprimer les extrémités de relations
-            element.removeInParent();
-            //TODO-0 Il faut supprimer aussi tous les descendants dans la structure arborescente du projet
-            element = null;
+            return true;
         }
-        return element == null;
+        return false;
     }
 
 
@@ -121,10 +116,7 @@ public abstract class EditingTreat {
             }
             for (int i = element.getChilds().size() - 1  ; i >= 0 ;  i--) {
                 MVCCDElement child = element.getChilds().get(i);
-                removeMVVCCDChildInRepository(child);
-
-                child.removeInParent();
-                child = null;
+                child.delete();
             }
         }
     }
@@ -136,16 +128,29 @@ public abstract class EditingTreat {
         String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
 
         if (datasAdjusted( panelInputContent)) {
-            String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.completness");
-            String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
-                    new String[] {messageMode});
-            if (showDialog) {
-                if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
+           if (showDialog) {
+               String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.completness");
+               String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
+                       new String[] {messageMode});
+               if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
                     DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
                     fen.setVisible(true);
                 }
             } else {
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                // TODO-0 - Faire de class + nameTree + id une méthode
+                String name = mvccdElement.getNameTree();
+                if (mvccdElement instanceof MElement){
+                    name = ((MElement) mvccdElement).getNameTreePath();
+                }
+                String id = "-";
+                if(mvccdElement instanceof ProjectElement){
+                    id = "" + ((ProjectElement) mvccdElement).getIdProjectElement();
+                }
+                String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.without.dialog",
+                        new String[] {mvccdElement.getClass().getName(), name, id});
+               String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
+                       new String[] {messageMode});
+               resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
         } else {
             if (!checkInput(panelInputContent)) {
@@ -207,14 +212,6 @@ public abstract class EditingTreat {
     protected abstract DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) ;
 
     protected abstract String getPropertyTheElement();
-
-    protected  void removeMVCCDElementInRepository(MVCCDElement element){
-        MVCCDManager.instance().removeMVCCDElementInRepository(element, element.getParent());
-    }
-
-    protected  void removeMVVCCDChildInRepository(MVCCDElement child){
-        MVCCDManager.instance().removeMVCCDElementInRepository(child, child.getParent());
-    }
 
 
 }
