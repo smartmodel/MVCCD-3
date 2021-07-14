@@ -1,11 +1,15 @@
 package main;
 
+import console.ViewLogsManager;
 import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDSourceMLDRTable;
+import mcd.services.IMCDModelService;
+import mcd.services.MCDModelService;
 import mdr.*;
 import mdr.interfaces.IMDRParameter;
+import messages.MessagesBuilder;
 import mldr.*;
 import mldr.services.MLDRContConstraintsService;
 import mpdr.*;
@@ -21,6 +25,9 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
 
 public class MVCCDElementFactory {
 
@@ -231,8 +238,11 @@ public class MVCCDElementFactory {
     public MCDLink createMCDLink( MCDContRelations mcdContRelations, MCDEntity mcdEntity, MCDAssociation mcdAssociation) {
         MCDLink mcdLink = new MCDLink(mcdContRelations);
         this.initMCDLink(mcdLink, mcdEntity, mcdAssociation);
+        //TODO-1 A voir, s'il faut tracer le changement de source
+        this.changeSourceForTable(mcdLink);
         return mcdLink;
     }
+
 
     public MCDLink createMCDLink( MCDContRelations mcdContRelations, MCDEntity mcdEntity, MCDAssociation mcdAssociation, int id) {
         MCDLink mcdLink = new MCDLink(mcdContRelations, id);
@@ -255,6 +265,28 @@ public class MVCCDElementFactory {
 
         mcdLinkEndAssociation.setmElement(mcdAssociation);
         mcdLinkEndAssociation.setMcdLink(mcdLink);
+    }
+
+    // Si nécessaire, changment de la source de la table : Association n:n --> Entité associative
+    private void changeSourceForTable(MCDLink mcdLink) {
+        Resultat resultat = new Resultat();
+        MCDAssociation mcdAssociation = mcdLink.getAssociation();
+        if (mcdAssociation.isDegreeNN()){
+            IMCDModel mcdModelAccueil = mcdLink.getIMCDModelAccueil();
+            for (MLDRModel mldrModel : IMCDModelService.getMLDRModels(mcdModelAccueil)){
+                MLDRTable mldrTable = mldrModel.getMLDRTableByAssNNSource(mcdAssociation);
+                if (mldrTable != null){
+                    mldrTable.setMcdElementSource(mcdLink.getEntity());
+                    String message = MessagesBuilder.getMessagesProperty("editor.link.change.source.to.entity.ass",
+                            new String[] {mldrTable.getNameTreePath(), mcdLink.getEntity().getNameTreePath()} );
+                    resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+                }
+            }
+        }
+        if (resultat.getNbElementsAllLevels() > 0){
+            ViewLogsManager.printResultat(resultat);
+            //DialogMessage.showOk(null, message);
+        }
     }
 
 

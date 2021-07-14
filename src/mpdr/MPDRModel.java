@@ -46,7 +46,8 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         ArrayList<IMDRElementWithIteration> resultat = new ArrayList<IMDRElementWithIteration>();
         for (MDRElement mdrElement : getMDRDescendants()) {
             if (mdrElement instanceof IMDRElementWithIteration) {
-                if (mdrElement instanceof MPDRModel) {
+                //if (mdrElement instanceof MPDRModel) {
+                if (mdrElement instanceof IMPDRElement) {
                     resultat.add((IMDRElementWithIteration) mdrElement);
                 }
             }

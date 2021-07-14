@@ -1,14 +1,24 @@
 package mcd;
 
+import console.ViewLogsManager;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import mcd.interfaces.IMCDModel;
+import mcd.services.IMCDModelService;
 import mcd.services.MCDRelationService;
+import messages.MessagesBuilder;
+import mldr.MLDRModel;
+import mldr.MLDRTable;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
+import utilities.window.DialogMessage;
 
 import java.util.ArrayList;
 
@@ -94,5 +104,30 @@ public class MCDLink extends MCDRelation {
 
         return resultat;
     }
+
+
+    public void delete(){
+        Resultat resultat = new Resultat();
+        // Si nécessaire, changement de la source de la table : Association n:n --> Entité associative
+        if (getAssociation().isDegreeNN()){
+            IMCDModel mcdModelAccueil = this.getIMCDModelAccueil();
+            for (MLDRModel mldrModel : IMCDModelService.getMLDRModels(mcdModelAccueil)){
+                MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(getEntity());
+                if (mldrTable != null){
+                    mldrTable.setMcdElementSource(getAssociation());
+                    String message = MessagesBuilder.getMessagesProperty("editor.link.change.source.to.association.nn",
+                    new String[] {mldrTable.getNameTreePath(), getAssociation().getNameTreePath()} );
+                    resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+                }
+            }
+        }
+        if (resultat.getNbElementsAllLevels() > 0){
+            ViewLogsManager.printResultat(resultat);
+            //DialogMessage.showOk(null, message);
+        }
+
+        super.delete();
+    }
+
 
 }

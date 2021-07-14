@@ -4,6 +4,7 @@ import delete.Delete;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
+import mcd.MCDAssociation;
 import mcd.MCDAttribute;
 import mcd.MCDElement;
 import mcd.MCDEntity;
@@ -43,8 +44,7 @@ public class MCDTransform extends MDTransform {
 
             // Change source MCD pour mldrColumnPK (Attribut AID <--> Entité)
             resultat.addResultat(changeSourceMLDRColumnPK());
-            //TODO-0 chgt entre n:n et entité associative
-            //TODO-0 Ajouter le traitement d'erreur comme pour changeSourceMLDRColumnPK();
+           //TODO-0 Ajouter le traitement d'erreur comme pour changeSourceMLDRColumnPK();
 
             // Transformation des entités
             MCDTransformToTable mcdTransformToTable = new MCDTransformToTable(this, imcdModel, mldrModel);
@@ -83,6 +83,7 @@ public class MCDTransform extends MDTransform {
             return resultat;
         }
     }
+
 
     private void undoTransform(MLDRModel mldrModelClone) {
         //Delete.deleteMVCCDElement(mldrModel);
@@ -156,6 +157,7 @@ public class MCDTransform extends MDTransform {
         }
         return resultat ;
     }
+
 
     /*
     @Override

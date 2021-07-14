@@ -289,7 +289,6 @@ public abstract class PanelButtonsContent extends PanelContent
         getInputContent().restartChange();
         getInputContent().enabledButtons();
         getEditor().adjustTitle();
-        DialogMessage.showOk(null, "Test");
         MVCCDManager.instance().showMVCCDElementInRepository(getEditor().getMvccdElementCrt());
     }
 

@@ -5,6 +5,7 @@ import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
+import mldr.MLDRModel;
 import mldr.MLDRModelDT;
 import mldr.MLDRModelTI;
 import utilities.Trace;
@@ -276,6 +277,16 @@ public class IMCDModelService {
             }
         }
         return null;
+    }
+
+    public static ArrayList<MLDRModel> getMLDRModels(IMCDModel imcdModel) {
+        ArrayList<MLDRModel> resultat = new ArrayList<MLDRModel>();
+        for ( MVCCDElement mvccdElement : imcdModel.getChilds()){
+            if ( mvccdElement instanceof MLDRModel){
+                resultat.add((MLDRModel) mvccdElement) ;
+            }
+        }
+        return resultat;
     }
 
 
