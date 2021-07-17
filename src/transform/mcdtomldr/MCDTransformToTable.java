@@ -81,12 +81,12 @@ public class MCDTransformToTable {
         while (mcdEntitiesToTransform.size() > 0){
             ArrayList<MCDEntity> mcdEntitiesToTransformInner = (ArrayList<MCDEntity>) mcdEntitiesToTransform.clone();
             for (MCDEntity mcdEntity : mcdEntitiesToTransformInner){
-                ArrayList<MCDRelEnd> mcdRelEndsParents = getMCDRRelEndsParentsNotNN(mcdEntity);
-                mcdRelEndsParents.addAll(getMCDRRelEndsLinkNN(mcdEntity));
-                ArrayList<MLDRTable> mldrTablesParents = getMLDRTablesParents(mcdRelEndsParents);
+                ArrayList<MCDRelEnd> mcdRelEndsSources = getMCDRRelEndsParentsNotNN(mcdEntity);
+                mcdRelEndsSources.addAll(getMCDRRelEndsLinkNN(mcdEntity));
+                ArrayList<MLDRTable> mldrTablesParents = getMLDRTablesParents(mcdRelEndsSources);
                 if (pkParentsExists(mldrTablesParents)){
                     MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(mcdEntity);
-                    MLDRPK mldrPK = new MCDTransformToPK(mcdTransform).createOrModifyFromEntityConcretNoInd(mldrModel, mcdEntity, mldrTable,mcdRelEndsParents);
+                    MLDRPK mldrPK = new MCDTransformToPK(mcdTransform).createOrModifyFromEntityConcretNoInd(mldrModel, mcdEntity, mldrTable,mcdRelEndsSources);
                     if (mldrPK != null){
                         // Suppression de l'entité dans la liste à transformer
                         mcdEntitiesToTransform.remove(mcdEntity);

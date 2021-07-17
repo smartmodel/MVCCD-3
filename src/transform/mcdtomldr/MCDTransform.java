@@ -1,10 +1,8 @@
 package transform.mcdtomldr;
 
-import delete.Delete;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
-import mcd.MCDAssociation;
 import mcd.MCDAttribute;
 import mcd.MCDElement;
 import mcd.MCDEntity;
@@ -55,7 +53,7 @@ public class MCDTransform extends MDTransform {
 
             // Transformation des associations non identifiantes de composition
             MCDTransformToFK mcdTransformToFK = new MCDTransformToFK(this);
-            mcdTransformToFK.createOrModifyFromAllAssNoIdOrIdNatural(imcdModel, mldrModel);
+            mcdTransformToFK.createOrModifyFromAllAssNotIdCompAndNotNN(imcdModel, mldrModel);
 
             // Transformation des contraintes d'unicité
             MCDTransformToUnique mcdTransformToUnique = new MCDTransformToUnique(this);

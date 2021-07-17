@@ -1,5 +1,7 @@
 package mdr;
 
+import m.MRelEndMulti;
+import m.MRelEndMultiPart;
 import mcd.MCDAttribute;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
@@ -7,6 +9,7 @@ import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRColumnsService;
 import mldr.MLDRColumn;
 import project.ProjectElement;
+import utilities.Trace;
 
 public abstract class MDRColumn extends MDRElement implements
         IMDRParameter, IMDRElementNamingPreferences, IMDRElementWithIteration {
@@ -99,6 +102,14 @@ public abstract class MDRColumn extends MDRElement implements
     }
 
     public boolean isMandatory() {
+        if (getMDRTableAccueil().getMDRPK() != null ){
+                if (isPk()) {
+                    return true;
+                } else if (isFk()){
+                    MRelEndMultiPart multiMinStd =getFk().getMDRRelationFK().getEndParent().getMultiMinStd();
+                    return multiMinStd == MRelEndMultiPart.MULTI_ONE;
+                }
+        }
         return mandatory;
     }
 

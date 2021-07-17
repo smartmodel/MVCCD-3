@@ -45,8 +45,15 @@ public abstract class MDRConstraint extends MDROperation{
         return resultat;
     }
 
+    public ArrayList<MDRParameter> getMDRParametersSortDefault(){
+        ArrayList<MDRParameter> resultat = getMDRParameters();
+        Collections.sort(resultat, MDRParameter::compareToDefault) ;
+        return resultat;
+    }
+
     public ArrayList<? extends MVCCDElement> getChildsSortDefault() {
-        return getMDRColumnsSortDefault();
+        //return getMDRColumnsSortDefault();
+        return getMDRParametersSortDefault();
     }
 
 

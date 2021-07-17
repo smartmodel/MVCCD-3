@@ -34,6 +34,7 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
     //private MCDAssociation mcdAssociation;
     //private MCDEntity mcdEntity ;
     private boolean ordered = false;
+    // Multiplicité reçue sous forme de chaine (1, 1..8, n, *, 0..1  etc)
     private String multiStr;
 
 

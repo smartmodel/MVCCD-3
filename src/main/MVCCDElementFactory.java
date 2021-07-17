@@ -2,6 +2,7 @@ package main;
 
 import console.ViewLogsManager;
 import diagram.mcd.MCDDiagram;
+import m.MRelEndMultiPart;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDSourceMLDRTable;
@@ -238,7 +239,6 @@ public class MVCCDElementFactory {
     public MCDLink createMCDLink( MCDContRelations mcdContRelations, MCDEntity mcdEntity, MCDAssociation mcdAssociation) {
         MCDLink mcdLink = new MCDLink(mcdContRelations);
         this.initMCDLink(mcdLink, mcdEntity, mcdAssociation);
-        //TODO-1 A voir, s'il faut tracer le changement de source
         this.changeSourceForTable(mcdLink);
         return mcdLink;
     }

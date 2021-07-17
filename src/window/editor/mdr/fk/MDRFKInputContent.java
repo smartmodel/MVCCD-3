@@ -1,9 +1,11 @@
 package window.editor.mdr.fk;
 
 import m.MElement;
+import m.MRelEndMulti;
 import main.MVCCDElement;
 import mdr.MDRColumn;
 import mdr.MDRFK;
+import mdr.MDRRelationFK;
 import preferences.Preferences;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
@@ -20,6 +22,20 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
 
     private JLabel labelPK ;
     private STextField fieldPK ;
+
+    private JPanel panelRelationFK ;
+
+    private JPanel panelRelationFKEndRef ;
+    private JLabel labelEndRefMultiStd;
+    private JTextField fieldEndRefMultiStd ;
+
+    
+    private JPanel panelRelationFKEndOwner;
+    private JLabel labelEndOwnerMultiStd;
+    private JTextField fieldEndOwnerMultiStd ;
+    private JLabel labelEndOwnerMultiCustom;
+    private JTextField fieldEndOwnerMultiCustom ;
+
 
 
     public MDRFKInputContent(MDRFKInput MDRFKInput)     {
@@ -38,6 +54,24 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
         fieldPK = new STextField(this, labelPK);
         fieldPK.setPreferredSize(new Dimension(100, Preferences.EDITOR_FIELD_HEIGHT));
         fieldPK.setReadOnly(true);
+
+        panelRelationFK = new JPanel();
+
+        panelRelationFKEndRef = new JPanel();
+        labelEndRefMultiStd = new JLabel("Multiplicité");
+        fieldEndRefMultiStd = new JTextField();
+        fieldEndRefMultiStd.setPreferredSize((new Dimension(50, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldEndRefMultiStd.setEnabled(false);
+
+        panelRelationFKEndOwner = new JPanel();
+        labelEndOwnerMultiStd = new JLabel("Multiplicité standard");
+        fieldEndOwnerMultiStd = new JTextField();
+        fieldEndOwnerMultiStd.setPreferredSize((new Dimension(50, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldEndOwnerMultiStd.setEnabled(false);
+        labelEndOwnerMultiCustom = new JLabel("Multiplicité personnalisée");
+        fieldEndOwnerMultiCustom = new JTextField();
+        fieldEndOwnerMultiCustom.setPreferredSize((new Dimension(50, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldEndOwnerMultiCustom.setEnabled(false);
 
         createPanelMaster();
     }
@@ -64,7 +98,54 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
         gbc.gridwidth = 2;
         panelInputContentCustom.add(panelTableComplete, gbc);
 
+        createPanelRelationFK();
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(panelRelationFK, gbc);
+
         this.add(panelInputContentCustom);
+
+    }
+
+    private void createPanelRelationFK() {
+        GridBagConstraints gbc = PanelService.createSubPanelGridBagConstraints(panelRelationFK, "Relation graphique FK");
+
+        createPanelRelationFKEndRef();
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelRelationFK.add(panelRelationFKEndRef, gbc);
+
+        createPanelRelationFKEndOwner();
+        gbc.gridx++;
+        panelRelationFK.add(panelRelationFKEndOwner, gbc);
+
+    }
+
+    private void createPanelRelationFKEndRef() {
+        GridBagConstraints gbc = PanelService.createSubPanelGridBagConstraints(panelRelationFKEndRef, "Extr. référence (PK)");
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panelRelationFKEndRef.add(labelEndRefMultiStd, gbc);
+        gbc.gridx++;
+        panelRelationFKEndRef.add(fieldEndRefMultiStd, gbc);
+
+    }
+
+    private void createPanelRelationFKEndOwner() {
+        GridBagConstraints gbc = PanelService.createSubPanelGridBagConstraints(panelRelationFKEndOwner, "Extr. propriétaire (FK)");
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panelRelationFKEndOwner.add(labelEndOwnerMultiStd, gbc);
+        gbc.gridx++;
+        panelRelationFKEndOwner.add(fieldEndOwnerMultiStd, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelRelationFKEndOwner.add(labelEndOwnerMultiCustom, gbc);
+        gbc.gridx++;
+        panelRelationFKEndOwner.add(fieldEndOwnerMultiCustom, gbc);
 
     }
 
@@ -174,6 +255,18 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
         MDRFK mdrFK = (MDRFK) mvccdElementCrt;
         super.loadDatas(mdrFK);
         fieldPK.setText(mdrFK.getMdrPK().getName());
+        loadRelationFK(mdrFK.getMDRRelationFK());
+    }
+
+    private void loadRelationFK(MDRRelationFK mdrRelationFK) {
+        MRelEndMulti ownerMultiStd = MRelEndMulti.findByTwoValues(
+                mdrRelationFK.getEndChild().getMultiMinStd(),
+                mdrRelationFK.getEndChild().getMultiMaxStd());
+        fieldEndOwnerMultiStd.setText(ownerMultiStd.getText());
+        MRelEndMulti refMultiStd = MRelEndMulti.findByTwoValues(
+                mdrRelationFK.getEndParent().getMultiMinStd(),
+                mdrRelationFK.getEndParent().getMultiMaxStd());
+        fieldEndRefMultiStd.setText(refMultiStd.getText());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package mdr;
 
+import mdr.services.MDRRelationFKService;
 import project.ProjectElement;
 import project.ProjectService;
 
@@ -52,5 +53,4 @@ public abstract class MDRRelationFK extends MDRRelation{
         }
         return "La liaison avec la contrainte FK n'est pas encore faite";
     }
-
 }

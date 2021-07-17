@@ -6,6 +6,7 @@ import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDConstraintService;
 import mdr.MDRColumn;
+import mdr.MDRParameter;
 import mdr.services.MDRColumnsService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -13,6 +14,7 @@ import project.ProjectElement;
 import stereotypes.Stereotype;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Classe qui représente toute contrainte MCD.
@@ -188,6 +190,18 @@ public abstract class MCDConstraint extends MCDOperation{
 
     public int compareToDefault(MCDConstraint other) {
         return MCDConstraintService.compareToDefault(this, other);
+    }
+
+
+    public ArrayList<MCDParameter> getMCDParametersSortDefault(){
+        ArrayList<MCDParameter> resultat = getParameters();
+        Collections.sort(resultat, MCDParameter::compareToDefault) ;
+        return resultat;
+    }
+
+
+    public ArrayList<? extends MVCCDElement> getChildsSortDefault() {
+        return getMCDParametersSortDefault();
     }
 
 }

@@ -372,10 +372,10 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
        }
     }
 
-    public int compareToOrder(MVCCDElement o) {
-            if (this.getOrder() > o.getOrder()) {
+    public int compareToOrder(MVCCDElement other) {
+            if (this.getOrder() > other.getOrder()) {
                 return 1;
-            } else if (this.getOrder() == o.getOrder()) {
+            } else if (this.getOrder() == other.getOrder()) {
                 return 0;
             } else {
                 return -1;

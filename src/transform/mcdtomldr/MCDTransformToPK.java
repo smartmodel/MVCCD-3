@@ -43,16 +43,16 @@ public class MCDTransformToPK {
     public MLDRPK createOrModifyFromEntityConcretNoInd(MLDRModel mldrModel,
                                                        MCDEntity mcdEntity,
                                                        MLDRTable mldrTable,
-                                                       ArrayList<MCDRelEnd> mcdRelEndsParents)  {
+                                                       ArrayList<MCDRelEnd> mcdRelEndsSources)  {
 
         // Ensemble des colonnes PK
         ArrayList<MDRColumn> mdrColumnPKs = new ArrayList<MDRColumn>();
 
         // Création des PFK
-        for (MCDRelEnd mcdRelEndParent : mcdRelEndsParents){
+        for (MCDRelEnd mcdRelEndSource : mcdRelEndsSources){
             // Création des PFK
             MCDTransformToFK mcdTransformToFK = new MCDTransformToFK(mcdTransform);
-            MLDRFK mldrFK = mcdTransformToFK.createOrModifyFromRelEndParent(mldrModel, mcdRelEndParent, mldrTable, MDRFKNature.IDCOMP);
+            MLDRFK mldrFK = mcdTransformToFK.createOrModifyFromRelEndSource(mldrModel, mcdRelEndSource, mldrTable, MDRFKNature.IDCOMP);
             mdrColumnPKs.addAll(mldrFK.getMDRColumns());
         }
 

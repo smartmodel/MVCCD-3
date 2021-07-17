@@ -8,6 +8,7 @@ import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import mcd.*;
 import mcd.interfaces.IMCDParameter;
+import mdr.MDRColumn;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -16,6 +17,10 @@ import window.editor.mcd.operation.parameter.ParameterEditor;
 import java.util.ArrayList;
 
 public class MCDParameterService {
+
+    final static int HAUT = -1 ;
+    final static int BAS = 1;
+    final static int COMPARE_DEFAULT = 0 ;
 
     public static ArrayList<String> checkTarget(IMCDParameter iMCDParameterTarget,
                                                 String selectedItem,
@@ -205,4 +210,40 @@ public class MCDParameterService {
         return false;
     }
 
- }
+    // Les MCDAssEnd en haut par rapport à l'ordre de saisie des paramètres
+    // Les MCDAttribute ensuite par rapport à l'ordre de saisie en tant qu'attribut d'entité
+    // Les paramètres sans target en bas par rapport à l'ordre de saisie
+    public static int compareToDefault(MCDParameter courant, MCDParameter other) {
+
+        //TODO-1 Code à metttre en place lorsque l'écran de saisie sera adaptà au tri ci-desssos
+        /*
+        MCDAttribute courantAttribute = courant.getMCDAttribute();
+        MCDAttribute otherAttribute = other.getMCDAttribute();
+        MCDAssEnd courantAssEnd = courant.getMCDAssEnd();
+        MCDAssEnd otherAssEnd = other.getMCDAssEnd();
+        IMCDParameter courantTarget = courant.getTarget();
+        IMCDParameter otherTarget = other.getTarget();
+        if ( (courantAssEnd != null) && (otherAssEnd != null)){
+            return courant.compareToOrder(other) ;
+        } else if ( (courantAttribute != null) && (otherAttribute != null)){
+            return courantAttribute.compareToOrder(otherAttribute) ;
+        } else if ( (courantTarget == null) && (otherTarget == null)){
+            return courant.compareToOrder(other) ;
+        } else if (courantAssEnd != null) {
+            return HAUT;
+        } else if (otherAssEnd != null) {
+            return BAS ;
+        } else if (courantAttribute != null) {
+            return HAUT;
+        } else if (otherAttribute != null) {
+            return BAS ;
+        } else {
+            return COMPARE_DEFAULT;
+        }
+
+         */
+
+        // En attendant
+        return courant.compareToOrder(other) ;
+    }
+}

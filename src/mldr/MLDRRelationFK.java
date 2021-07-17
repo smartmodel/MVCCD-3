@@ -2,6 +2,7 @@ package mldr;
 
 import mcd.MCDElement;
 import md.MDElement;
+import mdr.MDRRelFKEnd;
 import mdr.MDRRelationFK;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;

@@ -2,6 +2,9 @@ package mcd;
 
 import m.services.MElementService;
 import mcd.interfaces.IMCDParameter;
+import mcd.services.MCDParameterService;
+import mdr.MDRParameter;
+import mdr.services.MDRParameterService;
 import project.ProjectElement;
 import utilities.Trace;
 
@@ -48,4 +51,28 @@ public class MCDParameter extends MCDElement {
     public static String getClassShortNameUI() {
         return "Paramètre";
     }
+
+
+    public int compareToDefault(MCDParameter other) {
+        return MCDParameterService.compareToDefault(this, other);
+    }
+
+    public MCDAttribute getMCDAttribute(){
+        if (target != null) {
+            if ( target instanceof MCDAttribute){
+                return (MCDAttribute) target;
+            }
+        }
+        return null;
+    }
+
+    public MCDAssEnd getMCDAssEnd(){
+        if (target != null) {
+            if ( target instanceof MCDAssEnd){
+                return (MCDAssEnd) target;
+            }
+        }
+        return null;
+    }
+
 }

@@ -113,7 +113,7 @@ public class MCDTransformToColumn {
             mldrColumn.setScale(mcdAttribute.getScale());
         }
 
-        // Mandatory
+        // Mandatory (pour les colonnes non PK et FK)
         if (mldrColumn.isMandatory() != mcdAttribute.isMandatory()){
             mldrColumn.setMandatory(mcdAttribute.isMandatory());
         }
@@ -187,6 +187,9 @@ public class MCDTransformToColumn {
             mldrColumn.setSize(mldrDatatypeSizeNew);
         }
 
+        // Obligation de valeur pour PFK
+        // MDRColumn.isMandatory() Déduit dynamiquement par MDRColumn.isPk()
+
     }
 
 
@@ -196,6 +199,8 @@ public class MCDTransformToColumn {
         MLDRModel mldrModel = (MLDRModel) mldrColumnPK.getMDRTableAccueil().getMDRModelParent();
         MCDTransformService.names(mldrColumnPK, buildNameColumnPK(mcdEntity), mldrModel);
 
+        // Obligation de valeur
+        // MDRColumn.isMandatory() Déduit dynamiquement par MDRColumn.isPk()
         modifyColumnPKorFK(mldrColumnPK);
     }
 
