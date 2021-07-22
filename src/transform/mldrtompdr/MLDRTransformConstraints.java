@@ -126,8 +126,13 @@ public class MLDRTransformConstraints {
         if (mpdrFK.getNature() != mldrFK.getNature()) {
             mpdrFK.setNature(mldrFK.getNature());
         }
+        //Indice
         if (mpdrFK.getIndice() != mldrFK.getIndice()) {
             mpdrFK.setIndice(mldrFK.getIndice());
+        }
+        //{deleteCascade}
+        if (mpdrFK.isDeleteCascade() != mldrFK.isDeleteCascade()) {
+            mpdrFK.setDeleteCascade(mldrFK.isDeleteCascade());
         }
     }
 

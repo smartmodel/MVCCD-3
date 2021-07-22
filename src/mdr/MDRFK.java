@@ -17,6 +17,9 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
     private int mdrRelationFKId;
     private int mdrPKId;
 
+    //TODO-0 XML A ajouter
+    private boolean deleteCascade = false;
+
     public MDRFK(ProjectElement parent) {
         super(parent);
     }
@@ -72,5 +75,13 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
 
     public int compareToDefault(MDRFK other) {
         return MDRFKService.compareToDefault(this,  other);
+    }
+
+    public boolean isDeleteCascade() {
+        return deleteCascade;
+    }
+
+    public void setDeleteCascade(boolean deleteCascade) {
+        this.deleteCascade = deleteCascade;
     }
 }

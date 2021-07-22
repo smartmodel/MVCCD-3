@@ -3,6 +3,7 @@ package mdr;
 import exceptions.CodeApplException;
 import m.MRelEndMultiPart;
 import project.ProjectElement;
+import utilities.Trace;
 
 public abstract class MDRRelFKEnd extends MDRRelEnd{
 
@@ -92,14 +93,14 @@ public abstract class MDRRelFKEnd extends MDRRelEnd{
     }
 
     public String getRoleText() {
+        if (role == null){
+            return "Le rôle n''est pas affecté";
+        }
         if (role.intValue() == PARENT.intValue()) {
             return "Parent";
         }
         if (role.intValue() == CHILD.intValue()) {
             return "Child";
-        }
-        if (role == null){
-            return null;
         }
         throw new CodeApplException("Le rôle est inconnu ");
     }

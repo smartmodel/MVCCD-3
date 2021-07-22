@@ -13,8 +13,6 @@ import java.awt.*;
 
 public class MCDUniqueEditingTreat extends MCDTableTransitoryEditingTreat {
 
-
-
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
         return new UniqueInputContent(element);
@@ -26,7 +24,6 @@ public class MCDUniqueEditingTreat extends MCDTableTransitoryEditingTreat {
                 new MCDUniqueEditingTreat());
 
     }
-
 
     @Override
     protected String getPropertyTheElement() {

@@ -104,6 +104,16 @@ public class MCDTransformToFK {
         MLDRTable mldrTableParent = mldrModel.getMLDRTableByEntitySource(mcdEntitySource);
         MLDRPK mldrPKParent = mldrTableParent.getMLDRPK();
 
+        MCDAssociation mcdAssociation = null;
+        if (mcdRelEndSource.getImRelation() instanceof MCDAssociation) {
+            mcdAssociation = (MCDAssociation) mcdRelEndSource.getImRelation();
+        }
+
+        MCDGeneralization mcdGeneralization= null;
+        if (mcdRelEndSource.getImRelation() instanceof MCDGeneralization) {
+            mcdGeneralization = (MCDGeneralization) mcdRelEndSource.getImRelation();
+        }
+
         // Nom
         String tableShortNameChild = "";
         MCDElement mcdElementSource = mldrTable.getMcdElementSource();
@@ -117,11 +127,38 @@ public class MCDTransformToFK {
         MDRElementNames namesFK = buildNameFK(mldrTable, tableShortNameChild, mldrFK, mcdRelEndSource, mldrTableParent);
         MCDTransformService.names(mldrFK, namesFK, mldrModel);
 
-        //TODO-PAS Faire les test de changements de valeurs
         // Nature
-        mldrFK.setNature(fkNature);
+        if (mldrFK.getNature() != null) {
+            if (mldrFK.getNature() != fkNature){
+                mldrFK.setNature(fkNature);
+            }
+        } else {
+            mldrFK.setNature(fkNature);
+        }
+
         // Lien avec la PK
-        mldrFK.setMdrPK(mldrPKParent);
+        if (mldrFK.getMdrPK() != null) {
+            if (mldrFK.getMdrPK() != mldrPKParent){
+                throw new CodeApplException("Le changement de source/destination pour une relation n'est pas supporté");
+                // Si la PK de référence peut être modifiée --> iL faut aussi modifier MDRRelationFK
+            }
+        } else {
+            mldrFK.setMdrPK(mldrPKParent);
+        }
+
+        // deleteCascade sur une association 1:1 ou 1:n
+        if (mcdAssociation != null){
+            if (mldrFK.isDeleteCascade() != mcdAssociation.isDeleteCascade() ){
+                mldrFK.setDeleteCascade(mcdAssociation.isDeleteCascade());
+            }
+        }
+
+        // deleteCascade imposée sur une généralisation
+        if (mcdGeneralization != null){
+            if ( ! mldrFK.isDeleteCascade() ){
+                mldrFK.setDeleteCascade(true);
+            }
+        }
 
         ArrayList<MDRColumn> mdrColumnsFK = new ArrayList<MDRColumn>();
         //Création des colonnes FK et des paramètres
