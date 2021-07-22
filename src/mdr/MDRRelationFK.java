@@ -19,21 +19,31 @@ public abstract class MDRRelationFK extends MDRRelation{
         super(parent, name);
     }
 
-    public MDRRelFKEnd getEndParent() {
-        return (MDRRelFKEnd) super.getA();
+    public MDRRelationFK(ProjectElement parent, int id) {
+        super(parent, id);
     }
 
+    public MDRRelFKEnd getEndParent() {
+        return MDRRelationFKService.getEndByRole(this, MDRRelFKEnd.PARENT);
+    }
+
+    /*
     public void setEndParent(MDRRelFKEnd endParent){
         super.setA(endParent);
     }
 
+     */
+
     public MDRRelFKEnd getEndChild() {
-        return (MDRRelFKEnd) super.getB();
+        return MDRRelationFKService.getEndByRole(this, MDRRelFKEnd.CHILD);
     }
 
+    /*
     public void setEndChild(MDRRelFKEnd endChild){
         super.setB(endChild);
     }
+
+     */
 
     public int getMdrFKId(){
         return this.mdrFKId;

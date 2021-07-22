@@ -1,18 +1,23 @@
 package mpdr;
 
 import datatypes.MPDRDatatype;
+import main.MVCCDElementFactory;
 import main.MVCCDManager;
-import main.window.repository.WinRepositoryTree;
-import mdr.MDRConstraint;
 import mdr.MDRElement;
 import mdr.MDRModel;
+import mdr.MDRRelFKEnd;
 import mdr.interfaces.IMDRElementWithIteration;
 import mldr.MLDRColumn;
+import mldr.MLDRFK;
+import mldr.MLDRRelationFK;
 import mldr.MLDRTable;
 import mldr.interfaces.IMLDRElement;
+import mldr.interfaces.IMLDRRelation;
 import mpdr.interfaces.IMPDRElement;
+import mpdr.interfaces.IMPDRRelation;
 import mpdr.services.MPDRModelService;
 import project.ProjectElement;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -60,7 +65,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     }
 
     public IMPDRElement getIMPDRElementByMLDRElementSource(IMLDRElement imldrElement){
-        return (IMPDRElement) MPDRModelService.getIMPDRElementByMLDRElementSource(this, imldrElement);
+        return (IMPDRElement) MPDRModelService.getIMPDRElementByIMLDRElementSource(this, imldrElement);
     }
 
 
@@ -73,5 +78,32 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     }
 
 
+    public MPDRContRelations getMPDRContRelations() {
+        return MPDRModelService.getMPDRContRelations(this);
+    }
+
+    public ArrayList<IMPDRRelation> getIMPDRRelations() {
+        return MPDRModelService.getIMPDRRelations(this);
+    }
+
+    public IMPDRRelation getIMPDRRelationByIMLDRRelationSource(IMLDRRelation imldrRelation) {
+        return MPDRModelService.getIMPDRRelationByIMLDRRelationSource(this, imldrRelation);
+    }
+
+
+    public  IMPDRRelation createIMPDRRelation(IMLDRRelation imldrRelation){
+        if ( imldrRelation instanceof MLDRRelationFK){
+            MLDRRelationFK mldrRelationFK = (MLDRRelationFK) imldrRelation;
+            MLDRFK mldrFK = (MLDRFK) mldrRelationFK.getMDRFK();
+            MPDRTable mpdrtableAccueil = getMPDRTableByMLDRTableSource((MLDRTable) mldrFK.getMDRTableAccueil());
+            MPDRFK mpdrFK = mpdrtableAccueil.getMPDRFKByMLDRFKSource(mldrFK);
+            MPDRRelationFK newMPDRRelationFK = MVCCDElementFactory.instance().createMPDRRelationFK(
+                    getMPDRContRelations(), mldrRelationFK, (MPDRTable) mpdrFK.getMDRTableAccueil(),
+                    (MPDRTable) mpdrFK.getMdrPK().getMDRTableAccueil());
+
+            return newMPDRRelationFK;
+        }
+        return null;
+    }
 
 }

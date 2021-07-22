@@ -8,14 +8,15 @@ public abstract class MDRRelFKEnd extends MDRRelEnd{
 
     private static final long serialVersionUID = 1000;
 
-    public static final int PARENT = 1 ;  //PK
-    public static final int CHILD = 2 ;   //FK
+    public static final Integer PARENT = 1 ;  //PK
+    public static final Integer CHILD = 2 ;   //FK
 
     //TODO-0 XML A ajouter
     private MRelEndMultiPart multiMinStd;
     private Integer multiMinCustom = null;
     private MRelEndMultiPart multiMaxStd;
     private Integer multiMaxCustom = null;
+    private Integer role = null ;
 
     public MDRRelFKEnd(ProjectElement parent) {
         super(parent);
@@ -46,17 +47,7 @@ public abstract class MDRRelFKEnd extends MDRRelEnd{
     }
 
     public String getName() {
-        return getMDRRelationFK().getName();
-    }
-
-    public int getRole() {
-        if (this == getMDRRelationFK().getEndParent()){
-            return PARENT;
-        }
-        if (this == getMDRRelationFK().getEndChild()){
-            return CHILD;
-        }
-        throw new CodeApplException("Le rôle d'une extrémité de la relationFK " + getMDRRelationFK().getNameTreePath()+ "n'est pas défini");
+        return getRoleText() + " - " + getMDRRelationFK().getName();
     }
 
 
@@ -90,5 +81,26 @@ public abstract class MDRRelFKEnd extends MDRRelEnd{
 
     public void setMultiMaxCustom(Integer multiMaxCustom) {
         this.multiMaxCustom = multiMaxCustom;
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
+    }
+
+    public String getRoleText() {
+        if (role.intValue() == PARENT.intValue()) {
+            return "Parent";
+        }
+        if (role.intValue() == CHILD.intValue()) {
+            return "Child";
+        }
+        if (role == null){
+            return null;
+        }
+        throw new CodeApplException("Le rôle est inconnu ");
     }
 }

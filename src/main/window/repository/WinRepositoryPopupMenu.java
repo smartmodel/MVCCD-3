@@ -16,6 +16,8 @@ import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDNIDService;
 import mdr.MDRElement;
+import mdr.MDRFK;
+import mdr.MDRRelFKEnd;
 import mdr.MDRRelationFK;
 import mdr.interfaces.IMDRElementWithIteration;
 import messages.MessagesBuilder;
@@ -43,6 +45,7 @@ import repository.editingTreat.naming.NamingEditingTreat;
 import repository.editingTreat.preferences.*;
 import resultat.Resultat;
 import utilities.DefaultMutableTreeNodeService;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
@@ -277,6 +280,14 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 treatGenericRead(this, new MDRParameterEditingTreat());
             }
 
+            if (node.getUserObject() instanceof MLDRRelationFK) {
+                treatMDRRelationFKRead(this);
+            }
+
+            if (node.getUserObject() instanceof MLDRRelFKEnd) {
+                treatMDRRelFKEndRead(this);
+            }
+
             if (node.getUserObject() instanceof MPDRModel) {
                 treatGeneric(this, new MPDRModelEditingTreat());
             }
@@ -304,6 +315,15 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             if (node.getUserObject() instanceof MPDRParameter) {
                 treatGenericRead(this, new MDRParameterEditingTreat());
             }
+
+            if (node.getUserObject() instanceof MPDRRelationFK) {
+                treatMDRRelationFKRead(this);
+            }
+
+            if (node.getUserObject() instanceof MPDRRelFKEnd) {
+                treatMDRRelFKEndRead(this);
+            }
+
         } catch (Exception e){
             //TODO-PAS A terme ce bloc de traitement d'exception devrait pouvoir être supprimé
             // si toutes les actionPerformed() qui modifient la présentation du référentiel
@@ -338,6 +358,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                         message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - nom : " + mdrRelationFK.getMDRFK().getName();
                         message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - id : " + mdrRelationFK.getMDRFK().getIdProjectElement();
                     }
+                    if (mvccdElement instanceof MDRRelFKEnd) {
+                        MDRRelFKEnd mdrRelFKEnd = (MDRRelFKEnd) mvccdElement;
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR + mdrRelFKEnd.getRoleText();
+                    }
+
                     new DialogMessage().showOk(mvccdWindow, message);
                 }catch (Exception e){
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.inspector");
@@ -772,6 +797,46 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
                 } catch (Exception e) {
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.naming");
+                }
+            }
+        });
+    }
+
+
+    private void treatMDRRelationFKRead(ISMenu menu) {
+        String textMenu = MessagesBuilder.getMessagesProperty("menu.read");
+        JMenuItem menuItem = new JMenuItem(textMenu);
+        addItem(menu, menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    MDRRelationFK mdrRelationFK = (MDRRelationFK) mvccdElement;
+                    new MDRFKEditingTreat().treatRead(mvccdWindow,mdrRelationFK.getMDRFK());
+                } catch (Exception e){
+                    String propertyMessage ;
+                    propertyMessage = "repository.menu.exception.read";
+                    exceptionUnhandled(e, mvccdElement, propertyMessage);
+                }
+            }
+        });
+    }
+
+
+    private void treatMDRRelFKEndRead(ISMenu menu) {
+        String textMenu = MessagesBuilder.getMessagesProperty("menu.read");
+        JMenuItem menuItem = new JMenuItem(textMenu);
+        addItem(menu, menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    MDRRelFKEnd mdrRelFKEnd = (MDRRelFKEnd) mvccdElement;
+                    new MDRFKEditingTreat().treatRead(mvccdWindow,mdrRelFKEnd.getMDRRelationFK().getMDRFK());
+                } catch (Exception e){
+                    String propertyMessage ;
+                    propertyMessage = "repository.menu.exception.read";
+                    exceptionUnhandled(e, mvccdElement, propertyMessage);
                 }
             }
         });

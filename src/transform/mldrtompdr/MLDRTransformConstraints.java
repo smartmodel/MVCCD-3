@@ -65,18 +65,17 @@ public class MLDRTransformConstraints {
             if (mldrConstraint instanceof MLDRPK){
                 MLDRPK mldrPK = (MLDRPK) mldrConstraint;
                 mpdrConstraint = mpdrTable.createPK(mldrPK);
-                MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
             }
             if (mldrConstraint instanceof MLDRFK){
                 MLDRFK mldrFK = (MLDRFK) mldrConstraint;
                 mpdrConstraint = mpdrTable.createFK(mldrFK);
-                MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
             }
             if (mldrConstraint instanceof MLDRUnique){
                 MLDRUnique mldrUnique = (MLDRUnique) mldrConstraint;
                 mpdrConstraint = mpdrTable.createUnique(mldrUnique);
-                MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
             }
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
+
         }
 
         // Le temps de développement
@@ -108,14 +107,7 @@ public class MLDRTransformConstraints {
         if (mpdrConstraint instanceof MPDRFK) {
             MLDRFK mldrFK = (MLDRFK) mldrConstraint;
             MPDRFK mpdrFK = (MPDRFK) mpdrConstraint;
-            // Nature
-            if (mpdrFK.getNature() != mldrFK.getNature()) {
-                mpdrFK.setNature(mldrFK.getNature());
-            }
-            if (mpdrFK.getIndice() != mldrFK.getIndice()) {
-                mpdrFK.setIndice(mldrFK.getIndice());
-            }
-
+            modifyConstraintFK(mldrFK, mpdrFK);
         }
 
         // Unique
@@ -126,6 +118,16 @@ public class MLDRTransformConstraints {
             if (mpdrUnique.getMdrUniqueNature() != mldrUnique.getMdrUniqueNature()) {
                 mpdrUnique.setMdrUniqueNature(mldrUnique.getMdrUniqueNature());
             }
+        }
+    }
+
+    private void modifyConstraintFK(MLDRFK mldrFK, MPDRFK mpdrFK) {
+        // Nature
+        if (mpdrFK.getNature() != mldrFK.getNature()) {
+            mpdrFK.setNature(mldrFK.getNature());
+        }
+        if (mpdrFK.getIndice() != mldrFK.getIndice()) {
+            mpdrFK.setIndice(mldrFK.getIndice());
         }
     }
 

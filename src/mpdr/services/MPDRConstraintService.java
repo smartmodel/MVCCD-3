@@ -21,7 +21,8 @@ public class MPDRConstraintService {
     }
 
     public static MPDRParameter getMPDRParameterByMLDRParameterSource(
-            MDRConstraint mdrConstraint, MLDRParameter mldrParameter) {
+            MDRConstraint mdrConstraint,
+            MLDRParameter mldrParameter) {
         for (MPDRParameter mpdrParameter : getMPDRParameters(mdrConstraint)){
             if (mpdrParameter instanceof IMPDRElementWithSource) {
                 if (mpdrParameter.getMldrElementSource() == mldrParameter) {

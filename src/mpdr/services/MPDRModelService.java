@@ -1,16 +1,17 @@
 package mpdr.services;
 
 import main.MVCCDElement;
-import mdr.MDRConstraint;
 import mdr.MDRElement;
 import mldr.MLDRTable;
 import mldr.interfaces.IMLDRElement;
+import mldr.interfaces.IMLDRRelation;
+import mpdr.MPDRContRelations;
 import mpdr.MPDRContTables;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
-import utilities.Trace;
+import mpdr.interfaces.IMPDRRelation;
 
 import java.util.ArrayList;
 
@@ -48,7 +49,7 @@ public class MPDRModelService {
         return null ;
     }
 
-    public static IMPDRElement getIMPDRElementByMLDRElementSource(MPDRModel mpdrModel, IMLDRElement imldrElement) {
+    public static IMPDRElement getIMPDRElementByIMLDRElementSource(MPDRModel mpdrModel, IMLDRElement imldrElement) {
 
         for (MDRElement mdrElement : mpdrModel.getMDRDescendants()){
             if (mdrElement instanceof IMPDRElementWithSource) {
@@ -62,4 +63,38 @@ public class MPDRModelService {
         }
         return null ;
     }
+
+    public static MPDRContRelations getMPDRContRelations(MPDRModel mpdrModel) {
+        for (MVCCDElement mvccdElement : mpdrModel.getChilds()){
+            if (mvccdElement instanceof MPDRContRelations){
+                return (MPDRContRelations) mvccdElement ;
+            }
+        }
+        return null ;
+    }
+
+
+    public static ArrayList<IMPDRRelation> getIMPDRRelations(MPDRModel mpdrModel){
+        ArrayList<IMPDRRelation> resultat = new ArrayList<IMPDRRelation>();
+        MPDRContRelations mpdrContRelations = getMPDRContRelations(mpdrModel);
+        for (MVCCDElement mvccdElement: mpdrContRelations.getChilds()){
+            if (mvccdElement instanceof MPDRTable){
+                resultat.add((IMPDRRelation) mvccdElement);
+            }
+        }
+        return resultat;
+    }
+
+
+    public static IMPDRRelation getIMPDRRelationByIMLDRRelationSource(MPDRModel mpdrModel,
+                                                                      IMLDRRelation imldrRelation) {
+        for (IMPDRRelation impdrRelation : getIMPDRRelations(mpdrModel)){
+            if ( impdrRelation.getMldrElementSource()  == imldrRelation){
+                return impdrRelation;
+            }
+        }
+        return null;
+    }
+
+
 }

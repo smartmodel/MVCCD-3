@@ -4,12 +4,13 @@ import mcd.MCDElement;
 import md.MDElement;
 import mdr.MDRRelFKEnd;
 import mdr.MDRRelationFK;
+import mdr.interfaces.IMDRElementWithIteration;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mldr.interfaces.IMLDRRelation;
 import project.ProjectElement;
 
-public class MLDRRelationFK  extends MDRRelationFK implements IMLDRElement, IMLDRRelation, IMLDRElementWithSource {
+public class MLDRRelationFK  extends MDRRelationFK implements IMLDRElement, IMLDRRelation, IMLDRElementWithSource, IMDRElementWithIteration {
 
     private  static final long serialVersionUID = 1000;
 
@@ -17,6 +18,11 @@ public class MLDRRelationFK  extends MDRRelationFK implements IMLDRElement, IMLD
 
     public MLDRRelationFK(ProjectElement parent, MCDElement mcdElementSource) {
         super(parent);
+        this.mcdElementSource = mcdElementSource;
+    }
+
+    public MLDRRelationFK(ProjectElement parent, MCDElement mcdElementSource, int id) {
+        super(parent, id);
         this.mcdElementSource = mcdElementSource;
     }
 
@@ -36,5 +42,11 @@ public class MLDRRelationFK  extends MDRRelationFK implements IMLDRElement, IMLD
         return mcdElementSource;
     }
 
+    public MLDRRelFKEnd getEndParent() {
+        return (MLDRRelFKEnd) super.getEndParent();
+    }
 
+    public MLDRRelFKEnd getEndChild() {
+        return (MLDRRelFKEnd) super.getEndChild();
+    }
 }

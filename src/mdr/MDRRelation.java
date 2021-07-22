@@ -21,8 +21,13 @@ public abstract class MDRRelation extends MDRElement implements IMRelation, IMDR
     public MDRRelation(ProjectElement parent) {
         super(parent);
     }
+
     public MDRRelation(ProjectElement parent, String name) {
         super(parent, name);
+    }
+
+    public MDRRelation(ProjectElement parent, int id) {
+        super(parent, id);
     }
 
     @Override

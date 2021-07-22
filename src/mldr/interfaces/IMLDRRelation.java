@@ -3,7 +3,7 @@ package mldr.interfaces;
 import mcd.MCDElement;
 import md.MDElement;
 
-public interface IMLDRRelation {
+public interface IMLDRRelation extends IMLDRElement {
 
     public String getName();
     public MCDElement getMcdElementSource();

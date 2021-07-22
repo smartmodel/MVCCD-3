@@ -3,6 +3,7 @@ package transform.mcdtomldr;
 import exceptions.CodeApplException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
 import m.MRelEndMultiPart;
+import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
@@ -16,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.MDRAdjustParameters;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -67,8 +69,8 @@ public class MCDTransformToFK {
         if (mldrRelationFK == null){
             mldrRelationFK = mldrModel.createRelationFK(mcdRelation,  mldrTableParent, mldrTable);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK);
-            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK.getEndParent());
-            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK.getEndChild());
+            MVCCDManager.instance().addNewMVCCDElementInRepository((MVCCDElement) mldrRelationFK.getA());
+            MVCCDManager.instance().addNewMVCCDElementInRepository((MVCCDElement) mldrRelationFK.getB());
         }
 
 
@@ -81,6 +83,8 @@ public class MCDTransformToFK {
 
         modifyRelationFK(mldrModel, mcdRelEndSource, mldrTable, mldrFK, fkNature, mldrRelationFK);
         mldrRelationFK.setIteration(mcdTransform.getIteration());
+        mldrRelationFK.getEndParent().setIteration(mcdTransform.getIteration());
+        mldrRelationFK.getEndChild().setIteration(mcdTransform.getIteration());
 
         return mldrFK;
     }
@@ -158,6 +162,42 @@ public class MCDTransformToFK {
             }
         }
 
+        // Création de RelationFK ou modification des extrémités
+        MLDRRelFKEnd  relFKEndA = (MLDRRelFKEnd)mldrRelationFK.getA();
+        MLDRRelFKEnd  relFKEndB = (MLDRRelFKEnd)mldrRelationFK.getB();
+        if ((relFKEndA.getMcdElementSource() == null) && (relFKEndB.getMcdElementSource() == null)){
+            relFKEndA.setMcdElementSource(mcdRelEndForRelationFKEndParent);
+            relFKEndA.setRole(MDRRelFKEnd.PARENT);
+            relFKEndB.setMcdElementSource(mcdRelEndForRelationFKEndChild);
+            relFKEndB.setRole(MDRRelFKEnd.CHILD);
+        } else if ((relFKEndA.getMcdElementSource() != null) && (relFKEndB.getMcdElementSource() != null)){
+            inversionMCDMultiplicities (relFKEndA, relFKEndB, mcdRelEndForRelationFKEndParent, mcdRelEndForRelationFKEndChild);
+         } else {
+            throw new CodeApplException("la relationFK ne peut être créée car les 2 extrémités ne sont pas cohérentes");
+        }
+
+        // Changement des cardinalités au niveau conceptuel
+        // Par exemple : 1--*  vers *--1
+        // Parent et child sont inversés
+
+
+        if (mldrRelationFK.getEndParent().getMcdElementSource() !=  mcdRelEndForRelationFKEndParent){
+            if (mldrRelationFK.getEndParent().getMcdElementSource() != null){
+                MVCCDManager.instance().removeMVCCDElementInRepository(
+                        mldrRelationFK.getEndParent(), mldrRelationFK.getEndParent().getParent());
+            }
+            mldrRelationFK.getEndParent().setMcdElementSource(mcdRelEndForRelationFKEndParent);
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK.getEndParent());
+        }
+        if (mldrRelationFK.getEndChild().getMcdElementSource() !=  mcdRelEndForRelationFKEndChild){
+            if (mldrRelationFK.getEndChild().getMcdElementSource() != null){
+                MVCCDManager.instance().removeMVCCDElementInRepository(
+                        mldrRelationFK.getEndChild(), mldrRelationFK.getEndChild().getParent());
+            }
+            mldrRelationFK.getEndChild().setMcdElementSource(mcdRelEndForRelationFKEndChild);
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK.getEndChild());
+        }
+
         // Multplicité
         // Parent FK
         // Minimum
@@ -179,6 +219,14 @@ public class MCDTransformToFK {
         if (mldrRelationFK.getEndParent().getMultiMaxStd() != MRelEndMultiPart.MULTI_ONE) {
             mldrRelationFK.getEndParent().setMultiMaxStd(MRelEndMultiPart.MULTI_ONE);
         }
+        // Remise à nul des valeurs Custom lorsqu'il y a eu permutation Parent <--> Child
+        if (mldrRelationFK.getEndParent().getMultiMinCustom() != null) {
+            mldrRelationFK.getEndParent().setMultiMinCustom(null);
+        }
+        if (mldrRelationFK.getEndParent().getMultiMaxCustom() != null) {
+            mldrRelationFK.getEndParent().setMultiMaxCustom(null);
+        }
+
 
         // Child FK
         // Association
@@ -227,6 +275,40 @@ public class MCDTransformToFK {
         }
     }
 
+    private void inversionMCDMultiplicities(MLDRRelFKEnd relFKEndA, MLDRRelFKEnd relFKEndB, MCDRelEnd mcdRelEndForRelationFKEndParent, MCDRelEnd mcdRelEndForRelationFKEndChild) {
+
+        if (relFKEndA.getMcdElementSource() == relFKEndB.getMcdElementSource()) {
+            throw new CodeApplException("la relationFK ne peut être modifées car les 2 extrémités ont la même source MCD");
+        }
+        if (relFKEndA.getRole() == relFKEndB.getRole()) {
+            throw new CodeApplException("la relationFK ne peut être modifées car les 2 extrémités ont le même rôle");
+        }
+
+        boolean c1a = (relFKEndA.getMcdElementSource() == mcdRelEndForRelationFKEndParent) &&
+                (relFKEndA.getRole().intValue() == MDRRelFKEnd.PARENT.intValue());
+        boolean c1b = (relFKEndB.getMcdElementSource() == mcdRelEndForRelationFKEndChild) &&
+                (relFKEndB.getRole().intValue() == MDRRelFKEnd.CHILD.intValue());
+        boolean c2a = (relFKEndA.getMcdElementSource() == mcdRelEndForRelationFKEndChild) &&
+                (relFKEndA.getRole().intValue() == MDRRelFKEnd.CHILD.intValue());
+        boolean c2b = (relFKEndB.getMcdElementSource() == mcdRelEndForRelationFKEndParent) &&
+                (relFKEndB.getRole() == MDRRelFKEnd.PARENT);
+        if (!((c1a && c1b) || (c2a && c2b))){
+            // le nouveau role de la source MCD est Child
+            if (relFKEndA.getMcdElementSource() == mcdRelEndForRelationFKEndChild){
+                relFKEndA.setMcdElementSource(mcdRelEndForRelationFKEndChild);
+                relFKEndA.setRole(MDRRelFKEnd.CHILD);
+                relFKEndB.setMcdElementSource(mcdRelEndForRelationFKEndParent);
+                relFKEndB.setRole(MDRRelFKEnd.PARENT);
+            }
+            // le nouveau role de la source MCD est Parent
+            if (relFKEndA.getMcdElementSource() == mcdRelEndForRelationFKEndParent){
+                relFKEndA.setMcdElementSource(mcdRelEndForRelationFKEndParent);
+                relFKEndA.setRole(MDRRelFKEnd.PARENT);
+                relFKEndB.setMcdElementSource(mcdRelEndForRelationFKEndChild);
+                relFKEndB.setRole(MDRRelFKEnd.CHILD);
+            }
+        }
+    }
 
     protected MDRElementNames buildNameFK(MDRTable mdrTableChild,
                                           String tableShortNameChild,

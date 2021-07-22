@@ -1,6 +1,5 @@
 package transform.mldrtompdr;
 
-import delete.Delete;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
@@ -36,14 +35,21 @@ public class MLDRTransform extends MDTransform {
         MPDRModel mpdrModelClone = (MPDRModel) mpdrModel.cloneDeep();
 
         try {
-            mldrModel.incrementeIteration();
+            mpdrModel.incrementeIteration();
 
             // Transformation des tables
             MLDRTransformTables mldrTransformTables = new MLDRTransformTables(this, mldrModel, mpdrModel);
             mldrTransformTables.transformTables();
 
+
             //Etablissement des référencements entre MPDRElement (FKs, Colonnes de FKs...
-            referencingBetweenElements();
+            referencingBetweenPKsAndFKs();
+
+            // Transformation des relationFKs
+            MLDRTransformRelations mldrTransformRelations = new MLDRTransformRelations(this, mldrModel, mpdrModel);
+            mldrTransformRelations.transformRelations();
+
+
             //Suppression des MPDRElement absents de l'itération
             deleteMDRElementNotInIteration();
 
@@ -119,7 +125,7 @@ public class MLDRTransform extends MDTransform {
         return mpdrModel.getIMDRElementsWithIterationInScope();
 
     }
-    private void referencingBetweenElements() {
+    private void referencingBetweenPKsAndFKs() {
         for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()){
             for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumns()){
                 if (mpdrColumn.isFk()) {
@@ -133,7 +139,6 @@ public class MLDRTransform extends MDTransform {
             }
         }
     }
-
 
     private void referencingColumnFK(MPDRColumn mpdrColumnFK) {
         //Niveau physique
@@ -170,6 +175,8 @@ public class MLDRTransform extends MDTransform {
             mpdrFK.setMdrPK(mpdrPK);
         }
     }
+
+
 
     public Resultat getResultat() {
         return resultat;

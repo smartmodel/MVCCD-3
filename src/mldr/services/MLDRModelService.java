@@ -79,9 +79,6 @@ public class MLDRModelService {
         ArrayList<IMLDRRelation> resultat = new ArrayList<IMLDRRelation>();
         MLDRContRelations mldrContRelations = getMLDRContRelations(mldrModel);
         for (MVCCDElement mvccdElement: mldrContRelations.getChilds()){
-            if (mvccdElement instanceof MLDRRelationFK){
-                MLDRRelationFK mldrRelationFK = (MLDRRelationFK) mvccdElement;
-            }
             if (mvccdElement instanceof IMLDRRelation){
                 resultat.add((IMLDRRelation) mvccdElement);
             }
