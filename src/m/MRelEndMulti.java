@@ -34,7 +34,7 @@ public enum MRelEndMulti {
                 return MULTI_ONE_ONE;
             }
             if (max == MRelEndMultiPart.MULTI_MANY) {
-                return MULTI_ZERO_MANY;
+                return MULTI_ONE_MANY;
             }
         }
         throw new CodeApplException("Les 2 valeurs " + min.getText() + " et " + max.getText() + " passées pour créer trouver une instance de MRelEndMulti ne sont pas cohérentes");

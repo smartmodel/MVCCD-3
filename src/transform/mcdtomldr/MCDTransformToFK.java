@@ -146,10 +146,17 @@ public class MCDTransformToFK {
             mldrFK.setMdrPK(mldrPKParent);
         }
 
-        // deleteCascade sur une association 1:1 ou 1:n
+        // deleteCascade
         if (mcdAssociation != null){
+            // deleteCascade sur une association 1:1 ou 1:n
             if (mldrFK.isDeleteCascade() != mcdAssociation.isDeleteCascade() ){
                 mldrFK.setDeleteCascade(mcdAssociation.isDeleteCascade());
+            }
+            // deleteCascade pour le rôle source d'une association n:n
+            // Dans ce cas mcdRelEndSource correspond au rôle qui porte deleteCascade
+            MCDAssEnd mcdAssEndSource = (MCDAssEnd) mcdRelEndSource;
+            if (mldrFK.isDeleteCascade() != mcdAssEndSource.isDeleteCascade()){
+                mldrFK.setDeleteCascade(mcdAssEndSource.isDeleteCascade());
             }
         }
 
@@ -191,7 +198,7 @@ public class MCDTransformToFK {
         // Source correspond à l'entité parent pour les associations 1:1, 1:n et pour les gén/spec
         MCDRelEnd mcdRelEndForRelationFKEndParent = mcdRelEndSource;
         MCDRelEnd mcdRelEndForRelationFKEndChild = mcdRelEndSource.getMCDRelEndOpposite();
-        // Permutation pour les association n:n
+        // Permutation pour les associations n:n
         if (mcdRelEndSource instanceof MCDAssEnd) {
             if (((MCDAssEnd) mcdRelEndSource).getMcdAssociation().isDegreeNN()) {
                 mcdRelEndForRelationFKEndParent = mcdRelEndSource.getMCDRelEndOpposite();
@@ -281,8 +288,12 @@ public class MCDTransformToFK {
             //MCDAssEnd mcdAssEndForRelationFKMultiParent = (MCDAssEnd) mcdRelEndForRelationFKEndParent;
             MCDAssEnd mcdAssEndForRelationFKMultiChild = (MCDAssEnd) mcdRelEndForRelationFKEndChild;
 
+            // Cardinalité sur l'extrémité opposée pour les associations n:n
+            if (((MCDAssEnd) mcdRelEndSource).getMcdAssociation().isDegreeNN()) {
+                mcdAssEndForRelationFKMultiChild = mcdAssEndForRelationFKMultiChild.getMCDAssEndOpposite();
+            }
 
-            // Minimum
+                // Minimum
             if (mldrRelationFK.getEndChild().getMultiMinStd() != mcdAssEndForRelationFKMultiChild.getMultiMinStd()) {
                 mldrRelationFK.getEndChild().setMultiMinStd(mcdAssEndForRelationFKMultiChild.getMultiMinStd());
             }

@@ -28,14 +28,12 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
     public static final String CLASSSHORTNAMEUI = "Extr. association";
 
 
-    //public static final int FROM = 1 ;  //drawingDirection
-    //public static final int TO = 2 ;  //drawingDirection
-
-    //private MCDAssociation mcdAssociation;
-    //private MCDEntity mcdEntity ;
     private boolean ordered = false;
     // Multiplicité reçue sous forme de chaine (1, 1..8, n, *, 0..1  etc)
     private String multiStr;
+
+    //TODO-0 XML A ajouter
+    private boolean deleteCascade = false;
 
 
     public MCDAssEnd(MCDElement parent) {
@@ -105,6 +103,13 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
         this.ordered = ordered;
     }
 
+    public boolean isDeleteCascade() {
+        return deleteCascade;
+    }
+
+    public void setDeleteCascade(boolean deleteCascade) {
+        this.deleteCascade = deleteCascade;
+    }
 
     @Override
     public String getNameTree() {

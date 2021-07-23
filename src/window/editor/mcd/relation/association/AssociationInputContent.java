@@ -51,6 +51,7 @@ public class AssociationInputContent extends PanelInputContentId {
     private STextField fieldFromRoleShortName = new STextField(this);
     private SComboBox fieldFromMulti = new SComboBox(this);
     private SCheckBox fieldFromOrdered = new SCheckBox(this);
+    private SCheckBox fieldFromDeleteCascade = new SCheckBox(this);
 
     private JPanel panelTo = new JPanel();
     private SComboBox fieldToEntity = new SComboBox(this);
@@ -59,6 +60,7 @@ public class AssociationInputContent extends PanelInputContentId {
     private STextField fieldToRoleShortName = new STextField(this);
     private SComboBox fieldToMulti = new SComboBox(this);
     private SCheckBox fieldToOrdered = new SCheckBox(this);
+    private SCheckBox fieldToDeleteCascade = new SCheckBox(this);
 
     private AssEndInputContent assEndInputContent = new AssEndInputContent();
 
@@ -72,6 +74,7 @@ public class AssociationInputContent extends PanelInputContentId {
     private STextField factorizeFieldRoleShortName = null;
     private SComboBox factorizeFieldMulti = null;
     private SCheckBox factorizeFieldOrdered = null;
+    private SCheckBox factorizeFieldDeleteCascade = null;
 
 
     public AssociationInputContent(AssociationInput associationInput)     {
@@ -213,11 +216,15 @@ public class AssociationInputContent extends PanelInputContentId {
         factorizeFieldOrdered.addFocusListener(this);
         factorizeFieldOrdered.addItemListener(this);
 
+        factorizeFieldDeleteCascade.addFocusListener(this);
+        factorizeFieldDeleteCascade.addItemListener(this);
+
         super.getSComponents().add(factorizeFieldEntity);
         super.getSComponents().add(factorizeFieldRoleName);
         super.getSComponents().add(factorizeFieldRoleShortName);
         super.getSComponents().add(factorizeFieldMulti);
         super.getSComponents().add(factorizeFieldOrdered);
+        super.getSComponents().add(factorizeFieldDeleteCascade);
     }
 
     private void createPanelMaster(){
@@ -320,6 +327,12 @@ public class AssociationInputContent extends PanelInputContentId {
         gbc.gridx++;
         panelRole.add(factorizeFieldOrdered, gbc);
 
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelRole.add(new JLabel("Suppr. cascade :"), gbc);
+        gbc.gridx++;
+        panelRole.add(factorizeFieldDeleteCascade, gbc);
+
     }
 
 
@@ -411,6 +424,9 @@ public class AssociationInputContent extends PanelInputContentId {
         MRelEndMultiPart multiMax = MRelEndService.computeMultiMaxStd((String) fieldMulti.getSelectedItem());
         if (!multiMax.equals(MRelEndMultiPart.MULTI_MANY)){
             ordered.setSelected(false);
+            // Les deux deleteCascade ne sont possibles que pour des association n:n
+            fieldFromDeleteCascade.setSelected(false);
+            fieldToDeleteCascade.setSelected(false);
         }
 
         fieldOriented.setEnabled(false);
@@ -1082,7 +1098,9 @@ public class AssociationInputContent extends PanelInputContentId {
             factorizeFieldMulti.setSelectedEmpty();
         }
         factorizeFieldOrdered.setSelected(mcdAssEnd.isOrdered());
+        factorizeFieldDeleteCascade.setSelected(mcdAssEnd.isDeleteCascade());
     }
+
 
     @Override
     public void saveDatas(MVCCDElement mvccdElement) {
@@ -1141,6 +1159,9 @@ public class AssociationInputContent extends PanelInputContentId {
         if (factorizeFieldOrdered.checkIfUpdated()){
             mcdAssEnd.setOrdered(factorizeFieldOrdered.isSelected());
         }
+        if (factorizeFieldDeleteCascade.checkIfUpdated()){
+            mcdAssEnd.setDeleteCascade(factorizeFieldDeleteCascade.isSelected());
+        }
     }
 
     @Override
@@ -1174,20 +1195,31 @@ public class AssociationInputContent extends PanelInputContentId {
 
     private void enabledContentMulti(int direction) {
         SCheckBox ordered = null;
+        SCheckBox deleteCascade = null;
         SComboBox fieldMulti = null;
+        SComboBox fieldMultiOpposite = null;
         if (direction == MCDAssEnd.FROM){
             ordered = fieldFromOrdered;
+            deleteCascade = fieldFromDeleteCascade;
             fieldMulti = fieldFromMulti;
+            fieldMultiOpposite = fieldToMulti;
         }
         if (direction == MCDAssEnd.TO){
             ordered = fieldToOrdered;
+            deleteCascade = fieldToDeleteCascade;
             fieldMulti = fieldToMulti;
+            fieldMultiOpposite = fieldFromMulti;
         }
         if (! fieldMulti.isSelectedEmpty()){
             MRelEndMultiPart multiMax = MRelEndService.computeMultiMaxStd((String) fieldMulti.getSelectedItem());
-            ordered.setEnabled(multiMax.equals(MRelEndMultiPart.MULTI_MANY));
+            boolean c1 = multiMax.equals(MRelEndMultiPart.MULTI_MANY);
+            ordered.setEnabled(c1);
+            MRelEndMultiPart multiMaxOpposite = MRelEndService.computeMultiMaxStd((String) fieldMultiOpposite.getSelectedItem());
+            boolean c2 = multiMaxOpposite.equals(MRelEndMultiPart.MULTI_MANY);
+            deleteCascade.setEnabled(c1 && c2);
         } else {
             ordered.setEnabled(false);
+            deleteCascade.setEnabled(false);
         }
     }
 
@@ -1211,6 +1243,7 @@ public class AssociationInputContent extends PanelInputContentId {
             factorizeFieldRoleShortName = fieldFromRoleShortName;
             factorizeFieldMulti = fieldFromMulti;
             factorizeFieldOrdered = fieldFromOrdered;
+            factorizeFieldDeleteCascade = fieldFromDeleteCascade;
         }
         if (direction == MCDRelEnd.TO){
             factorizeTitle = "Tracée vers";
@@ -1221,6 +1254,7 @@ public class AssociationInputContent extends PanelInputContentId {
             factorizeFieldRoleShortName = fieldToRoleShortName;
             factorizeFieldMulti = fieldToMulti;
             factorizeFieldOrdered = fieldToOrdered;
+            factorizeFieldDeleteCascade = fieldToDeleteCascade;
         }
     }
 
