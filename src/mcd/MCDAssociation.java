@@ -145,6 +145,10 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDSo
         return getMCDAssEndOpposite(getMCDAssEndParent());
     }
 
+    public ArrayList<MCDAssEnd> getMCDAssEnds(){
+        return MCDAssociationService.getMCDAssEnds(this);
+    }
+
     public MCDContRelEnds getMCDContRelEnds() {
         for (MVCCDElement mvccdElement : getChilds()){
             if (mvccdElement instanceof MCDContRelEnds) {

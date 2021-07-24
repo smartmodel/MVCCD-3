@@ -19,6 +19,8 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
 
     //TODO-0 XML A ajouter
     private boolean deleteCascade = false;
+    private boolean oriented = false;
+    private boolean notOriented = false;
 
     public MDRFK(ProjectElement parent) {
         super(parent);
@@ -83,5 +85,21 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
 
     public void setDeleteCascade(boolean deleteCascade) {
         this.deleteCascade = deleteCascade;
+    }
+
+    public boolean isOriented() {
+        return oriented;
+    }
+
+    public void setOriented(boolean oriented) {
+        this.oriented = oriented;
+    }
+
+    public boolean isNotOriented() {
+        return notOriented;
+    }
+
+    public void setNotOriented(boolean notOriented) {
+        this.notOriented = notOriented;
     }
 }

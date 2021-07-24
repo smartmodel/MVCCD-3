@@ -3,7 +3,6 @@ package window.editor.mcd.relation.association;
 import m.MRelEndMultiPart;
 import m.MRelEndMultiStr;
 import m.MRelationDegree;
-import m.services.MElementService;
 import m.services.MRelEndService;
 import m.services.MRelationService;
 import main.MVCCDElement;
@@ -14,6 +13,7 @@ import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import utilities.Trace;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentId;
 import utilities.window.editor.services.PanelInputService;
@@ -77,11 +77,11 @@ public class AssociationInputContent extends PanelInputContentId {
     private SCheckBox factorizeFieldDeleteCascade = null;
 
 
-    public AssociationInputContent(AssociationInput associationInput)     {
+    public AssociationInputContent(AssociationInput associationInput) {
         super(associationInput);
     }
 
-    public AssociationInputContent(MVCCDElement elementCrt)     {
+    public AssociationInputContent(MVCCDElement elementCrt) {
         super(null);
         elementForCheckInput = elementCrt;
     }
@@ -93,7 +93,7 @@ public class AssociationInputContent extends PanelInputContentId {
         fieldName.setToolTipText("Nom de l'association");
         fieldName.setCheckPreSave(false);
 
-        for (MCDAssociationNature nature : MCDAssociationNature.values()){
+        for (MCDAssociationNature nature : MCDAssociationNature.values()) {
             fieldNature.addItem(nature.getText());
         }
         fieldNature.addFocusListener(this);
@@ -109,12 +109,10 @@ public class AssociationInputContent extends PanelInputContentId {
         fieldOriented.addItemListener(this);
 
 
-
         super.getSComponents().add(fieldNature);
         super.getSComponents().add(fieldFrozen);
         super.getSComponents().add(fieldDeleteCascade);
         super.getSComponents().add(fieldOriented);
-
 
 
         fieldFromEntity.setCheckPreSave(true);
@@ -187,7 +185,7 @@ public class AssociationInputContent extends PanelInputContentId {
 
         //factorizeFieldMulti.setEditable(true);
         factorizeFieldMulti.addItem(SComboBox.LINEWHITE);
-        for (MRelEndMultiStr multi : MRelEndMultiStr.values()){
+        for (MRelEndMultiStr multi : MRelEndMultiStr.values()) {
             factorizeFieldMulti.addItem(multi.getText());
         }
         factorizeFieldMulti.setCheckPreSave(true);
@@ -227,7 +225,7 @@ public class AssociationInputContent extends PanelInputContentId {
         super.getSComponents().add(factorizeFieldDeleteCascade);
     }
 
-    private void createPanelMaster(){
+    private void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
         gbc.gridwidth = 6;
@@ -239,17 +237,16 @@ public class AssociationInputContent extends PanelInputContentId {
         gbc.gridx = 0;
         gbc.gridy++;
         createPanelAssEnd(MCDRelEnd.FROM);
-        panelInputContentCustom.add(panelFrom,gbc);
+        panelInputContentCustom.add(panelFrom, gbc);
 
         gbc.gridx++;
         createPanelProperties();
-        panelInputContentCustom.add(panelProperties,gbc);
+        panelInputContentCustom.add(panelProperties, gbc);
 
 
         gbc.gridx++;
         createPanelAssEnd(MCDRelEnd.TO);
-        panelInputContentCustom.add(panelTo,gbc);
-
+        panelInputContentCustom.add(panelTo, gbc);
 
 
         this.add(panelInputContentCustom);
@@ -337,7 +334,7 @@ public class AssociationInputContent extends PanelInputContentId {
 
 
     protected boolean changeField(DocumentEvent e) {
-        boolean ok = true ;
+        boolean ok = true;
 
 
         SComponent sComponent = null;
@@ -355,24 +352,23 @@ public class AssociationInputContent extends PanelInputContentId {
         }
 
 
-        if ( doc == fieldFromRoleName.getDocument()){
+        if (doc == fieldFromRoleName.getDocument()) {
             sComponent = fieldFromRoleName;
         }
-        if ( doc == fieldFromRoleShortName.getDocument()){
+        if (doc == fieldFromRoleShortName.getDocument()) {
             sComponent = fieldFromRoleShortName;
         }
 
-        if ( doc == fieldToRoleName.getDocument()){
+        if (doc == fieldToRoleName.getDocument()) {
             sComponent = fieldToRoleName;
         }
-        if ( doc == fieldToRoleShortName.getDocument()){
+        if (doc == fieldToRoleShortName.getDocument()) {
             sComponent = fieldToRoleShortName;
         }
 
 
-
         if (sComponent != null) {
-            ok = treatField(sComponent) ;
+            ok = treatField(sComponent);
         }
 
         return ok;
@@ -395,19 +391,19 @@ public class AssociationInputContent extends PanelInputContentId {
         if (source == fieldToMulti) {
             changeFieldSelectedMulti(fieldToMulti, MCDAssEnd.TO);
         }
-        if (source == fieldNature){
+        if (source == fieldNature) {
             changeFieldSelectedNature();
         }
-        if (source instanceof SComponent){
-            treatField( (SComponent) source);
+
+        if (source instanceof SComponent) {
+            treatField((SComponent) source);
         }
 
     }
 
 
-
     private void changeFieldSelectedEntity(int direction) {
-        if (isNotReflexive()){
+        if (isNotReflexive()) {
             fieldOriented.setSelectedEmpty();
         }
     }
@@ -415,14 +411,14 @@ public class AssociationInputContent extends PanelInputContentId {
 
     private void changeFieldSelectedMulti(SComboBox fieldMulti, int direction) {
         SCheckBox ordered = null;
-        if (direction == MCDAssEnd.FROM){
+        if (direction == MCDAssEnd.FROM) {
             ordered = fieldFromOrdered;
         }
-        if (direction == MCDAssEnd.TO){
+        if (direction == MCDAssEnd.TO) {
             ordered = fieldToOrdered;
         }
         MRelEndMultiPart multiMax = MRelEndService.computeMultiMaxStd((String) fieldMulti.getSelectedItem());
-        if (!multiMax.equals(MRelEndMultiPart.MULTI_MANY)){
+        if (!multiMax.equals(MRelEndMultiPart.MULTI_MANY)) {
             ordered.setSelected(false);
             // Les deux deleteCascade ne sont possibles que pour des association n:n
             fieldFromDeleteCascade.setSelected(false);
@@ -431,12 +427,12 @@ public class AssociationInputContent extends PanelInputContentId {
 
         fieldOriented.setEnabled(false);
         try {
-            if (isNotReflexive()){
+            if (isNotReflexive()) {
                 fieldOriented.setSelectedEmpty();
-            } else if (getDegree() == MRelationDegree.DEGREE_ONE_MANY){
+            } else if (getDegree() == MRelationDegree.DEGREE_ONE_MANY) {
                 fieldOriented.setSelectedEmpty();
             }
-        } catch(Exception e ){
+        } catch (Exception e) {
             // les 2 multiplicités ne sont pas saisies
         }
     }
@@ -459,12 +455,11 @@ public class AssociationInputContent extends PanelInputContentId {
     protected void changeFieldDeSelected(ItemEvent e) {
         Object source = e.getSource();
 
-        if (source instanceof SComponent){
-            treatField( (SComponent) source);
+        if (source instanceof SComponent) {
+            treatField((SComponent) source);
         }
 
     }
-
 
 
     @Override
@@ -511,7 +506,7 @@ public class AssociationInputContent extends PanelInputContentId {
         boolean ok = checkAssociationFrom(unitaire);
 
         unitaire = notBatch && (sComponent == fieldToEntity);
-        ok = checkAssociationTo(unitaire ) && ok;
+        ok = checkAssociationTo(unitaire) && ok;
 
         if (ok) {
 
@@ -565,7 +560,7 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
     @Override
-    public boolean checkDatas(SComponent sComponent){
+    public boolean checkDatas(SComponent sComponent) {
         boolean ok = super.checkDatas(sComponent);
 
         if (ok) {
@@ -583,7 +578,7 @@ public class AssociationInputContent extends PanelInputContentId {
             ok = checkLongName(unitaire) && ok;
 
             unitaire = notBatch && (sComponent == fieldFromRoleShortName);
-            boolean okCheckFromRoleShortName = checkFromRoleShortName(unitaire) ;
+            boolean okCheckFromRoleShortName = checkFromRoleShortName(unitaire);
 
             ok = okCheckFromRoleShortName && ok;
 
@@ -594,7 +589,7 @@ public class AssociationInputContent extends PanelInputContentId {
             //}
 
             unitaire = notBatch && (sComponent == fieldToRoleShortName);
-            boolean okCheckToRoleShortName = checkToRoleShortName(unitaire) ;
+            boolean okCheckToRoleShortName = checkToRoleShortName(unitaire);
 
             ok = okCheckToRoleShortName && ok;
 
@@ -607,9 +602,23 @@ public class AssociationInputContent extends PanelInputContentId {
             unitaire = notBatch && (sComponent == fieldNature);
             ok = checkNature(fieldNature, unitaire) && ok;
 
-
             unitaire = notBatch && (sComponent == fieldOriented);
-            ok = checkOriented(fieldOriented, unitaire) && ok;
+            ok = checkOrientedOrNotOriented(fieldOriented, unitaire) && ok;
+
+
+            /*
+            unitaire = notBatch && (sComponent == fieldFromDeleteCascade);
+            //ok = checkDeleteCascadeAssEnd(fieldFromDeleteCascade, fieldToDeleteCascade, unitaire) && ok;
+            // Synchronisation plutôt que check
+            synchronizeDeleteCascadeAssEnd(fieldFromDeleteCascade, fieldToDeleteCascade);
+
+            unitaire = notBatch && (sComponent == fieldToDeleteCascade);
+            //ok = checkDeleteCascadeAssEnd(fieldToDeleteCascade, fieldFromDeleteCascade, unitaire) && ok;
+            // Synchronisation plutôt que check
+            synchronizeDeleteCascadeAssEnd(fieldToDeleteCascade, fieldFromDeleteCascade);
+            */
+
+
         }
 
         return ok;
@@ -627,7 +636,7 @@ public class AssociationInputContent extends PanelInputContentId {
             if (ok) {
                 ok = checkNameOneWay(unitaire, fieldName.getText(), nameId);
             }
-        }else {
+        } else {
             return checkInput(fieldName,
                     unitaire,
                     MCDUtilService.checkString(
@@ -653,7 +662,6 @@ public class AssociationInputContent extends PanelInputContentId {
                 getNamingAndBrothersElements(MVCCDElement.SCOPENAME),
                 getNamingAndBrothersElements(MVCCDElement.SCOPENOTNAME)));
     }
-
 
 
     @Override
@@ -706,7 +714,7 @@ public class AssociationInputContent extends PanelInputContentId {
             if (ok) {
                 ok = checkLongNameOneWay(unitaire, fieldLongName.getText(), longNameId);
             }
-        }else {
+        } else {
             return checkInput(fieldLongName,
                     unitaire,
                     MCDUtilService.checkString(
@@ -742,7 +750,7 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
     private boolean checkFromRoleScopeNaming(boolean unitaire, int scopeNaming) {
-        MCDAssociation mcdAssociation = (MCDAssociation)  getElementForCheck();
+        MCDAssociation mcdAssociation = (MCDAssociation) getElementForCheck();
         //#MAJ 2021-03-02-A Erreur création d'une association
         //IMCDModel imcdModel = mcdAssociation.getIMCDModelAccueil();
 
@@ -752,7 +760,7 @@ public class AssociationInputContent extends PanelInputContentId {
         MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, text);
 
         MCDAssEnd mcdAssEnd = null;
-        if (mcdAssociation != null){
+        if (mcdAssociation != null) {
             mcdAssEnd = mcdAssociation.getFrom();
         }
 
@@ -784,7 +792,7 @@ public class AssociationInputContent extends PanelInputContentId {
     private boolean checkToRoleScopeNaming(boolean unitaire, int scopeNaming) {
 
 
-        MCDAssociation mcdAssociation = (MCDAssociation)  getElementForCheck();
+        MCDAssociation mcdAssociation = (MCDAssociation) getElementForCheck();
         //#MAJ 2021-03-02-A Erreur création d'une association
         // IMCDModel imcdModel = mcdAssociation.getIMCDModelAccueil();
 
@@ -794,8 +802,8 @@ public class AssociationInputContent extends PanelInputContentId {
         MCDEntity mcdEntityOpposite = IMCDModelService.getMCDEntityByNamePath(iMCDModelContainer, text);
 
 
-        MCDAssEnd mcdAssEnd= null;
-        if (mcdAssociation != null){
+        MCDAssEnd mcdAssEnd = null;
+        if (mcdAssociation != null) {
             mcdAssEnd = mcdAssociation.getTo();
         }
 
@@ -815,15 +823,14 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
 
-
     private boolean checkFromRoleNaming(boolean unitaire) {
         return assEndInputContent.checkRoleNaming(
-                this, fieldFromRoleName, fieldFromRoleShortName,unitaire, MCDAssEnd.FROM);
+                this, fieldFromRoleName, fieldFromRoleShortName, unitaire, MCDAssEnd.FROM);
     }
 
     private boolean checkToRoleNaming(boolean unitaire) {
         return assEndInputContent.checkRoleNaming(
-                this, fieldToRoleName, fieldToRoleShortName,unitaire, MCDAssEnd.TO);
+                this, fieldToRoleName, fieldToRoleShortName, unitaire, MCDAssEnd.TO);
     }
 
     private boolean checkNameNaming(boolean unitaire) {
@@ -832,11 +839,11 @@ public class AssociationInputContent extends PanelInputContentId {
         boolean c1 = StringUtils.isEmpty(fieldName.getText());
         boolean c2 = StringUtils.isEmpty(fieldShortName.getText());
         ArrayList<String> messagesErrors = new ArrayList<String>();
-        if ( !c1 && c2 ){
+        if (!c1 && c2) {
             String message = MessagesBuilder.getMessagesProperty("association.name.and.short.name.error");
             messagesErrors.add(message);
         }
-        if ( c1 && !c2 ){
+        if (c1 && !c2) {
             String message = MessagesBuilder.getMessagesProperty("association.short.name.only.error");
             messagesErrors.add(message);
         }
@@ -844,7 +851,7 @@ public class AssociationInputContent extends PanelInputContentId {
             showCheckResultat(messagesErrors);
         }
 
-        if (messagesErrors.size() != 0){
+        if (messagesErrors.size() != 0) {
             fieldShortName.setColor(SComponent.COLORWARNING);
         } else {
             fieldShortName.setColor(SComponent.COLORNORMAL);
@@ -862,7 +869,6 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
 
-
     private boolean checkNature(SComboBox fieldNature, boolean unitaire) {
         return checkInput(fieldNature,
                 unitaire,
@@ -871,12 +877,11 @@ public class AssociationInputContent extends PanelInputContentId {
     }
 
 
-    private boolean checkOriented(SComboBox fieldOriented, boolean unitaire) {
+    private boolean checkOrientedOrNotOriented(SComboBox fieldOriented, boolean unitaire) {
         return checkInput(fieldOriented,
                 unitaire,
-                MCDAssociationService.checkOriented(fieldOriented, isReflexive(), getDegree()));
+                MCDAssociationService.checkOrientedOrNotOriented(fieldOriented, isReflexive(), getDegree()));
     }
-
 
 
     @Override
@@ -899,7 +904,8 @@ public class AssociationInputContent extends PanelInputContentId {
             return Preferences.ASSOCIATION_LONG_NAME_LENGTH;
         }
 
-        return -1;    }
+        return -1;
+    }
 
     @Override
     protected String getElement(int naming) {
@@ -935,7 +941,7 @@ public class AssociationInputContent extends PanelInputContentId {
                 fieldToEntity,
                 true,
                 "of.entity.to",
-                "of.association" );
+                "of.association");
 
         return super.checkInput(fieldToEntity, unitaire, messages);
 
@@ -945,7 +951,7 @@ public class AssociationInputContent extends PanelInputContentId {
 
         boolean c1 = StringUtils.isEmpty(fieldName.getText());
         boolean c2 = StringUtils.isEmpty(fieldFromRoleName.getText());
-        boolean c3 = StringUtils.isEmpty(fieldToRoleName.getText()) ;
+        boolean c3 = StringUtils.isEmpty(fieldToRoleName.getText());
 
         boolean r1 = c1 && c2 && c3;
         boolean r2a = !c1 && !c2;
@@ -978,7 +984,7 @@ public class AssociationInputContent extends PanelInputContentId {
         }
          */
 
-        if ( r3 ) {
+        if (r3) {
             message = MessagesBuilder.getMessagesProperty("association.role.name.error");
             fieldFromRoleName.setColor(SComponent.COLORERROR);
             fieldToRoleName.setColor(SComponent.COLORERROR);
@@ -1064,7 +1070,7 @@ public class AssociationInputContent extends PanelInputContentId {
 
 
         // Au niveau de chacune des 2 extrémités
-        MCDAssEnd  mcdAssEndFrom = null;
+        MCDAssEnd mcdAssEndFrom = null;
         if (mcdAssociation.getFrom() != null) {
             mcdAssEndFrom = mcdAssociation.getFrom();
         } else {
@@ -1073,7 +1079,7 @@ public class AssociationInputContent extends PanelInputContentId {
         }
         loadDatasAssEnd(MCDRelEnd.FROM, mcdAssEndFrom);
 
-        MCDAssEnd  mcdAssEndTo = null;
+        MCDAssEnd mcdAssEndTo = null;
         if (mcdAssociation.getTo() != null) {
             mcdAssEndTo = mcdAssociation.getTo();
         } else {
@@ -1091,7 +1097,7 @@ public class AssociationInputContent extends PanelInputContentId {
         factorizeFieldRoleName.setText(mcdAssEnd.getName());
         factorizeFieldRoleShortName.setText(mcdAssEnd.getShortName());
         factorizeFieldMulti.removeItemAt(0);
-        factorizeFieldMulti.insertItemAt(SComboBox.LINEWHITE,0);
+        factorizeFieldMulti.insertItemAt(SComboBox.LINEWHITE, 0);
         if (mcdAssEnd.getMultiStr() != null) {
             SComboBoxService.selectByTextEditable(factorizeFieldMulti, mcdAssEnd.getMultiStr());
         } else {
@@ -1114,28 +1120,27 @@ public class AssociationInputContent extends PanelInputContentId {
             mcdAssociation.setNature(MCDAssociationNature.findByText(textNature));
         }
 
-        if (fieldFrozen.checkIfUpdated()){
+        if (fieldFrozen.checkIfUpdated()) {
             mcdAssociation.setFrozen(fieldFrozen.isSelected());
         }
-        if (fieldDeleteCascade.checkIfUpdated()){
+        if (fieldDeleteCascade.checkIfUpdated()) {
             mcdAssociation.setDeleteCascade(fieldDeleteCascade.isSelected());
         }
-        if (fieldOriented.checkIfUpdated()){
+        if (fieldOriented.checkIfUpdated()) {
             mcdAssociation.setOriented(PanelInputService.getBooleanFromText(fieldOriented));
         }
 
         // Au niveau de chacune des 2 extémités
-        MCDAssEnd  mcdAssEndFrom = mcdAssociation.getFrom();
+        MCDAssEnd mcdAssEndFrom = mcdAssociation.getFrom();
         saveDatasAssEnd(MCDRelEnd.FROM, mcdAssEndFrom);
 
-        MCDAssEnd  mcdAssEndTo = mcdAssociation.getTo();
+        MCDAssEnd mcdAssEndTo = mcdAssociation.getTo();
         saveDatasAssEnd(MCDRelEnd.TO, mcdAssEndTo);
 
     }
 
 
-
-    private void saveDatasAssEnd(int direction, MCDAssEnd mcdAssEnd){
+    private void saveDatasAssEnd(int direction, MCDAssEnd mcdAssEnd) {
         factorizeAssEnd(direction);
 
         /*
@@ -1156,10 +1161,10 @@ public class AssociationInputContent extends PanelInputContentId {
         if (factorizeFieldMulti.checkIfUpdated()) {
             mcdAssEnd.setMultiStr((String) factorizeFieldMulti.getSelectedItem());
         }
-        if (factorizeFieldOrdered.checkIfUpdated()){
+        if (factorizeFieldOrdered.checkIfUpdated()) {
             mcdAssEnd.setOrdered(factorizeFieldOrdered.isSelected());
         }
-        if (factorizeFieldDeleteCascade.checkIfUpdated()){
+        if (factorizeFieldDeleteCascade.checkIfUpdated()) {
             mcdAssEnd.setDeleteCascade(factorizeFieldDeleteCascade.isSelected());
         }
     }
@@ -1168,7 +1173,7 @@ public class AssociationInputContent extends PanelInputContentId {
     protected void enabledContent() {
         Preferences preferences = PreferencesManager.instance().preferences();
 
-        if ( ! getEditor().getMode().equals(DialogEditor.NEW)){
+        if (!getEditor().getMode().equals(DialogEditor.NEW)) {
             fieldFromEntity.setEnabled(false);
             fieldToEntity.setEnabled(false);
         }
@@ -1179,7 +1184,7 @@ public class AssociationInputContent extends PanelInputContentId {
         fieldOriented.setEnabled(false);
         try {
             fieldOriented.setEnabled(isReflexive() && (getDegree() != MRelationDegree.DEGREE_ONE_MANY));
-        } catch(Exception e ){
+        } catch (Exception e) {
             // les multiplicités ne sont pas saisies
         }
 
@@ -1189,7 +1194,14 @@ public class AssociationInputContent extends PanelInputContentId {
         fieldFrozen.setEnabled((nature == MCDAssociationNature.NOID) || (nature == MCDAssociationNature.IDNATURAL));
 
         // {deletecascade}
-        fieldDeleteCascade.setEnabled(nature == MCDAssociationNature.IDCOMP);
+        boolean c1 = nature == MCDAssociationNature.IDCOMP;
+        // deleteCascade pour du n:n réflexif mais seulement notOriented (sur l'association)
+        boolean c2 = isReflexive() && isNotOriented() && (getDegree() == MRelationDegree.DEGREE_MANY_MANY);
+        fieldDeleteCascade.setEnabled(c1 || c2);
+        if (!fieldDeleteCascade.isEnabled()) {
+            // Pour éviter de manquer une remise à nul par les changements des sources de dépendance
+            fieldDeleteCascade.setSelected(false);
+        }
 
     }
 
@@ -1198,29 +1210,43 @@ public class AssociationInputContent extends PanelInputContentId {
         SCheckBox deleteCascade = null;
         SComboBox fieldMulti = null;
         SComboBox fieldMultiOpposite = null;
-        if (direction == MCDAssEnd.FROM){
+        if (direction == MCDAssEnd.FROM) {
             ordered = fieldFromOrdered;
             deleteCascade = fieldFromDeleteCascade;
             fieldMulti = fieldFromMulti;
             fieldMultiOpposite = fieldToMulti;
         }
-        if (direction == MCDAssEnd.TO){
+        if (direction == MCDAssEnd.TO) {
             ordered = fieldToOrdered;
             deleteCascade = fieldToDeleteCascade;
             fieldMulti = fieldToMulti;
             fieldMultiOpposite = fieldFromMulti;
         }
-        if (! fieldMulti.isSelectedEmpty()){
+        if (!fieldMulti.isSelectedEmpty()) {
             MRelEndMultiPart multiMax = MRelEndService.computeMultiMaxStd((String) fieldMulti.getSelectedItem());
             boolean c1 = multiMax.equals(MRelEndMultiPart.MULTI_MANY);
             ordered.setEnabled(c1);
-            MRelEndMultiPart multiMaxOpposite = MRelEndService.computeMultiMaxStd((String) fieldMultiOpposite.getSelectedItem());
-            boolean c2 = multiMaxOpposite.equals(MRelEndMultiPart.MULTI_MANY);
-            deleteCascade.setEnabled(c1 && c2);
+            if (!fieldMultiOpposite.isSelectedEmpty()) {
+                MRelEndMultiPart multiMaxOpposite = MRelEndService.computeMultiMaxStd((String) fieldMultiOpposite.getSelectedItem());
+                boolean c2a = isNotReflexive() && multiMaxOpposite.equals(MRelEndMultiPart.MULTI_MANY);
+                // deleteCascade pour du n:n réflexif mais seulement Oriented (sur le rôle)
+                boolean c2b = isReflexive() && isOriented() && multiMaxOpposite.equals(MRelEndMultiPart.MULTI_MANY);
+
+                deleteCascade.setEnabled(c1 && (c2a || c2b));
+            } else {
+                ordered.setEnabled(false);
+                deleteCascade.setEnabled(false);
+            }
         } else {
             ordered.setEnabled(false);
             deleteCascade.setEnabled(false);
         }
+
+        if (!deleteCascade.isEnabled()){
+            // Pour éviter de manquer une remise à nul par les changements des sources de dépendance
+            deleteCascade.setSelected(false);
+        }
+
     }
 
     public MCDEntity getMCDEntityTo(){
@@ -1258,6 +1284,14 @@ public class AssociationInputContent extends PanelInputContentId {
         }
     }
 
+    public boolean isOriented(){
+        return PanelInputService.prefComboBoxOption(fieldOriented) == Preferences.OPTION_YES ;
+    }
+
+    public boolean isNotOriented(){
+        return PanelInputService.prefComboBoxOption(fieldOriented) == Preferences.OPTION_NO ;
+    }
+
     public boolean isReflexive(){
         return (fieldFromEntity.isNotSelectedEmpty() && fieldToEntity.isNotSelectedEmpty()) &&
                 (fieldFromEntity.getSelectedIndex() == fieldToEntity.getSelectedIndex());
@@ -1267,11 +1301,17 @@ public class AssociationInputContent extends PanelInputContentId {
         return ! isReflexive();
     }
 
-    public MRelationDegree getDegree() {
 
-        MRelEndMultiPart multiFrom = MRelEndService.computeMultiMaxStd((String) fieldFromMulti.getSelectedItem());
-        MRelEndMultiPart multiTo = MRelEndService.computeMultiMaxStd((String) fieldToMulti.getSelectedItem());
-        return MRelationService.computeDegree( multiFrom,  multiTo);
+    public MRelationDegree getDegree() {
+        // try... catch  24.7.2021
+        try {
+            MRelEndMultiPart multiFrom = MRelEndService.computeMultiMaxStd((String) fieldFromMulti.getSelectedItem());
+            MRelEndMultiPart multiTo = MRelEndService.computeMultiMaxStd((String) fieldToMulti.getSelectedItem());
+            return MRelationService.computeDegree(multiFrom, multiTo);
+        } catch (Exception e){
+            // Tant que les multiplicités ne sont pas renseignées
+            return null;
+        }
     }
 
     public SComboBox getFieldFromEntity() {

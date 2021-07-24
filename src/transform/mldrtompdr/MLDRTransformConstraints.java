@@ -134,6 +134,15 @@ public class MLDRTransformConstraints {
         if (mpdrFK.isDeleteCascade() != mldrFK.isDeleteCascade()) {
             mpdrFK.setDeleteCascade(mldrFK.isDeleteCascade());
         }
+
+        // Oriented
+        if (mpdrFK.isOriented() != mldrFK.isOriented()) {
+            mpdrFK.setOriented(mldrFK.isOriented());
+        }
+        // NotNotOriented
+        if (mpdrFK.isNotOriented() != mldrFK.isNotOriented()) {
+            mpdrFK.setNotOriented(mldrFK.isNotOriented());
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package mcd.compliant;
 
+import m.MRelationDegree;
 import m.services.MElementService;
 import main.MVCCDElementConvert;
 import main.MVCCDManager;
@@ -672,6 +673,9 @@ public class MCDCompliant {
             Resultat resultat = new MCDAssociationEditingTreat().treatCompletness(
                     MVCCDManager.instance().getMvccdWindow(),
                     mcdRelation, showDialogCompletness);
+            if (resultat.isWithoutElementFatal()) {
+                resultat.addResultat(checkAssociation((MCDAssociation) mcdRelation));
+            }
             return resultat;
         }
         if (mcdRelation instanceof MCDGeneralization) {
@@ -688,6 +692,31 @@ public class MCDCompliant {
         }
 
         return null;
+    }
+
+    private Resultat checkAssociation(MCDAssociation mcdAssociation) {
+        Resultat resultat = new Resultat();
+
+        /* Pris en charge par l'éditeur d'association !
+        // Les 2 extrémiotés d'association n:n doivent comporter uniformément la valeur de deleteCascade
+        if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_MANY_MANY) {
+            if (mcdAssociation.isReflexive()){
+                if (!mcdAssociation.getOriented()) {
+                    int nbDeleteCascade = 0;
+                    for (MCDAssEnd mcdAssEnd : mcdAssociation.getMCDAssEnds()) {
+                        if (mcdAssEnd.isDeleteCascade()) {
+                            nbDeleteCascade++;
+                        }
+                    }
+                    if (nbDeleteCascade == 1) {
+
+                    }
+                }
+            }
+        }
+
+        */
+        return resultat ;
     }
 
 

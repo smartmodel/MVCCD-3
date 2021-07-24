@@ -153,6 +153,7 @@ public class MCDTransformToFK {
                 mldrFK.setDeleteCascade(mcdAssociation.isDeleteCascade());
             }
             // deleteCascade pour le rôle source d'une association n:n
+            // n:n non réflexive ou réflexive mais Oriented
             // Dans ce cas mcdRelEndSource correspond au rôle qui porte deleteCascade
             MCDAssEnd mcdAssEndSource = (MCDAssEnd) mcdRelEndSource;
             if (mldrFK.isDeleteCascade() != mcdAssEndSource.isDeleteCascade()){
@@ -164,6 +165,33 @@ public class MCDTransformToFK {
         if (mcdGeneralization != null){
             if ( ! mldrFK.isDeleteCascade() ){
                 mldrFK.setDeleteCascade(true);
+            }
+        }
+
+        // oriented et nonOriented
+        if (mcdAssociation != null) {
+            // mcdAssociation.getOriented() rend :
+            // null --> oriented et notOriented = false
+            // Vrai --> oriented = true
+            // Faux --> notOriented = true
+            boolean mcdOriented = false;
+            boolean mcdNotOriented = false;
+            if (mcdAssociation.getOriented() != null){
+                if (mcdAssociation.getOriented()){
+                    mcdOriented = true;
+                } else {
+                    mcdNotOriented = true;
+                }
+            }
+            if (mldrFK.isOriented() != mcdOriented){
+                mldrFK.setOriented(mcdOriented);
+            }
+            if (mldrFK.isNotOriented() != mcdNotOriented){
+                mldrFK.setNotOriented(mcdNotOriented);
+                // delete cascade pour chaque extrémité
+                if (mldrFK.isDeleteCascade() != mcdAssociation.isDeleteCascade()){
+                    mldrFK.setDeleteCascade(mcdAssociation.isDeleteCascade());
+                }
             }
         }
 
