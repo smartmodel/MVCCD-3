@@ -13,7 +13,6 @@ import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentId;
 import utilities.window.editor.services.PanelInputService;
@@ -605,24 +604,17 @@ public class AssociationInputContent extends PanelInputContentId {
             unitaire = notBatch && (sComponent == fieldOriented);
             ok = checkOrientedOrNotOriented(fieldOriented, unitaire) && ok;
 
-
-            /*
-            unitaire = notBatch && (sComponent == fieldFromDeleteCascade);
-            //ok = checkDeleteCascadeAssEnd(fieldFromDeleteCascade, fieldToDeleteCascade, unitaire) && ok;
-            // Synchronisation plutôt que check
-            synchronizeDeleteCascadeAssEnd(fieldFromDeleteCascade, fieldToDeleteCascade);
-
-            unitaire = notBatch && (sComponent == fieldToDeleteCascade);
-            //ok = checkDeleteCascadeAssEnd(fieldToDeleteCascade, fieldFromDeleteCascade, unitaire) && ok;
-            // Synchronisation plutôt que check
-            synchronizeDeleteCascadeAssEnd(fieldToDeleteCascade, fieldFromDeleteCascade);
-            */
-
+            unitaire = notBatch &&
+                    ( (sComponent == fieldFromRoleShortName) || (sComponent == fieldToRoleShortName));
+            if (ok) {
+                ok = checkOrientingAndRoleShortName(unitaire) && ok;
+            }
 
         }
 
         return ok;
     }
+
 
 
     @Override
@@ -861,6 +853,40 @@ public class AssociationInputContent extends PanelInputContentId {
 
     }
 
+    private boolean checkOrientingAndRoleShortName(boolean unitaire) {
+        boolean c1 = isOriented() ;
+        boolean c2 = isNotOriented() ;
+
+        boolean c3a = StringUtils.isEmpty(fieldFromRoleShortName.getText());
+        boolean c3b = StringUtils.isEmpty(fieldToRoleShortName.getText());
+        boolean c3 = c3a || c3b;
+
+        ArrayList<String> messagesErrors = new ArrayList<String>();
+        if (c1 && c3) {
+            String message = MessagesBuilder.getMessagesProperty("association.oriented.and.role.naming.error");
+            messagesErrors.add(message);
+        }
+        if (c2 && (!c3)) {
+            String message = MessagesBuilder.getMessagesProperty("association.notoriented.and.role.naming.error");
+            messagesErrors.add(message);
+        }
+
+        if (unitaire) {
+            showCheckResultat(messagesErrors);
+        }
+
+        if (messagesErrors.size() != 0) {
+            fieldFromRoleShortName.setColor(SComponent.COLORWARNING);
+            fieldToRoleShortName.setColor(SComponent.COLORWARNING);
+        } else {
+            fieldFromRoleShortName.setColor(SComponent.COLORNORMAL);
+            fieldToRoleShortName.setColor(SComponent.COLORNORMAL);
+        }
+
+        return messagesErrors.size() == 0;
+
+    }
+
     private boolean checkMulti(SComboBox fieldMulti, String inputEditor, int direction, boolean unitaire) {
 
         ArrayList<String> messages = MCDAssEndService.checkMulti(fieldMulti, inputEditor, direction);
@@ -983,6 +1009,24 @@ public class AssociationInputContent extends PanelInputContentId {
             fieldToRoleName.setColor(SComponent.COLORERROR);
         }
          */
+
+        //#MAJ 2021-07-24 Nommage d'association nom et/ou role - Retour à l'état avant //#MAJ 2021-03-30
+        //Pas compris pourquoi cette restriction a été levée //#MAJ 2021-03-30
+        if ( r1 ) {
+            message = MessagesBuilder.getMessagesProperty("association.name.or.role.name.error");
+            fieldName.setColor(SComponent.COLORERROR);
+            fieldFromRoleName.setColor(SComponent.COLORERROR);
+            fieldToRoleName.setColor(SComponent.COLORERROR);
+        }
+
+        //Pas compris pourquoi cette restriction a été levée //#MAJ 2021-03-30
+        // Par contre pourrait l'être ! A voir si nécessaire
+        if ( r2 ) {
+            message = MessagesBuilder.getMessagesProperty("association.name.and.role.name.error");
+            fieldName.setColor(SComponent.COLORERROR);
+            fieldFromRoleName.setColor(SComponent.COLORERROR);
+            fieldToRoleName.setColor(SComponent.COLORERROR);
+        }
 
         if (r3) {
             message = MessagesBuilder.getMessagesProperty("association.role.name.error");
