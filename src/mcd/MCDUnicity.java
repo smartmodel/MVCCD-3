@@ -1,6 +1,7 @@
 package mcd;
 
 import constraints.Constraint;
+import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import mdr.MDRUniqueNature;
@@ -45,8 +46,7 @@ public abstract class MCDUnicity extends MCDConstraint{
         this.absolute = absolute;
     }
 
-    @Override
-    public ArrayList<Constraint> getToConstraints() {
+    public ArrayList<Constraint> getConstraints() {
         ArrayList<Constraint> resultat = new ArrayList<Constraint>();
 
         Constraints constraints = ConstraintsManager.instance().constraints();
@@ -57,6 +57,10 @@ public abstract class MCDUnicity extends MCDConstraint{
                     preferences.CONSTRAINT_ABSOLUTE_LIENPROG));
         }
         return resultat;
+    }
+
+    public String getConstraintsInLine(){
+        return ConstraintService.getUMLNamingInLine(getConstraints());
     }
 
     public abstract MDRUniqueNature getMDRUniqueNature();

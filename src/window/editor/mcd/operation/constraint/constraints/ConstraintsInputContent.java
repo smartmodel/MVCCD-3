@@ -181,13 +181,6 @@ public class ConstraintsInputContent extends PanelInputContentTable {
 
         MCDConstraint constraint = (MCDConstraint) mElement;
 
-        ArrayList<Stereotype> stereotypes =  constraint.getToStereotypes();
-        ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
-
-        ArrayList<Constraint> constraints =  constraint.getToConstraints();
-
-        ArrayList<String> constraintsUMLNames = ConstraintService.getUMLNamesByConstraints(constraints);
-
         int col;
 
         col = ConstraintsTableColumn.ID.getPosition();
@@ -203,7 +196,7 @@ public class ConstraintsInputContent extends PanelInputContentTable {
         //row[col] = constraint.getClassShortNameUI();
 
         col = ConstraintsTableColumn.STEREOTYPES.getPosition();
-        row[col] = UtilDivers.ArrayStringToString(stereotypesUMLNames, "");
+        row[col] = constraint.getStereotypesInLine();
 
         col = ConstraintsTableColumn.NAME.getPosition();
         row[col] = constraint.getName();
@@ -212,7 +205,7 @@ public class ConstraintsInputContent extends PanelInputContentTable {
         row[col] = constraint.getParametersNameAsStr();
 
         col = ConstraintsTableColumn.CONSTRAINTS.getPosition();
-        row[col] = UtilDivers.ArrayStringToString(constraintsUMLNames, "");;
+        row[col] = constraint.getConstraintsInLine();
 
      }
 

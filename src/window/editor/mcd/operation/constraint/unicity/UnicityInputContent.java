@@ -144,6 +144,7 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
 
      */
 
+    /*
     @Override
     protected void saveElementMaster(boolean masterNew) {
         MVCCDElement mvccdElementMaster ;
@@ -160,9 +161,9 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
         // Formulaire maitre après enregistrement en mode update
         ((UnicityButtonsContent)getEditor().getButtons().getButtonsContent()).actionApply(mvccdElementMaster);
 
-
-
     }
+
+     */
 
     @Override
     protected String getMessageAdd() {

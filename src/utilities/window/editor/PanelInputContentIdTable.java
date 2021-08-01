@@ -12,6 +12,8 @@ import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
 import repository.editingTreat.EditingTreat;
+import utilities.Trace;
+import utilities.window.DialogMessage;
 import utilities.window.ReadTableModel;
 import utilities.window.editor.services.PanelInputContentTableService;
 import utilities.window.scomponents.SComponent;
@@ -192,8 +194,12 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
             }
 
         } catch (Exception exception){
+            MVCCDElement mvccdElement = getEditor().getMvccdElementCrt();
+            if (e.getSource() == btnAdd){
+                mvccdElement = getEditor().getMvccdElementParent();
+            }
             ExceptionService.exceptionUnhandled(exception, getEditor(),
-                    getEditor().getMvccdElementCrt(),
+                    mvccdElement,
                     "editor.table.exception",
                     propertyAction);
 
@@ -203,15 +209,19 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
 
 
     protected MElement actionAdd(ActionEvent e) {
-        /*
+
         //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        // Il faut conserver l'enregistrement du maitre avant la sauvegarde des détails !
+        // Pour tout mettre dans une même transaction, il faudrait que l'enregistrement maitre soit aussi transitoire
+        // pour pouvoir faire une sauvegarde "transitoire" avant de passer aux détails !
         if (getEditor().getMode().equals(DialogEditor.NEW)) {
             // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas confirmé
             if (DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageAdd()) == JOptionPane.YES_OPTION) {
                 // Sauvegarde de l'enregistrement maitre
                 saveElementMaster(true);
-            }
+           }
         } else {
+            /*
             boolean appendAuthorized = true;
             // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
             //if (getEditor().getButtons().getButtonsContent().btnApply.isEnabled()) {
@@ -225,13 +235,19 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
             } else {
                 return actionAddValid(e);
             }
+
+             */
+            return actionAddValid(e);
         }
         return null;
 
-         */
+
+        /*
         //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
         //MElement mElement = newElement();
+        Trace.println("Entré");
         MElement mElement = (MElement) editingTreatDetail().treatNew(getEditor(), getEditor().getMvccdElementCrt());
+
         if (mElement != null) {
             Object[] row = newRow(mElement);
             model.addRow(row);
@@ -241,14 +257,22 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
         }
         return mElement;
 
+         */
+
+
+
     }
 
 
-    /*
+
+
     protected MElement actionAddValid(ActionEvent e) {
         //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
         //MElement mElement = newElement();
-        MElement mElement = (MElement) editingTreatDetail().treatNew(getEditor(), getEditor().getMvccdElementCrt());
+
+        //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+        //MElement mElement = (MElement) editingTreatDetail().treatNew(getEditor(), getEditor().getMvccdElementCrt());
+        MElement mElement = (MElement) editingTreatDetail().treatNewTransitory(getEditor(), getEditor().getMvccdElementCrt());
         if (mElement != null) {
             Object[] row = newRow(mElement);
             model.addRow(row);
@@ -258,8 +282,6 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
         }
         return mElement;
     }
-
-     */
 
     protected MElement actionEdit(ActionEvent e, MElement mElement) {
         //TODO-1 Inactif tant que la modification n''est pas traitée
@@ -322,7 +344,7 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
 
     protected abstract EditingTreat editingTreatDetail();
 
-    /*
+/*
     protected  boolean noChangeOtherThanTable(){
         boolean resultat = true ;
         Trace.println("");
@@ -334,7 +356,9 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
         return resultat;
     }
 
-     */
+ */
+
+
 
 
     protected void tableContentChanged(){
@@ -344,7 +368,24 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
         checkDatas(table);
     }
 
-    protected abstract void saveElementMaster(boolean masterNew);
+    //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+    //protected abstract void saveElementMaster(boolean masterNew);
+    private void saveElementMaster(boolean masterNew){
+        MVCCDElement mvccdElementMaster ;
+            if (masterNew) {
+            getEditor().getButtons().getButtonsContent().treatCreate();
+            mvccdElementMaster = getEditor().getMvccdElementNew();
+        } else {
+            getEditor().getButtons().getButtonsContent().treatUpdate();
+            mvccdElementMaster = getEditor().getMvccdElementCrt();
+        }
+        // Suppression de l'ancien formulaire maitre
+        getEditor().myDispose();
+
+        // Formulaire maitre après enregistrement en mode update
+        getEditor().getEditingTreat().treatUpdate(getEditor().getOwner(), mvccdElementMaster);
+    }
+
 
     protected abstract String getMessageAdd();
     protected abstract String getMessageUpdate();
@@ -505,7 +546,6 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
                 elementInProject = null;
             }
         }
-
     }
 
 
@@ -514,8 +554,11 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
         MElement newElement = getNewTransitoryElementById(idNewRecord);
 
         newElement.setParent(getEditor().getMvccdElementCrt());
-        newElement.setTransitoryProjectElement(false);
+        // L'objet n'est plus transitory en ayant un parent affecté
+        //newElement.setTransitoryProjectElement(false);
 
+        // Valeur provoire ( ne peut être nul car int)
+        // L'ordonnancement est actualisé après chaque modif dans la table
         newElement.setOrder(MVCCDElement.NOORDERTRANSITORY);
         specificSaveCompleteRecord(i, newElement);
 }

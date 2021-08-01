@@ -7,6 +7,7 @@ import main.MVCCDManager;
 import mcd.MCDElement;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
 import project.ProjectElement;
 import resultat.Resultat;
 import resultat.ResultatElement;
@@ -41,6 +42,25 @@ public abstract class EditingTreat {
         return fen.getMvccdElementNew();
     }
 
+    public MVCCDElement treatNewTransitory(Window owner, MVCCDElement parent) {
+
+        DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW); //Ouvre l'éditeur attendu
+        //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+        fen.setNewElementTransitory(true);
+        fen.setVisible(true);
+        //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+        // Pas de changement pour un élément transitoire
+        /*
+        if (fen.getMvccdElementNew() != null) {
+            if (fen.getMvccdElementNew() instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
+        }
+
+         */
+
+        return fen.getMvccdElementNew();
+    }
     /**
      * Déclenchement de traitement de données pour la modification d'un élément.
      */
@@ -58,7 +78,9 @@ public abstract class EditingTreat {
 
         //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
         if (fen.isDatasChanged()) {
-            if (element instanceof ProjectElement) {
+            //TODO-1 A voir car le changement d'une préférence d'application --> Save Project !
+            // Cela pourrait être pertinent de conserver tel quel !
+            if ( (element instanceof ProjectElement) || (element instanceof Preferences)){
                 MVCCDManager.instance().setDatasProjectChanged(true);
             }
         }

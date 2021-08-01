@@ -7,23 +7,15 @@ import datatypes.MDDatatypeService;
 import exceptions.service.ExceptionService;
 import m.MElement;
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
-import main.MVCCDManager;
 import mcd.*;
 import mcd.services.MCDNIDService;
-import preferences.Preferences;
-import project.ProjectElement;
-import project.ProjectService;
 import repository.editingTreat.EditingTreat;
 import repository.editingTreat.mcd.MCDAttributeEditingTreat;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
-import utilities.Trace;
 import utilities.UtilDivers;
-import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentTable;
 import utilities.window.services.PanelService;
-import window.editor.mcd.attribute.AttributeEditor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -135,11 +127,6 @@ public class AttributesInputContent extends PanelInputContentTable {
     @Override
     protected void putValueInRow(MElement mElement, Object[] row) {
         MCDAttribute attribute = (MCDAttribute) mElement;
-        ArrayList<Stereotype> stereotypes =  attribute.getToStereotypes();
-        ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
-
-        ArrayList<Constraint> constraints =  attribute.getToConstraints();
-        ArrayList<String> constraintsUMLNames = ConstraintService.getUMLNamesByConstraints(constraints);
 
         String textForDatatype = "";
         if(attribute.getDatatypeLienProg() != null) {
@@ -159,7 +146,8 @@ public class AttributesInputContent extends PanelInputContentTable {
         row[col] = attribute.getOrder();
 
         col = AttributesTableColumn.STEREOTYPES.getPosition();
-        row[col] = UtilDivers.ArrayStringToString(stereotypesUMLNames, "");
+        //row[col] = UtilDivers.arrayStringToString(stereotypesUMLNames, "");
+        row[col] = attribute.getStereotypesInLine();
 
         col = AttributesTableColumn.NAME.getPosition();
         row[col] = attribute.getName();
@@ -179,7 +167,7 @@ public class AttributesInputContent extends PanelInputContentTable {
         row[col] = attribute.isUppercase();
 
         col = AttributesTableColumn.CONSTRAINTS.getPosition();
-        row[col] = UtilDivers.ArrayStringToString(constraintsUMLNames, "");;
+        row[col] =attribute.getConstraintsInLine();
 
         col = AttributesTableColumn.DERIVED.getPosition();
         row[col] = attribute.isDerived();

@@ -5,8 +5,6 @@ import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDParameter;
 import messages.MessagesBuilder;
-import repository.editingTreat.mcd.MCDAttributeEditingTreat;
-import repository.editingTreat.mcd.MCDEntityEditingTreat;
 import repository.editingTreat.mcd.MCDNIDEditingTreat;
 import repository.editingTreat.mcd.MCDUniqueEditingTreat;
 import resultat.Resultat;
@@ -209,21 +207,21 @@ public class MCDConstraintCompliant {
             ArrayList<String> attributes = MVCCDElementConvert.toNamesString(mcdUnique.getMcdAttributesMandatory());
             String message = MessagesBuilder.getMessagesProperty("constraint.unique.not.absolute.attribute.mandatory.error",
                     new String[]{nameEntity, mcdUnique.getName(),
-                            UtilDivers.ArrayStringToString(attributes, ", ")});
+                            UtilDivers.arrayStringToString(attributes, ", ")});
             resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
         if (c4){
             ArrayList<String> assEnds = MVCCDElementConvert.toNamesTreeString(mcdUnique.getMcdAssEndsMandatory());
             String message = MessagesBuilder.getMessagesProperty("constraint.unique.not.absolute.assend.mandatory.error",
                     new String[]{nameEntity, mcdUnique.getName(),
-                            UtilDivers.ArrayStringToString(assEnds, ", ")});
+                            UtilDivers.arrayStringToString(assEnds, ", ")});
             resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
         }
         if (c5) {
             ArrayList<String> assEnds = MVCCDElementConvert.toNamesTreeString(mcdUnique.getMcdAssEndsOtherNoId());
             String message = MessagesBuilder.getMessagesProperty("constraint.unique.not.absolute.assend.noid.error",
                     new String[]{nameEntity, mcdUnique.getName(),
-                            UtilDivers.ArrayStringToString(assEnds, ", ")});
+                            UtilDivers.arrayStringToString(assEnds, ", ")});
             resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
 
         }

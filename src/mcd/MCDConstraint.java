@@ -2,6 +2,7 @@ package mcd;
 
 import constraints.Constraint;
 import m.MRelationDegree;
+import m.interfaces.IMUMLExtensionNamingInLine;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDConstraintService;
@@ -21,7 +22,7 @@ import java.util.Collections;
  * Une contrainte MCD contient un ensemble de paramètres, chacun d'eux étant un attribut inclus dans la contrainte.
  * La liste des paramètres correspond à la liste des enfants de la contraintes (attribut childs, hérité de MVCCDElement).
  */
-public abstract class MCDConstraint extends MCDOperation{
+public abstract class MCDConstraint extends MCDOperation  {
 
     private static final long serialVersionUID = 1000;
 
@@ -38,10 +39,6 @@ public abstract class MCDConstraint extends MCDOperation{
     }
 
     public abstract String getClassShortNameUI();
-
-    public abstract ArrayList<Stereotype> getToStereotypes();
-
-    public abstract ArrayList<Constraint> getToConstraints(); // Contraintes UML
 
     public ArrayList<MCDParameter> getMcdParameters() {
         ArrayList<MCDParameter> resultat = new ArrayList<MCDParameter>();

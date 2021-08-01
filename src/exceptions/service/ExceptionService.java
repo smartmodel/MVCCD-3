@@ -26,7 +26,7 @@ public class ExceptionService {
             //String nameMVCCDElement = mvccdElement.getNameTree();
             String nameElement = mvccdElement.getName();
             if (mvccdElement instanceof MElement) {
-                nameElement = ((MElement)mvccdElement).getNamePath();
+                nameElement = ((MElement)mvccdElement).getNameTreePath();
             }
             String nameClassMVCCDElement = mvccdElement.getClass().getName();
             String message = MessagesBuilder.getMessagesProperty(propertyMessage,

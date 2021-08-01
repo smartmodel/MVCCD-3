@@ -72,6 +72,7 @@ public class ParameterInputContent extends PanelInputContent {
     public void createTargets(){
 
         MCDOperation mcdOperation = (MCDOperation) getEditor().getMvccdElementParent();
+        Trace.println(getEditor().getMvccdElementParent().getName());
         MCDEntity mcdEntity = (MCDEntity) mcdOperation.getParent().getParent();
         ArrayList<MVCCDElement> targetsPotential = new ArrayList<MVCCDElement>();
 

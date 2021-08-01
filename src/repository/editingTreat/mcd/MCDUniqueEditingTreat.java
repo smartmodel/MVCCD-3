@@ -22,7 +22,6 @@ public class MCDUniqueEditingTreat extends MCDTableTransitoryEditingTreat {
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
         return new UniqueEditor(owner, (MCDContConstraints) parent, (MCDUnicity) element, mode,
                 new MCDUniqueEditingTreat());
-
     }
 
     @Override

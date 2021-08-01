@@ -63,6 +63,7 @@ Problèmes : Initialisation d'une relation en création
 //#MAJ 2021-06-21 IMCDModelService - getMCDAssociationNoIdOrIdNatural remplacé par getMCDAssociationNotIdCompAndNotNN
 //#MAJ 2021-06-21B MCDDatatype - type date autorisé poue NID
 //#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
-//#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
-//#MAJ 2021-07-03 Pas de persistence de tri dans la table de PanelInputContentIdTable
+//#MAJ 2021-07-28 Changement réalisation IMWithStereotype
+//#MAJ 2021-07-31 Spéficité d'un élément transitoire
+
 

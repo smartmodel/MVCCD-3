@@ -2,7 +2,8 @@ package preferences;
 
 
 import console.WarningLevel;
-import console.WarningLevelManager;
+import javafx.scene.input.KeyCode;
+import m.MUMLExtensionNaming;
 import main.MVCCDElement;
 import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
@@ -239,8 +240,6 @@ public class Preferences extends MVCCDElement {
 
     public static String CONSTRAINT_ABSOLUTE_NAME = "absolute";
     public static String CONSTRAINT_ABSOLUTE_LIENPROG = "absolute";
-
-
 
 
     public static String MCDDATATYPE_ROOT_NAME = "MCD";
@@ -686,6 +685,12 @@ public class Preferences extends MVCCDElement {
     // Préférences de projet (modifications User/Custom)
     // Général
     private String GENERAL_RELATION_NOTATION ;
+    private MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
+    private MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
+    private MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
+    private MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
+
+
     //private String PROJET_VERSION;  //Directement comme propriété de projet
 
     // MCD
@@ -905,6 +910,50 @@ public class Preferences extends MVCCDElement {
 
     public void setGENERAL_RELATION_NOTATION(String GENERAL_RELATION_NOTATION) {
         this.GENERAL_RELATION_NOTATION = GENERAL_RELATION_NOTATION;
+    }
+
+    public MUMLExtensionNaming getGENERAL_M_UML_STEREOTYPE_NAMING_INLINE() {
+        if (GENERAL_M_UML_STEREOTYPE_NAMING_INLINE == null){
+            GENERAL_M_UML_STEREOTYPE_NAMING_INLINE = MUMLExtensionNaming.ONELINE_MANYMARKER;
+        }
+        return GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
+    }
+
+    public void setGENERAL_M_UML_STEREOTYPE_NAMING_INLINE(MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INLINE) {
+        this.GENERAL_M_UML_STEREOTYPE_NAMING_INLINE = GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
+    }
+
+    public MUMLExtensionNaming getGENERAL_M_UML_STEREOTYPE_NAMING_INBOX() {
+        if (GENERAL_M_UML_STEREOTYPE_NAMING_INBOX == null){
+            GENERAL_M_UML_STEREOTYPE_NAMING_INBOX = MUMLExtensionNaming.MANYLINE;
+        }
+        return GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
+    }
+
+    public void setGENERAL_M_UML_STEREOTYPE_NAMING_INBOX(MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INBOX) {
+        this.GENERAL_M_UML_STEREOTYPE_NAMING_INBOX = GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
+    }
+
+    public MUMLExtensionNaming getGENERAL_M_UML_CONSTRAINT_NAMING_INLINE() {
+        if (GENERAL_M_UML_CONSTRAINT_NAMING_INLINE == null){
+            GENERAL_M_UML_CONSTRAINT_NAMING_INLINE = MUMLExtensionNaming.ONELINE_MANYMARKER;
+        }
+        return GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
+    }
+
+    public void setGENERAL_M_UML_CONSTRAINT_NAMING_INLINE(MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INLINE) {
+        this.GENERAL_M_UML_CONSTRAINT_NAMING_INLINE = GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
+    }
+
+    public MUMLExtensionNaming getGENERAL_M_UML_CONSTRAINT_NAMING_INBOX() {
+        if (GENERAL_M_UML_CONSTRAINT_NAMING_INBOX == null){
+            GENERAL_M_UML_CONSTRAINT_NAMING_INBOX = MUMLExtensionNaming.MANYLINE;
+        }
+        return GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
+    }
+
+    public void setGENERAL_M_UML_CONSTRAINT_NAMING_INBOX(MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INBOX) {
+        this.GENERAL_M_UML_CONSTRAINT_NAMING_INBOX = GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
     }
 
     public Boolean getMCD_JOURNALIZATION() {

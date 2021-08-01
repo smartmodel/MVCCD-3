@@ -1,6 +1,8 @@
 package mcd;
 
+import constraints.Constraint;
 import m.MRelationDegree;
+import m.interfaces.IMClass;
 import m.interfaces.IMCompletness;
 import main.MVCCDElement;
 import main.MVCCDManager;
@@ -12,6 +14,7 @@ import mcd.interfaces.IMCDSourceMLDRTable;
 import mcd.services.MCDEntityService;
 import project.ProjectElement;
 import resultat.Resultat;
+import stereotypes.Stereotype;
 
 import java.util.ArrayList;
 
@@ -24,7 +27,7 @@ import java.util.ArrayList;
  * d'associations (MCDAssEnd), que des extrémités de lien d'entité associative (MCDLinkEnd) ou que des extrémités
  * de liens de généralisation/spécialisation (MCDGSEnd).
  */
-public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElementWithTargets, IMCDSourceMLDRTable,
+public class MCDEntity extends MCDElement implements IMClass, IMCompletness, IMCDElementWithTargets, IMCDSourceMLDRTable,
         IMCDCompliant {
 
     private static final long serialVersionUID = 1000;
@@ -461,4 +464,33 @@ public class MCDEntity extends MCDElement implements  IMCompletness, IMCDElement
     }
 
 
+    @Override
+    public ArrayList<Stereotype> getStereotypes() {
+        return null;
+    }
+
+    @Override
+    public String getStereotypesInBox() {
+        return null;
+    }
+
+    @Override
+    public String getStereotypesInLine() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Constraint> getConstraints() {
+        return null;
+    }
+
+    @Override
+    public String getConstraintsInBox() {
+        return null;
+    }
+
+    @Override
+    public String getConstraintsInLine() {
+        return null;
+    }
 }

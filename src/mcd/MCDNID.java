@@ -6,6 +6,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 
@@ -49,7 +50,7 @@ public class MCDNID extends MCDUnicity {
 
 
     @Override
-    public ArrayList<Stereotype> getToStereotypes() {
+    public ArrayList<Stereotype> getStereotypes() {
         ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
 
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
@@ -63,6 +64,11 @@ public class MCDNID extends MCDUnicity {
         }
 
         return resultat;
+    }
+
+    @Override
+    public String getStereotypesInLine() {
+        return StereotypeService.getUMLNamingInLine(getStereotypes());
     }
 
 

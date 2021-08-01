@@ -4,6 +4,7 @@ import m.MElement;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 
@@ -34,12 +35,13 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     private MVCCDElement mvccdElementParentChoosed = null;     // la parent effectivement choisi lors de la saisie
     private boolean datasChanged = false;               // données modifiées par l'éditeur
 
-
     private boolean readOnly = false;
 
     protected int scope;
     private EditingTreat editingTreat = null;
 
+    //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+    private boolean newElementTransitory = false;
 
     public DialogEditor(Window owner,
                         MVCCDElement mvccdElementParent,
@@ -374,10 +376,18 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         }
     }
 
-    //TOD=-2 J'ai du écrire de mon propre dispose et nons surcharger car j'avais un appel parasite!
+    //TODO-2 J'ai du écrire de mon propre dispose et non surcharger car j'avais un appel parasite!
     public void myDispose(){
         setLocationCustom(getLocationOnScreen());
         setSizeCustom(getSize());
         super.dispose();
+    }
+
+    public boolean isNewElementTransitory() {
+        return newElementTransitory;
+    }
+
+    public void setNewElementTransitory(boolean newElementTransitory) {
+        this.newElementTransitory = newElementTransitory;
     }
 }

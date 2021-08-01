@@ -28,7 +28,7 @@ public class AttributeStereotypesEditor {
 
         // Stéréotypes applicables à un attribut
         ArrayList<Stereotype> stereotypes = StereotypesManager.instance().stereotypes().getStereotypesByClassName(MCDAttribute.class.getName());
-        stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
+        stereotypesUMLNames = StereotypeService.getUMLNames(stereotypes);
 
         Collections.sort(stereotypesUMLNames);
         init();
@@ -51,7 +51,7 @@ public class AttributeStereotypesEditor {
         shuttleDialog.setVisible(true);
         shuttleDialog.getResultat();
         ArrayList<String> stereotypesNames = shuttleDialog.getResultat();
-        textField.setText(UtilDivers.ArrayStringToString(stereotypesNames,""));
+        textField.setText(UtilDivers.arrayStringToString(stereotypesNames,""));
         //dialog.setCrtDatas(tabCrtDatas);
         //fireEditingStopped(); //Make the renderer reappear.
     }

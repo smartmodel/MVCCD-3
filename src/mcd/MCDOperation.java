@@ -1,13 +1,14 @@
 package mcd;
 
 import m.interfaces.IMCompletness;
+import m.interfaces.IMUMLExtensionNamingInLine;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDElementWithTargets;
 import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public abstract class MCDOperation extends MCDElement implements IMCompletness, IMCDElementWithTargets {
+public abstract class MCDOperation extends MCDElement implements IMCompletness, IMCDElementWithTargets, IMUMLExtensionNamingInLine {
 
     private static final long serialVersionUID = 1000;
 

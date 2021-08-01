@@ -12,17 +12,16 @@ public class UtilDivers {
     public static final int NULL = 1;
     public static final int EMPTY = 2;
 
-    public static String ArrayStringToString(ArrayList<String> array, String separator) {
+    public static String arrayStringToString(ArrayList<String> array, String separator) {
         String resultat = "";
         boolean first = true;
         if (array != null) {
             for (String element : array) {
-                if (first) {
+                if (! first) {
                     resultat = resultat + separator;
-                    first = false;
                 }
                 resultat = resultat + element;
-
+                first = false;
             }
         }
         return resultat;
