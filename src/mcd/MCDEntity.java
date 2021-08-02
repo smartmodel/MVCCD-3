@@ -1,6 +1,9 @@
 package mcd;
 
 import constraints.Constraint;
+import constraints.ConstraintService;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import m.MRelationDegree;
 import m.interfaces.IMClass;
 import m.interfaces.IMCompletness;
@@ -12,9 +15,14 @@ import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMPathOnlyRepositoryTree;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mcd.services.MCDEntityService;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.ProjectElement;
 import resultat.Resultat;
 import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
@@ -466,31 +474,50 @@ public class MCDEntity extends MCDElement implements IMClass, IMCompletness, IMC
 
     @Override
     public ArrayList<Stereotype> getStereotypes() {
-        return null;
+        // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_ENTITY_LIENPROG));
+
+        return resultat;
     }
 
     @Override
     public String getStereotypesInBox() {
-        return null;
+        return StereotypeService.getUMLNamingInBox(getStereotypes());
     }
 
     @Override
     public String getStereotypesInLine() {
-        return null;
+        return StereotypeService.getUMLNamingInLine(getStereotypes());
     }
 
     @Override
     public ArrayList<Constraint> getConstraints() {
-        return null;
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        if (ordered){
+            resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                    preferences.CONSTRAINT_ORDERED_LIENPROG));
+        }
+
+        return resultat;
     }
 
     @Override
     public String getConstraintsInBox() {
-        return null;
+        return ConstraintService.getUMLNamingInBox(getConstraints());
     }
 
     @Override
     public String getConstraintsInLine() {
-        return null;
+        return ConstraintService.getUMLNamingInLine(getConstraints());
     }
 }

@@ -1,14 +1,23 @@
 package mdr;
 
+import constraints.Constraint;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
+import m.interfaces.IMClass;
 import m.services.MElementService;
 import main.MVCCDElement;
 import mdr.interfaces.IMDRElementNamingPreferences;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.ProjectElement;
+import stereotypes.Stereotype;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public abstract class MDRTable extends MDRTableOrView implements IMDRElementNamingPreferences {
+public abstract class MDRTable extends MDRTableOrView implements IMClass, IMDRElementNamingPreferences {
 
     private  static final long serialVersionUID = 1000;
 
@@ -157,4 +166,31 @@ public abstract class MDRTable extends MDRTableOrView implements IMDRElementNami
         }
         return null;
     }
+
+    @Override
+    public ArrayList<Stereotype> getStereotypes() {
+        // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        resultat.add(stereotypes.getStereotypeByLienProg(MDRTable.class.getName(),
+                preferences.STEREOTYPE_TABLE_LIENPROG));
+
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<Constraint> getConstraints() {
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+
+        return resultat;
+    }
+
+
 }

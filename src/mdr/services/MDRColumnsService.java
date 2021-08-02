@@ -1,9 +1,17 @@
 package mdr.services;
 
+import constraints.Constraint;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
+import datatypes.MCDDatatype;
 import exceptions.CodeApplException;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
+import mcd.MCDAttribute;
 import mdr.MDRColumn;
+import mldr.services.MLDRContConstraintsService;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import utilities.Trace;
 
 import java.util.ArrayList;
@@ -128,4 +136,42 @@ public class MDRColumnsService {
         }
      }
 
+    public static ArrayList<Constraint> getConstraints(MDRColumn mdrColumn) {
+
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        Constraint constraintDatatype = getConstraintDatatype(mdrColumn);
+        if (constraintDatatype != null) {
+            resultat.add(constraintDatatype);
+        }
+
+        if (mdrColumn.isFrozen()){
+            resultat.add(constraints.getConstraintByLienProg(MDRColumn.class.getName(),
+                    preferences.CONSTRAINT_FROZEN_LIENPROG));
+        }
+        return resultat;
+
+    }
+
+    private static Constraint getConstraintDatatype(MDRColumn mdrColumn) {
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        if (mdrColumn.isFromMcdAttributeSource()){
+            // Colonne provenant d'un attribut
+            MCDAttribute mcdAttributeSource = mdrColumn.getMcdAttributeSource();
+            MCDDatatype mcdDatatypeSource = mcdAttributeSource.getMCDDatatype();
+            return constraints.getConstraintByLienProg(MDRColumn.class.getName(),
+                    mcdDatatypeSource.getLienProg());
+        } else if (mdrColumn.isPk() || mdrColumn.isFk()){
+            // Colonne PK générée à partir d'une entité sans attribut AID
+            // Colonne FK issue de la transformation
+            return constraints.getConstraintByLienProg(MDRColumn.class.getName(),
+                    preferences.getMCD_AID_DATATYPE_LIENPROG());
+        }
+        return null;
+    }
 }

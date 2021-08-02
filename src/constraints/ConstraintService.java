@@ -51,7 +51,13 @@ public class ConstraintService {
 
 
     public static String getUMLNamingInLine(ArrayList<Constraint> constraints){
-        MUMLExtensionNaming mumlExtensionNaming =  PreferencesManager.instance().preferences().getGENERAL_M_UML_STEREOTYPE_NAMING_INLINE();
+        MUMLExtensionNaming mumlExtensionNaming =  PreferencesManager.instance().preferences().getGENERAL_M_UML_CONSTRAINT_NAMING_INLINE();
+        return ConstraintService.getUMLNaming(constraints, mumlExtensionNaming);
+
+    }
+
+    public static String getUMLNamingInBox(ArrayList<Constraint> constraints){
+        MUMLExtensionNaming mumlExtensionNaming =  PreferencesManager.instance().preferences().getGENERAL_M_UML_CONSTRAINT_NAMING_INBOX();
         return ConstraintService.getUMLNaming(constraints, mumlExtensionNaming);
 
     }

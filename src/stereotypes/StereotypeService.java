@@ -48,6 +48,13 @@ public class StereotypeService {
 
     }
 
+
+    public static String getUMLNamingInBox(ArrayList<Stereotype> stereotypes){
+        MUMLExtensionNaming mumlExtensionNaming =  PreferencesManager.instance().preferences().getGENERAL_M_UML_STEREOTYPE_NAMING_INBOX();
+        return StereotypeService.getUMLNaming(stereotypes, mumlExtensionNaming);
+
+    }
+
     public static String getUMLNaming(ArrayList<Stereotype> stereotypes, MUMLExtensionNaming mNaming){
         if (mNaming == MUMLExtensionNaming.ONELINE_ONEMARKER) {
             return getUMLNamingOneLineOneMarker(stereotypes);

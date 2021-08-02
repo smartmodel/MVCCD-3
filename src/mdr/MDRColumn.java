@@ -1,18 +1,31 @@
 package mdr;
 
+import constraints.Constraint;
+import constraints.ConstraintService;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import m.MRelEndMulti;
 import m.MRelEndMultiPart;
+import m.interfaces.IMUMLExtensionNamingInLine;
 import mcd.MCDAttribute;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRColumnsService;
 import mldr.MLDRColumn;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.ProjectElement;
+import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
 import utilities.Trace;
 
+import java.util.ArrayList;
+
 public abstract class MDRColumn extends MDRElement implements
-        IMDRParameter, IMDRElementNamingPreferences, IMDRElementWithIteration {
+        IMUMLExtensionNamingInLine, IMDRParameter, IMDRElementNamingPreferences, IMDRElementWithIteration {
 
     private Integer iteration = null; // Si un objet est créé directement et non par transformation
 
@@ -225,5 +238,37 @@ public abstract class MDRColumn extends MDRElement implements
     public boolean isFromMcdAttributeSource(){
         return getMcdAttributeSource() != null;
     }
+
+
+
+    @Override
+    public ArrayList<Stereotype> getStereotypes() {
+        // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+
+        return resultat;
+    }
+
+
+    @Override
+    public String getStereotypesInLine() {
+        return StereotypeService.getUMLNamingInLine(getStereotypes());
+    }
+
+
+    @Override
+    public ArrayList<Constraint> getConstraints() {
+        return MDRColumnsService.getConstraints(this);
+    }
+
+    @Override
+    public String getConstraintsInLine() {
+        return ConstraintService.getUMLNamingInLine(getConstraints());
+    }
+
 
 }

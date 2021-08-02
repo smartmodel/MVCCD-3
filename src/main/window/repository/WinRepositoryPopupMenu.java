@@ -6,6 +6,8 @@ import datatypes.MDDatatype;
 import diagram.mcd.MCDDiagram;
 import exceptions.service.ExceptionService;
 import m.interfaces.IMCompletness;
+import m.interfaces.IMUMLExtensionNamingInBox;
+import m.interfaces.IMUMLExtensionNamingInLine;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
@@ -360,7 +362,17 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     }
                     if (mvccdElement instanceof MDRRelFKEnd) {
                         MDRRelFKEnd mdrRelFKEnd = (MDRRelFKEnd) mvccdElement;
-                        message = message + Preferences.SYSTEM_LINE_SEPARATOR + mdrRelFKEnd.getRoleText();
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Rôle : " + mdrRelFKEnd.getRoleText();
+                    }
+                    if (mvccdElement instanceof IMUMLExtensionNamingInLine) {
+                        IMUMLExtensionNamingInLine imumlExtensionNamingInLine = (IMUMLExtensionNamingInLine) mvccdElement;
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Stéréo InLine : " + imumlExtensionNamingInLine.getStereotypesInLine();
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Contr. InLine : " + imumlExtensionNamingInLine.getConstraintsInLine();
+                    }
+                    if (mvccdElement instanceof IMUMLExtensionNamingInBox) {
+                        IMUMLExtensionNamingInBox imumlExtensionNamingInBox = (IMUMLExtensionNamingInBox) mvccdElement;
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Stéréo InBox : "  + imumlExtensionNamingInBox.getStereotypesInBox();
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Contr. InBox : " + imumlExtensionNamingInBox.getConstraintsInBox();
                     }
 
                     new DialogMessage().showOk(mvccdWindow, message);

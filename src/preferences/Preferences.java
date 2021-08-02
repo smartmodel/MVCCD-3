@@ -204,6 +204,17 @@ public class Preferences extends MVCCDElement {
 
     public static String STEREOTYPE_SEPARATOR = "-";
 
+    public static String STEREOTYPE_ENTITY_NAME = "Entity";
+    public static String STEREOTYPE_ENTITY_LIENPROG = "Entity";
+    public static String STEREOTYPE_TABLE_NAME = "Table";
+    public static String STEREOTYPE_TABLE_LIENPROG = "Table";
+    public static String STEREOTYPE_ORACLE_NAME = "Oracle";
+    public static String STEREOTYPE_ORACLE_LIENPROG = "Oracle";
+    public static String STEREOTYPE_MYSQL_NAME = "MySQL";
+    public static String STEREOTYPE_MYSQL_LIENPROG = "MySQL";
+    public static String STEREOTYPE_POSTGRESQL_NAME = "PostgreSQL";
+    public static String STEREOTYPE_POSTGRESQL_LIENPROG = "PostgreSQL";
+
     public static String STEREOTYPE_AID_NAME = "AID";
     public static String STEREOTYPE_AID_LIENPROG = "AID";
     public static String STEREOTYPE_M_NAME = "M";
@@ -226,6 +237,17 @@ public class Preferences extends MVCCDElement {
     public static int STEREOTYPE_U_MAX = 10;
     public static String STEREOTYPE_U_NAME = "U";
     public static String STEREOTYPE_U_LIENPROG = "U";
+
+    public static String STEREOTYPE_PK_NAME = "PK";
+    public static String STEREOTYPE_PK_LIENPROG = "PK";
+
+    public static int STEREOTYPE_FK_MAX = 20;
+    public static String STEREOTYPE_FK_NAME = "FK";
+    public static String STEREOTYPE_FK_LIENPROG = "FK";
+
+    public static int STEREOTYPE_PFK_MAX = 5;
+    public static String STEREOTYPE_PFK_NAME = "PFK";
+    public static String STEREOTYPE_PFK_LIENPROG = "PFK";
 
     public static String CONSTRAINT_ORDERED_NAME = "ordered";
     public static String CONSTRAINT_ORDERED_LIENPROG = "ordered";

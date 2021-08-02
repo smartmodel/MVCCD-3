@@ -1,5 +1,8 @@
 package mpdr;
 
+import constraints.Constraint;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import md.MDElement;
 import mdr.MDRConstraint;
 import mdr.MDRTable;
@@ -13,7 +16,13 @@ import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.services.MPDRColumnService;
 import mpdr.services.MPDRTableService;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.ProjectElement;
+import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
@@ -92,4 +101,27 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
 
     public abstract MDRConstraint createUnique(MLDRUnique mldrUnique);
+
+    public ArrayList<Stereotype> getStereotypes() {
+        // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
+        ArrayList<Stereotype> resultat = super.getStereotypes();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+
+    @Override
+    public ArrayList<Constraint> getConstraints() {
+        ArrayList<Constraint> resultat = super.getConstraints();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+
 }

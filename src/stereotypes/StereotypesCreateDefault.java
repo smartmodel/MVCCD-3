@@ -1,9 +1,12 @@
 package stereotypes;
 
-import mcd.MCDAssociation;
-import mcd.MCDAttribute;
-import mcd.MCDNID;
-import mcd.MCDUnique;
+import mcd.*;
+import mdr.MDRColumn;
+import mdr.MDRTable;
+import mldr.MLDRTable;
+import mpdr.mysql.MPDRMySQLTable;
+import mpdr.oracle.MPDROracleTable;
+import mpdr.postgresql.MPDRPostgreSQLTable;
 import preferences.Preferences;
 
 public class StereotypesCreateDefault {
@@ -17,9 +20,11 @@ public class StereotypesCreateDefault {
     public void create() {
         createMCD();
         createMDR();
+        createMLDR();
+        createMPDROracle();
+        createMPDRMySQL();
+        createMPDRPostgreSQL();
     }
-
-
 
 
     private Stereotype createStereotype(String name, String lienProg, String className){
@@ -37,6 +42,11 @@ public class StereotypesCreateDefault {
 
     public void createMCD(){
         createStereotype(
+                Preferences.STEREOTYPE_ENTITY_NAME,
+                Preferences.STEREOTYPE_ENTITY_LIENPROG,
+                MCDEntity.class.getName());
+
+        createStereotype(
                 Preferences.STEREOTYPE_AID_NAME,
                 Preferences.STEREOTYPE_AID_LIENPROG,
                 MCDAttribute.class.getName());
@@ -48,19 +58,26 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_L_NAME,
                 Preferences.STEREOTYPE_L_LIENPROG,
                 MCDAttribute.class.getName());
+
         createStereotype(
                 Preferences.STEREOTYPE_LP_NAME,
                 Preferences.STEREOTYPE_LP_LIENPROG,
                 MCDNID.class.getName());
+
+        //#MAJ 2021-08-01 Vérfification code Stéréotypes et contraintes
+        //Uniquement des stéréotypes indicés...
+        /*
         createStereotype(
                 Preferences.STEREOTYPE_NID_NAME,
-                Preferences.STEREOTYPE_LP_LIENPROG,
+                Preferences.STEREOTYPE_NID_LIENPROG,
                 MCDNID.class.getName());
+
+         */
+
         createStereotype(
                 Preferences.STEREOTYPE_NID_NAME,
                 Preferences.STEREOTYPE_NID_LIENPROG,
                 MCDAssociation.class.getName());
-        createStereotypesMCDNID();
         createStereotype(
                 Preferences.STEREOTYPE_CID_NAME,
                 Preferences.STEREOTYPE_CID_LIENPROG,
@@ -69,6 +86,9 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_CP_NAME,
                 Preferences.STEREOTYPE_CP_LIENPROG,
                 MCDAssociation.class.getName());
+
+        // Stéréotypes indicés
+        createStereotypesMCDNID();
         createStereotypesMCDU();
     }
 
@@ -107,7 +127,49 @@ public class StereotypesCreateDefault {
     }
 
     private void createMDR() {
-     }
+        createStereotype(
+                Preferences.STEREOTYPE_TABLE_NAME,
+                Preferences.STEREOTYPE_TABLE_LIENPROG,
+                MDRTable.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_M_NAME,
+                Preferences.STEREOTYPE_M_LIENPROG,
+                MDRColumn.class.getName());
+
+
+    }
+
+    private void createMLDR() {
+
+    }
+
+
+    private void createMPDROracle() {
+        createStereotype(
+                Preferences.STEREOTYPE_ORACLE_NAME,
+                Preferences.STEREOTYPE_ORACLE_LIENPROG,
+                MPDROracleTable.class.getName());
+
+    }
+
+    private void createMPDRMySQL() {
+        createStereotype(
+                Preferences.STEREOTYPE_MYSQL_NAME,
+                Preferences.STEREOTYPE_MYSQL_LIENPROG,
+                MPDRMySQLTable.class.getName());
+
+    }
+
+    private void createMPDRPostgreSQL() {
+        createStereotype(
+                Preferences.STEREOTYPE_POSTGRESQL_NAME,
+                Preferences.STEREOTYPE_POSTGRESQL_LIENPROG,
+                MPDRPostgreSQLTable.class.getName());
+
+    }
+
+
 
 
 }
