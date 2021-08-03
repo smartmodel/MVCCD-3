@@ -245,7 +245,7 @@ public class Preferences extends MVCCDElement {
     public static String STEREOTYPE_FK_NAME = "FK";
     public static String STEREOTYPE_FK_LIENPROG = "FK";
 
-    public static int STEREOTYPE_PFK_MAX = 5;
+    public static int STEREOTYPE_PFK_MAX = 20;  // Même indiçage que FK !
     public static String STEREOTYPE_PFK_NAME = "PFK";
     public static String STEREOTYPE_PFK_LIENPROG = "PFK";
 
@@ -664,6 +664,11 @@ public class Preferences extends MVCCDElement {
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1 = "mdr.pref.column.fk.one.diff.indice.start.1";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2 = "mdr.pref.column.fk.one.diff.indice.start.2";
 
+    public static String MDR_PREF_COLUMN_PFK_STEREOTYPE_BOTH = "mdr.pref.column.pfk.stereotype.both";
+    public static String MDR_PREF_COLUMN_PFK_STEREOTYPE_SEPARATE = "mdr.pref.column.pfk.stereotype.separate";
+
+    public static Boolean MDR_PREF_COLUMN_NID_DEFAULT = true;
+
     public static String WARNING_LEVEL_DEVELOPMENT= "warning.level.development";
     public static String WARNING_LEVEL_DEBUG = "warning.level.debug";
     public static String WARNING_LEVEL_DETAILS = "warning.level.details";
@@ -774,6 +779,9 @@ public class Preferences extends MVCCDElement {
     // MDR Préférences
     private Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR = null ;
     private String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = null;
+    private String MDR_PREF_COLUMN_PFK_STEREOTYPE = null;
+    private Boolean MDR_PREF_COLUMN_NID = true;
+
 
     // MLDR Préférences
     private MDRNamingLength MLDR_PREF_NAMING_LENGTH = null;
@@ -1447,6 +1455,28 @@ public class Preferences extends MVCCDElement {
 
     public void setMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF(String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF) {
         this.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF;
+    }
+
+    public String getMDR_PREF_COLUMN_PFK_STEREOTYPE() {
+        if (MDR_PREF_COLUMN_PFK_STEREOTYPE == null){
+            MDR_PREF_COLUMN_PFK_STEREOTYPE = MDR_PREF_COLUMN_PFK_STEREOTYPE_BOTH;
+        }
+        return MDR_PREF_COLUMN_PFK_STEREOTYPE;
+    }
+
+    public void setMDR_PREF_COLUMN_PFK_STEREOTYPE(String MDR_PREF_COLUMN_PFK_STEREOTYPE) {
+        this.MDR_PREF_COLUMN_PFK_STEREOTYPE = MDR_PREF_COLUMN_PFK_STEREOTYPE;
+    }
+
+    public Boolean getMDR_PREF_COLUMN_NID() {
+        if (MDR_PREF_COLUMN_NID == null){
+            MDR_PREF_COLUMN_NID = MDR_PREF_COLUMN_NID_DEFAULT;
+        }
+        return MDR_PREF_COLUMN_NID;
+    }
+
+    public void setMDR_PREF_COLUMN_NID(Boolean MDR_PREF_COLUMN_NID) {
+        this.MDR_PREF_COLUMN_NID = MDR_PREF_COLUMN_NID;
     }
 
     public MDRNamingLength getMLDR_PREF_NAMING_LENGTH() {

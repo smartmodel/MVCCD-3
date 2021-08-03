@@ -181,16 +181,6 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         return resultat;
     }
 
-    @Override
-    public String getStereotypesInBox() {
-        return StereotypeService.getUMLNamingInBox(getStereotypes());
-    }
-
-    @Override
-    public String getStereotypesInLine() {
-        return StereotypeService.getUMLNamingInLine(getStereotypes());
-    }
-
 
     @Override
     public ArrayList<Constraint> getConstraints() {
@@ -200,16 +190,6 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         Preferences preferences = PreferencesManager.instance().preferences();
 
         return resultat;
-    }
-
-    @Override
-    public String getConstraintsInBox() {
-        return ConstraintService.getUMLNamingInBox(getConstraints());
-    }
-
-    @Override
-    public String getConstraintsInLine() {
-        return ConstraintService.getUMLNamingInLine(getConstraints());
     }
 
 }

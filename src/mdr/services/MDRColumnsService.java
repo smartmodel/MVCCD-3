@@ -8,6 +8,7 @@ import exceptions.CodeApplException;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import mcd.MCDAttribute;
+import mcd.MCDNID;
 import mdr.MDRColumn;
 import mldr.services.MLDRContConstraintsService;
 import preferences.Preferences;
@@ -173,5 +174,14 @@ public class MDRColumnsService {
                     preferences.getMCD_AID_DATATYPE_LIENPROG());
         }
         return null;
+    }
+
+    public static ArrayList<MCDNID> partOfMCDNIds(MDRColumn mdrColumn) {
+        ArrayList<MCDNID> resultat = new ArrayList<MCDNID>();
+        if (mdrColumn.getMcdAttributeSource() != null){
+            MCDAttribute mcdAttributeSource = (MCDAttribute) mdrColumn.getMcdAttributeSource();
+            resultat.addAll(mcdAttributeSource.partOfNIds());
+        }
+        return resultat;
     }
 }

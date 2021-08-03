@@ -1,8 +1,7 @@
 package stereotypes;
 
 import mcd.*;
-import mdr.MDRColumn;
-import mdr.MDRTable;
+import mdr.*;
 import mldr.MLDRTable;
 import mpdr.mysql.MPDRMySQLTable;
 import mpdr.oracle.MPDROracleTable;
@@ -133,15 +132,96 @@ public class StereotypesCreateDefault {
                 MDRTable.class.getName());
 
         createStereotype(
+                Preferences.STEREOTYPE_PK_NAME,
+                Preferences.STEREOTYPE_PK_LIENPROG,
+                MDRColumn.class.getName());
+
+        createStereotype(
                 Preferences.STEREOTYPE_M_NAME,
                 Preferences.STEREOTYPE_M_LIENPROG,
                 MDRColumn.class.getName());
 
+        createStereotype(
+                Preferences.STEREOTYPE_PK_NAME,
+                Preferences.STEREOTYPE_PK_LIENPROG,
+                MDRConstraint.class.getName());
 
+        createStereotype(
+                Preferences.STEREOTYPE_PK_NAME,
+                Preferences.STEREOTYPE_PK_LIENPROG,
+                MDRPK.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_U_NAME,
+                Preferences.STEREOTYPE_U_LIENPROG,
+                MDRUnique.class.getName());
+
+        createStereotypesMDRFK();
+        createStereotypesMDRPFK();
+        createStereotypesMDRNID();  // Pour les colonnes et non les contraintes
+        // Difficile à traiter et peut-être source de confusion
+        // Je ne les traite pas pour l'instant dans MDRColumn.getStereotypes()
+        createStereotypesMDRU();  // Pour les colonnes et non les contraintes
     }
 
-    private void createMLDR() {
 
+
+    private void createStereotypesMDRFK() {
+        for (int i = 0; i < Preferences.STEREOTYPE_FK_MAX; i++){
+            createStereotypeMulti(
+                    Preferences.STEREOTYPE_FK_NAME,
+                    Preferences.STEREOTYPE_FK_LIENPROG,
+                    MDRColumn.class.getName(),
+                    i );
+            createStereotypeMulti(
+                    Preferences.STEREOTYPE_FK_NAME,
+                    Preferences.STEREOTYPE_FK_LIENPROG,
+                    MDRFK.class.getName(),
+                    i );
+        }
+    }
+
+
+
+    private void createStereotypesMDRPFK() {
+        for (int i = 0; i < Preferences.STEREOTYPE_PFK_MAX; i++){
+            createStereotypeMulti(
+                    Preferences.STEREOTYPE_PFK_NAME,
+                    Preferences.STEREOTYPE_PFK_LIENPROG,
+                    MDRColumn.class.getName(),
+                    i );
+            createStereotypeMulti(
+                    Preferences.STEREOTYPE_PFK_NAME,
+                    Preferences.STEREOTYPE_PFK_LIENPROG,
+                    MDRFK.class.getName(),
+                    i );
+        }
+    }
+
+
+    private void createStereotypesMDRNID() {
+        for (int i = 0; i < Preferences.STEREOTYPE_NID_MAX; i++){
+            createStereotypeMulti(
+                    Preferences.STEREOTYPE_NID_NAME,
+                    Preferences.STEREOTYPE_NID_LIENPROG,
+                    MDRColumn.class.getName(),
+                    i );
+        }
+    }
+
+    private void createStereotypesMDRU() {
+        for (int i = 0; i < Preferences.STEREOTYPE_U_MAX; i++){
+            createStereotypeMulti(
+                    Preferences.STEREOTYPE_U_NAME,
+                    Preferences.STEREOTYPE_U_LIENPROG,
+                    MDRColumn.class.getName(),
+                    i );
+        }
+    }
+
+
+
+    private void createMLDR() {
     }
 
 
@@ -150,7 +230,6 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_ORACLE_NAME,
                 Preferences.STEREOTYPE_ORACLE_LIENPROG,
                 MPDROracleTable.class.getName());
-
     }
 
     private void createMPDRMySQL() {
@@ -158,7 +237,6 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_MYSQL_NAME,
                 Preferences.STEREOTYPE_MYSQL_LIENPROG,
                 MPDRMySQLTable.class.getName());
-
     }
 
     private void createMPDRPostgreSQL() {
@@ -166,10 +244,6 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_POSTGRESQL_NAME,
                 Preferences.STEREOTYPE_POSTGRESQL_LIENPROG,
                 MPDRPostgreSQLTable.class.getName());
-
     }
-
-
-
 
 }

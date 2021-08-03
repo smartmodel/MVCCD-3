@@ -49,6 +49,8 @@ public class MCDNID extends MCDUnicity {
 
 
 
+
+
     @Override
     public ArrayList<Stereotype> getStereotypes() {
         ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
@@ -65,12 +67,6 @@ public class MCDNID extends MCDUnicity {
 
         return resultat;
     }
-
-    @Override
-    public String getStereotypesInLine() {
-        return StereotypeService.getUMLNamingInLine(getStereotypes());
-    }
-
 
     public boolean isLienProg() {
         return lienProg;

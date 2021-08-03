@@ -8,6 +8,8 @@ import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.interfaces.IMUMLExtensionNamingInLine;
 import mcd.MCDAttribute;
+import mcd.MCDNID;
+import mcd.services.MCDAttributeService;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
@@ -249,6 +251,27 @@ public abstract class MDRColumn extends MDRElement implements
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
         Preferences preferences = PreferencesManager.instance().preferences();
 
+        if (isPk()){
+            if( ! isPFk()){
+                resultat.add(stereotypes.getStereotypeByLienProg(MDRColumn.class.getName(),
+                        preferences.STEREOTYPE_PK_LIENPROG));
+            } else {
+                resultat.add(getFk().getPFKStereotype());
+            }
+        } else {
+            if (isMandatory()){
+                resultat.add(stereotypes.getStereotypeByLienProg(MDRColumn.class.getName(),
+                        preferences.STEREOTYPE_M_LIENPROG));
+            }
+            if (isFk()){
+                resultat.add(getFk().getDefaultStereotype());
+            }
+            for (MCDNID mcdNID : partOfMCDNIds()){
+                if (preferences.getMDR_PREF_COLUMN_NID()) {
+                    resultat.add(mcdNID.getDefaultStereotype());
+                }
+            }
+        }
 
         return resultat;
     }
@@ -268,6 +291,11 @@ public abstract class MDRColumn extends MDRElement implements
     @Override
     public String getConstraintsInLine() {
         return ConstraintService.getUMLNamingInLine(getConstraints());
+    }
+
+
+    public ArrayList<MCDNID> partOfMCDNIds(){
+        return MDRColumnsService.partOfMCDNIds(this);
     }
 
 

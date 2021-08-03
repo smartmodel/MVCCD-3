@@ -33,7 +33,6 @@ public abstract class MCDUnicity extends MCDConstraint{
         super(parent, name);
     }
 
-    public abstract Stereotype getDefaultStereotype();
 
     public abstract String getOfUnicity();
 
@@ -57,10 +56,6 @@ public abstract class MCDUnicity extends MCDConstraint{
                     preferences.CONSTRAINT_ABSOLUTE_LIENPROG));
         }
         return resultat;
-    }
-
-    public String getConstraintsInLine(){
-        return ConstraintService.getUMLNamingInLine(getConstraints());
     }
 
     public abstract MDRUniqueNature getMDRUniqueNature();

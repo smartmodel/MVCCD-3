@@ -76,17 +76,6 @@ public class MPDRPostgreSQLTable extends MPDRTable {
     }
 
     @Override
-    public String getStereotypesInBox() {
-        return StereotypeService.getUMLNamingInBox(getStereotypes());
-    }
-
-    @Override
-    public String getStereotypesInLine() {
-        return StereotypeService.getUMLNamingInLine(getStereotypes());
-    }
-
-
-    @Override
     public ArrayList<Constraint> getConstraints() {
         ArrayList<Constraint> resultat = super.getConstraints();
 
@@ -94,16 +83,6 @@ public class MPDRPostgreSQLTable extends MPDRTable {
         Preferences preferences = PreferencesManager.instance().preferences();
 
         return resultat;
-    }
-
-    @Override
-    public String getConstraintsInBox() {
-        return ConstraintService.getUMLNamingInBox(getConstraints());
-    }
-
-    @Override
-    public String getConstraintsInLine() {
-        return ConstraintService.getUMLNamingInLine(getConstraints());
     }
 
 }

@@ -54,12 +54,6 @@ public class MCDUnique extends MCDUnicity{
     }
 
     @Override
-    public String getStereotypesInLine() {
-       return StereotypeService.getUMLNamingInLine(getStereotypes());
-    }
-
-
-    @Override
     public String getClassShortNameUI() {
         return CLASSSHORTNAMEUI;
     }

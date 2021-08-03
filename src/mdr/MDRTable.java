@@ -17,7 +17,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public abstract class MDRTable extends MDRTableOrView implements IMClass, IMDRElementNamingPreferences {
+public abstract class MDRTable extends MDRTableOrView {
 
     private  static final long serialVersionUID = 1000;
 
