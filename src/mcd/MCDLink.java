@@ -85,25 +85,6 @@ public class MCDLink extends MCDRelation {
         return CLASSSHORTNAMEUI;
     }
 
-    @Override
-    public ArrayList<Stereotype> getToStereotypes() {
-        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
-
-        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
-        Preferences preferences = PreferencesManager.instance().preferences();
-
-        return resultat;
-    }
-
-    @Override
-    public ArrayList<Constraint> getToConstraints() {
-        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
-
-        Constraints constraints = ConstraintsManager.instance().constraints();
-        Preferences preferences = PreferencesManager.instance().preferences();
-
-        return resultat;
-    }
 
 
     public void delete(){
@@ -128,6 +109,5 @@ public class MCDLink extends MCDRelation {
 
         super.delete();
     }
-
 
 }

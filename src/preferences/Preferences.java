@@ -406,8 +406,10 @@ public class Preferences extends MVCCDElement {
     public static String ICONE_RELATION_ASS_NONID_LG = "AssNonId.png";
     public static String ICONE_RELATION_ASS_ID_COMP_LEFT_LG = "AssIdCompLeft.png";
     public static String ICONE_RELATION_ASS_ID_COMP_RIGHT_LG = "AssIdCompRight.png";
+    public static String ICONE_RELATION_ASS_ID_COMP_STEREO_LG = "AssIdCompStereo.png";
     public static String ICONE_RELATION_ASS_ID_NAT_LEFT_LG = "AssIdNatLeft.png";
     public static String ICONE_RELATION_ASS_ID_NAT_RIGHT_LG = "AssIdNatRight.png";
+    public static String ICONE_RELATION_ASS_ID_NAT_STEREO_LG = "AssIdNatStereo.png";
     public static String ICONE_RELATION_LINK_LEFT_LG = "LinkLeft.png";
     public static String ICONE_RELATION_LINK_RIGHT_LG = "LinkRight.png";
 
@@ -640,6 +642,8 @@ public class Preferences extends MVCCDElement {
     public static String MDR_COLUMN_FK_NAME_FORMAT_DEFAULT = "{parentTableShortName}{tableSep}{parentRoleShortName}{roleSep}{colName}";
     public static String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT_DEFAULT = "{colNameOneAncestor}{indColFK}";
     public static String MDR_PK_NAME_FORMAT_DEFAULT = "{PK_}{tableShortName}";
+    public static String MDR_PK_NN_NAME_FORMAT_DEFAULT = "{PK_}{ATableShortName}{tableSep}{assShortName}{roleA}{roleSep}{roleB}{tableSep}{BTableShortName}";
+    public static String MDR_PK_NN_NAME_INDICE_FORMAT_DEFAULT = "{PK_}{ATableShortName}{tableSep}{BTableShortName}{indTableNN}";
     public static String MDR_INDICE_REGEXPR = "([0-9]+)$";
     public static Integer MDR_INDICE_TABLENN_LENGTH = 1 ;
     public static Integer MDR_INDICE_COL_FK_LENGTH = 1 ;
@@ -761,6 +765,8 @@ public class Preferences extends MVCCDElement {
     private String MDR_COLUMN_ATTR_SHORT_NAME_FORMAT = null;
     private String MDR_COLUMN_DERIVED_MARKER = null;
     private String MDR_PK_NAME_FORMAT = null;
+    private String MDR_PK_NN_NAME_FORMAT = null;
+    private String MDR_PK_NN_NAME_INDICE_FORMAT = null;
     private String MDR_COLUMN_PK_NAME_FORMAT = null;
     private String MDR_COLUMN_FK_NAME_FORMAT = null;
     private String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT = null;
@@ -1277,6 +1283,8 @@ public class Preferences extends MVCCDElement {
     public void setMDR_PK_NAME_FORMAT(String MDR_PK_NAME_FORMAT) {
         this.MDR_PK_NAME_FORMAT = MDR_PK_NAME_FORMAT;
     }
+
+
 
     public String getMDR_COLUMN_FK_NAME_FORMAT() {
         if (MDR_COLUMN_FK_NAME_FORMAT == null){

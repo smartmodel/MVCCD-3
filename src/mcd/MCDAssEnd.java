@@ -162,18 +162,17 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
     }
 
     @Override
-    public ArrayList<Stereotype> getToStereotypes() {
-        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+    public ArrayList<Stereotype> getStereotypes() {
+        ArrayList<Stereotype> resultat = super.getStereotypes();
 
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
         Preferences preferences = PreferencesManager.instance().preferences();
-
-        return resultat;
+      return resultat;
     }
 
     @Override
-    public ArrayList<Constraint> getToConstraints() {
-        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+    public ArrayList<Constraint> getConstraints() {
+        ArrayList<Constraint> resultat = super.getConstraints();
 
         Constraints constraints = ConstraintsManager.instance().constraints();
         Preferences preferences = PreferencesManager.instance().preferences();
@@ -182,15 +181,21 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
             resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
                     preferences.CONSTRAINT_ORDERED_NAME));
         }
+        if (deleteCascade){
+            resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                    preferences.CONSTRAINT_DELETECASCADE_LIENPROG));
+        }
 
         return resultat;
     }
 
 
+
     @Override
     protected String getFileImageIconLong() {
+        Preferences preferences = PreferencesManager.instance().preferences();
         MCDAssociation mcdAssociation = getMcdAssociation();
-        if (PreferencesManager.instance().preferences().getGENERAL_RELATION_NOTATION().equals(
+        if (preferences.getGENERAL_RELATION_NOTATION().equals(
                 Preferences.GENERAL_RELATION_NOTATION_UML)) {
             if (mcdAssociation.getNature() == MCDAssociationNature.NOID) {
                 return Preferences.ICONE_RELATION_ASS_NONID_LG;
@@ -228,7 +233,15 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
         }
         if (PreferencesManager.instance().preferences().getGENERAL_RELATION_NOTATION().equals(
                 Preferences.GENERAL_RELATION_NOTATION_STEREOTYPES)) {
-            return Preferences.ICONE_RELATION_ASS_NONID_LG;
+            if (mcdAssociation.getNature() == MCDAssociationNature.NOID) {
+                return Preferences.ICONE_RELATION_ASS_NONID_LG;
+            }
+            if (mcdAssociation.getNature() == MCDAssociationNature.IDCOMP) {
+                return Preferences.ICONE_RELATION_ASS_ID_COMP_STEREO_LG;
+            }
+            if (mcdAssociation.getNature() == MCDAssociationNature.IDNATURAL) {
+                return Preferences.ICONE_RELATION_ASS_ID_NAT_STEREO_LG;
+            }
         }
 
         return null;

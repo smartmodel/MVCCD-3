@@ -141,15 +141,6 @@ public class RelEndsInputContent extends PanelInputContentTable {
         MCDRelEnd relEnd = (MCDRelEnd) mElement;
         MCDRelation relation = (MCDRelation) relEnd.getImRelation();
 
-
-        ArrayList<Stereotype> stereotypes =  relEnd.getToStereotypes();
-        stereotypes.addAll(relation.getToStereotypes());
-        ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNames(stereotypes);
-
-        ArrayList<Constraint> constraints =  relEnd.getToConstraints();
-        constraints.addAll(relation.getToConstraints());
-        ArrayList<String> constraintsUMLNames = ConstraintService.getUMLNamesByConstraints(constraints);
-
         int col;
 
         col = RelEndsTableColumn.ID.getPosition();
@@ -169,7 +160,7 @@ public class RelEndsInputContent extends PanelInputContentTable {
         }
 
         col = RelEndsTableColumn.STEREOTYPES.getPosition();
-        row[col] = UtilDivers.arrayStringToString(stereotypesUMLNames, "");
+        row[col] = relation.getStereotypesInLine();
 
         col = RelEndsTableColumn.OPPOSITE.getPosition();
         /*
@@ -185,7 +176,7 @@ public class RelEndsInputContent extends PanelInputContentTable {
         //row[col] = relEnd.getMCDRelEndOpposite().getNameTree();
 
         col = RelEndsTableColumn.CONSTRAINTS.getPosition();
-        row[col] = UtilDivers.arrayStringToString(constraintsUMLNames, "");;
+        row[col] = relation.getConstraintsInLine();
 
      }
 

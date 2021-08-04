@@ -234,8 +234,8 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDSo
     }
 
     @Override
-    public ArrayList<Stereotype> getToStereotypes() {
-        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+    public ArrayList<Stereotype> getStereotypes() {
+        ArrayList<Stereotype> resultat = super.getStereotypes();
 
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
         Preferences preferences = PreferencesManager.instance().preferences();
@@ -260,8 +260,8 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDSo
     }
 
     @Override
-    public ArrayList<Constraint> getToConstraints() {
-        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+    public ArrayList<Constraint> getConstraints() {
+        ArrayList<Constraint> resultat = super.getConstraints();
 
         Constraints constraints = ConstraintsManager.instance().constraints();
         Preferences preferences = PreferencesManager.instance().preferences();

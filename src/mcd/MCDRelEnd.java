@@ -1,14 +1,22 @@
 package mcd;
 
 import constraints.Constraint;
+import constraints.ConstraintService;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import m.MElement;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
+import m.interfaces.IMUMLExtensionNamingInLine;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.services.MCDRelEndService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
 import utilities.UtilDivers;
 import utilities.files.UtilFiles;
 
@@ -16,7 +24,8 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 
-public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElementWithTargets {
+public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElementWithTargets,
+        IMUMLExtensionNamingInLine {
 
     public static final int FROM = 1 ;
     public static final int TO = 2 ;
@@ -112,10 +121,6 @@ public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElem
         this.drawingDirection = drawingDirection;
     }
 
-    public abstract ArrayList<Stereotype> getToStereotypes();
-
-    public abstract ArrayList<Constraint> getToConstraints(); // Contraintes UML
-
     public abstract String getNameSource();
 
     public  ImageIcon getImageIconLong(){
@@ -150,4 +155,36 @@ public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElem
         String shortName = super.getShortName();
         return shortName;
     }
+
+    @Override
+    public ArrayList<Stereotype> getStereotypes() {
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<Constraint> getConstraints() {
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+    @Override
+    public String getStereotypesInLine() {
+        return StereotypeService.getUMLNamingInLine(getStereotypes());
+    }
+
+
+    @Override
+    public String getConstraintsInLine() {
+        return ConstraintService.getUMLNamingInLine(getConstraints());
+    }
+
 }

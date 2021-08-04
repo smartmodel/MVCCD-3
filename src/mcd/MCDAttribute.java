@@ -234,13 +234,10 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         return resultat;
     }
 
-
     @Override
     public String getConstraintsInLine() {
         return ConstraintService.getUMLNamingInLine(getConstraints());
     }
-
-
 
 
     @Override

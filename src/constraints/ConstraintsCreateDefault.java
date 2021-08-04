@@ -46,6 +46,10 @@ public class ConstraintsCreateDefault {
                 Preferences.CONSTRAINT_ORDERED_NAME,
                 Preferences.CONSTRAINT_ORDERED_LIENPROG,
                 MCDAssEnd.class.getName());
+        createConstraint(
+                Preferences.CONSTRAINT_DELETECASCADE_NAME,
+                Preferences.CONSTRAINT_DELETECASCADE_LIENPROG,
+                MCDAssEnd.class.getName());
 
         createConstraint(
                 Preferences.CONSTRAINT_FROZEN_NAME,
