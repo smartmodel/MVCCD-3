@@ -10,6 +10,7 @@ import m.services.MElementService;
 import m.services.MRelEndService;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
+import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import mcd.services.MCDRelEndService;
 import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
@@ -22,7 +23,7 @@ import utilities.Trace;
 
 import java.util.ArrayList;
 
-public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter{
+public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter, IMCDSourceMLDRRelationFK {
 
     private static final long serialVersionUID = 1000;
     public static final String CLASSSHORTNAMEUI = "Extr. association";

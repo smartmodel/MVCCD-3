@@ -1,6 +1,7 @@
 package mldr;
 
 import mcd.MCDElement;
+import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import md.MDElement;
 import mdr.MDRRelFKEnd;
 import mdr.MDRRelationFK;
@@ -16,9 +17,9 @@ public class MLDRRelationFK  extends MDRRelationFK implements IMLDRElement, IMLD
 
     private MCDElement mcdElementSource ;
 
-    public MLDRRelationFK(ProjectElement parent, MCDElement mcdElementSource) {
+    public MLDRRelationFK(ProjectElement parent, IMCDSourceMLDRRelationFK imcdSourceMLDRRelationFK) {
         super(parent);
-        this.mcdElementSource = mcdElementSource;
+        this.mcdElementSource =(MCDElement) imcdSourceMLDRRelationFK;
     }
 
     public MLDRRelationFK(ProjectElement parent, MCDElement mcdElementSource, int id) {

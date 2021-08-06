@@ -48,6 +48,7 @@ import repository.editingTreat.preferences.*;
 import resultat.Resultat;
 import utilities.DefaultMutableTreeNodeService;
 import utilities.Trace;
+import utilities.UtilDivers;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
@@ -373,6 +374,15 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                         IMUMLExtensionNamingInBox imumlExtensionNamingInBox = (IMUMLExtensionNamingInBox) mvccdElement;
                         message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Stéréo InBox : "  + imumlExtensionNamingInBox.getStereotypesInBox();
                         message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Contr. InBox : " + imumlExtensionNamingInBox.getConstraintsInBox();
+                    }
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Childs : "  ;
+                    int i = 0;
+                    for (MVCCDElement mvccdElement : mvccdElement.getChilds()){
+                        if (i > 0){
+                            message += ", ";
+                        }
+                        message = message + mvccdElement.getNameTree();
+                        i++;
                     }
 
                     new DialogMessage().showOk(mvccdWindow, message);

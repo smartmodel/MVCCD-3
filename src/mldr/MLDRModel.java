@@ -2,10 +2,10 @@ package mldr;
 
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
-import main.window.repository.WinRepositoryTree;
 import mcd.MCDAssociation;
 import mcd.MCDEntity;
 import mcd.MCDRelation;
+import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import mdr.MDRContTables;
 import mdr.MDRElement;
 import mdr.MDRModel;
@@ -16,9 +16,7 @@ import mldr.services.MLDRModelService;
 import project.ProjectElement;
 import resultat.Resultat;
 import transform.mldrtompdr.MLDRTransform;
-import utilities.Trace;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;
 
 public abstract class MLDRModel extends MDRModel implements IMLDRElement {
@@ -70,9 +68,9 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
     }
 
 
-    public MLDRRelationFK createRelationFK(MCDRelation mcdRelation, MLDRTable mldrTableParent, MLDRTable mldrTableChild) {
+    public MLDRRelationFK createRelationFK(IMCDSourceMLDRRelationFK imcdSourceMLDRRelationFK, MLDRTable mldrTableParent, MLDRTable mldrTableChild) {
         MLDRRelationFK newRelationFK = MVCCDElementFactory.instance().createMLDRRelationFK(
-                getMLDRContRelations(), mcdRelation, mldrTableParent, mldrTableChild);
+                getMLDRContRelations(), imcdSourceMLDRRelationFK, mldrTableParent, mldrTableChild);
 
         return newRelationFK;
     }
@@ -82,14 +80,14 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
     }
 
     public ArrayList<MLDRRelationFK> getMLDRRelationFKsByMCDRelationSource(MCDRelation mcdRelation) {
-        return MLDRModelService.getMLDRRelationFKsByMCDRelationSource(this, mcdRelation);
+        return MLDRModelService.getMLDRRelationFKsByIMCDSource(this, mcdRelation);
     }
 
-    public MLDRRelationFK getMLDRRelationFKByMCDRelationSourceAndSameTables(MCDRelation mcdRelation,
-                                                                            MLDRTable mldrTableA,
-                                                                            MLDRTable mldrTableB) {
+    public MLDRRelationFK getMLDRRelationFKByIMCDSourceAndSameTables(IMCDSourceMLDRRelationFK imcdSourceMLDRRelationFK,
+                                                                     MLDRTable mldrTableA,
+                                                                     MLDRTable mldrTableB) {
         return MLDRModelService.getMLDRRelationFKByMCDRelationSourceAndSameTables(
-                this, mcdRelation, mldrTableA, mldrTableB);
+                this, imcdSourceMLDRRelationFK, mldrTableA, mldrTableB);
     }
 
 

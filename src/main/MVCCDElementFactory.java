@@ -4,6 +4,7 @@ import console.ViewLogsManager;
 import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
+import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mcd.services.IMCDModelService;
 import mdr.*;
@@ -413,32 +414,32 @@ public class MVCCDElementFactory {
 
 
     public MLDRRelationFK createMLDRRelationFK( MLDRContRelations mldrContRelations,
-                                                MCDRelation mcdRelation,
+                                                IMCDSourceMLDRRelationFK imcdSourceMLDRRelationFK,
                                                 MLDRTable mldrTableA,
                                                 MLDRTable mldrTableB) {
 
-        MLDRRelationFK mldrRelationFK = new MLDRRelationFK(mldrContRelations, mcdRelation) ;
+        MLDRRelationFK mldrRelationFK = new MLDRRelationFK(mldrContRelations, imcdSourceMLDRRelationFK) ;
 
 
         MLDRContRelEnds mldrContEndRelsA = (MLDRContRelEnds) mldrTableA.getMDRContRelEnds();
         MLDRRelFKEnd mldrRelFKEndA = new MLDRRelFKEnd(mldrContEndRelsA) ;
 
         MLDRContRelEnds mldrContEndRelsB = (MLDRContRelEnds) mldrTableB.getMDRContRelEnds();
-        MLDRRelFKEnd mldrRelFKEndChild = new MLDRRelFKEnd(mldrContEndRelsB) ;
+        MLDRRelFKEnd mldrRelFKEndB = new MLDRRelFKEnd(mldrContEndRelsB) ;
 
         /*
         mldrRelationFK.setEndParent(mldrRelFKEndParent);
         mldrRelationFK.setEndChild(mldrRelFKEndChild);
          */
         mldrRelationFK.setA(mldrRelFKEndA);
-        mldrRelationFK.setB(mldrRelFKEndChild);
+        mldrRelationFK.setB(mldrRelFKEndB);
 
 
         mldrRelFKEndA.setMDRTable(mldrTableA);
         mldrRelFKEndA.setMDRRelationFK(mldrRelationFK);
 
-        mldrRelFKEndChild.setMDRTable(mldrTableB);
-        mldrRelFKEndChild.setMDRRelationFK(mldrRelationFK);
+        mldrRelFKEndB.setMDRTable(mldrTableB);
+        mldrRelFKEndB.setMDRRelationFK(mldrRelationFK);
 
         return mldrRelationFK;
     }

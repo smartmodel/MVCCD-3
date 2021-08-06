@@ -16,8 +16,4 @@ public class MDROrderWordTableShortName extends MDROrderWord{
         super.setValue(MDROrderService.getPath(mcdEntity) + mcdEntity.getShortName());
     }
 
-    public void setValue(MCDAssociation mcdAssNN){
-        super.setValue(MDROrderService.getPath(mcdAssNN) + mcdAssNN.getShortName());
-    }
-
 }

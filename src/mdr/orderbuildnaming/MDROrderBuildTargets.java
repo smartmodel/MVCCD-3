@@ -14,6 +14,8 @@ public enum MDROrderBuildTargets {
     COLUMNFKFROMENTITYIND (Preferences.MDR_NAMING_COLUMN_FK, "mdr.of.columns.fk"),
     COLUMNFKONEANCESTOR (Preferences.MDR_NAMING_COLUMN_FK, "mdr.of.columns.fk"),
     PK (Preferences.MDR_NAMING_PK, "mdr.of.constraints.pk"),
+    PKNN (Preferences.MDR_NAMING_PK_NN, "mdr.of.tables.nn"),
+    PKNNINDICE (Preferences.MDR_NAMING_PK_NN_INDICE, "mdr.of.tables.nn"),
     FK (Preferences.MDR_NAMING_FK, "mdr.of.constraints.fk"),
     FKWITHOUTROLE(Preferences.MDR_NAMING_FK, "mdr.of.constraints.fk"),
     UNIQUE(Preferences.MDR_NAMING_UNIQUE, "mdr.of.constraints.unique"),

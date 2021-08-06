@@ -11,6 +11,7 @@ import m.interfaces.IMUMLExtensionNamingInLine;
 import m.services.MElementService;
 import main.MVCCDManager;
 import mcd.interfaces.IMCDElementWithTargets;
+import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -23,7 +24,7 @@ import stereotypes.StereotypesManager;
 import java.util.ArrayList;
 
 public abstract class MCDRelation extends MCDElement implements IMRelation, IMCDElementWithTargets,
-        IMUMLExtensionNamingInLine {
+        IMUMLExtensionNamingInLine, IMCDSourceMLDRRelationFK {
 
     private  static final long serialVersionUID = 1000;
 

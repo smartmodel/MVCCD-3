@@ -6,6 +6,7 @@ import mcd.MCDElement;
 import mcd.MCDEntity;
 import mcd.MCDRelation;
 import mcd.interfaces.IMCDModel;
+import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import mcd.services.IMCDModelService;
 import mdr.MDRContTables;
 import mldr.MLDRContRelations;
@@ -17,7 +18,6 @@ import mldr.interfaces.IMLDRRelation;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -99,12 +99,15 @@ public class MLDRModelService {
  */
 
     // Il peut y avoir 2 relations logiques pour une association n:n de niveau conceptuel
-    public static ArrayList<MLDRRelationFK> getMLDRRelationFKsByMCDRelationSource(MLDRModel mldrModel, MCDRelation mcdRelation) {
+    public static ArrayList<MLDRRelationFK> getMLDRRelationFKsByIMCDSource(
+            MLDRModel mldrModel,
+            IMCDSourceMLDRRelationFK imcdSourceMLDRRelationFK) {
+
         ArrayList<MLDRRelationFK> resultat = new ArrayList<MLDRRelationFK>();
         for (IMLDRRelation imldrRelation : getIMLDRRelations(mldrModel)) {
             if (imldrRelation instanceof MLDRRelationFK) {
                 MLDRRelationFK mldrRelationFK = (MLDRRelationFK) imldrRelation;
-                if (mldrRelationFK.getMcdElementSource() == mcdRelation) {
+                if (mldrRelationFK.getMcdElementSource() == imcdSourceMLDRRelationFK) {
                     resultat.add(mldrRelationFK);
                 }
             }
@@ -141,12 +144,14 @@ public class MLDRModelService {
 
     // Une relation de niveau logique peut être simplement modifiée alors que la contrainte de clé étrangère
     // passe d'une table à une autre en changeant par exemple le sens d'un degré 1:n
-    public static MLDRRelationFK getMLDRRelationFKByMCDRelationSourceAndSameTables(MLDRModel mldrModel,
-                                                                                    MCDRelation mcdRelation,
-                                                                                    MLDRTable mldrTableA,
-                                                                                    MLDRTable mldrTableB) {
+    public static MLDRRelationFK getMLDRRelationFKByMCDRelationSourceAndSameTables(
+            MLDRModel mldrModel,
+            IMCDSourceMLDRRelationFK imcdSourceMLDRRelationFK,
+            MLDRTable mldrTableA,
+            MLDRTable mldrTableB) {
 
-        for (MLDRRelationFK mldrRelationFK : getMLDRRelationFKsByMCDRelationSource(mldrModel, mcdRelation)){
+        for (MLDRRelationFK mldrRelationFK : getMLDRRelationFKsByIMCDSource(mldrModel, imcdSourceMLDRRelationFK)){
+
             MLDRTable mldrTable1 = (MLDRTable) mldrRelationFK.getEndChild().getMDRTable();
             MLDRTable mldrTable2 = (MLDRTable) mldrRelationFK.getEndParent().getMDRTable();
 

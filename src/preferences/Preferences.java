@@ -580,6 +580,8 @@ public class Preferences extends MVCCDElement {
     public static String MDR_NAMING_COLUMN_PK = "mdr.column.pk";
     public static String MDR_NAMING_COLUMN_FK = "mdr.column.fk";
     public static String MDR_NAMING_PK = "mdr.pk";
+    public static String MDR_NAMING_PK_NN = "mdr.pk.nn";
+    public static String MDR_NAMING_PK_NN_INDICE = "mdr.pk.nn.indice";
     public static String MDR_NAMING_FK = "mdr.fk";
     public static String MDR_NAMING_UNIQUE = "mdr.unique";
 
@@ -1284,7 +1286,27 @@ public class Preferences extends MVCCDElement {
         this.MDR_PK_NAME_FORMAT = MDR_PK_NAME_FORMAT;
     }
 
+    public String getMDR_PK_NN_NAME_FORMAT() {
+        if (MDR_PK_NN_NAME_FORMAT == null){
+            MDR_PK_NN_NAME_FORMAT = MDR_PK_NN_NAME_FORMAT_DEFAULT;
+        }
+        return MDR_PK_NN_NAME_FORMAT;
+    }
 
+    public void setMDR_PK_NN_NAME_FORMAT(String MDR_PK_NN_NAME_FORMAT) {
+        this.MDR_PK_NN_NAME_FORMAT = MDR_PK_NN_NAME_FORMAT;
+    }
+
+    public String getMDR_PK_NN_NAME_INDICE_FORMAT() {
+        if (MDR_PK_NN_NAME_INDICE_FORMAT == null){
+            MDR_PK_NN_NAME_INDICE_FORMAT = MDR_PK_NN_NAME_INDICE_FORMAT_DEFAULT;
+        }
+        return MDR_PK_NN_NAME_INDICE_FORMAT;
+    }
+
+    public void setMDR_PK_NN_NAME_INDICE_FORMAT(String MDR_PK_NN_NAME_INDICE_FORMAT) {
+        this.MDR_PK_NN_NAME_INDICE_FORMAT = MDR_PK_NN_NAME_INDICE_FORMAT;
+    }
 
     public String getMDR_COLUMN_FK_NAME_FORMAT() {
         if (MDR_COLUMN_FK_NAME_FORMAT == null){

@@ -106,6 +106,11 @@ public class MCDTransformToTable {
     }
 
     public void createOrModifyFromAssociationNN(MCDAssociation mcdAssNN) {
+        // Les éventuels changement de présence où pas d'une entité associative
+        // sont pris en charge par :
+        // MCLink en cas de suppression de lien
+        // MVCDElementFactory en cas d'ajout d'un lien
+
         // Table
         MLDRTable mldrTable = mldrModel.getMLDRTableByAssNNSource(mcdAssNN);
         if (mldrTable == null){
@@ -252,7 +257,7 @@ public class MCDTransformToTable {
                     message = e.getMessage();
                 } else {
                     message = MessagesBuilder.getMessagesProperty("mldrtable.build.name.error",
-                            new String[]{mcdEntity.getName()});
+                            new String[]{mcdEntity.getNamePath()});
                 }
                 throw new CodeApplException(message, e);
             }
@@ -316,7 +321,7 @@ public class MCDTransformToTable {
                     message = e.getMessage();
                 } else {
                     message = MessagesBuilder.getMessagesProperty("mldrtable.build.name.error",
-                            new String[]{mcdAssociationNN.getName()});
+                            new String[]{mcdAssociationNN.getNameTreePath()});
                 }
                 throw new CodeApplException(message, e);
             }

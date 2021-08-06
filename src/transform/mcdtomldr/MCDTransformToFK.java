@@ -3,10 +3,12 @@ package transform.mcdtomldr;
 import exceptions.CodeApplException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
 import m.MRelEndMultiPart;
+import m.MRelationDegree;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
+import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import mcd.services.IMCDModelService;
 import mdr.*;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
@@ -63,28 +65,7 @@ public class MCDTransformToFK {
 
 
         // Relation FK
-        MCDRelation mcdRelation = (MCDRelation) mcdRelEndSource.getImRelation();
-        MLDRTable mldrTableParent = mldrModel.getMLDRTableByEntitySource((MCDEntity)mcdRelEndSource.getmElement());
-        MLDRRelationFK mldrRelationFK = mldrModel.getMLDRRelationFKByMCDRelationSourceAndSameTables(mcdRelation,mldrTable, mldrTableParent);
-        if (mldrRelationFK == null){
-            mldrRelationFK = mldrModel.createRelationFK(mcdRelation,  mldrTableParent, mldrTable);
-            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK);
-            MVCCDManager.instance().addNewMVCCDElementInRepository((MVCCDElement) mldrRelationFK.getA());
-            MVCCDManager.instance().addNewMVCCDElementInRepository((MVCCDElement) mldrRelationFK.getB());
-        }
-
-
-        // Lien entre contrainte FK et sa représentation sous forme de relation
-        // Double lien assuré par setMDRRelationFK
-        if (mldrFK.getMDRRelationFK() != mldrRelationFK){
-            mldrFK.setMDRRelationFK(mldrRelationFK);
-        }
-
-
-        modifyRelationFK(mldrModel, mcdRelEndSource, mldrTable, mldrFK, fkNature, mldrRelationFK);
-        mldrRelationFK.setIteration(mcdTransform.getIteration());
-        mldrRelationFK.getEndParent().setIteration(mcdTransform.getIteration());
-        mldrRelationFK.getEndChild().setIteration(mcdTransform.getIteration());
+        createOrModifyRelationFromRelEndSource(mldrModel, mcdRelEndSource, mldrTable, mldrFK,fkNature);
 
         return mldrFK;
     }
@@ -122,6 +103,12 @@ public class MCDTransformToFK {
         }
         if (mcdElementSource instanceof MCDAssociation){
             tableShortNameChild = mcdElementSource.getShortName();
+            // Si pas de shortName pour l'association n:n, il faut prendre le nom de la table qui a été créé avec
+            // les shortName des tables constitutives et des rôles
+            if (StringUtils.isEmpty(tableShortNameChild)){
+                tableShortNameChild = mldrTable.getName();
+            }
+
         }
 
         MDRElementNames namesFK = buildNameFK(mldrTable, tableShortNameChild, mldrFK, mcdRelEndSource, mldrTableParent);
@@ -211,6 +198,42 @@ public class MCDTransformToFK {
 
         // Transformation des paramètres PK en paramètres FK
         MDRAdjustParameters.adjustParameters(mcdTransform, mldrTable, mldrFK, mdrColumnsFK);
+    }
+
+
+    private void createOrModifyRelationFromRelEndSource(MLDRModel mldrModel, MCDRelEnd mcdRelEndSource, MLDRTable mldrTable, MLDRFK mldrFK, MDRFKNature fkNature) {
+        MCDRelation mcdRelation = (MCDRelation) mcdRelEndSource.getImRelation();
+        IMCDSourceMLDRRelationFK imcdSourceMLDRRelationFK = (IMCDSourceMLDRRelationFK) mcdRelation;
+        // Cas particulier des associations n:n dont la source doit être l'extrémité n reçue en paramètre
+        if (mcdRelation instanceof MCDAssociation){
+            MCDAssociation mcdAssociation = (MCDAssociation) mcdRelation;
+            if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_MANY_MANY){
+                imcdSourceMLDRRelationFK = (MCDAssEnd) mcdRelEndSource ;
+            }
+        }
+        MLDRTable mldrTableParent = mldrModel.getMLDRTableByEntitySource((MCDEntity)mcdRelEndSource.getmElement());
+        MLDRRelationFK mldrRelationFK = mldrModel.getMLDRRelationFKByIMCDSourceAndSameTables(imcdSourceMLDRRelationFK,mldrTable, mldrTableParent);
+        if (mldrRelationFK == null){
+            //mldrRelationFK = mldrModel.createRelationFK(mcdRelation,  mldrTableParent, mldrTable);
+            mldrRelationFK = mldrModel.createRelationFK(imcdSourceMLDRRelationFK,  mldrTableParent, mldrTable);
+
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrRelationFK);
+            MVCCDManager.instance().addNewMVCCDElementInRepository((MVCCDElement) mldrRelationFK.getA());
+            MVCCDManager.instance().addNewMVCCDElementInRepository((MVCCDElement) mldrRelationFK.getB());
+        }
+
+
+        // Lien entre contrainte FK et sa représentation sous forme de relation
+        // Double lien assuré par setMDRRelationFK
+        if (mldrFK.getMDRRelationFK() != mldrRelationFK){
+            mldrFK.setMDRRelationFK(mldrRelationFK);
+        }
+
+
+        modifyRelationFK(mldrModel, mcdRelEndSource, mldrTable, mldrFK, fkNature, mldrRelationFK);
+        mldrRelationFK.setIteration(mcdTransform.getIteration());
+        mldrRelationFK.getEndParent().setIteration(mcdTransform.getIteration());
+        mldrRelationFK.getEndChild().setIteration(mcdTransform.getIteration());
     }
 
     private void modifyRelationFK(MLDRModel mldrModel,
@@ -409,6 +432,14 @@ public class MCDTransformToFK {
             orderBuild.getTableSep().setValue();
             orderBuild.getRoleShortNameParent().setValue(mcdRelEndParent);
 
+            // Si une association n:n porte un nom d'association au lieu de 2 rôles
+            // Il ne faut pas afficher le rôle parent car il corresopond au nom de la table Child !
+            if (tableShortNameChild.equals(orderBuild.getRoleShortNameParent().getValue())){
+                // A voir pour un séparateur de table spécifique à ne pas afficher dans ce cas !
+                //orderBuild.getTableSep().setValue("");
+                orderBuild.getRoleShortNameParent().setValue("");
+
+            }
 
             String name;
 

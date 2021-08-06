@@ -2,6 +2,8 @@ package transform.mcdtomldr;
 
 import exceptions.CodeApplException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
+import main.MVCCDElement;
+import main.MVCCDElementConvert;
 import main.MVCCDManager;
 import mcd.*;
 import mdr.*;
@@ -158,14 +160,18 @@ public class MCDTransformToPK {
     public void modifyPK(MLDRPK mldrPK, MCDElement mcdElement) {
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrPK.getMDRTableAccueil().getMDRModelParent();
-        MCDTransformService.names(mldrPK, buildNamePK(mldrPK.getMDRTableAccueil(), mcdElement), mldrModel);
+        if ( mcdElement instanceof MCDEntity) {
+            MCDTransformService.names(mldrPK,
+                    buildNamePK((MLDRTable) mldrPK.getMDRTableAccueil(), (MCDEntity) mcdElement), mldrModel);}
+        if ( mcdElement instanceof MCDAssociation) {
+            MCDTransformService.names(mldrPK,
+                    buildNamePK((MLDRTable) mldrPK.getMDRTableAccueil(), (MCDAssociation) mcdElement), mldrModel);}
     }
-
 
     public void modifyPK(MLDRPK mldrPK, MCDElement mcdElement, ArrayList<MCDAssociation> mcdAssociationsId) {
     }
 
-    protected MDRElementNames buildNamePK(MDRTable mdrTable, MCDElement mcdElement) {
+    protected MDRElementNames buildNamePK(MLDRTable mldrTable, MCDEntity mcdEntity) {
         Preferences preferences = PreferencesManager.instance().preferences();
 
         MDRElementNames names = new MDRElementNames();
@@ -176,12 +182,7 @@ public class MCDTransformToPK {
             orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_PK_LENGTH);
             orderBuild.setTargetNaming(MDROrderBuildTargets.PK);
 
-            if (mcdElement instanceof MCDEntity) {
-                orderBuild.getTableShortName().setValue((MCDEntity) mcdElement);
-            }
-            if (mcdElement instanceof MCDAssociation) {
-                orderBuild.getTableShortName().setValue((MCDAssociation) mcdElement);
-            }
+            orderBuild.getTableShortName().setValue(mcdEntity);
 
             String name;
 
@@ -193,7 +194,7 @@ public class MCDTransformToPK {
                     message = e.getMessage();
                 } else {
                     message = MessagesBuilder.getMessagesProperty("mdrpk.build.name.error",
-                            new String[]{mdrTable.getName()});
+                            new String[]{mldrTable.getNamePath()});
                 }
                 throw new CodeApplException(message, e);
             }
@@ -202,4 +203,67 @@ public class MCDTransformToPK {
         return names;
     }
 
-}
+    protected MDRElementNames buildNamePK(MLDRTable mldrTable, MCDAssociation mcdAssociationNN) {
+
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        MDRElementNames names = new MDRElementNames();
+        for (MDRNamingLength element : MDRNamingLength.values()) {
+            MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
+            orderBuild.setFormat(preferences.getMDR_PK_NN_NAME_FORMAT());
+            orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_PK_LENGTH);
+            orderBuild.setTargetNaming(MDROrderBuildTargets.PKNN);
+
+            MCDAssEnd assEndA = mcdAssociationNN.getFrom();
+            MCDAssEnd assEndB = mcdAssociationNN.getTo();
+
+            MCDEntity mcdEntityA = assEndA.getMcdEntity();
+            orderBuild.getTableShortNameA().setValue(mcdEntityA);
+            orderBuild.getTableSep().setValue();
+
+            String roleA = assEndA.getShortName(); // Le format du nom est libre
+            String roleB = assEndB.getShortName(); // Le format du nom est libre
+            if (StringUtils.isNotEmpty(roleA) && StringUtils.isNotEmpty(roleB)) {
+                orderBuild.getRoleShortNameA().setValue(roleA);
+                orderBuild.getRoleSep().setValue();
+                orderBuild.getRoleShortNameB().setValue(roleB);
+                orderBuild.getAssShortName().setValue("");
+            } else {
+                orderBuild.getRoleShortNameA().setValue("");
+                orderBuild.getRoleSep().setValue("");
+                orderBuild.getRoleShortNameB().setValue("");
+                orderBuild.getAssShortName().setValue(mcdAssociationNN.getShortName());
+            }
+
+            orderBuild.getTableSep().setValue();
+            MCDEntity mcdEntityB = assEndB.getMcdEntity();
+            orderBuild.getTableShortNameB().setValue(mcdEntityB);
+
+            // Pour le nommage indicé en cas de limite de taille
+            String nameNN = orderBuild.getTableShortNameA().getValue() + orderBuild.getTableSep().getValue() +
+                    orderBuild.getTableShortNameB().getValue();
+
+            ArrayList<MVCCDElement> brothers = MVCCDElementConvert.to(mldrTable.getBrothers());
+            orderBuild.getIndTableNN().setValue(nameNN, brothers);
+
+            String name;
+
+            try {
+                name = orderBuild.buildNaming();
+            } catch (OrderBuildNameException e) {
+                String message = "";
+                if (StringUtils.isNotEmpty(e.getMessage())) {
+                    message = e.getMessage();
+                } else {
+                    message = MessagesBuilder.getMessagesProperty("mdrpk.build.name.error",
+                            new String[]{mcdAssociationNN.getNameTreePath()});
+                }
+                throw new CodeApplException(message, e);
+            }
+            names.setElementName(name, element);
+        }
+        return names;
+    }
+
+
+    }
