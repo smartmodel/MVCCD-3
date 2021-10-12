@@ -8,6 +8,7 @@ import mldr.interfaces.IMLDRRelation;
 import mpdr.*;
 import mpdr.interfaces.IMPDRRelation;
 import mpdr.interfaces.IMPDRelEnd;
+import utilities.Trace;
 
 public class MLDRTransformRelations {
 
@@ -25,6 +26,7 @@ public class MLDRTransformRelations {
     void transformRelations() {
         //tansformTablesWithoutFKsIdComp();
         for (IMLDRRelation imldrRelation : mldrModel.getIMLDRRelations()){
+            Trace.println(imldrRelation.getMcdElementSource().getNameTreePath());
             transformRelation(imldrRelation);
         }
     }
