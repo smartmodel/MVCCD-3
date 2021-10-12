@@ -293,6 +293,20 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             if (node.getUserObject() instanceof MPDRModel) {
                 treatGeneric(this, new MPDRModelEditingTreat());
+
+                JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(
+                        "menu.generate.sql.from.mpdr"));
+                addItem(this, menuItem);
+                menuItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        try {
+                            (new MPDRModelEditingTreat()).treatGenerate(mvccdElement);
+                        } catch (Exception e){
+                            exceptionUnhandled(e, mvccdElement, "repository.menu.exception.transform");
+                        }
+                    }
+                });
             }
 
             if (node.getUserObject() instanceof MPDRTable) {
