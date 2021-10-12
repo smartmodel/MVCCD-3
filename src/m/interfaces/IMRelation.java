@@ -1,6 +1,8 @@
 package m.interfaces;
 
 import main.MVCCDElement;
+import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
 
 public interface IMRelation {
 
@@ -16,5 +18,7 @@ public interface IMRelation {
     public IMRelEnd getB();
 
     public void setB(IMRelEnd b);
+
+    public void removeInParent() ;
 
 }

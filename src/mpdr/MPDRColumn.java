@@ -1,7 +1,10 @@
 package mpdr;
 
+import mcd.MCDAttribute;
+import mcd.MCDElement;
 import md.MDElement;
 import mdr.MDRColumn;
+import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
@@ -39,4 +42,16 @@ public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPD
     public MDElement getMdElementSource() {
         return (MDElement) getMldrElementSource();
     }
+
+
+    @Override
+    public MCDAttribute getMcdAttributeSource() {
+        IMLDRElement mldrElementSource = getMldrElementSource();
+        if (mldrElementSource instanceof MLDRColumn){
+            MLDRColumn mldrColumnSource = (MLDRColumn) mldrElementSource;
+            return mldrColumnSource.getMcdAttributeSource();
+        }
+        return null;
+    }
+
 }

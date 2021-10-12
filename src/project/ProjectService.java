@@ -2,6 +2,7 @@ package project;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
+import mcd.MCDAttribute;
 import mdr.MDRModel;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -29,12 +30,20 @@ public class ProjectService {
         }
     }
 
-    public static ProjectElement getElementById(int id) {
+    public static ProjectElement getProjectElementById(int id) {
         Project project = MVCCDManager.instance().getProject();
-        return getElementById(project, id);
+        return getProjectElementById(project, id);
     }
 
-    public static ProjectElement getElementById(ProjectElement projectElement, int id) {
+    public static MCDAttribute getMCDAttributById(int id) {
+        ProjectElement projectElement = getProjectElementById(id);
+        if (projectElement instanceof MCDAttribute) {
+            return (MCDAttribute) projectElement ;
+        }
+        return null;
+    }
+
+    public static ProjectElement getProjectElementById(ProjectElement projectElement, int id) {
         ProjectElement resultat = null;
         for (MVCCDElement mvccdElement : projectElement.getChilds()) {
             if (mvccdElement instanceof ProjectElement) {
@@ -43,7 +52,7 @@ public class ProjectService {
                     resultat = child;
                 } else {
                     if (resultat == null) {
-                        resultat = getElementById(child, id);
+                        resultat = getProjectElementById(child, id);
                     }
                 }
             }

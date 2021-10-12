@@ -1,19 +1,27 @@
 package mdr;
 
+import constraints.Constraint;
+import constraints.ConstraintService;
+import m.interfaces.IMUMLExtensionNamingInLine;
 import main.MVCCDElement;
 import md.interfaces.IMDElementWithSource;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
+import mdr.services.MDRColumnsService;
 import mldr.MLDRParameter;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRParameter;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
+import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-public abstract class MDROperation extends MDRElement implements IMDRElementWithIteration, IMDElementWithSource {
+public abstract class MDROperation extends MDRElement implements IMDRElementWithIteration, IMDElementWithSource,
+        IMUMLExtensionNamingInLine {
 
     private  static final long serialVersionUID = 1000;
     private Integer iteration = null; // Si un objet est créé directement et non par transformation
@@ -25,6 +33,8 @@ public abstract class MDROperation extends MDRElement implements IMDRElementWith
     public MDROperation(ProjectElement parent, int id) {
         super(parent, id);
     }
+
+    public abstract Stereotype getDefaultStereotype();
 
     @Override
     public Integer getIteration() {
@@ -77,18 +87,6 @@ public abstract class MDROperation extends MDRElement implements IMDRElementWith
         return resultat;
     }
 
-
-    public ArrayList<MDRColumn> getMDRColumns(){
-        ArrayList<MDRColumn> resultat = new ArrayList<MDRColumn>();
-        for (IMDRParameter imdrParameter : getTargets()){
-            if (imdrParameter instanceof MDRColumn) {
-                resultat.add((MDRColumn) imdrParameter);
-            }
-        }
-        return resultat;
-    }
-
-
     public ArrayList<String> getParametersName(){
         ArrayList<String> resultat = new ArrayList<String>();
         for ( MDRParameter mdrParameter : getMDRParameters()){
@@ -118,5 +116,18 @@ public abstract class MDROperation extends MDRElement implements IMDRElementWith
 
     // Utilisé pour les paramètres de niveau physique
     public abstract MPDRParameter createParameter(MLDRParameter mldrParameter);
+
+
+    @Override
+    public String getStereotypesInLine() {
+        return StereotypeService.getUMLNamingInLine(getStereotypes());
+    }
+
+    @Override
+    public String getConstraintsInLine() {
+        return ConstraintService.getUMLNamingInLine(getConstraints());
+    }
+
+
 
 }

@@ -4,6 +4,7 @@ import exceptions.CodeApplException;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
 import utilities.Debug;
+import utilities.Trace;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
     public static final int SCOPELONGNAME = 3;
     public static final int SCOPENOTNAME = 4;
     // Constantes postfixées ORDER : Utilisées pour générer le numéro d'ordred de l'enfant dans la fraterie
+    public static int NOORDERTRANSITORY = -1;
     public static int FIRSTVALUEORDER = 10;
     public static int INTERVALORDER = 10;
 
@@ -142,7 +144,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
 
 
     public String getLongNameSmart() {
-        if (longName != null) {
+        if (StringUtils.isNotEmpty(longName)) {
             return longName;
         } else {
             return name;
@@ -154,14 +156,44 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
      * Retourne une liste ordonnée des enfants.
      * @return
      */
+
     public ArrayList<MVCCDElement> getChilds() {
+        // Création d'un nouveau tableau car erreur de comodification....
+/*
+        ArrayList<MVCCDElement> childsSortOrder = new ArrayList<MVCCDElement>();
+            for (MVCCDElement child : childs) {
+                childsSortOrder.add(child);
+            }
+
+        Collections.sort(childsSortOrder, MVCCDElement::compareToOrder);
+        return childsSortOrder;
+
+
+       */
+
         Collections.sort(childs, MVCCDElement::compareToOrder);
         return childs;
+
     }
 
-    public ArrayList<MVCCDElement> getChildsSortName() {
+    public ArrayList<? extends MVCCDElement> getChildsSortName() {
+        ArrayList<MVCCDElement> childsSortName = new ArrayList<MVCCDElement>();
+        for (MVCCDElement child : getChilds()){
+            childsSortName.add(child);
+        }
+        Collections.sort(childsSortName, MVCCDElement::compareToName);
+        return childsSortName;
+
+        /*
         Collections.sort(childs, MVCCDElement::compareToName);
         return childs;
+
+         */
+    }
+
+    //#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
+    public ArrayList<? extends MVCCDElement> getChildsSortDefault() {
+        return getChilds();
     }
 
     /**
@@ -169,6 +201,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
      * @return
      */
     public ArrayList<MVCCDElement> getSiblings(){
+
         return getParent().getChilds();
     }
 
@@ -199,7 +232,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
 
     public int getChildOrderIndexSameClass(MVCCDElement child){
         int index = -1 ;
-        for (MVCCDElement aChild : getChilds()){
+        for (MVCCDElement aChild : getChildsSortDefault()){
             if (aChild.getClass() == child.getClass()) {
                 index++;
                 if (aChild == child) {
@@ -294,6 +327,7 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         return getName();
     } ;
 
+
     public String toString(){
 
             if (StringUtils.isNotEmpty(getNameTree())) {
@@ -338,14 +372,14 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
        }
     }
 
-    public int compareToOrder(MVCCDElement o) {
-        if ( this.getOrder() > o.getOrder()){
-            return 1;
-        } else if (this.getOrder() == o.getOrder()){
-            return 0;
-        } else {
-            return -1;
-        }
+    public int compareToOrder(MVCCDElement other) {
+            if (this.getOrder() > other.getOrder()) {
+                return 1;
+            } else if (this.getOrder() == other.getOrder()) {
+                return 0;
+            } else {
+                return -1;
+            }
     }
 
     public  int compareToName(MVCCDElement o) {
@@ -405,9 +439,14 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         if (this.getParent() != null){
             this.getParent().getChilds().remove(this);
         }
-   }
+    }
 
-   public void clearChilds(){
+    public void delete(){
+        MVCCDManager.instance().removeMVCCDElementInRepository(this, this.getParent());
+        this.removeInParent();
+    }
+
+    public void clearChilds(){
         childs =  new ArrayList<MVCCDElement>();
    }
 

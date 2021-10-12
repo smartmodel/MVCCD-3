@@ -5,6 +5,7 @@ import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
+import mldr.MLDRModel;
 import mldr.MLDRModelDT;
 import mldr.MLDRModelTI;
 import utilities.Trace;
@@ -127,10 +128,9 @@ public class IMCDModelService {
     }
 
     public static MCDEntity getMCDEntityByNamePath(IMCDModel imcdModel,
-                                                   int pathMode,
                                                    String namePath){
         return (MCDEntity) IMCDModelService.getMCDElementByClassAndNamePath(imcdModel, false,
-                MCDEntity.class.getName(), pathMode, namePath);
+                MCDEntity.class.getName(), namePath);
     }
 
 
@@ -196,6 +196,8 @@ public class IMCDModelService {
         return resultat;
     }
 
+    //#MAJ 2021-06-21 IMCDModelService - getMCDAssociationNoIdOrIdNatural remplacé par getMCDAssociationNotIdCompAndNotNN
+/*
     public static ArrayList<MCDAssociation> getMCDAssociationNoIdOrIdNatural(IMCDModel imcdModel) {
         ArrayList<MCDAssociation> resultat = new ArrayList<MCDAssociation>();
         for (MCDElement mcdElement : getAllMCDAssociationsInIModel(imcdModel)){
@@ -210,9 +212,27 @@ public class IMCDModelService {
         return resultat;
     }
 
-    public static MCDElement getMCDElementByClassAndNamePath(IMCDModel imcdModel, boolean withModel, String className, int pathMode, String namePath){
+ */
+
+    public static ArrayList<MCDAssociation> getMCDAssociationNotIdCompAndNotNN(IMCDModel imcdModel) {
+        ArrayList<MCDAssociation> resultat = new ArrayList<MCDAssociation>();
+        for (MCDElement mcdElement : getAllMCDAssociationsInIModel(imcdModel)){
+            MCDAssociation mcdAssociation = (MCDAssociation) mcdElement;
+            boolean c1 = ! mcdAssociation.isIdComp();
+            boolean c2 = mcdAssociation.getDegree()  != MRelationDegree.DEGREE_MANY_MANY;
+            if (c1 && c2) {
+                resultat.add(mcdAssociation);
+            }
+        }
+        return resultat;
+    }
+
+    public static MCDElement getMCDElementByClassAndNamePath(IMCDModel imcdModel,
+                                                             boolean withModel,
+                                                             String className,
+                                                             String namePath){
         for (MCDElement mcdElement: getMCDElementsByClassName(imcdModel, withModel, className)){
-            if (mcdElement.getNamePath(pathMode).equals(namePath)){
+            if (mcdElement.getNamePath().equals(namePath)){
                 return mcdElement;
             }
         }
@@ -257,6 +277,16 @@ public class IMCDModelService {
             }
         }
         return null;
+    }
+
+    public static ArrayList<MLDRModel> getMLDRModels(IMCDModel imcdModel) {
+        ArrayList<MLDRModel> resultat = new ArrayList<MLDRModel>();
+        for ( MVCCDElement mvccdElement : imcdModel.getChilds()){
+            if ( mvccdElement instanceof MLDRModel){
+                resultat.add((MLDRModel) mvccdElement) ;
+            }
+        }
+        return resultat;
     }
 
 
@@ -324,9 +354,9 @@ public class IMCDModelService {
     }
 
 
-    public static MCDContEntities getMCDContEntitiesByNamePath(IMCDModel imcdModel, int pathMode, String namePath){
+    public static MCDContEntities getMCDContEntitiesByNamePath(IMCDModel imcdModel, String namePath){
         for (MCDContEntities mcdContEntities : IMCDModelService.getMCDContEntities(imcdModel)){
-            if (mcdContEntities.getNamePath(pathMode).equals(namePath)){
+            if (mcdContEntities.getNamePath().equals(namePath)){
                 return mcdContEntities;
             }
         }
@@ -345,10 +375,9 @@ public class IMCDModelService {
     }
 
     public static MCDContRelations getMCDContRelationsByNamePath(IMCDModel imcdModel,
-                                                                 int pathMode,
                                                                  String namePath){
         for (MCDContRelations mcdContRelation : IMCDModelService.getMCDContRelations(imcdModel)){
-            if (mcdContRelation.getNamePath(pathMode).equals(namePath)){
+            if (mcdContRelation.getNamePath().equals(namePath)){
                 return mcdContRelation;
             }
         }

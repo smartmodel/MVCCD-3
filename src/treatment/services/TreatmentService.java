@@ -30,7 +30,7 @@ public class TreatmentService {
         MDElement mdElement = (MDElement) mvccdElement;
         String mdElementName = mdElement.getName();
         if (mdElement instanceof MCDElement){
-            mdElementName = ((MCDElement) mdElement).getNamePath(MElementService.PATHSHORTNAME);
+            mdElementName = ((MCDElement) mdElement).getNamePath();
         }
 
         String messageElement = MessagesBuilder.getMessagesProperty(propertyTheElement);
@@ -40,6 +40,9 @@ public class TreatmentService {
                     new String[]{messageElement, mdElementName});
         } else {
             message = MessagesBuilder.getMessagesProperty(propertyError,
+                    new String[]{messageElement, mdElementName});
+            message += System.lineSeparator();
+            message += MessagesBuilder.getMessagesProperty("dialog.error.console",
                     new String[]{messageElement, mdElementName});
         }
         resultat.add(new ResultatElement (message, ResultatLevel.INFO));

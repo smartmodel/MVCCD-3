@@ -6,8 +6,9 @@ import mpdr.MPDRParameter;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import project.ProjectElement;
 
-public class MPDROracleParameter extends MPDRParameter implements IMPDROracleElement {
+public class MPDROracleParameter extends MPDRParameter implements IMPDROracleElement{
 
+    private  static final long serialVersionUID = 1000;
     public MPDROracleParameter(IMPDROracleElement parent, IMLDRElement mldrElementSource) {
         super((ProjectElement) parent, mldrElementSource);
     }

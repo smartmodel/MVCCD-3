@@ -1,25 +1,21 @@
 package window.editor.preferences.project.mdr;
 
 import main.MVCCDElement;
-import main.MVCCDManager;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.services.PrefMDRService;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.editor.PanelButtonsContent;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
-import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
-import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 
 public class PrefMDRInputContent extends PanelInputContent {
@@ -30,6 +26,12 @@ public class PrefMDRInputContent extends PanelInputContent {
     private SCheckBox fieldColumnFKOneAncestor;
     private JLabel labelColumnFKOneAncestorDiff ;
     private SComboBox fieldColumnFKOneAncestorDiff;
+
+    private JPanel panelStereotypes = new JPanel ();
+    private JLabel labelColumnPFKStereotype ;
+    private SComboBox fieldColumnPFKStereotype;
+    private JLabel labelColumnNIDStereotype ;
+    private SCheckBox fieldColumnNIDStereotype;
 
 
     private JPanel panelNamingLengths = new JPanel ();
@@ -66,6 +68,22 @@ public class PrefMDRInputContent extends PanelInputContent {
         fieldColumnFKOneAncestorDiff.addItemListener(this);
         fieldColumnFKOneAncestorDiff.addFocusListener(this);
 
+        labelColumnPFKStereotype = new JLabel("Colonnes PFK :");
+        fieldColumnPFKStereotype = new SComboBox(this, labelColumnPFKStereotype);
+        fieldColumnPFKStereotype.addItem(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_PFK_STEREOTYPE_BOTH));
+        fieldColumnPFKStereotype.addItem(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_PFK_STEREOTYPE_SEPARATE));
+        fieldColumnPFKStereotype.setToolTipText("Affichage du stéréotype <<PFK-i>> ou des 2 stéréotypes <<PK>><<FK-i>>");
+        fieldColumnPFKStereotype.addItemListener(this);
+        fieldColumnPFKStereotype.addFocusListener(this);
+        
+        labelColumnNIDStereotype = new JLabel("Colonnes NID :");
+        fieldColumnNIDStereotype = new SCheckBox(this, labelColumnNIDStereotype);
+        //fieldColumnNIDStereotype.setToolTipText("Pour le modèle logique. Pour les modèles physiques adaptés automatiquement en f() de la taille maximale des noms");
+        fieldColumnNIDStereotype.setToolTipText("Affichage du stéréotype NID pour les colonnes issues d'attributs NID");
+        fieldColumnNIDStereotype.addItemListener(this);
+        fieldColumnNIDStereotype.addFocusListener(this);
+
+
         labelNamingLength30 = new JLabel("30 :");
         fieldNamingLength30 = new SCheckBox(this, labelNamingLength30);
         fieldNamingLength30.addItemListener(this);
@@ -83,6 +101,8 @@ public class PrefMDRInputContent extends PanelInputContent {
 
         super.getSComponents().add(fieldColumnFKOneAncestor);
         super.getSComponents().add(fieldColumnFKOneAncestorDiff);
+        super.getSComponents().add(fieldColumnPFKStereotype);
+        super.getSComponents().add(fieldColumnNIDStereotype);
         super.getSComponents().add(fieldNamingLength30);
         super.getSComponents().add(fieldNamingLength60);
         super.getSComponents().add(fieldNamingLength120);
@@ -94,11 +114,16 @@ public class PrefMDRInputContent extends PanelInputContent {
     private void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
-        createPanelColumnFKOneAncestor();
-        createPanelNamingLengths();
+        createPanelStereotypes();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panelInputContentCustom.add(panelStereotypes, gbc);
 
-        gbc.gridwidth = 4;
+        createPanelColumnFKOneAncestor();
+        gbc.gridy++;
         panelInputContentCustom.add(panelColumnFKOneAncestor, gbc);
+
+        createPanelNamingLengths();
         gbc.gridy++ ;
         panelInputContentCustom.add(panelNamingLengths, gbc);
 
@@ -120,6 +145,27 @@ public class PrefMDRInputContent extends PanelInputContent {
         panelColumnFKOneAncestor.add(labelColumnFKOneAncestorDiff, gbcA);
         gbcA.gridx++ ;
         panelColumnFKOneAncestor.add(fieldColumnFKOneAncestorDiff, gbcA);
+    }
+    private void createPanelStereotypes() {
+        GridBagConstraints gbc = PanelService.createSubPanelGridBagConstraints(panelStereotypes, "Stéréotypes");
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+
+        panelStereotypes.add(labelColumnPFKStereotype, gbc);
+        gbc.gridx++ ;
+        panelStereotypes.add(fieldColumnPFKStereotype, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++ ;
+
+        panelStereotypes.add(labelColumnNIDStereotype, gbc);
+        gbc.gridx++ ;
+        panelStereotypes.add(fieldColumnNIDStereotype, gbc);
+
+
     }
 
 
@@ -180,6 +226,9 @@ public class PrefMDRInputContent extends PanelInputContent {
         fieldColumnFKOneAncestor.setSelected(preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR());
         SComboBoxService.selectByText(fieldColumnFKOneAncestorDiff,
                 MessagesBuilder.getMessagesProperty(preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF()));
+        SComboBoxService.selectByText(fieldColumnPFKStereotype,
+                MessagesBuilder.getMessagesProperty(preferences.getMDR_PREF_COLUMN_PFK_STEREOTYPE()));
+        fieldColumnNIDStereotype.setSelected(preferences.getMDR_PREF_COLUMN_NID());
         fieldNamingLength30.setSelected(MDRNamingLength.LENGTH30.isRequired());
         fieldNamingLength60.setSelected(MDRNamingLength.LENGTH30.LENGTH60.isRequired());
         fieldNamingLength120.setSelected(MDRNamingLength.LENGTH30.LENGTH120.isRequired());
@@ -217,6 +266,19 @@ public class PrefMDRInputContent extends PanelInputContent {
             }
         }
 
+        if (fieldColumnPFKStereotype.checkIfUpdated()){
+            String text = (String) fieldColumnPFKStereotype.getSelectedItem();
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_PFK_STEREOTYPE_BOTH))){
+                preferences.setMDR_PREF_COLUMN_PFK_STEREOTYPE(Preferences.MDR_PREF_COLUMN_PFK_STEREOTYPE_BOTH);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_PREF_COLUMN_PFK_STEREOTYPE_SEPARATE))){
+                preferences.setMDR_PREF_COLUMN_PFK_STEREOTYPE(Preferences.MDR_PREF_COLUMN_PFK_STEREOTYPE_SEPARATE);
+            }
+        }
+
+        if (fieldColumnNIDStereotype.checkIfUpdated()){
+            preferences.setMDR_PREF_COLUMN_NID(fieldColumnNIDStereotype.isSelected());
+        }
         if (fieldNamingLength30.checkIfUpdated()){
             MDRNamingLength.LENGTH30.setRequired(fieldNamingLength30.isSelected());
             PrefMDRService.adjustMDRPrefNaming(MDRNamingLength.LENGTH30);

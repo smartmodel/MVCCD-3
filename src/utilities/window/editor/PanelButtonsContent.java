@@ -1,7 +1,6 @@
 package utilities.window.editor;
 
 import console.ViewLogsManager;
-import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
@@ -9,7 +8,9 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
+import utilities.Trace;
 import utilities.files.UtilFiles;
+import utilities.window.DialogMessage;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.SButton;
 import utilities.window.services.ComponentService;
@@ -289,24 +290,27 @@ public abstract class PanelButtonsContent extends PanelContent
         getInputContent().enabledButtons();
         getEditor().adjustTitle();
         MVCCDManager.instance().showMVCCDElementInRepository(getEditor().getMvccdElementCrt());
-
-        if (getEditor().isDatasChanged()) {
-            if (getEditor().isDatasProjectElementEdited()) {
-                MVCCDManager.instance().setDatasProjectChanged(true);
-            }
-        }
     }
 
     public void  treatCreate() {
-        MVCCDElement newMVCCDElement = createNewMVCCDElement(getEditor().getMvccdElementParentChoosed());
+        //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+        MVCCDElement mvccdElementParent = getEditor().getMvccdElementParentChoosed();
+        if (getEditor().isNewElementTransitory()) {
+            mvccdElementParent = null;
+        }
+        MVCCDElement newMVCCDElement = createNewMVCCDElement(mvccdElementParent);
+
         saveDatas(newMVCCDElement);
         getEditor().setMvccdElementNew(newMVCCDElement);
         getEditor().setDatasChanged(true);
 
-       if (!(newMVCCDElement instanceof Project)){
-           // L'ajout doit se faire ici car si l'ajout est réalisé par Apply
-           // le module appelant (editingTreat) ne reprend pas la main et la mise à jour n'est pas faite.
-            MVCCDManager.instance().addNewMVCCDElementInRepository(newMVCCDElement);
+        //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+        if (! getEditor().isNewElementTransitory()) {
+            if (!(newMVCCDElement instanceof Project)) {
+                // L'ajout doit se faire ici car si l'ajout est réalisé par Apply
+                // le module appelant (editingTreat) ne reprend pas la main et la mise à jour n'est pas faite.
+                MVCCDManager.instance().addNewMVCCDElementInRepository(newMVCCDElement);
+            }
         }
     }
 
@@ -351,6 +355,7 @@ public abstract class PanelButtonsContent extends PanelContent
                 new String[] {action, nameMVCCDElement, nameClassMVCCDElement} );
         ViewLogsManager.catchException(e, getEditor(), message);
     }
+
 
 
 }

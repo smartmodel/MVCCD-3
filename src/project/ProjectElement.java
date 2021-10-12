@@ -13,7 +13,10 @@ public abstract class ProjectElement extends MVCCDElement {
     private static final long serialVersionUID = 1000;
 
     private int id; //Identifiant unique pour tout élément d'un projet utilisateur. La valeur est générée automatiquement.
-    private boolean transitory = false;
+    //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+    // Transitory est simplement sans parent !
+    //TODO-0 XML A supprimer
+    //private boolean transitory = false;
 
     public ProjectElement(ProjectElement parent) {
         super(parent); // Ceci appelle aussi de-facto la méthode init() de MVCCDElement.
@@ -66,9 +69,14 @@ public abstract class ProjectElement extends MVCCDElement {
             } catch(Exception e){
                 this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
             }
+            //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+            // isTransitory est déterminé par l'exitence ou pas d'un parent
+            /*
             if ( parent == null) {
                 transitory = true;
             }
+
+             */
         }
     }
 
@@ -134,17 +142,24 @@ public abstract class ProjectElement extends MVCCDElement {
         }
     }
 
-    //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
+    //#MAJ 2021-02-14 Problème de nommage en Ingénierie inverse avec VP
     //TransitoryProjectElement au lieu de Transitory
     public boolean isTransitoryProjectElement() {
-        return transitory;
+        //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+        //return transitory;
+        return getParent() == null;
     }
 
     //#MAJ 2021-02-14 Problème de nopmmage en Ingénierie inverse avec VP
     //TransitoryProjectElement au lieu de Transitory
+    //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+    /*
     public void setTransitoryProjectElement(boolean transitory) {
         this.transitory = transitory;
+
     }
+
+     */
 
     public DefaultMutableTreeNode getNode(){
         return ProjectService.getNodeById(this.id);

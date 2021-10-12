@@ -141,13 +141,15 @@ public class WinRepositoryTree extends JTree {
         ProjectElement lastProjectElement = project.getLastWinRepositoryProjectElement();
         if (lastProjectElement != null) {
             DefaultMutableTreeNode lastNode = ProjectService.getNodeById(lastProjectElement.getIdProjectElement());
-            TreeNode[] lastArrayNodes = lastNode.getPath();
-            TreePath lastPath = new TreePath (lastArrayNodes);
-            boolean lastProjectElementExpanded = project.isLastWinRepositoryExpand();
-            if (lastProjectElementExpanded) {
-                this.expandPath(lastPath);
-            }else{
-                this.collapsePath(lastPath);
+            if (lastNode != null) {
+                TreeNode[] lastArrayNodes = lastNode.getPath();
+                TreePath lastPath = new TreePath(lastArrayNodes);
+                boolean lastProjectElementExpanded = project.isLastWinRepositoryExpand();
+                if (lastProjectElementExpanded) {
+                    this.expandPath(lastPath);
+                } else {
+                    this.collapsePath(lastPath);
+                }
             }
         }
     }

@@ -48,11 +48,23 @@ Problèmes : Initialisation d'une relation en création
 
 //#MAJ 2021-05-30 MLDR-> MPDR Transformation size
 
-//Exception provoquée
-//int i = 0 ;
-//int j = 2 /i ;
+//#MAJ 2021-05-30 NameTarget
 
-//Exception provoquée
-throw new CodeApplicationException("Exception artificielle");
+//#MAJ 2021-06-05 Formulaire Read avec changement de valeurs de paramétrage - NamingInputContent
 
-//CodeApplException provoquée
+//#MAJ 2021-06-06 Formulaire PrefApplButtonsContent - Propriété superflue
+
+//#MAJ 2021-06-06 Suppression du paramétrage MElement.getPath() ; automatiquement la préférence de l'application
+
+//#MAJ 2021-06-18 Message intempestif relatif aux extension par défaut lors de la création d'un nouveau projet
+//#MAJ 2021-06-18B Save As - Message complémentaire de changement de nom de projet
+//#MAJ 2021-06-18C Attribut AID - pas d'affectation de propriété si dupliqué
+//#MAJ 2021-06-18D MCDDatatype autorisé pour NID (Généralisation)
+//#MAJ 2021-06-21 IMCDModelService - getMCDAssociationNoIdOrIdNatural remplacé par getMCDAssociationNotIdCompAndNotNN
+//#MAJ 2021-06-21B MCDDatatype - type date autorisé poue NID
+//#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
+//#MAJ 2021-07-28 Changement réalisation IMWithStereotype
+//#MAJ 2021-07-31 Spéficité d'un élément transitoire
+//#MAJ 2021-08-01 Vérfification code Stéréotypes et contraintes
+
+

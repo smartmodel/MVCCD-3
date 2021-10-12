@@ -31,8 +31,12 @@ public class ConstraintsCreateDefault {
         createConstraint(
                 Preferences.CONSTRAINT_ORDERED_NAME,
                 Preferences.CONSTRAINT_ORDERED_LIENPROG,
-                MCDAttribute.class.getName());
+                MCDEntity.class.getName());
 
+        createConstraint(
+                Preferences.CONSTRAINT_ORDERED_NAME,
+                Preferences.CONSTRAINT_ORDERED_LIENPROG,
+                MCDAttribute.class.getName());
         createConstraint(
                 Preferences.CONSTRAINT_FROZEN_NAME,
                 Preferences.CONSTRAINT_FROZEN_LIENPROG,
@@ -42,22 +46,23 @@ public class ConstraintsCreateDefault {
                 Preferences.CONSTRAINT_ORDERED_NAME,
                 Preferences.CONSTRAINT_ORDERED_LIENPROG,
                 MCDAssEnd.class.getName());
+        createConstraint(
+                Preferences.CONSTRAINT_DELETECASCADE_NAME,
+                Preferences.CONSTRAINT_DELETECASCADE_LIENPROG,
+                MCDAssEnd.class.getName());
 
         createConstraint(
                 Preferences.CONSTRAINT_FROZEN_NAME,
                 Preferences.CONSTRAINT_FROZEN_LIENPROG,
                 MCDAssociation.class.getName());
-
         createConstraint(
                 Preferences.CONSTRAINT_DELETECASCADE_NAME,
                 Preferences.CONSTRAINT_DELETECASCADE_LIENPROG,
                 MCDAssociation.class.getName());
-
         createConstraint(
                 Preferences.CONSTRAINT_ORIENTED_NAME,
                 Preferences.CONSTRAINT_ORIENTED_LIENPROG,
                 MCDAssociation.class.getName());
-
         createConstraint(
                 Preferences.CONSTRAINT_NONORIENTED_NAME,
                 Preferences.CONSTRAINT_NONORIENTED_LIENPROG,
@@ -68,17 +73,27 @@ public class ConstraintsCreateDefault {
                 Preferences.CONSTRAINT_ABSOLUTE_LIENPROG,
                 MCDUnique.class.getName());
 
+        //#MAJ 2021-08-01 Vérfification code Stéréotypes et contraintes
+        // Pas applicablée aux MCDNID
+        /*
         createConstraint(
                 Preferences.CONSTRAINT_ABSOLUTE_NAME,
                 Preferences.CONSTRAINT_ABSOLUTE_LIENPROG,
                 MCDNID.class.getName());
+
+         */
     }
 
 
 
     private void createMDR() {
-
         createMDRDatatype();
+
+        createConstraint(
+                Preferences.CONSTRAINT_FROZEN_NAME,
+                Preferences.CONSTRAINT_FROZEN_LIENPROG,
+                MDRColumn.class.getName());
+
     }
 
     private void createMDRDatatype() {

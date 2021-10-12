@@ -3,8 +3,12 @@ package mdr;
 import exceptions.CodeApplException;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
+import mcd.MCDRelEnd;
+import mcd.MCDRelation;
 import mdr.interfaces.IMDRElementWithIteration;
 import project.ProjectElement;
+
+import java.util.ArrayList;
 
 public abstract class MDRRelation extends MDRElement implements IMRelation, IMDRElementWithIteration {
 
@@ -17,8 +21,13 @@ public abstract class MDRRelation extends MDRElement implements IMRelation, IMDR
     public MDRRelation(ProjectElement parent) {
         super(parent);
     }
+
     public MDRRelation(ProjectElement parent, String name) {
         super(parent, name);
+    }
+
+    public MDRRelation(ProjectElement parent, int id) {
+        super(parent, id);
     }
 
     @Override
@@ -62,6 +71,22 @@ public abstract class MDRRelation extends MDRElement implements IMRelation, IMDR
         throw new CodeApplException("L'extrémité de relation passée en paramètre n'existe pas pour cette relation ");
     }
 
+
+    // Repris de MCDRelation !
+    public void removeInParent(){
+
+        MDRRelEnd a = (MDRRelEnd) getA();
+        if (a != null) {
+            a.removeInParent();
+            a = null;
+        }
+        MDRRelEnd b = (MDRRelEnd) getB();
+        if (b != null) {
+            b.removeInParent();
+            b = null;
+        }
+        super.removeInParent();
+    }
 
 
 }

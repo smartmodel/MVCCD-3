@@ -43,10 +43,4 @@ public class MCDRelationEditingTreat extends EditingTreat {
         return "the.relation";
     }
 
-    @Override
-    protected void removeMVCCDElementInRepository(MVCCDElement element) {
-        MCDRelation mcdRelation = (MCDRelation) element;
-        MVCCDManager.instance().removeMCDRelationAndDependantsInRepository(mcdRelation);
-    }
-
 }

@@ -60,6 +60,8 @@ public class MLDRTransformTables {
         if (mpdrModel instanceof MPDROracleModel) {
             mldrTransformConstraints.transformConstraints();
         }
+
+        // Transformation des relations (repr. graphique de FK)
     }
 
     private void modifyTable(MLDRTable mldrTable, MPDRTable mpdrTable ) {

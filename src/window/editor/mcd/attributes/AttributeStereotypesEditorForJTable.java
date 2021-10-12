@@ -43,7 +43,7 @@ public class AttributeStereotypesEditorForJTable extends AbstractCellEditor
         // Stéréotypes
         ArrayList<Stereotype> stereotypes = StereotypesManager.instance().stereotypes().getStereotypesByClassName(MCDAttribute.class.getName());
 
-        stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
+        stereotypesUMLNames = StereotypeService.getUMLNames(stereotypes);
 
         Collections.sort(stereotypesUMLNames);
 
@@ -52,7 +52,7 @@ public class AttributeStereotypesEditorForJTable extends AbstractCellEditor
     @Override
     public Object getCellEditorValue() {
         ArrayList<String> stereotypesNames = dialog.getResultat();
-        return UtilDivers.ArrayStringToString(stereotypesNames,"");
+        return UtilDivers.arrayStringToString(stereotypesNames,"");
     }
 
     @Override

@@ -5,6 +5,7 @@ import mcd.interfaces.IMPathOnlyRepositoryTree;
 import project.ProjectElement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MCDContConstraints extends MCDElement implements IMPathOnlyRepositoryTree {
 
@@ -47,4 +48,24 @@ public class MCDContConstraints extends MCDElement implements IMPathOnlyReposito
         }
         return resultat;
     }
+
+
+
+
+    public ArrayList<MCDConstraint> getMCDConstraintsSortDefault(){
+        ArrayList<MCDConstraint> mcdConstraintsSorted = new ArrayList<MCDConstraint>();
+        for (MCDConstraint mcdConstraint : getMCDConstraints()){
+            mcdConstraintsSorted.add(mcdConstraint);
+        }
+        Collections.sort(mcdConstraintsSorted, MCDConstraint::compareToDefault);
+        return mcdConstraintsSorted;
+    }
+
+
+
+    // Surcharge pour l'affichage trié PFK - PK - FK
+    public ArrayList<? extends  MVCCDElement> getChildsSortDefault() {
+        return getMCDConstraintsSortDefault() ;
+    }
+
 }

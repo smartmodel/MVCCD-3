@@ -19,12 +19,15 @@ public abstract class MDTransform {
             if ( imdrElementWithIteration instanceof IMDElementWithSource) {
                 // vérifier que'une source soit présente
                 MDElement mdElementSource = ((IMDElementWithSource) imdrElementWithIteration).getMdElementSource();
-                if (mdElementSource != null){
+                // Si la source est supprimée mdElementSource est null !
+                // En remplaçant MdElementSource par son Id, la référence sera nulle mais, pas léa valeur d'id!
+                //if (mdElementSource != null){
                     //Vérifier que les 2 itérations soient différentes
                     if (imdrElementWithIteration.getIteration() != getIteration()){
-                        Delete.deleteMVCCDElement((MVCCDElement) imdrElementWithIteration);
+                        //Delete.deleteMVCCDElement((MVCCDElement) imdrElementWithIteration);
+                        ((MVCCDElement) imdrElementWithIteration).delete();
                     }
-                }
+                //}
             }
         }
     }

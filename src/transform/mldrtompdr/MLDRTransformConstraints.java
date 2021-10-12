@@ -5,6 +5,7 @@ import mdr.MDRConstraint;
 import mldr.MLDRFK;
 import mldr.MLDRPK;
 import mldr.MLDRTable;
+import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
 import mpdr.*;
 import mpdr.interfaces.IMPDRElement;
@@ -64,13 +65,17 @@ public class MLDRTransformConstraints {
             if (mldrConstraint instanceof MLDRPK){
                 MLDRPK mldrPK = (MLDRPK) mldrConstraint;
                 mpdrConstraint = mpdrTable.createPK(mldrPK);
-                MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
             }
             if (mldrConstraint instanceof MLDRFK){
                 MLDRFK mldrFK = (MLDRFK) mldrConstraint;
                 mpdrConstraint = mpdrTable.createFK(mldrFK);
-                MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
             }
+            if (mldrConstraint instanceof MLDRUnique){
+                MLDRUnique mldrUnique = (MLDRUnique) mldrConstraint;
+                mpdrConstraint = mpdrTable.createUnique(mldrUnique);
+            }
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
+
         }
 
         // Le temps de développement
@@ -98,13 +103,45 @@ public class MLDRTransformConstraints {
         MLDRTransformService.modifyNames((IMLDRElement) mldrConstraint, (IMPDRElement) mpdrConstraint);
         MLDRTransformService.modifyName(mpdrModel, mpdrConstraint);
 
-        // Nature
+        // FK
         if (mpdrConstraint instanceof MPDRFK) {
             MLDRFK mldrFK = (MLDRFK) mldrConstraint;
             MPDRFK mpdrFK = (MPDRFK) mpdrConstraint;
-            if (mpdrFK.getNature() != mldrFK.getNature()) {
-                mpdrFK.setNature(mldrFK.getNature());
+            modifyConstraintFK(mldrFK, mpdrFK);
+        }
+
+        // Unique
+        if (mpdrConstraint instanceof MPDRUnique) {
+            MLDRUnique mldrUnique = (MLDRUnique) mldrConstraint;
+            MPDRUnique mpdrUnique = (MPDRUnique) mpdrConstraint;
+            // Nature
+            if (mpdrUnique.getMdrUniqueNature() != mldrUnique.getMdrUniqueNature()) {
+                mpdrUnique.setMdrUniqueNature(mldrUnique.getMdrUniqueNature());
             }
+        }
+    }
+
+    private void modifyConstraintFK(MLDRFK mldrFK, MPDRFK mpdrFK) {
+        // Nature
+        if (mpdrFK.getNature() != mldrFK.getNature()) {
+            mpdrFK.setNature(mldrFK.getNature());
+        }
+        //Indice
+        if (mpdrFK.getIndice() != mldrFK.getIndice()) {
+            mpdrFK.setIndice(mldrFK.getIndice());
+        }
+        //{deleteCascade}
+        if (mpdrFK.isDeleteCascade() != mldrFK.isDeleteCascade()) {
+            mpdrFK.setDeleteCascade(mldrFK.isDeleteCascade());
+        }
+
+        // Oriented
+        if (mpdrFK.isOriented() != mldrFK.isOriented()) {
+            mpdrFK.setOriented(mldrFK.isOriented());
+        }
+        // NotNotOriented
+        if (mpdrFK.isNotOriented() != mldrFK.isNotOriented()) {
+            mpdrFK.setNotOriented(mldrFK.isNotOriented());
         }
     }
 

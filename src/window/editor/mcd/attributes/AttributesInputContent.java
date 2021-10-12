@@ -4,23 +4,27 @@ import constraints.Constraint;
 import constraints.ConstraintService;
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
+import exceptions.service.ExceptionService;
 import m.MElement;
 import main.MVCCDElement;
-import mcd.MCDAttribute;
-import mcd.MCDContAttributes;
+import mcd.*;
+import mcd.services.MCDNIDService;
+import repository.editingTreat.EditingTreat;
 import repository.editingTreat.mcd.MCDAttributeEditingTreat;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import utilities.UtilDivers;
-import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentTable;
 import utilities.window.services.PanelService;
-import window.editor.mcd.attribute.AttributeEditor;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class AttributesInputContent extends PanelInputContentTable {
+
+    protected JButton btnCreateNID1;
 
 
     public AttributesInputContent(AttributesInput attributesInput)    {
@@ -47,6 +51,12 @@ public class AttributesInputContent extends PanelInputContentTable {
     private void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
         panelInputContentCustom.add(panelTableComplete, gbc);
+
+        btnCreateNID1 = new JButton("Création de l'identifiant naturel");
+        btnCreateNID1.setEnabled(false);
+        btnCreateNID1.addActionListener(this);
+
+        panelButtons.add(btnCreateNID1);
 
         this.add(panelInputContentCustom);
     }
@@ -104,19 +114,6 @@ public class AttributesInputContent extends PanelInputContentTable {
     }
 
 
-    @Override
-    protected MElement newElement() {
-        DialogEditor fen = null;
-        MCDContAttributes mcdContAttribute = (MCDContAttributes) getEditor().getMvccdElementCrt();
-
-        fen = new AttributeEditor(getEditor(), mcdContAttribute, null,
-                DialogEditor.NEW, new MCDAttributeEditingTreat());
-
-        fen.setVisible(true);
-        MVCCDElement newElement = fen.getMvccdElementNew();
-        return (MElement) newElement;
-    }
-
 
 
     @Override
@@ -126,27 +123,10 @@ public class AttributesInputContent extends PanelInputContentTable {
         return row;
     }
 
-    @Override
-    protected void updateElement(MElement mElement) {
-        DialogEditor fen = new AttributeEditor(getEditor(), (MCDContAttributes) mElement.getParent(),
-                (MCDAttribute) mElement,
-                DialogEditor.UPDATE, new MCDAttributeEditingTreat());
-        fen.setVisible(true);
-    }
-
-    @Override
-    protected boolean deleteElement(MElement mElement) {
-        return new MCDAttributeEditingTreat().treatDelete(getEditor(), mElement);
-    }
 
     @Override
     protected void putValueInRow(MElement mElement, Object[] row) {
         MCDAttribute attribute = (MCDAttribute) mElement;
-        ArrayList<Stereotype> stereotypes =  attribute.getToStereotypes();
-        ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
-
-        ArrayList<Constraint> constraints =  attribute.getToConstraints();
-        ArrayList<String> constraintsUMLNames = ConstraintService.getUMLNamesByConstraints(constraints);
 
         String textForDatatype = "";
         if(attribute.getDatatypeLienProg() != null) {
@@ -166,7 +146,8 @@ public class AttributesInputContent extends PanelInputContentTable {
         row[col] = attribute.getOrder();
 
         col = AttributesTableColumn.STEREOTYPES.getPosition();
-        row[col] = UtilDivers.ArrayStringToString(stereotypesUMLNames, "");
+        //row[col] = UtilDivers.arrayStringToString(stereotypesUMLNames, "");
+        row[col] = attribute.getStereotypesInLine();
 
         col = AttributesTableColumn.NAME.getPosition();
         row[col] = attribute.getName();
@@ -186,7 +167,7 @@ public class AttributesInputContent extends PanelInputContentTable {
         row[col] = attribute.isUppercase();
 
         col = AttributesTableColumn.CONSTRAINTS.getPosition();
-        row[col] = UtilDivers.ArrayStringToString(constraintsUMLNames, "");;
+        row[col] =attribute.getConstraintsInLine();
 
         col = AttributesTableColumn.DERIVED.getPosition();
         row[col] = attribute.isDerived();
@@ -202,5 +183,47 @@ public class AttributesInputContent extends PanelInputContentTable {
         row[col] = defaultValue;
     }
 
+    protected void enabledContent() {
+        int pos = table.getSelectedRow();
+        if (pos >= 0){
+            btnCreateNID1.setEnabled(nid1Authorized(pos));
+        } else {
+            btnCreateNID1.setEnabled(false);
+        }
+        super.enabledContent();
+    }
+
+    private boolean nid1Authorized (int pos) {
+        MCDAttribute mcdAttribute = (MCDAttribute) getMElementSelected();
+
+        return MCDNIDService.attributeCandidateForNID1(mcdAttribute);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String propertyAction = "";
+        try {
+            Object source = e.getSource();
+            MCDAttribute mcdAttribute = (MCDAttribute) super.getMElementSelected();
+
+            if (source == btnCreateNID1) {
+                propertyAction = "editor.table.attributes.exception.createNID1";
+                if (MCDNIDService.confirmCreateNID1FromAttribute(getEditor().getOwner(), mcdAttribute)) {
+                    refreshRow(table.getSelectedRow());
+                }
+            }
+            super.actionPerformed(e);
+        } catch (Exception exception){
+            ExceptionService.exceptionUnhandled(exception, getEditor(),
+                    getEditor().getMvccdElementCrt(),
+                    "editor.table.attributes.exception",
+                    propertyAction);
+
+        }
+    }
+
+    @Override
+    protected EditingTreat editingTreatDetail() {
+        return new MCDAttributeEditingTreat();
+    }
 
 }

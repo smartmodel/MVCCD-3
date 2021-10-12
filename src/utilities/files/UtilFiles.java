@@ -7,6 +7,7 @@ import messages.MessagesBuilder;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.UtilDivers;
 import utilities.window.DialogMessage;
 
 import javax.swing.*;
@@ -23,7 +24,7 @@ public class UtilFiles {
     //TODO-1 Voir la libraire FileUtils de Apache !
 
     //TODO-1 Voir pourquoi cela ne fonctionne pas dans le code avec cette constante
-    public final  String SEPEEXTENSION = "\\.";
+    //public final  String SEPEEXTENSION = "\\.";
 
     public static String getStrDirectory(File file) {
         String directory = StringUtils.removeEnd(file.getPath(), file.getName());
@@ -44,7 +45,8 @@ public class UtilFiles {
     }
 
     public static String getExtension(String fileName) {
-        String[] parts = fileName.split("\\.");
+        String regex = UtilDivers.toEscapedForRegex(Preferences.FILE_DOT);
+        String[] parts = fileName.split(regex);
         if (parts.length >1){
             return parts[parts.length - 1];
         }
@@ -59,12 +61,13 @@ public class UtilFiles {
      */
     public static String changeExtension(String fileName, String newExtension){
         String newFileName = "";
-        String[] parts = fileName.split("\\.");
+        String regex = UtilDivers.toEscapedForRegex(Preferences.FILE_DOT);
+        String[] parts = fileName.split(regex);
         if (parts.length >1){
             for (int i=0; i < parts.length -1; i++ ){
                 newFileName = newFileName  + parts[i];
             }
-            newFileName = newFileName + "." + newExtension;
+            newFileName = newFileName + Preferences.FILE_DOT + newExtension;
         }
         return newFileName;
     }
@@ -78,7 +81,7 @@ public class UtilFiles {
     }
 
     public static String fileName(String shortName, String extName){
-         return shortName + "." + extName;
+         return shortName + Preferences.FILE_DOT + extName;
     }
 
     public static String filePath(String directory, String fileName){

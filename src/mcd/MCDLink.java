@@ -1,14 +1,24 @@
 package mcd;
 
+import console.ViewLogsManager;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import mcd.interfaces.IMCDModel;
+import mcd.services.IMCDModelService;
 import mcd.services.MCDRelationService;
+import messages.MessagesBuilder;
+import mldr.MLDRModel;
+import mldr.MLDRTable;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
+import utilities.window.DialogMessage;
 
 import java.util.ArrayList;
 
@@ -64,11 +74,10 @@ public class MCDLink extends MCDRelation {
 
     @Override
     public String getNameTree(){
-        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_LINK, false,null);
-    }
-
-    public String getNamePath(int pathMode){
-        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_LINK, true,pathMode);
+        MCDLinkEnd assEndEntity = this.getEndEntity();
+        MCDEntity entity = this.getEntity();
+        MCDAssociation association = this.getAssociation();
+        return assEndEntity.getPath() + Preferences.MCD_NAMING_LINK + association.getNameTreePath();
     }
 
     @Override
@@ -76,24 +85,29 @@ public class MCDLink extends MCDRelation {
         return CLASSSHORTNAMEUI;
     }
 
-    @Override
-    public ArrayList<Stereotype> getToStereotypes() {
-        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
 
-        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
-        Preferences preferences = PreferencesManager.instance().preferences();
 
-        return resultat;
-    }
+    public void delete(){
+        Resultat resultat = new Resultat();
+        // Si nécessaire, changement de la source de la table : Association n:n --> Entité associative
+        if (getAssociation().isDegreeNN()){
+            IMCDModel mcdModelAccueil = this.getIMCDModelAccueil();
+            for (MLDRModel mldrModel : IMCDModelService.getMLDRModels(mcdModelAccueil)){
+                MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(getEntity());
+                if (mldrTable != null){
+                    mldrTable.setMcdElementSource(getAssociation());
+                    String message = MessagesBuilder.getMessagesProperty("editor.link.change.source.to.association.nn",
+                    new String[] {mldrTable.getNameTreePath(), getAssociation().getNameTreePath()} );
+                    resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+                }
+            }
+        }
+        if (resultat.getNbElementsAllLevels() > 0){
+            ViewLogsManager.printResultat(resultat);
+            //DialogMessage.showOk(null, message);
+        }
 
-    @Override
-    public ArrayList<Constraint> getToConstraints() {
-        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
-
-        Constraints constraints = ConstraintsManager.instance().constraints();
-        Preferences preferences = PreferencesManager.instance().preferences();
-
-        return resultat;
+        super.delete();
     }
 
 }

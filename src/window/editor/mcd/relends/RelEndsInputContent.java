@@ -2,25 +2,20 @@ package window.editor.mcd.relends;
 
 import constraints.Constraint;
 import constraints.ConstraintService;
+import exceptions.CodeApplException;
 import m.MElement;
 import main.MVCCDElement;
 import mcd.*;
 import messages.MessagesBuilder;
-import repository.editingTreat.mcd.MCDAssociationEditingTreat;
-import repository.editingTreat.mcd.MCDGeneralizationEditingTreat;
-import repository.editingTreat.mcd.MCDLinkEditingTreat;
-import repository.editingTreat.mcd.MCDRelationEditingTreat;
+import repository.editingTreat.EditingTreat;
+import repository.editingTreat.mcd.*;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import utilities.UtilDivers;
 import utilities.window.DialogMessage;
-import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentTable;
 import utilities.window.scomponents.services.STableService;
 import utilities.window.services.PanelService;
-import window.editor.mcd.relation.association.AssociationEditor;
-import window.editor.mcd.relation.genspec.GenSpecEditor;
-import window.editor.mcd.relation.link.LinkEditor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +24,7 @@ import java.util.ArrayList;
 
 public class RelEndsInputContent extends PanelInputContentTable {
 
+    private EditingTreat editingTreatRelEnd = null;
 
     public RelEndsInputContent(RelEndsInput relEndsInput) {
         super(relEndsInput);
@@ -49,7 +45,6 @@ public class RelEndsInputContent extends PanelInputContentTable {
     private void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
         panelInputContentCustom.add(panelTableComplete, gbc);
-
         this.add(panelInputContentCustom);
     }
 
@@ -96,11 +91,10 @@ public class RelEndsInputContent extends PanelInputContentTable {
     }
 
 
-    @Override
-    protected MElement newElement() {
-        MVCCDElement newElement = null;
+    protected MElement actionAdd(ActionEvent e) {
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        //MElement mElement = newElement();
         MCDEntity mcdEntityContext = (MCDEntity) getEditor().getMvccdElementParent();
-        MCDContRelations mcdContRelations = (MCDContRelations) mcdEntityContext.getParent().getBrotherByClassName(MCDContRelations.class.getName());
 
         String message = MessagesBuilder.getMessagesProperty("editor.relends.choice.nature");
         Object[] options = {"Annuler", "Association", "Spécialisation", "Généralisation", "Entité associative"};
@@ -108,67 +102,32 @@ public class RelEndsInputContent extends PanelInputContentTable {
 
         if (posOption > 0) {
             if (posOption == 1) {
-                newElement = newAssociation(mcdEntityContext, mcdContRelations);
+                MCDAssEndEditingTreat mcdAssEndEditingTreat= new MCDAssEndEditingTreat();
+                mcdAssEndEditingTreat.setMcdEntityFrom(mcdEntityContext);
+                editingTreatRelEnd = mcdAssEndEditingTreat;
             }
+
             if (posOption == 2) {
-                newElement = newSpecialization(mcdEntityContext, mcdContRelations);
+                MCDGSEndEditingTreat mcdGSEndEditingTreat= new MCDGSEndEditingTreat();
+                mcdGSEndEditingTreat.setMcdEntityGen(mcdEntityContext);
+                editingTreatRelEnd = mcdGSEndEditingTreat;
             }
+
             if (posOption == 3) {
-                newElement = newGeneralization(mcdEntityContext, mcdContRelations);
+                MCDGSEndEditingTreat mcdGSEndEditingTreat= new MCDGSEndEditingTreat();
+                mcdGSEndEditingTreat.setMcdEntitySpec(mcdEntityContext);
+                editingTreatRelEnd = mcdGSEndEditingTreat;
             }
+
             if (posOption == 4) {
-                newElement = newLink(mcdEntityContext, mcdContRelations);
+                MCDLinkEndEditingTreat mcdLinkEndEditingTreat= new MCDLinkEndEditingTreat();
+                mcdLinkEndEditingTreat.setMcdEntity(mcdEntityContext);
+                editingTreatRelEnd = mcdLinkEndEditingTreat;
             }
+
         }
-
-         return (MElement) newElement;
+        return super.actionAdd(e);
     }
-
-
-    private MVCCDElement newAssociation(MCDEntity mcdEntityContext, MCDContRelations mcdContRelations) {
-        MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
-        MCDAssociation newMCDAssociation = mcdAssociationEditingTreat.treatNew(getEditor(), mcdContRelations,
-                mcdEntityContext, null, null, true);
-        if (newMCDAssociation != null){
-            return newMCDAssociation.getFrom();  // Extrémité mcdEntityContext
-        } else {
-            return null;
-        }
-    }
-
-    private MVCCDElement newSpecialization(MCDEntity mcdEntityContext, MCDContRelations mcdContRelations) {
-        MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
-        MCDGeneralization mcdGeneralization = mcdGeneralizationEditingTreat.treatNew(getEditor(), mcdContRelations,
-                mcdEntityContext, null,  true);
-        if (mcdGeneralization != null){
-            return mcdGeneralization.getGen();  // Extrémité mcdEntityContext
-        } else {
-            return null;
-        }
-    }
-
-    private MVCCDElement newGeneralization(MCDEntity mcdEntityContext, MCDContRelations mcdContRelations) {
-        MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
-        MCDGeneralization mcdGeneralization = mcdGeneralizationEditingTreat.treatNew(getEditor(), mcdContRelations,
-                 null,  mcdEntityContext, true);
-        if (mcdGeneralization != null){
-            return mcdGeneralization.getSpec();  // Extrémité mcdEntityContext
-        } else {
-            return null;
-        }
-    }
-
-    private MVCCDElement newLink(MCDEntity mcdEntityContext, MCDContRelations mcdContRelations) {
-        MCDLinkEditingTreat mcdLinkEditingTreat = new MCDLinkEditingTreat();
-        MCDLink newMCDLink = mcdLinkEditingTreat.treatNew(getEditor(), mcdContRelations,
-                mcdEntityContext, null,  true);
-        if (newMCDLink != null) {
-            return newMCDLink.getEndEntity();  // Extrémité mcdEntityContext
-        } else {
-            return null;
-        }
-    }
-
 
     @Override
     protected Object[] newRow(MElement mElement) {
@@ -178,52 +137,9 @@ public class RelEndsInputContent extends PanelInputContentTable {
     }
 
     @Override
-    protected void updateElement(MElement mElement) {
-        MCDRelEnd mcdRelEnd = (MCDRelEnd) mElement;
-        DialogEditor fen = null;
-        if (mcdRelEnd.getImRelation() instanceof MCDAssociation) {
-            fen = new AssociationEditor(getEditor(), (MCDContRelations) mcdRelEnd.getImRelation().getParent(),
-                    (MCDAssociation) mcdRelEnd.getImRelation(),
-                    DialogEditor.UPDATE,
-                    new MCDAssociationEditingTreat());
-        }
-        if (mcdRelEnd.getImRelation() instanceof MCDGeneralization) {
-            fen = new GenSpecEditor(getEditor(), (MCDContRelations) mcdRelEnd.getImRelation().getParent(),
-                    (MCDGeneralization) mcdRelEnd.getImRelation(),
-                    DialogEditor.UPDATE,
-                    new MCDGeneralizationEditingTreat());
-        }
-        if (mcdRelEnd.getImRelation() instanceof MCDLink) {
-            fen = new LinkEditor(getEditor(), (MCDContRelations) mcdRelEnd.getImRelation().getParent(),
-                    (MCDLink) mcdRelEnd.getImRelation(),
-                    DialogEditor.UPDATE,
-                    new MCDLinkEditingTreat());
-        }
-
-        fen.setVisible(true);
-    }
-
-
-
-    @Override
-    protected boolean deleteElement(MElement mElement) {
-        MCDRelation mcdRelation = (MCDRelation) ((MCDRelEnd) mElement).getImRelation();
-        return new MCDRelationEditingTreat().treatDelete(getEditor(), mcdRelation );
-    }
-
-    @Override
     protected void putValueInRow(MElement mElement, Object[] row) {
         MCDRelEnd relEnd = (MCDRelEnd) mElement;
         MCDRelation relation = (MCDRelation) relEnd.getImRelation();
-
-
-        ArrayList<Stereotype> stereotypes =  relEnd.getToStereotypes();
-        stereotypes.addAll(relation.getToStereotypes());
-        ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
-
-        ArrayList<Constraint> constraints =  relEnd.getToConstraints();
-        constraints.addAll(relation.getToConstraints());
-        ArrayList<String> constraintsUMLNames = ConstraintService.getUMLNamesByConstraints(constraints);
 
         int col;
 
@@ -244,7 +160,7 @@ public class RelEndsInputContent extends PanelInputContentTable {
         }
 
         col = RelEndsTableColumn.STEREOTYPES.getPosition();
-        row[col] = UtilDivers.ArrayStringToString(stereotypesUMLNames, "");
+        row[col] = relation.getStereotypesInLine();
 
         col = RelEndsTableColumn.OPPOSITE.getPosition();
         /*
@@ -260,16 +176,18 @@ public class RelEndsInputContent extends PanelInputContentTable {
         //row[col] = relEnd.getMCDRelEndOpposite().getNameTree();
 
         col = RelEndsTableColumn.CONSTRAINTS.getPosition();
-        row[col] = UtilDivers.ArrayStringToString(constraintsUMLNames, "");;
+        row[col] = relation.getConstraintsInLine();
 
      }
 
     protected void actionEdit(ActionEvent e, MElement mElement){
+        MCDRelEnd mcdRelEnd = (MCDRelEnd) mElement;
+        fixeEditingTreatRelEnd(mcdRelEnd);
+
         // Update référentiel et ligne du tabeau sélectionnée
         super.actionEdit(e, mElement);
 
         // Modification de la ligne de l'extrémité opposée des associations réflexives
-        MCDRelEnd mcdRelEnd = (MCDRelEnd) mElement;
         if (mcdRelEnd != null) {
             if (mcdRelEnd.getImRelation() instanceof MCDAssociation) {
                 MCDAssociation mcdAssociation = (MCDAssociation) mcdRelEnd.getImRelation();
@@ -284,8 +202,21 @@ public class RelEndsInputContent extends PanelInputContentTable {
         }
     }
 
+    private void fixeEditingTreatRelEnd(MCDRelEnd mcdRelEnd) {
+        if (mcdRelEnd.getImRelation() instanceof MCDAssociation) {
+            editingTreatRelEnd = new MCDAssEndEditingTreat();
+        } else if (mcdRelEnd.getImRelation() instanceof MCDGeneralization) {
+            editingTreatRelEnd = new MCDGSEndEditingTreat();
+        } else if (mcdRelEnd.getImRelation() instanceof MCDLink) {
+            editingTreatRelEnd = new MCDLinkEndEditingTreat();
+        } else {
+            throw new CodeApplException("L'éditeur pour " +
+                    mcdRelEnd.getNameTreePath() + " n'est pas défini.") ;
+        }
+    }
+
     protected boolean actionDelete(ActionEvent e, MElement mElement){
-        // Mémorisation l'extrémité opposée des associations réflexives
+        // Mémorisation de l'extrémité opposée des associations réflexives
         MCDRelEnd mcdRelEnd = (MCDRelEnd) mElement;
         MCDRelEnd mcdRelEndOpposite = null;
         if (mcdRelEnd != null) {
@@ -297,7 +228,8 @@ public class RelEndsInputContent extends PanelInputContentTable {
             }
         }
 
-        // Suppression référentiel et ligne du tabeau sélectionnée
+        // Suppression référentiel et ligne du tableau sélectionnée
+        fixeEditingTreatRelEnd(mcdRelEnd);
         if (super.actionDelete(e, mElement)) {
             // Suppression de la ligne de l'extrémité opposée des associations réflexives
             if (mcdRelEndOpposite != null) {
@@ -311,5 +243,10 @@ public class RelEndsInputContent extends PanelInputContentTable {
         return false;
     }
 
+
+    @Override
+    protected EditingTreat editingTreatDetail() {
+        return editingTreatRelEnd;
+    }
 
 }

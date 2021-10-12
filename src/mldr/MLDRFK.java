@@ -9,6 +9,7 @@ import mdr.interfaces.IMDRParameter;
 import mldr.interfaces.IMDLRConstraint;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
+import mldr.services.MLDRConstraintService;
 import mldr.services.MLDROperationService;
 import mpdr.MPDRParameter;
 import project.ProjectElement;
@@ -70,7 +71,7 @@ public class MLDRFK extends MDRFK implements IMLDRElement, IMLDRElementWithSourc
     }
 
     public ArrayList<MLDRColumn> getMLDRColumns(){
-        return MLDROperationService.getMLDRColumns(this);
+        return MLDRConstraintService.getMLDRColumns(this);
     }
 
 

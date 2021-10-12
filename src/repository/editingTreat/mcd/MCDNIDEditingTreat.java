@@ -1,6 +1,7 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
+import main.MVCCDManager;
 import mcd.MCDContConstraints;
 import mcd.MCDUnicity;
 import repository.editingTreat.EditingTreat;
@@ -11,7 +12,7 @@ import window.editor.mcd.operation.constraint.unicity.nid.NIDInputContent;
 
 import java.awt.*;
 
-public class MCDNIDEditingTreat extends EditingTreat {
+public class MCDNIDEditingTreat extends MCDTableTransitoryEditingTreat {
 
 
     @Override
@@ -31,5 +32,4 @@ public class MCDNIDEditingTreat extends EditingTreat {
     protected String getPropertyTheElement() {
         return "the.constraint.nid";
     }
-
 }

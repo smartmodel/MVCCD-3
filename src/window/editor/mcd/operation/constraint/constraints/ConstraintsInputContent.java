@@ -2,32 +2,29 @@ package window.editor.mcd.operation.constraint.constraints;
 
 import constraints.Constraint;
 import constraints.ConstraintService;
+import exceptions.CodeApplException;
 import m.MElement;
 import main.MVCCDElement;
-import mcd.MCDConstraint;
-import mcd.MCDContConstraints;
-import mcd.MCDNID;
-import mcd.MCDUnique;
+import mcd.*;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import repository.editingTreat.mcd.MCDNIDEditingTreat;
-import repository.editingTreat.mcd.MCDUniqueEditingTreat;
+import repository.editingTreat.EditingTreat;
+import repository.editingTreat.mcd.*;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import utilities.UtilDivers;
 import utilities.window.DialogMessage;
-import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentTable;
 import utilities.window.services.PanelService;
-import window.editor.mcd.operation.constraint.unicity.nid.NIDEditor;
-import window.editor.mcd.operation.constraint.unicity.unique.UniqueEditor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class ConstraintsInputContent extends PanelInputContentTable {
 
+    private EditingTreat editingTreatUnicity = null;
 
     public ConstraintsInputContent(ConstraintsInput constraintsInput)    {
 
@@ -89,7 +86,7 @@ public class ConstraintsInputContent extends PanelInputContentTable {
     protected void specificInitOrLoadTable() {
 
         MCDContConstraints mcdContConstraints = (MCDContConstraints) getEditor().getMvccdElementCrt();
-        ArrayList<MCDConstraint> mcdConstraints = mcdContConstraints.getMCDConstraints();
+        ArrayList<MCDConstraint> mcdConstraints = mcdContConstraints.getMCDConstraintsSortDefault();
 
         datas = new Object[mcdConstraints.size()][ConstraintsTableColumn.getNbColumns()];
         int line=-1;
@@ -118,12 +115,8 @@ public class ConstraintsInputContent extends PanelInputContentTable {
         return true;
     }
 
-
-    @Override
-    protected MElement newElement() {
-        DialogEditor fen = null;
-        MVCCDElement newElement = null;
-        MCDContConstraints mcdContConstraints = (MCDContConstraints) getEditor().getMvccdElementCrt();
+    protected MElement actionAdd(ActionEvent e) {
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
 
         String message = MessagesBuilder.getMessagesProperty("editor.constaints.choice.nature");
         //Object[] options = {"Annuler", "Id. naturel", "Unique", "Logique"};
@@ -132,19 +125,48 @@ public class ConstraintsInputContent extends PanelInputContentTable {
 
         if (posOption > 0 ) {
             if (posOption == 1) {
-                fen = new NIDEditor(getEditor(), mcdContConstraints, null,
-                        DialogEditor.NEW, new MCDNIDEditingTreat());
+                MCDNIDEditingTreat mcdNIDEditingTreat = new MCDNIDEditingTreat();
+                editingTreatUnicity = mcdNIDEditingTreat;
             }
-
             if (posOption == 2) {
-                fen = new UniqueEditor(getEditor(), mcdContConstraints, null,
-                        DialogEditor.NEW, new MCDUniqueEditingTreat());
+                MCDUniqueEditingTreat mcdUniqueEditingTreat = new MCDUniqueEditingTreat();
+                editingTreatUnicity = mcdUniqueEditingTreat;
             }
-            fen.setVisible(true);
-            newElement = fen.getMvccdElementNew();
         }
+        return super.actionAdd(e);
+    }
 
-        return (MElement) newElement;
+    protected void actionEdit(ActionEvent e, MElement mElement){
+        MCDUnicity mcdUnicity = (MCDUnicity) mElement;
+        fixeEditingTreatRelEnd(mcdUnicity);
+
+        // Update référentiel et ligne du tabeau sélectionnée
+        super.actionEdit(e, mElement);
+    }
+
+    protected boolean actionDelete(ActionEvent e, MElement mElement){
+         MCDUnicity mcdUnicity = (MCDUnicity) mElement;
+
+        // Suppression référentiel et ligne du tableau sélectionnée
+        fixeEditingTreatRelEnd(mcdUnicity);
+        return super.actionDelete(e, mcdUnicity) ;
+    }
+
+
+    private void fixeEditingTreatRelEnd(MCDUnicity mcdUnicity) {
+        if (mcdUnicity instanceof MCDNID) {
+            editingTreatUnicity = new MCDNIDEditingTreat();
+        } else if (mcdUnicity instanceof MCDUnique) {
+            editingTreatUnicity = new MCDUniqueEditingTreat();
+        } else  {
+            throw new CodeApplException("L'éditeur pour " +
+                    mcdUnicity.getNameTreePath() + " n'est pas défini.") ;
+        }
+    }
+
+    @Override
+    protected EditingTreat editingTreatDetail() {
+        return editingTreatUnicity;
     }
 
     @Override
@@ -155,39 +177,9 @@ public class ConstraintsInputContent extends PanelInputContentTable {
     }
 
     @Override
-    protected void updateElement(MElement mElement) {
-        DialogEditor fen = null;
-        if (mElement instanceof MCDNID) {
-            fen = new NIDEditor(getEditor(), (MCDContConstraints) mElement.getParent(),
-                    (MCDNID) mElement,
-                    DialogEditor.UPDATE,
-                    new MCDNIDEditingTreat());
-        }
-        if (mElement instanceof MCDUnique) {
-            fen = new UniqueEditor(getEditor(), (MCDContConstraints) mElement.getParent(),
-                    (MCDUnique) mElement,
-                    DialogEditor.UPDATE,
-                    new MCDUniqueEditingTreat());
-        }
-        fen.setVisible(true);
-    }
-
-    @Override
-    protected boolean deleteElement(MElement mElement) {
-        return new MCDNIDEditingTreat().treatDelete(getEditor(), mElement);
-    }
-
-    @Override
     protected void putValueInRow(MElement mElement, Object[] row) {
 
         MCDConstraint constraint = (MCDConstraint) mElement;
-
-        ArrayList<Stereotype> stereotypes =  constraint.getToStereotypes();
-        ArrayList<String> stereotypesUMLNames = StereotypeService.getUMLNamesBySterotypes(stereotypes);
-
-        ArrayList<Constraint> constraints =  constraint.getToConstraints();
-
-        ArrayList<String> constraintsUMLNames = ConstraintService.getUMLNamesByConstraints(constraints);
 
         int col;
 
@@ -204,7 +196,7 @@ public class ConstraintsInputContent extends PanelInputContentTable {
         //row[col] = constraint.getClassShortNameUI();
 
         col = ConstraintsTableColumn.STEREOTYPES.getPosition();
-        row[col] = UtilDivers.ArrayStringToString(stereotypesUMLNames, "");
+        row[col] = constraint.getStereotypesInLine();
 
         col = ConstraintsTableColumn.NAME.getPosition();
         row[col] = constraint.getName();
@@ -213,7 +205,7 @@ public class ConstraintsInputContent extends PanelInputContentTable {
         row[col] = constraint.getParametersNameAsStr();
 
         col = ConstraintsTableColumn.CONSTRAINTS.getPosition();
-        row[col] = UtilDivers.ArrayStringToString(constraintsUMLNames, "");;
+        row[col] = constraint.getConstraintsInLine();
 
      }
 

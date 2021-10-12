@@ -1,6 +1,5 @@
 package transform.mcdtomldr;
 
-import delete.Delete;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
@@ -43,8 +42,7 @@ public class MCDTransform extends MDTransform {
 
             // Change source MCD pour mldrColumnPK (Attribut AID <--> Entité)
             resultat.addResultat(changeSourceMLDRColumnPK());
-            //TODO-0 chgt entre n:n et entité associative
-            //TODO-0 Ajouter le traitement d'erreur comme pour changeSourceMLDRColumnPK();
+           //TODO-0 Ajouter le traitement d'erreur comme pour changeSourceMLDRColumnPK();
 
             // Transformation des entités
             MCDTransformToTable mcdTransformToTable = new MCDTransformToTable(this, imcdModel, mldrModel);
@@ -55,7 +53,7 @@ public class MCDTransform extends MDTransform {
 
             // Transformation des associations non identifiantes de composition
             MCDTransformToFK mcdTransformToFK = new MCDTransformToFK(this);
-            mcdTransformToFK.createOrModifyFromAllAssNoIdOrIdNatural(imcdModel, mldrModel);
+            mcdTransformToFK.createOrModifyFromAllAssNotIdCompAndNotNN(imcdModel, mldrModel);
 
             // Transformation des contraintes d'unicité
             MCDTransformToUnique mcdTransformToUnique = new MCDTransformToUnique(this);
@@ -71,6 +69,11 @@ public class MCDTransform extends MDTransform {
 
             //Rafraichir l'arbre
             mldrModel.refreshTreeMLDR();
+
+            // Traçage de changement de projet
+            //TODO-1 Véfier la mise à jour effective
+            MVCCDManager.instance().setDatasProjectChanged(true);
+
             return resultat;
         } catch(Exception e){
             undoTransform(mldrModelClone);
@@ -79,8 +82,10 @@ public class MCDTransform extends MDTransform {
         }
     }
 
+
     private void undoTransform(MLDRModel mldrModelClone) {
-        Delete.deleteMVCCDElement(mldrModel);
+        //Delete.deleteMVCCDElement(mldrModel);
+        mldrModel.delete();
         mldrModelClone.setParent((MVCCDElement) imcdModel);
         MVCCDManager.instance().addNewMVCCDElementInRepository(mldrModelClone);
     }
@@ -139,7 +144,8 @@ public class MCDTransform extends MDTransform {
                 }
             }
             catch (Exception e){
-                Delete.deleteMVCCDElement(mldrTable);
+                //Delete.deleteMVCCDElement(mldrTable);
+                mldrTable.delete();
                 // Information de suppression
                 String message = MessagesBuilder.getMessagesProperty ("transform.mcdtomldr.mtable.without.pk",
                         new String[] {mldrTable.getName() });
@@ -149,6 +155,7 @@ public class MCDTransform extends MDTransform {
         }
         return resultat ;
     }
+
 
     /*
     @Override

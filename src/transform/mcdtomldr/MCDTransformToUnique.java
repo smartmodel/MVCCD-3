@@ -150,7 +150,7 @@ public class MCDTransformToUnique {
                     message = e.getMessage();
                 } else {
                     message = MessagesBuilder.getMessagesProperty("mdrunique.build.name.error",
-                            new String[]{mldrTable.getName(), uniqueNature.getText(), mcdUnicity.getNamePath(MElementService.PATHSHORTNAME)});
+                            new String[]{mldrTable.getName(), uniqueNature.getText(), mcdUnicity.getNamePath()});
                 }
                 throw new CodeApplException(message, e);
             }

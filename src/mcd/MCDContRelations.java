@@ -1,7 +1,10 @@
 package mcd;
 
+import main.MVCCDElement;
 import mcd.interfaces.IMPathOnlyRepositoryTree;
 import project.ProjectElement;
+
+import java.util.ArrayList;
 
 public class MCDContRelations extends MCDElement implements IMPathOnlyRepositoryTree {
 
@@ -27,5 +30,10 @@ public class MCDContRelations extends MCDElement implements IMPathOnlyRepository
 
      */
 
+
+    //TODO-0 PAS A surcharger pour prendre nameTreePath
+    public ArrayList<? extends MVCCDElement> getChildsSortDefault() {
+        return getChildsSortName();
+    }
 
 }

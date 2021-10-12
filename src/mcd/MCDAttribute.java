@@ -1,9 +1,13 @@
 package mcd;
 
 import constraints.Constraint;
+import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import datatypes.MCDDatatype;
+import datatypes.MDDatatypeService;
 import m.interfaces.IMCompletness;
+import m.interfaces.IMUMLExtensionNamingInLine;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAttributeService;
@@ -12,12 +16,14 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParameter, IMCDElementWithTargets {
+public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParameter, IMCDElementWithTargets,
+        IMUMLExtensionNamingInLine {
 
     private static final long serialVersionUID = 1000;
 
@@ -80,6 +86,10 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
 
     public String getDatatypeLienProg() {
         return datatypeLienProg;
+    }
+
+    public MCDDatatype getMCDDatatype() {
+        return MDDatatypeService.getMCDDatatypeByLienProg(datatypeLienProg);
     }
 
     public void setDatatypeLienProg(String datatypeLienProg) {
@@ -162,7 +172,8 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         this.list = list;
     }
 
-    public ArrayList<Stereotype> getToStereotypes(){
+    public ArrayList<Stereotype> getStereotypes(){
+        // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
         ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
 
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
@@ -187,10 +198,24 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
             }
         }
 
+        if (partOfUniques().size()> 0){
+            for (MCDUnique unique : partOfUniques()){
+                resultat.add(unique.getDefaultStereotype());
+            }
+        }
+
         return resultat;
     }
 
-    public ArrayList<Constraint> getToConstraints(){
+    @Override
+    public String getStereotypesInLine() {
+        return StereotypeService.getUMLNamingInLine(getStereotypes());
+    }
+
+
+
+    @Override
+    public ArrayList<Constraint> getConstraints(){
         ArrayList<Constraint> resultat = new ArrayList<Constraint>();
 
         Constraints constraints = ConstraintsManager.instance().constraints();
@@ -209,6 +234,10 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         return resultat;
     }
 
+    @Override
+    public String getConstraintsInLine() {
+        return ConstraintService.getUMLNamingInLine(getConstraints());
+    }
 
 
     @Override
@@ -216,10 +245,22 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         return CLASSSHORTNAMEUI;
     }
 
+    @Override
+    public String getNameTarget() {
+        return getName();
+    }
+
     public MCDEntity getEntityAccueil(){
         return (MCDEntity) getParent().getParent();
     }
+
     public ArrayList<MCDNID> partOfNIds(){
         return MCDAttributeService.partOfNIds(this);
     }
+
+
+    public ArrayList<MCDUnique> partOfUniques(){
+        return MCDAttributeService.partOfUniques(this);
+    }
+
 }

@@ -1,6 +1,7 @@
 package mcd;
 
 import constraints.Constraint;
+import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import mdr.MDRUniqueNature;
@@ -32,7 +33,6 @@ public abstract class MCDUnicity extends MCDConstraint{
         super(parent, name);
     }
 
-    public abstract Stereotype getDefaultStereotype();
 
     public abstract String getOfUnicity();
 
@@ -45,8 +45,7 @@ public abstract class MCDUnicity extends MCDConstraint{
         this.absolute = absolute;
     }
 
-    @Override
-    public ArrayList<Constraint> getToConstraints() {
+    public ArrayList<Constraint> getConstraints() {
         ArrayList<Constraint> resultat = new ArrayList<Constraint>();
 
         Constraints constraints = ConstraintsManager.instance().constraints();

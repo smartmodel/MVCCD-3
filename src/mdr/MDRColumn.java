@@ -1,16 +1,33 @@
 package mdr;
 
+import constraints.Constraint;
+import constraints.ConstraintService;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
+import m.MRelEndMulti;
+import m.MRelEndMultiPart;
+import m.interfaces.IMUMLExtensionNamingInLine;
+import mcd.MCDAttribute;
+import mcd.MCDNID;
+import mcd.services.MCDAttributeService;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
+import mdr.services.MDRColumnsService;
 import mldr.MLDRColumn;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.ProjectElement;
+import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
 import utilities.Trace;
 
 import java.util.ArrayList;
 
 public abstract class MDRColumn extends MDRElement implements
-        IMDRParameter, IMDRElementNamingPreferences, IMDRElementWithIteration {
+        IMUMLExtensionNamingInLine, IMDRParameter, IMDRElementNamingPreferences, IMDRElementWithIteration {
 
     private Integer iteration = null; // Si un objet est créé directement et non par transformation
 
@@ -33,6 +50,7 @@ public abstract class MDRColumn extends MDRElement implements
 
     private  static final long serialVersionUID = 1000;
 
+    //TODO-0 A voir avec Steve pour la sauvegarde XML car en principe, je stocke un id !!!
     private MDRColumn mdrColumnPK = null;
 
     private String tempTargetColumnPkId = null;
@@ -99,6 +117,14 @@ public abstract class MDRColumn extends MDRElement implements
     }
 
     public boolean isMandatory() {
+        if (getMDRTableAccueil().getMDRPK() != null ){
+                if (isPk()) {
+                    return true;
+                } else if (isFk()){
+                    MRelEndMultiPart multiMinStd =getFk().getMDRRelationFK().getEndParent().getMultiMinStd();
+                    return multiMinStd == MRelEndMultiPart.MULTI_ONE;
+                }
+        }
         return mandatory;
     }
 
@@ -147,6 +173,14 @@ public abstract class MDRColumn extends MDRElement implements
         return getMDRTableAccueil().getMDRColumnsFK().contains(this);
     }
 
+    public boolean isPFk() {
+        return isPk() && isFk();
+    }
+
+    public boolean isPkNotFk() {
+        return isPk() && (!isFk());
+    }
+
     public MDRFK getFk() {
         for (MDRFK mdrFK : getMDRTableAccueil().getMDRFKs()) {
             if (mdrFK.getMDRColumns().contains(this)){
@@ -185,4 +219,84 @@ public abstract class MDRColumn extends MDRElement implements
     public void setTempTargetColumnPkId(String tempTargetColumnPkId) {
         this.tempTargetColumnPkId = tempTargetColumnPkId;
     }
+
+    // Applicale aux colonnes PFK
+    // retourne le niveau de la source colonne PK d'une colonne PFK
+    public Integer getLevelForPK(){
+        //if (isPk() && isFk()) {
+        if (isFk()) {
+            return MDRColumnsService.getLevelForPK(this.getMDRColumnPK());
+        } else {
+            return null;
+        }
+    }
+
+    public int compareToDefault(MDRColumn other) {
+        return MDRColumnsService.compareToDefault(this, other);
+    }
+
+    public abstract MCDAttribute getMcdAttributeSource();
+
+    public boolean isFromMcdAttributeSource(){
+        return getMcdAttributeSource() != null;
+    }
+
+
+
+    @Override
+    public ArrayList<Stereotype> getStereotypes() {
+        // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        if (isPk()){
+            if( ! isPFk()){
+                resultat.add(stereotypes.getStereotypeByLienProg(MDRColumn.class.getName(),
+                        preferences.STEREOTYPE_PK_LIENPROG));
+            } else {
+                resultat.add(getFk().getPFKStereotype());
+            }
+        } else {
+            if (isMandatory()){
+                resultat.add(stereotypes.getStereotypeByLienProg(MDRColumn.class.getName(),
+                        preferences.STEREOTYPE_M_LIENPROG));
+            }
+            if (isFk()){
+                resultat.add(getFk().getDefaultStereotype());
+            }
+            for (MCDNID mcdNID : partOfMCDNIds()){
+                if (preferences.getMDR_PREF_COLUMN_NID()) {
+                    resultat.add(mcdNID.getDefaultStereotype());
+                }
+            }
+        }
+
+        return resultat;
+    }
+
+
+    @Override
+    public String getStereotypesInLine() {
+        return StereotypeService.getUMLNamingInLine(getStereotypes());
+    }
+
+
+    @Override
+    public ArrayList<Constraint> getConstraints() {
+        return MDRColumnsService.getConstraints(this);
+    }
+
+    @Override
+    public String getConstraintsInLine() {
+        return ConstraintService.getUMLNamingInLine(getConstraints());
+    }
+
+
+    public ArrayList<MCDNID> partOfMCDNIds(){
+        return MDRColumnsService.partOfMCDNIds(this);
+    }
+
+
 }

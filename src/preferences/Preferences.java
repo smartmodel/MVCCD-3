@@ -2,7 +2,8 @@ package preferences;
 
 
 import console.WarningLevel;
-import console.WarningLevelManager;
+import javafx.scene.input.KeyCode;
+import m.MUMLExtensionNaming;
 import main.MVCCDElement;
 import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
@@ -146,12 +147,17 @@ public class Preferences extends MVCCDElement {
     public static String LOGGING_FOLDER_PATH = "log" ;
     public static String DIRECTORY_LOGGING_NAME = "logs";
 
-    // Path de nommage au niveau des objets du MCD (Modèle.paquetatge.entité....
-    public static String MODEL_NAME_PATH_SEPARATOR = ".";
+    // Path de nommage au niveau des objets  (Modèle.paquetatge.entité....
+    public static String PATH_NAMING_SEPARATOR = ".";
+    // Séparation entre conteneur de modèle et nommage d'association qui contient déjà des séparateurs "."
+    public static String PATH_NAMING_RELATION_SEPARATOR = "!";
 
     public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
     public static Integer MVCCD_WINDOW_WIDTH = 1200;
     public static Integer MVCCD_WINDOW_HEIGHT = 900; // Limité à 900 pour l'utilisation portable
+    public static Integer NAMING_WINDOW_WIDTH = 1200;
+    public static Integer NAMING_WINDOW_HEIGHT = 900; // Limité à 900 pour l'utilisation portable
+
     public static Integer PROJECT_WINDOW_WIDTH = 800;
     public static Integer PROJECT_WINDOW_HEIGHT = 400;
     public static Integer MODEL_WINDOW_WIDTH = 800;
@@ -198,6 +204,17 @@ public class Preferences extends MVCCDElement {
 
     public static String STEREOTYPE_SEPARATOR = "-";
 
+    public static String STEREOTYPE_ENTITY_NAME = "Entity";
+    public static String STEREOTYPE_ENTITY_LIENPROG = "Entity";
+    public static String STEREOTYPE_TABLE_NAME = "Table";
+    public static String STEREOTYPE_TABLE_LIENPROG = "Table";
+    public static String STEREOTYPE_ORACLE_NAME = "Oracle";
+    public static String STEREOTYPE_ORACLE_LIENPROG = "Oracle";
+    public static String STEREOTYPE_MYSQL_NAME = "MySQL";
+    public static String STEREOTYPE_MYSQL_LIENPROG = "MySQL";
+    public static String STEREOTYPE_POSTGRESQL_NAME = "PostgreSQL";
+    public static String STEREOTYPE_POSTGRESQL_LIENPROG = "PostgreSQL";
+
     public static String STEREOTYPE_AID_NAME = "AID";
     public static String STEREOTYPE_AID_LIENPROG = "AID";
     public static String STEREOTYPE_M_NAME = "M";
@@ -221,6 +238,17 @@ public class Preferences extends MVCCDElement {
     public static String STEREOTYPE_U_NAME = "U";
     public static String STEREOTYPE_U_LIENPROG = "U";
 
+    public static String STEREOTYPE_PK_NAME = "PK";
+    public static String STEREOTYPE_PK_LIENPROG = "PK";
+
+    public static int STEREOTYPE_FK_MAX = 20;
+    public static String STEREOTYPE_FK_NAME = "FK";
+    public static String STEREOTYPE_FK_LIENPROG = "FK";
+
+    public static int STEREOTYPE_PFK_MAX = 20;  // Même indiçage que FK !
+    public static String STEREOTYPE_PFK_NAME = "PFK";
+    public static String STEREOTYPE_PFK_LIENPROG = "PFK";
+
     public static String CONSTRAINT_ORDERED_NAME = "ordered";
     public static String CONSTRAINT_ORDERED_LIENPROG = "ordered";
     public static String CONSTRAINT_FROZEN_NAME = "frozen";
@@ -234,8 +262,6 @@ public class Preferences extends MVCCDElement {
 
     public static String CONSTRAINT_ABSOLUTE_NAME = "absolute";
     public static String CONSTRAINT_ABSOLUTE_LIENPROG = "absolute";
-
-
 
 
     public static String MCDDATATYPE_ROOT_NAME = "MCD";
@@ -380,8 +406,10 @@ public class Preferences extends MVCCDElement {
     public static String ICONE_RELATION_ASS_NONID_LG = "AssNonId.png";
     public static String ICONE_RELATION_ASS_ID_COMP_LEFT_LG = "AssIdCompLeft.png";
     public static String ICONE_RELATION_ASS_ID_COMP_RIGHT_LG = "AssIdCompRight.png";
+    public static String ICONE_RELATION_ASS_ID_COMP_STEREO_LG = "AssIdCompStereo.png";
     public static String ICONE_RELATION_ASS_ID_NAT_LEFT_LG = "AssIdNatLeft.png";
     public static String ICONE_RELATION_ASS_ID_NAT_RIGHT_LG = "AssIdNatRight.png";
+    public static String ICONE_RELATION_ASS_ID_NAT_STEREO_LG = "AssIdNatStereo.png";
     public static String ICONE_RELATION_LINK_LEFT_LG = "LinkLeft.png";
     public static String ICONE_RELATION_LINK_RIGHT_LG = "LinkRight.png";
 
@@ -552,6 +580,8 @@ public class Preferences extends MVCCDElement {
     public static String MDR_NAMING_COLUMN_PK = "mdr.column.pk";
     public static String MDR_NAMING_COLUMN_FK = "mdr.column.fk";
     public static String MDR_NAMING_PK = "mdr.pk";
+    public static String MDR_NAMING_PK_NN = "mdr.pk.nn";
+    public static String MDR_NAMING_PK_NN_INDICE = "mdr.pk.nn.indice";
     public static String MDR_NAMING_FK = "mdr.fk";
     public static String MDR_NAMING_UNIQUE = "mdr.unique";
 
@@ -614,6 +644,8 @@ public class Preferences extends MVCCDElement {
     public static String MDR_COLUMN_FK_NAME_FORMAT_DEFAULT = "{parentTableShortName}{tableSep}{parentRoleShortName}{roleSep}{colName}";
     public static String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT_DEFAULT = "{colNameOneAncestor}{indColFK}";
     public static String MDR_PK_NAME_FORMAT_DEFAULT = "{PK_}{tableShortName}";
+    public static String MDR_PK_NN_NAME_FORMAT_DEFAULT = "{PK_}{ATableShortName}{tableSep}{assShortName}{roleA}{roleSep}{roleB}{tableSep}{BTableShortName}";
+    public static String MDR_PK_NN_NAME_INDICE_FORMAT_DEFAULT = "{PK_}{ATableShortName}{tableSep}{BTableShortName}{indTableNN}";
     public static String MDR_INDICE_REGEXPR = "([0-9]+)$";
     public static Integer MDR_INDICE_TABLENN_LENGTH = 1 ;
     public static Integer MDR_INDICE_COL_FK_LENGTH = 1 ;
@@ -637,6 +669,11 @@ public class Preferences extends MVCCDElement {
     //public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK = "mdr.pref.column.fk.one.diff.indice.fk";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1 = "mdr.pref.column.fk.one.diff.indice.start.1";
     public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2 = "mdr.pref.column.fk.one.diff.indice.start.2";
+
+    public static String MDR_PREF_COLUMN_PFK_STEREOTYPE_BOTH = "mdr.pref.column.pfk.stereotype.both";
+    public static String MDR_PREF_COLUMN_PFK_STEREOTYPE_SEPARATE = "mdr.pref.column.pfk.stereotype.separate";
+
+    public static Boolean MDR_PREF_COLUMN_NID_DEFAULT = true;
 
     public static String WARNING_LEVEL_DEVELOPMENT= "warning.level.development";
     public static String WARNING_LEVEL_DEBUG = "warning.level.debug";
@@ -681,6 +718,12 @@ public class Preferences extends MVCCDElement {
     // Préférences de projet (modifications User/Custom)
     // Général
     private String GENERAL_RELATION_NOTATION ;
+    private MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
+    private MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
+    private MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
+    private MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
+
+
     //private String PROJET_VERSION;  //Directement comme propriété de projet
 
     // MCD
@@ -694,6 +737,8 @@ public class Preferences extends MVCCDElement {
     private String MCD_AID_DEP_COLUMN_NAME = null;
     private Boolean MCD_AID_WITH_DEP = true;
     private Integer MCD_AID_SIZEDEFAULT = MCDDOMAIN_AID_SIZEDEFAULT;
+    //TODO-0 --> Est devenue une préférence de portée générale
+    // Par exemple PATH_NAMING et renommer aussi les 2 constantes MCD_NAMING_NAME et MCD_NAMING_SHORT_NAME
     private String MCD_TREE_NAMING_ASSOCIATION = null;
     private String MCD_MODE_NAMING_LONG_NAME = null;
     private String MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = null;
@@ -722,6 +767,8 @@ public class Preferences extends MVCCDElement {
     private String MDR_COLUMN_ATTR_SHORT_NAME_FORMAT = null;
     private String MDR_COLUMN_DERIVED_MARKER = null;
     private String MDR_PK_NAME_FORMAT = null;
+    private String MDR_PK_NN_NAME_FORMAT = null;
+    private String MDR_PK_NN_NAME_INDICE_FORMAT = null;
     private String MDR_COLUMN_PK_NAME_FORMAT = null;
     private String MDR_COLUMN_FK_NAME_FORMAT = null;
     private String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT = null;
@@ -740,6 +787,9 @@ public class Preferences extends MVCCDElement {
     // MDR Préférences
     private Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR = null ;
     private String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = null;
+    private String MDR_PREF_COLUMN_PFK_STEREOTYPE = null;
+    private Boolean MDR_PREF_COLUMN_NID = true;
+
 
     // MLDR Préférences
     private MDRNamingLength MLDR_PREF_NAMING_LENGTH = null;
@@ -898,6 +948,50 @@ public class Preferences extends MVCCDElement {
 
     public void setGENERAL_RELATION_NOTATION(String GENERAL_RELATION_NOTATION) {
         this.GENERAL_RELATION_NOTATION = GENERAL_RELATION_NOTATION;
+    }
+
+    public MUMLExtensionNaming getGENERAL_M_UML_STEREOTYPE_NAMING_INLINE() {
+        if (GENERAL_M_UML_STEREOTYPE_NAMING_INLINE == null){
+            GENERAL_M_UML_STEREOTYPE_NAMING_INLINE = MUMLExtensionNaming.ONELINE_MANYMARKER;
+        }
+        return GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
+    }
+
+    public void setGENERAL_M_UML_STEREOTYPE_NAMING_INLINE(MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INLINE) {
+        this.GENERAL_M_UML_STEREOTYPE_NAMING_INLINE = GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
+    }
+
+    public MUMLExtensionNaming getGENERAL_M_UML_STEREOTYPE_NAMING_INBOX() {
+        if (GENERAL_M_UML_STEREOTYPE_NAMING_INBOX == null){
+            GENERAL_M_UML_STEREOTYPE_NAMING_INBOX = MUMLExtensionNaming.MANYLINE;
+        }
+        return GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
+    }
+
+    public void setGENERAL_M_UML_STEREOTYPE_NAMING_INBOX(MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INBOX) {
+        this.GENERAL_M_UML_STEREOTYPE_NAMING_INBOX = GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
+    }
+
+    public MUMLExtensionNaming getGENERAL_M_UML_CONSTRAINT_NAMING_INLINE() {
+        if (GENERAL_M_UML_CONSTRAINT_NAMING_INLINE == null){
+            GENERAL_M_UML_CONSTRAINT_NAMING_INLINE = MUMLExtensionNaming.ONELINE_MANYMARKER;
+        }
+        return GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
+    }
+
+    public void setGENERAL_M_UML_CONSTRAINT_NAMING_INLINE(MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INLINE) {
+        this.GENERAL_M_UML_CONSTRAINT_NAMING_INLINE = GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
+    }
+
+    public MUMLExtensionNaming getGENERAL_M_UML_CONSTRAINT_NAMING_INBOX() {
+        if (GENERAL_M_UML_CONSTRAINT_NAMING_INBOX == null){
+            GENERAL_M_UML_CONSTRAINT_NAMING_INBOX = MUMLExtensionNaming.MANYLINE;
+        }
+        return GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
+    }
+
+    public void setGENERAL_M_UML_CONSTRAINT_NAMING_INBOX(MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INBOX) {
+        this.GENERAL_M_UML_CONSTRAINT_NAMING_INBOX = GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
     }
 
     public Boolean getMCD_JOURNALIZATION() {
@@ -1192,6 +1286,28 @@ public class Preferences extends MVCCDElement {
         this.MDR_PK_NAME_FORMAT = MDR_PK_NAME_FORMAT;
     }
 
+    public String getMDR_PK_NN_NAME_FORMAT() {
+        if (MDR_PK_NN_NAME_FORMAT == null){
+            MDR_PK_NN_NAME_FORMAT = MDR_PK_NN_NAME_FORMAT_DEFAULT;
+        }
+        return MDR_PK_NN_NAME_FORMAT;
+    }
+
+    public void setMDR_PK_NN_NAME_FORMAT(String MDR_PK_NN_NAME_FORMAT) {
+        this.MDR_PK_NN_NAME_FORMAT = MDR_PK_NN_NAME_FORMAT;
+    }
+
+    public String getMDR_PK_NN_NAME_INDICE_FORMAT() {
+        if (MDR_PK_NN_NAME_INDICE_FORMAT == null){
+            MDR_PK_NN_NAME_INDICE_FORMAT = MDR_PK_NN_NAME_INDICE_FORMAT_DEFAULT;
+        }
+        return MDR_PK_NN_NAME_INDICE_FORMAT;
+    }
+
+    public void setMDR_PK_NN_NAME_INDICE_FORMAT(String MDR_PK_NN_NAME_INDICE_FORMAT) {
+        this.MDR_PK_NN_NAME_INDICE_FORMAT = MDR_PK_NN_NAME_INDICE_FORMAT;
+    }
+
     public String getMDR_COLUMN_FK_NAME_FORMAT() {
         if (MDR_COLUMN_FK_NAME_FORMAT == null){
             MDR_COLUMN_FK_NAME_FORMAT = MDR_COLUMN_FK_NAME_FORMAT_DEFAULT;
@@ -1369,6 +1485,28 @@ public class Preferences extends MVCCDElement {
 
     public void setMDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF(String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF) {
         this.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF;
+    }
+
+    public String getMDR_PREF_COLUMN_PFK_STEREOTYPE() {
+        if (MDR_PREF_COLUMN_PFK_STEREOTYPE == null){
+            MDR_PREF_COLUMN_PFK_STEREOTYPE = MDR_PREF_COLUMN_PFK_STEREOTYPE_BOTH;
+        }
+        return MDR_PREF_COLUMN_PFK_STEREOTYPE;
+    }
+
+    public void setMDR_PREF_COLUMN_PFK_STEREOTYPE(String MDR_PREF_COLUMN_PFK_STEREOTYPE) {
+        this.MDR_PREF_COLUMN_PFK_STEREOTYPE = MDR_PREF_COLUMN_PFK_STEREOTYPE;
+    }
+
+    public Boolean getMDR_PREF_COLUMN_NID() {
+        if (MDR_PREF_COLUMN_NID == null){
+            MDR_PREF_COLUMN_NID = MDR_PREF_COLUMN_NID_DEFAULT;
+        }
+        return MDR_PREF_COLUMN_NID;
+    }
+
+    public void setMDR_PREF_COLUMN_NID(Boolean MDR_PREF_COLUMN_NID) {
+        this.MDR_PREF_COLUMN_NID = MDR_PREF_COLUMN_NID;
     }
 
     public MDRNamingLength getMLDR_PREF_NAMING_LENGTH() {

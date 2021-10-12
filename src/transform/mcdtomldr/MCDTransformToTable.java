@@ -81,12 +81,12 @@ public class MCDTransformToTable {
         while (mcdEntitiesToTransform.size() > 0){
             ArrayList<MCDEntity> mcdEntitiesToTransformInner = (ArrayList<MCDEntity>) mcdEntitiesToTransform.clone();
             for (MCDEntity mcdEntity : mcdEntitiesToTransformInner){
-                ArrayList<MCDRelEnd> mcdRelEndsParents = getMCDRRelEndsParentsNotNN(mcdEntity);
-                mcdRelEndsParents.addAll(getMCDRRelEndsParentsNN(mcdEntity));
-                ArrayList<MLDRTable> mldrTablesParents = getMLDRTablesParents(mcdRelEndsParents);
+                ArrayList<MCDRelEnd> mcdRelEndsSources = getMCDRRelEndsParentsNotNN(mcdEntity);
+                mcdRelEndsSources.addAll(getMCDRRelEndsLinkNN(mcdEntity));
+                ArrayList<MLDRTable> mldrTablesParents = getMLDRTablesParents(mcdRelEndsSources);
                 if (pkParentsExists(mldrTablesParents)){
                     MLDRTable mldrTable = mldrModel.getMLDRTableByEntitySource(mcdEntity);
-                    MLDRPK mldrPK = new MCDTransformToPK(mcdTransform).createOrModifyFromEntityConcretNoInd(mldrModel, mcdEntity, mldrTable,mcdRelEndsParents);
+                    MLDRPK mldrPK = new MCDTransformToPK(mcdTransform).createOrModifyFromEntityConcretNoInd(mldrModel, mcdEntity, mldrTable,mcdRelEndsSources);
                     if (mldrPK != null){
                         // Suppression de l'entité dans la liste à transformer
                         mcdEntitiesToTransform.remove(mcdEntity);
@@ -106,6 +106,11 @@ public class MCDTransformToTable {
     }
 
     public void createOrModifyFromAssociationNN(MCDAssociation mcdAssNN) {
+        // Les éventuels changement de présence où pas d'une entité associative
+        // sont pris en charge par :
+        // MCLink en cas de suppression de lien
+        // MVCDElementFactory en cas d'ajout d'un lien
+
         // Table
         MLDRTable mldrTable = mldrModel.getMLDRTableByAssNNSource(mcdAssNN);
         if (mldrTable == null){
@@ -127,7 +132,7 @@ public class MCDTransformToTable {
 
         boolean exist = true;
 
-        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getAssEndsIdCompChild();
+        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getMCDAssEndsIdCompChild();
         for (MCDAssEnd mcdAssEndIdCompChild : mcdAssEndsIdCompChild){
             MCDAssEnd mcdAssEndIdCompParent = mcdAssEndIdCompChild.getMCDAssEndOpposite() ;
             MCDEntity mcdEntityParent = mcdAssEndIdCompParent.getMcdEntity();
@@ -161,7 +166,7 @@ public class MCDTransformToTable {
 
         ArrayList<MLDRTable> resultat = new ArrayList<MLDRTable>();
 
-        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getAssEndsIdCompChild();
+        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getMCDAssEndsIdCompChild();
         ArrayList<MCDGSEnd> mcdAssEndsSpecialize = mcdEntity.getGSEndSpecialize();
 
         ArrayList<MCDRelEnd> mcdRelEndsChild = MCDRelEndService.convertToMCDRelEnd(mcdAssEndsIdCompChild);
@@ -191,7 +196,7 @@ public class MCDTransformToTable {
 
         ArrayList<MCDRelEnd> resultat = new ArrayList<MCDRelEnd>();
 
-        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getAssEndsIdCompChild();
+        ArrayList<MCDAssEnd> mcdAssEndsIdCompChild = mcdEntity.getMCDAssEndsIdCompChild();
         ArrayList<MCDGSEnd> mcdAssEndsSpecialize = mcdEntity.getGSEndSpecialize();
 
         ArrayList<MCDRelEnd> mcdRelEndsChild = MCDRelEndService.convertToMCDRelEnd(mcdAssEndsIdCompChild);
@@ -203,12 +208,12 @@ public class MCDTransformToTable {
         return resultat;
     }
 
-    private ArrayList<MCDRelEnd> getMCDRRelEndsParentsNN(MCDEntity mcdEntity) {
+    private ArrayList<MCDRelEnd> getMCDRRelEndsLinkNN(MCDEntity mcdEntity) {
 
-        ArrayList<MCDAssEnd> mcdAssEndsNNParent = mcdEntity.getAssEndsAssNNParent();
-        ArrayList<MCDRelEnd> mcdRelEndsParent = MCDRelEndService.convertToMCDRelEnd(mcdAssEndsNNParent);
+        ArrayList<MCDAssEnd> mcdAssEndsNN = mcdEntity.getMCDAssEndsLinkNN();
+        ArrayList<MCDRelEnd> mcdRelEnds = MCDRelEndService.convertToMCDRelEnd(mcdAssEndsNN);
 
-        return mcdRelEndsParent;
+        return mcdRelEnds;
     }
 
 
@@ -252,7 +257,7 @@ public class MCDTransformToTable {
                     message = e.getMessage();
                 } else {
                     message = MessagesBuilder.getMessagesProperty("mldrtable.build.name.error",
-                            new String[]{mcdEntity.getName()});
+                            new String[]{mcdEntity.getNamePath()});
                 }
                 throw new CodeApplException(message, e);
             }
@@ -316,7 +321,7 @@ public class MCDTransformToTable {
                     message = e.getMessage();
                 } else {
                     message = MessagesBuilder.getMessagesProperty("mldrtable.build.name.error",
-                            new String[]{mcdAssociationNN.getName()});
+                            new String[]{mcdAssociationNN.getNameTreePath()});
                 }
                 throw new CodeApplException(message, e);
             }

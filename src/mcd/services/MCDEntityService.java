@@ -4,9 +4,11 @@ import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
 import m.services.MRelationService;
+import main.MVCCDElement;
 import mcd.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import resultat.Resultat;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,16 +54,6 @@ public class MCDEntityService {
         return resultat;
     }
 
-    public static ArrayList<MCDAssEnd> getMCDAssEnds(MCDEntity mcdEntity) {
-        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
-        for (MCDRelEnd mcdRelEnd : getMCDRelEnds(mcdEntity)){
-            if (mcdRelEnd instanceof MCDAssEnd){
-                resultat.add((MCDAssEnd) mcdRelEnd);
-            }
-        }
-        return resultat;
-    }
-
     public static ArrayList<MCDGSEnd> getGSEndsGeneralize(MCDEntity mcdEntity) {
         ArrayList<MCDGSEnd> resultat = new ArrayList<MCDGSEnd>();
         for (MCDGSEnd mcdGSEnd : getMCDGSEnds(mcdEntity)){
@@ -72,6 +64,7 @@ public class MCDEntityService {
         return resultat;
     }
 
+
     public static ArrayList<MCDGSEnd> getGSEndsSpecialize(MCDEntity mcdEntity) {
         ArrayList<MCDGSEnd> resultat = new ArrayList<MCDGSEnd>();
         for (MCDGSEnd mcdGSEnd : getMCDGSEnds(mcdEntity)){
@@ -80,161 +73,6 @@ public class MCDEntityService {
             }
         }
         return resultat;
-    }
-
-
-    public static ArrayList<MCDAssEnd> getAssEndsNoIdChild(MCDEntity mcdEntity) {
-        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
-        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
-            if (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.NOID){
-                resultat.add((MCDAssEnd) mcdAssEnd);
-            }
-        }
-        return resultat;
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsNoIdOptionnalChild(MCDEntity mcdEntity) {
-        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
-        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
-            if (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.NOID){
-                if (mcdAssEnd.getMCDAssEndOpposite().getMultiMinStd() == MRelEndMultiPart.MULTI_ZERO) {
-                    resultat.add((MCDAssEnd) mcdAssEnd);
-                }
-            }
-        }
-        return resultat;
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsNoIdAndNoNNChild(MCDEntity mcdEntity) {
-        ArrayList<MCDAssEnd> resultat = getAssEndsNoIdChild(mcdEntity);
-        resultat.removeAll(getAssEndsAssNNChild(mcdEntity));
-        return resultat;
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsAssNNChild(MCDEntity mcdEntity) {
-        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
-        for (MCDLinkEnd mcdLinkEnd: getMCDLinkEnds(mcdEntity)){
-            MCDAssociation mcdAssociation = (MCDAssociation) mcdLinkEnd.getMcdLink().getEndAssociation().getmElement();
-            if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_MANY_MANY){
-                    resultat.add((MCDAssEnd) mcdAssociation.getFrom());
-                    resultat.add((MCDAssEnd) mcdAssociation.getTo());
-            }
-        }
-        return resultat;
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsAssNNParent(MCDEntity mcdEntity) {
-        // Il n'y a pas de rôle child ou parent !
-        return getAssEndsAssNNChild(mcdEntity);
-    }
-
-
-
-
-        public static ArrayList<MCDAssEnd> getAssEndsId(MCDEntity mcdEntity, boolean parent) {
-        ArrayList<MCDAssEnd> resultat = getAssEndsIdComp(mcdEntity, parent);
-        resultat.addAll(getAssEndsIdNat(mcdEntity, parent));
-        resultat.addAll(getAssEndsCP(mcdEntity, parent));
-        return resultat;
-    }
-
-
-
-    public static ArrayList<MCDAssEnd> getAssEndsIdParent(MCDEntity mcdEntity) {
-        return getAssEndsId(mcdEntity, true);
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsIdChild(MCDEntity mcdEntity) {
-        return getAssEndsId(mcdEntity, false);
-    }
-
-
-
-    public static ArrayList<MCDAssEnd> getAssEndsIdAndNNChild(MCDEntity mcdEntity) {
-        ArrayList<MCDAssEnd> resultat = getAssEndsId(mcdEntity, false);
-        resultat.addAll(getAssEndsAssNNChild(mcdEntity));
-        return resultat;
-    }
-
-
-    public static ArrayList<MCDAssEnd> getAssEndsIdAndNNParent(MCDEntity mcdEntity) {
-        ArrayList<MCDAssEnd> resultat = getAssEndsId(mcdEntity, true);
-        resultat.addAll(getAssEndsAssNNParent(mcdEntity));
-        return resultat;
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsIdComp(MCDEntity mcdEntity, boolean parent) {
-        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
-        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
-            if (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.IDCOMP){
-                boolean c1 = mcdAssEnd.getMultiMaxStd() == MRelEndMultiPart.MULTI_MANY;
-                if ( c1 && !parent ) {
-                    resultat.add((MCDAssEnd) mcdAssEnd);
-                }
-                if ( (!c1) && (parent) ){
-                    resultat.add((MCDAssEnd) mcdAssEnd);
-                }
-            }
-        }
-        return resultat;
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsIdCompParent(MCDEntity mcdEntity) {
-        return getAssEndsIdComp(mcdEntity, true);
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsIdCompChild(MCDEntity mcdEntity) {
-        return getAssEndsIdComp(mcdEntity, false);
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsIdNat(MCDEntity mcdEntity, boolean parent) {
-        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
-        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
-            if (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.IDNATURAL){
-                boolean c1 = mcdAssEnd.getMultiMaxStd() == MRelEndMultiPart.MULTI_MANY;
-                if ( c1 && !parent ) {
-                    resultat.add((MCDAssEnd) mcdAssEnd);
-                }
-                if ( (!c1) && (parent) ){
-                    resultat.add((MCDAssEnd) mcdAssEnd);
-                }
-            }
-        }
-        return resultat;
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsIdNatParent(MCDEntity mcdEntity) {
-        return getAssEndsIdNat(mcdEntity, true);
-    }
-
-
-    public static ArrayList<MCDAssEnd> getAssEndsIdNatChild(MCDEntity mcdEntity) {
-        return getAssEndsIdNat(mcdEntity, false);
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsCP(MCDEntity mcdEntity, boolean parent) {
-        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
-        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)){
-            if (mcdAssEnd.getMcdAssociation().getNature() == MCDAssociationNature.CP){
-                boolean c1 = mcdAssEnd.getMultiMaxStd() == MRelEndMultiPart.MULTI_MANY;
-                if ( c1 && !parent ) {
-                    resultat.add((MCDAssEnd) mcdAssEnd);
-                }
-                if ( (!c1) && (parent) ){
-                    resultat.add((MCDAssEnd) mcdAssEnd);
-                }
-            }
-        }
-        return resultat;
-    }
-
-    public static ArrayList<MCDAssEnd> getAssEndsCPParent(MCDEntity mcdEntity) {
-        return getAssEndsCP(mcdEntity, true);
-    }
-
-
-    public static ArrayList<MCDAssEnd> getAssEndsCPChild(MCDEntity mcdEntity) {
-        return getAssEndsCP(mcdEntity, false);
     }
 
     public static ArrayList<MCDLinkEnd> getMCDLinkEnds(MCDEntity mcdEntity) {
@@ -344,5 +182,153 @@ public class MCDEntityService {
     }
 
 
+    // Nouveaux getMCDAssEnd...
 
+    public static ArrayList<MCDAssEnd> getMCDAssEndsOpposites(ArrayList<MCDAssEnd> mcdAssEnds){
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : mcdAssEnds) {
+            resultat.add(mcdAssEnd.getMCDAssEndOpposite());
+        }
+        return resultat;
+
+    }
+
+    public static ArrayList<MCDAssEnd> getMCDAssEnds(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MVCCDElement mvccdElement : mcdEntity.getMCDContRelEnds().getChilds()){
+            if (mvccdElement instanceof MCDAssEnd){
+                resultat.add((MCDAssEnd) mvccdElement);
+            }
+        }
+        return resultat;
+    }
+
+
+    public static ArrayList<MCDAssEnd> getMCDAssEndsNN(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)) {
+            if (mcdAssEnd.getMcdAssociation().getDegree() == MRelationDegree.DEGREE_MANY_MANY) {
+                resultat.add(mcdAssEnd);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDAssEnd> getMCDAssEnds1N(MCDEntity mcdEntity, boolean parent) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)) {
+            if (mcdAssEnd.getMcdAssociation().getDegree() == MRelationDegree.DEGREE_ONE_MANY) {
+                boolean c1 = mcdAssEnd.getMultiMaxStd() == MRelEndMultiPart.MULTI_MANY;
+                if ( c1 && !parent ) {
+                    resultat.add(mcdAssEnd);
+                }
+                if ( (!c1) && (parent) ){
+                    resultat.add(mcdAssEnd);
+                }
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDAssEnd> getMCDAssEnds11(MCDEntity mcdEntity, boolean parent) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : getMCDAssEnds(mcdEntity)) {
+            if (mcdAssEnd.getMcdAssociation().getDegree() == MRelationDegree.DEGREE_ONE_ONE) {
+                boolean c1 = mcdAssEnd.getMultiMinStd() == MRelEndMultiPart.MULTI_ONE;
+                boolean c2 = mcdAssEnd.getMCDAssEndOpposite().getMultiMinStd() == MRelEndMultiPart.MULTI_ONE;
+                MCDAssEnd mcdAssEndParent ;
+                MCDAssEnd mcdAssEndChild ;
+                if ( c1 != c2 ) {
+                    if (c1) {
+                        mcdAssEndParent = mcdAssEnd;
+                        mcdAssEndChild = mcdAssEnd.getMCDAssEndOpposite();
+                    } else{
+                        mcdAssEndParent = mcdAssEnd.getMCDAssEndOpposite();
+                        mcdAssEndChild = mcdAssEnd;
+                    }
+                } else{
+                    boolean c3 = mcdAssEnd == mcdAssEnd.getMcdAssociation().getFrom();
+                    if (c3){
+                        mcdAssEndParent = mcdAssEnd;
+                        mcdAssEndChild = mcdAssEnd.getMCDAssEndOpposite();
+                    } else {
+                        mcdAssEndParent = mcdAssEnd.getMCDAssEndOpposite();
+                        mcdAssEndChild = mcdAssEnd;
+                    }
+                }
+                if (parent){
+                    resultat.add(mcdAssEndParent);
+                } else {
+                    resultat.add(mcdAssEndChild);
+                }
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDAssEnd> getMCDAssEndsNotNN(MCDEntity mcdEntity, boolean parent) {
+        ArrayList<MCDAssEnd> resultat = getMCDAssEnds1N(mcdEntity, parent);
+        resultat.addAll(getMCDAssEnds11(mcdEntity, parent));
+        return resultat;
+    }
+
+    public static ArrayList<MCDAssEnd> getMCDAssEndsAssNature(MCDEntity mcdEntity,
+                                                           boolean parent,
+                                                           MCDAssociationNature assNature) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDAssEnd mcdAssEnd : getMCDAssEndsNotNN(mcdEntity, parent)) {
+            if (mcdAssEnd.getMcdAssociation().getNature() == assNature) {
+                resultat.add(mcdAssEnd);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDAssEnd> getMCDAssEndsId(MCDEntity mcdEntity,
+                                                              boolean parent){
+        ArrayList<MCDAssEnd> resultat = getMCDAssEndsAssNature(mcdEntity, parent, MCDAssociationNature.IDCOMP);
+        resultat.addAll(getMCDAssEndsAssNature(mcdEntity, parent, MCDAssociationNature.IDNATURAL));
+        resultat.addAll(getMCDAssEndsAssNature(mcdEntity, parent, MCDAssociationNature.CP));
+        return resultat ;
+    }
+
+    public static ArrayList<MCDAssEnd> getMCDAssEndsLinkNN(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        for (MCDLinkEnd mcdLinkEnd: getMCDLinkEnds(mcdEntity)){
+            MCDAssociation mcdAssociation = (MCDAssociation) mcdLinkEnd.getMcdLink().getEndAssociation().getmElement();
+            if (mcdAssociation.getDegree() == MRelationDegree.DEGREE_MANY_MANY){
+                resultat.add((MCDAssEnd) mcdAssociation.getFrom());
+                resultat.add((MCDAssEnd) mcdAssociation.getTo());
+            }
+        }
+        return resultat;
+    }
+
+
+    public static ArrayList<MCDAssEnd> getMCDAssEndsNoIdOptionnal(MCDEntity mcdEntity,
+                                                                  boolean parent) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        ArrayList<MCDAssEnd>  mcdAssEndsNoId = MCDEntityService.getMCDAssEndsAssNature(mcdEntity, parent, MCDAssociationNature.NOID);
+        for (MCDAssEnd mcdAssEndNoId : mcdAssEndsNoId) {
+            MCDAssEnd mcdAssEndNoIdParent ;
+            if (parent){
+                mcdAssEndNoIdParent =  mcdAssEndNoId;
+            } else {
+                mcdAssEndNoIdParent =  mcdAssEndNoId.getMCDAssEndOpposite();
+            }
+            if (mcdAssEndNoIdParent.getMultiMinStd() == MRelEndMultiPart.MULTI_ZERO) {
+                resultat.add(mcdAssEndNoId);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MCDAssEnd> getMCDAssEndsStructureIdForParameters(MCDEntity mcdEntity) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        // Extrémités opposées aux extrémités identifiantes avec rôle child côté entité
+        resultat =  MCDAssEndService.getMCDAssEndsOpposites(mcdEntity.getMCDAssEndsIdChild());
+         // Extrémités d'association LinkNN
+        resultat.addAll(mcdEntity.getMCDAssEndsLinkNN());
+        return resultat;
+    }
 }

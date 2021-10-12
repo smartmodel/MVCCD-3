@@ -22,7 +22,6 @@ import repository.Repository;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
-import utilities.Trace;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
 
@@ -33,8 +32,9 @@ import java.util.ArrayList;
 
 /**
  * Il s'agit de la classe d'orchestration du programme.
- * Les attributs permettent cette orchestration.
+ * Les propriétés permettent cette orchestration.
  */
+
 public class MVCCDManager {
 
     private static MVCCDManager instance;
@@ -47,7 +47,6 @@ public class MVCCDManager {
     private ProjectsRecents projectsRecents = null; //Projets ouverts  récemment
     private File fileProjectCurrent = null; //Fichier de sauvegarde du projet en cours de traitement
     private boolean datasProjectChanged = false; //Indicateur de changement de données propres au projet
-    //private boolean datasEdited = true; //Indicateur d'édition de données y-compris les préférences d'application
 
     //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
     private boolean extensionProjectFileNotEqual = false; // Si l'extension du fichier correspond à la préférence d'application
@@ -174,7 +173,9 @@ public class MVCCDManager {
         DefaultMutableTreeNode nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
         getWinRepositoryContent().getTree().changeModel(repository);
         getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(nodeNew.getPath()));
-        setDatasProjectChanged(true);
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        // Un changement Repository !--> changment projet
+        // setDatasProjectChanged(true);
     }
 
     public void addNewMVCCDElementInRepository(MVCCDElement mvccdElementNew) {
@@ -183,7 +184,9 @@ public class MVCCDManager {
         DefaultMutableTreeNode nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
         getWinRepositoryContent().getTree().changeModel(repository);
         getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(nodeNew.getPath()));
-        setDatasProjectChanged(true);
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        // Un changement Repository !--> changment projet
+        // setDatasProjectChanged(true);
     }
 
     public void showMVCCDElementInRepository(MVCCDElement mvccdElement) {
@@ -192,11 +195,33 @@ public class MVCCDManager {
             DefaultMutableTreeNode node = ProjectService.getNodeById(projectElement.getIdProjectElement());
             //getWinRepositoryContent().getTree().changeModel(repository);
             getWinRepositoryContent().getTree().getTreeModel().reload(node);
+            //TreePath nodeTreePath = new TreePath(node.getPath());
+            //getWinRepositoryContent().getTree().scrollPathToVisible(nodeTreePath);
             getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
         }
     }
 
+    // A priori pour le remplacement des paramètres d'une contrainte/opération dont
+    // tous les paramètres sont gérés au sein d'une transaction propre à la contrainte/opération
+    // Attention : C'est le tri par défaut.
+
+    public void replaceChildsInRepository(MVCCDElement parent) {
+        if (parent instanceof ProjectElement) {
+            ProjectElement projectElement = (ProjectElement) parent;
+            DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(projectElement.getIdProjectElement());
+            nodeParent.removeAllChildren();
+            // Erreur Comodification...
+            // TODO-0 A voir !!!
+            // for (MVCCDElement child : parent.getChilds()){
+            for (int i = 0 ; i < parent.getChilds().size() ; i ++){
+                addNewMVCCDElementInRepository(parent.getChilds().get(i), nodeParent);
+            }
+            showMVCCDElementInRepository(parent);
+        }
+    }
+
     public void removeMVCCDElementInRepository(MVCCDElement mvccdElementToRemove, MVCCDElement parent) {
+        // Suppression dans l'arbre de référentiel
         DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(((ProjectElement)parent).getIdProjectElement());
         ProjectElement child = (ProjectElement) mvccdElementToRemove;
         DefaultMutableTreeNode nodeChild= ProjectService.getNodeById(child.getIdProjectElement());
@@ -212,7 +237,7 @@ public class MVCCDManager {
             //getWinRepositoryContent().getTree().getTreeModel().reload();
             setDatasProjectChanged(true);
         }
-    }
+}
 
     public void changeParentMVCCDElementInRepository(MVCCDElement mvccdElementChanged, MVCCDElement oldParent) {
         removeMVCCDElementInRepository(mvccdElementChanged, oldParent);
@@ -227,11 +252,11 @@ public class MVCCDManager {
 
     }
 
-    public void removeMCDRelationAndDependantsInRepository(MCDRelation mcdRelation) {
+    public void removeMCDRelationAndChildsInRepository(MCDRelation mcdRelation) {
 
         ArrayList<MCDRelation> mcdRelationChilds = mcdRelation.getMCDRelationsChilds();
         for (MCDRelation mcdRelationChild : mcdRelationChilds) {
-            removeMCDRelationAndDependantsInRepository(mcdRelationChild);
+            removeMCDRelationAndChildsInRepository(mcdRelationChild);
         }
         removeMVCCDElementInRepository(mcdRelation, mcdRelation.getParent());
         //TODO-0 A voir La remarque ci-dessous
@@ -404,7 +429,7 @@ public class MVCCDManager {
     public Resultat saveProject() {
         Resultat resultat ;
         if (fileProjectCurrent != null) {
-            resultat = saveProjectBase();
+            resultat = saveProjectBase("");
             //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
             if (isExtensionProjectFileNotEqual()) {
                 projectsRecents.add(fileProjectCurrent);
@@ -426,7 +451,8 @@ public class MVCCDManager {
         if (fileChoose != null){
             if (UtilFiles.confirmIfExist(mvccdWindow, fileChoose)) {
                 fileProjectCurrent = fileChoose;
-                resultat = saveProjectBase();
+                //#MAJ 2021-06-18B Save As - Message complémentaire de changement de nom de projet
+                resultat = saveProjectBase(MessagesBuilder.getMessagesProperty ("project.save.as.additionnal"));
                 projectsRecents.add(fileProjectCurrent);
                 changeActivateProjectOpenRecentsItems();
             }
@@ -434,7 +460,7 @@ public class MVCCDManager {
         return resultat;
     }
 
-    private Resultat saveProjectBase(){
+    private Resultat saveProjectBase(String messageAdditionnal){
         Resultat resultat = new Resultat();
         String message = MessagesBuilder.getMessagesProperty("project.save.start",
                 new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() } );
@@ -454,6 +480,7 @@ public class MVCCDManager {
             message = MessagesBuilder.getMessagesProperty ("project.save.finish.ok",
                     new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() });
 
+            message += System.lineSeparator() + messageAdditionnal;
         } catch (Exception e){
             resultat.addExceptionUnhandled(e);
             // pas de référence aux noms du projet et du fichier qui peuvent être une source d'erreur
@@ -471,6 +498,8 @@ public class MVCCDManager {
         String message = MessagesBuilder.getMessagesProperty("project.close", new String[] {project.getName()});
         resultat.add( new ResultatElement(message, ResultatLevel.INFO));
         project = null;
+        //#MAJ 2021-06-18 Message intempestif relatif aux extension par défaut lors de la création d'un nouveau projet
+        fileProjectCurrent = null;
         repository.removeProject();
         PreferencesManager.instance().setProfilePref(null);
         repository.removeProfile();

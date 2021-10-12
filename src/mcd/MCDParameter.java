@@ -2,6 +2,9 @@ package mcd;
 
 import m.services.MElementService;
 import mcd.interfaces.IMCDParameter;
+import mcd.services.MCDParameterService;
+import mdr.MDRParameter;
+import mdr.services.MDRParameterService;
 import project.ProjectElement;
 import utilities.Trace;
 
@@ -30,33 +33,46 @@ public class MCDParameter extends MCDElement {
 
     public String getName() {
         if (target != null){
-            if (target instanceof MCDRelEnd) {
-                return target.getNamePath(MElementService.PATHSHORTNAME);
-            } else {
-                return target.getName();
-            }
+            //#MAJ 2021-05-30 NameTarget
+            return target.getNameTarget();
         } else {
             return super.getName();
         }
     }
 
     public String getNameTree() {
-        if (target != null){
-            if (target instanceof MCDRelEnd) {
-                return target.getNamePath(MElementService.PATHSHORTNAME);
-            } else {
-                return target.getNameTree();
-            }
-        } else {
-            return super.getNameTree();
-        }
+        return getName();
     }
 
     public String toString(){
-        return getNameTree();
+        return getName();
     }
 
     public static String getClassShortNameUI() {
         return "Paramètre";
     }
+
+
+    public int compareToDefault(MCDParameter other) {
+        return MCDParameterService.compareToDefault(this, other);
+    }
+
+    public MCDAttribute getMCDAttribute(){
+        if (target != null) {
+            if ( target instanceof MCDAttribute){
+                return (MCDAttribute) target;
+            }
+        }
+        return null;
+    }
+
+    public MCDAssEnd getMCDAssEnd(){
+        if (target != null) {
+            if ( target instanceof MCDAssEnd){
+                return (MCDAssEnd) target;
+            }
+        }
+        return null;
+    }
+
 }

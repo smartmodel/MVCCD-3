@@ -1,6 +1,5 @@
 package transform.mldrtompdr;
 
-import delete.Delete;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
@@ -36,19 +35,31 @@ public class MLDRTransform extends MDTransform {
         MPDRModel mpdrModelClone = (MPDRModel) mpdrModel.cloneDeep();
 
         try {
-            mldrModel.incrementeIteration();
+            mpdrModel.incrementeIteration();
 
             // Transformation des tables
             MLDRTransformTables mldrTransformTables = new MLDRTransformTables(this, mldrModel, mpdrModel);
             mldrTransformTables.transformTables();
 
+
             //Etablissement des référencements entre MPDRElement (FKs, Colonnes de FKs...
-            referencingBetweenElements();
+            referencingBetweenPKsAndFKs();
+
+            // Transformation des relationFKs
+            MLDRTransformRelations mldrTransformRelations = new MLDRTransformRelations(this, mldrModel, mpdrModel);
+            mldrTransformRelations.transformRelations();
+
+
             //Suppression des MPDRElement absents de l'itération
             deleteMDRElementNotInIteration();
 
             //Rafraichir l'arbre
             mpdrModel.refreshTreeMPDR();
+
+            // Traçage de changement de projet
+            //TODO-1 Véfier la mise à jour effective
+            MVCCDManager.instance().setDatasProjectChanged(true);
+
             return resultat;
         } catch(Exception e){
             undoTransform(mpdrModelClone);
@@ -58,7 +69,8 @@ public class MLDRTransform extends MDTransform {
     }
 
     private void undoTransform(MPDRModel mpdrModelClone) {
-        Delete.deleteMVCCDElement(mpdrModel);
+        //Delete.deleteMVCCDElement(mpdrModel);
+        mpdrModel.delete();
         mpdrModelClone.setParent((MVCCDElement) mldrModel);
         MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrModelClone);
     }
@@ -113,7 +125,7 @@ public class MLDRTransform extends MDTransform {
         return mpdrModel.getIMDRElementsWithIterationInScope();
 
     }
-    private void referencingBetweenElements() {
+    private void referencingBetweenPKsAndFKs() {
         for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()){
             for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumns()){
                 if (mpdrColumn.isFk()) {
@@ -127,7 +139,6 @@ public class MLDRTransform extends MDTransform {
             }
         }
     }
-
 
     private void referencingColumnFK(MPDRColumn mpdrColumnFK) {
         //Niveau physique
@@ -164,6 +175,8 @@ public class MLDRTransform extends MDTransform {
             mpdrFK.setMdrPK(mpdrPK);
         }
     }
+
+
 
     public Resultat getResultat() {
         return resultat;

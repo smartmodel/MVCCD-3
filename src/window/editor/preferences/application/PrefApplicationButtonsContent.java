@@ -7,7 +7,8 @@ import java.awt.event.ActionListener;
 
 public class PrefApplicationButtonsContent extends PanelButtonsContent implements ActionListener {
 
-    private PrefApplicationButtons prefApplicationButtons;
+    //#MAJ 2021-06-06 Formulaire PrefApplButtonsContent - Propriété superflue
+    //private PrefApplicationButtons prefApplicationButtons;
 
     public PrefApplicationButtonsContent(PrefApplicationButtons prefApplicationButtons) {
         super(prefApplicationButtons);

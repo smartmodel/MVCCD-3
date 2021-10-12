@@ -4,7 +4,9 @@ import main.MVCCDElement;
 import mdr.MDRConstraint;
 import mdr.MDRContColumns;
 import mldr.MLDRColumn;
+import mldr.MLDRFK;
 import mpdr.MPDRColumn;
+import mpdr.MPDRFK;
 import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRElementWithSource;
 import utilities.Trace;
@@ -54,5 +56,13 @@ public class MPDRTableService {
             }
         }
         return null ;
+    }
+
+    public static MPDRFK getMPDRFKByMLDRFKSource(MPDRTable mpdrTable, MLDRFK mldrFK) {
+        MDRConstraint mdrConstraint = getMPDRConstraintByMLDRConstraintSource(mpdrTable, mldrFK);
+        if ( mdrConstraint instanceof MPDRFK){
+            return (MPDRFK) mdrConstraint;
+        }
+        return null;
     }
 }

@@ -9,6 +9,8 @@ import mpdr.MPDRPK;
 import mpdr.MPDRParameter;
 import mpdr.interfaces.IMPDRElementWithSource;
 
+import java.util.ArrayList;
+
 public class MPDRConstraintService {
 
     public static MPDRPK getMPDRPK(ArrayList<MDRConstraint> mdrConstraints) {
@@ -52,8 +54,8 @@ public class MPDRConstraintService {
     }
 
     public static MPDRParameter getMPDRParameterByMLDRParameterSource(
-        MDRConstraint mdrConstraint, MLDRParameter mldrParameter) {
-        for (MPDRParameter mpdrParameter : getMPDRParameters(mdrConstraint)) {
+            MDRConstraint mdrConstraint, MLDRParameter mldrParameter) {
+        for (MPDRParameter mpdrParameter : getMPDRParameters(mdrConstraint)){
             if (mpdrParameter instanceof IMPDRElementWithSource) {
                 if (mpdrParameter.getMldrElementSource() == mldrParameter) {
                     return mpdrParameter;

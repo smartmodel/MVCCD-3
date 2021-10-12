@@ -6,7 +6,8 @@ import datatypes.MDDatatype;
 import diagram.mcd.MCDDiagram;
 import exceptions.service.ExceptionService;
 import m.interfaces.IMCompletness;
-import m.services.MElementService;
+import m.interfaces.IMUMLExtensionNamingInBox;
+import m.interfaces.IMUMLExtensionNamingInLine;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationPreferences;
 import main.MVCCDManager;
@@ -15,7 +16,12 @@ import mcd.*;
 import mcd.interfaces.IMCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDModel;
+import mcd.services.MCDNIDService;
+import mdr.MDRElement;
+import mdr.MDRFK;
+import mdr.MDRRelFKEnd;
 import mdr.MDRRelationFK;
+import mdr.interfaces.IMDRElementWithIteration;
 import messages.MessagesBuilder;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
@@ -37,9 +43,12 @@ import repository.editingTreat.md.MDDatatypeEditingTreat;
 import repository.editingTreat.mdr.*;
 import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
+import repository.editingTreat.naming.NamingEditingTreat;
 import repository.editingTreat.preferences.*;
 import resultat.Resultat;
 import utilities.DefaultMutableTreeNodeService;
+import utilities.Trace;
+import utilities.UtilDivers;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
@@ -75,6 +84,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     treatInspectObject();
                 }
             }
+
+            //TODO-1 A terme, mettre une restriction Debug ou autre
+            treatNaming(this);
 
             if (node.getUserObject() instanceof IMLDRElementWithSource) {
                 treatSourceMLDRElementWithSource();
@@ -159,6 +171,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             if (node.getUserObject() instanceof MCDAttribute) {
                 treatGeneric(this, new MCDAttributeEditingTreat());
+                MCDAttribute mcdAttribute = (MCDAttribute) node.getUserObject();
+                if (MCDNIDService.attributeCandidateForNID1(mcdAttribute)) {
+                    treatCreateNID1FromAttribute();
+                }
             }
 
             if (node.getUserObject() instanceof MCDContRelEnds) {
@@ -267,6 +283,14 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 treatGenericRead(this, new MDRParameterEditingTreat());
             }
 
+            if (node.getUserObject() instanceof MLDRRelationFK) {
+                treatMDRRelationFKRead(this);
+            }
+
+            if (node.getUserObject() instanceof MLDRRelFKEnd) {
+                treatMDRRelFKEndRead(this);
+            }
+
             if (node.getUserObject() instanceof MPDRModel) {
                 treatGeneric(this, new MPDRModelEditingTreat());
 
@@ -293,13 +317,30 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 treatGenericRead(this, new MDRColumnEditingTreat());
             }
 
+            if (node.getUserObject() instanceof MPDRPK) {
+                treatGenericRead(this, new MDRPKEditingTreat());
+            }
+
             if (node.getUserObject() instanceof MPDRFK) {
                 treatGenericRead(this, new MDRFKEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MPDRUnique) {
+                treatGenericRead(this, new MDRUniqueEditingTreat());
             }
 
             if (node.getUserObject() instanceof MPDRParameter) {
                 treatGenericRead(this, new MDRParameterEditingTreat());
             }
+
+            if (node.getUserObject() instanceof MPDRRelationFK) {
+                treatMDRRelationFKRead(this);
+            }
+
+            if (node.getUserObject() instanceof MPDRRelFKEnd) {
+                treatMDRRelFKEndRead(this);
+            }
+
         } catch (Exception e){
             //TODO-PAS A terme ce bloc de traitement d'exception devrait pouvoir être supprimé
             // si toutes les actionPerformed() qui modifient la présentation du référentiel
@@ -324,11 +365,40 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                         ProjectElement projectElement = (ProjectElement) mvccdElement;
                         message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id : " + projectElement.getIdProjectElement();
                     }
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Ordre dans la fraterie : " + mvccdElement.getOrder();
+                    if (mvccdElement instanceof IMDRElementWithIteration) {
+                        IMDRElementWithIteration mdrElement = (IMDRElementWithIteration) mvccdElement;
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Itération : " + mdrElement.getIteration();
+                    }
                     if (mvccdElement instanceof MDRRelationFK) {
                         MDRRelationFK mdrRelationFK = (MDRRelationFK) mvccdElement;
                         message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - nom : " + mdrRelationFK.getMDRFK().getName();
                         message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - id : " + mdrRelationFK.getMDRFK().getIdProjectElement();
                     }
+                    if (mvccdElement instanceof MDRRelFKEnd) {
+                        MDRRelFKEnd mdrRelFKEnd = (MDRRelFKEnd) mvccdElement;
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Rôle : " + mdrRelFKEnd.getRoleText();
+                    }
+                    if (mvccdElement instanceof IMUMLExtensionNamingInLine) {
+                        IMUMLExtensionNamingInLine imumlExtensionNamingInLine = (IMUMLExtensionNamingInLine) mvccdElement;
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Stéréo InLine : " + imumlExtensionNamingInLine.getStereotypesInLine();
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Contr. InLine : " + imumlExtensionNamingInLine.getConstraintsInLine();
+                    }
+                    if (mvccdElement instanceof IMUMLExtensionNamingInBox) {
+                        IMUMLExtensionNamingInBox imumlExtensionNamingInBox = (IMUMLExtensionNamingInBox) mvccdElement;
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Stéréo InBox : "  + imumlExtensionNamingInBox.getStereotypesInBox();
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Contr. InBox : " + imumlExtensionNamingInBox.getConstraintsInBox();
+                    }
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR  + "Childs : "  ;
+                    int i = 0;
+                    for (MVCCDElement mvccdElement : mvccdElement.getChilds()){
+                        if (i > 0){
+                            message += ", ";
+                        }
+                        message = message + mvccdElement.getNameTree();
+                        i++;
+                    }
+
                     new DialogMessage().showOk(mvccdWindow, message);
                 }catch (Exception e){
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.inspector");
@@ -348,9 +418,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     IMLDRElementWithSource imldrElementWithSource = (IMLDRElementWithSource) mvccdElement;
                     MCDElement mcdElementSource = imldrElementWithSource.getMcdElementSource();
                     String message = "Classe : " + mcdElementSource.getClass().getName();
-                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNamePath(MElementService.PATHNAME);
-                    //ProjectElement projectElement = (ProjectElement) mvccdElement;
-                    //message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + projectElement.getIdProjectElement();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNameSourcePath();
                     message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mcdElementSource.getIdProjectElement();
 
                     new DialogMessage().showOk(mvccdWindow, message,
@@ -386,6 +454,27 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         });
 
     }
+
+
+
+    private void treatCreateNID1FromAttribute() {
+        JMenuItem source = new JMenuItem("Création NID-1");
+        this.add(source);
+        source.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    MCDNIDService.confirmCreateNID1FromAttribute(mvccdWindow, (MCDAttribute) node.getUserObject());
+                } catch (Exception e) {
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.attribute.nid1");
+                }
+            }
+        });
+
+    }
+
+
+
 
     private void treatProfile(ISMenu menu) {
     }
@@ -718,6 +807,77 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             }
         });
     }
+
+
+
+    private void treatNaming(ISMenu menu) {
+        String textMenu = MessagesBuilder.getMessagesProperty("menu.mvccdelement.naming");
+        JMenuItem menuItem = new JMenuItem(textMenu);
+        addItem(menu, menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    Preferences preferences = PreferencesManager.instance().preferences();
+
+                    // Mémorisation de la préférence qui peut être modifiée
+                    String pathNaming = preferences.getMCD_TREE_NAMING_ASSOCIATION();
+
+                    // Appel du formulaire
+                    (new NamingEditingTreat()).treatNaming(mvccdWindow, mvccdElement);
+
+                    //Remise en l'état initial de la préférence
+                    if ( ! preferences.getMCD_TREE_NAMING_ASSOCIATION().equals(pathNaming)){
+                        preferences.setMCD_TREE_NAMING_ASSOCIATION(pathNaming);
+                    }
+
+                } catch (Exception e) {
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.naming");
+                }
+            }
+        });
+    }
+
+
+    private void treatMDRRelationFKRead(ISMenu menu) {
+        String textMenu = MessagesBuilder.getMessagesProperty("menu.read");
+        JMenuItem menuItem = new JMenuItem(textMenu);
+        addItem(menu, menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    MDRRelationFK mdrRelationFK = (MDRRelationFK) mvccdElement;
+                    new MDRFKEditingTreat().treatRead(mvccdWindow,mdrRelationFK.getMDRFK());
+                } catch (Exception e){
+                    String propertyMessage ;
+                    propertyMessage = "repository.menu.exception.read";
+                    exceptionUnhandled(e, mvccdElement, propertyMessage);
+                }
+            }
+        });
+    }
+
+
+    private void treatMDRRelFKEndRead(ISMenu menu) {
+        String textMenu = MessagesBuilder.getMessagesProperty("menu.read");
+        JMenuItem menuItem = new JMenuItem(textMenu);
+        addItem(menu, menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    MDRRelFKEnd mdrRelFKEnd = (MDRRelFKEnd) mvccdElement;
+                    new MDRFKEditingTreat().treatRead(mvccdWindow,mdrRelFKEnd.getMDRRelationFK().getMDRFK());
+                } catch (Exception e){
+                    String propertyMessage ;
+                    propertyMessage = "repository.menu.exception.read";
+                    exceptionUnhandled(e, mvccdElement, propertyMessage);
+                }
+            }
+        });
+    }
+
 
     private void exceptionUnhandled(Exception e,
                                     MVCCDElement mvccdElement,

@@ -28,13 +28,16 @@ public class UniqueButtonsContent extends UnicityButtonsContent {
         return Preferences.FILE_HELP_ENTITY_NAME;
     }
 
-
+    //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+    /*
     @Override
     public void actionApply(MVCCDElement mvccdElementMaster){
 
         new MCDUniqueEditingTreat().treatUpdate(getEditor().getOwner(),
                 mvccdElementMaster);
     }
+
+     */
 
 
 }

@@ -20,10 +20,11 @@ import preferences.PreferencesManager;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
-public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDParameter, IMCDSourceMLDRTable {
+public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDSourceMLDRTable {
 
     private  static final long serialVersionUID = 1000;
 
@@ -97,33 +98,25 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
 
     @Override
     public String getNameTree(){
-        String namingAssociation = computeNamingAssociation();
-        return MCDRelationService.getNameTree(this, namingAssociation, false, null);
-    }
+        MCDAssEnd from = getFrom();
+        MCDAssEnd to = getTo();
 
-
-    @Override
-    public String getNameSource() {
-        String namingAssociation = computeNamingAssociation();
-        return MCDRelationService.getNameTree(this, namingAssociation, true, MElementService.PATHNAME);
+        String namingAssociation = computeNamingAssociation(from, to);
+        return from.getPath() + namingAssociation + to.getPathReverse();
     }
 
 
 
-    public String getNamePath(int pathMode){
-        String namingAssociation = computeNamingAssociation();
-        return MCDRelationService.getNameTree(this, namingAssociation, true, pathMode);
-    }
 
-    private String computeNamingAssociation(){
+    private String computeNamingAssociation(MCDAssEnd from, MCDAssEnd to){
         String namingAssociation ;
 
-        if (StringUtils.isNotEmpty(getFrom().getName())  && StringUtils.isNotEmpty(getTo().getName())){
-            namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_ARROW_RIGHT +
-                    getFrom().getName() +
+        if (StringUtils.isNotEmpty(from.getName())  && StringUtils.isNotEmpty(to.getName())){
+         namingAssociation = Preferences.PATH_NAMING_SEPARATOR + from.getName() +
                     Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR  +
-                    getTo().getName() +
-                    Preferences.MCD_NAMING_ASSOCIATION_ARROW_LEFT;
+                    to.getName() + Preferences.PATH_NAMING_SEPARATOR;
+
+
         } else {
             namingAssociation = Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
                     this.getName() + Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR;
@@ -150,6 +143,10 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
 
     public MCDAssEnd getMCDAssEndChild(){
         return getMCDAssEndOpposite(getMCDAssEndParent());
+    }
+
+    public ArrayList<MCDAssEnd> getMCDAssEnds(){
+        return MCDAssociationService.getMCDAssEnds(this);
     }
 
     public MCDContRelEnds getMCDContRelEnds() {
@@ -237,8 +234,8 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
     }
 
     @Override
-    public ArrayList<Stereotype> getToStereotypes() {
-        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+    public ArrayList<Stereotype> getStereotypes() {
+        ArrayList<Stereotype> resultat = super.getStereotypes();
 
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
         Preferences preferences = PreferencesManager.instance().preferences();
@@ -263,8 +260,8 @@ public class MCDAssociation extends MCDRelation implements IMCompletness, IMCDPa
     }
 
     @Override
-    public ArrayList<Constraint> getToConstraints() {
-        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+    public ArrayList<Constraint> getConstraints() {
+        ArrayList<Constraint> resultat = super.getConstraints();
 
         Constraints constraints = ConstraintsManager.instance().constraints();
         Preferences preferences = PreferencesManager.instance().preferences();

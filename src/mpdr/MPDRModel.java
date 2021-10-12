@@ -1,18 +1,25 @@
 package mpdr;
 
 import datatypes.MPDRDatatype;
+import main.MVCCDElementFactory;
 import generatesql.MPDRGenerateSQL;
 import generatesql.window.GenerateSQLWindow;
 import main.MVCCDManager;
 import mdr.MDRElement;
 import mdr.MDRModel;
+import mdr.MDRRelFKEnd;
 import mdr.interfaces.IMDRElementWithIteration;
 import mldr.MLDRColumn;
+import mldr.MLDRFK;
+import mldr.MLDRRelationFK;
 import mldr.MLDRTable;
 import mldr.interfaces.IMLDRElement;
+import mldr.interfaces.IMLDRRelation;
 import mpdr.interfaces.IMPDRElement;
+import mpdr.interfaces.IMPDRRelation;
 import mpdr.services.MPDRModelService;
 import project.ProjectElement;
+import utilities.Trace;
 import resultat.Resultat;
 
 import java.awt.*;
@@ -48,7 +55,8 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         ArrayList<IMDRElementWithIteration> resultat = new ArrayList<IMDRElementWithIteration>();
         for (MDRElement mdrElement : getMDRDescendants()) {
             if (mdrElement instanceof IMDRElementWithIteration) {
-                if (mdrElement instanceof MPDRModel) {
+                //if (mdrElement instanceof MPDRModel) {
+                if (mdrElement instanceof IMPDRElement) {
                     resultat.add((IMDRElementWithIteration) mdrElement);
                 }
             }
@@ -61,7 +69,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     }
 
     public IMPDRElement getIMPDRElementByMLDRElementSource(IMLDRElement imldrElement){
-        return (IMPDRElement) MPDRModelService.getIMPDRElementByMLDRElementSource(this, imldrElement);
+        return (IMPDRElement) MPDRModelService.getIMPDRElementByIMLDRElementSource(this, imldrElement);
     }
 
     public Resultat treatGenerate(GenerateSQLWindow owner) {
@@ -78,5 +86,32 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     }
 
 
+    public MPDRContRelations getMPDRContRelations() {
+        return MPDRModelService.getMPDRContRelations(this);
+    }
+
+    public ArrayList<IMPDRRelation> getIMPDRRelations() {
+        return MPDRModelService.getIMPDRRelations(this);
+    }
+
+    public IMPDRRelation getIMPDRRelationByIMLDRRelationSource(IMLDRRelation imldrRelation) {
+        return MPDRModelService.getIMPDRRelationByIMLDRRelationSource(this, imldrRelation);
+    }
+
+
+    public  IMPDRRelation createIMPDRRelation(IMLDRRelation imldrRelation){
+        if ( imldrRelation instanceof MLDRRelationFK){
+            MLDRRelationFK mldrRelationFK = (MLDRRelationFK) imldrRelation;
+            MLDRFK mldrFK = (MLDRFK) mldrRelationFK.getMDRFK();
+            MPDRTable mpdrtableAccueil = getMPDRTableByMLDRTableSource((MLDRTable) mldrFK.getMDRTableAccueil());
+            MPDRFK mpdrFK = mpdrtableAccueil.getMPDRFKByMLDRFKSource(mldrFK);
+            MPDRRelationFK newMPDRRelationFK = MVCCDElementFactory.instance().createMPDRRelationFK(
+                    getMPDRContRelations(), mldrRelationFK, (MPDRTable) mpdrFK.getMDRTableAccueil(),
+                    (MPDRTable) mpdrFK.getMdrPK().getMDRTableAccueil());
+
+            return newMPDRRelationFK;
+        }
+        return null;
+    }
 
 }

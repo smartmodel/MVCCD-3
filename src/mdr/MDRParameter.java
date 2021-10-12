@@ -2,6 +2,8 @@ package mdr;
 
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
+import mdr.services.MDRColumnsService;
+import mdr.services.MDRParameterService;
 import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
 import project.ProjectService;
@@ -50,10 +52,20 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
 
     public IMDRParameter getTarget() {
         if (targetId != null) {
-            return (IMDRParameter) ProjectService.getElementById(targetId);
+            return (IMDRParameter) ProjectService.getProjectElementById(targetId);
         }
         return null;
     }
+
+    public MDRColumn getMDRColumn() {
+        if (getTarget() != null) {
+            if ( getTarget() instanceof MDRColumn){
+                return (MDRColumn) getTarget();
+            }
+        }
+        return null;
+    }
+
     public String getName(){
         String name = super.getName();
         if (getTarget() != null){
@@ -74,4 +86,7 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
         return (MDRTable) getMDRConstraintAccueil().getMDRTableAccueil();
     }
 
+    public int compareToDefault(MDRParameter other) {
+        return MDRParameterService.compareToDefault(this, other);
+    }
 }

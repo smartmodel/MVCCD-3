@@ -8,7 +8,9 @@ import mcd.MCDContConstraints;
 import mcd.MCDNID;
 import mcd.MCDOperation;
 import mcd.services.MCDNIDService;
+import repository.editingTreat.EditingTreat;
 import repository.editingTreat.mcd.MCDNIDParameterEditingTreat;
+import repository.editingTreat.mcd.MCDNIDParameterTransientEditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComponent;
@@ -61,6 +63,11 @@ public class NIDInputContent extends UnicityInputContent {
         createPanelMaster();
     }
 
+    @Override
+    protected EditingTreat editingTreatDetail() {
+        return new MCDNIDParameterTransientEditingTreat();
+    }
+
     private void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
@@ -107,18 +114,6 @@ public class NIDInputContent extends UnicityInputContent {
 
         this.add(panelInputContentCustom);
 
-    }
-
-
-    @Override
-    protected MElement getNewElement() {
-        MCDOperation mcdOperation = (MCDOperation) getEditor().getMvccdElementCrt();
-        DialogEditor fen = new ParameterTransientEditor(getEditor(), mcdOperation, null,
-                    DialogEditor.NEW, ParameterEditor.NID, new MCDNIDParameterEditingTreat());
-
-        fen.setVisible(true);
-        MVCCDElement newElement = fen.getMvccdElementNew();
-        return (MElement) newElement;
     }
 
     @Override

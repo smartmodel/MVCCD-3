@@ -56,17 +56,8 @@ public class MCDLinkEnd extends MCDRelEnd  {
         return (MCDEntity) this.getmElement();
     }
 
-    @Override
-    public String getNameTree() {
-        return getNameTreeOrSource(MCDRelEndService.TREE);
-    }
 
-    @Override
-    public String getNameSource() {
-        return getNameTreeOrSource(MCDRelEndService.SOURCE);
-    }
-
-    public String getNameTreeOrSource(int scope) {
+    public String getNameTree () {
 
         String namingLink ;
 
@@ -76,29 +67,22 @@ public class MCDLinkEnd extends MCDRelEnd  {
             namingLink = Preferences.MCD_NAMING_LINK_ELEMENT ;
         }
 
-        return MCDRelEndService.getNameTreeOrSource(scope, this, namingLink);
+        return MCDRelEndService.getNameTree(this, namingLink);
     }
 
 
-
     @Override
-    public ArrayList<Stereotype> getToStereotypes() {
-        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+    public String getNameSource() {
 
-        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
-        Preferences preferences = PreferencesManager.instance().preferences();
+        String namingLink ;
 
-        return resultat;
-    }
+        if (this.getDrawingDirection() == MCDLinkEnd.ELEMENT){
+            namingLink = Preferences.MCD_NAMING_LINK_ASSOCIATION ;
+        } else {
+            namingLink = Preferences.MCD_NAMING_LINK_ELEMENT ;
+        }
 
-    @Override
-    public ArrayList<Constraint> getToConstraints() {
-        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
-
-        Constraints constraints = ConstraintsManager.instance().constraints();
-        Preferences preferences = PreferencesManager.instance().preferences();
-
-        return resultat;
+        return MCDRelEndService.nameTreeToNameSource(getNameTree(), namingLink);
     }
 
     @Override
