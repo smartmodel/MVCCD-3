@@ -1,15 +1,10 @@
 package repository;
 
-import delete.Delete;
 import main.MVCCDElement;
 import main.MVCCDElementProfileEntry;
-import main.MVCCDElementService;
-import main.MVCCDManager;
-import mdr.MDRTable;
-import mpdr.MPDRContTables;
+import mdr.MDRRelEnd;
 import profile.Profile;
 import project.Project;
-import utilities.Trace;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -147,6 +142,7 @@ public class Repository extends DefaultTreeModel{
 
     public DefaultMutableTreeNode addMVCCDElement(DefaultMutableTreeNode nodeParent, MVCCDElement mvccdElement)  {
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(mvccdElement);
+        // recherche de la position dans la fraterie du projet
         int index = 0;
         if (mvccdElement.getParent() != null) {
             for (MVCCDElement child : mvccdElement.getParent().getChilds()) {
@@ -157,8 +153,19 @@ public class Repository extends DefaultTreeModel{
             }
         }
 
-        //insertNodeInto(node, nodeParent, nodeParent.getChildCount());
-        insertNodeInto(node, nodeParent, index);
+        //#MAJ 2021-10-14 MPDRRelationFK réflexives - Extr A et B ne sont pas créées dans le bon ordre
+        // Les MDRRelEnd sont ajoutées aux tables (ou autres extrémités) sans suivre un ordre par rapport à ces éléments
+        // mais, un rôle A ou B (en tous les cas pour les MDRRelEndFK
+        if (  mvccdElement instanceof MDRRelEnd) {
+            // Insertion en queue de liste
+            insertNodeInto(node, nodeParent, nodeParent.getChildCount());
+        } else {
+            //  Insertion en bonne position dans la fraterie de la vue du référentiel
+            insertNodeInto(node, nodeParent, index);
+        }
+
+
+        // Insertion des éventuels enfants
         if (mvccdElement.getChilds().size()>0){
             for (int i = 0 ; i < mvccdElement.getChilds().size(); i++ ){
                 addMVCCDElement(node, mvccdElement.getChilds().get(i));

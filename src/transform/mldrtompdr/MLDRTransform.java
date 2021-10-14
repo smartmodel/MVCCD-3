@@ -62,7 +62,7 @@ public class MLDRTransform extends MDTransform {
 
             return resultat;
         } catch(Exception e){
-            undoTransform(mpdrModelClone);
+            //undoTransform(mpdrModelClone);
             resultat.addExceptionUnhandled(e);
             return resultat;
         }

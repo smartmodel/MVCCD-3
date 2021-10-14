@@ -2,7 +2,6 @@ package preferences;
 
 
 import console.WarningLevel;
-import javafx.scene.input.KeyCode;
 import m.MUMLExtensionNaming;
 import main.MVCCDElement;
 import mdr.MDRNamingFormat;
