@@ -35,8 +35,17 @@ public class MVCCDFactory {
         MVCCDElementRepositoryGlobal repositoryGlobal = new MVCCDElementRepositoryGlobal(repositoryRoot);
         MVCCDElementApplicationPreferences applicationPref = new MVCCDElementApplicationPreferences(repositoryGlobal);
         MVCCDElementApplicationMDDatatypes applicationMDDatatype = new MVCCDElementApplicationMDDatatypes(repositoryGlobal);
+        MVCCDElementApplicationConnexions applicationConnexions = createRepositoryApplicationConnections(repositoryGlobal);
         profileEntry = new MVCCDElementProfileEntry(repositoryRoot);
         return repositoryRoot;
+    }
+
+    public  MVCCDElementApplicationConnexions createRepositoryApplicationConnections( MVCCDElementRepositoryGlobal repositoryGlobal) {
+        MVCCDElementApplicationConnexions applicationConnexions = new MVCCDElementApplicationConnexions(repositoryGlobal);
+        MVCCDElementApplicationConnexionsOracle applicationConnexionsOracle = new MVCCDElementApplicationConnexionsOracle(applicationConnexions);
+        MVCCDElementApplicationConnexionsMySQL applicationConnexionsMySQL = new MVCCDElementApplicationConnexionsMySQL(applicationConnexions);
+        MVCCDElementApplicationConnexionsPostgreSQL applicationConnexionsPostgreSQL = new MVCCDElementApplicationConnexionsPostgreSQL(applicationConnexions);
+        return applicationConnexions;
     }
 
 }

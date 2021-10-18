@@ -383,6 +383,9 @@ public class Preferences extends MVCCDElement {
     public static String MCDDATATYPE_NUMBER_SIZE_PRECISION = "mcddatatype.number.size.precision";
     public static String MCDDATATYPE_NUMBER_SIZE_INTEGER_PORTION_ONLY = "mcddatatype.number.size.integer.portion.only";
 
+    public static String CON_DB_ORACLE = "con.db.oracle";
+    public static String CON_DB_MYSQL = "con.db.mysql";
+    public static String CON_DB_POSTGRESQL = "con.db.postgresql";
 
 
     public static String MCD_NAMING_NAME="mcd.naming.name";
