@@ -2,6 +2,7 @@ package mcd.services;
 
 import m.MRelationDegree;
 import main.MVCCDElement;
+
 import mcd.*;
 import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
@@ -189,7 +190,7 @@ public class IMCDModelService {
     }
 
     public static ArrayList<MCDAssociation> getAllMCDAssociationsInIModel(IMCDModel imcdModel){
-        ArrayList<MCDAssociation> resultat = new ArrayList<MCDAssociation>();
+        ArrayList<MCDAssociation> resultat = new ArrayList();
         for (MCDElement mcdElement : getMCDElementsByClassName(imcdModel, false, MCDAssociation.class.getName())){
             resultat.add ((MCDAssociation) mcdElement);
         }
@@ -313,7 +314,7 @@ public class IMCDModelService {
         return resultat;
     }
     public static ArrayList<MCDAssociation> getMCDAssociations(IMCDModel imcdModel) {
-        ArrayList<MCDAssociation>  resultat = new ArrayList<MCDAssociation>() ;
+        ArrayList<MCDAssociation> resultat = new ArrayList<MCDAssociation>() ;
         for (MCDRelation mcdRelation : getMCDRelations(imcdModel)){
             if (mcdRelation instanceof MCDAssociation) {
                 resultat.add((MCDAssociation) mcdRelation);

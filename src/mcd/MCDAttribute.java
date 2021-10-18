@@ -264,4 +264,51 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         return MCDAttributeService.partOfUniques(this);
     }
 
+
+    public ArrayList<Stereotype> getToStereotypes() {
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+        if (aid) {
+            resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_AID_LIENPROG));
+        }
+        if (mandatory) {
+            resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_M_LIENPROG));
+        }
+        if (list) {
+            resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_L_LIENPROG));
+        }
+        if (partOfNIds().size() > 0) {
+            for (MCDNID nid : partOfNIds()) {
+                resultat.add(nid.getDefaultStereotype());
+            }
+        }
+        return resultat;
+    }
+
+    public String getMCDDisplay() {
+        StringBuilder builder = new StringBuilder();
+        for (Stereotype stereotype : this.getToStereotypes()) {
+            builder.append("<<");
+            builder.append(stereotype.getName());
+            builder.append(">>");
+            // S'il s'agit d'un identifiant artificiel, on affiche uniquement le stéréotype <<AID>>
+            if (stereotype.getName().equals("AID")) {
+                break;
+            }
+        }
+        builder.append(" ");
+        builder.append(this.getName());
+        builder.append(" ");
+        // S'il s'agit d'un identifiant artificiel, on affiche uniquement le stéréotype et son nom
+        if (!this.datatypeLienProg.equals("aid")) {
+            builder.append(":");
+            builder.append(" ");
+            builder.append(this.datatypeLienProg);
+        }
+        return builder.toString();
+    }
 }
