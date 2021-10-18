@@ -1,57 +1,54 @@
 package main.window.diagram;
 
-import main.MVCCDManager;
-import main.MVCCDWindow;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import javax.swing.JPanel;
 import utilities.window.PanelContent;
-
-import javax.swing.*;
-import java.awt.*;
+import window.editor.diagrammer.drawpanel.DrawPanelComponent;
+import window.editor.diagrammer.palette.PalettePanel;
+import window.editor.diagrammer.services.DiagrammerService;
 
 /**
- * La classe crée les panneaux du diagrammeur (en-tête, palette et zone de dessin).
- * La classe ajoute ensuite les panneaux comme contenu de son ancêtre PanelContent.
- * L'ancêtre PanelContent crée la barre de défilement si nécessaire (décision à prendre).
- * Remarque: la palette et la zone de dessin du diagrammeur seront créés spécifiquement pour le genre de modèle à
- * réaliser (MCD, MLD-R, MPD-R ou autres).
+ * La classe crée les panneaux du diagrammeur (en-tête, palette et zone de dessin). La classe ajoute ensuite les panneaux comme contenu de son ancêtre PanelContent. L'ancêtre PanelContent crée la barre de défilement si nécessaire (décision à prendre). Remarque: la palette et la zone de dessin du diagrammeur seront créés spécifiquement pour le genre de modèle à réaliser (MCD, MLD-R, MPD-R ou
+ * autres).
  */
 public class WinDiagramContent extends PanelContent {
 
-    private MVCCDWindow mvccdWindow;
-    JPanel content = new JPanel();          //Diagrammeur dans son ensemble
-    JPanel panelTitle = new JPanel();       //En-tête du diagrammeur
-    JPanel panelPalette = new JPanel();     //Palette du diagrammeur
-    JPanel panelDraw = new JPanel();        //Zone de dessin du diagrammeur
+  JPanel content = new JPanel(); //Diagrammeur dans son ensemble
+  JPanel panelTitle = new JPanel(); //En-tête du diagrammeur
+  PalettePanel panelPalette = new PalettePanel(); //Palette du diagrammeur
+  DrawPanelComponent panelDraw; //Zone de dessin du diagrammeur
 
-    JButton btnAdd;
+  public WinDiagramContent(WinDiagram diagram) {
+    super(diagram);
 
-    public WinDiagramContent(WinDiagram diagram) {
-        super(diagram);
-        mvccdWindow = MVCCDManager.instance().getMvccdWindow();
-        //Création des panneaux du diagrammeur
-        BorderLayout bl = new BorderLayout(5,5);
-        content.setLayout(bl);
-        content.add(panelPalette, BorderLayout.WEST);
-        content.add(panelDraw, BorderLayout.CENTER);
-        content.add(panelTitle, BorderLayout.NORTH);
-        //Place le diagrammeur (JPanel content) dans son ancêtre PanelBorder
-        super.addContent(content);
+    this.panelDraw = new DrawPanelComponent(DiagrammerService.getDrawPanel());
 
+    //Création des panneaux du diagrammeur
+    BorderLayout layout = new BorderLayout();
+    this.content.setLayout(layout);
+    this.content.add(this.panelPalette, BorderLayout.WEST);
+    this.content.add(this.panelDraw, BorderLayout.CENTER);
+    this.content.add(this.panelTitle, BorderLayout.NORTH);
 
-    }
+    //Place le diagrammeur (JPanel content) dans son ancêtre PanelBorder
+    super.addContent(this.content);
 
-    public JPanel getPanelTitle() {
-        return panelTitle;
-    }
+  }
 
-    public JPanel getPanelPalette() {
-        return panelPalette;
-    }
+  @Override
+  protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+  }
 
-    public JPanel getPanelDraw() {
-        return panelDraw;
-    }
+  public JPanel getPanelTitle() {
+    return this.panelTitle;
+  }
 
-    public Dimension  resizeContent(){
-         return super.resizeContent();
-    }
+  @Override
+  public Dimension resizeContent() {
+    return super.resizeContent();
+  }
+
 }

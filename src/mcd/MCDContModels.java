@@ -61,6 +61,15 @@ public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePa
         return null;
     }
 
+    public MCDContRelations getRelations(){
+        for(MVCCDElement childOfContEntities : this.getChilds()){
+            if(childOfContEntities instanceof MCDContRelations){
+                return (MCDContRelations) childOfContEntities;
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public MLDRModel getLastTransformedMLDRModel() {

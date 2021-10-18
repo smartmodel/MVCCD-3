@@ -4,6 +4,7 @@ import constraints.Constraint;
 import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import java.util.ArrayList;
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import m.interfaces.IMCompletness;
@@ -104,73 +105,73 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         this.size = size;
     }
 
-    public Integer getScale() {
-        return scale;
-    }
+  public Integer getScale() {
+    return scale;
+  }
 
-    public void setScale(Integer scale) {
-        this.scale = scale;
-    }
+  public void setScale(Integer scale) {
+    this.scale = scale;
+  }
 
-    public String getInitValue() {
-        return initValue;
-    }
+  public String getInitValue() {
+    return initValue;
+  }
 
-    public void setInitValue(String initValue) {
-        this.initValue = initValue;
-    }
+  public void setInitValue(String initValue) {
+    this.initValue = initValue;
+  }
 
-    public String getDerivedValue() {
-        return derivedValue;
-    }
+  public String getDerivedValue() {
+    return derivedValue;
+  }
 
-    public void setDerivedValue(String derivedValue) {
-        this.derivedValue = derivedValue;
-    }
+  public void setDerivedValue(String derivedValue) {
+    this.derivedValue = derivedValue;
+  }
 
-    public boolean isDerived(){
-        return StringUtils.isNotEmpty(getDerivedValue());
-    }
+  public boolean isDerived() {
+    return StringUtils.isNotEmpty(getDerivedValue());
+  }
 
-    public String getDomain() {
-        return domain;
-    }
+  public String getDomain() {
+    return domain;
+  }
 
-    public void setDomain(String domain) {
-        this.domain = domain;
-    }
+  public void setDomain(String domain) {
+    this.domain = domain;
+  }
 
-    public boolean isAid() {
-        return aid;
-    }
+  public boolean isAid() {
+    return aid;
+  }
 
-    public void setAid(boolean aid) {
-        this.aid = aid;
-    }
+  public void setAid(boolean aid) {
+    this.aid = aid;
+  }
 
-    public boolean isAidDep() {
-        return aidDep;
-    }
+  public boolean isAidDep() {
+    return aidDep;
+  }
 
-    public void setAidDep(boolean aidDep) {
-        this.aidDep = aidDep;
-    }
+  public void setAidDep(boolean aidDep) {
+    this.aidDep = aidDep;
+  }
 
-    public boolean isMandatory() {
-        return mandatory;
-    }
+  public boolean isMandatory() {
+    return mandatory;
+  }
 
-    public void setMandatory(boolean mandatory) {
-        this.mandatory = mandatory;
-    }
+  public void setMandatory(boolean mandatory) {
+    this.mandatory = mandatory;
+  }
 
-    public boolean isList() {
-        return list;
-    }
+  public boolean isList() {
+    return list;
+  }
 
-    public void setList(boolean list) {
-        this.list = list;
-    }
+  public void setList(boolean list) {
+    this.list = list;
+  }
 
     public ArrayList<Stereotype> getStereotypes(){
         // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
@@ -263,4 +264,51 @@ public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParam
         return MCDAttributeService.partOfUniques(this);
     }
 
+
+    public ArrayList<Stereotype> getToStereotypes() {
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+        if (aid) {
+            resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_AID_LIENPROG));
+        }
+        if (mandatory) {
+            resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_M_LIENPROG));
+        }
+        if (list) {
+            resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_L_LIENPROG));
+        }
+        if (partOfNIds().size() > 0) {
+            for (MCDNID nid : partOfNIds()) {
+                resultat.add(nid.getDefaultStereotype());
+            }
+        }
+        return resultat;
+    }
+
+    public String getMCDDisplay() {
+        StringBuilder builder = new StringBuilder();
+        for (Stereotype stereotype : this.getToStereotypes()) {
+            builder.append("<<");
+            builder.append(stereotype.getName());
+            builder.append(">>");
+            // S'il s'agit d'un identifiant artificiel, on affiche uniquement le stéréotype <<AID>>
+            if (stereotype.getName().equals("AID")) {
+                break;
+            }
+        }
+        builder.append(" ");
+        builder.append(this.getName());
+        builder.append(" ");
+        // S'il s'agit d'un identifiant artificiel, on affiche uniquement le stéréotype et son nom
+        if (!this.datatypeLienProg.equals("aid")) {
+            builder.append(":");
+            builder.append(" ");
+            builder.append(this.datatypeLienProg);
+        }
+        return builder.toString();
+    }
 }

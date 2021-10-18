@@ -25,6 +25,7 @@ import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
+import stereotypes.Stereotype;
 
 /**
  * Classe qui représente l'entité du modèle MCD.
@@ -503,12 +504,21 @@ public class MCDEntity extends MCDElement implements IMClass, IMCompletness, IMC
         Constraints constraints = ConstraintsManager.instance().constraints();
         Preferences preferences = PreferencesManager.instance().preferences();
 
-        if (ordered){
+        if (ordered) {
             resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
                     preferences.CONSTRAINT_ORDERED_LIENPROG));
         }
-
         return resultat;
+    }
+
+    public ArrayList<String> getAttributesForMCDDisplay(){
+        ArrayList<String> attributesToDisplay = new ArrayList<>();
+        if (!this.getMCDAttributes().isEmpty()){
+            for (MCDAttribute attribut : this.getMCDAttributes()){
+                attributesToDisplay.add(attribut.getMCDDisplay());
+            }
+        }
+        return attributesToDisplay;
     }
 
     @Override
