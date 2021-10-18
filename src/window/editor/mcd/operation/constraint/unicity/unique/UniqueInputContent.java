@@ -7,7 +7,9 @@ import main.MVCCDElementFactory;
 import mcd.*;
 import mcd.services.MCDUniqueService;
 import project.ProjectService;
+import repository.editingTreat.EditingTreat;
 import repository.editingTreat.mcd.MCDUniqueParameterEditingTreat;
+import repository.editingTreat.mcd.MCDUniqueParameterTransientEditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComponent;
@@ -44,6 +46,8 @@ public class UniqueInputContent extends UnicityInputContent {
         super.createContentCustom();
         createPanelMaster();
     }
+
+
 
 
     private void createPanelMaster() {
@@ -88,17 +92,6 @@ public class UniqueInputContent extends UnicityInputContent {
     }
 
 
-
-    @Override
-    protected MElement getNewElement() {
-        MCDOperation mcdOperation = (MCDOperation) getEditor().getMvccdElementCrt();
-        DialogEditor fen = new ParameterTransientEditor(getEditor(), mcdOperation, null,
-                    DialogEditor.NEW, ParameterEditor.UNIQUE, new MCDUniqueParameterEditingTreat());
-        fen.setVisible(true);
-        MVCCDElement newElement = fen.getMvccdElementNew();
-        return (MElement) newElement;
-    }
-
     @Override
     protected void changeFieldSelectedAbsolute() {
 
@@ -120,7 +113,7 @@ public class UniqueInputContent extends UnicityInputContent {
                 boolean c2 = subType.equals(MCDAssociationNature.IDNATURAL.getText());
                 boolean c3 = subType.equals(MCDAssociationNature.CP.getText());
                 int idParam = (int) row[OperationParamTableColumn.ID.getPosition()];
-                MCDParameter mcdParam = (MCDParameter) ProjectService.getElementById(idParam);
+                MCDParameter mcdParam = (MCDParameter) ProjectService.getProjectElementById(idParam);
                 MCDAssEnd mcdAssEnd = (MCDAssEnd) mcdParam.getTarget();
                 MCDAssociation  mcdAssociation = (MCDAssociation) mcdAssEnd.getMcdAssociation();
                 boolean c4 = subType.equals(MCDAssociationNature.NOID.getText()) &&
@@ -248,6 +241,11 @@ public class UniqueInputContent extends UnicityInputContent {
 
         super.saveDatas(mvccdElement);
 
+    }
+
+    @Override
+    protected EditingTreat editingTreatDetail() {
+        return new MCDUniqueParameterTransientEditingTreat();
     }
 
 }

@@ -20,10 +20,9 @@ public class MCDContEntitiesService {
     }
 
     public static MCDContEntities getMCDContEntitiesByNamePath(IMCDModel model,
-                                                   int pathMode,
                                                    String namePath){
         return (MCDContEntities) IMCDModelService.getMCDElementByClassAndNamePath(model, false,
-                MCDContEntities.class.getName(), pathMode, namePath);
+                MCDContEntities.class.getName(), namePath);
     }
 
     public static ArrayList<MCDElement> toMCDElements(ArrayList<MCDContEntities> mcdConEntities) {

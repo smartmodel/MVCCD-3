@@ -1,8 +1,10 @@
 package utilities.window.editor;
 
+import m.MElement;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
+import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 
@@ -31,16 +33,15 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     private MVCCDElement mvccdElementCrt = null;     // lui-même pour la modification, suppression, lecture
     private MVCCDElement mvccdElementNew = null;     // lui-même pour la modification
     private MVCCDElement mvccdElementParentChoosed = null;     // la parent effectivement choisi lors de la saisie
-    private boolean datasChanged = false;     // données modifiées
-    private boolean datasProjectElementEdited = false;
-    private boolean datasApplicationPreferencesEdited = false;
-
+    private boolean datasChanged = false;               // données modifiées par l'éditeur
 
     private boolean readOnly = false;
 
     protected int scope;
     private EditingTreat editingTreat = null;
 
+    //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+    private boolean newElementTransitory = false;
 
     public DialogEditor(Window owner,
                         MVCCDElement mvccdElementParent,
@@ -220,7 +221,7 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     @Override
     public void windowActivated(WindowEvent windowEvent) {
         //MVCCDManager.instance().setDatasEdited(true);
-        datasProjectElementEdited = true;
+        //datasProjectElementEdited = true;
     }
 
     @Override
@@ -277,22 +278,6 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         this.datasChanged = datasChanged;
     }
 
-    public boolean isDatasProjectElementEdited() {
-        return datasProjectElementEdited;
-    }
-
-    public void setDatasProjectElementEdited(boolean datasProjectElementEdited) {
-        this.datasProjectElementEdited = datasProjectElementEdited;
-    }
-
-    public boolean isDatasApplicationPreferencesEdited() {
-        return datasApplicationPreferencesEdited;
-    }
-
-    public void setDatasApplicationPreferencesEdited(boolean datasApplicationPreferencesEdited) {
-        this.datasApplicationPreferencesEdited = datasApplicationPreferencesEdited;
-    }
-
     public void adjustTitle() {
        String title = MessagesBuilder.getMessagesProperty(getPropertyTitleUpdate(), new String[]{
                 getMvccdElementCrt().getName()});
@@ -323,7 +308,14 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     protected abstract String getPropertyTitleRead();
 
     protected String getElementNameTitle(){
-        return getMvccdElementCrt().getName();
+        if ( getMvccdElementCrt() instanceof MElement){
+            //String treeNaming = PreferencesManager.instance().preferences().getMCD_TREE_NAMING_ASSOCIATION();
+            //TODO-1 A paramétrer avec treeNaming
+            return ((MElement) getMvccdElementCrt()).getNameTreePath();
+        } else {
+            return getMvccdElementCrt().getNameTree();
+        }
+
     }
 
     public boolean isReadOnly() {
@@ -367,6 +359,9 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
     }
 
     void confirmClose() {
+
+        //#MAJ 2021-06-05 Formulaire Read avec changement de valeurs de paramétrage - NamingInputContent
+
         if (getInput().getInputContent().datasChangedNow()){
             String message = MessagesBuilder.getMessagesProperty ("editor.close.change.not.saved");
             boolean confirm = DialogMessage.showConfirmYesNo_No(this, message) == JOptionPane.YES_OPTION;
@@ -381,10 +376,18 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         }
     }
 
-    //TOD=-2 J'ai du écrire de mon propre dispose et nons surcharger car j'avais un appel parasite!
+    //TODO-2 J'ai du écrire de mon propre dispose et non surcharger car j'avais un appel parasite!
     public void myDispose(){
         setLocationCustom(getLocationOnScreen());
         setSizeCustom(getSize());
         super.dispose();
+    }
+
+    public boolean isNewElementTransitory() {
+        return newElementTransitory;
+    }
+
+    public void setNewElementTransitory(boolean newElementTransitory) {
+        this.newElementTransitory = newElementTransitory;
     }
 }

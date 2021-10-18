@@ -6,6 +6,8 @@ import mcd.MCDElement;
 import mcd.MCDModel;
 import mcd.interfaces.IMCDModel;
 import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import utilities.Trace;
 
 import java.util.ArrayList;
@@ -47,14 +49,19 @@ public class MCDElementService {
 
 
 
-    public static String getNamePathSource(MCDElement mcdElement, int pathMode, String separator) {
-        String nameSource = "";
-        String path = mcdElement.getPath( pathMode, separator);
-        if (StringUtils.isNotEmpty(path)){
-            nameSource = nameSource + path + separator ;
+    public static String getNameSourcePath(MCDElement mcdElement) {
+        String resultat = "";
+        //TODO-1 Prévoir une préfrérence propre à MCDElement getNamePathSource
+        //Path de MCDElement
+        resultat = mcdElement.getPath();
+
+        if (StringUtils.isNotEmpty(resultat)){
+            resultat = resultat + Preferences.PATH_NAMING_SEPARATOR ;
         }
-        nameSource = nameSource +  mcdElement.getNameSource();
-        return nameSource ;
+
+        // MCDElement lui-même
+        resultat = resultat +  mcdElement.getNameSource();
+        return resultat ;
     }
 
 
@@ -75,7 +82,7 @@ public class MCDElementService {
             //Il ne faut pas remonter au parent
             return (IMCDModel) mcdElement ;
         } else{
-            throw new CodeApplException("Erreur de parcours  pour " + mcdElement.getNamePath(MElementService.PATHNAME));
+            throw new CodeApplException("Erreur de parcours  pour " + mcdElement.getNamePath());
         }
     }
 

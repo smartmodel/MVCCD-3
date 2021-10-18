@@ -1,16 +1,30 @@
 package mcd;
 
 import constraints.Constraint;
+import constraints.ConstraintService;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
+import m.interfaces.IMUMLExtensionNamingInLine;
+import m.services.MElementService;
+import main.MVCCDManager;
 import mcd.interfaces.IMCDElementWithTargets;
+import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import mcd.services.MCDRelationService;
+import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public abstract class MCDRelation extends MCDElement implements IMRelation, IMCDElementWithTargets {
+public abstract class MCDRelation extends MCDElement implements IMRelation, IMCDElementWithTargets,
+        IMUMLExtensionNamingInLine, IMCDSourceMLDRRelationFK {
 
     private  static final long serialVersionUID = 1000;
 
@@ -90,9 +104,61 @@ public abstract class MCDRelation extends MCDElement implements IMRelation, IMCD
         super.removeInParent();
     }
 
-    public abstract ArrayList<Stereotype> getToStereotypes();
 
-    public abstract ArrayList<Constraint> getToConstraints(); // Contraintes UML
+    public abstract String getNameTree();
 
+    public String getNameTreePath(){
+        if (StringUtils.isEmpty(getPath())) {
+            return getNameTree();
+        } else {
+            return getPath() + Preferences.PATH_NAMING_RELATION_SEPARATOR + getNameTree();
+        }
+    }
+
+    public String getNameSourcePath(){
+        if (StringUtils.isEmpty(getPath())) {
+            return getNameSource();
+        } else {
+            return getPath() + Preferences.PATH_NAMING_RELATION_SEPARATOR + getNameSource();
+        }
+    }
+
+
+    public void delete(){
+        MVCCDManager.instance().removeMCDRelationAndChildsInRepository(this);
+        this.removeInParent();
+    }
+
+
+    @Override
+    public ArrayList<Stereotype> getStereotypes() {
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+    @Override
+    public ArrayList<Constraint> getConstraints() {
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+    @Override
+    public String getStereotypesInLine() {
+        return StereotypeService.getUMLNamingInLine(getStereotypes());
+    }
+
+
+    @Override
+    public String getConstraintsInLine() {
+        return ConstraintService.getUMLNamingInLine(getConstraints());
+    }
 
 }

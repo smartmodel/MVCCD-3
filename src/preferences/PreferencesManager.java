@@ -10,6 +10,7 @@ import project.ProjectFileChooser;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
+import utilities.Trace;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
 

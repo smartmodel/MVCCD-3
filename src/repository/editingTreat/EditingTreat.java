@@ -2,13 +2,13 @@ package repository.editingTreat;
 
 import console.ViewLogsManager;
 import m.MElement;
-import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.MCDElement;
-import mcd.services.MCDElementService;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
+import project.ProjectElement;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
@@ -19,7 +19,6 @@ import utilities.window.editor.PanelInputContent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Fournit les méthodes génériques de déclenchement de traitement de données telles que treatNew(), treatUpdate(), treatRead(), etc.
@@ -34,9 +33,34 @@ public abstract class EditingTreat {
 
         DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW); //Ouvre l'éditeur attendu
         fen.setVisible(true);
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        if (fen.getMvccdElementNew() != null) {
+            if (fen.getMvccdElementNew() instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
+        }
         return fen.getMvccdElementNew();
     }
 
+    public MVCCDElement treatNewTransitory(Window owner, MVCCDElement parent) {
+
+        DialogEditor fen = getDialogEditor(owner, parent, null, DialogEditor.NEW); //Ouvre l'éditeur attendu
+        //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+        fen.setNewElementTransitory(true);
+        fen.setVisible(true);
+        //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+        // Pas de changement pour un élément transitoire
+        /*
+        if (fen.getMvccdElementNew() != null) {
+            if (fen.getMvccdElementNew() instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
+        }
+
+         */
+
+        return fen.getMvccdElementNew();
+    }
     /**
      * Déclenchement de traitement de données pour la modification d'un élément.
      */
@@ -51,6 +75,16 @@ public abstract class EditingTreat {
         if (parentBefore != parentAfter) {
             MVCCDManager.instance().changeParentMVCCDElementInRepository(element, parentBefore);
         }
+
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        if (fen.isDatasChanged()) {
+            //TODO-1 A voir car le changement d'une préférence d'application --> Save Project !
+            // Cela pourrait être pertinent de conserver tel quel !
+            if ( (element instanceof ProjectElement) || (element instanceof Preferences)){
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
+        }
+
         return fen.isDatasChanged();
     }
 
@@ -69,16 +103,24 @@ public abstract class EditingTreat {
      */
     public boolean treatDelete (Window owner, MVCCDElement element) {
         String messageTheElement = StringUtils.lowerCase(MessagesBuilder.getMessagesProperty (getPropertyTheElement()));
+        // Pour l'affichage des extrémités de relation avec un nom parlant
+        String elementName = element.getNameTree();
+        if (element instanceof MElement){
+            elementName = ((MElement)element).getNameTreePath();
+        }
         String message = MessagesBuilder.getMessagesProperty ("editor.delete.confirm",
-                new String[] { messageTheElement, element.getName()});
+                //new String[] { messageTheElement, element.getName()});
+                new String[] { messageTheElement, elementName});
         boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
         if (confirmDelete){
-            removeMVCCDElementInRepository(element);
-            element.removeInParent();
-            //TODO-0 Il faut supprimer aussi tous les descendants dans la structure arborescente du projet
-            element = null;
+            //removeMVCCDElementInRepository(element);
+            element.delete();
+            if (element instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
+            return true;
         }
-        return element == null;
+        return false;
     }
 
 
@@ -91,12 +133,12 @@ public abstract class EditingTreat {
                 new String[] {element.getName()});
         boolean confirmDelete = DialogMessage.showConfirmYesNo_No(owner, message) == JOptionPane.YES_OPTION;
         if (confirmDelete){
+            if (element instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
             for (int i = element.getChilds().size() - 1  ; i >= 0 ;  i--) {
                 MVCCDElement child = element.getChilds().get(i);
-                removeMVVCCDChildInRepository(child);
-
-                child.removeInParent();
-                child = null;
+                child.delete();
             }
         }
     }
@@ -108,16 +150,29 @@ public abstract class EditingTreat {
         String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
 
         if (datasAdjusted( panelInputContent)) {
-            String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.completness");
-            String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
-                    new String[] {messageMode});
-            if (showDialog) {
-                if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
+           if (showDialog) {
+               String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.completness");
+               String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
+                       new String[] {messageMode});
+               if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
                     DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
                     fen.setVisible(true);
                 }
             } else {
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                // TODO-0 - Faire de class + nameTree + id une méthode
+                String name = mvccdElement.getNameTree();
+                if (mvccdElement instanceof MElement){
+                    name = ((MElement) mvccdElement).getNameTreePath();
+                }
+                String id = "-";
+                if(mvccdElement instanceof ProjectElement){
+                    id = "" + ((ProjectElement) mvccdElement).getIdProjectElement();
+                }
+                String messageMode  = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change.without.dialog",
+                        new String[] {mvccdElement.getClass().getName(), name, id});
+               String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
+                       new String[] {messageMode});
+               resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
             }
         } else {
             if (!checkInput(panelInputContent)) {
@@ -125,7 +180,7 @@ public abstract class EditingTreat {
                 if (showDialog) {
                     elementNameInContext = mvccdElement.getNameTree();
                 } else {
-                    elementNameInContext = ((MCDElement) mvccdElement).getNamePath(MElementService.PATHSHORTNAME);
+                    elementNameInContext = ((MCDElement) mvccdElement).getNameTreePath();
                 }
                String message = MessagesBuilder.getMessagesProperty("dialog.completness.error",
                         new String[]{messageElement, elementNameInContext});
@@ -179,14 +234,6 @@ public abstract class EditingTreat {
     protected abstract DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) ;
 
     protected abstract String getPropertyTheElement();
-
-    protected  void removeMVCCDElementInRepository(MVCCDElement element){
-        MVCCDManager.instance().removeMVCCDElementInRepository(element, element.getParent());
-    }
-
-    protected  void removeMVVCCDChildInRepository(MVCCDElement child){
-        MVCCDManager.instance().removeMVCCDElementInRepository(child, child.getParent());
-    }
 
 
 }

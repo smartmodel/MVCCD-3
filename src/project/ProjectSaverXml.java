@@ -766,7 +766,8 @@ public class ProjectSaverXml {
 
         // Création de la balise <genEntite>
         Element entityGen = doc.createElement("genEntite");
-        entityGen.appendChild(doc.createTextNode(mcdGeneralization.getGen().getMcdEntity().getNamePath(1)));
+        //#MAJ 2021-06-06 Suppression du paramétrage MElement.getPath() ; automatiquement la préférence de l'application
+        entityGen.appendChild(doc.createTextNode(mcdGeneralization.getGen().getMcdEntity().getNamePath()));
         generalisation.appendChild(entityGen);
 
         // Ajout de l'attribut target_entity_id sur la balise <genEntity>
@@ -776,7 +777,8 @@ public class ProjectSaverXml {
 
         // Création de la balise <specEntite>
         Element entitySpec = doc.createElement("specEntite");
-        entitySpec.appendChild(doc.createTextNode(mcdGeneralization.getSpec().getMcdEntity().getNamePath(1)));
+        //#MAJ 2021-06-06 Suppression du paramétrage MElement.getPath() ; automatiquement la préférence de l'application
+        entitySpec.appendChild(doc.createTextNode(mcdGeneralization.getSpec().getMcdEntity().getNamePath()));
         generalisation.appendChild(entitySpec);
 
         // Ajout de l'attribut target_entity_id sur la balise <specEntity>
@@ -882,7 +884,8 @@ public class ProjectSaverXml {
 
         // Création de la balise <entiteNamePath> sous <roleExtremiteFrom> ou <roleExtremiteTo>
         Element entityTag = doc.createElement("entiteNamePath");
-        entityTag.appendChild(doc.createTextNode(assEnd.getMcdEntity().getNamePath(1)));
+        //#MAJ 2021-06-06 Suppression du paramétrage MElement.getPath() ; automatiquement la préférence de l'application
+        entityTag.appendChild(doc.createTextNode(assEnd.getMcdEntity().getNamePath()));
         roleExtremiteTag.appendChild(entityTag);
 
         // Création de la balise <multiplicity> sous <roleExtremiteFrom> ou <roleExtremiteTo>

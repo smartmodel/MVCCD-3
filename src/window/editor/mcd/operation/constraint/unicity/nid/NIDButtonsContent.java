@@ -29,12 +29,15 @@ public class NIDButtonsContent extends UnicityButtonsContent {
         return Preferences.FILE_HELP_ENTITY_NAME;
     }
 
-
+    //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+    /*
     @Override
     public void actionApply(MVCCDElement mvccdElementMaster){
         new MCDNIDEditingTreat().treatUpdate(getEditor().getOwner(),
                 mvccdElementMaster);
     }
+
+     */
 
 
 }

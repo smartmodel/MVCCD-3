@@ -1,8 +1,8 @@
 package mdr;
 
+import mdr.services.MDRRelationFKService;
 import project.ProjectElement;
 import project.ProjectService;
-import utilities.Trace;
 
 public abstract class MDRRelationFK extends MDRRelation{
 
@@ -19,28 +19,38 @@ public abstract class MDRRelationFK extends MDRRelation{
         super(parent, name);
     }
 
-    public MDRRelFKEnd getEndParent() {
-        return (MDRRelFKEnd) super.getA();
+    public MDRRelationFK(ProjectElement parent, int id) {
+        super(parent, id);
     }
 
+    public MDRRelFKEnd getEndParent() {
+        return MDRRelationFKService.getEndByRole(this, MDRRelFKEnd.PARENT);
+    }
+
+    /*
     public void setEndParent(MDRRelFKEnd endParent){
         super.setA(endParent);
     }
 
+     */
+
     public MDRRelFKEnd getEndChild() {
-        return (MDRRelFKEnd) super.getB();
+        return MDRRelationFKService.getEndByRole(this, MDRRelFKEnd.CHILD);
     }
 
+    /*
     public void setEndChild(MDRRelFKEnd endChild){
         super.setB(endChild);
     }
+
+     */
 
     public int getMdrFKId(){
         return this.mdrFKId;
     }
 
     public MDRFK getMDRFK() {
-        return (MDRFK) ProjectService.getElementById(mdrFKId);
+        return (MDRFK) ProjectService.getProjectElementById(mdrFKId);
     }
 
     public void setMDRFK(MDRFK mdrfk) {
@@ -53,5 +63,4 @@ public abstract class MDRRelationFK extends MDRRelation{
         }
         return "La liaison avec la contrainte FK n'est pas encore faite";
     }
-
 }

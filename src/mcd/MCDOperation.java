@@ -1,13 +1,17 @@
 package mcd;
 
+import constraints.ConstraintService;
 import m.interfaces.IMCompletness;
+import m.interfaces.IMUMLExtensionNamingInLine;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDElementWithTargets;
 import project.ProjectElement;
+import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
 
 import java.util.ArrayList;
 
-public abstract class MCDOperation extends MCDElement implements IMCompletness, IMCDElementWithTargets {
+public abstract class MCDOperation extends MCDElement implements IMCompletness, IMCDElementWithTargets, IMUMLExtensionNamingInLine {
 
     private static final long serialVersionUID = 1000;
 
@@ -23,6 +27,8 @@ public abstract class MCDOperation extends MCDElement implements IMCompletness, 
         super(parent, name);
     }
 
+    public abstract Stereotype getDefaultStereotype();
+
     public ArrayList<MCDParameter> getParameters() {
         ArrayList<MCDParameter> parameters = new ArrayList<MCDParameter>();
         for (MVCCDElement mvccdElement : getChilds()) {
@@ -36,4 +42,16 @@ public abstract class MCDOperation extends MCDElement implements IMCompletness, 
     public MCDEntity getEntityAccueil(){
         return (MCDEntity) getParent().getParent();
     }
+
+    public String getConstraintsInLine(){
+        return ConstraintService.getUMLNamingInLine(getConstraints());
+    }
+
+
+    @Override
+    public String getStereotypesInLine() {
+        return StereotypeService.getUMLNamingInLine(getStereotypes());
+    }
+
+
 }

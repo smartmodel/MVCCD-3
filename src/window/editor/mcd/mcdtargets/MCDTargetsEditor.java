@@ -5,7 +5,6 @@ import mcd.*;
 import messages.MessagesBuilder;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
-import utilities.Trace;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelInput;
@@ -95,6 +94,6 @@ public class MCDTargetsEditor extends DialogEditor {
         if (getMvccdElementCrt() instanceof MCDRelEnd){
             theElement = MessagesBuilder.getMessagesProperty("of.relend");
         }
-        return theElement + " " +((MCDElement)getMvccdElementCrt()).getNamePathSourceDefault();
+        return theElement + " " +((MCDElement)getMvccdElementCrt()).getNameSourcePath();
     }
 }

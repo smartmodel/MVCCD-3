@@ -12,6 +12,7 @@ import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 import utilities.Trace;
+import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContentIdTable;
 import utilities.window.scomponents.SCheckBox;
@@ -26,6 +27,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
@@ -66,6 +68,7 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
         fieldAssEndIdParents = new STextArea (this, labelAssEndIdParents);
 
         fieldAssEndIdParents.setPreferredSize((new Dimension(300, 50)));
+        fieldAssEndIdParents.setEnabled(false);
 
 
 
@@ -113,9 +116,37 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
 
     }
 
+    /*
+    protected MElement actionAdd(ActionEvent e) {
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        if (getEditor().getMode().equals(DialogEditor.NEW)) {
+            // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas confirmé
+            if (DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageAdd()) == JOptionPane.YES_OPTION) {
+                // Sauvegarde de l'enregistrement maitre
+                saveElementMaster(true);
+            }
+        } else {
+            boolean appendAuthorized = true;
+            // Les détails ne peuvent être saisis tant que l'enregistrement mâitre n'est pas sauvegardé
+            if (getEditor().getButtons().getButtonsContent().getBtnApply().isEnabled()) {
+                appendAuthorized = DialogMessage.showConfirmYesNo_Yes(getEditor(), getMessageUpdate()) == JOptionPane.YES_OPTION;
+                if (appendAuthorized) {
+                    //getEditor().getButtons().getButtonsContent().treatUpdate();
+                    // Sauvegarde de l'enregistrement maitre
+                    saveElementMaster(false);
+                }
+            } else {
+                return super.actionAdd(e);
+            }
+        }
+        return null;
+    }
 
+     */
+
+    /*
     @Override
-    protected void getActionAddDetail(boolean masterNew) {
+    protected void saveElementMaster(boolean masterNew) {
         MVCCDElement mvccdElementMaster ;
         if (masterNew) {
             getEditor().getButtons().getButtonsContent().treatCreate();
@@ -130,9 +161,9 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
         // Formulaire maitre après enregistrement en mode update
         ((UnicityButtonsContent)getEditor().getButtons().getButtonsContent()).actionApply(mvccdElementMaster);
 
-
-
     }
+
+     */
 
     @Override
     protected String getMessageAdd() {
@@ -172,13 +203,11 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
     }
 
     @Override
-    protected Object[] getNewRow(MElement mElement) {
+    protected Object[] newRow(MElement mElement) {
         Object[] row = new Object [OperationParamTableColumn.getNbColumns()];
         putValueInRow(mElement, row);
         return row;
     }
-
-    protected  abstract MElement getNewElement();
 
     @Override
     protected void putValueInRow(MElement mElement, Object[] row) {
@@ -357,7 +386,7 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
     }
 
     @Override
-    protected MCDElement getParentByNamePath(int pathname, String text) {
+    protected MCDElement getParentByNamePath(String namePath) {
         return null;
     }
 
@@ -378,9 +407,9 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
 
         MCDUnicity mcdUnicity = (MCDUnicity) mvccdElement;
         fieldAbsolute.setSelected(mcdUnicity.isAbsolute());
-        if (! mcdUnicity.isAbsolute()) {
+        //if (! mcdUnicity.isAbsolute()) {
             loadAssEndIdParents(mcdUnicity);
-        }
+        //}
 
         fieldStereotype.setText(computeStereotype().getName());
 
@@ -392,16 +421,17 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
         //boolean c2 = (mcdUnicity instanceof MCDUnique) &&  (!(((MCDUnique) mcdUnicity).isAbsolute())) ;
 
         //if (c1 || c2 ){
-        if (! mcdUnicity.isAbsolute()){
+        //if (! mcdUnicity.isAbsolute()){
             MCDEntity mcdEntity = mcdUnicity.getEntityParent();
-            ArrayList<MCDAssEnd> mcdAssEndsIdCompParent = mcdEntity.getAssEndsIdCompParent();
-            ArrayList<MCDAssEnd> mcdAssEndsIdParent = mcdAssEndsIdCompParent;
-            ArrayList<MCDAssEnd> mcdAssEndsIdNatParent = mcdEntity.getAssEndsIdNatParent();
-            mcdAssEndsIdParent.addAll(mcdAssEndsIdNatParent);
-            for (MCDAssEnd mcdAssEnd : mcdAssEndsIdParent){
-                fieldAssEndIdParents.append(mcdAssEnd.getNameTree());
+            int i = 0;
+            for (MCDAssEnd mcdAssEnd : mcdEntity.getMCDAssEndsStructureIdForParameters()){
+                if (i > 0) {
+                    fieldAssEndIdParents.append(System.lineSeparator());
+                }
+                i++;
+                fieldAssEndIdParents.append(mcdAssEnd.getNameTarget());
             }
-        }
+        //}
     }
 
 
@@ -468,7 +498,7 @@ public abstract class UnicityInputContent extends PanelInputContentIdTable {
 
         MCDUnicity mcdUnicity = (MCDUnicity) getEditor().getMvccdElementCrt();
         MCDEntity mcdEntity = (MCDEntity) mcdUnicity.getParent().getParent();
-        IMCDParameter target = MCDParameterService.getTargetByTypeAndNameTree(mcdEntity,
+        IMCDParameter target = MCDParameterService.getTargetByTypeAndNameTarget(mcdEntity,
                 (String) model.getValueAt(line, OperationParamTableColumn.TYPE.getPosition()),
                 (String) model.getValueAt(line, OperationParamTableColumn.NAME.getPosition()));
 

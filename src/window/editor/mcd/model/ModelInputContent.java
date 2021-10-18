@@ -284,13 +284,12 @@ public class ModelInputContent extends PanelInputContentId {
     }
 
     @Override
-    protected MCDElement getParentByNamePath(int pathname, String text) {
+    protected MCDElement getParentByNamePath(String namePath) {
         if (getScope() == ModelEditor.PACKAGE) {
             //#MAJ 2021-02-21-A Erreur création d'un paquetage sous un modèle
             if (getEditor().getMvccdElementParent() instanceof MCDPackage) {
                 MCDPackage mcdPackage = (MCDPackage) getEditor().getMvccdElementParent();
-                return (MCDElement) IMCDContPackages.getIMCDContPackagesByNamePath(mcdPackage.getIMCDModelAccueil()
-                        , MElementService.PATHNAME, text);
+                return (MCDElement) IMCDContPackages.getIMCDContPackagesByNamePath(mcdPackage.getIMCDModelAccueil(), namePath);
             } else {
                 return (MCDElement) getEditor().getMvccdElementParent();
             }

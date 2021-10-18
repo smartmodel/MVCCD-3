@@ -4,21 +4,23 @@ import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import exceptions.CodeApplException;
 import m.MElement;
-import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import mcd.*;
 import mcd.interfaces.IMCDParameter;
+import mdr.MDRColumn;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.Trace;
 import window.editor.mcd.operation.parameter.ParameterEditor;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class MCDParameterService {
+
+    final static int HAUT = -1 ;
+    final static int BAS = 1;
+    final static int COMPARE_DEFAULT = 0 ;
 
     public static ArrayList<String> checkTarget(IMCDParameter iMCDParameterTarget,
                                                 String selectedItem,
@@ -141,12 +143,15 @@ public class MCDParameterService {
             if (targetPotential instanceof MCDAttribute) {
                 MCDAttribute attributePotential = (MCDAttribute) targetPotential;
                 MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(attributePotential.getDatatypeLienProg());
+                //#MAJ 2021-06-18D MCDDatatype autorisé pour NID (Généralisation)
+                /*
                 MCDDatatype token = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_TOKEN_LIENPROG);
                 MCDDatatype positiveInteger = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_POSITIVEINTEGER_LIENPROG);
                 boolean c1 = mcdDatatype.isSelfOrDescendantOf(token) || mcdDatatype.isSelfOrDescendantOf(positiveInteger);
+                */
                 // Il doit y avoir un attribut obligatoire mais, d'autres optionnels
                 //boolean c2 = attributePotential.isMandatory();
-                if (c1 ) {
+                if (mcdDatatype.isAuthorizedForNID()) {
                         resultat.add(attributePotential);
                 }
             }
@@ -154,11 +159,12 @@ public class MCDParameterService {
         return resultat;
     }
 
-    public static IMCDParameter getTargetByTypeAndNameTree(MCDEntity mcdEntity, String type, String name) {
+
+    public static IMCDParameter getTargetByTypeAndNameTarget(MCDEntity mcdEntity, String type, String nameTarget) {
         if ( type.equals(MCDAttribute.CLASSSHORTNAMEUI)) {
             // Attributs
             for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()) {
-                if (mcdAttribute.getName().equals(name)) {
+                if (mcdAttribute.getNameTarget().equals(nameTarget)) {
                     return mcdAttribute;
                 }
             }
@@ -170,25 +176,26 @@ public class MCDParameterService {
                 //#MAJ 2021-05-19 Affinement MCDUnicity
 
                 //if (mcdAssEnd.getMCDAssEndOpposite().getNameTree().equals(nameTree)) {
-                if (mcdAssEnd.getNamePath(MElementService.PATHSHORTNAME).equals(name)) {
-                    //return mcdAssEnd.getMCDAssEndOpposite();
-                    return mcdAssEnd;
+                //if (mcdAssEnd.getNameTarget().equals(nameTarget)) {
+                if (mcdAssEnd.getMCDAssEndOpposite().getNameTarget().equals(nameTarget)) {
+                        //return mcdAssEnd.getMCDAssEndOpposite();
+                    return mcdAssEnd.getMCDAssEndOpposite();
                 }
             }
             // Avec entité associative
             for (MCDLinkEnd mcdLinkEnd : mcdEntity.getMCDLinkEnds()) {
                 MCDAssociation mcdAssociation = (MCDAssociation) mcdLinkEnd.getMcdLink().getEndAssociation().getParent().getParent();
-                if (mcdAssociation.getFrom().getNamePath(MElementService.PATHSHORTNAME).equals(name)) {
+                if (mcdAssociation.getFrom().getNameTarget().equals(nameTarget)) {
                     return mcdAssociation.getFrom();
                 }
-                if (mcdAssociation.getTo().getNamePath(MElementService.PATHSHORTNAME).equals(name)) {
+                if (mcdAssociation.getTo().getNameTarget().equals(nameTarget)) {
                     return mcdAssociation.getTo();
                 }
             }
         }
 
         throw new CodeApplException("La méthode getTargetByTypeAndName ne trouve pas de cible de type "+
-                type + " et de nom " + name + " pour l'entité " + mcdEntity.getName());
+                type + " et de nom " + nameTarget + " pour l'entité " + mcdEntity.getName());
     }
 
     public static boolean existTargetInParameters(ArrayList<MCDParameter> parameters,
@@ -203,4 +210,40 @@ public class MCDParameterService {
         return false;
     }
 
- }
+    // Les MCDAssEnd en haut par rapport à l'ordre de saisie des paramètres
+    // Les MCDAttribute ensuite par rapport à l'ordre de saisie en tant qu'attribut d'entité
+    // Les paramètres sans target en bas par rapport à l'ordre de saisie
+    public static int compareToDefault(MCDParameter courant, MCDParameter other) {
+
+        //TODO-1 Code à metttre en place lorsque l'écran de saisie sera adaptà au tri ci-desssos
+        /*
+        MCDAttribute courantAttribute = courant.getMCDAttribute();
+        MCDAttribute otherAttribute = other.getMCDAttribute();
+        MCDAssEnd courantAssEnd = courant.getMCDAssEnd();
+        MCDAssEnd otherAssEnd = other.getMCDAssEnd();
+        IMCDParameter courantTarget = courant.getTarget();
+        IMCDParameter otherTarget = other.getTarget();
+        if ( (courantAssEnd != null) && (otherAssEnd != null)){
+            return courant.compareToOrder(other) ;
+        } else if ( (courantAttribute != null) && (otherAttribute != null)){
+            return courantAttribute.compareToOrder(otherAttribute) ;
+        } else if ( (courantTarget == null) && (otherTarget == null)){
+            return courant.compareToOrder(other) ;
+        } else if (courantAssEnd != null) {
+            return HAUT;
+        } else if (otherAssEnd != null) {
+            return BAS ;
+        } else if (courantAttribute != null) {
+            return HAUT;
+        } else if (otherAttribute != null) {
+            return BAS ;
+        } else {
+            return COMPARE_DEFAULT;
+        }
+
+         */
+
+        // En attendant
+        return courant.compareToOrder(other) ;
+    }
+}

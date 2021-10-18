@@ -1,18 +1,29 @@
 package mpdr;
 
+import constraints.Constraint;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import md.MDElement;
 import mdr.MDRConstraint;
 import mdr.MDRTable;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
 import mldr.MLDRPK;
+import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
 import mldr.services.MLDRColumnService;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.services.MPDRColumnService;
+import mpdr.services.MPDRConstraintService;
 import mpdr.services.MPDRTableService;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.ProjectElement;
+import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
+import stereotypes.Stereotypes;
+import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
@@ -74,6 +85,13 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         return MPDRTableService.getMPDRConstraintByMLDRConstraintSource(this, mldrConstraint);
     }
 
+    public MPDRFK getMPDRFKByMLDRFKSource(MLDRFK mldrFk){
+        return MPDRTableService.getMPDRFKByMLDRFKSource(this, mldrFk);
+    }
+
+    public ArrayList<MPDRColumn> getMPDRColumns() {
+        return MPDRColumnService.to(getMDRColumns());
+    }
 
     public  abstract MPDRColumn createColumn(MLDRColumn mldrColumn);
 
@@ -82,7 +100,33 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public abstract MDRConstraint createFK(MLDRFK mldrFK);
 
-    public ArrayList<MPDRColumn> getMPDRColumns() {
-        return MPDRColumnService.to(getMDRColumns());
+
+    public abstract MDRConstraint createUnique(MLDRUnique mldrUnique);
+
+    public ArrayList<Stereotype> getStereotypes() {
+        // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
+        ArrayList<Stereotype> resultat = super.getStereotypes();
+
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
     }
+
+
+    @Override
+    public ArrayList<Constraint> getConstraints() {
+        ArrayList<Constraint> resultat = super.getConstraints();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        return resultat;
+    }
+
+
+
+    public MPDRPK getMPDRPK() { return MPDRConstraintService.getMPDRPK(getMDRConstraints()); }
+
+    public ArrayList<MPDRFK> getMPDRFKs() { return MPDRConstraintService.getMPDRFKs(getMDRConstraints()); }
 }

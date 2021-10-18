@@ -1,5 +1,6 @@
 package mldr;
 
+import mcd.MCDAttribute;
 import mcd.MCDElement;
 import md.MDElement;
 import mdr.MDRColumn;
@@ -46,4 +47,12 @@ public class MLDRColumn extends MDRColumn implements IMLDRElement, IMLDRElementW
         return mcdElementSource;
     }
 
+    @Override
+    public MCDAttribute getMcdAttributeSource() {
+        MCDElement mcdElementSource = getMcdElementSource();
+        if (mcdElementSource instanceof MCDAttribute){
+            return (MCDAttribute) mcdElementSource;
+        }
+        return null;
+    }
 }

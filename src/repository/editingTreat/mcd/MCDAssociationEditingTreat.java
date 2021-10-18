@@ -1,10 +1,12 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
+import main.MVCCDManager;
 import mcd.MCDAssociation;
 import mcd.MCDAssociationNature;
 import mcd.MCDContRelations;
 import mcd.MCDEntity;
+import project.ProjectElement;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.services.SComboBoxService;
@@ -61,7 +63,7 @@ public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
 
         //Initialisation de l'entité de départ
         if (entityFrom  != null){
-            SComboBoxService.selectByText(content.getFieldFromEntity(), entityFrom.getNamePath(content.getModePathName()));
+            SComboBoxService.selectByText(content.getFieldFromEntity(), entityFrom.getNamePath());
             if (initFrozen)  {
                 content.getFieldFromEntity().setReadOnly(true);
             }
@@ -69,7 +71,7 @@ public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
 
         //Initialisation de l'entité d'arrivée
         if (entityTo  != null) {
-            SComboBoxService.selectByText(content.getFieldToEntity(), entityTo.getNamePath(content.getModePathName()));
+            SComboBoxService.selectByText(content.getFieldToEntity(), entityTo.getNamePath());
             if (initFrozen)  {
                 content.getFieldToEntity().setReadOnly(true);
             }
@@ -88,6 +90,12 @@ public class MCDAssociationEditingTreat extends MCDRelationEditingTreat {
 
         if (mcdAssociationNew != null) {
             addRelEndsInRepository(mcdAssociationNew);
+        }
+        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+        if (fen.getMvccdElementNew() != null) {
+            if (fen.getMvccdElementNew() instanceof ProjectElement) {
+                MVCCDManager.instance().setDatasProjectChanged(true);
+            }
         }
         return mcdAssociationNew;
     }

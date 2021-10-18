@@ -11,9 +11,6 @@ public abstract class MDRRelEnd extends MDRElement implements IMRelEnd, IMDRElem
     private static final long serialVersionUID = 1000;
     private Integer iteration = null; // Si un objet est créé directement et non par transformation
 
-    public static final int PARENT = 1 ;  //PK
-    public static final int CHILD = 2 ;   //FK
-
 
     private IMRelation imRelation;
     private MElement mElement ;

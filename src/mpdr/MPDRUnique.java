@@ -1,8 +1,12 @@
 package mpdr;
 
+import mcd.MCDAttribute;
+import mcd.MCDUnicity;
 import md.MDElement;
 import mdr.MDRFK;
 import mdr.MDRUnique;
+import mldr.MLDRColumn;
+import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
@@ -38,6 +42,16 @@ public abstract class MPDRUnique extends MDRUnique implements IMPDRElement, IMPD
         return (MDElement) getMldrElementSource();
     }
 
+
+    @Override
+    public MCDUnicity getMcdUnicitySource() {
+        IMLDRElement mldrElementSource = getMldrElementSource();
+        if (mldrElementSource instanceof MLDRUnique){
+            MLDRUnique mldrUniqueSource = (MLDRUnique) mldrElementSource;
+            return mldrUniqueSource.getMcdUnicitySource();
+        }
+        return null;
+    }
 
 
 

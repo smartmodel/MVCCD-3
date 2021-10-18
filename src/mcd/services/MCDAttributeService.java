@@ -2,14 +2,12 @@ package mcd.services;
 
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
-import java.util.ArrayList;
-import mcd.MCDAttribute;
-import mcd.MCDEntity;
-import mcd.MCDNID;
-import mcd.MCDParameter;
+import mcd.*;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+
+import java.util.ArrayList;
 
 public class MCDAttributeService {
 
@@ -55,17 +53,31 @@ public class MCDAttributeService {
     return label;
   }
 
-  public static ArrayList<MCDNID> partOfNIds(MCDAttribute mcdAttribute) {
-    ArrayList<MCDNID> resultat = new ArrayList<MCDNID>();
-    MCDEntity mcdEntity = mcdAttribute.getEntityAccueil();
-    ArrayList<MCDNID> allNIDs = mcdEntity.getMCDContConstraints().getMCDNIDs();
-    for (MCDNID aNID : allNIDs) {
-      for (MCDParameter parameter : aNID.getMcdParameters()) {
-        if (parameter.getTarget() == mcdAttribute) {
-          resultat.add(aNID);
+    public static ArrayList<MCDNID> partOfNIds(MCDAttribute mcdAttribute) {
+        ArrayList<MCDNID> resultat = new ArrayList<MCDNID>();
+        MCDEntity mcdEntity = mcdAttribute.getEntityAccueil();
+        ArrayList<MCDNID>  allNIDs = mcdEntity.getMCDContConstraints().getMCDNIDs();
+        for (MCDNID aNID : allNIDs){
+            for (MCDParameter parameter : aNID.getMcdParameters()){
+                if ( parameter.getTarget() == mcdAttribute){
+                    resultat.add(aNID);
+                }
+            }
         }
-      }
+        return resultat;
     }
-    return resultat;
-  }
+
+    public static ArrayList<MCDUnique> partOfUniques(MCDAttribute mcdAttribute) {
+        ArrayList<MCDUnique> resultat = new ArrayList<MCDUnique>();
+        MCDEntity mcdEntity = mcdAttribute.getEntityAccueil();
+        ArrayList<MCDUnique>  allUniques = mcdEntity.getMCDContConstraints().getMCDUniques();
+        for (MCDUnique aUnique : allUniques){
+            for (MCDParameter parameter : aUnique.getMcdParameters()){
+                if ( parameter.getTarget() == mcdAttribute){
+                    resultat.add(aUnique);
+                }
+            }
+        }
+        return resultat;
+    }
 }

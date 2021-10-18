@@ -2,11 +2,13 @@ package repository;
 
 import main.MVCCDElement;
 import main.MVCCDElementProfileEntry;
+import mdr.MDRRelEnd;
 import profile.Profile;
 import project.Project;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import java.util.ArrayList;
 
 public class Repository extends DefaultTreeModel{
 
@@ -23,16 +25,45 @@ public class Repository extends DefaultTreeModel{
     }
 
     public void addChildsNodes(DefaultMutableTreeNode nodeParent, MVCCDElement mvccdElementParent) {
+
+
+        /*
         for ( MVCCDElement mvccdElement : mvccdElementParent.getChilds()){
+            Trace.println("Elément Classe: " +mvccdElement.getClass().getName());
+            //Trace.println("Elément name : " + mvccdElement.getName() );
+            // La trace ci-dessous provoque une erreur !
+            //Trace.println("Elément : " + mvccdElement.getName() );
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(mvccdElement);
-             if (mvccdElement instanceof MVCCDElementProfileEntry){
+            if (mvccdElement instanceof MVCCDElementProfileEntry){
                 nodeProfileEntry = node ;
             }
             nodeParent.add (node);
-            if (mvccdElement.getChilds().size()>0){
+            //#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
+            //if (mvccdElement.getChildsSortedDefault().size()>0){
                 addChildsNodes(node, mvccdElement);
-            }
+            //}
         }
+
+         */
+
+
+        //#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
+        ArrayList <? extends MVCCDElement> childs = mvccdElementParent.getChildsSortDefault();
+        int i = 0 ;
+        while ( i < childs.size() ){
+            // La trace ci-dessous provoque une erreur !
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(childs.get(i));
+            if (childs.get(i) instanceof MVCCDElementProfileEntry){
+                nodeProfileEntry = node ;
+            }
+            nodeParent.add (node);
+            //#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
+            if (childs.get(i).getChilds().size()>0){
+                addChildsNodes(node, childs.get(i));
+            }
+            i++;
+        }
+
     }
 
     public DefaultMutableTreeNode addNode (DefaultMutableTreeNode nodeParent, MVCCDElement mvccdElement) {
@@ -111,6 +142,7 @@ public class Repository extends DefaultTreeModel{
 
     public DefaultMutableTreeNode addMVCCDElement(DefaultMutableTreeNode nodeParent, MVCCDElement mvccdElement)  {
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(mvccdElement);
+        // recherche de la position dans la fraterie du projet
         int index = 0;
         if (mvccdElement.getParent() != null) {
             for (MVCCDElement child : mvccdElement.getParent().getChilds()) {
@@ -121,8 +153,19 @@ public class Repository extends DefaultTreeModel{
             }
         }
 
-        //insertNodeInto(node, nodeParent, nodeParent.getChildCount());
-        insertNodeInto(node, nodeParent, index);
+        //#MAJ 2021-10-14 MPDRRelationFK réflexives - Extr A et B ne sont pas créées dans le bon ordre
+        // Les MDRRelEnd sont ajoutées aux tables (ou autres extrémités) sans suivre un ordre par rapport à ces éléments
+        // mais, un rôle A ou B (en tous les cas pour les MDRRelEndFK
+        if (  mvccdElement instanceof MDRRelEnd) {
+            // Insertion en queue de liste
+            insertNodeInto(node, nodeParent, nodeParent.getChildCount());
+        } else {
+            //  Insertion en bonne position dans la fraterie de la vue du référentiel
+            insertNodeInto(node, nodeParent, index);
+        }
+
+
+        // Insertion des éventuels enfants
         if (mvccdElement.getChilds().size()>0){
             for (int i = 0 ; i < mvccdElement.getChilds().size(); i++ ){
                 addMVCCDElement(node, mvccdElement.getChilds().get(i));

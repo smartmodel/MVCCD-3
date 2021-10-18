@@ -16,7 +16,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MCDGeneralization extends MCDRelation implements IMCompletness, IMCDParameter {
+public class MCDGeneralization extends MCDRelation implements IMCompletness {
 
     private  static final long serialVersionUID = 1000;
 
@@ -62,11 +62,10 @@ public class MCDGeneralization extends MCDRelation implements IMCompletness, IMC
 
     @Override
     public String getNameTree(){
-        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_GENERALIZATION, false, null);
-    }
+        MCDGSEnd gen = this.getGen();
+        MCDGSEnd spec= this.getSpec();
 
-    public String getNamePath(int pathMode){
-        return MCDRelationService.getNameTree(this, Preferences.MCD_NAMING_GENERALIZATION, true, pathMode);
+        return gen.getPath() + Preferences.MCD_NAMING_GENERALIZATION + spec.getPathReverse();
     }
 
     public MCDGSEnd getMCDAssGSOpposite(MCDGSEnd mcdGSEnd) {
@@ -81,31 +80,9 @@ public class MCDGeneralization extends MCDRelation implements IMCompletness, IMC
 
     }
 
-
-
     @Override
     public String getClassShortNameUI() {
         return CLASSSHORTNAMEUI;
-    }
-
-    @Override
-    public ArrayList<Stereotype> getToStereotypes() {
-        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
-
-        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
-        Preferences preferences = PreferencesManager.instance().preferences();
-
-        return resultat;
-    }
-
-    @Override
-    public ArrayList<Constraint> getToConstraints() {
-        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
-
-        Constraints constraints = ConstraintsManager.instance().constraints();
-        Preferences preferences = PreferencesManager.instance().preferences();
-
-        return resultat;
     }
 
 }

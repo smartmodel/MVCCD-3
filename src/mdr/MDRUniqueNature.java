@@ -4,11 +4,11 @@ import messages.MessagesBuilder;
 import preferences.Preferences;
 
 public enum MDRUniqueNature {
-    UNIQUE (Preferences.MDR_UNIQUE_NATURE_UNIQUE),
-    NID(Preferences.MDR_UNIQUE_NATURE_NID),
-    LP(Preferences.MDR_UNIQUE_NATURE_LP),
     SIMPK(Preferences.MDR_UNIQUE_NATURE_SIMPK),
     SIMCP(Preferences.MDR_UNIQUE_NATURE_SIMCP),
+    NID(Preferences.MDR_UNIQUE_NATURE_NID),
+    UNIQUE (Preferences.MDR_UNIQUE_NATURE_UNIQUE),
+    LP(Preferences.MDR_UNIQUE_NATURE_LP),
     FKMAXONECHILD(Preferences.MDR_UNIQUE_NATURE_FKMAXONECHILD);
 
     private final String name;
@@ -32,6 +32,18 @@ public enum MDRUniqueNature {
             }
         }
         return null;
+    }
+
+
+    public static int getIndex(MDRUniqueNature nature){
+        int i = -1 ;
+        for (MDRUniqueNature element: MDRUniqueNature.values()){
+            i++;
+            if (element == nature) {
+                return i;
+            }
+        }
+        return i;
     }
 
 }

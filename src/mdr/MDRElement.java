@@ -1,6 +1,8 @@
 package mdr;
 
 import exceptions.CodeApplException;
+import mcd.MCDAttribute;
+import mcd.MCDElement;
 import md.MDElement;
 import mdr.services.MDRElementConvert;
 import mdr.services.MDRElementService;
@@ -96,6 +98,5 @@ public abstract class MDRElement extends MDElement {
     }
 
      */
-
 
 }

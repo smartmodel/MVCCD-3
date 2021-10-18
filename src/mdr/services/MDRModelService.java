@@ -10,6 +10,7 @@ import mldr.MLDRContRelations;
 import mldr.MLDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.UtilDivers;
 
 import java.util.ArrayList;
 
@@ -149,7 +150,9 @@ public class MDRModelService {
     }
 
     private static String capitalize(String name){
-        String[] parts = name.split(Preferences.MDR_SEPARATOR);
+        String regex = UtilDivers.toEscapedForRegex(Preferences.MDR_SEPARATOR);
+
+        String[] parts = name.split(regex);
         String nameCapitalized ="";
         for(int i=0 ; i< parts.length ; i++){
             nameCapitalized = nameCapitalized + StringUtils.capitalize(parts[i]);

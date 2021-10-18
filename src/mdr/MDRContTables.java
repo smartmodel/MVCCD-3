@@ -1,8 +1,10 @@
 package mdr;
 
+import main.MVCCDElement;
 import mcd.interfaces.IMPathOnlyRepositoryTree;
 import mdr.services.MDRContTablesService;
 import project.ProjectElement;
+import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -27,6 +29,10 @@ public class MDRContTables extends MDRElement implements IMPathOnlyRepositoryTre
         return MDRContTablesService.getMDRTableById(this, id);
     }
 
+
+    public ArrayList<? extends MVCCDElement> getChildsSortDefault() {
+        return getChildsSortName();
+    }
 
 
 }

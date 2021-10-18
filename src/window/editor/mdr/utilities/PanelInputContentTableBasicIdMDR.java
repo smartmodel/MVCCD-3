@@ -134,7 +134,7 @@ public abstract class PanelInputContentTableBasicIdMDR extends PanelInputContent
             String sourceName = mdElementSource.getName();
             if (mdElementSource instanceof MCDElement) {
                 //sourceName = ((MCDElement) mdElementSource).getNamePath(MElement.SCOPESHORTNAME);
-                sourceName = ((MCDElement) mdElementSource).getNameSource();
+                sourceName = ((MCDElement) mdElementSource).getNameSourcePath();
             }
             String sourceClassName = mdElementSource.getClass().getSimpleName();
             fieldSource.setText(sourceClassName + " :  " + sourceName);

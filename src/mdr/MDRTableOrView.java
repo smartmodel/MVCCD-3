@@ -1,14 +1,18 @@
 package mdr;
 
+import constraints.ConstraintService;
+import m.interfaces.IMClass;
 import main.MVCCDElement;
+import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import project.ProjectElement;
+import stereotypes.StereotypeService;
 import utilities.Trace;
 
 import java.util.ArrayList;
 
-public abstract class MDRTableOrView extends MDRElement implements IMDRElementWithIteration{
+public abstract class MDRTableOrView extends MDRElement implements IMDRElementWithIteration, IMClass, IMDRElementNamingPreferences {
 
     //protected MDElement mdElementSource;
     private  static final long serialVersionUID = 1000;
@@ -91,6 +95,28 @@ public abstract class MDRTableOrView extends MDRElement implements IMDRElementWi
             }
         }
         return false;
+    }
+
+
+
+    @Override
+    public String getStereotypesInBox() {
+        return StereotypeService.getUMLNamingInBox(getStereotypes());
+    }
+
+    @Override
+    public String getStereotypesInLine() {
+        return StereotypeService.getUMLNamingInLine(getStereotypes());
+    }
+
+    @Override
+    public String getConstraintsInBox() {
+        return ConstraintService.getUMLNamingInBox(getConstraints());
+    }
+
+    @Override
+    public String getConstraintsInLine() {
+        return ConstraintService.getUMLNamingInLine(getConstraints());
     }
 
 }

@@ -213,7 +213,7 @@ public abstract class PanelInputContentTableBasic extends PanelInputContent
         if (posSelected >= 0) {
             int idElementSelected = (int) table.getValueAt(posSelected, STableService.IDINDEX);
 
-            MElement mElementSelected = (MElement) ProjectService.getElementById(idElementSelected);
+            MElement mElementSelected = (MElement) ProjectService.getProjectElementById(idElementSelected);
             return mElementSelected;
         }
         return null;

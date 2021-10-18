@@ -1,8 +1,10 @@
 package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
+import main.MVCCDManager;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
+import mcd.MCDRelation;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.entity.EntityEditor;
@@ -32,5 +34,6 @@ public class MCDEntityEditingTreat extends MCDCompliantEditingTreat {
     protected String getPropertyTheElement() {
         return "the.entity";
     }
+
 
 }

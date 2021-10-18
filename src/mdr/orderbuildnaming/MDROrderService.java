@@ -1,5 +1,6 @@
 package mdr.orderbuildnaming;
 
+import m.services.MElementService;
 import mcd.MCDAssociation;
 import mcd.MCDElement;
 import mcd.MCDEntity;
@@ -12,11 +13,13 @@ public class MDROrderService {
     public static String getPath(MCDElement mcdElement){
         String value = "";
 
-        Preferences preferences = PreferencesManager.instance().preferences();
-        String path = mcdElement.getShortPath(preferences.getMDR_PATH_SEP_FORMAT());
+        String pathMode = MElementService.PATHSHORTNAME;
+        String separator = PreferencesManager.instance().preferences().getMDR_PATH_SEP_FORMAT();
+
+        String path = mcdElement.getPathCustomized(pathMode, separator);
 
         if (StringUtils.isNotEmpty(path)){
-            value = path + preferences.getMDR_PATH_SEP_FORMAT();
+            value = path + separator;
         }
         return value ;
     }

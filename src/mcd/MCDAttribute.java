@@ -1,10 +1,14 @@
 package mcd;
 
 import constraints.Constraint;
+import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import java.util.ArrayList;
+import datatypes.MCDDatatype;
+import datatypes.MDDatatypeService;
 import m.interfaces.IMCompletness;
+import m.interfaces.IMUMLExtensionNamingInLine;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAttributeService;
@@ -13,75 +17,93 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import stereotypes.Stereotype;
+import stereotypes.StereotypeService;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 
-public class MCDAttribute extends MCDElement
-    implements IMCompletness, IMCDParameter, IMCDElementWithTargets {
+import java.util.ArrayList;
 
-  public static final String CLASSSHORTNAMEUI = "Attribute";
-  private static final long serialVersionUID = 1000;
-  private boolean aid = false;
-  private boolean aidDep = false;
-  private boolean mandatory = false;
-  private boolean list = false;
-  private boolean frozen = false;
-  private boolean ordered = false;
-  private boolean uppercase = false;
-  private String datatypeLienProg = null;
-  private Integer size = null;
-  private Integer scale = null;
-  private String initValue = null;
-  private String derivedValue = null;
-  private String domain = null;
+public class MCDAttribute extends MCDElement implements IMCompletness, IMCDParameter, IMCDElementWithTargets,
+        IMUMLExtensionNamingInLine {
 
-  public MCDAttribute(ProjectElement parent) {
-    super(parent);
-  }
+    private static final long serialVersionUID = 1000;
 
-  public MCDAttribute(ProjectElement parent, int id) {
-    super(parent, id);
-  }
+    public static final String CLASSSHORTNAMEUI = "Attribute";
 
-  public boolean isFrozen() {
-    return frozen;
-  }
+    private boolean aid = false;
+    private boolean aidDep = false;
+    private boolean mandatory = false ;
+    private boolean list = false;
 
-  public void setFrozen(boolean frozen) {
-    this.frozen = frozen;
-  }
+    private boolean frozen = false;
+    private boolean ordered = false;
 
-  public boolean isOrdered() {
-    return ordered;
-  }
+    private boolean uppercase = false;
 
-  public void setOrdered(boolean ordered) {
-    this.ordered = ordered;
-  }
+    private String datatypeLienProg = null;
+    private Integer size = null;
+    private Integer scale = null;
 
-  public boolean isUppercase() {
-    return uppercase;
-  }
 
-  public void setUppercase(boolean uppercase) {
-    this.uppercase = uppercase;
-  }
+    private String initValue = null;
+    private String derivedValue = null;
 
-  public String getDatatypeLienProg() {
-    return datatypeLienProg;
-  }
+    private String domain = null;
 
-  public void setDatatypeLienProg(String datatypeLienProg) {
-    this.datatypeLienProg = datatypeLienProg;
-  }
 
-  public Integer getSize() {
-    return size;
-  }
 
-  public void setSize(Integer size) {
-    this.size = size;
-  }
+    public MCDAttribute(ProjectElement parent) {
+        super(parent);
+    }
+
+    public MCDAttribute(ProjectElement parent, int id) {
+        super(parent, id);
+    }
+
+
+    public boolean isFrozen() {
+        return frozen;
+    }
+
+    public void setFrozen(boolean frozen) {
+        this.frozen = frozen;
+    }
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
+    }
+
+    public boolean isUppercase() {
+        return uppercase;
+    }
+
+    public void setUppercase(boolean uppercase) {
+        this.uppercase = uppercase;
+    }
+
+    public String getDatatypeLienProg() {
+        return datatypeLienProg;
+    }
+
+    public MCDDatatype getMCDDatatype() {
+        return MDDatatypeService.getMCDDatatypeByLienProg(datatypeLienProg);
+    }
+
+    public void setDatatypeLienProg(String datatypeLienProg) {
+        this.datatypeLienProg = datatypeLienProg;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
 
   public Integer getScale() {
     return scale;
@@ -151,78 +173,95 @@ public class MCDAttribute extends MCDElement
     this.list = list;
   }
 
-  public ArrayList<Stereotype> getToStereotypes() {
-    ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
-    Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
-    Preferences preferences = PreferencesManager.instance().preferences();
-    if (aid) {
-      resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
-                                                       preferences.STEREOTYPE_AID_LIENPROG));
-    }
-    if (mandatory) {
-      resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
-                                                       preferences.STEREOTYPE_M_LIENPROG));
-    }
-    if (list) {
-      resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
-                                                       preferences.STEREOTYPE_L_LIENPROG));
-    }
-    if (partOfNIds().size() > 0) {
-      for (MCDNID nid : partOfNIds()) {
-        resultat.add(nid.getDefaultStereotype());
-      }
-    }
-    return resultat;
-  }
+    public ArrayList<Stereotype> getStereotypes(){
+        // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
+        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
 
-  public ArrayList<Constraint> getToConstraints() {
-    ArrayList<Constraint> resultat = new ArrayList<Constraint>();
-    Constraints constraints = ConstraintsManager.instance().constraints();
-    Preferences preferences = PreferencesManager.instance().preferences();
-    if (ordered) {
-      resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
-                                                       preferences.CONSTRAINT_ORDERED_LIENPROG));
-    }
-    if (frozen) {
-      resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
-                                                       preferences.CONSTRAINT_FROZEN_LIENPROG));
-    }
-    return resultat;
-  }
+        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+        Preferences preferences = PreferencesManager.instance().preferences();
 
-  @Override
-  public String getClassShortNameUI() {
-    return CLASSSHORTNAMEUI;
-  }
+        if (aid){
+            resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_AID_LIENPROG));
+        }
+        if (mandatory){
+            resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_M_LIENPROG));
+        }
+        if (list){
+            resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
+                    preferences.STEREOTYPE_L_LIENPROG));
+        }
 
-  public MCDEntity getEntityAccueil() {
-    return (MCDEntity) getParent().getParent();
-  }
+        if (partOfNIds().size()> 0){
+            for (MCDNID nid : partOfNIds()){
+                resultat.add(nid.getDefaultStereotype());
+            }
+        }
 
-  public ArrayList<MCDNID> partOfNIds() {
-    return MCDAttributeService.partOfNIds(this);
-  }
+        if (partOfUniques().size()> 0){
+            for (MCDUnique unique : partOfUniques()){
+                resultat.add(unique.getDefaultStereotype());
+            }
+        }
 
-  public String getMCDDisplay() {
-    StringBuilder builder = new StringBuilder();
-    for (Stereotype stereotype : this.getToStereotypes()) {
-      builder.append("<<");
-      builder.append(stereotype.getName());
-      builder.append(">>");
-      // S'il s'agit d'un identifiant artificiel, on affiche uniquement le stéréotype <<AID>>
-      if (stereotype.getName().equals("AID")) {
-        break;
-      }
+        return resultat;
     }
-    builder.append(" ");
-    builder.append(this.getName());
-    builder.append(" ");
-    // S'il s'agit d'un identifiant artificiel, on affiche uniquement le stéréotype et son nom
-    if (!this.datatypeLienProg.equals("aid")) {
-      builder.append(":");
-      builder.append(" ");
-      builder.append(this.datatypeLienProg);
+
+    @Override
+    public String getStereotypesInLine() {
+        return StereotypeService.getUMLNamingInLine(getStereotypes());
     }
-    return builder.toString();
-  }
+
+
+
+    @Override
+    public ArrayList<Constraint> getConstraints(){
+        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        Preferences preferences = PreferencesManager.instance().preferences();
+
+        if (ordered){
+            resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                    preferences.CONSTRAINT_ORDERED_LIENPROG));
+        }
+
+        if (frozen){
+            resultat.add(constraints.getConstraintByLienProg(this.getClass().getName(),
+                    preferences.CONSTRAINT_FROZEN_LIENPROG));
+        }
+
+        return resultat;
+    }
+
+    @Override
+    public String getConstraintsInLine() {
+        return ConstraintService.getUMLNamingInLine(getConstraints());
+    }
+
+
+    @Override
+    public  String getClassShortNameUI() {
+        return CLASSSHORTNAMEUI;
+    }
+
+    @Override
+    public String getNameTarget() {
+        return getName();
+    }
+
+    public MCDEntity getEntityAccueil(){
+        return (MCDEntity) getParent().getParent();
+    }
+
+    public ArrayList<MCDNID> partOfNIds(){
+        return MCDAttributeService.partOfNIds(this);
+    }
+
+
+    public ArrayList<MCDUnique> partOfUniques(){
+        return MCDAttributeService.partOfUniques(this);
+    }
+
 }

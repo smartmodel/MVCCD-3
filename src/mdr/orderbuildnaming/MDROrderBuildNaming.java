@@ -319,7 +319,9 @@ public class MDROrderBuildNaming {
             boolean colFKOneAncestor = targetNaming == MDROrderBuildTargets.COLUMNFKONEANCESTOR;
             boolean  uniqueWithName = targetNaming == MDROrderBuildTargets.UNIQUE;
 
-            //boolean pk = targetNaming == MDROrderBuildTargets.PK;
+            boolean pk = targetNaming == MDROrderBuildTargets.PK;
+            boolean pkNN = targetNaming == MDROrderBuildTargets.PKNN;
+            boolean pkNNInd = targetNaming == MDROrderBuildTargets.PKNNINDICE;
             boolean fk = targetNaming == MDROrderBuildTargets.FK;
             boolean fkInd = targetNaming == MDROrderBuildTargets.FKWITHOUTROLE;
 
@@ -336,6 +338,8 @@ public class MDROrderBuildNaming {
 
             if (newName.length() > lengthMax) {
                 if (tableNN || tableNNInd) {
+                    return limitSizeTableNN(newName);
+                } else if (pkNN || pkNNInd) {
                     return limitSizeTableNN(newName);
                 } else if (colAttr || colAttrShortName) {
                     return limitSizeColumnAttr(newName);
@@ -404,6 +408,28 @@ public class MDROrderBuildNaming {
                 throw new OrderBuildNameTableNNSizeLimitException();
             }
             else if (targetNaming == MDROrderBuildTargets.TABLENNINDICE){
+                newName = newName.replace(Preferences.MDR_SEPARATOR, "");
+                if (newName.length() <= MDRNamingLength.LENGTH30.getLength()) {
+                    return newName;
+                } else {
+                    limitComputedCodeError(newName);
+                }
+            } else {
+                throw new CodeApplException(error);
+            }
+        } else {
+            limitCodeError(newName);
+        }
+        throw new CodeApplException(error);
+    }
+
+    private String limitSizePKNN(String newName){
+        String error = "Erreur limitSizePKNN";
+        if (namingLength == MDRNamingLength.LENGTH30){
+            if (targetNaming == MDROrderBuildTargets.PKNN){
+                throw new OrderBuildNameTableNNSizeLimitException();
+            }
+            else if (targetNaming == MDROrderBuildTargets.PKNNINDICE){
                 newName = newName.replace(Preferences.MDR_SEPARATOR, "");
                 if (newName.length() <= MDRNamingLength.LENGTH30.getLength()) {
                     return newName;

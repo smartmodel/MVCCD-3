@@ -16,7 +16,8 @@ public abstract class UnicityButtonsContent extends PanelButtonsContent {
         btnApply.setVisible(true);
     }
 
-    protected abstract void actionApply(MVCCDElement mvccdElementMaster);
+    //#MAJ 2021-07-31 Spéficité d'un élément transitoire
+    //protected abstract void actionApply(MVCCDElement mvccdElementMaster);
 
 }
 

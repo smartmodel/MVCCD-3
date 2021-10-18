@@ -19,6 +19,12 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
     private JPanel panelConstraintsName = new JPanel ();
     private JLabel labelPKName ;
     private STextField fieldPKName;
+    private JLabel labelPKNNName ;
+    private STextField fieldPKNNName;
+    private JLabel labelPKNNNameIndice ;
+    private STextField fieldPKNNNameIndice;
+
+
     private JLabel labelFKName = new JLabel();
     private STextField fieldFKName;
     private JLabel labelFKWithoutRoleName = new JLabel();
@@ -93,11 +99,23 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
         fieldFKWithoutRoleName.getDocument().addDocumentListener(this);
         fieldFKWithoutRoleName.addFocusListener(this);
 
-        labelColumnPKName = new JLabel("PK :");
+        labelColumnPKName = new JLabel("PK depuis entité:");
         fieldColumnPKName = new STextField(this, labelColumnPKName);
         fieldColumnPKName.setPreferredSize((new Dimension(150, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldColumnPKName.getDocument().addDocumentListener(this);
         fieldColumnPKName.addFocusListener(this);
+        
+        labelPKNNName = new JLabel("Depuis ass. n:n :");
+        fieldPKNNName = new STextField(this, labelPKNNName);
+        fieldPKNNName.setPreferredSize((new Dimension(600, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldPKNNName.getDocument().addDocumentListener(this);
+        fieldPKNNName.addFocusListener(this);
+
+        labelPKNNNameIndice = new JLabel("Depuis ass. n:n (indicée) :");
+        fieldPKNNNameIndice = new STextField(this, labelPKNNNameIndice);
+        fieldPKNNNameIndice.setPreferredSize((new Dimension(600, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldPKNNNameIndice.getDocument().addDocumentListener(this);
+        fieldPKNNNameIndice.addFocusListener(this);
 
         labelColumnAttrName = new JLabel("Attribut :");
         fieldColumnAttrName = new STextField(this, labelColumnAttrName);
@@ -180,6 +198,8 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
 
 
         super.getSComponents().add(fieldPKName);
+        super.getSComponents().add(fieldPKNNName);
+        super.getSComponents().add(fieldPKNNNameIndice);
         super.getSComponents().add(fieldFKName);
         super.getSComponents().add(fieldFKWithoutRoleName);
         super.getSComponents().add(fieldColumnPKName);
@@ -287,6 +307,19 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
         panelConstraintsName.add(labelPKName, gbcA);
         gbcA.gridx++ ;
         panelConstraintsName.add(fieldPKName, gbcA);
+
+
+        gbcA.gridx = 0;
+        gbcA.gridy++ ;
+        panelConstraintsName.add(labelPKNNName, gbcA);
+        gbcA.gridx++ ;
+        panelConstraintsName.add(fieldPKNNName, gbcA);
+
+        gbcA.gridx = 0;
+        gbcA.gridy++ ;
+        panelConstraintsName.add(labelPKNNNameIndice, gbcA);
+        gbcA.gridx++ ;
+        panelConstraintsName.add(fieldPKNNNameIndice, gbcA);
 
         gbcA.gridx = 0;
         gbcA.gridy++ ;
@@ -405,6 +438,8 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
 
     public void loadDatasWithSource(MVCCDElement mvccdElement, Preferences preferences) {
         fieldPKName.setText(preferences.getMDR_PK_NAME_FORMAT());
+        fieldPKNNName.setText(preferences.getMDR_PK_NN_NAME_FORMAT());
+        fieldPKNNNameIndice.setText(preferences.getMDR_PK_NN_NAME_INDICE_FORMAT());
         fieldFKName.setText(preferences.getMDR_FK_NAME_FORMAT());
         fieldFKWithoutRoleName.setText(preferences.getMDR_FK_NAME_WITHOUT_ROLE_FORMAT());
         fieldColumnPKName.setText(preferences.getMDR_COLUMN_PK_NAME_FORMAT());
@@ -440,6 +475,12 @@ public class PrefMDRFormatInputContent extends PanelInputContent {
 
         if (fieldPKName.checkIfUpdated()){
             preferences.setMDR_PK_NAME_FORMAT(fieldPKName.getText());
+        }
+        if (fieldPKNNName.checkIfUpdated()){
+            preferences.setMDR_PK_NN_NAME_FORMAT(fieldPKNNName.getText());
+        }
+        if (fieldPKNNNameIndice.checkIfUpdated()){
+            preferences.setMDR_PK_NN_NAME_INDICE_FORMAT(fieldPKNNNameIndice.getText());
         }
         if (fieldFKName.checkIfUpdated()){
             preferences.setMDR_FK_NAME_FORMAT(fieldFKName.getText());

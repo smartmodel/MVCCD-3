@@ -126,11 +126,4 @@ public class STable extends JTable implements SComponent {
         return label;
     }
 
-    public static int getOrderByLine(int i) {
-        if ( i== 0){
-            return MVCCDElement.FIRSTVALUEORDER;
-        } else {
-            return MVCCDElement.FIRSTVALUEORDER + (i * MVCCDElement.INTERVALORDER);
-        }
-    }
 }

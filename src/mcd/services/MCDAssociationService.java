@@ -11,6 +11,8 @@ import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.Trace;
+import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 
 import java.util.ArrayList;
@@ -32,11 +34,11 @@ public class MCDAssociationService {
 
     public static String buildNamingId(MCDEntity entityFrom, MCDEntity entityTo, String naming) {
 
-        return  entityFrom.getNamePath(MElementService.PATHNAME) +
+        return  entityFrom.getNamePath() +
                 Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
                 naming +
                 Preferences.MCD_NAMING_ASSOCIATION_SEPARATOR +
-                entityTo.getNamePath(MElementService.PATHNAME);
+                entityTo.getNamePath();
 
     }
 
@@ -104,12 +106,12 @@ public class MCDAssociationService {
     }
 
 
-    public static ArrayList<String> checkOriented(SComboBox fieldOriented,
-                                                  boolean recursif,
-                                                  MRelationDegree degree) {
+    public static ArrayList<String> checkOrientedOrNotOriented(SComboBox fieldOriented,
+                                                               boolean reflexif,
+                                                               MRelationDegree degree) {
 
         ArrayList<String> messages = new ArrayList<String>();
-        if (recursif){
+        if (reflexif){
             if (fieldOriented.isSelectedEmpty()){
                 if (degree != MRelationDegree.DEGREE_ONE_MANY) {
                     messages.add(MessagesBuilder.getMessagesProperty("editor.association.nature.reflexive.oriented.error",
@@ -124,6 +126,7 @@ public class MCDAssociationService {
         }
         return messages;
     }
+
 
     public static ArrayList<MCDAssociation> getMCDAssociationsInIModel(IMCDModel iMCDModel) {
         ArrayList<MCDAssociation> resultat =  new ArrayList<MCDAssociation>();
@@ -194,6 +197,13 @@ public class MCDAssociationService {
         }
         throw new CodeApplException("Le degré d'association " +
                 mcdAssociation.getNameTree() + " est inconnu ");
+    }
+
+    public static ArrayList<MCDAssEnd> getMCDAssEnds(MCDAssociation mcdAssociation) {
+        ArrayList<MCDAssEnd> resultat = new ArrayList<MCDAssEnd>();
+        resultat.add((MCDAssEnd) mcdAssociation.getFrom());
+        resultat.add((MCDAssEnd) mcdAssociation.getTo());
+        return resultat;
     }
 
     private static MCDAssEnd getMCDAssEndParentBeetweenTheTwo(MCDAssEnd mcdAssEndFrom,
