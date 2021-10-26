@@ -14,7 +14,10 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import m.interfaces.IMRelation;
+import main.MVCCDManager;
+import md.MDElement;
 import preferences.Preferences;
+import project.ProjectService;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
@@ -24,6 +27,7 @@ import window.editor.diagrammer.utils.Position;
 
 public abstract class RelationShape extends JComponent implements IShape {
 
+  protected int id;
   protected List<RelationPointAncrageShape> pointsAncrage = new LinkedList<>();
   protected boolean isSelected = false;
   protected MCDEntityShape source;
@@ -34,9 +38,20 @@ public abstract class RelationShape extends JComponent implements IShape {
   protected LabelShape sourceCardinalite;
   protected LabelShape destinationCardinalite;
   protected LabelShape associationName;
+  protected MDElement relatedRepositoryElement;
   protected boolean isReflexive;
 
+  public RelationShape(int id) {
+    this.id = id;
+  }
+
+  public RelationShape() {
+    if (MVCCDManager.instance().getProject() != null)
+      this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
+  }
+
   public RelationShape(MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+    this();
     this.source = source;
     this.destination = destination;
     this.isReflexive = isReflexive;
@@ -46,6 +61,24 @@ public abstract class RelationShape extends JComponent implements IShape {
 
     this.setFocusable(true);
   }
+  public RelationShape(int id, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+
+    this.source = source;
+    this.destination = destination;
+    this.isReflexive = isReflexive;
+    this.id = id;
+
+    this.createPointsAncrage(isReflexive);
+    this.createLabels();
+
+    this.setFocusable(true);
+  }
+
+  public RelationShape(MDElement relatedRepositoryElement, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+    this(source, destination, isReflexive);
+    this.relatedRepositoryElement = relatedRepositoryElement;
+  }
+
 
   public void drawPointsAncrage(Graphics2D graphics2D) {
     for (RelationPointAncrageShape pointAncrage : this.pointsAncrage) {
@@ -432,4 +465,33 @@ public abstract class RelationShape extends JComponent implements IShape {
   public abstract void setSourceCardinalite(String cardinalite);
 
   public abstract void setDestinationCardinalite(String cardinalite);
+
+  public MDElement getRelatedRepositoryElement() {
+    return relatedRepositoryElement;
+  }
+
+  public abstract String getXmlTagName();
+
+  public int getId() {
+    return id;
+  }
+
+  @Override
+  public String toString() {
+    return "RelationShape{" +
+            "id=" + id +
+            ", pointsAncrage=" + pointsAncrage +
+            ", isSelected=" + isSelected +
+            ", source=" + source +
+            ", destination=" + destination +
+            ", relation=" + relation +
+            ", sourceRole=" + sourceRole +
+            ", destinationRole=" + destinationRole +
+            ", sourceCardinalite=" + sourceCardinalite +
+            ", destinationCardinalite=" + destinationCardinalite +
+            ", associationName=" + associationName +
+            ", relatedRepositoryElement=" + relatedRepositoryElement +
+            ", isReflexive=" + isReflexive +
+            '}';
+  }
 }

@@ -74,6 +74,11 @@ public class Preferences extends MVCCDElement {
   public static final int DIAGRAMMER_RELATION_CLICK_AREA = 5;
   public static final String DIAGRAMMER_ENTITY_STEREOTYPE_TEXT = "<<Entity>>";
   public static final String DIAGRAMMER_ENTITY_ORDERED_TEXT = "{ordered}";
+  public static final String DIAGRAMMER_MCD_ENTITY_XML_TAG = "mcdEntityShape";
+  public static final String DIAGRAMMER_MCD_ASSOCIATION_XML_TAG = "mcdAssociationShape";
+  public static final String DIAGRAMMER_MCD_GENERALIZATION_XML_TAG = "mcdGeneralizationShape";
+  public static final String DIAGRAMMER_MCD_COMPOSITION_XML_TAG = "mcdCompositionShape";
+  public static final String DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG = "anchorPoint";
 
   public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
   public static String REGEXPR_FIRSTCAR = "[a-zA-Z]{1,1}";

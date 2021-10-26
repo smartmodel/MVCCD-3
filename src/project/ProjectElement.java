@@ -15,6 +15,7 @@ public abstract class ProjectElement extends MVCCDElement {
     private int id; //Identifiant unique pour tout élément d'un projet utilisateur. La valeur est générée automatiquement.
     //#MAJ 2021-07-31 Spéficité d'un élément transitoire
     // Transitory est simplement sans parent !
+
     //TODO-0 XML A supprimer
     //private boolean transitory = false;
 

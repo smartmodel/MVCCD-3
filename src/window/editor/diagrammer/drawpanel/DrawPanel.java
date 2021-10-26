@@ -104,7 +104,6 @@ public class DrawPanel extends JLayeredPane {
   }
 
   public void addElement(IShape element) {
-    if (MVCCDManager.instance().getProject() != null) {
       if (element != null) {
         this.add((JComponent) element);
         this.elements.add(element);
@@ -112,9 +111,6 @@ public class DrawPanel extends JLayeredPane {
       } else {
         DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.add.null.element"));
       }
-    } else {
-      DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.project.closed"));
-    }
   }
 
   private void addListeners() {
@@ -367,6 +363,16 @@ public class DrawPanel extends JLayeredPane {
       }
     }
     return relations;
+  }
+
+  public List<ClassShape> getClassShapes(){
+    List<ClassShape> classShapes = new ArrayList<>();
+    for (IShape shape : this.elements){
+      if (shape instanceof ClassShape){
+        classShapes.add((ClassShape) shape);
+      }
+    }
+    return classShapes;
   }
 
   public List<RelationShape> getRelationShapesByClassShape(ClassShape shape) {

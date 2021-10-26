@@ -17,6 +17,12 @@ import org.w3c.dom.Element;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.files.TranformerForXml;
+import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,6 +34,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Giorgio Roncallo, adapté et complété par Steve Berberat
@@ -71,6 +78,22 @@ public class ProjectSaverXml {
             mcdTag.setAttributeNode(idAttrOfMcdTag);
 
             ArrayList<MVCCDElement> mcdModels = mcdContModels.getChilds();
+
+
+            // Persiste les formes du diagrammeur
+            Element shapesTag = document.createElement("shapes");
+            mcdTag.appendChild(shapesTag);
+
+            // Persiste les ClassShapes
+            for (ClassShape shape :DiagrammerService.getDrawPanel().getClassShapes()){
+                this.addClassShape(document, shape, shapesTag);
+            }
+
+            // Persiste les RelationShape
+            for (RelationShape shape : DiagrammerService.getDrawPanel().getRelationShapes()){
+                this.addRelationShape(document, shape, shapesTag);
+            }
+
 
             //Modèle
             if (manyModelsAuthorized) {
@@ -1389,4 +1412,50 @@ public class ProjectSaverXml {
         mdrRelationTag.setAttribute("fk_target_id", String.valueOf(mdrRelationFK.getMdrFKId()));
     }
 
+
+    private void addClassShape(Document doc, ClassShape shape, Element shapesTag){
+        Element shapeElement = doc.createElement(shape.getXmlTagName());
+
+        // Ajoute les attributs à la balise créée
+        shapeElement.setAttribute("id", String.valueOf(shape.getId()));
+        shapeElement.setAttribute("height", String.valueOf(shape.getHeight()));
+        shapeElement.setAttribute("width", String.valueOf(shape.getWidth()));
+        shapeElement.setAttribute("x", String.valueOf(shape.getX()));
+        shapeElement.setAttribute("y", String.valueOf(shape.getY()));
+
+        // Vérifie si la forme a bien un objet du référentiel lié
+        if (shape.getRelatedRepositoryElement() != null)
+            shapeElement.setAttribute("repository_entity_id", shape.getRelatedRepositoryElement().getIdProjectElementAsString());
+
+        // Ajoute l'élément à la balise parent
+        shapesTag.appendChild(shapeElement);
+    }
+
+    private void addRelationShape(Document doc, RelationShape shape, Element shapeTags){
+        Element shapeElement = doc.createElement(shape.getXmlTagName());
+
+        // Ajoute les attributs à la relation
+        shapeElement.setAttribute("id", String.valueOf(shape.getId()));
+        shapeElement.setAttribute("is_reflexive", String.valueOf(shape.isReflexive()));
+        shapeElement.setAttribute("source_entity_shape_id", String.valueOf(shape.getSource().getId()));
+        shapeElement.setAttribute("destination_entity_shape_id", String.valueOf(shape.getDestination().getId()));
+
+        // Vérifie si la forme a bien un objet du référentiel lié
+        if (shape.getRelatedRepositoryElement() != null)
+            shapeElement.setAttribute("related_repository_association_id", shape.getRelatedRepositoryElement().getIdProjectElementAsString());
+
+        // Crée, pour chaque point d'ancrage, une balise enfant
+        for (RelationPointAncrageShape pointAncrageShape : shape.getPointsAncrage()){
+            Element anchorPointElement = doc.createElement(pointAncrageShape.getXmlTagName());
+            anchorPointElement.setAttribute("x", String.valueOf(pointAncrageShape.x));
+            anchorPointElement.setAttribute("y", String.valueOf(pointAncrageShape.y));
+
+            // Ajoute le noeud "anchorPoint" à la relation parent
+            shapeElement.appendChild(anchorPointElement);
+        }
+
+        // Ajoute l'élément à la balise parent
+        shapeTags.appendChild(shapeElement);
+
+    }
 }

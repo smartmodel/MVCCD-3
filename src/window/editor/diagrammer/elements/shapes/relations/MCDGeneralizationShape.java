@@ -2,11 +2,15 @@ package window.editor.diagrammer.elements.shapes.relations;
 
 import java.awt.Graphics2D;
 import mcd.MCDGeneralization;
+import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 
 public class MCDGeneralizationShape extends RelationShape {
 
-  private MCDGeneralization generalization;
+  public MCDGeneralizationShape(MCDGeneralization relatedRepositoryGeneralization, MCDEntityShape source, MCDEntityShape destination) {
+    this(source, destination);
+    this.relatedRepositoryElement = relatedRepositoryGeneralization;
+  }
 
   public MCDGeneralizationShape(MCDEntityShape source, MCDEntityShape destination) {
     super(source, destination, false);
@@ -47,6 +51,11 @@ public class MCDGeneralizationShape extends RelationShape {
     // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
   }
 
+  @Override
+  public String getXmlTagName() {
+    return Preferences.DIAGRAMMER_MCD_GENERALIZATION_XML_TAG;
+  }
+
   public void drawArrow(Graphics2D graphics2D) {
     // TODO -> Faire en sorte que la flêche ait une bordune noire et un fond blanc
 
@@ -82,10 +91,10 @@ public class MCDGeneralizationShape extends RelationShape {
   }
 
   public MCDGeneralization getGeneralization() {
-    return this.generalization;
+    return (MCDGeneralization) this.relatedRepositoryElement;
   }
 
   public void setGeneralization(MCDGeneralization generalization) {
-    this.generalization = generalization;
+    this.relatedRepositoryElement = generalization;
   }
 }

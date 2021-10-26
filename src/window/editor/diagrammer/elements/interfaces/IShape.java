@@ -1,5 +1,7 @@
 package window.editor.diagrammer.elements.interfaces;
 
+import project.ProjectElement;
+
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;

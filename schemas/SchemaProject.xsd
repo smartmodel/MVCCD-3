@@ -229,6 +229,7 @@
 			<xs:choice>
 				<xs:element ref="model" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:sequence>
+					<xs:element ref="shapes" />
 					<xs:element ref="diagrammes"/>
 					<xs:element ref="entities"/>
 					<xs:element ref="relations"/>
@@ -305,6 +306,51 @@
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
+
+	<xs:element name="mcdEntityShape">
+		<xs:complexType>
+			<xs:attribute name="id" use="required" type="xs:int" />
+			<xs:attribute name="height" use="required" type="xs:double" />
+			<xs:attribute name="width" use="required" type="xs:double" />
+			<xs:attribute name="x" use="required" type="xs:double" />
+			<xs:attribute name="y" use="required" type="xs:double" />
+			<xs:attribute name="repository_entity_id" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="anchorPoint">
+		<xs:complexType>
+			<xs:attribute name="x" use="required" type="xs:double" />
+			<xs:attribute name="y" use="required" type="xs:double" />
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="mcdAssociationShape">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="2" maxOccurs="unbounded" ref="anchorPoint" />
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:int" />
+			<xs:attribute name="destination_entity_shape_id" use="required" type="xs:int" />
+			<xs:attribute name="source_entity_shape_id" use="required" type="xs:int" />
+			<xs:attribute name="related_repository_association_id" type="xs:int" />
+			<xs:attribute name="is_reflexive" use="required" type="xs:boolean" />
+		</xs:complexType>
+	</xs:element>
+
+
+
+	<xs:element name="shapes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="mcdEntityShape" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="mcdAssociationShape" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
 
 	<xs:element name="diagramme">
 		<xs:complexType>

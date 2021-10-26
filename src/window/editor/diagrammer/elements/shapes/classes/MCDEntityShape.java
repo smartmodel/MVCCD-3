@@ -3,18 +3,31 @@ package window.editor.diagrammer.elements.shapes.classes;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import mcd.MCDEntity;
+import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.listeners.MCDEntityShapeListener;
 
 public class MCDEntityShape extends ClassShape {
 
-  private MCDEntity entity;
-
-  public MCDEntityShape() {
-    super();
+  public MCDEntityShape(MCDEntity relatedRepositoryEntity) {
+    super(relatedRepositoryEntity);
     this.addListeners();
   }
-  
+
+  public MCDEntityShape(int id, MCDEntity relatedRepositoryEntity) {
+    this(id);
+    this.relatedRepositoryElement = relatedRepositoryEntity;
+  }
+
+  public MCDEntityShape(int id) {
+    super(id);
+    this.addListeners();
+  }
+
+  public MCDEntityShape() {
+    this.addListeners();
+  }
+
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
@@ -29,9 +42,9 @@ public class MCDEntityShape extends ClassShape {
   public void setZoneEnTeteContent() {
     this.zoneEnTete.getElements().clear();
     this.zoneEnTete.addElement(Preferences.DIAGRAMMER_ENTITY_STEREOTYPE_TEXT);
-    if (this.entity != null) {
-      this.zoneEnTete.addElement(this.entity.getName());
-      if (this.entity.isOrdered()) {
+    if (this.getEntity() != null) {
+      this.zoneEnTete.addElement(this.getEntity().getName());
+      if (this.getEntity().isOrdered()) {
         this.zoneEnTete.addElement(Preferences.DIAGRAMMER_ENTITY_ORDERED_TEXT);
       }
       this.updateSizeAndMinimumSize();
@@ -40,8 +53,8 @@ public class MCDEntityShape extends ClassShape {
 
   @Override
   public void setZoneProprietesContent() {
-    if (this.entity != null) {
-      this.zoneProprietes.setElements(this.entity.getAttributesForMCDDisplay());
+    if (this.getEntity() != null) {
+      this.zoneProprietes.setElements(this.getEntity().getAttributesForMCDDisplay());
       this.updateSizeAndMinimumSize();
     }
   }
@@ -53,9 +66,9 @@ public class MCDEntityShape extends ClassShape {
 
   @Override
   protected String getLongestProperty() {
-    if (this.entity != null) {
+    if (this.getEntity() != null) {
       String longestProperty = "";
-      for (String property : this.entity.getAttributesForMCDDisplay()) {
+      for (String property : this.getEntity().getAttributesForMCDDisplay()) {
         if (property.length() > longestProperty.length()) {
           longestProperty = property;
         }
@@ -68,13 +81,18 @@ public class MCDEntityShape extends ClassShape {
 
   @Override
   public void setNameFont(Graphics2D graphics2D) {
-    if (this.entity != null) {
-      if (this.entity.isEntAbstract()) {
+    if (this.getEntity() != null) {
+      if (this.getEntity().isEntAbstract()) {
         graphics2D.setFont(Preferences.DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT);
       } else {
         graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_NAME_FONT);
       }
     }
+  }
+
+  @Override
+  public String getXmlTagName() {
+    return Preferences.DIAGRAMMER_MCD_ENTITY_XML_TAG;
   }
 
   private void addListeners() {
@@ -84,11 +102,12 @@ public class MCDEntityShape extends ClassShape {
   }
 
   public MCDEntity getEntity() {
-    return entity;
+    return (MCDEntity) this.getRelatedRepositoryElement();
   }
 
   public void setEntity(MCDEntity entity) {
-    this.entity = entity;
+    this.relatedRepositoryElement = entity;
     this.updateSizeAndMinimumSize();
   }
+
 }

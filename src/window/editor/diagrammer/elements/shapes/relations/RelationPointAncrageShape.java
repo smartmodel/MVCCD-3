@@ -3,6 +3,8 @@ package window.editor.diagrammer.elements.shapes.relations;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+
+import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
@@ -22,7 +24,6 @@ public class RelationPointAncrageShape extends Point implements IShape {
   public RelationPointAncrageShape(int x, int y) {
     super(x, y);
     this.setSize(this.DIAMETER, this.DIAMETER);
-
   }
 
   public RelationPointAncrageShape(int x, int y, int index) {
@@ -84,5 +85,9 @@ public class RelationPointAncrageShape extends Point implements IShape {
 
   public void setIndex(int index) {
     this.index = index;
+  }
+
+  public String getXmlTagName(){
+    return Preferences.DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG;
   }
 }

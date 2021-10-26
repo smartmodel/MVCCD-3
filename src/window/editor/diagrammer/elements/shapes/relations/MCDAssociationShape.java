@@ -2,53 +2,69 @@ package window.editor.diagrammer.elements.shapes.relations;
 
 import java.awt.Graphics2D;
 import mcd.MCDAssociation;
+import mcd.MCDEntity;
+import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 
 public class MCDAssociationShape extends RelationShape {
 
-  MCDAssociation association;
+
 
   public MCDAssociationShape(MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
     super(source, destination, isReflexive);
   }
+  public MCDAssociationShape(int id, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+    super(id, source, destination, isReflexive);
+  }
 
+
+  public MCDAssociationShape(MCDAssociation relatedRepositoryAssociation, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+    this(source, destination, isReflexive);
+    this.relatedRepositoryElement = relatedRepositoryAssociation;
+  }
+
+
+  public MCDAssociationShape(int id, MCDAssociation relatedRepositoryAssociation, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+    this(id,source, destination, isReflexive);
+    this.relatedRepositoryElement = relatedRepositoryAssociation;
+  }
   @Override
   public void doDraw(Graphics2D graphics2D) {}
 
   @Override
   public void setInformations() {
-    if (this.association != null) {
+    if (this.getMCDAssociation() != null) {
       // Nom d'association
-      if (!this.association.getName().isEmpty()) {
-        this.setRelationName(this.association.getName());
+      if (!this.getMCDAssociation().getName().isEmpty()) {
+        this.setRelationName(this.getMCDAssociation().getName());
         this.associationName.setVisible(true);
       } else {
         this.associationName.setVisible(false);
       }
       // Rôle source
-      if (!this.association.getFrom().getName().isEmpty()) {
-        this.setSourceRole(this.association.getFrom().getName());
+      if (!this.getMCDAssociation().getFrom().getName().isEmpty()) {
+        this.setSourceRole(this.getMCDAssociation().getFrom().getName());
         this.sourceRole.setVisible(true);
       } else {
         this.sourceRole.setVisible(false);
       }
       // Rôle destination
-      if (!this.association.getTo().getName().isEmpty()) {
-        this.setDestinationRole(this.association.getTo().getName());
+      if (!this.getMCDAssociation().getTo().getName().isEmpty()) {
+        this.setDestinationRole(this.getMCDAssociation().getTo().getName());
         this.destinationRole.setVisible(true);
       } else {
         this.destinationRole.setVisible(false);
       }
       // Cardinalité destination
-      if (!this.association.getTo().getMultiStr().isEmpty()) {
-        this.setDestinationCardinalite(this.association.getTo().getMultiStr());
+      if (!this.getMCDAssociation().getTo().getMultiStr().isEmpty()) {
+        this.setDestinationCardinalite(this.getMCDAssociation().getTo().getMultiStr());
         this.destinationCardinalite.setVisible(true);
       } else {
         this.destinationCardinalite.setVisible(false);
       }
       // Cardinalité source
-      if (!this.association.getFrom().getMultiStr().isEmpty()) {
-        this.setSourceCardinalite(this.association.getFrom().getMultiStr());
+      if (!this.getMCDAssociation().getFrom().getMultiStr().isEmpty()) {
+        this.setSourceCardinalite(this.getMCDAssociation().getFrom().getMultiStr());
         this.sourceCardinalite.setVisible(true);
       } else {
         this.sourceCardinalite.setVisible(false);
@@ -87,12 +103,17 @@ public class MCDAssociationShape extends RelationShape {
     this.destinationCardinalite.repaint();
   }
 
-  public MCDAssociation getAssociation() {
-    return this.association;
+  @Override
+  public String getXmlTagName() {
+    return Preferences.DIAGRAMMER_MCD_ASSOCIATION_XML_TAG;
   }
 
-  public void setAssociation(MCDAssociation association) {
-    this.association = association;
+  public MCDAssociation getMCDAssociation() {
+    return (MCDAssociation) this.relatedRepositoryElement;
+  }
+
+  public void setMCDAssociation(MCDAssociation association) {
+    this.relatedRepositoryElement = association;
     // Ajoute les informations dans les labels
     this.setInformations();
   }
