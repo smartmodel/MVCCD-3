@@ -23,10 +23,8 @@ public class MCDAssociationShape extends RelationShape {
     this.relatedRepositoryElement = relatedRepositoryAssociation;
   }
 
-
   public MCDAssociationShape(int id, MCDAssociation relatedRepositoryAssociation, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
-    this(id,source, destination, isReflexive);
-    this.relatedRepositoryElement = relatedRepositoryAssociation;
+    super(id, relatedRepositoryAssociation, source, destination, isReflexive);
   }
   @Override
   public void doDraw(Graphics2D graphics2D) {}

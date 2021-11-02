@@ -11,6 +11,7 @@ public interface IShape {
   default void setLocationDifference(int differenceX, int differenceY) {
     this.setLocation(this.getBounds().x + differenceX, this.getBounds().y + differenceY);
   }
+  void repaint();
   void setLocation(Point location);
   void setSize(Dimension dimension);
   Rectangle getBounds();

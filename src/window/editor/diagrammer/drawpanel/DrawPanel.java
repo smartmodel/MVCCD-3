@@ -107,7 +107,6 @@ public class DrawPanel extends JLayeredPane {
       if (element != null) {
         this.add((JComponent) element);
         this.elements.add(element);
-        this.repaint();
       } else {
         DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.add.null.element"));
       }

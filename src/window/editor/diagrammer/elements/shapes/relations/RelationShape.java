@@ -57,9 +57,13 @@ public abstract class RelationShape extends JComponent implements IShape {
     this.isReflexive = isReflexive;
 
     this.createPointsAncrage(isReflexive);
+
     this.createLabels();
 
     this.setFocusable(true);
+
+    this.repaintLabels();
+
   }
   public RelationShape(int id, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
 
@@ -69,16 +73,36 @@ public abstract class RelationShape extends JComponent implements IShape {
     this.id = id;
 
     this.createPointsAncrage(isReflexive);
+
     this.createLabels();
 
     this.setFocusable(true);
+
   }
 
-  public RelationShape(MDElement relatedRepositoryElement, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
-    this(source, destination, isReflexive);
+  public RelationShape(int id, MDElement relatedRepositoryElement, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+    this.id = id;
+    this.source = source;
+    this.destination = destination;
+    this.isReflexive = isReflexive;
     this.relatedRepositoryElement = relatedRepositoryElement;
+
+    this.createPointsAncrage(isReflexive);
+
+    this.createLabels();
+
+    this.setFocusable(true);
+
   }
 
+  public void repaintLabels(){
+    sourceRole.repaint();
+    destinationRole.repaint();
+    sourceCardinalite.repaint();
+    destinationCardinalite.repaint();
+    associationName.repaint();
+    System.out.println("Association repaint");
+  }
 
   public void drawPointsAncrage(Graphics2D graphics2D) {
     for (RelationPointAncrageShape pointAncrage : this.pointsAncrage) {
@@ -112,6 +136,8 @@ public abstract class RelationShape extends JComponent implements IShape {
   @Override
   public void drag(int differenceX, int differenceY) {
   }
+
+
 
   @Override
   public boolean isSelected() {
@@ -286,7 +312,7 @@ public abstract class RelationShape extends JComponent implements IShape {
     this.doDraw(graphics2D);
   }
 
-  public abstract void doDraw(Graphics2D graphics2D);
+  public abstract void  doDraw(Graphics2D graphics2D);
 
   public void addPointAncrage(Point point) {
     final Line2D nearestSegment = this.getNearestSegment(point);
@@ -340,6 +366,7 @@ public abstract class RelationShape extends JComponent implements IShape {
 
   private void createLabels() {
     if (!this.pointsAncrage.isEmpty()) {
+      System.out.println("labels created");
       this.sourceRole = new LabelShape(this.getFirstPoint(), this, true);
       this.destinationRole = new LabelShape(this.getLastPoint(), this, true);
       this.sourceCardinalite = new LabelShape(this.getLastPoint(), this, false);
@@ -351,6 +378,7 @@ public abstract class RelationShape extends JComponent implements IShape {
       DiagrammerService.getDrawPanel().add(this.destinationRole, JLayeredPane.DRAG_LAYER);
       DiagrammerService.getDrawPanel().add(this.destinationCardinalite, JLayeredPane.DRAG_LAYER);
       DiagrammerService.getDrawPanel().add(this.associationName, JLayeredPane.DRAG_LAYER);
+
     }
 
   }
@@ -479,19 +507,7 @@ public abstract class RelationShape extends JComponent implements IShape {
   @Override
   public String toString() {
     return "RelationShape{" +
-            "id=" + id +
-            ", pointsAncrage=" + pointsAncrage +
-            ", isSelected=" + isSelected +
-            ", source=" + source +
-            ", destination=" + destination +
-            ", relation=" + relation +
-            ", sourceRole=" + sourceRole +
-            ", destinationRole=" + destinationRole +
-            ", sourceCardinalite=" + sourceCardinalite +
-            ", destinationCardinalite=" + destinationCardinalite +
-            ", associationName=" + associationName +
-            ", relatedRepositoryElement=" + relatedRepositoryElement +
-            ", isReflexive=" + isReflexive +
+            "relatedRepositoryElement=" + relatedRepositoryElement +
             '}';
   }
 }

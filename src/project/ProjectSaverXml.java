@@ -97,7 +97,6 @@ public class ProjectSaverXml {
 
             //Modèle
             if (manyModelsAuthorized) {
-
                 addModelAndChilds(document, mcdTag, mcdModels);
 
             //Package
@@ -1436,17 +1435,17 @@ public class ProjectSaverXml {
 
         // Ajoute les attributs à la relation
         shapeElement.setAttribute("id", String.valueOf(shape.getId()));
-        shapeElement.setAttribute("is_reflexive", String.valueOf(shape.isReflexive()));
         shapeElement.setAttribute("source_entity_shape_id", String.valueOf(shape.getSource().getId()));
         shapeElement.setAttribute("destination_entity_shape_id", String.valueOf(shape.getDestination().getId()));
 
         // Vérifie si la forme a bien un objet du référentiel lié
         if (shape.getRelatedRepositoryElement() != null)
-            shapeElement.setAttribute("related_repository_association_id", shape.getRelatedRepositoryElement().getIdProjectElementAsString());
+            shapeElement.setAttribute("repository_association_id", shape.getRelatedRepositoryElement().getIdProjectElementAsString());
 
         // Crée, pour chaque point d'ancrage, une balise enfant
         for (RelationPointAncrageShape pointAncrageShape : shape.getPointsAncrage()){
             Element anchorPointElement = doc.createElement(pointAncrageShape.getXmlTagName());
+
             anchorPointElement.setAttribute("x", String.valueOf(pointAncrageShape.x));
             anchorPointElement.setAttribute("y", String.valueOf(pointAncrageShape.y));
 

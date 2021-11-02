@@ -37,16 +37,16 @@ public abstract class ClassShape extends SquaredShape {
 
   public ClassShape(MDElement relatedRepositoryElement, int id) {
     super(id);
-    this.initUI();
     this.addListeners();
     this.relatedRepositoryElement = relatedRepositoryElement;
+    this.initUI();
   }
 
   public ClassShape(MDElement relatedRepositoryElement) {
     super();
-    this.initUI();
     this.addListeners();
     this.relatedRepositoryElement = relatedRepositoryElement;
+    this.initUI();
   }
 
   @Override

@@ -4,7 +4,6 @@ import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDFactory;
-import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.*;
@@ -44,7 +43,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -122,11 +120,15 @@ public class ProjectLoaderXml {
 
             // Formes du diagrammeur
             Element shapesTag = (Element) projectTag.getElementsByTagName("shapes").item(0);
-            addClassShapes(shapesTag, mcd);
-            addRelationShapes(shapesTag, mcd);
+
+            loadClassShapes(shapesTag, mcd);
+            loadRelationShapes(shapesTag, mcd);
 
             // Validation du fichier
             validator.validate(new DOMSource(document));
+
+            DiagrammerService.getDrawPanel().repaint();
+            // DiagrammerService.getDrawPanel().getElements().forEach(System.out::println);
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             //#MAJ 2021-06-06 TODO-PAS STB faire un throw(e) - Intégration dans la transaction
@@ -1751,7 +1753,7 @@ public class ProjectLoaderXml {
         }
     }
 
-    private void addClassShapes(Element shapesTag, MCDContModels mcdSource){
+    private void loadClassShapes(Element shapesTag, MCDContModels mcdSource){
         NodeList shapes = shapesTag.getChildNodes();
         for (int i = 0; i < shapes.getLength(); i++) {
             if (shapes.item(i) instanceof Element){
@@ -1787,11 +1789,12 @@ public class ProjectLoaderXml {
         }
     }
 
-    private void addRelationShapes(Element shapesTag, MCDContModels mcdSource){
+    private void loadRelationShapes(Element shapesTag, MCDContModels mcdSource){
         NodeList shapes = shapesTag.getChildNodes();
 
         for (int i = 0; i < shapes.getLength(); i++) {
             if (shapes.item(i) instanceof Element){
+
                 // Récupère le noeud courant
                 Element currentNode = (Element) shapes.item(i);
                 int id = Integer.parseInt(currentNode.getAttribute("id"));
@@ -1800,7 +1803,7 @@ public class ProjectLoaderXml {
                 if (currentNode.getNodeName().equals(Preferences.DIAGRAMMER_MCD_ASSOCIATION_XML_TAG)){
 
                     // Récupère les ids de l'association et des entités du référentiel liées
-                    boolean isReflexive = Boolean.parseBoolean(currentNode.getAttribute("is_reflexive"));
+                    boolean isReflexive = currentNode.getAttribute("destination_entity_shape_id").equals(currentNode.getAttribute("source_entity_shape_id"));
 
                     MCDEntityShape sourceEntityShape = null;
                     MCDEntityShape destinationEntityShape = null;
@@ -1840,7 +1843,6 @@ public class ProjectLoaderXml {
 
                     // Ajoute l'association dans le diagrammeur
                     DiagrammerService.getDrawPanel().addElement(newAssociation);
-                    DiagrammerService.getDrawPanel().repaint();
                 }
 
             }

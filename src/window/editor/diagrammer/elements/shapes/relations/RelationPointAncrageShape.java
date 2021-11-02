@@ -38,6 +38,11 @@ public class RelationPointAncrageShape extends Point implements IShape {
   }
 
   @Override
+  public void repaint() {
+
+  }
+
+  @Override
   public void setSize(Dimension dimension) {
     this.DIAMETER = dimension.height;
   }
@@ -90,4 +95,6 @@ public class RelationPointAncrageShape extends Point implements IShape {
   public String getXmlTagName(){
     return Preferences.DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG;
   }
+
+
 }

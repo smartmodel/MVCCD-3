@@ -13,6 +13,7 @@ import resultat.ResultatElement;
 import resultat.ResultatLevel;
 import utilities.Trace;
 import utilities.window.DialogMessage;
+import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -144,7 +145,7 @@ public class WinMenuContent implements ActionListener {
             if (source == projectOpen) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.open.exception");
                 resultat = openProject();
-             }
+            }
             for (int i = 0; i < Preferences.FILES_RECENTS_AUTHORIZED; i++) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.recent.open.exception");
                 if (source == projectOpenRecentsItems[i]) {

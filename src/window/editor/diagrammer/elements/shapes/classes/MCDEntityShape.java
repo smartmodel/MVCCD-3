@@ -15,8 +15,8 @@ public class MCDEntityShape extends ClassShape {
   }
 
   public MCDEntityShape(int id, MCDEntity relatedRepositoryEntity) {
-    this(id);
-    this.relatedRepositoryElement = relatedRepositoryEntity;
+    super(relatedRepositoryEntity);
+    this.id = id;
   }
 
   public MCDEntityShape(int id) {
@@ -110,4 +110,10 @@ public class MCDEntityShape extends ClassShape {
     this.updateSizeAndMinimumSize();
   }
 
+  @Override
+  public String toString() {
+    return "MCDEntityShape{" +
+            "relatedRepositoryElement=" + relatedRepositoryElement +
+            '}';
+  }
 }

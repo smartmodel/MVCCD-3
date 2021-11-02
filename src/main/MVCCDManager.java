@@ -24,6 +24,7 @@ import resultat.ResultatElement;
 import resultat.ResultatLevel;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
+import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -385,6 +386,7 @@ public class MVCCDManager {
                 getWinMenuContent().getProjectEdit().setEnabled(true);
                 getWinMenuContent().getProjectSaveAs().setEnabled(true);
                 getWinMenuContent().getProjectClose().setEnabled(true);
+
             }
 
 
@@ -400,6 +402,7 @@ public class MVCCDManager {
                     new String[]{file.getPath()});
         }
         resultat.add(new  ResultatElement(message, ResultatLevel.INFO));
+
         return resultat;
     }
 

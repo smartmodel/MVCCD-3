@@ -334,8 +334,7 @@
 			<xs:attribute name="id" use="required" type="xs:int" />
 			<xs:attribute name="destination_entity_shape_id" use="required" type="xs:int" />
 			<xs:attribute name="source_entity_shape_id" use="required" type="xs:int" />
-			<xs:attribute name="related_repository_association_id" type="xs:int" />
-			<xs:attribute name="is_reflexive" use="required" type="xs:boolean" />
+			<xs:attribute name="repository_association_id" type="xs:int" />
 		</xs:complexType>
 	</xs:element>
 
