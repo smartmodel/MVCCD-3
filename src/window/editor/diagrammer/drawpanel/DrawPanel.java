@@ -107,6 +107,7 @@ public class DrawPanel extends JLayeredPane {
       if (element != null) {
         this.add((JComponent) element);
         this.elements.add(element);
+        this.repaint();
       } else {
         DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.add.null.element"));
       }
@@ -153,6 +154,12 @@ public class DrawPanel extends JLayeredPane {
     }
     for (int i = 0; i < height; i += this.gridSize) {
       graphics2D.drawLine(0, i, width, i);
+    }
+  }
+
+  public void repaintElements(){
+    for (IShape shape : getElements()){
+      shape.repaint();
     }
   }
 

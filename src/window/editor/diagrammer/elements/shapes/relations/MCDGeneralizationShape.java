@@ -22,33 +22,8 @@ public class MCDGeneralizationShape extends RelationShape {
   }
 
   @Override
-  public void setInformations() {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
-  }
+  public void createLabelsAfterRelationShapeEdit() {
 
-  @Override
-  public void setDestinationRole(String role) {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
-  }
-
-  @Override
-  public void setSourceRole(String role) {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
-  }
-
-  @Override
-  public void setRelationName(String name) {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
-  }
-
-  @Override
-  public void setSourceCardinalite(String cardinalite) {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
-  }
-
-  @Override
-  public void setDestinationCardinalite(String cardinalite) {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
   }
 
   @Override

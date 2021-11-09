@@ -25,6 +25,7 @@ public class MCDEntityShape extends ClassShape {
   }
 
   public MCDEntityShape() {
+    super();
     this.addListeners();
   }
 

@@ -28,33 +28,8 @@ public class MCDCompositionShape extends RelationShape {
   }
 
   @Override
-  public void setInformations() {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
-  }
+  public void createLabelsAfterRelationShapeEdit() {
 
-  @Override
-  public void setDestinationRole(String role) {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
-  }
-
-  @Override
-  public void setSourceRole(String role) {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
-  }
-
-  @Override
-  public void setRelationName(String name) {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
-  }
-
-  @Override
-  public void setSourceCardinalite(String cardinalite) {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
-  }
-
-  @Override
-  public void setDestinationCardinalite(String cardinalite) {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
   }
 
   @Override

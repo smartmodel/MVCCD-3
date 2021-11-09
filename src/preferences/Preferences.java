@@ -79,6 +79,9 @@ public class Preferences extends MVCCDElement {
   public static final String DIAGRAMMER_MCD_GENERALIZATION_XML_TAG = "mcdGeneralizationShape";
   public static final String DIAGRAMMER_MCD_COMPOSITION_XML_TAG = "mcdCompositionShape";
   public static final String DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG = "anchorPoint";
+  public static final String DIAGRAMMER_LABEL_XML_TAG = "labelShape";
+  public static final String DIAGRAMMER_LABELS_XML_TAG_NAME = "labelShapes";
+  public static final String DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME = "anchorPoints";
 
   public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
   public static String REGEXPR_FIRSTCAR = "[a-zA-Z]{1,1}";

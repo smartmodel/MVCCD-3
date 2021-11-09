@@ -7,6 +7,7 @@ import main.MVCCDManager;
 import mcd.MCDAssociation;
 import repository.editingTreat.mcd.MCDAssociationEditingTreat;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
+import window.editor.diagrammer.services.DiagrammerService;
 
 public class MCDAssociationEditAction extends AbstractAction {
 
@@ -31,7 +32,7 @@ public class MCDAssociationEditAction extends AbstractAction {
     final MVCCDManager manager = MVCCDManager.instance();
     final MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
     mcdAssociationEditingTreat.treatUpdate(manager.getMvccdWindow(), this.shape.getMCDAssociation());
-    this.shape.setInformations();
+    shape.createLabelsAfterRelationShapeEdit();
   }
 
   private void create() {
@@ -39,5 +40,6 @@ public class MCDAssociationEditAction extends AbstractAction {
     final MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
     final MCDAssociation association = mcdAssociationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations());
     this.shape.setMCDAssociation(association);
+    shape.createLabelsAfterRelationShapeEdit();
   }
 }

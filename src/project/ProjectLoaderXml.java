@@ -31,6 +31,8 @@ import org.xml.sax.SAXException;
 import preferences.Preferences;
 import profile.Profile;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.LabelShape;
+import window.editor.diagrammer.elements.shapes.relations.LabelType;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.services.DiagrammerService;
@@ -43,10 +45,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProjectLoaderXml {
     // Version de l'application utilisée par le projet XML chargé
@@ -127,8 +131,6 @@ public class ProjectLoaderXml {
             // Validation du fichier
             validator.validate(new DOMSource(document));
 
-            DiagrammerService.getDrawPanel().repaint();
-            // DiagrammerService.getDrawPanel().getElements().forEach(System.out::println);
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             //#MAJ 2021-06-06 TODO-PAS STB faire un throw(e) - Intégration dans la transaction
@@ -1831,15 +1833,18 @@ public class ProjectLoaderXml {
                         newAssociation = new MCDAssociationShape(id, sourceEntityShape, destinationEntityShape, isReflexive);
                     }
 
-                    // Vide la liste des points d'ancrage
-                    newAssociation.getPointsAncrage().clear();
 
-                    // Récupère les points d'ancrage
-                    for (int k = 0; k < currentNode.getElementsByTagName("anchorPoint").getLength(); k++) {
-                            Element pointTag = (Element) currentNode.getElementsByTagName("anchorPoint").item(k);
-                            RelationPointAncrageShape pointAncrageShape = new RelationPointAncrageShape(Integer.parseInt(pointTag.getAttribute("x")), Integer.parseInt(pointTag.getAttribute("y")));
-                            newAssociation.getPointsAncrage().add(pointAncrageShape);
+                    // Ajoute les points d'ancrage
+                    addAnchorPoints(newAssociation, currentNode);
+
+
+                    // Ajoute les labels
+                    if (elementHasChildByTagName(currentNode, Preferences.DIAGRAMMER_LABELS_XML_TAG_NAME)){
+                        loadLabelShapes(newAssociation, currentNode);
+                    } else{
+                        System.err.println("Le noeud " + currentNode + " du fichier XML ne contient pas la balise " + Preferences.DIAGRAMMER_LABELS_XML_TAG_NAME + ".");
                     }
+
 
                     // Ajoute l'association dans le diagrammeur
                     DiagrammerService.getDrawPanel().addElement(newAssociation);
@@ -1847,6 +1852,76 @@ public class ProjectLoaderXml {
 
             }
         }
+    }
+
+    private void loadLabelShapes(MCDAssociationShape associationShape, Element currentNode){
+        // Récupère les labels
+        NodeList labelsParentTag = currentNode.getElementsByTagName(Preferences.DIAGRAMMER_LABELS_XML_TAG_NAME);
+        NodeList allLabelsTags = labelsParentTag.item(0).getChildNodes();
+
+        // Vide la liste des labels de l'association
+        associationShape.getLabels().clear();
+
+        for (int i = 0; i < allLabelsTags.getLength(); i++) {
+            if (allLabelsTags.item(i) instanceof Element){
+                Element currentLabelTag = (Element) allLabelsTags.item(i);
+                String type = currentLabelTag.getAttribute("type");
+                int relatedAnchorPointId = Integer.parseInt(currentLabelTag.getAttribute("related_anchor_point_id"));
+
+                // Récupère le point d'ancrage lié
+                List<RelationPointAncrageShape> anchorPointFound = associationShape.getPointsAncrage().stream().filter(anchorPoint -> anchorPoint.getId() == relatedAnchorPointId).collect(Collectors.toList());
+
+                // Crée le LabelShape
+                if (!anchorPointFound.isEmpty()) {
+                    LabelShape label;
+
+                    // Nom d'association
+                    if (type.equals(LabelType.ASSOCIATION_NAME.name()))
+                        associationShape.createLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getName(), LabelType.ASSOCIATION_NAME);
+
+                    // Cardinalités destination
+                    if (type.equals(LabelType.DESTINATION_CARDINALITY.name()))
+                        associationShape.createLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY);
+
+                    // Cardinalités source
+                    if (type.equals(LabelType.SOURCE_CARDINALITY.name()))
+                        associationShape.createLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY);
+
+                    // Rôle source
+                    if (type.equals(LabelType.SOURCE_ROLE.name()))
+                        associationShape.createLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getName(), LabelType.SOURCE_ROLE);
+
+                    // Rôle destination
+                    if (type.equals(LabelType.DESTINATION_ROLE.name()))
+                        associationShape.createLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getName(), LabelType.DESTINATION_ROLE);
+                }
+            }
+        }
+    }
+
+    private void addAnchorPoints(MCDAssociationShape associationShape, Element currentNode){
+        // Vide la liste des points d'ancrage
+        associationShape.getPointsAncrage().clear();
+
+        // Récupère les points d'ancrage
+        NodeList anchorPointsParentTag = currentNode.getElementsByTagName(Preferences.DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME);
+        NodeList allAnchorPointTags = anchorPointsParentTag.item(0).getChildNodes();
+
+        for (int i = 0; i < allAnchorPointTags.getLength(); i++) {
+            if (allAnchorPointTags.item(i) instanceof Element){
+                Element pointTag = (Element) allAnchorPointTags.item(i);
+                Point point = new Point(Integer.parseInt(pointTag.getAttribute("x")), Integer.parseInt(pointTag.getAttribute("y")));
+                RelationPointAncrageShape pointAncrageShape = new RelationPointAncrageShape(Integer.parseInt(pointTag.getAttribute("id")), point);
+                associationShape.getPointsAncrage().add(pointAncrageShape);
+            }
+        }
+    }
+
+    private boolean elementHasChildByTagName(Element element, String tagNameToFind){
+        System.out.println(element.getChildNodes().item(0));
+        System.out.println(element.getChildNodes().item(1));
+        System.out.println(tagNameToFind);
+        return element.getElementsByTagName(tagNameToFind).getLength() > 0;
     }
 
 }

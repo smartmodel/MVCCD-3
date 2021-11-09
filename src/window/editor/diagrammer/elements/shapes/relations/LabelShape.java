@@ -9,6 +9,7 @@ import javax.swing.SwingConstants;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
+import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
 
 public class LabelShape extends JLabel {
@@ -20,20 +21,28 @@ public class LabelShape extends JLabel {
   private RelationShape relationShape;
   private boolean isRole;
   private boolean firstDisplay;
+  private LabelType type;
 
-  public LabelShape() {
+  private LabelShape() {
     this.initUI();
     this.addListeners();
   }
 
-  public LabelShape(RelationPointAncrageShape pointAncrage, RelationShape relationShape, boolean isRole) {
+  public LabelShape(RelationPointAncrageShape pointAncrage, LabelType type, RelationShape relationShape) {
     this();
+
+    this.type = type;
     this.pointAncrage = pointAncrage;
     this.relationShape = relationShape;
-    this.isRole = isRole;
+    this.isRole = (type == LabelType.DESTINATION_ROLE || type == LabelType.SOURCE_ROLE);
     this.firstDisplay = true;
+
     final Point location = this.calculateLocation(this.firstDisplay);
     this.setBounds(location.x, location.y, 110, 30);
+
+    DiagrammerService.getDrawPanel().add(this);
+    System.out.println(this.getText());
+
     this.repaint();
   }
 
@@ -193,5 +202,17 @@ public class LabelShape extends JLabel {
 
   public void setFirstDisplay(boolean firstDisplay) {
     this.firstDisplay = firstDisplay;
+  }
+
+  public String getXmlTagName(){
+    return Preferences.DIAGRAMMER_LABEL_XML_TAG;
+  }
+
+  public RelationPointAncrageShape getPointAncrage() {
+    return pointAncrage;
+  }
+
+  public LabelType getType() {
+    return type;
   }
 }

@@ -5,7 +5,6 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.*;
 import mdr.*;
-import mdr.interfaces.IMDRParameter;
 import mldr.*;
 import mpdr.*;
 import mpdr.mysql.MPDRMySQLModel;
@@ -17,9 +16,8 @@ import org.w3c.dom.Element;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.files.TranformerForXml;
-import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
@@ -31,10 +29,10 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Giorgio Roncallo, adapté et complété par Steve Berberat
@@ -1442,19 +1440,54 @@ public class ProjectSaverXml {
         if (shape.getRelatedRepositoryElement() != null)
             shapeElement.setAttribute("repository_association_id", shape.getRelatedRepositoryElement().getIdProjectElementAsString());
 
-        // Crée, pour chaque point d'ancrage, une balise enfant
-        for (RelationPointAncrageShape pointAncrageShape : shape.getPointsAncrage()){
-            Element anchorPointElement = doc.createElement(pointAncrageShape.getXmlTagName());
+        // Ajoute les points d'ancrage
+        addAnchorPointsShapes(doc, shape, shapeElement);
 
-            anchorPointElement.setAttribute("x", String.valueOf(pointAncrageShape.x));
-            anchorPointElement.setAttribute("y", String.valueOf(pointAncrageShape.y));
-
-            // Ajoute le noeud "anchorPoint" à la relation parent
-            shapeElement.appendChild(anchorPointElement);
-        }
+        // Ajoute les labels
+        if (!shape.getLabels().isEmpty())
+            addLabelShapes(doc, shape, shapeElement);
 
         // Ajoute l'élément à la balise parent
         shapeTags.appendChild(shapeElement);
 
+    }
+
+    private void addAnchorPointsShapes(Document doc, RelationShape shape, Element relationTag){
+
+        Element anchorPointsTag = doc.createElement(Preferences.DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME);
+
+        // Crée, pour chaque point d'ancrage, une balise enfant
+        for (RelationPointAncrageShape pointAncrageShape : shape.getPointsAncrage()){
+            Element anchorPointElement = doc.createElement(pointAncrageShape.getXmlTagName());
+
+            anchorPointElement.setAttribute("id", String.valueOf(pointAncrageShape.getId()));
+            anchorPointElement.setAttribute("x", String.valueOf(pointAncrageShape.x));
+            anchorPointElement.setAttribute("y", String.valueOf(pointAncrageShape.y));
+
+            // Ajoute le noeud "anchorPoint" au noeud "anchorPoints"
+            anchorPointsTag.appendChild(anchorPointElement);
+        }
+
+        relationTag.appendChild(anchorPointsTag);
+    }
+
+    private void addLabelShapes(Document doc, RelationShape shape, Element relationTag){
+
+        Element labelsTag = doc.createElement(Preferences.DIAGRAMMER_LABELS_XML_TAG_NAME);
+
+        // Crée, pour chaque label, une balise enfant
+        for (LabelShape label : shape.getLabels()){
+            Element labelShapeElement = doc.createElement(label.getXmlTagName());
+
+            labelShapeElement.setAttribute("related_anchor_point_id", String.valueOf(label.getPointAncrage().getId()));
+            labelShapeElement.setAttribute("x_distance_from_anchor_point", String.valueOf(label.getDistanceInXFromPointAncrage()));
+            labelShapeElement.setAttribute("y_distance_from_anchor_point", String.valueOf(label.getDistanceInYFromPointAncrage()));
+            labelShapeElement.setAttribute("type", String.valueOf(label.getType()));
+
+            // Ajoute le noeud "labelShape" au noeud "labelsTag"
+            labelsTag.appendChild(labelShapeElement);
+        }
+
+        relationTag.appendChild(labelsTag);
     }
 }

@@ -27,7 +27,6 @@ public class ProfileLoaderXml {
         Preferences profilePref = new Preferences(null, null);
         if (profileFileName != null) {
             try {
-
                 // Création du document en mémoire et du parseur pour parcourir le fichier
                 DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
                 Document document = builder.parse(new File(Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR + profileFileName));
