@@ -1,11 +1,16 @@
 package main;
 
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.IntelliJTheme;
+import com.formdev.flatlaf.intellijthemes.FlatCyanLightIJTheme;
 import console.ViewLogsManager;
 import messages.MessagesBuilder;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
 
+import javax.swing.*;
 import java.io.Console;
 
 public class MVCCD  {
@@ -16,6 +21,7 @@ public class MVCCD  {
     public static void main(String[] args) {
         Console console;
         try {
+            UIManager.setLookAndFeel(new FlatLightLaf());
             MVCCDManager.instance().start();
         } catch(Exception e){
             if (MVCCDManager.instance().getConsoleManager() != null) {
