@@ -1786,6 +1786,9 @@ public class ProjectLoaderXml {
 
                     // Ajoute l'entité chargée dans le diagrammeur
                     DiagrammerService.getDrawPanel().addElement(newEntity);
+
+                    // Affiche les différentes zones de l'entité
+                    newEntity.refreshInformations();
                 }
             }
         }
@@ -1815,9 +1818,15 @@ public class ProjectLoaderXml {
                         if (shapes.item(j) instanceof Element){
                             Element comparedItem = (Element) shapes.item(j);
                             if (comparedItem.getAttribute("id").equals(currentNode.getAttribute("source_entity_shape_id"))){
-                                sourceEntityShape = new MCDEntityShape(Integer.parseInt(currentNode.getAttribute("source_entity_shape_id")));
+
+                                int sourceEntityId = Integer.parseInt(currentNode.getAttribute("source_entity_shape_id"));
+                                sourceEntityShape = DiagrammerService.getDrawPanel().getMcdEntityShapeById(sourceEntityId);
+
                             } else if (comparedItem.getAttribute("id").equals(currentNode.getAttribute("destination_entity_shape_id"))){
-                                destinationEntityShape = new MCDEntityShape(Integer.parseInt(currentNode.getAttribute("destination_entity_shape_id")));
+
+                                int destinationEntityId = Integer.parseInt(currentNode.getAttribute("destination_entity_shape_id"));
+                                destinationEntityShape = DiagrammerService.getDrawPanel().getMcdEntityShapeById(destinationEntityId);
+
                             }
                         }
                     }
@@ -1835,7 +1844,7 @@ public class ProjectLoaderXml {
 
 
                     // Ajoute les points d'ancrage
-                    addAnchorPoints(newAssociation, currentNode);
+                    loadAnchorPoints(newAssociation, currentNode);
 
 
                     // Ajoute les labels
@@ -1866,40 +1875,43 @@ public class ProjectLoaderXml {
             if (allLabelsTags.item(i) instanceof Element){
                 Element currentLabelTag = (Element) allLabelsTags.item(i);
                 String type = currentLabelTag.getAttribute("type");
+
                 int relatedAnchorPointId = Integer.parseInt(currentLabelTag.getAttribute("related_anchor_point_id"));
+                int distanceInXFromAnchorPoint = Integer.parseInt(currentLabelTag.getAttribute("x_distance_from_anchor_point"));
+                int distanceInYFromAnchorPoint = Integer.parseInt(currentLabelTag.getAttribute("y_distance_from_anchor_point"));
 
                 // Récupère le point d'ancrage lié
                 List<RelationPointAncrageShape> anchorPointFound = associationShape.getPointsAncrage().stream().filter(anchorPoint -> anchorPoint.getId() == relatedAnchorPointId).collect(Collectors.toList());
 
                 // Crée le LabelShape
                 if (!anchorPointFound.isEmpty()) {
-                    LabelShape label;
 
                     // Nom d'association
                     if (type.equals(LabelType.ASSOCIATION_NAME.name()))
-                        associationShape.createLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getName(), LabelType.ASSOCIATION_NAME);
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getName(), LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
 
                     // Cardinalités destination
                     if (type.equals(LabelType.DESTINATION_CARDINALITY.name()))
-                        associationShape.createLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY);
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
 
                     // Cardinalités source
                     if (type.equals(LabelType.SOURCE_CARDINALITY.name()))
-                        associationShape.createLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY);
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
 
                     // Rôle source
                     if (type.equals(LabelType.SOURCE_ROLE.name()))
-                        associationShape.createLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getName(), LabelType.SOURCE_ROLE);
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getName(), LabelType.SOURCE_ROLE, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
 
                     // Rôle destination
                     if (type.equals(LabelType.DESTINATION_ROLE.name()))
-                        associationShape.createLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getName(), LabelType.DESTINATION_ROLE);
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getName(), LabelType.DESTINATION_ROLE, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+
                 }
             }
         }
     }
 
-    private void addAnchorPoints(MCDAssociationShape associationShape, Element currentNode){
+    private void loadAnchorPoints(MCDAssociationShape associationShape, Element currentNode){
         // Vide la liste des points d'ancrage
         associationShape.getPointsAncrage().clear();
 
@@ -1915,12 +1927,11 @@ public class ProjectLoaderXml {
                 associationShape.getPointsAncrage().add(pointAncrageShape);
             }
         }
+
+        associationShape.reindexAllPointsAncrage();
     }
 
     private boolean elementHasChildByTagName(Element element, String tagNameToFind){
-        System.out.println(element.getChildNodes().item(0));
-        System.out.println(element.getChildNodes().item(1));
-        System.out.println(tagNameToFind);
         return element.getElementsByTagName(tagNameToFind).getLength() > 0;
     }
 

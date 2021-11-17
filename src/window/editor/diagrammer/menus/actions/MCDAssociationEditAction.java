@@ -7,7 +7,6 @@ import main.MVCCDManager;
 import mcd.MCDAssociation;
 import repository.editingTreat.mcd.MCDAssociationEditingTreat;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
-import window.editor.diagrammer.services.DiagrammerService;
 
 public class MCDAssociationEditAction extends AbstractAction {
 

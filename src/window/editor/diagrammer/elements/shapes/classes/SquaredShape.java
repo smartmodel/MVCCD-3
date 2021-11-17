@@ -29,6 +29,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable 
   public SquaredShape() {
     if (MVCCDManager.instance().getProject() != null)
       this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
+
     this.addListeners();
     this.setBorder(this.BORDER);
   }

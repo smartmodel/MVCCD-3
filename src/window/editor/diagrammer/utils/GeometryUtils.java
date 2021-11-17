@@ -100,10 +100,6 @@ public final class GeometryUtils {
   public static boolean pointIsAroundShape(Point point, ClassShape shape) {
     // On convertit le point pour le rendre relatif à la ClassShape
     Point converted = SwingUtilities.convertPoint(DiagrammerService.getDrawPanel(), point, shape);
-    boolean t = (converted.x >= 0 && converted.x <= shape.getWidth() && (converted.y == 0 || converted.y == shape.getHeight())) || (converted.y >= 0 && converted.y <= shape.getHeight() && (converted.x == 0 || converted.x == shape.getWidth()));
-    System.out.println("Is around shape : " + t);
-    System.out.println(shape.getBounds());
-    System.out.println(point.x + "  x  " + point.y);
     return (converted.x >= 0 && converted.x <= shape.getWidth() && (converted.y == 0 || converted.y == shape.getHeight())) || (converted.y >= 0 && converted.y <= shape.getHeight() && (converted.x == 0 || converted.x == shape.getWidth()));
   }
 

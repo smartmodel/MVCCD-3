@@ -17,6 +17,7 @@ public class MCDEntityShape extends ClassShape {
   public MCDEntityShape(int id, MCDEntity relatedRepositoryEntity) {
     super(relatedRepositoryEntity);
     this.id = id;
+    this.addListeners();
   }
 
   public MCDEntityShape(int id) {
@@ -42,6 +43,7 @@ public class MCDEntityShape extends ClassShape {
   @Override
   public void setZoneEnTeteContent() {
     this.zoneEnTete.getElements().clear();
+
     this.zoneEnTete.addElement(Preferences.DIAGRAMMER_ENTITY_STEREOTYPE_TEXT);
     if (this.getEntity() != null) {
       this.zoneEnTete.addElement(this.getEntity().getName());
@@ -109,12 +111,5 @@ public class MCDEntityShape extends ClassShape {
   public void setEntity(MCDEntity entity) {
     this.relatedRepositoryElement = entity;
     this.updateSizeAndMinimumSize();
-  }
-
-  @Override
-  public String toString() {
-    return "MCDEntityShape{" +
-            "relatedRepositoryElement=" + relatedRepositoryElement +
-            '}';
   }
 }

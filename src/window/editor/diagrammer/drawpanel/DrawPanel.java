@@ -23,6 +23,7 @@ import preferences.PreferencesManager;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.DrawPanelListener;
 import window.editor.diagrammer.utils.GridUtils;
@@ -76,6 +77,17 @@ public class DrawPanel extends JLayeredPane {
     }
   }
 
+  public MCDEntityShape getMcdEntityShapeById(int id){
+    for (ClassShape shape : this.getClassShapes()){
+      if (shape instanceof MCDEntityShape){
+        if (shape.getId() == id){
+          return (MCDEntityShape) shape;
+        }
+      }
+    }
+    return null;
+  }
+
   public void zoom(int zoomFactor) {
     int oldGridSize = this.gridSize;
     if (zoomFactor >= Preferences.DIAGRAMMER_MINIMUM_ALLOWED_ZOOM && zoomFactor <= Preferences.DIAGRAMMER_MAXIMUM_ALLOWED_ZOOM) {
@@ -115,6 +127,7 @@ public class DrawPanel extends JLayeredPane {
 
   private void addListeners() {
     DrawPanelListener listener = new DrawPanelListener();
+
     this.addMouseListener(listener);
     this.addMouseMotionListener(listener);
     this.addMouseWheelListener(listener);

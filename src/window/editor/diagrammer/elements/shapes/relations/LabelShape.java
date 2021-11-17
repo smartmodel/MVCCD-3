@@ -14,9 +14,9 @@ import window.editor.diagrammer.utils.GeometryUtils;
 
 public class LabelShape extends JLabel {
 
-  private final int MARGIN = 10;
-  private int distanceInXFromPointAncrage = 0;
-  private int distanceInYFromPointAncrage = 0;
+  private final int MARGIN = 20;
+  private int distanceInXFromPointAncrage;
+  private int distanceInYFromPointAncrage;
   private RelationPointAncrageShape pointAncrage;
   private RelationShape relationShape;
   private boolean isRole;
@@ -28,32 +28,48 @@ public class LabelShape extends JLabel {
     this.addListeners();
   }
 
-  public LabelShape(RelationPointAncrageShape pointAncrage, LabelType type, RelationShape relationShape) {
+  public LabelShape(RelationPointAncrageShape pointAncrage, LabelType type, RelationShape relationShape, int distanceInXFromPointAncrage, int distanceInYFromPointAncrage) {
     this();
 
     this.type = type;
     this.pointAncrage = pointAncrage;
     this.relationShape = relationShape;
     this.isRole = (type == LabelType.DESTINATION_ROLE || type == LabelType.SOURCE_ROLE);
-    this.firstDisplay = true;
 
-    final Point location = this.calculateLocation(this.firstDisplay);
-    this.setBounds(location.x, location.y, 110, 30);
+    this.distanceInXFromPointAncrage = distanceInXFromPointAncrage;
+    this.distanceInYFromPointAncrage = distanceInYFromPointAncrage;
+
+    Point initialLocation = this.calculateLocation(true);
+
+    this.setBounds(initialLocation.x + distanceInXFromPointAncrage, initialLocation.y + distanceInYFromPointAncrage, 110, 30);
 
     DiagrammerService.getDrawPanel().add(this);
-    System.out.println(this.getText());
 
-    this.repaint();
+    repaint();
+    DiagrammerService.getDrawPanel().repaint();
   }
+
+
 
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    final Graphics2D graphics2D = (Graphics2D) g;
-    final Point location = this.calculateLocation(this.firstDisplay);
-    final Dimension size = this.calculateSize(graphics2D);
-    this.setBounds(location.x, location.y, size.width, size.height);
+    Graphics2D graphics2D = (Graphics2D) g;
+    Dimension size = this.calculateSize(graphics2D);
+
+
+    this.setBounds(pointAncrage.getBounds().x + distanceInXFromPointAncrage, pointAncrage.getBounds().y + distanceInYFromPointAncrage, size.width, size.height);
+
   }
+
+  private void initUI() {
+    this.setOpaque(false); // Pour la transparence
+    this.setVisible(false);
+    this.setHorizontalAlignment(SwingConstants.CENTER);
+    this.setVerticalAlignment(SwingConstants.CENTER);
+    this.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
+  }
+
 
   private void addListeners() {
     LabelShapeListener listener = new LabelShapeListener();
@@ -64,7 +80,7 @@ public class LabelShape extends JLabel {
   private Point calculateDestionationInformationsFirstDisplay() {
     int x;
     int y;
-    final ClassShape nearestClassShape = this.relationShape.getNearestClassShape(this.pointAncrage);
+    ClassShape nearestClassShape = this.relationShape.getNearestClassShape(this.pointAncrage);
 
     if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté gauche de la ClassShape
@@ -103,13 +119,15 @@ public class LabelShape extends JLabel {
         y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       }
     }
+
     return new Point(x, y);
   }
 
   private Point calculateSourceInformationsFirstDisplay() {
     int x;
     int y;
-    final ClassShape nearestClassShape = this.relationShape.getNearestClassShape(this.pointAncrage);
+
+    ClassShape nearestClassShape = this.relationShape.getNearestClassShape(this.pointAncrage);
 
     if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté gauche de la ClassShape
@@ -151,22 +169,15 @@ public class LabelShape extends JLabel {
     return new Point(x, y);
   }
 
-  private void initUI() {
-    this.setOpaque(false); // Pour la transparence
-    this.setVisible(false);
-    this.setHorizontalAlignment(SwingConstants.CENTER);
-    this.setVerticalAlignment(SwingConstants.CENTER);
-    this.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
-  }
-
   private Dimension calculateSize(Graphics2D graphics2D) {
-    final int width = graphics2D.getFontMetrics().stringWidth(this.getText());
-    final int height = graphics2D.getFontMetrics().getHeight();
+    int width = graphics2D.getFontMetrics().stringWidth(this.getText());
+    int height = graphics2D.getFontMetrics().getHeight();
     return new Dimension(width, height);
   }
 
   public Point calculateLocation(boolean firstDisplay) {
     if (!firstDisplay) {
+      System.out.println("ok");
       // S'il s'agit du nom d'association
       if (!this.relationShape.isFirstOrLastPoint(this.pointAncrage)) {
         return new Point(this.relationShape.getCenter().x + this.distanceInXFromPointAncrage, this.relationShape.getCenter().y + this.distanceInYFromPointAncrage);
@@ -174,13 +185,12 @@ public class LabelShape extends JLabel {
         return new Point(this.pointAncrage.x + this.distanceInXFromPointAncrage, this.pointAncrage.y + this.distanceInYFromPointAncrage);
       }
     } else {
-      if (this.relationShape.isFirstPoint(this.pointAncrage)) {
+      if (this.relationShape.isFirstPoint(this.pointAncrage))
         return this.calculateSourceInformationsFirstDisplay();
-      } else if (this.relationShape.isLastPoint(this.pointAncrage)) {
+      else if (this.relationShape.isLastPoint(this.pointAncrage))
         return this.calculateDestionationInformationsFirstDisplay();
-      } else {
+      else
         return this.relationShape.getCenter();
-      }
     }
   }
 
