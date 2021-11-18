@@ -33,6 +33,7 @@ import java.util.ArrayList;
 public class ConConnectorInputContent extends PanelInputContent implements ActionListener {
 
     protected JPanel panelConnection = new JPanel ();
+    protected JPanel panelUser = new JPanel ();
 
     private JLabel labelName;
     private STextField fieldName;
@@ -130,6 +131,8 @@ public class ConConnectorInputContent extends PanelInputContent implements Actio
         fieldSaveUserPW.setToolTipText("Le mot de passe utilisateur est sauvegardé avec la connexion ...");
         fieldSaveUserPW.addFocusListener(this);
         fieldSaveUserPW.addItemListener(this);
+        //TODO-1 Renoncement dans un premier pour simplifier le développement
+        fieldSaveUserPW.setEnabled(false);
 
         btnTest = new SButton("Test de connexion du connecteur");
         btnTest.addActionListener(this);
@@ -210,27 +213,15 @@ public class ConConnectorInputContent extends PanelInputContent implements Actio
         gbc.gridx++;
         panelInputContentCustom.add(fieldUserName, gbc);
 
+
+        gbc.gridwidth = 6;
         gbc.gridx = 0;
         gbc.gridy++;
-        panelInputContentCustom.add(labelUserPW, gbc);
-        gbc.gridx++;
-        panelInputContentCustom.add(fieldUserPW, gbc);
-        gbc.gridx++;
-        panelInputContentCustom.add(btnUserPWClear, gbc);
-        gbc.gridx++;
-        panelInputContentCustom.add(fieldUserPWClear, gbc);
-
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        panelInputContentCustom.add(labelSaveUserPW, gbc);
-        gbc.gridx++;
-        panelInputContentCustom.add(fieldSaveUserPW, gbc);
-
+        createPanelUser();
+        panelInputContentCustom.add(panelUser, gbc);
         gbc.gridx = 0;
         gbc.gridy++;
         panelInputContentCustom.add(btnTest, gbc);
-
 
     }
 
@@ -265,6 +256,45 @@ public class ConConnectorInputContent extends PanelInputContent implements Actio
     }
 
 
+    protected void createPanelUser() {
+        Border border = BorderFactory.createLineBorder(Color.black);
+        TitledBorder panelDataypeBorder = BorderFactory.createTitledBorder(border, "Utilisateur");
+        panelUser.setBorder(panelDataypeBorder);
+
+        panelUser.setLayout(new GridBagLayout());
+        GridBagConstraints gbcD = new GridBagConstraints();
+        gbcD.anchor = GridBagConstraints.NORTHWEST;
+        gbcD.insets = new Insets(10, 10, 0, 0);
+
+        gbcD.gridx = 0;
+        gbcD.gridy = 0;
+        gbcD.gridwidth = 1;
+        gbcD.gridheight = 1;
+
+        gbcD.gridx = 0;
+        gbcD.gridy++;
+        panelUser.add(labelUserName, gbcD);
+        gbcD.gridx++;
+        panelUser.add(fieldUserName, gbcD);
+
+        gbcD.gridx = 0;
+        gbcD.gridy++;
+        panelUser.add(labelUserPW, gbcD);
+        gbcD.gridx++;
+        panelUser.add(fieldUserPW, gbcD);
+        gbcD.gridx++;
+        panelUser.add(btnUserPWClear, gbcD);
+        gbcD.gridx++;
+        panelUser.add(fieldUserPWClear, gbcD);
+
+        gbcD.gridx = 0;
+        gbcD.gridy++;
+        panelUser.add(labelSaveUserPW, gbcD);
+        gbcD.gridx++;
+        panelUser.add(fieldSaveUserPW, gbcD);
+
+    }
+
     @Override
     public void loadDatas(MVCCDElement mvccdElementCrt) {
         ConConnector conConnector = (ConConnector) mvccdElementCrt;
@@ -285,20 +315,12 @@ public class ConConnectorInputContent extends PanelInputContent implements Actio
         ConConnection parent = (ConConnection) getEditor().getMvccdElementParent();
         fieldConnection.setText(parent.getName()) ;
         fieldURL.setText(parent.getResourceURL()) ;
+        //TODO-0 Valeur par défaut tant que la sauvegarde XML n'est pas faite
         fieldName.setText("CC");
-        fieldUserName.setText("TEST1");
-        fieldUserPW.setText("TEST1");
+        fieldUserName.setText("TEST2");
+        fieldUserPW.setText("TEST2");
+        fieldUserPWClear.setText(fieldUserPW.getText()); //TODO-0 Voir getPassword
         fieldSaveUserPW.setSelected(true);
-
-        /*
-        radDriverDefault.setSelected(true);
-        fieldDriverDefault.setText(getEditor().getConDb().getDriverFileNamePathAbsolute());
-        fieldDriverCustom.setText("");
-        fieldHostName.setText("MM");
-        fieldDbName.setText("DD");
-        fieldSaveUserPW.setSelected(false);
-
-         */
     }
 
 

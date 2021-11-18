@@ -526,12 +526,15 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
         radDriverDefault.setSelected(true);
         fieldDriverDefault.setText(getEditor().getConDb().getDefaultDriverFileNamePathAbsolute());
         fieldDriverCustom.setText("");
+        //TODO-0 Valeur par défaut tant que la sauvegarde XML n'est pas faite
+        //fieldIdDbName est initialisé par la calsse spécialisée;
         fieldHostName.setText("localhost");
         initPort();
-        fieldDbName.setText("XE");
+        fieldDbName.setText("XEPDB1");
         // fieldIdDbName initialisé par la classe spécialisée
-        fieldUserName.setText("SYSTEM");
-        fieldUserPW.setText("Chatana1");
+        fieldUserName.setText("TEST1");
+        fieldUserPW.setText("TEST1");
+        fieldUserPWClear.setText(fieldUserPW.getText()); //TODO-0 Voir getPassword
         fieldSaveUserPW.setSelected(true);
 
         fieldConfExecScript.setSelected(false);

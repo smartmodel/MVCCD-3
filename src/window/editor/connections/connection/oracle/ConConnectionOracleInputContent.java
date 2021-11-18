@@ -77,7 +77,7 @@ public class ConConnectionOracleInputContent extends ConConnectionInputContent {
     protected void initDatas() {
         super.initDatas();
         SComboBoxService.selectByText(fieldIdDbName,
-                ConIDDBName.SID.getText());
+                ConIDDBName.SERVICE_NAME.getText());
 
     }
 
