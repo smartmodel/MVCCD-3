@@ -4,7 +4,6 @@ import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import preferences.PreferencesManager;
 import utilities.Debug;
-import utilities.Trace;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.*;
 
@@ -71,6 +70,8 @@ public abstract class PanelInputContent
     ;
 
     public boolean checkDatasPreSave(SComponent sComponent) {
+        //#MAJ 2021-10-27 reset Color sComponents
+        resetColorSComponents();
         boolean ok = true;
         setPreSaveOk(ok);
         return ok;

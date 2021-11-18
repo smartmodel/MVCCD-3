@@ -1,11 +1,13 @@
 package main;
 
-import java.util.ArrayList;
+import application.ApplElement;
 import mcd.MCDElement;
 import mcd.MCDEntity;
 import mcd.interfaces.IMCDTraceability;
 import org.apache.commons.lang.StringUtils;
 import utilities.UtilDivers;
+
+import java.util.ArrayList;
 
 /**
  * Il s'agit de la classe de services pour MVCCDElement. Elle fournit les différents services dont le contrôle d'unicité de nommage (attributs "name", "shortname" et "longname").
@@ -135,6 +137,18 @@ public class MVCCDElementService {
         }
       }
 
+    }
+    return null;
+  }
+
+
+  public static ApplElement lienProgExistInBrothers(ArrayList<ApplElement> brothers, String lienProg) {
+    for (ApplElement brother : brothers) {
+      if (StringUtils.isNotEmpty(brother.getLienProg()) && StringUtils.isNotEmpty(lienProg)) {
+        if (brother.getLienProg().equals(lienProg)) {
+          return brother;
+        }
+      }
     }
     return null;
   }

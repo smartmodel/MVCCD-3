@@ -1,10 +1,12 @@
 package preferences;
 
+import connections.ConDBMode;
 import console.WarningLevel;
 import exceptions.CodeApplException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,9 +15,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Cette classe fournit le nécessaire pour charger les préférences d'application sauvegardées dans le fichier des préférences XML (application.pref). Les préférences sont récupérées de ce fichier et sont affectées aux préférences d'application existantes dans Preferences.java.
@@ -51,6 +53,7 @@ public class PreferencesOfApplicationLoaderXml {
       Element debugTdPrint = (Element) racine.getElementsByTagName("debugTdPrint").item(0);
       Element debugTdUnicityPrint = (Element) racine.getElementsByTagName("debugTdUnicityPrint").item(0);
       Element warningLevel = (Element) racine.getElementsByTagName("warningLevel").item(0);
+      Element conDBMode = (Element) racine.getElementsByTagName("conDBMode").item(0);
       Element repositoryMcdModelsMany = (Element) racine.getElementsByTagName("repositoryMcdModelsMany").item(0);
       Element repositoryMcdPackagesAuthorizeds = (Element) racine.getElementsByTagName("repositoryMcdPackagesAuthorizeds").item(0);
       Element persistenceSerialisationInsteadofXML = (Element) racine.getElementsByTagName("persistenceSerialisationInsteadofXML").item(0);
@@ -67,6 +70,7 @@ public class PreferencesOfApplicationLoaderXml {
       applicationPrefs.setDEBUG_TD_UNICITY_PRINT(Boolean.valueOf(debugTdUnicityPrint.getTextContent()));
       //Lire la constante de texte (warning.level.info par exemple) et non le texte (info)
       applicationPrefs.setWARNING_LEVEL(WarningLevel.findByName(warningLevel.getTextContent()));
+      applicationPrefs.setCON_DB_MODE(ConDBMode.findByName(conDBMode.getTextContent()));
       applicationPrefs.setREPOSITORY_MCD_MODELS_MANY(Boolean.valueOf(repositoryMcdModelsMany.getTextContent()));
       applicationPrefs.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(Boolean.valueOf(repositoryMcdPackagesAuthorizeds.getTextContent()));
       applicationPrefs.setPERSISTENCE_SERIALISATION_INSTEADOF_XML(Boolean.valueOf(persistenceSerialisationInsteadofXML.getTextContent()));

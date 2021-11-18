@@ -1,10 +1,8 @@
 package window.editor.naming;
 
-import datatypes.MDDatatype;
 import main.MVCCDElement;
 import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
-import utilities.Trace;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelInput;
@@ -67,4 +65,10 @@ public class NamingEditor extends DialogEditor {
     protected String getPropertyTitleRead() {
         return "editor.naming.read";
     }
+
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
 }

@@ -1,15 +1,14 @@
 package preferences;
 
+import connections.ConDBMode;
 import console.WarningLevel;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
 import m.MUMLExtensionNaming;
 import main.MVCCDElement;
 import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
 import window.editor.diagrammer.services.DiagrammerService;
+
+import java.awt.*;
 
 /**
  * Regroupe l'ensemble des préférences développeur (les attributs statics de la classe), des préférences d'application (les attributs qui suivent ensuite) et des préférences de projet (les attributs plus bas dans la classe). Cette classe est instanciée plusieurs fois depuis MVCCDManager. Lorsqu'une préférence doit être utilisée, il est plus simple d'utiliser la méthode statique
@@ -51,6 +50,47 @@ public class Preferences extends MVCCDElement {
   public static String REPOSITORY_MPDR_MODEL_MYSQL_NAME = "MPDR_MySQL";
   public static String REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME = "MPDR_PostgreSQL";
 
+
+  public static String CON_DB_ORACLE = "con.db.oracle";
+  public static String CON_DB_MYSQL = "con.db.mysql";
+  public static String CON_DB_POSTGRESQL = "con.db.postgresql";
+
+  public static String CON_DB_MODE_CONNECTION = "con.db.mode.connection";
+  public static String CON_DB_MODE_CONNECTOR = "con.db.mode.connector";
+
+  public static String CON_DIRECTORY_DRIVERS = "drivers";
+  public static String CON_DIRECTORY_ORACLE = "oracle";
+  public static String CON_DIRECTORY_MYSQL = "mysql";
+  public static String CON_DIRECTORY_POSTGRESQL = "postgresql";
+
+  public static final int CON_NAME_LENGTH = 40 ;
+  public static final int CON_HOSTNAME_LENGTH = 100 ;
+  public static final int CON_DBNAME_LENGTH = 40 ;
+  public static final int CON_PORT_MIN = 0 ;
+  public static final int CON_PORT_MAX = 6553 ;
+  public static final int CON_PORT_DEFAULT_ORACLE = 1521 ;
+  public static final int CON_PORT_DEFAULT_MYSQL = 3306 ;
+  public static final int CON_PORT_DEFAULT_POSTGRESQL = 5432 ;
+  public static final String CON_HOSTNAME_WORD = "hostName";
+  public static final String CON_PORT_WORD = "port";
+  public static final String CON_DBNAME_WORD = "dbName";
+  public static final String CON_DBNAME_ID_MARKER = "dbNameId";  // : pour SID et / ServiceName par exemple :Oracle
+
+  public static final String CON_URL_TEMPLATE_ORACLE = "jdbc:oracle:thin:@{"+ CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD +"}{"+CON_DBNAME_ID_MARKER+"}{"+ CON_DBNAME_WORD + "}" ;
+  public static final String CON_URL_TEMPLATE_MYSQL = "jdbc:mysql://{"+ CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD +"}/{"+ CON_DBNAME_WORD + "}" ;
+  public static final String CON_URL_TEMPLATE_POSTGRESQL = "jdbc:postgresql://{"+ CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD +"}/{"+ CON_DBNAME_WORD + "}" ;
+
+  public static final String CON_FOR_NAME_ORACLE = "oracle.jdbc.driver.OracleDriver";
+  public static final String CON_FOR_NAME_MYSQL = "com.mysql.jdbc.Driver";
+  public static final String CON_FOR_NAME_POSTGRESQL = "org.postgresql.Driver";
+
+  public static final String CON_IDDB_NAME_STD = "con.iddb.name.std";
+  public static final String CON_IDDB_NAME_SID = "con.iddb.name.sid";
+  public static final String CON_IDDB_NAME_SERVICE_NAME = "con.iddb.name.service.name";
+
+  public static final String CON_IDDB_NAME_SID_ORACLE_MARKER = ":";
+  public static final String CON_IDDB_NAME_SERVICE_NAME_ORACLE_MARKER = "/";
+
   public static final String DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME = "DrawPanelContainer";
   public static final String DIAGRAMMER_DRAW_PANEL_NAME = "DrawPanel";
   public static final String DIAGRAMMER_PALETTE_PANEL_NAME = "PalettePanel";
@@ -82,7 +122,10 @@ public class Preferences extends MVCCDElement {
   public static String REGEXPR_FREE = "([ ]{0,1}[a-zA-Z0-9_àâäçéèêëòöùûü]+)*";
   public static String NAME_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_NOFREE;
   public static String NAME_FREE_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_FREE;
+  public static String CON_HOSTNAME_REGEXPR = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"; //Provient de  : https://stackoverflow.com/questions/106179/regular-expression-to-match-dns-hostname-or-ip-address
+  public static String CON_DBNAME_REGEXPR = "^[0-9a-zA-Z$_]+$"; //Provient de  : https://stackoverflow.com/questions/6731833/database-name-regex-restriction
   public static String REGEXPR_1_99 = "[1-9]{1}[0-9]{0,1}";
+
   public static String MULTI_MERISE_N = "n";
   public static String MULTI_OCL_SP = "\\.\\.";
   public static String MULTI_CUSTOM_REGEXPR = "((0|" + REGEXPR_1_99 + ")" + MULTI_OCL_SP + "(" + REGEXPR_1_99 + "|\\*|n))|1|\\*";
@@ -115,10 +158,11 @@ public class Preferences extends MVCCDElement {
   public static String MCD_AID_DEP_COLUMN_NAME_DEFAULT = "numDep";
   public static Integer MCD_AID_COLUMN_NAME_LENGTH = 5;
 
-  public static String INTEGER_REGEXPR = "([0])|([1-9]{1,1}[0-9]*)";
+  public static String INTEGER_REGEXPR = "([0])|([-]{0,1}[1-9]{1,1}[0-9]*)";
   //public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
   public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"windows-1252\"?>";
 
+  public static String LIEN_PROG_SEP = "-#-";
   public static String XML_BALISE_PROJECT = "project";
   public static String XML_BALISE_DIAGRAMS = "diagrams";
   public static String XML_BALISE_ENTITIES = "entities";
@@ -160,7 +204,6 @@ public class Preferences extends MVCCDElement {
   public static String LOGGING_FILE_NAME_FORMAT = "yyyy-MM-dd";
   public static String LOGGING_FILE_NAME_EXTENSION = "log";
   public static String LOGGING_FILE_NAME_FORMAT_ERROR_NULL = "Le format de nommage du fichier de log est inexistant";
-  public static String LOGGING_FOLDER_PATH = "log";
   public static String DIRECTORY_LOGGING_NAME = "logs";
 
     // Path de nommage au niveau des objets  (Modèle.paquetatge.entité....
@@ -200,7 +243,12 @@ public class Preferences extends MVCCDElement {
     public static Integer PREFERENCES_WINDOW_HEIGHT = 600;
     public static Integer MCDDATATYPE_WINDOW_WIDTH = 800;
     public static Integer MCDDATATYPE_WINDOW_HEIGHT = 600;
-    public static Integer MDRTABLE_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
+    public static Integer CON_CONNECTION_WINDOW_WIDTH = 1000;
+    public static Integer CON_CONNECTION_WINDOW_HEIGHT = 800;
+    public static Integer CON_CONNECTOR_WINDOW_WIDTH = 1000;
+    public static Integer CON_CONNECTOR_WINDOW_HEIGHT = 600;
+
+  public static Integer MDRTABLE_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
     public static Integer MDRTABLE_WINDOW_HEIGHT = 600;
 
   public static Integer EDITOR_FIELD_HEIGHT = 20;
@@ -397,10 +445,6 @@ public class Preferences extends MVCCDElement {
 
   public static String MCDDATATYPE_NUMBER_SIZE_PRECISION = "mcddatatype.number.size.precision";
   public static String MCDDATATYPE_NUMBER_SIZE_INTEGER_PORTION_ONLY = "mcddatatype.number.size.integer.portion.only";
-
-    public static String CON_DB_ORACLE = "con.db.oracle";
-    public static String CON_DB_MYSQL = "con.db.mysql";
-    public static String CON_DB_POSTGRESQL = "con.db.postgresql";
 
 
     public static String MCD_NAMING_NAME="mcd.naming.name";
@@ -721,10 +765,12 @@ public class Preferences extends MVCCDElement {
   private WarningLevel WARNING_LEVEL = null;
   private Boolean REPOSITORY_MCD_MODELS_MANY = false;
   private Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = false;
+  private ConDBMode CON_DB_MODE = null;
 
   // Pendant la phase de développement
   //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref
   private Boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = false;
+
 
   //private PreferencesDisplay GENERAL_PREFERENCES_DISPLAY = PreferencesDisplay.REPOSITORY;
 
@@ -934,6 +980,17 @@ public class Preferences extends MVCCDElement {
 
   public void setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(Boolean REPOSITORY_MCD_PACKAGES_AUTHORIZEDS) {
     this.REPOSITORY_MCD_PACKAGES_AUTHORIZEDS = REPOSITORY_MCD_PACKAGES_AUTHORIZEDS;
+  }
+
+  public ConDBMode getCON_DB_MODE() {
+    if (this.CON_DB_MODE == null) {
+      this.CON_DB_MODE = ConDBMode.CONNECTION;
+    }
+    return CON_DB_MODE;
+  }
+
+  public void setCON_DB_MODE(ConDBMode CON_DB_MODE) {
+    this.CON_DB_MODE = CON_DB_MODE;
   }
 
   // Project

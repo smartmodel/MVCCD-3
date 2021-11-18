@@ -29,6 +29,15 @@
     </xs:simpleType>
   </xs:element>
 
+  <xs:element name="conDBMode">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="con.db.mode.connection"/>
+        <xs:enumeration value="con.db.mode.connector"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
   <xs:element name="repositoryMcdModelsMany" type="xs:boolean"/>
   <xs:element name="repositoryMcdPackagesAuthorizeds" type="xs:boolean"/>
   <xs:element name="persistenceSerialisationInsteadofXML" type="xs:boolean"/>
@@ -45,6 +54,7 @@
         <xs:element ref="debugTdPrint"/>
         <xs:element ref="debugTdUnicityPrint"/>
         <xs:element ref="warningLevel"/>
+        <xs:element ref="conDBMode"/>
         <xs:element ref="repositoryMcdModelsMany"/>
         <xs:element ref="repositoryMcdPackagesAuthorizeds"/>
         <xs:element ref="persistenceSerialisationInsteadofXML"/>

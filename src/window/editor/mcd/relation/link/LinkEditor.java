@@ -69,4 +69,10 @@ public class LinkEditor extends DialogEditor {
         return "editor.link.read";
     }
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
+
 }

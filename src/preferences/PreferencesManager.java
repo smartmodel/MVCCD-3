@@ -8,9 +8,7 @@ import profile.ProfileFileChooser;
 import project.Project;
 import project.ProjectFileChooser;
 import resultat.Resultat;
-import resultat.ResultatElement;
 import resultat.ResultatLevel;
-import utilities.Trace;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
 
@@ -107,6 +105,9 @@ public class PreferencesManager {
         projectPref.setDEBUG_TD_PRINT(applicationPref.getDEBUG_TD_PRINT());
         projectPref.setDEBUG_TD_UNICITY_PRINT(applicationPref.getDEBUG_TD_UNICITY_PRINT());
         projectPref.setWARNING_LEVEL(applicationPref.getWARNING_LEVEL());
+        //#MAJ 2021-11-15A Melvyn-Diagrammeur show grid (Apparemment manque l'affectation)
+        projectPref.setDIAGRAMMER_SHOW_GRID(applicationPref.isDIAGRAMMER_SHOW_GRID());
+        projectPref.setCON_DB_MODE(applicationPref.getCON_DB_MODE());
         //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
         projectPref.setPERSISTENCE_SERIALISATION_INSTEADOF_XML(
                 applicationPref.isPERSISTENCE_SERIALISATION_INSTEADOF_XML());

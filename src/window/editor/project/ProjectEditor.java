@@ -70,4 +70,9 @@ public class ProjectEditor extends DialogEditor {
         return "editor.project.read";
     }
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
 }

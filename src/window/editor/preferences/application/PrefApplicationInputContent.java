@@ -1,15 +1,7 @@
 package window.editor.preferences.application;
 
+import connections.ConDBMode;
 import console.WarningLevel;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ItemEvent;
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.event.DocumentEvent;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import preferences.Preferences;
@@ -21,6 +13,11 @@ import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.services.SComboBoxService;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import java.awt.*;
+import java.awt.event.ItemEvent;
 
 public class PrefApplicationInputContent extends PanelInputContent {
   //private JPanel panel = new JPanel();
@@ -44,6 +41,8 @@ public class PrefApplicationInputContent extends PanelInputContent {
   private SCheckBox fieldRepMCDModelsMany = new SCheckBox(this);
   private SCheckBox fieldRepMCDPackagesAuthorizeds = new SCheckBox(this);
   private SCheckBox fieldShowGrid = new SCheckBox(this);
+
+  private SComboBox fieldConDBMode = new SComboBox(this);
 
   // Pendant la phase de développement
   private SCheckBox fieldInsteadofXML = new SCheckBox(this);
@@ -94,6 +93,13 @@ public class PrefApplicationInputContent extends PanelInputContent {
     fieldRepMCDPackagesAuthorizeds.addItemListener(this);
     fieldRepMCDPackagesAuthorizeds.addFocusListener(this);
 
+
+    fieldConDBMode.addItem(ConDBMode.CONNECTION.getText());
+    fieldConDBMode.addItem(ConDBMode.CONNECTOR.getText());
+    fieldConDBMode.addItemListener(this);
+    fieldConDBMode.addFocusListener(this);
+
+
     fieldShowGrid.addItemListener(this);
     fieldShowGrid.addFocusListener(this);
 
@@ -112,6 +118,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
     super.getSComponents().add(fieldShowGrid);
     super.getSComponents().add(fieldRepMCDModelsMany);
     super.getSComponents().add(fieldRepMCDPackagesAuthorizeds);
+    super.getSComponents().add(fieldConDBMode);
     super.getSComponents().add(fieldInsteadofXML);
 
     panelInputContentCustom.setLayout(new GridBagLayout());
@@ -227,6 +234,12 @@ public class PrefApplicationInputContent extends PanelInputContent {
     panelInputContentCustom.add(new JLabel("Niveau de messages console"), gbc);
     gbc.gridx++;
     panelInputContentCustom.add(fieldWarningLevel, gbc);
+
+    gbc.gridy++;
+    gbc.gridx = 0;
+    panelInputContentCustom.add(new JLabel("Mode de connexion base de données"), gbc);
+    gbc.gridx++;
+    panelInputContentCustom.add(fieldConDBMode, gbc);
   }
 
   @Override
@@ -261,6 +274,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
     fieldRepMCDPackagesAuthorizeds.setSelected(preferences.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
     fieldInsteadofXML.setSelected(preferences.isPERSISTENCE_SERIALISATION_INSTEADOF_XML());
     fieldShowGrid.setSelected(preferences.isDIAGRAMMER_SHOW_GRID());
+    SComboBoxService.selectByText(fieldConDBMode, preferences.getCON_DB_MODE().getText());
   }
 
   @Override
@@ -322,6 +336,17 @@ public class PrefApplicationInputContent extends PanelInputContent {
     if (fieldShowGrid.checkIfUpdated()) {
       applicationPref.setDIAGRAMMER_SHOW_GRID(fieldShowGrid.isSelected());
     }
+
+    if (fieldConDBMode.checkIfUpdated()) {
+      String text = (String) fieldConDBMode.getSelectedItem();
+      if (text.equals(ConDBMode.CONNECTION.getText())) {
+        applicationPref.setCON_DB_MODE(ConDBMode.CONNECTION);
+      }
+      if (text.equals(ConDBMode.CONNECTOR.getText())) {
+        applicationPref.setCON_DB_MODE(ConDBMode.CONNECTOR);
+      }
+    }
+
 
     // Copie dans les préférences de pojet
     if (PreferencesManager.instance().getProjectPref() != null) {

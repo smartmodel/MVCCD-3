@@ -1,5 +1,8 @@
 package main;
 
+import connections.ConConnectionOracle;
+import connections.ConConnectorOracle;
+import connections.ConnectionsOracle;
 import console.ViewLogsManager;
 import diagram.mcd.MCDDiagram;
 import mcd.*;
@@ -55,6 +58,14 @@ public class MVCCDElementFactory {
                 createContentMCDModel(mcdContModels);
         }
         return project;
+    }
+
+    public ConConnectionOracle createConResourceOracle(ConnectionsOracle parent) {
+        return new ConConnectionOracle(parent);
+    }
+
+    public ConConnectorOracle createConConnectorOracle(ConConnectionOracle parent) {
+        return new ConConnectorOracle(parent);
     }
 
     public MCDContModels createMCDModels(Project project, int id){

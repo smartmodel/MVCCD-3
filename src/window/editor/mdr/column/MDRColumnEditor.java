@@ -81,4 +81,11 @@ public class MDRColumnEditor extends DialogEditor {
     }
 
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
+
+
 }

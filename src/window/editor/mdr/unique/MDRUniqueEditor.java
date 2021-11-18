@@ -1,11 +1,8 @@
 package window.editor.mdr.unique;
 
 import mdr.MDRContConstraints;
-import mdr.MDRFK;
 import mdr.MDRUnique;
-import mldr.MLDRFK;
 import mldr.MLDRUnique;
-import mpdr.MPDRFK;
 import mpdr.MPDRUnique;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
@@ -78,6 +75,11 @@ public class MDRUniqueEditor extends DialogEditor {
         if ( getMvccdElementCrt() instanceof MPDRUnique){
             return "editor.mpdr.unique.read";
         }
+        return null;
+    }
+
+    @Override
+    protected String getTitleSpecialized() {
         return null;
     }
 

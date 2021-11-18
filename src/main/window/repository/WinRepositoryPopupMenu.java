@@ -1,5 +1,6 @@
 package main.window.repository;
 
+import connections.*;
 import console.ConsoleManager;
 import console.ViewLogsManager;
 import datatypes.MDDatatype;
@@ -8,17 +9,12 @@ import exceptions.service.ExceptionService;
 import m.interfaces.IMCompletness;
 import m.interfaces.IMUMLExtensionNamingInBox;
 import m.interfaces.IMUMLExtensionNamingInLine;
-import main.MVCCDElement;
-import main.MVCCDElementApplicationPreferences;
-import main.MVCCDManager;
-import main.MVCCDWindow;
+import main.*;
 import mcd.*;
 import mcd.interfaces.IMCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDNIDService;
-import mdr.MDRElement;
-import mdr.MDRFK;
 import mdr.MDRRelFKEnd;
 import mdr.MDRRelationFK;
 import mdr.interfaces.IMDRElementWithIteration;
@@ -35,8 +31,9 @@ import profile.ProfileSaverXml;
 import project.Project;
 import project.ProjectElement;
 import repository.editingTreat.EditingTreat;
-import repository.editingTreat.mcd.MCDTransformEditingTreat;
 import repository.editingTreat.ProjectEditingTreat;
+import repository.editingTreat.connections.connection.ConConnectionOracleEditingTreat;
+import repository.editingTreat.connections.connector.ConConnectorEditingTreat;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.*;
 import repository.editingTreat.md.MDDatatypeEditingTreat;
@@ -47,8 +44,6 @@ import repository.editingTreat.naming.NamingEditingTreat;
 import repository.editingTreat.preferences.*;
 import resultat.Resultat;
 import utilities.DefaultMutableTreeNodeService;
-import utilities.Trace;
-import utilities.UtilDivers;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
 import utilities.window.scomponents.SMenu;
@@ -83,6 +78,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 if (PreferencesManager.instance().getApplicationPref().getDEBUG_INSPECT_OBJECT_IN_TREE()) {
                     treatInspectObject();
                 }
+                if (node.getUserObject() instanceof MVCCDElementRepositoryRoot){
+                    treatRepositoryRoot(this);
+                }
             }
 
             //TODO-1 A terme, mettre une restriction Debug ou autre
@@ -102,6 +100,18 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             if (node.getUserObject() instanceof MDDatatype) {
                 treatGenericRead(this, new MDDatatypeEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof ConnectionsDB) {
+                treatConnections(this);
+            }
+
+            if (node.getUserObject() instanceof ConConnection) {
+                treatConConnection(this);
+            }
+
+            if (node.getUserObject() instanceof ConConnector) {
+                treatConConnector(this);
             }
 
             if (node.getUserObject() instanceof Preferences) {
@@ -350,6 +360,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             ViewLogsManager.catchException(e, mvccdWindow, message);
         }
     }
+
 
 
 
@@ -602,6 +613,12 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         });
     }
 
+    private void treatConnections(ISMenu menu) {
+        if (node.getUserObject() instanceof ConnectionsOracle) {
+            treatGenericNew(this, new ConConnectionOracleEditingTreat());
+        }
+    }
+
     private void treatMCDModels(ISMenu menu) {
         if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_MODELS_MANY()) {
             treatGenericNew( menu, new MCDModelEditingTreat(),
@@ -838,6 +855,24 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         });
     }
 
+    private void treatRepositoryRoot(WinRepositoryPopupMenu menu) {
+        String textMenu = "Visualisation des CLASSPATH";
+        JMenuItem menuItem = new JMenuItem(textMenu);
+        addItem(menu, menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    String classpath = System.getProperty("java.class.path");
+                    String[] classpathEntries = classpath.split(System.getProperty("path.separator"));
+                    DialogMessage.showOk(mvccdWindow, classpath, "Liste des CLASSPATH");
+                } catch (Exception e) {
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.classpath");
+                }
+            }
+        });
+
+    }
 
     private void treatMDRRelationFKRead(ISMenu menu) {
         String textMenu = MessagesBuilder.getMessagesProperty("menu.read");
@@ -876,6 +911,49 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 }
             }
         });
+    }
+
+    private void treatConConnection(WinRepositoryPopupMenu winRepositoryPopupMenu) {
+
+        if (node.getUserObject() instanceof ConConnection) {
+            ConConnection conConnection = (ConConnection) node.getUserObject();
+            treatGeneric(this, conConnection.getConConnectionEditingTreat());
+            if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE()== ConDBMode.CONNECTOR) {
+                // Nouveau connecteur
+               treatGenericNew(this, conConnection.getConConnectorEditingTreat());
+            }
+        }
+        /*
+        if (node.getUserObject() instanceof ConConnectionOracle) {
+            treatGeneric(this, new ConConnectionOracleEditingTreat());
+            if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE()== ConDBMode.CONNECTOR) {
+                treatGenericNew(this, new ConConnectorOracleEditingTreat());
+            }
+        }
+
+         */
+    }
+
+    private void treatConConnector(WinRepositoryPopupMenu winRepositoryPopupMenu) {
+
+        if (node.getUserObject() instanceof ConConnectorOracle) {
+            ConConnector conConnector = (ConConnector) node.getUserObject();
+            ConConnectorEditingTreat conConnectorEditingTreat = conConnector.getConConnectorEditingTreat();
+            treatGenericRead(this, conConnectorEditingTreat);
+            if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE()== ConDBMode.CONNECTOR) {
+                treatGenericUpdate(this, conConnectorEditingTreat);
+            }
+            treatGenericDelete(this, conConnectorEditingTreat);
+            if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE()== ConDBMode.CONNECTOR) {
+                treatGenericCompletness(this, conConnectorEditingTreat);
+            }
+        }
+        /*
+        if (node.getUserObject() instanceof ConConnectorOracle) {
+            treatGeneric(this, new ConConnectorOracleEditingTreat());
+        }
+
+         */
     }
 
 

@@ -4,7 +4,6 @@ import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 import utilities.files.UtilFiles;
 
 import javax.swing.*;
@@ -57,7 +56,7 @@ public class ProjectFileChooser extends JFileChooser {
                 extension = "xml";
             }
             file = new File(MVCCDManager.instance().getProject().getName() +
-                        Preferences.FILE_DOT + extension);
+                    Preferences.FILE_DOT + extension);
             setSelectedFile(file);
         }
 
@@ -93,7 +92,5 @@ public class ProjectFileChooser extends JFileChooser {
         }
         return null;
     }
-
-
 
 }

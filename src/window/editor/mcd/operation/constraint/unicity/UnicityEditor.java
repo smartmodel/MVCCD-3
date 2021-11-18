@@ -40,4 +40,10 @@ public abstract class UnicityEditor extends DialogEditor {
     protected void setLocationCustom(Point point) {
 
     }
+
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
 }

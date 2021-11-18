@@ -1,6 +1,7 @@
 package repository;
 
 import main.MVCCDElement;
+import main.MVCCDElementApplicationConnections;
 import main.MVCCDElementProfileEntry;
 import mdr.MDRRelEnd;
 import profile.Profile;
@@ -16,6 +17,7 @@ public class Repository extends DefaultTreeModel{
     private DefaultMutableTreeNode nodeProject = null;
     private DefaultMutableTreeNode nodeProfileEntry = null;
     private DefaultMutableTreeNode nodeProfile = null;
+    private DefaultMutableTreeNode nodeConnexionsEntry = null;
 
     public Repository(DefaultMutableTreeNode rootNode, MVCCDElement rootMvccdElement){
         super(rootNode);
@@ -55,6 +57,9 @@ public class Repository extends DefaultTreeModel{
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(childs.get(i));
             if (childs.get(i) instanceof MVCCDElementProfileEntry){
                 nodeProfileEntry = node ;
+            }
+            if (childs.get(i) instanceof MVCCDElementApplicationConnections){
+                nodeConnexionsEntry = node ;
             }
             nodeParent.add (node);
             //#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
@@ -181,5 +186,9 @@ public class Repository extends DefaultTreeModel{
     @Override
     public Object getRoot() {
         return (DefaultMutableTreeNode) super.getRoot();
+    }
+
+    public DefaultMutableTreeNode getNodeConnexionsEntry() {
+        return nodeConnexionsEntry;
     }
 }

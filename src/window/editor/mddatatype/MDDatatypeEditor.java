@@ -63,8 +63,16 @@ public class MDDatatypeEditor extends DialogEditor {
         return null;
     }
 
+    //TODO-0 A voir pourquoi la propriété est préfixée mcd
     @Override
     protected String getPropertyTitleRead() {
         return "mcddatype.application.read";
     }
+
+
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
 }

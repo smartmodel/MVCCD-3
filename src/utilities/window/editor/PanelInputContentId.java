@@ -1,10 +1,8 @@
 package utilities.window.editor;
 
-import m.services.MElementService;
 import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.interfaces.IMCDModel;
-import mcd.services.MCDElementService;
 import mcd.services.MCDUtilService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -265,6 +263,7 @@ public abstract class PanelInputContentId extends PanelInputContent {
         Object source = focusEvent.getSource();
 
         if (source == fieldName) {
+            //TODO-0 A voir s'il ne faut pas appeler checkDatasPreSave
             checkDatas(fieldName);
         }
         if (source == fieldShortName) {

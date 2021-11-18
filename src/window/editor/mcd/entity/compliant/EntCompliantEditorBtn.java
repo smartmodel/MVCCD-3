@@ -75,5 +75,9 @@ public class EntCompliantEditorBtn extends DialogEditorNavBtn {
         return "editor.entity.compliant.read";
     }
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
 
 }

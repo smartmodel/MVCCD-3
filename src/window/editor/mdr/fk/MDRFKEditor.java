@@ -3,7 +3,6 @@ package window.editor.mdr.fk;
 import mdr.MDRContConstraints;
 import mdr.MDRFK;
 import mldr.MLDRFK;
-import mldr.MLDRPK;
 import mpdr.MPDRFK;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
@@ -76,6 +75,11 @@ public class MDRFKEditor extends DialogEditor {
         if ( getMvccdElementCrt() instanceof MPDRFK){
             return "editor.mpdr.fk.read";
         }
+        return null;
+    }
+
+    @Override
+    protected String getTitleSpecialized() {
         return null;
     }
 

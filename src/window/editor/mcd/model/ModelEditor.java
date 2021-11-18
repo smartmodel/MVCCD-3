@@ -91,4 +91,10 @@ public class ModelEditor extends DialogEditor {
         }
         return null;
     }
+
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
 }

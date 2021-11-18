@@ -12,7 +12,6 @@ import project.ProjectElement;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -187,7 +186,10 @@ public abstract class EditingTreat {
                 if (showDialog) {
                     message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.question.input");
                     if (DialogMessage.showConfirmYesNo_Yes(owner, message) == JOptionPane.YES_OPTION) {
-                        DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
+                        //DialogEditor fen = getDialogEditor(owner, (MElement) mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
+                        // Utilisation pour les connexions qui n'héritent pas de MElement
+                        //#MAJ 2021-11-15 Utilisation de complétude pour les connexions
+                        DialogEditor fen = getDialogEditor(owner, mvccdElement.getParent(), mvccdElement, DialogEditor.UPDATE);
                         fen.setVisible(true);
                     }
                 } else {

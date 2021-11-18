@@ -77,6 +77,12 @@ public class MCDTargetsEditor extends DialogEditor {
         return "editor.imcdelementwithtargets.targets.read";
     }
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
+
     protected String getElementNameTitle(){
          String theElement = "";
          if (getMvccdElementCrt() instanceof MCDEntity){

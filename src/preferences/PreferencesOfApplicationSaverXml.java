@@ -1,6 +1,9 @@
 package preferences;
 
-import java.io.File;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import utilities.files.TranformerForXml;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -8,9 +11,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import utilities.files.TranformerForXml;
+import java.io.File;
 
 /**
  * Cette classe fournit le nécessaire pour sauvegarder les préférences d'application dans le fichier XML application.pref. Cette méthode de sauvegarde vise à remplacer la sauvegarde dans un fichier sérialisé.
@@ -70,6 +71,10 @@ public class PreferencesOfApplicationSaverXml {
       //Sauver la constante de texte (warning.level.info par exemple) et non le texte (info)
       warningLevel.appendChild(document.createTextNode(prefApp.getWARNING_LEVEL().getName()));
       preferences.appendChild(warningLevel);
+
+      Element conDBMode = document.createElement("conDBMode");
+      conDBMode.appendChild(document.createTextNode(prefApp.getCON_DB_MODE().getName()));
+      preferences.appendChild(conDBMode);
 
       Element repositoryMcdModelsMny = document.createElement("repositoryMcdModelsMany");
       repositoryMcdModelsMny.appendChild(document.createTextNode(prefApp.getREPOSITORY_MCD_MODELS_MANY().toString()));

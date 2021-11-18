@@ -64,8 +64,6 @@ public class MDDatatypesManager {
                 applicationMDDatatypes);
         defaultMPDRPostgreSQLDatatypeRoot = createDefaultMPDRPostgreSQL.create();
 
-
-
     }
 
     public MDDatatypes mdDatatypes (){

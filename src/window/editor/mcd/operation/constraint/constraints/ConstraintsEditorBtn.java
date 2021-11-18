@@ -77,4 +77,10 @@ public class ConstraintsEditorBtn extends DialogEditorNavBtn {
     protected String getElementNameTitle(){
         return getMvccdElementCrt().getParent().getName();
     }
+
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
 }

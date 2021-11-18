@@ -78,5 +78,10 @@ public class MDRPKEditor extends DialogEditor {
         return null;
     }
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
 
 }

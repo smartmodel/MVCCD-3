@@ -47,6 +47,12 @@ public class PrefApplicationEditor extends DialogEditor {
     }
 
     @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
+
+    @Override
     protected PanelButtons getButtonsCustom() {
         return new PrefApplicationButtons(this);
     }

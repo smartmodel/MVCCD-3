@@ -76,5 +76,11 @@ public class EntityEditor extends DialogEditorNavBtn {
         return "editor.entity.read";
     }
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
+
 
 }

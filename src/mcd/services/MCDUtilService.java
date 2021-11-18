@@ -1,5 +1,6 @@
 package mcd.services;
 
+import application.ApplElement;
 import exceptions.CodeApplException;
 import main.MVCCDElement;
 import main.MVCCDElementService;
@@ -34,10 +35,12 @@ public class MCDUtilService {
         Boolean error = false;
 
         if (StringUtils.isNotEmpty(text)) {
-            if (!text.matches(regularExpr)) {
-                messages.add(MessagesBuilder.getMessagesProperty("editor.format.error"
-                        , new String[]{message1, message2, regularExpr}));
-                error = true;
+            if (regularExpr != null) {
+                if (!text.matches(regularExpr)) {
+                    messages.add(MessagesBuilder.getMessagesProperty("editor.format.error"
+                            , new String[]{message1, message2, regularExpr}));
+                    error = true;
+                }
             }
             if (lengthMax != null) {
                 if (text.length() > lengthMax) {
@@ -119,11 +122,24 @@ public class MCDUtilService {
                                                            boolean uppercase,
                                                            String contextMessage) {
 
-        MCDElement elementConflict = (MCDElement) MVCCDElementService.nameExistInOthersChilds(brothers,
+        //#MAJ 2021-10-25 Type de retour trop restrictif
+        MVCCDElement elementConflict =  MVCCDElementService.nameExistInOthersChilds(brothers,
                 name, uppercase);
         if (elementConflict != null) {
             return messagesExistNaming(name, uppercase, "naming.exist.element",
                     contextMessage, "naming.name", elementConflict.getName());
+        }
+
+        //TODO-1 A voir si ajouter modèle, paquetage, association...
+        return new ArrayList<String>();
+    }
+
+    public static ArrayList<String> checkExistLienProgInBrothers(ArrayList<ApplElement> brothers,
+                                                           String lienProg) {
+
+        ApplElement elementConflict =  MVCCDElementService.lienProgExistInBrothers(brothers, lienProg);
+        if (elementConflict != null) {
+            return messagesExistLienProg(lienProg, elementConflict.getName());
         }
 
         //TODO-1 A voir si ajouter modèle, paquetage, association...
@@ -198,18 +214,18 @@ public class MCDUtilService {
     }
 
     public static ArrayList<String> messagesExistNaming(String naming,
-                                                         boolean uppercase,
-                                                         String bodyMessage,
-                                                         String contextMessage,
-                                                         String typeNaming,
-                                                         String nameElementConflict) {
+                                                        boolean uppercase,
+                                                        String bodyMessage,
+                                                        String contextMessage,
+                                                        String typeNaming,
+                                                        String nameElementConflict) {
         ArrayList<String> messages = new ArrayList<String>();
 
         String messageContext = MessagesBuilder.getMessagesProperty(contextMessage, nameElementConflict);
         String messageTypeNaming = MessagesBuilder.getMessagesProperty(typeNaming);
 
         messages.add(0, MessagesBuilder.getMessagesProperty(bodyMessage
-        , new String[]{messageTypeNaming, naming, messageContext}));
+                , new String[]{messageTypeNaming, naming, messageContext}));
         if (uppercase) {
             messages.add(MessagesBuilder.getMessagesProperty("naming.uppercase"));
         } else {
@@ -217,6 +233,37 @@ public class MCDUtilService {
         }
         return messages;
     }
+
+    public static ArrayList<String> messagesExistLienProg(String lienProg,
+                                                          String nameElementConflict) {
+        ArrayList<String> messages = new ArrayList<String>();
+
+        messages.add(0, MessagesBuilder.getMessagesProperty("lienprog.exist.element"
+                , new String[]{lienProg, nameElementConflict}));
+
+        messages.add(MessagesBuilder.getMessagesProperty("naming.uppercase"));
+        return messages;
+    }
+
+    public static ArrayList<String> checkNameAlone(ArrayList<MVCCDElement> brothers,
+                                                String name,
+                                                boolean mandatory,
+                                                int lengthMax,
+                                                String naming,
+                                                String element,
+                                                String namingAndBrothersElementsSelf) {
+
+        ArrayList<String> messages = MCDUtilService.checkString(name, mandatory, lengthMax,
+                Preferences.NAME_REGEXPR, naming, element);
+
+        if (messages.size() == 0) {
+            messages.addAll(MCDUtilService.checkExistNameInChilds(brothers, name, true,
+                    namingAndBrothersElementsSelf));
+        }
+
+        return messages;
+    }
+
 
     public static ArrayList<String> checkNameId(ArrayList<MVCCDElement> brothers,
                                                 String name,
@@ -244,9 +291,6 @@ public class MCDUtilService {
         }
         ArrayList<String> messages = MCDUtilService.checkString(name, mandatory, lengthMax,
                 Preferences.NAME_REGEXPR, naming, element);
-
-
-
 
         if (messages.size() == 0) {
             messages.addAll(MCDUtilService.checkExistNameInChilds(brothers, nameId, true,

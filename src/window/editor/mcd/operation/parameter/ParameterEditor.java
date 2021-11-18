@@ -77,4 +77,10 @@ public class ParameterEditor extends DialogEditor {
         return "editor.parameter.read";
     }
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
+
 }

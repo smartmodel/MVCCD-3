@@ -12,7 +12,6 @@ import preferences.Preferences;
 import project.ProjectElement;
 import project.ProjectService;
 import repository.editingTreat.EditingTreat;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.ReadTableModel;
 import utilities.window.editor.services.PanelInputContentTableService;
@@ -245,7 +244,6 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
         /*
         //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
         //MElement mElement = newElement();
-        Trace.println("Entré");
         MElement mElement = (MElement) editingTreatDetail().treatNew(getEditor(), getEditor().getMvccdElementCrt());
 
         if (mElement != null) {
@@ -347,7 +345,6 @@ public abstract class PanelInputContentIdTable extends PanelInputContentId
 /*
     protected  boolean noChangeOtherThanTable(){
         boolean resultat = true ;
-        Trace.println("");
         for ( SComponent sComponent : super.getSComponents()){
             if (!(sComponent instanceof STable)) {
                 resultat = resultat && (!sComponent.checkIfUpdated());

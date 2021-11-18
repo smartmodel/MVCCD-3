@@ -1,5 +1,7 @@
 package main;
 
+import connections.ConElement;
+import connections.services.ConnectionsService;
 import console.ConsoleManager;
 import console.ViewLogsManager;
 import datatypes.MDDatatypesManager;
@@ -179,26 +181,46 @@ public class MVCCDManager {
     }
 
     public void addNewMVCCDElementInRepository(MVCCDElement mvccdElementNew) {
-        ProjectElement parent = (ProjectElement) mvccdElementNew.getParent();
-        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(parent.getIdProjectElement());
-        DefaultMutableTreeNode nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
+        DefaultMutableTreeNode nodeParent = null;
+        DefaultMutableTreeNode nodeNew = null;
+        if (mvccdElementNew instanceof ProjectElement) {
+            ProjectElement parent = (ProjectElement) mvccdElementNew.getParent();
+            nodeParent = ProjectService.getNodeById(parent.getIdProjectElement());
+            nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
+            //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
+            // Un changement Repository !--> changment projet
+            // setDatasProjectChanged(true);
+        }
+        if (mvccdElementNew instanceof ConElement) {
+            ConElement parent = (ConElement) mvccdElementNew.getParent();
+            nodeParent = ConnectionsService.getNodeByLienProg(parent.getLienProg());
+            nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
+         }
         getWinRepositoryContent().getTree().changeModel(repository);
         getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(nodeNew.getPath()));
-        //#MAJ 2021-06-30 Affinement de la trace de modification pour déclencher Save
-        // Un changement Repository !--> changment projet
-        // setDatasProjectChanged(true);
+
     }
 
     public void showMVCCDElementInRepository(MVCCDElement mvccdElement) {
-        if (mvccdElement instanceof ProjectElement) {
+        DefaultMutableTreeNode node = null;
+        boolean c1 = mvccdElement instanceof ProjectElement;
+        boolean c2 = mvccdElement instanceof ConElement;
+        if (c1) {
             ProjectElement projectElement = (ProjectElement) mvccdElement;
-            DefaultMutableTreeNode node = ProjectService.getNodeById(projectElement.getIdProjectElement());
+            node = ProjectService.getNodeById(projectElement.getIdProjectElement());
+        }
+        if (c2) {
+            ConElement conElement = (ConElement) mvccdElement;
+            node = ConnectionsService.getNodeByLienProg(conElement.getLienProg());
+         }
+        if (c1 || c2) {
             //getWinRepositoryContent().getTree().changeModel(repository);
             getWinRepositoryContent().getTree().getTreeModel().reload(node);
             //TreePath nodeTreePath = new TreePath(node.getPath());
             //getWinRepositoryContent().getTree().scrollPathToVisible(nodeTreePath);
             getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(node.getPath()));
         }
+
     }
 
     // A priori pour le remplacement des paramètres d'une contrainte/opération dont
@@ -641,6 +663,18 @@ public class MVCCDManager {
             return null;
         }
     }
+
+
+    public MVCCDElementApplicationConnections getConnectionsRoot() {
+        MVCCDElement mvccdElement = MVCCDElementService.getUniqueInstanceByClassName(rootMVCCDElement,
+                MVCCDElementApplicationConnections.class.getName());
+        if (mvccdElement != null) {
+            return (MVCCDElementApplicationConnections) mvccdElement;
+        } else {
+            return null;
+        }
+    }
+
 
     //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
     public boolean isExtensionProjectFileNotEqual() {

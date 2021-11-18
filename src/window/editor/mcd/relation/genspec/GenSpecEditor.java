@@ -69,4 +69,9 @@ public class GenSpecEditor extends DialogEditor {
         return "editor.genspec.read";
     }
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
 }

@@ -1,12 +1,8 @@
 package window.editor.mdr.parameter;
 
-import mdr.MDRColumn;
 import mdr.MDRConstraint;
-import mdr.MDRContColumns;
 import mdr.MDRParameter;
-import mldr.MLDRColumn;
 import mldr.MLDRParameter;
-import mpdr.MPDRColumn;
 import mpdr.MPDRParameter;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
@@ -81,6 +77,11 @@ public class MDRParameterEditor extends DialogEditor {
         if ( getMvccdElementCrt() instanceof MPDRParameter){
             return "editor.mpdr.parameter.read";
         }
+        return null;
+    }
+
+    @Override
+    protected String getTitleSpecialized() {
         return null;
     }
 

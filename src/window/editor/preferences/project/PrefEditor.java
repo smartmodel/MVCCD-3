@@ -67,4 +67,9 @@ public abstract class PrefEditor extends DialogEditorNavTree {
     }
 
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
 }

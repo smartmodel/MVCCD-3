@@ -1,29 +1,26 @@
-package connexions;
+package connections;
 
 import messages.MessagesBuilder;
 import preferences.Preferences;
 
-public enum ConDB {
-    ORACLE (Preferences.CON_DB_ORACLE),
-    MYSQL (Preferences.CON_DB_MYSQL),
-    POSTGRESQL (Preferences.CON_DB_POSTGRESQL);
+public enum ConIDDBName {
+    NAME_STD(Preferences.CON_IDDB_NAME_STD),
+    SID(Preferences.CON_IDDB_NAME_SID),
+    SERVICE_NAME(Preferences.CON_IDDB_NAME_SERVICE_NAME);
 
     private final String name;
 
-    ConDB(String name) {
+    ConIDDBName(String name) {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getText() {
         return MessagesBuilder.getMessagesProperty(name);
     }
 
-    public static ConDB findByText(String text){
-        for (ConDB element: ConDB.values()){
+
+    public static ConIDDBName findByText(String text){
+        for (ConIDDBName element: ConIDDBName.values()){
             if (element.getText().equals(text)) {
                 return element;
             }

@@ -3,7 +3,6 @@ package console;
 import exceptions.CodeApplException;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 import resultat.ResultatElement;
 import utilities.files.UtilFiles;
 
@@ -102,7 +101,8 @@ public class LogsManager {
      * @return
      */
     static public String getlogFilePath(){
-        if(Preferences.LOGGING_FOLDER_PATH != null){
+        //#MAJ 2021-10-31 Préférence LOGGING_FOLDER_PATH redondante avec DIRECTORY_LOGGING_NAME
+        if(Preferences.DIRECTORY_LOGGING_NAME != null){
             return UtilFiles.filePath(Preferences.DIRECTORY_LOGGING_NAME, getLogFileName());
        }else{
             String msg = MessagesBuilder.getMessagesProperty("plugin.logging.folder.path.null");

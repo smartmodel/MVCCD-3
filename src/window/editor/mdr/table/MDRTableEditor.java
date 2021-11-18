@@ -90,5 +90,9 @@ public class MDRTableEditor extends DialogEditorNavBtn {
         return null;
     }
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
 
 }

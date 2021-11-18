@@ -84,5 +84,9 @@ public class MDRModelEditor extends DialogEditor {
         return null;
     }
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
 
 }

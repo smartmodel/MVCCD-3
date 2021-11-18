@@ -3,8 +3,8 @@ package utilities.window.editor;
 import m.MElement;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
+import org.apache.commons.lang.StringUtils;
 import repository.editingTreat.EditingTreat;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.PanelBorderLayoutResizer;
 
@@ -284,6 +284,9 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
         super.setTitle(title);
     }
 
+    // Ajouté pour les éditeurs spécialisés de connexion SGBD
+    protected abstract String getTitleSpecialized ();
+
     private String getTitleByMode(String mode) {
         String title="";
         if (mode.equals(DialogEditor.NEW)){
@@ -298,7 +301,10 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
             title = MessagesBuilder.getMessagesProperty(getPropertyTitleRead(), new String[]{
                     getElementNameTitle() });
         }
-        return title;
+        if (StringUtils.isNotEmpty(getTitleSpecialized())){
+            title = title + getTitleSpecialized();
+        }
+        return title ;
     }
 
     protected abstract String getPropertyTitleNew();

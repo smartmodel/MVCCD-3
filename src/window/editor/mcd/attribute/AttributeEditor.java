@@ -67,4 +67,10 @@ public class AttributeEditor extends DialogEditor {
         return "editor.attribute.read";
     }
 
+    @Override
+    protected String getTitleSpecialized() {
+        return null;
+    }
+
+
 }
