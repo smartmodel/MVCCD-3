@@ -4,6 +4,7 @@ import connections.services.ConConnectionService;
 import m.interfaces.IMCompletness;
 import main.MVCCDElement;
 import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
 import repository.editingTreat.connections.connection.ConConnectionEditingTreat;
 import repository.editingTreat.connections.connector.ConConnectorEditingTreat;
 
@@ -130,5 +131,9 @@ public abstract class ConConnection extends ConElement implements IMCompletness 
 
     public abstract ConConnectionEditingTreat getConConnectionEditingTreat();
     public abstract ConConnectorEditingTreat getConConnectorEditingTreat();
+
+    public String getNamePath(){
+        return getConDB() + Preferences.PATH_NAMING_SEPARATOR + getName();
+    }
 
 }

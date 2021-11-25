@@ -244,9 +244,16 @@ public class MVCCDManager {
 
     public void removeMVCCDElementInRepository(MVCCDElement mvccdElementToRemove, MVCCDElement parent) {
         // Suppression dans l'arbre de référentiel
-        DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(((ProjectElement)parent).getIdProjectElement());
-        ProjectElement child = (ProjectElement) mvccdElementToRemove;
-        DefaultMutableTreeNode nodeChild= ProjectService.getNodeById(child.getIdProjectElement());
+        DefaultMutableTreeNode nodeChild = null;
+        if ( mvccdElementToRemove instanceof ProjectElement) {
+            //DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(((ProjectElement) parent).getIdProjectElement());
+            ProjectElement child = (ProjectElement) mvccdElementToRemove;
+            nodeChild = ProjectService.getNodeById(child.getIdProjectElement());
+        }
+        if ( mvccdElementToRemove instanceof ConElement) {
+            ConElement child = (ConElement) mvccdElementToRemove;
+            nodeChild = ConnectionsService.getNodeByLienProg(child.getLienProg());
+        }
 
         //TODO-0 A revoir le problème de suppression d'une relation qui aurait perdu une extrémité
         // Méthode : removeMCDRelationAndDependantsInRepository

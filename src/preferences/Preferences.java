@@ -51,9 +51,13 @@ public class Preferences extends MVCCDElement {
   public static String REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME = "MPDR_PostgreSQL";
 
 
+  /*
   public static String CON_DB_ORACLE = "con.db.oracle";
   public static String CON_DB_MYSQL = "con.db.mysql";
   public static String CON_DB_POSTGRESQL = "con.db.postgresql";
+
+  Remplacé par DB_ORACLE...
+   */
 
   public static String CON_DB_MODE_CONNECTION = "con.db.mode.connection";
   public static String CON_DB_MODE_CONNECTOR = "con.db.mode.connector";
@@ -125,6 +129,8 @@ public class Preferences extends MVCCDElement {
   public static String CON_HOSTNAME_REGEXPR = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"; //Provient de  : https://stackoverflow.com/questions/106179/regular-expression-to-match-dns-hostname-or-ip-address
   public static String CON_DBNAME_REGEXPR = "^[0-9a-zA-Z$_]+$"; //Provient de  : https://stackoverflow.com/questions/6731833/database-name-regex-restriction
   public static String REGEXPR_1_99 = "[1-9]{1}[0-9]{0,1}";
+  public static String NAME_NOTMODEL_REGEXPR = "[a-zA-Z0-9_]*";
+
 
   public static String MULTI_MERISE_N = "n";
   public static String MULTI_OCL_SP = "\\.\\.";
@@ -527,9 +533,11 @@ public class Preferences extends MVCCDElement {
   public static String MDR_UNIQUE_NATURE_SIMCP = "mdr.unique.nature.simcp";
   public static String MDR_UNIQUE_NATURE_FKMAXONECHILD = "mdr.unique.nature.fkmaxonechild";
 
-  public static String MPDR_DB_ORACLE = "mpdr.db.oracle";
-  public static String MPDR_DB_MYSQL = "mpdr.db.mysql";
-  public static String MPDR_DB_POSTGRESQL = "mpdr.db.postgresql";
+
+  public static String DB_ORACLE = "db.oracle";
+  public static String DB_MYSQL = "db.mysql";
+  public static String DB_POSTGRESQL = "db.postgresql";
+
 
   public static String MLDRDATATYPE_ROOT_NAME = "MLD-R";
   public static String MLDRDATATYPE_ROOT_LIENPROG = "MLD-R";
@@ -1272,7 +1280,7 @@ public class Preferences extends MVCCDElement {
 
   public String getMLDRTOMPDR_DB() {
     if (this.MLDRTOMPDR_DB == null) {
-      this.MLDRTOMPDR_DB = MPDR_DB_ORACLE;
+      this.MLDRTOMPDR_DB = DB_ORACLE;
     }
     return this.MLDRTOMPDR_DB;
   }

@@ -1,9 +1,6 @@
 package connections.services;
 
-import connections.ConDB;
-import connections.ConElement;
-import connections.ConIDDBName;
-import connections.ConManager;
+import connections.*;
 import generatesql.MPDRGenerateSQLUtil;
 import main.MVCCDManager;
 import org.apache.commons.lang.StringUtils;
@@ -18,6 +15,22 @@ public class ConnectionsService {
             if (conElement.getLienProg().equals(lienProg)){
                 return conElement;
             }
+        }
+        return null;
+    }
+
+    public static ConConnection getConConnectionByLienProg(String lienProg) {
+        ConElement conElement = getConElementByLienProg(lienProg);
+        if (conElement instanceof ConConnection){
+            return (ConConnection)conElement;
+        }
+        return null;
+    }
+
+    public static ConConnector getConConnectorByLienProg(String lienProg) {
+        ConElement conElement = getConElementByLienProg(lienProg);
+        if (conElement instanceof ConConnector){
+            return (ConConnector)conElement;
         }
         return null;
     }

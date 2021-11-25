@@ -1,13 +1,12 @@
 package mpdr;
 
 import datatypes.MPDRDatatype;
-import main.MVCCDElementFactory;
 import generatesql.MPDRGenerateSQL;
 import generatesql.window.GenerateSQLWindow;
+import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import mdr.MDRElement;
 import mdr.MDRModel;
-import mdr.MDRRelFKEnd;
 import mdr.interfaces.IMDRElementWithIteration;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
@@ -19,15 +18,18 @@ import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRRelation;
 import mpdr.services.MPDRModelService;
 import project.ProjectElement;
-import utilities.Trace;
 import resultat.Resultat;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     private static final long serialVersionUID = 1000;
     private MPDRDB db = null;
+
+    // Les 2 liens de Connection et Connector peuvent exister si la préférence d'application est changée
+    // Par contre, lorsqiûe Connector est utilisé l'instance de Connection est trouvée en passant par son parent!
+    private String connectionLienProg = null;
+    private String connectorLienProg = null;
 
     public MPDRModel(ProjectElement parent, String name, MPDRDB db) {
         super(parent, name);
@@ -114,4 +116,19 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         return null;
     }
 
+    public String getConnectionLienProg() {
+        return connectionLienProg;
+    }
+
+    public void setConnectionLienProg(String connectionLienProg) {
+        this.connectionLienProg = connectionLienProg;
+    }
+
+    public String getConnectorLienProg() {
+        return connectorLienProg;
+    }
+
+    public void setConnectorLienProg(String connectorLienProg) {
+        this.connectorLienProg = connectorLienProg;
+    }
 }

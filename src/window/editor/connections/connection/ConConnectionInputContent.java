@@ -32,7 +32,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.util.ArrayList;
 
-public class ConConnectionInputContent extends PanelInputContent implements ActionListener {
+public abstract class ConConnectionInputContent extends PanelInputContent implements ActionListener {
 
     protected JPanel panelDriver = new JPanel ();
     protected JPanel panelUser = new JPanel ();
@@ -103,9 +103,15 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
 
     @Override
     protected void enabledContent() {
-       btnTest.setEnabled(checkDatas(null));
-
     }
+
+
+    public void enabledButtons() {
+        super.enabledButtons();
+        btnDriverChoice.setEnabled(radDriverCustom.isSelected());
+        btnTest.setEnabled(checkDatas(null));
+    }
+
 
     @Override
     public void createContentCustom() {
@@ -118,12 +124,12 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
 
         labelDriverDefault = new JLabel("Défaut ");
         radDriverDefault = new SRadioButton(this,labelDriverDefault);
-        radDriverDefault.addActionListener(this);
+        radDriverDefault.addItemListener(this);
         radDriverDefault.addFocusListener(this);
 
         labelDriverCustom = new JLabel("Personnalisé ");
         radDriverCustom = new SRadioButton(this, labelDriverCustom);
-        radDriverCustom.addActionListener(this);
+        radDriverCustom.addItemListener(this);
         radDriverCustom.addFocusListener(this);
 
         radGroupDriver = new ButtonGroup();
@@ -228,6 +234,7 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
 
         super.getSComponents().add(fieldName);
         super.getSComponents().add(radDriverDefault);
+        super.getSComponents().add(radDriverCustom);
         super.getSComponents().add(fieldDriverDefault);
         super.getSComponents().add(fieldDriverCustom);
         super.getSComponents().add(btnDriverChoice);
@@ -250,7 +257,7 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
     protected boolean changeField(DocumentEvent e) {
         Document doc = e.getDocument();
         if (doc == fieldName.getDocument()) {
-            return checkDatasPreSave(fieldName);
+            return checkDatas(fieldName);
         } else if (doc == fieldHostName.getDocument()) {
             return checkDatas(fieldHostName);
         } else if (doc == fieldPort.getDocument()) {
@@ -290,7 +297,7 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
         Object source = focusEvent.getSource();
 
         if (source == fieldName) {
-            checkDatasPreSave(fieldName);
+            checkDatas(fieldName);
         }
         if (source == fieldHostName) {
             checkDatas(fieldHostName);
@@ -622,7 +629,10 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
         if (ok) {
             boolean notBatch = panelInput != null;
 
-            boolean unitaire = notBatch && (sComponent == fieldHostName);
+            boolean unitaire = notBatch && (sComponent == radDriverCustom);
+            ok = checkDriverCustom(unitaire) && ok;
+
+            unitaire = notBatch && (sComponent == fieldHostName);
             boolean hostNameOk = checkHostName(unitaire);
             hostNameURL = (hostNameOk)?fieldHostName.getText():null;
             ok = hostNameOk && ok;
@@ -659,7 +669,6 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
     }
 
 
-
     protected boolean checkName(boolean unitaire){
         return checkName(unitaire, true);
     }
@@ -671,6 +680,7 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
                 fieldName.getText(),
                 true,
                 Preferences.CON_NAME_LENGTH,
+                Preferences.NAME_NOTMODEL_REGEXPR,
                 "naming.of.name",   // Le non
                 "of.connection",     // La connexion
                 "naming.a.sister.connexion"));
@@ -696,6 +706,20 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
     }
 
 
+
+    protected boolean checkDriverCustom(boolean unitaire){
+        if ( radDriverCustom.isSelected()) {
+            return super.checkInput(fieldDriverCustom, unitaire, MCDUtilService.checkString(
+                    fieldDriverCustom.getText(),
+                    true,
+                    null,
+                    null, // Le format est pris en charge par le sélecteur de fichier
+                    "of.filename",
+                    "of.driver"));
+        } else {
+            return true;
+        }
+    }
     protected boolean checkHostName(boolean unitaire){
         return checkHostName(unitaire, true);
     }
@@ -798,6 +822,7 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
                 propertyAction = "editor.con.connection.btn.exception.port.default";
                 actionPortDefault();
             }
+            /*
             if (source == radDriverDefault) {
                 propertyAction = "editor.con.connection.rad.btn.exception.defaultt";
                 btnDriverChoice.setEnabled(false);
@@ -806,9 +831,15 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
                 propertyAction = "editor.con.connection.rad.btn.exception.custom";
                 btnDriverChoice.setEnabled(true);
             }
+
+             */
             if (source == btnDriverChoice) {
                 propertyAction = "editor.con.connection.btn.exception.custom.choice";
                 actionDiverFileChoice();
+                // Relancer le contrôle
+                checkDatas(btnDriverChoice);
+                // Activer/Désactiver Ok/Apply
+                enabledButtons();
             }
             if (source == btnUserPWClear) {
                 propertyAction = "editor.con.connection.btn.exception.pw.clear";
@@ -856,9 +887,11 @@ public class ConConnectionInputContent extends PanelInputContent implements Acti
                     );
 
             // S'il y a erreur, elle est levée directement par createConnection()
-            String message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
-            ViewLogsManager.printMessage(message, ResultatLevel.INFO);
-            ViewLogsManager.dialogQuittance(getEditor(), message);
+            if ( connection != null) {
+                String message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
+                ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+                ViewLogsManager.dialogQuittance(getEditor(), message);
+            }
             /*
             Statement statement = connection.createStatement();
             statement.executeUpdate("CREATE TABLE TABLE3 (COLUMN1 VARCHAR2(20))");

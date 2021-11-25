@@ -30,6 +30,6 @@ public abstract class ApplElement extends MVCCDElement {
      * Retourne une liste ordonnée des frères et soeurs.
      */
     public ArrayList<ApplElement> getApplBrothers(){
-        return ApplElementConvert.to(getParent().getBrothers());
+        return ApplElementConvert.to(getBrothers());
     }
 }

@@ -4,7 +4,6 @@ import exceptions.CodeApplException;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
 import utilities.Debug;
-import utilities.Trace;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -201,7 +200,6 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
      * @return
      */
     public ArrayList<MVCCDElement> getSiblings(){
-
         return getParent().getChilds();
     }
 

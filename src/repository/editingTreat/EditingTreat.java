@@ -1,5 +1,6 @@
 package repository.editingTreat;
 
+import connections.ConElement;
 import console.ViewLogsManager;
 import m.MElement;
 import main.MVCCDElement;
@@ -175,11 +176,16 @@ public abstract class EditingTreat {
             }
         } else {
             if (!checkInput(panelInputContent)) {
-                String elementNameInContext ;
+                String elementNameInContext = null;
                 if (showDialog) {
                     elementNameInContext = mvccdElement.getNameTree();
                 } else {
-                    elementNameInContext = ((MCDElement) mvccdElement).getNameTreePath();
+                    if ( mvccdElement instanceof MCDElement) {
+                        elementNameInContext = ((MCDElement) mvccdElement).getNameTreePath();
+                    }
+                    if ( mvccdElement instanceof ConElement) {
+                        elementNameInContext = ((ConElement) mvccdElement).getNamePath();
+                    }
                 }
                String message = MessagesBuilder.getMessagesProperty("dialog.completness.error",
                         new String[]{messageElement, elementNameInContext});

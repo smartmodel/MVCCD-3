@@ -9,5 +9,4 @@ public class ConnectionsOracle extends ConnectionsDB {
         super(parent, MessagesBuilder.getMessagesProperty("con.db.oracle"), ConDB.ORACLE);
     }
 
-
 }

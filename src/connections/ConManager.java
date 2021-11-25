@@ -7,7 +7,6 @@ import main.MVCCDElement;
 import main.MVCCDElementApplicationConnections;
 import main.MVCCDManager;
 import preferences.Preferences;
-import resultat.Resultat;
 import resultat.ResultatLevel;
 
 import java.awt.*;
@@ -36,10 +35,10 @@ public class ConManager {
 
     public ConManager() {
         applicationConnections = MVCCDManager.instance().getConnectionsRoot();
-        connectionsOracle = (ConnectionsOracle) getConnectionsBD(ConDB.ORACLE);
+        connectionsOracle = (ConnectionsOracle) getConnectionsDB(ConDB.ORACLE);
     }
 
-    private ConnectionsDB getConnectionsBD(ConDB conDB) {
+    private ConnectionsDB getConnectionsDB(ConDB conDB) {
         for (ConnectionsDB connectionsDB : applicationConnections.getConnectionsDB()) {
             if (connectionsDB.getConDB() == conDB) {
                 return connectionsDB;
@@ -49,9 +48,9 @@ public class ConManager {
     }
 
 
-    public ArrayList<ConConnection> getConResources(ConDB conDB) {
+    public ArrayList<ConConnection> getConConnections(ConDB conDB) {
         ArrayList<ConConnection> resultat = new ArrayList<ConConnection>();
-        ConnectionsDB connectionsDB = getConnectionsBD(conDB);
+        ConnectionsDB connectionsDB = getConnectionsDB(conDB);
         for (MVCCDElement mvccdElement : connectionsDB.getChilds()) {
             if (mvccdElement instanceof ConConnection) {
                 resultat.add((ConConnection) mvccdElement);
@@ -59,6 +58,17 @@ public class ConManager {
         }
         return resultat;
     }
+
+
+    public ConConnection getConConnectionByName(ConDB conDB, String name) {
+        for (ConConnection conConnection : getConConnections(conDB)){
+            if ( conConnection.getName().equals(name)){
+                return conConnection;
+            }
+        }
+        return null;
+    }
+
 
     public ArrayList<ConConnector> getConConnectors(ConConnection conConnection) {
         ArrayList<ConConnector> resultat = new ArrayList<ConConnector>();
@@ -70,9 +80,19 @@ public class ConManager {
         return resultat;
     }
 
+
+    public ConConnector getConConnectorByName(ConConnection conConnection, String name) {
+        for (ConConnector conConnector : getConConnectors(conConnection)){
+            if ( conConnector.getName().equals(name)){
+                return conConnector;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<ConElement> getConElements(ConDB conDB) {
         ArrayList<ConElement> resultat = new ArrayList<ConElement>();
-        for (ConConnection conConnection : getConResources(conDB)) {
+        for (ConConnection conConnection : getConConnections(conDB)) {
             resultat.add(conConnection);
             resultat.addAll(getConConnectors(conConnection));
         }
@@ -82,7 +102,7 @@ public class ConManager {
     public ArrayList<ConElement> getConElements() {
         ArrayList<ConElement> resultat = new ArrayList<ConElement>();
         for (ConDB conDB : ConDB.values()) {
-            resultat.addAll(getConResources(conDB));
+            resultat.addAll(getConElements(conDB));
         }
         return resultat;
     }
@@ -130,18 +150,19 @@ public class ConManager {
 
             return d;
         } catch(Exception e ){
-            throw new CodeApplException(e.getMessage(), e) ;
+            throw new CodeApplException("Erreur chargement du fichier de Driver...   \r\n" + e.getMessage(), e) ;
         }
     }
 
 
+    /*
     // Appel direct depuis une instance de connecteur
     public static Connection createConnection(Window owner,
                                               ConConnector conConnector) {
 
         // Test de l'instance de connecteur
         Resultat resultat = conConnector.getConDB().getConConnectorEditingTreat().treatCompletness(
-                owner, conConnector, true);
+                owner, conConnector, false);
 
         // Test du connecteur avec la connexion parent et userName/PW du connecteur
         if (resultat.isNotError()) {
@@ -150,6 +171,10 @@ public class ConManager {
                                     conConnector.getUserName(),
                                     conConnector.getUserPW() );
         }
+        String message = MessagesBuilder.getMessagesProperty("con.connector.with.error",
+                new String[] {conConnector.getConDB().getText(), conConnector.getName()});
+        ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+        ViewLogsManager.dialogQuittance(owner, message);
         return null;
     }
 
@@ -163,6 +188,7 @@ public class ConManager {
         Connection connection = createConnection(owner, conConnectionParent);
         // Clone de la connexion car, il y a changement du user/pw !
         ConConnection conConnectionParentClone = (ConConnection) conConnectionParent.clone();
+        // !!! Le contrôle de conformité va chercher les frères en remontant au parent qui n'est pas défini dans le clone
         if (connection != null){
             // L'appel se fait depuis l'éditeur, sinon c'est un objet conConnecteur qui est passé en paramètre
             //Mettre le userName et password du connecteur dans l'objet connexion
@@ -179,7 +205,7 @@ public class ConManager {
         // Test de l'instance de connexion
 
         Resultat resultat = conConnection.getConDB().getConConnectionEditingTreat().treatCompletness(
-                owner, conConnection, true);
+                owner, conConnection, false);
 
         if (resultat.isNotError()) {
             return createConnection(owner,
@@ -193,10 +219,56 @@ public class ConManager {
                     conConnection.getUserPW()
             );
         } else {
+            String message = MessagesBuilder.getMessagesProperty("con.connection.with.error",
+                    new String[] {conConnection.getConDB().getText(), conConnection.getName()});
+            ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+            ViewLogsManager.dialogQuittance(owner, message);
             return null;
         }
     }
+    */
 
+    // Appel direct depuis une instance de connecteur
+    public static Connection createConnection(Window owner,
+                                              ConConnector conConnector) {
+
+        return createConnection(owner,
+                    (ConConnection) conConnector.getParent(),
+                    conConnector.getUserName(),
+                    conConnector.getUserPW()
+        );
+    }
+
+    // Appel direct depuis l'édition d'un connecteur
+    public static Connection createConnection(Window owner,
+                                              ConConnection conConnectionParent,
+                                              String userName,
+                                              String userPW) {
+
+         // Clone de la connexion car, il y a changement du user/pw !
+        ConConnection conConnectionParentClone = (ConConnection) conConnectionParent.clone();
+
+        // L'appel se fait depuis l'éditeur, sinon c'est un objet conConnecteur qui est passé en paramètre
+        //Mettre le userName et password du connecteur dans l'objet connexion
+        conConnectionParentClone.setUserName(userName);
+        conConnectionParentClone.setUserPW(userPW);
+        return createConnection(owner, conConnectionParentClone);
+    }
+
+    // Appel direct depuis une instance de connection
+    public static Connection createConnection(Window owner,
+                                              ConConnection conConnection) {
+        return createConnection(owner,
+                conConnection.getConDB(),
+                conConnection.getDriverFileToUse(),
+                conConnection.getHostName(),
+                conConnection.getPort(),
+                conConnection.getConIDDBName(),
+                conConnection.getDbName(),
+                conConnection.getUserName(),
+                conConnection.getUserPW()
+        );
+    }
 
     // Appel direct depuis l'édition d'une connexion
     // Sinon appel en fin par les 3 autres méthodes createConnection()

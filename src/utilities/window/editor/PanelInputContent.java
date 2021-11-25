@@ -62,19 +62,27 @@ public abstract class PanelInputContent
     public abstract void createContentCustom();
 
     public boolean checkDatas(SComponent sComponent) {
-        resetColorSComponents();
+        //#MAJ 2021-11-24 Correction de la réinitialisation des couleurs Scomponent s/ checkDatas et checkDatasPreSave
+        //resetColorSComponents();
+        resetColorSComponentsNotPreSave();
+        //  !!!  Important !!!
+        // Lance le checDatasPreSave depuis la classe concrète de dernier niveau en resdecendant jusqu'ici
+        // Il ne doit pas y avoir d'appel direct de checkPreSave dans les autres classes!
         boolean ok = checkDatasPreSave(sComponent);
         return ok;
+
     }
 
     ;
 
     public boolean checkDatasPreSave(SComponent sComponent) {
-        //#MAJ 2021-10-27 reset Color sComponents
-        resetColorSComponents();
+        //#MAJ 2021-11-24 Correction de la réinitialisation des couleurs Scomponent s/ checkDatas et checkDatasPreSave
+        //resetColorSComponents();
+        resetColorSComponentsPreSave();
         boolean ok = true;
         setPreSaveOk(ok);
         return ok;
+
     }
 
     ;
@@ -308,6 +316,7 @@ public abstract class PanelInputContent
                     }
                 }
             }
+
             if (test) {
                 resultat = resultat || sComponent.checkIfUpdated();
             }
@@ -413,6 +422,25 @@ public abstract class PanelInputContent
         for (SComponent sComponent : sComponents){
             if (! (sComponent instanceof SButton)) {
                 sComponent.setColor(SComponent.COLORNORMAL);
+            }
+        }
+    }
+
+    protected void resetColorSComponentsPreSave(){
+        resetColorSComponentsPreSave(true);
+    }
+
+    protected void resetColorSComponentsNotPreSave(){
+        resetColorSComponentsPreSave(false);
+    }
+
+
+    protected void resetColorSComponentsPreSave(boolean preSave){
+        for (SComponent sComponent : sComponents){
+            if (! (sComponent instanceof SButton)) {
+                if (preSave == sComponent.isCheckPreSave()) {
+                    sComponent.setColor(SComponent.COLORNORMAL);
+                }
             }
         }
     }

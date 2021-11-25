@@ -5,8 +5,8 @@ import connections.ConnectionsOracle;
 import main.MVCCDElement;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.connections.connection.ConConnectionInputContent;
 import window.editor.connections.connection.oracle.ConConnectionOracleEditor;
+import window.editor.connections.connection.oracle.ConConnectionOracleInputContent;
 
 import java.awt.*;
 
@@ -15,7 +15,7 @@ public class ConConnectionOracleEditingTreat extends ConConnectionEditingTreat {
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
-        return new ConConnectionInputContent(element);
+        return new ConConnectionOracleInputContent(element);
     }
 
     /**

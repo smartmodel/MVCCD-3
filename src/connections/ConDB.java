@@ -8,7 +8,7 @@ import repository.editingTreat.connections.connector.ConConnectorEditingTreat;
 import repository.editingTreat.connections.connector.ConConnectorOracleEditingTreat;
 
 public enum ConDB {
-    ORACLE (Preferences.CON_DB_ORACLE,
+    ORACLE (Preferences.DB_ORACLE,
             "Oracle",
             Preferences.CON_URL_TEMPLATE_ORACLE,
             Preferences.CON_IDDB_NAME_SID_ORACLE_MARKER,
@@ -19,7 +19,7 @@ public enum ConDB {
             new ConConnectionOracleEditingTreat(),
             new ConConnectorOracleEditingTreat()),
 
-    MYSQL (Preferences.CON_DB_MYSQL,
+    MYSQL (Preferences.DB_MYSQL,
             "MySQL",
             Preferences.CON_URL_TEMPLATE_MYSQL,
             null,
@@ -30,7 +30,7 @@ public enum ConDB {
             null,
             null),
 
-    POSTGRESQL (Preferences.CON_DB_POSTGRESQL,
+    POSTGRESQL (Preferences.DB_POSTGRESQL,
             "PostgreSQL",
             Preferences.CON_URL_TEMPLATE_POSTGRESQL,
             null,
@@ -85,6 +85,15 @@ public enum ConDB {
     public static ConDB findByText(String text){
         for (ConDB element: ConDB.values()){
             if (element.getText().equals(text)) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+    public static ConDB findByName(String name){
+        for (ConDB element: ConDB.values()){
+            if (element.getName().equals(name)) {
                 return element;
             }
         }

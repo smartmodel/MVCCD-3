@@ -16,7 +16,7 @@ import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
-public class MDRModelInputContent extends PanelInputContent  {
+public abstract class MDRModelInputContent extends PanelInputContent  {
 
 
 
@@ -116,7 +116,6 @@ public class MDRModelInputContent extends PanelInputContent  {
         super.getSComponents().add(fieldNamingFormatFuture);
         super.getSComponents().add(fieldLastIteration);
 
-        createPanelMaster();
     }
 
     @Override
@@ -134,8 +133,7 @@ public class MDRModelInputContent extends PanelInputContent  {
 
     }
 
-    private void createPanelMaster() {
-        GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
+    protected void createPanelMaster(GridBagConstraints gbc) {
 
         panelInputContentCustom.add(labelName, gbc);
         gbc.gridx = 1;

@@ -1,8 +1,6 @@
 package main;
 
-import connections.ConnectionsMySQL;
-import connections.ConnectionsOracle;
-import connections.ConnectionsPostgreSQL;
+import connections.*;
 import profile.Profile;
 import project.Project;
 
@@ -48,6 +46,40 @@ public class MVCCDFactory {
         ConnectionsOracle applicationConnexionsOracle = new ConnectionsOracle(applicationConnexions);
         ConnectionsMySQL applicationConnexionsMySQL = new ConnectionsMySQL(applicationConnexions);
         ConnectionsPostgreSQL applicationConnexionsPostgreSQL = new ConnectionsPostgreSQL(applicationConnexions);
+
+        //TODO-0 Phase de mise au point
+        ConConnectionOracle conConnectionOracleLocal = new ConConnectionOracle(applicationConnexionsOracle);
+        conConnectionOracleLocal.setName("LocalTEST1");
+        conConnectionOracleLocal.setDriverDefault(true);
+        conConnectionOracleLocal.setHostName("localhost");
+        conConnectionOracleLocal.setPort(ConDB.ORACLE.getPortDefault());
+        conConnectionOracleLocal.setConIDDBName(ConIDDBName.SERVICE_NAME);
+        conConnectionOracleLocal.setDbName("XEPDB1");
+        conConnectionOracleLocal.setUserName("TEST1");
+        conConnectionOracleLocal.setUserPW("TEST1");
+
+        ConConnectorOracle conConnectorOracleLocal = new ConConnectorOracle(conConnectionOracleLocal);
+        conConnectorOracleLocal.setName("LocalTEST2");
+        conConnectorOracleLocal.setUserName("TEST2");
+        conConnectorOracleLocal.setUserPW("TEST2");
+
+        ConConnectionOracle conConnectionOracleVM = new ConConnectionOracle(applicationConnexionsOracle);
+        conConnectionOracleVM.setName("VMTEST1");
+        conConnectionOracleVM.setDriverDefault(true);
+        conConnectionOracleVM.setHostName("192.168.88.128");
+        conConnectionOracleVM.setPort(ConDB.ORACLE.getPortDefault());
+        conConnectionOracleVM.setConIDDBName(ConIDDBName.SERVICE_NAME);
+        conConnectionOracleVM.setDbName("XEPDB1");
+        conConnectionOracleVM.setUserName("TEST1");
+        conConnectionOracleVM.setUserPW("TEST1");
+
+        ConConnectorOracle conConnectorOracleVM = new ConConnectorOracle(conConnectionOracleVM);
+        conConnectorOracleVM.setName("VMTEST2");
+        conConnectorOracleVM.setUserName("TEST2");
+        conConnectorOracleVM.setUserPW("TEST2");
+
+
+
         return applicationConnexions;
     }
 

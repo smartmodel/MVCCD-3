@@ -245,16 +245,39 @@ public class MCDUtilService {
         return messages;
     }
 
+    /*
     public static ArrayList<String> checkNameAlone(ArrayList<MVCCDElement> brothers,
-                                                String name,
-                                                boolean mandatory,
-                                                int lengthMax,
-                                                String naming,
-                                                String element,
-                                                String namingAndBrothersElementsSelf) {
+                                                   String name,
+                                                   boolean mandatory,
+                                                   int lengthMax,
+                                                   String naming,
+                                                   String element,
+                                                   String namingAndBrothersElementsSelf) {
 
         ArrayList<String> messages = MCDUtilService.checkString(name, mandatory, lengthMax,
                 Preferences.NAME_REGEXPR, naming, element);
+
+        if (messages.size() == 0) {
+            messages.addAll(MCDUtilService.checkExistNameInChilds(brothers, name, true,
+                    namingAndBrothersElementsSelf));
+        }
+
+        return messages;
+    }
+
+     */
+
+    public static ArrayList<String> checkNameAlone(ArrayList<MVCCDElement> brothers,
+                                                   String name,
+                                                   boolean mandatory,
+                                                   int lengthMax,
+                                                   String regularExpr,
+                                                   String naming,
+                                                   String element,
+                                                   String namingAndBrothersElementsSelf) {
+
+        ArrayList<String> messages = MCDUtilService.checkString(name, mandatory, lengthMax,
+                regularExpr, naming, element);
 
         if (messages.size() == 0) {
             messages.addAll(MCDUtilService.checkExistNameInChilds(brothers, name, true,

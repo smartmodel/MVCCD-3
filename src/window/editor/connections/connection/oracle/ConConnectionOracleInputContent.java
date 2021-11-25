@@ -18,6 +18,10 @@ public class ConConnectionOracleInputContent extends ConConnectionInputContent {
         super(conResourceOracleInput);
     }
 
+    public ConConnectionOracleInputContent(MVCCDElement element)     {
+        super(element);
+    }
+
 
     @Override
     protected void enabledContent() {

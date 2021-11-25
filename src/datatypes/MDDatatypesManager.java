@@ -100,11 +100,11 @@ public class MDDatatypesManager {
 
     public MPDRDatatype mpdrDatatypeRoot (){
         Preferences preferences = PreferencesManager.instance().preferences();
-        if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_ORACLE)){
+        if (preferences.getMLDRTOMPDR_DB().equals(Preferences.DB_ORACLE)){
             defaultMPDRDatatypeRoot = defaultMPDROracleDatatypeRoot;
-        } else if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_MYSQL)){
+        } else if (preferences.getMLDRTOMPDR_DB().equals(Preferences.DB_MYSQL)){
             defaultMPDRDatatypeRoot = defaultMPDRMySQLDatatypeRoot;
-        } else if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_POSTGRESQL)){
+        } else if (preferences.getMLDRTOMPDR_DB().equals(Preferences.DB_POSTGRESQL)){
             defaultMPDRDatatypeRoot = defaultMPDRPostgreSQLDatatypeRoot;
         } else {
             throw new CodeApplException("La BD " + preferences.getMLDRTOMPDR_DB() + " n'est pas trouvée");

@@ -2,6 +2,7 @@ package connections;
 
 import connections.services.ConConnectorService;
 import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
 import repository.editingTreat.connections.connector.ConConnectorEditingTreat;
 
 public abstract class ConConnector extends ConElement{
@@ -51,5 +52,10 @@ public abstract class ConConnector extends ConElement{
     }
 
     public abstract ConConnectorEditingTreat getConConnectorEditingTreat();
+
+
+    public String getNamePath(){
+        return ((ConConnection) getParent()).getNamePath() + Preferences.PATH_NAMING_SEPARATOR + getName();
+    }
 
 }

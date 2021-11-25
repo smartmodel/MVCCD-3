@@ -30,7 +30,7 @@ import java.awt.event.ItemEvent;
 import java.sql.Connection;
 import java.util.ArrayList;
 
-public class ConConnectorInputContent extends PanelInputContent implements ActionListener {
+public abstract class ConConnectorInputContent extends PanelInputContent implements ActionListener {
 
     protected JPanel panelConnection = new JPanel ();
     protected JPanel panelUser = new JPanel ();
@@ -152,7 +152,7 @@ public class ConConnectorInputContent extends PanelInputContent implements Actio
     protected boolean changeField(DocumentEvent e) {
         Document doc = e.getDocument();
         if (doc == fieldName.getDocument()) {
-            return checkDatasPreSave(fieldName);
+            return checkDatas(fieldName);
         } else if (doc == fieldUserName.getDocument()) {
             return checkDatas(fieldUserName);
         } else if (doc == fieldUserPW.getDocument()) {
@@ -182,7 +182,7 @@ public class ConConnectorInputContent extends PanelInputContent implements Actio
         Object source = focusEvent.getSource();
 
         if (source == fieldName) {
-            checkDatasPreSave(fieldName);
+            checkDatas(fieldName);
         }
         if (source == fieldUserName) {
             checkDatas(fieldUserName);
@@ -398,6 +398,7 @@ public class ConConnectorInputContent extends PanelInputContent implements Actio
                 fieldName.getText(),
                 true,
                 Preferences.CON_NAME_LENGTH,
+                Preferences.NAME_NOTMODEL_REGEXPR,
                 "naming.of.name",   // Le non
                 "of.connector",     // La connexion
                 "naming.a.brother.connector"));
@@ -474,7 +475,7 @@ public class ConConnectorInputContent extends PanelInputContent implements Actio
             Object source = actionEvent.getSource();
 
             if (source == btnUserPWClear) {
-                propertyAction = "editor.con.resource.btn.exception.pw.clear";
+                propertyAction = "editor.con.connector.btn.exception.pw.clear";
                 fieldUserPWClear.setVisible(! fieldUserPWClear.isVisible());
                 panelInputContentCustom.revalidate();
                 panelInputContentCustom.repaint();

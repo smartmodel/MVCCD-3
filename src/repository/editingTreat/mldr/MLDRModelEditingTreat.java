@@ -1,7 +1,6 @@
 package repository.editingTreat.mldr;
 
 import main.MVCCDElement;
-import mdr.MDRModel;
 import messages.MessagesBuilder;
 import mldr.MLDRModel;
 import preferences.PreferencesManager;
@@ -12,7 +11,7 @@ import resultat.ResultatLevel;
 import treatment.services.TreatmentService;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.mdr.model.MDRModelEditor;
+import window.editor.mdr.mldr.model.MLDRModelEditor;
 
 import java.awt.*;
 
@@ -27,7 +26,7 @@ public class MLDRModelEditingTreat extends EditingTreat {
 
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
-        return new MDRModelEditor(owner, parent, (MDRModel) element, mode,
+        return new MLDRModelEditor(owner, parent, (MLDRModel) element, mode,
                 new MLDRModelEditingTreat());
     }
 

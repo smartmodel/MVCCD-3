@@ -4,9 +4,9 @@ import messages.MessagesBuilder;
 import preferences.Preferences;
 
 public enum MPDRDB {
-    ORACLE (Preferences.MPDR_DB_ORACLE),
-    MYSQL (Preferences.MPDR_DB_MYSQL),
-    POSTGRESQL (Preferences.MPDR_DB_POSTGRESQL);
+    ORACLE (Preferences.DB_ORACLE),
+    MYSQL (Preferences.DB_MYSQL),
+    POSTGRESQL (Preferences.DB_POSTGRESQL);
 
     private final String name;
 
@@ -30,5 +30,6 @@ public enum MPDRDB {
         }
         return null;
     }
+
 
 }

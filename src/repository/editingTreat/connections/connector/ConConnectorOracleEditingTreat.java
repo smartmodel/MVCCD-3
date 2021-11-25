@@ -6,6 +6,7 @@ import main.MVCCDElement;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.connections.connector.oracle.ConConnectorOracleEditor;
+import window.editor.connections.connector.oracle.ConConnectorOracleInputContent;
 
 import java.awt.*;
 
@@ -14,7 +15,7 @@ public class ConConnectorOracleEditingTreat extends ConConnectorEditingTreat {
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
-        return null;
+        return new ConConnectorOracleInputContent(element);
     }
 
     /**

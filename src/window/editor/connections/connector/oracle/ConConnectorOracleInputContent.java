@@ -17,6 +17,11 @@ public class ConConnectorOracleInputContent extends ConConnectorInputContent {
     }
 
 
+    public ConConnectorOracleInputContent(MVCCDElement element)     {
+        super(element);
+    }
+
+
     @Override
     protected void enabledContent() {
         super.enabledContent();

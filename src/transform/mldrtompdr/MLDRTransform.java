@@ -77,7 +77,7 @@ public class MLDRTransform extends MDTransform {
 
 
     private MPDRModel foundOrCreateMPDRModel(String mldrtompdrDb) {
-        if (mldrtompdrDb.equals(Preferences.MPDR_DB_ORACLE)){
+        if (mldrtompdrDb.equals(Preferences.DB_ORACLE)){
             MPDROracleModel mpdrOracleModel = MLDRModelService.getMPDRModelOracle(mldrModel);
             if (mpdrOracleModel == null){
                 mpdrOracleModel = MVCCDElementFactory.instance().createMPDRModelOracle(mldrModel);
@@ -85,7 +85,7 @@ public class MLDRTransform extends MDTransform {
             }
             return mpdrOracleModel;
         }
-        if (mldrtompdrDb.equals(Preferences.MPDR_DB_MYSQL)){
+        if (mldrtompdrDb.equals(Preferences.DB_MYSQL)){
             MPDRMySQLModel mpdrMySQLModel = MLDRModelService.getMPDRModelMySQL(mldrModel);
             if (mpdrMySQLModel == null){
                 mpdrMySQLModel = MVCCDElementFactory.instance().createMPDRModelMySQL(mldrModel);
@@ -93,7 +93,7 @@ public class MLDRTransform extends MDTransform {
             }
             return mpdrMySQLModel;
         }
-        if (mldrtompdrDb.equals(Preferences.MPDR_DB_POSTGRESQL)){
+        if (mldrtompdrDb.equals(Preferences.DB_POSTGRESQL)){
             MPDRPostgreSQLModel mpdrPostgreSQLModel = MLDRModelService.getMPDRModelPostgreSQL(mldrModel);
             if (mpdrPostgreSQLModel == null){
                 mpdrPostgreSQLModel = MVCCDElementFactory.instance().createMPDRModelPostgreSQL(mldrModel);

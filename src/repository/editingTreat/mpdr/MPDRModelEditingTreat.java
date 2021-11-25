@@ -1,14 +1,14 @@
 package repository.editingTreat.mpdr;
 
 import generatesql.window.GenerateSQLWindow;
-import java.awt.Window;
 import main.MVCCDElement;
-import mdr.MDRModel;
 import mpdr.MPDRModel;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.mdr.model.MDRModelEditor;
+import window.editor.mdr.mpdr.model.MPDRModelEditor;
+
+import java.awt.*;
 
 public class MPDRModelEditingTreat extends EditingTreat {
 
@@ -21,7 +21,7 @@ public class MPDRModelEditingTreat extends EditingTreat {
 
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
-        return new MDRModelEditor(owner, parent, (MDRModel) element, mode,
+        return new MPDRModelEditor(owner, parent, (MPDRModel) element, mode,
             new MPDRModelEditingTreat());
     }
 

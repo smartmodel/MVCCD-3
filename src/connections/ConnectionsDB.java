@@ -19,4 +19,10 @@ public abstract class ConnectionsDB extends ConElement {
         super.setName(name);
     }
 
+
+    @Override
+    public String getNamePath() {
+        return null;
+    }
+
 }

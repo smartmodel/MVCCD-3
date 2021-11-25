@@ -19,7 +19,7 @@ public class ConDriverFileChooser extends JFileChooser {
 
     public File conResourceDriverFileChoose() {
 
-        String title = MessagesBuilder.getMessagesProperty("con.resource.driver.file.title", conDB.getText());
+        String title = MessagesBuilder.getMessagesProperty("con.connection.driver.file.title", conDB.getText());
         String btnApprovedText =MessagesBuilder.getMessagesProperty("window.reference.btn.text");
 
         setDialogTitle(title);

@@ -26,4 +26,7 @@ public abstract class ConElement extends ApplElement {
     public String getLienProg() {
         return lienProg;
     }
+
+    public abstract String getNamePath();
+
 }

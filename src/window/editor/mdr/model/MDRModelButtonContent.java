@@ -3,10 +3,10 @@ package window.editor.mdr.model;
 import main.MVCCDElement;
 import utilities.window.editor.PanelButtonsContent;
 
-public class MDRModelContent extends PanelButtonsContent {
+public abstract class MDRModelButtonContent extends PanelButtonsContent {
 
 
-    public MDRModelContent(MDRModelButtons MDRModelButtons) {
+    public MDRModelButtonContent(MDRModelButtons MDRModelButtons) {
         super(MDRModelButtons);
     }
 

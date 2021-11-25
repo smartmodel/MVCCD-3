@@ -9,7 +9,6 @@ import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 public class MLDRTransformColumns {
 
@@ -148,14 +147,14 @@ public class MLDRTransformColumns {
     private void exceptionsColumnBoolean(MPDRColumn mpdrColumn, MLDRColumn mldrColumn) {
         Preferences preferences = PreferencesManager.instance().preferences();
              // Oracle
-            if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_ORACLE)){
+            if (preferences.getMLDRTOMPDR_DB().equals(Preferences.DB_ORACLE)){
                 //#MAJ 2021-05-30 MLDR-> MPDR Transformation size
                 if (mpdrColumn.getDatatypeLienProg().equals(Preferences.MPDRORACLEDATATYPE_VARCHAR2_LIENPROG)){
                     pushSize(mpdrColumn, 1);
                 }
             }
             // MySQL
-            if (preferences.getMLDRTOMPDR_DB().equals(Preferences.MPDR_DB_MYSQL)){
+            if (preferences.getMLDRTOMPDR_DB().equals(Preferences.DB_MYSQL)){
                 //#MAJ 2021-05-30 MLDR-> MPDR Transformation size
                 if (mpdrColumn.getDatatypeLienProg().equals(Preferences.MPDRMySQLDATATYPE_TINYINT_LIENPROG)){
                     pushSize(mpdrColumn, 1);
