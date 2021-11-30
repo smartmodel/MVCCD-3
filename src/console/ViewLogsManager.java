@@ -1,7 +1,6 @@
 package console;
 
 
-import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import resultat.Resultat;
 import resultat.ResultatElement;
@@ -23,10 +22,12 @@ import java.util.ArrayList;
  *
  */
 
+
 public class ViewLogsManager {
 
+    private static boolean inTransaction = false;
 
-    static private void newResultat(ResultatElement resultatElement){
+    static public void printNewResultat(ResultatElement resultatElement){
         ConsoleManager.clearMessages();
         LogsManager.newResultatElement(resultatElement);
         ViewManager.printResultatElement(resultatElement);
@@ -39,7 +40,7 @@ public class ViewLogsManager {
      * @param resultatElement
      */
 
-    static private void continueResultat(ResultatElement resultatElement){
+    static public void printContinueResultat(ResultatElement resultatElement){
         LogsManager.continueResultatElement(resultatElement);
         ViewManager.printResultatElement(resultatElement);
     }
@@ -51,15 +52,15 @@ public class ViewLogsManager {
     }
 
     public static void printResultat(Resultat resultat) {
-        int i = 0 ;
-        for (ResultatElement resultatElement : resultat.getElementsAllLevel()){
-            if (i == 0){
-                ViewLogsManager.newResultat(resultatElement);
-            }else {
-                ViewLogsManager.continueResultat(resultatElement);
+            int i = 0;
+            for (ResultatElement resultatElement : resultat.getElementsAllLevel()) {
+                if (i == 0) {
+                    ViewLogsManager.printNewResultat(resultatElement);
+                } else {
+                    ViewLogsManager.printContinueResultat(resultatElement);
+                }
+                i++;
             }
-            i++ ;
-        }
     }
 
     public static void dialogQuittance(Window window, Resultat resultat) {
@@ -78,6 +79,11 @@ public class ViewLogsManager {
         DialogMessage.showOk(window, message);
     }
 
+    public static void printMessageAndDialog(Window window, String message, ResultatLevel resultatLevel) {
+        printMessage(message, resultatLevel);
+        DialogMessage.showOk(window, message);
+    }
+
     public static void catchException(Exception e, Window window, String message) {
         Resultat resultat = new Resultat();
         resultat.addExceptionUnhandled(e);
@@ -86,4 +92,12 @@ public class ViewLogsManager {
         ViewLogsManager.dialogQuittance(window, resultat);
     }
 
+
+    public static boolean isInTransaction() {
+        return inTransaction;
+    }
+
+    public static void setInTransaction(boolean pInTransaction) {
+        inTransaction = pInTransaction;
+    }
 }

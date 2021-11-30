@@ -7,7 +7,10 @@ import mldr.MLDRPK;
 import mldr.MLDRTable;
 import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
-import mpdr.*;
+import mpdr.MPDRFK;
+import mpdr.MPDRModel;
+import mpdr.MPDRTable;
+import mpdr.MPDRUnique;
 import mpdr.interfaces.IMPDRElement;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
@@ -35,8 +38,7 @@ public class MLDRTransformConstraints {
         for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
             if(mldrConstraint instanceof MLDRPK) {
                 MDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
-                Trace.println("MPDRPK   " + mpdrConstraint.getName());
-            }
+             }
         }
         for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
             if(mldrConstraint instanceof MLDRFK) {

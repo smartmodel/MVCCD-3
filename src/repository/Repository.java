@@ -31,10 +31,6 @@ public class Repository extends DefaultTreeModel{
 
         /*
         for ( MVCCDElement mvccdElement : mvccdElementParent.getChilds()){
-            Trace.println("Elément Classe: " +mvccdElement.getClass().getName());
-            //Trace.println("Elément name : " + mvccdElement.getName() );
-            // La trace ci-dessous provoque une erreur !
-            //Trace.println("Elément : " + mvccdElement.getName() );
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(mvccdElement);
             if (mvccdElement instanceof MVCCDElementProfileEntry){
                 nodeProfileEntry = node ;

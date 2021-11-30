@@ -471,7 +471,6 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         /*
         for (MVCCDElement child : root.getChilds()){
             MVCCDElement childClone = child.clone();
-            Trace.println(root.getChilds().size() + "  " + root.getName() + "  " + childClone.getName());
             childClone.setParent(rootClone);
             cloneChilds(child, childClone);
         }

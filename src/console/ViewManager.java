@@ -26,7 +26,7 @@ public class ViewManager {
         WarningLevel prefWarningLevel = PreferencesManager.instance().preferences().getWARNING_LEVEL();
         WarningLevel resultatWarningLevel = resultatElement.getLevel().getWarningLevel();
         if(resultatWarningLevel == null || wlm.oneIsAsImportantAsSecond(resultatWarningLevel,prefWarningLevel)){
-            ConsoleManager.printMessage(resultatElement.getText());
+             ConsoleManager.printMessage(resultatElement.getText());
         }
     }
 

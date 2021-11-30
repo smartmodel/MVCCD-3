@@ -162,7 +162,7 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
             if (!fieldConnectorLienProg.isSelectedEmpty()) {
                 mpdrModel.setConnectorLienProg(getConConnectorByFieldConnectorLienProg().getLienProg());
             } else {
-                mpdrModel.setConnectionLienProg(null);
+                mpdrModel.setConnectorLienProg(null);
             }
         }
 

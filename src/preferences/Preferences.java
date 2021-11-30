@@ -200,6 +200,12 @@ public class Preferences extends MVCCDElement {
   public static String FILE_HELP_ANCHOR_NAME = "helpAnchor.txt";
   public static String FILE_HELP_MCDDATATYPE_NAME = "helpMCDDatatpe.txt";
 
+  public static String FILE_CREATE_SQL_SHORT_NAME = "create";
+  public static String FILE_POPULATE_SQL_SHORT_NAME = "populate";
+  public static String FILE_SQL_DDL_EXTENSION = "sql";
+  public static String FILE_SQL_DML_EXTENSION = "sql";
+
+
   public static String DIRECTORY_PROFILE_NAME = "profiles";
   public static String DIRECTORY_RESSOURCES_NAME = "ressources";
 
@@ -253,6 +259,8 @@ public class Preferences extends MVCCDElement {
     public static Integer CON_CONNECTION_WINDOW_HEIGHT = 800;
     public static Integer CON_CONNECTOR_WINDOW_WIDTH = 1000;
     public static Integer CON_CONNECTOR_WINDOW_HEIGHT = 600;
+    public static Integer GENERATOR_SQL_WINDOW_WIDTH = 1000;
+    public static Integer GENERATOR_SQL_WINDOW_HEIGHT = 1000;
 
   public static Integer MDRTABLE_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
     public static Integer MDRTABLE_WINDOW_HEIGHT = 600;

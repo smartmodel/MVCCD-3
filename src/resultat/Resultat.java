@@ -8,6 +8,7 @@ public class Resultat {
     private ArrayList<ResultatElement> elements = new ArrayList<ResultatElement>();
 
     public Resultat() {
+
     }
 
 
@@ -17,8 +18,13 @@ public class Resultat {
         }
     }
 
+
+
     public void addResultat(Resultat resultat){
-        elements.addAll(resultat.getElementsAllLevel());
+        //elements.addAll(resultat.getElementsAllLevel());
+        for (ResultatElement resultatElement : resultat.getElementsAllLevel()){
+            add(resultatElement);
+        }
     }
 
     public void addExceptionUnhandled(Exception e){
@@ -101,5 +107,6 @@ public class Resultat {
     public boolean isNotError(){
         return ! isError();
     }
+
 
 }

@@ -5,7 +5,13 @@ import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class UtilDivers {
 
@@ -246,7 +252,22 @@ public class UtilDivers {
         } else {
             return null;
         }
+    }
 
+    public static String dateHourFormatted(Date date){
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        String partDate = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(localDate);
 
+        LocalTime localTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+        String partTime = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM).format(localTime);
+
+        return partDate + " " + partTime ;
+    }
+
+    public static String hourFormatted(Date date){
+        LocalTime localTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+        String partTime = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM).format(localTime);
+
+        return partTime ;
     }
 }

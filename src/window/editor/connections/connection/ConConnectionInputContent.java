@@ -892,11 +892,6 @@ public abstract class ConConnectionInputContent extends PanelInputContent implem
                 ViewLogsManager.printMessage(message, ResultatLevel.INFO);
                 ViewLogsManager.dialogQuittance(getEditor(), message);
             }
-            /*
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("CREATE TABLE TABLE3 (COLUMN1 VARCHAR2(20))");
-            statement.close();
-             */
 
     }
 

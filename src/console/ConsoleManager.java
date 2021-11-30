@@ -5,12 +5,13 @@ import main.window.console.WinConsoleContent;
 
 public class ConsoleManager {
 
+
     private static WinConsoleContent winConsoleContent(){
         return  (WinConsoleContent) MVCCDManager.instance().getWinConsoleContent();
     }
 
     public static void printMessage (String message){
-        winConsoleContent().getTextArea().append(message + System.lineSeparator());
+          winConsoleContent().getTextArea().append(message + System.lineSeparator());
     }
 
     public static void clearMessages(){

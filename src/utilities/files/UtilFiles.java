@@ -18,6 +18,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Date;
 
 public class UtilFiles {
 
@@ -37,7 +39,7 @@ public class UtilFiles {
     }
 
     public static Boolean hasExtension(String fileName, String extension) {
-        if (StringUtils.isNotEmpty(fileName)  && StringUtils.isNotEmpty(extension)) {
+        if (StringUtils.isNotEmpty(fileName) && StringUtils.isNotEmpty(extension)) {
             return extension.equals(FilenameUtils.getExtension(fileName));
         } else {
             return null;
@@ -47,7 +49,7 @@ public class UtilFiles {
     public static String getExtension(String fileName) {
         String regex = UtilDivers.toEscapedForRegex(Preferences.FILE_DOT);
         String[] parts = fileName.split(regex);
-        if (parts.length >1){
+        if (parts.length > 1) {
             return parts[parts.length - 1];
         }
         return null;
@@ -55,17 +57,18 @@ public class UtilFiles {
 
     /**
      * Retourne un nouveau fileName avec l'extension modifiée
+     *
      * @param fileName
      * @param newExtension
      * @return
      */
-    public static String changeExtension(String fileName, String newExtension){
+    public static String changeExtension(String fileName, String newExtension) {
         String newFileName = "";
         String regex = UtilDivers.toEscapedForRegex(Preferences.FILE_DOT);
         String[] parts = fileName.split(regex);
-        if (parts.length >1){
-            for (int i=0; i < parts.length -1; i++ ){
-                newFileName = newFileName  + parts[i];
+        if (parts.length > 1) {
+            for (int i = 0; i < parts.length - 1; i++) {
+                newFileName = newFileName + parts[i];
             }
             newFileName = newFileName + Preferences.FILE_DOT + newExtension;
         }
@@ -73,18 +76,23 @@ public class UtilFiles {
     }
 
     public static boolean isFileProfil(String fileName) {
-        if (hasExtension(fileName, Preferences.FILE_PROFILE_EXTENSION) ){
+        if (hasExtension(fileName, Preferences.FILE_PROFILE_EXTENSION)) {
             return true;
         } else {
             return false;
         }
     }
 
-    public static String fileName(String shortName, String extName){
-         return shortName + Preferences.FILE_DOT + extName;
+    public static String fileName(String shortName, String extName) {
+        return shortName + Preferences.FILE_DOT + extName;
     }
 
-    public static String filePath(String directory, String fileName){
+    //TODO-1 A affiner avec un directory avant le nom
+    public static String fileShortName(String name) {
+        return name.substring(0, name.indexOf(Preferences.FILE_DOT));
+    }
+
+    public static String filePath(String directory, String fileName) {
         StringBuilder filePath = new StringBuilder(directory);
 
         //#MAJ 2021-04-03 Remplacé le text "path.separator" par File.separator
@@ -103,12 +111,12 @@ public class UtilFiles {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 if (StringUtils.isNotEmpty(content)) {
-                    content = content + Preferences.SYSTEM_LINE_SEPARATOR ;
+                    content = content + Preferences.SYSTEM_LINE_SEPARATOR;
                 }
                 content = content + line;
             }
         } catch (IOException e) {
-            throw (new CodeApplException(e));	// L'erreur est renvoyée
+            throw (new CodeApplException(e));    // L'erreur est renvoyée
         }
         return content;
     }
@@ -118,21 +126,36 @@ public class UtilFiles {
         return fileTextToString(filePath);
     }
 
-    public static ImageIcon getImageIcon(String dir, String fileName){
-        return new ImageIcon (Preferences.DIRECTORY_RESSOURCES_NAME + Preferences.SYSTEM_FILE_SEPARATOR +
+    public static ImageIcon getImageIcon(String dir, String fileName) {
+        return new ImageIcon(Preferences.DIRECTORY_RESSOURCES_NAME + Preferences.SYSTEM_FILE_SEPARATOR +
                 dir + Preferences.SYSTEM_FILE_SEPARATOR + fileName);
     }
 
     public static boolean confirmIfExist(MVCCDWindow mvccdWindow, File fileChoose) {
-        if (fileChoose.exists()){
-            String message = MessagesBuilder.getMessagesProperty ("file.create.exist",fileChoose.getPath());
+        if (fileChoose.exists()) {
+            String message = MessagesBuilder.getMessagesProperty("file.create.exist", fileChoose.getPath());
             return DialogMessage.showConfirmYesNo_No(
-                    MVCCDManager.instance().getMvccdWindow(), message) == JOptionPane.YES_OPTION ;
+                    MVCCDManager.instance().getMvccdWindow(), message) == JOptionPane.YES_OPTION;
         }
         return true;
     }
 
-    public static File createFile(String directory, String fileName){
-        return new File (directory + File.separator + fileName);
+    public static File createFile(String directory, String fileName) {
+        return new File(directory + File.separator + fileName);
+    }
+
+    public static Date getLastModifiedDate(File file) {
+        try {
+            if (file.exists()) {
+                BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+                //("creationTime: " + attr.creationTime());
+                //("lastAccessTime: " + attr.lastAccessTime());
+                //("lastModifiedTime: " + attr.lastModifiedTime());
+                return new Date(attr.lastModifiedTime().toMillis());
+            }
+            return null;
+        } catch (IOException e) {
+            throw new CodeApplException("Erreur lecture <<lastModifiedTime>> de fichier  " + e.getMessage(), e);
+        }
     }
 }

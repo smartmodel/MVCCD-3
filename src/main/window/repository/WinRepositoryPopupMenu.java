@@ -304,6 +304,19 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             if (node.getUserObject() instanceof MPDRModel) {
                 treatGeneric(this, new MPDRModelEditingTreat());
 
+                JMenuItem menuItemTB = new JMenuItem("Générator TB");
+                addItem(this, menuItemTB);
+                menuItemTB.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        try {
+                            (new MPDRModelEditingTreat()).treatGenerateTB(mvccdElement);
+                        } catch (Exception e){
+                            exceptionUnhandled(e, mvccdElement, "repository.menu.exception.generate.sql");
+                        }
+                    }
+                });
+
                 JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(
                         "menu.generate.sql.from.mpdr"));
                 addItem(this, menuItem);
@@ -313,7 +326,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                         try {
                             (new MPDRModelEditingTreat()).treatGenerate(mvccdElement);
                         } catch (Exception e){
-                            exceptionUnhandled(e, mvccdElement, "repository.menu.exception.transform");
+                            exceptionUnhandled(e, mvccdElement, "repository.menu.exception.generate.sql");
                         }
                     }
                 });

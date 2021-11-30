@@ -1,6 +1,7 @@
 package repository.editingTreat.mpdr;
 
 import generatesql.window.GenerateSQLWindow;
+import generatorsql.viewer.SQLViewer;
 import main.MVCCDElement;
 import mpdr.MPDRModel;
 import repository.editingTreat.EditingTreat;
@@ -30,8 +31,14 @@ public class MPDRModelEditingTreat extends EditingTreat {
         return "the.model.physical";
     }
 
-    public void treatGenerate(MVCCDElement mvccdElement) {
+    public void treatGenerateTB(MVCCDElement mvccdElement) {
         MPDRModel mpdrModel = (MPDRModel) mvccdElement;
         new GenerateSQLWindow(mpdrModel);
+    }
+
+    public void treatGenerate(MVCCDElement mvccdElement) {
+        MPDRModel mpdrModel = (MPDRModel) mvccdElement;
+        SQLViewer fen = new SQLViewer(mpdrModel);
+        fen.setVisible(true);
     }
 }
