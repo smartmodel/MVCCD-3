@@ -31,7 +31,6 @@ import org.xml.sax.SAXException;
 import preferences.Preferences;
 import profile.Profile;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
-import window.editor.diagrammer.elements.shapes.relations.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.LabelType;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
@@ -1785,7 +1784,7 @@ public class ProjectLoaderXml {
                     newEntity.setLocation(Integer.parseInt(currentNode.getAttribute("x")), Integer.parseInt(currentNode.getAttribute("y")));
 
                     // Ajoute l'entité chargée dans le diagrammeur
-                    DiagrammerService.getDrawPanel().addElement(newEntity);
+                    DiagrammerService.getDrawPanel().addShape(newEntity);
 
                     // Affiche les différentes zones de l'entité
                     newEntity.refreshInformations();
@@ -1856,7 +1855,7 @@ public class ProjectLoaderXml {
 
 
                     // Ajoute l'association dans le diagrammeur
-                    DiagrammerService.getDrawPanel().addElement(newAssociation);
+                    DiagrammerService.getDrawPanel().addShape(newAssociation);
                 }
 
             }

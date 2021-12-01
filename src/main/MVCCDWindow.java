@@ -1,7 +1,6 @@
 package main;
 
 import console.ViewLogsManager;
-import console.WarningLevel;
 import main.window.console.WinConsole;
 import main.window.diagram.WinDiagram;
 import main.window.haut.Haut;
@@ -34,7 +33,7 @@ public class MVCCDWindow extends JFrame implements WindowListener {
     private JPanel panel= new JPanel();;
     private Haut menu ;
     private WinRepository repository ;
-    private WinDiagram diagram ;
+    private WinDiagram diagrammer;
     private WinConsole console ;
     private Reserve reserve ;
     private PanelBorderLayoutResizer panelBLResizer ;
@@ -67,7 +66,7 @@ public class MVCCDWindow extends JFrame implements WindowListener {
 
         menu = new Haut(borderLayoutPositionMenu, panelBLResizer);
         repository = new WinRepository(borderLayoutPositionRepository, panelBLResizer);
-        diagram= new WinDiagram(borderLayoutPositionDiagram, panelBLResizer);
+        diagrammer = new WinDiagram(borderLayoutPositionDiagram, panelBLResizer);
         console = new WinConsole(borderLayoutPositionConsole, panelBLResizer);
         reserve = new Reserve(borderLayoutPositionReserve, panelBLResizer);
 
@@ -75,7 +74,7 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         panel.setLayout(bl);
         panel.add(menu, borderLayoutPositionMenu);
         panel.add(repository, borderLayoutPositionRepository);
-        panel.add(diagram, borderLayoutPositionDiagram);
+        panel.add(diagrammer, borderLayoutPositionDiagram);
         panel.add(console, borderLayoutPositionConsole);
         panel.add(reserve, borderLayoutPositionReserve);
 
@@ -98,8 +97,8 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         return repository;
     }
 
-    public WinDiagram getDiagram() {
-        return diagram;
+    public WinDiagram getDiagrammer() {
+        return diagrammer;
     }
 
     public WinConsole getConsole() {
@@ -168,10 +167,10 @@ public class MVCCDWindow extends JFrame implements WindowListener {
     public void adjustPanelRepository() {
         if (repository.getWidth() <=  (Preferences.PANEL_REPOSITORY_WIDTH / 2) ) {
             ComponentService.increaseWidth(repository, Preferences.PANEL_REPOSITORY_WIDTH);
-            ComponentService.increaseWidth(diagram, -Preferences.PANEL_REPOSITORY_WIDTH);
-            ComponentService.increaseLocationX(diagram, Preferences.PANEL_REPOSITORY_WIDTH);
+            ComponentService.increaseWidth(diagrammer, -Preferences.PANEL_REPOSITORY_WIDTH);
+            ComponentService.increaseLocationX(diagrammer, Preferences.PANEL_REPOSITORY_WIDTH);
             repository.resizeContent();
-            diagram.resizeContent();
+            diagrammer.resizeContent();
         }
     }
 }

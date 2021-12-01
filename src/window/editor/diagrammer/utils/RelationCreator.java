@@ -47,7 +47,7 @@ public final class RelationCreator {
         relation = new MCDAssociationShape((MCDEntityShape) RelationCreator.source, (MCDEntityShape) RelationCreator.destination, true);
       }
       // Ajoute l'élément au DrawPanel
-      DiagrammerService.getDrawPanel().addElement(relation);
+      DiagrammerService.getDrawPanel().addShape(relation);
       resetSourceAndDestination();
     }
   }

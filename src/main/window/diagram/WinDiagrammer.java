@@ -13,15 +13,17 @@ import window.editor.diagrammer.services.DiagrammerService;
  * La classe crée les panneaux du diagrammeur (en-tête, palette et zone de dessin). La classe ajoute ensuite les panneaux comme contenu de son ancêtre PanelContent. L'ancêtre PanelContent crée la barre de défilement si nécessaire (décision à prendre). Remarque: la palette et la zone de dessin du diagrammeur seront créés spécifiquement pour le genre de modèle à réaliser (MCD, MLD-R, MPD-R ou
  * autres).
  */
-public class WinDiagramContent extends PanelContent {
+public class WinDiagrammer extends PanelContent {
 
   JPanel content = new JPanel(); //Diagrammeur dans son ensemble
   JPanel panelTitle = new JPanel(); //En-tête du diagrammeur
   PalettePanel panelPalette = new PalettePanel(); //Palette du diagrammeur
   DrawPanelComponent panelDraw; //Zone de dessin du diagrammeur
 
-  public WinDiagramContent(WinDiagram diagram) {
+  public WinDiagrammer(WinDiagram diagram) {
     super(diagram);
+
+    this.setVisible(true);
 
     this.panelDraw = new DrawPanelComponent(DiagrammerService.getDrawPanel());
 

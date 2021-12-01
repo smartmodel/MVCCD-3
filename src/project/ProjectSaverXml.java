@@ -95,21 +95,21 @@ public class ProjectSaverXml {
 
             //Modèle
             if (manyModelsAuthorized) {
-                addModelAndChilds(document, mcdTag, mcdModels);
+                addModelAndChilds(document, mcdTag, mcdModels, projectTag);
 
             //Package
             } else if (packagesAuthorized) {
 
-                addDiagrams(document, mcdModels, mcdTag);
+                addDiagrams(document, mcdModels, projectTag);
                 addEntities(document, mcdModels, mcdTag);
                 addMCDRelations(document, mcdModels, mcdTag);
-                addPackages(document, mcdContModels, mcdTag);
+                addPackages(document, mcdContModels, mcdTag, projectTag);
                 addMLD(document, mcdModels, mcdTag);
 
             //projet simple
             } else {
 
-                addDiagrams(document, mcdModels, mcdTag);
+                addDiagrams(document, mcdModels, projectTag);
                 addEntities(document, mcdModels, mcdTag);
                 addMCDRelations(document, mcdModels, mcdTag);
                 addMLD(document, mcdModels, mcdTag);
@@ -228,7 +228,7 @@ public class ProjectSaverXml {
         return childTag;
     }
 
-    private void addModelAndChilds(Document doc, Element mcd, ArrayList<MVCCDElement> mcdModels) {
+    private void addModelAndChilds(Document doc, Element mcd, ArrayList<MVCCDElement> mcdModels, Element projectTag) {
         // Parcours des enfants de l'élément mcd
         for(MVCCDElement mcdModel : mcdModels){
             // Création du modèle dans le document
@@ -242,18 +242,19 @@ public class ProjectSaverXml {
 
             ArrayList<MVCCDElement> modelsChilds = mcdModel.getChilds();
 
+
             if (packagesAuthorized) {
                 // Création des différents éléments du modèle avec packages
                 addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
-                addDiagrams(doc, modelsChilds, modelTag);
+                addDiagrams(doc, modelsChilds, projectTag);
                 addEntities(doc, modelsChilds, modelTag);
                 addMCDRelations(doc, modelsChilds, modelTag);
-                addPackages(doc, mcdModel, modelTag);
+                addPackages(doc, mcdModel, modelTag, projectTag);
                 addMLD(doc, modelsChilds, modelTag);
             } else {
                 // Création des différents éléments du modèle sans packages
                 addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
-                addDiagrams(doc, modelsChilds, modelTag);
+                addDiagrams(doc, modelsChilds, projectTag);
                 addEntities(doc, modelsChilds, modelTag);
                 addMCDRelations(doc, modelsChilds, modelTag);
                 addMLD(doc, modelsChilds, modelTag);
@@ -262,7 +263,7 @@ public class ProjectSaverXml {
 
     }
 
-    private void addPackages(Document doc, MVCCDElement modelChild, Element racine) {
+    private void addPackages(Document doc, MVCCDElement modelChild, Element racine, Element projectTag) {
 
         // Récupération des packages
         ArrayList<MCDPackage> packagesChilds = getPackages(modelChild);
@@ -282,10 +283,10 @@ public class ProjectSaverXml {
 
                 // Ajout des éléments qui composent un paquetage
                 addPropertiesModelsOrPackages(doc, packages, pack);
-                addDiagrams(doc, packageChilds, packages);
+                addDiagrams(doc, packageChilds, projectTag);
                 addEntities(doc, packageChilds, packages);
                 addMCDRelations(doc, packageChilds, packages);
-                addPackages(doc, pack, packages);
+                addPackages(doc, pack, packages, projectTag);
                 racine.appendChild(packages);
             }
         }
@@ -316,6 +317,7 @@ public class ProjectSaverXml {
                 Attr idAttrOfDiagramsTag = doc.createAttribute("id");
                 idAttrOfDiagramsTag.setValue(mcdContDiagrams.getIdProjectElementAsString());
                 diagramsTag.setAttributeNode(idAttrOfDiagramsTag);
+
                 racineTag.appendChild(diagramsTag);
 
                 ArrayList<MVCCDElement> diagrams = mcdContDiagrams.getChilds();
@@ -330,8 +332,15 @@ public class ProjectSaverXml {
 
                         // Ajout de l'id à la balise <diagramme>
                         Attr idAttrOfDiagramTag = doc.createAttribute("id");
+
                         idAttrOfDiagramTag.setValue(mcdDiagram.getIdProjectElementAsString());
                         diagramTag.setAttributeNode(idAttrOfDiagramTag);
+
+
+                        // Ajout de l'ID du parent pour faire la référence
+                        ProjectElement parentModel = (ProjectElement) mcdDiagram.getParent().getParent();
+                        diagramTag.setAttribute("parent_id", parentModel.getIdProjectElementAsString());
+
 
                         // Ajout de l'attribut "name" à la balise <diagramme>
                         Attr nameAttrOfDiagramTag = doc.createAttribute("name");
