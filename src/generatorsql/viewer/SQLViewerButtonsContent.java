@@ -8,6 +8,7 @@ import console.ViewLogsManager;
 import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
 import generatorsql.GenerateSQLUtil;
+import main.MVCCDManager;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import preferences.Preferences;
@@ -307,10 +308,12 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                 new String[]{mpdrModel.getNamePath()});
         resultat.add(new ResultatElement(message, ResultatLevel.INFO));
 
+        MVCCDManager.instance().getConsoleManager().printMessage(message);
         // Sauvegarde du fichier de script
         String codeSQL = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
         Resultat resultatSave = actionSave(false);
         resultat.addResultat(resultatSave);
+
 
         // Exécution du script
         Connection connection = null;

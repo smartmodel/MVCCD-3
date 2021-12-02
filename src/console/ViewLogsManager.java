@@ -1,6 +1,7 @@
 package console;
 
 
+import main.MVCCDManager;
 import messages.MessagesBuilder;
 import resultat.Resultat;
 import resultat.ResultatElement;
@@ -28,7 +29,8 @@ public class ViewLogsManager {
     private static boolean inTransaction = false;
 
     static public void printNewResultat(ResultatElement resultatElement){
-        ConsoleManager.clearMessages();
+        ConsoleManager consoleManager = MVCCDManager.instance().getConsoleManager();
+        consoleManager.clearMessages();
         LogsManager.newResultatElement(resultatElement);
         ViewManager.printResultatElement(resultatElement);
     }

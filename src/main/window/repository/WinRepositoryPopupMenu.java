@@ -2,6 +2,7 @@ package main.window.repository;
 
 import connections.*;
 import console.ConsoleManager;
+import console.LogsManager;
 import console.ViewLogsManager;
 import datatypes.MDDatatype;
 import diagram.mcd.MCDDiagram;
@@ -73,7 +74,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
         try {
             // Effacement des anciens contenus qui ne devraient plus subsister si aucune erreur ne survient
-            ConsoleManager.clearMessages();
+            String message = MessagesBuilder.getMessagesProperty("file.add.text", LogsManager.getlogFilePath());
+            ConsoleManager consoleManager = MVCCDManager.instance().getConsoleManager();
+            consoleManager.clearMessages();
             if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
                 if (PreferencesManager.instance().getApplicationPref().getDEBUG_INSPECT_OBJECT_IN_TREE()) {
                     treatInspectObject();

@@ -1,5 +1,6 @@
 package main.window.console;
 
+import thread.ConsoleThread;
 import utilities.window.PanelContent;
 
 import javax.swing.*;
@@ -8,6 +9,7 @@ import java.awt.*;
 public class WinConsoleContent extends PanelContent {
     private JTextArea textArea;
 
+    private ConsoleThread consoleThread ;
 
     public WinConsoleContent(WinConsole console) {
         super(console);
@@ -19,9 +21,18 @@ public class WinConsoleContent extends PanelContent {
 
         super.addContent(textArea);
 
+        ConsoleThread consoleThread = new ConsoleThread();
+        consoleThread.start();
+        this.consoleThread = consoleThread;
+        SwingUtilities.invokeLater(consoleThread);
     }
 
     public JTextArea getTextArea() {
         return textArea;
+    }
+
+
+    public ConsoleThread getConsoleThread() {
+        return consoleThread;
     }
 }

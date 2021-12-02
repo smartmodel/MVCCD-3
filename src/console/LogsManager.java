@@ -1,6 +1,7 @@
 package console;
 
 import exceptions.CodeApplException;
+import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import resultat.ResultatElement;
@@ -112,19 +113,20 @@ public class LogsManager {
 
     static public void noLogFileAvailable(Throwable e) {
         if (fileError) {
+            ConsoleManager consoleManager = MVCCDManager.instance().getConsoleManager();
             // Comme l'erreur est lié au fichier de log, il nous faut envoyer les messages directement sur la console
-            // la classe MessageManager ne peut pas être utilisée.
-            ConsoleManager.printMessage("****  Traçabilité impossible  ****");
+            // la classe Messag.eManager ne peut pas être utilisée.
+            consoleManager.printMessage("****  Traçabilité impossible  ****");
             // Message d'erreur système
-            ConsoleManager.printMessage("Attention:  " + fileErrorMessage);
-            ConsoleManager.printMessage("Cette erreur empêche MVC-CD de tracer son activité dans son fichier de log");
-            ConsoleManager.printMessage("Si l'erreur est liée à un problème d'accès aux ressources, il faut alors vous assurer de lancer MVC-CD davec les privilèges d'administrateur");
-            ConsoleManager.printMessage("---------------------------------");
+            consoleManager.printMessage("Attention:  " + fileErrorMessage);
+            consoleManager.printMessage("Cette erreur empêche MVC-CD de tracer son activité dans son fichier de log");
+            consoleManager.printMessage("Si l'erreur est liée à un problème d'accès aux ressources, il faut alors vous assurer de lancer MVC-CD davec les privilèges d'administrateur");
+            consoleManager.printMessage("---------------------------------");
             //TODO-1 A voir aussi le manque de place et autres...
             // Affinier le traitement pour donner une indication précise de l'erreur
 
             // Affichage de la pile d'erreur dans la console
-            ConsoleManager.printStackTrace(e);
+            consoleManager.printStackTrace(e);
         }
     }
 

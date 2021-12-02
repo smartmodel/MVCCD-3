@@ -1,5 +1,6 @@
 package console;
 
+import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.PreferencesManager;
 import resultat.ResultatElement;
@@ -26,7 +27,8 @@ public class ViewManager {
         WarningLevel prefWarningLevel = PreferencesManager.instance().preferences().getWARNING_LEVEL();
         WarningLevel resultatWarningLevel = resultatElement.getLevel().getWarningLevel();
         if(resultatWarningLevel == null || wlm.oneIsAsImportantAsSecond(resultatWarningLevel,prefWarningLevel)){
-             ConsoleManager.printMessage(resultatElement.getText());
+            ConsoleManager consoleManager = MVCCDManager.instance().getConsoleManager();
+            consoleManager.printMessage(resultatElement.getText());
         }
     }
 
@@ -37,7 +39,8 @@ public class ViewManager {
     static public void informUserNewTextAddToFileLog(){
         if(LogsManager.isTextAddedToLog() ){
             String message = MessagesBuilder.getMessagesProperty("file.add.text", LogsManager.getlogFilePath());
-            ConsoleManager.printMessage(message);
+            ConsoleManager consoleManager = MVCCDManager.instance().getConsoleManager();
+            consoleManager.printMessage(message);
         }
     }
 

@@ -2,9 +2,6 @@ package main;
 
 import console.ViewLogsManager;
 import messages.MessagesBuilder;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 
 import java.io.Console;
 
@@ -15,7 +12,16 @@ public class MVCCD  {
      */
     public static void main(String[] args) {
         Console console;
+
         try {
+            /*
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    MVCCDManager.instance().start();
+                }
+            });
+
+            */
             MVCCDManager.instance().start();
         } catch(Exception e){
             if (MVCCDManager.instance().getConsoleManager() != null) {
