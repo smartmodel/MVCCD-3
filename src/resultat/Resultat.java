@@ -1,11 +1,13 @@
 package resultat;
 
+import console.ViewLogsManager;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 
 public class Resultat {
     private ArrayList<ResultatElement> elements = new ArrayList<ResultatElement>();
+    private boolean printImmediately = false ; //Par défaut un résultat est disponible pour un parent qui se chargera de l'imprimer ou pas
 
     public Resultat() {
 
@@ -15,6 +17,9 @@ public class Resultat {
     public void add(ResultatElement resultatElement){
         if (resultatElement != null) {
             elements.add(resultatElement);
+            if (isPrintImmediately()){
+                ViewLogsManager.printElementResultat(resultatElement);
+            }
         }
     }
 
@@ -108,5 +113,22 @@ public class Resultat {
         return ! isError();
     }
 
+    public boolean isPrintImmediately() {
+        return printImmediately;
+    }
 
+    public void setPrintImmediatelyForResultat(boolean printImmediately) {
+        this.printImmediately = printImmediately;
+        ViewLogsManager.clear();
+        // Les messages de main ne peuvent être affichés qu'après le chargement de la console
+        if (elements.size() > 0){
+            for (ResultatElement resultatElement : elements) {
+                ViewLogsManager.printElementResultat(resultatElement);
+            }
+        }
+    }
+
+    public void setPrintImmediatelyForMessage(boolean printImmediately) {
+        this.printImmediately = printImmediately;
+    }
 }

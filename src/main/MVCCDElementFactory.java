@@ -3,7 +3,6 @@ package main;
 import connections.ConConnectionOracle;
 import connections.ConConnectorOracle;
 import connections.ConnectionsOracle;
-import console.ViewLogsManager;
 import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
@@ -294,7 +293,6 @@ public class MVCCDElementFactory {
             }
         }
         if (resultat.getNbElementsAllLevels() > 0){
-            ViewLogsManager.printResultat(resultat);
             //DialogMessage.showOk(null, message);
         }
     }

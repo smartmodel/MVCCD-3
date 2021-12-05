@@ -2,15 +2,10 @@ package generatorsql.viewer;
 
 import connections.ConConnection;
 import connections.ConConnector;
-import console.WarningLevel;
-import console.WarningLevelManager;
+import main.MVCCDManager;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
-import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import preferences.PreferencesManager;
-import resultat.Resultat;
-import resultat.ResultatElement;
 import utilities.window.PanelBorderLayoutResizer;
 
 import javax.swing.*;
@@ -57,6 +52,7 @@ public class SQLViewer extends JDialog implements WindowListener {
 
         setModal(true);
 
+
         panelBLResizer = new PanelBorderLayoutResizer();
 
 
@@ -83,6 +79,9 @@ public class SQLViewer extends JDialog implements WindowListener {
                 panelBLResizer.resizerContentPanels();
             }
         });
+
+        //Console FrontEnd (Duplication de la console de la fenêtre principale
+        MVCCDManager.instance().getConsoleManager().setiConsoleContentFrontEnd(this.sqlViewerConsole.getSqlViewerConsoleContent());
 
         addWindowListener(this);
 
@@ -117,6 +116,10 @@ public class SQLViewer extends JDialog implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
+
+        //Console FrontEnd (Suppression de la duplication de la console de la fenêtre principale
+        MVCCDManager.instance().getConsoleManager().setiConsoleContentFrontEnd(null);
+
         /*
         boolean exit = false ;
         if (MVCCDManager.instance().isDatasProjectChanged()){
@@ -188,32 +191,5 @@ public class SQLViewer extends JDialog implements WindowListener {
         this.conConnector = conConnector;
     }
 
-    protected void clearConsole(){
-        getSqlViewerConsole().getSqlViewerConsoleContent().getTextArea().setText("");
-    }
 
-    protected void printConsole(String text){
-        JTextArea jTextArea = getSqlViewerConsole().getSqlViewerConsoleContent().getTextArea();
-        if (StringUtils.isNotEmpty(jTextArea.getText())){
-            jTextArea.append(System.lineSeparator());
-        }
-        jTextArea.append(text);
-        jTextArea.revalidate();
-        jTextArea.repaint();
-    }
-
-    protected void printResultatElementConsole(ResultatElement resultatElement){
-        WarningLevelManager wlm = WarningLevelManager.instance();
-        WarningLevel prefWarningLevel = PreferencesManager.instance().preferences().getWARNING_LEVEL();
-        WarningLevel resultatWarningLevel = resultatElement.getLevel().getWarningLevel();
-        if(resultatWarningLevel == null || wlm.oneIsAsImportantAsSecond(resultatWarningLevel,prefWarningLevel)) {
-            printConsole(resultatElement.getText());
-        }
-    }
-
-    protected void printResultatConsole(Resultat resultat){
-        for (ResultatElement resultatElement : resultat.getElementsAllLevel()) {
-            printResultatElementConsole(resultatElement);
-        }
-    }
 }

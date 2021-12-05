@@ -193,7 +193,7 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
                     sqlViewer.setConConnection(conConnection);
                 } else {
                     String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connection.unknow");
-                    ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+                    ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
                     ViewLogsManager.dialogQuittance(getEditor(), message);
                 }
             }
@@ -208,7 +208,7 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
                     sqlViewer.setConConnector(conConnector);
                 } else {
                     String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connector.unknow");
-                    ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+                    ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
                     ViewLogsManager.dialogQuittance(getEditor(), message);
                 }
 

@@ -14,6 +14,7 @@ public abstract class MCDTransformEditingTreat extends MCDCompliantEditingTreat 
 
     public void treatTransform(Window owner, IMCDModel imcdModel) {
         Resultat resultat = new Resultat();
+        resultat.setPrintImmediatelyForResultat(true);
         String message = MessagesBuilder.getMessagesProperty("transform.mcdtomldr.start",
                 new String[] {MessagesBuilder.getMessagesProperty(getPropertyTheElement()),
                         imcdModel.getName()} );

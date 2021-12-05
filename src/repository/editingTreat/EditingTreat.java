@@ -1,7 +1,6 @@
 package repository.editingTreat;
 
 import connections.ConElement;
-import console.ViewLogsManager;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
@@ -206,7 +205,6 @@ public abstract class EditingTreat {
                     String message = MessagesBuilder.getMessagesProperty("dialog.completness.ok",
                             new String[]{messageElement, mvccdElement.getNameTree()});
                     resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
-                    ViewLogsManager.printResultat(resultat);
                     DialogMessage.showOk(owner, message);
                 }
             }

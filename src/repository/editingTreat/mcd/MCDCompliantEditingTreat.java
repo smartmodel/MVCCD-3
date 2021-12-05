@@ -16,6 +16,7 @@ public abstract class MCDCompliantEditingTreat extends EditingTreat {
 
     public void treatCompliant(Window owner, IMCDCompliant imcdCompliant) {
         Resultat resultat = new Resultat();
+        resultat.setPrintImmediatelyForResultat(true);
         String message = MessagesBuilder.getMessagesProperty("compliant.mcd.start",
                 new String[] {MessagesBuilder.getMessagesProperty(getPropertyTheElement()),
                         imcdCompliant.getName()});

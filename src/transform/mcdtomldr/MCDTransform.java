@@ -17,6 +17,7 @@ import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
 import transform.MDTransform;
+import utilities.window.DialogMessage;
 
 import java.util.ArrayList;
 
@@ -51,6 +52,7 @@ public class MCDTransform extends MDTransform {
             // Transformation des associations n:n sans entités associatives
             mcdTransformToTable.createOrModifyFromAllAssociationsNN();
 
+            DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), "Arrêt");
             // Transformation des associations non identifiantes de composition
             MCDTransformToFK mcdTransformToFK = new MCDTransformToFK(this);
             mcdTransformToFK.createOrModifyFromAllAssNotIdCompAndNotNN(imcdModel, mldrModel);
@@ -58,6 +60,9 @@ public class MCDTransform extends MDTransform {
             // Transformation des contraintes d'unicité
             MCDTransformToUnique mcdTransformToUnique = new MCDTransformToUnique(this);
             mcdTransformToUnique.createOrModifyFromAllUnicities(imcdModel, mldrModel);
+
+            MVCCDManager.instance().getConsoleManager().printMessage("Mon message");
+            DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), "Attente");
 
             // Transformation des LP - liens de programmation
 

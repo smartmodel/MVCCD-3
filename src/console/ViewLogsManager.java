@@ -26,8 +26,7 @@ import java.util.ArrayList;
 
 public class ViewLogsManager {
 
-    private static boolean inTransaction = false;
-
+/*
     static public void printNewResultat(ResultatElement resultatElement){
         ConsoleManager consoleManager = MVCCDManager.instance().getConsoleManager();
         consoleManager.clearMessages();
@@ -36,25 +35,51 @@ public class ViewLogsManager {
     }
 
 
+ */
+
+    static public void clear() {
+        ConsoleManager consoleManager = MVCCDManager.instance().getConsoleManager();
+        consoleManager.clearMessages();
+        //TODO-0 A remplacer par simplement l'impression de la ligne de séparation
+        LogsManager.newResultatElement(new ResultatElement("", ResultatLevel.INFO));
+    }
+
+
+
     /**
      * Print a message to the user through the console or/and the log file.
      * Print only in one line.
      * @param resultatElement
      */
 
+    /*
     static public void printContinueResultat(ResultatElement resultatElement){
         LogsManager.continueResultatElement(resultatElement);
         ViewManager.printResultatElement(resultatElement);
     }
 
-    public static void printMessage(String message, ResultatLevel resultatLevel) {
-        Resultat resultat = new Resultat();
-        resultat.add(new ResultatElement(message, resultatLevel));
-        printResultat(resultat);
+     */
+
+
+    static public void printElementResultat(ResultatElement resultatElement){
+        LogsManager.continueResultatElement(resultatElement);
+        ViewManager.printResultatElement(resultatElement);
     }
 
+
+
+    public static void printNewResultatWithMessage(String message, ResultatLevel resultatLevel) {
+        Resultat resultat = new Resultat();
+        resultat.setPrintImmediatelyForMessage(true);
+        resultat.add(new ResultatElement(message, resultatLevel));
+    }
+
+
+    /*
     public static void printResultat(Resultat resultat) {
+
             int i = 0;
+
             for (ResultatElement resultatElement : resultat.getElementsAllLevel()) {
                 if (i == 0) {
                     ViewLogsManager.printNewResultat(resultatElement);
@@ -64,6 +89,10 @@ public class ViewLogsManager {
                 i++;
             }
     }
+
+     */
+
+
 
     public static void dialogQuittance(Window window, Resultat resultat) {
         ArrayList<ResultatElement> elements = resultat.getElementsAllLevel();
@@ -82,24 +111,14 @@ public class ViewLogsManager {
     }
 
     public static void printMessageAndDialog(Window window, String message, ResultatLevel resultatLevel) {
-        printMessage(message, resultatLevel);
+        printNewResultatWithMessage(message, resultatLevel);
         DialogMessage.showOk(window, message);
     }
 
     public static void catchException(Exception e, Window window, String message) {
         Resultat resultat = new Resultat();
+        resultat.setPrintImmediatelyForResultat(true);
         resultat.addExceptionUnhandled(e);
         resultat.add(new ResultatElement(message, ResultatLevel.INFO));
-        ViewLogsManager.printResultat(resultat);
-        ViewLogsManager.dialogQuittance(window, resultat);
     }
-
-
-    public static boolean isInTransaction() {
-        return inTransaction;
-    }
-
-    public static void setInTransaction(boolean pInTransaction) {
-        inTransaction = pInTransaction;
-    }
-}
+ }

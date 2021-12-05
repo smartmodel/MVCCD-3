@@ -2,19 +2,15 @@ package console;
 
 import main.MVCCDManager;
 import main.window.console.WinConsoleContent;
-import thread.ConsolePile;
-import utilities.Trace;
+import org.apache.commons.lang.StringUtils;
+
+import javax.swing.*;
 
 public class ConsoleManager {
 
-    //private ConsoleThread consoleThread ;
+    private IConsoleContentFrontEnd iConsoleContentFrontEnd = null;
 
     public ConsoleManager(){
-        /*
-        ConsoleThread consoleThread = new ConsoleThread();
-        this.consoleThread = consoleThread;
-        consoleThread.run();
-        */
     }
 
     private  WinConsoleContent winConsoleContent(){
@@ -25,16 +21,33 @@ public class ConsoleManager {
         //System.setOut(new PrintStream(new JTextAreaOutputStream(winConsoleContent().getTextArea())));
         //System.out.println(message);
         // L'impression se fait toujours après la fin du traitement invoqué...
-        //winConsoleContent().getTextArea().append(message + System.lineSeparator());
-        Trace.println(message);
-        ConsolePile.add(message + System.lineSeparator());
-        winConsoleContent().getConsoleThread().run();
-        //consoleThread.run();
+        printMessage (message, winConsoleContent().getTextArea());
+        if (iConsoleContentFrontEnd != null){
+            printMessage (message, iConsoleContentFrontEnd.getTextArea());
+        }
+
+    }
+
+    public  void printMessage (String message, JTextArea jTextArea){
+        //System.setOut(new PrintStream(new JTextAreaOutputStream(winConsoleContent().getTextArea())));
+        //System.out.println(message);
+        // L'impression se fait toujours après la fin du traitement invoqué...
+
+        if (StringUtils.isNotEmpty(jTextArea.getText())){
+            jTextArea.append(System.lineSeparator());
+        }
+        jTextArea.append(message);
     }
 
     public  void clearMessages(){
-        //winConsoleContent().getTextArea().removeAll();
-        winConsoleContent().getTextArea().setText("");
+        clearMessages(winConsoleContent().getTextArea());
+        if (iConsoleContentFrontEnd != null){
+            clearMessages(iConsoleContentFrontEnd.getTextArea());
+        }
+    }
+
+    public  void clearMessages(JTextArea jTextArea){
+        jTextArea.setText("");
     }
 
     /**
@@ -48,10 +61,11 @@ public class ConsoleManager {
         }
     }
 
-    /*
-    public ConsoleThread getConsoleThread() {
-        return consoleThread;
+    public IConsoleContentFrontEnd getiConsoleContentFrontEnd() {
+        return iConsoleContentFrontEnd;
     }
 
-     */
+    public void setiConsoleContentFrontEnd(IConsoleContentFrontEnd iConsoleContentFrontEnd) {
+        this.iConsoleContentFrontEnd = iConsoleContentFrontEnd;
+    }
 }

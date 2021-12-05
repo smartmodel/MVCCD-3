@@ -1,7 +1,6 @@
 package main.window.menu;
 
 import console.ViewLogsManager;
-import console.WarningLevel;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
@@ -11,7 +10,6 @@ import repository.editingTreat.ProjectEditingTreat;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 
 import javax.swing.*;
@@ -176,7 +174,6 @@ public class WinMenuContent implements ActionListener {
             }
 
             // Quittance ok
-            ViewLogsManager.printResultat(resultat);
             if (dialogQuittance) {
                 ViewLogsManager.dialogQuittance(mvccdWindow, resultat);
             }

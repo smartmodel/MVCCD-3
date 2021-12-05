@@ -1,7 +1,6 @@
 package main;
 
 import console.ViewLogsManager;
-import console.WarningLevel;
 import main.window.console.WinConsole;
 import main.window.diagram.WinDiagram;
 import main.window.haut.Haut;
@@ -135,7 +134,7 @@ public class MVCCDWindow extends JFrame implements WindowListener {
         if (exit) {
             // Quittance de sortie de l'application
             String message = MessagesBuilder.getMessagesProperty ("mvccd.close");
-            ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+            ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
             System.exit(0);
         }
     }

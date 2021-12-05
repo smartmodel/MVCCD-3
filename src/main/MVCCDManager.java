@@ -86,6 +86,8 @@ public class MVCCDManager {
         // Création de la console
         startConsole();
 
+        resultat.setPrintImmediatelyForResultat(true);
+
         // Création du référentiel
         startRepository();
 
@@ -109,7 +111,6 @@ public class MVCCDManager {
 
         // Quittance de fin
         resultat.finishTreatment("mvccd.finish.ok", "mvccd.finish.error");
-        ViewLogsManager.printResultat(resultat);
         ViewLogsManager.dialogQuittance(mvccdWindow, resultat);
 
     }
@@ -152,21 +153,6 @@ public class MVCCDManager {
      * <img src="doc-files/UI_homeScreen.jpg" alt="Fenêtre de l'écran d'accueil">
      */
     public void startMVCCDWindow() {
-        /*
-        Trace.println("Avant");
-
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                Trace.println("Entré run");
-                mvccdWindow = new MVCCDWindow();
-            }
-        });
-
-        Trace.println("Après");
-
-         */
-
-        // Dans SwingUtilities.invokeLater
         mvccdWindow = new MVCCDWindow();
         mvccdWindow.setVisible(true);
         mvccdWindow.getPanelBLResizer().resizerContentPanels();

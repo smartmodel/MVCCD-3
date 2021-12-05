@@ -8,9 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
-import utilities.Trace;
 import utilities.files.UtilFiles;
-import utilities.window.DialogMessage;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.SButton;
 import utilities.window.services.ComponentService;
@@ -155,6 +153,10 @@ public abstract class PanelButtonsContent extends PanelContent
 
     public JButton getBtnApply() {
         return btnApply;
+    }
+
+    public JTextArea getMessages() {
+        return messages;
     }
 
     public void addIfNotExistMessage(String message){

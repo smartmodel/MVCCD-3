@@ -28,6 +28,12 @@ public class DialogMessage {
         JOptionPane.showMessageDialog(owner, message, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public static void showNotOkErrorConsole(Window owner, String message){
+        String title = MessagesBuilder.getMessagesProperty("dialog.information");
+        message = message + System.lineSeparator() + MessagesBuilder.getMessagesProperty("dialog.error.console");
+        JOptionPane.showMessageDialog(owner, message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public static void showOk(Window owner, String message, String title){
         JOptionPane.showMessageDialog(owner, message, title, JOptionPane.INFORMATION_MESSAGE);
     }

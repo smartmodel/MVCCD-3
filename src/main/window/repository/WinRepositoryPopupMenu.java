@@ -800,7 +800,6 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     Resultat resultat = editingTreat.treatCompletness(mvccdWindow, mvccdElement, true);
-                    ViewLogsManager.printResultat(resultat);
                 } catch (Exception e) {
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.completness");
                 }

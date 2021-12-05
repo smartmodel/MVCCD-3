@@ -135,7 +135,7 @@ public class PreferencesManager {
                     message = message + System.lineSeparator() +
                             "Tant que la sauvegarde xml n'est pas finalisée des données du projet peuvent être perdues!";
                 }
-                ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+                ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
                 DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), message, "Changement de format");
             }
             // Indicateur pour pouvoir faire une sauvegarde avec le format changé

@@ -1,13 +1,12 @@
 package connections;
 
 import connections.services.ConnectionsService;
-import console.ViewLogsManager;
 import exceptions.CodeApplException;
+import exceptions.SQLPreTreatedException;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationConnections;
 import main.MVCCDManager;
 import preferences.Preferences;
-import resultat.ResultatLevel;
 
 import java.awt.*;
 import java.io.File;
@@ -319,13 +318,19 @@ public class ConManager {
         } catch(SQLException e ){
             //TODO-1 Finaliser le traitement d'erreur
             if ( e.getMessage().indexOf("ORA-12505") > -1 ){
+                /*
                 String message = "Erreur Oracle : " + e.getMessage() +
                         "\r\nIl ne faut pas que la liste réfère SID et que le nom  soit un service";
-                ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+                ViewLogsManager.printNewMessage(message, ResultatLevel.INFO);
                 ViewLogsManager.dialogQuittance(owner, message);
                 return null;
+
+                 */
+                String message = "Erreur Oracle : " + e.getMessage() + System.lineSeparator() +
+                        "Il ne faut pas que la liste réfère SID et que le nom  soit un service";
+                throw new SQLPreTreatedException(message , e) ;
             } else {
-                throw new CodeApplException(e.getMessage(), e) ;
+                throw new SQLPreTreatedException(e.getMessage(), e) ;
             }
         } catch(Exception e ){
             throw new CodeApplException(e.getMessage(), e) ;

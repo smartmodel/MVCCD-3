@@ -104,7 +104,7 @@ public class MPDRModelConnectionInputContent extends MPDRModelInputContent imple
             boolean c2 = conConnection == null;
             if (c1 && c2) {
                 String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connection.unknow");
-                ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+                ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
                 ViewLogsManager.dialogQuittance(getEditor(), message);
 
             }
@@ -201,7 +201,7 @@ public class MPDRModelConnectionInputContent extends MPDRModelInputContent imple
         // S'il y a erreur, elle est levée directement par createConnection()
         if ( connection != null) {
             String message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
-            ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+            ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
             ViewLogsManager.dialogQuittance(getEditor(), message);
         }
      }

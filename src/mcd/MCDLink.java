@@ -1,26 +1,14 @@
 package mcd;
 
-import console.ViewLogsManager;
-import constraints.Constraint;
-import constraints.Constraints;
-import constraints.ConstraintsManager;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
-import mcd.services.MCDRelationService;
 import messages.MessagesBuilder;
 import mldr.MLDRModel;
 import mldr.MLDRTable;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
-import stereotypes.Stereotype;
-import stereotypes.Stereotypes;
-import stereotypes.StereotypesManager;
-import utilities.window.DialogMessage;
-
-import java.util.ArrayList;
 
 public class MCDLink extends MCDRelation {
 
@@ -89,6 +77,7 @@ public class MCDLink extends MCDRelation {
 
     public void delete(){
         Resultat resultat = new Resultat();
+        resultat.setPrintImmediatelyForResultat(true);
         // Si nécessaire, changement de la source de la table : Association n:n --> Entité associative
         if (getAssociation().isDegreeNN()){
             IMCDModel mcdModelAccueil = this.getIMCDModelAccueil();
@@ -103,7 +92,6 @@ public class MCDLink extends MCDRelation {
             }
         }
         if (resultat.getNbElementsAllLevels() > 0){
-            ViewLogsManager.printResultat(resultat);
             //DialogMessage.showOk(null, message);
         }
 

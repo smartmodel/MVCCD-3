@@ -4,11 +4,10 @@ import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConDBMode;
 import connections.ConManager;
-import console.ViewLogsManager;
 import exceptions.CodeApplException;
+import exceptions.SQLPreTreatedException;
 import exceptions.service.ExceptionService;
 import generatorsql.GenerateSQLUtil;
-import main.MVCCDManager;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import preferences.Preferences;
@@ -16,7 +15,6 @@ import preferences.PreferencesManager;
 import resultat.Resultat;
 import resultat.ResultatElement;
 import resultat.ResultatLevel;
-import resultat.ResultatService;
 import utilities.UtilDivers;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
@@ -211,14 +209,16 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         try {
             Object source = actionEvent.getSource();
 
+            Connection connection = null;
             if (source == btnConnectionTest) {
                 propertyAction = "editor.mpdr.connection.btn.exception.test";
-                actionTestConnection(true);
+                //Resultat resultat = actionTestConnection(true, connection);
+                actionTestConnection(true, connection);
             }
 
             if (source == btnConnectorTest) {
                 propertyAction = "editor.con.connector.btn.exception.test";
-                actionTestConnector(true);
+                actionTestConnector(true, connection);
             }
 
             if (source == btnExecute) {
@@ -238,54 +238,69 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         }
     }
 
-    private Connection actionTestConnection(boolean autonomous) {
-        ConConnection conConnection = sqlViewer.getConConnection();
-        if (conConnection != null) {
-            Connection connection = ConManager.createConnection(sqlViewer, conConnection);
-            // S'il y a erreur, elle est levée directement par createConnection()
-            if ( connection != null) {
-                String message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
-                ViewLogsManager.printMessage(message, ResultatLevel.INFO);
-                if (autonomous){
-                    DialogMessage.showOk(sqlViewer, message);
-                }
-            }
-            return connection;
-        } else {
-            String message = MessagesBuilder.getMessagesProperty("sqlviewer.connection.unknow", mpdrModel.getNameTreePath());
-            ViewLogsManager.printMessage(message, ResultatLevel.INFO);
-            if (autonomous){
-                DialogMessage.showOk(sqlViewer, message);
-            }
+    private Resultat actionTestConnection(boolean autonomous, Connection connection) {
+        Resultat resultat = new Resultat();
+        if (autonomous) {
+            resultat.setPrintImmediatelyForResultat(true);
         }
-        return null;
+        ConConnection conConnection = sqlViewer.getConConnection();
+        String message = null;
+        if (conConnection != null) {
+            try {
+                connection = ConManager.createConnection(sqlViewer, conConnection);
+                if (connection != null) {
+                    message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
+                    resultat.add(new ResultatElement(message , ResultatLevel.INFO));
+                }
+            } catch (SQLPreTreatedException e){
+                message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.not.ok");
+                resultat.addExceptionCatched(e, message);
+            }
+        } else {
+            message = MessagesBuilder.getMessagesProperty("sqlviewer.connection.unknow", mpdrModel.getNameTreePath());
+            resultat.add(new ResultatElement(message , ResultatLevel.INFO));
+
+        }
+        if (autonomous && (message != null)){
+            DialogMessage.showNotOkErrorConsole(sqlViewer, message);
+        }
+        return resultat;
     }
 
-    private Connection actionTestConnector(boolean autonomous) {
-         ConConnector conConnector = sqlViewer.getConConnector();
-        if (conConnector != null) {
-            Connection connection = ConManager.createConnection(sqlViewer, conConnector);
-            // S'il y a erreur, elle est levée directement par createConnection()
-            if ( connection != null) {
-                String message = MessagesBuilder.getMessagesProperty("editor.con.connector.btn.test.ok");
-                ViewLogsManager.printMessage(message, ResultatLevel.INFO);
-                if (autonomous){
-                    DialogMessage.showOk(sqlViewer, message);
-                }
-            }
-            return connection;
-        } else {
-            String message = MessagesBuilder.getMessagesProperty("sqlviewer.connector.unknow", mpdrModel.getNameTreePath());
-            ViewLogsManager.printMessage(message, ResultatLevel.INFO);
-            if (autonomous){
-                DialogMessage.showOk(sqlViewer, message);
-            }
+    private Resultat actionTestConnector(boolean autonomous, Connection connection) {
+        Resultat resultat = new Resultat();
+        if (autonomous) {
+            resultat.setPrintImmediatelyForResultat(true);
         }
-        return null;
+        ConConnector conConnector = sqlViewer.getConConnector();
+        String message = null;
+        if (conConnector != null) {
+            try {
+                connection = ConManager.createConnection(sqlViewer, conConnector);
+                if (connection != null) {
+                    message = MessagesBuilder.getMessagesProperty("editor.con.connector.btn.test.ok");
+                    resultat.add(new ResultatElement(message , ResultatLevel.INFO));
+                 }
+            } catch (SQLPreTreatedException e){
+                message = MessagesBuilder.getMessagesProperty("editor.con.connector.btn.test.not.ok");
+                resultat.addExceptionCatched(e, message);
+            }
+        } else {
+            message = MessagesBuilder.getMessagesProperty("sqlviewer.connector.unknow");
+            resultat.add(new ResultatElement(message , ResultatLevel.INFO));
+      }
+        if (autonomous && (message != null)){
+            DialogMessage.showNotOkErrorConsole(sqlViewer, message);
+        }
+        return resultat;
     }
 
     private Resultat actionSave(boolean autonomous)  {
-        Resultat resultat = GenerateSQLUtil.generateSQLFile(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL());
+        Resultat resultat = new Resultat();
+        if (autonomous) {
+            resultat.setPrintImmediatelyForResultat(true);
+        }
+        resultat.addResultat(GenerateSQLUtil.generateSQLFile(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL()));
         String message ;
         if (resultat.isNotError()) {
             message = MessagesBuilder.getMessagesProperty("sqlviewer.dml.file.saved.ok", sqlCreateFile);
@@ -295,7 +310,6 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         resultat.add(new ResultatElement (message, ResultatLevel.INFO));
         if (autonomous) {
             DialogMessage.showOk(sqlViewer, message);
-            ViewLogsManager.printResultat(resultat);
         }
         return resultat;
     }
@@ -303,28 +317,26 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
 
     private void actionExecute() {
         Resultat resultat = new Resultat();
-        sqlViewer.clearConsole();
+        resultat.setPrintImmediatelyForResultat(true);
         String message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.start",
                 new String[]{mpdrModel.getNamePath()});
         resultat.add(new ResultatElement(message, ResultatLevel.INFO));
 
-        MVCCDManager.instance().getConsoleManager().printMessage(message);
         // Sauvegarde du fichier de script
         String codeSQL = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
         Resultat resultatSave = actionSave(false);
         resultat.addResultat(resultatSave);
 
-
-        // Exécution du script
+        // Etablissement de la connexion
         Connection connection = null;
         if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTION) {
-            connection = actionTestConnection(false);
+            resultat.addResultat(actionTestConnection(false, connection));
         }
-
         if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
-            connection = actionTestConnector(false);
+            resultat.addResultat(actionTestConnector(false, connection));
         }
 
+        // Exécution du script
         if (connection != null) {
             try {
                 Statement statement = connection.createStatement();
@@ -334,13 +346,11 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                 fieldDDLExecuted.setText(formattedHourExecuted);
             } catch (Exception e) {
                 resultat.addExceptionUnhandled(e);
-                // Pour la console sqlViewer
-                Resultat resultatExceptionUnhandled = new Resultat();
-                ResultatService.addExceptionUnhandled(resultatExceptionUnhandled, e);
-                sqlViewer.printResultatConsole(resultatExceptionUnhandled);
-            }
+             }
         }
-        if (resultat.isNotError()) {
+
+        // Quittance de fin de traitement
+        if (resultat.isNotError() && (connection != null)) {
             message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.ok",
                     new String[]{mpdrModel.getNamePath()});
         } else {
@@ -350,7 +360,6 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         }
         resultat.add(new ResultatElement(message, ResultatLevel.INFO));
         DialogMessage.showOk(sqlViewer, message);
-        ViewLogsManager.printResultat(resultat);
     }
 
 

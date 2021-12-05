@@ -504,7 +504,7 @@ public abstract class ConConnectorInputContent extends PanelInputContent impleme
 
         // S'il y a erreur, elle est levée directement par createConnection()
         String message = MessagesBuilder.getMessagesProperty("editor.con.connector.btn.test.ok");
-        ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+        ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
         ViewLogsManager.dialogQuittance(getEditor(), message);
     }
 

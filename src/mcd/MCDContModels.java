@@ -38,7 +38,8 @@ public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePa
         MCDCompliant mcdCompliant = new MCDCompliant();
         // Il n'y a pas de modèles. Il faut donc tester toutes les entités du conteneur
         //ArrayList<String> resultat = mcdCompliant.check(ProjectService.getMCDEntities(), false);
-        return mcdCompliant.check(IMCDModelService.getMCDEntities(this), false);
+        return mcdCompliant.check(IMCDModelService.getMCDEntities(this),
+                false);
     }
 
 

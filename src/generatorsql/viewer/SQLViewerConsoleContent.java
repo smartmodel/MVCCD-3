@@ -1,11 +1,12 @@
 package generatorsql.viewer;
 
+import console.IConsoleContentFrontEnd;
 import utilities.window.PanelContent;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class SQLViewerConsoleContent extends PanelContent {
+public class SQLViewerConsoleContent extends PanelContent implements IConsoleContentFrontEnd {
 
     private JTextArea textArea;
 

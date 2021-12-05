@@ -889,7 +889,7 @@ public abstract class ConConnectionInputContent extends PanelInputContent implem
             // S'il y a erreur, elle est levée directement par createConnection()
             if ( connection != null) {
                 String message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
-                ViewLogsManager.printMessage(message, ResultatLevel.INFO);
+                ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
                 ViewLogsManager.dialogQuittance(getEditor(), message);
             }
 
