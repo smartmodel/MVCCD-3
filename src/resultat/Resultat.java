@@ -2,12 +2,14 @@ package resultat;
 
 import console.ViewLogsManager;
 import org.apache.commons.lang.StringUtils;
+import resultat.viewer.ResultatViewer;
 
 import java.util.ArrayList;
 
 public class Resultat {
     private ArrayList<ResultatElement> elements = new ArrayList<ResultatElement>();
     private boolean printImmediately = false ; //Par défaut un résultat est disponible pour un parent qui se chargera de l'imprimer ou pas
+    private ResultatViewer resultatViewer = null;
 
     public Resultat() {
 
@@ -130,5 +132,46 @@ public class Resultat {
 
     public void setPrintImmediatelyForMessage(boolean printImmediately) {
         this.printImmediately = printImmediately;
+    }
+
+
+    //TODO-1 A reprendre la finalisation du Viewer
+    // Il est possible qu'il faille créer la fenêtre au départ
+    // Et ensuite la nettoyer et la présenter selon les besoins
+    public void showViewer() {
+        /*
+        new Thread(new Runnable() {
+            public void run() {
+                resultatViewer = new ResultatViewer();
+                MVCCDManager.instance().getConsoleManager().setResultatViewer(resultatViewer);
+                //On modifie l'état  d'un composant Swing => Opération à effectuer dans l'EDT
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        resultatViewer.setVisible(true);
+                    }
+                });
+            }
+        }).start();
+
+         */
+
+        /*
+        new Thread(new Runnable() {
+            public void run() {
+                resultatViewer = new ResultatViewer();
+                MVCCDManager.instance().getConsoleManager().setResultatViewer(resultatViewer);
+                resultatViewer.setVisible(true);
+            }
+        }).start();
+
+         */
+
+        //resultatViewer = new ResultatViewer();
+        //resultatViewer.setVisible(true);
+    }
+
+
+    public void hideViewer(){
+        //resultatViewer.setVisible(false);
     }
 }

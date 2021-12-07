@@ -3,7 +3,7 @@ package generatorsql.viewer;
 import utilities.window.PanelBorderLayout;
 import utilities.window.PanelBorderLayoutResizer;
 
-public class SQLViewerConsole extends PanelBorderLayout {
+public class SQLViewerConsole extends PanelBorderLayout  {
 
     private SQLViewerConsoleContent sqlViewerConsoleContent;
 
@@ -22,4 +22,5 @@ public class SQLViewerConsole extends PanelBorderLayout {
     public SQLViewerConsoleContent getSqlViewerConsoleContent() {
         return sqlViewerConsoleContent;
     }
-}
+
+  }

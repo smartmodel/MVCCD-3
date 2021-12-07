@@ -3,12 +3,14 @@ package console;
 import main.MVCCDManager;
 import main.window.console.WinConsoleContent;
 import org.apache.commons.lang.StringUtils;
+import resultat.viewer.ResultatViewer;
 
 import javax.swing.*;
 
 public class ConsoleManager {
 
     private IConsoleContentFrontEnd iConsoleContentFrontEnd = null;
+    private ResultatViewer resultatViewer = null;
 
     public ConsoleManager(){
     }
@@ -24,6 +26,9 @@ public class ConsoleManager {
         printMessage (message, winConsoleContent().getTextArea());
         if (iConsoleContentFrontEnd != null){
             printMessage (message, iConsoleContentFrontEnd.getTextArea());
+        }
+        if (resultatViewer != null){
+            printMessage (message, resultatViewer.getResultatViewerQuittance().getResultatViewerQuittanceContent().getTextArea() );
         }
 
     }
@@ -67,5 +72,13 @@ public class ConsoleManager {
 
     public void setiConsoleContentFrontEnd(IConsoleContentFrontEnd iConsoleContentFrontEnd) {
         this.iConsoleContentFrontEnd = iConsoleContentFrontEnd;
+    }
+
+    public ResultatViewer getResultatViewer() {
+        return resultatViewer;
+    }
+
+    public void setResultatViewer(ResultatViewer resultatViewer) {
+        this.resultatViewer = resultatViewer;
     }
 }

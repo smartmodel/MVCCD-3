@@ -8,6 +8,7 @@ import exceptions.CodeApplException;
 import exceptions.SQLPreTreatedException;
 import exceptions.service.ExceptionService;
 import generatorsql.GenerateSQLUtil;
+import main.MVCCDManager;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import preferences.Preferences;
@@ -42,7 +43,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     private SQLViewer sqlViewer;
     private MPDRModel mpdrModel;
 
-    File sqlCreateFile = GenerateSQLUtil.sqlCreateFile();
+    File sqlCreateFile = null;
 
 
     private JPanel panelContent = new JPanel();
@@ -53,6 +54,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     private SButton btnConnectorTest;
     private SButton btnExecute;
     private SButton btnSave;
+    private SButton btnClose;
 
     private JLabel labelDDLName;
     private STextField fieldDDLName;
@@ -67,6 +69,9 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         super.addContent(panelContent);
         sqlViewer = sqlViewerButtons.getSQLViewer();
         mpdrModel = sqlViewer.getMpdrModel();
+        if ( MVCCDManager.instance().getFileProjectCurrent() != null) {
+            sqlCreateFile = GenerateSQLUtil.sqlCreateFile();
+        }
         createContent();
         createPanelContent();
         loadDatas();
@@ -87,6 +92,9 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
 
         btnSave = new SButton("Sauver");
         btnSave.addActionListener(this);
+
+        btnClose = new SButton("Fermer");
+        btnClose.addActionListener(this);
 
 
         labelDDLName = new JLabel("Nom : ");
@@ -132,6 +140,8 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         panelContent.add(btnExecute, gbc);
         gbc.gridy++ ;
         panelContent.add(btnSave, gbc);
+        gbc.gridy++ ;
+        panelContent.add(btnClose, gbc);
 
     }
 
@@ -173,15 +183,22 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         SQLViewer sqlViewer = sqlViewerButtons.getSQLViewer();
         MPDRModel mpdrModel = sqlViewer.getMpdrModel();
 
-        fieldDDLName.setText(sqlCreateFile.getName());
+        if (sqlCreateFile != null) {
+            fieldDDLName.setText(sqlCreateFile.getName());
+        } else {
+            fieldDDLName.setText("");
+        }
         setFieldDDLSaved();
         fieldDDLExecuted.setText("");
     }
 
     private void setFieldDDLSaved() {
-        Date ddlDateLastModified = UtilFiles.getLastModifiedDate(sqlCreateFile);
+        Date ddlDateLastModified = null;
+        if (sqlCreateFile != null) {
+            ddlDateLastModified = UtilFiles.getLastModifiedDate(sqlCreateFile);
+        }
         if (ddlDateLastModified != null) {
-            Date dateLastModified = UtilFiles.getLastModifiedDate(sqlCreateFile);
+            Date dateLastModified = ddlDateLastModified;
             String formattedDateLastModified = UtilDivers.dateHourFormatted(dateLastModified);
             fieldDDLSaved.setText(formattedDateLastModified);
         } else {
@@ -202,6 +219,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         throw new CodeApplException("getEditor n'est pas affecté...");
     }
 
+    /*
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         String propertyMessage = "sqlviewer.btn.exception.new";
@@ -223,12 +241,21 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
 
             if (source == btnExecute) {
                 propertyAction = "sqlviewer.execute.btn.exception.test";
-                actionExecute();
+                new Thread(new Runnable() {
+                    public void run() {
+                        actionExecute();
+                    }
+                }).start();
+
             }
 
             if (source == btnSave) {
                 propertyAction = "sqlviewer.save.btn.exception.test";
-                actionSave(true);
+                new Thread(new Runnable() {
+                    public void run() {
+                        actionSave(true);
+                    }
+                }).start();
                 // Mise à jour de l'indicateur de dernière modif.
                 setFieldDDLSaved();
             }
@@ -236,6 +263,59 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
             ExceptionService.exceptionUnhandled(exception, sqlViewer, mpdrModel,
                     propertyMessage, propertyAction);
         }
+    }
+
+     */
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        new Thread(new Runnable() {
+            public void run() {
+                actionPerformedThread(actionEvent);
+            }
+        }).start();
+
+    }
+    public void actionPerformedThread(ActionEvent actionEvent) {
+
+                String propertyMessage = "sqlviewer.btn.exception.new";
+                String propertyAction = "";
+                try {
+                    Object source = actionEvent.getSource();
+
+                    Connection connection = null;
+                    if (source == btnConnectionTest) {
+                        propertyAction = "editor.mpdr.connection.btn.exception.test";
+                        //Resultat resultat = actionTestConnection(true, connection);
+                        actionTestConnection(true, connection);
+                    }
+
+                    if (source == btnConnectorTest) {
+                        propertyAction = "editor.con.connector.btn.exception.test";
+                        actionTestConnector(true, connection);
+                    }
+
+                    if (source == btnExecute) {
+                        propertyAction = "sqlviewer.execute.btn.exception.test";
+                        actionExecute();
+                    }
+
+                    if (source == btnSave) {
+                        propertyAction = "sqlviewer.save.btn.exception.test";
+                        actionSave(true);
+                        // Mise à jour de l'indicateur de dernière modif.
+                        setFieldDDLSaved();
+                    }
+                    if (source == btnClose) {
+                        sqlViewer.dispose();
+                    }
+                } catch (Exception exception) {
+                    ExceptionService.exceptionUnhandled(exception, sqlViewer, mpdrModel,
+                            propertyMessage, propertyAction);
+                }
+
+
+
     }
 
     private Resultat actionTestConnection(boolean autonomous, Connection connection) {
@@ -303,6 +383,8 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         resultat.addResultat(GenerateSQLUtil.generateSQLFile(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL()));
         String message ;
         if (resultat.isNotError()) {
+            File sqlCreateFile = GenerateSQLUtil.sqlCreateFile();
+            setFieldDDLSaved();
             message = MessagesBuilder.getMessagesProperty("sqlviewer.dml.file.saved.ok", sqlCreateFile);
         } else {
             message = MessagesBuilder.getMessagesProperty("sqlviewer.dml.file.saved.error", sqlCreateFile);
@@ -318,49 +400,59 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     private void actionExecute() {
         Resultat resultat = new Resultat();
         resultat.setPrintImmediatelyForResultat(true);
-        String message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.start",
-                new String[]{mpdrModel.getNamePath()});
-        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+        resultat.showViewer();
+                String message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.start",
+                        new String[]{mpdrModel.getNamePath()});
+                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
 
-        // Sauvegarde du fichier de script
-        String codeSQL = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
-        Resultat resultatSave = actionSave(false);
-        resultat.addResultat(resultatSave);
+                // Sauvegarde du fichier de script
+                String codeSQL = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
+                Resultat resultatSave = actionSave(false);
+                resultat.addResultat(resultatSave);
 
-        // Etablissement de la connexion
-        Connection connection = null;
-        if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTION) {
-            resultat.addResultat(actionTestConnection(false, connection));
-        }
-        if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
-            resultat.addResultat(actionTestConnector(false, connection));
-        }
+                // Etablissement de la connexion
+                Connection connection = null;
+                if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTION) {
+                    resultat.addResultat(actionTestConnection(false, connection));
+                }
+                if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
+                    resultat.addResultat(actionTestConnector(false, connection));
+                }
 
-        // Exécution du script
-        if (connection != null) {
-            try {
-                Statement statement = connection.createStatement();
-                statement.executeUpdate(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL());
-                statement.close();
-                String formattedHourExecuted = UtilDivers.hourFormatted(new Date());
-                fieldDDLExecuted.setText(formattedHourExecuted);
-            } catch (Exception e) {
-                resultat.addExceptionUnhandled(e);
-             }
-        }
+                // Exécution du script
+                if (connection != null) {
+                    try {
+                        Statement statement = connection.createStatement();
+                        statement.executeUpdate(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL());
+                        statement.close();
+                        String formattedHourExecuted = UtilDivers.hourFormatted(new Date());
+                        fieldDDLExecuted.setText(formattedHourExecuted);
+                    } catch (Exception e) {
+                        resultat.addExceptionUnhandled(e);
+                    }
+                }
 
-        // Quittance de fin de traitement
-        if (resultat.isNotError() && (connection != null)) {
-            message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.ok",
-                    new String[]{mpdrModel.getNamePath()});
-        } else {
-            message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.abort",
-                    new String[]{mpdrModel.getNamePath()});
+                // Quittance de fin de traitement
+                if (resultat.isNotError() && (connection != null)) {
+                    message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.ok",
+                            new String[]{mpdrModel.getNamePath()});
+                } else {
+                    message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.abort",
+                            new String[]{mpdrModel.getNamePath()});
 
-        }
-        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
-        DialogMessage.showOk(sqlViewer, message);
+                }
+                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+                DialogMessage.showOk(sqlViewer, message);
+                resultat.hideViewer();
+
+   }
+
+
+    public SButton getBtnExecute() {
+        return btnExecute;
     }
 
-
+    public SButton getBtnSave() {
+        return btnSave;
+    }
 }

@@ -6,7 +6,7 @@ import utilities.window.PanelBorderLayoutResizer;
 public class SQLViewerButtons extends PanelBorderLayout {
 
     private SQLViewer SQLViewer;
-    private SQLViewerButtonsContent content;
+    private SQLViewerButtonsContent sqlViewerButtonsContent;
 
     public SQLViewerButtons(SQLViewer SQLViewer,
                             String borderLayoutPosition,
@@ -17,11 +17,15 @@ public class SQLViewerButtons extends PanelBorderLayout {
         super.setPanelBLResizer(panelBLResizer);
         startLayout();
 
-        content = new SQLViewerButtonsContent(this);
-        super.setPanelContent(content);
+        sqlViewerButtonsContent = new SQLViewerButtonsContent(this);
+        super.setPanelContent(sqlViewerButtonsContent);
     }
 
     public SQLViewer getSQLViewer() {
         return SQLViewer;
+    }
+
+    public SQLViewerButtonsContent getSqlViewerButtonsContent() {
+        return sqlViewerButtonsContent;
     }
 }

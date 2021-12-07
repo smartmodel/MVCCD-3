@@ -12,15 +12,19 @@ public class GenerateSQLUtil {
 
 
     public static File directorySQLFiles() {
-        String filePathProjectCurrent = MVCCDManager.instance().getFileProjectCurrent().getPath();
-        String fileNameProjectCurrent = MVCCDManager.instance().getFileProjectCurrent().getName();
-        String fileShortNameProjectCurrent = UtilFiles.fileShortName(fileNameProjectCurrent);
-        String directoryProjectCurrent = UtilFiles.getStrDirectory(MVCCDManager.instance().getFileProjectCurrent());
+        if (MVCCDManager.instance().getFileProjectCurrent() != null) {
+            String filePathProjectCurrent = MVCCDManager.instance().getFileProjectCurrent().getPath();
+            String fileNameProjectCurrent = MVCCDManager.instance().getFileProjectCurrent().getName();
+            String fileShortNameProjectCurrent = UtilFiles.fileShortName(fileNameProjectCurrent);
+            String directoryProjectCurrent = UtilFiles.getStrDirectory(MVCCDManager.instance().getFileProjectCurrent());
 
-        String folderSQLFiles = UtilFiles.filePath(directoryProjectCurrent, fileShortNameProjectCurrent);
-        File directory =  new File(folderSQLFiles);
-        directory.mkdirs(); //Create folder if necessary
-        return directory;
+            String folderSQLFiles = UtilFiles.filePath(directoryProjectCurrent, fileShortNameProjectCurrent);
+            File directory = new File(folderSQLFiles);
+            directory.mkdirs(); //Create folder if necessary
+            return directory;
+        } else {
+            return null;
+        }
     }
 
 

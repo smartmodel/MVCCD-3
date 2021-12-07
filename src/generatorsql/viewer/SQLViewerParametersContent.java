@@ -7,6 +7,7 @@ import connections.services.ConnectionsService;
 import console.ViewLogsManager;
 import exceptions.CodeApplException;
 import generatorsql.GenerateSQLUtil;
+import main.MVCCDManager;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
@@ -16,6 +17,7 @@ import resultat.ResultatLevel;
 import utilities.window.PanelContent;
 import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.IPanelInputContent;
+import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
 
@@ -24,7 +26,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
-public class SQLViewerParametersContent extends PanelContent implements IPanelInputContent{
+public class SQLViewerParametersContent extends PanelContent implements IPanelInputContent {
 
     SQLViewerParameters sqlViewerParameters;
 
@@ -219,8 +221,15 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
             fieldPort.setText(conConnection.getPort());
             fieldDbName.setText(conConnection.getDbName());
         }
-        String directorySQL = GenerateSQLUtil.directorySQLFiles().getPath();
-        fieldDirectorySQL.setText(directorySQL);
+
+        if ( MVCCDManager.instance().getFileProjectCurrent() != null) {
+            String directorySQL = GenerateSQLUtil.directorySQLFiles().getPath();
+            fieldDirectorySQL.setText(directorySQL);
+        } else {
+            fieldDirectorySQL.setText("");
+            fieldDirectorySQL.setColor(SComponent.COLORERROR);
+
+        }
     }
 
     @Override
@@ -234,4 +243,5 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
     public DialogEditor getEditor() {
         throw new CodeApplException("getEditor n'est pas affecté...");
     }
+
 }
