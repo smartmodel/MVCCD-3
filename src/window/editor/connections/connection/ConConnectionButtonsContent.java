@@ -1,8 +1,11 @@
 package window.editor.connections.connection;
 
+import console.IConsoleContentFrontEnd;
 import utilities.window.editor.PanelButtonsContent;
 
-public abstract class ConConnectionButtonsContent extends PanelButtonsContent {
+import javax.swing.*;
+
+public abstract class ConConnectionButtonsContent extends PanelButtonsContent implements IConsoleContentFrontEnd {
 
 
     public ConConnectionButtonsContent(ConConnectionButtons conConnectionButtons) {
@@ -15,5 +18,10 @@ public abstract class ConConnectionButtonsContent extends PanelButtonsContent {
         btnApply.setVisible(true);
     }
 
+
+    @Override
+    public JTextArea getTextArea() {
+        return super.getMessages();
+    }
 
 }

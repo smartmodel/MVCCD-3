@@ -1,12 +1,22 @@
 package connections.services;
 
 import connections.*;
+import connections.interfaces.IConConnectionOrConnector;
+import exceptions.CodeApplException;
+import exceptions.SQLPreTreatedException;
 import generatesql.MPDRGenerateSQLUtil;
 import main.MVCCDManager;
+import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import resultat.Resultat;
+import resultat.ResultatElement;
+import resultat.ResultatLevel;
+import utilities.window.DialogMessage;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
+import java.sql.Connection;
 
 public class ConnectionsService {
 
@@ -89,4 +99,46 @@ public class ConnectionsService {
         }
         return url ;
     }
+
+
+    public static Resultat actionTestIConConnectionOrConnector(Window owner,
+                                                               boolean autonomous,
+                                                               IConConnectionOrConnector iConConnectionOrConnector,
+                                                               Connection connection) {
+        Resultat resultat = new Resultat();
+        String message="";
+        if (autonomous) {
+            resultat.setPrintImmediatelyForResultat(true);
+            message = MessagesBuilder.getMessagesProperty("con.connection.start.test");
+            resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+        }
+
+        if (iConConnectionOrConnector != null) {
+            try {
+                connection = ConManager.createConnection(iConConnectionOrConnector);
+                if (connection != null) {
+                    message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
+                    resultat.add(new ResultatElement(message , ResultatLevel.INFO));
+                } else {
+                    message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.not.ok");
+                    resultat.add(new ResultatElement(message , ResultatLevel.INFO));
+                }
+            } catch (SQLPreTreatedException e){
+                message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.not.ok");
+                resultat.addExceptionCatched(e, message);
+            }
+        } else {
+            //resultat.add(new ResultatElement(messageIConConnectionOrConnectorUnknow , ResultatLevel.INFO));
+            throw new CodeApplException("La connexion ou le connecteur sont inexistants");
+        }
+        if (autonomous ){
+            if (connection != null){
+                DialogMessage.showOk(owner, message);
+            } else {
+                DialogMessage.showNotOkErrorConsole(owner, message);
+            }
+        }
+        return resultat;
+    }
+
 }

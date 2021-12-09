@@ -70,6 +70,13 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
         return oldIndex;
     }
 
+    // Pour pouvoir lors d'un load() remplacé une valeur reçue devenue inexistante par une valeur valeur ou asence de valeur
+    // Cas pratque : MPDR Chargement d'une connexion qui a été supprimée entre-temps
+    public void forceUpdated() {
+        oldIndex = -1;
+    }
+
+
     @Override
     public boolean checkIfUpdated() {
         boolean updated;

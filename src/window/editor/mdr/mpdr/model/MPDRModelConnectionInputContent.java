@@ -1,16 +1,17 @@
 package window.editor.mdr.mpdr.model;
 
 import connections.ConConnection;
-import connections.ConManager;
 import connections.services.ConnectionsService;
-import console.ViewLogsManager;
 import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import resultat.Resultat;
+import resultat.ResultatElement;
 import resultat.ResultatLevel;
+import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.SButton;
 import utilities.window.scomponents.STextField;
@@ -103,12 +104,15 @@ public class MPDRModelConnectionInputContent extends MPDRModelInputContent imple
             boolean c1 = StringUtils.isNotEmpty(mpdrModel.getConnectionLienProg());
             boolean c2 = conConnection == null;
             if (c1 && c2) {
-                String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connection.unknow");
-                ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
-                ViewLogsManager.dialogQuittance(getEditor(), message);
-
+                Resultat resultat = new Resultat();
+                resultat.setPrintImmediatelyForResultat(true);
+                String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connection.unknow",
+                        new String[] {mpdrModel.getConnectionLienProg(), mpdrModel.getNamePath()});
+                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+                DialogMessage.showOk(getEditor(), message);
             }
             SComboBoxService.selectByText(fieldConnectionLienProg, withoutItem);
+            fieldConnectionLienProg.forceUpdated();
         }
 
         //UserName de connexion
@@ -185,27 +189,27 @@ public class MPDRModelConnectionInputContent extends MPDRModelInputContent imple
 
             if (source == btnConnectionTest) {
                 propertyAction = "editor.mpdr.connection.btn.exception.test";
-                actionTestConnection();
-            }
+
+                new Thread(new Runnable() {
+                    public void run() {
+                        actionTestConnection();
+                    }
+                }).start();
+           }
         } catch (Exception exception) {
             ExceptionService.exceptionUnhandled(exception, getEditor(), mvccdElementForCatchException,
                     propertyMessage, propertyAction);
-
         }
     }
 
-
     private void actionTestConnection() {
-        Connection connection = ConManager.createConnection(getEditor(), getConConnectionByFieldConnectionLienProg());
-
-        // S'il y a erreur, elle est levée directement par createConnection()
-        if ( connection != null) {
-            String message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
-            ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
-            ViewLogsManager.dialogQuittance(getEditor(), message);
-        }
-     }
-
+        ConConnection conConnection = getConConnectionByFieldConnectionLienProg();
+        Connection connection = null;
+        ConnectionsService.actionTestIConConnectionOrConnector(getEditor(),
+                true,
+                conConnection,
+                connection);
+    }
 }
 
 

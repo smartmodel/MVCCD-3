@@ -1,5 +1,6 @@
 package connections;
 
+import connections.interfaces.IConConnectionOrConnector;
 import connections.services.ConConnectionService;
 import m.interfaces.IMCompletness;
 import main.MVCCDElement;
@@ -10,7 +11,7 @@ import repository.editingTreat.connections.connector.ConConnectorEditingTreat;
 
 import java.io.File;
 
-public abstract class ConConnection extends ConElement implements IMCompletness {
+public abstract class ConConnection extends ConElement implements IMCompletness, IConConnectionOrConnector {
 
     private String hostName;
     private String port;

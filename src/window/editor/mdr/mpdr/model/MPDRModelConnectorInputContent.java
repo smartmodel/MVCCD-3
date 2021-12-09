@@ -4,14 +4,16 @@ import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConManager;
 import connections.services.ConnectionsService;
-import console.ViewLogsManager;
 import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import resultat.Resultat;
+import resultat.ResultatElement;
 import resultat.ResultatLevel;
+import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.SButton;
 import utilities.window.scomponents.SComboBox;
@@ -122,21 +124,26 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
 
         if (conConnector != null) {
             ConConnection conConnection = (ConConnection) conConnector.getParent();
+            SComboBoxService.selectByText(fieldConnectionLienProg, conConnection.getName());
             for (ConConnector conConnectorSiblings : ConManager.instance().getConConnectors(conConnection)) {
                 fieldConnectorLienProg.addItem(conConnector.getName());
             }
             SComboBoxService.selectByText(fieldConnectorLienProg, conConnector.getName());
-            SComboBoxService.selectByText(fieldConnectionLienProg, conConnection. getName());
+            setFieldConnectorUserName();
+            enabledBtnTestConnector();
         } else {
             boolean c1 = StringUtils.isNotEmpty(mpdrModel.getConnectorLienProg());
             boolean c2 = conConnector == null;
             if (c1 && c2) {
-                String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connector.unknow");
-                ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
-                ViewLogsManager.dialogQuittance(getEditor(), message);
-
+                Resultat resultat = new Resultat();
+                resultat.setPrintImmediatelyForResultat(true);
+                String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connector.unknow",
+                        new String[] {mpdrModel.getConnectorLienProg(), mpdrModel.getNamePath()});
+                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+                DialogMessage.showOk(getEditor(), message);
             }
             SComboBoxService.selectByText(fieldConnectorLienProg, withoutItem);
+            fieldConnectorLienProg.forceUpdated();
         }
 
         //UserName de connexion
@@ -190,9 +197,9 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
 
 
     private void setFieldConnectorUserName() {
-        ConConnector conConnectconConnector = getConConnectorByFieldConnectorLienProg();
-        if (conConnectconConnector != null) {
-            fieldConnectorUserName.setText(conConnectconConnector.getUserName());
+        ConConnector conConnector = getConConnectorByFieldConnectorLienProg();
+        if (conConnector != null) {
+            fieldConnectorUserName.setText(conConnector.getUserName());
         } else {
             fieldConnectorUserName.setText("");
         }
@@ -218,8 +225,10 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
         ConConnection conConnection = getConConnectionByFieldConnectionLienProg();
         fieldConnectorLienProg.removeAllItems();
         fieldConnectorLienProg.addItem(withoutItem);
-        for (ConConnector conConnectorSiblings : ConManager.instance().getConConnectors(conConnection)) {
-            fieldConnectorLienProg.addItem(conConnectorSiblings.getName());
+        if (conConnection != null) {
+            for (ConConnector conConnectorSiblings : ConManager.instance().getConConnectors(conConnection)) {
+                fieldConnectorLienProg.addItem(conConnectorSiblings.getName());
+            }
         }
     }
 
@@ -238,8 +247,16 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
 
             if (source == btnConnectorTest) {
                 propertyAction = "editor.mpdr.connection.btn.exception.test";
-                actionTestConnector();
+
+                new Thread(new Runnable() {
+                    public void run() {
+                        actionTestConnector();
+                    }
+                }).start();
+
             }
+
+
         } catch (Exception exception) {
             ExceptionService.exceptionUnhandled(exception, getEditor(), mvccdElementForCatchException,
                     propertyMessage, propertyAction);
@@ -249,14 +266,12 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
 
 
     private void actionTestConnector() {
-        Connection connection = ConManager.createConnection(getEditor(), getConConnectorByFieldConnectorLienProg());
-
-        // S'il y a erreur, elle est levée directement par createConnection()
-        if ( connection != null) {
-            String message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
-            ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
-            ViewLogsManager.dialogQuittance(getEditor(), message);
-        }
+        ConConnector conConnector = getConConnectorByFieldConnectorLienProg();
+        Connection connection = null;
+        ConnectionsService.actionTestIConConnectionOrConnector(getEditor(),
+                true,
+                conConnector,
+                connection);
      }
 
 }

@@ -1,5 +1,6 @@
 package connections;
 
+import connections.interfaces.IConConnectionOrConnector;
 import connections.services.ConnectionsService;
 import exceptions.CodeApplException;
 import exceptions.SQLPreTreatedException;
@@ -8,7 +9,6 @@ import main.MVCCDElementApplicationConnections;
 import main.MVCCDManager;
 import preferences.Preferences;
 
-import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -36,6 +36,8 @@ public class ConManager {
         applicationConnections = MVCCDManager.instance().getConnectionsRoot();
         connectionsOracle = (ConnectionsOracle) getConnectionsDB(ConDB.ORACLE);
     }
+
+
 
     private ConnectionsDB getConnectionsDB(ConDB conDB) {
         for (ConnectionsDB connectionsDB : applicationConnections.getConnectionsDB()) {
@@ -227,11 +229,20 @@ public class ConManager {
     }
     */
 
-    // Appel direct depuis une instance de connecteur
-    public static Connection createConnection(Window owner,
-                                              ConConnector conConnector) {
+    public static Connection createConnection(IConConnectionOrConnector iConConnectionOrConnector) {
+        if (iConConnectionOrConnector instanceof ConConnection){
+            return createConnection((ConConnection) iConConnectionOrConnector);
+        }
+        if (iConConnectionOrConnector instanceof ConConnector){
+            return createConnection((ConConnector) iConConnectionOrConnector);
+        }
+        return null;
+    }
 
-        return createConnection(owner,
+    // Appel direct depuis une instance de connecteur
+    public static Connection createConnection(ConConnector conConnector) {
+
+        return createConnection(
                     (ConConnection) conConnector.getParent(),
                     conConnector.getUserName(),
                     conConnector.getUserPW()
@@ -239,8 +250,7 @@ public class ConManager {
     }
 
     // Appel direct depuis l'édition d'un connecteur
-    public static Connection createConnection(Window owner,
-                                              ConConnection conConnectionParent,
+    public static Connection createConnection(ConConnection conConnectionParent,
                                               String userName,
                                               String userPW) {
 
@@ -251,14 +261,12 @@ public class ConManager {
         //Mettre le userName et password du connecteur dans l'objet connexion
         conConnectionParentClone.setUserName(userName);
         conConnectionParentClone.setUserPW(userPW);
-        return createConnection(owner, conConnectionParentClone);
+        return createConnection(conConnectionParentClone);
     }
 
     // Appel direct depuis une instance de connection
-    public static Connection createConnection(Window owner,
-                                              ConConnection conConnection) {
-        return createConnection(owner,
-                conConnection.getConDB(),
+    public static Connection createConnection(ConConnection conConnection) {
+        return createConnection(conConnection.getConDB(),
                 conConnection.getDriverFileToUse(),
                 conConnection.getHostName(),
                 conConnection.getPort(),
@@ -271,8 +279,7 @@ public class ConManager {
 
     // Appel direct depuis l'édition d'une connexion
     // Sinon appel en fin par les 3 autres méthodes createConnection()
-    public static Connection createConnection(Window owner,
-                                              ConDB conDB,
+    public static Connection createConnection(ConDB conDB,
                                               File driverFileToUse,
                                               String hostName,
                                               String port,

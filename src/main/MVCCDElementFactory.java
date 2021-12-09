@@ -59,7 +59,7 @@ public class MVCCDElementFactory {
         return project;
     }
 
-    public ConConnectionOracle createConResourceOracle(ConnectionsOracle parent) {
+    public ConConnectionOracle createConConnectionOracle(ConnectionsOracle parent) {
         return new ConConnectionOracle(parent);
     }
 

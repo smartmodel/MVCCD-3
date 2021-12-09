@@ -4,15 +4,11 @@ import application.ApplElement;
 import application.services.ApplElementConvert;
 import connections.ConConnection;
 import connections.ConConnector;
-import connections.ConManager;
 import connections.services.ConConnectorService;
-import console.ViewLogsManager;
 import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import mcd.services.MCDUtilService;
-import messages.MessagesBuilder;
 import preferences.Preferences;
-import resultat.ResultatLevel;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.*;
@@ -483,7 +479,13 @@ public abstract class ConConnectorInputContent extends PanelInputContent impleme
             }
             if (source == btnTest) {
                 propertyAction = "editor.con.connector.btn.exception.test";
-                actionTestConnector();
+
+                new Thread(new Runnable() {
+                    public void run() {
+                        actionTestConnector();
+                    }
+                }).start();
+
             }
 
        } catch (Exception exception) {
@@ -496,17 +498,14 @@ public abstract class ConConnectorInputContent extends PanelInputContent impleme
 
     private void actionTestConnector() {
 
-        Connection connection = ConManager.createConnection(getEditor(),
+        Connection connection = null;
+        ConConnectorService.actionTestConnection(getEditor(),
+                true,
                 conConnectionParent,
                 fieldUserName.getText(),
-                fieldUserPW.getText() //TODO-0 a finaliser avec getPassword()
-        );
-
-        // S'il y a erreur, elle est levée directement par createConnection()
-        String message = MessagesBuilder.getMessagesProperty("editor.con.connector.btn.test.ok");
-        ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
-        ViewLogsManager.dialogQuittance(getEditor(), message);
-    }
+                fieldUserPW.getText(), //TODO-0 a finaliser avec getPassword()
+                connection);
+   }
 
     public ConConnectorEditor getEditor() {
         return (ConConnectorEditor) super.getEditor();

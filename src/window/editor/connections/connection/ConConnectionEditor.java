@@ -3,6 +3,7 @@ package window.editor.connections.connection;
 import connections.ConConnection;
 import connections.ConDB;
 import connections.ConnectionsDB;
+import main.MVCCDManager;
 import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
@@ -18,6 +19,9 @@ public abstract class ConConnectionEditor extends DialogEditor {
                                String mode,
                                EditingTreat editingTreat)  {
         super(owner, parent, conConnection, mode, DialogEditor.SCOPE_NOTHING, editingTreat);
+
+        //Console FrontEnd (Duplication de la console de la fenêtre principale
+        MVCCDManager.instance().getConsoleManager().setiConsoleContentFrontEnd((ConConnectionButtonsContent) this.getButtons().getButtonsContent());
 
     }
 

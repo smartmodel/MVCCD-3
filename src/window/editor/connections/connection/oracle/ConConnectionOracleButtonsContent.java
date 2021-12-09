@@ -15,7 +15,7 @@ public class ConConnectionOracleButtonsContent extends ConConnectionButtonsConte
 
     @Override
     protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
-        ConConnectionOracle conResourceOracle = MVCCDElementFactory.instance().createConResourceOracle((ConnectionsOracle) parent);
+        ConConnectionOracle conResourceOracle = MVCCDElementFactory.instance().createConConnectionOracle((ConnectionsOracle) parent);
         return conResourceOracle;
     }
 
@@ -23,5 +23,4 @@ public class ConConnectionOracleButtonsContent extends ConConnectionButtonsConte
     protected String getHelpFileName() {
         return null;
     }
-
 }

@@ -2,6 +2,7 @@ package window.editor.mdr.mpdr.model;
 
 import connections.ConDB;
 import main.MVCCDElement;
+import main.MVCCDManager;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
 import repository.editingTreat.EditingTreat;
@@ -12,9 +13,13 @@ import window.editor.mdr.model.MDRModelEditor;
 
 import java.awt.*;
 
-public class MPDRModelEditor extends MDRModelEditor {
+public class MPDRModelEditor extends MDRModelEditor  {
     public MPDRModelEditor(Window owner, MVCCDElement parent, MPDRModel mpdrModel, String mode, EditingTreat editingTreat) {
         super(owner, parent, mpdrModel, mode, editingTreat);
+
+        //Console FrontEnd (Duplication de la console de la fenêtre principale
+        MVCCDManager.instance().getConsoleManager().setiConsoleContentFrontEnd((MPDRModelButtonContent) this.getButtons().getButtonsContent());
+
     }
 
 
@@ -50,4 +55,6 @@ public class MPDRModelEditor extends MDRModelEditor {
             // Pas de cas de contrôle de données avec elementForCheckInput
         }
     }
+
+
 }

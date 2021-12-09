@@ -34,10 +34,10 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
     private JPanel panelConnection = new JPanel();
 
     private JLabel labelConnectionName;
-    private STextField fielConnectionName;
+    private STextField fieldConnectionName;
 
     private JLabel labelConnectorName;
-    private STextField fielConnectorName;
+    private STextField fieldConnectorName;
     
     private JLabel labelHostName;
     private STextField fieldHostName;
@@ -66,17 +66,16 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
     }
 
 
-
     public void createContent() {
-        labelConnectionName = new JLabel("Nom de connexion : ");
-        fielConnectionName = new STextField(this, labelConnectionName);
-        fielConnectionName.setPreferredSize((new Dimension(200, Preferences.EDITOR_FIELD_HEIGHT)));
-        fielConnectionName.setReadOnly(true);
+        labelConnectionName = new JLabel("Nom de la connexion : ");
+        fieldConnectionName = new STextField(this, labelConnectionName);
+        fieldConnectionName.setPreferredSize((new Dimension(200, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldConnectionName.setReadOnly(true);
       
         labelConnectorName = new JLabel("Nom du connecteur : ");
-        fielConnectorName = new STextField(this, labelConnectorName);
-        fielConnectorName.setPreferredSize((new Dimension(200, Preferences.EDITOR_FIELD_HEIGHT)));
-        fielConnectorName.setReadOnly(true);
+        fieldConnectorName = new STextField(this, labelConnectorName);
+        fieldConnectorName.setPreferredSize((new Dimension(200, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldConnectorName.setReadOnly(true);
 
         labelHostName = new JLabel("Host Name : ");
         fieldHostName = new STextField(this, labelHostName);
@@ -134,7 +133,7 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
 
     private void createPanelConnection() {
         Border border = BorderFactory.createLineBorder(Color.black);
-        TitledBorder panelDataypeBorder = BorderFactory.createTitledBorder(border, "Connection à la base de données");
+        TitledBorder panelDataypeBorder = BorderFactory.createTitledBorder(border, "Connexion à la base de données");
         panelConnection.setBorder(panelDataypeBorder);
 
         panelConnection.setLayout(new GridBagLayout());
@@ -150,13 +149,13 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
         if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTION) {
             panelConnection.add(labelConnectionName, gbcD);
             gbcD.gridx++;
-            panelConnection.add(fielConnectionName, gbcD);
+            panelConnection.add(fieldConnectionName, gbcD);
         }
 
         if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
             panelConnection.add(labelConnectorName, gbcD);
             gbcD.gridx++;
-            panelConnection.add(fielConnectorName, gbcD);
+            panelConnection.add(fieldConnectorName, gbcD);
         }
 
         gbcD.gridx = 0;
@@ -193,6 +192,8 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
                     //fieldUserName.setText(conConnection.getUserName());
                     //fielConnectionName.setText(conConnection.getNamePath());
                     sqlViewer.setConConnection(conConnection);
+                    fieldConnectionName.setText(conConnection.getName());
+                    fieldUserName.setText(conConnection.getUserName());
                 } else {
                     String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connection.unknow");
                     ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
@@ -208,6 +209,8 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
                     //fieldUserName.setText(conConnector.getUserName());
                     //fielConnectorName.setText(conConnector.getNamePath());
                     sqlViewer.setConConnector(conConnector);
+                    fieldConnectorName.setText(conConnector.getName());
+                    fieldUserName.setText(conConnector.getUserName());
                 } else {
                     String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connector.unknow");
                     ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);

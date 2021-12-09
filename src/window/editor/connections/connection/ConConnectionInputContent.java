@@ -2,17 +2,18 @@ package window.editor.connections.connection;
 
 import application.ApplElement;
 import application.services.ApplElementConvert;
-import connections.*;
+import connections.ConConnection;
+import connections.ConDB;
+import connections.ConDriverFileChooser;
+import connections.ConIDDBName;
 import connections.services.ConConnectionService;
 import connections.services.ConnectionsService;
-import console.ViewLogsManager;
 import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import mcd.services.MCDUtilService;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import resultat.ResultatLevel;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.*;
@@ -850,7 +851,13 @@ public abstract class ConConnectionInputContent extends PanelInputContent implem
             }
             if (source == btnTest) {
                 propertyAction = "editor.con.connection.btn.exception.test";
-                actionTestConnection();
+
+                new Thread(new Runnable() {
+                    public void run() {
+                        actionTestConnection();
+                    }
+                }).start();
+
             }
        } catch (Exception exception) {
             ExceptionService.exceptionUnhandled(exception, getEditor(), mvccdElementForCatchException,
@@ -871,28 +878,19 @@ public abstract class ConConnectionInputContent extends PanelInputContent implem
     }
 
     private void actionTestConnection() {
-            ConDB conDB = getEditor().getConDb();
-            File fileDriverToUse =  ConConnectionService.getDriverFileToUse(conDB,
-                    radDriverDefault.isSelected(),
-                    fieldDriverCustom.getText());
-            Connection connection = ConManager.createConnection(getEditor(),
-                    conDB,
-                    fileDriverToUse,
-                    fieldHostName.getText(),
-                    fieldPort.getText(),
-                    ConIDDBName.findByText((String) fieldIdDbName.getSelectedItem()),
-                    fieldDbName.getText(),
-                    fieldUserName.getText(),
-                    fieldUserPW.getText() //TODO-0 a finaliser avec getPassword()
-                    );
-
-            // S'il y a erreur, elle est levée directement par createConnection()
-            if ( connection != null) {
-                String message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
-                ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
-                ViewLogsManager.dialogQuittance(getEditor(), message);
-            }
-
+        Connection connection = null;
+        ConConnectionService.actionTestConnection(getEditor(),
+                true,
+                getEditor().getConDb(),
+                fieldHostName.getText(),
+                fieldPort.getText(),
+                fieldDbName.getText(),
+                radDriverDefault.isSelected(),
+                fieldDriverCustom.getText(),
+                fieldUserName.getText(),
+                fieldUserPW.getText(), //TODO-0 a finaliser avec getPassword()
+                ConIDDBName.findByText((String) fieldIdDbName.getSelectedItem()),
+                connection);
     }
 
     private void actionPortDefault(){

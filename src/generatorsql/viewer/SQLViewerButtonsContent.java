@@ -3,9 +3,8 @@ package generatorsql.viewer;
 import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConDBMode;
-import connections.ConManager;
+import connections.services.ConnectionsService;
 import exceptions.CodeApplException;
-import exceptions.SQLPreTreatedException;
 import exceptions.service.ExceptionService;
 import generatorsql.GenerateSQLUtil;
 import main.MVCCDManager;
@@ -313,67 +312,25 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                     ExceptionService.exceptionUnhandled(exception, sqlViewer, mpdrModel,
                             propertyMessage, propertyAction);
                 }
-
-
-
     }
 
     private Resultat actionTestConnection(boolean autonomous, Connection connection) {
-        Resultat resultat = new Resultat();
-        if (autonomous) {
-            resultat.setPrintImmediatelyForResultat(true);
-        }
         ConConnection conConnection = sqlViewer.getConConnection();
-        String message = null;
-        if (conConnection != null) {
-            try {
-                connection = ConManager.createConnection(sqlViewer, conConnection);
-                if (connection != null) {
-                    message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
-                    resultat.add(new ResultatElement(message , ResultatLevel.INFO));
-                }
-            } catch (SQLPreTreatedException e){
-                message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.not.ok");
-                resultat.addExceptionCatched(e, message);
-            }
-        } else {
-            message = MessagesBuilder.getMessagesProperty("sqlviewer.connection.unknow", mpdrModel.getNameTreePath());
-            resultat.add(new ResultatElement(message , ResultatLevel.INFO));
+        return ConnectionsService.actionTestIConConnectionOrConnector(sqlViewer,
+                true,
+                conConnection,
+                connection);
+   }
 
-        }
-        if (autonomous && (message != null)){
-            DialogMessage.showNotOkErrorConsole(sqlViewer, message);
-        }
-        return resultat;
-    }
 
     private Resultat actionTestConnector(boolean autonomous, Connection connection) {
-        Resultat resultat = new Resultat();
-        if (autonomous) {
-            resultat.setPrintImmediatelyForResultat(true);
-        }
         ConConnector conConnector = sqlViewer.getConConnector();
-        String message = null;
-        if (conConnector != null) {
-            try {
-                connection = ConManager.createConnection(sqlViewer, conConnector);
-                if (connection != null) {
-                    message = MessagesBuilder.getMessagesProperty("editor.con.connector.btn.test.ok");
-                    resultat.add(new ResultatElement(message , ResultatLevel.INFO));
-                 }
-            } catch (SQLPreTreatedException e){
-                message = MessagesBuilder.getMessagesProperty("editor.con.connector.btn.test.not.ok");
-                resultat.addExceptionCatched(e, message);
-            }
-        } else {
-            message = MessagesBuilder.getMessagesProperty("sqlviewer.connector.unknow");
-            resultat.add(new ResultatElement(message , ResultatLevel.INFO));
-      }
-        if (autonomous && (message != null)){
-            DialogMessage.showNotOkErrorConsole(sqlViewer, message);
-        }
-        return resultat;
+        return ConnectionsService.actionTestIConConnectionOrConnector(sqlViewer,
+                autonomous,
+                conConnector,
+                connection );
     }
+
 
     private Resultat actionSave(boolean autonomous)  {
         Resultat resultat = new Resultat();
@@ -400,7 +357,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     private void actionExecute() {
         Resultat resultat = new Resultat();
         resultat.setPrintImmediatelyForResultat(true);
-        resultat.showViewer();
+        resultat.showViewer(); // ResultatViewer est désactivé
                 String message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.start",
                         new String[]{mpdrModel.getNamePath()});
                 resultat.add(new ResultatElement(message, ResultatLevel.INFO));
@@ -411,6 +368,8 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                 resultat.addResultat(resultatSave);
 
                 // Etablissement de la connexion
+                message = MessagesBuilder.getMessagesProperty("con.connection.start.test");
+                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
                 Connection connection = null;
                 if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTION) {
                     resultat.addResultat(actionTestConnection(false, connection));
