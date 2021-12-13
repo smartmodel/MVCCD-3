@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.files.TranformerForXml;
+import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
@@ -76,22 +77,6 @@ public class ProjectSaverXml {
             mcdTag.setAttributeNode(idAttrOfMcdTag);
 
             ArrayList<MVCCDElement> mcdModels = mcdContModels.getChilds();
-
-
-            // Persiste les formes du diagrammeur
-            Element shapesTag = document.createElement("shapes");
-            mcdTag.appendChild(shapesTag);
-
-            // Persiste les ClassShapes
-            for (ClassShape shape :DiagrammerService.getDrawPanel().getClassShapes()){
-                this.addClassShape(document, shape, shapesTag);
-            }
-
-            // Persiste les RelationShape
-            for (RelationShape shape : DiagrammerService.getDrawPanel().getRelationShapes()){
-                this.addRelationShape(document, shape, shapesTag);
-            }
-
 
             //Modèle
             if (manyModelsAuthorized) {
@@ -346,6 +331,20 @@ public class ProjectSaverXml {
                         Attr nameAttrOfDiagramTag = doc.createAttribute("name");
                         nameAttrOfDiagramTag.setValue(mcdDiagram.getName());
                         diagramTag.setAttributeNode(nameAttrOfDiagramTag);
+
+                        // Ajout des shapes
+                        Element shapesTag = doc.createElement("shapes");
+                        diagramTag.appendChild(shapesTag);
+
+                        // ClassShapes
+                        for (ClassShape classShape : mcdDiagram.getClassShapes()) {
+                            addClassShape(doc, classShape, shapesTag);
+                        }
+
+                        // RelationShapes
+                        for (RelationShape relation : mcdDiagram.getRelationShapes()){
+                            addRelationShape(doc, relation, shapesTag);
+                        }
                     }
                 }
 
@@ -1417,6 +1416,7 @@ public class ProjectSaverXml {
         //Ajout de la référence (id) vers la FK
         mdrRelationTag.setAttribute("fk_target_id", String.valueOf(mdrRelationFK.getMdrFKId()));
     }
+
 
 
     private void addClassShape(Document doc, ClassShape shape, Element shapesTag){

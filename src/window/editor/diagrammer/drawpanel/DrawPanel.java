@@ -129,8 +129,9 @@ public class DrawPanel extends JLayeredPane {
 
   public void loadShapes(List<IShape> shapes){
     for (IShape shape : shapes) {
-      this.add((JComponent) shape);
+      this.add((JComponent) shape, JLayeredPane.DRAG_LAYER);
     }
+    repaint();
     ConsoleManager.printMessage(shapes.size() + " formes ont été ajoutées à la zone de dessin.");
   }
 

@@ -3,6 +3,7 @@ package project;
 import main.MVCCDElement;
 import main.MVCCDFactory;
 import main.MVCCDManager;
+import mcd.MCDContDiagrams;
 import mcd.MCDContModels;
 import mcd.services.MCDAdjustPref;
 import preferences.Preferences;
@@ -200,6 +201,15 @@ public class Project extends ProjectElement {
         for(MVCCDElement mvccdElementChild : this.getChilds()){
             if(mvccdElementChild instanceof MCDContModels){
                 return (MCDContModels) mvccdElementChild;
+            }
+        }
+        return null;
+    }
+
+    public MCDContDiagrams getMCDContDiagrams(){
+        for (MVCCDElement mvccdElementChild : this.getChilds()){
+            if (mvccdElementChild instanceof MCDContDiagrams){
+                return (MCDContDiagrams) mvccdElementChild;
             }
         }
         return null;

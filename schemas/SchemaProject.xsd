@@ -6,6 +6,7 @@
 				<xs:element ref="proprietes"/>
 				<xs:element ref="preferences"/>
 				<xs:element ref="MCD"/>
+				<xs:element ref="diagrammes" />
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -229,8 +230,8 @@
 			<xs:choice>
 				<xs:element ref="model" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:sequence>
-					<xs:element ref="shapes" />
-					<xs:element ref="diagrammes"/>
+<!--					<xs:element ref="shapes" />
+					<xs:element ref="diagrammes"/>-->
 					<xs:element ref="entities"/>
 					<xs:element ref="relations"/>
 					<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
@@ -383,6 +384,9 @@
 
 	<xs:element name="diagramme">
 		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="shapes" minOccurs="1" maxOccurs="1" />
+			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
@@ -391,6 +395,7 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
+			<xs:attribute name="parent_id" use="required" type="xs:string"></xs:attribute>
 		</xs:complexType>
 	</xs:element>
 

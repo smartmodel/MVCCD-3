@@ -1,5 +1,6 @@
 package project;
 
+import diagram.Diagram;
 import diagram.mcd.MCDDiagram;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
@@ -105,8 +106,9 @@ public class ProjectLoaderXml {
             ArrayList<Element> modelsTagsList = loadModels(mcd, mcdTag);
             // Chargement des packages
             loadPackages(mcd, mcdTag);
-            // Chargement des diagramme
-            loadDiagrams(mcd, mcdTag);
+            // Chargement des diagrammes
+            Element diagramsTag = (Element) projectTag.getElementsByTagName("diagrammes").item(0);
+            loadDiagrams(project, diagramsTag, mcd);
             // Chargement des entités
             loadEntities(mcd, mcdTag, modelsTagsList);
             // Chargement des attributs
@@ -121,11 +123,11 @@ public class ProjectLoaderXml {
             //Chargement du (ou des) MLDR
             loadMLDRs(mcd, mcdTag);
 
-            // Formes du diagrammeur
+/*            // Formes du diagrammeur
             Element shapesTag = (Element) projectTag.getElementsByTagName("shapes").item(0);
 
             loadClassShapes(shapesTag, mcd);
-            loadRelationShapes(shapesTag, mcd);
+            loadRelationShapes(shapesTag, mcd);*/
 
             // Validation du fichier
             validator.validate(new DOMSource(document));
@@ -320,12 +322,12 @@ public class ProjectLoaderXml {
                 /*
                 Chargement des conteneurs sans modèle
                  */
-                //Chargement des diagrammes
+/*                //Chargement des diagrammes
                 if(childOfMcdTag.getNodeName().equals("diagrammes")) {
                     MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(mcd, Integer.parseInt(childOfMcdTag.getAttribute("id")));
                     mcdContDiagrams.setName(Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
                     this.diagramTagsList = childOfMcdTag.getChildNodes(); //Récupération des enfants de <diagrammes>, c'est-à-dire de la liste de chaque <diagramme>.
-                }
+                }*/
                 else if(childOfMcdTag.getNodeName().equals("entities")) {
                     MVCCDElementFactory.instance().createMCDEntities(mcd, Preferences.REPOSITORY_MCD_ENTITIES_NAME);
                 }
@@ -467,22 +469,36 @@ public class ProjectLoaderXml {
         }
     }
 
-    private void loadDiagrams(MCDContModels mcd, Element mcdTag){
-        //Recherche du conteneur de diagrammes au sein du modèle "MCD"
-        ArrayList<MVCCDElement> mcdElements = mcd.getChilds();
-        for(MVCCDElement mvccdElement : mcdElements){
-            if (mvccdElement instanceof MCDContDiagrams) {
-                MCDContDiagrams mcdContDiagrams = (MCDContDiagrams) mvccdElement;
-                //Parcours chaque diagramme pour chargement
-                for (int i = 0; i < this.diagramTagsList.getLength(); i++) {
-                    if(this.diagramTagsList.item(i) instanceof Element){
-                        Element diagramTag = (Element) this.diagramTagsList.item(i);
-                        MCDDiagram mcdDiagram = MVCCDElementFactory.instance().createMCDDiagram(mcdContDiagrams, Integer.parseInt(diagramTag.getAttribute("id")));
-                        mcdDiagram.setName(diagramTag.getAttribute("name"));
-                    }
+    private void loadDiagrams(Project project, Element diagramsTag, MCDContModels mcdSource){
+
+        // Création du contenur de diagrammes MCD
+        MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(mcdSource, Integer.parseInt(diagramsTag.getAttribute("id")));
+        mcdContDiagrams.setName(Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+
+        // Parcours de tous les diagrammes MCD
+        for (int i = 0; i < diagramsTag.getChildNodes().getLength(); i++) {
+            Node currentElement = diagramsTag.getChildNodes().item(i);
+            if(currentElement instanceof Element){
+
+                Element diagramTag = (Element) currentElement;
+
+                // Récupère l'ID du parent pour déterminer s'il s'agit d'un diagramme de projet, MCD, etc.
+                int parentId = Integer.parseInt(diagramTag.getAttribute("parent_id"));
+                ProjectElement parent = ProjectService.getProjectElementById(project, parentId);
+
+                Diagram diagram = null;
+                // Si le parent est un MCD
+                if (parent instanceof MCDContModels){
+                    diagram = MVCCDElementFactory.instance().createMCDDiagram(mcdContDiagrams, Integer.parseInt(diagramTag.getAttribute("id")));
+                    diagram.setName(diagramTag.getAttribute("name"));
                 }
+
+                // Chargement des shapes
+                loadClassShapes(diagramTag, diagram, mcdSource);
             }
         }
+
+
     }
 
     private void loadEntities(MCDContModels mcd, Element element, ArrayList<Element> elementsModeles) {
@@ -1754,8 +1770,11 @@ public class ProjectLoaderXml {
         }
     }
 
-    private void loadClassShapes(Element shapesTag, MCDContModels mcdSource){
+    private void loadClassShapes(Element diagramTag, Diagram diagram, MCDContModels mcdSource){
+        Node shapesTag = diagramTag.getElementsByTagName("shapes").item(0);
         NodeList shapes = shapesTag.getChildNodes();
+        System.out.println("Lenght : " + shapes.getLength());
+
         for (int i = 0; i < shapes.getLength(); i++) {
             if (shapes.item(i) instanceof Element){
 
@@ -1783,8 +1802,11 @@ public class ProjectLoaderXml {
                     newEntity.setSize(Integer.parseInt(currentNode.getAttribute("width")), Integer.parseInt(currentNode.getAttribute("height")));
                     newEntity.setLocation(Integer.parseInt(currentNode.getAttribute("x")), Integer.parseInt(currentNode.getAttribute("y")));
 
+/*
                     // Ajoute l'entité chargée dans le diagrammeur
                     DiagrammerService.getDrawPanel().addShape(newEntity);
+*/
+                    diagram.addShape(newEntity);
 
                     // Affiche les différentes zones de l'entité
                     newEntity.refreshInformations();

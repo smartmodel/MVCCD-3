@@ -1,5 +1,6 @@
 package window.editor.diagrammer.utils;
 
+import main.MVCCDManager;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
@@ -47,7 +48,9 @@ public final class RelationCreator {
         relation = new MCDAssociationShape((MCDEntityShape) RelationCreator.source, (MCDEntityShape) RelationCreator.destination, true);
       }
       // Ajoute l'élément au DrawPanel
+      MVCCDManager.instance().getCurrentDiagram().addShape(relation);
       DiagrammerService.getDrawPanel().addShape(relation);
+      DiagrammerService.getDrawPanel().repaint();
       resetSourceAndDestination();
     }
   }

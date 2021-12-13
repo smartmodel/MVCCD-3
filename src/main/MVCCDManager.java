@@ -136,7 +136,6 @@ public class MVCCDManager {
     }
 
 
-
     private void startConsole() {
 
         consoleManager = new ConsoleManager();
@@ -660,13 +659,6 @@ public class MVCCDManager {
     }
     //Fin provisoire !
 
-    public void openDiagrammer(){
-        mvccdWindow.getDiagrammer().showDrawPanel();
-    }
-
-    public void hideDiagrammer(){
-        mvccdWindow.getDiagrammer().hideDrawPanel();
-    }
 
     public Diagram getCurrentDiagram() {
         return currentDiagram;
@@ -674,21 +666,19 @@ public class MVCCDManager {
 
     public void setCurrentDiagram(Diagram currentDiagram) {
         this.currentDiagram = currentDiagram;
+        loadDiagram(currentDiagram);
         ConsoleManager.printMessage("Diagramme " + currentDiagram.getName() + " ajouté en tant que diagramme courant.");
-        loadCurrentDiagram();
     }
 
-    private void loadCurrentDiagram(){
-        // Supprime toutes les formes du DrawPanel
-        DiagrammerService.getDrawPanel().unloadAllShapes();
+    private void loadDiagram(Diagram diagram){
 
         // Récupère les shapes du diagramme courant
-        List<IShape> currentDiagramShapes = currentDiagram.getShapes();
+        List<IShape> currentDiagramShapes = diagram.getShapes();
 
         // Ajoute les formes à la zone de dessin
         DiagrammerService.getDrawPanel().loadShapes(currentDiagramShapes);
 
-        ConsoleManager.printMessage("Diagramme " + currentDiagram.getName() + " affiché.");
+        ConsoleManager.printMessage("Diagramme " + diagram.getName() + " affiché.");
     }
 
 }

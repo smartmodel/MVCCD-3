@@ -25,7 +25,6 @@ public abstract class MElement extends ProjectElement {
         super(parent, name);
     }
 
-
     /**
      * Retourne le nom d'un objet (d'un élément) avec le path (le chemin d'accès). Par exemple: le nom d'une entité
      * préfixé du ou des paquetages qui la contiennent.

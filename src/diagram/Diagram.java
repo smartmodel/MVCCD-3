@@ -5,9 +5,14 @@ import main.MVCCDElement;
 import project.Project;
 import project.ProjectElement;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
+import javax.management.relation.Relation;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Tous les diagrammes concrets sont des descendants de Diagram.
@@ -50,5 +55,13 @@ public abstract class Diagram extends ProjectElement {
 
     public void setShapes(List<IShape> shapes) {
         this.shapes = shapes;
+    }
+
+    public List<ClassShape> getClassShapes(){
+        return shapes.stream().filter(shape -> shape instanceof ClassShape).map(s -> (ClassShape) s).collect(Collectors.toList());
+    }
+
+    public List<RelationShape> getRelationShapes(){
+        return shapes.stream().filter(shape -> shape instanceof RelationShape).map(s -> (RelationShape) s).collect(Collectors.toList());
     }
 }
