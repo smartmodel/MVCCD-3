@@ -29,21 +29,25 @@ public class SQLViewer extends JDialog implements WindowListener {
     private ConConnector conConnector = null;
 
     private JPanel panel= new JPanel();;
-    private SQLViewerParameters parameters;
+    private SQLViewerParameters sqlViewerParameters;
     private SQLViewerCodeSQL sqlViewerCodeSQL;
     private SQLViewerButtons sqlViewerButtons;
     private SQLViewerConsole sqlViewerConsole;
 
     private PanelBorderLayoutResizer panelBLResizer ;
 
+    private String code ;
+
 
     /**
      * Dans le constructeur, le menu, les panneaux et les listeners sont mis en place.
      * Le gestionnaire de redimensionnement est créé.
      * @param mpdrModel
+     * @param code
      */
-    public SQLViewer(MPDRModel mpdrModel) {
+    public SQLViewer(MPDRModel mpdrModel, String code) {
         this.mpdrModel = mpdrModel;
+        this.code = code;
 
         setTitle((MessagesBuilder.getMessagesProperty("generate.sql.window.title",
                 new String[] {this.mpdrModel.getDb().getText() , this.mpdrModel.getNameTreePath()})));
@@ -59,14 +63,14 @@ public class SQLViewer extends JDialog implements WindowListener {
         String borderLayoutPositionCodeSQL = BorderLayout.CENTER;
         String borderLayoutPositionConsole= BorderLayout.SOUTH;
 
-        parameters = new SQLViewerParameters(this, borderLayoutPositionParameters, panelBLResizer);
+        sqlViewerParameters = new SQLViewerParameters(this, borderLayoutPositionParameters, panelBLResizer);
+        sqlViewerConsole = new SQLViewerConsole(this, borderLayoutPositionConsole, panelBLResizer);
         sqlViewerCodeSQL = new SQLViewerCodeSQL(borderLayoutPositionCodeSQL, panelBLResizer);
         sqlViewerButtons = new SQLViewerButtons(this, borderLayoutPositionButtons, panelBLResizer);
-        sqlViewerConsole = new SQLViewerConsole(borderLayoutPositionConsole, panelBLResizer);
         BorderLayout bl = new BorderLayout(0,0);
         panel.setLayout(bl);
 
-        panel.add(parameters, borderLayoutPositionParameters);
+        panel.add(sqlViewerParameters, borderLayoutPositionParameters);
         panel.add(sqlViewerCodeSQL, borderLayoutPositionCodeSQL);
         panel.add(sqlViewerButtons, borderLayoutPositionButtons);
         panel.add(sqlViewerConsole, borderLayoutPositionConsole);
@@ -82,7 +86,6 @@ public class SQLViewer extends JDialog implements WindowListener {
         MVCCDManager.instance().getConsoleManager().setiConsoleContentFrontEnd(this.sqlViewerConsole.getSqlViewerConsoleContent());
 
         addWindowListener(this);
-        testProjectFile();
 
     }
 
@@ -96,8 +99,8 @@ public class SQLViewer extends JDialog implements WindowListener {
     }
 
 
-    public SQLViewerParameters getParameters() {
-        return parameters;
+    public SQLViewerParameters getSqlViewerParameters() {
+        return sqlViewerParameters;
     }
 
     public SQLViewerButtons getSqlViewerButtons() {
@@ -163,6 +166,18 @@ public class SQLViewer extends JDialog implements WindowListener {
     @Override
     public void windowActivated(WindowEvent windowEvent) {
 
+
+        // Clear de la console
+        // A la création, il y a 3 lignes vides pour le dimensionnement qui sont mises
+
+        sqlViewerConsole.getSqlViewerConsoleContent().getTextArea().setText("");
+
+        // La console doit être prête avant load
+        sqlViewerParameters.getSqlViewerParametersContent().loadDatas();
+
+        //Chargement du code
+        sqlViewerCodeSQL.getSqlViewerCodeSQLContent().getTextArea().setText(code);
+
     }
 
     @Override
@@ -189,19 +204,6 @@ public class SQLViewer extends JDialog implements WindowListener {
     public void setConConnector(ConConnector conConnector) {
         this.conConnector = conConnector;
     }
-
-
-    public void testProjectFile() {
-        if (MVCCDManager.instance().getFileProjectCurrent() == null) {
-            String message = MessagesBuilder.getMessagesProperty("generatesql.project.not.saved");
-            SQLViewerConsoleContent sqlViewerConsoleContent = getSqlViewerConsole().getSqlViewerConsoleContent();
-            sqlViewerConsoleContent.getTextArea().setText(message);
-            SQLViewerButtonsContent sqlViewerButtonsContent = getSqlViewerButtons().getSqlViewerButtonsContent();
-            sqlViewerButtonsContent.getBtnSave().setEnabled(false);
-            sqlViewerButtonsContent.getBtnExecute().setEnabled(false);
-        }
-    }
-
 
 
 }

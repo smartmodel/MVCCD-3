@@ -13,6 +13,7 @@ public class SQLViewerCodeSQLContent extends PanelContent {
         super(sqlViewerCodeSQL);
         super.setLayout(new FlowLayout(FlowLayout.LEFT));
         textArea = new JTextArea();
+        /*
         textArea.setText("CREATE TABLE Article(\n" +
                 "\tcode VARCHAR2(10) DEFAULT '' NOT NULL,\n" +
                 "\tprix NUMBER(6, 2) DEFAULT '' NOT NULL,\n" +
@@ -87,6 +88,8 @@ public class SQLViewerCodeSQLContent extends PanelContent {
                 "\n" +
                 "ALTER TABLE Four_fourni_Art ADD CONSTRAINT FK2_fourni_Art_ FOREIGN KEY(Art_fourni_num) REFERENCES Article(num);");
 
+
+         */
         super.addContent(textArea);
     }
 

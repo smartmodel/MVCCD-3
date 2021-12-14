@@ -103,16 +103,15 @@ public class MVCCDManager {
             changeActivateProjectOpenRecentsItems();
 
             // Ouverture du fichier
+            //TODO-0 Désactivé pour Mise au point
             resultat.addResultat(openLastProject());
         } catch (Exception e ){
             throw e ;
         }
 
-
         // Quittance de fin
         resultat.finishTreatment("mvccd.finish.ok", "mvccd.finish.error");
         ViewLogsManager.dialogQuittance(mvccdWindow, resultat);
-
     }
 
 

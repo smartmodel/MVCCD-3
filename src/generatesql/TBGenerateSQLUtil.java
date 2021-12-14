@@ -1,5 +1,9 @@
 package generatesql;
 
+import main.MVCCDManager;
+import resultat.Resultat;
+import utilities.files.UtilFiles;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,11 +12,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
-import main.MVCCDManager;
-import resultat.Resultat;
-import utilities.files.UtilFiles;
 
-public class MPDRGenerateSQLUtil {
+public class TBGenerateSQLUtil {
 
     public static String replaceKeyValue(String code, String key, String value) {
         return code.replaceAll("\\{" + key + "}", value);

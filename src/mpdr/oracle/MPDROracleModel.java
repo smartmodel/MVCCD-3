@@ -7,6 +7,7 @@ import mldr.MLDRTable;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
 import mpdr.oracle.interfaces.IMPDROracleElement;
+import preferences.Preferences;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDROracleDatatype;
 
@@ -30,6 +31,11 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement {
     @Override
     public MPDRDatatype fromMLDRDatatype(MLDRColumn mldrColumn) {
         return MLDRTransformToMPDROracleDatatype.fromMLDRDatatype(mldrColumn);
+    }
+
+    @Override
+    protected String getTemplateBDDirectory() {
+        return Preferences.DIRECTORY_TEMPLATES_ORACLE_NAME;
     }
 
 }

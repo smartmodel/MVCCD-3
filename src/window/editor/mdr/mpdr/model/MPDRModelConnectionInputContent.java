@@ -204,11 +204,10 @@ public class MPDRModelConnectionInputContent extends MPDRModelInputContent imple
 
     private void actionTestConnection() {
         ConConnection conConnection = getConConnectionByFieldConnectionLienProg();
-        Connection connection = null;
-        ConnectionsService.actionTestIConConnectionOrConnector(getEditor(),
+        Connection connection = ConnectionsService.actionTestIConConnectionOrConnector(getEditor(),
                 true,
                 conConnection,
-                connection);
+                new Resultat() );
     }
 }
 

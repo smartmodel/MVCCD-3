@@ -70,7 +70,7 @@ public class ViewLogsManager {
 
     public static void printNewResultatWithMessage(String message, ResultatLevel resultatLevel) {
         Resultat resultat = new Resultat();
-        resultat.setPrintImmediatelyForMessage(true);
+        resultat.setPrintImmediatelyForNewMessage(true);
         resultat.add(new ResultatElement(message, resultatLevel));
     }
 

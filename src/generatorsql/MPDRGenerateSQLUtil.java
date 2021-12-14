@@ -8,7 +8,7 @@ import utilities.files.UtilFiles;
 import java.io.File;
 import java.io.FileWriter;
 
-public class GenerateSQLUtil {
+public class MPDRGenerateSQLUtil {
 
 
     public static File directorySQLFiles() {
@@ -56,6 +56,34 @@ public class GenerateSQLUtil {
             resultat.addExceptionUnhandled(e);
             return resultat;
         }
+    }
+
+
+    public static String replaceKeyValue(String code, String key, String value) {
+        //TODO-1 A voir expression régulière
+        return code.replaceAll("\\{" + key + "}", value);
+    }
+
+
+
+    public static String cleanSeparatorArguments(String code) {
+        String cleanCode = "";
+        //TODO-1 A voir expression régulière
+        String[] arguments = code.split("\\" + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS);
+        if (arguments.length > 0){
+            for ( int i = 0 ; i < arguments.length ; i++) {
+                cleanCode += arguments[i] ;
+                if (i <  arguments.length -2 ){
+                    // Le dernier argument n'est pas suivi d'un séparateur
+                    cleanCode += Preferences.SQL_SEPARATOR_ARGUMENTS;
+                }
+            }
+        } else {
+            cleanCode = code;
+        }
+
+
+        return cleanCode;
     }
 
 }

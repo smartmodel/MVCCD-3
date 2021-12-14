@@ -46,8 +46,12 @@ public class MLDRTransform extends MDTransform {
             referencingBetweenPKsAndFKs();
 
             // Transformation des relationFKs
-            MLDRTransformRelations mldrTransformRelations = new MLDRTransformRelations(this, mldrModel, mpdrModel);
-            mldrTransformRelations.transformRelations();
+            //TODO-PAS En cours de développement
+            if (mpdrModel instanceof MPDROracleModel) {
+
+                MLDRTransformRelations mldrTransformRelations = new MLDRTransformRelations(this, mldrModel, mpdrModel);
+                mldrTransformRelations.transformRelations();
+            }
 
 
             //Suppression des MPDRElement absents de l'itération

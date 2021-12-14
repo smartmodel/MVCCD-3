@@ -11,7 +11,6 @@ import mldr.MLDRFK;
 import mldr.MLDRPK;
 import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
-import mldr.services.MLDRColumnService;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.services.MPDRColumnService;
@@ -21,7 +20,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import stereotypes.Stereotype;
-import stereotypes.StereotypeService;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 
@@ -68,6 +66,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     // Une association n:n sans entité associative doit avoir Name et shortName!
 
     /*
+
     @Override
     public String getShortName() {
         return ((IMLDRElementWithSource) getMldrElementSource()).getMcdElementSource().getShortName();
@@ -129,4 +128,8 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     public MPDRPK getMPDRPK() { return MPDRConstraintService.getMPDRPK(getMDRConstraints()); }
 
     public ArrayList<MPDRFK> getMPDRFKs() { return MPDRConstraintService.getMPDRFKs(getMDRConstraints()); }
+
+    public MPDRModel getMPDRModelParent() {
+        return (MPDRModel) getMDRModelParent();
+    }
 }

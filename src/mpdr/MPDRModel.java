@@ -1,8 +1,9 @@
 package mpdr;
 
 import datatypes.MPDRDatatype;
-import generatesql.MPDRGenerateSQL;
+import generatesql.TBGenerateSQL;
 import generatesql.window.GenerateSQLWindow;
+import generatorsql.generator.MPDRGenerateSQL;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import mdr.MDRElement;
@@ -17,6 +18,7 @@ import mldr.interfaces.IMLDRRelation;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRRelation;
 import mpdr.services.MPDRModelService;
+import preferences.Preferences;
 import project.ProjectElement;
 import resultat.Resultat;
 
@@ -70,20 +72,25 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         return MPDRModelService.getMPDRTables(this);
     }
 
-    public IMPDRElement getIMPDRElementByMLDRElementSource(IMLDRElement imldrElement){
+    public IMPDRElement getIMPDRElementByMLDRElementSource(IMLDRElement imldrElement) {
         return (IMPDRElement) MPDRModelService.getIMPDRElementByIMLDRElementSource(this, imldrElement);
     }
 
-    public Resultat treatGenerate(GenerateSQLWindow owner) {
-        MPDRGenerateSQL mpdrGenerateSQL = new MPDRGenerateSQL();
-        return mpdrGenerateSQL.generateSQL(owner, this);
+    //TODO-1 A supprimer lorsque la génération ser réécrite
+    public Resultat treatGenerateTB(GenerateSQLWindow owner) {
+        TBGenerateSQL TBGenerateSQL = new TBGenerateSQL();
+        return TBGenerateSQL.generateSQL(owner, this);
     }
 
+    public String treatGenerate(Resultat resultat) {
+        MPDRGenerateSQL MPDRGenerateSQL = new MPDRGenerateSQL(this, resultat);
+        return MPDRGenerateSQL.generate();
+    }
 
     //TODO-1 A suppimer si la solution du listner est possible
     // Voir MLDR (même problème)
 
-    public void refreshTreeMPDR(){
+    public void refreshTreeMPDR() {
         MVCCDManager.instance().getWinRepositoryContent().reload(this.getNode());
     }
 
@@ -101,14 +108,16 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     }
 
 
-    public  IMPDRRelation createIMPDRRelation(IMLDRRelation imldrRelation){
-        if ( imldrRelation instanceof MLDRRelationFK){
+    public IMPDRRelation createIMPDRRelation(IMLDRRelation imldrRelation) {
+        if (imldrRelation instanceof MLDRRelationFK) {
             MLDRRelationFK mldrRelationFK = (MLDRRelationFK) imldrRelation;
             MLDRFK mldrFK = (MLDRFK) mldrRelationFK.getMDRFK();
             MPDRTable mpdrtableAccueil = getMPDRTableByMLDRTableSource((MLDRTable) mldrFK.getMDRTableAccueil());
             MPDRFK mpdrFK = mpdrtableAccueil.getMPDRFKByMLDRFKSource(mldrFK);
             MPDRRelationFK newMPDRRelationFK = MVCCDElementFactory.instance().createMPDRRelationFK(
-                    getMPDRContRelations(), mldrRelationFK, (MPDRTable) mpdrFK.getMDRTableAccueil(),
+                    getMPDRContRelations(),
+                    mldrRelationFK,
+                    (MPDRTable) mpdrFK.getMDRTableAccueil(),
                     (MPDRTable) mpdrFK.getMdrPK().getMDRTableAccueil());
 
             return newMPDRRelationFK;
@@ -131,4 +140,28 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     public void setConnectorLienProg(String connectorLienProg) {
         this.connectorLienProg = connectorLienProg;
     }
+
+    private String getTemplateDirBase() {
+        return Preferences.DIRECTORY_TEMPLATES_NAME + Preferences.SYSTEM_FILE_SEPARATOR +
+                Preferences.DIRECTORY_TEMPLATES_SQLDDL_NAME + Preferences.SYSTEM_FILE_SEPARATOR +
+                getTemplateBDDirectory() + Preferences.SYSTEM_FILE_SEPARATOR ;
+    }
+
+    public String getTemplateDirCreate() {
+        return getTemplateDirBase() +
+                Preferences.DIRECTORY_TEMPLATES_CREATE;
+    }
+
+    public String getTemplateDirAlter() {
+        return getTemplateDirBase() +
+                Preferences.DIRECTORY_TEMPLATES_ALTER;
+    }
+
+
+    public String getTemplateDirDrop() {
+        return getTemplateDirBase() +
+                Preferences.DIRECTORY_TEMPLATES_DROP;
+    }
+
+    protected abstract String getTemplateBDDirectory();
 }

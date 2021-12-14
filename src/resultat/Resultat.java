@@ -130,7 +130,12 @@ public class Resultat {
         }
     }
 
-    public void setPrintImmediatelyForMessage(boolean printImmediately) {
+    public void setPrintImmediatelyForNewMessage(boolean printImmediately) {
+        this.printImmediately = printImmediately;
+        ViewLogsManager.clear();
+    }
+
+    public void setPrintImmediatelyForContinueMessage(boolean printImmediately) {
         this.printImmediately = printImmediately;
     }
 

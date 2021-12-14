@@ -4,10 +4,7 @@ import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
-import m.interfaces.IMClass;
-import m.services.MElementService;
 import main.MVCCDElement;
-import mdr.interfaces.IMDRElementNamingPreferences;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -94,7 +91,12 @@ public abstract class MDRTable extends MDRTableOrView {
     }
 
     public ArrayList<MDRColumn> getMDRColumnsPK() {
-        return getMDRPK().getMDRColumns();
+        // Pendant la phase de développement les contraintes ne sont pas finalisées
+        if (getMDRPK() != null) {
+            return getMDRPK().getMDRColumns();
+        } else {
+            return new ArrayList<MDRColumn>();
+        }
     }
 
     public ArrayList<MDRColumn> getMDRColumnsFK() {

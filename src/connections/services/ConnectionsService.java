@@ -4,7 +4,7 @@ import connections.*;
 import connections.interfaces.IConConnectionOrConnector;
 import exceptions.CodeApplException;
 import exceptions.SQLPreTreatedException;
-import generatesql.MPDRGenerateSQLUtil;
+import generatesql.TBGenerateSQLUtil;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
@@ -79,21 +79,21 @@ public class ConnectionsService {
     public static String getResourceURL(ConDB conDB, String hostName, String port, ConIDDBName iddbName, String dbName) {
         String url = conDB.getUrlTemplate();
         if (StringUtils.isNotEmpty(hostName)){
-            url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_HOSTNAME_WORD, hostName);
+            url = TBGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_HOSTNAME_WORD, hostName);
         }
         if (StringUtils.isNotEmpty(port)){
-            url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_PORT_WORD, port);
+            url = TBGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_PORT_WORD, port);
         }
         if (StringUtils.isNotEmpty(dbName)){
-            url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_WORD, dbName);
+            url = TBGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_WORD, dbName);
         }
         if (iddbName != null){
             if (iddbName != ConIDDBName.NAME_STD) {
                 if (iddbName == ConIDDBName.SID) {
-                    url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateSIDMarker());
+                    url = TBGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateSIDMarker());
                 }
                 if (iddbName == ConIDDBName.SERVICE_NAME) {
-                    url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateServiceNameMarker());
+                    url = TBGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateServiceNameMarker());
                 }
             }
         }
@@ -101,11 +101,10 @@ public class ConnectionsService {
     }
 
 
-    public static Resultat actionTestIConConnectionOrConnector(Window owner,
+    public static Connection actionTestIConConnectionOrConnector(Window owner,
                                                                boolean autonomous,
                                                                IConConnectionOrConnector iConConnectionOrConnector,
-                                                               Connection connection) {
-        Resultat resultat = new Resultat();
+                                                               Resultat resultat) {
         String message="";
         if (autonomous) {
             resultat.setPrintImmediatelyForResultat(true);
@@ -113,6 +112,7 @@ public class ConnectionsService {
             resultat.add(new ResultatElement(message, ResultatLevel.INFO));
         }
 
+        Connection connection = null;
         if (iConConnectionOrConnector != null) {
             try {
                 connection = ConManager.createConnection(iConConnectionOrConnector);
@@ -138,7 +138,7 @@ public class ConnectionsService {
                 DialogMessage.showNotOkErrorConsole(owner, message);
             }
         }
-        return resultat;
+        return connection;
     }
 
 }

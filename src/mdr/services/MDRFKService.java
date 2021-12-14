@@ -1,8 +1,11 @@
 package mdr.services;
 
 import exceptions.CodeApplException;
+import mdr.MDRColumn;
 import mdr.MDRFK;
 import mdr.MDRFKNature;
+import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
 
 public class MDRFKService {
     final static int HAUT = -1 ;
@@ -47,6 +50,35 @@ public class MDRFKService {
             } else {
                 return BAS;
             }
+    }
+
+
+    public static String getMDRColumnsNameAsParamStr(MDRFK mdrFK){
+        String resultat = "";
+        for (MDRColumn mdrColumn: mdrFK.getMDRColumns()){
+            if (StringUtils.isNotEmpty(resultat)){
+                resultat =  resultat+ Preferences.PARAMETERS_SEPARATOR;
+            }
+            resultat = resultat + mdrColumn.getName();
+        }
+        return resultat;
+    }
+
+    public static String getMDRColumnsRefPKNameAsParamStr(MDRFK mdrFK){
+        String resultat = "";
+        for (MDRColumn mdrColumn: mdrFK.getMDRColumns()){
+            MDRColumn refPKMDRColumn = mdrColumn.getMDRColumnPK();
+            if (refPKMDRColumn != null) {
+                if (StringUtils.isNotEmpty(resultat)) {
+                    resultat = resultat + Preferences.PARAMETERS_SEPARATOR;
+                }
+                resultat = resultat + refPKMDRColumn.getName();
+            }  else {
+                throw new CodeApplException("La colonne " + mdrColumn.getNamePath()  +
+                        "n''a pas de colonne de référence !");
+            }
+        }
+        return resultat;
     }
 
 }

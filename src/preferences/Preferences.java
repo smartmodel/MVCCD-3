@@ -208,6 +208,24 @@ public class Preferences extends MVCCDElement {
 
   public static String DIRECTORY_PROFILE_NAME = "profiles";
   public static String DIRECTORY_RESSOURCES_NAME = "ressources";
+  public static String DIRECTORY_TEMPLATES_NAME = "template";
+  public static String DIRECTORY_TEMPLATES_SQLDDL_NAME = "sql-ddl";
+  public static String DIRECTORY_TEMPLATES_ORACLE_NAME = "oracle";
+  public static String DIRECTORY_TEMPLATES_MYSQL_NAME = "mysql";
+  public static String DIRECTORY_TEMPLATES_POSTGRESQL_NAME = "postgresql";
+  public static String DIRECTORY_TEMPLATES_CREATE = "create";
+  public static String DIRECTORY_TEMPLATES_ALTER = "alter";
+  public static String DIRECTORY_TEMPLATES_DROP = "drop";
+
+  public static String TEMPLATE_CREATE_TABLE = "createTable.txt";
+  public static String TEMPLATE_CREATE_TABLE_COLUMNS = "createTableColumns.txt";
+  public static String TEMPLATE_CREATE_TABLE_PK = "createTablePK.txt";
+
+  public static String TEMPLATES_ALTER_TABLE_FK = "alterTableFK.txt";
+
+  public static String TEMPLATES_DROP_EMPTY_SCHEMA = "emptySchema.txt";
+  public static String SQL_SEPARATOR_ARGUMENTS = ",";
+  public static String SQL_MARKER_SEPARATOR_ARGUMENTS = "separatorArguments";
 
   public static String SYSTEM_LINE_SEPARATOR = System.getProperty("line.separator");
   public static String SYSTEM_FILE_SEPARATOR = System.getProperty("file.separator");

@@ -327,7 +327,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         try {
-                            (new MPDRModelEditingTreat()).treatGenerate(mvccdElement);
+                            (new MPDRModelEditingTreat()).treatGenerate(mvccdWindow, mvccdElement);
                         } catch (Exception e){
                             exceptionUnhandled(e, mvccdElement, "repository.menu.exception.generate.sql");
                         }

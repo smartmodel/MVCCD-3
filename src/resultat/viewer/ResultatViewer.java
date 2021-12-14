@@ -3,7 +3,6 @@ package resultat.viewer;
 import connections.ConConnection;
 import connections.ConConnector;
 import main.MVCCDManager;
-import messages.MessagesBuilder;
 import utilities.window.PanelBorderLayoutResizer;
 
 import javax.swing.*;
@@ -38,8 +37,7 @@ public class ResultatViewer extends JDialog implements WindowListener {
      */
     public ResultatViewer() {
 
-        setTitle((MessagesBuilder.getMessagesProperty("generate.sql.window.title",
-                new String[] {})));
+        setTitle("Traitement en cours"); // A peaufiner le titre
         //setSize(Preferences.GENERATOR_SQL_WINDOW_WIDTH, Preferences.GENERATOR_SQL_WINDOW_HEIGHT);
         setSize(400, 400);
         getContentPane().add(panel);

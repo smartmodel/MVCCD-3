@@ -878,8 +878,7 @@ public abstract class ConConnectionInputContent extends PanelInputContent implem
     }
 
     private void actionTestConnection() {
-        Connection connection = null;
-        ConConnectionService.actionTestConnection(getEditor(),
+        Connection connection =  ConConnectionService.actionTestConnection(getEditor(),
                 true,
                 getEditor().getConDb(),
                 fieldHostName.getText(),
@@ -889,8 +888,7 @@ public abstract class ConConnectionInputContent extends PanelInputContent implem
                 fieldDriverCustom.getText(),
                 fieldUserName.getText(),
                 fieldUserPW.getText(), //TODO-0 a finaliser avec getPassword()
-                ConIDDBName.findByText((String) fieldIdDbName.getSelectedItem()),
-                connection);
+                ConIDDBName.findByText((String) fieldIdDbName.getSelectedItem()));
     }
 
     private void actionPortDefault(){

@@ -1,5 +1,7 @@
 package utilities;
 
+import exceptions.CodeApplException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,6 +14,7 @@ public class TemplateFile {
         String content = "";
         Path path = Paths.get(templateDir, templateFileName);
 
+
         try (BufferedReader bufferedReader = Files.newBufferedReader(path)) {
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
@@ -21,7 +24,7 @@ public class TemplateFile {
                 content += line;
             }
         } catch (IOException e) {
-            System.out.println(e);
+            throw new CodeApplException("Erreur de lecture du fichier template " + path.toString());
         }
 
         return content;

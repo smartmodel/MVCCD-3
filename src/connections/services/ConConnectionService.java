@@ -32,7 +32,7 @@ public class ConConnectionService {
 
 
 
-    public static Resultat actionTestConnection(Window owner,
+    public static Connection actionTestConnection(Window owner,
                                                 boolean autonomous,
                                                 ConDB conDB,
                                                 String hostName,
@@ -42,8 +42,7 @@ public class ConConnectionService {
                                                 String driverFileCustom,
                                                 String userName,
                                                 String userPW,
-                                                ConIDDBName conIDDBName,
-                                                Connection connection) {
+                                                ConIDDBName conIDDBName) {
         ConConnection conConnection = null;
         if (conDB == ConDB.ORACLE) {
             conConnection = new ConConnectionOracle(null);
@@ -62,7 +61,7 @@ public class ConConnectionService {
         return ConnectionsService.actionTestIConConnectionOrConnector(owner,
                 autonomous,
                 conConnection,
-                connection);
+                new Resultat() );
     }
 
 }

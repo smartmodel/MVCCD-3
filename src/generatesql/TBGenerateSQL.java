@@ -4,7 +4,7 @@ import generatesql.window.GenerateSQLWindow;
 import mpdr.MPDRModel;
 import resultat.Resultat;
 
-public class MPDRGenerateSQL {
+public class TBGenerateSQL {
 
     private MPDRModel mpdrModel;
     private Resultat resultat = new Resultat();
@@ -13,15 +13,15 @@ public class MPDRGenerateSQL {
         this.mpdrModel = mpdrModel;
 
         try {
-            MPDRGenerateSQLTables mpdrGenerateSQLTables = new MPDRGenerateSQLTables(this, mpdrModel);
-            String code = mpdrGenerateSQLTables.generateSQLTables();
+            TBGenerateSQLTables TBGenerateSQLTables = new TBGenerateSQLTables(this, mpdrModel);
+            String code = TBGenerateSQLTables.generateSQLTables();
 
             //Génération des contraintes FK en dehors de la création de la table
-            MPDRGenerateSQLConstraints mpdrGenerateSQLConstraints = new MPDRGenerateSQLConstraints(this, mpdrModel);
-            code += mpdrGenerateSQLConstraints.generateSQLFKs();
+            TBGenerateSQLConstraints TBGenerateSQLConstraints = new TBGenerateSQLConstraints(this, mpdrModel);
+            code += TBGenerateSQLConstraints.generateSQLFKs();
 
             //Nettoyage du code obligatoire !
-            owner.getTextAreaCode().setText(MPDRGenerateSQLUtil.cleanCode(code));
+            owner.getTextAreaCode().setText(TBGenerateSQLUtil.cleanCode(code));
 
             return resultat;
         } catch (Exception e) {

@@ -9,6 +9,7 @@ import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import mcd.services.MCDUtilService;
 import preferences.Preferences;
+import resultat.Resultat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.*;
@@ -498,13 +499,12 @@ public abstract class ConConnectorInputContent extends PanelInputContent impleme
 
     private void actionTestConnector() {
 
-        Connection connection = null;
-        ConConnectorService.actionTestConnection(getEditor(),
+        Connection connection = ConConnectorService.actionTestConnection(getEditor(),
                 true,
                 conConnectionParent,
                 fieldUserName.getText(),
                 fieldUserPW.getText(), //TODO-0 a finaliser avec getPassword()
-                connection);
+                new Resultat());
    }
 
     public ConConnectorEditor getEditor() {

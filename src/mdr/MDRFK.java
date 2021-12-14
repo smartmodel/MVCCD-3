@@ -1,7 +1,6 @@
 package mdr;
 
 import constraints.Constraint;
-import mcd.MCDNID;
 import mdr.interfaces.IMDRConstraintIndice;
 import mdr.services.MDRFKService;
 import preferences.Preferences;
@@ -16,9 +15,9 @@ import java.util.ArrayList;
 
 public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndice {
 
-    private  static final long serialVersionUID = 1000;
+    private static final long serialVersionUID = 1000;
 
-    private Integer indice = null ;
+    private Integer indice = null;
 
     private MDRFKNature nature = null;
 
@@ -85,7 +84,7 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
     }
 
     public int compareToDefault(MDRFK other) {
-        return MDRFKService.compareToDefault(this,  other);
+        return MDRFKService.compareToDefault(this, other);
     }
 
     public boolean isDeleteCascade() {
@@ -120,15 +119,15 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
                 getOrderIndexInParentSameClass() + 1);
     }
 
-    public boolean isIdComp(){
+    public boolean isIdComp() {
         return getNature() == MDRFKNature.IDCOMP;
     }
 
-    public boolean isIdNatural(){
+    public boolean isIdNatural() {
         return getNature() == MDRFKNature.IDNATURAL;
     }
 
-    public boolean isNoId(){
+    public boolean isNoId() {
         return getNature() == MDRFKNature.NOID;
     }
 
@@ -162,5 +161,11 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
         return new ArrayList<Constraint>();
     }
 
+    public String getMDRColumnsNameAsParamStr() {
+        return MDRFKService.getMDRColumnsNameAsParamStr(this);
+    }
 
+    public String getMDRColumnsRefPKNameAsParamStr() {
+        return MDRFKService.getMDRColumnsRefPKNameAsParamStr(this);
+    }
 }

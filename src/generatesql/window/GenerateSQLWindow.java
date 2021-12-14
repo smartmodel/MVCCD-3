@@ -1,17 +1,7 @@
 package generatesql.window;
 
 import console.LogsManager;
-import generatesql.MPDRGenerateSQLUtil;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import generatesql.TBGenerateSQLUtil;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import resultat.Resultat;
@@ -19,6 +9,10 @@ import resultat.ResultatElement;
 import resultat.ResultatLevel;
 import treatment.services.TreatmentService;
 import utilities.window.DialogMessage;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GenerateSQLWindow extends JDialog {
 
@@ -98,7 +92,7 @@ public class GenerateSQLWindow extends JDialog {
         );
         resultat.add(new ResultatElement(message, ResultatLevel.INFO));
 
-        resultat.addResultat(mpdrModel.treatGenerate(this));
+        resultat.addResultat(mpdrModel.treatGenerateTB(this));
 
         TreatmentService.treatmentFinish(this, mpdrModel, resultat, "the.model.physical", "generatesql.mpdrtosql.ok", "generatesql.mpdrtosql.abort");
 
@@ -121,7 +115,7 @@ public class GenerateSQLWindow extends JDialog {
 
         resultat.add(new ResultatElement(message, ResultatLevel.INFO));
 
-        resultat.addResultat(MPDRGenerateSQLUtil.executeQuery(
+        resultat.addResultat(TBGenerateSQLUtil.executeQuery(
             textAreaCode.getText(),
             textFieldHostName.getText(),
             textFieldPort.getText(),
@@ -145,7 +139,7 @@ public class GenerateSQLWindow extends JDialog {
 
         resultat.add(new ResultatElement(message, ResultatLevel.INFO));
 
-        resultat.addResultat(MPDRGenerateSQLUtil.generateSQLFile(textAreaCode.getText()));
+        resultat.addResultat(TBGenerateSQLUtil.generateSQLFile(textAreaCode.getText()));
 
         treatmentSQLFinish(this, resultat, "the.sql.code", "generatesql.sqlfile.ok", "generatesql.sqlfile.abort");
     }

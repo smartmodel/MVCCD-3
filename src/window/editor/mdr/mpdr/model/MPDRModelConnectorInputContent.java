@@ -267,11 +267,10 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
 
     private void actionTestConnector() {
         ConConnector conConnector = getConConnectorByFieldConnectorLienProg();
-        Connection connection = null;
-        ConnectionsService.actionTestIConConnectionOrConnector(getEditor(),
+        Connection connection = ConnectionsService.actionTestIConConnectionOrConnector(getEditor(),
                 true,
                 conConnector,
-                connection);
+                new Resultat());
      }
 
 }

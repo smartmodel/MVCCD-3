@@ -14,12 +14,12 @@ public class ConConnectorService {
     }
 
 
-    public static Resultat actionTestConnection(Window owner,
+    public static Connection actionTestConnection(Window owner,
                                                 boolean autonomous,
                                                 ConConnection conConnectionParent,
                                                 String userName,
                                                 String userPW,
-                                                Connection connection) {
+                                                Resultat resultat) {
 
         // Clone de la connexion car, il y a changement du user/pw !
         ConConnection conConnectionParentClone = (ConConnection) conConnectionParent.clone();
@@ -32,7 +32,7 @@ public class ConConnectorService {
         return ConnectionsService.actionTestIConConnectionOrConnector(owner,
                 autonomous,
                 conConnectionParentClone,
-                connection);
+                resultat);
     }
 
 }

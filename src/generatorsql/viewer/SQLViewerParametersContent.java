@@ -4,16 +4,14 @@ import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConDBMode;
 import connections.services.ConnectionsService;
-import console.ViewLogsManager;
 import exceptions.CodeApplException;
-import generatorsql.GenerateSQLUtil;
+import generatorsql.MPDRGenerateSQLUtil;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import resultat.ResultatLevel;
 import utilities.window.PanelContent;
 import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.IPanelInputContent;
@@ -62,7 +60,6 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
         super.addContent(panelContent);
         createContent();
         createPanelContent();
-        loadDatas();
     }
 
 
@@ -179,7 +176,7 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
     }
 
 
-    private void loadDatas() {
+    void loadDatas() {
         SQLViewer sqlViewer = sqlViewerParameters.getSQLViewer();
         MPDRModel mpdrModel = sqlViewer.getMpdrModel();
 
@@ -189,15 +186,15 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
             if (StringUtils.isNotEmpty(mpdrModel.getConnectionLienProg())) {
                 conConnection = ConnectionsService.getConConnectionByLienProg(mpdrModel.getConnectionLienProg());
                 if (conConnection != null) {
-                    //fieldUserName.setText(conConnection.getUserName());
-                    //fielConnectionName.setText(conConnection.getNamePath());
                     sqlViewer.setConConnection(conConnection);
-                    fieldConnectionName.setText(conConnection.getName());
+                    fieldConnectionName.setText(conConnection.getNamePath());
                     fieldUserName.setText(conConnection.getUserName());
                 } else {
-                    String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connection.unknow");
-                    ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
-                    ViewLogsManager.dialogQuittance(getEditor(), message);
+                    String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connection.unknow",
+                            new String[] {mpdrModel.getConnectionLienProg(), mpdrModel.getNamePath()});
+                    SQLViewerConsoleContent sqlViewerConsoleContent = sqlViewer.getSqlViewerConsole().getSqlViewerConsoleContent();
+                    sqlViewerConsoleContent.getTextArea().append(message);
+                    fieldConnectionName.setColor(SComponent.COLORERROR);
                 }
             }
         }
@@ -206,17 +203,16 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
                 ConConnector conConnector = ConnectionsService.getConConnectorByLienProg(mpdrModel.getConnectorLienProg());
                 if (conConnector != null){
                     conConnection = (ConConnection) conConnector.getParent();
-                    //fieldUserName.setText(conConnector.getUserName());
-                    //fielConnectorName.setText(conConnector.getNamePath());
                     sqlViewer.setConConnector(conConnector);
-                    fieldConnectorName.setText(conConnector.getName());
+                    fieldConnectorName.setText(conConnector.getNamePath());
                     fieldUserName.setText(conConnector.getUserName());
                 } else {
-                    String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connector.unknow");
-                    ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
-                    ViewLogsManager.dialogQuittance(getEditor(), message);
+                    String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connector.unknow",
+                            new String[] {mpdrModel.getConnectorLienProg(), mpdrModel.getNamePath()});
+                    SQLViewerConsoleContent sqlViewerConsoleContent = sqlViewer.getSqlViewerConsole().getSqlViewerConsoleContent();
+                    sqlViewerConsoleContent.getTextArea().append(message);
+                    fieldConnectorName.setColor(SComponent.COLORERROR);
                 }
-
             }
         }
         if (conConnection != null) {
@@ -225,14 +221,21 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
             fieldDbName.setText(conConnection.getDbName());
         }
 
+
         if ( MVCCDManager.instance().getFileProjectCurrent() != null) {
-            String directorySQL = GenerateSQLUtil.directorySQLFiles().getPath();
+            String directorySQL = MPDRGenerateSQLUtil.directorySQLFiles().getPath();
             fieldDirectorySQL.setText(directorySQL);
         } else {
             fieldDirectorySQL.setText("");
             fieldDirectorySQL.setColor(SComponent.COLORERROR);
-
+            SQLViewerButtonsContent sqlViewerButtonsContent = sqlViewer.getSqlViewerButtons().getSqlViewerButtonsContent();
+            sqlViewerButtonsContent.getBtnSave().setEnabled(false);
+            sqlViewerButtonsContent.getBtnExecute().setEnabled(false);
+            String message = MessagesBuilder.getMessagesProperty("generatesql.project.not.saved");
+            SQLViewerConsoleContent sqlViewerConsoleContent = sqlViewer.getSqlViewerConsole().getSqlViewerConsoleContent();
+            sqlViewerConsoleContent.getTextArea().append(message);
         }
+
     }
 
     @Override

@@ -6,7 +6,7 @@ import connections.ConDBMode;
 import connections.services.ConnectionsService;
 import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
-import generatorsql.GenerateSQLUtil;
+import generatorsql.MPDRGenerateSQLUtil;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
@@ -69,7 +69,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         sqlViewer = sqlViewerButtons.getSQLViewer();
         mpdrModel = sqlViewer.getMpdrModel();
         if ( MVCCDManager.instance().getFileProjectCurrent() != null) {
-            sqlCreateFile = GenerateSQLUtil.sqlCreateFile();
+            sqlCreateFile = MPDRGenerateSQLUtil.sqlCreateFile();
         }
         createContent();
         createPanelContent();
@@ -286,12 +286,12 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                     if (source == btnConnectionTest) {
                         propertyAction = "editor.mpdr.connection.btn.exception.test";
                         //Resultat resultat = actionTestConnection(true, connection);
-                        actionTestConnection(true, connection);
+                        actionTestConnection(true, new Resultat());
                     }
 
                     if (source == btnConnectorTest) {
                         propertyAction = "editor.con.connector.btn.exception.test";
-                        actionTestConnector(true, connection);
+                        actionTestConnector(true, new Resultat());
                     }
 
                     if (source == btnExecute) {
@@ -314,21 +314,21 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                 }
     }
 
-    private Resultat actionTestConnection(boolean autonomous, Connection connection) {
-        ConConnection conConnection = sqlViewer.getConConnection();
+    private Connection actionTestConnection(boolean autonomous , Resultat resultat) {
+         ConConnection conConnection = sqlViewer.getConConnection();
         return ConnectionsService.actionTestIConConnectionOrConnector(sqlViewer,
                 true,
                 conConnection,
-                connection);
+                 resultat);
    }
 
 
-    private Resultat actionTestConnector(boolean autonomous, Connection connection) {
+    private Connection actionTestConnector(boolean autonomous, Resultat resultat) {
         ConConnector conConnector = sqlViewer.getConConnector();
         return ConnectionsService.actionTestIConConnectionOrConnector(sqlViewer,
                 autonomous,
                 conConnector,
-                connection );
+                resultat );
     }
 
 
@@ -337,10 +337,10 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         if (autonomous) {
             resultat.setPrintImmediatelyForResultat(true);
         }
-        resultat.addResultat(GenerateSQLUtil.generateSQLFile(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL()));
+        resultat.addResultat(MPDRGenerateSQLUtil.generateSQLFile(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL()));
         String message ;
         if (resultat.isNotError()) {
-            File sqlCreateFile = GenerateSQLUtil.sqlCreateFile();
+            File sqlCreateFile = MPDRGenerateSQLUtil.sqlCreateFile();
             setFieldDDLSaved();
             message = MessagesBuilder.getMessagesProperty("sqlviewer.dml.file.saved.ok", sqlCreateFile);
         } else {
@@ -372,18 +372,29 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                 resultat.add(new ResultatElement(message, ResultatLevel.INFO));
                 Connection connection = null;
                 if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTION) {
-                    resultat.addResultat(actionTestConnection(false, connection));
+                    connection = actionTestConnection(false, resultat);
                 }
                 if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
-                    resultat.addResultat(actionTestConnector(false, connection));
+                    connection = actionTestConnector(false, resultat);
                 }
 
                 // Exécution du script
                 if (connection != null) {
                     try {
+                        String generateSQLCode = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
+                        String[] commandes = generateSQLCode.split(";");
+
+                        for (String commande : commandes) {
+                                Statement statement = connection.createStatement();
+                                statement.executeUpdate(commande);
+                                statement.close();
+                        }
+                        /*
                         Statement statement = connection.createStatement();
                         statement.executeUpdate(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL());
                         statement.close();
+
+                         */
                         String formattedHourExecuted = UtilDivers.hourFormatted(new Date());
                         fieldDDLExecuted.setText(formattedHourExecuted);
                     } catch (Exception e) {
