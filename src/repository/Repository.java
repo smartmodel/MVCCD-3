@@ -57,7 +57,6 @@ public class Repository extends DefaultTreeModel{
                 nodeProfileEntry = node ;
             }
             nodeParent.add (node);
-            System.out.println(node.getUserObject().getClass());
             //#MAJ 2021-06-24 getChildsSortedDefault - MDRColumn (PK-FK) Entités/tables (nom)...
             if (childs.get(i).getChilds().size()>0){
                 addChildsNodes(node, childs.get(i));

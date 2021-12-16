@@ -37,7 +37,7 @@ import window.editor.diagrammer.utils.RelationCreator;
 public class DrawPanel extends JLayeredPane {
 
   private final Point origin;
-  private final List<IShape> shapes;
+  private List<IShape> shapes;
   private int gridSize = Preferences.DIAGRAMMER_DEFAULT_GRID_SIZE;
 
   public DrawPanel() {
@@ -128,9 +128,11 @@ public class DrawPanel extends JLayeredPane {
   }
 
   public void loadShapes(List<IShape> shapes){
+    this.shapes.addAll(shapes);
     for (IShape shape : shapes) {
-      this.add((JComponent) shape, JLayeredPane.DRAG_LAYER);
+      this.add((JComponent) shape);
     }
+    revalidate();
     repaint();
     ConsoleManager.printMessage(shapes.size() + " formes ont été ajoutées à la zone de dessin.");
   }
@@ -155,13 +157,14 @@ public class DrawPanel extends JLayeredPane {
   public void deleteShape(IShape shape) {
     this.remove((JComponent) shape);
     this.shapes.remove(shape);
+    revalidate();
     this.repaint();
   }
 
   public void unloadAllShapes(){
-    for (IShape shape : shapes){
-      remove((JComponent) shape);
-    }
+    removeAll();
+    shapes.clear();
+    revalidate();
     repaint();
   }
 

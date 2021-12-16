@@ -298,8 +298,8 @@ public class ProjectSaverXml {
         for (int i = 0; i < listElements.size(); i++) {
             if(listElements.get(i) instanceof MCDContDiagrams){
                 MCDContDiagrams mcdContDiagrams = (MCDContDiagrams) listElements.get(i);
-                Element diagramsTag = doc.createElement("diagrammes");
-                Attr idAttrOfDiagramsTag = doc.createAttribute("id");
+                Element diagramsTag = doc.createElement(Preferences.NODE_DIAGRAMS);
+                Attr idAttrOfDiagramsTag = doc.createAttribute(Preferences.ATTRIBUTE_ID);
                 idAttrOfDiagramsTag.setValue(mcdContDiagrams.getIdProjectElementAsString());
                 diagramsTag.setAttributeNode(idAttrOfDiagramsTag);
 
@@ -312,39 +312,47 @@ public class ProjectSaverXml {
                     if(diagram instanceof MCDDiagram) {
                         // Création de la balise <diagramme>
                         MCDDiagram mcdDiagram = (MCDDiagram) diagram;
-                        Element diagramTag = doc.createElement("diagramme");
+                        Element diagramTag = doc.createElement(Preferences.NODE_DIAGRAM);
                         diagramsTag.appendChild(diagramTag);
 
                         // Ajout de l'id à la balise <diagramme>
-                        Attr idAttrOfDiagramTag = doc.createAttribute("id");
+                        Attr idAttrOfDiagramTag = doc.createAttribute(Preferences.ATTRIBUTE_ID);
 
                         idAttrOfDiagramTag.setValue(mcdDiagram.getIdProjectElementAsString());
                         diagramTag.setAttributeNode(idAttrOfDiagramTag);
 
+                        // Ajout de l'attribut isActive représentant le diagramme actif au moment de la fermeture
+                        if (diagram == MVCCDManager.instance().getCurrentDiagram()){
+                            diagramTag.setAttribute(Preferences.ATTRIBUTE_IS_ACTIVE, "true");
+                        }
+
 
                         // Ajout de l'ID du parent pour faire la référence
                         ProjectElement parentModel = (ProjectElement) mcdDiagram.getParent().getParent();
-                        diagramTag.setAttribute("parent_id", parentModel.getIdProjectElementAsString());
+                        diagramTag.setAttribute(Preferences.ATTRIBUTE_PARENT_ID, parentModel.getIdProjectElementAsString());
 
 
                         // Ajout de l'attribut "name" à la balise <diagramme>
-                        Attr nameAttrOfDiagramTag = doc.createAttribute("name");
+                        Attr nameAttrOfDiagramTag = doc.createAttribute(Preferences.ATTRIBUTE_NAME);
                         nameAttrOfDiagramTag.setValue(mcdDiagram.getName());
                         diagramTag.setAttributeNode(nameAttrOfDiagramTag);
 
                         // Ajout des shapes
-                        Element shapesTag = doc.createElement("shapes");
-                        diagramTag.appendChild(shapesTag);
+                        if (!((MCDDiagram) diagram).getShapes().isEmpty()){
+                            Element shapesTag = doc.createElement(Preferences.NODE_SHAPES);
+                            diagramTag.appendChild(shapesTag);
 
-                        // ClassShapes
-                        for (ClassShape classShape : mcdDiagram.getClassShapes()) {
-                            addClassShape(doc, classShape, shapesTag);
+                            // ClassShapes
+                            for (ClassShape classShape : mcdDiagram.getClassShapes()) {
+                                addClassShape(doc, classShape, shapesTag);
+                            }
+
+                            // RelationShapes
+                            for (RelationShape relation : mcdDiagram.getRelationShapes()){
+                                addRelationShape(doc, relation, shapesTag);
+                            }
                         }
 
-                        // RelationShapes
-                        for (RelationShape relation : mcdDiagram.getRelationShapes()){
-                            addRelationShape(doc, relation, shapesTag);
-                        }
                     }
                 }
 
@@ -1423,15 +1431,15 @@ public class ProjectSaverXml {
         Element shapeElement = doc.createElement(shape.getXmlTagName());
 
         // Ajoute les attributs à la balise créée
-        shapeElement.setAttribute("id", String.valueOf(shape.getId()));
-        shapeElement.setAttribute("height", String.valueOf(shape.getHeight()));
-        shapeElement.setAttribute("width", String.valueOf(shape.getWidth()));
-        shapeElement.setAttribute("x", String.valueOf(shape.getX()));
-        shapeElement.setAttribute("y", String.valueOf(shape.getY()));
+        shapeElement.setAttribute(Preferences.ATTRIBUTE_ID, String.valueOf(shape.getId()));
+        shapeElement.setAttribute(Preferences.ATTRIBUTE_HEIGHT, String.valueOf(shape.getHeight()));
+        shapeElement.setAttribute(Preferences.ATTRIBUTE_WIDTH, String.valueOf(shape.getWidth()));
+        shapeElement.setAttribute(Preferences.ATTRIBUTE_X, String.valueOf(shape.getX()));
+        shapeElement.setAttribute(Preferences.ATTRIBUTE_Y, String.valueOf(shape.getY()));
 
         // Vérifie si la forme a bien un objet du référentiel lié
         if (shape.getRelatedRepositoryElement() != null)
-            shapeElement.setAttribute("repository_entity_id", shape.getRelatedRepositoryElement().getIdProjectElementAsString());
+            shapeElement.setAttribute(Preferences.ATTRIBUTE_REPOSITORY_ENTITY_ID, shape.getRelatedRepositoryElement().getIdProjectElementAsString());
 
         // Ajoute l'élément à la balise parent
         shapesTag.appendChild(shapeElement);
@@ -1441,13 +1449,13 @@ public class ProjectSaverXml {
         Element shapeElement = doc.createElement(shape.getXmlTagName());
 
         // Ajoute les attributs à la relation
-        shapeElement.setAttribute("id", String.valueOf(shape.getId()));
-        shapeElement.setAttribute("source_entity_shape_id", String.valueOf(shape.getSource().getId()));
-        shapeElement.setAttribute("destination_entity_shape_id", String.valueOf(shape.getDestination().getId()));
+        shapeElement.setAttribute(Preferences.ATTRIBUTE_ID, String.valueOf(shape.getId()));
+        shapeElement.setAttribute(Preferences.ATTRIBUTE_SOURCE_ENTITY_SHAPE_ID, String.valueOf(shape.getSource().getId()));
+        shapeElement.setAttribute(Preferences.ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID, String.valueOf(shape.getDestination().getId()));
 
         // Vérifie si la forme a bien un objet du référentiel lié
         if (shape.getRelatedRepositoryElement() != null)
-            shapeElement.setAttribute("repository_association_id", shape.getRelatedRepositoryElement().getIdProjectElementAsString());
+            shapeElement.setAttribute(Preferences.ATTRIBUTE_REPOSITORY_ASSOCIATION_ID, shape.getRelatedRepositoryElement().getIdProjectElementAsString());
 
         // Ajoute les points d'ancrage
         addAnchorPointsShapes(doc, shape, shapeElement);
@@ -1469,9 +1477,9 @@ public class ProjectSaverXml {
         for (RelationPointAncrageShape pointAncrageShape : shape.getPointsAncrage()){
             Element anchorPointElement = doc.createElement(pointAncrageShape.getXmlTagName());
 
-            anchorPointElement.setAttribute("id", String.valueOf(pointAncrageShape.getId()));
-            anchorPointElement.setAttribute("x", String.valueOf(pointAncrageShape.x));
-            anchorPointElement.setAttribute("y", String.valueOf(pointAncrageShape.y));
+            anchorPointElement.setAttribute(Preferences.ATTRIBUTE_ID, String.valueOf(pointAncrageShape.getId()));
+            anchorPointElement.setAttribute(Preferences.ATTRIBUTE_X, String.valueOf(pointAncrageShape.x));
+            anchorPointElement.setAttribute(Preferences.ATTRIBUTE_Y, String.valueOf(pointAncrageShape.y));
 
             // Ajoute le noeud "anchorPoint" au noeud "anchorPoints"
             anchorPointsTag.appendChild(anchorPointElement);
@@ -1488,10 +1496,10 @@ public class ProjectSaverXml {
         for (LabelShape label : shape.getLabels()){
             Element labelShapeElement = doc.createElement(label.getXmlTagName());
 
-            labelShapeElement.setAttribute("related_anchor_point_id", String.valueOf(label.getPointAncrage().getId()));
-            labelShapeElement.setAttribute("x_distance_from_anchor_point", String.valueOf(label.getDistanceInXFromPointAncrage()));
-            labelShapeElement.setAttribute("y_distance_from_anchor_point", String.valueOf(label.getDistanceInYFromPointAncrage()));
-            labelShapeElement.setAttribute("type", String.valueOf(label.getType()));
+            labelShapeElement.setAttribute(Preferences.ATTRIBUTE_RELATED_ANCHOR_POINT_ID, String.valueOf(label.getPointAncrage().getId()));
+            labelShapeElement.setAttribute(Preferences.ATTRIBUTE_X_DISTANCE_FROM_ANCHOR_POINT, String.valueOf(label.getDistanceInXFromPointAncrage()));
+            labelShapeElement.setAttribute(Preferences.ATTRIBUTE_Y_DISTANCE_FROM_ANCHOR_POINT, String.valueOf(label.getDistanceInYFromPointAncrage()));
+            labelShapeElement.setAttribute(Preferences.ATTRIBUTE_TYPE, String.valueOf(label.getType()));
 
             // Ajoute le noeud "labelShape" au noeud "labelsTag"
             labelsTag.appendChild(labelShapeElement);

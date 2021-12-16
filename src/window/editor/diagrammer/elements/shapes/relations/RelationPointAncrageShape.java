@@ -74,7 +74,6 @@ public class RelationPointAncrageShape extends Point implements IShape {
     // Génère un id utile à la persistance
     if (MVCCDManager.instance().getProject() != null) {
       this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
-      System.out.println("id generated for anchor point : " + id);
     }
   }
 

@@ -416,19 +416,16 @@ public abstract class RelationShape extends JComponent implements IShape {
   public void addLabelsInDiagrammeur(){
     // Ajoute les labels au diagrammeur
     labels.forEach(label -> DiagrammerService.getDrawPanel().add(label, JLayeredPane.DRAG_LAYER));
-    System.out.println("Labels added in diagrammer");
   }
 
   public void displayLabels(){
     labels.forEach(label -> label.setVisible(true));
     repaintLabels();
-    System.out.println("Labels displayed");
   }
 
   public void hideLabels(){
     labels.forEach(label -> label.setVisible(false));
     repaintLabels();
-    System.out.println("Labels hidden");
   }
 
   public void deleteLabels() {

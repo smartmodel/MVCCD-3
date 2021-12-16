@@ -177,7 +177,6 @@ public class LabelShape extends JLabel {
 
   public Point calculateLocation(boolean firstDisplay) {
     if (!firstDisplay) {
-      System.out.println("ok");
       // S'il s'agit du nom d'association
       if (!this.relationShape.isFirstOrLastPoint(this.pointAncrage)) {
         return new Point(this.relationShape.getCenter().x + this.distanceInXFromPointAncrage, this.relationShape.getCenter().y + this.distanceInYFromPointAncrage);

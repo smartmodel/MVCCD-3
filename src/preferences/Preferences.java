@@ -706,6 +706,32 @@ public class Preferences extends MVCCDElement {
   public static String RESULTAT_NO_FATAL = "resultat.error.no.fatal";
   public static String RESULTAT_INFO = "resultat.info";
 
+
+  public static String ATTRIBUTE_IS_ACTIVE = "isActive";
+  public static String ATTRIBUTE_REPOSITORY_ENTITY_ID = "repository_entity_id";
+  public static String ATTRIBUTE_HEIGHT = "height";
+  public static String ATTRIBUTE_WIDTH = "width";
+  public static String ATTRIBUTE_X = "x";
+  public static String ATTRIBUTE_Y = "y";
+  public static String ATTRIBUTE_ID = "id";
+  public static String ATTRIBUTE_TYPE = "type";
+  public static String ATTRIBUTE_NAME = "name";
+  public static String ATTRIBUTE_PARENT_ID = "parent_id";
+  public static String ATTRIBUTE_X_DISTANCE_FROM_ANCHOR_POINT = "x_distance_from_anchor_point";
+  public static String ATTRIBUTE_Y_DISTANCE_FROM_ANCHOR_POINT = "y_distance_from_anchor_point";
+  public static String ATTRIBUTE_RELATED_ANCHOR_POINT_ID = "related_anchor_point_id";
+  public static String ATTRIBUTE_REPOSITORY_ASSOCIATION_ID = "repository_association_id";
+  public static String ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID = "destination_entity_shape_id";
+  public static String ATTRIBUTE_SOURCE_ENTITY_SHAPE_ID = "source_entity_shape_id";
+  public static String NODE_SHAPES = "shapes";
+  public static String NODE_DIAGRAM = "diagramme";
+  public static String NODE_DIAGRAMS = "diagrammes";
+
+
+
+
+
+
   /*
    * Préférences de l'application
    * ATTENTION: pour chaque nouvelle préférence créée, il est nécessaire d'ajouter la préférence dans :

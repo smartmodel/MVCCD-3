@@ -483,6 +483,7 @@ public class MVCCDManager {
             } else {
                 throw new CodeApplException("Seules les extensions mvccd et xml sont reconnues");
             }
+
             // Fin provisoire !
             message = MessagesBuilder.getMessagesProperty ("project.save.finish.ok",
                     new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() });

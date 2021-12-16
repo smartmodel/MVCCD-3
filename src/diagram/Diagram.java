@@ -6,6 +6,7 @@ import project.Project;
 import project.ProjectElement;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
 import javax.management.relation.Relation;
@@ -64,4 +65,17 @@ public abstract class Diagram extends ProjectElement {
     public List<RelationShape> getRelationShapes(){
         return shapes.stream().filter(shape -> shape instanceof RelationShape).map(s -> (RelationShape) s).collect(Collectors.toList());
     }
+
+    public MCDEntityShape getMCDEntityShapeByID(int id){
+        for (IShape shape : shapes){
+            if (shape instanceof MCDEntityShape){
+                MCDEntityShape mcdEntityShape = (MCDEntityShape) shape;
+                if (mcdEntityShape.getId() == id){
+                    return mcdEntityShape;
+                }
+            }
+        }
+        return null;
+    }
+
 }
