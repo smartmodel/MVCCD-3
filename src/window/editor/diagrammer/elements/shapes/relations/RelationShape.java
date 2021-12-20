@@ -353,27 +353,32 @@ public abstract class RelationShape extends JComponent implements IShape {
 
   public abstract void createLabelsAfterRelationShapeEdit();
 
-  public void createOrUpdateLabel(RelationPointAncrageShape anchorPoint, String text, LabelType type, int distanceInXFromAnchorPoint, int distanceInYFromAnchorPoint) {
+  public LabelShape createOrUpdateLabel(RelationPointAncrageShape anchorPoint, String text, LabelType type, int distanceInXFromAnchorPoint, int distanceInYFromAnchorPoint) {
 
-      if (hasLabel(type))
+    LabelShape labelShape;
+
+      if (hasLabel(type)){
         // La relation a déjà un label du type fourni en paramètre
-        updateLabel(text, type);
-      else
+        labelShape = updateLabel(text, type);
+      } else {
         // La relation n'as pas encore de label du type fourni en paramètre
-        createLabel(anchorPoint, text, type, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+        labelShape = createLabel(anchorPoint, text, type, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+      }
+
+      return labelShape;
 
   }
 
-  public void createLabel(RelationPointAncrageShape anchorPoint, String text, LabelType type, int distanceInXFromAnchorPoint, int distanceInYFromAnchorPoint){
+  public LabelShape createLabel(RelationPointAncrageShape anchorPoint, String text, LabelType type, int distanceInXFromAnchorPoint, int distanceInYFromAnchorPoint){
 
     // La relation possède déjà un label du type fourni en paramètre
     LabelShape label = new LabelShape(anchorPoint, type, this, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
     label.setText(text);
     label.setVisible(true);
 
-    // Ajoute le label à la liste des labels et dans le diagrammer
+    // Ajoute le label à la liste des labels
     labels.add(label);
-    DiagrammerService.getDrawPanel().add(label, JLayeredPane.DRAG_LAYER);
+    return label;
 
   }
 
@@ -389,13 +394,15 @@ public abstract class RelationShape extends JComponent implements IShape {
     return null;
   }
 
-  public void updateLabel(String newValue, LabelType type){
+  public LabelShape updateLabel(String newValue, LabelType type){
     LabelShape label = getLabelByType(type);
 
     if (label != null){
       label.setText(newValue);
       System.out.println("Label " + type.name() + " updated with new value \"" + newValue + "\"");
     }
+
+    return label;
   }
 
   public boolean hasLabel(LabelType type){

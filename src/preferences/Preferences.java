@@ -707,7 +707,7 @@ public class Preferences extends MVCCDElement {
   public static String RESULTAT_INFO = "resultat.info";
 
 
-  public static String ATTRIBUTE_IS_ACTIVE = "isActive";
+  public static String ATTRIBUTE_IS_ACTIVE = "is_active";
   public static String ATTRIBUTE_REPOSITORY_ENTITY_ID = "repository_entity_id";
   public static String ATTRIBUTE_HEIGHT = "height";
   public static String ATTRIBUTE_WIDTH = "width";

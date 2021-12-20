@@ -388,7 +388,7 @@
 				<xs:element ref="shapes" minOccurs="0" maxOccurs="1" />
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
-			<xs:attribute name="isActive" use="optional" type="xs:boolean" />
+			<xs:attribute name="is_active" use="optional" type="xs:boolean" />
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">

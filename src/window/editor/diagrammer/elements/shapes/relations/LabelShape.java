@@ -20,7 +20,6 @@ public class LabelShape extends JLabel {
   private RelationPointAncrageShape pointAncrage;
   private RelationShape relationShape;
   private boolean isRole;
-  private boolean firstDisplay;
   private LabelType type;
 
   private LabelShape() {
@@ -42,8 +41,6 @@ public class LabelShape extends JLabel {
     Point initialLocation = this.calculateLocation(true);
 
     this.setBounds(initialLocation.x + distanceInXFromPointAncrage, initialLocation.y + distanceInYFromPointAncrage, 110, 30);
-
-    DiagrammerService.getDrawPanel().add(this);
 
     repaint();
     DiagrammerService.getDrawPanel().repaint();
@@ -207,10 +204,6 @@ public class LabelShape extends JLabel {
 
   public void setDistanceInYFromPointAncrage(int distanceInYFromPointAncrage) {
     this.distanceInYFromPointAncrage = distanceInYFromPointAncrage;
-  }
-
-  public void setFirstDisplay(boolean firstDisplay) {
-    this.firstDisplay = firstDisplay;
   }
 
   public String getXmlTagName(){

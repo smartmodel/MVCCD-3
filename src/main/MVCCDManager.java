@@ -26,6 +26,8 @@ import resultat.ResultatLevel;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -678,6 +680,10 @@ public class MVCCDManager {
 
         // Ajoute les formes à la zone de dessin
         DiagrammerService.getDrawPanel().loadShapes(currentDiagramShapes);
+        diagram.getRelationShapes().forEach(RelationShape::addLabelsInDiagrammeur);
+
+        // Refresh les informations des ClassShapes
+        diagram.getClassShapes().forEach(ClassShape::refreshInformations);
 
         ConsoleManager.printMessage("Diagramme " + diagram.getName() + " affiché.");
     }

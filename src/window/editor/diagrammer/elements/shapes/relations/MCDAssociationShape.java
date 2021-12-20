@@ -34,33 +34,42 @@ public class MCDAssociationShape extends RelationShape {
     MCDAssociation association = getMCDAssociation();
 
     // Nom d'association
-    if (!association.getName().isEmpty())
-      createOrUpdateLabel(new RelationPointAncrageShape(getCenter().x, getCenter().y), association.getName(), LabelType.ASSOCIATION_NAME, 0, 0);
-    else
+    if (!association.getName().isEmpty()){
+      LabelShape labelShape = createOrUpdateLabel(new RelationPointAncrageShape(getCenter().x, getCenter().y), association.getName(), LabelType.ASSOCIATION_NAME, 0, 0);
+      DiagrammerService.getDrawPanel().add(labelShape);
+    } else {
       deleteLabel(LabelType.ASSOCIATION_NAME);
+    }
 
     // Rôle source
-    if (!association.getFrom().getName().isEmpty())
-      createOrUpdateLabel(getFirstPoint(), association.getFrom().getName(), LabelType.SOURCE_ROLE, 0, 0);
-    else
+    if (!association.getFrom().getName().isEmpty()){
+      LabelShape labelShape = createOrUpdateLabel(getFirstPoint(), association.getFrom().getName(), LabelType.SOURCE_ROLE, 0, 0);
+      DiagrammerService.getDrawPanel().add(labelShape);
+    } else {
       deleteLabel(LabelType.SOURCE_ROLE);
+    }
 
     // Rôle destination
-    if (!association.getTo().getName().isEmpty())
-       createOrUpdateLabel(getLastPoint(), association.getTo().getName(), LabelType.DESTINATION_ROLE, 0, 0);
-    else
+    if (!association.getTo().getName().isEmpty()){
+      LabelShape labelShape = createOrUpdateLabel(getLastPoint(), association.getTo().getName(), LabelType.DESTINATION_ROLE, 0, 0);
+      DiagrammerService.getDrawPanel().add(labelShape);
+    } else {
       deleteLabel(LabelType.DESTINATION_ROLE);
+    }
 
     // Cardinalités source
-    if (!association.getFrom().getMultiStr().isEmpty())
-      createOrUpdateLabel(getFirstPoint(), association.getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY, 0, 0);
-    else
+    if (!association.getFrom().getMultiStr().isEmpty()){
+      LabelShape labelShape = createOrUpdateLabel(getFirstPoint(), association.getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY, 0, 0);
+      DiagrammerService.getDrawPanel().add(labelShape);
+    } else {
       deleteLabel(LabelType.SOURCE_CARDINALITY);
+    }
 
     // Cardinalités destination
-    if (!association.getTo().getMultiStr().isEmpty())
-      createOrUpdateLabel(getLastPoint(), association.getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY, 0, 0);
-    else
+    if (!association.getTo().getMultiStr().isEmpty()){
+      LabelShape labelShape = createOrUpdateLabel(getLastPoint(), association.getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY, 0, 0);
+      DiagrammerService.getDrawPanel().add(labelShape);
+    } else
       deleteLabel(LabelType.DESTINATION_CARDINALITY);
 
     DiagrammerService.getDrawPanel().repaint();
