@@ -2,14 +2,10 @@ package console;
 
 
 import main.MVCCDManager;
-import messages.MessagesBuilder;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
+import org.apache.commons.lang.StringUtils;
 import utilities.window.DialogMessage;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * This class have to be used when you want to tell something to user right now.
@@ -41,15 +37,19 @@ public class ViewLogsManager {
         ConsoleManager consoleManager = MVCCDManager.instance().getConsoleManager();
         consoleManager.clearMessages();
         //TODO-0 A remplacer par simplement l'impression de la ligne de séparation
-        LogsManager.newResultatElement(new ResultatElement("", ResultatLevel.INFO));
+        //LogsManager.newResultatElement(new ResultatElement("", ResultatLevel.INFO));
+        LogsManager.clear();
     }
 
+    static public void printMessage(String message, WarningLevel warningLevel){
+        LogsManager.printMessage(message);
+        ViewManager.printMessage(message, warningLevel);
+    }
 
 
     /**
      * Print a message to the user through the console or/and the log file.
      * Print only in one line.
-     * @param resultatElement
      */
 
     /*
@@ -60,7 +60,7 @@ public class ViewLogsManager {
 
      */
 
-
+/*
     static public void printElementResultat(ResultatElement resultatElement){
         LogsManager.continueResultatElement(resultatElement);
         ViewManager.printResultatElement(resultatElement);
@@ -73,6 +73,8 @@ public class ViewLogsManager {
         resultat.setPrintImmediatelyForNewMessage(true);
         resultat.add(new ResultatElement(message, resultatLevel));
     }
+
+ */
 
 
     /*
@@ -93,7 +95,7 @@ public class ViewLogsManager {
      */
 
 
-
+/*
     public static void dialogQuittance(Window window, Resultat resultat) {
         ArrayList<ResultatElement> elements = resultat.getElementsAllLevel();
         if (elements.size() > 0) {
@@ -106,19 +108,58 @@ public class ViewLogsManager {
         }
     }
 
+ */
+
+
     public static void dialogQuittance(Window window, String message) {
         DialogMessage.showOk(window, message);
     }
 
+    /*
     public static void printMessageAndDialog(Window window, String message, ResultatLevel resultatLevel) {
         printNewResultatWithMessage(message, resultatLevel);
         DialogMessage.showOk(window, message);
     }
 
+     */
+
+    public static void printMessageAndDialog(Window window, String message, WarningLevel warningLevel) {
+        printMessage(message, warningLevel);
+        DialogMessage.showOk(window, message);
+    }
+
+
+    public static void catchException(Exception e, String message){
+        /*
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        if (stackTrace.length > 0){
+            ViewLogsManager.printMessage(stackTrace[0].toString(), WarningLevel.INFO);
+
+        }
+        */
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        if (StringUtils.isNotEmpty(e.getMessage())) {
+            ViewLogsManager.printMessage(e.getMessage(), WarningLevel.INFO);
+            System.out.println(e.getMessage());
+        }
+        System.out.println(e.toString());
+        e.printStackTrace();
+    }
+
+
+
+    public static void catchException(Exception e, Window window, String message){
+        catchException(e, message);
+        dialogQuittance(window, message);
+    }
+
+    /*
     public static void catchException(Exception e, Window window, String message) {
         Resultat resultat = new Resultat();
         resultat.setPrintImmediatelyForResultat(true);
         resultat.addExceptionUnhandled(e);
         resultat.add(new ResultatElement(message, ResultatLevel.INFO));
     }
+
+     */
  }

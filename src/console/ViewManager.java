@@ -3,7 +3,6 @@ package console;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.PreferencesManager;
-import resultat.ResultatElement;
 
 /**
  * This class allow you to send messages to the final user.
@@ -22,6 +21,17 @@ public class ViewManager {
      * @param resultatElement
      */
 
+
+    static public void printMessage(String message, WarningLevel warningLevel){
+        WarningLevelManager wlm = WarningLevelManager.instance();
+        WarningLevel prefWarningLevel = PreferencesManager.instance().preferences().getWARNING_LEVEL();
+        if(warningLevel == null || wlm.oneIsAsImportantAsSecond(warningLevel,prefWarningLevel)){
+            ConsoleManager consoleManager = MVCCDManager.instance().getConsoleManager();
+            consoleManager.printMessage(message);
+        }
+    }
+
+/*
     static public void printResultatElement(ResultatElement resultatElement){
         WarningLevelManager wlm = WarningLevelManager.instance();
         WarningLevel prefWarningLevel = PreferencesManager.instance().preferences().getWARNING_LEVEL();
@@ -31,6 +41,8 @@ public class ViewManager {
             consoleManager.printMessage(resultatElement.getText());
         }
     }
+
+ */
 
     /**
      * Print assLink the console that a new text has been added to the log file.

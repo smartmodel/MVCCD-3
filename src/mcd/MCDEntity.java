@@ -8,24 +8,20 @@ import m.MRelationDegree;
 import m.interfaces.IMClass;
 import m.interfaces.IMCompletness;
 import main.MVCCDElement;
-import main.MVCCDManager;
 import mcd.compliant.MCDCompliant;
 import mcd.interfaces.IMCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
-import mcd.interfaces.IMPathOnlyRepositoryTree;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mcd.services.MCDEntityService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
-import resultat.Resultat;
 import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
-import stereotypes.Stereotype;
 
 /**
  * Classe qui représente l'entité du modèle MCD.
@@ -207,7 +203,7 @@ public class MCDEntity extends MCDElement implements IMClass, IMCompletness, IMC
         return "Entité";
     }
 
-    public Resultat treatCompliant(){
+    public boolean treatCompliant(){
         MCDCompliant mcdCompliant = new MCDCompliant();
         return mcdCompliant.check(this);
     }

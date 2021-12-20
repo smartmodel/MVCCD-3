@@ -1,6 +1,5 @@
 package console;
 
-import resultat.ResultatLevel;
 
 /**
  * Give methods assLink work with the levels of importance, used assLink categorized degrees of importance

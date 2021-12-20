@@ -2,7 +2,6 @@ package connections.services;
 
 import connections.ConConnection;
 import preferences.Preferences;
-import resultat.Resultat;
 
 import java.awt.*;
 import java.sql.Connection;
@@ -18,8 +17,7 @@ public class ConConnectorService {
                                                 boolean autonomous,
                                                 ConConnection conConnectionParent,
                                                 String userName,
-                                                String userPW,
-                                                Resultat resultat) {
+                                                String userPW) {
 
         // Clone de la connexion car, il y a changement du user/pw !
         ConConnection conConnectionParentClone = (ConConnection) conConnectionParent.clone();
@@ -31,8 +29,7 @@ public class ConConnectorService {
 
         return ConnectionsService.actionTestIConConnectionOrConnector(owner,
                 autonomous,
-                conConnectionParentClone,
-                resultat);
+                conConnectionParentClone);
     }
 
 }

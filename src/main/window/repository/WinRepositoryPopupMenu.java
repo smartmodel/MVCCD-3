@@ -43,7 +43,6 @@ import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
 import repository.editingTreat.naming.NamingEditingTreat;
 import repository.editingTreat.preferences.*;
-import resultat.Resultat;
 import utilities.DefaultMutableTreeNodeService;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.ISMenu;
@@ -306,19 +305,6 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             if (node.getUserObject() instanceof MPDRModel) {
                 treatGeneric(this, new MPDRModelEditingTreat());
-
-                JMenuItem menuItemTB = new JMenuItem("Générator TB");
-                addItem(this, menuItemTB);
-                menuItemTB.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        try {
-                            (new MPDRModelEditingTreat()).treatGenerateTB(mvccdElement);
-                        } catch (Exception e){
-                            exceptionUnhandled(e, mvccdElement, "repository.menu.exception.generate.sql");
-                        }
-                    }
-                });
 
                 JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(
                         "menu.generate.sql.from.mpdr"));
@@ -799,7 +785,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    Resultat resultat = editingTreat.treatCompletness(mvccdWindow, mvccdElement, true);
+                    boolean ok =  editingTreat.treatCompletness(mvccdWindow, mvccdElement, true);
                 } catch (Exception e) {
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.completness");
                 }

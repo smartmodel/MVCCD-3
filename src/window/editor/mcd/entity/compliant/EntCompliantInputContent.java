@@ -1,13 +1,12 @@
 package window.editor.mcd.entity.compliant;
 
+import console.ViewLogsManager;
 import main.MVCCDElement;
 import mcd.MCDEntity;
 import mcd.MCDEntityNature;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import repository.editingTreat.mcd.MCDEntCompliantEditingTreat;
-import resultat.Resultat;
-import resultat.ResultatElement;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
@@ -53,8 +52,11 @@ public class EntCompliantInputContent extends PanelInputContent {
         //labelAbstract = new JLabel("Abstraite");
         //fieldAbstract = new SCheckBox(this, labelAbstract);
 
-        labelErrors = new JLabel("Erreurs");
+        labelErrors = new JLabel("");
+        // L'erreur est envoyé dans la console et plus dans un champ dédié
         fieldErrors = new STextArea(this);
+        fieldErrors.setVisible (false);
+
 
         super.getSComponents().add(fieldNature);
         super.getSComponents().add(fieldGeneralize);
@@ -134,12 +136,12 @@ public class EntCompliantInputContent extends PanelInputContent {
         // pas d'insertion
     }
 
-    @Override
-    public void loadDatas(MVCCDElement mvccdElementCrt) {
+    public void loadDatasOld(MVCCDElement mvccdElementCrt) {
         MCDEntity mcdEntity = (MCDEntity) mvccdElementCrt;
 
-        Resultat resultat = mcdEntity.treatCompliant();
-        ((MCDEntCompliantEditingTreat) getEditor().getEditingTreat()).treatCompliant(getEditor(), mcdEntity);
+        //boolean ok = mcdEntity.treatCompliant();
+        ViewLogsManager.clear();
+        boolean ok = ((MCDEntCompliantEditingTreat) getEditor().getEditingTreat()).treatCompliant(getEditor(), mcdEntity);
 
         MCDEntityNature nature = mcdEntity.getNature();
         if (nature != null){
@@ -151,15 +153,58 @@ public class EntCompliantInputContent extends PanelInputContent {
         fieldGeneralize.setSelected(mcdEntity.isGeneralized());
         //fieldAbstract.setSelected(mcdEntity.isEntAbstract());
 
-        if (resultat.isWithElementFatal() ){
-            for (ResultatElement error : resultat.getElementsAllLevel()) {
-                fieldErrors.append(error.getText() + System.lineSeparator());
-            }
+        if (!ok ){
+/*
+            String message = MessagesBuilder.getMessagesProperty("compliant.mcd.element.error",
+                    new String[] {MessagesBuilder.getMessagesProperty("the.entity"),
+                            mcdEntity.getNamePath()});
+            ViewLogsManager.printMessageAndDialog(getEditor(), message, WarningLevel.INFO);
+
+ */
+            labelErrors.setText("L'entité n'est pas conforme !");
         } else {
-            fieldErrors.setVisible (false);
             labelErrors.setText("L'entité est conforme !");
         }
     }
+
+    public void loadDatas(MVCCDElement mvccdElementCrt) {
+        MCDEntity mcdEntity = (MCDEntity) mvccdElementCrt;
+
+        MCDEntityNature nature = mcdEntity.getNature();
+        if (nature != null){
+            fieldNature.setText(nature.getText());
+        }else {
+            fieldNature.setText(SComboBox.LINEDASH);
+        }
+
+        fieldGeneralize.setSelected(mcdEntity.isGeneralized());
+        //fieldAbstract.setSelected(mcdEntity.isEntAbstract());
+
+    }
+
+
+
+    public void checkCompliant(MVCCDElement mvccdElementCrt) {
+        MCDEntity mcdEntity = (MCDEntity) mvccdElementCrt;
+
+        //boolean ok = mcdEntity.treatCompliant();
+        ViewLogsManager.clear();
+        boolean ok = ((MCDEntCompliantEditingTreat) getEditor().getEditingTreat()).treatCompliant(getEditor(), mcdEntity);
+
+        if (!ok ){
+/*
+            String message = MessagesBuilder.getMessagesProperty("compliant.mcd.element.error",
+                    new String[] {MessagesBuilder.getMessagesProperty("the.entity"),
+                            mcdEntity.getNamePath()});
+            ViewLogsManager.printMessageAndDialog(getEditor(), message, WarningLevel.INFO);
+
+ */
+            labelErrors.setText("L'entité n'est pas conforme !");
+        } else {
+            labelErrors.setText("L'entité est conforme !");
+        }
+    }
+
 
     @Override
     protected void saveDatas(MVCCDElement mvccdElement) {
@@ -173,6 +218,7 @@ public class EntCompliantInputContent extends PanelInputContent {
     protected void enabledContent() {
         Preferences preferences = PreferencesManager.instance().preferences();
     }
+
 
 
 

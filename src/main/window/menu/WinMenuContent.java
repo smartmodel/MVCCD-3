@@ -1,15 +1,13 @@
 package main.window.menu;
 
 import console.ViewLogsManager;
+import console.WarningLevel;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import project.Project;
 import repository.editingTreat.ProjectEditingTreat;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 import utilities.window.DialogMessage;
 
 import javax.swing.*;
@@ -126,27 +124,25 @@ public class WinMenuContent implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Resultat resultat = new Resultat() ;
         String messageExceptionTarget = "";
-        Boolean dialogQuittance = false;
         try {
             Object source = e.getSource();
             if (source == projectNew) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.new.exception");
-                resultat = newProject();
+                newProject();
             }
             if (source == projectEdit) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.edit.exception");
-                resultat = ProjectEditingTreat.treatUpdate(mvccdWindow);
+                ProjectEditingTreat.treatUpdate(mvccdWindow);
             }
             if (source == projectOpen) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.open.exception");
-                resultat = openProject();
+                openProject();
              }
             for (int i = 0; i < Preferences.FILES_RECENTS_AUTHORIZED; i++) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.recent.open.exception");
                 if (source == projectOpenRecentsItems[i]) {
-                    resultat = openProjectRecent(projectOpenRecentsItems[i].getText());
+                    openProjectRecent(projectOpenRecentsItems[i].getText());
                 }
             }
 
@@ -158,66 +154,55 @@ public class WinMenuContent implements ActionListener {
                     confirmClose = DialogMessage.showConfirmYesNo_No(mvccdWindow, message) == JOptionPane.YES_OPTION;
                 }
                 if (confirmClose) {
-                    resultat = MVCCDManager.instance().closeProject();
+                    MVCCDManager.instance().closeProject();
                 }
             }
 
             if (source == projectSave) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.save.exception");
-                dialogQuittance = true;
-                resultat = MVCCDManager.instance().saveProject();
+                MVCCDManager.instance().saveProject();
             }
             if (source == projectSaveAs) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.save.as.exception");
-                dialogQuittance = true;
-                resultat = MVCCDManager.instance().saveAsProject(false);
-            }
-
-            // Quittance ok
-            if (dialogQuittance) {
-                ViewLogsManager.dialogQuittance(mvccdWindow, resultat);
+                MVCCDManager.instance().saveAsProject(false);
             }
 
         } catch(Exception exception){
             String messageException = MessagesBuilder.getMessagesProperty("bar.menu.exception",
                     messageExceptionTarget);
-            ViewLogsManager.catchException(exception, mvccdWindow, messageException);
+            ViewLogsManager.catchException(exception, messageException);
         }
     }
 
-    private Resultat newProject() {
-        Resultat resultat = new Resultat();
+    private void newProject() {
         if (MVCCDManager.instance().getProject() == null) {
             Project project = ProjectEditingTreat.treatNew(mvccdWindow);
             if (project != null){
                 // Quittance de création d'un nouveau projet
                 String message = MessagesBuilder.getMessagesProperty ("project.new", project.getName());
-                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+                ViewLogsManager.printMessage(message, WarningLevel.INFO);
             }
         } else {
             String message = MessagesBuilder.getMessagesProperty ("project.new.not.close");
             DialogMessage.showOk(mvccdWindow,message);
         }
-        return resultat;
     }
 
-    private Resultat openProject() {
+    private void openProject() {
         if (MVCCDManager.instance().getProject() == null) {
-            return MVCCDManager.instance().openProject();
+            MVCCDManager.instance().openProject();
         } else {
             String message = MessagesBuilder.getMessagesProperty ("project.open.not.close");
             DialogMessage.showOk(mvccdWindow,message);
-            return new Resultat();
         }
     }
 
-    private Resultat openProjectRecent(String fileName) {
+    private void openProjectRecent(String fileName) {
         if (MVCCDManager.instance().getProject() == null) {
-            return MVCCDManager.instance().openProjectRecent(fileName);
+            MVCCDManager.instance().openProjectRecent(fileName);
         } else {
             String message = MessagesBuilder.getMessagesProperty ("project.open.not.close");
             DialogMessage.showOk(mvccdWindow,message);
-            return new Resultat();
         }
 
     }

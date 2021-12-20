@@ -5,16 +5,20 @@ import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
 import preferences.Preferences;
+import utilities.window.scomponents.STextField;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
 import window.editor.preferences.project.mdr.utilities.PrefMLPDRInputContent;
 
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
 public class PrefMPDROracleInputContent extends PrefMLPDRInputContent {
 
+    protected JLabel labelDelimiterInstructions = new JLabel();
+    protected STextField fieldDelimiterInstructions;
 
 
     public PrefMPDROracleInputContent(PrefMPDROracleInput prefMPDROracleInput) {
@@ -24,13 +28,13 @@ public class PrefMPDROracleInputContent extends PrefMLPDRInputContent {
     public void createContentCustom() {
 
         super.createContentCustom();
+
         createPanelMaster();
 
     }
 
     private void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
-
         super.affectPanelMaster(gbc);
     }
 

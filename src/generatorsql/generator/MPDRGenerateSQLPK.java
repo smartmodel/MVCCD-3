@@ -4,18 +4,15 @@ import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import preferences.Preferences;
-import resultat.Resultat;
 import utilities.TemplateFile;
 
 public class MPDRGenerateSQLPK {
 
     private MPDRModel  mpdrModel;
     private MPDRTable mpdrTable;
-    private Resultat resultat;
 
-    public MPDRGenerateSQLPK(MPDRTable mpdrTable, Resultat resultat) {
+    public MPDRGenerateSQLPK(MPDRTable mpdrTable) {
         this.mpdrTable = mpdrTable;
-        this.resultat = resultat;
         mpdrModel = mpdrTable.getMPDRModelParent();
     }
 

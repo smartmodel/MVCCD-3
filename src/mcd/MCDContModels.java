@@ -6,7 +6,6 @@ import mcd.interfaces.*;
 import mcd.services.IMCDModelService;
 import mldr.MLDRModel;
 import project.ProjectElement;
-import resultat.Resultat;
 import transform.mcdtomldr.MCDTransform;
 
 /**
@@ -34,7 +33,7 @@ public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePa
     }
 
 
-    public Resultat treatCompliant(){
+    public boolean treatCompliant(){
         MCDCompliant mcdCompliant = new MCDCompliant();
         // Il n'y a pas de modèles. Il faut donc tester toutes les entités du conteneur
         //ArrayList<String> resultat = mcdCompliant.check(ProjectService.getMCDEntities(), false);
@@ -43,7 +42,7 @@ public class MCDContModels extends MCDElement implements IMCDModel, /*IMCDNamePa
     }
 
 
-    public Resultat treatTransform()   {
+    public boolean treatTransform()   {
         MCDTransform mcdTransform = new MCDTransform();
         // Il n'y a pas de modèles. Il faut donc tester toutes les entités
         return mcdTransform.transform(this);

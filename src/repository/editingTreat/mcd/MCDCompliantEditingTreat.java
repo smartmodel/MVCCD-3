@@ -1,12 +1,11 @@
 package repository.editingTreat.mcd;
 
+import console.ViewLogsManager;
+import console.WarningLevel;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDCompliant;
 import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 import treatment.services.TreatmentService;
 
 import java.awt.*;
@@ -14,18 +13,17 @@ import java.awt.*;
 public abstract class MCDCompliantEditingTreat extends EditingTreat {
 
 
-    public void treatCompliant(Window owner, IMCDCompliant imcdCompliant) {
-        Resultat resultat = new Resultat();
-        resultat.setPrintImmediatelyForResultat(true);
-        String message = MessagesBuilder.getMessagesProperty("compliant.mcd.start",
+    public boolean treatCompliant(Window owner, IMCDCompliant imcdCompliant) {
+       String message = MessagesBuilder.getMessagesProperty("compliant.mcd.start",
                 new String[] {MessagesBuilder.getMessagesProperty(getPropertyTheElement()),
                         imcdCompliant.getName()});
-        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
 
-        resultat.addResultat(imcdCompliant.treatCompliant());
+        boolean ok = imcdCompliant.treatCompliant();
 
-        TreatmentService.treatmentFinish(owner, (MVCCDElement) imcdCompliant, resultat,
+        TreatmentService.treatmentFinish(owner, (MVCCDElement) imcdCompliant, ok,
                 getPropertyTheElement(), "compliant.mcd.ok", "compliant.mcd.error") ;
+        return ok ;
     }
 }
 

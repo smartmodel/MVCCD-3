@@ -600,6 +600,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRORACLEDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
   public static String MPDRORACLEDATATYPE_DATE_NAME = "DATE";
   public static String MPDRORACLEDATATYPE_DATE_LIENPROG = "DATE";
+  public static String MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT = ";";
 
   public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
   public static String MPDRMySQLDATATYPE_ROOT_LIENPROG = "MPDR-MySQL";
@@ -629,6 +630,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRMySQLDATATYPE_TIME_LIENPROG = "TIME";
   public static String MPDRMySQLDATATYPE_YEAR_NAME = "YEAR";
   public static String MPDRMySQLDATATYPE_YEAR_LIENPROG = "YEAR";
+  public static String MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT = ";";
 
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_NAME = "MPDR-PostgreSQL";
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_LIENPROG = "MPDR-PostgreSQL";
@@ -656,6 +658,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRPOSTGRESQLDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
   public static String MPDRPOSTGRESQLDATATYPE_TIME_NAME = "TIME";
   public static String MPDRPOSTGRESQLDATATYPE_TIME_LIENPROG = "TIME";
+  public static String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT = ";";
 
   public static String MDR_NAMING_LENGTH_30 = "mdr.naming.length.30";
   public static String MDR_NAMING_LENGTH_60 = "mdr.naming.length.60";
@@ -774,12 +777,15 @@ public class Preferences extends MVCCDElement {
     public static String WARNING_LEVEL_INFO = "warning.level.info";
     public static String WARNING_LEVEL_WARNING = "warning.level.warning";
 
+    /*
   public static String RESULTAT_EXCEPTION_STACKTRACE = "resultat.exception.stacktrace";
   public static String RESULTAT_EXCEPTION_UNHANDLED = "resultat.exception.unhandled";
   public static String RESULTAT_EXCEPTION_CATCHED = "resultat.exception.catched";
   public static String RESULTAT_FATAL = "resultat.error.fatal";
   public static String RESULTAT_NO_FATAL = "resultat.error.no.fatal";
   public static String RESULTAT_INFO = "resultat.info";
+
+     */
 
   /*
    * Préférences de l'application
@@ -891,14 +897,17 @@ public class Preferences extends MVCCDElement {
   // MPDR Oracle Préférences
   private MDRNamingLength MPDRORACLE_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MPDRORACLE_PREF_NAMING_FORMAT = null;
+  private String MPDRORACLE_DELIMITER_INSTRUCTIONS = null;
 
   // MPDR MySQL Préférences
   private MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MPDRMYSQL_PREF_NAMING_FORMAT = null;
+  private String MPDRMySQL_DELIMITER_INSTRUCTIONS = null;
 
   // MPDR PostgreSQL Préférences
   private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT = null;
+  private String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS = null;
 
   private boolean DIAGRAMMER_SHOW_GRID = true;
 
@@ -1660,6 +1669,17 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_PREF_NAMING_FORMAT = MPDRORACLE_PREF_NAMING_FORMAT;
   }
 
+  public String getMPDRORACLE_DELIMITER_INSTRUCTIONS() {
+    if (this.MPDRORACLE_DELIMITER_INSTRUCTIONS == null) {
+      this.MPDRORACLE_DELIMITER_INSTRUCTIONS = MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT;
+    }
+    return MPDRORACLE_DELIMITER_INSTRUCTIONS;
+  }
+
+  public void setMPDRORACLE_DELIMITER_INSTRUCTIONS(String MPDRORACLE_DELIMITER_INSTRUCTIONS) {
+    this.MPDRORACLE_DELIMITER_INSTRUCTIONS = MPDRORACLE_DELIMITER_INSTRUCTIONS;
+  }
+
   public MDRNamingLength getMPDRMYSQL_PREF_NAMING_LENGTH() {
     if (this.MPDRMYSQL_PREF_NAMING_LENGTH == null) {
       this.MPDRMYSQL_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
@@ -1682,6 +1702,17 @@ public class Preferences extends MVCCDElement {
     this.MPDRMYSQL_PREF_NAMING_FORMAT = MPDRMYSQL_PREF_NAMING_FORMAT;
   }
 
+  public String getMPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT() {
+    if (this.MPDRMySQL_DELIMITER_INSTRUCTIONS == null) {
+      this.MPDRMySQL_DELIMITER_INSTRUCTIONS = MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT;
+    }
+    return MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT;
+  }
+
+  public static void setMPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT(String MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT) {
+    Preferences.MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT = MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT;
+  }
+
   public MDRNamingLength getMPDRPOSTGRESQL_PREF_NAMING_LENGTH() {
     if (this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH == null) {
       this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
@@ -1702,6 +1733,17 @@ public class Preferences extends MVCCDElement {
 
   public void setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT) {
     this.MPDRPOSTGRESQL_PREF_NAMING_FORMAT = MPDRPOSTGRESQL_PREF_NAMING_FORMAT;
+  }
+
+  public String getMPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS() {
+    if (this.MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS == null) {
+      this.MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS = MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT;
+    }
+    return MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS;
+  }
+
+  public void setMPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS(String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS) {
+    this.MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS = MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS;
   }
 
   public Boolean isDIAGRAMMER_SHOW_GRID() {

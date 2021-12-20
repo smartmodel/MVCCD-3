@@ -4,6 +4,8 @@ import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConDBMode;
 import connections.services.ConnectionsService;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
 import generatorsql.MPDRGenerateSQLUtil;
@@ -12,12 +14,9 @@ import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
+import treatment.services.TreatmentService;
 import utilities.UtilDivers;
 import utilities.files.UtilFiles;
-import utilities.window.DialogMessage;
 import utilities.window.PanelContent;
 import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.IPanelInputContent;
@@ -277,6 +276,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     }
     public void actionPerformedThread(ActionEvent actionEvent) {
 
+                ViewLogsManager.clear();
                 String propertyMessage = "sqlviewer.btn.exception.new";
                 String propertyAction = "";
                 try {
@@ -286,12 +286,12 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                     if (source == btnConnectionTest) {
                         propertyAction = "editor.mpdr.connection.btn.exception.test";
                         //Resultat resultat = actionTestConnection(true, connection);
-                        actionTestConnection(true, new Resultat());
+                        actionTestConnection(true);
                     }
 
                     if (source == btnConnectorTest) {
                         propertyAction = "editor.con.connector.btn.exception.test";
-                        actionTestConnector(true, new Resultat());
+                        actionTestConnector(true);
                     }
 
                     if (source == btnExecute) {
@@ -302,8 +302,6 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                     if (source == btnSave) {
                         propertyAction = "sqlviewer.save.btn.exception.test";
                         actionSave(true);
-                        // Mise à jour de l'indicateur de dernière modif.
-                        setFieldDDLSaved();
                     }
                     if (source == btnClose) {
                         sqlViewer.dispose();
@@ -314,108 +312,97 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                 }
     }
 
-    private Connection actionTestConnection(boolean autonomous , Resultat resultat) {
+    private Connection actionTestConnection(boolean autonomous) {
          ConConnection conConnection = sqlViewer.getConConnection();
         return ConnectionsService.actionTestIConConnectionOrConnector(sqlViewer,
                 true,
-                conConnection,
-                 resultat);
+                conConnection);
    }
 
 
-    private Connection actionTestConnector(boolean autonomous, Resultat resultat) {
+    private Connection actionTestConnector(boolean autonomous) {
         ConConnector conConnector = sqlViewer.getConConnector();
         return ConnectionsService.actionTestIConConnectionOrConnector(sqlViewer,
                 autonomous,
-                conConnector,
-                resultat );
+                conConnector);
     }
 
 
-    private Resultat actionSave(boolean autonomous)  {
-        Resultat resultat = new Resultat();
-        if (autonomous) {
-            resultat.setPrintImmediatelyForResultat(true);
+    private boolean actionSave(boolean autonomous)  {
+
+        boolean ok = true ;
+        File sqlCreateFile = MPDRGenerateSQLUtil.sqlCreateFile();
+
+        try {
+            String message = MessagesBuilder.getMessagesProperty("sqlviewer.dml.file.saved.start", sqlCreateFile.getPath());
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+            MPDRGenerateSQLUtil.generateSQLFile(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL());
+        } catch (Exception e){
+            ok = false ;
         }
-        resultat.addResultat(MPDRGenerateSQLUtil.generateSQLFile(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL()));
-        String message ;
-        if (resultat.isNotError()) {
-            File sqlCreateFile = MPDRGenerateSQLUtil.sqlCreateFile();
+
+        if (ok) {
             setFieldDDLSaved();
-            message = MessagesBuilder.getMessagesProperty("sqlviewer.dml.file.saved.ok", sqlCreateFile);
-        } else {
-            message = MessagesBuilder.getMessagesProperty("sqlviewer.dml.file.saved.error", sqlCreateFile);
         }
-        resultat.add(new ResultatElement (message, ResultatLevel.INFO));
-        if (autonomous) {
-            DialogMessage.showOk(sqlViewer, message);
-        }
-        return resultat;
+
+        TreatmentService.treatmentFinish(sqlViewer, new String[] {sqlCreateFile.getPath()}, ok, autonomous,
+                "sqlviewer.dml.file.saved.ok", "sqlviewer.dml.file.saved.abort") ;
+
+        return ok;
     }
 
 
-    private void actionExecute() {
-        Resultat resultat = new Resultat();
-        resultat.setPrintImmediatelyForResultat(true);
-        resultat.showViewer(); // ResultatViewer est désactivé
-                String message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.start",
+    private boolean actionExecute() {
+        boolean ok = true ;
+
+        String message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.start",
                         new String[]{mpdrModel.getNamePath()});
-                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
 
-                // Sauvegarde du fichier de script
-                String codeSQL = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
-                Resultat resultatSave = actionSave(false);
-                resultat.addResultat(resultatSave);
+        // Sauvegarde du fichier de script
+        String codeSQL = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
+        ok = actionSave(false);
 
-                // Etablissement de la connexion
-                message = MessagesBuilder.getMessagesProperty("con.connection.start.test");
-                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
-                Connection connection = null;
-                if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTION) {
-                    connection = actionTestConnection(false, resultat);
-                }
-                if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
-                    connection = actionTestConnector(false, resultat);
-                }
+        // Etablissement de la connexion
+        if (ok) {
+            message = MessagesBuilder.getMessagesProperty("con.connection.start.test");
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+            Connection connection = null;
+            if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTION) {
+                connection = actionTestConnection(false);
+            }
+            if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
+                connection = actionTestConnector(false);
+            }
 
-                // Exécution du script
-                if (connection != null) {
-                    try {
-                        String generateSQLCode = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
-                        String[] commandes = generateSQLCode.split(";");
+            // Exécution du script
+            if (connection != null) {
+                try {
+                    String generateSQLCode = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
+                    //TODO-0 A paramétrer
+                    String[] commandes = generateSQLCode.split(";");
 
-                        for (String commande : commandes) {
-                                Statement statement = connection.createStatement();
-                                statement.executeUpdate(commande);
-                                statement.close();
-                        }
-                        /*
+                    for (String commande : commandes) {
                         Statement statement = connection.createStatement();
-                        statement.executeUpdate(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL());
+                        statement.executeUpdate(commande);
                         statement.close();
-
-                         */
-                        String formattedHourExecuted = UtilDivers.hourFormatted(new Date());
-                        fieldDDLExecuted.setText(formattedHourExecuted);
-                    } catch (Exception e) {
-                        resultat.addExceptionUnhandled(e);
                     }
+
+                    String formattedHourExecuted = UtilDivers.hourFormatted(new Date());
+                    fieldDDLExecuted.setText(formattedHourExecuted);
+                } catch (Exception e) {
+                    ok = false;
+                    ViewLogsManager.catchException(e, "Le script SQL-DDL n'a pas pu être exécuté");
                 }
+            } else {
+                ok = false;
+            }
+        }
 
-                // Quittance de fin de traitement
-                if (resultat.isNotError() && (connection != null)) {
-                    message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.ok",
-                            new String[]{mpdrModel.getNamePath()});
-                } else {
-                    message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.abort",
-                            new String[]{mpdrModel.getNamePath()});
-
-                }
-                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
-                DialogMessage.showOk(sqlViewer, message);
-                resultat.hideViewer();
-
-   }
+        TreatmentService.treatmentFinish(sqlViewer, new String[]{mpdrModel.getNamePath()}, ok, true,
+                "sqlviewer.sql.execute.ok", "sqlviewer.sql.execute.abort") ;
+        return ok;
+    }
 
 
     public SButton getBtnExecute() {

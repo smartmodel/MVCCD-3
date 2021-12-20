@@ -4,7 +4,6 @@ import exceptions.CodeApplException;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import resultat.ResultatElement;
 import utilities.files.UtilFiles;
 
 import java.io.File;
@@ -42,7 +41,7 @@ public class LogsManager {
      * @param newResultat
      */
 
-
+/*
     static private void logResultatElement(ResultatElement resultatElement, boolean newResultat){
         if (!fileError){
                 FilesManager fm = FilesManager.instance();
@@ -80,6 +79,37 @@ public class LogsManager {
         logResultatElement(resultatElement, false);
     }
 
+ */
+
+
+    static public void clear(){
+        String datation = new SimpleDateFormat("HH:mm:ss").format(new Date());
+        String message =  "============================================================"
+                + System.lineSeparator() + Preferences.APPLICATION_NAME+"-"+Preferences.APPLICATION_VERSION +
+                "  " + datation + System.lineSeparator() ;
+        printMessage(message);
+    }
+
+    static public void printMessage(String message){
+        if (!fileError){
+            FilesManager fm = FilesManager.instance();
+            String fileName = getLogFileName();
+            try{
+               fm.addLineToFile(Preferences.DIRECTORY_LOGGING_NAME + File.separator, fileName, message);
+                textAddedToLog = true;
+            }catch(CodeApplException e){
+                throw e;
+            } catch (Throwable e){
+                fileError = true;
+                String messageErr = e.getMessage();
+                if (messageErr == null){
+                    messageErr = e.toString();
+                }
+                fileErrorMessage = messageErr ;
+                noLogFileAvailable(e);
+            }
+        }
+    }
 
     /**
      * Return the file name where logs is written assLink.

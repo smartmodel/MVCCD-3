@@ -1,5 +1,7 @@
 package transform.mldrtompdr;
 
+import console.ViewLogsManager;
+import console.WarningLevel;
 import main.MVCCDManager;
 import mdr.MDRConstraint;
 import mldr.MLDRFK;
@@ -12,8 +14,6 @@ import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.MPDRUnique;
 import mpdr.interfaces.IMPDRElement;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 
 public class MLDRTransformConstraints {
 
@@ -93,7 +93,7 @@ public class MLDRTransformConstraints {
             String message = "La contrainte " + mldrConstraint.getName() +" de type " +
                     mldrConstraint.getClass().getName() + " n'est pas encore implantée pour la base de données " +
                     mpdrModel.getDb().getText();
-            mldrTransform.getResultat().add(new ResultatElement(message, ResultatLevel.INFO));
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
         }
 
 

@@ -1,25 +1,21 @@
 package mcd.compliant;
 
-import main.MVCCDElementConvert;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import main.MVCCDManager;
-import mcd.*;
-import mcd.interfaces.IMCDParameter;
+import mcd.MCDAttribute;
+import mcd.MCDConstraint;
+import mcd.MCDEntity;
 import messages.MessagesBuilder;
-import repository.editingTreat.mcd.*;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
-import utilities.Trace;
-import utilities.UtilDivers;
-
-import java.util.ArrayList;
+import repository.editingTreat.mcd.MCDAttributeEditingTreat;
+import repository.editingTreat.mcd.MCDEntityEditingTreat;
 
 public class MCDEntityCompliant {
 
 
 
-    public  Resultat checkEntityOutContext(MCDEntity mcdEntity, boolean showDialogCompletness) {
-        Resultat resultat =new MCDEntityEditingTreat().treatCompletness(
+    public  boolean checkEntityOutContext(MCDEntity mcdEntity, boolean showDialogCompletness) {
+        boolean ok =new MCDEntityEditingTreat().treatCompletness(
                 MVCCDManager.instance().getMvccdWindow(),
                 mcdEntity, showDialogCompletness);
 
@@ -30,272 +26,292 @@ public class MCDEntityCompliant {
         if (mcdEntity.isDuplicateMCDAttributeAID()){
             String message = MessagesBuilder.getMessagesProperty("entity.aid.duplicate.error",
                     new String[]{mcdEntityNamePath});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
         }
 
         // Attribut aid ou contraintes nid exclusivement
         if ((mcdEntity.getMCDAttributeAID() != null) && (mcdEntity.getMCDNIDs().size() > 0)) {
             String message = MessagesBuilder.getMessagesProperty("entity.compliant.identifier.aid.and.nid.error",
                     new String[]{mcdEntityNamePath});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
         }
 
         // Contrôle de complétude des attributs
         for (MCDAttribute mcdAttribute : mcdEntity.getMCDAttributes()){
-            resultat.addResultat(checkAttributeOutContext(mcdAttribute, showDialogCompletness));
+            ok = ok && checkAttributeOutContext(mcdAttribute, showDialogCompletness);
         }
 
         // Contrôle de complétude des contraintes
         for (MCDConstraint mcdConstraint : mcdEntity.getMCDConstraints()){
-            resultat.addResultat(new MCDConstraintCompliant().checkConstraintOutContext(mcdConstraint, showDialogCompletness));
+            ok = ok && new MCDConstraintCompliant().checkConstraintOutContext(mcdConstraint, showDialogCompletness);
         }
-        return resultat;
+        return ok;
     }
 
-    public Resultat checkEntityInContext(MCDEntity mcdEntity) {
-        Resultat resultat = new Resultat();
+    public boolean checkEntityInContext(MCDEntity mcdEntity) {
+        boolean ok = true;
         String mcdEntityNamePath = mcdEntity.getNamePath();
 
         // Spécialise une seule entité générale
         if (mcdEntity.getGSEndSpecialize().size() > 1) {
             String message = MessagesBuilder.getMessagesProperty("entity.compliant.specialized.only.one.error",
                     new String[]{mcdEntityNamePath});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
         }
 
         // Entité associative ou pseudo d'une seule association
         if (mcdEntity.getLinkEnds().size() > 1){
             String message = MessagesBuilder.getMessagesProperty("entity.compliant.linkea.only.one.error",
                     new String[] {mcdEntityNamePath});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
         }
 
         // Nature d'entité
-        if (resultat.isWithoutElementFatal()) {
-            resultat.addResultat(checkEntityNature(mcdEntity));
+        if (ok) {
+            ok = checkEntityNature(mcdEntity);
          }
 
         // Pas de redondances entre MCDUnicity
-        if (resultat.isWithoutElementFatal()) {
-            resultat.addResultat(new MCDConstraintCompliant().checkUnicities(mcdEntity));
+        if (ok) {
+            ok = new MCDConstraintCompliant().checkUnicities(mcdEntity);
         }
 
         // Contraintes dans le contexte
         for (MCDConstraint mcdConstraint : mcdEntity.getMCDConstraints()){
-            if (resultat.isWithoutElementFatal()) {
-                resultat.addResultat(new MCDConstraintCompliant().checkConstraintInContext(mcdConstraint));
+            if (ok) {
+                ok = new MCDConstraintCompliant().checkConstraintInContext(mcdConstraint);
             }
         }
-        return resultat;
+        return ok;
     }
 
 
 
-    private Resultat checkEntityNature(MCDEntity mcdEntity) {
-        Resultat resultat = new Resultat();
-        resultat.addResultat(checkEntitynNaturePseudoEA(mcdEntity));
-        resultat.addResultat(checkEntityNatureDep(mcdEntity));
-        resultat.addResultat(checkEntityNatureEntAss(mcdEntity));
-        resultat.addResultat(checkEntityOrdered(mcdEntity));
-        resultat.addResultat(checkEntityAbstract(mcdEntity));
-        resultat.addResultat(checkEntityNaturePotential(mcdEntity));
+    private boolean checkEntityNature(MCDEntity mcdEntity) {
+        boolean ok = true;
+        ok = ok && checkEntitynNaturePseudoEA(mcdEntity);
+        ok = ok && checkEntityNatureDep(mcdEntity);
+        ok = ok && checkEntityNatureEntAss(mcdEntity);
+        ok = ok && checkEntityOrdered(mcdEntity);
+        ok = ok && checkEntityAbstract(mcdEntity);
+        ok = ok && checkEntityNaturePotential(mcdEntity);
 
         String mcdEntityNamePath = mcdEntity.getNamePath();
         // Nature indéterminée
         if (mcdEntity.getNature() == null){
             // Pas de message lié à une éventulle nature potentielle
-            if (resultat.isWithoutElementFatal()){
+            if (ok){
                 // Erreur - Nature indéterminée
                 String message = MessagesBuilder.getMessagesProperty("entity.compliant.nature.unknow",
                         new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
+                ViewLogsManager.printMessage(message, WarningLevel.INFO);
                 //TODO-1 Mettre une indication pour signaler l'erreur aux développeurs
             }
         }
-        return resultat;
+        return ok;
     }
 
 
-    private Resultat checkEntitynNaturePseudoEA(MCDEntity mcdEntity) {
-        Resultat resultat = new Resultat();
+    private boolean checkEntitynNaturePseudoEA(MCDEntity mcdEntity) {
+        boolean ok = true;
         String mcdEntityNamePath = mcdEntity.getNamePath();
+        String message = "";
 
-        if (mcdEntity.isPseudoEntAss()){
-            if (mcdEntity.isDep()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.dep",
-                        new String[] {mcdEntityNamePath});
+        if (mcdEntity.isPseudoEntAss()) {
+            if (mcdEntity.isDep()) {
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.dep",
+                        new String[]{mcdEntityNamePath});
             }
-            if (mcdEntity.isEntAss()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.entass",
-                        new String[] {mcdEntityNamePath});
+            if (mcdEntity.isEntAss()) {
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.entass",
+                        new String[]{mcdEntityNamePath});
             }
-            if (mcdEntity.isNAire()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.naire",
-                        new String[] {mcdEntityNamePath});
+            if (mcdEntity.isNAire()) {
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.naire",
+                        new String[]{mcdEntityNamePath});
             }
-            if (mcdEntity.isSpecialized()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.specialized",
-                        new String[] {mcdEntityNamePath});
+            if (mcdEntity.isSpecialized()) {
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.specialized",
+                        new String[]{mcdEntityNamePath});
             }
-            if (mcdEntity.getMCDAssEndsIdCompParent().size() > 0){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.parentasspk",
-                        new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            if (mcdEntity.getMCDAssEndsIdCompParent().size() > 0) {
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.parentasspk",
+                        new String[]{mcdEntityNamePath});
+                ok = false;
             }
-            if (mcdEntity.isGeneralized()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.generalized",
-                        new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            if (mcdEntity.isGeneralized()) {
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.generalized",
+                        new String[]{mcdEntityNamePath});
+                ok = false;
             }
             // Pas d'association avec une pseudo entité associative
-            if (mcdEntity.getMCDAssEnds().size() > 0){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.association",
-                        new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            if (mcdEntity.getMCDAssEnds().size() > 0) {
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.pseudoea.association",
+                        new String[]{mcdEntityNamePath});
+                ok = false;
+            }
+            // A voir si ok envoi du message
+            if (!ok) {
+                ViewLogsManager.printMessage(message, WarningLevel.INFO);
             }
         }
-
-        return resultat;
+        return ok;
     }
 
-    private Resultat checkEntityNatureDep(MCDEntity mcdEntity) {
-        Resultat resultat = new Resultat();
+    private boolean checkEntityNatureDep(MCDEntity mcdEntity) {
+        boolean ok = true;
         String mcdEntityNamePath = mcdEntity.getNamePath();
+        String message = "";
 
         if (mcdEntity.isDep()){
             if (mcdEntity.isEntAss()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.dep.entass",
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.dep.entass",
                         new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
             }
             if (mcdEntity.isNAire()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.dep.naire",
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.dep.naire",
                         new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
              }
             if (mcdEntity.isSpecialized()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.dep.specialized",
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.dep.specialized",
                         new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
             }
         }
-        return resultat;
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        return ok;
     }
 
-    private Resultat checkEntityNatureEntAss(MCDEntity mcdEntity) {
-        Resultat resultat = new Resultat();
+    private boolean checkEntityNatureEntAss(MCDEntity mcdEntity) {
+        boolean ok = true;
         String mcdEntityNamePath = mcdEntity.getNamePath();
+        String message = "";
 
         if (mcdEntity.isEntAss()){
             if (mcdEntity.isNAire()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.entass.naire",
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.entass.naire",
                         new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+               ok = false;
             }
             if (mcdEntity.isSpecialized()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.entass.specialized",
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.entass.specialized",
                         new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
             }
         }
-        return resultat;
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        return ok;
     }
 
-    private ArrayList<ResultatElement> checkEntityNatureNAire(MCDEntity mcdEntity) {
-        ArrayList<ResultatElement> resultat = new ArrayList<ResultatElement>();
+    private boolean checkEntityNatureNAire(MCDEntity mcdEntity) {
+        boolean ok = true;
         String mcdEntityNamePath = mcdEntity.getNamePath();
+        String message = "";
 
         if (mcdEntity.isNAire()){
            if (mcdEntity.isSpecialized()){
-               String message = MessagesBuilder.getMessagesProperty("entity.compliant.naire.specialized",
+               message = MessagesBuilder.getMessagesProperty("entity.compliant.naire.specialized",
                         new String[] {mcdEntityNamePath});
-               resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+               ok = false;
             }
         }
-        return resultat;
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        return ok;
     }
 
-    private Resultat checkEntityOrdered(MCDEntity mcdEntity) {
-        Resultat resultat = new Resultat();
+    private boolean checkEntityOrdered(MCDEntity mcdEntity) {
+        boolean ok = true;
         String mcdEntityNamePath = mcdEntity.getNamePath();
+        String message = "";
 
         if (mcdEntity.isOrdered()){
             if (mcdEntity.isPseudoEntAss()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.pseudoea",
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.pseudoea",
                         new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
             }
             if (mcdEntity.isEntAssDep()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.eadep",
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.eadep",
                         new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
             }
             if (mcdEntity.isNAireDep()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.nairedep",
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.nairedep",
                         new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
             }
             if (mcdEntity.isSpecialized()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.specialized",
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.ordered.specialized",
                         new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
             }
         }
-        return resultat;
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        return ok;
     }
 
-    private Resultat checkEntityAbstract(MCDEntity mcdEntity) {
-        Resultat resultat = new Resultat();
+    private boolean checkEntityAbstract(MCDEntity mcdEntity) {
+        boolean ok = true;
         String mcdEntityNamePath = mcdEntity.getNamePath();
+        String message = "";
 
         if (mcdEntity.isEntAbstract()){
             if (! mcdEntity.isSpecialized()){
-                String message = MessagesBuilder.getMessagesProperty("entity.compliant.abstract.not.generalized",
+                message = MessagesBuilder.getMessagesProperty("entity.compliant.abstract.not.generalized",
                         new String[] {mcdEntityNamePath});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+               ok = false;
             }
         }
-        return resultat;
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        return ok;
     }
 
 
-    private Resultat checkEntityNaturePotential(MCDEntity mcdEntity) {
-        Resultat resultat = new Resultat();
+    private boolean checkEntityNaturePotential(MCDEntity mcdEntity) {
+        boolean ok = true;
         String mcdEntityNamePath = mcdEntity.getNamePath();
+        String message = "";
 
         if (mcdEntity.isPotentialInd()){
-            String message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.ind",
+            message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.ind",
                     new String[] {mcdEntityNamePath});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
         }
         if (mcdEntity.isPotentialDep()){
-            String message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.dep",
+            message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.dep",
                     new String[] {mcdEntityNamePath});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
         }
         if (mcdEntity.isPotentialSpecAttrAID()){
-            String message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.specialized.attribute.aid",
+            message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.specialized.attribute.aid",
                     new String[] {mcdEntityNamePath});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
         }
         if (mcdEntity.isPotentialSpecAssIdComp()){
-            String message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.specialized.association.idcomp",
+            message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.specialized.association.idcomp",
                     new String[] {mcdEntityNamePath});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
         }
         if (mcdEntity.isPotentialPseudoEntAss()){
-            String message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.pseudoass.with.id",
+            message = MessagesBuilder.getMessagesProperty("entity.compliant.potential.pseudoass.with.id",
                     new String[] {mcdEntityNamePath});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
         }
-        return resultat;
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        return ok;
     }
 
-    public Resultat checkAttributeOutContext(MCDAttribute mcdAttribute, boolean showDialogCompletness) {
-        Resultat resultat =new MCDAttributeEditingTreat().treatCompletness(
+    public boolean checkAttributeOutContext(MCDAttribute mcdAttribute, boolean showDialogCompletness) {
+        return new MCDAttributeEditingTreat().treatCompletness(
                 MVCCDManager.instance().getMvccdWindow(),
                 mcdAttribute, showDialogCompletness);
-        return resultat;
     }
 
 

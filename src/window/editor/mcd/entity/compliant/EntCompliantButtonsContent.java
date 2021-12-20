@@ -1,12 +1,15 @@
 package window.editor.mcd.entity.compliant;
 
+import console.IConsoleContentFrontEnd;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import preferences.Preferences;
 import project.ProjectElement;
 import utilities.window.editor.PanelButtonsContent;
 
-public class EntCompliantButtonsContent extends PanelButtonsContent {
+import javax.swing.*;
+
+public class EntCompliantButtonsContent extends PanelButtonsContent implements IConsoleContentFrontEnd {
 
 
     public EntCompliantButtonsContent(EntCompliantButtons entCompliantButtons) {
@@ -32,4 +35,8 @@ public class EntCompliantButtonsContent extends PanelButtonsContent {
     }
 
 
+    @Override
+    public JTextArea getTextArea() {
+        return super.getMessages();
+    }
 }

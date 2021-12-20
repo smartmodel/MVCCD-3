@@ -1,5 +1,8 @@
 package mcd.compliant;
 
+import console.ViewLogsManager;
+import console.WarningLevel;
+import exceptions.CodeApplException;
 import main.MVCCDElementConvert;
 import main.MVCCDManager;
 import mcd.*;
@@ -7,71 +10,68 @@ import mcd.interfaces.IMCDParameter;
 import messages.MessagesBuilder;
 import repository.editingTreat.mcd.MCDNIDEditingTreat;
 import repository.editingTreat.mcd.MCDUniqueEditingTreat;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;
 
 public class MCDConstraintCompliant {
 
-    public Resultat checkConstraintOutContext(MCDConstraint mcdConstraint, boolean showDialogCompletness) {
+    public boolean checkConstraintOutContext(MCDConstraint mcdConstraint, boolean showDialogCompletness) {
         //TODO-1 A factoriser (Voir checkConstraintInContext)
         if (mcdConstraint instanceof MCDNID){
-            Resultat resultat =new MCDNIDEditingTreat().treatCompletness(
+             return new MCDNIDEditingTreat().treatCompletness(
                     MVCCDManager.instance().getMvccdWindow(),
                     mcdConstraint, showDialogCompletness);
-            return resultat;
         }
         if (mcdConstraint instanceof MCDUnique){
-            Resultat resultat =new MCDUniqueEditingTreat().treatCompletness(
+            return new MCDUniqueEditingTreat().treatCompletness(
                     MVCCDManager.instance().getMvccdWindow(),
                     mcdConstraint, showDialogCompletness);
-            return resultat;
         }
 
-        return null;
+        throw new CodeApplException("Le type de contrainte " +mcdConstraint.getClass().getName() + " n'est pas traité ");
     }
 
-    public Resultat checkConstraintInContext(MCDConstraint mcdConstraint) {
-        Resultat resultat = new Resultat();
+    public boolean checkConstraintInContext(MCDConstraint mcdConstraint) {
+        boolean ok = true;
         if (mcdConstraint instanceof MCDUnicity) {
-                resultat.addResultat(checkUnicityInContext((MCDUnicity) mcdConstraint));
+               return checkUnicityInContext((MCDUnicity) mcdConstraint);
         }
 
-        return resultat;
+        throw new CodeApplException("Le type de contrainte " +mcdConstraint.getClass().getName() + " n'est pas traité ");
     }
 
-    private Resultat checkUnicityInContext(MCDUnicity mcdUnicity) {
-        Resultat resultat = new Resultat();
+    private boolean checkUnicityInContext(MCDUnicity mcdUnicity) {
+        boolean ok = true;
         MCDEntity mcdEntity = mcdUnicity.getEntityParent();
         String mcdEntityNamePath = mcdEntity.getNamePath();
 
         if (mcdEntity.isEntConcret()) {
             if (mcdUnicity instanceof MCDNID) {
-                resultat.addResultat(checkNIDInContextEntConcrete((MCDNID)  mcdUnicity));
+                ok = checkNIDInContextEntConcrete((MCDNID)  mcdUnicity);
             }
             if (mcdUnicity instanceof MCDUnique) {
-                resultat.addResultat(checkUniqueInContextEntConcrete((MCDUnique) mcdUnicity));
+                ok = checkUniqueInContextEntConcrete((MCDUnique) mcdUnicity);
             }
         } else {
             if (mcdEntity.isPseudoEntAss()) {
                 String message = MessagesBuilder.getMessagesProperty("constraint.compliant.pseudoass.unicity",
                         new String[]{mcdEntityNamePath, mcdUnicity.getOfUnicity(), mcdUnicity.getName()});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
+                ViewLogsManager.printMessage(message, WarningLevel.INFO);
             } else {
                 String message = MessagesBuilder.getMessagesProperty("constraint.compliant.entity.not.concrete.unknow",
                         new String[]{mcdEntityNamePath, mcdUnicity.getName()});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
+                ViewLogsManager.printMessage(message, WarningLevel.INFO);
             }
         }
 
-        return resultat;
+        return ok;
     }
 
-    private Resultat checkNIDInContextEntConcrete(MCDNID mcdNID) {
-        Resultat resultat = new Resultat();
+    private boolean checkNIDInContextEntConcrete(MCDNID mcdNID) {
+        boolean ok = true;
         //#MAJ 2021-05-19 Affinement MCDUnicity
 
         /*
@@ -142,13 +142,11 @@ public class MCDConstraintCompliant {
 
 */
 
-        return resultat;
+        return ok;
     }
 
-    private Resultat checkUniqueInContextEntConcrete(MCDUnique mcdUnique) {
-
-        Resultat resultat = new Resultat();
-
+    private boolean checkUniqueInContextEntConcrete(MCDUnique mcdUnique) {
+        boolean ok = true;
         MCDEntity mcdEntity = mcdUnique.getEntityAccueil();
         String nameEntity = mcdEntity.getNamePath();
 
@@ -158,32 +156,34 @@ public class MCDConstraintCompliant {
                 if (! mcdEntity.isChildOfIdNat()) {
                     String message = MessagesBuilder.getMessagesProperty("constraint.unique.entity.ind.error",
                             new String[]{nameEntity, mcdUnique.getName()});
-                    resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                    ok = false;
+                    ViewLogsManager.printMessage(message, WarningLevel.INFO);
                 }
             }
             if (mcdEntity.isSpecialized()){
                 String message = MessagesBuilder.getMessagesProperty("constraint.unique.entity.specialized.error",
                         new String[]{nameEntity, mcdUnique.getName()});
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ok = false;
+                ViewLogsManager.printMessage(message, WarningLevel.INFO);
             }
         }
 
-        if (resultat.isWithoutElementFatal()){
+        if (ok){
             if (mcdUnique.isAbsolute()){
                 // Unique absolue
-                resultat.addResultat(checkUniqueAbsolute(mcdUnique)) ;
+                ok = checkUniqueAbsolute(mcdUnique) ;
             }else {
                 // Unique non absolue
-                resultat.addResultat(checkUniqueNoAbsolute(mcdUnique)) ;
+                ok = checkUniqueNoAbsolute(mcdUnique);
 
             }
         }
 
-        return resultat;
+        return ok;
     }
 
-    private Resultat checkUniqueNoAbsolute(MCDUnique mcdUnique) {
-        Resultat resultat = new Resultat();
+    private boolean checkUniqueNoAbsolute(MCDUnique mcdUnique) {
+        boolean ok = true;
         int attrOptionnal = mcdUnique.getMcdAttributesOptionnal().size();
         int attrMandatory = mcdUnique.getMcdAttributesMandatory().size();
         int assEndOptionnal = mcdUnique.getMcdAssEndsOptionnal().size();
@@ -198,38 +198,41 @@ public class MCDConstraintCompliant {
         MCDEntity mcdEntityAccueil = mcdUnique.getEntityParent();
         String nameEntity = mcdEntityAccueil.getNamePath();
 
+        String message = "";
         if( c1 && c2 ){
-            String message = MessagesBuilder.getMessagesProperty("constraint.unique.not.absolute.optionnal.error",
+            message = MessagesBuilder.getMessagesProperty("constraint.unique.not.absolute.optionnal.error",
                     new String[]{nameEntity, mcdUnique.getName()});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
         }
         if (c3){
             ArrayList<String> attributes = MVCCDElementConvert.toNamesString(mcdUnique.getMcdAttributesMandatory());
-            String message = MessagesBuilder.getMessagesProperty("constraint.unique.not.absolute.attribute.mandatory.error",
+            message = MessagesBuilder.getMessagesProperty("constraint.unique.not.absolute.attribute.mandatory.error",
                     new String[]{nameEntity, mcdUnique.getName(),
                             UtilDivers.arrayStringToString(attributes, ", ")});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
         }
         if (c4){
             ArrayList<String> assEnds = MVCCDElementConvert.toNamesTreeString(mcdUnique.getMcdAssEndsMandatory());
-            String message = MessagesBuilder.getMessagesProperty("constraint.unique.not.absolute.assend.mandatory.error",
+            message = MessagesBuilder.getMessagesProperty("constraint.unique.not.absolute.assend.mandatory.error",
                     new String[]{nameEntity, mcdUnique.getName(),
                             UtilDivers.arrayStringToString(assEnds, ", ")});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
         }
         if (c5) {
             ArrayList<String> assEnds = MVCCDElementConvert.toNamesTreeString(mcdUnique.getMcdAssEndsOtherNoId());
-            String message = MessagesBuilder.getMessagesProperty("constraint.unique.not.absolute.assend.noid.error",
+            message = MessagesBuilder.getMessagesProperty("constraint.unique.not.absolute.assend.noid.error",
                     new String[]{nameEntity, mcdUnique.getName(),
                             UtilDivers.arrayStringToString(assEnds, ", ")});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
-
+            ok = false;
         }
-        return resultat ;
+        if (!ok){
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        }
+        return ok ;
     }
 
-    private Resultat checkUniqueAbsolute(MCDUnique mcdUnique){
-        Resultat resultat = new Resultat();
+    private boolean checkUniqueAbsolute(MCDUnique mcdUnique){
+        boolean ok = true;
         MCDEntity mcdEntityAccueil = mcdUnique.getEntityParent();
         ArrayList<MCDAssEnd> mcdAssEndsStructureIdForParameters = mcdEntityAccueil.getMCDAssEndsStructureIdForParameters();
         /*
@@ -261,19 +264,21 @@ public class MCDConstraintCompliant {
         if (r1 || r2) {
             String message = MessagesBuilder.getMessagesProperty("constraint.unique.absolute.restrict.basic.structure",
                     new String[]{nameEntity, mcdUnique.getName()});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
         }
         if (r3) {
             String message = MessagesBuilder.getMessagesProperty("constraint.unique.absolute.redundant.basic.structure",
                     new String[]{nameEntity, mcdUnique.getName()});
-            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+            ok = false;
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
         }
-        return resultat;
+        return ok;
 
     }
 
-    public Resultat checkUnicities(MCDEntity mcdEntity) {
-        Resultat resultat = new Resultat();
+    public boolean checkUnicities(MCDEntity mcdEntity) {
+        boolean ok = true;
         // Pas de redondance entre les contraintes MCDUnicity
         if ( mcdEntity.isEntConcret()){
             ArrayList<MCDUnicity> mcdUnicities = mcdEntity.getMCDUnicities();
@@ -290,14 +295,15 @@ public class MCDConstraintCompliant {
                                     new String[]{mcdEntity.getNamePath(),
                                             mcdUnicityExt.getOfUnicity(), mcdUnicityExt.getName(),
                                             mcdUnicityInt.getOfUnicity(), mcdUnicityInt.getName()});
-                            resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                            ok = false;
+                            ViewLogsManager.printMessage(message, WarningLevel.INFO);
                         }
                     }
                 }
             }
         }
 
-        return resultat;
+        return ok;
     }
 
 }

@@ -4,17 +4,14 @@ import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import preferences.Preferences;
-import resultat.Resultat;
 import utilities.TemplateFile;
 
 public class MPDRGenerateSQLTables {
 
     private MPDRModel mpdrModel;
-    private Resultat resultat ;
 
-    public MPDRGenerateSQLTables(MPDRModel mpdrModel, Resultat resultat) {
+    public MPDRGenerateSQLTables(MPDRModel mpdrModel) {
         this.mpdrModel = mpdrModel;
-        this.resultat = resultat ;
     }
 
     public String generateSQLCreateTables() {
@@ -32,7 +29,6 @@ public class MPDRGenerateSQLTables {
     }
 
     private String generateSQLCreateTable(MPDRTable mpdrTable) {
-        Resultat resultat = new Resultat();
 
         //Génération des tables
         String generateSQLCode = "";
@@ -42,13 +38,13 @@ public class MPDRGenerateSQLTables {
 
 
         //Génération des colonnes
-        MPDRGenerateSQLColumns mpdrGenerateSQLColumns = new MPDRGenerateSQLColumns(mpdrTable, resultat);
+        MPDRGenerateSQLColumns mpdrGenerateSQLColumns = new MPDRGenerateSQLColumns(mpdrTable);
         String columnsInCreateTable = mpdrGenerateSQLColumns.generateSQLCreateColumns();
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_COLUMNS, columnsInCreateTable);
 
         //Génération de la contrainte de PK
         //generateSQLCode += Preferences.SQL_SEPARATOR_ARGUMENTS + System.lineSeparator();
-        MPDRGenerateSQLPK mpdrGenerateSQLConstraints = new MPDRGenerateSQLPK(mpdrTable, resultat);
+        MPDRGenerateSQLPK mpdrGenerateSQLConstraints = new MPDRGenerateSQLPK(mpdrTable);
         String pkInCreateTable =mpdrGenerateSQLConstraints.generateSQLCreatePK();
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_PK, pkInCreateTable);
 

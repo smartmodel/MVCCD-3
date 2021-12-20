@@ -1,6 +1,8 @@
 package repository.editingTreat;
 
 import connections.ConElement;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDManager;
@@ -9,9 +11,6 @@ import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -142,10 +141,10 @@ public abstract class EditingTreat {
         }
     }
 
-    public Resultat treatCompletness(Window owner, MVCCDElement mvccdElement, boolean showDialog) {
-        Resultat resultat = new Resultat();
-        PanelInputContent panelInputContent = loadPanelInput(mvccdElement);
+    public boolean treatCompletness(Window owner, MVCCDElement mvccdElement, boolean showDialog) {
 
+        boolean ok = true;
+        PanelInputContent panelInputContent = loadPanelInput(mvccdElement);
         String messageElement = MessagesBuilder.getMessagesProperty(getPropertyTheElement());
 
         if (datasAdjusted( panelInputContent)) {
@@ -171,7 +170,8 @@ public abstract class EditingTreat {
                         new String[] {mvccdElement.getClass().getName(), name, id});
                String message = MessagesBuilder.getMessagesProperty("dialog.adjust.by.change",
                        new String[] {messageMode});
-               resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+               ViewLogsManager.printMessage(message, WarningLevel.INFO);
+               ok = false;
             }
         } else {
             if (!checkInput(panelInputContent)) {
@@ -198,18 +198,19 @@ public abstract class EditingTreat {
                         fen.setVisible(true);
                     }
                 } else {
-                    resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                    ViewLogsManager.printMessage(message, WarningLevel.INFO);
+                    ok = false;
                 }
             } else {
                 if (showDialog) {
                     String message = MessagesBuilder.getMessagesProperty("dialog.completness.ok",
                             new String[]{messageElement, mvccdElement.getNameTree()});
-                    resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                    ViewLogsManager.printMessage(message, WarningLevel.INFO);
                     DialogMessage.showOk(owner, message);
                 }
             }
         }
-        return resultat;
+        return ok;
     }
 
 

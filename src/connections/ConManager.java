@@ -2,8 +2,9 @@ package connections;
 
 import connections.interfaces.IConConnectionOrConnector;
 import connections.services.ConnectionsService;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import exceptions.CodeApplException;
-import exceptions.SQLPreTreatedException;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationConnections;
 import main.MVCCDManager;
@@ -335,9 +336,14 @@ public class ConManager {
                  */
                 String message = "Erreur Oracle : " + e.getMessage() + System.lineSeparator() +
                         "Il ne faut pas que la liste réfère SID et que le nom  soit un service";
-                throw new SQLPreTreatedException(message , e) ;
+                ViewLogsManager.printMessage(message, WarningLevel.INFO);
+                return null;
+                //throw new SQLPreTreatedException(message , e) ;
             } else {
-                throw new SQLPreTreatedException(e.getMessage(), e) ;
+                String message = "La connexion ne peut pas être établie.";
+                ViewLogsManager.catchException(e, message);
+                return null;
+                //throw new SQLPreTreatedException(e.getMessage(), e) ;
             }
         } catch(Exception e ){
             throw new CodeApplException(e.getMessage(), e) ;

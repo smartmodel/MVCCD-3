@@ -4,16 +4,14 @@ import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConManager;
 import connections.services.ConnectionsService;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
-import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.SButton;
 import utilities.window.scomponents.SComboBox;
@@ -135,13 +133,10 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
             boolean c1 = StringUtils.isNotEmpty(mpdrModel.getConnectorLienProg());
             boolean c2 = conConnector == null;
             if (c1 && c2) {
-                Resultat resultat = new Resultat();
-                resultat.setPrintImmediatelyForResultat(true);
                 String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connector.unknow",
                         new String[] {mpdrModel.getConnectorLienProg(), mpdrModel.getNamePath()});
-                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
-                DialogMessage.showOk(getEditor(), message);
-            }
+                ViewLogsManager.printMessageAndDialog(getEditor(), message, WarningLevel.INFO);
+             }
             SComboBoxService.selectByText(fieldConnectorLienProg, withoutItem);
             fieldConnectorLienProg.forceUpdated();
         }
@@ -269,8 +264,7 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
         ConConnector conConnector = getConConnectorByFieldConnectorLienProg();
         Connection connection = ConnectionsService.actionTestIConConnectionOrConnector(getEditor(),
                 true,
-                conConnector,
-                new Resultat());
+                conConnector);
      }
 
 }

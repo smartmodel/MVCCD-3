@@ -1,15 +1,9 @@
 package utilities;
 
-import console.WarningLevel;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
-
-import java.util.ArrayList;
-
 public class TD {
 
-    static public Resultat printResultats(
+    /*
+    static Resultat void printResultats(
             String context,
             String[] conditions,
             boolean[] rules, String[] rules_actions) {
@@ -46,5 +40,7 @@ public class TD {
 
         return resultat;
     }
+
+     */
 
 }

@@ -6,21 +6,18 @@ import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import resultat.Resultat;
 import utilities.TemplateFile;
 
 public class MPDRGenerateSQLColumns {
 
     private MPDRModel mpdrModel;
     private MPDRTable mpdrTable;
-    private Resultat resultat ;
 
 
 
 
-    public MPDRGenerateSQLColumns(MPDRTable mpdrTable, Resultat resultat) {
+    public MPDRGenerateSQLColumns(MPDRTable mpdrTable) {
         this.mpdrTable = mpdrTable;
-        this.resultat = resultat;
         mpdrModel = mpdrTable.getMPDRModelParent();
     }
 

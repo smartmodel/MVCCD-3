@@ -1,5 +1,6 @@
 package window.editor.mcd.entity.compliant;
 
+import main.MVCCDManager;
 import mcd.MCDContEntities;
 import mcd.MCDEntity;
 import preferences.PreferencesManager;
@@ -10,9 +11,11 @@ import utilities.window.editor.PanelInput;
 import utilities.window.editor.PanelNavBtn;
 
 import java.awt.*;
+import java.awt.event.WindowEvent;
 
 public class EntCompliantEditorBtn extends DialogEditorNavBtn {
 
+    private MCDEntity mcdEntity;
 
     public EntCompliantEditorBtn(Window owner,
                                  MCDContEntities parent,
@@ -20,6 +23,8 @@ public class EntCompliantEditorBtn extends DialogEditorNavBtn {
                                  String mode,
                                  EditingTreat editingTreat)  {
         super(owner, parent, mcdEntity, mode, editingTreat);
+        this.mcdEntity = mcdEntity;
+        MVCCDManager.instance().getConsoleManager().setiConsoleContentFrontEnd((EntCompliantButtonsContent) this.getButtons().getButtonsContent());
 
     }
 
@@ -78,6 +83,14 @@ public class EntCompliantEditorBtn extends DialogEditorNavBtn {
     @Override
     protected String getTitleSpecialized() {
         return null;
+    }
+
+
+
+    @Override
+    public void windowOpened(WindowEvent windowEvent) {
+        super.windowOpened(windowEvent);
+        ((EntCompliantInputContent) this.getInput().getInputContent()).checkCompliant(mcdEntity);
     }
 
 }

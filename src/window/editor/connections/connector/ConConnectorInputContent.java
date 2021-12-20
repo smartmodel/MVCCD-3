@@ -9,7 +9,6 @@ import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import mcd.services.MCDUtilService;
 import preferences.Preferences;
-import resultat.Resultat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.*;
@@ -503,8 +502,8 @@ public abstract class ConConnectorInputContent extends PanelInputContent impleme
                 true,
                 conConnectionParent,
                 fieldUserName.getText(),
-                fieldUserPW.getText(), //TODO-0 a finaliser avec getPassword()
-                new Resultat());
+                fieldUserPW.getText() //TODO-0 a finaliser avec getPassword()
+                );
    }
 
     public ConConnectorEditor getEditor() {

@@ -4,7 +4,6 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import project.Project;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
-import resultat.Resultat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.project.ProjectEditor;
@@ -29,12 +28,12 @@ public class ProjectEditingTreat  extends EditingTreat {
     }
 
 
-    public static Resultat treatUpdate(Window owner) {
+    public static void treatUpdate(Window owner) {
 
         ProjectEditor fen = new ProjectEditor(owner, MVCCDManager.instance().getProject(),
                 DialogEditor.UPDATE, new ProjectEditingTreat());
         fen.setVisible(true);
-        return new Resultat();
+        return ;
     }
 
 

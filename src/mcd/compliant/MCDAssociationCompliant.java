@@ -1,17 +1,14 @@
 package mcd.compliant;
 
+import console.ViewLogsManager;
+import console.WarningLevel;
 import main.MVCCDElement;
-import main.MVCCDElementConvert;
-import main.MVCCDManager;
-import mcd.*;
-import mcd.interfaces.IMCDParameter;
+import mcd.MCDAssEnd;
+import mcd.MCDAssociation;
+import mcd.MCDElement;
+import mcd.MCDEntity;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
-import repository.editingTreat.mcd.*;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
-import utilities.Trace;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;
@@ -20,8 +17,7 @@ public class MCDAssociationCompliant {
 
 
 
-    public Resultat checkAssociation(MCDAssociation mcdAssociation) {
-        Resultat resultat ;
+    public boolean checkAssociation(MCDAssociation mcdAssociation) {
         // le nommage d'une association ne doit pas être en conflit avec le nommage des entités liées
         MCDAssEnd mcdAssEndFrom = mcdAssociation.getFrom();
         MCDAssEnd mcdAssEndTo = mcdAssociation.getTo();
@@ -32,39 +28,38 @@ public class MCDAssociationCompliant {
         mcdEntityCouple.add(mcdEntityTo);
 
         String assOrAssEndContext = MessagesBuilder.getMessagesProperty("of.association") ;
-        resultat = checkAssociationNaming(mcdAssociation, mcdEntityCouple, assOrAssEndContext);
+        boolean ok = checkAssociationNaming(mcdAssociation, mcdEntityCouple, assOrAssEndContext);
         assOrAssEndContext = MessagesBuilder.getMessagesProperty("of.assend") ;
-        if (resultat.isWithoutElementFatal()) {
-            resultat.addResultat(checkAssociationNaming(mcdAssEndFrom, mcdEntityCouple, assOrAssEndContext));
+        if (ok) {
+            ok = ok && checkAssociationNaming(mcdAssEndFrom, mcdEntityCouple, assOrAssEndContext);
         }
-        if (resultat.isWithoutElementFatal()) {
-            resultat.addResultat(checkAssociationNaming(mcdAssEndTo, mcdEntityCouple, assOrAssEndContext));
+        if (ok) {
+            ok = ok && checkAssociationNaming(mcdAssEndTo, mcdEntityCouple, assOrAssEndContext);
         }
-        return resultat ;
+        return ok ;
     }
 
-    private Resultat checkAssociationNaming(MCDElement mcdAssOrAssEnd,
+    private boolean checkAssociationNaming(MCDElement mcdAssOrAssEnd,
                                             ArrayList<MCDEntity> mcdEntityCouple,
                                             String assOrAssEndContext) {
-        Resultat resultat;
-        resultat = checkAssociationNamingOneScope(mcdAssOrAssEnd, mcdEntityCouple,
+        boolean ok = checkAssociationNamingOneScope(mcdAssOrAssEnd, mcdEntityCouple,
                 assOrAssEndContext, MVCCDElement.SCOPENAME) ;
-        if (resultat.isWithoutElementFatal()) {
-            resultat.addResultat(checkAssociationNamingOneScope(mcdAssOrAssEnd, mcdEntityCouple,
-                    assOrAssEndContext, MVCCDElement.SCOPESHORTNAME));
+        if (ok) {
+            ok = ok && checkAssociationNamingOneScope(mcdAssOrAssEnd, mcdEntityCouple,
+                    assOrAssEndContext, MVCCDElement.SCOPESHORTNAME);
         }
-        if (resultat.isWithoutElementFatal()) {
-            resultat.addResultat(checkAssociationNamingOneScope(mcdAssOrAssEnd, mcdEntityCouple,
-                    assOrAssEndContext, MVCCDElement.SCOPELONGNAME));
+        if (ok) {
+            ok = ok && checkAssociationNamingOneScope(mcdAssOrAssEnd, mcdEntityCouple,
+                    assOrAssEndContext, MVCCDElement.SCOPELONGNAME);
         }
-        return resultat;
+        return ok;
     }
 
-    private Resultat checkAssociationNamingOneScope(MCDElement mcdAssOrAssEnd,
+    private boolean checkAssociationNamingOneScope(MCDElement mcdAssOrAssEnd,
                                                     ArrayList<MCDEntity> mcdEntityCouple,
                                                     String assOrAssEndContext,
                                                     int assOrAssEndTypeNaming) {
-        Resultat resultat = new Resultat();
+        boolean ok = true;
         String mcdAssOrAssEndNaming = null;
         String mcdAssOrAssEndTypeNamingMessage = null;
         if (assOrAssEndTypeNaming == MVCCDElement.SCOPENAME){
@@ -82,57 +77,56 @@ public class MCDAssociationCompliant {
         if (mcdAssOrAssEndNaming != null){
             if (! mcdAssOrAssEndNaming.equals("")){
                 for (MCDEntity mcdEntity : mcdEntityCouple){
-                    if (resultat.isWithoutElementFatal()) {
-                        resultat.addResultat(checkAssociationNamingOneScopeOneEntity(mcdEntity,
-                                assOrAssEndContext, mcdAssOrAssEndTypeNamingMessage, mcdAssOrAssEndNaming));
+                    if (ok) {
+                        ok = ok && checkAssociationNamingOneScopeOneEntity(mcdEntity,
+                                assOrAssEndContext, mcdAssOrAssEndTypeNamingMessage, mcdAssOrAssEndNaming);
                     }
                 }
             }
         }
-        return resultat;
+        return ok;
     }
 
-    private Resultat checkAssociationNamingOneScopeOneEntity(MCDEntity mcdEntity,
+    private boolean checkAssociationNamingOneScopeOneEntity(MCDEntity mcdEntity,
                                                              String assOrAssEndContext,
                                                              String assOrAssEndTypeNamingMessage,
                                                              String assOrAssEndNaming) {
-        Resultat resultat = new Resultat();
         // Name  d'entité
         String entityTypeNamingMessage = MessagesBuilder.getMessagesProperty("naming2.name");
-        resultat = checkAssociationNamingOneScopeOneEntityOneScope(assOrAssEndContext, assOrAssEndTypeNamingMessage,
+        boolean ok = checkAssociationNamingOneScopeOneEntityOneScope(assOrAssEndContext, assOrAssEndTypeNamingMessage,
                 assOrAssEndNaming, entityTypeNamingMessage, mcdEntity.getName(), mcdEntity.getName());
 
         // ShortName  d'entité
-        if (resultat.isWithoutElementFatal()) {
+        if (ok) {
             entityTypeNamingMessage = MessagesBuilder.getMessagesProperty("naming2.short.name");
-            resultat = checkAssociationNamingOneScopeOneEntityOneScope(assOrAssEndContext, assOrAssEndTypeNamingMessage,
+            ok = checkAssociationNamingOneScopeOneEntityOneScope(assOrAssEndContext, assOrAssEndTypeNamingMessage,
                     assOrAssEndNaming, entityTypeNamingMessage, mcdEntity.getShortName(), mcdEntity.getName());
         }
 
         // LongName  d'entité
-        if (resultat.isWithoutElementFatal()) {
+        if (ok) {
             entityTypeNamingMessage = MessagesBuilder.getMessagesProperty("naming2.long.name");
-            resultat = checkAssociationNamingOneScopeOneEntityOneScope(assOrAssEndContext, assOrAssEndTypeNamingMessage,
+            ok = checkAssociationNamingOneScopeOneEntityOneScope(assOrAssEndContext, assOrAssEndTypeNamingMessage,
                     assOrAssEndNaming, entityTypeNamingMessage, mcdEntity.getLongName(), mcdEntity.getName());
         }
 
         // Nom de table associé à l'entité
-        if (resultat.isWithoutElementFatal()) {
+        if (ok) {
             entityTypeNamingMessage = MessagesBuilder.getMessagesProperty("naming2.name.table");
-            resultat = checkAssociationNamingOneScopeOneEntityOneScope(assOrAssEndContext, assOrAssEndTypeNamingMessage,
+            ok = checkAssociationNamingOneScopeOneEntityOneScope(assOrAssEndContext, assOrAssEndTypeNamingMessage,
                     assOrAssEndNaming, entityTypeNamingMessage, mcdEntity.getMldrTableName(), mcdEntity.getName());
         }
 
-        return resultat ;
+        return ok ;
     }
 
-    private Resultat checkAssociationNamingOneScopeOneEntityOneScope(String assOrAssEndContext,
+    private boolean checkAssociationNamingOneScopeOneEntityOneScope(String assOrAssEndContext,
                                                                      String assOrAssEndTypeNamingMessage,
                                                                      String assOrAssEndNaming,
                                                                      String entityTypeNamingMessage,
                                                                      String entityNaming,
                                                                      String entityName) {
-        Resultat resultat = new Resultat();
+        boolean ok = true;
         assOrAssEndNaming = UtilDivers.toNoFree(assOrAssEndNaming).toUpperCase();
         entityNaming = UtilDivers.toNoFree(entityNaming).toUpperCase();
         if (StringUtils.isNotEmpty(entityNaming)){
@@ -141,13 +135,13 @@ public class MCDAssociationCompliant {
                         new String[] {assOrAssEndTypeNamingMessage, assOrAssEndContext, assOrAssEndNaming, entityTypeNamingMessage, entityName});
                 //TODO-1 Prévoir une valeur de Résultat qui permet de continuer le contrôle de conformité
                 // mais qui empêchera la transformation
-                resultat.add(new ResultatElement(message, ResultatLevel.FATAL));
+                ViewLogsManager.printMessage(message, WarningLevel.INFO);
                 message = MessagesBuilder.getMessagesProperty("naming.uppercase");
-                resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+                ViewLogsManager.printMessage(message, WarningLevel.INFO);
             }
 
        }
-        return resultat;
+        return ok;
     }
 
 

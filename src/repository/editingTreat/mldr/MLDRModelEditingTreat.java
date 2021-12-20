@@ -1,13 +1,12 @@
 package repository.editingTreat.mldr;
 
+import console.ViewLogsManager;
+import console.WarningLevel;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import mldr.MLDRModel;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 import treatment.services.TreatmentService;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
@@ -38,18 +37,17 @@ public class MLDRModelEditingTreat extends EditingTreat {
     public void treatTransform(Window owner, MVCCDElement mvccdElement) {
         MLDRModel mldrModel = (MLDRModel) mvccdElement;
 
-        Resultat resultat = new Resultat();
-        String message = MessagesBuilder.getMessagesProperty("transform.mldrtompdr.start",
+         String message = MessagesBuilder.getMessagesProperty("transform.mldrtompdr.start",
                 new String[] {
                         MessagesBuilder.getMessagesProperty(PreferencesManager.instance().preferences().getMLDRTOMPDR_DB()),
                         MessagesBuilder.getMessagesProperty(getPropertyTheElement()),
                         mvccdElement.getName()} );
-        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
 
         //TODO-1 Contrôle de conformité à prévoir !
-        resultat.addResultat(mldrModel.treatTransform());
+        boolean ok = mldrModel.treatTransform();
 
-        TreatmentService.treatmentFinish(owner, mvccdElement, resultat,
+        TreatmentService.treatmentFinish(owner, mvccdElement, ok,
                 getPropertyTheElement(), "transform.mldrtompdr.ok", "transform.mldrtompdr.abort") ;
 
     }

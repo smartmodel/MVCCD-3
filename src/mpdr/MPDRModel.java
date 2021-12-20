@@ -1,8 +1,6 @@
 package mpdr;
 
 import datatypes.MPDRDatatype;
-import generatesql.TBGenerateSQL;
-import generatesql.window.GenerateSQLWindow;
 import generatorsql.generator.MPDRGenerateSQL;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
@@ -20,7 +18,6 @@ import mpdr.interfaces.IMPDRRelation;
 import mpdr.services.MPDRModelService;
 import preferences.Preferences;
 import project.ProjectElement;
-import resultat.Resultat;
 
 import java.util.ArrayList;
 
@@ -76,14 +73,9 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         return (IMPDRElement) MPDRModelService.getIMPDRElementByIMLDRElementSource(this, imldrElement);
     }
 
-    //TODO-1 A supprimer lorsque la génération ser réécrite
-    public Resultat treatGenerateTB(GenerateSQLWindow owner) {
-        TBGenerateSQL TBGenerateSQL = new TBGenerateSQL();
-        return TBGenerateSQL.generateSQL(owner, this);
-    }
 
-    public String treatGenerate(Resultat resultat) {
-        MPDRGenerateSQL MPDRGenerateSQL = new MPDRGenerateSQL(this, resultat);
+    public String treatGenerate() {
+        MPDRGenerateSQL MPDRGenerateSQL = new MPDRGenerateSQL(this);
         return MPDRGenerateSQL.generate();
     }
 

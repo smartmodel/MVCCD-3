@@ -1,79 +1,60 @@
 package mcd.compliant;
 
-import m.MRelationDegree;
-import m.services.MElementService;
-import main.MVCCDElement;
-import main.MVCCDElementConvert;
-import main.MVCCDManager;
-import mcd.*;
-import mcd.interfaces.IMCDParameter;
-import mcd.services.MCDAssEndService;
-import messages.MessagesBuilder;
-import org.apache.commons.lang.StringUtils;
-import repository.editingTreat.mcd.*;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
-import utilities.Trace;
-import utilities.UtilDivers;
+import mcd.MCDEntity;
+import mcd.MCDRelation;
 
 import java.util.ArrayList;
 
 public class MCDCompliant {
 
 
-    public Resultat check(MCDEntity mcdEntity){
+    public boolean check(MCDEntity mcdEntity){
         ArrayList<MCDEntity> mcdEntities = new ArrayList<MCDEntity>();
         mcdEntities.add(mcdEntity);
-        Resultat resultat = check (mcdEntities, false);
-
-        return resultat;
+        return check (mcdEntities, false);
     }
 
 
     //TODO-1 Appeler la méthode de check unitaire depuis le menu contextuel de MCDAssociation ou
     // autre spécialisation de MRelation
-    public Resultat check(MCDRelation mcdRelation){
+    public boolean check(MCDRelation mcdRelation){
         // Teste la relation pour elle-même
-        Resultat resultat = new MCDRelationCompliant().checkRelationOutContext(mcdRelation, false);
-        if (resultat.isWithoutElementFatal()) {
+        boolean ok = new MCDRelationCompliant().checkRelationOutContext(mcdRelation, false);
+        if (ok) {
             // Teste la relation dans son contexte
-            resultat.addResultat(new MCDRelationCompliant().checkRelationInContext(mcdRelation));
+            ok = ok && new MCDRelationCompliant().checkRelationInContext(mcdRelation);
         }
 
-        return resultat;
+        return ok;
     }
 
-    public Resultat check(ArrayList<MCDEntity> mcdEntities, boolean showDialogCompletness){
-        Resultat resultat = new Resultat();
-        //#MAJ 2021-03-26 Console.clearMessages est appelé à chaque invocation de menu conceptuel du référentiel
-        //Console.clearMessages();
-
+    public boolean check(ArrayList<MCDEntity> mcdEntities, boolean showDialogCompletness){
+        boolean ok = true;
         // Tous les tests de complétude de saisie se font même s'il y a une erreur fatale détectée
         for (MCDEntity mcdEntity : mcdEntities) {
             // Teste l'entité pour elle-même
-            resultat.addResultat(new MCDEntityCompliant().checkEntityOutContext(mcdEntity, showDialogCompletness));
+            ok = ok && new MCDEntityCompliant().checkEntityOutContext(mcdEntity, showDialogCompletness);
         }
 
         ArrayList<MCDRelation> mcdRelations = getRelations(mcdEntities);
 
         for (MCDRelation mcdRelation : mcdRelations){
             // Teste la relation pour elle-même
-            resultat.addResultat(new MCDRelationCompliant().checkRelationOutContext(mcdRelation, showDialogCompletness));
+           ok = ok && (new MCDRelationCompliant().checkRelationOutContext(mcdRelation, showDialogCompletness));
         }
 
 
-        if (resultat.isWithoutElementFatal()) {
+        if (ok) {
             for (MCDEntity mcdEntity : mcdEntities) {
                 // Teste la conformité entité et relations attachées
-                resultat.addResultat(new MCDEntityCompliant().checkEntityInContext(mcdEntity));
+                ok = ok && new MCDEntityCompliant().checkEntityInContext(mcdEntity);
             }
             for (MCDRelation mcdRelation : mcdRelations){
                 // Teste la relation dans son contexte
-                resultat.addResultat(new MCDRelationCompliant().checkRelationInContext(mcdRelation));
+                ok = ok && (new MCDRelationCompliant().checkRelationInContext(mcdRelation));
             }
         }
-       return resultat;
+       return ok;
     }
 
 

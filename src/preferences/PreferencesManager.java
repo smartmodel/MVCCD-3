@@ -1,16 +1,14 @@
 package preferences;
 
 import console.ViewLogsManager;
+import console.WarningLevel;
 import exceptions.CodeApplException;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import profile.ProfileFileChooser;
 import project.Project;
 import project.ProjectFileChooser;
-import resultat.Resultat;
-import resultat.ResultatLevel;
 import utilities.files.UtilFiles;
-import utilities.window.DialogMessage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -135,9 +133,8 @@ public class PreferencesManager {
                     message = message + System.lineSeparator() +
                             "Tant que la sauvegarde xml n'est pas finalisée des données du projet peuvent être perdues!";
                 }
-                ViewLogsManager.printNewResultatWithMessage(message, ResultatLevel.INFO);
-                DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), message, "Changement de format");
-            }
+                ViewLogsManager.printMessageAndDialog(MVCCDManager.instance().getMvccdWindow(),message, WarningLevel.INFO);
+             }
             // Indicateur pour pouvoir faire une sauvegarde avec le format changé
             MVCCDManager.instance().setExtensionProjectFileNotEqual(! extensionAppl.equals(extensionProject));
         }
@@ -265,11 +262,9 @@ public class PreferencesManager {
      * Cette méthode est créée dans le cadre de la persistance XML au lieu et place de la persistance avec sérialisation.
      * @author Giorgio Roncallo
      */
-    public Resultat loadOrCreateFileXMLApplicationPref() {
-        Resultat resultat = new Resultat();
+    public void loadOrCreateFileXMLApplicationPref() {
         try {
             applicationPref = new PreferencesOfApplicationLoaderXml().loadFileApplicationPref();
-            return resultat;
         } catch (Exception eLoad) {
             // Fichier pas trouvé ou corrompu
             // Le fichier des préférences est réinitialisé
@@ -282,11 +277,10 @@ public class PreferencesManager {
                 } else {
                     message = MessagesBuilder.getMessagesProperty("pref.appl.load.error");
                 }
-                resultat.addExceptionCatched(eLoad, message);
+                ViewLogsManager.catchException(eLoad, message);
 
                 applicationPref = new Preferences(null, null);
                 new PreferencesOfApplicationSaverXml().createFileApplicationPref();
-                return resultat ;
             } catch(Exception eCreate) {
                 throw eCreate;
             }

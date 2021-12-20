@@ -114,6 +114,19 @@ public class SQLViewer extends JDialog implements WindowListener {
     @Override
     public void windowOpened(WindowEvent windowEvent) {
 
+
+        // Clear de la console
+        // A la création, il y a 3 lignes vides pour le dimensionnement qui sont mises
+
+        sqlViewerConsole.getSqlViewerConsoleContent().getTextArea().setText("");
+
+        // La console doit être prête avant load
+        sqlViewerParameters.getSqlViewerParametersContent().loadDatas();
+
+        //Chargement du code
+        sqlViewerCodeSQL.getSqlViewerCodeSQLContent().getTextArea().setText(code);
+
+
     }
 
     @Override
@@ -165,18 +178,6 @@ public class SQLViewer extends JDialog implements WindowListener {
 
     @Override
     public void windowActivated(WindowEvent windowEvent) {
-
-
-        // Clear de la console
-        // A la création, il y a 3 lignes vides pour le dimensionnement qui sont mises
-
-        sqlViewerConsole.getSqlViewerConsoleContent().getTextArea().setText("");
-
-        // La console doit être prête avant load
-        sqlViewerParameters.getSqlViewerParametersContent().loadDatas();
-
-        //Chargement du code
-        sqlViewerCodeSQL.getSqlViewerCodeSQLContent().getTextArea().setText(code);
 
     }
 

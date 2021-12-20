@@ -6,7 +6,6 @@ import mpdr.MPDRModel;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
 import preferences.Preferences;
-import resultat.Resultat;
 import utilities.TemplateFile;
 
 import java.util.ArrayList;
@@ -14,11 +13,9 @@ import java.util.ArrayList;
 public class MPDRGenerateSQLFKs {
 
     private MPDRModel mpdrModel;
-    private Resultat resultat;
 
-    public MPDRGenerateSQLFKs(MPDRModel mpdrModel, Resultat resultat) {
+    public MPDRGenerateSQLFKs(MPDRModel mpdrModel) {
         this.mpdrModel = mpdrModel;
-        this.resultat = resultat;
     }
 
 

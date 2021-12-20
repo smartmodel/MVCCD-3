@@ -1,5 +1,7 @@
 package transform.mcdtomldr;
 
+import console.ViewLogsManager;
+import console.WarningLevel;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
@@ -13,9 +15,6 @@ import messages.MessagesBuilder;
 import mldr.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 import transform.MDTransform;
 
 import java.util.ArrayList;
@@ -24,10 +23,9 @@ public class MCDTransform extends MDTransform {
 
     private IMCDModel  imcdModel ;
     private MLDRModel mldrModel ;
-    private Resultat resultat = new Resultat();
 
 
-    public Resultat transform(IMCDModel imcdModel)   {
+    public boolean transform(IMCDModel imcdModel)   {
         this.imcdModel = imcdModel;
         // Création du modèle logique si inexistant
         mldrModel = foundOrCreateMLDRModel(
@@ -37,11 +35,12 @@ public class MCDTransform extends MDTransform {
         //TODO-1 Faut-il s'arrêter au niveau MLD-R ou descendre vers tous les MPD-R ?
         MLDRModel mldrModelClone = (MLDRModel) mldrModel.cloneDeep();
 
+        boolean ok = true;
         try {
             mldrModel.incrementeIteration();
 
             // Change source MCD pour mldrColumnPK (Attribut AID <--> Entité)
-            resultat.addResultat(changeSourceMLDRColumnPK());
+            ok = changeSourceMLDRColumnPK();
            //TODO-0 Ajouter le traitement d'erreur comme pour changeSourceMLDRColumnPK();
 
             // Transformation des entités
@@ -74,11 +73,11 @@ public class MCDTransform extends MDTransform {
             //TODO-1 Véfier la mise à jour effective
             MVCCDManager.instance().setDatasProjectChanged(true);
 
-            return resultat;
+            return ok;
         } catch(Exception e){
             undoTransform(mldrModelClone);
-            resultat.addExceptionUnhandled(e) ;
-            return resultat;
+            ViewLogsManager.catchException(e, "Erreur interne dans la classe de transformation");
+            return ok;
         }
     }
 
@@ -114,8 +113,8 @@ public class MCDTransform extends MDTransform {
         return null;
     }
 
-    private Resultat changeSourceMLDRColumnPK() {
-        Resultat resultat = new Resultat();
+    private boolean changeSourceMLDRColumnPK() {
+        boolean ok = true;
         int indTable = 0;
         //for (MLDRTable mldrTable : mldrModel.getMLDRTables()) {
         while (indTable < mldrModel.getMLDRTables().size()) {
@@ -149,11 +148,12 @@ public class MCDTransform extends MDTransform {
                 // Information de suppression
                 String message = MessagesBuilder.getMessagesProperty ("transform.mcdtomldr.mtable.without.pk",
                         new String[] {mldrTable.getName() });
-                resultat.add(new ResultatElement(message, ResultatLevel.NO_FATAL));
+                ViewLogsManager.printMessage(message, WarningLevel.INFO);
+                ok = false;
             }
             indTable++;
         }
-        return resultat ;
+        return ok ;
     }
 
 

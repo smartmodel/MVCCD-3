@@ -2,17 +2,14 @@ package generatorsql.generator;
 
 import mpdr.MPDRModel;
 import preferences.Preferences;
-import resultat.Resultat;
 import utilities.TemplateFile;
 
 public class MPDRGenerateSQLEmptySchema {
 
     private MPDRModel mpdrModel;
-    private Resultat resultat ;
 
-    public MPDRGenerateSQLEmptySchema(MPDRModel mpdrModel, Resultat resultat) {
+    public MPDRGenerateSQLEmptySchema(MPDRModel mpdrModel) {
         this.mpdrModel = mpdrModel;
-        this.resultat = resultat ;
     }
 
     public String generateSQLEmptySchema() {

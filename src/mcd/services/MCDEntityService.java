@@ -1,14 +1,11 @@
 package mcd.services;
 
-import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
-import m.services.MRelationService;
 import main.MVCCDElement;
 import mcd.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import resultat.Resultat;
 
 import java.util.ArrayList;
 import java.util.Collections;

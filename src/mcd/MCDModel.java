@@ -5,7 +5,6 @@ import mcd.compliant.MCDCompliant;
 import mcd.interfaces.*;
 import mcd.services.IMCDModelService;
 import mldr.MLDRModel;
-import resultat.Resultat;
 import transform.mcdtomldr.MCDTransform;
 
 import java.util.ArrayList;
@@ -80,16 +79,15 @@ public class MCDModel extends MCDElement implements IMCDModel, IMCDTraceability,
         return IMCDModelService.getMCDEntities(this);
     }
 
-    public Resultat treatCompliant(){
+    public boolean treatCompliant(){
         MCDCompliant mcdCompliant = new MCDCompliant();
         return  mcdCompliant.check(getMCDEntities(), false);
     }
 
-    public Resultat treatTransform()  {
+    public boolean treatTransform()  {
         MCDTransform mcdTransform = new MCDTransform();
         return mcdTransform.transform(this);
     }
-
 
     @Override
     public MLDRModel getLastTransformedMLDRModel() {

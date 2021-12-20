@@ -1,5 +1,6 @@
 package transform.mldrtompdr;
 
+import console.ViewLogsManager;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
@@ -13,7 +14,6 @@ import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import resultat.Resultat;
 import transform.MDTransform;
 
 import java.util.ArrayList;
@@ -22,9 +22,8 @@ public class MLDRTransform extends MDTransform {
 
     private MLDRModel mldrModel ;
     private MPDRModel mpdrModel ;
-    private Resultat resultat = new Resultat();
 
-    public Resultat transform(MLDRModel mldrModel) {
+    public boolean transform(MLDRModel mldrModel) {
         this.mldrModel = mldrModel ;
 
         // Création du modèle physique si inexistant
@@ -34,6 +33,7 @@ public class MLDRTransform extends MDTransform {
         //Clonage du modèle avant transformation
         MPDRModel mpdrModelClone = (MPDRModel) mpdrModel.cloneDeep();
 
+        boolean ok = true;
         try {
             mpdrModel.incrementeIteration();
 
@@ -64,11 +64,11 @@ public class MLDRTransform extends MDTransform {
             //TODO-1 Véfier la mise à jour effective
             MVCCDManager.instance().setDatasProjectChanged(true);
 
-            return resultat;
+            return ok;
         } catch(Exception e){
             //undoTransform(mpdrModelClone);
-            resultat.addExceptionUnhandled(e);
-            return resultat;
+            ViewLogsManager.catchException(e, "Erreur interne dans la classe de transformation");
+            return ok;
         }
     }
 
@@ -178,11 +178,5 @@ public class MLDRTransform extends MDTransform {
         if (mpdrFK.getMdrPK() != mldrFK.getMdrPK()) {
             mpdrFK.setMdrPK(mpdrPK);
         }
-    }
-
-
-
-    public Resultat getResultat() {
-        return resultat;
     }
 }

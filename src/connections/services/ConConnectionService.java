@@ -3,7 +3,6 @@ package connections.services;
 import connections.*;
 import exceptions.CodeApplException;
 import preferences.Preferences;
-import resultat.Resultat;
 
 import java.awt.*;
 import java.io.File;
@@ -60,8 +59,7 @@ public class ConConnectionService {
 
         return ConnectionsService.actionTestIConConnectionOrConnector(owner,
                 autonomous,
-                conConnection,
-                new Resultat() );
+                conConnection);
     }
 
 }

@@ -1,46 +1,44 @@
 package mcd.compliant;
 
+import exceptions.CodeApplException;
 import main.MVCCDManager;
-import mcd.*;
+import mcd.MCDAssociation;
+import mcd.MCDGeneralization;
+import mcd.MCDLink;
+import mcd.MCDRelation;
 import repository.editingTreat.mcd.MCDAssociationEditingTreat;
 import repository.editingTreat.mcd.MCDGeneralizationEditingTreat;
 import repository.editingTreat.mcd.MCDLinkEditingTreat;
-import resultat.Resultat;
-import utilities.Trace;
-
-import java.util.ArrayList;
 
 public class MCDRelationCompliant {
 
 
-    public Resultat checkRelationOutContext(MCDRelation mcdRelation, boolean showDialogCompletness) {
+    public boolean checkRelationOutContext(MCDRelation mcdRelation, boolean showDialogCompletness) {
         //TODO-1 A factoriser
+
         if (mcdRelation instanceof MCDAssociation) {
-            Resultat resultat = new MCDAssociationEditingTreat().treatCompletness(
+            return new MCDAssociationEditingTreat().treatCompletness(
                     MVCCDManager.instance().getMvccdWindow(),
                     mcdRelation, showDialogCompletness);
-           return resultat;
         }
         if (mcdRelation instanceof MCDGeneralization) {
-            Resultat resultat = new MCDGeneralizationEditingTreat().treatCompletness(
+            return new MCDGeneralizationEditingTreat().treatCompletness(
                     MVCCDManager.instance().getMvccdWindow(),
                     mcdRelation, showDialogCompletness);
-            return resultat;
         }
         if (mcdRelation instanceof MCDLink) {
-            Resultat resultat = new MCDLinkEditingTreat().treatCompletness(
+            return new MCDLinkEditingTreat().treatCompletness(
                     MVCCDManager.instance().getMvccdWindow(),
                     mcdRelation, showDialogCompletness);
-            return resultat;
         }
 
-        return null;
+        throw new CodeApplException("Le type de relation " +mcdRelation.getClass().getName() + " n'est pas traité ");
     }
 
 
-    public Resultat checkRelationInContext(MCDRelation mcdRelation) {
-        Resultat resultat = new Resultat();
+    public boolean checkRelationInContext(MCDRelation mcdRelation) {
 
+        boolean ok = true;
         // Traitement des associations
         if ( mcdRelation instanceof MCDAssociation){
             MCDAssociation mcdAssociation = (MCDAssociation) mcdRelation;
@@ -67,11 +65,11 @@ public class MCDRelationCompliant {
                      */
                 }
             }
-            if (resultat.isWithoutElementFatal()) {
-                resultat.addResultat(new MCDAssociationCompliant().checkAssociation((MCDAssociation) mcdRelation));
+            if (ok) {
+                ok = ok &&(new MCDAssociationCompliant().checkAssociation((MCDAssociation) mcdRelation));
             }
         }
-        return resultat;
+        return ok;
     }
 
 }

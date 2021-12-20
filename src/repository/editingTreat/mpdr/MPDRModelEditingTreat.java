@@ -1,15 +1,13 @@
 package repository.editingTreat.mpdr;
 
-import generatesql.window.GenerateSQLWindow;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import generatorsql.viewer.SQLViewer;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import repository.editingTreat.EditingTreat;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
-import utilities.window.DialogMessage;
+import treatment.services.TreatmentService;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mdr.mpdr.model.MPDRModelEditor;
@@ -36,34 +34,29 @@ public class MPDRModelEditingTreat extends EditingTreat {
         return "the.model.physical";
     }
 
-    public void treatGenerateTB(MVCCDElement mvccdElement) {
+    public boolean treatGenerate(Window owner, MVCCDElement mvccdElement) {
         MPDRModel mpdrModel = (MPDRModel) mvccdElement;
-        new GenerateSQLWindow(mpdrModel);
-    }
 
-    public void treatGenerate(Window owner, MVCCDElement mvccdElement) {
-        MPDRModel mpdrModel = (MPDRModel) mvccdElement;
-        Resultat resultat = new Resultat();
+        boolean ok = true;
+        String generateSQLCode = "";
+        try {
+            String message = MessagesBuilder.getMessagesProperty("generate.sql.mpdrtosql.start",
+                    new String[]{mpdrModel.getNamePath()});
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
 
-        resultat.setPrintImmediatelyForResultat(true);
-        String message = MessagesBuilder.getMessagesProperty("generate.sql.mpdrtosql.start",
-                new String[] {mpdrModel.getNamePath()} );
-        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+            generateSQLCode = mpdrModel.treatGenerate();
 
-        String generateSQLCode = mpdrModel.treatGenerate(resultat);
-        if (resultat.isNotError()) {
-            message = MessagesBuilder.getMessagesProperty("generate.sql.mpdrtosql.ok",
-                    new String[] {mpdrModel.getNamePath()} );
-        } else {
-            message = MessagesBuilder.getMessagesProperty("generate.sql.mpdrtosql.abort",
-                    new String[] {mpdrModel.getNamePath()} );
+        } catch (Exception e){
+            ViewLogsManager.catchException(e, owner, "La génération de code SQL-DDL a échoué.");
+            ok = false ;
         }
-        resultat.add(new ResultatElement(message, ResultatLevel.INFO));
-        DialogMessage.showOk(owner, message);
 
-        if (resultat.isNotError()) {
+        TreatmentService.treatmentFinish(owner, mvccdElement, ok,
+                getPropertyTheElement(), "generate.sql.mpdrtosql.ok", "generate.sql.mpdrtosql.abort") ;
+        if (ok) {
             SQLViewer fen = new SQLViewer(mpdrModel, generateSQLCode);
             fen.setVisible(true);
         }
-    }
+        return ok ;
+   }
 }

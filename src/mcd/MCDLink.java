@@ -1,14 +1,13 @@
 package mcd;
 
+import console.ViewLogsManager;
+import console.WarningLevel;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
 import messages.MessagesBuilder;
 import mldr.MLDRModel;
 import mldr.MLDRTable;
 import preferences.Preferences;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 
 public class MCDLink extends MCDRelation {
 
@@ -76,8 +75,6 @@ public class MCDLink extends MCDRelation {
 
 
     public void delete(){
-        Resultat resultat = new Resultat();
-        resultat.setPrintImmediatelyForResultat(true);
         // Si nécessaire, changement de la source de la table : Association n:n --> Entité associative
         if (getAssociation().isDegreeNN()){
             IMCDModel mcdModelAccueil = this.getIMCDModelAccueil();
@@ -87,13 +84,10 @@ public class MCDLink extends MCDRelation {
                     mldrTable.setMcdElementSource(getAssociation());
                     String message = MessagesBuilder.getMessagesProperty("editor.link.change.source.to.association.nn",
                     new String[] {mldrTable.getNameTreePath(), getAssociation().getNameTreePath()} );
-                    resultat.add(new ResultatElement(message, ResultatLevel.INFO));
-                }
+                    ViewLogsManager.printMessage(message, WarningLevel.INFO);}
             }
         }
-        if (resultat.getNbElementsAllLevels() > 0){
-            //DialogMessage.showOk(null, message);
-        }
+
 
         super.delete();
     }

@@ -6,7 +6,6 @@ import mcd.interfaces.*;
 import mcd.services.MCDElementService;
 import mcd.services.MCDPackageService;
 import project.ProjectElement;
-import resultat.Resultat;
 
 import java.util.ArrayList;
 
@@ -67,7 +66,7 @@ public class MCDPackage extends MCDElement implements IMCDTraceability,
         return MCDPackageService.getMCDEntities(this);
     }
 
-    public Resultat treatCompliant(){
+    public boolean treatCompliant(){
         MCDCompliant mcdCompliant = new MCDCompliant();
         return mcdCompliant.check(getMCDEntities(), false);
     }

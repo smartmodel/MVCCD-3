@@ -2,16 +2,14 @@ package connections.services;
 
 import connections.*;
 import connections.interfaces.IConConnectionOrConnector;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import exceptions.CodeApplException;
-import exceptions.SQLPreTreatedException;
-import generatesql.TBGenerateSQLUtil;
+import generatorsql.MPDRGenerateSQLUtil;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 import utilities.window.DialogMessage;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -76,24 +74,25 @@ public class ConnectionsService {
         return resultat;
     }
 
+
     public static String getResourceURL(ConDB conDB, String hostName, String port, ConIDDBName iddbName, String dbName) {
         String url = conDB.getUrlTemplate();
         if (StringUtils.isNotEmpty(hostName)){
-            url = TBGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_HOSTNAME_WORD, hostName);
+            url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_HOSTNAME_WORD, hostName);
         }
         if (StringUtils.isNotEmpty(port)){
-            url = TBGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_PORT_WORD, port);
+            url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_PORT_WORD, port);
         }
         if (StringUtils.isNotEmpty(dbName)){
-            url = TBGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_WORD, dbName);
+            url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_WORD, dbName);
         }
         if (iddbName != null){
             if (iddbName != ConIDDBName.NAME_STD) {
                 if (iddbName == ConIDDBName.SID) {
-                    url = TBGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateSIDMarker());
+                    url =MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateSIDMarker());
                 }
                 if (iddbName == ConIDDBName.SERVICE_NAME) {
-                    url = TBGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateServiceNameMarker());
+                    url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateServiceNameMarker());
                 }
             }
         }
@@ -103,30 +102,23 @@ public class ConnectionsService {
 
     public static Connection actionTestIConConnectionOrConnector(Window owner,
                                                                boolean autonomous,
-                                                               IConConnectionOrConnector iConConnectionOrConnector,
-                                                               Resultat resultat) {
+                                                               IConConnectionOrConnector iConConnectionOrConnector) {
         String message="";
         if (autonomous) {
-            resultat.setPrintImmediatelyForResultat(true);
             message = MessagesBuilder.getMessagesProperty("con.connection.start.test");
-            resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+            ViewLogsManager.clear();
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
         }
 
         Connection connection = null;
         if (iConConnectionOrConnector != null) {
-            try {
-                connection = ConManager.createConnection(iConConnectionOrConnector);
-                if (connection != null) {
+            connection = ConManager.createConnection(iConConnectionOrConnector);
+            if (connection != null) {
                     message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.ok");
-                    resultat.add(new ResultatElement(message , ResultatLevel.INFO));
-                } else {
+            } else {
                     message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.not.ok");
-                    resultat.add(new ResultatElement(message , ResultatLevel.INFO));
-                }
-            } catch (SQLPreTreatedException e){
-                message = MessagesBuilder.getMessagesProperty("editor.con.connection.btn.test.not.ok");
-                resultat.addExceptionCatched(e, message);
             }
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
         } else {
             //resultat.add(new ResultatElement(messageIConConnectionOrConnectorUnknow , ResultatLevel.INFO));
             throw new CodeApplException("La connexion ou le connecteur sont inexistants");

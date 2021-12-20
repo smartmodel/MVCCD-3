@@ -3,6 +3,8 @@ package main;
 import connections.ConConnectionOracle;
 import connections.ConConnectorOracle;
 import connections.ConnectionsOracle;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import diagram.mcd.MCDDiagram;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
@@ -27,9 +29,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
-import resultat.Resultat;
-import resultat.ResultatElement;
-import resultat.ResultatLevel;
 
 public class MVCCDElementFactory {
 
@@ -278,7 +277,6 @@ public class MVCCDElementFactory {
 
     // Si nécessaire, changment de la source de la table : Association n:n --> Entité associative
     private void changeSourceForTable(MCDLink mcdLink) {
-        Resultat resultat = new Resultat();
         MCDAssociation mcdAssociation = mcdLink.getAssociation();
         if (mcdAssociation.isDegreeNN()){
             IMCDModel mcdModelAccueil = mcdLink.getIMCDModelAccueil();
@@ -288,13 +286,11 @@ public class MVCCDElementFactory {
                     mldrTable.setMcdElementSource(mcdLink.getEntity());
                     String message = MessagesBuilder.getMessagesProperty("editor.link.change.source.to.entity.ass",
                             new String[] {mldrTable.getNameTreePath(), mcdLink.getEntity().getNameTreePath()} );
-                    resultat.add(new ResultatElement(message, ResultatLevel.INFO));
+                    ViewLogsManager.printMessage(message, WarningLevel.INFO);
                 }
             }
         }
-        if (resultat.getNbElementsAllLevels() > 0){
-            //DialogMessage.showOk(null, message);
-        }
+
     }
 
 
