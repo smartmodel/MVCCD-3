@@ -1,13 +1,14 @@
 package mpdr.oracle;
 
 import datatypes.MPDRDatatype;
+import generatorsql.generator.MPDRGenerateSQL;
+import generatorsql.generator.oracle.MPDROracleGenerateSQL;
 import main.MVCCDElementFactory;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
 import mpdr.oracle.interfaces.IMPDROracleElement;
-import preferences.Preferences;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDROracleDatatype;
 
@@ -33,9 +34,11 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement {
         return MLDRTransformToMPDROracleDatatype.fromMLDRDatatype(mldrColumn);
     }
 
-    @Override
-    protected String getTemplateBDDirectory() {
-        return Preferences.DIRECTORY_TEMPLATES_ORACLE_NAME;
+
+    public String treatGenerate() {
+        MPDRGenerateSQL mpdrGenerateSQL = new MPDROracleGenerateSQL(this);
+        return mpdrGenerateSQL.generate();
     }
+
 
 }

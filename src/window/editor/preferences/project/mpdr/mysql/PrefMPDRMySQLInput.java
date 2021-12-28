@@ -1,10 +1,10 @@
 package window.editor.preferences.project.mpdr.mysql;
 
 
-import utilities.window.editor.PanelInput;
 import utilities.window.editor.PanelInputContent;
+import window.editor.preferences.project.mpdr.PrefMPDRInput;
 
-public class PrefMPDRMySQLInput extends PanelInput {
+public class PrefMPDRMySQLInput extends PrefMPDRInput {
 
      public PrefMPDRMySQLInput(PrefMPDRMySQLEditor prefMPDRMySQLEditor) {
         super(prefMPDRMySQLEditor);

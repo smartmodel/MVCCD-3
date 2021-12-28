@@ -1,12 +1,12 @@
 package mpdr.mysql;
 
 import datatypes.MPDRDatatype;
+import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
-import preferences.Preferences;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDRMySQLDatatype;
 
@@ -31,9 +31,10 @@ public class MPDRMySQLModel extends MPDRModel {
         return MLDRTransformToMPDRMySQLDatatype.fromMLDRDatatype(mldrColumn);
     }
 
-    @Override
-    protected String getTemplateBDDirectory() {
-        return Preferences.DIRECTORY_TEMPLATES_MYSQL_NAME;
+
+    public String treatGenerate() {
+        throw new CodeApplException("La génération SQL pour " + this.getDb().getText() + " n'est pas encore développée");
     }
+
 
 }

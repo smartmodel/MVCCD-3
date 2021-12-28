@@ -4,8 +4,7 @@ import exceptions.CodeApplException;
 import main.MVCCDElementApplicationMDDatatypes;
 import main.MVCCDElementService;
 import main.MVCCDManager;
-import preferences.Preferences;
-import preferences.PreferencesManager;
+import mpdr.MPDRDB;
 
 import java.util.ArrayList;
 
@@ -98,16 +97,15 @@ public class MDDatatypesManager {
 
 
 
-    public MPDRDatatype mpdrDatatypeRoot (){
-        Preferences preferences = PreferencesManager.instance().preferences();
-        if (preferences.getMLDRTOMPDR_DB().equals(Preferences.DB_ORACLE)){
+    public MPDRDatatype mpdrDatatypeRoot(MPDRDB db){
+        if (db == MPDRDB.ORACLE){
             defaultMPDRDatatypeRoot = defaultMPDROracleDatatypeRoot;
-        } else if (preferences.getMLDRTOMPDR_DB().equals(Preferences.DB_MYSQL)){
+        } else if (db == MPDRDB.MYSQL){
             defaultMPDRDatatypeRoot = defaultMPDRMySQLDatatypeRoot;
-        } else if (preferences.getMLDRTOMPDR_DB().equals(Preferences.DB_POSTGRESQL)){
+        } else if (db == MPDRDB.POSTGRESQL){
             defaultMPDRDatatypeRoot = defaultMPDRPostgreSQLDatatypeRoot;
         } else {
-            throw new CodeApplException("La BD " + preferences.getMLDRTOMPDR_DB() + " n'est pas trouvée");
+            throw new CodeApplException("La BD " + db.getText() + " n'est pas trouvée");
         }
         if (projectMPDRDatatypeRoot!= null){
             return projectMPDRDatatypeRoot;
@@ -249,8 +247,8 @@ public class MDDatatypesManager {
     }
 
 
-    public ArrayList<MPDRDatatype> getMPDRDatatypes (int treatAbstrait){
-        return getMPDRDatatypesByRoot(mpdrDatatypeRoot(), treatAbstrait);
+    public ArrayList<MPDRDatatype> getMPDRDatatypes(MPDRDB db, int treatAbstrait){
+        return getMPDRDatatypesByRoot(mpdrDatatypeRoot(db), treatAbstrait);
     }
 
     public ArrayList<MPDRDatatype> getMPDRDatatypesByRoot(MPDRDatatype root, int treatAbstrait){

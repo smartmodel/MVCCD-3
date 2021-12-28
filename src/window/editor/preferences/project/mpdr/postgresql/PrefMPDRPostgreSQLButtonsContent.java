@@ -1,11 +1,10 @@
 package window.editor.preferences.project.mpdr.postgresql;
 
-import main.MVCCDElement;
-import utilities.window.editor.PanelButtonsContent;
+import window.editor.preferences.project.mpdr.PrefMPDRButtonsContent;
 
 import java.awt.event.ActionListener;
 
-public class PrefMPDRPostgreSQLButtonsContent extends PanelButtonsContent implements ActionListener {
+public class PrefMPDRPostgreSQLButtonsContent extends PrefMPDRButtonsContent implements ActionListener {
 
     private PrefMPDRPostgreSQLButtons prefMPDRPostgreSQLButtons;
 
@@ -16,11 +15,6 @@ public class PrefMPDRPostgreSQLButtonsContent extends PanelButtonsContent implem
 
     @Override
     protected String getHelpFileName() {
-        return null;
-    }
-
-    @Override
-    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         return null;
     }
 

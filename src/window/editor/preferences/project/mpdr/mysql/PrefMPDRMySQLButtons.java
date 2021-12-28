@@ -1,9 +1,9 @@
 package window.editor.preferences.project.mpdr.mysql;
 
-import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelButtonsContent;
+import window.editor.preferences.project.mpdr.PrefMPDRButtons;
 
-public class PrefMPDRMySQLButtons extends PanelButtons {
+public class PrefMPDRMySQLButtons extends PrefMPDRButtons {
 
     public PrefMPDRMySQLButtons(PrefMPDRMySQLEditor prefMPDRMySQLEditor) {
         super(prefMPDRMySQLEditor);

@@ -1,7 +1,9 @@
 package mpdr;
 
+import exceptions.CodeApplException;
 import messages.MessagesBuilder;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 
 public enum MPDRDB {
     ORACLE (Preferences.DB_ORACLE),
@@ -29,6 +31,18 @@ public enum MPDRDB {
             }
         }
         return null;
+    }
+
+    public String getDelimiterInstructions(){
+        if (this == ORACLE){
+            return PreferencesManager.instance().preferences().getMPDRORACLE_DELIMITER_INSTRUCTIONS();
+        } else if (this == MYSQL){
+            return PreferencesManager.instance().preferences().getMPDRMYSQL_DELIMITER_INSTRUCTIONS();
+        } else if (this == POSTGRESQL){
+            return PreferencesManager.instance().preferences().getMPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS();
+        } else {
+            throw new CodeApplException("La méthode n'a pas de retour pour cette valeur de Database");
+        }
     }
 
 

@@ -1,11 +1,10 @@
 package window.editor.preferences.project.mpdr.mysql;
 
-import main.MVCCDElement;
-import utilities.window.editor.PanelButtonsContent;
+import window.editor.preferences.project.mpdr.PrefMPDRButtonsContent;
 
 import java.awt.event.ActionListener;
 
-public class PrefMPDRMySQLButtonsContent extends PanelButtonsContent implements ActionListener {
+public class PrefMPDRMySQLButtonsContent extends PrefMPDRButtonsContent implements ActionListener {
 
     private PrefMPDRMySQLButtons prefMPDRMySQLButtons;
 
@@ -16,11 +15,6 @@ public class PrefMPDRMySQLButtonsContent extends PanelButtonsContent implements 
 
     @Override
     protected String getHelpFileName() {
-        return null;
-    }
-
-    @Override
-    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         return null;
     }
 

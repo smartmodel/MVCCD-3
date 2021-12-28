@@ -72,6 +72,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
     private void init() {
 
         try {
+            Preferences preferences = PreferencesManager.instance().preferences();
             // Effacement des anciens contenus qui ne devraient plus subsister si aucune erreur ne survient
             String message = MessagesBuilder.getMessagesProperty("file.add.text", LogsManager.getlogFilePath());
             ConsoleManager consoleManager = MVCCDManager.instance().getConsoleManager();
@@ -304,7 +305,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             }
 
             if (node.getUserObject() instanceof MPDRModel) {
-                treatGeneric(this, new MPDRModelEditingTreat());
+               treatGeneric(this, new MPDRModelEditingTreat());
 
                 JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(
                         "menu.generate.sql.from.mpdr"));

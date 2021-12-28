@@ -1,4 +1,4 @@
-CREATE TABLE {table_name}(
+CREATE TABLE {tableName}(
 {createTableColumns.txt}
 {createTablePK.txt}
-) ;
+)

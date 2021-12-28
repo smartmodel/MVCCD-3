@@ -1,7 +1,6 @@
 package mpdr;
 
 import datatypes.MPDRDatatype;
-import generatorsql.generator.MPDRGenerateSQL;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import mdr.MDRElement;
@@ -16,7 +15,6 @@ import mldr.interfaces.IMLDRRelation;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRRelation;
 import mpdr.services.MPDRModelService;
-import preferences.Preferences;
 import project.ProjectElement;
 
 import java.util.ArrayList;
@@ -29,6 +27,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     // Par contre, lorsqiûe Connector est utilisé l'instance de Connection est trouvée en passant par son parent!
     private String connectionLienProg = null;
     private String connectorLienProg = null;
+    private boolean dropBeforeCreate = true;
 
     public MPDRModel(ProjectElement parent, String name, MPDRDB db) {
         super(parent, name);
@@ -74,10 +73,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     }
 
 
-    public String treatGenerate() {
-        MPDRGenerateSQL MPDRGenerateSQL = new MPDRGenerateSQL(this);
-        return MPDRGenerateSQL.generate();
-    }
+    public abstract String treatGenerate() ;
 
     //TODO-1 A suppimer si la solution du listner est possible
     // Voir MLDR (même problème)
@@ -133,27 +129,11 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         this.connectorLienProg = connectorLienProg;
     }
 
-    private String getTemplateDirBase() {
-        return Preferences.DIRECTORY_TEMPLATES_NAME + Preferences.SYSTEM_FILE_SEPARATOR +
-                Preferences.DIRECTORY_TEMPLATES_SQLDDL_NAME + Preferences.SYSTEM_FILE_SEPARATOR +
-                getTemplateBDDirectory() + Preferences.SYSTEM_FILE_SEPARATOR ;
+    public boolean isDropBeforeCreate() {
+        return dropBeforeCreate;
     }
 
-    public String getTemplateDirCreate() {
-        return getTemplateDirBase() +
-                Preferences.DIRECTORY_TEMPLATES_CREATE;
+    public void setDropBeforeCreate(boolean dropBeforeCreate) {
+        this.dropBeforeCreate = dropBeforeCreate;
     }
-
-    public String getTemplateDirAlter() {
-        return getTemplateDirBase() +
-                Preferences.DIRECTORY_TEMPLATES_ALTER;
-    }
-
-
-    public String getTemplateDirDrop() {
-        return getTemplateDirBase() +
-                Preferences.DIRECTORY_TEMPLATES_DROP;
-    }
-
-    protected abstract String getTemplateBDDirectory();
 }

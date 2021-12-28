@@ -1,1 +1,1 @@
-CONSTRAINT {pk_name} PRIMARY KEY({pk_columns})
+CONSTRAINT {pkName} PRIMARY KEY({pkColumns})

@@ -1,11 +1,10 @@
 package window.editor.preferences.project.mpdr.oracle;
 
-import main.MVCCDElement;
-import utilities.window.editor.PanelButtonsContent;
+import window.editor.preferences.project.mpdr.PrefMPDRButtonsContent;
 
 import java.awt.event.ActionListener;
 
-public class PrefMPDROracleButtonsContent extends PanelButtonsContent implements ActionListener {
+public class PrefMPDROracleButtonsContent extends PrefMPDRButtonsContent implements ActionListener {
 
     private PrefMPDROracleButtons prefMPDROracleButtons;
 
@@ -16,11 +15,6 @@ public class PrefMPDROracleButtonsContent extends PanelButtonsContent implements
 
     @Override
     protected String getHelpFileName() {
-        return null;
-    }
-
-    @Override
-    protected MVCCDElement createNewMVCCDElement(MVCCDElement parent) {
         return null;
     }
 

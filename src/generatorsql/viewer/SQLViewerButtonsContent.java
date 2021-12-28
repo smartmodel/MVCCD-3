@@ -12,6 +12,7 @@ import generatorsql.MPDRGenerateSQLUtil;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import treatment.services.TreatmentService;
@@ -380,12 +381,14 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                 try {
                     String generateSQLCode = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
                     //TODO-0 A paramétrer
-                    String[] commandes = generateSQLCode.split(";");
-
-                    for (String commande : commandes) {
-                        Statement statement = connection.createStatement();
-                        statement.executeUpdate(commande);
-                        statement.close();
+                    String[] commands = generateSQLCode.split(mpdrModel.getDb().getDelimiterInstructions());
+                    for (String command : commands) {
+                        command = MPDRGenerateSQLUtil.clearCommandSQL(command);
+                        if (StringUtils.isNotEmpty(command)) {
+                            Statement statement = connection.createStatement();
+                            statement.executeUpdate(command);
+                            statement.close();
+                        }
                     }
 
                     String formattedHourExecuted = UtilDivers.hourFormatted(new Date());

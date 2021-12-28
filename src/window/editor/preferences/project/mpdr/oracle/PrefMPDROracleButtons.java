@@ -1,9 +1,9 @@
 package window.editor.preferences.project.mpdr.oracle;
 
-import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelButtonsContent;
+import window.editor.preferences.project.mpdr.PrefMPDRButtons;
 
-public class PrefMPDROracleButtons extends PanelButtons {
+public class PrefMPDROracleButtons extends PrefMPDRButtons {
 
     public PrefMPDROracleButtons(PrefMPDROracleEditor prefMPDROracleEditor) {
         super(prefMPDROracleEditor);

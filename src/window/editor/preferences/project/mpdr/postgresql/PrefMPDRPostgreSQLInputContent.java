@@ -4,16 +4,12 @@ import main.MVCCDElement;
 import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
+import mpdr.MPDRDBPK;
 import preferences.Preferences;
 import utilities.window.scomponents.services.SComboBoxService;
-import utilities.window.services.PanelService;
-import window.editor.preferences.project.mdr.utilities.PrefMLPDRInputContent;
+import window.editor.preferences.project.mpdr.PrefMPDRInputContent;
 
-import javax.swing.event.DocumentEvent;
-import java.awt.*;
-import java.awt.event.ItemEvent;
-
-public class PrefMPDRPostgreSQLInputContent extends PrefMLPDRInputContent {
+public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
 
 
 
@@ -21,42 +17,13 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMLPDRInputContent {
         super(prefMPDRPostgreSQLInput);
      }
 
+
     public void createContentCustom() {
 
         super.createContentCustom();
-        createPanelMaster();
-
+        fieldPKGenerate.addItem(MPDRDBPK.SEQUENCE.getText());
+        fieldPKGenerate.addItem(MPDRDBPK.IDENTITY.getText());
     }
-
-    private void createPanelMaster() {
-        GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
-
-        super.affectPanelMaster(gbc);
-    }
-
-
-
-    @Override
-    protected void enabledContent() {
-
-    }
-
-
-    @Override
-    protected boolean changeField(DocumentEvent e) {
-        return true;
-    }
-
-    @Override
-    protected void changeFieldSelected(ItemEvent e) {
-
-    }
-
-    @Override
-    protected void changeFieldDeSelected(ItemEvent e) {
-
-    }
-
 
     @Override
     public void loadDatas(MVCCDElement mvccdElement) {
@@ -65,11 +32,9 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMLPDRInputContent {
                 preferences.getMPDRMYSQL_PREF_NAMING_LENGTH().getText());
         SComboBoxService.selectByText(fieldNamingFormat,
                 preferences.getMPDRMYSQL_PREF_NAMING_FORMAT().getText());
-    }
-
-    @Override
-    protected void initDatas() {
-
+        fieldDelimiterInstructions.setText(preferences.getMPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS());
+        SComboBoxService.selectByText(fieldPKGenerate,
+                preferences.getMPDRORACLE_PK_GENERATE().getText());
     }
 
     @Override
@@ -104,13 +69,23 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMLPDRInputContent {
                 preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE);
             }
         }
+
+        if (fieldDelimiterInstructions.checkIfUpdated()){
+            preferences.setMPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS(fieldDelimiterInstructions.getText());
+        }
+
+
+        if (fieldPKGenerate.checkIfUpdated()){
+            String text = (String) fieldPKGenerate.getSelectedItem();
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.DB_PK_SEQUENCE))){
+                preferences.setMPDRORACLE_PK_GENERATE(MPDRDBPK.SEQUENCE);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.DB_PK_IDENTITY))){
+                preferences.setMPDRORACLE_PK_GENERATE(MPDRDBPK.IDENTITY);
+            }
+        }
+
     }
-
-    @Override
-    public void loadSimulationChange(MVCCDElement mvccdElementCrt) {
-
-    }
-
 
 }
 

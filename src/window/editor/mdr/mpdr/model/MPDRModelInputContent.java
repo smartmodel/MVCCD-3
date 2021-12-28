@@ -6,6 +6,7 @@ import connections.ConManager;
 import main.MVCCDElement;
 import mpdr.MPDRModel;
 import preferences.Preferences;
+import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.STextField;
 import window.editor.mdr.model.MDRModelInputContent;
@@ -25,6 +26,8 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     protected JLabel labelConnectionURL;
     protected STextField fieldConnectionURL;
 
+    protected JLabel labelDropBeforeCreate ;
+    protected SCheckBox fieldDropBeforeCreate ;
 
     public MPDRModelInputContent(MPDRModelInput mpdrModelInput) {
         super(mpdrModelInput);
@@ -55,12 +58,25 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         fieldConnectionURL.setToolTipText("Chaîne de connexion construite...");
         fieldConnectionURL.setReadOnly(true);
 
+        labelDropBeforeCreate = new JLabel("Drop avant Create : ");
+        fieldDropBeforeCreate = new SCheckBox(this, labelDropBeforeCreate);
+        fieldDropBeforeCreate.setToolTipText("Suppression des objets, s'ils existent, avant leur création");
+        fieldDropBeforeCreate.addItemListener(this);
+        fieldDropBeforeCreate.addFocusListener(this);
+
         super.getSComponents().add(fieldConnectionLienProg);
         super.getSComponents().add(fieldConnectionURL);
+        super.getSComponents().add(fieldDropBeforeCreate);
     }
 
     protected void createPanelMaster(GridBagConstraints gbc) {
         super.createPanelMaster(gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(labelDropBeforeCreate, gbc);
+        gbc.gridx = 1;
+        panelInputContentCustom.add(fieldDropBeforeCreate, gbc);
     }
 
     protected void createPanelConnection(GridBagConstraints gbcA) {
@@ -73,13 +89,14 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         panelConnection.add(labelConnectionURL, gbcA);
         gbcA.gridx++;
         panelConnection.add(fieldConnectionURL, gbcA);
-   }
+    }
 
 
     @Override
     public void loadDatas(MVCCDElement mvccdElementCrt) {
         super.loadDatas(mvccdElementCrt);
         MPDRModel mpdrModel = (MPDRModel) mvccdElementCrt;
+        fieldDropBeforeCreate.setSelected(((MPDRModel) mvccdElementCrt).isDropBeforeCreate());
     }
 
 
@@ -89,6 +106,9 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     public void saveDatas(MVCCDElement mvccdElement) {
         super.saveDatas(mvccdElement);
         MPDRModel mpdrModel = (MPDRModel) mvccdElement;
+        if ( fieldDropBeforeCreate.checkIfUpdated()){
+            mpdrModel.setDropBeforeCreate(fieldDropBeforeCreate.isSelected());
+        }
    }
 
 

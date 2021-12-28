@@ -1,10 +1,10 @@
 package window.editor.preferences.project.mpdr.postgresql;
 
 
-import utilities.window.editor.PanelInput;
 import utilities.window.editor.PanelInputContent;
+import window.editor.preferences.project.mpdr.PrefMPDRInput;
 
-public class PrefMPDRPostgreSQLInput extends PanelInput {
+public class PrefMPDRPostgreSQLInput extends PrefMPDRInput {
 
      public PrefMPDRPostgreSQLInput(PrefMPDRPostgreSQLEditor prefMPDRPostgreSQLEditor) {
         super(prefMPDRPostgreSQLEditor);

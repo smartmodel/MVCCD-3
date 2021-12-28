@@ -1,0 +1,8 @@
+DECLARE tbl_exist  PLS_INTEGER;
+
+BEGIN
+    SELECT count(*) INTO tbl_exist from user_tables WHERE table_name = UPPER('{tableName}');
+    IF tbl_exist = 1 then
+        EXECUTE IMMEDIATE 'DROP table {tableName} CASCADE CONSTRAINT';
+    END IF;
+END;

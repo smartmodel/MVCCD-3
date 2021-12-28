@@ -2,48 +2,29 @@ package generatorsql.generator;
 
 import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.MPDRFK;
-import mpdr.MPDRModel;
-import mpdr.MPDRTable;
+import mpdr.MPDRPK;
 import preferences.Preferences;
 import utilities.TemplateFile;
 
-import java.util.ArrayList;
+public abstract class MPDRGenerateSQLFK {
 
-public class MPDRGenerateSQLFK {
+    MPDRGenerateSQL mpdrGenerateSQL ;
 
-    private MPDRModel  mpdrModel;
-    private MPDRTable mpdrTable;
-
-    public MPDRGenerateSQLFK(MPDRTable mpdrTable) {
-        this.mpdrTable = mpdrTable;
-        mpdrModel = mpdrTable.getMPDRModelParent();
+    public MPDRGenerateSQLFK(MPDRGenerateSQL mpdrGenerateSQL) {
+        this.mpdrGenerateSQL = mpdrGenerateSQL;
     }
 
-    public String generateSQLAlterFKs() {
+    public String generateSQLFK(MPDRFK mpdrfk) {
         String generateSQLCode = "";
-        ArrayList<MPDRTable> mpdrTables = mpdrModel.getMPDRTables();
-
-        for (MPDRTable mpdrTable : mpdrTables) {
-            ArrayList<MPDRFK> mpdrFks = mpdrTable.getMPDRFKs();
-            for (MPDRFK mpdrFk : mpdrFks) {
-                generateSQLCode += generateSQLFK(mpdrFk);
-            }
-        }
-
-        return generateSQLCode;
-    }
-
-    private String generateSQLFK(MPDRFK mpdrfk) {
-        String generateSQLCode = "";
-
-        generateSQLCode += TemplateFile.templateFileToString(mpdrModel.getTemplateDirAlter(), Preferences.TEMPLATES_ALTER_TABLE_FK) + System.lineSeparator();
-        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "table_name", mpdrfk.getParent().getParent().getName());
-        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "constraint_name", mpdrfk.getName());
-        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "constraint_column", mpdrfk.getMDRColumnsNameAsParamStr());
+        generateSQLCode += TemplateFile.templateFileToString(mpdrGenerateSQL.getTemplateDirAlter(), Preferences.TEMPLATES_ALTER_TABLE_FK) ;
+        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_CHILD_WORD, mpdrfk.getParent().getParent().getName());
+        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_FK_NAME_WORD, mpdrfk.getName());
+        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_FK_COLUMNS_WORD, mpdrfk.getParametersNameAsStr());
 
         //Contraite PK de référence
-        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "constraint_reference_table", mpdrfk.getMdrPK().getMDRTableAccueil().getName());
-        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, "constraint_reference_column", mpdrfk.getMDRColumnsRefPKNameAsParamStr());
+        MPDRPK reference = (MPDRPK) mpdrfk.getMdrPK();
+        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_PARENT_WORD, reference.getMDRTableAccueil().getName());
+        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_FK_COLUMNS_REF_WORD, reference.getParametersNameAsStr());
 
         return generateSQLCode;
     }

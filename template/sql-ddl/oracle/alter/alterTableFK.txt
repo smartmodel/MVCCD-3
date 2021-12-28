@@ -1,1 +1,1 @@
-ALTER TABLE {fk_table_name} ADD CONSTRAINT {fk_name} FOREIGN KEY({fk_columns}) REFERENCES {pk_reference_table}({pk_reference_columns}) ;
+ALTER TABLE {childTableName} ADD CONSTRAINT {fkName} FOREIGN KEY({fkColumns}) REFERENCES {parentTableName}({fkColumnsRef})

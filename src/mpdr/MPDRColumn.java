@@ -1,7 +1,6 @@
 package mpdr;
 
 import mcd.MCDAttribute;
-import mcd.MCDElement;
 import md.MDElement;
 import mdr.MDRColumn;
 import mldr.MLDRColumn;
@@ -54,4 +53,7 @@ public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPD
         return null;
     }
 
+    public MPDRTable getMPDRTableAccueil(){
+        return (MPDRTable) getMDRTableAccueil();
+    }
 }

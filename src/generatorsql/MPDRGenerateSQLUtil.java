@@ -64,7 +64,7 @@ public class MPDRGenerateSQLUtil {
     public static String cleanSeparatorArguments(String code) {
         String cleanCode = "";
         //TODO-1 A voir expression régulière
-        String[] arguments = code.split("\\" + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS);
+        String[] arguments = code.split(Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS);
         if (arguments.length > 0){
             for ( int i = 0 ; i < arguments.length ; i++) {
                 cleanCode += arguments[i] ;
@@ -76,9 +76,21 @@ public class MPDRGenerateSQLUtil {
         } else {
             cleanCode = code;
         }
-
-
         return cleanCode;
     }
 
+    // Retire les blancs avant et après le code de la commande
+    // Retire les sauts de ligne de fin de commande
+    // Retourne une chaine vide si la commande ne contient que des blancs et/ou sauts de ligne
+    public static String clearCommandSQL (String command){
+        command = command.trim();
+        while (command.endsWith(System.lineSeparator())){
+            if (command.length() == 1){
+                command = ""
+                ;                            } else {
+                command = command.substring(0, command.length()-1);
+            }
+        }
+        return command;
+    }
 }

@@ -5,15 +5,14 @@ import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelInput;
-import window.editor.preferences.project.PrefEditor;
 import window.editor.preferences.project.PrefProjectMenu;
+import window.editor.preferences.project.mpdr.PrefMPDREditor;
 
 import java.awt.*;
 
-public class PrefMPDRPostgreSQLEditor extends PrefEditor {
+public class PrefMPDRPostgreSQLEditor extends PrefMPDREditor {
 
 
-    //TODO-0 Il faut appuyer 2 * pour fermer la fenêtre!
     public PrefMPDRPostgreSQLEditor(Window owner,
                                     MVCCDElement parent,
                                     Preferences preferences,

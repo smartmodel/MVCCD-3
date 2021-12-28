@@ -6,6 +6,7 @@ import m.MUMLExtensionNaming;
 import main.MVCCDElement;
 import mdr.MDRNamingFormat;
 import mdr.MDRNamingLength;
+import mpdr.MPDRDBPK;
 import window.editor.diagrammer.services.DiagrammerService;
 
 import java.awt.*;
@@ -51,13 +52,6 @@ public class Preferences extends MVCCDElement {
   public static String REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME = "MPDR_PostgreSQL";
 
 
-  /*
-  public static String CON_DB_ORACLE = "con.db.oracle";
-  public static String CON_DB_MYSQL = "con.db.mysql";
-  public static String CON_DB_POSTGRESQL = "con.db.postgresql";
-
-  Remplacé par DB_ORACLE...
-   */
 
   public static String CON_DB_MODE_CONNECTION = "con.db.mode.connection";
   public static String CON_DB_MODE_CONNECTOR = "con.db.mode.connector";
@@ -217,15 +211,18 @@ public class Preferences extends MVCCDElement {
   public static String DIRECTORY_TEMPLATES_ALTER = "alter";
   public static String DIRECTORY_TEMPLATES_DROP = "drop";
 
+  public static String TEMPLATE_DROP_TABLE = "dropTable.txt";
+
   public static String TEMPLATE_CREATE_TABLE = "createTable.txt";
   public static String TEMPLATE_CREATE_TABLE_COLUMNS = "createTableColumns.txt";
+  public static String TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY = "createTableColumnIdentity.txt";
   public static String TEMPLATE_CREATE_TABLE_PK = "createTablePK.txt";
 
   public static String TEMPLATES_ALTER_TABLE_FK = "alterTableFK.txt";
 
   public static String TEMPLATES_DROP_EMPTY_SCHEMA = "emptySchema.txt";
   public static String SQL_SEPARATOR_ARGUMENTS = ",";
-  public static String SQL_MARKER_SEPARATOR_ARGUMENTS = "separatorArguments";
+  public static String SQL_MARKER_SEPARATOR_ARGUMENTS = "__separatorArguments";
 
   public static String SYSTEM_LINE_SEPARATOR = System.getProperty("line.separator");
   public static String SYSTEM_FILE_SEPARATOR = System.getProperty("file.separator");
@@ -564,6 +561,9 @@ public class Preferences extends MVCCDElement {
   public static String DB_MYSQL = "db.mysql";
   public static String DB_POSTGRESQL = "db.postgresql";
 
+  public static String DB_PK_SEQUENCE = "db.pk.sequence";
+  public static String DB_PK_IDENTITY = "db.pk.identity";
+
 
   public static String MLDRDATATYPE_ROOT_NAME = "MLD-R";
   public static String MLDRDATATYPE_ROOT_LIENPROG = "MLD-R";
@@ -600,7 +600,8 @@ public class Preferences extends MVCCDElement {
   public static String MPDRORACLEDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
   public static String MPDRORACLEDATATYPE_DATE_NAME = "DATE";
   public static String MPDRORACLEDATATYPE_DATE_LIENPROG = "DATE";
-  public static String MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT = ";";
+  public static String MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT = "\\";
+  public static MPDRDBPK MPDRORACLE_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
 
   public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
   public static String MPDRMySQLDATATYPE_ROOT_LIENPROG = "MPDR-MySQL";
@@ -630,7 +631,8 @@ public class Preferences extends MVCCDElement {
   public static String MPDRMySQLDATATYPE_TIME_LIENPROG = "TIME";
   public static String MPDRMySQLDATATYPE_YEAR_NAME = "YEAR";
   public static String MPDRMySQLDATATYPE_YEAR_LIENPROG = "YEAR";
-  public static String MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT = ";";
+  public static String MPDRMYSQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\";
+  public static MPDRDBPK MPDRMYSQL_PK_GENERATE_DEFAULT = MPDRDBPK.IDENTITY;
 
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_NAME = "MPDR-PostgreSQL";
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_LIENPROG = "MPDR-PostgreSQL";
@@ -658,7 +660,8 @@ public class Preferences extends MVCCDElement {
   public static String MPDRPOSTGRESQLDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
   public static String MPDRPOSTGRESQLDATATYPE_TIME_NAME = "TIME";
   public static String MPDRPOSTGRESQLDATATYPE_TIME_LIENPROG = "TIME";
-  public static String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT = ";";
+  public static String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\";
+  public static MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
 
   public static String MDR_NAMING_LENGTH_30 = "mdr.naming.length.30";
   public static String MDR_NAMING_LENGTH_60 = "mdr.naming.length.60";
@@ -689,6 +692,19 @@ public class Preferences extends MVCCDElement {
   public static String MDR_TABLE_SHORT_NAME_B_WORD = "BTableShortName";
   public static String MDR_TABLE_SHORT_NAME_PARENT_WORD = "parentTableShortName";
   public static String MDR_TABLE_SHORT_NAME_CHILD_WORD = "childTableShortName";
+  public static String MDR_TABLE_NAME_PARENT_WORD = "parentTableName";
+  public static String MDR_TABLE_NAME_CHILD_WORD = "childTableName";
+  public static String MDR_FK_NAME_WORD = "fkName";
+  public static String MDR_FK_COLUMNS_WORD = "fkColumns";
+  public static String MDR_FK_COLUMNS_REF_WORD = "fkColumnsRef"; // Il ne faut pas utiliser MDR_PK_COLUMNS_WORD qui ne garanti pas le lien entre colonnes
+  public static String MDR_PK_NAME_WORD = "pkName";
+  public static String MDR_PK_COLUMNS_WORD = "pkColumns";
+  public static String MDR_COLUMN_NAME_WORD =  "columnName";
+  public static String MDR_COLUMN_TYPE_WORD =  "columnType";
+  public static String MDR_COLUMN_SIZE_WORD =  "columnSize";
+  public static String MDR_COLUMN_SCALE_WORD =  "columnScale";
+  public static String MDR_COLUMN_DEFAULT_WORD =  "columnDefault";
+  public static String MDR_COLUMN_MANDATORY_WORD =  "columnMandatory";
 
   public static String MDR_ATTR_NAME_WORD = "attrName";
   public static String MDR_ATTR_SHORT_NAME_WORD = "attrShortName";
@@ -760,6 +776,7 @@ public class Preferences extends MVCCDElement {
     public static String MDR_UNIQUE_NATURE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
 
   public static Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DEFAULT = true;
+
 
   //A priori pas judicieux
   //public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK = "mdr.pref.column.fk.one.diff.indice.fk";
@@ -898,16 +915,19 @@ public class Preferences extends MVCCDElement {
   private MDRNamingLength MPDRORACLE_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MPDRORACLE_PREF_NAMING_FORMAT = null;
   private String MPDRORACLE_DELIMITER_INSTRUCTIONS = null;
+  private MPDRDBPK MPDRORACLE_PK_GENERATE = null;
 
   // MPDR MySQL Préférences
   private MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MPDRMYSQL_PREF_NAMING_FORMAT = null;
-  private String MPDRMySQL_DELIMITER_INSTRUCTIONS = null;
+  private String MPDRMYSQL_DELIMITER_INSTRUCTIONS = null;
+  private MPDRDBPK MPDRMYSQL_PK_GENERATE = null;
 
   // MPDR PostgreSQL Préférences
   private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT = null;
   private String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS = null;
+  private MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE = null;
 
   private boolean DIAGRAMMER_SHOW_GRID = true;
 
@@ -1680,6 +1700,17 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_DELIMITER_INSTRUCTIONS = MPDRORACLE_DELIMITER_INSTRUCTIONS;
   }
 
+  public MPDRDBPK getMPDRORACLE_PK_GENERATE() {
+    if (this.MPDRORACLE_PK_GENERATE == null) {
+      this.MPDRORACLE_PK_GENERATE = MPDRORACLE_PK_GENERATE_DEFAULT;
+    }
+    return MPDRORACLE_PK_GENERATE;
+  }
+
+  public void setMPDRORACLE_PK_GENERATE(MPDRDBPK MPDRORACLE_PK_GENERATE) {
+    this.MPDRORACLE_PK_GENERATE = MPDRORACLE_PK_GENERATE;
+  }
+
   public MDRNamingLength getMPDRMYSQL_PREF_NAMING_LENGTH() {
     if (this.MPDRMYSQL_PREF_NAMING_LENGTH == null) {
       this.MPDRMYSQL_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
@@ -1702,15 +1733,26 @@ public class Preferences extends MVCCDElement {
     this.MPDRMYSQL_PREF_NAMING_FORMAT = MPDRMYSQL_PREF_NAMING_FORMAT;
   }
 
-  public String getMPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT() {
-    if (this.MPDRMySQL_DELIMITER_INSTRUCTIONS == null) {
-      this.MPDRMySQL_DELIMITER_INSTRUCTIONS = MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT;
+  public String getMPDRMYSQL_DELIMITER_INSTRUCTIONS() {
+    if (this.MPDRMYSQL_DELIMITER_INSTRUCTIONS == null) {
+      this.MPDRMYSQL_DELIMITER_INSTRUCTIONS = MPDRMYSQL_DELIMITER_INSTRUCTIONS_DEFAULT;
     }
-    return MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT;
+    return MPDRMYSQL_DELIMITER_INSTRUCTIONS;
   }
 
-  public static void setMPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT(String MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT) {
-    Preferences.MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT = MPDRMySQL_DELIMITER_INSTRUCTIONS_DEFAULT;
+  public void setMPDRMYSQL_DELIMITER_INSTRUCTIONS(String MPDRMYSQL_DELIMITER_INSTRUCTIONS) {
+    this.MPDRMYSQL_DELIMITER_INSTRUCTIONS = MPDRMYSQL_DELIMITER_INSTRUCTIONS;
+  }
+
+  public MPDRDBPK getMPDRMYSQL_PK_GENERATE() {
+    if (this.MPDRMYSQL_PK_GENERATE == null) {
+      this.MPDRMYSQL_PK_GENERATE = MPDRMYSQL_PK_GENERATE_DEFAULT;
+    }
+    return MPDRMYSQL_PK_GENERATE;
+  }
+
+  public void setMPDRMYSQL_PK_GENERATE(MPDRDBPK MPDRMYSQL_PK_GENERATE) {
+    this.MPDRMYSQL_PK_GENERATE = MPDRMYSQL_PK_GENERATE;
   }
 
   public MDRNamingLength getMPDRPOSTGRESQL_PREF_NAMING_LENGTH() {
@@ -1744,6 +1786,17 @@ public class Preferences extends MVCCDElement {
 
   public void setMPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS(String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS) {
     this.MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS = MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS;
+  }
+
+  public MPDRDBPK getMPDRPOSTGRESQL_PK_GENERATE() {
+    if (this.MPDRPOSTGRESQL_PK_GENERATE == null) {
+      this.MPDRPOSTGRESQL_PK_GENERATE = MPDRPOSTGRESQL_PK_GENERATE_DEFAULT;
+    }
+    return MPDRPOSTGRESQL_PK_GENERATE;
+  }
+
+  public void setMPDRPOSTGRESQL_PK_GENERATE(MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE) {
+    this.MPDRPOSTGRESQL_PK_GENERATE = MPDRPOSTGRESQL_PK_GENERATE;
   }
 
   public Boolean isDIAGRAMMER_SHOW_GRID() {

@@ -7,6 +7,7 @@ import main.MVCCDElement;
 import mdr.MDRColumn;
 import mldr.MLDRColumn;
 import mpdr.MPDRColumn;
+import mpdr.MPDRTable;
 import preferences.Preferences;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.STextField;
@@ -225,7 +226,9 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
                 datatypeName = MDDatatypeService.convertMLDRLienProgToName(mdrColumn.getDatatypeLienProg());
             }
             if (mdrColumn instanceof MPDRColumn){
-                datatypeName = MDDatatypeService.convertMPDRLienProgToName(mdrColumn.getDatatypeLienProg());
+                MPDRColumn mpdrColumn = (MPDRColumn) mdrColumn;
+                MPDRTable mpdrTable = mpdrColumn.getMPDRTableAccueil();
+                datatypeName = MDDatatypeService.convertMPDRLienProgToName(mpdrTable.getMPDRModelParent().getDb(), mdrColumn.getDatatypeLienProg());
             }
         }
         fieldDatatypeName.setText(datatypeName);

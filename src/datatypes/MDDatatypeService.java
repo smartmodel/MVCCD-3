@@ -1,6 +1,7 @@
 package datatypes;
 
 import main.MVCCDElement;
+import mpdr.MPDRDB;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;
@@ -210,8 +211,8 @@ public class MDDatatypeService {
 
 
 
-    public static MPDRDatatype getMPDRDatatypeByName(String name){
-        for (MPDRDatatype mpdrDatatype : MDDatatypesManager.instance().getMPDRDatatypes(MDDatatypesManager.BOTH)){
+    public static MPDRDatatype getMPDRDatatypeByName(MPDRDB db,String name){
+        for (MPDRDatatype mpdrDatatype : MDDatatypesManager.instance().getMPDRDatatypes(db, MDDatatypesManager.BOTH)){
             if (mpdrDatatype.getName().equals(name)){
                 return mpdrDatatype;
             }
@@ -220,8 +221,8 @@ public class MDDatatypeService {
     }
 
 
-    public static MPDRDatatype getMPDRDatatypeByLienProg(String lienProg){
-        for (MPDRDatatype mpdrDatatype : MDDatatypesManager.instance().getMPDRDatatypes(MDDatatypesManager.BOTH)){
+    public static MPDRDatatype getMPDRDatatypeByLienProg(MPDRDB db, String lienProg){
+        for (MPDRDatatype mpdrDatatype : MDDatatypesManager.instance().getMPDRDatatypes(db, MDDatatypesManager.BOTH)){
             if (mpdrDatatype.getLienProg().equals(lienProg)){
                 return mpdrDatatype;
             }
@@ -229,13 +230,13 @@ public class MDDatatypeService {
         return null;
     }
 
-    public static String convertMPDRNameToLienProg(String name){
-        MPDRDatatype mpdrDatatype = getMPDRDatatypeByName(name);
+    public static String convertMPDRNameToLienProg(MPDRDB db, String name){
+        MPDRDatatype mpdrDatatype = getMPDRDatatypeByName(db, name);
         return mpdrDatatype.getLienProg();
     }
 
-    public static String convertMPDRLienProgToName(String lienProg){
-        MPDRDatatype mpdrDatatype = getMPDRDatatypeByLienProg(lienProg);
+    public static String convertMPDRLienProgToName(MPDRDB db, String lienProg){
+        MPDRDatatype mpdrDatatype = getMPDRDatatypeByLienProg(db, lienProg);
         return mpdrDatatype.getName();
     }
 
