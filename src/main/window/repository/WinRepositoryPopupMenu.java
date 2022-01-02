@@ -41,6 +41,7 @@ import repository.editingTreat.md.MDDatatypeEditingTreat;
 import repository.editingTreat.mdr.*;
 import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
+import repository.editingTreat.mpdr.MPDRSequenceEditingTreat;
 import repository.editingTreat.naming.NamingEditingTreat;
 import repository.editingTreat.preferences.*;
 import utilities.DefaultMutableTreeNodeService;
@@ -352,6 +353,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             if (node.getUserObject() instanceof MPDRRelFKEnd) {
                 treatMDRRelFKEndRead(this);
+            }
+
+
+            if (node.getUserObject() instanceof MPDRSequence) {
+                treatGenericRead(this, new MPDRSequenceEditingTreat());
             }
 
         } catch (Exception e){

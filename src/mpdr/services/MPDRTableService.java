@@ -6,10 +6,10 @@ import mdr.MDRContColumns;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
 import mpdr.MPDRColumn;
+import mpdr.MPDRContTAPIs;
 import mpdr.MPDRFK;
 import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRElementWithSource;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -65,4 +65,15 @@ public class MPDRTableService {
         }
         return null;
     }
+
+
+    public static MPDRContTAPIs getMPDRContTAPIs(MPDRTable mpdrTable) {
+        for (MVCCDElement mvccdElement : mpdrTable.getChilds()){
+            if (mvccdElement instanceof MPDRContTAPIs){
+                return (MPDRContTAPIs) mvccdElement ;
+            }
+        }
+        return null ;
+    }
+
 }

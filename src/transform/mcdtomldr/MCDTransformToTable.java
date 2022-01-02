@@ -22,6 +22,7 @@ import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import transform.mdr.services.MDRTransformService;
 
 import java.util.ArrayList;
 
@@ -221,10 +222,10 @@ public class MCDTransformToTable {
 
         // Nom
         if ( imcdSourceMLDRTable instanceof MCDEntity) {
-            MCDTransformService.names(mldrTable, buildNameTable((MCDEntity) imcdSourceMLDRTable), mldrModel);
+            MDRTransformService.names(mldrTable, buildNameTable((MCDEntity) imcdSourceMLDRTable), mldrModel);
         }
         if ( imcdSourceMLDRTable instanceof MCDAssociation) {
-            MCDTransformService.names(mldrTable, buildNameTable(mldrTable, (MCDAssociation) imcdSourceMLDRTable), mldrModel);
+            MDRTransformService.names(mldrTable, buildNameTable(mldrTable, (MCDAssociation) imcdSourceMLDRTable), mldrModel);
         }
 
         // A voir !

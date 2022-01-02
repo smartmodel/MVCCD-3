@@ -68,7 +68,7 @@ public class MLDRTransform extends MDTransform {
         } catch(Exception e){
             //undoTransform(mpdrModelClone);
             ViewLogsManager.catchException(e, "Erreur interne dans la classe de transformation");
-            return ok;
+            return false;
         }
     }
 
@@ -81,12 +81,19 @@ public class MLDRTransform extends MDTransform {
 
 
     private MPDRModel foundOrCreateMPDRModel(String mldrtompdrDb) {
+        Preferences preferences = PreferencesManager.instance().preferences();
         if (mldrtompdrDb.equals(Preferences.DB_ORACLE)){
             MPDROracleModel mpdrOracleModel = MLDRModelService.getMPDRModelOracle(mldrModel);
             if (mpdrOracleModel == null){
                 mpdrOracleModel = MVCCDElementFactory.instance().createMPDRModelOracle(mldrModel);
                 MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrOracleModel);
             }
+            //TODO-2 A voir l'organisation des préférences et MPDR
+            // Provisoirement,m il faut le faire ici pour que tout changement dans les préférences soient répercutées
+            // Ensuite, les préférences ne devraient être utiles que pour la création ? A voir! 
+            mpdrOracleModel.setMpdrDbPK(preferences.getMPDRORACLE_PK_GENERATE());
+            mpdrOracleModel.setTapis(preferences.getMPDRORACLE_TAPIS());
+            mpdrOracleModel.setSequencePKNameFormat(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
             return mpdrOracleModel;
         }
         if (mldrtompdrDb.equals(Preferences.DB_MYSQL)){
@@ -95,6 +102,9 @@ public class MLDRTransform extends MDTransform {
                 mpdrMySQLModel = MVCCDElementFactory.instance().createMPDRModelMySQL(mldrModel);
                 MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrMySQLModel);
             }
+            mpdrMySQLModel.setMpdrDbPK(preferences.getMPDRMYSQL_PK_GENERATE());
+            mpdrMySQLModel.setTapis(preferences.getMPDRMYSQL_TAPIS());
+            mpdrMySQLModel.setSequencePKNameFormat(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
             return mpdrMySQLModel;
         }
         if (mldrtompdrDb.equals(Preferences.DB_POSTGRESQL)){
@@ -103,6 +113,9 @@ public class MLDRTransform extends MDTransform {
                 mpdrPostgreSQLModel = MVCCDElementFactory.instance().createMPDRModelPostgreSQL(mldrModel);
                 MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrPostgreSQLModel);
             }
+            mpdrPostgreSQLModel.setMpdrDbPK(preferences.getMPDRPOSTGRESQL_PK_GENERATE());
+            mpdrPostgreSQLModel.setTapis(preferences.getMPDRORACLE_TAPIS());
+            mpdrPostgreSQLModel.setSequencePKNameFormat(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
             return mpdrPostgreSQLModel;
         }
 
@@ -111,7 +124,7 @@ public class MLDRTransform extends MDTransform {
 
 
     @Override
-    protected int getIteration() {
+    public int getIteration() {
         return mpdrModel.getIteration();
     }
 

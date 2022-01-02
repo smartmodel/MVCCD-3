@@ -17,5 +17,4 @@ public class MPDROracleColumn extends MPDRColumn implements IMPDROracleElement {
         super(parent, mldrElementSource, id);
     }
 
-
 }

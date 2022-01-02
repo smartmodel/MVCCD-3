@@ -2,6 +2,7 @@ package window.editor.preferences.project.mpdr;
 
 import main.MVCCDElement;
 import preferences.Preferences;
+import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
@@ -16,10 +17,17 @@ import java.awt.event.ItemEvent;
 
 public abstract class PrefMPDRInputContent extends PrefMLPDRInputContent {
 
+    private JPanel panelFormatNames = new JPanel ();
+
     protected JLabel labelDelimiterInstructions ;
     protected STextField fieldDelimiterInstructions;
     protected JLabel labelPKGenerate;
     protected SComboBox fieldPKGenerate;
+    protected JLabel labelTAPIs;
+    protected SCheckBox fieldTAPIs;
+    protected JLabel labelSeqPKNameFormat ;
+    protected STextField fieldSeqPKNameFormat;
+
 
 
     public PrefMPDRInputContent(PrefMPDRInput prefMPDRInput) {
@@ -32,8 +40,6 @@ public abstract class PrefMPDRInputContent extends PrefMLPDRInputContent {
 
         labelDelimiterInstructions = new JLabel("Délimiteur d'instructions");
         fieldDelimiterInstructions = new STextField(this, labelDelimiterInstructions);
-
-
         fieldDelimiterInstructions.setPreferredSize((new Dimension(100, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldDelimiterInstructions.setToolTipText("Délimiteur utilisé pour sépsrer les instructions au sein d'un bloc d'instructions");
         //TODO-1 Prévoir un formattage/contrôle minimal
@@ -45,8 +51,24 @@ public abstract class PrefMPDRInputContent extends PrefMLPDRInputContent {
         fieldPKGenerate.addItemListener(this);
         fieldPKGenerate.addFocusListener(this);
 
+        labelTAPIs = new JLabel("Générations des TAPIs");
+        fieldTAPIs = new SCheckBox(this, labelTAPIs);
+        fieldTAPIs.addItemListener(this);
+        fieldTAPIs.addFocusListener(this);
+
+
+        labelSeqPKNameFormat = new JLabel("Séquence de PK");
+        fieldSeqPKNameFormat = new STextField(this, labelSeqPKNameFormat);
+        fieldSeqPKNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldSeqPKNameFormat.setToolTipText("Format de nommage de la séquence de cé primaire pour les tables indépendantes");
+        //TODO-1 Prévoir un formattage/contrôle minimal
+        fieldSeqPKNameFormat.getDocument().addDocumentListener(this);
+        fieldSeqPKNameFormat.addFocusListener(this);
+
         super.getSComponents().add(fieldDelimiterInstructions);
         super.getSComponents().add(fieldPKGenerate);
+        super.getSComponents().add(fieldTAPIs);
+        super.getSComponents().add(fieldSeqPKNameFormat);
 
         createPanelMaster();
     }
@@ -66,8 +88,33 @@ public abstract class PrefMPDRInputContent extends PrefMLPDRInputContent {
         panelInputContentCustom.add(labelPKGenerate, gbc);
         gbc.gridx++;
         panelInputContentCustom.add(fieldPKGenerate, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(labelTAPIs, gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldTAPIs, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        createFormatNames();
+        panelInputContentCustom.add(panelFormatNames, gbc);
     }
 
+    protected  void createFormatNames(){
+        GridBagConstraints gbcA = PanelService.createSubPanelGridBagConstraints(panelFormatNames,
+                "Formatage des noms");
+
+        gbcA.gridx = 0;
+        gbcA.gridy = 0;
+
+        panelFormatNames.add(labelSeqPKNameFormat, gbcA);
+        gbcA.gridx++ ;
+        panelFormatNames.add(fieldSeqPKNameFormat, gbcA);
+
+
+    }
 
 
     @Override

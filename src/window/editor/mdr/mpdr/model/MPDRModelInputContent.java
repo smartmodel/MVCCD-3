@@ -9,6 +9,7 @@ import preferences.Preferences;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.STextField;
+import utilities.window.services.PanelService;
 import window.editor.mdr.model.MDRModelInputContent;
 
 import javax.swing.*;
@@ -21,13 +22,27 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     protected String withoutItem = SComboBox.LINEDASH;
     protected JPanel panelConnection = new JPanel();
 
+
     protected JLabel labelConnectionLienProg;
     protected SComboBox fieldConnectionLienProg;
     protected JLabel labelConnectionURL;
     protected STextField fieldConnectionURL;
 
+
     protected JLabel labelDropBeforeCreate ;
     protected SCheckBox fieldDropBeforeCreate ;
+
+
+    protected JPanel panelOptionsTransform = new JPanel();
+
+    protected JLabel labelMPDRDbPK;
+    protected STextField fieldMPDRDbPK;
+    protected JLabel labelTAPIs;
+    protected SCheckBox fieldTAPIs;
+    protected JLabel labelSeqPKNameFormat ;
+    protected STextField fieldSeqPKNameFormat;
+
+
 
     public MPDRModelInputContent(MPDRModelInput mpdrModelInput) {
         super(mpdrModelInput);
@@ -41,6 +56,7 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
 
         labelConnectionLienProg = new JLabel("Name : ");
         fieldConnectionLienProg = new SComboBox(this, labelConnectionLienProg);
+
 
         fieldConnectionLienProg.setToolTipText("Connexion de la liste définie dans les préférences de l'application");
         fieldConnectionLienProg.addItemListener(this);
@@ -64,9 +80,32 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         fieldDropBeforeCreate.addItemListener(this);
         fieldDropBeforeCreate.addFocusListener(this);
 
+        labelMPDRDbPK = new JLabel("Génération colonne PK : ");
+        fieldMPDRDbPK = new STextField(this, labelMPDRDbPK);
+        fieldMPDRDbPK.setPreferredSize((new Dimension(200, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldMPDRDbPK.setToolTipText("Mode de génération de la colonne de clé primaire");
+        fieldMPDRDbPK.setReadOnly(true);
+
+        labelTAPIs = new JLabel("Génération des TAPIs : ");
+        fieldTAPIs = new SCheckBox(this, labelTAPIs);
+        fieldTAPIs.setToolTipText("Génération des APIs de tables");
+        fieldTAPIs.setReadOnly(true);
+
+        labelSeqPKNameFormat = new JLabel("Séquence de PK : ");
+        fieldSeqPKNameFormat = new STextField(this, labelSeqPKNameFormat);
+        fieldSeqPKNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldSeqPKNameFormat.setToolTipText("Format de nommage de la séquence de PK");
+        fieldSeqPKNameFormat.setReadOnly(true);
+
+        fieldConnectionLienProg.setName("fieldConnectionLienProg");
+        fieldConnectionURL.setName("fieldConnectionURL");
+        fieldDropBeforeCreate.setName("fieldDropBeforeCreate");
         super.getSComponents().add(fieldConnectionLienProg);
         super.getSComponents().add(fieldConnectionURL);
         super.getSComponents().add(fieldDropBeforeCreate);
+        super.getSComponents().add(fieldMPDRDbPK);
+        super.getSComponents().add(fieldTAPIs);
+        super.getSComponents().add(fieldSeqPKNameFormat);
     }
 
     protected void createPanelMaster(GridBagConstraints gbc) {
@@ -77,6 +116,13 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         panelInputContentCustom.add(labelDropBeforeCreate, gbc);
         gbc.gridx = 1;
         panelInputContentCustom.add(fieldDropBeforeCreate, gbc);
+
+        createPanelOptionsTransform();
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        panelInputContentCustom.add(panelOptionsTransform, gbc);
+
     }
 
     protected void createPanelConnection(GridBagConstraints gbcA) {
@@ -91,12 +137,36 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         panelConnection.add(fieldConnectionURL, gbcA);
     }
 
+    protected void createPanelOptionsTransform() {
+        GridBagConstraints gbcA = PanelService.createSubPanelGridBagConstraints(panelOptionsTransform,
+                "Option de la transformation depuis le MLD-R");
+
+        panelOptionsTransform.add(labelMPDRDbPK, gbcA);
+        gbcA.gridx++;
+        panelOptionsTransform.add(fieldMPDRDbPK, gbcA);
+
+        gbcA.gridx ++;
+        panelOptionsTransform.add(labelTAPIs, gbcA);
+        gbcA.gridx++;
+        panelOptionsTransform.add(fieldTAPIs, gbcA);
+
+        gbcA.gridx = 0;
+        gbcA.gridy++;
+        panelOptionsTransform.add(labelSeqPKNameFormat, gbcA);
+        gbcA.gridx++;
+        panelOptionsTransform.add(fieldSeqPKNameFormat, gbcA);
+    }
+
 
     @Override
     public void loadDatas(MVCCDElement mvccdElementCrt) {
         super.loadDatas(mvccdElementCrt);
         MPDRModel mpdrModel = (MPDRModel) mvccdElementCrt;
         fieldDropBeforeCreate.setSelected(((MPDRModel) mvccdElementCrt).isDropBeforeCreate());
+
+        fieldMPDRDbPK.setText(mpdrModel.getMpdrDbPK().getText());
+        fieldTAPIs.setSelected(mpdrModel.isTapis());
+        fieldSeqPKNameFormat.setText(mpdrModel.getSequencePKNameFormat());
     }
 
 

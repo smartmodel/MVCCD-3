@@ -29,12 +29,15 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
     public void loadDatas(MVCCDElement mvccdElement) {
         Preferences preferences = (Preferences) mvccdElement;
         SComboBoxService.selectByText(fieldNamingLength,
-                preferences.getMPDRMYSQL_PREF_NAMING_LENGTH().getText());
+                preferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH().getText());
         SComboBoxService.selectByText(fieldNamingFormat,
-                preferences.getMPDRMYSQL_PREF_NAMING_FORMAT().getText());
+                preferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT().getText());
         fieldDelimiterInstructions.setText(preferences.getMPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS());
         SComboBoxService.selectByText(fieldPKGenerate,
-                preferences.getMPDRORACLE_PK_GENERATE().getText());
+                preferences.getMPDRPOSTGRESQL_PK_GENERATE().getText());
+        fieldTAPIs.setSelected(preferences.getMPDRPOSTGRESQL_TAPIS());
+        fieldSeqPKNameFormat.setText(preferences.getMPDRPOSTGRESQL_SEQPK_NAME_FORMAT());
+
     }
 
     @Override
@@ -44,29 +47,29 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
         if (fieldNamingLength.checkIfUpdated()){
             String text = (String) fieldNamingLength.getSelectedItem();
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_30))){
-                preferences.setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH30);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH30);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_60))){
-                preferences.setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH60);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH60);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_LENGTH_120))){
-                preferences.setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120);
             }
         }
 
         if (fieldNamingFormat.checkIfUpdated()){
             String text = (String) fieldNamingFormat.getSelectedItem();
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_NOTHING))){
-                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_UPPERCASE))){
-                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_LOWERCASE))){
-                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_CAPITALIZE))){
-                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE);
             }
         }
 
@@ -78,12 +81,21 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
         if (fieldPKGenerate.checkIfUpdated()){
             String text = (String) fieldPKGenerate.getSelectedItem();
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.DB_PK_SEQUENCE))){
-                preferences.setMPDRORACLE_PK_GENERATE(MPDRDBPK.SEQUENCE);
+                preferences.setMPDRPOSTGRESQL_PK_GENERATE(MPDRDBPK.SEQUENCE);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.DB_PK_IDENTITY))){
-                preferences.setMPDRORACLE_PK_GENERATE(MPDRDBPK.IDENTITY);
+                preferences.setMPDRPOSTGRESQL_PK_GENERATE(MPDRDBPK.IDENTITY);
             }
         }
+
+        if (fieldTAPIs.checkIfUpdated()){
+            preferences.setMPDRPOSTGRESQL_TAPIS(fieldTAPIs.isSelected());
+        }
+
+        if (fieldSeqPKNameFormat.checkIfUpdated()){
+            preferences.setMPDRPOSTGRESQL_SEQPK_NAME_FORMAT(fieldSeqPKNameFormat.getText());
+        }
+
 
     }
 

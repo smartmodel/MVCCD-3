@@ -1,18 +1,16 @@
 package transform;
 
-import delete.Delete;
 import main.MVCCDElement;
 import md.MDElement;
 import md.interfaces.IMDElementWithSource;
 import mdr.interfaces.IMDRElementWithIteration;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
 public abstract class MDTransform {
 
 
-    protected abstract int getIteration();
+    public abstract int getIteration();
 
     protected void deleteMDRElementNotInIteration(){
         for (IMDRElementWithIteration imdrElementWithIteration : getIMDRElementsWithIterationInScope()){

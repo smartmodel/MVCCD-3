@@ -33,8 +33,9 @@ public class PrefMPDROracleInputContent extends PrefMPDRInputContent {
         fieldDelimiterInstructions.setText(preferences.getMPDRORACLE_DELIMITER_INSTRUCTIONS());
         SComboBoxService.selectByText(fieldPKGenerate,
                     preferences.getMPDRORACLE_PK_GENERATE().getText());
-
-        }
+        fieldTAPIs.setSelected(preferences.getMPDRORACLE_TAPIS());
+        fieldSeqPKNameFormat.setText(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
+    }
 
     @Override
     public void saveDatas(MVCCDElement mvccdElement) {
@@ -84,6 +85,13 @@ public class PrefMPDROracleInputContent extends PrefMPDRInputContent {
             }
         }
 
+        if (fieldTAPIs.checkIfUpdated()){
+            preferences.setMPDRORACLE_TAPIS(fieldTAPIs.isSelected());
+        }
+
+        if (fieldSeqPKNameFormat.checkIfUpdated()){
+            preferences.setMPDRORACLE_SEQPK_NAME_FORMAT(fieldSeqPKNameFormat.getText());
+        }
     }
 
 

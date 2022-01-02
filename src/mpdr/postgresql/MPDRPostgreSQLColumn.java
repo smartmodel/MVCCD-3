@@ -1,7 +1,9 @@
 package mpdr.postgresql;
 
+import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
+import mpdr.MPDRSequence;
 import project.ProjectElement;
 
 public class MPDRPostgreSQLColumn extends MPDRColumn {
@@ -14,6 +16,11 @@ public class MPDRPostgreSQLColumn extends MPDRColumn {
 
     public MPDRPostgreSQLColumn(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
         super(parent, mldrElementSource, id);
+    }
+
+    @Override
+    public MPDRSequence createSequence(MLDRColumn mldrColumn) {
+        return null;
     }
 
 

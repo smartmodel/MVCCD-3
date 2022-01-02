@@ -18,8 +18,8 @@ import mldr.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import transform.MDRAdjustParameters;
-import utilities.Trace;
+import transform.mcdtomldr.services.MCDTransformService;
+import transform.mdr.services.MDRTransformService;
 
 import java.util.ArrayList;
 
@@ -112,7 +112,7 @@ public class MCDTransformToFK {
         }
 
         MDRElementNames namesFK = buildNameFK(mldrTable, tableShortNameChild, mldrFK, mcdRelEndSource, mldrTableParent);
-        MCDTransformService.names(mldrFK, namesFK, mldrModel);
+        MDRTransformService.names(mldrFK, namesFK, mldrModel);
 
         // Nature
         if (mldrFK.getNature() != null) {
@@ -197,7 +197,7 @@ public class MCDTransformToFK {
         }
 
         // Transformation des paramètres PK en paramètres FK
-        MDRAdjustParameters.adjustParameters(mcdTransform, mldrTable, mldrFK, mdrColumnsFK);
+        MDRTransformService.adjustParameters(mcdTransform, mldrTable, mldrFK, mdrColumnsFK);
     }
 
 

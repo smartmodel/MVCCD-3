@@ -3,13 +3,11 @@ package mpdr;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import exceptions.CodeApplException;
 import md.MDElement;
 import mdr.MDRConstraint;
 import mdr.MDRTable;
-import mldr.MLDRColumn;
-import mldr.MLDRFK;
-import mldr.MLDRPK;
-import mldr.MLDRUnique;
+import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
@@ -27,7 +25,7 @@ import java.util.ArrayList;
 
 public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRElementWithSource {
 
-    private  static final long serialVersionUID = 1000;
+    private static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;
 
     public MPDRTable(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
@@ -75,16 +73,16 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
      */
 
 
-    public MPDRColumn getMPDRColumnByMLDRColumnSource(MLDRColumn mldrColumn){
+    public MPDRColumn getMPDRColumnByMLDRColumnSource(MLDRColumn mldrColumn) {
         return MPDRTableService.getMPDRColumnByMLDRColumnSource(this, mldrColumn);
     }
 
 
-    public MDRConstraint getMPDRConstraintByMLDRConstraintSource(MDRConstraint mldrConstraint){
+    public MDRConstraint getMPDRConstraintByMLDRConstraintSource(MDRConstraint mldrConstraint) {
         return MPDRTableService.getMPDRConstraintByMLDRConstraintSource(this, mldrConstraint);
     }
 
-    public MPDRFK getMPDRFKByMLDRFKSource(MLDRFK mldrFk){
+    public MPDRFK getMPDRFKByMLDRFKSource(MLDRFK mldrFk) {
         return MPDRTableService.getMPDRFKByMLDRFKSource(this, mldrFk);
     }
 
@@ -92,9 +90,9 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         return MPDRColumnService.to(getMDRColumns());
     }
 
-    public  abstract MPDRColumn createColumn(MLDRColumn mldrColumn);
+    public abstract MPDRColumn createColumn(MLDRColumn mldrColumn);
 
-    public  abstract MPDRPK createPK(MLDRPK mldrPK);
+    public abstract MPDRPK createPK(MLDRPK mldrPK);
 
 
     public abstract MDRConstraint createFK(MLDRFK mldrFK);
@@ -124,12 +122,35 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     }
 
 
+    public MPDRPK getMPDRPK() {
+        return MPDRConstraintService.getMPDRPK(getMDRConstraints());
+    }
 
-    public MPDRPK getMPDRPK() { return MPDRConstraintService.getMPDRPK(getMDRConstraints()); }
-
-    public ArrayList<MPDRFK> getMPDRFKs() { return MPDRConstraintService.getMPDRFKs(getMDRConstraints()); }
+    public ArrayList<MPDRFK> getMPDRFKs() {
+        return MPDRConstraintService.getMPDRFKs(getMDRConstraints());
+    }
 
     public MPDRModel getMPDRModelParent() {
         return (MPDRModel) getMDRModelParent();
+    }
+
+
+    public MLDRTable getMLDRTableSource() {
+        if (getMldrElementSource() instanceof MLDRTable) {
+            return (MLDRTable) getMldrElementSource();
+        }
+        return null;
+    }
+
+    public String getShortName() {
+        if (getMLDRTableSource() != null) {
+            return getMLDRTableSource().getShortName();
+        } else {
+            throw new CodeApplException("Le shortName n'est calculé que pour une table provenant d'une entité");
+        }
+    }
+
+    public  MPDRContTAPIs getMPDRContTAPIs(){
+        return MPDRTableService.getMPDRContTAPIs(this);
     }
 }

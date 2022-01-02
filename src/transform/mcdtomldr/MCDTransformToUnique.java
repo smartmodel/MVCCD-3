@@ -2,9 +2,9 @@ package transform.mcdtomldr;
 
 import exceptions.CodeApplException;
 import exceptions.orderbuildnaming.OrderBuildNameException;
-import m.services.MElementService;
 import main.MVCCDManager;
-import mcd.*;
+import mcd.MCDEntity;
+import mcd.MCDUnicity;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.IMCDModelService;
@@ -15,12 +15,14 @@ import mdr.MDRUniqueNature;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
 import mdr.orderbuildnaming.MDROrderBuildTargets;
 import messages.MessagesBuilder;
-import mldr.*;
+import mldr.MLDRColumn;
+import mldr.MLDRModel;
+import mldr.MLDRTable;
+import mldr.MLDRUnique;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import transform.MDRAdjustParameters;
-import utilities.Trace;
+import transform.mdr.services.MDRTransformService;
 
 import java.util.ArrayList;
 
@@ -71,7 +73,7 @@ public class MCDTransformToUnique {
         }
 
         // Nom
-        MCDTransformService.names(mldrUnique, buildNameUnique(mcdUnicity, mldrUnique.getMdrUniqueNature(), mldrTable), mldrModel);
+        MDRTransformService.names(mldrUnique, buildNameUnique(mcdUnicity, mldrUnique.getMdrUniqueNature(), mldrTable), mldrModel);
 
         //absolute
         if (mldrUnique.isAbsolute() != mcdUnicity.isAbsolute()){
@@ -92,7 +94,7 @@ public class MCDTransformToUnique {
         mdrColumnParameters.addAll(mdrColumnsFromMCDUnicity(mcdUnicity, mldrTable));
 
         // Ajustement des paramètres
-        MDRAdjustParameters.adjustParameters(mcdTransform, mldrTable, mldrUnique, mdrColumnParameters);
+        MDRTransformService.adjustParameters(mcdTransform, mldrTable, mldrUnique, mdrColumnParameters);
 
     }
 

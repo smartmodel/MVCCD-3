@@ -1,5 +1,7 @@
 package mpdr;
 
+import main.MVCCDElement;
+import main.MVCCDElementFactory;
 import mcd.MCDAttribute;
 import md.MDElement;
 import mdr.MDRColumn;
@@ -7,6 +9,7 @@ import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.oracle.MPDROracleSequence;
 import project.ProjectElement;
 
 public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPDRElementWithSource {
@@ -55,5 +58,36 @@ public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPD
 
     public MPDRTable getMPDRTableAccueil(){
         return (MPDRTable) getMDRTableAccueil();
+    }
+
+    public MPDRSequence createSequence(MLDRColumn mldrColumn) {
+        MPDROracleSequence newSequence = MVCCDElementFactory.instance().createMPDROracleSequence(
+                this, mldrColumn);
+
+        return newSequence;
+    }
+
+
+    public MLDRColumn getMLDRColumnSource(){
+        if (getMldrElementSource() instanceof MLDRColumn){
+            return (MLDRColumn) getMldrElementSource();
+        }
+        return null;
+    }
+
+    public boolean isPKForEntityIndependant() {
+       if (getMLDRColumnSource() != null){
+            return getMLDRColumnSource().isPKForEntityIndependant();
+        }
+        return false;
+    }
+
+    public  MPDRSequence getMPDRSequence(){
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MPDRSequence){
+                return (MPDRSequence) mvccdElement ;
+            }
+        }
+        return null;
     }
 }

@@ -77,7 +77,7 @@ public class MCDTransform extends MDTransform {
         } catch(Exception e){
             undoTransform(mldrModelClone);
             ViewLogsManager.catchException(e, "Erreur interne dans la classe de transformation");
-            return ok;
+            return false;
         }
     }
 
@@ -89,7 +89,7 @@ public class MCDTransform extends MDTransform {
         MVCCDManager.instance().addNewMVCCDElementInRepository(mldrModelClone);
     }
 
-    protected int getIteration(){
+    public int getIteration(){
         return mldrModel.getIteration();
     }
 

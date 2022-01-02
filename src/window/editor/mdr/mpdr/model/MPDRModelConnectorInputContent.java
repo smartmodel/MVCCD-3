@@ -28,10 +28,13 @@ import java.sql.Connection;
 
 public class MPDRModelConnectorInputContent extends MPDRModelInputContent implements ActionListener {
 
+
     private JLabel labelConnectorLienProg;
     private SComboBox fieldConnectorLienProg;
     private JLabel labelConnectorUserName;
     private STextField fieldConnectorUserName;
+
+
 
     private SButton btnConnectorTest;
 
@@ -130,15 +133,16 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
             setFieldConnectorUserName();
             enabledBtnTestConnector();
         } else {
+            SComboBoxService.selectByText(fieldConnectionLienProg, withoutItem);
             boolean c1 = StringUtils.isNotEmpty(mpdrModel.getConnectorLienProg());
             boolean c2 = conConnector == null;
             if (c1 && c2) {
                 String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connector.unknow",
                         new String[] {mpdrModel.getConnectorLienProg(), mpdrModel.getNamePath()});
                 ViewLogsManager.printMessageAndDialog(getEditor(), message, WarningLevel.INFO);
-             }
+                fieldConnectorLienProg.forceUpdated();
+            }
             SComboBoxService.selectByText(fieldConnectorLienProg, withoutItem);
-            fieldConnectorLienProg.forceUpdated();
         }
 
         //UserName de connexion
@@ -258,7 +262,6 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
 
         }
     }
-
 
     private void actionTestConnector() {
         ConConnector conConnector = getConConnectorByFieldConnectorLienProg();

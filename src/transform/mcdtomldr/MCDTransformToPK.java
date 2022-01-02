@@ -6,7 +6,10 @@ import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import main.MVCCDManager;
 import mcd.*;
-import mdr.*;
+import mdr.MDRColumn;
+import mdr.MDRElementNames;
+import mdr.MDRFKNature;
+import mdr.MDRNamingLength;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
 import mdr.orderbuildnaming.MDROrderBuildTargets;
 import messages.MessagesBuilder;
@@ -14,7 +17,7 @@ import mldr.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import transform.MDRAdjustParameters;
+import transform.mdr.services.MDRTransformService;
 
 import java.util.ArrayList;
 
@@ -38,7 +41,7 @@ public class MCDTransformToPK {
         ArrayList<MDRColumn> mdrColumnPKs = new ArrayList<MDRColumn>();
         mdrColumnPKs.add(createOrModifyColumnPKProper(mcdEntity, mldrTable));
 
-        MDRAdjustParameters.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
+        MDRTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
     }
 
 
@@ -67,7 +70,7 @@ public class MCDTransformToPK {
             mdrColumnPKs.add(mdrColumnPKProper);
         }
 
-        MDRAdjustParameters.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
+        MDRTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
 
         return mldrPK;
     }
@@ -87,7 +90,7 @@ public class MCDTransformToPK {
 
         MLDRPK mldrPK = createOrModifyPKAssNN(mcdAssNN,mldrTable);
 
-        MDRAdjustParameters.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
+        MDRTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
 
         return mldrPK;
     }
@@ -161,10 +164,10 @@ public class MCDTransformToPK {
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrPK.getMDRTableAccueil().getMDRModelParent();
         if ( mcdElement instanceof MCDEntity) {
-            MCDTransformService.names(mldrPK,
+            MDRTransformService.names(mldrPK,
                     buildNamePK((MLDRTable) mldrPK.getMDRTableAccueil(), (MCDEntity) mcdElement), mldrModel);}
         if ( mcdElement instanceof MCDAssociation) {
-            MCDTransformService.names(mldrPK,
+            MDRTransformService.names(mldrPK,
                     buildNamePK((MLDRTable) mldrPK.getMDRTableAccueil(), (MCDAssociation) mcdElement), mldrModel);}
     }
 

@@ -42,6 +42,8 @@ public class Preferences extends MVCCDElement {
   public static String REPOSITORY_MCD_CONSTRAINTS_NAME = "Contraintes";
   public static String REPOSITORY_MDR_TABLES_NAME = "Tables";
   public static String REPOSITORY_MDR_RELATIONS_NAME = "Relations";
+  public static String REPOSITORY_MDR_TAPIS_NAME = "TAPIs";
+  public static String REPOSITORY_MDR_SEQUENCES_NAME = "Séquences";
   public static String REPOSITORY_MDR_COLUMNS_NAME = "Colonnes";
   public static String REPOSITORY_MDR_CONSTRAINTS_NAME = "Contraintes";
   public static String REPOSITORY_MDR_RELENDS_NAME = "Extrémités de relations";
@@ -300,7 +302,9 @@ public class Preferences extends MVCCDElement {
     public static String STEREOTYPE_ENTITY_LIENPROG = "Entity";
     public static String STEREOTYPE_TABLE_NAME = "Table";
     public static String STEREOTYPE_TABLE_LIENPROG = "Table";
-    public static String STEREOTYPE_ORACLE_NAME = "Oracle";
+  public static String STEREOTYPE_SEQUENCE_NAME = "Sequence";
+  public static String STEREOTYPE_SEQUENCE_LIENPROG = "Sequence";
+  public static String STEREOTYPE_ORACLE_NAME = "Oracle";
     public static String STEREOTYPE_ORACLE_LIENPROG = "Oracle";
     public static String STEREOTYPE_MYSQL_NAME = "MySQL";
     public static String STEREOTYPE_MYSQL_LIENPROG = "MySQL";
@@ -564,6 +568,7 @@ public class Preferences extends MVCCDElement {
   public static String DB_PK_SEQUENCE = "db.pk.sequence";
   public static String DB_PK_IDENTITY = "db.pk.identity";
 
+  public static String MPDR_SEQUENCE_PK = "mpdr.sequence.pk";
 
   public static String MLDRDATATYPE_ROOT_NAME = "MLD-R";
   public static String MLDRDATATYPE_ROOT_LIENPROG = "MLD-R";
@@ -602,6 +607,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRORACLEDATATYPE_DATE_LIENPROG = "DATE";
   public static String MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT = "\\";
   public static MPDRDBPK MPDRORACLE_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
+  public static String MPDRORACLE_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
 
   public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
   public static String MPDRMySQLDATATYPE_ROOT_LIENPROG = "MPDR-MySQL";
@@ -633,6 +639,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRMySQLDATATYPE_YEAR_LIENPROG = "YEAR";
   public static String MPDRMYSQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\";
   public static MPDRDBPK MPDRMYSQL_PK_GENERATE_DEFAULT = MPDRDBPK.IDENTITY;
+  public static String MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
 
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_NAME = "MPDR-PostgreSQL";
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_LIENPROG = "MPDR-PostgreSQL";
@@ -662,6 +669,8 @@ public class Preferences extends MVCCDElement {
   public static String MPDRPOSTGRESQLDATATYPE_TIME_LIENPROG = "TIME";
   public static String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\";
   public static MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
+  public static String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
+
 
   public static String MDR_NAMING_LENGTH_30 = "mdr.naming.length.30";
   public static String MDR_NAMING_LENGTH_60 = "mdr.naming.length.60";
@@ -683,6 +692,7 @@ public class Preferences extends MVCCDElement {
     public static String MDR_NAMING_PK_NN_INDICE = "mdr.pk.nn.indice";
     public static String MDR_NAMING_FK = "mdr.fk";
     public static String MDR_NAMING_UNIQUE = "mdr.unique";
+    public static String MPDR_NAMING_SEQUENCE_PK = "mpdr.sequence.pk";
 
   public static String MDR_PATH_WORD = "path";
   public static String MDR_PATH_SEP_WORD = "pathSep";
@@ -741,6 +751,7 @@ public class Preferences extends MVCCDElement {
   public static Integer MDR_MARKER_CUSTOM_COLUMN_NAME_LENGTH = 3;
   public static Integer MDR_MARKER_CUSTOM_PK_LENGTH = 3;
   public static Integer MDR_MARKER_CUSTOM_FK_LENGTH = 3;
+  public static Integer MARKER_CUSTOM_SEQPK_LENGTH = 8;
   public static Integer MDR_SEPARATOR_NAMING_LENGTH = 1;
 
     public static String MDR_WORDS_BEGIN = "{";
@@ -758,6 +769,7 @@ public class Preferences extends MVCCDElement {
     public static String MDR_PK_NAME_FORMAT_DEFAULT = "{PK_}{tableShortName}";
     public static String MDR_PK_NN_NAME_FORMAT_DEFAULT = "{PK_}{ATableShortName}{tableSep}{assShortName}{roleA}{roleSep}{roleB}{tableSep}{BTableShortName}";
     public static String MDR_PK_NN_NAME_INDICE_FORMAT_DEFAULT = "{PK_}{ATableShortName}{tableSep}{BTableShortName}{indTableNN}";
+
     public static String MDR_INDICE_REGEXPR = "([0-9]+)$";
     public static Integer MDR_INDICE_TABLENN_LENGTH = 1 ;
     public static Integer MDR_INDICE_COL_FK_LENGTH = 1 ;
@@ -774,6 +786,7 @@ public class Preferences extends MVCCDElement {
     public static String MDR_ROLE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
     public static String MDR_FKIND_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
     public static String MDR_UNIQUE_NATURE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
+
 
   public static Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DEFAULT = true;
 
@@ -911,23 +924,30 @@ public class Preferences extends MVCCDElement {
   private MDRNamingLength MLDR_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MLDR_PREF_NAMING_FORMAT = null;
 
+
   // MPDR Oracle Préférences
   private MDRNamingLength MPDRORACLE_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MPDRORACLE_PREF_NAMING_FORMAT = null;
   private String MPDRORACLE_DELIMITER_INSTRUCTIONS = null;
   private MPDRDBPK MPDRORACLE_PK_GENERATE = null;
+  private Boolean MPDRORACLE_TAPIS = null;
+  private String MPDRORACLE_SEQPK_NAME_FORMAT;
 
   // MPDR MySQL Préférences
   private MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MPDRMYSQL_PREF_NAMING_FORMAT = null;
   private String MPDRMYSQL_DELIMITER_INSTRUCTIONS = null;
   private MPDRDBPK MPDRMYSQL_PK_GENERATE = null;
+  private Boolean MPDRMYSQL_TAPIS = null;
+  private String MPDRMYSQL_SEQPK_NAME_FORMAT;
 
   // MPDR PostgreSQL Préférences
   private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT = null;
   private String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS = null;
   private MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE = null;
+  private Boolean MPDRPOSTGRESQL_TAPIS = null;
+  private String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
 
   private boolean DIAGRAMMER_SHOW_GRID = true;
 
@@ -1443,7 +1463,7 @@ public class Preferences extends MVCCDElement {
         this.MDR_PK_NN_NAME_INDICE_FORMAT = MDR_PK_NN_NAME_INDICE_FORMAT;
     }
 
-    public String getMDR_COLUMN_FK_NAME_FORMAT() {
+  public String getMDR_COLUMN_FK_NAME_FORMAT() {
         if (MDR_COLUMN_FK_NAME_FORMAT == null){
             MDR_COLUMN_FK_NAME_FORMAT = MDR_COLUMN_FK_NAME_FORMAT_DEFAULT;
         }
@@ -1596,7 +1616,6 @@ public class Preferences extends MVCCDElement {
   public void setMDR_UNIQUE_NATURE_SEP_FORMAT(String MDR_UNIQUE_NATURE_SEP_FORMAT) {
     this.MDR_UNIQUE_NATURE_SEP_FORMAT = MDR_UNIQUE_NATURE_SEP_FORMAT;
   }
-
   public Boolean getMDR_PREF_COLUMN_FK_ONE_ANCESTOR() {
     if (this.MDR_PREF_COLUMN_FK_ONE_ANCESTOR == null) {
       this.MDR_PREF_COLUMN_FK_ONE_ANCESTOR = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DEFAULT;
@@ -1685,6 +1704,8 @@ public class Preferences extends MVCCDElement {
     return this.MPDRORACLE_PREF_NAMING_FORMAT;
   }
 
+
+
   public void setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat MPDRORACLE_PREF_NAMING_FORMAT) {
     this.MPDRORACLE_PREF_NAMING_FORMAT = MPDRORACLE_PREF_NAMING_FORMAT;
   }
@@ -1711,6 +1732,17 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_PK_GENERATE = MPDRORACLE_PK_GENERATE;
   }
 
+  public Boolean getMPDRORACLE_TAPIS() {
+    if (this.MPDRORACLE_TAPIS == null) {
+      this.MPDRORACLE_TAPIS = false;
+    }
+    return MPDRORACLE_TAPIS;
+  }
+
+  public void setMPDRORACLE_TAPIS(Boolean MPDRORACLE_TAPIS) {
+    this.MPDRORACLE_TAPIS = MPDRORACLE_TAPIS;
+  }
+
   public MDRNamingLength getMPDRMYSQL_PREF_NAMING_LENGTH() {
     if (this.MPDRMYSQL_PREF_NAMING_LENGTH == null) {
       this.MPDRMYSQL_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
@@ -1718,6 +1750,20 @@ public class Preferences extends MVCCDElement {
     return this.MPDRMYSQL_PREF_NAMING_LENGTH;
   }
 
+  public String getMPDRORACLE_SEQPK_NAME_FORMAT() {
+    if (this.MPDRORACLE_SEQPK_NAME_FORMAT == null) {
+      this.MPDRORACLE_SEQPK_NAME_FORMAT = MPDRORACLE_SEQPK_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRORACLE_SEQPK_NAME_FORMAT;
+  }
+
+  public void setMPDRORACLE_SEQPK_NAME_FORMAT(String MPDRORACLE_SEQPK_NAME_FORMAT) {
+    this.MPDRORACLE_SEQPK_NAME_FORMAT = MPDRORACLE_SEQPK_NAME_FORMAT;
+  }
+
+  
+  
+  // MySQL
   public void setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH) {
     this.MPDRMYSQL_PREF_NAMING_LENGTH = MPDRMYSQL_PREF_NAMING_LENGTH;
   }
@@ -1755,6 +1801,17 @@ public class Preferences extends MVCCDElement {
     this.MPDRMYSQL_PK_GENERATE = MPDRMYSQL_PK_GENERATE;
   }
 
+  public Boolean getMPDRMYSQL_TAPIS() {
+    if (this.MPDRMYSQL_TAPIS == null) {
+      this.MPDRMYSQL_TAPIS = false;
+    }
+    return MPDRMYSQL_TAPIS;
+  }
+
+  public void setMPDRMYSQL_TAPIS(Boolean MPDRMYSQL_TAPIS) {
+    this.MPDRMYSQL_TAPIS = MPDRMYSQL_TAPIS;
+  }
+
   public MDRNamingLength getMPDRPOSTGRESQL_PREF_NAMING_LENGTH() {
     if (this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH == null) {
       this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
@@ -1762,6 +1819,18 @@ public class Preferences extends MVCCDElement {
     return this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH;
   }
 
+  public String getMPDRMYSQL_SEQPK_NAME_FORMAT() {
+    if (this.MPDRMYSQL_SEQPK_NAME_FORMAT == null) {
+      this.MPDRMYSQL_SEQPK_NAME_FORMAT = MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRMYSQL_SEQPK_NAME_FORMAT;
+  }
+
+  public void setMPDRMYSQL_SEQPK_NAME_FORMAT(String MPDRMYSQL_SEQPK_NAME_FORMAT) {
+    this.MPDRMYSQL_SEQPK_NAME_FORMAT = MPDRMYSQL_SEQPK_NAME_FORMAT;
+  }
+
+  // PostgreSQL
   public void setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH) {
     this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH = MPDRPOSTGRESQL_PREF_NAMING_LENGTH;
   }
@@ -1799,6 +1868,30 @@ public class Preferences extends MVCCDElement {
     this.MPDRPOSTGRESQL_PK_GENERATE = MPDRPOSTGRESQL_PK_GENERATE;
   }
 
+  public Boolean getMPDRPOSTGRESQL_TAPIS() {
+    if (this.MPDRPOSTGRESQL_TAPIS == null) {
+      this.MPDRPOSTGRESQL_TAPIS = false;
+    }
+    return MPDRPOSTGRESQL_TAPIS;
+  }
+
+  public void setMPDRPOSTGRESQL_TAPIS(Boolean MPDRPOSTGRESQL_TAPIS) {
+    this.MPDRPOSTGRESQL_TAPIS = MPDRPOSTGRESQL_TAPIS;
+  }
+
+  public String getMPDRPOSTGRESQL_SEQPK_NAME_FORMAT() {
+    if (this.MPDRPOSTGRESQL_SEQPK_NAME_FORMAT == null) {
+      this.MPDRPOSTGRESQL_SEQPK_NAME_FORMAT = MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT;
+    }
+
+    return MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
+  }
+
+  public void setMPDRPOSTGRESQL_SEQPK_NAME_FORMAT(String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT) {
+    this.MPDRPOSTGRESQL_SEQPK_NAME_FORMAT = MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
+  }
+
+  //
   public Boolean isDIAGRAMMER_SHOW_GRID() {
     return this.DIAGRAMMER_SHOW_GRID;
   }

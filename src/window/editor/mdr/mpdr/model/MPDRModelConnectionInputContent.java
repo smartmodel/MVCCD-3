@@ -105,9 +105,9 @@ public class MPDRModelConnectionInputContent extends MPDRModelInputContent imple
                 String message = MessagesBuilder.getMessagesProperty("editor.mpdr.load.connection.unknow",
                         new String[] {mpdrModel.getConnectionLienProg(), mpdrModel.getNamePath()});
                 ViewLogsManager.printMessageAndDialog(getEditor(), message, WarningLevel.INFO);
+                fieldConnectionLienProg.forceUpdated();
             }
             SComboBoxService.selectByText(fieldConnectionLienProg, withoutItem);
-            fieldConnectionLienProg.forceUpdated();
         }
 
         //UserName de connexion

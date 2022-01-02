@@ -493,6 +493,7 @@ public class MVCCDElementFactory {
         mpdrOracleModel.setNamingLengthFuture( preferences.getMPDRORACLE_PREF_NAMING_LENGTH());
         mpdrOracleModel.setNamingFormatActual( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
         mpdrOracleModel.setNamingFormatFuture( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
+        // Conteneur générique
         createMPDRContModel(mpdrOracleModel);
         return mpdrOracleModel;
     }
@@ -564,6 +565,13 @@ public class MVCCDElementFactory {
         return new MPDROracleParameter(impdrOracleElement, target, mldrParameter, id);
     }
 
+    //TAPIs Oracle
+    public MPDROracleSequence createMPDROracleSequence(MPDRColumn mpdrColumn, MLDRColumn mldrColumn) {
+        MPDROracleSequence mpdrOracleSequence = new MPDROracleSequence(mpdrColumn, mldrColumn);
+        return mpdrOracleSequence;
+    }
+
+
     // MySQL
     public MPDRMySQLModel createMPDRModelMySQL(MLDRModel mldrModel) {
         MPDRMySQLModel mpdrMySQLModel = new MPDRMySQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_MYSQL_NAME);
@@ -587,7 +595,6 @@ public class MVCCDElementFactory {
         this.initMPDRTable(mpdrMySQLTable);
         return mpdrMySQLTable;
     }
-
 
 
     public MPDRMySQLColumn createMPDRMySQLColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn) {
@@ -677,6 +684,10 @@ public class MVCCDElementFactory {
         new MPDRContColumns(mpdrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         new MPDRContConstraints(mpdrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
         new MPDRContRelEnds(mpdrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
+
+        // Le conteneur est toujours créé car sinon il faut le créer/supprimer lors du changement de préférence
+        //TODO-2 A faire à terme
+        MPDRContTAPIs  mpdrContTAPIs = new MPDRContTAPIs(mpdrTable, Preferences.REPOSITORY_MDR_TAPIS_NAME);
     }
 
 

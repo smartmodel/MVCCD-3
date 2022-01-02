@@ -2,14 +2,10 @@ package mdr;
 
 import constraints.Constraint;
 import constraints.ConstraintService;
-import constraints.Constraints;
-import constraints.ConstraintsManager;
-import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.interfaces.IMUMLExtensionNamingInLine;
 import mcd.MCDAttribute;
 import mcd.MCDNID;
-import mcd.services.MCDAttributeService;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
@@ -22,7 +18,6 @@ import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -299,4 +294,5 @@ public abstract class MDRColumn extends MDRElement implements
     }
 
 
+    public abstract boolean isPKForEntityIndependant() ;
 }

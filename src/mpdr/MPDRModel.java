@@ -24,10 +24,14 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     private MPDRDB db = null;
 
     // Les 2 liens de Connection et Connector peuvent exister si la préférence d'application est changée
-    // Par contre, lorsqiûe Connector est utilisé l'instance de Connection est trouvée en passant par son parent!
+    // Par contre, lorsque Connector est utilisé l'instance de Connection est trouvée en passant par son parent!
     private String connectionLienProg = null;
     private String connectorLienProg = null;
     private boolean dropBeforeCreate = true;
+
+    private MPDRDBPK mpdrDbPK ;
+    private boolean tapis ;
+    private String sequencePKNameFormat;
 
     public MPDRModel(ProjectElement parent, String name, MPDRDB db) {
         super(parent, name);
@@ -44,6 +48,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     public MPDRContTables getMPDRContTables() {
         return MPDRModelService.getMPDRContTables(this);
     }
+
 
     public MPDRDB getDb() {
         return db;
@@ -135,5 +140,29 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
 
     public void setDropBeforeCreate(boolean dropBeforeCreate) {
         this.dropBeforeCreate = dropBeforeCreate;
+    }
+
+    public MPDRDBPK getMpdrDbPK() {
+        return mpdrDbPK;
+    }
+
+    public void setMpdrDbPK(MPDRDBPK mpdrDbPK) {
+        this.mpdrDbPK = mpdrDbPK;
+    }
+
+    public boolean isTapis() {
+        return tapis;
+    }
+
+    public void setTapis(boolean tapis) {
+        this.tapis = tapis;
+    }
+
+    public String getSequencePKNameFormat() {
+        return sequencePKNameFormat;
+    }
+
+    public void setSequencePKNameFormat(String sequencePKNameFormat) {
+        this.sequencePKNameFormat = sequencePKNameFormat;
     }
 }

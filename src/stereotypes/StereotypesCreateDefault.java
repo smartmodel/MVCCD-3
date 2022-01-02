@@ -2,7 +2,7 @@ package stereotypes;
 
 import mcd.*;
 import mdr.*;
-import mldr.MLDRTable;
+import mpdr.MPDRSequence;
 import mpdr.mysql.MPDRMySQLTable;
 import mpdr.oracle.MPDROracleTable;
 import mpdr.postgresql.MPDRPostgreSQLTable;
@@ -20,6 +20,7 @@ public class StereotypesCreateDefault {
         createMCD();
         createMDR();
         createMLDR();
+        createMPDR();
         createMPDROracle();
         createMPDRMySQL();
         createMPDRPostgreSQL();
@@ -224,6 +225,13 @@ public class StereotypesCreateDefault {
     private void createMLDR() {
     }
 
+
+    private void createMPDR() {
+        createStereotype(
+                Preferences.STEREOTYPE_SEQUENCE_NAME,
+                Preferences.STEREOTYPE_SEQUENCE_LIENPROG,
+                MPDRSequence.class.getName());
+    }
 
     private void createMPDROracle() {
         createStereotype(

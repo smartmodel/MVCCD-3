@@ -1,33 +1,11 @@
-package transform.mcdtomldr;
+package transform.mcdtomldr.services;
 
 import exceptions.CodeApplException;
 import mcd.MCDAssociation;
 import mcd.MCDAssociationNature;
-import mdr.MDRElement;
-import mdr.MDRElementNames;
 import mdr.MDRFKNature;
-import mdr.services.MDRModelService;
-import mldr.MLDRModel;
 
 public class MCDTransformService {
-
-    public static void names(MDRElement mdrElement, MDRElementNames newNames, MLDRModel mldrModel){
-        // Enregistrement de l'objet contenant tous les noms
-        mdrElement.setNames(newNames);
-
-        // Affectation du nom
-        // A partir des noms calculés et du nom sélectionné
-        String newName = newNames.getNameByNameLength(mldrModel.getNamingLengthFuture());
-        newName = MDRModelService.formatNaming(newName, mldrModel.getNamingFormatFuture());
-
-        if (mdrElement.getName() != null) {
-            if (!mdrElement.getName().equals(newName)) {
-                mdrElement.setName(newName);
-            }
-        } else {
-            mdrElement.setName(newName);
-        }
-    }
 
     public static MDRFKNature mapMCDAssociationNature (MCDAssociation mcdAssociation){
         MDRFKNature fkNature = null ;

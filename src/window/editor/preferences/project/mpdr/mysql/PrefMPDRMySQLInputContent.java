@@ -33,7 +33,9 @@ public class PrefMPDRMySQLInputContent extends PrefMPDRInputContent {
                 preferences.getMPDRMYSQL_PREF_NAMING_FORMAT().getText());
         fieldDelimiterInstructions.setText(preferences.getMPDRMYSQL_DELIMITER_INSTRUCTIONS());
         SComboBoxService.selectByText(fieldPKGenerate,
-                preferences.getMPDRORACLE_PK_GENERATE().getText());
+                preferences.getMPDRMYSQL_PK_GENERATE().getText());
+        fieldTAPIs.setSelected(preferences.getMPDRMYSQL_TAPIS());
+        fieldSeqPKNameFormat.setText(preferences.getMPDRMYSQL_SEQPK_NAME_FORMAT());
 
     }
 
@@ -78,8 +80,18 @@ public class PrefMPDRMySQLInputContent extends PrefMPDRInputContent {
         if (fieldPKGenerate.checkIfUpdated()){
             String text = (String) fieldPKGenerate.getSelectedItem();
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.DB_PK_IDENTITY))){
-                preferences.setMPDRORACLE_PK_GENERATE(MPDRDBPK.IDENTITY);
+                preferences.setMPDRMYSQL_PK_GENERATE(MPDRDBPK.IDENTITY);
             }
+        }
+
+
+        if (fieldTAPIs.checkIfUpdated()){
+            preferences.setMPDRMYSQL_TAPIS(fieldTAPIs.isSelected());
+        }
+
+
+        if (fieldSeqPKNameFormat.checkIfUpdated()){
+            preferences.setMPDRMYSQL_SEQPK_NAME_FORMAT(fieldSeqPKNameFormat.getText());
         }
 
     }

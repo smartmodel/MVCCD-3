@@ -6,7 +6,10 @@ import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import main.MVCCDManager;
-import mcd.*;
+import mcd.MCDAttribute;
+import mcd.MCDEntity;
+import mcd.MCDEntityNature;
+import mcd.MCDRelEnd;
 import mdr.MDRElementNames;
 import mdr.MDRFKNature;
 import mdr.MDRNamingLength;
@@ -19,6 +22,7 @@ import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import transform.mdr.services.MDRTransformService;
 
 import java.util.ArrayList;
 
@@ -71,7 +75,7 @@ public class MCDTransformToColumn {
 
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrColumn.getMDRTableAccueil().getMDRModelParent();
-        MCDTransformService.names(mldrColumn, buildNameColumnAttr(mcdAttribute), mldrModel);
+        MDRTransformService.names(mldrColumn, buildNameColumnAttr(mcdAttribute), mldrModel);
 
 
         // Datatype
@@ -197,7 +201,7 @@ public class MCDTransformToColumn {
 
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrColumnPK.getMDRTableAccueil().getMDRModelParent();
-        MCDTransformService.names(mldrColumnPK, buildNameColumnPK(mcdEntity), mldrModel);
+        MDRTransformService.names(mldrColumnPK, buildNameColumnPK(mcdEntity), mldrModel);
 
         // Obligation de valeur
         // MDRColumn.isMandatory() Déduit dynamiquement par MDRColumn.isPk()
@@ -209,7 +213,7 @@ public class MCDTransformToColumn {
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrColumnFK.getMDRTableAccueil().getMDRModelParent();
 
-        MCDTransformService.names(mldrColumnFK, buildNameColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK, indiceFK), mldrModel);
+        MDRTransformService.names(mldrColumnFK, buildNameColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK, indiceFK), mldrModel);
 
         modifyColumnPKorFK(mldrColumnFK);
     }

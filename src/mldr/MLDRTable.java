@@ -1,9 +1,9 @@
 package mldr;
 
 import constraints.Constraint;
-import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
 import mcd.*;
 import md.MDElement;
@@ -18,7 +18,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import stereotypes.Stereotype;
-import stereotypes.StereotypeService;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 
@@ -190,6 +189,33 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         Preferences preferences = PreferencesManager.instance().preferences();
 
         return resultat;
+    }
+
+
+    public MCDEntity getEntityParentSource() {
+        if (getMcdElementSource() instanceof MCDEntity) {
+            return (MCDEntity) getMcdElementSource();
+        }
+        return null;
+    }
+
+
+    public MCDAssociation getAssNNParentSource() {
+        if ( getMcdElementSource() instanceof MCDAssociation) {
+            return (MCDAssociation) getMcdElementSource();
+        }
+        return null ;
+    }
+
+
+    public String getShortName() {
+        MCDEntity mcdEntityParentSource = getEntityParentSource();
+        MCDAssociation mcdAssNNParentSource = getAssNNParentSource();
+        if (mcdEntityParentSource != null) {
+            return mcdEntityParentSource.getShortName();
+        } else {
+            throw new CodeApplException("Le shortName n'est calculé que pour une table provenant d'une entité");
+        }
     }
 
 }

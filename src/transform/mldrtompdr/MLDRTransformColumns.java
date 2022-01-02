@@ -4,9 +4,8 @@ import datatypes.MPDRDatatype;
 import main.MVCCDManager;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
-import mpdr.MPDRColumn;
-import mpdr.MPDRModel;
-import mpdr.MPDRTable;
+import mpdr.*;
+import mpdr.oracle.MPDROracleModel;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
@@ -127,6 +126,21 @@ public class MLDRTransformColumns {
             }
         } else {
             mpdrColumn.setDerivedValue(mpdrDefaultValue);
+        }
+
+
+        // Séquence de clé primaire associée
+        //TODO-PAS En cours de développement
+        if (mpdrModel instanceof MPDROracleModel) {
+            boolean c1 = mldrColumn.isPkNotFk();
+            boolean c2 = mldrColumn.getEntityParentSource().isInd();
+            boolean c3 = mpdrModel.getMpdrDbPK() == MPDRDBPK.SEQUENCE ;
+            if (c1 && c2 && c3) {
+                    // Création de la séquence de PK
+                    MLDRTransformToSequence mldrTransformToSequence = new MLDRTransformToSequence(
+                            mldrTransform, mldrColumn, mpdrModel, mpdrColumn);
+                    MPDRSequence mpdrSequence = mldrTransformToSequence.createOrModifySeq(MPDRSequenceRole.PK);
+            }
         }
     }
 
