@@ -14,7 +14,7 @@ public abstract class MPDRGenerateSQLPK {
         String generateSQLCode = "";
         //generateSQLCode += Preferences.SQL_SEPARATOR_ARGUMENTS + System.lineSeparator();
 
-        generateSQLCode += "\t" + TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreate(), Preferences.TEMPLATE_CREATE_TABLE_PK)  +
+        generateSQLCode += "\t" + TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_PK)  +
                 Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS ;
 
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_PK_NAME_WORD, mpdrTable.getMPDRPK().getName());

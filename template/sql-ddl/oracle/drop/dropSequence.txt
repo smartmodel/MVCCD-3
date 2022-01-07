@@ -1,0 +1,8 @@
+DECLARE nb_seq  PLS_INTEGER;
+
+BEGIN
+    SELECT count(*) INTO nb_seq from user_sequences WHERE sequence_name = UPPER('{sequenceName}');
+    IF nb_seq = 1 then
+        EXECUTE IMMEDIATE 'DROP sequence {sequenceName}';
+    END IF;
+END;

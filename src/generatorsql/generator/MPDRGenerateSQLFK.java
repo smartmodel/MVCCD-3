@@ -16,7 +16,7 @@ public abstract class MPDRGenerateSQLFK {
 
     public String generateSQLFK(MPDRFK mpdrfk) {
         String generateSQLCode = "";
-        generateSQLCode += TemplateFile.templateFileToString(mpdrGenerateSQL.getTemplateDirAlter(), Preferences.TEMPLATES_ALTER_TABLE_FK) ;
+        generateSQLCode += TemplateFile.templateFileToString(mpdrGenerateSQL.getTemplateDirAlterDB(), Preferences.TEMPLATES_ALTER_TABLE_FK) ;
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_CHILD_WORD, mpdrfk.getParent().getParent().getName());
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_FK_NAME_WORD, mpdrfk.getName());
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_FK_COLUMNS_WORD, mpdrfk.getParametersNameAsStr());

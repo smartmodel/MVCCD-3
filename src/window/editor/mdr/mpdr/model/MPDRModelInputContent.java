@@ -4,11 +4,13 @@ import connections.ConConnection;
 import connections.ConDB;
 import connections.ConManager;
 import main.MVCCDElement;
+import mpdr.MPDRDropBefore;
 import mpdr.MPDRModel;
 import preferences.Preferences;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.STextField;
+import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
 import window.editor.mdr.model.MDRModelInputContent;
 
@@ -30,7 +32,7 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
 
 
     protected JLabel labelDropBeforeCreate ;
-    protected SCheckBox fieldDropBeforeCreate ;
+    protected SComboBox fieldDropBeforeCreate ;
 
 
     protected JPanel panelOptionsTransform = new JPanel();
@@ -75,10 +77,13 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         fieldConnectionURL.setReadOnly(true);
 
         labelDropBeforeCreate = new JLabel("Drop avant Create : ");
-        fieldDropBeforeCreate = new SCheckBox(this, labelDropBeforeCreate);
-        fieldDropBeforeCreate.setToolTipText("Suppression des objets, s'ils existent, avant leur création");
+        fieldDropBeforeCreate = new SComboBox(this, labelDropBeforeCreate);
+        fieldDropBeforeCreate.setToolTipText("Choix de suppression des objets avant leur création");
         fieldDropBeforeCreate.addItemListener(this);
         fieldDropBeforeCreate.addFocusListener(this);
+        for (MPDRDropBefore mpdrDropBefore : MPDRDropBefore.values()) {
+            fieldDropBeforeCreate.addItem(mpdrDropBefore.getText());
+        }
 
         labelMPDRDbPK = new JLabel("Génération colonne PK : ");
         fieldMPDRDbPK = new STextField(this, labelMPDRDbPK);
@@ -162,8 +167,7 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     public void loadDatas(MVCCDElement mvccdElementCrt) {
         super.loadDatas(mvccdElementCrt);
         MPDRModel mpdrModel = (MPDRModel) mvccdElementCrt;
-        fieldDropBeforeCreate.setSelected(((MPDRModel) mvccdElementCrt).isDropBeforeCreate());
-
+        SComboBoxService.selectByText(fieldDropBeforeCreate, mpdrModel.getDropBeforeCreate().getText());
         fieldMPDRDbPK.setText(mpdrModel.getMpdrDbPK().getText());
         fieldTAPIs.setSelected(mpdrModel.isTapis());
         fieldSeqPKNameFormat.setText(mpdrModel.getSequencePKNameFormat());
@@ -176,8 +180,13 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     public void saveDatas(MVCCDElement mvccdElement) {
         super.saveDatas(mvccdElement);
         MPDRModel mpdrModel = (MPDRModel) mvccdElement;
-        if ( fieldDropBeforeCreate.checkIfUpdated()){
-            mpdrModel.setDropBeforeCreate(fieldDropBeforeCreate.isSelected());
+        if ( fieldDropBeforeCreate.checkIfUpdated()) {
+            String text = (String) fieldDropBeforeCreate.getSelectedItem();
+            for (MPDRDropBefore mpdrDropBefore : MPDRDropBefore.values()) {
+                if (text.equals(mpdrDropBefore.getText())) {
+                    mpdrModel.setDropBeforeCreate(mpdrDropBefore);
+                }
+            }
         }
    }
 

@@ -385,9 +385,9 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                     for (String command : commands) {
                         command = MPDRGenerateSQLUtil.clearCommandSQL(command);
                         if (StringUtils.isNotEmpty(command)) {
-                            Statement statement = connection.createStatement();
-                            statement.executeUpdate(command);
-                            statement.close();
+                                Statement statement = connection.createStatement();
+                                statement.executeUpdate(command);
+                                statement.close();
                         }
                     }
 

@@ -17,11 +17,11 @@ public abstract class MPDRGenerateSQLColumn {
         String generateSQLCode = "";
         boolean identityColumn = pkGenerateIdentity() && mpdrColumn.isPkNotFk();
         if (identityColumn){
-            generateSQLCode += "\t" + TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreate(), Preferences.TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY) +
+            generateSQLCode += "\t" + TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY) +
                     Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
 
         } else {
-            generateSQLCode += "\t" + TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreate(), Preferences.TEMPLATE_CREATE_TABLE_COLUMNS) +
+            generateSQLCode += "\t" + TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMNS) +
                     Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
         }
 

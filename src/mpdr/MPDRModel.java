@@ -27,7 +27,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     // Par contre, lorsque Connector est utilisé l'instance de Connection est trouvée en passant par son parent!
     private String connectionLienProg = null;
     private String connectorLienProg = null;
-    private boolean dropBeforeCreate = true;
+    private MPDRDropBefore dropBeforeCreate = MPDRDropBefore.NOTHING;
 
     private MPDRDBPK mpdrDbPK ;
     private boolean tapis ;
@@ -134,11 +134,11 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         this.connectorLienProg = connectorLienProg;
     }
 
-    public boolean isDropBeforeCreate() {
+    public MPDRDropBefore getDropBeforeCreate() {
         return dropBeforeCreate;
     }
 
-    public void setDropBeforeCreate(boolean dropBeforeCreate) {
+    public void setDropBeforeCreate(MPDRDropBefore dropBeforeCreate) {
         this.dropBeforeCreate = dropBeforeCreate;
     }
 

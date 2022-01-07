@@ -13,7 +13,7 @@ public abstract class MPDRGenerateSQLTable {
 
     public String generateSQLDropTable(MPDRTable mpdrTable) {
         String generateSQLCode = "";
-        generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirDrop(), Preferences.TEMPLATE_DROP_TABLE);
+        generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirDropDB(), Preferences.TEMPLATE_DROP_TABLE);
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
         return generateSQLCode;
     }
@@ -22,7 +22,7 @@ public abstract class MPDRGenerateSQLTable {
         String generateSQLCode = "";
 
         //Génération des tables
-        generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreate(), Preferences.TEMPLATE_CREATE_TABLE) ;
+        generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE) ;
         generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
 
 

@@ -214,15 +214,18 @@ public class Preferences extends MVCCDElement {
   public static String DIRECTORY_TEMPLATES_DROP = "drop";
 
   public static String TEMPLATE_DROP_TABLE = "dropTable.txt";
+  public static String TEMPLATE_DROP_SEQUENCE = "dropSequence.txt";
 
   public static String TEMPLATE_CREATE_TABLE = "createTable.txt";
   public static String TEMPLATE_CREATE_TABLE_COLUMNS = "createTableColumns.txt";
   public static String TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY = "createTableColumnIdentity.txt";
   public static String TEMPLATE_CREATE_TABLE_PK = "createTablePK.txt";
+  public static String TEMPLATE_CREATE_SEQUENCE = "createSequence.txt";
 
   public static String TEMPLATES_ALTER_TABLE_FK = "alterTableFK.txt";
 
   public static String TEMPLATES_DROP_EMPTY_SCHEMA = "emptySchema.txt";
+  public static String TEMPLATES_DROP_EXECUTE_EMPTY_SCHEMA = "executeEmptySchema.txt";
   public static String SQL_SEPARATOR_ARGUMENTS = ",";
   public static String SQL_MARKER_SEPARATOR_ARGUMENTS = "__separatorArguments";
 
@@ -605,9 +608,10 @@ public class Preferences extends MVCCDElement {
   public static String MPDRORACLEDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
   public static String MPDRORACLEDATATYPE_DATE_NAME = "DATE";
   public static String MPDRORACLEDATATYPE_DATE_LIENPROG = "DATE";
-  public static String MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT = "\\";
+  public static String MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
   public static MPDRDBPK MPDRORACLE_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
   public static String MPDRORACLE_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
+  public static String MPDRORACLE_EMPTY_SCHEMA = "empty_schema";
 
   public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
   public static String MPDRMySQLDATATYPE_ROOT_LIENPROG = "MPDR-MySQL";
@@ -637,7 +641,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRMySQLDATATYPE_TIME_LIENPROG = "TIME";
   public static String MPDRMySQLDATATYPE_YEAR_NAME = "YEAR";
   public static String MPDRMySQLDATATYPE_YEAR_LIENPROG = "YEAR";
-  public static String MPDRMYSQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\";
+  public static String MPDRMYSQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
   public static MPDRDBPK MPDRMYSQL_PK_GENERATE_DEFAULT = MPDRDBPK.IDENTITY;
   public static String MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
 
@@ -667,7 +671,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRPOSTGRESQLDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
   public static String MPDRPOSTGRESQLDATATYPE_TIME_NAME = "TIME";
   public static String MPDRPOSTGRESQLDATATYPE_TIME_LIENPROG = "TIME";
-  public static String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\";
+  public static String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
   public static MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
   public static String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
 
@@ -715,6 +719,15 @@ public class Preferences extends MVCCDElement {
   public static String MDR_COLUMN_SCALE_WORD =  "columnScale";
   public static String MDR_COLUMN_DEFAULT_WORD =  "columnDefault";
   public static String MDR_COLUMN_MANDATORY_WORD =  "columnMandatory";
+  public static String MPDR_SEQUENCE_NAME_WORD = "sequenceName";
+  public static String MPDR_MIN_VALUE_WORD = "minValue";
+  public static String MPDR_INCREMENT_WORD = "increment";
+
+  public static String MPDR_EMPTY_SCHEMA_NAME_WORD = "emptySchema";
+  public static String MPDR_DROP_BEFORE_NOTHING = "mpdr.drop.before.nothing";
+  public static String MPDR_DROP_BEFORE_OBJECTS_CREATED = "mpdr.drop.before.objects.created";
+  public static String MPDR_DROP_BEFORE_EMPTY = "mpdr.drop.before.empty";
+
 
   public static String MDR_ATTR_NAME_WORD = "attrName";
   public static String MDR_ATTR_SHORT_NAME_WORD = "attrShortName";
@@ -887,6 +900,7 @@ public class Preferences extends MVCCDElement {
 
   // MLDRToMPDR
   private String MLDRTOMPDR_DB = null;
+
 
     // MDR Format
     private String MDR_TABLE_NAME_FORMAT = null;
