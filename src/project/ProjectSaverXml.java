@@ -10,18 +10,12 @@ import mpdr.*;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.files.TranformerForXml;
-import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.relations.LabelShape;
-import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
-import window.editor.diagrammer.elements.shapes.relations.RelationShape;
-import window.editor.diagrammer.services.DiagrammerService;
+import window.editor.diagrammer.elements.shapes.relations.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,7 +24,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -352,10 +345,39 @@ public class ProjectSaverXml {
                                 addRelationShape(doc, relation, shapesTag);
                             }
                         }
-
                     }
                 }
+            }
+        }
+    }
 
+    private void addMCDAssociationNameAnchorPoint(Document doc, MCDAssociationShape shape){
+        if (shape.hasLabel(LabelType.ASSOCIATION_NAME)){
+
+            LabelShape label = shape.getLabelByType(LabelType.ASSOCIATION_NAME);
+
+            Element anchorPointElement = doc.createElement(label.getPointAncrage().getXmlTagName());
+
+            anchorPointElement.setAttribute(Preferences.ATTRIBUTE_ID, String.valueOf(label.getPointAncrage().getId()));
+            anchorPointElement.setAttribute(Preferences.ATTRIBUTE_X, String.valueOf(label.getPointAncrage().x));
+            anchorPointElement.setAttribute(Preferences.ATTRIBUTE_Y, String.valueOf(label.getPointAncrage().y));
+
+            NodeList nodes = doc.getElementsByTagName(Preferences.DIAGRAMMER_MCD_ASSOCIATION_XML_TAG);
+
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node currentNode = nodes.item(i);
+                NamedNodeMap attributes = currentNode.getAttributes();
+
+                // Vérifie s'il s'agit de l'ID de l'association traitée
+                if (Integer.parseInt(attributes.getNamedItem(Preferences.ATTRIBUTE_ID).getNodeValue()) == shape.getId()){
+                    for (int j = 0; j < currentNode.getChildNodes().getLength(); j++) {
+                        Node currentChild = currentNode.getChildNodes().item(j);
+                        // Ajoute le noeud anchorPoint au parent
+                        if (currentChild.getNodeName().equals(Preferences.DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME)){
+                            currentChild.appendChild(anchorPointElement);
+                        }
+                    }
+                }
             }
         }
     }

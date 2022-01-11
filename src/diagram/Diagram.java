@@ -2,11 +2,13 @@ package diagram;
 
 import console.ConsoleManager;
 import main.MVCCDElement;
+import mcd.MCDAssociation;
 import project.Project;
 import project.ProjectElement;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
 import javax.management.relation.Relation;
@@ -76,6 +78,10 @@ public abstract class Diagram extends ProjectElement {
             }
         }
         return null;
+    }
+
+    public List<MCDAssociationShape> getMCDAssociationShapes(){
+        return shapes.stream().filter(shape -> shape instanceof MCDAssociationShape).map(s -> (MCDAssociationShape) s).collect(Collectors.toList());
     }
 
 }

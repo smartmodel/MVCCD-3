@@ -56,11 +56,9 @@ public abstract class RelationShape extends JComponent implements IShape {
     this.createPointsAncrage(isReflexive);
 
     this.setFocusable(true);
-
   }
 
   public RelationShape(int id, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
-
     this.source = source;
     this.destination = destination;
     this.isReflexive = isReflexive;
@@ -69,7 +67,6 @@ public abstract class RelationShape extends JComponent implements IShape {
     this.createPointsAncrage(isReflexive);
 
     this.setFocusable(true);
-
   }
 
   public RelationShape(int id, MDElement relatedRepositoryElement, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
@@ -159,9 +156,8 @@ public abstract class RelationShape extends JComponent implements IShape {
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     // Pour chaque point d'ancrage
     for (int i = 0; i < this.pointsAncrage.size(); i++) {
-      if (i != this.pointsAncrage.size() - 1) {
+      if (i != this.pointsAncrage.size() - 1)
         graphics2D.drawLine((int) this.pointsAncrage.get(i).getX(), (int) this.pointsAncrage.get(i).getY(), (int) this.pointsAncrage.get(i + 1).getX(), (int) this.pointsAncrage.get(i + 1).getY());
-      }
     }
   }
 
@@ -391,22 +387,21 @@ public abstract class RelationShape extends JComponent implements IShape {
       System.err.println("Multiples labels found with type " + type.name());
     else
       return labelsFound.get(0);
+
     return null;
   }
 
   public LabelShape updateLabel(String newValue, LabelType type){
     LabelShape label = getLabelByType(type);
 
-    if (label != null){
+    if (label != null)
       label.setText(newValue);
-      System.out.println("Label " + type.name() + " updated with new value \"" + newValue + "\"");
-    }
 
     return label;
   }
 
   public boolean hasLabel(LabelType type){
-    return labels.stream().filter(l -> l.getType() == type).count() > 0;
+    return labels.stream().anyMatch(l -> l.getType() == type);
   }
 
   public void deleteLabel(LabelType type){
@@ -415,7 +410,6 @@ public abstract class RelationShape extends JComponent implements IShape {
     if (label != null){
       labels.remove(label);
       DiagrammerService.getDrawPanel().remove(label);
-      System.out.println("Label " + type + " removed");
     }
 
   }

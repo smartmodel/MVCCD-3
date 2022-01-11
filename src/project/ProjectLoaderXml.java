@@ -37,7 +37,6 @@ import window.editor.diagrammer.elements.shapes.relations.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.LabelType;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
-import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -1810,10 +1809,6 @@ public class ProjectLoaderXml {
         newEntity.setSize(Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_WIDTH)), Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_HEIGHT)));
         newEntity.setLocation(Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_X)), Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_Y)));
 
-        // Ajoute l'entité au diagrammeur s'il s'agit du diagramme courant
-        if (diagramTag.hasAttribute(Preferences.ATTRIBUTE_IS_ACTIVE))
-            DiagrammerService.getDrawPanel().addShape(newEntity);
-
         // Ajoute l'entité au diagramme
         diagram.addShape(newEntity);
 
@@ -1853,14 +1848,16 @@ public class ProjectLoaderXml {
         for (int j = 0; j < shapes.getLength(); j++) {
             if (shapes.item(j) instanceof Element){
                 if (shapes.item(j).getNodeName().equals(Preferences.DIAGRAMMER_MCD_ENTITY_XML_TAG)) {
-
                     Element comparedItem = (Element) shapes.item(j);
-                    if (comparedItem.getAttribute(Preferences.ATTRIBUTE_ID).equals(node.getAttribute(Preferences.ATTRIBUTE_SOURCE_ENTITY_SHAPE_ID))) {
-
+                    if (comparedItem.getAttribute(Preferences.ATTRIBUTE_ID).equals(node.getAttribute(Preferences.ATTRIBUTE_SOURCE_ENTITY_SHAPE_ID)) && comparedItem.getAttribute(Preferences.ATTRIBUTE_ID).equals(node.getAttribute(Preferences.ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID))){
+                        // Réflexive
+                        int entitiesId = Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID));
+                        destinationEntityShape = diagram.getMCDEntityShapeByID(entitiesId);
+                        sourceEntityShape = diagram.getMCDEntityShapeByID(entitiesId);
+                    } else if (comparedItem.getAttribute(Preferences.ATTRIBUTE_ID).equals(node.getAttribute(Preferences.ATTRIBUTE_SOURCE_ENTITY_SHAPE_ID))) {
                         int sourceEntityId = Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_SOURCE_ENTITY_SHAPE_ID));
                         sourceEntityShape = diagram.getMCDEntityShapeByID(sourceEntityId);
                     } else if (comparedItem.getAttribute(Preferences.ATTRIBUTE_ID).equals(node.getAttribute(Preferences.ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID))) {
-
                         int destinationEntityId = Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID));
                         destinationEntityShape = diagram.getMCDEntityShapeByID(destinationEntityId);
                     }
@@ -1886,10 +1883,6 @@ public class ProjectLoaderXml {
         if (elementHasChildByTagName(node, Preferences.DIAGRAMMER_LABELS_XML_TAG_NAME))
             loadLabelShapes(newAssociation, node, diagramTag);
 
-        // Ajoute l'association au diagrammeur s'il s'agit du diagramme courant
-        if (diagramTag.hasAttribute(Preferences.ATTRIBUTE_IS_ACTIVE))
-            DiagrammerService.getDrawPanel().addShape(newAssociation);
-
         // Ajoute l'association au diagramme
         diagram.addShape(newAssociation);
     }
@@ -1903,6 +1896,7 @@ public class ProjectLoaderXml {
         associationShape.getLabels().clear();
 
         for (int i = 0; i < allLabelsTags.getLength(); i++) {
+
             if (allLabelsTags.item(i) instanceof Element){
                 Element currentLabelTag = (Element) allLabelsTags.item(i);
                 String type = currentLabelTag.getAttribute(Preferences.ATTRIBUTE_TYPE);
@@ -1916,28 +1910,23 @@ public class ProjectLoaderXml {
 
                 // Crée le LabelShape
                 if (!anchorPointFound.isEmpty()) {
-
-                    LabelShape labelShape;
-
                     // Nom d'association
                     if (type.equals(LabelType.ASSOCIATION_NAME.name())){
-                        labelShape = associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getName(), LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getName(), LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
                     } else if (type.equals(LabelType.DESTINATION_CARDINALITY.name())){
                         // Cardinalités destination
-                        labelShape = associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
                     } else if (type.equals(LabelType.SOURCE_CARDINALITY.name())){
                         // Cardinalités source
-                        labelShape = associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
                     } else if (type.equals(LabelType.SOURCE_ROLE.name())) {
                         // Rôle source
-                        labelShape = associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getName(), LabelType.SOURCE_ROLE, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getName(), LabelType.SOURCE_ROLE, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
                     } else {
                         // Rôle destination
-                        labelShape = associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getName(), LabelType.DESTINATION_ROLE, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getName(), LabelType.DESTINATION_ROLE, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
                     }
 
-                    if (diagramTag.hasAttribute(Preferences.ATTRIBUTE_IS_ACTIVE))
-                        DiagrammerService.getDrawPanel().add(labelShape);
 
                 }
             }

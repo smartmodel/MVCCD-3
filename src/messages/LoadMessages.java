@@ -37,6 +37,7 @@ public class LoadMessages {
 	 * Instantiate the unique instance of the class.
 	 */
 	private LoadMessages(){
+
 	}
 
 

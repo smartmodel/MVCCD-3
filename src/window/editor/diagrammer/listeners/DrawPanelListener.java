@@ -92,7 +92,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
   public void mouseReleased(MouseEvent e) {
     super.mouseReleased(e);
     if (!this.pointAncrageClickedIsNull() && !this.relationClickedIsNull()) {
-      this.deletePointsAncrageIfNecessary();
+      //this.deletePointsAncrageIfNecessary();
     }
     if (this.mouseWheelPressed && SwingUtilities.isMiddleMouseButton(e)) {
       this.mouseWheelPressed = false;

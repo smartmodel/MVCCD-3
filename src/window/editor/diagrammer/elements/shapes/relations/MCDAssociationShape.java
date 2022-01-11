@@ -1,6 +1,6 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 
 import mcd.MCDAssociation;
 import preferences.Preferences;
@@ -35,8 +35,19 @@ public class MCDAssociationShape extends RelationShape {
 
     // Nom d'association
     if (!association.getName().isEmpty()){
-      LabelShape labelShape = createOrUpdateLabel(new RelationPointAncrageShape(getCenter().x, getCenter().y), association.getName(), LabelType.ASSOCIATION_NAME, 0, 0);
-      DiagrammerService.getDrawPanel().add(labelShape);
+      LabelShape labelShape;
+      if (pointsAncrage.size() <= 2){
+        RelationPointAncrageShape anchorPoint = pointsAncrage.get(0);
+        Point relationCenter = getCenter();
+        int distanceInXFromAnchorPoint = Math.abs(relationCenter.x - anchorPoint.x);
+        int distanceInYFromAnchorPoint = Math.abs(relationCenter.y - anchorPoint.y);
+        labelShape = createOrUpdateLabel(anchorPoint, association.getName(), LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+
+      } else {
+        int middleIndex = pointsAncrage.size() / 2;
+        labelShape = createOrUpdateLabel(pointsAncrage.get(middleIndex), association.getName(), LabelType.ASSOCIATION_NAME, 0, 0);
+      }
+        DiagrammerService.getDrawPanel().add(labelShape);
     } else {
       deleteLabel(LabelType.ASSOCIATION_NAME);
     }
