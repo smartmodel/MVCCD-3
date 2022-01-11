@@ -113,7 +113,7 @@ public class MVCCDManager {
 
             // Ouverture du fichier
             //TODO-0 Désactivé pour Mise au point
-            openLastProject();
+             openLastProject();
         } catch (Exception e ){
             throw e ;
         }
@@ -696,7 +696,7 @@ public class MVCCDManager {
     public void setCurrentDiagram(Diagram currentDiagram) {
         this.currentDiagram = currentDiagram;
         loadDiagram(currentDiagram);
-        ConsoleManager.printMessage("Diagramme " + currentDiagram.getName() + " ajouté en tant que diagramme courant.");
+        ViewLogsManager.printMessage("Diagramme " + currentDiagram.getName() + " ajouté en tant que diagramme courant.", WarningLevel.INFO);
     }
 
     private void loadDiagram(Diagram diagram){
@@ -711,7 +711,7 @@ public class MVCCDManager {
         // Refresh les informations des ClassShapes
         diagram.getClassShapes().forEach(ClassShape::refreshInformations);
 
-        ConsoleManager.printMessage("Diagramme " + diagram.getName() + " affiché.");
+        ViewLogsManager.printMessage("Diagramme " + diagram.getName() + " affiché.", WarningLevel.INFO);
     }
 
 }

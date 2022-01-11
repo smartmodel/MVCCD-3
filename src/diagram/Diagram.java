@@ -1,9 +1,8 @@
 package diagram;
 
-import console.ConsoleManager;
-import main.MVCCDElement;
-import mcd.MCDAssociation;
-import project.Project;
+
+import console.ViewLogsManager;
+import console.WarningLevel;
 import project.ProjectElement;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
@@ -11,8 +10,7 @@ import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
-import javax.management.relation.Relation;
-import java.util.ArrayList;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,7 +51,7 @@ public abstract class Diagram extends ProjectElement {
 
     public void addShape(IShape shape){
         shapes.add(shape);
-        ConsoleManager.printMessage(shape.getClass().getSimpleName() + " ajoutée au diagramme " + getName());
+        ViewLogsManager.printMessage(shape.getClass().getSimpleName() + " ajoutée au diagramme " + getName(), WarningLevel.INFO);
     }
 
     public void setShapes(List<IShape> shapes) {

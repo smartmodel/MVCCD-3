@@ -281,6 +281,7 @@ public class PreferencesManager {
 
                 applicationPref = new Preferences(null, null);
                 new PreferencesOfApplicationSaverXml().createFileApplicationPref();
+
             } catch(Exception eCreate) {
                 throw eCreate;
             }

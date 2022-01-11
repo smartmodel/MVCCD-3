@@ -18,6 +18,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
 import console.ConsoleManager;
+import console.ViewLogsManager;
+import console.WarningLevel;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
@@ -134,7 +136,7 @@ public class DrawPanel extends JLayeredPane {
     }
     revalidate();
     repaint();
-    ConsoleManager.printMessage(shapes.size() + " formes ont été ajoutées à la zone de dessin.");
+    ViewLogsManager.printMessage(shapes.size() + " formes ont été ajoutées à la zone de dessin.", WarningLevel.INFO);
   }
 
   private void addListeners() {

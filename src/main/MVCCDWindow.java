@@ -1,6 +1,7 @@
 package main;
 
 import console.ViewLogsManager;
+import console.WarningLevel;
 import main.window.console.WinConsole;
 import main.window.diagram.WinDiagram;
 import main.window.haut.Haut;
