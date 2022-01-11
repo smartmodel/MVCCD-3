@@ -212,6 +212,7 @@ public class Preferences extends MVCCDElement {
   public static String DIRECTORY_TEMPLATES_CREATE = "create";
   public static String DIRECTORY_TEMPLATES_ALTER = "alter";
   public static String DIRECTORY_TEMPLATES_DROP = "drop";
+  public static String DIRECTORY_TEMPLATES_TRIGGERS = "triggers";
 
   public static String TEMPLATE_DROP_TABLE = "dropTable.txt";
   public static String TEMPLATE_DROP_SEQUENCE = "dropSequence.txt";
@@ -307,6 +308,8 @@ public class Preferences extends MVCCDElement {
     public static String STEREOTYPE_TABLE_LIENPROG = "Table";
   public static String STEREOTYPE_SEQUENCE_NAME = "Sequence";
   public static String STEREOTYPE_SEQUENCE_LIENPROG = "Sequence";
+  public static String STEREOTYPE_TRIGGERS_NAME = "Triggers";
+  public static String STEREOTYPE_TRIGGERS_LIENPROG = "Triggers";
   public static String STEREOTYPE_ORACLE_NAME = "Oracle";
     public static String STEREOTYPE_ORACLE_LIENPROG = "Oracle";
     public static String STEREOTYPE_MYSQL_NAME = "MySQL";
@@ -714,6 +717,7 @@ public class Preferences extends MVCCDElement {
   public static String MDR_PK_NAME_WORD = "pkName";
   public static String MDR_PK_COLUMNS_WORD = "pkColumns";
   public static String MDR_COLUMN_NAME_WORD =  "columnName";
+  public static String MDR_COLUMN_PK_NAME_WORD =  "columnPKName";
   public static String MDR_COLUMN_TYPE_WORD =  "columnType";
   public static String MDR_COLUMN_SIZE_WORD =  "columnSize";
   public static String MDR_COLUMN_SCALE_WORD =  "columnScale";

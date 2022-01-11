@@ -25,6 +25,8 @@ import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.postgresql.MPDRPostgreSQLColumn;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 import mpdr.postgresql.MPDRPostgreSQLTable;
+import mpdr.tapis.MPDRContTAPIs;
+import mpdr.tapis.oracle.MPDROracleTriggers;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
@@ -565,12 +567,16 @@ public class MVCCDElementFactory {
         return new MPDROracleParameter(impdrOracleElement, target, mldrParameter, id);
     }
 
-    //TAPIs Oracle
     public MPDROracleSequence createMPDROracleSequence(MPDRColumn mpdrColumn, MLDRColumn mldrColumn) {
         MPDROracleSequence mpdrOracleSequence = new MPDROracleSequence(mpdrColumn, mldrColumn);
         return mpdrOracleSequence;
     }
 
+    //TAPIs Oracle
+    public MPDROracleTriggers createMPDROracleTriggers(MPDRContTAPIs mpdrContTAPIs, MLDRTable mldrTable) {
+        MPDROracleTriggers mpdrOracleTriggers = new MPDROracleTriggers(mpdrContTAPIs, mldrTable);
+        return mpdrOracleTriggers;
+    }
 
     // MySQL
     public MPDRMySQLModel createMPDRModelMySQL(MLDRModel mldrModel) {

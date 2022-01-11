@@ -6,10 +6,10 @@ import mdr.MDRContColumns;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
 import mpdr.MPDRColumn;
-import mpdr.MPDRContTAPIs;
 import mpdr.MPDRFK;
 import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.tapis.MPDRContTAPIs;
 
 import java.util.ArrayList;
 

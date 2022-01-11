@@ -165,4 +165,6 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     public void setSequencePKNameFormat(String sequencePKNameFormat) {
         this.sequencePKNameFormat = sequencePKNameFormat;
     }
+
+    public abstract Boolean getMPDR_TAPIs() ;
 }

@@ -14,6 +14,8 @@ import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.services.MPDRColumnService;
 import mpdr.services.MPDRConstraintService;
 import mpdr.services.MPDRTableService;
+import mpdr.tapis.MPDRContTAPIs;
+import mpdr.tapis.MPDRTriggers;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -100,6 +102,10 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public abstract MDRConstraint createUnique(MLDRUnique mldrUnique);
 
+
+    public abstract MPDRTriggers createTriggers(MLDRTable mldrTable);
+
+
     public ArrayList<Stereotype> getStereotypes() {
         // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
         ArrayList<Stereotype> resultat = super.getStereotypes();
@@ -150,7 +156,15 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         }
     }
 
-    public  MPDRContTAPIs getMPDRContTAPIs(){
+    public MPDRContTAPIs getMPDRContTAPIs(){
         return MPDRTableService.getMPDRContTAPIs(this);
+    }
+
+    public MPDRColumn getMPDRColumnPKProper (){
+        return (MPDRColumn) super.getMDRColumnPKProper();
+    }
+
+    public MPDRTriggers getMPDRTriggers() {
+        return getMPDRContTAPIs().getMPDRTriggers();
     }
 }

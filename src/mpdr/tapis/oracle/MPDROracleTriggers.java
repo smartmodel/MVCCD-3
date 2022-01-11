@@ -1,14 +1,10 @@
-package mpdr.mysql;
+package mpdr.tapis.oracle;
 
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import main.MVCCDElementFactory;
-import mdr.MDRConstraint;
-import mldr.*;
 import mldr.interfaces.IMLDRElement;
-import mpdr.MPDRPK;
-import mpdr.MPDRTable;
+import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.tapis.MPDRTriggers;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -19,48 +15,19 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MPDRMySQLTable extends MPDRTable {
-
+public class MPDROracleTriggers extends MPDRTriggers implements IMPDROracleElement {
     private  static final long serialVersionUID = 1000;
 
-    public MPDRMySQLTable(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
+    public MPDROracleTriggers(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
         super(parent, name, mldrElementSource);
     }
 
-    public MPDRMySQLTable(ProjectElement parent, IMLDRElement mldrElementSource) {
+    public MPDROracleTriggers(ProjectElement parent, IMLDRElement mldrElementSource) {
         super(parent, mldrElementSource);
     }
 
-    public MPDRMySQLTable(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+    public MPDROracleTriggers(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
         super(parent, mldrElementSource, id);
-    }
-
-    @Override
-    public MPDRMySQLColumn createColumn(MLDRColumn mldrColumn) {
-        MPDRMySQLColumn newColumn = MVCCDElementFactory.instance().createMPDRMySQLColumn(
-                getMDRContColumns(),  mldrColumn);
-
-        return newColumn;
-    }
-
-    @Override
-    public MPDRPK createPK(MLDRPK mldrPK) {
-        return null;
-    }
-
-    @Override
-    public MDRConstraint createFK(MLDRFK mldrFK) {
-        return null;
-    }
-
-    @Override
-    public MDRConstraint createUnique(MLDRUnique mldrUnique) {
-        return null;
-    }
-
-    @Override
-    public MPDRTriggers createTriggers(MLDRTable mldrTable) {
-        return null;
     }
 
 
@@ -73,10 +40,11 @@ public class MPDRMySQLTable extends MPDRTable {
         Preferences preferences = PreferencesManager.instance().preferences();
 
         resultat.add(stereotypes.getStereotypeByLienProg(this.getClass().getName(),
-                preferences.STEREOTYPE_MYSQL_LIENPROG));
+                preferences.STEREOTYPE_ORACLE_LIENPROG));
 
         return resultat;
     }
+
 
     @Override
     public ArrayList<Constraint> getConstraints() {

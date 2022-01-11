@@ -1,0 +1,7 @@
+IF {pio_crtrec}.{column_pk} IS NULL THEN
+	SELECT NVL(MAX({column_pk}), 0) + 1
+	INTO {pio_crtrec}.{column_pk}
+	FROM {table}
+	WHERE (1=1)
+	{TABLE_DEP_JOIN_PARENT};
+END IF;

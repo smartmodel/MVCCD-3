@@ -9,6 +9,8 @@ import mldr.MLDRTable;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
 import mpdr.oracle.interfaces.IMPDROracleElement;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDROracleDatatype;
 
@@ -38,6 +40,12 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement {
     public String treatGenerate() {
         MPDRGenerateSQL mpdrGenerateSQL = new MPDROracleGenerateSQL(this);
         return mpdrGenerateSQL.generate();
+    }
+
+    @Override
+    public Boolean getMPDR_TAPIs() {
+        Preferences preferences = PreferencesManager.instance().preferences();
+        return preferences.getMPDRORACLE_TAPIS();
     }
 
 

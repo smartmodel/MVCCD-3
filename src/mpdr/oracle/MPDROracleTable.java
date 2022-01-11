@@ -1,25 +1,22 @@
 package mpdr.oracle;
 
 import constraints.Constraint;
-import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import main.MVCCDElementFactory;
 import mdr.MDRConstraint;
-import mldr.MLDRColumn;
-import mldr.MLDRFK;
-import mldr.MLDRPK;
-import mldr.MLDRUnique;
+import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
 import mpdr.oracle.interfaces.IMPDROracleElement;
+import mpdr.tapis.MPDRTriggers;
+import mpdr.tapis.oracle.MPDROracleTriggers;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import stereotypes.Stereotype;
-import stereotypes.StereotypeService;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 
@@ -65,6 +62,14 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
                 getMDRContConstraints(), mldrUnique);
         return newUnique;
     }
+
+    @Override
+    public MPDRTriggers createTriggers(MLDRTable mldrTable) {
+        MPDROracleTriggers mpdrOracleTriggers = MVCCDElementFactory.instance().createMPDROracleTriggers(
+                getMPDRContTAPIs(), mldrTable);
+        return mpdrOracleTriggers;
+    }
+
 
     @Override
     public ArrayList<Stereotype> getStereotypes() {

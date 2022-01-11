@@ -62,6 +62,22 @@ public class MLDRTransformTables {
         }
 
         // Transformation des relations (repr. graphique de FK)
+
+        // APIs de tables ou triggers pour les séquences si pas d'APIS de tables
+        //TODO-PAS En cours de développement
+        if (mpdrModel instanceof MPDROracleModel) {
+
+            if (mpdrModel.getMPDR_TAPIs()) {
+
+            } else {
+                if (mpdrTable.getMPDRColumnPKProper() != null) {
+                    // Conteneur de triggers et trigger d'alimentation
+                    MLDRTransformToTriggers mldrTransformToTriggers = new MLDRTransformToTriggers(
+                            mldrTransform, mldrTable, mpdrModel, mpdrTable);
+                    mldrTransformToTriggers.createOrModifyTriggers();
+                }
+            }
+        }
     }
 
     private void modifyTable(MLDRTable mldrTable, MPDRTable mpdrTable ) {

@@ -180,6 +180,11 @@ public abstract class MPDRGenerateSQL {
                 Preferences.DIRECTORY_TEMPLATES_DROP;
     }
 
+    public String getTemplateDirTriggersDB() {
+        return getTemplateDirBaseDB() +
+                Preferences.DIRECTORY_TEMPLATES_TRIGGERS;
+    }
+
     public String delimiter(){
         return Preferences.SYSTEM_LINE_SEPARATOR + getDelimiterInstructions() + Preferences.SYSTEM_LINE_SEPARATOR;
 

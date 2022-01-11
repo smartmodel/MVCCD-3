@@ -1,0 +1,11 @@
+CREATE OR REPLACE TRIGGER {trigger}
+	BEFORE INSERT ON {tableName} FOR EACH ROW
+
+	BEGIN
+	    IF :new.{columnPKName} IS NULL THEN
+    	    SELECT {sequenceName}.NEXTVAL
+    	    INTO :new.{columnPKName}
+    	    FROM DUAL;
+        END IF;
+
+	END;
