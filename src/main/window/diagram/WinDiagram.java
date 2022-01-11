@@ -9,7 +9,7 @@ import utilities.window.PanelBorderLayoutResizer;
  */
 public class WinDiagram extends PanelBorderLayout {
 
-    private WinDiagramContent content;
+    private WinDiagrammer content;
 
     public WinDiagram(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer){
         super();
@@ -17,11 +17,19 @@ public class WinDiagram extends PanelBorderLayout {
         super.setPanelBLResizer(panelBLResizer);
         startLayout();
 
-        content = new WinDiagramContent(this);
+        content = new WinDiagrammer(this);
         super.setPanelContent(content);
     }
 
-    public WinDiagramContent getContent() {
+    public void hideDrawPanel(){
+        content.setVisible(false);
+    }
+
+    public void showDrawPanel(){
+        content.setVisible(true);
+    }
+
+    public WinDiagrammer getContent() {
         return content;
     }
 

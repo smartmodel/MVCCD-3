@@ -22,7 +22,7 @@ public class ProjectService {
      * @param projectElement Élément du référentiel à partir duquel rechercher.
      * @return Retourne le projet, qui est l'élément racine du référentiel.
      */
-    static Project getProjectRoot(ProjectElement projectElement) {
+    public static Project getProjectRoot(ProjectElement projectElement) {
         if (projectElement instanceof Project) {
             return ((Project) projectElement);
         } else {

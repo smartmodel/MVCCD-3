@@ -334,8 +334,6 @@ public class MDROrderBuildNaming {
                 }
             }
 
-
-
             if (newName.length() > lengthMax) {
                 if (tableNN || tableNNInd) {
                     return limitSizeTableNN(newName);
@@ -375,6 +373,26 @@ public class MDROrderBuildNaming {
         }
         return newName;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     private String limitSizeColumnAttr(String newName) {

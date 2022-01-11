@@ -12,6 +12,8 @@ import java.awt.geom.Line2D;
 import java.util.ListIterator;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
+
+import main.MVCCDManager;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
@@ -90,7 +92,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
   public void mouseReleased(MouseEvent e) {
     super.mouseReleased(e);
     if (!this.pointAncrageClickedIsNull() && !this.relationClickedIsNull()) {
-      this.deletePointsAncrageIfNecessary();
+      //this.deletePointsAncrageIfNecessary();
     }
     if (this.mouseWheelPressed && SwingUtilities.isMiddleMouseButton(e)) {
       this.mouseWheelPressed = false;
@@ -204,8 +206,11 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
 
     shape.setLocation(GridUtils.alignToGrid(mouseClick.x, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(mouseClick.y, DiagrammerService.getDrawPanel().getGridSize()));
 
-    DiagrammerService.getDrawPanel().addElement(shape);
+
+    MVCCDManager.instance().getCurrentDiagram().addShape(shape);
+    DiagrammerService.getDrawPanel().addShape(shape);
     DiagrammerService.getDrawPanel().repaint();
+
   }
 
   private void executeButtonAction(MouseEvent event) {

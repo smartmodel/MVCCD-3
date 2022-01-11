@@ -3,6 +3,9 @@ package window.editor.diagrammer.elements.shapes.relations;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+
+import main.MVCCDManager;
+import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
@@ -12,21 +15,47 @@ public class RelationPointAncrageShape extends Point implements IShape {
   public int DIAMETER = 10;
   private int index;
   private boolean isSelected = false;
+  private int id;
 
   public RelationPointAncrageShape(Point p, int index) {
     super(p);
+
+    this.generateId();
+
     this.index = index;
     this.setSize(this.DIAMETER, this.DIAMETER);
   }
 
   public RelationPointAncrageShape(int x, int y) {
     super(x, y);
+    this.generateId();
     this.setSize(this.DIAMETER, this.DIAMETER);
-
   }
 
   public RelationPointAncrageShape(int x, int y, int index) {
     super(x, y);
+    this.generateId();
+    this.index = index;
+    this.setSize(this.DIAMETER, this.DIAMETER);
+  }
+
+  public RelationPointAncrageShape(int id, Point p, int index) {
+    super(p);
+    this.id = id;
+    this.index = index;
+    this.setSize(this.DIAMETER, this.DIAMETER);
+  }
+
+  public RelationPointAncrageShape(int id, Point p) {
+    super(p);
+    this.id = id;
+    this.setSize(this.DIAMETER, this.DIAMETER);
+  }
+
+
+  public RelationPointAncrageShape(int id, int x, int y, int index) {
+    super(x, y);
+    this.id = id;
     this.index = index;
     this.setSize(this.DIAMETER, this.DIAMETER);
   }
@@ -34,6 +63,18 @@ public class RelationPointAncrageShape extends Point implements IShape {
   @Override
   public void setLocationDifference(int differenceX, int differenceY) {
     this.translate(differenceX, differenceY);
+  }
+
+  @Override
+  public void repaint() {
+
+  }
+
+  private void generateId(){
+    // Génère un id utile à la persistance
+    if (MVCCDManager.instance().getProject() != null) {
+      this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
+    }
   }
 
   @Override
@@ -84,5 +125,13 @@ public class RelationPointAncrageShape extends Point implements IShape {
 
   public void setIndex(int index) {
     this.index = index;
+  }
+
+  public String getXmlTagName(){
+    return Preferences.DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG;
+  }
+
+  public int getId() {
+    return id;
   }
 }

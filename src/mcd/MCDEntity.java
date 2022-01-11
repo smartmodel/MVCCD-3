@@ -526,4 +526,5 @@ public class MCDEntity extends MCDElement implements IMClass, IMCompletness, IMC
     public String getConstraintsInLine() {
         return ConstraintService.getUMLNamingInLine(getConstraints());
     }
+
 }

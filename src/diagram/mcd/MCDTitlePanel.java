@@ -48,7 +48,7 @@ public class MCDTitlePanel {
      *  - la création d'un autre bouton (btnApply) qui effectue les changements au sein de l'arbre du projet et qui
      *    synchronise la vue du référentiel.
      */
-    public void getContent( ){
+    public void getContent(){
         // Réinitialisation
         //TODO-1 A affiner
         panelTitle.removeAll();

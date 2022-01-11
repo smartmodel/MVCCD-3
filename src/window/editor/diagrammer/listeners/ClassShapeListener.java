@@ -35,8 +35,9 @@ public class ClassShapeListener extends MouseAdapter {
 
   @Override
   public void mouseDragged(MouseEvent e) {
-    final ClassShape shape = (ClassShape) e.getSource();
-    final int cursor = shape.getCursor().getType();
+    ClassShape shape = (ClassShape) e.getSource();
+    int cursor = shape.getCursor().getType();
+
     if (cursor != Cursor.MOVE_CURSOR) {
       shape.updateRelations();
     }

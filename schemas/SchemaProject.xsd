@@ -6,6 +6,7 @@
 				<xs:element ref="proprietes"/>
 				<xs:element ref="preferences"/>
 				<xs:element ref="MCD"/>
+				<xs:element ref="diagrammes" />
 			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
 		</xs:complexType>
@@ -229,7 +230,8 @@
 			<xs:choice>
 				<xs:element ref="model" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:sequence>
-					<xs:element ref="diagrammes"/>
+<!--					<xs:element ref="shapes" />
+					<xs:element ref="diagrammes"/>-->
 					<xs:element ref="entities"/>
 					<xs:element ref="relations"/>
 					<xs:element ref="package" minOccurs="0" maxOccurs="unbounded"/>
@@ -306,9 +308,87 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="mcdEntityShape">
+		<xs:complexType>
+			<xs:attribute name="id" use="required" type="xs:int" />
+			<xs:attribute name="height" use="required" type="xs:double" />
+			<xs:attribute name="width" use="required" type="xs:double" />
+			<xs:attribute name="x" use="required" type="xs:double" />
+			<xs:attribute name="y" use="required" type="xs:double" />
+			<xs:attribute name="repository_entity_id" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="anchorPoint">
+		<xs:complexType>
+			<xs:attribute name="id" use="required" type="xs:int" />
+			<xs:attribute name="x" use="required" type="xs:double" />
+			<xs:attribute name="y" use="required" type="xs:double" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="labelShape">
+		<xs:complexType>
+			<xs:attribute name="related_anchor_point_id" use="required" type="xs:int" />
+			<xs:attribute name="x_distance_from_anchor_point" use="required" type="xs:double" />
+			<xs:attribute name="y_distance_from_anchor_point" use="required" type="xs:double" />
+			<xs:attribute name="type" use="required" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="anchorPoints">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="2" maxOccurs="unbounded" ref="anchorPoint" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="labelShapes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="6" ref="labelShape" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+
+	<xs:element name="mcdAssociationShape">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="anchorPoints"></xs:element>
+				<xs:element ref="labelShapes" minOccurs="0" maxOccurs="1"></xs:element>
+			</xs:sequence>
+
+			<xs:attribute name="id" use="required" type="xs:int" />
+			<xs:attribute name="destination_entity_shape_id" use="required" type="xs:int" />
+			<xs:attribute name="source_entity_shape_id" use="required" type="xs:int" />
+			<xs:attribute name="repository_association_id" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+
+
+	<xs:element name="shapes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="mcdEntityShape" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="mcdAssociationShape" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+
 	<xs:element name="diagramme">
 		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="shapes" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
 			<xs:attribute name="id" use="required" type="xs:int"/>
+			<xs:attribute name="is_active" use="optional" type="xs:boolean" />
 			<xs:attribute name="name" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -316,6 +396,7 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
+			<xs:attribute name="parent_id" use="required" type="xs:string"></xs:attribute>
 		</xs:complexType>
 	</xs:element>
 

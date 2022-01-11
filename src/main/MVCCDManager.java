@@ -6,10 +6,11 @@ import console.ConsoleManager;
 import console.ViewLogsManager;
 import console.WarningLevel;
 import datatypes.MDDatatypesManager;
+import diagram.Diagram;
 import exceptions.CodeApplException;
 import main.window.console.WinConsoleContent;
 import main.window.diagram.WinDiagram;
-import main.window.diagram.WinDiagramContent;
+import main.window.diagram.WinDiagrammer;
 import main.window.menu.WinMenuContent;
 import main.window.repository.WinRepository;
 import main.window.repository.WinRepositoryContent;
@@ -24,11 +25,16 @@ import project.*;
 import repository.Repository;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
+import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Il s'agit de la classe d'orchestration du programme.
@@ -50,6 +56,8 @@ public class MVCCDManager {
 
     //#MAJ 2021-03-16 Provisoire en attendant la sauvegarde XML finalisée
     private boolean extensionProjectFileNotEqual = false; // Si l'extension du fichier correspond à la préférence d'application
+
+    private Diagram currentDiagram;
 
     public static synchronized MVCCDManager instance() {
         if (instance == null) {
@@ -131,7 +139,6 @@ public class MVCCDManager {
         // Affiche le référentiel dans l'écran d'accueil
         getWinRepositoryContent().getTree().changeModel(repository);
     }
-
 
 
     private void startConsole() {
@@ -497,6 +504,7 @@ public class MVCCDManager {
             } else {
                 throw new CodeApplException("Seules les extensions mvccd et xml sont reconnues");
             }
+
             // Fin provisoire !
             message = MessagesBuilder.getMessagesProperty ("project.save.finish.ok",
                     new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() });
@@ -576,11 +584,11 @@ public class MVCCDManager {
     }
 
     public WinDiagram getWinDiagram() {
-        return mvccdWindow.getDiagram();
+        return mvccdWindow.getDiagrammer();
     }
 
-    public WinDiagramContent getWinDiagramContent() {
-        return (WinDiagramContent) mvccdWindow.getDiagram().getPanelContent();
+    public WinDiagrammer getWinDiagramContent() {
+        return (WinDiagrammer) mvccdWindow.getDiagrammer().getPanelContent();
     }
 
 
@@ -639,7 +647,6 @@ public class MVCCDManager {
         getWinMenuContent().getProjectSave().setEnabled(datasProjectChanged);
     }
 
-
     public MVCCDElement getRootMVCCDElement() {
         return rootMVCCDElement;
     }
@@ -682,6 +689,29 @@ public class MVCCDManager {
     //Fin provisoire !
 
 
+    public Diagram getCurrentDiagram() {
+        return currentDiagram;
+    }
 
+    public void setCurrentDiagram(Diagram currentDiagram) {
+        this.currentDiagram = currentDiagram;
+        loadDiagram(currentDiagram);
+        ConsoleManager.printMessage("Diagramme " + currentDiagram.getName() + " ajouté en tant que diagramme courant.");
+    }
+
+    private void loadDiagram(Diagram diagram){
+
+        // Récupère les shapes du diagramme courant
+        List<IShape> currentDiagramShapes = diagram.getShapes();
+
+        // Ajoute les formes à la zone de dessin
+        DiagrammerService.getDrawPanel().loadShapes(currentDiagramShapes);
+        diagram.getRelationShapes().forEach(RelationShape::addLabelsInDiagrammeur);
+
+        // Refresh les informations des ClassShapes
+        diagram.getClassShapes().forEach(ClassShape::refreshInformations);
+
+        ConsoleManager.printMessage("Diagramme " + diagram.getName() + " affiché.");
+    }
 
 }

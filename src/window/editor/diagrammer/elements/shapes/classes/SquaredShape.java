@@ -4,19 +4,32 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import javax.swing.JPanel;
+
+import main.MVCCDManager;
 import window.editor.diagrammer.elements.interfaces.IResizable;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.ResizableBorder;
 
+import javax.swing.JPanel;
+
 public abstract class SquaredShape extends JPanel implements IShape, IResizable {
 
+  protected int id;
   protected final ResizableBorder BORDER = new ResizableBorder();
   protected boolean isSelected = false;
 
+  public SquaredShape(int id){
+    this.id = id;
+    this.addListeners();
+    this.setBorder(this.BORDER);
+  }
+
   public SquaredShape() {
+    if (MVCCDManager.instance().getProject() != null)
+      this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
+
     this.addListeners();
     this.setBorder(this.BORDER);
   }
@@ -78,4 +91,14 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable 
     this.setBounds(newBounds.x, newBounds.y, newBounds.width, newBounds.height);
   }
 
+  public int getId() {
+    return id;
+  }
+
+  @Override
+  public String toString() {
+    return "SquaredShape{" +
+            "id=" + id +
+            '}';
+  }
 }

@@ -16,6 +16,8 @@ import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
+
+import console.ConsoleManager;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
@@ -23,6 +25,7 @@ import preferences.PreferencesManager;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.DrawPanelListener;
 import window.editor.diagrammer.utils.GridUtils;
@@ -34,11 +37,11 @@ import window.editor.diagrammer.utils.RelationCreator;
 public class DrawPanel extends JLayeredPane {
 
   private final Point origin;
-  private final List<IShape> elements;
+  private List<IShape> shapes;
   private int gridSize = Preferences.DIAGRAMMER_DEFAULT_GRID_SIZE;
 
   public DrawPanel() {
-    this.elements = new LinkedList<>();
+    this.shapes = new LinkedList<>();
     this.origin = new Point();
     this.initUI();
     this.addListeners();
@@ -76,6 +79,17 @@ public class DrawPanel extends JLayeredPane {
     }
   }
 
+  public MCDEntityShape getMcdEntityShapeById(int id){
+    for (ClassShape shape : this.getClassShapes()){
+      if (shape instanceof MCDEntityShape){
+        if (shape.getId() == id){
+          return (MCDEntityShape) shape;
+        }
+      }
+    }
+    return null;
+  }
+
   public void zoom(int zoomFactor) {
     int oldGridSize = this.gridSize;
     if (zoomFactor >= Preferences.DIAGRAMMER_MINIMUM_ALLOWED_ZOOM && zoomFactor <= Preferences.DIAGRAMMER_MAXIMUM_ALLOWED_ZOOM) {
@@ -96,47 +110,62 @@ public class DrawPanel extends JLayeredPane {
     differenceY = y - y * this.gridSize / oldGridSize;
     // On déplace l'origine
     this.moveOrigin(GridUtils.alignToGrid(-differenceX, this.gridSize), GridUtils.alignToGrid(-differenceY, this.gridSize));
-    for (IShape e : this.getElements()) {
+    for (IShape e : this.getShapes()) {
       e.setLocationDifference(GridUtils.alignToGrid(differenceX, this.gridSize), GridUtils.alignToGrid(differenceX, this.gridSize));
     }
     this.updatePanelAndScrollbars();
 
   }
 
-  public void addElement(IShape element) {
-    if (MVCCDManager.instance().getProject() != null) {
+  public void addShape(IShape element) {
       if (element != null) {
         this.add((JComponent) element);
-        this.elements.add(element);
+        this.shapes.add(element);
         this.repaint();
       } else {
         DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.add.null.element"));
       }
-    } else {
-      DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.project.closed"));
+  }
+
+  public void loadShapes(List<IShape> shapes){
+    this.shapes.addAll(shapes);
+    for (IShape shape : shapes) {
+      this.add((JComponent) shape);
     }
+    revalidate();
+    repaint();
+    ConsoleManager.printMessage(shapes.size() + " formes ont été ajoutées à la zone de dessin.");
   }
 
   private void addListeners() {
     DrawPanelListener listener = new DrawPanelListener();
+
     this.addMouseListener(listener);
     this.addMouseMotionListener(listener);
     this.addMouseWheelListener(listener);
     this.addKeyListener(listener);
   }
 
-  public List<IShape> getElements() {
-    return this.elements;
+  public List<IShape> getShapes() {
+    return this.shapes;
   }
 
   public Point getOrigin() {
     return this.origin;
   }
 
-  public void deleteElement(IShape shape) {
+  public void deleteShape(IShape shape) {
     this.remove((JComponent) shape);
-    this.elements.remove(shape);
+    this.shapes.remove(shape);
+    revalidate();
     this.repaint();
+  }
+
+  public void unloadAllShapes(){
+    removeAll();
+    shapes.clear();
+    revalidate();
+    repaint();
   }
 
   public void drawRelations(Graphics2D graphics2D) {
@@ -161,6 +190,12 @@ public class DrawPanel extends JLayeredPane {
     }
   }
 
+  public void repaintElements(){
+    for (IShape shape : getShapes()){
+      shape.repaint();
+    }
+  }
+
   /**
    * Zoom les éléments du modèle.
    * @param fromFactor facteur de zoom initial
@@ -168,7 +203,7 @@ public class DrawPanel extends JLayeredPane {
    */
   public void zoomElements(int fromFactor, int toFactor) {
     if (this.zoomAllowed(toFactor)) {
-      for (IShape element : this.getElements()) {
+      for (IShape element : this.getShapes()) {
         element.zoom(fromFactor, toFactor);
       }
     }
@@ -189,7 +224,7 @@ public class DrawPanel extends JLayeredPane {
   }
 
   private void removeUnnecessaryWhitespaceAroundDiagram() {
-    Rectangle contentBounds = this.getContentBounds(this.getElements(), 0);
+    Rectangle contentBounds = this.getContentBounds(this.getShapes(), 0);
     int newX = 0;
     int newY = 0;
     int newWidth = (int) this.getVisibleRect().getMaxX();
@@ -203,7 +238,7 @@ public class DrawPanel extends JLayeredPane {
       newHeight = (int) (contentBounds.getY() + contentBounds.getHeight());
     }
     this.moveOrigin(newX, newY);
-    for (IShape element : this.getElements()) {
+    for (IShape element : this.getShapes()) {
       element.setLocation(GridUtils.alignToGrid(element.getBounds().x - newX, this.gridSize), GridUtils.alignToGrid(element.getBounds().y - newY, this.gridSize));
     }
     // On change la position de la vue
@@ -224,7 +259,7 @@ public class DrawPanel extends JLayeredPane {
 
   private void checkIfScrollbarsAreNecessary() {
     final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
-    final Rectangle diaWithoutWhite = this.getContentBounds(this.getElements(), 0);
+    final Rectangle diaWithoutWhite = this.getContentBounds(this.getShapes(), 0);
     final Dimension viewSize = this.getViewableDiagrampanelSize();
     final boolean vertWasVisible = this.isVerticalScrollbarVisible();
     final boolean horWasVisible = this.isHorizontalScrollbarVisible();
@@ -304,7 +339,7 @@ public class DrawPanel extends JLayeredPane {
 
   private void insertWhiteSpaceInUpperLeftCorner() {
     final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
-    final Rectangle diaWithoutWhite = this.getContentBounds(this.getElements(), 0);
+    final Rectangle diaWithoutWhite = this.getContentBounds(this.getShapes(), 0);
     int adjustWidth = 0;
     if (diaWithoutWhite.getX() < 0) {
       adjustWidth = (int) diaWithoutWhite.getX();
@@ -314,7 +349,7 @@ public class DrawPanel extends JLayeredPane {
       adjustHeight = (int) diaWithoutWhite.getY();
     }
     this.moveOrigin(adjustWidth, adjustHeight);
-    for (IShape element : this.getElements()) {
+    for (IShape element : this.getShapes()) {
       JComponent component = (JComponent) element;
       component.setLocation(GridUtils.alignToGrid(component.getX() - adjustWidth, this.gridSize), GridUtils.alignToGrid(component.getY() - adjustHeight, this.gridSize));
     }
@@ -349,7 +384,7 @@ public class DrawPanel extends JLayeredPane {
   }
 
   public void scroll(int differenceX, int differenceY) {
-    for (IShape element : this.getElements()) {
+    for (IShape element : this.getShapes()) {
       element.setLocationDifference(differenceX, differenceY);
     }
   }
@@ -361,12 +396,22 @@ public class DrawPanel extends JLayeredPane {
 
   public List<RelationShape> getRelationShapes() {
     List<RelationShape> relations = new ArrayList<>();
-    for (IShape shape : this.elements) {
+    for (IShape shape : this.shapes) {
       if (shape instanceof RelationShape) {
         relations.add((RelationShape) shape);
       }
     }
     return relations;
+  }
+
+  public List<ClassShape> getClassShapes(){
+    List<ClassShape> classShapes = new ArrayList<>();
+    for (IShape shape : this.shapes){
+      if (shape instanceof ClassShape){
+        classShapes.add((ClassShape) shape);
+      }
+    }
+    return classShapes;
   }
 
   public List<RelationShape> getRelationShapesByClassShape(ClassShape shape) {
@@ -380,14 +425,14 @@ public class DrawPanel extends JLayeredPane {
   }
 
   public void deselectAllShapes() {
-    for (IShape shape : this.getElements()) {
+    for (IShape shape : this.getShapes()) {
       shape.setSelected(false);
     }
     this.repaint();
   }
 
   public void deselectAllOtherShape(IShape shapeToKeepSelected) {
-    for (IShape shape : this.getElements()) {
+    for (IShape shape : this.getShapes()) {
       if (shape != shapeToKeepSelected) {
         shape.setSelected(false);
       }

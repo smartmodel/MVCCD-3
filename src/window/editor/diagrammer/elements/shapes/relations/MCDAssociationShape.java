@@ -1,100 +1,105 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
-import java.awt.Graphics2D;
+import java.awt.*;
+
 import mcd.MCDAssociation;
+import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.services.DiagrammerService;
 
 public class MCDAssociationShape extends RelationShape {
-
-  MCDAssociation association;
 
   public MCDAssociationShape(MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
     super(source, destination, isReflexive);
   }
+  public MCDAssociationShape(int id, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+    super(id, source, destination, isReflexive);
+  }
 
+
+  public MCDAssociationShape(MCDAssociation relatedRepositoryAssociation, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+    this(source, destination, isReflexive);
+    this.relatedRepositoryElement = relatedRepositoryAssociation;
+  }
+
+  public MCDAssociationShape(int id, MCDAssociation relatedRepositoryAssociation, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+    super(id, relatedRepositoryAssociation, source, destination, isReflexive);
+  }
   @Override
   public void doDraw(Graphics2D graphics2D) {}
 
   @Override
-  public void setInformations() {
-    if (this.association != null) {
-      // Nom d'association
-      if (!this.association.getName().isEmpty()) {
-        this.setRelationName(this.association.getName());
-        this.associationName.setVisible(true);
-      } else {
-        this.associationName.setVisible(false);
-      }
-      // Rôle source
-      if (!this.association.getFrom().getName().isEmpty()) {
-        this.setSourceRole(this.association.getFrom().getName());
-        this.sourceRole.setVisible(true);
-      } else {
-        this.sourceRole.setVisible(false);
-      }
-      // Rôle destination
-      if (!this.association.getTo().getName().isEmpty()) {
-        this.setDestinationRole(this.association.getTo().getName());
-        this.destinationRole.setVisible(true);
-      } else {
-        this.destinationRole.setVisible(false);
-      }
-      // Cardinalité destination
-      if (!this.association.getTo().getMultiStr().isEmpty()) {
-        this.setDestinationCardinalite(this.association.getTo().getMultiStr());
-        this.destinationCardinalite.setVisible(true);
-      } else {
-        this.destinationCardinalite.setVisible(false);
-      }
-      // Cardinalité source
-      if (!this.association.getFrom().getMultiStr().isEmpty()) {
-        this.setSourceCardinalite(this.association.getFrom().getMultiStr());
-        this.sourceCardinalite.setVisible(true);
-      } else {
-        this.sourceCardinalite.setVisible(false);
-      }
+  public void createLabelsAfterRelationShapeEdit(){
 
+    MCDAssociation association = getMCDAssociation();
+
+    // Nom d'association
+    if (!association.getName().isEmpty()){
+      LabelShape labelShape;
+      if (pointsAncrage.size() <= 2){
+        RelationPointAncrageShape anchorPoint = pointsAncrage.get(0);
+        Point relationCenter = getCenter();
+        int distanceInXFromAnchorPoint = Math.abs(relationCenter.x - anchorPoint.x);
+        int distanceInYFromAnchorPoint = Math.abs(relationCenter.y - anchorPoint.y);
+        labelShape = createOrUpdateLabel(anchorPoint, association.getName(), LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+
+      } else {
+        int middleIndex = pointsAncrage.size() / 2;
+        labelShape = createOrUpdateLabel(pointsAncrage.get(middleIndex), association.getName(), LabelType.ASSOCIATION_NAME, 0, 0);
+      }
+        DiagrammerService.getDrawPanel().add(labelShape);
+    } else {
+      deleteLabel(LabelType.ASSOCIATION_NAME);
     }
+
+    // Rôle source
+    if (!association.getFrom().getName().isEmpty()){
+      LabelShape labelShape = createOrUpdateLabel(getFirstPoint(), association.getFrom().getName(), LabelType.SOURCE_ROLE, 0, 0);
+      DiagrammerService.getDrawPanel().add(labelShape);
+    } else {
+      deleteLabel(LabelType.SOURCE_ROLE);
+    }
+
+    // Rôle destination
+    if (!association.getTo().getName().isEmpty()){
+      LabelShape labelShape = createOrUpdateLabel(getLastPoint(), association.getTo().getName(), LabelType.DESTINATION_ROLE, 0, 0);
+      DiagrammerService.getDrawPanel().add(labelShape);
+    } else {
+      deleteLabel(LabelType.DESTINATION_ROLE);
+    }
+
+    // Cardinalités source
+    if (!association.getFrom().getMultiStr().isEmpty()){
+      LabelShape labelShape = createOrUpdateLabel(getFirstPoint(), association.getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY, 0, 0);
+      DiagrammerService.getDrawPanel().add(labelShape);
+    } else {
+      deleteLabel(LabelType.SOURCE_CARDINALITY);
+    }
+
+    // Cardinalités destination
+    if (!association.getTo().getMultiStr().isEmpty()){
+      LabelShape labelShape = createOrUpdateLabel(getLastPoint(), association.getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY, 0, 0);
+      DiagrammerService.getDrawPanel().add(labelShape);
+    } else
+      deleteLabel(LabelType.DESTINATION_CARDINALITY);
+
+    DiagrammerService.getDrawPanel().repaint();
+
+
   }
 
   @Override
-  public void setDestinationRole(String role) {
-    this.destinationRole.setText(role);
-    this.destinationRole.repaint();
+  public String getXmlTagName() {
+    return Preferences.DIAGRAMMER_MCD_ASSOCIATION_XML_TAG;
   }
 
-  @Override
-  public void setSourceRole(String role) {
-    this.sourceRole.setText(role);
-    this.sourceRole.repaint();
+  public MCDAssociation getMCDAssociation() {
+    return (MCDAssociation) this.relatedRepositoryElement;
   }
 
-  @Override
-  public void setRelationName(String name) {
-    this.associationName.setText(name);
-    this.associationName.repaint();
+  public void setMCDAssociation(MCDAssociation association) {
+    this.relatedRepositoryElement = association;
   }
 
-  @Override
-  public void setSourceCardinalite(String cardinalite) {
-    this.sourceCardinalite.setText(cardinalite);
-    this.sourceCardinalite.repaint();
-  }
-
-  @Override
-  public void setDestinationCardinalite(String cardinalite) {
-    this.destinationCardinalite.setText(cardinalite);
-    this.destinationCardinalite.repaint();
-  }
-
-  public MCDAssociation getAssociation() {
-    return this.association;
-  }
-
-  public void setAssociation(MCDAssociation association) {
-    this.association = association;
-    // Ajoute les informations dans les labels
-    this.setInformations();
-  }
 
 }

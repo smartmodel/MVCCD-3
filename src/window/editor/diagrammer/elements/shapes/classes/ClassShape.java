@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.List;
+
+import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
@@ -19,11 +21,32 @@ public abstract class ClassShape extends SquaredShape {
   protected ClassShapeZone zoneProprietes = new ClassShapeZone();
   protected ClassShapeZone zoneOperations = new ClassShapeZone();
   protected ClassShapeZone zoneServices = new ClassShapeZone();
+  protected MDElement relatedRepositoryElement;
+
+  public ClassShape(int id){
+    super(id);
+    this.initUI();
+    this.addListeners();
+  }
 
   public ClassShape() {
     super();
     this.initUI();
     this.addListeners();
+  }
+
+  public ClassShape(MDElement relatedRepositoryElement, int id) {
+    super(id);
+    this.addListeners();
+    this.relatedRepositoryElement = relatedRepositoryElement;
+    this.initUI();
+  }
+
+  public ClassShape(MDElement relatedRepositoryElement) {
+    super();
+    this.addListeners();
+    this.relatedRepositoryElement = relatedRepositoryElement;
+    this.initUI();
   }
 
   @Override
@@ -36,6 +59,12 @@ public abstract class ClassShape extends SquaredShape {
     this.drawZoneProprietes(graphics2D);
   }
 
+  public void refreshInformations(){
+    setZoneEnTeteContent();
+    setZoneProprietesContent();
+    repaint();
+  }
+
   @Override
   public void drag(int differenceX, int differenceY) {
     super.drag(differenceX, differenceY);
@@ -45,7 +74,7 @@ public abstract class ClassShape extends SquaredShape {
           pointAncrage.setLocationDifference(differenceX, differenceY);
         }
       } else {
-        final RelationPointAncrageShape nearestPointAncrage = GeometryUtils.getNearestPointAncrage(this, relation);
+        RelationPointAncrageShape nearestPointAncrage = GeometryUtils.getNearestPointAncrage(this, relation);
         nearestPointAncrage.setLocationDifference(differenceX, differenceY);
       }
     }
@@ -161,4 +190,11 @@ public abstract class ClassShape extends SquaredShape {
   protected abstract String getLongestProperty();
 
   protected abstract void setNameFont(Graphics2D graphics2D);
+
+  public MDElement getRelatedRepositoryElement() {
+
+    return relatedRepositoryElement;
+  }
+
+  public abstract String getXmlTagName();
 }

@@ -1,9 +1,10 @@
 package project;
 
-import diagram.mcd.MCDDiagram;
+import diagram.Diagram;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDFactory;
+import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.*;
@@ -22,6 +23,7 @@ import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.postgresql.MPDRPostgreSQLColumn;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 import mpdr.postgresql.MPDRPostgreSQLTable;
+import oracle.ucp.proxy.annotation.Pre;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -30,6 +32,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import preferences.Preferences;
 import profile.Profile;
+import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.LabelShape;
+import window.editor.diagrammer.elements.shapes.relations.LabelType;
+import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -39,10 +46,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProjectLoaderXml {
     // Version de l'application utilisée par le projet XML chargé
@@ -98,8 +107,6 @@ public class ProjectLoaderXml {
             ArrayList<Element> modelsTagsList = loadModels(mcd, mcdTag);
             // Chargement des packages
             loadPackages(mcd, mcdTag);
-            // Chargement des diagramme
-            loadDiagrams(mcd, mcdTag);
             // Chargement des entités
             loadEntities(mcd, mcdTag, modelsTagsList);
             // Chargement des attributs
@@ -114,8 +121,14 @@ public class ProjectLoaderXml {
             //Chargement du (ou des) MLDR
             loadMLDRs(mcd, mcdTag);
 
+            // Chargement des diagrammes
+            Element diagramsTag = (Element) projectTag.getElementsByTagName(Preferences.NODE_DIAGRAMS).item(0);
+            loadMCDDiagrams(project, diagramsTag, mcd);
+
+
             // Validation du fichier
             validator.validate(new DOMSource(document));
+
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             //#MAJ 2021-06-06 TODO-PAS STB faire un throw(e) - Intégration dans la transaction
@@ -306,12 +319,12 @@ public class ProjectLoaderXml {
                 /*
                 Chargement des conteneurs sans modèle
                  */
-                //Chargement des diagrammes
+/*                //Chargement des diagrammes
                 if(childOfMcdTag.getNodeName().equals("diagrammes")) {
                     MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(mcd, Integer.parseInt(childOfMcdTag.getAttribute("id")));
                     mcdContDiagrams.setName(Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
                     this.diagramTagsList = childOfMcdTag.getChildNodes(); //Récupération des enfants de <diagrammes>, c'est-à-dire de la liste de chaque <diagramme>.
-                }
+                }*/
                 else if(childOfMcdTag.getNodeName().equals("entities")) {
                     MVCCDElementFactory.instance().createMCDEntities(mcd, Preferences.REPOSITORY_MCD_ENTITIES_NAME);
                 }
@@ -453,22 +466,40 @@ public class ProjectLoaderXml {
         }
     }
 
-    private void loadDiagrams(MCDContModels mcd, Element mcdTag){
-        //Recherche du conteneur de diagrammes au sein du modèle "MCD"
-        ArrayList<MVCCDElement> mcdElements = mcd.getChilds();
-        for(MVCCDElement mvccdElement : mcdElements){
-            if (mvccdElement instanceof MCDContDiagrams) {
-                MCDContDiagrams mcdContDiagrams = (MCDContDiagrams) mvccdElement;
-                //Parcours chaque diagramme pour chargement
-                for (int i = 0; i < this.diagramTagsList.getLength(); i++) {
-                    if(this.diagramTagsList.item(i) instanceof Element){
-                        Element diagramTag = (Element) this.diagramTagsList.item(i);
-                        MCDDiagram mcdDiagram = MVCCDElementFactory.instance().createMCDDiagram(mcdContDiagrams, Integer.parseInt(diagramTag.getAttribute("id")));
-                        mcdDiagram.setName(diagramTag.getAttribute("name"));
-                    }
+    private void loadMCDDiagrams(Project project, Element diagramsTag, MCDContModels mcdSource){
+
+        // Création du contenur de diagrammes MCD
+        MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(mcdSource, Integer.parseInt(diagramsTag.getAttribute(Preferences.ATTRIBUTE_ID)));
+        mcdContDiagrams.setName(Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+
+        // Parcours de tous les diagrammes MCD
+        for (int i = 0; i < diagramsTag.getChildNodes().getLength(); i++) {
+            Node currentElement = diagramsTag.getChildNodes().item(i);
+            if(currentElement instanceof Element){
+
+                Element diagramTag = (Element) currentElement;
+
+                // Récupère l'ID du parent pour déterminer s'il s'agit d'un diagramme de projet, MCD, etc.
+                int parentId = Integer.parseInt(diagramTag.getAttribute(Preferences.ATTRIBUTE_PARENT_ID));
+                ProjectElement parent = ProjectService.getProjectElementById(project, parentId);
+
+                Diagram diagram = null;
+
+                // Si le parent est un MCD
+                if (parent instanceof MCDContModels){
+                    diagram = MVCCDElementFactory.instance().createMCDDiagram(mcdContDiagrams, Integer.parseInt(diagramTag.getAttribute(Preferences.ATTRIBUTE_ID)));
+                    diagram.setName(diagramTag.getAttribute(Preferences.ATTRIBUTE_NAME));
+                }
+
+                // Chargement des shapes
+                if (diagramTag.getElementsByTagName(Preferences.NODE_SHAPES).getLength() > 0){
+                    loadClassShapes(diagramTag, diagram, mcdSource);
+                    loadRelationShapes(diagramTag, diagram, mcdSource);
                 }
             }
         }
+
+
     }
 
     private void loadEntities(MCDContModels mcd, Element element, ArrayList<Element> elementsModeles) {
@@ -1739,4 +1770,191 @@ public class ProjectLoaderXml {
             }
         }
     }
+
+    private void loadClassShapes(Element diagramTag, Diagram diagram, MCDContModels mcdSource){
+        Node shapesTag = diagramTag.getElementsByTagName(Preferences.NODE_SHAPES).item(0);
+        NodeList shapes = shapesTag.getChildNodes();
+
+        for (int i = 0; i < shapes.getLength(); i++) {
+            if (shapes.item(i) instanceof Element){
+
+                // Récupère le noeud courant et son id
+                Element currentNode = (Element) shapes.item(i);
+                int id = Integer.parseInt(currentNode.getAttribute(Preferences.ATTRIBUTE_ID));
+
+                // La balise courante est une entité d'un MCD
+                if (currentNode.getNodeName().equals(Preferences.DIAGRAMMER_MCD_ENTITY_XML_TAG)){
+                    loadMCDEntityShape(currentNode, mcdSource, diagram, diagramTag, id);
+                }
+            }
+        }
+    }
+
+    private void loadMCDEntityShape(Element node, MCDContModels mcd, Diagram diagram, Element diagramTag, int entityShapeId){
+
+        // Crée la nouvelle forme qui sera affichée dans le diagrammeur
+        MCDEntityShape newEntity;
+
+        // Récupère l'entité du référentiel liée
+        if (node.hasAttribute(Preferences.ATTRIBUTE_REPOSITORY_ENTITY_ID)){
+            String relatedRepositoryEntityId = node.getAttribute(Preferences.ATTRIBUTE_REPOSITORY_ENTITY_ID);
+            MCDEntity entityFound = (MCDEntity) mcd.getEntities().getChildById((Integer.parseInt(relatedRepositoryEntityId)));
+            newEntity = new MCDEntityShape(entityShapeId, entityFound);
+
+        } else {
+            newEntity = new MCDEntityShape(entityShapeId);
+        }
+
+        // Set la size et la position de l'entité
+        newEntity.setSize(Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_WIDTH)), Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_HEIGHT)));
+        newEntity.setLocation(Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_X)), Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_Y)));
+
+        // Ajoute l'entité au diagramme
+        diagram.addShape(newEntity);
+
+        // Affiche les différentes zones de l'entité
+        newEntity.refreshInformations();
+    }
+
+    private void loadRelationShapes(Element diagramTag, Diagram diagram, MCDContModels mcdSource){
+        Node shapesTag = diagramTag.getElementsByTagName(Preferences.NODE_SHAPES).item(0);
+        NodeList shapes = shapesTag.getChildNodes();
+
+        for (int i = 0; i < shapes.getLength(); i++) {
+            if (shapes.item(i) instanceof Element){
+
+                // Récupère le noeud courant
+                Element currentNode = (Element) shapes.item(i);
+                int id = Integer.parseInt(currentNode.getAttribute(Preferences.ATTRIBUTE_ID));
+
+                // La balise courante est une entité d'un MCD
+                if (currentNode.getNodeName().equals(Preferences.DIAGRAMMER_MCD_ASSOCIATION_XML_TAG)){
+                    loadMCDAssociationShape(currentNode, shapes, diagram, diagramTag, id, mcdSource);
+                }
+
+            }
+        }
+    }
+
+    private void loadMCDAssociationShape(Element node, NodeList shapes, Diagram diagram, Element diagramTag, int associationShapeId, MCDContModels mcd){
+
+        // Récupère les ids de l'association et des entités du référentiel liées
+        boolean isReflexive = node.getAttribute(Preferences.ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID).equals(node.getAttribute(Preferences.ATTRIBUTE_SOURCE_ENTITY_SHAPE_ID));
+
+        MCDEntityShape sourceEntityShape = null;
+        MCDEntityShape destinationEntityShape = null;
+
+        // Récupère les entityShape source et destination
+        for (int j = 0; j < shapes.getLength(); j++) {
+            if (shapes.item(j) instanceof Element){
+                if (shapes.item(j).getNodeName().equals(Preferences.DIAGRAMMER_MCD_ENTITY_XML_TAG)) {
+                    Element comparedItem = (Element) shapes.item(j);
+                    if (comparedItem.getAttribute(Preferences.ATTRIBUTE_ID).equals(node.getAttribute(Preferences.ATTRIBUTE_SOURCE_ENTITY_SHAPE_ID)) && comparedItem.getAttribute(Preferences.ATTRIBUTE_ID).equals(node.getAttribute(Preferences.ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID))){
+                        // Réflexive
+                        int entitiesId = Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID));
+                        destinationEntityShape = diagram.getMCDEntityShapeByID(entitiesId);
+                        sourceEntityShape = diagram.getMCDEntityShapeByID(entitiesId);
+                    } else if (comparedItem.getAttribute(Preferences.ATTRIBUTE_ID).equals(node.getAttribute(Preferences.ATTRIBUTE_SOURCE_ENTITY_SHAPE_ID))) {
+                        int sourceEntityId = Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_SOURCE_ENTITY_SHAPE_ID));
+                        sourceEntityShape = diagram.getMCDEntityShapeByID(sourceEntityId);
+                    } else if (comparedItem.getAttribute(Preferences.ATTRIBUTE_ID).equals(node.getAttribute(Preferences.ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID))) {
+                        int destinationEntityId = Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID));
+                        destinationEntityShape = diagram.getMCDEntityShapeByID(destinationEntityId);
+                    }
+                }
+            }
+        }
+
+        MCDAssociationShape newAssociation;
+
+        // Récupère l'entité du référentiel liée
+        if (node.hasAttribute(Preferences.ATTRIBUTE_REPOSITORY_ASSOCIATION_ID)){
+            int relatedRepositoryAssociationId = Integer.parseInt(node.getAttribute(Preferences.ATTRIBUTE_REPOSITORY_ASSOCIATION_ID));
+            MCDAssociation associationFound = (MCDAssociation) mcd.getRelations().getChildById(relatedRepositoryAssociationId);
+            newAssociation = new MCDAssociationShape(associationShapeId, associationFound, sourceEntityShape, destinationEntityShape, isReflexive);
+        } else {
+            newAssociation = new MCDAssociationShape(associationShapeId, sourceEntityShape, destinationEntityShape, isReflexive);
+        }
+
+        // Ajoute les points d'ancrage
+        loadAnchorPoints(newAssociation, node);
+
+        // Ajoute les labels
+        if (elementHasChildByTagName(node, Preferences.DIAGRAMMER_LABELS_XML_TAG_NAME))
+            loadLabelShapes(newAssociation, node, diagramTag);
+
+        // Ajoute l'association au diagramme
+        diagram.addShape(newAssociation);
+    }
+
+    private void loadLabelShapes(MCDAssociationShape associationShape, Element currentNode, Element diagramTag){
+        // Récupère les labels
+        NodeList labelsParentTag = currentNode.getElementsByTagName(Preferences.DIAGRAMMER_LABELS_XML_TAG_NAME);
+        NodeList allLabelsTags = labelsParentTag.item(0).getChildNodes();
+
+        // Vide la liste des labels de l'association
+        associationShape.getLabels().clear();
+
+        for (int i = 0; i < allLabelsTags.getLength(); i++) {
+
+            if (allLabelsTags.item(i) instanceof Element){
+                Element currentLabelTag = (Element) allLabelsTags.item(i);
+                String type = currentLabelTag.getAttribute(Preferences.ATTRIBUTE_TYPE);
+
+                int relatedAnchorPointId = Integer.parseInt(currentLabelTag.getAttribute(Preferences.ATTRIBUTE_RELATED_ANCHOR_POINT_ID));
+                int distanceInXFromAnchorPoint = Integer.parseInt(currentLabelTag.getAttribute(Preferences.ATTRIBUTE_X_DISTANCE_FROM_ANCHOR_POINT));
+                int distanceInYFromAnchorPoint = Integer.parseInt(currentLabelTag.getAttribute(Preferences.ATTRIBUTE_Y_DISTANCE_FROM_ANCHOR_POINT));
+
+                // Récupère le point d'ancrage lié
+                List<RelationPointAncrageShape> anchorPointFound = associationShape.getPointsAncrage().stream().filter(anchorPoint -> anchorPoint.getId() == relatedAnchorPointId).collect(Collectors.toList());
+
+                // Crée le LabelShape
+                if (!anchorPointFound.isEmpty()) {
+                    // Nom d'association
+                    if (type.equals(LabelType.ASSOCIATION_NAME.name())){
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getName(), LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+                    } else if (type.equals(LabelType.DESTINATION_CARDINALITY.name())){
+                        // Cardinalités destination
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+                    } else if (type.equals(LabelType.SOURCE_CARDINALITY.name())){
+                        // Cardinalités source
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+                    } else if (type.equals(LabelType.SOURCE_ROLE.name())) {
+                        // Rôle source
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getFrom().getName(), LabelType.SOURCE_ROLE, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+                    } else {
+                        // Rôle destination
+                        associationShape.createOrUpdateLabel(anchorPointFound.get(0), associationShape.getMCDAssociation().getTo().getName(), LabelType.DESTINATION_ROLE, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+                    }
+
+
+                }
+            }
+        }
+    }
+
+    private void loadAnchorPoints(MCDAssociationShape associationShape, Element currentNode){
+        // Vide la liste des points d'ancrage
+        associationShape.getPointsAncrage().clear();
+
+        // Récupère les points d'ancrage
+        NodeList anchorPointsParentTag = currentNode.getElementsByTagName(Preferences.DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME);
+        NodeList allAnchorPointTags = anchorPointsParentTag.item(0).getChildNodes();
+
+        for (int i = 0; i < allAnchorPointTags.getLength(); i++) {
+            if (allAnchorPointTags.item(i) instanceof Element){
+                Element pointTag = (Element) allAnchorPointTags.item(i);
+                Point point = new Point(Integer.parseInt(pointTag.getAttribute("x")), Integer.parseInt(pointTag.getAttribute("y")));
+                RelationPointAncrageShape pointAncrageShape = new RelationPointAncrageShape(Integer.parseInt(pointTag.getAttribute("id")), point);
+                associationShape.getPointsAncrage().add(pointAncrageShape);
+            }
+        }
+
+        associationShape.reindexAllPointsAncrage();
+    }
+
+    private boolean elementHasChildByTagName(Element element, String tagNameToFind){
+        return element.getElementsByTagName(tagNameToFind).getLength() > 0;
+    }
+
 }

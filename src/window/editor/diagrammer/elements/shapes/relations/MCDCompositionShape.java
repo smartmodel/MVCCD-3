@@ -1,13 +1,26 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
 import java.awt.Graphics2D;
+
+import md.MDElement;
+import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 
+import javax.naming.ldap.PagedResultsControl;
+
 public class MCDCompositionShape extends RelationShape {
+
+  // TODO -> Changer le premier paramètre en MCDComposition lorsqu'elle aura été implémentée (ne pas oublier de changer le getter)
 
   public MCDCompositionShape(MCDEntityShape source, MCDEntityShape destination) {
     super(source, destination, false);
   }
+
+  public MCDCompositionShape(MDElement relatedRepositoryComposition, MCDEntityShape source, MCDEntityShape destination) {
+    this(source, destination);
+    this.relatedRepositoryElement = relatedRepositoryComposition;
+  }
+
 
   @Override
   public void doDraw(Graphics2D graphics2D) {
@@ -15,33 +28,13 @@ public class MCDCompositionShape extends RelationShape {
   }
 
   @Override
-  public void setInformations() {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
+  public void createLabelsAfterRelationShapeEdit() {
+
   }
 
   @Override
-  public void setDestinationRole(String role) {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
-  }
-
-  @Override
-  public void setSourceRole(String role) {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
-  }
-
-  @Override
-  public void setRelationName(String name) {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
-  }
-
-  @Override
-  public void setSourceCardinalite(String cardinalite) {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
-  }
-
-  @Override
-  public void setDestinationCardinalite(String cardinalite) {
-    // TODO -> Implémenter cette méthode lorsque la composition sera prise en charge
+  public String getXmlTagName() {
+    return Preferences.DIAGRAMMER_MCD_COMPOSITION_XML_TAG;
   }
 
   public void drawDiamond(Graphics2D graphics2D) {
@@ -77,5 +70,9 @@ public class MCDCompositionShape extends RelationShape {
     final int[] ypoints = {lastPoint.y, (int) ym, (int) yq, (int) yn};
 
     graphics2D.fillPolygon(xpoints, ypoints, NUMBER_OF_POINTS);
+  }
+
+  public MDElement getMCDComposition(){
+    return this.relatedRepositoryElement;
   }
 }

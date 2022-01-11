@@ -1,9 +1,10 @@
 package window.editor.diagrammer.listeners;
 
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import window.editor.diagrammer.elements.shapes.relations.LabelShape;
+import window.editor.diagrammer.services.DiagrammerService;
 
 public class LabelShapeListener extends MouseAdapter {
 
@@ -24,7 +25,6 @@ public class LabelShapeListener extends MouseAdapter {
 
     shape.setDistanceInXFromPointAncrage(shape.getDistanceInXFromPointAncrage() + differenceX);
     shape.setDistanceInYFromPointAncrage(shape.getDistanceInYFromPointAncrage() + differenceY);
-    shape.setFirstDisplay(false);
 
     shape.repaint();
   }

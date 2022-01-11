@@ -1,9 +1,13 @@
 package main.window.repository;
 
+import diagram.Diagram;
 import main.MVCCDManager;
 import project.Project;
 import project.ProjectElement;
 import project.ProjectService;
+import window.editor.diagrammer.drawpanel.DrawPanel;
+import window.editor.diagrammer.drawpanel.DrawPanelComponent;
+import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
@@ -30,6 +34,28 @@ public class WinRepositoryTree extends JTree {
 
         // add MouseListener to tree
         MouseAdapter ma = new MouseAdapter() {
+            public void mouseClicked(MouseEvent e){
+                JTree tree = (JTree) e.getSource();
+                TreePath path = tree.getPathForLocation(e.getX(), e.getY());
+
+                tree.setSelectionPath(path);
+
+                if (path == null) return;
+
+                DefaultMutableTreeNode clickedNode = (DefaultMutableTreeNode)path.getLastPathComponent();
+
+                if (clickedNode != null){
+                    if (clickedNode.getUserObject() instanceof Diagram){
+                        if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e) && !e.isConsumed()){
+                            e.consume();
+                            DiagrammerService.getDrawPanel().unloadAllShapes();
+                            Diagram diagramClicked = (Diagram) clickedNode.getUserObject();
+                            MVCCDManager.instance().setCurrentDiagram(diagramClicked);
+                        }
+                    }
+                }
+            }
+
             private void myPopupEvent(MouseEvent e) {
                 int x = e.getX();
                 int y = e.getY();
@@ -39,10 +65,13 @@ public class WinRepositoryTree extends JTree {
                     return;
 
                 tree.setSelectionPath(path);
-                DefaultMutableTreeNode rightClickedNode =
+
+                DefaultMutableTreeNode clickedNode =
                         (DefaultMutableTreeNode)path.getLastPathComponent();
-                if(rightClickedNode != null){
-                    WinRepositoryPopupMenu popup = new WinRepositoryPopupMenu (rightClickedNode);
+
+                if(clickedNode != null){
+
+                    WinRepositoryPopupMenu popup = new WinRepositoryPopupMenu (clickedNode);
                     popup.show(tree, x, y);
                 }
             }

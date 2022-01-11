@@ -2,11 +2,15 @@ package window.editor.diagrammer.elements.shapes.relations;
 
 import java.awt.Graphics2D;
 import mcd.MCDGeneralization;
+import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 
 public class MCDGeneralizationShape extends RelationShape {
 
-  private MCDGeneralization generalization;
+  public MCDGeneralizationShape(MCDGeneralization relatedRepositoryGeneralization, MCDEntityShape source, MCDEntityShape destination) {
+    this(source, destination);
+    this.relatedRepositoryElement = relatedRepositoryGeneralization;
+  }
 
   public MCDGeneralizationShape(MCDEntityShape source, MCDEntityShape destination) {
     super(source, destination, false);
@@ -18,33 +22,13 @@ public class MCDGeneralizationShape extends RelationShape {
   }
 
   @Override
-  public void setInformations() {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
+  public void createLabelsAfterRelationShapeEdit() {
+
   }
 
   @Override
-  public void setDestinationRole(String role) {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
-  }
-
-  @Override
-  public void setSourceRole(String role) {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
-  }
-
-  @Override
-  public void setRelationName(String name) {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
-  }
-
-  @Override
-  public void setSourceCardinalite(String cardinalite) {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
-  }
-
-  @Override
-  public void setDestinationCardinalite(String cardinalite) {
-    // TODO -> Implémenter cette méthode lorsque le bug du input non cliquable dans la fenêtre d'édition de la généralization sera résolu
+  public String getXmlTagName() {
+    return Preferences.DIAGRAMMER_MCD_GENERALIZATION_XML_TAG;
   }
 
   public void drawArrow(Graphics2D graphics2D) {
@@ -82,10 +66,10 @@ public class MCDGeneralizationShape extends RelationShape {
   }
 
   public MCDGeneralization getGeneralization() {
-    return this.generalization;
+    return (MCDGeneralization) this.relatedRepositoryElement;
   }
 
   public void setGeneralization(MCDGeneralization generalization) {
-    this.generalization = generalization;
+    this.relatedRepositoryElement = generalization;
   }
 }

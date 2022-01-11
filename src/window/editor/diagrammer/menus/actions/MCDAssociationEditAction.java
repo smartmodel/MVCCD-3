@@ -19,7 +19,7 @@ public class MCDAssociationEditAction extends AbstractAction {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    if (this.shape.getAssociation() != null) {
+    if (this.shape.getMCDAssociation() != null) {
       this.edit();
     } else {
       this.create();
@@ -30,14 +30,15 @@ public class MCDAssociationEditAction extends AbstractAction {
   private void edit() {
     final MVCCDManager manager = MVCCDManager.instance();
     final MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
-    mcdAssociationEditingTreat.treatUpdate(manager.getMvccdWindow(), this.shape.getAssociation());
-    this.shape.setInformations();
+    mcdAssociationEditingTreat.treatUpdate(manager.getMvccdWindow(), this.shape.getMCDAssociation());
+    shape.createLabelsAfterRelationShapeEdit();
   }
 
   private void create() {
     final MVCCDManager manager = MVCCDManager.instance();
     final MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
     final MCDAssociation association = mcdAssociationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations());
-    this.shape.setAssociation(association);
+    this.shape.setMCDAssociation(association);
+    shape.createLabelsAfterRelationShapeEdit();
   }
 }

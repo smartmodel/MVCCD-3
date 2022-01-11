@@ -20,10 +20,8 @@ public abstract class DiagramEditingTreat extends EditingTreat {
      * @param owner
      */
     public void treatClose(Window owner) {
-
-
         MVCCDWindow mvccdWindow = (MVCCDWindow) owner;
-        WinDiagram winDiagram = mvccdWindow.getDiagram();
+        WinDiagram winDiagram = mvccdWindow.getDiagrammer();
         JPanel panelTitle = winDiagram.getContent().getPanelTitle();
         CloseTitlePanel closeTitlePanel = new CloseTitlePanel(panelTitle);
         closeTitlePanel.getContent();

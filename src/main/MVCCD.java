@@ -6,7 +6,6 @@ import messages.MessagesBuilder;
 import java.io.Console;
 
 public class MVCCD  {
-
     /**
      * Démarre MVC-CD-3  
      */

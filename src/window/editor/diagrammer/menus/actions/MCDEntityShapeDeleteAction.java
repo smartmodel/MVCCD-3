@@ -21,6 +21,6 @@ public class MCDEntityShapeDeleteAction extends AbstractAction {
     }
 
     private void delete() {
-        DiagrammerService.getDrawPanel().deleteElement(shape);
+        DiagrammerService.getDrawPanel().deleteShape(shape);
     }
 }

@@ -114,6 +114,14 @@ public class Preferences extends MVCCDElement {
   public static final int DIAGRAMMER_RELATION_CLICK_AREA = 5;
   public static final String DIAGRAMMER_ENTITY_STEREOTYPE_TEXT = "<<Entity>>";
   public static final String DIAGRAMMER_ENTITY_ORDERED_TEXT = "{ordered}";
+  public static final String DIAGRAMMER_MCD_ENTITY_XML_TAG = "mcdEntityShape";
+  public static final String DIAGRAMMER_MCD_ASSOCIATION_XML_TAG = "mcdAssociationShape";
+  public static final String DIAGRAMMER_MCD_GENERALIZATION_XML_TAG = "mcdGeneralizationShape";
+  public static final String DIAGRAMMER_MCD_COMPOSITION_XML_TAG = "mcdCompositionShape";
+  public static final String DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG = "anchorPoint";
+  public static final String DIAGRAMMER_LABEL_XML_TAG = "labelShape";
+  public static final String DIAGRAMMER_LABELS_XML_TAG_NAME = "labelShapes";
+  public static final String DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME = "anchorPoints";
 
   public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
   public static String REGEXPR_FIRSTCAR = "[a-zA-Z]{1,1}";
@@ -832,7 +840,31 @@ public class Preferences extends MVCCDElement {
   public static String RESULTAT_NO_FATAL = "resultat.error.no.fatal";
   public static String RESULTAT_INFO = "resultat.info";
 
-     */
+
+  public static String ATTRIBUTE_IS_ACTIVE = "is_active";
+  public static String ATTRIBUTE_REPOSITORY_ENTITY_ID = "repository_entity_id";
+  public static String ATTRIBUTE_HEIGHT = "height";
+  public static String ATTRIBUTE_WIDTH = "width";
+  public static String ATTRIBUTE_X = "x";
+  public static String ATTRIBUTE_Y = "y";
+  public static String ATTRIBUTE_ID = "id";
+  public static String ATTRIBUTE_TYPE = "type";
+  public static String ATTRIBUTE_NAME = "name";
+  public static String ATTRIBUTE_PARENT_ID = "parent_id";
+  public static String ATTRIBUTE_X_DISTANCE_FROM_ANCHOR_POINT = "x_distance_from_anchor_point";
+  public static String ATTRIBUTE_Y_DISTANCE_FROM_ANCHOR_POINT = "y_distance_from_anchor_point";
+  public static String ATTRIBUTE_RELATED_ANCHOR_POINT_ID = "related_anchor_point_id";
+  public static String ATTRIBUTE_REPOSITORY_ASSOCIATION_ID = "repository_association_id";
+  public static String ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID = "destination_entity_shape_id";
+  public static String ATTRIBUTE_SOURCE_ENTITY_SHAPE_ID = "source_entity_shape_id";
+  public static String NODE_SHAPES = "shapes";
+  public static String NODE_DIAGRAM = "diagramme";
+  public static String NODE_DIAGRAMS = "diagrammes";
+
+
+
+
+
 
   /*
    * Préférences de l'application
@@ -857,7 +889,6 @@ public class Preferences extends MVCCDElement {
   // Pendant la phase de développement
   //ATTENTION: lors de la modification de cette valeur, il faut supprimer le fichier application.pref
   private Boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML = false;
-
 
   //private PreferencesDisplay GENERAL_PREFERENCES_DISPLAY = PreferencesDisplay.REPOSITORY;
 
@@ -905,7 +936,6 @@ public class Preferences extends MVCCDElement {
   // MLDRToMPDR
   private String MLDRTOMPDR_DB = null;
 
-
     // MDR Format
     private String MDR_TABLE_NAME_FORMAT = null;
     private String MDR_TABLE_NN_NAME_FORMAT = null ;
@@ -941,7 +971,6 @@ public class Preferences extends MVCCDElement {
   // MLDR Préférences
   private MDRNamingLength MLDR_PREF_NAMING_LENGTH = null;
   private MDRNamingFormat MLDR_PREF_NAMING_FORMAT = null;
-
 
   // MPDR Oracle Préférences
   private MDRNamingLength MPDRORACLE_PREF_NAMING_LENGTH = null;
@@ -1634,6 +1663,7 @@ public class Preferences extends MVCCDElement {
   public void setMDR_UNIQUE_NATURE_SEP_FORMAT(String MDR_UNIQUE_NATURE_SEP_FORMAT) {
     this.MDR_UNIQUE_NATURE_SEP_FORMAT = MDR_UNIQUE_NATURE_SEP_FORMAT;
   }
+
   public Boolean getMDR_PREF_COLUMN_FK_ONE_ANCESTOR() {
     if (this.MDR_PREF_COLUMN_FK_ONE_ANCESTOR == null) {
       this.MDR_PREF_COLUMN_FK_ONE_ANCESTOR = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DEFAULT;
@@ -1722,8 +1752,6 @@ public class Preferences extends MVCCDElement {
     return this.MPDRORACLE_PREF_NAMING_FORMAT;
   }
 
-
-
   public void setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat MPDRORACLE_PREF_NAMING_FORMAT) {
     this.MPDRORACLE_PREF_NAMING_FORMAT = MPDRORACLE_PREF_NAMING_FORMAT;
   }
@@ -1779,8 +1807,8 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_SEQPK_NAME_FORMAT = MPDRORACLE_SEQPK_NAME_FORMAT;
   }
 
-  
-  
+
+
   // MySQL
   public void setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH) {
     this.MPDRMYSQL_PREF_NAMING_LENGTH = MPDRMYSQL_PREF_NAMING_LENGTH;
