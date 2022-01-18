@@ -9,7 +9,9 @@ import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
-import mpdr.tapis.MPDRTriggers;
+import mpdr.MPDRTriggerType;
+import mpdr.tapis.MPDRBoxTriggers;
+import mpdr.tapis.MPDRTrigger;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -59,7 +61,12 @@ public class MPDRMySQLTable extends MPDRTable {
     }
 
     @Override
-    public MPDRTriggers createTriggers(MLDRTable mldrTable) {
+    public MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable) {
+        return null;
+    }
+
+    @Override
+    public MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, MLDRTable mldrTable) {
         return null;
     }
 

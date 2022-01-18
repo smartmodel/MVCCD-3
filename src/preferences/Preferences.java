@@ -622,6 +622,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
   public static MPDRDBPK MPDRORACLE_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
   public static String MPDRORACLE_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
+  public static String MPDRORACLE_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
   public static String MPDRORACLE_EMPTY_SCHEMA = "empty_schema";
 
   public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
@@ -655,6 +656,8 @@ public class Preferences extends MVCCDElement {
   public static String MPDRMYSQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
   public static MPDRDBPK MPDRMYSQL_PK_GENERATE_DEFAULT = MPDRDBPK.IDENTITY;
   public static String MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
+  public static String MPDRMYSQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
+
 
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_NAME = "MPDR-PostgreSQL";
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_LIENPROG = "MPDR-PostgreSQL";
@@ -685,7 +688,16 @@ public class Preferences extends MVCCDElement {
   public static String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
   public static MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
   public static String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
+  public static String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
 
+  public static String MDR_TABLE_NATURE_IND = "mdr.table.nature.ind";
+  public static String MDR_TABLE_NATURE_DEP = "mdr.table.nature.dep";
+  public static String MDR_TABLE_NATURE_ASS = "mdr.table.nature.ass";
+  public static String MDR_TABLE_NATURE_ASSDEP = "mdr.table.nature.assdep";
+  public static String MDR_TABLE_NATURE_NAIRE = "mdr.table.nature.naire";
+  public static String MDR_TABLE_NATURE_NAIREDEP = "mdr.table.nature.nairedep";
+  public static String MDR_TABLE_NATURE_SPEC = "mdr.table.nature.spec";
+  
 
   public static String MDR_NAMING_LENGTH_30 = "mdr.naming.length.30";
   public static String MDR_NAMING_LENGTH_60 = "mdr.naming.length.60";
@@ -707,7 +719,9 @@ public class Preferences extends MVCCDElement {
     public static String MDR_NAMING_PK_NN_INDICE = "mdr.pk.nn.indice";
     public static String MDR_NAMING_FK = "mdr.fk";
     public static String MDR_NAMING_UNIQUE = "mdr.unique";
-    public static String MPDR_NAMING_SEQUENCE_PK = "mpdr.sequence.pk";
+  public static String MPDR_NAMING_SEQUENCE_PK = "mpdr.sequence.pk";
+  public static String MPDR_NAMING_TRIGGER_TABLE = "mpdr.trigger.table";
+  public static String MPDR_NAMING_TRIGGER_VIEW = "mpdr.trigger.view";
 
   public static String MDR_PATH_WORD = "path";
   public static String MDR_PATH_SEP_WORD = "pathSep";
@@ -739,6 +753,10 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_DROP_BEFORE_NOTHING = "mpdr.drop.before.nothing";
   public static String MPDR_DROP_BEFORE_OBJECTS_CREATED = "mpdr.drop.before.objects.created";
   public static String MPDR_DROP_BEFORE_EMPTY = "mpdr.drop.before.empty";
+  public static String MPDR_TRIGGER_USAGE_TAPIS = "mpdr.trigger.usage.tapis";
+  public static String MPDR_TRIGGER_USAGE_WITHOUT_TAPIS = "mpdr.trigger.usage.without.tapis";
+  public static String MPDR_TRIGGER_SCOPE_TABLE = "mpdr.trigger.scope.table";
+  public static String MPDR_TRIGGER_SCOPE_VIEW = "mpdr.trigger.scope.view";
 
 
   public static String MDR_ATTR_NAME_WORD = "attrName";
@@ -771,12 +789,15 @@ public class Preferences extends MVCCDElement {
   public static String MDR_FKIND_SEP_WORD = "fkIndSep";
   public static String MDR_UNIQUE_NATURE_SEP_WORD = "uniqueNatSep";
 
+  public static String MPDR_TYPE_TRIGGER_MARKER_WORD = "typeTriggerMarker";
+
   public static Integer MDR_MARKER_DERIVED_LENGTH = 4;
   public static Integer MDR_MARKER_CUSTOM_TABLE_NAME_LENGTH = 3;
   public static Integer MDR_MARKER_CUSTOM_COLUMN_NAME_LENGTH = 3;
   public static Integer MDR_MARKER_CUSTOM_PK_LENGTH = 3;
   public static Integer MDR_MARKER_CUSTOM_FK_LENGTH = 3;
   public static Integer MARKER_CUSTOM_SEQPK_LENGTH = 8;
+  public static Integer MARKER_TRIGGER_LENGTH = 8;
   public static Integer MDR_SEPARATOR_NAMING_LENGTH = 1;
 
     public static String MDR_WORDS_BEGIN = "{";
@@ -974,6 +995,7 @@ public class Preferences extends MVCCDElement {
   private MPDRDBPK MPDRORACLE_PK_GENERATE = null;
   private Boolean MPDRORACLE_TAPIS = null;
   private String MPDRORACLE_SEQPK_NAME_FORMAT;
+  private String MPDRORACLE_TRIGGER_NAME_FORMAT;
 
   // MPDR MySQL Préférences
   private MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH = null;
@@ -982,6 +1004,7 @@ public class Preferences extends MVCCDElement {
   private MPDRDBPK MPDRMYSQL_PK_GENERATE = null;
   private Boolean MPDRMYSQL_TAPIS = null;
   private String MPDRMYSQL_SEQPK_NAME_FORMAT;
+  private String MPDRMYSQL_TRIGGER_NAME_FORMAT;
 
   // MPDR PostgreSQL Préférences
   private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
@@ -990,6 +1013,7 @@ public class Preferences extends MVCCDElement {
   private MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE = null;
   private Boolean MPDRPOSTGRESQL_TAPIS = null;
   private String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
+  private String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT;
 
   private Boolean DIAGRAMMER_SHOW_GRID = null;
 
@@ -1802,7 +1826,16 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_SEQPK_NAME_FORMAT = MPDRORACLE_SEQPK_NAME_FORMAT;
   }
 
+  public String getMPDRORACLE_TRIGGER_NAME_FORMAT() {
+    if (this.MPDRORACLE_TRIGGER_NAME_FORMAT == null) {
+      this.MPDRORACLE_TRIGGER_NAME_FORMAT = MPDRORACLE_TRIGGER_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRORACLE_TRIGGER_NAME_FORMAT;
+  }
 
+  public void setMPDRORACLE_TRIGGER_NAME_FORMAT(String MPDRORACLE_TRIGGER_NAME_FORMAT) {
+    this.MPDRORACLE_TRIGGER_NAME_FORMAT = MPDRORACLE_TRIGGER_NAME_FORMAT;
+  }
 
   // MySQL
   public void setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH) {
@@ -1871,6 +1904,17 @@ public class Preferences extends MVCCDElement {
     this.MPDRMYSQL_SEQPK_NAME_FORMAT = MPDRMYSQL_SEQPK_NAME_FORMAT;
   }
 
+  public String getMPDRMYSQL_TRIGGER_NAME_FORMAT() {
+    if (this.MPDRMYSQL_TRIGGER_NAME_FORMAT == null) {
+      this.MPDRMYSQL_TRIGGER_NAME_FORMAT = MPDRMYSQL_TRIGGER_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRMYSQL_TRIGGER_NAME_FORMAT;
+  }
+
+  public void setMPDRMYSQL_TRIGGER_NAME_FORMAT(String MPDRMYSQL_TRIGGER_NAME_FORMAT) {
+    this.MPDRMYSQL_TRIGGER_NAME_FORMAT = MPDRMYSQL_TRIGGER_NAME_FORMAT;
+  }
+
   // PostgreSQL
   public void setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH) {
     this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH = MPDRPOSTGRESQL_PREF_NAMING_LENGTH;
@@ -1924,12 +1968,22 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRPOSTGRESQL_SEQPK_NAME_FORMAT == null) {
       this.MPDRPOSTGRESQL_SEQPK_NAME_FORMAT = MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT;
     }
-
     return MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
   }
 
   public void setMPDRPOSTGRESQL_SEQPK_NAME_FORMAT(String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT) {
     this.MPDRPOSTGRESQL_SEQPK_NAME_FORMAT = MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
+  }
+
+  public String getMPDRPOSTGRESQL_TRIGGER_NAME_FORMAT() {
+    if (this.MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT == null) {
+      this.MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT = MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT;
+  }
+
+  public void setMPDRPOSTGRESQL_TRIGGER_NAME_FORMAT(String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT) {
+    this.MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT = MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT;
   }
 
   //

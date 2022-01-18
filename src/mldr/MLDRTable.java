@@ -14,6 +14,7 @@ import mldr.services.MLDRColumnService;
 import mldr.services.MLDRFKService;
 import mldr.services.MLDRPKService;
 import mldr.services.MLDRTableService;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -213,8 +214,14 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         MCDAssociation mcdAssNNParentSource = getAssNNParentSource();
         if (mcdEntityParentSource != null) {
             return mcdEntityParentSource.getShortName();
+        }  else if (mcdAssNNParentSource != null) {
+            if (StringUtils.isNotEmpty(mcdAssNNParentSource.getShortName())) {
+                return mcdAssNNParentSource.getShortName();
+            } else {
+                throw new CodeApplException("Le shortName de l'association n:n " + mcdAssNNParentSource.getNamePath() + "n'est pas déterminé");
+            }
         } else {
-            throw new CodeApplException("Le shortName n'est calculé que pour une table provenant d'une entité");
+            throw new CodeApplException("Le shortName n'est calculé que pour une table provenant d'une entité ou d'une association n:n");
         }
     }
 

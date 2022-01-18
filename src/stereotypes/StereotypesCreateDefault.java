@@ -6,7 +6,7 @@ import mpdr.MPDRSequence;
 import mpdr.mysql.MPDRMySQLTable;
 import mpdr.oracle.MPDROracleTable;
 import mpdr.postgresql.MPDRPostgreSQLTable;
-import mpdr.tapis.MPDRTriggers;
+import mpdr.tapis.MPDRBoxTriggers;
 import preferences.Preferences;
 
 public class StereotypesCreateDefault {
@@ -236,7 +236,7 @@ public class StereotypesCreateDefault {
       createStereotype(
                 Preferences.STEREOTYPE_TRIGGERS_NAME,
                 Preferences.STEREOTYPE_TRIGGERS_NAME,
-                MPDRTriggers.class.getName());
+                MPDRBoxTriggers.class.getName());
     }
 
     private void createMPDROracle() {

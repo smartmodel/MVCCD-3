@@ -14,10 +14,10 @@ public class MPDRContTAPIs extends MDRElement {
 
 
 
-    public MPDRTriggers getMPDRTriggers() {
+    public MPDRBoxTriggers getMPDRBoxTriggers() {
         for (MVCCDElement mvccdElement : getChilds()){
-            if (mvccdElement instanceof MPDRTriggers){
-                return (MPDRTriggers) mvccdElement ;
+            if (mvccdElement instanceof MPDRBoxTriggers){
+                return (MPDRBoxTriggers) mvccdElement ;
             }
         }
         return null ;

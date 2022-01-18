@@ -72,9 +72,9 @@ public class MLDRTransformTables {
             } else {
                 if (mpdrTable.getMPDRColumnPKProper() != null) {
                     // Conteneur de triggers et trigger d'alimentation
-                    MLDRTransformToTriggers mldrTransformToTriggers = new MLDRTransformToTriggers(
+                    MLDRTransformToBoxTriggers mldrTransformToBoxTriggers = new MLDRTransformToBoxTriggers(
                             mldrTransform, mldrTable, mpdrModel, mpdrTable);
-                    mldrTransformToTriggers.createOrModifyTriggers();
+                    mldrTransformToBoxTriggers.createOrModifyBoxTriggersForColumnPKWithoutTAPIs(mpdrTable.getMPDRColumnPKProper());
                 }
             }
         }

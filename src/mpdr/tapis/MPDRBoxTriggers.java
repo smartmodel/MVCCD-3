@@ -5,11 +5,13 @@ import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import m.interfaces.IMClass;
+import main.MVCCDElement;
 import md.MDElement;
 import mdr.MDRElement;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mldr.interfaces.IMLDRElement;
+import mpdr.MPDRTriggerType;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import preferences.Preferences;
@@ -22,7 +24,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public abstract class MPDRTriggers extends MDRElement implements IMPDRElement, IMPDRElementWithSource,
+public abstract class MPDRBoxTriggers extends MDRElement implements IMPDRElement, IMPDRElementWithSource,
         IMDRElementWithIteration, IMClass, IMDRElementNamingPreferences {
 
     private  static final long serialVersionUID = 1000;
@@ -30,17 +32,17 @@ public abstract class MPDRTriggers extends MDRElement implements IMPDRElement, I
 
     private IMLDRElement mldrElementSource;
 
-    public MPDRTriggers(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
+    public MPDRBoxTriggers(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
         super(parent);
         this.mldrElementSource = mldrElementSource;
     }
 
-    public MPDRTriggers(ProjectElement parent, IMLDRElement mldrElementSource) {
+    public MPDRBoxTriggers(ProjectElement parent, IMLDRElement mldrElementSource) {
         super(parent);
         this.mldrElementSource = mldrElementSource;
     }
 
-    public MPDRTriggers(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+    public MPDRBoxTriggers(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
         super(parent, id);
         this.mldrElementSource = mldrElementSource;
     }
@@ -80,7 +82,7 @@ public abstract class MPDRTriggers extends MDRElement implements IMPDRElement, I
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
         Preferences preferences = PreferencesManager.instance().preferences();
 
-        resultat.add(stereotypes.getStereotypeByLienProg(MPDRTriggers.class.getName(),
+        resultat.add(stereotypes.getStereotypeByLienProg(MPDRBoxTriggers.class.getName(),
                 preferences.STEREOTYPE_TRIGGERS_LIENPROG));
 
         return resultat;
@@ -116,5 +118,23 @@ public abstract class MPDRTriggers extends MDRElement implements IMPDRElement, I
         return ConstraintService.getUMLNamingInLine(getConstraints());
     }
 
+    public ArrayList<MPDRTrigger> getAllTriggers(){
+        ArrayList<MPDRTrigger> resultat = new ArrayList<MPDRTrigger>();
+            for ( MVCCDElement mvccdElement : getChilds()){
+                if (mvccdElement instanceof MPDRTrigger){
+                    resultat.add((MPDRTrigger) mvccdElement);
+            }
+        }
+            return resultat;
+    }
+
+    public MPDRTrigger getMPDRTriggerByType(MPDRTriggerType type){
+        for (MPDRTrigger mpdrTrigger : getAllTriggers()){
+            if (mpdrTrigger.getType() == type){
+                return mpdrTrigger;
+            }
+        }
+        return null;
+    }
 
 }

@@ -218,53 +218,6 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         throw new CodeApplException("getEditor n'est pas affecté...");
     }
 
-    /*
-    @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-        String propertyMessage = "sqlviewer.btn.exception.new";
-        String propertyAction = "";
-        try {
-            Object source = actionEvent.getSource();
-
-            Connection connection = null;
-            if (source == btnConnectionTest) {
-                propertyAction = "editor.mpdr.connection.btn.exception.test";
-                //Resultat resultat = actionTestConnection(true, connection);
-                actionTestConnection(true, connection);
-            }
-
-            if (source == btnConnectorTest) {
-                propertyAction = "editor.con.connector.btn.exception.test";
-                actionTestConnector(true, connection);
-            }
-
-            if (source == btnExecute) {
-                propertyAction = "sqlviewer.execute.btn.exception.test";
-                new Thread(new Runnable() {
-                    public void run() {
-                        actionExecute();
-                    }
-                }).start();
-
-            }
-
-            if (source == btnSave) {
-                propertyAction = "sqlviewer.save.btn.exception.test";
-                new Thread(new Runnable() {
-                    public void run() {
-                        actionSave(true);
-                    }
-                }).start();
-                // Mise à jour de l'indicateur de dernière modif.
-                setFieldDDLSaved();
-            }
-        } catch (Exception exception) {
-            ExceptionService.exceptionUnhandled(exception, sqlViewer, mpdrModel,
-                    propertyMessage, propertyAction);
-        }
-    }
-
-     */
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {

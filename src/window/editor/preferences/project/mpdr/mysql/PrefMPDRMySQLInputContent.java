@@ -36,6 +36,7 @@ public class PrefMPDRMySQLInputContent extends PrefMPDRInputContent {
                 preferences.getMPDRMYSQL_PK_GENERATE().getText());
         fieldTAPIs.setSelected(preferences.getMPDRMYSQL_TAPIS());
         fieldSeqPKNameFormat.setText(preferences.getMPDRMYSQL_SEQPK_NAME_FORMAT());
+        fieldTriggerNameFormat.setText(preferences.getMPDRMYSQL_TRIGGER_NAME_FORMAT());
 
     }
 
@@ -84,14 +85,16 @@ public class PrefMPDRMySQLInputContent extends PrefMPDRInputContent {
             }
         }
 
-
         if (fieldTAPIs.checkIfUpdated()){
             preferences.setMPDRMYSQL_TAPIS(fieldTAPIs.isSelected());
         }
 
-
         if (fieldSeqPKNameFormat.checkIfUpdated()){
             preferences.setMPDRMYSQL_SEQPK_NAME_FORMAT(fieldSeqPKNameFormat.getText());
+        }
+
+        if (fieldTriggerNameFormat.checkIfUpdated()){
+            preferences.setMPDRMYSQL_TRIGGER_NAME_FORMAT(fieldTriggerNameFormat.getText());
         }
 
     }

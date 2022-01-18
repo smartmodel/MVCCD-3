@@ -35,6 +35,7 @@ public class PrefMPDROracleInputContent extends PrefMPDRInputContent {
                     preferences.getMPDRORACLE_PK_GENERATE().getText());
         fieldTAPIs.setSelected(preferences.getMPDRORACLE_TAPIS());
         fieldSeqPKNameFormat.setText(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
+        fieldTriggerNameFormat.setText(preferences.getMPDRORACLE_TRIGGER_NAME_FORMAT());
     }
 
     @Override
@@ -91,6 +92,10 @@ public class PrefMPDROracleInputContent extends PrefMPDRInputContent {
 
         if (fieldSeqPKNameFormat.checkIfUpdated()){
             preferences.setMPDRORACLE_SEQPK_NAME_FORMAT(fieldSeqPKNameFormat.getText());
+        }
+
+        if (fieldTriggerNameFormat.checkIfUpdated()){
+            preferences.setMPDRORACLE_TRIGGER_NAME_FORMAT(fieldTriggerNameFormat.getText());
         }
     }
 

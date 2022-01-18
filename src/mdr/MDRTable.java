@@ -5,6 +5,7 @@ import constraints.Constraints;
 import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import main.MVCCDElement;
+import mdr.services.MDRTableService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -64,6 +65,10 @@ public abstract class MDRTable extends MDRTableOrView {
             }
         }
         return resultat;
+    }
+
+    public int getNbFKsIdComp(){
+        return getMDRFKsIdComp().size();
     }
 
     public ArrayList<MDRTable> getMDRTablesIdComp() {
@@ -194,5 +199,45 @@ public abstract class MDRTable extends MDRTableOrView {
         return resultat;
     }
 
+    public MDRTableNature getNature() {
+        return MDRTableService.getNature(this);
+    }
+
+    public boolean  isIndependant() {
+        return MDRTableService.getNature(this) == MDRTableNature.IND;
+    }
+
+    public boolean  isDependant() {
+        return MDRTableService.getNature(this) == MDRTableNature.DEP;
+    }
+
+    public boolean  isSpecialized() {
+        return MDRTableService.getNature(this) == MDRTableNature.SPEC;
+    }
+
+    public boolean  isAssociative() {
+        return MDRTableService.getNature(this) == MDRTableNature.ASS;
+    }
+
+    public boolean  isAssociativeDep() {
+        return MDRTableService.getNature(this) == MDRTableNature.ASSDEP;
+    }
+
+    public boolean  isNAire() {
+        return MDRTableService.getNature(this) == MDRTableNature.NAIRE;
+    }
+
+    public boolean  isNAireDep() {
+        return MDRTableService.getNature(this) == MDRTableNature.NAIREDEP;
+    }
+
+
+    public boolean  isKindDependant() {
+        ArrayList<MDRTableNature> kindDependant = new ArrayList<MDRTableNature>() ;
+        kindDependant.add(MDRTableNature.DEP);
+        kindDependant.add(MDRTableNature.ASSDEP);
+        kindDependant.add(MDRTableNature.NAIREDEP);
+        return kindDependant.contains(getNature()) ;
+    }
 
 }

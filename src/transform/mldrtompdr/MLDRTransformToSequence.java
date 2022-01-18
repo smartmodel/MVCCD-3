@@ -87,7 +87,7 @@ public class MLDRTransformToSequence {
                     message = e.getMessage();
                 } else {
                     message = MessagesBuilder.getMessagesProperty("mpdrsequence.build.name.error",
-                            new String[]{mldrTable.getNamePath()});
+                            new String[]{mldrTable.getNamePath(), mldrColumn.getNamePath()});
                 }
                 throw new CodeApplException(message, e);
             }

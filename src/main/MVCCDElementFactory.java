@@ -25,8 +25,10 @@ import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.postgresql.MPDRPostgreSQLColumn;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 import mpdr.postgresql.MPDRPostgreSQLTable;
+import mpdr.tapis.MPDRBoxTriggers;
 import mpdr.tapis.MPDRContTAPIs;
-import mpdr.tapis.oracle.MPDROracleTriggers;
+import mpdr.tapis.oracle.MPDROracleBoxTriggers;
+import mpdr.tapis.oracle.MPDROracleTrigger;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
@@ -573,10 +575,17 @@ public class MVCCDElementFactory {
     }
 
     //TAPIs Oracle
-    public MPDROracleTriggers createMPDROracleTriggers(MPDRContTAPIs mpdrContTAPIs, MLDRTable mldrTable) {
-        MPDROracleTriggers mpdrOracleTriggers = new MPDROracleTriggers(mpdrContTAPIs, mldrTable);
+    public MPDROracleBoxTriggers createMPDROracleBoxTriggers(MPDRContTAPIs mpdrContTAPIs, MLDRTable mldrTable) {
+        MPDROracleBoxTriggers mpdrOracleTriggers = new MPDROracleBoxTriggers(mpdrContTAPIs, mldrTable);
         return mpdrOracleTriggers;
     }
+
+
+    public MPDROracleTrigger createMPDROracleTrigger(MPDRBoxTriggers mpdrBoxTriggers, MLDRTable mldrTable) {
+        MPDROracleTrigger mpdrOracleTrigger = new MPDROracleTrigger(mpdrBoxTriggers, mldrTable);
+        return mpdrOracleTrigger;
+    }
+
 
     // MySQL
     public MPDRMySQLModel createMPDRModelMySQL(MLDRModel mldrModel) {

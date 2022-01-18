@@ -5,7 +5,7 @@ import constraints.Constraints;
 import constraints.ConstraintsManager;
 import mldr.interfaces.IMLDRElement;
 import mpdr.oracle.interfaces.IMPDROracleElement;
-import mpdr.tapis.MPDRTriggers;
+import mpdr.tapis.MPDRBoxTriggers;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -15,18 +15,18 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MPDROracleTriggers extends MPDRTriggers implements IMPDROracleElement {
+public class MPDROracleBoxTriggers extends MPDRBoxTriggers implements IMPDROracleElement {
     private  static final long serialVersionUID = 1000;
 
-    public MPDROracleTriggers(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
+    public MPDROracleBoxTriggers(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
         super(parent, name, mldrElementSource);
     }
 
-    public MPDROracleTriggers(ProjectElement parent, IMLDRElement mldrElementSource) {
+    public MPDROracleBoxTriggers(ProjectElement parent, IMLDRElement mldrElementSource) {
         super(parent, mldrElementSource);
     }
 
-    public MPDROracleTriggers(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+    public MPDROracleBoxTriggers(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
         super(parent, mldrElementSource, id);
     }
 

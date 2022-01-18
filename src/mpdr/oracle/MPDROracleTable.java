@@ -3,6 +3,7 @@ package mpdr.oracle;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
 import mdr.MDRConstraint;
 import mldr.*;
@@ -10,9 +11,12 @@ import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
+import mpdr.MPDRTriggerType;
 import mpdr.oracle.interfaces.IMPDROracleElement;
-import mpdr.tapis.MPDRTriggers;
-import mpdr.tapis.oracle.MPDROracleTriggers;
+import mpdr.tapis.MPDRBoxTriggers;
+import mpdr.tapis.MPDRTrigger;
+import mpdr.tapis.oracle.MPDROracleBoxTriggers;
+import mpdr.tapis.oracle.MPDROracleTrigger;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -64,10 +68,24 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
     }
 
     @Override
-    public MPDRTriggers createTriggers(MLDRTable mldrTable) {
-        MPDROracleTriggers mpdrOracleTriggers = MVCCDElementFactory.instance().createMPDROracleTriggers(
+    public MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable) {
+        MPDROracleBoxTriggers mpdrOracleTriggers = MVCCDElementFactory.instance().createMPDROracleBoxTriggers(
                 getMPDRContTAPIs(), mldrTable);
         return mpdrOracleTriggers;
+    }
+
+
+
+    @Override
+    public MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, MLDRTable mldrTable) {
+        MPDROracleBoxTriggers mpdrOracleBoxTriggers = (MPDROracleBoxTriggers) getMPDRBoxTriggers();
+        if (mpdrOracleBoxTriggers != null){
+            MPDROracleTrigger mpdrOracleTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(
+                    getMPDRBoxTriggers(), mldrTable);
+            return mpdrOracleTrigger;
+        } else {
+            throw new CodeApplException("La boîte Triggers doit exister avant de créer un trigger");
+        }
     }
 
 

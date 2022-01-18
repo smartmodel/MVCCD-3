@@ -32,6 +32,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     private MPDRDBPK mpdrDbPK ;
     private boolean tapis ;
     private String sequencePKNameFormat;
+    private String triggerNameFormat;
 
     public MPDRModel(ProjectElement parent, String name, MPDRDB db) {
         super(parent, name);
@@ -164,6 +165,14 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
 
     public void setSequencePKNameFormat(String sequencePKNameFormat) {
         this.sequencePKNameFormat = sequencePKNameFormat;
+    }
+
+    public void setTriggerNameFormat(String triggerNameFormat) {
+        this.triggerNameFormat = triggerNameFormat;
+    }
+
+    public String getTriggerNameFormat() {
+        return triggerNameFormat;
     }
 
     public abstract Boolean getMPDR_TAPIs() ;

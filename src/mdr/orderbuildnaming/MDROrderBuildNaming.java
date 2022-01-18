@@ -7,7 +7,6 @@ import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,6 +55,8 @@ public class MDROrderBuildNaming {
     private MDROrderWordFKIndSep fkIndSep;
     private MDROrderWordUniqueNatureSep uniqueNatSep;
 
+    private MDROrderWordTypeTriggerMarker typeTriggerMarker ;
+
 
 
 
@@ -100,6 +101,7 @@ public class MDROrderBuildNaming {
         peaSep = new MDROrderWordPEASep(Preferences.MDR_PEA_SEP_WORD);
         uniqueNatSep = new MDROrderWordUniqueNatureSep(Preferences.MDR_UNIQUE_NATURE_SEP_WORD);
 
+        typeTriggerMarker = new MDROrderWordTypeTriggerMarker(Preferences.MPDR_TYPE_TRIGGER_MARKER_WORD);
     }
 
 
@@ -206,6 +208,9 @@ public class MDROrderBuildNaming {
 
                 } else if (mg.equals(Preferences.MDR_UNIQUE_NATURE_SEP_WORD)) {
                     value = pushValue(uniqueNatSep);
+
+                } else if (mg.equals(Preferences.MPDR_TYPE_TRIGGER_MARKER_WORD)) {
+                    value = pushValue(typeTriggerMarker);
 
                 } else {
                     // Marqueurs libres
@@ -737,5 +742,13 @@ public class MDROrderBuildNaming {
 
     public void setUniqueShortName(MDROrderWordUniqueShortName uniqueShortName) {
         this.uniqueShortName = uniqueShortName;
+    }
+
+    public MDROrderWordTypeTriggerMarker getTypeTriggerMarker() {
+        return typeTriggerMarker;
+    }
+
+    public void setTypeTriggerMarker(MDROrderWordTypeTriggerMarker typeTriggerMarker) {
+        this.typeTriggerMarker = typeTriggerMarker;
     }
 }

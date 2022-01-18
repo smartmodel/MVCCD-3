@@ -27,6 +27,8 @@ public abstract class PrefMPDRInputContent extends PrefMLPDRInputContent {
     protected SCheckBox fieldTAPIs;
     protected JLabel labelSeqPKNameFormat ;
     protected STextField fieldSeqPKNameFormat;
+    protected JLabel labelTriggerNameFormat ;
+    protected STextField fieldTriggerNameFormat;
 
 
 
@@ -56,19 +58,27 @@ public abstract class PrefMPDRInputContent extends PrefMLPDRInputContent {
         fieldTAPIs.addItemListener(this);
         fieldTAPIs.addFocusListener(this);
 
-
         labelSeqPKNameFormat = new JLabel("Séquence de PK");
         fieldSeqPKNameFormat = new STextField(this, labelSeqPKNameFormat);
         fieldSeqPKNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
-        fieldSeqPKNameFormat.setToolTipText("Format de nommage de la séquence de cé primaire pour les tables indépendantes");
+        fieldSeqPKNameFormat.setToolTipText("Format de nommage de la séquence de clé primaire pour les tables indépendantes");
         //TODO-1 Prévoir un formattage/contrôle minimal
         fieldSeqPKNameFormat.getDocument().addDocumentListener(this);
         fieldSeqPKNameFormat.addFocusListener(this);
+
+        labelTriggerNameFormat = new JLabel("Triggers");
+        fieldTriggerNameFormat = new STextField(this, labelTriggerNameFormat);
+        fieldTriggerNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldTriggerNameFormat.setToolTipText("Format de nommage des triggers de table");
+        //TODO-1 Prévoir un formattage/contrôle minimal
+        fieldTriggerNameFormat.getDocument().addDocumentListener(this);
+        fieldTriggerNameFormat.addFocusListener(this);
 
         super.getSComponents().add(fieldDelimiterInstructions);
         super.getSComponents().add(fieldPKGenerate);
         super.getSComponents().add(fieldTAPIs);
         super.getSComponents().add(fieldSeqPKNameFormat);
+        super.getSComponents().add(fieldTriggerNameFormat);
 
         createPanelMaster();
     }
@@ -112,6 +122,13 @@ public abstract class PrefMPDRInputContent extends PrefMLPDRInputContent {
         panelFormatNames.add(labelSeqPKNameFormat, gbcA);
         gbcA.gridx++ ;
         panelFormatNames.add(fieldSeqPKNameFormat, gbcA);
+
+
+        gbcA.gridx = 0;
+        gbcA.gridy++;
+        panelFormatNames.add(labelTriggerNameFormat, gbcA);
+        gbcA.gridx++ ;
+        panelFormatNames.add(fieldTriggerNameFormat, gbcA);
 
 
     }
