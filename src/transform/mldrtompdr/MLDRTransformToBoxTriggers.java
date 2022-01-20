@@ -5,8 +5,8 @@ import mldr.MLDRTable;
 import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
-import mpdr.MPDRTriggerType;
 import mpdr.tapis.MPDRBoxTriggers;
+import mpdr.tapis.MPDRTriggerType;
 
 public class MLDRTransformToBoxTriggers {
 

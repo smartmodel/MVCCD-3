@@ -11,7 +11,7 @@ import mdr.MDRElement;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mldr.interfaces.IMLDRElement;
-import mpdr.MPDRTriggerType;
+import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import preferences.Preferences;
@@ -137,4 +137,11 @@ public abstract class MPDRBoxTriggers extends MDRElement implements IMPDRElement
         return null;
     }
 
+    public MPDRContTAPIs getMPDRContTAPIs (){
+        return (MPDRContTAPIs) getParent();
+    }
+
+    public MPDRTable getMPDRTableAccueil (){
+        return getMPDRContTAPIs().getMPDRTableAccueil();
+    }
 }

@@ -13,7 +13,7 @@ public class STextArea extends JTextArea implements SComponent {
     //TODO-1 - Pas testé en édition (Simple recopie de STextField)
 
     // Valeur d'initialisation
-    private String oldText = null;
+    private String oldText = null ;
     // Erreur empêchant la sauvegarde du formulaire
     private boolean checkPreSave = false;
     // Lecture seule
@@ -85,8 +85,7 @@ public class STextArea extends JTextArea implements SComponent {
         } else {
             updated =  StringUtils.isNotEmpty(oldText);
         }
-
-        // Si ce n'est pas un appel directement pour le contrôle de complétude
+     // Si ce n'est pas un appel directement pour le contrôle de complétude
         if (panel.getEditor() != null) {
             if (panel.getEditor().getMode().equals(DialogEditor.NEW)) {
                 updated = true;
@@ -182,4 +181,17 @@ public class STextArea extends JTextArea implements SComponent {
     public JLabel getJLabel() {
         return label;
     }
+
+
+    // Surcharge de la méthode JTextField
+    public void setText(String text) {
+        if (text == null){
+            text = "";
+        }
+        super.setText(text);
+        if (! panel.isDataInitialized()) {
+            oldText = text;
+        }
+    }
+
 }

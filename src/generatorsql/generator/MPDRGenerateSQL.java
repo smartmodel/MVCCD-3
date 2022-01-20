@@ -4,6 +4,7 @@ import console.ViewLogsManager;
 import console.WarningLevel;
 import messages.MessagesBuilder;
 import mpdr.*;
+import mpdr.tapis.MPDRTrigger;
 import preferences.Preferences;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public abstract class MPDRGenerateSQL {
 
         String generateSQLCode = "";
         String message ;
-        // Suppression en des objets existants
+        // Suppression  des objets existants
         if (mpdrModel.getDropBeforeCreate() == MPDRDropBefore.EMPTY) {
             message = MessagesBuilder.getMessagesProperty("generate.sql.empty");
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
@@ -40,6 +41,10 @@ public abstract class MPDRGenerateSQL {
             message = MessagesBuilder.getMessagesProperty("generate.sql.drop.sequences");
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
             generateSQLCode += generateSQLCommandSequences(DROP);
+
+            message = MessagesBuilder.getMessagesProperty("generate.sql.drop.triggers");
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+            generateSQLCode += generateSQLCommandTriggers(DROP);
         }
 
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.tables");
@@ -53,6 +58,10 @@ public abstract class MPDRGenerateSQL {
         message = MessagesBuilder.getMessagesProperty("generate.sql.alter.constraints.fks");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
         generateSQLCode += generateSQLCommandFKs(ALTER);
+
+        message = MessagesBuilder.getMessagesProperty("generate.sql.create.triggers");
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        generateSQLCode += generateSQLCommandTriggers(CREATE);
 
         return generateSQLCode;
     }
@@ -123,6 +132,24 @@ public abstract class MPDRGenerateSQL {
         return generateSQLCode;
     }
 
+    private String generateSQLCommandTriggers(int command) {
+
+        String generateSQLCode = "";
+        for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
+            for (MPDRTrigger mpdrTrigger : mpdrTable.getMPDRTriggers()) {
+                if (command == CREATE) {
+                        generateSQLCode += getMpdrGenerateSQLTrigger().generateSQLCreateTrigger(mpdrTrigger);
+                        generateSQLCode += delimiter();
+                }
+                if (command == DROP) {
+                        generateSQLCode += getMpdrGenerateSQLTrigger().generateSQLDropTrigger(mpdrTrigger);
+                        generateSQLCode += delimiter();
+                }
+            }
+        }
+        return generateSQLCode;
+    }
+
 
     public String generateSQLCommandFKs(int command) {
         String generateSQLCode = "";
@@ -146,43 +173,63 @@ public abstract class MPDRGenerateSQL {
 
     public abstract MPDRGenerateSQLSequence getMpdrGenerateSQLSequence() ;
 
+    public abstract MPDRGenerateSQLTrigger getMpdrGenerateSQLTrigger() ;
+
+    public abstract MPDRGenerateSQLDynamicCode getMpdrGenerateSQLCodeDynamic() ;
+
     public abstract MPDRGenerateSQLFK getMpdrGenerateSQLFK();
 
     private String getTemplateDirBase() {
         return Preferences.DIRECTORY_TEMPLATES_NAME + Preferences.SYSTEM_FILE_SEPARATOR +
-                Preferences.DIRECTORY_TEMPLATES_SQLDDL_NAME + Preferences.SYSTEM_FILE_SEPARATOR ;
+                Preferences.DIRECTORY_TEMPLATES_SQLDDL_NAME  ;
     }
 
 
     public String getTemplateDirDrop() {
-        return getTemplateDirBase() +
+        return getTemplateDirBase() + Preferences.SYSTEM_FILE_SEPARATOR +
                 Preferences.DIRECTORY_TEMPLATES_DROP;
     }
 
     private String getTemplateDirBaseDB() {
-        return getTemplateDirBase() +
-                getTemplateBDDirectory() + Preferences.SYSTEM_FILE_SEPARATOR ;
+        return getTemplateDirBase() + Preferences.SYSTEM_FILE_SEPARATOR +
+                getTemplateBDDirectory()  ;
     }
 
     public String getTemplateDirCreateDB() {
-        return getTemplateDirBaseDB() +
+        return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR +
                 Preferences.DIRECTORY_TEMPLATES_CREATE;
     }
 
     public String getTemplateDirAlterDB() {
-        return getTemplateDirBaseDB() +
+        return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR +
                 Preferences.DIRECTORY_TEMPLATES_ALTER;
     }
 
 
     public String getTemplateDirDropDB() {
-        return getTemplateDirBaseDB() +
+        return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR+
                 Preferences.DIRECTORY_TEMPLATES_DROP;
     }
 
     public String getTemplateDirTriggersDB() {
-        return getTemplateDirBaseDB() +
+        return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR +
                 Preferences.DIRECTORY_TEMPLATES_TRIGGERS;
+    }
+
+    public String getTemplateDirCreateTriggersDB() {
+        return getTemplateDirTriggersDB() + Preferences.SYSTEM_FILE_SEPARATOR +
+                Preferences.DIRECTORY_TEMPLATES_CREATE;
+    }
+
+    public String getTemplateDirDropTriggersDB() {
+        return getTemplateDirTriggersDB() + Preferences.SYSTEM_FILE_SEPARATOR +
+                Preferences.DIRECTORY_TEMPLATES_DROP;
+    }
+
+
+    public String getTemplateDirDynamicCodeDB() {
+        return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR +
+                Preferences.DIRECTORY_TEMPLATES_DYNAMIC_CODE;
     }
 
     public String delimiter(){

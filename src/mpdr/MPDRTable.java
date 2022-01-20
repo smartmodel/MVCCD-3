@@ -17,6 +17,7 @@ import mpdr.services.MPDRTableService;
 import mpdr.tapis.MPDRBoxTriggers;
 import mpdr.tapis.MPDRContTAPIs;
 import mpdr.tapis.MPDRTrigger;
+import mpdr.tapis.MPDRTriggerType;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -106,7 +107,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public abstract MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable);
 
-    public abstract MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType,  MLDRTable mldrTable);
+    public abstract MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, MLDRTable mldrTable);
 
     public ArrayList<Stereotype> getStereotypes() {
         // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
@@ -170,7 +171,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         return getMPDRContTAPIs().getMPDRBoxTriggers();
     }
 
-    public ArrayList<MPDRTrigger> getAllTriggers(){
+    public ArrayList<MPDRTrigger> getMPDRTriggers(){
         return getMPDRBoxTriggers().getAllTriggers();
     }
 

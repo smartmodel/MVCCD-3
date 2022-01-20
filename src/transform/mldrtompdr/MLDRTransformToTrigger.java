@@ -11,9 +11,9 @@ import messages.MessagesBuilder;
 import mldr.MLDRTable;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
-import mpdr.MPDRTriggerType;
 import mpdr.tapis.MPDRTrigger;
 import mpdr.tapis.MPDRTriggerScope;
+import mpdr.tapis.MPDRTriggerType;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -55,12 +55,13 @@ public class MLDRTransformToTrigger {
     private void modifyTrigger(MLDRTable mldrTable,
                                MPDRTrigger mpdrTrigger,
                                MPDRTriggerType type) {
+
         if (mpdrTrigger.getType() != null) {
             if (mpdrTrigger.getType() != type) {
                 mpdrTrigger.setType(type);
-            } else {
-                mpdrTrigger.setType(type);
             }
+        } else {
+            mpdrTrigger.setType(type);
         }
         MDRTransformService.names(mpdrTrigger,
                 buildNameTrigger(mldrTable, type),

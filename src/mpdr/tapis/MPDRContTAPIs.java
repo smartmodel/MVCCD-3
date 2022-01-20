@@ -2,6 +2,7 @@ package mpdr.tapis;
 
 import main.MVCCDElement;
 import mdr.MDRElement;
+import mpdr.MPDRTable;
 import project.ProjectElement;
 
 public class MPDRContTAPIs extends MDRElement {
@@ -21,6 +22,11 @@ public class MPDRContTAPIs extends MDRElement {
             }
         }
         return null ;
+    }
+
+
+    public MPDRTable getMPDRTableAccueil (){
+        return (MPDRTable) getParent();
     }
 
 }

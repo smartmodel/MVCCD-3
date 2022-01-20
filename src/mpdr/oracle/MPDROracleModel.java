@@ -48,5 +48,9 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement {
         return preferences.getMPDRORACLE_TAPIS();
     }
 
+    @Override
+    public String getNewRecordWord() {
+        return Preferences.MPDR_ORACLE_NEW_RECORD_WORD;
+    }
 
 }

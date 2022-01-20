@@ -48,4 +48,9 @@ public class MPDRPostgreSQLModel extends MPDRModel {
 
     }
 
+    @Override
+    public String getNewRecordWord() {
+        return Preferences.MPDR_POSTGRESQL_NEW_RECORD_WORD;
+    }
+
 }

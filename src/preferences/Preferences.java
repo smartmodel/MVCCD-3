@@ -221,9 +221,11 @@ public class Preferences extends MVCCDElement {
   public static String DIRECTORY_TEMPLATES_ALTER = "alter";
   public static String DIRECTORY_TEMPLATES_DROP = "drop";
   public static String DIRECTORY_TEMPLATES_TRIGGERS = "triggers";
+  public static String DIRECTORY_TEMPLATES_DYNAMIC_CODE = "dynamicCode";
 
   public static String TEMPLATE_DROP_TABLE = "dropTable.txt";
   public static String TEMPLATE_DROP_SEQUENCE = "dropSequence.txt";
+  public static String TEMPLATE_DROP_TRIGGER = "dropTrigger.txt";
 
   public static String TEMPLATE_CREATE_TABLE = "createTable.txt";
   public static String TEMPLATE_CREATE_TABLE_COLUMNS = "createTableColumns.txt";
@@ -748,6 +750,16 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_SEQUENCE_NAME_WORD = "sequenceName";
   public static String MPDR_MIN_VALUE_WORD = "minValue";
   public static String MPDR_INCREMENT_WORD = "increment";
+  public static String MPDR_TRIGGER_NAME_WORD = "triggerName";
+
+  public static String MPDR_NEW_RECORD_WORD = "newRecord";
+
+  public static String MPDR_ORACLE_NEW_RECORD_WORD = ":NEW";
+  public static String MPDR_ORACLE_PIO_CRT_RECORD_WORD = "pio_crtrec";
+
+  public static String MPDR_MYSQL_NEW_RECORD_WORD = "NEW";
+
+  public static String MPDR_POSTGRESQL_NEW_RECORD_WORD = "NEW";
 
   public static String MPDR_EMPTY_SCHEMA_NAME_WORD = "emptySchema";
   public static String MPDR_DROP_BEFORE_NOTHING = "mpdr.drop.before.nothing";

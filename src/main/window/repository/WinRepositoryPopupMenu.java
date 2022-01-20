@@ -25,6 +25,7 @@ import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mpdr.*;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.tapis.MPDRTrigger;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
@@ -42,6 +43,7 @@ import repository.editingTreat.mdr.*;
 import repository.editingTreat.mldr.MLDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRModelEditingTreat;
 import repository.editingTreat.mpdr.MPDRSequenceEditingTreat;
+import repository.editingTreat.mpdr.MPDRTriggerEditingTreat;
 import repository.editingTreat.naming.NamingEditingTreat;
 import repository.editingTreat.preferences.*;
 import utilities.DefaultMutableTreeNodeService;
@@ -355,9 +357,12 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 treatMDRRelFKEndRead(this);
             }
 
-
             if (node.getUserObject() instanceof MPDRSequence) {
                 treatGenericRead(this, new MPDRSequenceEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MPDRTrigger) {
+                treatGenericRead(this, new MPDRTriggerEditingTreat());
             }
 
         } catch (Exception e){

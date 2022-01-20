@@ -5,13 +5,15 @@ import mdr.MDRElement;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mldr.interfaces.IMLDRElement;
-import mpdr.MPDRTriggerType;
+import mpdr.MPDRModel;
+import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.tapis.interfaces.IMPDRWithDynamicCode;
 import project.ProjectElement;
 
 public abstract class MPDRTrigger extends MDRElement implements IMPDRElement, IMPDRElementWithSource,
-        IMDRElementWithIteration, IMDRElementNamingPreferences {
+        IMDRElementWithIteration, IMDRElementNamingPreferences, IMPDRWithDynamicCode {
 
     MPDRTriggerType type  ;
     private Integer iteration = null; // Si un objet est créé directement et non par transformation
@@ -66,6 +68,21 @@ public abstract class MPDRTrigger extends MDRElement implements IMPDRElement, IM
     @Override
     public MDElement getMdElementSource() {
         return (MDElement) getMldrElementSource();
+    }
+
+    public MPDRBoxTriggers  getMPDRBoxTriggers (){
+        return (MPDRBoxTriggers) getParent();
+    }
+
+    public MPDRTable getMPDRTableAccueil (){
+        return getMPDRBoxTriggers().getMPDRTableAccueil();
+    }
+
+    public abstract String generateSQLDDL() ;
+
+
+    public MPDRModel getMPDRModelParent(){
+        return getMPDRTableAccueil ().getMPDRModelParent();
     }
 
 }

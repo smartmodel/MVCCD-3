@@ -1,5 +1,7 @@
 package mpdr.tapis.oracle;
 
+import generatorsql.generator.oracle.MPDROracleGenerateSQL;
+import generatorsql.generator.oracle.MPDROracleGenerateSQLTrigger;
 import mldr.interfaces.IMLDRElement;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.tapis.MPDRTrigger;
@@ -18,6 +20,13 @@ public class MPDROracleTrigger extends MPDRTrigger implements IMPDROracleElement
 
     public MPDROracleTrigger(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
         super(parent, mldrElementSource, id);
+    }
+
+    @Override
+    public String generateSQLDDL() {
+        MPDROracleGenerateSQL mpdrOracleGenerateSQL = new MPDROracleGenerateSQL(getMPDRModelParent());
+        MPDROracleGenerateSQLTrigger mpdrOracleGenerateSQLTrigger = new MPDROracleGenerateSQLTrigger(mpdrOracleGenerateSQL);
+        return mpdrOracleGenerateSQLTrigger.generateSQLCreateTrigger(this);
     }
 
 

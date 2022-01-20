@@ -81,6 +81,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
 
     public abstract String treatGenerate() ;
 
+
     //TODO-1 A suppimer si la solution du listner est possible
     // Voir MLDR (même problème)
 
@@ -176,4 +177,6 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     }
 
     public abstract Boolean getMPDR_TAPIs() ;
+
+    public abstract String getNewRecordWord();
 }

@@ -53,7 +53,6 @@ public class MLDRTransform extends MDTransform {
                 mldrTransformRelations.transformRelations();
             }
 
-
             //Suppression des MPDRElement absents de l'itération
             deleteMDRElementNotInIteration();
 

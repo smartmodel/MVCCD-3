@@ -1,6 +1,6 @@
 package mdr.orderbuildnaming;
 
-import mpdr.MPDRTriggerType;
+import mpdr.tapis.MPDRTriggerType;
 import preferences.Preferences;
 
 public class MDROrderWordTypeTriggerMarker extends MDROrderWord{

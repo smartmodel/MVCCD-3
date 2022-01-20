@@ -1,0 +1,1 @@
+AND ({tableName}.{columnName} = {newRecord}.{columnName})

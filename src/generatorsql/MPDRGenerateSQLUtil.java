@@ -59,6 +59,11 @@ public class MPDRGenerateSQLUtil {
         return code.replaceAll("\\{" + key + "}", value);
     }
 
+    public static boolean find(String code, String key) {
+        //TODO-1 A voir expression régulière
+        return code.indexOf("{" + key + "}") >= 0;
+    }
+
 
 
     public static String cleanSeparatorArguments(String code) {

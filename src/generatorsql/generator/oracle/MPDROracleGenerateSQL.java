@@ -11,17 +11,25 @@ public class MPDROracleGenerateSQL extends MPDRGenerateSQL {
     private MPDROracleGenerateSQLTable mpdrOracleGenerateSQLTable;
     private MPDROracleGenerateSQLFK mpdrOracleGenerateSQLFK;
     private MPDROracleGenerateSQLSequence mpdrOracleGenerateSQLSequence;
+    private MPDROracleGenerateSQLTrigger mpdrOracleGenerateSQLTrigger;
+    private MPDROracleGenerateSQLDynamicCode mpdrOracleGenerateSQLCodeDynamic;
 
     public MPDROracleGenerateSQL(MPDRModel mpdrModel) {
         super (mpdrModel);
+        init();
 
     }
 
-    public String generate() {
+    private void init(){
         mpdrOracleGenerateSQLEmptySchema = new MPDROracleGenerateSQLEmptySchema(this);
         mpdrOracleGenerateSQLTable = new MPDROracleGenerateSQLTable(this);
         mpdrOracleGenerateSQLFK = new MPDROracleGenerateSQLFK(this);
         mpdrOracleGenerateSQLSequence = new MPDROracleGenerateSQLSequence(this);
+        mpdrOracleGenerateSQLTrigger = new MPDROracleGenerateSQLTrigger(this);
+        mpdrOracleGenerateSQLCodeDynamic = new MPDROracleGenerateSQLDynamicCode(this);
+    }
+
+    public String generate() {
         String generateSQLCode = super.generate();
         return generateSQLCode;
     }
@@ -40,6 +48,16 @@ public class MPDROracleGenerateSQL extends MPDRGenerateSQL {
     @Override
     public MPDRGenerateSQLSequence getMpdrGenerateSQLSequence() {
         return mpdrOracleGenerateSQLSequence;
+    }
+
+    @Override
+    public MPDRGenerateSQLTrigger getMpdrGenerateSQLTrigger() {
+        return mpdrOracleGenerateSQLTrigger;
+    }
+
+    @Override
+    public MPDRGenerateSQLDynamicCode getMpdrGenerateSQLCodeDynamic() {
+        return mpdrOracleGenerateSQLCodeDynamic;
     }
 
     @Override

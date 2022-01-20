@@ -1,7 +1,6 @@
-package mpdr;
+package mpdr.tapis;
 
-import mpdr.tapis.MPDRTriggerScope;
-import mpdr.tapis.MPDRTriggerUsage;
+import mpdr.MPDRDB;
 
 import java.util.ArrayList;
 

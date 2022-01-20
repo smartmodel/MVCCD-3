@@ -45,5 +45,10 @@ public class MPDRMySQLModel extends MPDRModel {
 
     }
 
+    @Override
+    public String getNewRecordWord() {
+        return Preferences.MPDR_MYSQL_NEW_RECORD_WORD;
+    }
+
 
 }
