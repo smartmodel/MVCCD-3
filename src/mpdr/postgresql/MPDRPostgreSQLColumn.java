@@ -1,12 +1,14 @@
 package mpdr.postgresql;
 
+import main.MVCCDElementFactory;
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRSequence;
+import mpdr.oracle.interfaces.IMPDROracleElement;
 import project.ProjectElement;
 
-public class MPDRPostgreSQLColumn extends MPDRColumn {
+public class MPDRPostgreSQLColumn extends MPDRColumn implements IMPDROracleElement {
 
     private  static final long serialVersionUID = 1000;
 
@@ -20,7 +22,10 @@ public class MPDRPostgreSQLColumn extends MPDRColumn {
 
     @Override
     public MPDRSequence createSequence(MLDRColumn mldrColumn) {
-        return null;
+        MPDRPostgreSQLSequence newSequence = MVCCDElementFactory.instance().createMPDRPostgreSQLSequence(
+                this, mldrColumn);
+
+        return newSequence;
     }
 
 

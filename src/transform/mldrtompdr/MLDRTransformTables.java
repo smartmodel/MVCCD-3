@@ -47,7 +47,6 @@ public class MLDRTransformTables {
         modifyTable(mldrTable, mpdrTable );
         mpdrTable.setIteration(mldrTransform.getIteration());
 
-
         // Transformation des colonnes
         MLDRTransformColumns mldrTransformColumns = new MLDRTransformColumns(
                 mldrTransform, mldrTable, mpdrModel, mpdrTable);
@@ -56,10 +55,7 @@ public class MLDRTransformTables {
         //Transformation des opérations
         MLDRTransformConstraints mldrTransformConstraints = new MLDRTransformConstraints(
                 mldrTransform, mldrTable, mpdrModel, mpdrTable);
-        //TODO-PAS En cours de développement
-        if (mpdrModel instanceof MPDROracleModel) {
-            mldrTransformConstraints.transformConstraints();
-        }
+        mldrTransformConstraints.transformConstraints();
 
         // Transformation des relations (repr. graphique de FK)
 

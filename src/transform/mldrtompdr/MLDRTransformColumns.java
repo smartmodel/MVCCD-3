@@ -5,7 +5,6 @@ import main.MVCCDManager;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.*;
-import mpdr.oracle.MPDROracleModel;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
@@ -130,8 +129,6 @@ public class MLDRTransformColumns {
 
 
         // Séquence de clé primaire associée
-        //TODO-PAS En cours de développement
-        if (mpdrModel instanceof MPDROracleModel) {
             boolean c1 = mldrColumn.isPkNotFk();
             boolean c2 = mldrColumn.getEntityParentSource().isInd();
             boolean c3 = mpdrModel.getMpdrDbPK() == MPDRDBPK.SEQUENCE ;
@@ -141,7 +138,7 @@ public class MLDRTransformColumns {
                             mldrTransform, mldrColumn, mpdrModel, mpdrColumn);
                     MPDRSequence mpdrSequence = mldrTransformToSequence.createOrModifySeq(MPDRSequenceRole.PK);
             }
-        }
+
     }
 
 

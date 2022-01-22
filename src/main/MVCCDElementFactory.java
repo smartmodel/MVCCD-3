@@ -17,14 +17,12 @@ import messages.MessagesBuilder;
 import mldr.*;
 import mldr.services.MLDRContConstraintsService;
 import mpdr.*;
-import mpdr.mysql.MPDRMySQLColumn;
-import mpdr.mysql.MPDRMySQLModel;
-import mpdr.mysql.MPDRMySQLTable;
+import mpdr.mysql.*;
+import mpdr.mysql.interfaces.IMPDRMySQLElement;
 import mpdr.oracle.*;
 import mpdr.oracle.interfaces.IMPDROracleElement;
-import mpdr.postgresql.MPDRPostgreSQLColumn;
-import mpdr.postgresql.MPDRPostgreSQLModel;
-import mpdr.postgresql.MPDRPostgreSQLTable;
+import mpdr.postgresql.*;
+import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
 import mpdr.tapis.MPDRBoxTriggers;
 import mpdr.tapis.MPDRContTAPIs;
 import mpdr.tapis.oracle.MPDROracleBoxTriggers;
@@ -622,21 +620,42 @@ public class MVCCDElementFactory {
         return mpdrMySQLColumn;
     }
 
-    //TODO-PAS: PK pour MySQL
-    public MDRPK createMPDRMySQLPK(MDRContConstraints mdrContConstraints, MLDRPK mldrPkSourceOfMpdPk, int id) {
-        return null;
+    public MPDRMySQLPK createMPDRMySQLPK(MDRContConstraints mdrContConstraints, MLDRPK mldrPK) {
+        MPDRMySQLPK mpdrMySQLPK = new MPDRMySQLPK(mdrContConstraints, mldrPK);
+        return mpdrMySQLPK;
     }
 
-    //TODO-PAS: FK pour MySQL
-    public MDRFK createMPDRMySQLFK(MDRContConstraints mdrContConstraints, MLDRFK mldrFkSourceOfMpdFk, int id) {
-        return null;
+    public MPDRMySQLPK createMPDRMySQLPK(MDRContConstraints mdrContConstraints, MLDRPK mldrPK, int id) {
+        MPDRMySQLPK mpdrMySQLPK = new MPDRMySQLPK(mdrContConstraints, mldrPK, id);
+        return mpdrMySQLPK;
     }
 
-    //TODO-PAS: Parameter pour MySQL
-    public MPDRParameter createMPDRMySQLParameter(MDRConstraint mdrConstraint, IMDRParameter target, MLDRParameter mldrParameterSource, int parameterId) {
-        return null;
+
+    public MPDRMySQLFK createMPDRMySQLFK(MDRContConstraints mdrContConstraints, MLDRFK mldrFK) {
+        MPDRMySQLFK mpdrMySQLFK = new MPDRMySQLFK(mdrContConstraints, mldrFK);
+        return mpdrMySQLFK;
     }
 
+    public MPDRMySQLFK createMPDRMySQLFK(MDRContConstraints mdrContConstraints, MLDRFK mldrFK, int id) {
+        MPDRMySQLFK mpdrMySQLFK = new MPDRMySQLFK(mdrContConstraints, mldrFK, id);
+        return mpdrMySQLFK;
+    }
+    
+    public MPDRMySQLUnique createMPDRMySQLUnique(MDRContConstraints mdrContConstraints, MLDRUnique mldrUnique) {
+        MPDRMySQLUnique mpdrMySQLUnique = new MPDRMySQLUnique(mdrContConstraints, mldrUnique);
+        return mpdrMySQLUnique;
+    }
+
+    public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement impdrMySQLElement, MLDRParameter mldrParameter){
+        return new MPDRMySQLParameter( impdrMySQLElement, mldrParameter);
+    }
+
+    public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement impdrMySQLElement, IMDRParameter target, MLDRParameter mldrParameter, int id){
+        return new MPDRMySQLParameter(impdrMySQLElement, target, mldrParameter, id);
+    }
+
+   
+    
     // PostgreSQL
     public MPDRPostgreSQLModel createMPDRModelPostgreSQL(MLDRModel mldrModel) {
         MPDRPostgreSQLModel mpdrPostgreSQLModel = new MPDRPostgreSQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME);
@@ -674,19 +693,52 @@ public class MVCCDElementFactory {
     }
 
     //TODO-PAS: PK pour PostgreSQL
-    public MDRPK createMPDRPostgreSQLPK(MDRContConstraints mdrContConstraints, MLDRPK mldrPkSourceOfMpdPk, int id) {
-        return null;
+
+    public MPDRPostgreSQLPK createMPDRPostgreSQLPK(MDRContConstraints mdrContConstraints, MLDRPK mldrPK, int id) {
+        MPDRPostgreSQLPK mpdrPostgreSQLPK = new MPDRPostgreSQLPK(mdrContConstraints, mldrPK, id);
+        return mpdrPostgreSQLPK;
+    }
+
+    public MPDRPostgreSQLPK createMPDRPostgreSQLPK(MDRContConstraints mdrContConstraints, MLDRPK mldrPK) {
+        MPDRPostgreSQLPK mpdrPostgreSQLPK = new MPDRPostgreSQLPK(mdrContConstraints, mldrPK);
+        return mpdrPostgreSQLPK;
     }
 
     //TODO-PAS: FK pour PostgreSQL
-    public MDRFK createMPDRPostgreSQLFK(MDRContConstraints mdrContConstraints, MLDRFK mldrFkSourceOfMpdFk, int id) {
-        return null;
+    public MDRFK createMPDRPostgreSQLFK(MDRContConstraints mdrContConstraints, MLDRFK mldrFK, int id) {
+        MPDRPostgreSQLFK mpdrPostgreSQLFK = new MPDRPostgreSQLFK(mdrContConstraints, mldrFK, id);
+        return mpdrPostgreSQLFK;
     }
 
-    //TODO-PAS: Parameter pour PostgreSQL
-    public MPDRParameter createMPDRPostgreSQLParameter(MDRConstraint mdrConstraint, IMDRParameter target, MLDRParameter mldrParameterSource, int parameterId) {
-        return null;
+
+    public MPDRPostgreSQLFK createMPDRPostgreSQLFK(MDRContConstraints mdrContConstraints, MLDRFK mldrFK) {
+        MPDRPostgreSQLFK mpdrPostgreSQLFK = new MPDRPostgreSQLFK(mdrContConstraints, mldrFK);
+        return mpdrPostgreSQLFK;
     }
+
+
+    public MPDRPostgreSQLUnique createMPDRPostgreSQLUnique(MDRContConstraints mdrContConstraints, MLDRUnique mldrUnique) {
+        MPDRPostgreSQLUnique mpdrPostgreSQLUnique = new MPDRPostgreSQLUnique(mdrContConstraints, mldrUnique);
+        return mpdrPostgreSQLUnique;
+    }
+
+
+
+    //TODO-PAS: Parameter pour PostgreSQL
+    public MPDRParameter createMPDRPostgreSQLParameter(IMPDRPostgreSQLElement impdrPostgreSQLElement, IMDRParameter target, MLDRParameter mldrParameter, int id) {
+        return new MPDRPostgreSQLParameter( impdrPostgreSQLElement, target, mldrParameter, id);
+    }
+
+    public MPDRParameter createMPDRPostgreSQLParameter(IMPDRPostgreSQLElement impdrPostgreSQLElement, MLDRParameter mldrParameter){
+        return new MPDRPostgreSQLParameter( impdrPostgreSQLElement, mldrParameter);
+    }
+
+
+    public MPDRPostgreSQLSequence createMPDRPostgreSQLSequence(MPDRColumn mpdrColumn, MLDRColumn mldrColumn) {
+        MPDRPostgreSQLSequence mpdrPostgreSQLSequence = new MPDRPostgreSQLSequence(mpdrColumn, mldrColumn);
+        return mpdrPostgreSQLSequence;
+    }
+
 
     //Tous les MPDR
     private void createMPDRContModel(MPDRModel mpdrModel) {

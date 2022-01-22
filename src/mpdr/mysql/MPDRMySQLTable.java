@@ -9,6 +9,7 @@ import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
+import mpdr.mysql.interfaces.IMPDRMySQLElement;
 import mpdr.tapis.MPDRBoxTriggers;
 import mpdr.tapis.MPDRTrigger;
 import mpdr.tapis.MPDRTriggerType;
@@ -21,7 +22,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MPDRMySQLTable extends MPDRTable {
+public class MPDRMySQLTable extends MPDRTable implements IMPDRMySQLElement {
 
     private  static final long serialVersionUID = 1000;
 
@@ -47,18 +48,25 @@ public class MPDRMySQLTable extends MPDRTable {
 
     @Override
     public MPDRPK createPK(MLDRPK mldrPK) {
-        return null;
+        MPDRMySQLPK newPK = MVCCDElementFactory.instance().createMPDRMySQLPK(
+                getMDRContConstraints(), mldrPK);
+        return newPK;
     }
 
     @Override
     public MDRConstraint createFK(MLDRFK mldrFK) {
-        return null;
+        MPDRMySQLFK newFK = MVCCDElementFactory.instance().createMPDRMySQLFK(
+                getMDRContConstraints(), mldrFK);
+        return newFK;
     }
 
     @Override
     public MDRConstraint createUnique(MLDRUnique mldrUnique) {
-        return null;
-    }
+        MPDRMySQLUnique newUnique = MVCCDElementFactory.instance().createMPDRMySQLUnique(
+            getMDRContConstraints(), mldrUnique);
+        return newUnique;
+
+}
 
     @Override
     public MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable) {

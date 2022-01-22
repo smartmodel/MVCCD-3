@@ -1,4 +1,6 @@
 package mpdr.oracle.interfaces;
 
-public interface IMPDROracleElement {
+import mpdr.interfaces.IMPDRElement;
+
+public interface IMPDROracleElement extends IMPDRElement {
 }

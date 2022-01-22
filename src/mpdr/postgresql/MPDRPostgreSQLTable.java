@@ -10,6 +10,7 @@ import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
+import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
 import mpdr.tapis.MPDRBoxTriggers;
 import mpdr.tapis.MPDRTrigger;
 import mpdr.tapis.MPDRTriggerType;
@@ -22,7 +23,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MPDRPostgreSQLTable extends MPDRTable {
+public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLElement {
 
     private  static final long serialVersionUID = 1000;
 
@@ -43,18 +44,24 @@ public class MPDRPostgreSQLTable extends MPDRTable {
     }
 
     @Override
-    public MPDRPK createPK(MLDRPK mldrPK) {
-        return null;
+    public MPDRPK createPK(MLDRPK mldrPK)  {
+        MPDRPostgreSQLPK newPK = MVCCDElementFactory.instance().createMPDRPostgreSQLPK(
+            getMDRContConstraints(), mldrPK);
+        return newPK;
     }
 
     @Override
     public MDRConstraint createFK(MLDRFK mldrFK) {
-        return null;
+        MPDRPostgreSQLFK newFK = MVCCDElementFactory.instance().createMPDRPostgreSQLFK(
+                getMDRContConstraints(), mldrFK);
+        return newFK;
     }
 
     @Override
     public MDRConstraint createUnique(MLDRUnique mldrUnique) {
-        return null;
+        MPDRPostgreSQLUnique newUnique = MVCCDElementFactory.instance().createMPDRPostgreSQLUnique(
+                getMDRContConstraints(), mldrUnique);
+        return newUnique;
     }
 
     @Override

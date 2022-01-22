@@ -4,7 +4,6 @@ import diagram.Diagram;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDFactory;
-import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.*;
@@ -16,6 +15,7 @@ import mpdr.MPDRTable;
 import mpdr.mysql.MPDRMySQLColumn;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.mysql.MPDRMySQLTable;
+import mpdr.mysql.interfaces.IMPDRMySQLElement;
 import mpdr.oracle.MPDROracleColumn;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.oracle.MPDROracleTable;
@@ -23,7 +23,7 @@ import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.postgresql.MPDRPostgreSQLColumn;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 import mpdr.postgresql.MPDRPostgreSQLTable;
-import oracle.ucp.proxy.annotation.Pre;
+import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -33,7 +33,6 @@ import org.xml.sax.SAXException;
 import preferences.Preferences;
 import profile.Profile;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
-import window.editor.diagrammer.elements.shapes.relations.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.LabelType;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
@@ -1759,11 +1758,13 @@ public class ProjectLoaderXml {
                         }
                         //PostgreSQL
                         else if(targetMdrColumn instanceof MPDRPostgreSQLColumn){
-                            MVCCDElementFactory.instance().createMPDRPostgreSQLParameter(mdrConstraint, targetMdrColumn, mldrParameterSource, parameterId);
+                            //#MAJ 2022-01-20 Intégration PostgreSQL
+                            //Ajout CAST
+                            MVCCDElementFactory.instance().createMPDRPostgreSQLParameter((IMPDRPostgreSQLElement) mdrConstraint, targetMdrColumn, mldrParameterSource, parameterId);
                         }
                         //MySQL
                         else if(targetMdrColumn instanceof MPDRMySQLColumn){
-                            MVCCDElementFactory.instance().createMPDRMySQLParameter(mdrConstraint, targetMdrColumn, mldrParameterSource, parameterId);
+                            MVCCDElementFactory.instance().createMPDRMySQLParameter((IMPDRMySQLElement) mdrConstraint, targetMdrColumn, mldrParameterSource, parameterId);
                         }
                     }
                 }

@@ -4,9 +4,10 @@ import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRSequence;
+import mpdr.mysql.interfaces.IMPDRMySQLElement;
 import project.ProjectElement;
 
-public class MPDRMySQLColumn extends MPDRColumn {
+public class MPDRMySQLColumn extends MPDRColumn implements IMPDRMySQLElement {
 
     private  static final long serialVersionUID = 1000;
 
@@ -19,8 +20,9 @@ public class MPDRMySQLColumn extends MPDRColumn {
     }
 
     @Override
+    // Pas de séquence pour MySQL
     public MPDRSequence createSequence(MLDRColumn mldrColumn) {
-        return null;
+       return null;
     }
 
 

@@ -7,12 +7,13 @@ import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
+import mpdr.mysql.interfaces.IMPDRMySQLElement;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDRMySQLDatatype;
 
-public class MPDRMySQLModel extends MPDRModel {
+public class MPDRMySQLModel extends MPDRModel implements IMPDRMySQLElement {
 
     private  static final long serialVersionUID = 1000;
 

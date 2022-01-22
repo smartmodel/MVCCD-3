@@ -1,7 +1,6 @@
 package mpdr;
 
 import main.MVCCDElement;
-import main.MVCCDElementFactory;
 import mcd.MCDAttribute;
 import md.MDElement;
 import mdr.MDRColumn;
@@ -9,7 +8,6 @@ import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
-import mpdr.oracle.MPDROracleSequence;
 import project.ProjectElement;
 
 public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPDRElementWithSource {
@@ -60,12 +58,7 @@ public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPD
         return (MPDRTable) getMDRTableAccueil();
     }
 
-    public MPDRSequence createSequence(MLDRColumn mldrColumn) {
-        MPDROracleSequence newSequence = MVCCDElementFactory.instance().createMPDROracleSequence(
-                this, mldrColumn);
-
-        return newSequence;
-    }
+    public abstract MPDRSequence createSequence(MLDRColumn mldrColumn) ;
 
 
     public MLDRColumn getMLDRColumnSource(){

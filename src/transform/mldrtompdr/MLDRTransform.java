@@ -41,17 +41,12 @@ public class MLDRTransform extends MDTransform {
             MLDRTransformTables mldrTransformTables = new MLDRTransformTables(this, mldrModel, mpdrModel);
             mldrTransformTables.transformTables();
 
-
             //Etablissement des référencements entre MPDRElement (FKs, Colonnes de FKs...
             referencingBetweenPKsAndFKs();
 
             // Transformation des relationFKs
-            //TODO-PAS En cours de développement
-            if (mpdrModel instanceof MPDROracleModel) {
-
-                MLDRTransformRelations mldrTransformRelations = new MLDRTransformRelations(this, mldrModel, mpdrModel);
-                mldrTransformRelations.transformRelations();
-            }
+            MLDRTransformRelations mldrTransformRelations = new MLDRTransformRelations(this, mldrModel, mpdrModel);
+            mldrTransformRelations.transformRelations();
 
             //Suppression des MPDRElement absents de l'itération
             deleteMDRElementNotInIteration();

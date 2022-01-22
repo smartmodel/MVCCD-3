@@ -7,12 +7,13 @@ import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
+import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDRPostgreSQLDatatype;
 
-public class MPDRPostgreSQLModel extends MPDRModel {
+public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLElement {
 
     private  static final long serialVersionUID = 1000;
 
