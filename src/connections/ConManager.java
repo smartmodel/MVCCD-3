@@ -1,6 +1,7 @@
 package connections;
 
 import connections.interfaces.IConConnectionOrConnector;
+import connections.oracle.ConnectionsOracle;
 import connections.services.ConnectionsService;
 import console.ViewLogsManager;
 import console.WarningLevel;

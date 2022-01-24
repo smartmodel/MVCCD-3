@@ -1,0 +1,8 @@
+DECLARE nb_trigger  PLS_INTEGER;
+
+BEGIN
+    SELECT count(*) INTO nb_trigger from user_triggers WHERE trigger_name = UPPER('{triggerName}');
+    IF nb_trigger = 1 then
+        EXECUTE IMMEDIATE 'DROP trigger {triggerName}';
+    END IF;
+END;

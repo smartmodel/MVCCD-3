@@ -1,7 +1,8 @@
 package mpdr.postgresql;
 
 import datatypes.MPDRDatatype;
-import exceptions.CodeApplException;
+import generatorsql.generator.MPDRGenerateSQL;
+import generatorsql.generator.postgresql.MPDRPostgreSQLGenerateSQL;
 import main.MVCCDElementFactory;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
@@ -39,7 +40,8 @@ public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLEle
 
 
     public String treatGenerate() {
-        throw new CodeApplException("La génération SQL pour " + this.getDb().getText() + " n'est pas encore développée");
+        MPDRGenerateSQL mpdrGenerateSQL = new MPDRPostgreSQLGenerateSQL(this);
+        return mpdrGenerateSQL.generate();
     }
 
     @Override
@@ -53,5 +55,7 @@ public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLEle
     public String getNewRecordWord() {
         return Preferences.MPDR_POSTGRESQL_NEW_RECORD_WORD;
     }
+
+
 
 }

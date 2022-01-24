@@ -1,6 +1,13 @@
 package main;
 
-import connections.*;
+import connections.ConDB;
+import connections.ConIDDBName;
+import connections.mysql.ConnectionsMySQL;
+import connections.oracle.ConConnectionOracle;
+import connections.oracle.ConConnectorOracle;
+import connections.oracle.ConnectionsOracle;
+import connections.postgresql.ConConnectionPostgreSQL;
+import connections.postgresql.ConnectionsPostgreSQL;
 import profile.Profile;
 import project.Project;
 
@@ -77,6 +84,16 @@ public class MVCCDFactory {
         conConnectorOracleVM.setName("VMTEST2");
         conConnectorOracleVM.setUserName("TEST2");
         conConnectorOracleVM.setUserPW("TEST2");
+
+        ConConnectionPostgreSQL conConnectionPostgreSQLVM = new ConConnectionPostgreSQL(applicationConnexionsPostgreSQL);
+        conConnectionPostgreSQLVM.setName("VMTEST1");
+        conConnectionPostgreSQLVM.setDriverDefault(true);
+        conConnectionPostgreSQLVM.setHostName("192.168.88.128");
+        conConnectionPostgreSQLVM.setPort(ConDB.POSTGRESQL.getPortDefault());
+        conConnectionPostgreSQLVM.setConIDDBName(ConIDDBName.SID);
+        conConnectionPostgreSQLVM.setDbName("postgres");
+        conConnectionPostgreSQLVM.setUserName("role1");
+        conConnectionPostgreSQLVM.setUserPW("role1");
 
 
 

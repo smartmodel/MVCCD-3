@@ -172,7 +172,10 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     }
 
     public ArrayList<MPDRTrigger> getMPDRTriggers(){
-        return getMPDRBoxTriggers().getAllTriggers();
+        if ( getMPDRBoxTriggers() != null) {
+            return getMPDRBoxTriggers().getAllTriggers();
+        }
+        return null;
     }
 
     public MPDRTrigger getMPDRTriggerByType(MPDRTriggerType type){

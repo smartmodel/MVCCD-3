@@ -1,5 +1,7 @@
-package connections;
+package connections.oracle;
 
+import connections.ConConnection;
+import connections.ConDB;
 import connections.services.ConnectionsService;
 import main.MVCCDElement;
 import repository.editingTreat.connections.connection.ConConnectionEditingTreat;

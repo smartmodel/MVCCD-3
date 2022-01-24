@@ -1,21 +1,21 @@
 package repository.editingTreat.connections.connector;
 
-import connections.oracle.ConConnectionOracle;
-import connections.oracle.ConConnectorOracle;
+import connections.postgresql.ConConnectionPostgreSQL;
+import connections.postgresql.ConConnectorPostgreSQL;
 import main.MVCCDElement;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.connections.connector.oracle.ConConnectorOracleEditor;
-import window.editor.connections.connector.oracle.ConConnectorOracleInputContent;
+import window.editor.connections.connector.postgreSQL.ConConnectorPostgreSQLEditor;
+import window.editor.connections.connector.postgreSQL.ConConnectorPostgreSQLInputContent;
 
 import java.awt.*;
 
-public class ConConnectorOracleEditingTreat extends ConConnectorEditingTreat {
+public class ConConnectorPostgreSQLEditingTreat extends ConConnectorEditingTreat {
 
 
     @Override
     protected PanelInputContent getPanelInputContent(MVCCDElement element) {
-        return new ConConnectorOracleInputContent(element);
+        return new ConConnectorPostgreSQLInputContent(element);
     }
 
     /**
@@ -24,8 +24,8 @@ public class ConConnectorOracleEditingTreat extends ConConnectorEditingTreat {
      */
     @Override
     protected DialogEditor getDialogEditor(Window owner, MVCCDElement parent, MVCCDElement element, String mode) {
-        return new ConConnectorOracleEditor(owner, (ConConnectionOracle) parent, (ConConnectorOracle) element, mode,
-                new ConConnectorOracleEditingTreat());
+        return new ConConnectorPostgreSQLEditor(owner, (ConConnectionPostgreSQL) parent,
+                (ConConnectorPostgreSQL) element, mode, new ConConnectorPostgreSQLEditingTreat());
     }
 
     @Override

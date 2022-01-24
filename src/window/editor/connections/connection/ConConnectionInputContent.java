@@ -530,18 +530,18 @@ public abstract class ConConnectionInputContent extends PanelInputContent implem
 
     @Override
     protected void initDatas() {
-        fieldName.setText("TT");
+        fieldName.setText("");
         radDriverDefault.setSelected(true);
         fieldDriverDefault.setText(getEditor().getConDb().getDefaultDriverFileNamePathAbsolute());
         fieldDriverCustom.setText("");
         //TODO-0 Valeur par défaut tant que la sauvegarde XML n'est pas faite
         //fieldIdDbName est initialisé par la calsse spécialisée;
-        fieldHostName.setText("localhost");
+        fieldHostName.setText("");
         initPort();
-        fieldDbName.setText("XEPDB1");
+        fieldDbName.setText("");
         // fieldIdDbName initialisé par la classe spécialisée
-        fieldUserName.setText("TEST1");
-        fieldUserPW.setText("TEST1");
+        fieldUserName.setText("");
+        fieldUserPW.setText("");
         fieldUserPWClear.setText(fieldUserPW.getText()); //TODO-0 Voir getPassword
         fieldSaveUserPW.setSelected(true);
 

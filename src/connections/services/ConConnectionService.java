@@ -1,6 +1,11 @@
 package connections.services;
 
-import connections.*;
+import connections.ConConnection;
+import connections.ConDB;
+import connections.ConIDDBName;
+import connections.ConManager;
+import connections.oracle.ConConnectionOracle;
+import connections.postgresql.ConConnectionPostgreSQL;
 import exceptions.CodeApplException;
 import preferences.Preferences;
 
@@ -45,6 +50,8 @@ public class ConConnectionService {
         ConConnection conConnection = null;
         if (conDB == ConDB.ORACLE) {
             conConnection = new ConConnectionOracle(null);
+        } else if (conDB == ConDB.POSTGRESQL) {
+            conConnection = new ConConnectionPostgreSQL(null);
         } else{
             throw new CodeApplException("Il faut ajouter la création de la connexion pour " + conDB.getText());
         }

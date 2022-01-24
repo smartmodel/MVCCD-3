@@ -1,0 +1,48 @@
+CREATE OR REPLACE PROCEDURE {emptySchema} AS
+	TYPE commands IS TABLE OF VARCHAR2(1000);
+	drops_commands commands;
+	drops_select VARCHAR2(1000);
+
+BEGIN
+    -- Suppression des tables en premier qui implique la suppression des séquences systèmes
+    -- créées pour les colonnes d'identité.
+	drops_select := q'$SELECT 'DROP TABLE ' || object_name   || ' CASCADE CONSTRAINTS PURGE'
+                    FROM user_objects
+                    WHERE object_type = 'TABLE'$';
+
+	EXECUTE IMMEDIATE drops_select BULK COLLECT INTO drops_commands;
+
+    FOR i IN 1..drops_commands.COUNT
+    LOOP
+         BEGIN
+            EXECUTE IMMEDIATE drops_commands(i);
+            dbms_output.put_line('La commande a été exécutée ' || drops_commands(i));
+        EXCEPTION
+        WHEN OTHERS THEN
+            NULL;
+            dbms_output.put_line('La commande n''a pas pu être exécutée ' || drops_commands(i));
+        END;
+     END LOOP;
+
+    -- Suppresion des autres objets que les tables et sans la présente procédure en cours d'exécution.
+	drops_select := q'$SELECT 'DROP ' || object_type || ' ' || object_name   || ''
+                    FROM user_objects
+                    WHERE (object_type IN ('SEQUENCE', 'TRIGGER', 'PACKAGE',
+					'FUNCTION', 'VIEW', 'DATABASE LINK', 'SYNONYM')
+                    OR (( object_type = 'PROCEDURE') AND (object_name != Upper('{emptySchema}'))))$';
+
+    EXECUTE IMMEDIATE drops_select BULK COLLECT INTO drops_commands;
+
+    FOR i IN 1..drops_commands.COUNT
+    LOOP
+        BEGIN
+            EXECUTE IMMEDIATE drops_commands(i);
+            dbms_output.put_line('La commande a été exécutée ' || drops_commands(i));
+        EXCEPTION
+        WHEN OTHERS THEN
+            NULL;
+            dbms_output.put_line('La commande n''a pas pu être exécutée ' || drops_commands(i));
+        END;
+    END LOOP;
+
+END {emptySchema};

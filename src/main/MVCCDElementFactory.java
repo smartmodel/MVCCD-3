@@ -1,8 +1,11 @@
 package main;
 
-import connections.ConConnectionOracle;
-import connections.ConConnectorOracle;
-import connections.ConnectionsOracle;
+import connections.oracle.ConConnectionOracle;
+import connections.oracle.ConConnectorOracle;
+import connections.oracle.ConnectionsOracle;
+import connections.postgresql.ConConnectionPostgreSQL;
+import connections.postgresql.ConConnectorPostgreSQL;
+import connections.postgresql.ConnectionsPostgreSQL;
 import console.ViewLogsManager;
 import console.WarningLevel;
 import diagram.mcd.MCDDiagram;
@@ -66,6 +69,14 @@ public class MVCCDElementFactory {
 
     public ConConnectorOracle createConConnectorOracle(ConConnectionOracle parent) {
         return new ConConnectorOracle(parent);
+    }
+
+    public ConConnectionPostgreSQL createConConnectionPostgreSQL(ConnectionsPostgreSQL parent) {
+        return new ConConnectionPostgreSQL(parent);
+    }
+
+    public ConConnectorPostgreSQL createConConnectorPostgreSQL(ConConnectionPostgreSQL parent) {
+        return new ConConnectorPostgreSQL(parent);
     }
 
     public MCDContModels createMCDModels(Project project, int id){

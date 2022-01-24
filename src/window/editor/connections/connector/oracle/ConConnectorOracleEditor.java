@@ -1,8 +1,8 @@
 package window.editor.connections.connector.oracle;
 
-import connections.ConConnectionOracle;
-import connections.ConConnectorOracle;
 import connections.ConDB;
+import connections.oracle.ConConnectionOracle;
+import connections.oracle.ConConnectorOracle;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelInput;
@@ -33,12 +33,12 @@ public class ConConnectorOracleEditor extends ConConnectorEditor {
 
     @Override
     protected String getTitleSpecialized() {
-        return ConDB.ORACLE.getText();
+        return ConDB.POSTGRESQL.getText();
     }
 
 
     @Override
     protected ConDB getConDb() {
-        return ConDB.ORACLE;
+        return ConDB.POSTGRESQL;
     }
 }

@@ -1,0 +1,4 @@
+CREATE TABLE {tableName}(
+{createTableColumns.txt}
+{createTablePK.txt}
+)

@@ -1,8 +1,8 @@
 package window.editor.connections.connection.oracle;
 
-import connections.ConConnectionOracle;
 import connections.ConDB;
-import connections.ConnectionsOracle;
+import connections.oracle.ConConnectionOracle;
+import connections.oracle.ConnectionsOracle;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelInput;

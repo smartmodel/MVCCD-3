@@ -2,6 +2,7 @@ package connections;
 
 import main.MVCCDElement;
 import org.apache.commons.lang.StringUtils;
+import repository.editingTreat.EditingTreat;
 
 public abstract class ConnectionsDB extends ConElement {
 
@@ -25,4 +26,6 @@ public abstract class ConnectionsDB extends ConElement {
         return null;
     }
 
+
+    public abstract EditingTreat getConConnectionEditingTreat();
 }

@@ -136,14 +136,16 @@ public abstract class MPDRGenerateSQL {
 
         String generateSQLCode = "";
         for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
-            for (MPDRTrigger mpdrTrigger : mpdrTable.getMPDRTriggers()) {
-                if (command == CREATE) {
+            if (mpdrTable.getMPDRTriggers() != null) {
+                for (MPDRTrigger mpdrTrigger : mpdrTable.getMPDRTriggers()) {
+                    if (command == CREATE) {
                         generateSQLCode += getMpdrGenerateSQLTrigger().generateSQLCreateTrigger(mpdrTrigger);
                         generateSQLCode += delimiter();
-                }
-                if (command == DROP) {
+                    }
+                    if (command == DROP) {
                         generateSQLCode += getMpdrGenerateSQLTrigger().generateSQLDropTrigger(mpdrTrigger);
                         generateSQLCode += delimiter();
+                    }
                 }
             }
         }

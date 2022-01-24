@@ -1,7 +1,7 @@
 package window.editor.connections.connector.oracle;
 
-import connections.ConConnectionOracle;
-import connections.ConConnectorOracle;
+import connections.oracle.ConConnectionOracle;
+import connections.oracle.ConConnectorOracle;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import window.editor.connections.connector.ConConnectorButtonsContent;

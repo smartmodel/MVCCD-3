@@ -691,6 +691,8 @@ public class Preferences extends MVCCDElement {
   public static MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
   public static String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
   public static String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
+  public static String MPDRPOSTGRESQL_EMPTY_SCHEMA = "empty_schema";
+
 
   public static String MDR_TABLE_NATURE_IND = "mdr.table.nature.ind";
   public static String MDR_TABLE_NATURE_DEP = "mdr.table.nature.dep";

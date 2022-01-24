@@ -1,6 +1,10 @@
 package main.window.repository;
 
-import connections.*;
+import connections.ConConnection;
+import connections.ConConnector;
+import connections.ConDBMode;
+import connections.ConnectionsDB;
+import connections.oracle.ConConnectorOracle;
 import console.ConsoleManager;
 import console.LogsManager;
 import console.ViewLogsManager;
@@ -34,7 +38,6 @@ import project.Project;
 import project.ProjectElement;
 import repository.editingTreat.EditingTreat;
 import repository.editingTreat.ProjectEditingTreat;
-import repository.editingTreat.connections.connection.ConConnectionOracleEditingTreat;
 import repository.editingTreat.connections.connector.ConConnectorEditingTreat;
 import repository.editingTreat.diagram.MCDDiagramEditingTreat;
 import repository.editingTreat.mcd.*;
@@ -628,8 +631,14 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
     }
 
     private void treatConnections(ISMenu menu) {
-        if (node.getUserObject() instanceof ConnectionsOracle) {
+        /*if (node.getUserObject() instanceof ConnectionsOracle) {
             treatGenericNew(this, new ConConnectionOracleEditingTreat());
+        }
+
+         */
+        if (node.getUserObject() instanceof ConnectionsDB) {
+            ConnectionsDB connectionsDB = (ConnectionsDB) node.getUserObject();
+            treatGenericNew(this, connectionsDB.getConConnectionEditingTreat());
         }
     }
 
@@ -932,7 +941,7 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         if (node.getUserObject() instanceof ConConnection) {
             ConConnection conConnection = (ConConnection) node.getUserObject();
             treatGeneric(this, conConnection.getConConnectionEditingTreat());
-            if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE()== ConDBMode.CONNECTOR) {
+            if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
                 // Nouveau connecteur
                treatGenericNew(this, conConnection.getConConnectorEditingTreat());
             }
