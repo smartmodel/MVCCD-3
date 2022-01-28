@@ -21,6 +21,8 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
     public void createContentCustom() {
 
         super.createContentCustom();
+        fieldNamingFormat.addItem(MDRNamingFormat.LIKEBD.getText());
+
         fieldPKGenerate.addItem(MPDRDBPK.SEQUENCE.getText());
         fieldPKGenerate.addItem(MPDRDBPK.IDENTITY.getText());
     }
@@ -70,6 +72,9 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_CAPITALIZE))){
                 preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MPDR_NAMING_FORMAT_LIKEDB))){
+                preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.LIKEBD);
             }
         }
 

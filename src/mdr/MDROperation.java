@@ -1,15 +1,13 @@
 package mdr;
 
-import constraints.Constraint;
 import constraints.ConstraintService;
 import m.interfaces.IMUMLExtensionNamingInLine;
 import main.MVCCDElement;
 import md.interfaces.IMDElementWithSource;
+import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
-import mdr.services.MDRColumnsService;
 import mldr.MLDRParameter;
-import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRParameter;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -18,10 +16,9 @@ import stereotypes.Stereotype;
 import stereotypes.StereotypeService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public abstract class MDROperation extends MDRElement implements IMDRElementWithIteration, IMDElementWithSource,
-        IMUMLExtensionNamingInLine {
+        IMUMLExtensionNamingInLine, IMDRElementNamingPreferences {
 
     private  static final long serialVersionUID = 1000;
     private Integer iteration = null; // Si un objet est créé directement et non par transformation

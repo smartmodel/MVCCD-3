@@ -14,7 +14,8 @@ public abstract class MPDRGenerateSQLTable {
     public String generateSQLDropTable(MPDRTable mpdrTable) {
         String generateSQLCode = "";
         generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirDropDB(), Preferences.TEMPLATE_DROP_TABLE);
-        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
+                Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
         return generateSQLCode;
     }
 
@@ -23,18 +24,19 @@ public abstract class MPDRGenerateSQLTable {
 
         //Génération des tables
         generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE) ;
-        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
+                Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
 
 
         //Génération des colonnes
         String columnsInCreateTable = generateSQLCreateColumns(mpdrTable);
-        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_COLUMNS, columnsInCreateTable);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_COLUMNS, columnsInCreateTable);
 
         //Génération de la contrainte de PK
         //generateSQLCode += Preferences.SQL_SEPARATOR_ARGUMENTS + System.lineSeparator();
         MPDRGenerateSQLPK mpdrGenerateSQLPK = getMPDRGenerateSQLPK();
         String pkInCreateTable =mpdrGenerateSQLPK.generateSQLCreatePK(mpdrTable);
-        generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_PK, pkInCreateTable);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_PK, pkInCreateTable);
 
         generateSQLCode = MPDRGenerateSQLUtil.cleanSeparatorArguments(generateSQLCode);
 

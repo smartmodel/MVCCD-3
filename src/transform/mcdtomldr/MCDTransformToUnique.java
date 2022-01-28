@@ -22,6 +22,7 @@ import mldr.MLDRUnique;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import transform.mcdtomldr.services.MCDTransformService;
 import transform.mdr.services.MDRTransformService;
 
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class MCDTransformToUnique {
         }
 
         // Nom
-        MDRTransformService.names(mldrUnique, buildNameUnique(mcdUnicity, mldrUnique.getMdrUniqueNature(), mldrTable), mldrModel);
+        MCDTransformService.names(mldrUnique, buildNameUnique(mcdUnicity, mldrUnique.getMdrUniqueNature(), mldrTable), mldrModel);
 
         //absolute
         if (mldrUnique.isAbsolute() != mcdUnicity.isAbsolute()){
@@ -131,6 +132,7 @@ public class MCDTransformToUnique {
 
             orderBuild.setFormat(preferences.getMDR_UNIQUE_NAME_FORMAT());
             orderBuild.setTargetNaming(MDROrderBuildTargets.UNIQUE);
+            //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
 
             orderBuild.getUniqueNature().setValue(uniqueNature.getText());
             orderBuild.getUniqueNatSep().setValue();

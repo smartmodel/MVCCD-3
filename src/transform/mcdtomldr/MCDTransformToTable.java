@@ -22,7 +22,7 @@ import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import transform.mdr.services.MDRTransformService;
+import transform.mcdtomldr.services.MCDTransformService;
 
 import java.util.ArrayList;
 
@@ -222,10 +222,10 @@ public class MCDTransformToTable {
 
         // Nom
         if ( imcdSourceMLDRTable instanceof MCDEntity) {
-            MDRTransformService.names(mldrTable, buildNameTable((MCDEntity) imcdSourceMLDRTable), mldrModel);
+            MCDTransformService.names(mldrTable, buildNameTable((MCDEntity) imcdSourceMLDRTable), mldrModel);
         }
         if ( imcdSourceMLDRTable instanceof MCDAssociation) {
-            MDRTransformService.names(mldrTable, buildNameTable(mldrTable, (MCDAssociation) imcdSourceMLDRTable), mldrModel);
+            MCDTransformService.names(mldrTable, buildNameTable(mldrTable, (MCDAssociation) imcdSourceMLDRTable), mldrModel);
         }
 
         // A voir !
@@ -245,6 +245,7 @@ public class MCDTransformToTable {
             orderBuild.setFormat(preferences.getMDR_TABLE_NAME_FORMAT());
             orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_TABLE_NAME_LENGTH);
             orderBuild.setTargetNaming(MDROrderBuildTargets.TABLE);
+            //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
 
             orderBuild.getTableName().setValue(mcdEntity);
 
@@ -279,6 +280,7 @@ public class MCDTransformToTable {
             orderBuild.setFormat(preferences.getMDR_TABLE_NN_NAME_FORMAT());
             orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_TABLE_NAME_LENGTH);
             orderBuild.setTargetNaming(MDROrderBuildTargets.TABLENN);
+            //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
 
             MCDAssEnd assEndA = mcdAssociationNN.getFrom();
             MCDAssEnd assEndB = mcdAssociationNN.getTo();

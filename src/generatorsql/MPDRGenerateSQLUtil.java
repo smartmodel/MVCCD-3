@@ -53,11 +53,14 @@ public class MPDRGenerateSQLUtil {
         }
     }
 
-
+/*
     public static String replaceKeyValue(String code, String key, String value) {
         //TODO-1 A voir expression régulière
         return code.replaceAll("\\{" + key + "}", value);
     }
+
+
+ */
 
     public static boolean find(String code, String key) {
         //TODO-1 A voir expression régulière

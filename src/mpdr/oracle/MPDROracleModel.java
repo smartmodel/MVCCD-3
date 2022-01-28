@@ -4,6 +4,7 @@ import datatypes.MPDRDatatype;
 import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.oracle.MPDROracleGenerateSQL;
 import main.MVCCDElementFactory;
+import mdr.MDRNamingFormat;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
@@ -51,6 +52,25 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement {
     @Override
     public String getNewRecordWord() {
         return Preferences.MPDR_ORACLE_NEW_RECORD_WORD;
+    }
+
+    @Override
+    public void adjustProperties() {
+        Preferences preferences = PreferencesManager.instance().preferences();
+        setNamingLengthActual( preferences.getMPDRORACLE_PREF_NAMING_LENGTH());
+        setNamingLengthFuture( preferences.getMPDRORACLE_PREF_NAMING_LENGTH());
+        setNamingFormatActual( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
+        setNamingFormatFuture( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
+    }
+
+
+    // Surchargé pour les BD qui ont formattage particulier
+    // majuscule pour Oracle
+    public MDRNamingFormat getNamingFormatForDB() {
+        if (namingFormatFuture == MDRNamingFormat.LIKEBD){
+            return MDRNamingFormat.UPPERCASE;
+        }
+        return namingFormatFuture;
     }
 
 }

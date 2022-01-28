@@ -4,6 +4,7 @@ import datatypes.MPDRDatatype;
 import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.postgresql.MPDRPostgreSQLGenerateSQL;
 import main.MVCCDElementFactory;
+import mdr.MDRNamingFormat;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
@@ -17,6 +18,8 @@ import transform.mldrtompdr.MLDRTransformToMPDRPostgreSQLDatatype;
 public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLElement {
 
     private  static final long serialVersionUID = 1000;
+
+    private String schema ;
 
     public MPDRPostgreSQLModel(ProjectElement parent, String name) {
 
@@ -56,6 +59,32 @@ public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLEle
         return Preferences.MPDR_POSTGRESQL_NEW_RECORD_WORD;
     }
 
+    @Override
+    public void adjustProperties() {
+        Preferences preferences = PreferencesManager.instance().preferences();
+        setNamingLengthActual( preferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH());
+        setNamingLengthFuture( preferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH());
+        setNamingFormatActual( preferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT());
+        setNamingFormatFuture( preferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT());
 
+    }
+
+    public String getSchema() {
+        return schema;
+    }
+
+    public void setSchema(String schema) {
+        this.schema = schema;
+    }
+
+
+    // Surchargé pour les BD qui ont formattage particulier
+    // minuscule pour PostgreSQL
+     public MDRNamingFormat getNamingFormatForDB() {
+         if (namingFormatFuture == MDRNamingFormat.LIKEBD){
+            return MDRNamingFormat.LOWERCASE;
+        }
+        return namingFormatFuture;
+    }
 
 }

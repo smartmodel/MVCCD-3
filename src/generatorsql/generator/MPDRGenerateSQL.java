@@ -6,6 +6,7 @@ import messages.MessagesBuilder;
 import mpdr.*;
 import mpdr.tapis.MPDRTrigger;
 import preferences.Preferences;
+import utilities.UtilDivers;
 
 import java.util.ArrayList;
 
@@ -244,4 +245,12 @@ public abstract class MPDRGenerateSQL {
     protected abstract String getTemplateBDDirectory();
 
     public abstract String getDelimiterInstructions();
+
+
+
+    public String replaceKeyValue(String code, String key, String value) {
+        return UtilDivers.replaceKeyValue(code, key, value);
+    }
+
+
 }

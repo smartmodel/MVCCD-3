@@ -17,7 +17,7 @@ import mpdr.MPDRSequenceRole;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import transform.mdr.services.MDRTransformService;
+import transform.mcdtomldr.services.MCDTransformService;
 
 public class MLDRTransformToSequence {
 
@@ -55,7 +55,7 @@ public class MLDRTransformToSequence {
                                 MPDRSequence mpdrSequence,
                                 MPDRSequenceRole mpdrSequenceRole) {
 
-        MDRTransformService.names(mpdrSequence,
+        MCDTransformService.names(mpdrSequence,
                 buildNameSequence(mldrColumn, mpdrSequenceRole),
                 mpdrModel);
 
@@ -72,6 +72,9 @@ public class MLDRTransformToSequence {
             orderBuild.setFormat(mpdrSequenceRole.getNameFormat(mpdrModel));
             orderBuild.setFormatUserMarkerLengthMax(mpdrSequenceRole.getFormatUserMarkerLengthMax());
             orderBuild.setTargetNaming(MDROrderBuildTargets.SEQUENCEPK);
+
+            //orderBuild.setNamingFormat(mpdrModel.getNamingFormatForDB());
+            //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
 
             MLDRTable mldrTable = mldrColumn.getMLDRTableAccueil();
 

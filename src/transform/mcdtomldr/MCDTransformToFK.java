@@ -112,7 +112,7 @@ public class MCDTransformToFK {
         }
 
         MDRElementNames namesFK = buildNameFK(mldrTable, tableShortNameChild, mldrFK, mcdRelEndSource, mldrTableParent);
-        MDRTransformService.names(mldrFK, namesFK, mldrModel);
+        MCDTransformService.names(mldrFK, namesFK, mldrModel);
 
         // Nature
         if (mldrFK.getNature() != null) {
@@ -422,6 +422,7 @@ public class MCDTransformToFK {
             orderBuild.setFormat(preferences.getMDR_FK_NAME_FORMAT());
             orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_FK_LENGTH);
             orderBuild.setTargetNaming(MDROrderBuildTargets.FK);
+            //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
 
             orderBuild.getIndConstFK().setValue(mdrFK.getIndice().toString());
             orderBuild.getFkIndSep().setValue();

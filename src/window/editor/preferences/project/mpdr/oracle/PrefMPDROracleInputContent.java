@@ -19,6 +19,8 @@ public class PrefMPDROracleInputContent extends PrefMPDRInputContent {
     public void createContentCustom() {
 
         super.createContentCustom();
+        fieldNamingFormat.addItem(MDRNamingFormat.LIKEBD.getText());
+
         fieldPKGenerate.addItem(MPDRDBPK.SEQUENCE.getText());
         fieldPKGenerate.addItem(MPDRDBPK.IDENTITY.getText());
     }
@@ -69,6 +71,9 @@ public class PrefMPDROracleInputContent extends PrefMPDRInputContent {
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_CAPITALIZE))){
                 preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MPDR_NAMING_FORMAT_LIKEDB))){
+                preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.LIKEBD);
             }
         }
 

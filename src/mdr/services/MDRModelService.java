@@ -5,9 +5,6 @@ import md.MDElement;
 import md.interfaces.IMDElementWithSource;
 import mdr.*;
 import mdr.interfaces.IMDRElementNamingPreferences;
-import mdr.interfaces.IMDRElementWithIteration;
-import mldr.MLDRContRelations;
-import mldr.MLDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.UtilDivers;
@@ -16,6 +13,13 @@ import java.util.ArrayList;
 
 public class MDRModelService {
 
+    /*
+    private static final int LOWER = 0;
+    private static final int UPPER = 1;
+    final static String UPPERCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    final static String LOWERCHARS = "abcdefghijklmnopqrstuvwxyz";
+
+     */
 
     public static ArrayList<MDRTable> getMDRTablesDeep(MDRElement root){
         ArrayList<MDRTable>  resultat = new ArrayList<MDRTable>() ;
@@ -107,8 +111,7 @@ public class MDRModelService {
     }
 
     public static void adjustNaming(MDRModel mdrModel){
-        // Il faudra faire le changement de longueur en premier!
-        for (MDRElement mdrElement : mdrModel.getMDRDescendants()){
+        for (MDRElement mdrElement : getMDRDescendantsInModelStrict(mdrModel)){
             if (mdrElement instanceof IMDRElementNamingPreferences) {
                 String name = buildName(mdrModel, mdrElement);
                 mdrElement.setName(name);
@@ -129,16 +132,16 @@ public class MDRModelService {
             name = mdrElement.getNames().getName120();
         }
         //TODO-PAS Mettre un message si toujours name =""
-        MDRNamingFormat mdrNamingFormat = mdrModel.getNamingFormatFuture();
+        MDRNamingFormat mdrNamingFormat = mdrModel.getNamingFormatForDB();
         return formatNaming(name, mdrNamingFormat);
     }
 
-    public static String formatNaming(String name, MDRNamingFormat mdrNamingFormat){
+    private static String formatNaming(String name, MDRNamingFormat mdrNamingFormat){
         if (mdrNamingFormat == MDRNamingFormat.NOTHING) {
-            // Rien
+            // name tel que repris de MPDRModelService.builName
         }
         if (mdrNamingFormat == MDRNamingFormat.UPPERCASE) {
-            name = StringUtils.upperCase(name);
+             name = StringUtils.upperCase( name);
         }
         if (mdrNamingFormat == MDRNamingFormat.LOWERCASE) {
             name = StringUtils.lowerCase(name);
@@ -146,6 +149,7 @@ public class MDRModelService {
         if (mdrNamingFormat == MDRNamingFormat.CAPITALIZE) {
             name = capitalize(name);
         }
+
         return name;
     }
 
@@ -160,6 +164,90 @@ public class MDRModelService {
         return nameCapitalized;
     }
 
- }
+    /*
+    private static String lowerOrUpper(int treatment, String name){
+
+        if (isCapitalized(name)){
+
+            boolean separator = false;
+            boolean lastUpperChar = true ; // Dernier caractère écrit est une majuscule
+            String nameWithSep = "" + name.charAt(0) ;
+            for (int i = 1 ; i < name.length() ; i++){
+                char c = name.charAt(i);
+                Trace.println(name + "  " + c + "   " + StringUtils.contains(UPPERCHARS, c));
+                if (StringUtils.contains(UPPERCHARS, c)) {
+                    if (!lastUpperChar){
+                        nameWithSep += Preferences.MDR_SEPARATOR ;
+                    }
+                } else {
+                    lastUpperChar = false;
+                }
+                nameWithSep += c;
+            }
+
+            name = nameWithSep;
+
+        }
+
+        return name ;
+    }
+
+     */
+
+  /*
+    private static boolean isCapitalized (String name) {
+
+        String nameWithSep = "";
+        boolean nameIsCapitalized = false;
+        // Pas de séparateur
+        if (name.length() > 0) {
+            if (!StringUtils.contains(name, Preferences.MDR_SEPARATOR)) {
+                // 1ère lettre une majuscule
+                if (StringUtils.contains(UPPERCHARS, name.charAt(0))) {
+                    int i = 0;
+                    while ((!nameIsCapitalized) && (i < name.length())) {
+                        // Une lettre non majuscule
+                        boolean oneCharNotUpper = !StringUtils.contains(UPPERCHARS, name.charAt(i));
+                        if (oneCharNotUpper) {
+                            int j = 0;
+                            while ((!nameIsCapitalized) && (j < name.length())) {
+                                boolean oneCharUpper = StringUtils.contains(UPPERCHARS, name.charAt(j));
+                                if (oneCharUpper) {
+                                    nameIsCapitalized = true;
+                                }
+                                j++;
+                            }
+                        }
+                        i++;
+                    }
+                }
+            }
+        }
+        return nameIsCapitalized;
+    }
+
+   */
+
+    public static ArrayList<MDRElement> getMDRDescendantsInModelStrict(MDRModel mdrModel) {
+         return  getMDRDescendantsInModelStrictInternal(mdrModel);
+    }
+
+    // A l'appel root est une instance de MDRElement
+    private static ArrayList<MDRElement> getMDRDescendantsInModelStrictInternal(MDRElement root) {
+        ArrayList<MDRElement> resultat = new ArrayList<MDRElement>();
+        for (MDRElement child : root.getMDRChilds()){
+            if (!(child instanceof MDRModel)) {
+                resultat.add(child);
+                if (child.getChilds().size() > 0) {
+                    resultat.addAll(getMDRDescendantsInModelStrictInternal(child));
+                }
+            }
+        }
+        return resultat;
+
+    }
+
+
+}
 
 

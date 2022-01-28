@@ -25,7 +25,7 @@ public abstract class MPDRGenerateSQLDynamicCode {
         for (MPDRDynamicCodeType mpdrDynamicCodeType : MPDRDynamicCodeType.getAllForDB(mpdrDB)){
             if (MPDRGenerateSQLUtil.find(generateSQLCode, mpdrDynamicCodeType.getKey())){
                 String sqlCodeDynamic = loadTemplate(impdrWithDynamicCode, mpdrDynamicCodeType);
-                generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, mpdrDynamicCodeType.getKey(), sqlCodeDynamic);
+                generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, mpdrDynamicCodeType.getKey(), sqlCodeDynamic);
             }
         }
 
@@ -55,13 +55,13 @@ public abstract class MPDRGenerateSQLDynamicCode {
             for (MDRColumn mdrColumn : mdrColumns){
                 if (mdrColumn.isFk())  {
                     generateSQLCode += System.lineSeparator() + templateSQLCode ;
-                    generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode,
+                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                             Preferences.MPDR_NEW_RECORD_WORD,
                             getMPDRGenerateSQL().mpdrModel.getNewRecordWord());
-                    generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode,
+                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                             Preferences.MDR_TABLE_NAME_WORD,
                             mdrColumn.getMDRTableAccueil().getName());
-                    generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode,
+                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                             Preferences.MDR_COLUMN_NAME_WORD,
                             mdrColumn.getName());
                 }

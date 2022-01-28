@@ -13,6 +13,8 @@ import mdr.interfaces.IMDRElementWithIteration;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRRelation;
 import mldr.services.MLDRModelService;
+import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransform;
 
@@ -144,5 +146,13 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
         MVCCDManager.instance().getWinRepositoryContent().reload(this.getNode());
     }
 
+    @Override
+    public void adjustProperties() {
+        Preferences preferences = PreferencesManager.instance().preferences();
+        setNamingLengthActual( preferences.getMLDR_PREF_NAMING_LENGTH());
+        setNamingLengthFuture( preferences.getMLDR_PREF_NAMING_LENGTH());
+        setNamingFormatActual( preferences.getMLDR_PREF_NAMING_FORMAT());
+        setNamingFormatFuture( preferences.getMLDR_PREF_NAMING_FORMAT());
+    }
 
 }

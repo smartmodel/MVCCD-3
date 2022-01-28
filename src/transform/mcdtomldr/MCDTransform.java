@@ -38,6 +38,7 @@ public class MCDTransform extends MDTransform {
         boolean ok = true;
         try {
             mldrModel.incrementeIteration();
+            mldrModel.adjustProperties();
 
             // Change source MCD pour mldrColumnPK (Attribut AID <--> Entité)
             ok = changeSourceMLDRColumnPK();

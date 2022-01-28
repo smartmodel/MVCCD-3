@@ -1,32 +1,16 @@
 package transform.mdr.services;
 
 import main.MVCCDManager;
-import mdr.*;
-import mdr.services.MDRModelService;
+import mdr.MDRColumn;
+import mdr.MDROperation;
+import mdr.MDRParameter;
+import mdr.MDRTableOrView;
 import transform.MDTransform;
 
 import java.util.ArrayList;
 
 public class MDRTransformService {
 
-
-    public static void names(MDRElement mdrElement, MDRElementNames newNames, MDRModel mdrModel){
-        // Enregistrement de l'objet contenant tous les noms
-        mdrElement.setNames(newNames);
-
-        // Affectation du nom
-        // A partir des noms calculés et du nom sélectionné
-        String newName = newNames.getNameByNameLength(mdrModel.getNamingLengthFuture());
-        newName = MDRModelService.formatNaming(newName, mdrModel.getNamingFormatFuture());
-
-        if (mdrElement.getName() != null) {
-            if (!mdrElement.getName().equals(newName)) {
-                mdrElement.setName(newName);
-            }
-        } else {
-            mdrElement.setName(newName);
-        }
-    }
 
 
     public static void adjustParameters(MDTransform mdTransform,

@@ -179,4 +179,5 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     public abstract Boolean getMPDR_TAPIs() ;
 
     public abstract String getNewRecordWord();
-}
+
+ }

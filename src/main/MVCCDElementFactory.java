@@ -349,11 +349,15 @@ public class MVCCDElementFactory {
     }
 
     private void namingMLDRModel(MLDRModel mldrModel){
+        mldrModel.adjustProperties();
+        /*
         Preferences preferences = PreferencesManager.instance().preferences();
         mldrModel.setNamingLengthActual( preferences.getMLDR_PREF_NAMING_LENGTH());
         mldrModel.setNamingLengthFuture( preferences.getMLDR_PREF_NAMING_LENGTH());
         mldrModel.setNamingFormatActual( preferences.getMLDR_PREF_NAMING_FORMAT());
         mldrModel.setNamingFormatFuture( preferences.getMLDR_PREF_NAMING_FORMAT());
+
+         */
 
     }
 
@@ -501,11 +505,15 @@ public class MVCCDElementFactory {
     // Oracle
     public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {
         MPDROracleModel mpdrOracleModel = new MPDROracleModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_ORACLE_NAME);
+        mpdrOracleModel.adjustProperties();
+        /*
         Preferences preferences = PreferencesManager.instance().preferences();
         mpdrOracleModel.setNamingLengthActual( preferences.getMPDRORACLE_PREF_NAMING_LENGTH());
         mpdrOracleModel.setNamingLengthFuture( preferences.getMPDRORACLE_PREF_NAMING_LENGTH());
         mpdrOracleModel.setNamingFormatActual( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
         mpdrOracleModel.setNamingFormatFuture( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
+
+         */
         // Conteneur générique
         createMPDRContModel(mpdrOracleModel);
         return mpdrOracleModel;
@@ -597,13 +605,18 @@ public class MVCCDElementFactory {
 
 
     // MySQL
-    public MPDRMySQLModel createMPDRModelMySQL(MLDRModel mldrModel) {
+    public MPDRMySQLModel createMPDRMySQLModel(MLDRModel mldrModel) {
         MPDRMySQLModel mpdrMySQLModel = new MPDRMySQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_MYSQL_NAME);
+        mpdrMySQLModel.adjustProperties();
+
+        /*
         Preferences preferences = PreferencesManager.instance().preferences();
         mpdrMySQLModel.setNamingLengthActual( preferences.getMPDRMYSQL_PREF_NAMING_LENGTH());
         mpdrMySQLModel.setNamingLengthFuture( preferences.getMPDRMYSQL_PREF_NAMING_LENGTH());
         mpdrMySQLModel.setNamingFormatActual( preferences.getMPDRMYSQL_PREF_NAMING_FORMAT());
         mpdrMySQLModel.setNamingFormatFuture( preferences.getMPDRMYSQL_PREF_NAMING_FORMAT());
+
+         */
         createMPDRContModel(mpdrMySQLModel);
         return mpdrMySQLModel;
     }
@@ -668,13 +681,17 @@ public class MVCCDElementFactory {
    
     
     // PostgreSQL
-    public MPDRPostgreSQLModel createMPDRModelPostgreSQL(MLDRModel mldrModel) {
+    public MPDRPostgreSQLModel createMPDRPostgreSQLModel(MLDRModel mldrModel) {
         MPDRPostgreSQLModel mpdrPostgreSQLModel = new MPDRPostgreSQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME);
+        mpdrPostgreSQLModel.adjustProperties();
+        /*
         Preferences preferences = PreferencesManager.instance().preferences();
         mpdrPostgreSQLModel.setNamingLengthActual( preferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH());
         mpdrPostgreSQLModel.setNamingLengthFuture( preferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH());
         mpdrPostgreSQLModel.setNamingFormatActual( preferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT());
         mpdrPostgreSQLModel.setNamingFormatFuture( preferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT());
+
+         */
         createMPDRContModel(mpdrPostgreSQLModel);
         return mpdrPostgreSQLModel;
     }

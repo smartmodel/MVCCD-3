@@ -7,7 +7,8 @@ public enum MDRNamingFormat {
     NOTHING (Preferences.MDR_NAMING_FORMAT_NOTHING),
     UPPERCASE (Preferences.MDR_NAMING_FORMAT_UPPERCASE),
     LOWERCASE (Preferences.MDR_NAMING_FORMAT_LOWERCASE),
-    CAPITALIZE (Preferences.MDR_NAMING_FORMAT_CAPITALIZE);
+    CAPITALIZE (Preferences.MDR_NAMING_FORMAT_CAPITALIZE),
+    LIKEBD (Preferences.MPDR_NAMING_FORMAT_LIKEDB);
 
     private final String name;
 

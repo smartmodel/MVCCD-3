@@ -16,6 +16,8 @@ public class MDROrderBuildNaming {
     private String format;
     private Integer formatUserMarkerLengthMax ;
     private MDRNamingLength namingLength;
+    //private MDRNamingFormat namingFormat = null; Pas de formattage à ce niveau
+
     //private Integer lengthMax ;
     private MDROrderBuildTargets targetNaming ; // Cible de nommage table, column ...
 
@@ -240,6 +242,16 @@ public class MDROrderBuildNaming {
             }
             */
 
+            // Formattage (lowercase, uppercase...)
+            // Pas de formattage - Les données doivent rester brutes pour permettre les retours en arrière
+            /*
+            if (namingFormat != null) {
+                newName = MDRModelService.formatNaming(newName, namingFormat);
+            } else {
+                throw new CodeApplException("Le formatage (uppercase, lowercas...) n'est pas défini pour :  "+ format);
+            }
+
+             */
             return newName;
 
         }
@@ -379,27 +391,6 @@ public class MDROrderBuildNaming {
         return newName;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private String limitSizeColumnAttr(String newName) {
         if (namingLength == MDRNamingLength.LENGTH30) {
             if (targetNaming == MDROrderBuildTargets.COLUMNATTR) {
@@ -519,6 +510,17 @@ public class MDROrderBuildNaming {
     public MDRNamingLength getNamingLength() {
         return namingLength;
     }
+
+    /*
+    public MDRNamingFormat getNamingFormat() {
+        return namingFormat;
+    }
+
+    public void setNamingFormat(MDRNamingFormat namingFormat) {
+        this.namingFormat = namingFormat;
+    }
+
+     */
 
     public MDROrderBuildTargets getTargetNaming() {
         return targetNaming;

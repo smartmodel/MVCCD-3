@@ -7,7 +7,7 @@ import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
-import window.editor.preferences.project.mdr.utilities.PrefMLPDRInputContent;
+import window.editor.preferences.project.mdr.utilities.PrefMDRInputContent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -15,7 +15,7 @@ import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
-public abstract class PrefMPDRInputContent extends PrefMLPDRInputContent {
+public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
 
     private JPanel panelFormatNames = new JPanel ();
 

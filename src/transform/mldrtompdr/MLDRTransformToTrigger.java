@@ -17,7 +17,7 @@ import mpdr.tapis.MPDRTriggerType;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import transform.mdr.services.MDRTransformService;
+import transform.mcdtomldr.services.MCDTransformService;
 
 public class MLDRTransformToTrigger {
 
@@ -63,7 +63,7 @@ public class MLDRTransformToTrigger {
         } else {
             mpdrTrigger.setType(type);
         }
-        MDRTransformService.names(mpdrTrigger,
+        MCDTransformService.names(mpdrTrigger,
                 buildNameTrigger(mldrTable, type),
                 mpdrModel);
     }

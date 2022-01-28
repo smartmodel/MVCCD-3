@@ -6,15 +6,20 @@ import mpdr.MPDRFK;
 
 public class MPDRPostgreSQLGenerateSQLFK extends MPDRGenerateSQLFK {
 
-    MPDRGenerateSQL mpdrGenerateSQL ;
+    MPDRPostgreSQLGenerateSQL mpdrPostgreSQLGenerateSQL ;
 
     public MPDRPostgreSQLGenerateSQLFK(MPDRPostgreSQLGenerateSQL mpdrPostgreSQLGenerateSQL) {
-        super(mpdrPostgreSQLGenerateSQL);
+        this.mpdrPostgreSQLGenerateSQL = mpdrPostgreSQLGenerateSQL;
     }
 
     public String generateSQLFK(MPDRFK mpdrfk) {
         String generateSQLCode = super.generateSQLFK(mpdrfk);
         return generateSQLCode ;}
+
+    @Override
+    public MPDRGenerateSQL getMPDRGenerateSQL() {
+        return mpdrPostgreSQLGenerateSQL;
+    }
 
 
 }

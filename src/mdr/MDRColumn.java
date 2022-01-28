@@ -186,6 +186,22 @@ public abstract class MDRColumn extends MDRElement implements
     }
 
 
+    protected boolean isAudit() {
+        return this instanceof MDRColumnAudit;
+    }
+
+    public boolean isNotBusiness() {
+        boolean c1 = isPk() ;
+        boolean c2 = isFk() ;
+        boolean c3 = isAudit() ;
+
+        return isPk() || isFk() || isAudit();
+    }
+
+    public boolean isBusiness() {
+        return ! isNotBusiness();
+    }
+
 
     public MDRColumn getMDRColumnPK() {
         return mdrColumnPK;

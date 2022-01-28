@@ -711,8 +711,9 @@ public class Preferences extends MVCCDElement {
   public static String MDR_NAMING_FORMAT_UPPERCASE = "mdr.naming.format.uppercase"; //Idem
   public static String MDR_NAMING_FORMAT_LOWERCASE = "mdr.naming.format.lowercase"; //Idem
   public static String MDR_NAMING_FORMAT_CAPITALIZE = "mdr.naming.format.capitalize"; //Idem
+  public static String MPDR_NAMING_FORMAT_LIKEDB = "mpdr.naming.format.likedb"; //Idem
 
-    public static String MDR_NAMING_TABLE = "mdr.table";
+  public static String MDR_NAMING_TABLE = "mdr.table";
     public static String MDR_NAMING_TABLE_NN = "mdr.table.nn";
     public static String MDR_NAMING_TABLE_NN_INDICE = "mdr.table.nn.indice";
     public static String MDR_NAMING_COLUMN_ATTR = "mdr.column.attr";
@@ -1010,6 +1011,7 @@ public class Preferences extends MVCCDElement {
   private Boolean MPDRORACLE_TAPIS = null;
   private String MPDRORACLE_SEQPK_NAME_FORMAT;
   private String MPDRORACLE_TRIGGER_NAME_FORMAT;
+
 
   // MPDR MySQL Préférences
   private MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH = null;
@@ -1780,7 +1782,7 @@ public class Preferences extends MVCCDElement {
 
   public MDRNamingFormat getMPDRORACLE_PREF_NAMING_FORMAT() {
     if (this.MPDRORACLE_PREF_NAMING_FORMAT == null) {
-      this.MPDRORACLE_PREF_NAMING_FORMAT = MDRNamingFormat.NOTHING;
+      this.MPDRORACLE_PREF_NAMING_FORMAT = MDRNamingFormat.LIKEBD;
     }
     return this.MPDRORACLE_PREF_NAMING_FORMAT;
   }
@@ -1851,6 +1853,9 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_TRIGGER_NAME_FORMAT = MPDRORACLE_TRIGGER_NAME_FORMAT;
   }
 
+
+
+
   // MySQL
   public void setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH) {
     this.MPDRMYSQL_PREF_NAMING_LENGTH = MPDRMYSQL_PREF_NAMING_LENGTH;
@@ -1900,13 +1905,6 @@ public class Preferences extends MVCCDElement {
     this.MPDRMYSQL_TAPIS = MPDRMYSQL_TAPIS;
   }
 
-  public MDRNamingLength getMPDRPOSTGRESQL_PREF_NAMING_LENGTH() {
-    if (this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH == null) {
-      this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
-    }
-    return this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH;
-  }
-
   public String getMPDRMYSQL_SEQPK_NAME_FORMAT() {
     if (this.MPDRMYSQL_SEQPK_NAME_FORMAT == null) {
       this.MPDRMYSQL_SEQPK_NAME_FORMAT = MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT;
@@ -1930,13 +1928,22 @@ public class Preferences extends MVCCDElement {
   }
 
   // PostgreSQL
+
+
+  public MDRNamingLength getMPDRPOSTGRESQL_PREF_NAMING_LENGTH() {
+    if (this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH == null) {
+      this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
+    }
+    return this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH;
+  }
+
   public void setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH) {
     this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH = MPDRPOSTGRESQL_PREF_NAMING_LENGTH;
   }
 
   public MDRNamingFormat getMPDRPOSTGRESQL_PREF_NAMING_FORMAT() {
     if (this.MPDRPOSTGRESQL_PREF_NAMING_FORMAT == null) {
-      this.MPDRPOSTGRESQL_PREF_NAMING_FORMAT = MDRNamingFormat.NOTHING;
+      this.MPDRPOSTGRESQL_PREF_NAMING_FORMAT = MDRNamingFormat.LIKEBD;
     }
     return this.MPDRPOSTGRESQL_PREF_NAMING_FORMAT;
   }

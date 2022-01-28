@@ -4,8 +4,10 @@ import connections.ConConnection;
 import connections.ConDB;
 import connections.ConManager;
 import main.MVCCDElement;
+import mdr.MDRNamingFormat;
 import mpdr.MPDRDropBefore;
 import mpdr.MPDRModel;
+import mpdr.postgresql.MPDRPostgreSQLModel;
 import preferences.Preferences;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
@@ -31,6 +33,8 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     protected STextField fieldConnectionURL;
 
 
+    protected JLabel labelSchema;
+    protected STextField fieldSchema;
     protected JLabel labelDropBeforeCreate ;
     protected SComboBox fieldDropBeforeCreate ;
 
@@ -54,7 +58,10 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     public void createContentCustom() {
         super.createContentCustom();
         conDB = ((MPDRModelEditor) getEditor()).getConDB();
-
+        boolean conBDWithNamingFormat = (conDB == ConDB.ORACLE) || (conDB == ConDB.POSTGRESQL);
+        if (conBDWithNamingFormat){
+            fieldNamingFormatFuture.addItem(MDRNamingFormat.LIKEBD.getText());
+        }
 
         labelConnectionLienProg = new JLabel("Name : ");
         fieldConnectionLienProg = new SComboBox(this, labelConnectionLienProg);
@@ -75,6 +82,15 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         fieldConnectionURL.setPreferredSize((new Dimension(400, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldConnectionURL.setToolTipText("Chaîne de connexion construite...");
         fieldConnectionURL.setReadOnly(true);
+
+        labelSchema = new JLabel("Schéma : ");
+        fieldSchema = new STextField(this, labelSchema);
+        fieldSchema.setPreferredSize((new Dimension(200, Preferences.EDITOR_FIELD_HEIGHT)));
+        //TODO-0 Faire un contôle minimal de saisie
+        //TODO-0 Prévoir un bouton de test d'existence du schéma
+        fieldSchema.getDocument().addDocumentListener(this);
+        fieldSchema.addFocusListener(this);
+        fieldSchema.setToolTipText("Schéma d'exécution des scripts SQL-DDL...");
 
         labelDropBeforeCreate = new JLabel("Drop avant Create : ");
         fieldDropBeforeCreate = new SComboBox(this, labelDropBeforeCreate);
@@ -107,6 +123,7 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         fieldDropBeforeCreate.setName("fieldDropBeforeCreate");
         super.getSComponents().add(fieldConnectionLienProg);
         super.getSComponents().add(fieldConnectionURL);
+        super.getSComponents().add(fieldSchema);
         super.getSComponents().add(fieldDropBeforeCreate);
         super.getSComponents().add(fieldMPDRDbPK);
         super.getSComponents().add(fieldTAPIs);
@@ -115,6 +132,14 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
 
     protected void createPanelMaster(GridBagConstraints gbc) {
         super.createPanelMaster(gbc);
+
+        if (conDB == ConDB.POSTGRESQL) {
+            gbc.gridx = 0;
+            gbc.gridy++;
+            panelInputContentCustom.add(labelSchema, gbc);
+            gbc.gridx = 1;
+            panelInputContentCustom.add(fieldSchema, gbc);
+        }
 
         gbc.gridx = 0;
         gbc.gridy++;
@@ -171,6 +196,11 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         fieldMPDRDbPK.setText(mpdrModel.getMpdrDbPK().getText());
         fieldTAPIs.setSelected(mpdrModel.isTapis());
         fieldSeqPKNameFormat.setText(mpdrModel.getSequencePKNameFormat());
+
+        if (conDB == ConDB.POSTGRESQL) {
+            MPDRPostgreSQLModel mpdrPostgreSQLModel = (MPDRPostgreSQLModel) mpdrModel;
+            fieldSchema.setText(mpdrPostgreSQLModel.getSchema());
+        }
     }
 
 
@@ -180,7 +210,7 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     public void saveDatas(MVCCDElement mvccdElement) {
         super.saveDatas(mvccdElement);
         MPDRModel mpdrModel = (MPDRModel) mvccdElement;
-        if ( fieldDropBeforeCreate.checkIfUpdated()) {
+        if (fieldDropBeforeCreate.checkIfUpdated()) {
             String text = (String) fieldDropBeforeCreate.getSelectedItem();
             for (MPDRDropBefore mpdrDropBefore : MPDRDropBefore.values()) {
                 if (text.equals(mpdrDropBefore.getText())) {
@@ -188,8 +218,14 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
                 }
             }
         }
-   }
 
+        if (conDB == ConDB.POSTGRESQL) {
+            MPDRPostgreSQLModel mpdrPostgreSQLModel = (MPDRPostgreSQLModel) mpdrModel;
+            if (fieldSchema.checkIfUpdated()) {
+                mpdrPostgreSQLModel.setSchema(fieldSchema.getText());
+            }
+        }
+    }
 
     @Override
     protected void changeFieldSelected(ItemEvent e) {

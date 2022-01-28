@@ -33,6 +33,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
@@ -349,6 +350,13 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                 } catch (Exception e) {
                     ok = false;
                     ViewLogsManager.catchException(e, "Le script SQL-DDL n'a pas pu être exécuté");
+                } finally {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        ViewLogsManager.catchException(e, "La connexion n''a pas pu être ");
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 ok = false;

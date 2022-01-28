@@ -17,6 +17,7 @@ import mldr.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import transform.mcdtomldr.services.MCDTransformService;
 import transform.mdr.services.MDRTransformService;
 
 import java.util.ArrayList;
@@ -164,10 +165,10 @@ public class MCDTransformToPK {
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrPK.getMDRTableAccueil().getMDRModelParent();
         if ( mcdElement instanceof MCDEntity) {
-            MDRTransformService.names(mldrPK,
+            MCDTransformService.names(mldrPK,
                     buildNamePK((MLDRTable) mldrPK.getMDRTableAccueil(), (MCDEntity) mcdElement), mldrModel);}
         if ( mcdElement instanceof MCDAssociation) {
-            MDRTransformService.names(mldrPK,
+            MCDTransformService.names(mldrPK,
                     buildNamePK((MLDRTable) mldrPK.getMDRTableAccueil(), (MCDAssociation) mcdElement), mldrModel);}
     }
 
@@ -184,6 +185,7 @@ public class MCDTransformToPK {
             orderBuild.setFormat(preferences.getMDR_PK_NAME_FORMAT());
             orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_PK_LENGTH);
             orderBuild.setTargetNaming(MDROrderBuildTargets.PK);
+            //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
 
             orderBuild.getTableShortName().setValue(mcdEntity);
 
@@ -216,6 +218,7 @@ public class MCDTransformToPK {
             orderBuild.setFormat(preferences.getMDR_PK_NN_NAME_FORMAT());
             orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_PK_LENGTH);
             orderBuild.setTargetNaming(MDROrderBuildTargets.PKNN);
+            //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
 
             MCDAssEnd assEndA = mcdAssociationNN.getFrom();
             MCDAssEnd assEndB = mcdAssociationNN.getTo();

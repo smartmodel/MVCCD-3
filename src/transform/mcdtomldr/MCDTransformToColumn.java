@@ -22,7 +22,7 @@ import mldr.MLDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import transform.mdr.services.MDRTransformService;
+import transform.mcdtomldr.services.MCDTransformService;
 
 import java.util.ArrayList;
 
@@ -75,7 +75,7 @@ public class MCDTransformToColumn {
 
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrColumn.getMDRTableAccueil().getMDRModelParent();
-        MDRTransformService.names(mldrColumn, buildNameColumnAttr(mcdAttribute), mldrModel);
+        MCDTransformService.names(mldrColumn, buildNameColumnAttr(mcdAttribute), mldrModel);
 
 
         // Datatype
@@ -201,7 +201,7 @@ public class MCDTransformToColumn {
 
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrColumnPK.getMDRTableAccueil().getMDRModelParent();
-        MDRTransformService.names(mldrColumnPK, buildNameColumnPK(mcdEntity), mldrModel);
+        MCDTransformService.names(mldrColumnPK, buildNameColumnPK(mcdEntity), mldrModel);
 
         // Obligation de valeur
         // MDRColumn.isMandatory() Déduit dynamiquement par MDRColumn.isPk()
@@ -213,7 +213,7 @@ public class MCDTransformToColumn {
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrColumnFK.getMDRTableAccueil().getMDRModelParent();
 
-        MDRTransformService.names(mldrColumnFK, buildNameColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK, indiceFK), mldrModel);
+        MCDTransformService.names(mldrColumnFK, buildNameColumnFK(mldrColumnFK, mcdRelEndParent, mldrColumnPK, indiceFK), mldrModel);
 
         modifyColumnPKorFK(mldrColumnFK);
     }
@@ -230,6 +230,7 @@ public class MCDTransformToColumn {
             orderBuild.setFormat(preferences.getMDR_COLUMN_ATTR_NAME_FORMAT());
             orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_COLUMN_NAME_LENGTH);
             orderBuild.setTargetNaming(MDROrderBuildTargets.COLUMNATTR);
+            //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
 
             orderBuild.getAttrName().setValue(mcdAttribute.getName());
             orderBuild.getAttrShortName().setValue(mcdAttribute.getShortName());
@@ -283,6 +284,7 @@ public class MCDTransformToColumn {
             orderBuild.setFormat(preferences.getMDR_COLUMN_PK_NAME_FORMAT());
             orderBuild.setFormatUserMarkerLengthMax(Preferences.MDR_MARKER_CUSTOM_COLUMN_NAME_LENGTH);
             orderBuild.setTargetNaming(MDROrderBuildTargets.PK);
+            //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
 
             orderBuild.getAttrName().setValue(mcdEntity);
 
@@ -314,6 +316,7 @@ public class MCDTransformToColumn {
 
             MCDEntity mcdEntityParent = (MCDEntity) mcdRelEndParent.getmElement();
             MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
+            //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
             if (mldrColumnPK.isFk() && preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()) {
             //if (mcdEntityParent.isNoInd() && preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()) {
                 orderBuild.setFormat(preferences.getMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT());

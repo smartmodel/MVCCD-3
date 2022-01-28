@@ -3,8 +3,6 @@ package mdr;
 import md.MDElement;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.services.MDRModelService;
-import mldr.MLDRContRelations;
-import mldr.services.MLDRModelService;
 import project.ProjectElement;
 
 import java.util.ArrayList;
@@ -13,10 +11,14 @@ public abstract class MDRModel extends MDRElement  {
 
     private  static final long serialVersionUID = 1000;
 
-    private MDRNamingLength namingLengthActual ;// = MDRNamingLength.LENGTH60;
-    private MDRNamingLength namingLengthFuture ;// = MDRNamingLength.LENGTH60;
-    private MDRNamingFormat namingFormatActual ;// = MDRNamingFormat.NOTHING;
-    private MDRNamingFormat namingFormatFuture ;// = MDRNamingFormat.NOTHING;
+    // TODO-0 PAS
+    // Supprimer les 2 attributs qui reflètent les préférences
+    // Renommer les 2 attributs qui modifient le nommage pour le modèle
+    // Synchroniser avec la sauvegarde XML
+    private MDRNamingLength namingLengthActual ;  // Venant des préférences en lecture seule
+    private MDRNamingFormat namingFormatActual ;  // Idem
+    private MDRNamingLength namingLengthFuture ;  // Modifiable et propre au modèle
+    protected MDRNamingFormat namingFormatFuture ;  // Idem
 
     private Integer iteration = 0 ;
 
@@ -60,6 +62,13 @@ public abstract class MDRModel extends MDRElement  {
         return namingFormatFuture;
     }
 
+    // Surchargé pour les BD qui ont formattage partziculier
+    // minuscule pour PostgreSQL
+    // majuscule pour Oracle
+    public MDRNamingFormat getNamingFormatForDB() {
+        return namingFormatFuture;
+    }
+
     public void setNamingFormatFuture(MDRNamingFormat namingFormatFuture) {
         this.namingFormatFuture = namingFormatFuture;
     }
@@ -92,6 +101,10 @@ public abstract class MDRModel extends MDRElement  {
         return MDRModelService.getMDRContRelations(this);
     }
 
+    public ArrayList<MDRElement> getMDRDescendantsInModelStrict(){
+        return MDRModelService.getMDRDescendantsInModelStrict(this);
+    }
+
     public void adjustNaming(){
         MDRModelService.adjustNaming(this);
     }
@@ -103,4 +116,7 @@ public abstract class MDRModel extends MDRElement  {
     public void incrementeIteration(){
         iteration = iteration + 1 ;
     }
+
+    public abstract void adjustProperties();
+
 }

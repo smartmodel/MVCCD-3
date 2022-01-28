@@ -5,11 +5,11 @@ import connections.interfaces.IConConnectionOrConnector;
 import console.ViewLogsManager;
 import console.WarningLevel;
 import exceptions.CodeApplException;
-import generatorsql.MPDRGenerateSQLUtil;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.UtilDivers;
 import utilities.window.DialogMessage;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -78,21 +78,21 @@ public class ConnectionsService {
     public static String getResourceURL(ConDB conDB, String hostName, String port, ConIDDBName iddbName, String dbName) {
         String url = conDB.getUrlTemplate();
         if (StringUtils.isNotEmpty(hostName)){
-            url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_HOSTNAME_WORD, hostName);
+            url = UtilDivers.replaceKeyValue(url, Preferences.CON_HOSTNAME_WORD, hostName);
         }
         if (StringUtils.isNotEmpty(port)){
-            url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_PORT_WORD, port);
+            url = UtilDivers.replaceKeyValue(url, Preferences.CON_PORT_WORD, port);
         }
         if (StringUtils.isNotEmpty(dbName)){
-            url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_WORD, dbName);
+            url = UtilDivers.replaceKeyValue(url, Preferences.CON_DBNAME_WORD, dbName);
         }
         if (iddbName != null){
             if (iddbName != ConIDDBName.NAME_STD) {
                 if (iddbName == ConIDDBName.SID) {
-                    url =MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateSIDMarker());
+                    url = UtilDivers.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateSIDMarker());
                 }
                 if (iddbName == ConIDDBName.SERVICE_NAME) {
-                    url = MPDRGenerateSQLUtil.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateServiceNameMarker());
+                    url = UtilDivers.replaceKeyValue(url, Preferences.CON_DBNAME_ID_MARKER, conDB.getUrlTemplateServiceNameMarker());
                 }
             }
         }
@@ -132,5 +132,7 @@ public class ConnectionsService {
         }
         return connection;
     }
+
+
 
 }

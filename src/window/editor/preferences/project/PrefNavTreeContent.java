@@ -122,7 +122,7 @@ public class PrefNavTreeContent extends PanelNavTreeContent {
                     new PrefMPDRMySQLEditingTreat().treatUpdate(getEditor().getOwner(), PreferencesManager.instance().getProjectPref());
                 }
             }
-            if (rightClickedNode.getUserObject() == PrefProjectMenu.MPDRMySQL) {
+            if (rightClickedNode.getUserObject() == PrefProjectMenu.MPDRPostgreSQL) {
                 messageExceptionTarget = "project.preferences.mpr.postgresql";
                 if (!(getEditor() instanceof PrefMPDRPostgreSQLEditor)) {
                     getEditor().myDispose();

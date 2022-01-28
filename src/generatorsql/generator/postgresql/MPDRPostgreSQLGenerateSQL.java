@@ -3,7 +3,11 @@ package generatorsql.generator.postgresql;
 import generatorsql.generator.*;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
+import mpdr.postgresql.MPDRPostgreSQLModel;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+
+import java.util.ArrayList;
 
 public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
 
@@ -74,4 +78,28 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
     public String getDelimiterInstructions() {
         return MPDRDB.POSTGRESQL.getDelimiterInstructions();
     }
+
+    public String replaceKeyValue(String code, String key, String value) {
+
+        String replacement = value ;
+
+        ArrayList<String>  keysWithSchema = new ArrayList<String>();
+        keysWithSchema.add(Preferences.MDR_TABLE_NAME_WORD);
+        keysWithSchema.add(Preferences.MPDR_SEQUENCE_NAME_WORD);
+
+        if (keysWithSchema.contains(key)) {
+            MPDRPostgreSQLModel mpdrPostgreSQLModel = (MPDRPostgreSQLModel) mpdrModel;
+            String schema = mpdrPostgreSQLModel.getSchema();
+            //schema= schema.toLowerCase();
+            //value = value.toLowerCase();
+
+            if (StringUtils.isNotEmpty(schema)) {
+                replacement = schema + "." + value;
+            }
+        }
+
+        return super.replaceKeyValue(code, key, replacement);
+    }
+
+
 }

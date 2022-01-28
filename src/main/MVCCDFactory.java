@@ -7,6 +7,7 @@ import connections.oracle.ConConnectionOracle;
 import connections.oracle.ConConnectorOracle;
 import connections.oracle.ConnectionsOracle;
 import connections.postgresql.ConConnectionPostgreSQL;
+import connections.postgresql.ConConnectorPostgreSQL;
 import connections.postgresql.ConnectionsPostgreSQL;
 import profile.Profile;
 import project.Project;
@@ -94,7 +95,11 @@ public class MVCCDFactory {
         conConnectionPostgreSQLVM.setDbName("postgres");
         conConnectionPostgreSQLVM.setUserName("role1");
         conConnectionPostgreSQLVM.setUserPW("role1");
-
+        
+        ConConnectorPostgreSQL conConnectorPostgreSQLVM = new ConConnectorPostgreSQL(conConnectionPostgreSQLVM);
+        conConnectorPostgreSQLVM.setName("VMTEST2");
+        conConnectorPostgreSQLVM.setUserName("role1");
+        conConnectorPostgreSQLVM.setUserPW("role1");
 
 
         return applicationConnexions;

@@ -1223,10 +1223,10 @@ public class ProjectLoaderXml {
                 mpdrModel = MVCCDElementFactory.instance().createMPDRModelOracle(mldrModel);
                 break;
             case "MPDR_PostgreSQL":
-                mpdrModel = MVCCDElementFactory.instance().createMPDRModelPostgreSQL(mldrModel);
+                mpdrModel = MVCCDElementFactory.instance().createMPDRPostgreSQLModel(mldrModel);
                 break;
             case "MPDR_MySQL":
-                mpdrModel = MVCCDElementFactory.instance().createMPDRModelMySQL(mldrModel);
+                mpdrModel = MVCCDElementFactory.instance().createMPDRMySQLModel(mldrModel);
                 break;
         }
         this.loadMDR(null, mldrModel, mpdrModel, mpdrTag);

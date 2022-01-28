@@ -104,7 +104,6 @@ public class MLDRTransformConstraints {
     private void modifyConstraint(MDRConstraint mldrConstraint, MDRConstraint mpdrConstraint ) {
         MLDRTransformService.modifyNames((IMLDRElement) mldrConstraint, (IMPDRElement) mpdrConstraint);
         MLDRTransformService.modifyName(mpdrModel, mpdrConstraint);
-
         // FK
         if (mpdrConstraint instanceof MPDRFK) {
             MLDRFK mldrFK = (MLDRFK) mldrConstraint;

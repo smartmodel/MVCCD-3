@@ -7,13 +7,13 @@ import messages.MessagesBuilder;
 import preferences.Preferences;
 import utilities.window.scomponents.services.SComboBoxService;
 import utilities.window.services.PanelService;
-import window.editor.preferences.project.mdr.utilities.PrefMLPDRInputContent;
+import window.editor.preferences.project.mdr.utilities.PrefMDRInputContent;
 
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
-public class PrefMLDRInputContent extends PrefMLPDRInputContent {
+public class PrefMLDRInputContent extends PrefMDRInputContent {
 
 
 

@@ -76,11 +76,11 @@ public class MLDRTransformColumns {
         // Boolean
         if (mldrColumn.getDatatypeLienProg().equals(Preferences.MLDRDATATYPE_BOOLEAN_LIENPROG)) {
             exceptionsColumnBoolean(mpdrColumn, mldrColumn);
+        } else if (mldrColumn.getDatatypeLienProg().equals(Preferences.MLDRDATATYPE_NUMERIC_LIENPROG)) {
+                exceptionsColumnNumeric(mpdrColumn, mldrColumn);
         } else {
-            pushSize(mpdrColumn, mldrColumn.getSize());
+                pushSize(mpdrColumn, mldrColumn.getSize());
         }
-        //}
-
 
         // Datatype scale
         if (mpdrColumn.getScale() != null) {
@@ -145,7 +145,13 @@ public class MLDRTransformColumns {
     //#MAJ 2021-05-30 MLDR-> MPDR Transformation size
     private void pushSize(MPDRColumn mpdrColumn, Integer mldrSize) {
         if (mpdrColumn.getSize() != null) {
-            if (mpdrColumn.getSize().intValue() != mldrSize.intValue()) {
+            if (mldrSize != null) {
+                if (mpdrColumn.getSize().intValue() != mldrSize.intValue()) {
+                    mpdrColumn.setSize(mldrSize);
+                } else {
+                    // valeurs identiques et non nulles ...
+                }
+            } else {
                 mpdrColumn.setSize(mldrSize);
             }
         } else {
@@ -173,5 +179,19 @@ public class MLDRTransformColumns {
             }
     }
 
+    private void exceptionsColumnNumeric(MPDRColumn mpdrColumn, MLDRColumn mldrColumn) {
+        Preferences preferences = PreferencesManager.instance().preferences();
+        // PostgreSQL
+        boolean c1 = preferences.getMLDRTOMPDR_DB().equals(Preferences.DB_POSTGRESQL);
+        boolean c2 = mldrColumn.getScale() == null ;
+        boolean c3 = mldrColumn.isNotBusiness();
+
+        if ( c1 && c2 & c3) {
+            //SMALLINT, INTEGER, BIGINT
+            pushSize(mpdrColumn, null);
+        } else {
+            pushSize(mpdrColumn, mldrColumn.getSize());
+        }
+    }
 
 }

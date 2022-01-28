@@ -6,15 +6,21 @@ import mpdr.MPDRFK;
 
 public class MPDROracleGenerateSQLFK extends MPDRGenerateSQLFK {
 
-    MPDRGenerateSQL mpdrGenerateSQL ;
+    MPDROracleGenerateSQL mpdrOracleGenerateSQL;
 
     public MPDROracleGenerateSQLFK(MPDROracleGenerateSQL mpdrOracleGenerateSQL) {
-        super(mpdrOracleGenerateSQL);
+
+        this.mpdrOracleGenerateSQL = mpdrOracleGenerateSQL;
     }
 
     public String generateSQLFK(MPDRFK mpdrfk) {
         String generateSQLCode = super.generateSQLFK(mpdrfk);
         return generateSQLCode ;}
+
+    @Override
+    public MPDRGenerateSQL getMPDRGenerateSQL() {
+        return mpdrOracleGenerateSQL;
+    }
 
 
 }

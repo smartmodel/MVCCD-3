@@ -2,13 +2,12 @@ package mdr;
 
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
-import mdr.services.MDRColumnsService;
 import mdr.services.MDRParameterService;
 import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
 import project.ProjectService;
 
-public abstract class MDRParameter extends MDRElement implements IMDRElementWithIteration{
+public abstract class MDRParameter extends MDRElement implements IMDRElementWithIteration {
 
     private  static final long serialVersionUID = 1000;
     private Integer iteration = null; // Si un objet est créé directement et non par transformation

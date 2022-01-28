@@ -11,7 +11,7 @@ import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
-public abstract class PrefMLPDRInputContent extends PanelInputContent {
+public abstract class PrefMDRInputContent extends PanelInputContent {
 
     //private JPanel panel = new JPanel();
     protected JLabel labelNamingLength = new JLabel();
@@ -20,7 +20,7 @@ public abstract class PrefMLPDRInputContent extends PanelInputContent {
     protected SComboBox fieldNamingFormat;
 
 
-    public PrefMLPDRInputContent(PanelInput panelInput) {
+    public PrefMDRInputContent(PanelInput panelInput) {
         super(panelInput);
      }
 

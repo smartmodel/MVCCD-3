@@ -31,7 +31,7 @@ public abstract class MDRModelInputContent extends PanelInputContent  {
     private STextField fieldNamingLengthActual;
 
     private JLabel labelNamingFormatFuture;
-    private SComboBox fieldNamingFormatFuture;
+    protected SComboBox fieldNamingFormatFuture;
     private JLabel labelNamingFormatActual;
     private STextField fieldNamingFormatActual;
 
@@ -60,13 +60,13 @@ public abstract class MDRModelInputContent extends PanelInputContent  {
         fieldName.setReadOnly(true);
 
         // Taille
-        labelNamingLengthActual = new JLabel("Taille actuelle");
+        labelNamingLengthActual = new JLabel("Taille en préférences");
         fieldNamingLengthActual = new STextField (this, labelNamingLengthActual);
         fieldNamingLengthActual.getDocument().addDocumentListener(this);
         fieldNamingLengthActual.addFocusListener(this);
         fieldNamingLengthActual.setReadOnly(true);
 
-        labelNamingLengthFuture = new JLabel("Taille future");
+        labelNamingLengthFuture = new JLabel("Taille propre au modèle");
         fieldNamingLengthFuture = new SComboBox(this, labelNamingLengthFuture);
         if (MDRNamingLength.LENGTH30.isRequired()){
             fieldNamingLengthFuture.addItem(MDRNamingLength.LENGTH30.getText());
@@ -78,19 +78,19 @@ public abstract class MDRModelInputContent extends PanelInputContent  {
             fieldNamingLengthFuture.addItem(MDRNamingLength.LENGTH120.getText());
         }
 
-        fieldNamingLengthFuture.setToolTipText("Taille maximale des noms de tous les objets du modèle");
+        fieldNamingLengthFuture.setToolTipText("Taille maximale appliquée à tous les objets du modèle");
         fieldNamingLengthFuture.addItemListener(this);
         fieldNamingLengthFuture.addFocusListener(this);
         
         
         // Format
-        labelNamingFormatActual = new JLabel("Format actuel");
+        labelNamingFormatActual = new JLabel("Format en préférence");
         fieldNamingFormatActual = new STextField (this, labelNamingFormatActual);
         fieldNamingFormatActual.getDocument().addDocumentListener(this);
         fieldNamingFormatActual.addFocusListener(this);
         fieldNamingFormatActual.setReadOnly(true);
 
-        labelNamingFormatFuture = new JLabel("Format futur");
+        labelNamingFormatFuture = new JLabel("Format propre au modèl");
         fieldNamingFormatFuture = new SComboBox(this, labelNamingFormatFuture);
         fieldNamingFormatFuture.addItem(MDRNamingFormat.NOTHING.getText());
         fieldNamingFormatFuture.addItem(MDRNamingFormat.UPPERCASE.getText());
@@ -98,7 +98,7 @@ public abstract class MDRModelInputContent extends PanelInputContent  {
         fieldNamingFormatFuture.addItem(MDRNamingFormat.CAPITALIZE.getText());
 
 
-        fieldNamingFormatFuture.setToolTipText("Format des noms de tous les objets du modèle");
+        fieldNamingFormatFuture.setToolTipText("Format appliqué à tous les objets du modèles");
         fieldNamingFormatFuture.addItemListener(this);
         fieldNamingFormatFuture.addFocusListener(this);
 
@@ -217,7 +217,8 @@ public abstract class MDRModelInputContent extends PanelInputContent  {
             if (text.equals(MDRNamingLength.LENGTH120.getText())){
                 mdrModel.setNamingLengthFuture(MDRNamingLength.LENGTH120);
             }
-            mdrModel.setNamingLengthActual(mdrModel.getNamingLengthFuture());
+            // Conservation de la valeur des préférences
+            //mdrModel.setNamingLengthActual(mdrModel.getNamingLengthFuture());
         }
 
         if (fieldNamingFormatFuture.checkIfUpdated()){
@@ -234,12 +235,16 @@ public abstract class MDRModelInputContent extends PanelInputContent  {
             if (text.equals(MDRNamingFormat.CAPITALIZE.getText())){
                 mdrModel.setNamingFormatFuture(MDRNamingFormat.CAPITALIZE);
             }
-            mdrModel.setNamingFormatActual(mdrModel.getNamingFormatFuture());
+            if (text.equals(MDRNamingFormat.LIKEBD.getText())){
+                mdrModel.setNamingFormatFuture(MDRNamingFormat.LIKEBD);
+            }
+            // Conservation de la valeur des préférences
+            //mdrModel.setNamingFormatActual(mdrModel.getNamingFormatFuture());
         }
 
 
-        boolean c1 = ! fieldNamingLengthActual.getText().equals(fieldNamingLengthFuture.getSelectedItem().toString());
-        boolean c2 = ! fieldNamingFormatActual.getText().equals(fieldNamingFormatFuture.getSelectedItem().toString());
+        boolean c1 = fieldNamingLengthFuture.checkIfUpdated();
+        boolean c2 = fieldNamingFormatFuture.checkIfUpdated();
 
         if (c1 || c2){
             mdrModel.adjustNaming();

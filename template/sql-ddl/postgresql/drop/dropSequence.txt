@@ -1,1 +1,1 @@
-DROP IF EXISTS SEQUENCE {sequenceName}
+DROP SEQUENCE IF EXISTS {sequenceName}

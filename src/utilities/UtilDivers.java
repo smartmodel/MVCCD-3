@@ -270,4 +270,10 @@ public class UtilDivers {
 
         return partTime ;
     }
+
+
+    public static String replaceKeyValue(String code, String key, String value) {
+        return code.replaceAll("\\{" + key + "}", value);
+    }
+
 }

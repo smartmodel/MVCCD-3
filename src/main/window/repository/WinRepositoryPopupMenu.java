@@ -4,7 +4,6 @@ import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConDBMode;
 import connections.ConnectionsDB;
-import connections.oracle.ConConnectorOracle;
 import console.ConsoleManager;
 import console.LogsManager;
 import console.ViewLogsManager;
@@ -946,20 +945,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                treatGenericNew(this, conConnection.getConConnectorEditingTreat());
             }
         }
-        /*
-        if (node.getUserObject() instanceof ConConnectionOracle) {
-            treatGeneric(this, new ConConnectionOracleEditingTreat());
-            if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE()== ConDBMode.CONNECTOR) {
-                treatGenericNew(this, new ConConnectorOracleEditingTreat());
-            }
-        }
-
-         */
-    }
+     }
 
     private void treatConConnector(WinRepositoryPopupMenu winRepositoryPopupMenu) {
 
-        if (node.getUserObject() instanceof ConConnectorOracle) {
+        if (node.getUserObject() instanceof ConConnector) {
             ConConnector conConnector = (ConConnector) node.getUserObject();
             ConConnectorEditingTreat conConnectorEditingTreat = conConnector.getConConnectorEditingTreat();
             treatGenericRead(this, conConnectorEditingTreat);
@@ -971,12 +961,6 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 treatGenericCompletness(this, conConnectorEditingTreat);
             }
         }
-        /*
-        if (node.getUserObject() instanceof ConConnectorOracle) {
-            treatGeneric(this, new ConConnectorOracleEditingTreat());
-        }
-
-         */
     }
 
 
