@@ -16,14 +16,13 @@ public abstract class MPDRGenerateSQLColumn {
         String generateSQLCode = "";
         boolean identityColumn = pkGenerateIdentity() && mpdrColumn.isPkNotFk();
         if (identityColumn){
-            generateSQLCode += "\t" + TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY) +
+            generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY) +
                     Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
 
         } else {
-            generateSQLCode += "\t" + TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMNS) +
+            generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMNS) +
                     Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
         }
-
 
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
         // Correction PAS Nom et pas lienProg

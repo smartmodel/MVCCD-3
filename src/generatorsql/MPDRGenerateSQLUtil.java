@@ -2,6 +2,7 @@ package generatorsql;
 
 import exceptions.CodeApplException;
 import main.MVCCDManager;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.files.UtilFiles;
 
@@ -100,5 +101,32 @@ public class MPDRGenerateSQLUtil {
             }
         }
         return command;
+    }
+
+
+    public static String tabsApplicable(String generateSQLCode, String marker) {
+
+        String tabsApplicable = tabsApplicableInternal(generateSQLCode, marker, "{", "}");
+        if (StringUtils.isEmpty(tabsApplicable)) {
+            tabsApplicable = tabsApplicableInternal(generateSQLCode, marker, "{-", "-}");
+        }
+        return tabsApplicable;
+    }
+
+    private static String tabsApplicableInternal(String generateSQLCode,
+                                                String marker,
+                                                String beginBalise,
+                                                String endBalise) {
+        String[] lines = StringUtils.split(generateSQLCode, System.lineSeparator());
+        if (lines.length > 0) {
+
+            for (int i = 0 ; i < lines.length - 1 ; i++){
+                int posStartTemplateInterior = StringUtils.indexOf(lines[i], beginBalise + marker + endBalise);
+                if (posStartTemplateInterior >= 0 ){
+                    return StringUtils.substring(lines[i], 0, posStartTemplateInterior);
+                }
+            }
+        }
+        return "";
     }
 }

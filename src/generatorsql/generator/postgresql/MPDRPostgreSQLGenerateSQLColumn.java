@@ -25,7 +25,7 @@ public class MPDRPostgreSQLGenerateSQLColumn extends MPDRGenerateSQLColumn {
 
     @Override
     protected boolean pkGenerateIdentity() {
-        return  PreferencesManager.instance().preferences().getMPDRORACLE_PK_GENERATE() == MPDRDBPK.IDENTITY;
+        return  PreferencesManager.instance().preferences().getMPDRPOSTGRESQL_PK_GENERATE() == MPDRDBPK.IDENTITY;
     }
 
     @Override

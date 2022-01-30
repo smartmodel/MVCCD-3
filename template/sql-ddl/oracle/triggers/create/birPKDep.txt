@@ -1,6 +1,5 @@
 CREATE OR REPLACE TRIGGER {triggerName}
-	BEFORE INSERT ON {tableName} FOR EACH ROW
-
+    BEFORE INSERT ON {tableName} FOR EACH ROW
     BEGIN
         IF :new.{columnPKName} IS NULL THEN
             SELECT NVL(MAX({columnPKName}), 0) + 1

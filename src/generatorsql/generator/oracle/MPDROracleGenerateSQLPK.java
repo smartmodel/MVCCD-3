@@ -12,7 +12,7 @@ public class MPDROracleGenerateSQLPK extends MPDRGenerateSQLPK {
         this.mpdrOracleGenerateSQL = mpdrOracleGenerateSQL;
     }
 
-    public String generateSQLCreatePK(MPDRTable mpdrTable) {
+    public String generateSQLCreatePK(MPDRTable mpdrTable, String tabsApplicable) {
         String generateSQLCode = super.generateSQLCreatePK(mpdrTable);
 
         return generateSQLCode;

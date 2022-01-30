@@ -29,7 +29,8 @@ public abstract class MPDRGenerateSQLTable {
 
 
         //Génération des colonnes
-        String columnsInCreateTable = generateSQLCreateColumns(mpdrTable);
+        String tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_COLUMNS);
+        String columnsInCreateTable = generateSQLCreateColumns(mpdrTable, tabsApplicable);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_COLUMNS, columnsInCreateTable);
 
         //Génération de la contrainte de PK
@@ -44,15 +45,14 @@ public abstract class MPDRGenerateSQLTable {
     }
 
 
-    public String generateSQLCreateColumns(MPDRTable mpdrTable) {
+    public String generateSQLCreateColumns(MPDRTable mpdrTable, String tabsApplicable) {
         String generateSQLCode = "";
-
         // Avec nos règles de conformité, une table doit avoir au moins une colonne,
 
         boolean firstColumn = true;
         for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumns()) {
-            if (! firstColumn){
-                generateSQLCode +=  System.lineSeparator() ;
+            if (!firstColumn) {
+                generateSQLCode +=  System.lineSeparator() + tabsApplicable;
             }
             generateSQLCode += getMPDRGenerateSQLColumn().generateSQLCreateColumn(mpdrColumn);
             firstColumn = false;

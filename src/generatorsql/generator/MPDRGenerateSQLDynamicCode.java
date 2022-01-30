@@ -24,7 +24,11 @@ public abstract class MPDRGenerateSQLDynamicCode {
 
         for (MPDRDynamicCodeType mpdrDynamicCodeType : MPDRDynamicCodeType.getAllForDB(mpdrDB)){
             if (MPDRGenerateSQLUtil.find(generateSQLCode, mpdrDynamicCodeType.getKey())){
-                String sqlCodeDynamic = loadTemplate(impdrWithDynamicCode, mpdrDynamicCodeType);
+                //String sqlCodeDynamic = loadTemplate(impdrWithDynamicCode, mpdrDynamicCodeType);
+                String templateSQLCode = loadTemplate(mpdrDynamicCodeType);
+                String tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, mpdrDynamicCodeType.getKey());
+
+                String sqlCodeDynamic = generateFromTemplate(impdrWithDynamicCode, mpdrDynamicCodeType, templateSQLCode, tabsApplicable);
                 generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, mpdrDynamicCodeType.getKey(), sqlCodeDynamic);
             }
         }
@@ -32,29 +36,46 @@ public abstract class MPDRGenerateSQLDynamicCode {
         return generateSQLCode;
     }
 
+
+    protected String loadTemplate(MPDRDynamicCodeType mpdrDynamicCodeType){
+        return TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirDynamicCodeDB(), mpdrDynamicCodeType.getTemplateFileName()) ;
+    }
+
+    /*
     protected String loadTemplate(IMPDRWithDynamicCode impdrWithDynamicCode,
                                   MPDRDynamicCodeType mpdrDynamicCodeType){
 
         String templateSQLCode = "";
         templateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirDynamicCodeDB(), mpdrDynamicCodeType.getTemplateFileName()) ;
-        return genrateFromTemplate(impdrWithDynamicCode, mpdrDynamicCodeType, templateSQLCode);
+        return generateFromTemplate(impdrWithDynamicCode, mpdrDynamicCodeType, templateSQLCode);
     }
 
-    protected String genrateFromTemplate(IMPDRWithDynamicCode impdrWithDynamicCode, MPDRDynamicCodeType mpdrDynamicCodeType, String templateSQLCode){
+     */
+
+    protected String generateFromTemplate(IMPDRWithDynamicCode impdrWithDynamicCode,
+                                          MPDRDynamicCodeType mpdrDynamicCodeType,
+                                          String templateSQLCode,
+                                          String tabsApplicable){
         if (mpdrDynamicCodeType == MPDRDynamicCodeType.TABLE_DEP_JOIN_PARENT){
-            return generateTableDepJoinParent(impdrWithDynamicCode, templateSQLCode);
+            return generateTableDepJoinParent(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
         }
         throw new CodeApplException("Le code dynamique " + mpdrDynamicCodeType.getKey() + "n'est pas encore traité");
     }
 
     protected String generateTableDepJoinParent(IMPDRWithDynamicCode impdrWithDynamicCode,
-                                                String templateSQLCode){
+                                                String templateSQLCode,
+                                                String tabsApplicable){
         String generateSQLCode = "";
         if (impdrWithDynamicCode instanceof MPDRTrigger){
             ArrayList<MDRColumn> mdrColumns = ((MPDRTrigger) impdrWithDynamicCode).getMPDRTableAccueil().getMPDRPK().getMDRColumns();
+            boolean firstColumn = true;
             for (MDRColumn mdrColumn : mdrColumns){
                 if (mdrColumn.isFk())  {
-                    generateSQLCode += System.lineSeparator() + templateSQLCode ;
+                    if (!firstColumn) {
+                        generateSQLCode +=  System.lineSeparator() + tabsApplicable;
+                    }
+                    firstColumn = false;
+                    generateSQLCode += templateSQLCode ;
                     generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                             Preferences.MPDR_NEW_RECORD_WORD,
                             getMPDRGenerateSQL().mpdrModel.getNewRecordWord());
@@ -73,4 +94,5 @@ public abstract class MPDRGenerateSQLDynamicCode {
 
 
     public abstract MPDRGenerateSQL getMPDRGenerateSQL() ;
+
 }

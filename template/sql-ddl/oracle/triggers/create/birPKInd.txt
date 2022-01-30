@@ -1,11 +1,9 @@
 CREATE OR REPLACE TRIGGER {triggerName}
-	BEFORE INSERT ON {tableName} FOR EACH ROW
-
-	BEGIN
-	    IF :new.{columnPKName} IS NULL THEN
-    	    SELECT {sequenceName}.NEXTVAL
-    	    INTO :new.{columnPKName}
-    	    FROM DUAL;
+    BEFORE INSERT ON {tableName} FOR EACH ROW
+    BEGIN
+        IF :new.{columnPKName} IS NULL THEN
+            SELECT {sequenceName}.NEXTVAL
+            INTO :new.{columnPKName}
+            FROM DUAL;
         END IF;
-
-	END;
+    END;
