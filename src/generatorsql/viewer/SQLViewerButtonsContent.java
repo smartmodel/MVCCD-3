@@ -332,11 +332,13 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
 
             // Exécution du script
             if (connection != null) {
+                String commandCopy = "";
                 try {
                     String generateSQLCode = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
                     //TODO-0 A paramétrer
                     String[] commands = generateSQLCode.split(mpdrModel.getDb().getDelimiterInstructions());
                     for (String command : commands) {
+                        commandCopy = command;
                         command = MPDRGenerateSQLUtil.clearCommandSQL(command);
                         if (StringUtils.isNotEmpty(command)) {
                                 Statement statement = connection.createStatement();
@@ -349,7 +351,8 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                     fieldDDLExecuted.setText(formattedHourExecuted);
                 } catch (Exception e) {
                     ok = false;
-                    ViewLogsManager.catchException(e, "Le script SQL-DDL n'a pas pu être exécuté");
+                    ViewLogsManager.catchException(e, "Le script SQL-DDL n'a pas pu être exécuté :"
+                    + System.lineSeparator() + commandCopy);
                 } finally {
                     try {
                         connection.close();

@@ -14,10 +14,7 @@ import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.services.MPDRColumnService;
 import mpdr.services.MPDRConstraintService;
 import mpdr.services.MPDRTableService;
-import mpdr.tapis.MPDRBoxTriggers;
-import mpdr.tapis.MPDRContTAPIs;
-import mpdr.tapis.MPDRTrigger;
-import mpdr.tapis.MPDRTriggerType;
+import mpdr.tapis.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -104,10 +101,12 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public abstract MDRConstraint createUnique(MLDRUnique mldrUnique);
 
-
     public abstract MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable);
 
     public abstract MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, MLDRTable mldrTable);
+
+
+    public abstract MPDRBoxProceduresOrFunctions createBoxProceduresOrFunctions(MLDRTable mldrTable);
 
     public ArrayList<Stereotype> getStereotypes() {
         // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
@@ -181,4 +180,23 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     public MPDRTrigger getMPDRTriggerByType(MPDRTriggerType type){
         return getMPDRBoxTriggers().getMPDRTriggerByType(type);
     }
+
+
+    public MPDRBoxProceduresOrFunctions getMPDRBoxProceduresOrFunctions() {
+        return getMPDRContTAPIs().getMPDRBoxProceduresOrFunctions();
+    }
+
+    public MPDRFunction getMPDRFunctionByType(MPDRFunctionType type){
+        return getMPDRBoxProceduresOrFunctions().getMPDRFunctionByType(type);
+    }
+
+
+    public ArrayList<MPDRFunction> getMPDRFunctions(){
+        if ( getMPDRBoxProceduresOrFunctions() != null) {
+            return getMPDRBoxProceduresOrFunctions().getAllFunctions();
+        }
+        return null;
+    }
+
+    public abstract MPDRFunction createFunction(MPDRFunctionType type, MLDRTable mldrTable);
 }

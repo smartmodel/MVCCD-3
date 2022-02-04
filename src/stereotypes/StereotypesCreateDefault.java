@@ -233,9 +233,14 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_SEQUENCE_LIENPROG,
                 MPDRSequence.class.getName());
 
-      createStereotype(
+        createStereotype(
                 Preferences.STEREOTYPE_TRIGGERS_NAME,
-                Preferences.STEREOTYPE_TRIGGERS_NAME,
+                Preferences.STEREOTYPE_TRIGGERS_LIENPROG,
+                MPDRBoxTriggers.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_PROCEDURES_NAME,
+                Preferences.STEREOTYPE_PROCEDURES_LIENPROG,
                 MPDRBoxTriggers.class.getName());
     }
 

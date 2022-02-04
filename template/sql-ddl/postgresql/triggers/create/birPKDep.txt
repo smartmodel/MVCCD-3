@@ -1,12 +1,3 @@
 CREATE OR REPLACE TRIGGER {triggerName}
-	BEFORE INSERT ON {tableName} FOR EACH ROW
-
-    BEGIN
-        IF :new.{columnPKName} IS NULL THEN
-            SELECT NVL(MAX({columnPKName}), 0) + 1
-            INTO :new.{columnPKName}
-            FROM {tableName}
-            WHERE (1=1)
-            {-TABLE_DEP_JOIN_PARENT-};
-        END IF;
-    END;
+    BEFORE INSERT ON {tableName} FOR EACH ROW
+    EXECUTE FUNCTION  {functionName}();

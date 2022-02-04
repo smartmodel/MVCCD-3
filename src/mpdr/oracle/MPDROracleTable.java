@@ -12,9 +12,7 @@ import mpdr.MPDRColumn;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
 import mpdr.oracle.interfaces.IMPDROracleElement;
-import mpdr.tapis.MPDRBoxTriggers;
-import mpdr.tapis.MPDRTrigger;
-import mpdr.tapis.MPDRTriggerType;
+import mpdr.tapis.*;
 import mpdr.tapis.oracle.MPDROracleBoxTriggers;
 import mpdr.tapis.oracle.MPDROracleTrigger;
 import preferences.Preferences;
@@ -69,9 +67,9 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
 
     @Override
     public MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable) {
-        MPDROracleBoxTriggers mpdrOracleTriggers = MVCCDElementFactory.instance().createMPDROracleBoxTriggers(
+        MPDROracleBoxTriggers mpdrOracleBoxTriggers = MVCCDElementFactory.instance().createMPDROracleBoxTriggers(
                 getMPDRContTAPIs(), mldrTable);
-        return mpdrOracleTriggers;
+        return mpdrOracleBoxTriggers;
     }
 
 
@@ -86,6 +84,11 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
         } else {
             throw new CodeApplException("La boîte Triggers doit exister avant de créer un trigger");
         }
+    }
+
+    @Override
+    public MPDRBoxProceduresOrFunctions createBoxProceduresOrFunctions(MLDRTable mldrTable) {
+        return null;
     }
 
 
@@ -112,6 +115,11 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
         Preferences preferences = PreferencesManager.instance().preferences();
 
         return resultat;
+    }
+
+    @Override
+    public MPDRFunction createFunction(MPDRFunctionType type, MLDRTable mldrTable) {
+        return null;
     }
 
 }

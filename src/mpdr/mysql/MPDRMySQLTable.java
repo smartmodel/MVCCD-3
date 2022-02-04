@@ -10,9 +10,7 @@ import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
 import mpdr.mysql.interfaces.IMPDRMySQLElement;
-import mpdr.tapis.MPDRBoxTriggers;
-import mpdr.tapis.MPDRTrigger;
-import mpdr.tapis.MPDRTriggerType;
+import mpdr.tapis.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -78,6 +76,11 @@ public class MPDRMySQLTable extends MPDRTable implements IMPDRMySQLElement {
         return null;
     }
 
+    @Override
+    public MPDRBoxProceduresOrFunctions createBoxProceduresOrFunctions(MLDRTable mldrTable) {
+        return null;
+    }
+
 
     @Override
     public ArrayList<Stereotype> getStereotypes() {
@@ -101,6 +104,11 @@ public class MPDRMySQLTable extends MPDRTable implements IMPDRMySQLElement {
         Preferences preferences = PreferencesManager.instance().preferences();
 
         return resultat;
+    }
+
+    @Override
+    public MPDRFunction createFunction(MPDRFunctionType type, MLDRTable mldrTable) {
+        return null;
     }
 
 }

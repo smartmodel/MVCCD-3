@@ -1,7 +1,7 @@
-package window.editor.mdr.mpdr.trigger;
+package window.editor.mdr.mpdr.storedcode;
 
-import mpdr.tapis.MPDRBoxTriggers;
-import mpdr.tapis.MPDRTrigger;
+import mpdr.tapis.MPDRBoxStoredCode;
+import mpdr.tapis.MPDRStoredCode;
 import preferences.PreferencesManager;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
@@ -10,27 +10,27 @@ import utilities.window.editor.PanelInput;
 
 import java.awt.*;
 
-public class MPDRTriggerEditor extends DialogEditor {
+public class MPDRStoredCodeEditor extends DialogEditor {
 
 
-    public MPDRTriggerEditor(Window owner,
-                             MPDRBoxTriggers parent,
-                             MPDRTrigger mpdrTrigger,
-                             String mode,
-                             EditingTreat editingTreat)  {
-        super(owner, parent, mpdrTrigger, mode, DialogEditor.SCOPE_NOTHING, editingTreat);
+    public MPDRStoredCodeEditor(Window owner,
+                                MPDRBoxStoredCode parent,
+                                MPDRStoredCode mpdrStoredCode,
+                                String mode,
+                                EditingTreat editingTreat)  {
+        super(owner, parent, mpdrStoredCode, mode, DialogEditor.SCOPE_NOTHING, editingTreat);
 
     }
 
     @Override
     protected PanelButtons getButtonsCustom() {
-        return new MPDRTriggerButtons(this);
+        return new MPDRStoredCodeButtons(this);
     }
 
     @Override
     protected PanelInput getInputCustom() {
 
-        return new MPDRTriggerInput(this);
+        return new MPDRStoredCodeInput(this);
     }
 
 
@@ -69,7 +69,7 @@ public class MPDRTriggerEditor extends DialogEditor {
 
     @Override
     protected String getPropertyTitleRead() {
-        return "editor.mpdr.trigger.read";
+        return "editor.mpdr.stored.code.read";
     }
 
 

@@ -1,0 +1,13 @@
+CREATE OR REPLACE FUNCTION {functionName}() RETURNS TRIGGER
+LANGUAGE plpgsql AS $BODY$
+BEGIN
+    IF NEW.{columnPKName} IS NULL THEN
+        SELECT COALESCE(MAX({columnPKName}), 0) + 1
+        INTO NEW.{columnPKName}
+        FROM {tableName}
+        WHERE (1=1)
+        {-TABLE_DEP_JOIN_PARENT-};
+    END IF;
+    RETURN NEW;
+END;
+$BODY$

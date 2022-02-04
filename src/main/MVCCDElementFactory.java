@@ -30,6 +30,10 @@ import mpdr.tapis.MPDRBoxTriggers;
 import mpdr.tapis.MPDRContTAPIs;
 import mpdr.tapis.oracle.MPDROracleBoxTriggers;
 import mpdr.tapis.oracle.MPDROracleTrigger;
+import mpdr.tapis.postgresql.MPDRPostgreSQLBoxProceduresOrFunctions;
+import mpdr.tapis.postgresql.MPDRPostgreSQLBoxTriggers;
+import mpdr.tapis.postgresql.MPDRPostgreSQLFunction;
+import mpdr.tapis.postgresql.MPDRPostgreSQLTrigger;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
@@ -567,6 +571,12 @@ public class MVCCDElementFactory {
         return mpdrOracleUnique;
     }
 
+
+    public MPDROracleCheck createMPDROracleCheck(MDRContConstraints mdrContConstraints, MLDRColumn mldrColumn) {
+        MPDROracleCheck mpdrOracleCheck = new MPDROracleCheck(mdrContConstraints, mldrColumn);
+        return mpdrOracleCheck;
+    }
+
     public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, MLDRParameter mldrParameter){
         return new MPDROracleParameter( impdrOracleElement, mldrParameter);
     }
@@ -767,6 +777,28 @@ public class MVCCDElementFactory {
         return mpdrPostgreSQLSequence;
     }
 
+
+    //TAPIs PostgreSQL
+    public MPDRPostgreSQLBoxTriggers createMPDRPostgreSQLBoxTriggers(MPDRContTAPIs mpdrContTAPIs, MLDRTable mldrTable) {
+        MPDRPostgreSQLBoxTriggers mpdrPostgreSQLBoxTriggers = new MPDRPostgreSQLBoxTriggers(mpdrContTAPIs, mldrTable);
+        return mpdrPostgreSQLBoxTriggers;
+    }
+
+    public MPDRPostgreSQLTrigger createMPDRPostgreSQLTrigger(MPDRBoxTriggers mpdrBoxTriggers, MLDRTable mldrTable) {
+        MPDRPostgreSQLTrigger mpdrPostgreSQLTrigger = new MPDRPostgreSQLTrigger(mpdrBoxTriggers, mldrTable);
+        return mpdrPostgreSQLTrigger;
+    }
+
+    public MPDRPostgreSQLBoxProceduresOrFunctions createMPDRPostgreSQLBoxProceduresOrFunctions(MPDRContTAPIs mpdrContTAPIs, MLDRTable mldrTable) {
+        MPDRPostgreSQLBoxProceduresOrFunctions mpdrPostgreSQLBoxProceduresOrFunctions = new MPDRPostgreSQLBoxProceduresOrFunctions(mpdrContTAPIs, mldrTable);
+        return mpdrPostgreSQLBoxProceduresOrFunctions;
+    }
+
+    public MPDRPostgreSQLFunction createMPDRPostgreSQLFunction(MPDRPostgreSQLBoxProceduresOrFunctions mpdrPostgreSQLBoxProceduresOrFunctions,
+                                                               MLDRTable mldrTable) {
+        MPDRPostgreSQLFunction mpdrPostgreSQLFunction = new MPDRPostgreSQLFunction(mpdrPostgreSQLBoxProceduresOrFunctions, mldrTable);
+        return mpdrPostgreSQLFunction;
+    }
 
     //Tous les MPDR
     private void createMPDRContModel(MPDRModel mpdrModel) {

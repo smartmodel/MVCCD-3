@@ -6,6 +6,7 @@ import mldr.MLDRTable;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.oracle.MPDROracleModel;
+import mpdr.postgresql.MPDRPostgreSQLModel;
 
 public class MLDRTransformTables {
 
@@ -61,7 +62,7 @@ public class MLDRTransformTables {
 
         // APIs de tables ou triggers pour les séquences si pas d'APIS de tables
         //TODO-PAS En cours de développement
-        if (mpdrModel instanceof MPDROracleModel) {
+        if ((mpdrModel instanceof MPDROracleModel) || (mpdrModel instanceof MPDRPostgreSQLModel)) {
 
             if (mpdrModel.getMPDR_TAPIs()) {
 
@@ -72,14 +73,14 @@ public class MLDRTransformTables {
                             mldrTransform, mldrTable, mpdrModel, mpdrTable);
                     mldrTransformToBoxTriggers.createOrModifyBoxTriggersForColumnPKWithoutTAPIs(mpdrTable.getMPDRColumnPKProper());
                 }
-            }
+           }
         }
     }
 
     private void modifyTable(MLDRTable mldrTable, MPDRTable mpdrTable ) {
         MLDRTransformService.modifyNames(mldrTable, mpdrTable);
         MLDRTransformService.modifyName(mpdrModel, mpdrTable);
-    }
+        }
 
 
 }

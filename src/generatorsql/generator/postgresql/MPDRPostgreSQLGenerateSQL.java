@@ -16,6 +16,7 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
     private MPDRPostgreSQLGenerateSQLFK mpdrPostgreSQLGenerateSQLFK;
     private MPDRPostgreSQLGenerateSQLSequence mpdrPostgreSQLGenerateSQLSequence;
     private MPDRPostgreSQLGenerateSQLTrigger mpdrPostgreSQLGenerateSQLTrigger;
+    private MPDRPostgreSQLGenerateSQLFunction mpdrPostgreSQLGenerateSQLFunction;
     private MPDRPostgreSQLGenerateSQLDynamicCode mpdrPostgreSQLGenerateSQLDynamicCode;
 
     public MPDRPostgreSQLGenerateSQL(MPDRModel mpdrModel) {
@@ -30,6 +31,7 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
         mpdrPostgreSQLGenerateSQLFK = new MPDRPostgreSQLGenerateSQLFK(this);
         mpdrPostgreSQLGenerateSQLSequence = new MPDRPostgreSQLGenerateSQLSequence(this);
         mpdrPostgreSQLGenerateSQLTrigger = new MPDRPostgreSQLGenerateSQLTrigger(this);
+        mpdrPostgreSQLGenerateSQLFunction = new MPDRPostgreSQLGenerateSQLFunction(this);
         mpdrPostgreSQLGenerateSQLDynamicCode = new MPDRPostgreSQLGenerateSQLDynamicCode(this);
     }
 
@@ -60,6 +62,11 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
     }
 
     @Override
+    public MPDRGenerateSQLFunction getMpdrGenerateSQLFunction() {
+        return mpdrPostgreSQLGenerateSQLFunction;
+    }
+
+    @Override
     public MPDRGenerateSQLDynamicCode getMpdrGenerateSQLCodeDynamic() {
         return mpdrPostgreSQLGenerateSQLDynamicCode;
     }
@@ -85,7 +92,10 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
 
         ArrayList<String>  keysWithSchema = new ArrayList<String>();
         keysWithSchema.add(Preferences.MDR_TABLE_NAME_WORD);
+        keysWithSchema.add(Preferences.MDR_TABLE_NAME_CHILD_WORD);
+        keysWithSchema.add(Preferences.MDR_TABLE_NAME_PARENT_WORD);
         keysWithSchema.add(Preferences.MPDR_SEQUENCE_NAME_WORD);
+        keysWithSchema.add(Preferences.MPDR_FUNCTION_NAME_WORD);
 
         if (keysWithSchema.contains(key)) {
             MPDRPostgreSQLModel mpdrPostgreSQLModel = (MPDRPostgreSQLModel) mpdrModel;

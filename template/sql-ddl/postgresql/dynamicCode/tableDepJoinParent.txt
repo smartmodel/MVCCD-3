@@ -1,1 +1,1 @@
-AND ({tableName}.{columnName} = {newRecord}.{columnName})
+AND ({columnName} = {newRecord}.{columnName})

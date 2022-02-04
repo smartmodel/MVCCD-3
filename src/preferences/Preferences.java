@@ -221,11 +221,13 @@ public class Preferences extends MVCCDElement {
   public static String DIRECTORY_TEMPLATES_ALTER = "alter";
   public static String DIRECTORY_TEMPLATES_DROP = "drop";
   public static String DIRECTORY_TEMPLATES_TRIGGERS = "triggers";
+  public static String DIRECTORY_TEMPLATES_STOREDCODE = "storedCode";
   public static String DIRECTORY_TEMPLATES_DYNAMIC_CODE = "dynamicCode";
 
   public static String TEMPLATE_DROP_TABLE = "dropTable.txt";
   public static String TEMPLATE_DROP_SEQUENCE = "dropSequence.txt";
   public static String TEMPLATE_DROP_TRIGGER = "dropTrigger.txt";
+  public static String TEMPLATE_DROP_FUNCTION = "dropFunction.txt";
 
   public static String TEMPLATE_CREATE_TABLE = "createTable.txt";
   public static String TEMPLATE_CREATE_TABLE_COLUMNS = "createTableColumns.txt";
@@ -320,6 +322,8 @@ public class Preferences extends MVCCDElement {
   public static String STEREOTYPE_SEQUENCE_LIENPROG = "Sequence";
   public static String STEREOTYPE_TRIGGERS_NAME = "Triggers";
   public static String STEREOTYPE_TRIGGERS_LIENPROG = "Triggers";
+  public static String STEREOTYPE_PROCEDURES_NAME = "Procedures";
+  public static String STEREOTYPE_PROCEDURES_LIENPROG = "Procedures";
   public static String STEREOTYPE_ORACLE_NAME = "Oracle";
     public static String STEREOTYPE_ORACLE_LIENPROG = "Oracle";
     public static String STEREOTYPE_MYSQL_NAME = "MySQL";
@@ -361,7 +365,12 @@ public class Preferences extends MVCCDElement {
     public static String STEREOTYPE_PFK_NAME = "PFK";
     public static String STEREOTYPE_PFK_LIENPROG = "PFK";
 
-    public static String CONSTRAINT_ORDERED_NAME = "ordered";
+
+  public static String STEREOTYPE_CHECK_NAME = "CHK";
+  public static String STEREOTYPE_CHECK_LIENPROG = "CHK";
+
+
+  public static String CONSTRAINT_ORDERED_NAME = "ordered";
     public static String CONSTRAINT_ORDERED_LIENPROG = "ordered";
     public static String CONSTRAINT_FROZEN_NAME = "frozen";
     public static String CONSTRAINT_FROZEN_LIENPROG = "frozen";
@@ -727,6 +736,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_NAMING_SEQUENCE_PK = "mpdr.sequence.pk";
   public static String MPDR_NAMING_TRIGGER_TABLE = "mpdr.trigger.table";
   public static String MPDR_NAMING_TRIGGER_VIEW = "mpdr.trigger.view";
+  public static String MPDR_NAMING_FUNCTION = "mpdr.function";
 
   public static String MDR_PATH_WORD = "path";
   public static String MDR_PATH_SEP_WORD = "pathSep";
@@ -754,6 +764,8 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_MIN_VALUE_WORD = "minValue";
   public static String MPDR_INCREMENT_WORD = "increment";
   public static String MPDR_TRIGGER_NAME_WORD = "triggerName";
+  public static String MPDR_FUNCTION_NAME_WORD = "functionName";
+  public static String MPDR_PROCEDURE_NAME_WORD = "functionName";
 
   public static String MPDR_NEW_RECORD_WORD = "newRecord";
 
@@ -772,6 +784,9 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_TRIGGER_USAGE_WITHOUT_TAPIS = "mpdr.trigger.usage.without.tapis";
   public static String MPDR_TRIGGER_SCOPE_TABLE = "mpdr.trigger.scope.table";
   public static String MPDR_TRIGGER_SCOPE_VIEW = "mpdr.trigger.scope.view";
+
+  public static String MPDR_STOREDCODE_USAGE_TAPIS = "mpdr.storedcode.usage.tapis";
+  public static String MPDR_STOREDCODE_USAGE_WITHOUT_TAPIS = "mpdr.storedcode.usage.without.tapis";
 
 
   public static String MDR_ATTR_NAME_WORD = "attrName";

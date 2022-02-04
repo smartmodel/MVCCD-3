@@ -4,8 +4,8 @@ import exceptions.CodeApplException;
 import generatorsql.MPDRGenerateSQLUtil;
 import mdr.MDRColumn;
 import mpdr.MPDRDB;
+import mpdr.MPDRTable;
 import mpdr.tapis.MPDRDynamicCodeType;
-import mpdr.tapis.MPDRTrigger;
 import mpdr.tapis.interfaces.IMPDRWithDynamicCode;
 import preferences.Preferences;
 import utilities.TemplateFile;
@@ -66,8 +66,9 @@ public abstract class MPDRGenerateSQLDynamicCode {
                                                 String templateSQLCode,
                                                 String tabsApplicable){
         String generateSQLCode = "";
-        if (impdrWithDynamicCode instanceof MPDRTrigger){
-            ArrayList<MDRColumn> mdrColumns = ((MPDRTrigger) impdrWithDynamicCode).getMPDRTableAccueil().getMPDRPK().getMDRColumns();
+        MPDRTable tableAccueil = impdrWithDynamicCode.getMPDRTableAccueil();
+
+            ArrayList<MDRColumn> mdrColumns = tableAccueil.getMPDRPK().getMDRColumns();
             boolean firstColumn = true;
             for (MDRColumn mdrColumn : mdrColumns){
                 if (mdrColumn.isFk())  {
@@ -88,8 +89,7 @@ public abstract class MPDRGenerateSQLDynamicCode {
                 }
             }
             return generateSQLCode;
-        }
-        throw new CodeApplException("Le code dynamique generateTableDepJoinParent() n'est  traité que pour les triggers");
+
     }
 
 

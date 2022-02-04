@@ -4,6 +4,7 @@ import console.ViewLogsManager;
 import console.WarningLevel;
 import messages.MessagesBuilder;
 import mpdr.*;
+import mpdr.tapis.MPDRFunction;
 import mpdr.tapis.MPDRTrigger;
 import preferences.Preferences;
 import utilities.UtilDivers;
@@ -46,6 +47,10 @@ public abstract class MPDRGenerateSQL {
             message = MessagesBuilder.getMessagesProperty("generate.sql.drop.triggers");
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
             generateSQLCode += generateSQLCommandTriggers(DROP);
+
+            message = MessagesBuilder.getMessagesProperty("generate.sql.drop.functions");
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+            generateSQLCode += generateSQLCommandFunctions(DROP);
         }
 
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.tables");
@@ -59,6 +64,10 @@ public abstract class MPDRGenerateSQL {
         message = MessagesBuilder.getMessagesProperty("generate.sql.alter.constraints.fks");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
         generateSQLCode += generateSQLCommandFKs(ALTER);
+
+        message = MessagesBuilder.getMessagesProperty("generate.sql.create.functions");
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        generateSQLCode += generateSQLCommandFunctions(CREATE);
 
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.triggers");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
@@ -153,6 +162,26 @@ public abstract class MPDRGenerateSQL {
         return generateSQLCode;
     }
 
+    private String generateSQLCommandFunctions(int command) {
+
+        String generateSQLCode = "";
+        for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
+            if (mpdrTable.getMPDRFunctions() != null) {
+                for (MPDRFunction mpdrFunction : mpdrTable.getMPDRFunctions()) {
+                    if (command == CREATE) {
+                        generateSQLCode += getMpdrGenerateSQLFunction().generateSQLCreateFunction(mpdrFunction);
+                        generateSQLCode += delimiter();
+                    }
+                    if (command == DROP) {
+                        generateSQLCode += getMpdrGenerateSQLFunction().generateSQLDropFunction(mpdrFunction);
+                        generateSQLCode += delimiter();
+                    }
+                }
+            }
+        }
+        return generateSQLCode;
+    }
+
 
     public String generateSQLCommandFKs(int command) {
         String generateSQLCode = "";
@@ -177,6 +206,8 @@ public abstract class MPDRGenerateSQL {
     public abstract MPDRGenerateSQLSequence getMpdrGenerateSQLSequence() ;
 
     public abstract MPDRGenerateSQLTrigger getMpdrGenerateSQLTrigger() ;
+
+    public abstract MPDRGenerateSQLFunction getMpdrGenerateSQLFunction() ;
 
     public abstract MPDRGenerateSQLDynamicCode getMpdrGenerateSQLCodeDynamic() ;
 
@@ -230,6 +261,22 @@ public abstract class MPDRGenerateSQL {
     }
 
 
+    public String getTemplateDirStoredCodeDB() {
+        return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR +
+                Preferences.DIRECTORY_TEMPLATES_STOREDCODE;
+    }
+
+    public String getTemplateDirCreateStoredCodeDB() {
+        return getTemplateDirStoredCodeDB() + Preferences.SYSTEM_FILE_SEPARATOR +
+                Preferences.DIRECTORY_TEMPLATES_CREATE;
+    }
+
+    public String getTemplateDirDropStoredCodeDB() {
+        return getTemplateDirStoredCodeDB() + Preferences.SYSTEM_FILE_SEPARATOR +
+                Preferences.DIRECTORY_TEMPLATES_DROP;
+    }
+
+
     public String getTemplateDirDynamicCodeDB() {
         return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR +
                 Preferences.DIRECTORY_TEMPLATES_DYNAMIC_CODE;
@@ -248,6 +295,7 @@ public abstract class MPDRGenerateSQL {
 
 
 
+    // Surcharge si nécessité d'indiquer le schéma (PostgreSQL)
     public String replaceKeyValue(String code, String key, String value) {
         return UtilDivers.replaceKeyValue(code, key, value);
     }

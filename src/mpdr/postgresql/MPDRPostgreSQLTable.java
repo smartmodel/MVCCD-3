@@ -3,6 +3,7 @@ package mpdr.postgresql;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
 import mdr.MDRConstraint;
 import mldr.*;
@@ -11,9 +12,11 @@ import mpdr.MPDRColumn;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
 import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
-import mpdr.tapis.MPDRBoxTriggers;
-import mpdr.tapis.MPDRTrigger;
-import mpdr.tapis.MPDRTriggerType;
+import mpdr.tapis.*;
+import mpdr.tapis.postgresql.MPDRPostgreSQLBoxProceduresOrFunctions;
+import mpdr.tapis.postgresql.MPDRPostgreSQLBoxTriggers;
+import mpdr.tapis.postgresql.MPDRPostgreSQLFunction;
+import mpdr.tapis.postgresql.MPDRPostgreSQLTrigger;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -66,12 +69,42 @@ public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLEle
 
     @Override
     public MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable) {
-        return null;
+        MPDRPostgreSQLBoxTriggers mpdrPostgreSQLTriggers = MVCCDElementFactory.instance().createMPDRPostgreSQLBoxTriggers(
+                getMPDRContTAPIs(), mldrTable);
+        return mpdrPostgreSQLTriggers;
     }
 
     @Override
     public MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, MLDRTable mldrTable) {
-        return null;
+        MPDRPostgreSQLBoxTriggers mpdrPostgreSQLBoxTriggers = (MPDRPostgreSQLBoxTriggers) getMPDRBoxTriggers();
+        if (mpdrPostgreSQLBoxTriggers != null){
+            MPDRPostgreSQLTrigger mpdrPostgreSQLTrigger = MVCCDElementFactory.instance().createMPDRPostgreSQLTrigger(
+                    mpdrPostgreSQLBoxTriggers, mldrTable);
+            return mpdrPostgreSQLTrigger;
+        } else {
+            throw new CodeApplException("La boîte Triggers doit exister avant de créer un trigger");
+        }
+    }
+
+    @Override
+    public MPDRBoxProceduresOrFunctions createBoxProceduresOrFunctions(MLDRTable mldrTable) {
+        MPDRBoxProceduresOrFunctions mpdrPostgreSQLBoxProceduresOrFunctions = MVCCDElementFactory.instance().createMPDRPostgreSQLBoxProceduresOrFunctions(
+                getMPDRContTAPIs(), mldrTable);
+        return mpdrPostgreSQLBoxProceduresOrFunctions;
+    }
+
+
+    @Override
+    public MPDRFunction createFunction(MPDRFunctionType type, MLDRTable mldrTable) {
+        MPDRPostgreSQLBoxProceduresOrFunctions mpdrPostgreSQLBoxProceduresOrFunctions = (MPDRPostgreSQLBoxProceduresOrFunctions) getMPDRBoxProceduresOrFunctions();
+        if (mpdrPostgreSQLBoxProceduresOrFunctions != null){
+            MPDRPostgreSQLFunction mpdrPostgreSQLFunction = MVCCDElementFactory.instance().createMPDRPostgreSQLFunction(
+                    mpdrPostgreSQLBoxProceduresOrFunctions, mldrTable);
+            return mpdrPostgreSQLFunction;
+        } else {
+            throw new CodeApplException("La boîte Procédures/Functions doit exister avant de créer un trigger");
+        }
+
     }
 
 

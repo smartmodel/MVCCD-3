@@ -12,6 +12,7 @@ public class MPDROracleGenerateSQL extends MPDRGenerateSQL {
     private MPDROracleGenerateSQLFK mpdrOracleGenerateSQLFK;
     private MPDROracleGenerateSQLSequence mpdrOracleGenerateSQLSequence;
     private MPDROracleGenerateSQLTrigger mpdrOracleGenerateSQLTrigger;
+    private MPDROracleGenerateSQLFunction mpdrOracleGenerateSQLFunction;
     private MPDROracleGenerateSQLDynamicCode mpdrOracleGenerateSQLCodeDynamic;
 
     public MPDROracleGenerateSQL(MPDRModel mpdrModel) {
@@ -26,6 +27,7 @@ public class MPDROracleGenerateSQL extends MPDRGenerateSQL {
         mpdrOracleGenerateSQLFK = new MPDROracleGenerateSQLFK(this);
         mpdrOracleGenerateSQLSequence = new MPDROracleGenerateSQLSequence(this);
         mpdrOracleGenerateSQLTrigger = new MPDROracleGenerateSQLTrigger(this);
+        mpdrOracleGenerateSQLFunction = new MPDROracleGenerateSQLFunction(this);
         mpdrOracleGenerateSQLCodeDynamic = new MPDROracleGenerateSQLDynamicCode(this);
     }
 
@@ -53,6 +55,11 @@ public class MPDROracleGenerateSQL extends MPDRGenerateSQL {
     @Override
     public MPDRGenerateSQLTrigger getMpdrGenerateSQLTrigger() {
         return mpdrOracleGenerateSQLTrigger;
+    }
+
+    @Override
+    public MPDRGenerateSQLFunction getMpdrGenerateSQLFunction() {
+        return mpdrOracleGenerateSQLFunction;
     }
 
     @Override

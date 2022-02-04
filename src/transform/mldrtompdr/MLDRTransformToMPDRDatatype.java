@@ -1,6 +1,6 @@
 package transform.mldrtompdr;
 
-public class MLDRTransformToMPDRDatatype {
+public abstract class MLDRTransformToMPDRDatatype {
 
     /*
     public static MPDRDatatype fromMLDRDatatype(MPDRDB db, MLDRColumn mldrColumn) {

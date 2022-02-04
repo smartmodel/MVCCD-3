@@ -22,7 +22,8 @@ public enum MDROrderBuildTargets {
     UNIQUEMAX30(Preferences.MDR_NAMING_UNIQUE, "mdr.of.constraints.unique"),
     SEQUENCEPK(Preferences.MPDR_NAMING_SEQUENCE_PK, "mpdr.of.pk.column.pk"),
     TRIGGERTABLE(Preferences.MPDR_NAMING_TRIGGER_TABLE, "mpdr.of.trigger.table"),
-    TRIGGERVIEW(Preferences.MPDR_NAMING_TRIGGER_VIEW, "mpdr.of.trigger.table");
+    TRIGGERVIEW(Preferences.MPDR_NAMING_TRIGGER_VIEW, "mpdr.of.trigger.table"),
+    FUNCTION(Preferences.MPDR_NAMING_FUNCTION, "mpdr.of.function.table");
 
     private final String name;
     private final String propertyOfTarget;

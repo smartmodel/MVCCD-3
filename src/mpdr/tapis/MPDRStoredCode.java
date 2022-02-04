@@ -12,37 +12,29 @@ import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.tapis.interfaces.IMPDRWithDynamicCode;
 import project.ProjectElement;
 
-public abstract class MPDRTrigger extends MDRElement implements IMPDRElement, IMPDRElementWithSource,
+public abstract class MPDRStoredCode extends MDRElement implements IMPDRElement, IMPDRElementWithSource,
         IMDRElementWithIteration, IMDRElementNamingPreferences, IMPDRWithDynamicCode {
 
     private  static final long serialVersionUID = 1000;
 
-    MPDRTriggerType type  ;
     private Integer iteration = null; // Si un objet est créé directement et non par transformation
     private IMLDRElement mldrElementSource;
 
-    public MPDRTrigger(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
+    public MPDRStoredCode(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
         super(parent);
         this.mldrElementSource = mldrElementSource;
     }
 
-    public MPDRTrigger(ProjectElement parent, IMLDRElement mldrElementSource) {
+    public MPDRStoredCode(ProjectElement parent, IMLDRElement mldrElementSource) {
         super(parent);
         this.mldrElementSource = mldrElementSource;
     }
 
-    public MPDRTrigger(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+    public MPDRStoredCode(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
         super(parent, id);
         this.mldrElementSource = mldrElementSource;
     }
 
-    public MPDRTriggerType getType() {
-        return type;
-    }
-
-    public void setType(MPDRTriggerType type) {
-        this.type = type;
-    }
 
     @Override
     public Integer getIteration() {
@@ -72,12 +64,12 @@ public abstract class MPDRTrigger extends MDRElement implements IMPDRElement, IM
         return (MDElement) getMldrElementSource();
     }
 
-    public MPDRBoxTriggers  getMPDRBoxTriggers (){
-        return (MPDRBoxTriggers) getParent();
+    public MPDRBoxProceduresOrFunctions getMPDRBoxProcedures (){
+        return (MPDRBoxProceduresOrFunctions) getParent();
     }
 
     public MPDRTable getMPDRTableAccueil (){
-        return getMPDRBoxTriggers().getMPDRTableAccueil();
+        return getMPDRBoxProcedures().getMPDRTableAccueil();
     }
 
     public abstract String generateSQLDDL() ;
