@@ -1,24 +1,20 @@
 package mldr;
 
 import main.MVCCDElementFactory;
-import mcd.MCDAttribute;
 import mcd.MCDElement;
 import mcd.MCDUnicity;
 import md.MDElement;
 import mdr.MDRUnique;
-import mdr.MDRUniqueNature;
 import mdr.interfaces.IMDRParameter;
-import mldr.interfaces.IMDLRConstraint;
+import mldr.interfaces.IMLDRConstraint;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mldr.services.MLDRConstraintService;
-import mldr.services.MLDROperationService;
-import mpdr.MPDRParameter;
 import project.ProjectElement;
 
 import java.util.ArrayList;
 
-public class MLDRUnique extends MDRUnique implements IMLDRElement, IMLDRElementWithSource, IMDLRConstraint {
+public class MLDRUnique extends MDRUnique implements IMLDRElement, IMLDRElementWithSource, IMLDRConstraint {
 
     private  static final long serialVersionUID = 1000;
 
@@ -54,11 +50,6 @@ public class MLDRUnique extends MDRUnique implements IMLDRElement, IMLDRElementW
         MLDRParameter mldrParameter = MVCCDElementFactory.instance().createMLDRParameter(this,
                 target, this.getMcdElementSource());
         return mldrParameter;
-    }
-
-    @Override
-    public MPDRParameter createParameter(MLDRParameter mldrParameter) {
-        return null;
     }
 
     public ArrayList<MLDRColumn> getMLDRColumns(){

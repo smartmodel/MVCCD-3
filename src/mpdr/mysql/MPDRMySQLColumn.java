@@ -2,6 +2,7 @@ package mpdr.mysql;
 
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
+import mpdr.MPDRCheck;
 import mpdr.MPDRColumn;
 import mpdr.MPDRSequence;
 import mpdr.mysql.interfaces.IMPDRMySQLElement;
@@ -23,6 +24,11 @@ public class MPDRMySQLColumn extends MPDRColumn implements IMPDRMySQLElement {
     // Pas de séquence pour MySQL
     public MPDRSequence createSequence(MLDRColumn mldrColumn) {
        return null;
+    }
+
+    @Override
+    public MPDRCheck createCheckDatatype(MLDRColumn mldrColumn) {
+        return null;
     }
 
 

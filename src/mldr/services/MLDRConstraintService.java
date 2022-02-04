@@ -3,21 +3,19 @@ package mldr.services;
 import exceptions.CodeApplException;
 import mdr.MDRColumn;
 import mdr.MDRConstraint;
-import mdr.MDROperation;
 import mdr.MDRParameter;
 import mldr.MLDRColumn;
 import mldr.MLDRParameter;
+import mldr.interfaces.IMLDRConstraint;
 import mldr.interfaces.IMLDRElement;
-import mpdr.MPDRParameter;
-import mpdr.interfaces.IMPDRElementWithSource;
 
 import java.util.ArrayList;
 
 public class MLDRConstraintService {
 
-    public static ArrayList<MLDRParameter> getMLDRParameters(MDRConstraint mdrConstraint) {
+    public static ArrayList<MLDRParameter> getMLDRParameters(IMLDRConstraint mdrConstraint) {
         ArrayList<MLDRParameter> resultat = new ArrayList<MLDRParameter>();
-        for (MDRParameter mdrParameter : mdrConstraint.getMDRParameters()) {
+        for (MDRParameter mdrParameter : ((MDRConstraint) mdrConstraint).getMDRParameters()) {
             if ( mdrParameter instanceof MLDRParameter){
                 resultat.add((MLDRParameter) mdrParameter);
             }

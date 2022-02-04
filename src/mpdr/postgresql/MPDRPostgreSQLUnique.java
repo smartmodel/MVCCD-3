@@ -1,7 +1,6 @@
 package mpdr.postgresql;
 
 import main.MVCCDElementFactory;
-import mdr.interfaces.IMDRParameter;
 import mldr.MLDRParameter;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRParameter;
@@ -24,12 +23,6 @@ public class MPDRPostgreSQLUnique extends MPDRUnique implements IMPDRPostgreSQLE
     }
 
      */
-
-
-    @Override
-    public MLDRParameter createParameter(IMDRParameter target) {
-        return null;
-    }
 
     @Override
     public MPDRParameter createParameter(MLDRParameter  mldrParameter) {

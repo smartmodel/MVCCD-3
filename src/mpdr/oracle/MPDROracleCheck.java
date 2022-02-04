@@ -1,7 +1,6 @@
 package mpdr.oracle;
 
 import main.MVCCDElementFactory;
-import mdr.interfaces.IMDRParameter;
 import mldr.MLDRParameter;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRCheck;
@@ -19,12 +18,6 @@ public class MPDROracleCheck extends MPDRCheck implements IMPDROracleElement {
 
     public MPDROracleCheck(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
         super(parent, mldrElementSource, id);
-    }
-
-
-    @Override
-    public MLDRParameter createParameter(IMDRParameter target) {
-        return null;
     }
 
     @Override

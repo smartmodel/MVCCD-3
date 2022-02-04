@@ -1,10 +1,8 @@
 package mpdr.oracle;
 
 import main.MVCCDElementFactory;
-import mdr.interfaces.IMDRParameter;
 import mldr.MLDRParameter;
 import mldr.interfaces.IMLDRElement;
-import mpdr.MPDRFK;
 import mpdr.MPDRParameter;
 import mpdr.MPDRUnique;
 import mpdr.oracle.interfaces.IMPDROracleElement;
@@ -25,12 +23,6 @@ public class MPDROracleUnique extends MPDRUnique implements IMPDROracleElement {
     }
 
      */
-
-
-    @Override
-    public MLDRParameter createParameter(IMDRParameter target) {
-        return null;
-    }
 
     @Override
     public MPDRParameter createParameter(MLDRParameter  mldrParameter) {

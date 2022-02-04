@@ -5,10 +5,11 @@ import constraints.Constraints;
 import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import md.MDElement;
-import mdr.MDRConstraint;
 import mdr.MDRTable;
 import mldr.*;
+import mldr.interfaces.IMLDRConstraint;
 import mldr.interfaces.IMLDRElement;
+import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.services.MPDRColumnService;
@@ -79,7 +80,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     }
 
 
-    public MDRConstraint getMPDRConstraintByMLDRConstraintSource(MDRConstraint mldrConstraint) {
+    public IMPDRConstraint getMPDRConstraintByMLDRConstraintSource(IMLDRConstraint mldrConstraint) {
         return MPDRTableService.getMPDRConstraintByMLDRConstraintSource(this, mldrConstraint);
     }
 
@@ -96,10 +97,10 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     public abstract MPDRPK createPK(MLDRPK mldrPK);
 
 
-    public abstract MDRConstraint createFK(MLDRFK mldrFK);
+    public abstract IMPDRConstraint createFK(MLDRFK mldrFK);
 
 
-    public abstract MDRConstraint createUnique(MLDRUnique mldrUnique);
+    public abstract IMPDRConstraint createUnique(MLDRUnique mldrUnique);
 
     public abstract MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable);
 

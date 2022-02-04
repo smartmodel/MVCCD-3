@@ -8,7 +8,6 @@ import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import project.ProjectElement;
 import stereotypes.StereotypeService;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

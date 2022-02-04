@@ -1,7 +1,6 @@
 package mpdr.mysql;
 
 import main.MVCCDElementFactory;
-import mdr.interfaces.IMDRParameter;
 import mldr.MLDRParameter;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRFK;
@@ -19,11 +18,6 @@ public class MPDRMySQLFK extends MPDRFK implements IMPDRMySQLElement {
 
     public MPDRMySQLFK(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
         super(parent, mldrElementSource, id);
-    }
-
-    @Override
-    public MLDRParameter createParameter(IMDRParameter target) {
-        return null;
     }
 
     @Override

@@ -1,18 +1,17 @@
 package mpdr;
 
-import mcd.MCDAttribute;
 import mcd.MCDUnicity;
 import md.MDElement;
-import mdr.MDRFK;
 import mdr.MDRUnique;
-import mldr.MLDRColumn;
 import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
+import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import project.ProjectElement;
 
-public abstract class MPDRUnique extends MDRUnique implements IMPDRElement, IMPDRElementWithSource {
+public abstract class MPDRUnique extends MDRUnique implements IMPDRElement, IMPDRElementWithSource,
+        IMPDRConstraint {
 
     private  static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;

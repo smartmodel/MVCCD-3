@@ -5,9 +5,11 @@ import mdr.MDRConstraint;
 import mdr.MDRContColumns;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
+import mldr.interfaces.IMLDRConstraint;
 import mpdr.MPDRColumn;
 import mpdr.MPDRFK;
 import mpdr.MPDRTable;
+import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.tapis.MPDRContTAPIs;
 
@@ -46,12 +48,12 @@ public class MPDRTableService {
         return null ;
     }
 
-    public static MDRConstraint getMPDRConstraintByMLDRConstraintSource(MPDRTable mpdrTable, MDRConstraint mldrConstraint) {
+    public static IMPDRConstraint getMPDRConstraintByMLDRConstraintSource(MPDRTable mpdrTable, IMLDRConstraint mldrConstraint) {
         for (MDRConstraint mdrConstraint : mpdrTable.getMDRConstraints()){
             if (mdrConstraint instanceof IMPDRElementWithSource) {
                 IMPDRElementWithSource mpdrConstraint = (IMPDRElementWithSource) mdrConstraint;
                 if (mpdrConstraint.getMldrElementSource() == mldrConstraint) {
-                    return mdrConstraint;
+                    return (IMPDRConstraint) mdrConstraint;
                 }
             }
         }

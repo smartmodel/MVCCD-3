@@ -5,12 +5,9 @@ import constraints.Constraints;
 import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
-import mdr.MDRConstraint;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
-import mpdr.MPDRColumn;
-import mpdr.MPDRPK;
-import mpdr.MPDRTable;
+import mpdr.*;
 import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
 import mpdr.tapis.*;
 import mpdr.tapis.postgresql.MPDRPostgreSQLBoxProceduresOrFunctions;
@@ -54,14 +51,14 @@ public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLEle
     }
 
     @Override
-    public MDRConstraint createFK(MLDRFK mldrFK) {
+    public MPDRFK createFK(MLDRFK mldrFK) {
         MPDRPostgreSQLFK newFK = MVCCDElementFactory.instance().createMPDRPostgreSQLFK(
                 getMDRContConstraints(), mldrFK);
         return newFK;
     }
 
     @Override
-    public MDRConstraint createUnique(MLDRUnique mldrUnique) {
+    public MPDRUnique createUnique(MLDRUnique mldrUnique) {
         MPDRPostgreSQLUnique newUnique = MVCCDElementFactory.instance().createMPDRPostgreSQLUnique(
                 getMDRContConstraints(), mldrUnique);
         return newUnique;

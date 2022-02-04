@@ -4,22 +4,24 @@ import main.MVCCDManager;
 import mdr.MDRConstraint;
 import mldr.MLDRColumn;
 import mldr.MLDRParameter;
+import mldr.interfaces.IMLDRConstraint;
 import mldr.services.MLDRConstraintService;
 import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRParameter;
 import mpdr.MPDRTable;
+import mpdr.interfaces.IMPDRConstraint;
 import mpdr.services.MPDRConstraintService;
 
 public class MLDRTransformParameters {
 
 
     private MLDRTransform mldrTransform ;
-    private MDRConstraint mldrConstraint ;
+    private IMLDRConstraint mldrConstraint ;
     private MPDRModel mpdrModel ;
-    private MDRConstraint mpdrConstraint;
+    private IMPDRConstraint mpdrConstraint;
 
-    public MLDRTransformParameters(MLDRTransform mldrTransform, MDRConstraint mldrConstraint, MPDRModel mpdrModel, MDRConstraint mpdrConstraint) {
+    public MLDRTransformParameters(MLDRTransform mldrTransform, IMLDRConstraint mldrConstraint, MPDRModel mpdrModel, IMPDRConstraint mpdrConstraint) {
         this.mldrTransform = mldrTransform ;
         this.mldrConstraint= mldrConstraint;
         this.mpdrModel = mpdrModel;
@@ -39,7 +41,7 @@ public class MLDRTransformParameters {
 
     private MPDRParameter transformParameter(MLDRParameter mldrParameter) {
 
-        MPDRParameter mpdrParameter = MPDRConstraintService.getMPDRParameterByMLDRParameterSource(mpdrConstraint, mldrParameter);
+        MPDRParameter mpdrParameter = MPDRConstraintService.getMPDRParameterByMLDRParameterSource(((MDRConstraint)mpdrConstraint), mldrParameter);
         if ( mpdrParameter == null){
             mpdrParameter = mpdrConstraint.createParameter(mldrParameter);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrParameter);

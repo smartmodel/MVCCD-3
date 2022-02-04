@@ -4,11 +4,11 @@ import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import main.MVCCDElementFactory;
-import mdr.MDRConstraint;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
+import mpdr.interfaces.IMPDRConstraint;
 import mpdr.mysql.interfaces.IMPDRMySQLElement;
 import mpdr.tapis.*;
 import preferences.Preferences;
@@ -52,14 +52,14 @@ public class MPDRMySQLTable extends MPDRTable implements IMPDRMySQLElement {
     }
 
     @Override
-    public MDRConstraint createFK(MLDRFK mldrFK) {
+    public IMPDRConstraint createFK(MLDRFK mldrFK) {
         MPDRMySQLFK newFK = MVCCDElementFactory.instance().createMPDRMySQLFK(
                 getMDRContConstraints(), mldrFK);
         return newFK;
     }
 
     @Override
-    public MDRConstraint createUnique(MLDRUnique mldrUnique) {
+    public IMPDRConstraint createUnique(MLDRUnique mldrUnique) {
         MPDRMySQLUnique newUnique = MVCCDElementFactory.instance().createMPDRMySQLUnique(
             getMDRContConstraints(), mldrUnique);
         return newUnique;

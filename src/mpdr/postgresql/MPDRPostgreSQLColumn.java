@@ -3,6 +3,7 @@ package mpdr.postgresql;
 import main.MVCCDElementFactory;
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
+import mpdr.MPDRCheck;
 import mpdr.MPDRColumn;
 import mpdr.MPDRSequence;
 import mpdr.oracle.interfaces.IMPDROracleElement;
@@ -26,6 +27,17 @@ public class MPDRPostgreSQLColumn extends MPDRColumn implements IMPDROracleEleme
                 this, mldrColumn);
 
         return newSequence;
+    }
+
+    @Override
+    public MPDRCheck createCheckDatatype(MLDRColumn mldrColumn) {
+        /*
+        MDRContConstraints mdrContConstraints = this.getMPDRTableAccueil().getMDRContConstraints();
+        MPDRPostgreSQLCheck newCheck = MVCCDElementFactory.instance().createMPDRPostgreSQLCheck( mdrContConstraints, mldrColumn);
+        return newCheck;
+
+         */
+        return null;
     }
 
 
