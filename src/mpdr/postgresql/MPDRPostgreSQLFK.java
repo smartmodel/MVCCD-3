@@ -1,7 +1,6 @@
 package mpdr.postgresql;
 
 import main.MVCCDElementFactory;
-import mdr.interfaces.IMDRParameter;
 import mldr.MLDRParameter;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRFK;
@@ -21,13 +20,6 @@ public class MPDRPostgreSQLFK extends MPDRFK implements IMPDRPostgreSQLElement {
         super(parent, mldrElementSource, id);
     }
 
-
-    @Override
-    public MLDRParameter createParameter(IMDRParameter target) {
-        return null;
-    }
-
-    @Override
     public MPDRParameter createParameter(MLDRParameter  mldrParameter) {
         MPDRParameter mpdrParameter = MVCCDElementFactory.instance().createMPDRPostgreSQLParameter(this, mldrParameter);
         return mpdrParameter;

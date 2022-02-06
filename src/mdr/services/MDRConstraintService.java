@@ -1,7 +1,6 @@
 package mdr.services;
 
 import exceptions.CodeApplException;
-import mcd.MCDConstraint;
 import mdr.*;
 
 public class MDRConstraintService {
@@ -34,6 +33,14 @@ public class MDRConstraintService {
                 return BAS ;
             } else if (other instanceof MDRUnique){
                 return ((MDRUnique) courant).compareToDefault((MDRUnique) other);
+            } else {
+                return HAUT;
+            }
+        } else if (courant instanceof MDRCheck) {
+            if ((other instanceof MDRPK) || other instanceof MDRFK || other instanceof MDRCheck) {
+                return BAS ;
+            } else if (other instanceof MDRCheck){
+                return ((MDRCheck) courant).compareToDefault((MDRCheck) other);
             } else {
                 return HAUT;
             }

@@ -33,6 +33,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     private boolean tapis ;
     private String sequencePKNameFormat;
     private String triggerNameFormat;
+    private String checkColumnDatatypeNameFormat;
 
     public MPDRModel(ProjectElement parent, String name, MPDRDB db) {
         super(parent, name);
@@ -174,6 +175,14 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
 
     public String getTriggerNameFormat() {
         return triggerNameFormat;
+    }
+
+    public String getCheckColumnDatatypeNameFormat() {
+        return checkColumnDatatypeNameFormat;
+    }
+
+    public void setCheckColumnDatatypeNameFormat(String checkColumnDatatypeNameFormat) {
+        this.checkColumnDatatypeNameFormat = checkColumnDatatypeNameFormat;
     }
 
     public abstract Boolean getMPDR_TAPIs() ;

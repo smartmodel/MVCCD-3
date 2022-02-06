@@ -296,6 +296,8 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         return resultat;
     }
 
+    /*
+
     public boolean isSelfOrDescendantOf(String ancestorClassName){
         if (this.getClass().getName().equals(ancestorClassName)){
             return true;
@@ -303,6 +305,8 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
             return isDescendantOf(ancestorClassName);
         }
     }
+
+     */
 
 
 
@@ -484,6 +488,11 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
             cloneChilds(child, childClone);
             i++;
         }
+    }
+
+    // Pas testé !
+    boolean isDescendantOf(MVCCDElement ancestor, boolean selfInclude){
+        return MVCCDElementService.isDescendantOf(this, ancestor, selfInclude);
     }
 
 }

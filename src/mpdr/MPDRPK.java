@@ -3,11 +3,13 @@ package mpdr;
 import md.MDElement;
 import mdr.MDRPK;
 import mldr.interfaces.IMLDRElement;
+import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import project.ProjectElement;
 
-public abstract class MPDRPK extends MDRPK implements IMPDRElement, IMPDRElementWithSource {
+public abstract class MPDRPK extends MDRPK implements IMPDRElement, IMPDRElementWithSource,
+        IMPDRConstraint {
 
     private  static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;

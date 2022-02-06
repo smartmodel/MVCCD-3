@@ -9,6 +9,7 @@ import mdr.MDRConstraint;
 import mdr.MDRTable;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
+import mldr.interfaces.IMLDRSourceMPDRCheck;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.services.MPDRColumnService;
@@ -83,6 +84,13 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         return MPDRTableService.getMPDRConstraintByMLDRConstraintSource(this, mldrConstraint);
     }
 
+
+    public MPDRCheck getMPDRCheckByMLDRSourceAndRole(IMLDRSourceMPDRCheck imldrSourceMPDRCheck,
+                                                     MPDRCheckRole mpdrCheckRole){
+        return MPDRTableService.getMPDRCheckByMLDRSourceAndRole(this,
+                imldrSourceMPDRCheck, mpdrCheckRole);
+    }
+
     public MPDRFK getMPDRFKByMLDRFKSource(MLDRFK mldrFk) {
         return MPDRTableService.getMPDRFKByMLDRFKSource(this, mldrFk);
     }
@@ -96,10 +104,12 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     public abstract MPDRPK createPK(MLDRPK mldrPK);
 
 
-    public abstract MDRConstraint createFK(MLDRFK mldrFK);
+    public abstract MPDRFK createFK(MLDRFK mldrFK);
 
 
-    public abstract MDRConstraint createUnique(MLDRUnique mldrUnique);
+    public abstract MPDRUnique createUnique(MLDRUnique mldrUnique);
+
+    public abstract MPDRCheck createCheck(IMLDRSourceMPDRCheck imldrSourceMPDRCheck);
 
     public abstract MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable);
 
@@ -199,4 +209,5 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     }
 
     public abstract MPDRFunction createFunction(MPDRFunctionType type, MLDRTable mldrTable);
+
 }

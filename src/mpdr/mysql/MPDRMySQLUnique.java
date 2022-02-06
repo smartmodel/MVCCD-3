@@ -1,7 +1,6 @@
 package mpdr.mysql;
 
 import main.MVCCDElementFactory;
-import mdr.interfaces.IMDRParameter;
 import mldr.MLDRParameter;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRParameter;
@@ -25,13 +24,6 @@ public class MPDRMySQLUnique extends MPDRUnique implements IMPDRMySQLElement {
 
      */
 
-
-    @Override
-    public MLDRParameter createParameter(IMDRParameter target) {
-        return null;
-    }
-
-    @Override
     public MPDRParameter createParameter(MLDRParameter  mldrParameter) {
         MPDRParameter mpdrParameter = MVCCDElementFactory.instance().createMPDRMySQLParameter(this, mldrParameter);
         return mpdrParameter;

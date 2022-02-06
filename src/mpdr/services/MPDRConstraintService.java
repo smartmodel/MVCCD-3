@@ -1,12 +1,12 @@
 package mpdr.services;
 
-import java.util.ArrayList;
 import mdr.MDRConstraint;
 import mdr.MDRParameter;
 import mldr.MLDRParameter;
 import mpdr.MPDRFK;
 import mpdr.MPDRPK;
 import mpdr.MPDRParameter;
+import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElementWithSource;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class MPDRConstraintService {
         }
     }
 
-    public static ArrayList<MPDRParameter> getMPDRParameters(MDRConstraint mdrConstraint) {
+    public static ArrayList<MPDRParameter> getMPDRParameters(IMPDRConstraint mdrConstraint) {
         ArrayList<MPDRParameter> resultat = new ArrayList<MPDRParameter>();
         for (MDRParameter mdrParameter : mdrConstraint.getMDRParameters()) {
             if (mdrParameter instanceof MPDRParameter) {
@@ -54,7 +54,7 @@ public class MPDRConstraintService {
     }
 
     public static MPDRParameter getMPDRParameterByMLDRParameterSource(
-            MDRConstraint mdrConstraint, MLDRParameter mldrParameter) {
+            IMPDRConstraint mdrConstraint, MLDRParameter mldrParameter) {
         for (MPDRParameter mpdrParameter : getMPDRParameters(mdrConstraint)){
             if (mpdrParameter instanceof IMPDRElementWithSource) {
                 if (mpdrParameter.getMldrElementSource() == mldrParameter) {

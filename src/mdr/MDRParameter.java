@@ -14,6 +14,8 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
 
     //private IMDRParameter target = null;
     private Integer targetId ;
+    // Une valeur si pas de target
+    private String value ;
 
     // Pour le niveau logique
     public MDRParameter(ProjectElement parent, IMDRParameter target) {
@@ -86,6 +88,15 @@ public abstract class MDRParameter extends MDRElement implements IMDRElementWith
     }
 
     public int compareToDefault(MDRParameter other) {
+
         return MDRParameterService.compareToDefault(this, other);
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

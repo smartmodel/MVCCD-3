@@ -20,6 +20,7 @@ public enum MDROrderBuildTargets {
     FKWITHOUTROLE(Preferences.MDR_NAMING_FK, "mdr.of.constraints.fk"),
     UNIQUE(Preferences.MDR_NAMING_UNIQUE, "mdr.of.constraints.unique"),
     UNIQUEMAX30(Preferences.MDR_NAMING_UNIQUE, "mdr.of.constraints.unique"),
+    CHECKCOLUMNDATATYPE(Preferences.MPDR_NAMING_CHECK_COLUMNDATATYPE, "mpdr.of.check.column.datatype"),
     SEQUENCEPK(Preferences.MPDR_NAMING_SEQUENCE_PK, "mpdr.of.pk.column.pk"),
     TRIGGERTABLE(Preferences.MPDR_NAMING_TRIGGER_TABLE, "mpdr.of.trigger.table"),
     TRIGGERVIEW(Preferences.MPDR_NAMING_TRIGGER_VIEW, "mpdr.of.trigger.table"),

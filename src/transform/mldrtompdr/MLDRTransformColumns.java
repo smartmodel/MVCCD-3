@@ -1,10 +1,13 @@
 package transform.mldrtompdr;
 
+import datatypes.MCDDatatype;
+import datatypes.MDDatatypeService;
 import datatypes.MPDRDatatype;
 import main.MVCCDManager;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.*;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
@@ -129,16 +132,20 @@ public class MLDRTransformColumns {
 
 
         // Séquence de clé primaire associée
-            boolean c1 = mldrColumn.isPkNotFk();
-            boolean c2 = mldrColumn.getEntityParentSource().isInd();
-            boolean c3 = mpdrModel.getMpdrDbPK() == MPDRDBPK.SEQUENCE ;
-            if (c1 && c2 && c3) {
-                    // Création de la séquence de PK
-                    MLDRTransformToSequence mldrTransformToSequence = new MLDRTransformToSequence(
+        boolean c1 = mldrColumn.isPkNotFk();
+        boolean c2 = mldrColumn.getEntityParentSource().isInd();
+        boolean c3 = mpdrModel.getMpdrDbPK() == MPDRDBPK.SEQUENCE ;
+        if (c1 && c2 && c3) {
+            // Création de la séquence de PK
+            MLDRTransformToSequence mldrTransformToSequence = new MLDRTransformToSequence(
                             mldrTransform, mldrColumn, mpdrModel, mpdrColumn);
-                    MPDRSequence mpdrSequence = mldrTransformToSequence.createOrModifySeq(MPDRSequenceRole.PK);
-            }
+            MPDRSequence mpdrSequence = mldrTransformToSequence.createOrModifySeq(MPDRSequenceRole.PK);
+        }
 
+        // Contrainte de Check de type de donnée
+        if (mldrColumn.isBusiness()) {
+            createCheckForDatatype(mldrColumn, mpdrColumn);
+        }
     }
 
 
@@ -193,5 +200,85 @@ public class MLDRTransformColumns {
             pushSize(mpdrColumn, mldrColumn.getSize());
         }
     }
+
+
+    private void createCheckForDatatype(MLDRColumn mldrColumn, MPDRColumn mpdrColumn) {
+
+        String checkExpression = "";
+        String mcdDatatypeLienProg = mpdrColumn.getDatatypeConstraintLienProg();
+        MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(mcdDatatypeLienProg);
+
+        MCDDatatype number = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_NUMBER_LIENPROG);
+
+        if (mcdDatatype.isDescendantOf(number)) {
+            String comparisonExpression = checkNumberDatatype (mcdDatatype) ;
+            if (StringUtils.isNotEmpty(comparisonExpression)) {
+                checkExpression = mpdrColumn.getName() + comparisonExpression;
+            }
+        }
+
+
+        // Création de la contrainte de CHECK
+        if (StringUtils.isNotEmpty(checkExpression)) {
+            MLDRTransformToCheck mldrTransformToCheck = new MLDRTransformToCheck(
+                    mldrTransform, mldrColumn, mpdrModel, mpdrTable);
+            MPDRCheck mpdrCheck = mldrTransformToCheck.createOrModifyCheck(mpdrColumn, MPDRCheckRole.DATATYPE, checkExpression);
+        }
+
+    }
+
+    private String checkNumberDatatype(MCDDatatype mcdDatatype) {
+        
+        String comparisonPositiveExpression  = " > 0";
+        MCDDatatype positiveInteger = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_POSITIVEINTEGER_LIENPROG);
+        MCDDatatype positiveDecimal = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_POSITIVEDECIMAL_LIENPROG);
+        MCDDatatype positiveMoney = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_POSITIVEMONEY_LIENPROG);
+        if (mcdDatatype.isSelfOrDescendantOf(positiveInteger)){
+            return comparisonPositiveExpression;
+        } else if (mcdDatatype.isSelfOrDescendantOf(positiveDecimal)){
+            return comparisonPositiveExpression;
+        } else if (mcdDatatype.isSelfOrDescendantOf(positiveMoney)){
+            return comparisonPositiveExpression;
+        }
+
+        comparisonPositiveExpression  = " >= 0";
+        MCDDatatype nonNegativeInteger = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_NONNEGATIVEINTEGER_LIENPROG);
+        MCDDatatype nonNegativeDecimal = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_NONNEGATIVEDECIMAL_LIENPROG);
+        MCDDatatype nonNegativeMoney = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_NONNEGATIVEMONEY_LIENPROG);
+        if (mcdDatatype.isSelfOrDescendantOf(nonNegativeInteger)){
+            return comparisonPositiveExpression;
+        } else if (mcdDatatype.isSelfOrDescendantOf(nonNegativeDecimal)){
+            return comparisonPositiveExpression;
+        } else if (mcdDatatype.isSelfOrDescendantOf(nonNegativeMoney)){
+            return comparisonPositiveExpression;
+        }
+
+        comparisonPositiveExpression  = " < 0";
+        MCDDatatype negativeInteger = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_NEGATIVEINTEGER_LIENPROG);
+        MCDDatatype negativeDecimal = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_NEGATIVEDECIMAL_LIENPROG);
+        MCDDatatype negativeMoney = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_NEGATIVEMONEY_LIENPROG);
+        if (mcdDatatype.isSelfOrDescendantOf(negativeInteger)){
+            return comparisonPositiveExpression;
+        } else if (mcdDatatype.isSelfOrDescendantOf(negativeDecimal)){
+            return comparisonPositiveExpression;
+        } else if (mcdDatatype.isSelfOrDescendantOf(negativeMoney)){
+            return comparisonPositiveExpression;
+        }
+
+        comparisonPositiveExpression  = " <= 0";
+        MCDDatatype nonPositiveInteger = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_NONPOSITIVEINTEGER_LIENPROG);
+        MCDDatatype nonPositiveDecimal = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_NONPOSITIVEDECIMAL_LIENPROG);
+        MCDDatatype nonPositiveMoney = MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_NONPOSITIVEMONEY_LIENPROG);
+        if (mcdDatatype.isSelfOrDescendantOf(nonPositiveInteger)){
+            return comparisonPositiveExpression;
+        } else if (mcdDatatype.isSelfOrDescendantOf(nonPositiveDecimal)){
+            return comparisonPositiveExpression;
+        } else if (mcdDatatype.isSelfOrDescendantOf(nonPositiveMoney)){
+            return comparisonPositiveExpression;
+        }
+
+        return "";
+    }
+
 
 }

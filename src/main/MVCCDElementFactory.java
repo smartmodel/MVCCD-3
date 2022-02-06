@@ -18,6 +18,7 @@ import mdr.*;
 import mdr.interfaces.IMDRParameter;
 import messages.MessagesBuilder;
 import mldr.*;
+import mldr.interfaces.IMLDRSourceMPDRCheck;
 import mldr.services.MLDRContConstraintsService;
 import mpdr.*;
 import mpdr.mysql.*;
@@ -571,9 +572,8 @@ public class MVCCDElementFactory {
         return mpdrOracleUnique;
     }
 
-
-    public MPDROracleCheck createMPDROracleCheck(MDRContConstraints mdrContConstraints, MLDRColumn mldrColumn) {
-        MPDROracleCheck mpdrOracleCheck = new MPDROracleCheck(mdrContConstraints, mldrColumn);
+    public MPDROracleCheck createMPDROracleCheck(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCheck imldrSourceMPDRCheck) {
+        MPDROracleCheck mpdrOracleCheck = new MPDROracleCheck(mdrContConstraints, imldrSourceMPDRCheck);
         return mpdrOracleCheck;
     }
 
@@ -595,6 +595,13 @@ public class MVCCDElementFactory {
     public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMDRParameter target, MLDRParameter mldrParameter, int id){
         return new MPDROracleParameter(impdrOracleElement, target, mldrParameter, id);
     }
+
+
+    // Création d'un paramètre qui n'est pas issu de la transformation d'un paramètre logique
+    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMLDRSourceMPDRCheck imldrSourceMPDRCheck){
+        return new MPDROracleParameter( impdrOracleElement, imldrSourceMPDRCheck);
+    }
+
 
     public MPDROracleSequence createMPDROracleSequence(MPDRColumn mpdrColumn, MLDRColumn mldrColumn) {
         MPDROracleSequence mpdrOracleSequence = new MPDROracleSequence(mpdrColumn, mldrColumn);
@@ -680,6 +687,12 @@ public class MVCCDElementFactory {
         return mpdrMySQLUnique;
     }
 
+
+    public MPDRMySQLCheck createMPDRMySQLCheck(MDRContConstraints mdrContConstraints,IMLDRSourceMPDRCheck imldrSourceMPDRCheck) {
+        MPDRMySQLCheck mpdrMySQLCheck = new MPDRMySQLCheck(mdrContConstraints, imldrSourceMPDRCheck);
+        return mpdrMySQLCheck;
+    }
+
     public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement impdrMySQLElement, MLDRParameter mldrParameter){
         return new MPDRMySQLParameter( impdrMySQLElement, mldrParameter);
     }
@@ -688,7 +701,12 @@ public class MVCCDElementFactory {
         return new MPDRMySQLParameter(impdrMySQLElement, target, mldrParameter, id);
     }
 
-   
+
+    // Création d'un paramètre qui n'est pas issu de la transformation d'un paramètre logique
+    public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement mpdrMySQLParameter, IMLDRSourceMPDRCheck imldrSourceMPDRCheck){
+        return new MPDRMySQLParameter( mpdrMySQLParameter, imldrSourceMPDRCheck);
+    }
+
     
     // PostgreSQL
     public MPDRPostgreSQLModel createMPDRPostgreSQLModel(MLDRModel mldrModel) {
@@ -761,6 +779,11 @@ public class MVCCDElementFactory {
     }
 
 
+    public MPDRPostgreSQLCheck createMPDRPostgreSQLCheck(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCheck imldrSourceMPDRCheck) {
+        MPDRPostgreSQLCheck mpdrPostgreSQLCheck = new MPDRPostgreSQLCheck(mdrContConstraints, imldrSourceMPDRCheck);
+        return mpdrPostgreSQLCheck;
+    }
+
 
     //TODO-PAS: Parameter pour PostgreSQL
     public MPDRParameter createMPDRPostgreSQLParameter(IMPDRPostgreSQLElement impdrPostgreSQLElement, IMDRParameter target, MLDRParameter mldrParameter, int id) {
@@ -771,6 +794,10 @@ public class MVCCDElementFactory {
         return new MPDRPostgreSQLParameter( impdrPostgreSQLElement, mldrParameter);
     }
 
+    // Création d'un paramètre qui n'est pas issu de la transformation d'un paramètre logique
+    public MPDRParameter createMPDRPostgreSQLParameter(IMPDRPostgreSQLElement impdrPostgreSQLElement, IMLDRSourceMPDRCheck imldrSourceMPDRCheck){
+        return new MPDRPostgreSQLParameter( impdrPostgreSQLElement, imldrSourceMPDRCheck);
+    }
 
     public MPDRPostgreSQLSequence createMPDRPostgreSQLSequence(MPDRColumn mpdrColumn, MLDRColumn mldrColumn) {
         MPDRPostgreSQLSequence mpdrPostgreSQLSequence = new MPDRPostgreSQLSequence(mpdrColumn, mldrColumn);

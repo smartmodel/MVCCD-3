@@ -1,7 +1,6 @@
 package mpdr.oracle;
 
 import main.MVCCDElementFactory;
-import mdr.interfaces.IMDRParameter;
 import mldr.MLDRParameter;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRPK;
@@ -22,12 +21,6 @@ public class MPDROraclePK extends MPDRPK implements IMPDROracleElement {
     }
 
 
-    @Override
-    public MLDRParameter createParameter(IMDRParameter target) {
-        return null;
-    }
-
-    @Override
     public MPDRParameter createParameter(MLDRParameter  mldrParameter) {
         MPDRParameter mpdrParameter = MVCCDElementFactory.instance().createMPDROracleParameter(this, mldrParameter);
         return mpdrParameter;

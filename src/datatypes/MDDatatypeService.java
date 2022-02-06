@@ -240,4 +240,35 @@ public class MDDatatypeService {
         return mpdrDatatype.getName();
     }
 
+
+    // Code déjà existant ... au sein de MDDatatype
+    /*
+    public static boolean isDescendantOf(MDDatatype current,
+                                         MDDatatype ancestor,
+                                         boolean selfInclude) {
+        if (selfInclude){
+            if (current.getLienProg().equals(ancestor.getLienProg())){
+                return true;
+            } else {
+                    if (current.getParent() instanceof MDDatatype) {
+                        return isDescendantOf((MDDatatype)current.getParent(), ancestor, selfInclude);
+                    } else {
+                        return false;
+                    }
+            }
+        } else {
+                if (current.getParent() instanceof MDDatatype) {
+                    if (((MDDatatype)current.getParent()).getLienProg().equals(ancestor.getLienProg())){
+                        return true;
+                    } else {
+                        return isDescendantOf((MDDatatype)current.getParent(), ancestor, selfInclude);
+                    }
+                } else {
+                    return false;
+                }
+        }
+    }
+
+     */
+
 }

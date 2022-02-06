@@ -39,7 +39,7 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
                 preferences.getMPDRPOSTGRESQL_PK_GENERATE().getText());
         fieldTAPIs.setSelected(preferences.getMPDRPOSTGRESQL_TAPIS());
         fieldSeqPKNameFormat.setText(preferences.getMPDRPOSTGRESQL_SEQPK_NAME_FORMAT());
-
+        fieldCheckColumnDatatypeNameFormat.setText(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
     }
 
     @Override
@@ -99,6 +99,10 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
 
         if (fieldSeqPKNameFormat.checkIfUpdated()){
             preferences.setMPDRPOSTGRESQL_SEQPK_NAME_FORMAT(fieldSeqPKNameFormat.getText());
+        }
+
+        if (fieldCheckColumnDatatypeNameFormat.checkIfUpdated()){
+            preferences.setMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT(fieldCheckColumnDatatypeNameFormat.getText());
         }
 
 

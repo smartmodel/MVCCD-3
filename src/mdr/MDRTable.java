@@ -6,6 +6,7 @@ import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import main.MVCCDElement;
 import mdr.services.MDRTableService;
+import mpdr.MPDRCheck;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -238,6 +239,16 @@ public abstract class MDRTable extends MDRTableOrView {
         kindDependant.add(MDRTableNature.ASSDEP);
         kindDependant.add(MDRTableNature.NAIREDEP);
         return kindDependant.contains(getNature()) ;
+    }
+
+    public ArrayList<MPDRCheck> getMPDRChecks(){
+        ArrayList<MPDRCheck> resultat = new ArrayList<MPDRCheck>();
+        for (MDRCheck mdrCheck : getMDRContConstraints().getMDRChecks()) {
+            if (mdrCheck instanceof MPDRCheck) {
+                resultat.add((MPDRCheck) mdrCheck);
+            }
+        }
+        return resultat;
     }
 
 }

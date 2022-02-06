@@ -1,13 +1,15 @@
 package transform.mcdtomldr.services;
 
 import exceptions.CodeApplException;
+import main.MVCCDManager;
 import mcd.MCDAssociation;
 import mcd.MCDAssociationNature;
-import mdr.MDRElement;
-import mdr.MDRElementNames;
-import mdr.MDRFKNature;
-import mdr.MDRModel;
+import mdr.*;
 import mdr.services.MDRModelService;
+import mldr.interfaces.IMLDROperation;
+import transform.MDTransform;
+
+import java.util.ArrayList;
 
 public class MCDTransformService {
 
@@ -59,4 +61,29 @@ public class MCDTransformService {
         }
         return fkNature;
     }
+
+
+
+    public static void adjustParameters(MDTransform mdTransform,
+                                        MDRTableOrView mdrTableOrView,
+                                        IMLDROperation mdrOperation,
+                                        ArrayList<MDRColumn> mdrColumns) {
+
+        for (MDRColumn mdrColumn : mdrColumns){
+
+            MDRParameter mdrParameter = mdrOperation.getParameter(mdrColumn);
+            // Ajout des paramètres de colonnes manquants
+            if (mdrParameter == null) {
+                // Le tri est fait par par la méthode de base compareToDefault()
+                mdrParameter = mdrOperation.createParameter(mdrColumn);
+                MVCCDManager.instance().addNewMVCCDElementInRepository(mdrParameter);
+            }
+            // Pas de modification car les propriétés viennent de la colonne
+            // Mémorisation de l'itération courante
+            mdrParameter.setIteration(mdTransform.getIteration());
+            // La supression se fait sur la base de la valeur d'itération comme tout MDRElement!
+        }
+
+    }
+
 }

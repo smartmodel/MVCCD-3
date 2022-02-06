@@ -19,7 +19,6 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.mcdtomldr.services.MCDTransformService;
-import transform.mdr.services.MDRTransformService;
 
 import java.util.ArrayList;
 
@@ -37,7 +36,7 @@ public class MCDTransformToFK {
             MCDAssEnd mcdAssEndParent = mcdAssociation.getMCDAssEndParent();
             MCDEntity mcdEntityChild = mcdAssociation.getMCDAssEndChild().getMcdEntity();
             MLDRTable mldrTableChild = mldrModel.getMLDRTableByEntitySource(mcdEntityChild);
-            MDRFKNature fkNature = MCDTransformService.mapMCDAssociationNature(mcdAssociation);
+            MDRFKNature fkNature = transform.mcdtomldr.services.MCDTransformService.mapMCDAssociationNature(mcdAssociation);
             createOrModifyFromRelEndSource(mldrModel, mcdAssEndParent , mldrTableChild, fkNature);
         }
     }
@@ -112,7 +111,7 @@ public class MCDTransformToFK {
         }
 
         MDRElementNames namesFK = buildNameFK(mldrTable, tableShortNameChild, mldrFK, mcdRelEndSource, mldrTableParent);
-        MCDTransformService.names(mldrFK, namesFK, mldrModel);
+        transform.mcdtomldr.services.MCDTransformService.names(mldrFK, namesFK, mldrModel);
 
         // Nature
         if (mldrFK.getNature() != null) {
@@ -197,7 +196,7 @@ public class MCDTransformToFK {
         }
 
         // Transformation des paramètres PK en paramètres FK
-        MDRTransformService.adjustParameters(mcdTransform, mldrTable, mldrFK, mdrColumnsFK);
+        MCDTransformService.adjustParameters(mcdTransform, mldrTable, mldrFK, mdrColumnsFK);
     }
 
 

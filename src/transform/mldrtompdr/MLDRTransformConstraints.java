@@ -2,8 +2,10 @@ package transform.mldrtompdr;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
+import main.MVCCDElement;
 import main.MVCCDManager;
 import mdr.MDRConstraint;
+import mdr.MDRElement;
 import mldr.MLDRFK;
 import mldr.MLDRPK;
 import mldr.MLDRTable;
@@ -13,6 +15,7 @@ import mpdr.MPDRFK;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.MPDRUnique;
+import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElement;
 
 public class MLDRTransformConstraints {
@@ -33,36 +36,15 @@ public class MLDRTransformConstraints {
 
 
     void transformConstraints() {
-        //TODO-1 A reprendre et spécialiser par genre de contrainte
-        /*
         for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
-            if(mldrConstraint instanceof MLDRPK) {
-                MDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
-             }
-        }
-        for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
-            if(mldrConstraint instanceof MLDRFK) {
-                MDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
-            }
-        }
-        for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
-            boolean c1 = !(mldrConstraint instanceof MLDRPK);
-            boolean c2 = !(mldrConstraint instanceof MLDRFK);
-            if(c1 && c2) {
-                MDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
-            }
-        }
-
-         */
-        for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
-            MDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
+            IMPDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
         }
     }
 
 
 
-    private MDRConstraint transformConstraint(MDRConstraint mldrConstraint) {
-        MDRConstraint mpdrConstraint = mpdrTable.getMPDRConstraintByMLDRConstraintSource(mldrConstraint);
+    private IMPDRConstraint transformConstraint(MDRConstraint mldrConstraint) {
+        IMPDRConstraint mpdrConstraint = (IMPDRConstraint) mpdrTable.getMPDRConstraintByMLDRConstraintSource(mldrConstraint);
         if ( mpdrConstraint == null){
             if (mldrConstraint instanceof MLDRPK){
                 MLDRPK mldrPK = (MLDRPK) mldrConstraint;
@@ -76,7 +58,7 @@ public class MLDRTransformConstraints {
                 MLDRUnique mldrUnique = (MLDRUnique) mldrConstraint;
                 mpdrConstraint = mpdrTable.createUnique(mldrUnique);
             }
-            MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrConstraint);
+            MVCCDManager.instance().addNewMVCCDElementInRepository((MVCCDElement) mpdrConstraint);
 
         }
 
@@ -101,9 +83,9 @@ public class MLDRTransformConstraints {
         return mpdrConstraint;
     }
 
-    private void modifyConstraint(MDRConstraint mldrConstraint, MDRConstraint mpdrConstraint ) {
+    private void modifyConstraint(MDRConstraint mldrConstraint, IMPDRConstraint mpdrConstraint ) {
         MLDRTransformService.modifyNames((IMLDRElement) mldrConstraint, (IMPDRElement) mpdrConstraint);
-        MLDRTransformService.modifyName(mpdrModel, mpdrConstraint);
+        MLDRTransformService.modifyName(mpdrModel, (MDRElement) mpdrConstraint);
         // FK
         if (mpdrConstraint instanceof MPDRFK) {
             MLDRFK mldrFK = (MLDRFK) mldrConstraint;

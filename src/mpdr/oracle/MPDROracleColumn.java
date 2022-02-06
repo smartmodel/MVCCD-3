@@ -1,8 +1,10 @@
 package mpdr.oracle;
 
 import main.MVCCDElementFactory;
+import mdr.MDRContConstraints;
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
+import mpdr.MPDRCheck;
 import mpdr.MPDRColumn;
 import mpdr.MPDRSequence;
 import mpdr.oracle.interfaces.IMPDROracleElement;
@@ -21,11 +23,18 @@ public class MPDROracleColumn extends MPDRColumn implements IMPDROracleElement {
     }
 
 
-    public MPDRSequence createSequence(MLDRColumn mldrColumn) {
+    public MPDRSequence createMPDRSequence(MLDRColumn mldrColumn) {
         MPDROracleSequence newSequence = MVCCDElementFactory.instance().createMPDROracleSequence(
                 this, mldrColumn);
         return newSequence;
     }
 
+
+    @Override
+    public MPDRCheck createMPDRCheckDatatype(MLDRColumn mldrColumn) {
+        MDRContConstraints mdrContConstraints = this.getMPDRTableAccueil().getMDRContConstraints();
+        MPDROracleCheck newCheck = MVCCDElementFactory.instance().createMPDROracleCheck( mdrContConstraints, mldrColumn);
+        return newCheck;
+    }
 
 }

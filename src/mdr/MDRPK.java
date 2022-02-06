@@ -1,8 +1,6 @@
 package mdr;
 
 import constraints.Constraint;
-import mdr.interfaces.IMDRParameter;
-import mldr.MLDRParameter;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -24,8 +22,6 @@ public abstract class MDRPK extends MDRConstraint{
     public MDRPK(ProjectElement parent, int id) {
         super(parent, id);
     }
-
-    public abstract MLDRParameter createParameter(IMDRParameter target);
 
     public Stereotype getDefaultStereotype(){
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();

@@ -58,8 +58,9 @@ public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPD
         return (MPDRTable) getMDRTableAccueil();
     }
 
-    public abstract MPDRSequence createSequence(MLDRColumn mldrColumn) ;
+    public abstract MPDRSequence createMPDRSequence(MLDRColumn mldrColumn) ;
 
+    public abstract MPDRCheck createMPDRCheckDatatype(MLDRColumn mldrColumn) ;
 
     public MLDRColumn getMLDRColumnSource(){
         if (getMldrElementSource() instanceof MLDRColumn){

@@ -14,6 +14,7 @@ public abstract class MDRContConstraints extends MDRElement implements IMPathOnl
     public MDRContConstraints(ProjectElement parent, String name) {
         super(parent, name);
     }
+
     public ArrayList<MDRConstraint> getMDRConstraints() {
         ArrayList<MDRConstraint> resultat = new ArrayList<MDRConstraint>();
         for (MVCCDElement mvccdElement : getChilds()) {
@@ -39,6 +40,17 @@ public abstract class MDRContConstraints extends MDRElement implements IMPathOnl
     public ArrayList<? extends  MVCCDElement> getChildsSortDefault() {
         ArrayList<MDRConstraint> mdrConstraints = getMDRConstraintsSortDefault();
         return mdrConstraints ;
+    }
+
+
+    public ArrayList<MDRCheck> getMDRChecks() {
+        ArrayList<MDRCheck> resultat = new ArrayList<MDRCheck>();
+        for (MDRConstraint mdrConstraint : getMDRConstraints()) {
+            if (mdrConstraint instanceof MDRCheck) {
+                resultat.add((MDRCheck) mdrConstraint);
+            }
+        }
+        return resultat;
     }
 
 }

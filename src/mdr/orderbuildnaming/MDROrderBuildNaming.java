@@ -58,6 +58,7 @@ public class MDROrderBuildNaming {
     private MDROrderWordUniqueNatureSep uniqueNatSep;
 
     private MDROrderWordTypeTriggerMarker typeTriggerMarker ;
+    private MDROrderWordMPDRColumnName mpdrColumnName ;
 
 
 
@@ -104,6 +105,7 @@ public class MDROrderBuildNaming {
         uniqueNatSep = new MDROrderWordUniqueNatureSep(Preferences.MDR_UNIQUE_NATURE_SEP_WORD);
 
         typeTriggerMarker = new MDROrderWordTypeTriggerMarker(Preferences.MPDR_TYPE_TRIGGER_MARKER_WORD);
+        mpdrColumnName = new MDROrderWordMPDRColumnName(Preferences.MPDR_COLUMN_NAME_WORD);
     }
 
 
@@ -213,6 +215,9 @@ public class MDROrderBuildNaming {
 
                 } else if (mg.equals(Preferences.MPDR_TYPE_TRIGGER_MARKER_WORD)) {
                     value = pushValue(typeTriggerMarker);
+
+                } else if (mg.equals(Preferences.MPDR_COLUMN_NAME_WORD)) {
+                    value = pushValue(mpdrColumnName);
 
                 } else {
                     // Marqueurs libres
@@ -752,5 +757,13 @@ public class MDROrderBuildNaming {
 
     public void setTypeTriggerMarker(MDROrderWordTypeTriggerMarker typeTriggerMarker) {
         this.typeTriggerMarker = typeTriggerMarker;
+    }
+
+    public MDROrderWordMPDRColumnName getMpdrColumnName() {
+        return mpdrColumnName;
+    }
+
+    public void setMpdrColumnName(MDROrderWordMPDRColumnName mpdrColumnName) {
+        this.mpdrColumnName = mpdrColumnName;
     }
 }

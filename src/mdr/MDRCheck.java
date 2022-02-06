@@ -1,8 +1,7 @@
 package mdr;
 
 import constraints.Constraint;
-import mdr.interfaces.IMDRParameter;
-import mldr.MLDRParameter;
+import exceptions.CodeApplException;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -12,10 +11,9 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public abstract class MDRCheck extends MDRConstraint{
+public abstract class MDRCheck extends MDRConstraint {
 
-    private  static final long serialVersionUID = 1000;
-
+    private static final long serialVersionUID = 1000;
 
     public MDRCheck(ProjectElement parent) {
         super(parent);
@@ -25,15 +23,12 @@ public abstract class MDRCheck extends MDRConstraint{
         super(parent, id);
     }
 
-    public abstract MLDRParameter createParameter(IMDRParameter target);
-
-    public Stereotype getDefaultStereotype(){
+    public Stereotype getDefaultStereotype() {
         Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
         Preferences preferences = PreferencesManager.instance().preferences();
         return stereotypes.getStereotypeByLienProg(MDRCheck.class.getName(),
                 preferences.STEREOTYPE_CHECK_LIENPROG);
     }
-
 
 
     @Override
@@ -54,4 +49,15 @@ public abstract class MDRCheck extends MDRConstraint{
         return new ArrayList<Constraint>();
     }
 
+    public MDRParameter getMDRParameter(){
+         ArrayList<MDRParameter> mdrParameters = getMDRParameters();
+         if (mdrParameters.size() > 1 ){
+             throw new CodeApplException("La contrainte de Check " + getName() + " comporte plus d'un seul parammètre (l'expression)");
+         } else  if (mdrParameters.size() == 1 ){
+             return mdrParameters.get(0);
+         } else {
+             return null;
+         }
+    }
 }
+

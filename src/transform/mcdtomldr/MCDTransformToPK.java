@@ -18,7 +18,6 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.mcdtomldr.services.MCDTransformService;
-import transform.mdr.services.MDRTransformService;
 
 import java.util.ArrayList;
 
@@ -42,7 +41,7 @@ public class MCDTransformToPK {
         ArrayList<MDRColumn> mdrColumnPKs = new ArrayList<MDRColumn>();
         mdrColumnPKs.add(createOrModifyColumnPKProper(mcdEntity, mldrTable));
 
-        MDRTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
+        MCDTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
     }
 
 
@@ -71,7 +70,7 @@ public class MCDTransformToPK {
             mdrColumnPKs.add(mdrColumnPKProper);
         }
 
-        MDRTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
+        MCDTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
 
         return mldrPK;
     }
@@ -91,7 +90,7 @@ public class MCDTransformToPK {
 
         MLDRPK mldrPK = createOrModifyPKAssNN(mcdAssNN,mldrTable);
 
-        MDRTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
+        MCDTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
 
         return mldrPK;
     }
@@ -165,10 +164,10 @@ public class MCDTransformToPK {
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrPK.getMDRTableAccueil().getMDRModelParent();
         if ( mcdElement instanceof MCDEntity) {
-            MCDTransformService.names(mldrPK,
+            transform.mcdtomldr.services.MCDTransformService.names(mldrPK,
                     buildNamePK((MLDRTable) mldrPK.getMDRTableAccueil(), (MCDEntity) mcdElement), mldrModel);}
         if ( mcdElement instanceof MCDAssociation) {
-            MCDTransformService.names(mldrPK,
+            transform.mcdtomldr.services.MCDTransformService.names(mldrPK,
                     buildNamePK((MLDRTable) mldrPK.getMDRTableAccueil(), (MCDAssociation) mcdElement), mldrModel);}
     }
 

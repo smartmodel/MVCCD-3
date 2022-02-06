@@ -195,4 +195,30 @@ public class MVCCDElementService {
     }
     return null;
   }
+
+    public static boolean isDescendantOf(MVCCDElement current,
+                                         MVCCDElement ancestor,
+                                         boolean selfInclude) {
+      if (selfInclude){
+        if (current.getClass() == ancestor.getClass()){
+          return true;
+        } else {
+          if (current.getParent() != null) {
+            return isDescendantOf(current.getParent(), ancestor, selfInclude);
+          } else {
+            return false;
+          }
+        }
+      } else {
+        if (current.getParent() != null) {
+          if (current.getParent().getClass() == ancestor.getClass()) {
+            return true;
+          } else {
+            return isDescendantOf(current.getParent(), ancestor, selfInclude);
+          }
+        } else {
+            return false;
+        }
+      }
+    }
 }

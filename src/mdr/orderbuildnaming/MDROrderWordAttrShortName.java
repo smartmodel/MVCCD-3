@@ -8,6 +8,4 @@ public class MDROrderWordAttrShortName extends MDROrderWord{
         super(name, Preferences.ATTRIBUTE_SHORT_NAME_LENGTH);
     }
 
-
-
 }

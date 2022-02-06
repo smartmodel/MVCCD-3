@@ -42,7 +42,7 @@ public class MLDRTransformToSequence {
         MPDRSequence mpdrSequence = mpdrColumn.getMPDRSequence();
 
         if (mpdrSequence == null){
-            mpdrSequence = mpdrColumn.createSequence(mldrColumn);
+            mpdrSequence = mpdrColumn.createMPDRSequence(mldrColumn);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrSequence);
         }
         modifySequence(mldrColumn, mpdrSequence, mpdrSequenceRole);

@@ -5,12 +5,10 @@ import constraints.Constraints;
 import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
-import mdr.MDRConstraint;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
-import mpdr.MPDRColumn;
-import mpdr.MPDRPK;
-import mpdr.MPDRTable;
+import mldr.interfaces.IMLDRSourceMPDRCheck;
+import mpdr.*;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.tapis.*;
 import mpdr.tapis.oracle.MPDROracleBoxTriggers;
@@ -52,17 +50,24 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
     }
 
     @Override
-    public MDRConstraint createFK(MLDRFK mldrFK) {
+    public MPDRFK createFK(MLDRFK mldrFK) {
         MPDROracleFK newFK = MVCCDElementFactory.instance().createMPDROracleFK(
                 getMDRContConstraints(), mldrFK);
         return newFK;
     }
 
     @Override
-    public MDRConstraint createUnique(MLDRUnique mldrUnique) {
+    public MPDRUnique createUnique(MLDRUnique mldrUnique) {
         MPDROracleUnique newUnique = MVCCDElementFactory.instance().createMPDROracleUnique(
                 getMDRContConstraints(), mldrUnique);
         return newUnique;
+    }
+
+    @Override
+    public MPDRCheck createCheck(IMLDRSourceMPDRCheck imldrSourceMPDRCheck) {
+        MPDROracleCheck newCheck = MVCCDElementFactory.instance().createMPDROracleCheck(
+                getMDRContConstraints(), imldrSourceMPDRCheck);
+        return newCheck;
     }
 
     @Override

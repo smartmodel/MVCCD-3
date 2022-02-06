@@ -1,15 +1,8 @@
 package window.editor.mdr.parameter;
 
-import constraints.ConstraintService;
-import constraints.ConstraintsManager;
-import datatypes.MDDatatypeService;
 import main.MVCCDElement;
-import mdr.MDRColumn;
 import mdr.MDRParameter;
-import mldr.MLDRColumn;
-import mpdr.MPDRColumn;
 import preferences.Preferences;
-import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
 import window.editor.mdr.utilities.PanelInputContentIdMDR;
@@ -25,8 +18,10 @@ public class MDRParameterInputContent extends PanelInputContentIdMDR {
 
     private JLabel labelTargetClass;
     private STextField fieldTargetClass;
-    private STextField fieldTargetName;
     private JLabel labelTargetName;
+    private STextField fieldTargetName;
+    private JLabel labelValue;
+    private STextField fieldValue;
 
 
     public MDRParameterInputContent(MDRParameterInput MDRParameterInput)     {
@@ -47,12 +42,18 @@ public class MDRParameterInputContent extends PanelInputContentIdMDR {
         labelTargetName = new JLabel("Nom : ");
         fieldTargetName = new STextField(this, labelTargetName);
         fieldTargetName.setPreferredSize((new Dimension(200, Preferences.EDITOR_FIELD_HEIGHT)));
-        fieldTargetName.setToolTipText("Nom...");
+        fieldTargetName.setToolTipText("Nom de la cible du paramètre ...");
+        
+        labelValue = new JLabel("Valeur: ");
+        fieldValue = new STextField(this, labelValue);
+        fieldValue.setPreferredSize((new Dimension(500, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldValue.setToolTipText("Valeur du paramètre...");
 
 
 
         super.getSComponents().add(fieldTargetClass);
         super.getSComponents().add(fieldTargetName);
+        super.getSComponents().add(fieldValue);
 
         createPanelMaster();
     }
@@ -60,7 +61,7 @@ public class MDRParameterInputContent extends PanelInputContentIdMDR {
     private void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
-        gbc.gridwidth = 6;
+        gbc.gridwidth = 2;
 
         super.createPanelId();
         panelInputContentCustom.add(panelId, gbc);
@@ -70,6 +71,15 @@ public class MDRParameterInputContent extends PanelInputContentIdMDR {
         gbc.gridy++;
         createPanelTarget();
         panelInputContentCustom.add(panelTarget, gbc);
+
+
+        gbc.gridwidth = 1;
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(labelValue, gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldValue, gbc);
 
         this.add(panelInputContentCustom);
     }
@@ -112,6 +122,9 @@ public class MDRParameterInputContent extends PanelInputContentIdMDR {
         }
         fieldTargetClass.setText(targetClass);
         fieldTargetName.setText(targetName);
+        if (mdrParameter.getValue() != null){
+            fieldValue.setText(mdrParameter.getValue());
+        }
     }
 
 

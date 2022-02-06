@@ -29,6 +29,8 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
     protected STextField fieldSeqPKNameFormat;
     protected JLabel labelTriggerNameFormat ;
     protected STextField fieldTriggerNameFormat;
+    protected JLabel labelCheckColumnDatatypeNameFormat ;
+    protected STextField fieldCheckColumnDatatypeNameFormat;
 
 
 
@@ -74,11 +76,20 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
         fieldTriggerNameFormat.getDocument().addDocumentListener(this);
         fieldTriggerNameFormat.addFocusListener(this);
 
+        labelCheckColumnDatatypeNameFormat = new JLabel("CheckColumnDatatypes");
+        fieldCheckColumnDatatypeNameFormat = new STextField(this, labelCheckColumnDatatypeNameFormat);
+        fieldCheckColumnDatatypeNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldCheckColumnDatatypeNameFormat.setToolTipText("Format de nommage des triggers de table");
+        //TODO-1 Prévoir un formattage/contrôle minimal
+        fieldCheckColumnDatatypeNameFormat.getDocument().addDocumentListener(this);
+        fieldCheckColumnDatatypeNameFormat.addFocusListener(this);
+
         super.getSComponents().add(fieldDelimiterInstructions);
         super.getSComponents().add(fieldPKGenerate);
         super.getSComponents().add(fieldTAPIs);
         super.getSComponents().add(fieldSeqPKNameFormat);
         super.getSComponents().add(fieldTriggerNameFormat);
+        super.getSComponents().add(fieldCheckColumnDatatypeNameFormat);
 
         createPanelMaster();
     }
@@ -122,15 +133,18 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
         panelFormatNames.add(labelSeqPKNameFormat, gbcA);
         gbcA.gridx++ ;
         panelFormatNames.add(fieldSeqPKNameFormat, gbcA);
-
-
+        
         gbcA.gridx = 0;
         gbcA.gridy++;
         panelFormatNames.add(labelTriggerNameFormat, gbcA);
         gbcA.gridx++ ;
         panelFormatNames.add(fieldTriggerNameFormat, gbcA);
 
-
+        gbcA.gridx = 0;
+        gbcA.gridy++;
+        panelFormatNames.add(labelCheckColumnDatatypeNameFormat, gbcA);
+        gbcA.gridx++ ;
+        panelFormatNames.add(fieldCheckColumnDatatypeNameFormat, gbcA);
     }
 
 

@@ -5,9 +5,8 @@ import mdr.MDRConstraint;
 import mdr.MDRContColumns;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
-import mpdr.MPDRColumn;
-import mpdr.MPDRFK;
-import mpdr.MPDRTable;
+import mldr.interfaces.IMLDRSourceMPDRCheck;
+import mpdr.*;
 import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.tapis.MPDRContTAPIs;
 
@@ -71,6 +70,22 @@ public class MPDRTableService {
         for (MVCCDElement mvccdElement : mpdrTable.getChilds()){
             if (mvccdElement instanceof MPDRContTAPIs){
                 return (MPDRContTAPIs) mvccdElement ;
+            }
+        }
+        return null ;
+    }
+
+
+    public static MPDRCheck getMPDRCheckByMLDRSourceAndRole(MPDRTable mpdrTable,
+                                                            IMLDRSourceMPDRCheck imldrSourceMPDRCheck,
+                                                            MPDRCheckRole mpdrCheckRole) {
+        for (MPDRCheck mpdrCheck : mpdrTable.getMPDRChecks()){
+            if (mpdrCheck instanceof IMPDRElementWithSource) {
+                boolean c1 = mpdrCheck.getMldrElementSource() == imldrSourceMPDRCheck;
+                boolean c2 = mpdrCheck.getRole() == mpdrCheckRole;
+                if (c1 && c2) {
+                    return  mpdrCheck;
+                }
             }
         }
         return null ;

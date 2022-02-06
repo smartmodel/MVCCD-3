@@ -1,4 +1,4 @@
 package mldr.interfaces;
 
-public interface IMDLRConstraint {
+public interface IMDLRConstraint extends IMLDROperation {
 }

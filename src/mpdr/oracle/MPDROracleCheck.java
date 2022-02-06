@@ -1,9 +1,9 @@
 package mpdr.oracle;
 
 import main.MVCCDElementFactory;
-import mdr.interfaces.IMDRParameter;
 import mldr.MLDRParameter;
 import mldr.interfaces.IMLDRElement;
+import mldr.interfaces.IMLDRSourceMPDRCheck;
 import mpdr.MPDRCheck;
 import mpdr.MPDRParameter;
 import mpdr.oracle.interfaces.IMPDROracleElement;
@@ -13,7 +13,7 @@ public class MPDROracleCheck extends MPDRCheck implements IMPDROracleElement {
 
     private  static final long serialVersionUID = 1000;
 
-    public MPDROracleCheck(ProjectElement parent, IMLDRElement mldrElementSource) {
+    public MPDROracleCheck(ProjectElement parent, IMLDRSourceMPDRCheck mldrElementSource) {
         super(parent, mldrElementSource);
     }
 
@@ -21,13 +21,13 @@ public class MPDROracleCheck extends MPDRCheck implements IMPDROracleElement {
         super(parent, mldrElementSource, id);
     }
 
-
     @Override
-    public MLDRParameter createParameter(IMDRParameter target) {
-        return null;
+    public MPDRParameter createParameter(IMLDRSourceMPDRCheck imldrSourceMPDRCheck) {
+        MPDRParameter mpdrParameter = MVCCDElementFactory.instance().createMPDROracleParameter(this, imldrSourceMPDRCheck);
+        return mpdrParameter;
     }
 
-    @Override
+
     public MPDRParameter createParameter(MLDRParameter  mldrParameter) {
         MPDRParameter mpdrParameter = MVCCDElementFactory.instance().createMPDROracleParameter(this, mldrParameter);
         return mpdrParameter;
