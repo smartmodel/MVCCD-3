@@ -11,10 +11,7 @@ import mldr.MLDRPK;
 import mldr.MLDRTable;
 import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
-import mpdr.MPDRFK;
-import mpdr.MPDRModel;
-import mpdr.MPDRTable;
-import mpdr.MPDRUnique;
+import mpdr.*;
 import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElement;
 
@@ -44,7 +41,7 @@ public class MLDRTransformConstraints {
 
 
     private IMPDRConstraint transformConstraint(MDRConstraint mldrConstraint) {
-        IMPDRConstraint mpdrConstraint = (IMPDRConstraint) mpdrTable.getMPDRConstraintByMLDRConstraintSource(mldrConstraint);
+        IMPDRConstraint mpdrConstraint = (IMPDRConstraint) mpdrTable.getMPDRConstraintInheritedByMLDRConstraintSource(mldrConstraint);
         if ( mpdrConstraint == null){
             if (mldrConstraint instanceof MLDRPK){
                 MLDRPK mldrPK = (MLDRPK) mldrConstraint;
@@ -77,7 +74,6 @@ public class MLDRTransformConstraints {
                     mpdrModel.getDb().getText();
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
         }
-
 
 
         return mpdrConstraint;
@@ -126,6 +122,13 @@ public class MLDRTransformConstraints {
         if (mpdrFK.isNotOriented() != mldrFK.isNotOriented()) {
             mpdrFK.setNotOriented(mldrFK.isNotOriented());
         }
+
+        // Index de performance
+        MLDRTransformToIndex mldrTransformToIndex = new MLDRTransformToIndex(
+                mldrTransform, mldrFK, mpdrModel, mpdrTable);
+        MPDRIndex mpdrIndex = mldrTransformToIndex.createOrModifyIndex();
+
+
     }
 
 }

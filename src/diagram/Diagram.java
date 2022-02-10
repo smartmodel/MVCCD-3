@@ -10,7 +10,6 @@ import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;

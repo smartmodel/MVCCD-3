@@ -1,16 +1,10 @@
 package mcd.services;
 
-import m.services.MElementService;
-import main.MVCCDElement;
 import mcd.MCDElement;
-import mcd.MCDEntity;
 import mcd.MCDRelEnd;
 import mcd.MCDRelation;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import preferences.PreferencesManager;
-import utilities.Trace;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;

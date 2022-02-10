@@ -4,7 +4,6 @@ import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import mcd.MCDContConstraints;
 import preferences.Preferences;
-import repository.editingTreat.mcd.MCDUniqueEditingTreat;
 import window.editor.mcd.operation.constraint.unicity.UnicityButtons;
 import window.editor.mcd.operation.constraint.unicity.UnicityButtonsContent;
 

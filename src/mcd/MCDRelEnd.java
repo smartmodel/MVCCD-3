@@ -9,7 +9,6 @@ import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
 import m.interfaces.IMUMLExtensionNamingInLine;
 import mcd.interfaces.IMCDElementWithTargets;
-import mcd.services.MCDRelEndService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;

@@ -3,7 +3,6 @@ package mdr;
 import exceptions.CodeApplException;
 import m.MRelEndMultiPart;
 import project.ProjectElement;
-import utilities.Trace;
 
 public abstract class MDRRelFKEnd extends MDRRelEnd{
 

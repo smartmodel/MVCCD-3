@@ -1,11 +1,9 @@
 package window.editor.diagrammer.palette;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 import preferences.Preferences;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class PalettePanel extends JPanel {
 

@@ -5,18 +5,13 @@ import constraints.Constraints;
 import constraints.ConstraintsManager;
 import datatypes.MCDDatatype;
 import exceptions.CodeApplException;
-import main.MVCCDElement;
-import main.MVCCDElementConvert;
 import mcd.MCDAttribute;
 import mcd.MCDNID;
 import mdr.MDRColumn;
-import mldr.services.MLDRContConstraintsService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class MDRColumnsService {
 

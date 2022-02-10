@@ -2,11 +2,6 @@ package m.services;
 
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
-import m.MRelationUMLConstraint;
-import m.MRelationUMLDependency;
-import m.interfaces.IMRelation;
-import mcd.MCDAssociation;
-import mcd.MCDLink;
 
 public class MRelationService {
 

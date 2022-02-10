@@ -3,7 +3,6 @@ package repository.editingTreat.mcd;
 import exceptions.CodeApplException;
 import main.MVCCDElement;
 import mcd.*;
-import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.relation.link.LinkEditor;

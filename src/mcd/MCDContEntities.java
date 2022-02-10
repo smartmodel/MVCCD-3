@@ -5,7 +5,6 @@ import mcd.interfaces.IMPathOnlyRepositoryTree;
 import project.ProjectElement;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class MCDContEntities extends MCDElement implements IMPathOnlyRepositoryTree {
 

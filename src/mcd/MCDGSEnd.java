@@ -1,16 +1,7 @@
 package mcd;
 
-import constraints.Constraint;
-import constraints.Constraints;
-import constraints.ConstraintsManager;
 import mcd.services.MCDRelEndService;
 import preferences.Preferences;
-import preferences.PreferencesManager;
-import stereotypes.Stereotype;
-import stereotypes.Stereotypes;
-import stereotypes.StereotypesManager;
-
-import java.util.ArrayList;
 
 public class MCDGSEnd extends MCDRelEnd  {
 

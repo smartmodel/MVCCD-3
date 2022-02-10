@@ -1,8 +1,5 @@
 package window.editor.diagrammer.menus;
 
-import java.awt.Point;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.MCDCompositionShape;
 import window.editor.diagrammer.elements.shapes.relations.MCDGeneralizationShape;
@@ -11,6 +8,9 @@ import window.editor.diagrammer.menus.actions.MCDAssociationEditAction;
 import window.editor.diagrammer.menus.actions.MCDGeneralizationEditAction;
 import window.editor.diagrammer.menus.actions.RelationAddPointAncrageAction;
 import window.editor.diagrammer.menus.actions.RelationDeleteAction;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class RelationShapeMenu extends JPopupMenu {
 

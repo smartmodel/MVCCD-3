@@ -47,11 +47,7 @@ public class MLDRTransformToBoxProceduresOrFunctions {
                                                 MPDRBoxProceduresOrFunctions mpdrBoxProceduresOrFunctions) {
         MLDRTransformService.modifyNames(mldrTable, mpdrBoxProceduresOrFunctions);
         MLDRTransformService.modifyName(mpdrModel, mpdrBoxProceduresOrFunctions);
-
-        //TODO-0 Tant que les icone ne sont pas en place
-        mpdrBoxProceduresOrFunctions.setName( "Code - " + mpdrBoxProceduresOrFunctions.getName());
-
-    }
+   }
 
     public MPDRBoxProceduresOrFunctions createOrModifyBoxProceduresOrFunctionsForColumnPKWithoutTAPIs(MPDRColumn mpdrColumnPKProper, ArrayList<MPDRTrigger> mpdrTriggers){
         if (MPDRFunctionType.isFunctionForDBAndTriggers(mpdrModel.getDb(), mpdrTriggers)) {

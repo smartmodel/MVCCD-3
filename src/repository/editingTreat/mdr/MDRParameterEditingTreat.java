@@ -1,15 +1,11 @@
 package repository.editingTreat.mdr;
 
 import main.MVCCDElement;
-import mdr.MDRColumn;
 import mdr.MDRConstraint;
-import mdr.MDRContColumns;
 import mdr.MDRParameter;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.mdr.column.MDRColumnEditor;
-import window.editor.mdr.column.MDRColumnInputContent;
 import window.editor.mdr.parameter.MDRParameterEditor;
 import window.editor.mdr.parameter.MDRParameterInputContent;
 

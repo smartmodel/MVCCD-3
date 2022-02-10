@@ -1,7 +1,6 @@
 package m;
 
 import exceptions.CodeApplException;
-import utilities.Trace;
 
 public enum MRelEndMulti {
     MULTI_ZERO_ONE("0..1"),

@@ -118,4 +118,8 @@ public abstract class MPDRBoxProceduresOrFunctions extends MPDRBoxStoredCode {
         return getMPDRContTAPIs().getMPDRTableAccueil();
     }
 
+    //TODO-0 A retirer en ayant les icones
+    public String toString(){
+        return "Code - " + super.toString();
+    }
  }

@@ -1,8 +1,7 @@
 package window.editor.diagrammer.palette;
 
-import java.awt.Color;
-import javax.swing.Icon;
-import javax.swing.JButton;
+import javax.swing.*;
+import java.awt.*;
 
 public class PaletteButton extends JButton {
 

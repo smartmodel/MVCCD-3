@@ -9,13 +9,14 @@ import mdr.interfaces.IMDRParameter;
 import mldr.interfaces.IMDLRConstraint;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
+import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mldr.services.MLDRConstraintService;
 import project.ProjectElement;
 
 import java.util.ArrayList;
 
 public class MLDRFK extends MDRFK implements IMLDRElement, IMLDRElementWithSource,
-        IMDLRConstraint {
+        IMDLRConstraint, IMLDRSourceMPDRCConstraintSpecifc {
 
     private MCDElement mcdElementSource ;
 

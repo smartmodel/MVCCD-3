@@ -6,12 +6,13 @@ import mdr.MDRUnique;
 import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRConstraint;
+import mpdr.interfaces.IMPDRConstraintInheritedMLDR;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import project.ProjectElement;
 
 public abstract class MPDRUnique extends MDRUnique implements IMPDRElement, IMPDRElementWithSource,
-        IMPDRConstraint {
+        IMPDRConstraint, IMPDRConstraintInheritedMLDR {
 
     private  static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;

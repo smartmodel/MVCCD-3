@@ -1,7 +1,7 @@
 package window.editor.diagrammer.palette;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
 
 public class PaletteAction extends AbstractAction {
 

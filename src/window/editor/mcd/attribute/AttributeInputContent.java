@@ -1,7 +1,6 @@
 package window.editor.mcd.attribute;
 
 import datatypes.*;
-import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
@@ -12,12 +11,10 @@ import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDAttributeService;
 import messages.MessagesBuilder;
-import mldr.MLDRColumn;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import repository.Repository;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.MDDatatypeTreeDialog;

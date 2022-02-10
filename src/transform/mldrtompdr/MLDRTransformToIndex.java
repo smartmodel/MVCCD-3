@@ -1,120 +1,71 @@
 package transform.mldrtompdr;
 
-import exceptions.CodeApplException;
-import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDManager;
-import mdr.MDRElementNames;
-import mdr.MDRNamingLength;
-import mdr.orderbuildnaming.MDROrderBuildNaming;
-import mdr.orderbuildnaming.MDROrderBuildTargets;
-import messages.MessagesBuilder;
-import mldr.interfaces.IMLDRSourceMPDRCheck;
-import mpdr.*;
-import org.apache.commons.lang.StringUtils;
-import preferences.Preferences;
-import preferences.PreferencesManager;
-import transform.mcdtomldr.services.MCDTransformService;
+import mdr.MDRElement;
+import mldr.MLDRFK;
+import mldr.interfaces.IMLDRElement;
+import mpdr.MPDRConstraintSpecificRole;
+import mpdr.MPDRIndex;
+import mpdr.MPDRModel;
+import mpdr.MPDRTable;
+import mpdr.interfaces.IMPDRConstraint;
+import mpdr.interfaces.IMPDRElement;
 
-public class MLDRTransformToCheck {
+public class MLDRTransformToIndex {
 
     private MLDRTransform mldrTransform ;
-    IMLDRSourceMPDRCheck imldrSourceMPDRCheck ;
+    MLDRFK mldrFK ;
     private MPDRModel mpdrModel ;
     private MPDRTable mpdrTable;
 
-    public MLDRTransformToCheck(MLDRTransform mldrTransform,
-                                IMLDRSourceMPDRCheck imldrSourceMPDRCheck,
+    public MLDRTransformToIndex(MLDRTransform mldrTransform,
+                                MLDRFK mldrFK,
                                 MPDRModel mpdrModel,
                                 MPDRTable mpdrTable) {
         this.mldrTransform = mldrTransform;
-        this.imldrSourceMPDRCheck = imldrSourceMPDRCheck;
+        this.mldrFK = mldrFK;
         this.mpdrModel = mpdrModel;
         this.mpdrTable = mpdrTable;
     }
 
 
-    private MPDRCheckSpecific createOrModifyCheck(MPDRCheckRole mpdrCheckRole){
-        MPDRCheckSpecific mpdrCheckSpecific =  mpdrTable.getMPDRCheckSpecificByMLDRSourceAndRole(imldrSourceMPDRCheck,
-                                    mpdrCheckRole);
+    public MPDRIndex createOrModifyIndex(){
+        MPDRConstraintSpecificRole mpdrConstraintSpecificRole = MPDRConstraintSpecificRole.INDEX;
+        IMPDRConstraint impdrConstraint =  mpdrTable.getMPDRConstraintSpecificByMLDRSourceAndRole(
+                mldrFK, mpdrConstraintSpecificRole);
 
-        if (mpdrCheckSpecific == null){
-            mpdrCheckSpecific = mpdrTable.createCheckSpecific(imldrSourceMPDRCheck);
-            MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrCheckSpecific);
+        MPDRIndex mpdrIndex = null;
+        if (impdrConstraint instanceof MPDRIndex) {
+            mpdrIndex = (MPDRIndex) impdrConstraint;
         }
-        mpdrCheckSpecific.setIteration(mldrTransform.getIteration());
-        return mpdrCheckSpecific;
 
-    }
-
-    public MPDRCheckSpecific createOrModifyCheck(MPDRColumn mpdrColumn,
-                                         MPDRCheckRole mpdrCheckRole,
-                                         String checkExpression){
-        MPDRCheckSpecific mpdrCheckSpecific =  createOrModifyCheck(mpdrCheckRole);
-
-        modifyCheck(mpdrCheckSpecific, mpdrCheckRole, mpdrColumn, checkExpression);
-        return mpdrCheckSpecific;
-
-    }
-
-    private void modifyCheck(MPDRCheckSpecific mpdrCheckSpecific,
-                             MPDRCheckRole mpdrCheckRole,
-                             MPDRColumn mpdrColumn,
-                             String checkExpression) {
-
-        MCDTransformService.names(mpdrCheckSpecific,
-                buildNameCheck(mpdrCheckSpecific, mpdrCheckRole, mpdrColumn),
-                mpdrModel);
-
-        if (mpdrCheckSpecific.getRole() != null){
-            if ( mpdrCheckSpecific.getRole() != mpdrCheckRole) {
-                mpdrCheckSpecific.setRole(mpdrCheckRole);
-            }
-        } else {
-            mpdrCheckSpecific.setRole(mpdrCheckRole);
+        if (impdrConstraint == null) {
+            mpdrIndex = mpdrTable.createIndex(mldrFK);
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrIndex);
         }
+        mpdrIndex.setIteration(mldrTransform.getIteration());
 
         // Transformation des paramètres
-        MLDRTransformToParameter mldrTransformToParameter = new MLDRTransformToParameter(
-                mldrTransform, imldrSourceMPDRCheck, mpdrModel, mpdrCheckSpecific);
-        mldrTransformToParameter.createOrModifyParameter(checkExpression);
+        MLDRTransformParameters mldrTransformParameters = new MLDRTransformParameters(
+                    mldrTransform, mldrFK, mpdrModel, mpdrIndex);
+        mldrTransformParameters.transformParameters();
 
-
+        modifyIndex(mpdrIndex, mpdrConstraintSpecificRole);
+        return mpdrIndex;
     }
 
-    private MDRElementNames buildNameCheck(MPDRCheckSpecific mpdrCheckSpecific,
-                                           MPDRCheckRole mpdrCheckRole,
-                                           MPDRColumn mpdrColumn) {
+    private void modifyIndex(MPDRIndex mpdrIndex,
+                             MPDRConstraintSpecificRole mpdrConstraintSpecificRole) {
 
-        Preferences preferences = PreferencesManager.instance().preferences();
+        MLDRTransformService.modifyNames((IMLDRElement) mldrFK, (IMPDRElement) mpdrIndex);
+        MLDRTransformService.modifyName(mpdrModel, (MDRElement) mpdrIndex);
 
-        MDRElementNames names = new MDRElementNames();
-        for (MDRNamingLength element: MDRNamingLength.values()) {
-            MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
-            orderBuild.setFormat(mpdrCheckRole.getNameFormat(mpdrModel));
-            orderBuild.setFormatUserMarkerLengthMax(mpdrCheckRole.getFormatUserMarkerLengthMax());
-            if (mpdrCheckRole ==  MPDRCheckRole.DATATYPE) {
-                orderBuild.setTargetNaming(MDROrderBuildTargets.CHECKCOLUMNDATATYPE);
+        if (mpdrIndex.getRole() != null){
+            if ( mpdrIndex.getRole() != mpdrConstraintSpecificRole) {
+                mpdrIndex.setRole(mpdrConstraintSpecificRole);
             }
-            orderBuild.getMpdrColumnName().setValue(mpdrColumn.getName());
-
-            String name;
-
-            try {
-                name = orderBuild.buildNaming();
-            } catch (OrderBuildNameException e) {
-                String message = "";
-                if (StringUtils.isNotEmpty(e.getMessage())) {
-                    message = e.getMessage();
-                } else {
-                    message = MessagesBuilder.getMessagesProperty("mpdrcheck.columndatatype.build.name.error",
-                            new String[]{mpdrColumn.getNamePath()});
-                }
-                throw new CodeApplException(message, e);
-            }
-            names.setElementName(name, element);
+        } else {
+            mpdrIndex.setRole(mpdrConstraintSpecificRole);
         }
-        return names;
-
-
     }
 }

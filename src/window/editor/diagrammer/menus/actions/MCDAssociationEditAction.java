@@ -1,12 +1,12 @@
 package window.editor.diagrammer.menus.actions;
 
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDAssociation;
 import repository.editingTreat.mcd.MCDAssociationEditingTreat;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class MCDAssociationEditAction extends AbstractAction {
 

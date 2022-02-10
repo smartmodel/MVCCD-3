@@ -5,8 +5,11 @@ import mdr.MDRConstraint;
 import mdr.MDRContColumns;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
-import mldr.interfaces.IMLDRSourceMPDRCheck;
+import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.*;
+import mpdr.interfaces.IMPDRConstraint;
+import mpdr.interfaces.IMPDRConstraintInheritedMLDR;
+import mpdr.interfaces.IMPDRConstraintSpecific;
 import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.tapis.MPDRContTAPIs;
 
@@ -45,20 +48,37 @@ public class MPDRTableService {
         return null ;
     }
 
-    public static MDRConstraint getMPDRConstraintByMLDRConstraintSource(MPDRTable mpdrTable, MDRConstraint mldrConstraint) {
-        for (MDRConstraint mdrConstraint : mpdrTable.getMDRConstraints()){
-            if (mdrConstraint instanceof IMPDRElementWithSource) {
-                IMPDRElementWithSource mpdrConstraint = (IMPDRElementWithSource) mdrConstraint;
-                if (mpdrConstraint.getMldrElementSource() == mldrConstraint) {
-                    return mdrConstraint;
-                }
+
+    public static ArrayList<IMPDRConstraint> getMPDRConstraintsByMLDRConstraintSource(MPDRTable mpdrTable, MDRConstraint mldrConstraint) {
+        ArrayList<IMPDRConstraint> resultat = new ArrayList<IMPDRConstraint>();
+        for (IMPDRConstraint impdrConstraint : mpdrTable.getIMPDRConstraints()){
+            if (impdrConstraint.getMldrElementSource() == mldrConstraint){
+                resultat.add(impdrConstraint);
+            }
+        }
+        return resultat ;
+    }
+
+    public static IMPDRConstraint getMPDRConstraintInheritedByMLDRConstraintSource(MPDRTable mpdrTable, MDRConstraint mldrConstraint) {
+        for (IMPDRConstraint impdrConstraint : getMPDRConstraintsByMLDRConstraintSource( mpdrTable, mldrConstraint)){
+            if (impdrConstraint instanceof IMPDRConstraintInheritedMLDR) {
+                return impdrConstraint ;
+            }
+        }
+        return null ;
+    }
+
+    public static IMPDRConstraint getMPDRConstraintSpecificByMLDRConstraintSource(MPDRTable mpdrTable, MDRConstraint mldrConstraint) {
+        for (IMPDRConstraint impdrConstraint : getMPDRConstraintsByMLDRConstraintSource( mpdrTable, mldrConstraint)){
+            if (impdrConstraint instanceof IMPDRConstraintSpecific) {
+                return impdrConstraint;
             }
         }
         return null ;
     }
 
     public static MPDRFK getMPDRFKByMLDRFKSource(MPDRTable mpdrTable, MLDRFK mldrFK) {
-        MDRConstraint mdrConstraint = getMPDRConstraintByMLDRConstraintSource(mpdrTable, mldrFK);
+        IMPDRConstraint mdrConstraint = getMPDRConstraintInheritedByMLDRConstraintSource(mpdrTable, mldrFK);
         if ( mdrConstraint instanceof MPDRFK){
             return (MPDRFK) mdrConstraint;
         }
@@ -76,15 +96,18 @@ public class MPDRTableService {
     }
 
 
-    public static MPDRCheck getMPDRCheckByMLDRSourceAndRole(MPDRTable mpdrTable,
-                                                            IMLDRSourceMPDRCheck imldrSourceMPDRCheck,
-                                                            MPDRCheckRole mpdrCheckRole) {
+    public static MPDRCheckSpecific getMPDRCheckSpecificByMLDRSourceAndRole(MPDRTable mpdrTable,
+                                                                    IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc,
+                                                                    MPDRConstraintSpecificRole mpdrConstraintSpecificRole) {
         for (MPDRCheck mpdrCheck : mpdrTable.getMPDRChecks()){
             if (mpdrCheck instanceof IMPDRElementWithSource) {
-                boolean c1 = mpdrCheck.getMldrElementSource() == imldrSourceMPDRCheck;
-                boolean c2 = mpdrCheck.getRole() == mpdrCheckRole;
-                if (c1 && c2) {
-                    return  mpdrCheck;
+                if (mpdrCheck instanceof IMPDRConstraintSpecific) {
+                    MPDRCheckSpecific mpdrCheckSpecific = (MPDRCheckSpecific) mpdrCheck;
+                    boolean c1 = mpdrCheck.getMldrElementSource() == imldrSourceMPDRCConstraintSpecifc;
+                    boolean c2 = mpdrCheckSpecific.getRole() == mpdrConstraintSpecificRole;
+                    if (c1 && c2) {
+                        return mpdrCheckSpecific;
+                    }
                 }
             }
         }

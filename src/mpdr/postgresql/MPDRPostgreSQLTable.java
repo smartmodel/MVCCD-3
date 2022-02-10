@@ -7,7 +7,7 @@ import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
-import mldr.interfaces.IMLDRSourceMPDRCheck;
+import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.*;
 import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
 import mpdr.tapis.*;
@@ -40,7 +40,6 @@ public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLEle
     public MPDRColumn createColumn(MLDRColumn mldrColumn) {
         MPDRPostgreSQLColumn newColumn = MVCCDElementFactory.instance().createMPDRPostgreSQLColumn(
                 getMDRContColumns(),  mldrColumn);
-
         return newColumn;
     }
 
@@ -59,16 +58,24 @@ public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLEle
     }
 
     @Override
+    public MPDRIndex createIndex(MLDRFK mldrFK) {
+        MPDRPostgreSQLIndex newIndex = MVCCDElementFactory.instance().createMPDRPostgreSQLIndex(
+                getMDRContConstraints(), mldrFK);
+        return newIndex;
+    }
+
+    @Override
     public MPDRUnique createUnique(MLDRUnique mldrUnique) {
         MPDRPostgreSQLUnique newUnique = MVCCDElementFactory.instance().createMPDRPostgreSQLUnique(
                 getMDRContConstraints(), mldrUnique);
         return newUnique;
     }
 
+
     @Override
-    public MPDRCheck createCheck(IMLDRSourceMPDRCheck imldrSourceMPDRCheck) {
-        MPDRPostgreSQLCheck newCheck = MVCCDElementFactory.instance().createMPDRPostgreSQLCheck(
-                getMDRContConstraints(), imldrSourceMPDRCheck);
+    public MPDRCheckSpecific createCheckSpecific(IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
+        MPDRPostgreSQLCheckSpecific newCheck = MVCCDElementFactory.instance().createMPDRPostgreSQLCheckSpecific(
+                getMDRContConstraints(), imldrSourceMPDRCConstraintSpecifc);
         return newCheck;
     }
 

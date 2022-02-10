@@ -1,12 +1,8 @@
 package mpdr;
 
 import md.MDElement;
-import mdr.MDRFK;
 import mdr.MDRRelationFK;
-import mdr.interfaces.IMDRElementWithIteration;
 import mldr.interfaces.IMLDRElement;
-import mpdr.interfaces.IMPDRElement;
-import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.interfaces.IMPDRRelation;
 import project.ProjectElement;
 

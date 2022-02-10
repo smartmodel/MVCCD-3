@@ -3,7 +3,6 @@ package repository.editingTreat.mcd;
 import main.MVCCDElement;
 import mcd.MCDContConstraints;
 import mcd.MCDUnicity;
-import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.operation.constraint.unicity.unique.UniqueEditor;

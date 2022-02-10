@@ -1,7 +1,7 @@
 package transform.mldrtompdr;
 
 import main.MVCCDManager;
-import mldr.interfaces.IMLDRSourceMPDRCheck;
+import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.MPDRCheck;
 import mpdr.MPDRModel;
 import mpdr.MPDRParameter;
@@ -11,16 +11,16 @@ public class MLDRTransformToParameter {
 
 
     private MLDRTransform mldrTransform ;
-    private IMLDRSourceMPDRCheck imldrSourceMPDRCheck;
+    private IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc;
     private MPDRModel mpdrModel ;
     private MPDRCheck mpdrCheck;
 
     public MLDRTransformToParameter(MLDRTransform mldrTransform,
-                                    IMLDRSourceMPDRCheck imldrSourceMPDRCheck,
+                                    IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc,
                                     MPDRModel mpdrModel,
                                     MPDRCheck mpdrCheck) {
         this.mldrTransform = mldrTransform ;
-        this.imldrSourceMPDRCheck = imldrSourceMPDRCheck;
+        this.imldrSourceMPDRCConstraintSpecifc = imldrSourceMPDRCConstraintSpecifc;
         this.mpdrModel = mpdrModel;
         this.mpdrCheck = mpdrCheck;
     }
@@ -30,7 +30,7 @@ public class MLDRTransformToParameter {
         MPDRParameter mpdrParameter =   mpdrCheck.getMPDRParameter();
 
         if (mpdrParameter == null){
-            mpdrParameter = mpdrCheck.createParameter(imldrSourceMPDRCheck);
+            mpdrParameter = mpdrCheck.createParameter(imldrSourceMPDRCConstraintSpecifc);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrParameter);
         }
         mpdrParameter.setIteration(mldrTransform.getIteration());

@@ -60,6 +60,7 @@ public class MLDRTransformTables {
 
         // Transformation des relations (repr. graphique de FK)
 
+
         // APIs de tables ou triggers pour les séquences si pas d'APIS de tables
         //TODO-PAS En cours de développement
         if ((mpdrModel instanceof MPDROracleModel) || (mpdrModel instanceof MPDRPostgreSQLModel)) {

@@ -9,7 +9,6 @@ import mldr.MLDRColumn;
 import mldr.MLDRFK;
 import mldr.MLDRTable;
 import mldr.MLDRUnique;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

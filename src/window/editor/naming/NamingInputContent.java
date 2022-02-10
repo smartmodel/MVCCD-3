@@ -9,7 +9,6 @@ import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
-import utilities.Trace;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.services.PanelService;
 

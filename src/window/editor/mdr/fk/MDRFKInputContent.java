@@ -7,7 +7,6 @@ import mdr.MDRColumn;
 import mdr.MDRFK;
 import mdr.MDRRelationFK;
 import preferences.Preferences;
-import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
 import window.editor.mcd.mcdtargets.MCDTargetsTableColumn;
 import window.editor.mdr.utilities.PanelInputContentTableBasicIdMDR;

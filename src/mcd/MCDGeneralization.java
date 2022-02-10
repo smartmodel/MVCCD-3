@@ -1,20 +1,9 @@
 package mcd;
 
-import constraints.Constraint;
-import constraints.Constraints;
-import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import m.interfaces.IMCompletness;
-import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAssociationService;
-import mcd.services.MCDRelationService;
 import preferences.Preferences;
-import preferences.PreferencesManager;
-import stereotypes.Stereotype;
-import stereotypes.Stereotypes;
-import stereotypes.StereotypesManager;
-
-import java.util.ArrayList;
 
 public class MCDGeneralization extends MCDRelation implements IMCompletness {
 

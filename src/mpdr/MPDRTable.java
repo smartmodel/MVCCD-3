@@ -9,7 +9,8 @@ import mdr.MDRConstraint;
 import mdr.MDRTable;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
-import mldr.interfaces.IMLDRSourceMPDRCheck;
+import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
+import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.services.MPDRColumnService;
@@ -80,15 +81,14 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     }
 
 
-    public MDRConstraint getMPDRConstraintByMLDRConstraintSource(MDRConstraint mldrConstraint) {
-        return MPDRTableService.getMPDRConstraintByMLDRConstraintSource(this, mldrConstraint);
+    public IMPDRConstraint getMPDRConstraintInheritedByMLDRConstraintSource(MDRConstraint mldrConstraint) {
+        return MPDRTableService.getMPDRConstraintInheritedByMLDRConstraintSource(this, mldrConstraint);
     }
 
-
-    public MPDRCheck getMPDRCheckByMLDRSourceAndRole(IMLDRSourceMPDRCheck imldrSourceMPDRCheck,
-                                                     MPDRCheckRole mpdrCheckRole){
-        return MPDRTableService.getMPDRCheckByMLDRSourceAndRole(this,
-                imldrSourceMPDRCheck, mpdrCheckRole);
+    public MPDRCheckSpecific getMPDRConstraintSpecificByMLDRSourceAndRole(IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc,
+                                                                          MPDRConstraintSpecificRole mpdrConstraintSpecificRole){
+        return MPDRTableService.getMPDRCheckSpecificByMLDRSourceAndRole(this,
+                imldrSourceMPDRCConstraintSpecifc, mpdrConstraintSpecificRole);
     }
 
     public MPDRFK getMPDRFKByMLDRFKSource(MLDRFK mldrFk) {
@@ -99,17 +99,20 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         return MPDRColumnService.to(getMDRColumns());
     }
 
+    public ArrayList<MPDRColumn> getMPDRColumnsSortDefault() {
+        return MPDRColumnService.to(getMDRColumnsSortDefault());
+    }
+
     public abstract MPDRColumn createColumn(MLDRColumn mldrColumn);
 
     public abstract MPDRPK createPK(MLDRPK mldrPK);
 
-
     public abstract MPDRFK createFK(MLDRFK mldrFK);
-
+    public abstract MPDRIndex createIndex(MLDRFK mldrFK);
 
     public abstract MPDRUnique createUnique(MLDRUnique mldrUnique);
 
-    public abstract MPDRCheck createCheck(IMLDRSourceMPDRCheck imldrSourceMPDRCheck);
+    public abstract MPDRCheckSpecific createCheckSpecific(IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc);
 
     public abstract MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable);
 
@@ -170,6 +173,17 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public MPDRContTAPIs getMPDRContTAPIs(){
         return MPDRTableService.getMPDRContTAPIs(this);
+    }
+
+
+    public ArrayList<IMPDRConstraint> getIMPDRConstraints(){
+        ArrayList<IMPDRConstraint> resultat = new ArrayList<IMPDRConstraint>();
+        for ( MDRConstraint mdrConstraint : getMDRContConstraints().getMDRConstraints()){
+            if ( mdrConstraint instanceof IMPDRConstraint){
+                resultat.add ((IMPDRConstraint) mdrConstraint );
+            }
+        }
+        return resultat;
     }
 
     public MPDRColumn getMPDRColumnPKProper (){

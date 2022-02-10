@@ -5,7 +5,6 @@ import m.MUMLExtensionNaming;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import utilities.Trace;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.services.SComboBoxService;

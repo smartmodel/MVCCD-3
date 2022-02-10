@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class StereotypeService {
 
-    private static String UML_SYMBOLE_BEGIN_STEREOTYPE = "«";
-    private static String UML_SYMBOLE_END_STEREOTYPE = "»";
+    private static String UML_SYMBOLE_BEGIN_STEREOTYPE = "«";  //   "\\U+27EA";
+    private static String UML_SYMBOLE_END_STEREOTYPE = "»";  //   "\\U+27EB";
 
     /*
     public static ArrayList<String> stereotypesNames(ArrayList<Stereotype> stereotypes){

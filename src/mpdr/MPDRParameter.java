@@ -1,14 +1,11 @@
 package mpdr;
 
 import md.MDElement;
-import mdr.MDRColumn;
-import mdr.MDRConstraint;
 import mdr.MDRParameter;
 import mdr.interfaces.IMDRParameter;
 import mldr.interfaces.IMLDRElement;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
-import mpdr.services.MPDRConstraintService;
 import project.ProjectElement;
 
 public abstract class MPDRParameter extends MDRParameter implements IMPDRElement, IMPDRElementWithSource {

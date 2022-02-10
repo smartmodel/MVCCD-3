@@ -1,6 +1,5 @@
 package window.editor.mcd.model;
 
-import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.MCDElement;
@@ -10,7 +9,6 @@ import mcd.interfaces.IMCDContPackages;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDTraceability;
 import mcd.services.MCDAdjustPref;
-import mcd.services.MCDElementService;
 import mcd.services.MCDPackageService;
 import preferences.Preferences;
 import preferences.PreferencesManager;

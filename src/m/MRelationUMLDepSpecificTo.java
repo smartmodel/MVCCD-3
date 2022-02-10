@@ -1,9 +1,5 @@
 package m;
 
-import m.interfaces.IMRelEnd;
-import m.interfaces.IMRelation;
-import main.MVCCDElement;
-
 public class MRelationUMLDepSpecificTo extends MRelationUMLDependency {
 
     private static final long serialVersionUID = 1000;

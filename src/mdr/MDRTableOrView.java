@@ -8,7 +8,6 @@ import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import project.ProjectElement;
 import stereotypes.StereotypeService;
-import utilities.Trace;
 
 import java.util.ArrayList;
 
@@ -48,6 +47,10 @@ public abstract class MDRTableOrView extends MDRElement implements IMDRElementWi
 
     public ArrayList<MDRColumn> getMDRColumns() {
         return getMDRContColumns().getMDRColumns();
+    }
+
+    public ArrayList<MDRColumn> getMDRColumnsSortDefault(){
+        return getMDRContColumns().getMDRColumnsSortDefault();
     }
 
 

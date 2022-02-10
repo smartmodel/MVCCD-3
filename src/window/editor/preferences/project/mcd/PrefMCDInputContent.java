@@ -2,23 +2,6 @@ package window.editor.preferences.project.mcd;
 
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
-import java.util.ArrayList;
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.text.Document;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import mcd.services.MCDAdjustPref;
@@ -30,12 +13,20 @@ import preferences.services.PrefMCDService;
 import project.Project;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.editor.services.PanelInputService;
-import utilities.window.scomponents.SButton;
-import utilities.window.scomponents.SCheckBox;
-import utilities.window.scomponents.SComboBox;
-import utilities.window.scomponents.SComponent;
-import utilities.window.scomponents.STextField;
+import utilities.window.scomponents.*;
 import utilities.window.scomponents.services.SComboBoxService;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.text.Document;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 
 public class PrefMCDInputContent extends PanelInputContent {
 

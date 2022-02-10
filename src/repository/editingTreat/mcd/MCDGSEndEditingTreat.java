@@ -2,8 +2,10 @@ package repository.editingTreat.mcd;
 
 import exceptions.CodeApplException;
 import main.MVCCDElement;
-import mcd.*;
-import repository.editingTreat.EditingTreat;
+import mcd.MCDContRelations;
+import mcd.MCDEntity;
+import mcd.MCDGSEnd;
+import mcd.MCDGeneralization;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.relation.genspec.GenSpecEditor;

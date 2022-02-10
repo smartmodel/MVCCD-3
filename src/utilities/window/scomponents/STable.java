@@ -1,6 +1,5 @@
 package utilities.window.scomponents;
 
-import main.MVCCDElement;
 import utilities.window.scomponents.services.SComponentService;
 
 import javax.swing.*;

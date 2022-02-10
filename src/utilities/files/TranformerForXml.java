@@ -4,7 +4,6 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
-import java.nio.charset.StandardCharsets;
 
 public class TranformerForXml {
     public Transformer createTransformer() throws TransformerConfigurationException {

@@ -1,18 +1,12 @@
 package mcd;
 
-import constraints.Constraint;
 import m.MRelationDegree;
-import m.interfaces.IMUMLExtensionNamingInLine;
 import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDConstraintService;
-import mdr.MDRColumn;
-import mdr.MDRParameter;
-import mdr.services.MDRColumnsService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import project.ProjectElement;
-import stereotypes.Stereotype;
 
 import java.util.ArrayList;
 import java.util.Collections;

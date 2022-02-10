@@ -48,9 +48,6 @@ public class MLDRTransformToBoxTriggers {
         MLDRTransformService.modifyNames(mldrTable, mpdrBoxTriggers);
         MLDRTransformService.modifyName(mpdrModel, mpdrBoxTriggers);
 
-        //TODO-0 Tant que les icone ne sont pas en place
-        mpdrBoxTriggers.setName( "Triggers - " + mpdrBoxTriggers.getName());
-
     }
 
     public MPDRBoxTriggers createOrModifyBoxTriggersForColumnPKWithoutTAPIs(MPDRColumn mpdrColumnPKProper){

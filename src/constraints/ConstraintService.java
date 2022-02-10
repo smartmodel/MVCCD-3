@@ -5,8 +5,6 @@ import m.MUMLExtensionNaming;
 import main.MVCCDElementService;
 import org.apache.commons.lang.StringUtils;
 import preferences.PreferencesManager;
-import stereotypes.Stereotype;
-import stereotypes.StereotypeService;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;

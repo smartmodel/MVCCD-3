@@ -9,7 +9,6 @@ import mcd.*;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDAssEndService;
 import mcd.services.MCDParameterService;
-import utilities.Trace;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;

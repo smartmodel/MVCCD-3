@@ -9,7 +9,6 @@ import preferences.Preferences;
 import project.Project;
 import repository.editingTreat.ProjectEditingTreat;
 import utilities.window.DialogMessage;
-import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

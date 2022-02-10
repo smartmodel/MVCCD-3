@@ -4,7 +4,6 @@ import main.MVCCDElement;
 import mcd.interfaces.IMPathOnlyRepositoryTree;
 import mdr.services.MDRContTablesService;
 import project.ProjectElement;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
 package mpdr.interfaces;
 
-public interface IMPDRConstraint extends IMPDROperation {
+public interface IMPDRConstraint extends IMPDROperation, IMPDRElementWithSource {
 }

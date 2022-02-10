@@ -1,10 +1,6 @@
 package mdr.orderbuildnaming;
 
-import mcd.MCDGSEnd;
-import mcd.MCDRelEnd;
-import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import preferences.PreferencesManager;
 
 public class  MDROrderWordRoleShortName extends MDROrderWord{
 

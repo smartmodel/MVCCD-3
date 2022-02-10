@@ -3,7 +3,6 @@ package mldr;
 import mcd.MCDElement;
 import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import md.MDElement;
-import mdr.MDRRelFKEnd;
 import mdr.MDRRelationFK;
 import mdr.interfaces.IMDRElementWithIteration;
 import mldr.interfaces.IMLDRElement;

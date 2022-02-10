@@ -1,6 +1,5 @@
 package constraints;
 
-import m.interfaces.IMUMLExtensionNamingInLine;
 import main.MVCCDElement;
 
 public class Constraint extends MVCCDElement {

@@ -4,7 +4,6 @@ import constraints.Constraint;
 import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import java.util.ArrayList;
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import m.interfaces.IMCompletness;

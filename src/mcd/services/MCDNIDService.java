@@ -1,21 +1,18 @@
 package mcd.services;
 
 import datatypes.MCDDatatype;
-import m.MElement;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import mcd.*;
 import mcd.interfaces.IMCDParameter;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import utilities.Trace;
 import utilities.window.DialogMessage;
 import utilities.window.scomponents.STable;
 import window.editor.mcd.operation.OperationParamTableColumn;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class MCDNIDService {

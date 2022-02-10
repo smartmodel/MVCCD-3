@@ -6,21 +6,16 @@ import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import m.MRelationDegree;
 import m.interfaces.IMCompletness;
-import m.services.MElementService;
 import m.services.MRelationService;
 import main.MVCCDElement;
-import mcd.interfaces.IMCDParameter;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mcd.services.MCDAssociationService;
-import mcd.services.MCDRelEndService;
-import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

@@ -1,12 +1,8 @@
 package mcd;
 
-import m.services.MElementService;
 import mcd.interfaces.IMCDParameter;
 import mcd.services.MCDParameterService;
-import mdr.MDRParameter;
-import mdr.services.MDRParameterService;
 import project.ProjectElement;
-import utilities.Trace;
 
 public class MCDParameter extends MCDElement {
 

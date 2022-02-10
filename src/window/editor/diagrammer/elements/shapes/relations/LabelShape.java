@@ -1,16 +1,13 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class LabelShape extends JLabel {
 

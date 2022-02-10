@@ -2,12 +2,10 @@ package repository.editingTreat.mdr;
 
 import main.MVCCDElement;
 import mdr.MDRContConstraints;
-import mdr.MDRFK;
 import mdr.MDRUnique;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.mdr.fk.MDRFKEditor;
 import window.editor.mdr.table.MDRTableInputContent;
 import window.editor.mdr.unique.MDRUniqueEditor;
 

@@ -1,12 +1,5 @@
 package window.editor.diagrammer.elements.shapes.classes;
 
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.util.List;
-
 import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
@@ -14,6 +7,9 @@ import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
+
+import java.awt.*;
+import java.util.List;
 
 public abstract class ClassShape extends SquaredShape {
 

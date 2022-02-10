@@ -1,4 +1,4 @@
 package mldr.interfaces;
 
-public interface IMLDRSourceMPDRCheck extends IMLDRElement {
+public interface IMLDRSourceMPDRCConstraintSpecifc extends IMLDRElement {
 }

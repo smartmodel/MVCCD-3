@@ -1,26 +1,17 @@
 package window.editor.mcd.operation.constraint.unicity.nid;
 
-import m.MElement;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
-import mcd.MCDAssEnd;
 import mcd.MCDContConstraints;
 import mcd.MCDNID;
-import mcd.MCDOperation;
 import mcd.services.MCDNIDService;
 import repository.editingTreat.EditingTreat;
-import repository.editingTreat.mcd.MCDNIDParameterEditingTreat;
 import repository.editingTreat.mcd.MCDNIDParameterTransientEditingTreat;
-import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComponent;
-import utilities.window.scomponents.services.STableService;
 import utilities.window.services.PanelService;
-import window.editor.mcd.operation.OperationParamTableColumn;
 import window.editor.mcd.operation.constraint.unicity.UnicityInput;
 import window.editor.mcd.operation.constraint.unicity.UnicityInputContent;
-import window.editor.mcd.operation.parameter.ParameterEditor;
-import window.editor.mcd.operation.parameter.ParameterTransientEditor;
 
 import javax.swing.*;
 import java.awt.*;

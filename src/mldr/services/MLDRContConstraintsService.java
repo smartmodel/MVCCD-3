@@ -3,7 +3,6 @@ package mldr.services;
 import mdr.MDRConstraint;
 import mdr.MDRContConstraints;
 import mdr.interfaces.IMDRConstraintIndice;
-import mldr.MLDRContConstraints;
 import utilities.Indexing;
 
 import java.util.ArrayList;

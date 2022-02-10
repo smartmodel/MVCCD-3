@@ -5,8 +5,6 @@ import main.MVCCDManager;
 import project.Project;
 import project.ProjectElement;
 import project.ProjectService;
-import window.editor.diagrammer.drawpanel.DrawPanel;
-import window.editor.diagrammer.drawpanel.DrawPanelComponent;
 import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.swing.*;

@@ -1,14 +1,9 @@
 package mldr;
 
-import main.MVCCDElement;
-import mcd.MCDAttribute;
 import mcd.MCDElement;
-import mdr.MDRColumn;
 import mdr.MDRContColumns;
 import mldr.interfaces.IMLDRElement;
 import project.ProjectElement;
-
-import java.util.ArrayList;
 
 public class MLDRContColumns extends MDRContColumns implements IMLDRElement {
 

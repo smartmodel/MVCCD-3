@@ -1,10 +1,10 @@
 package window.editor.diagrammer.listeners;
 
+import window.editor.diagrammer.elements.shapes.relations.LabelShape;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import window.editor.diagrammer.elements.shapes.relations.LabelShape;
-import window.editor.diagrammer.services.DiagrammerService;
 
 public class LabelShapeListener extends MouseAdapter {
 

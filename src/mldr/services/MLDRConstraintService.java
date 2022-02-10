@@ -3,13 +3,10 @@ package mldr.services;
 import exceptions.CodeApplException;
 import mdr.MDRColumn;
 import mdr.MDRConstraint;
-import mdr.MDROperation;
 import mdr.MDRParameter;
 import mldr.MLDRColumn;
 import mldr.MLDRParameter;
 import mldr.interfaces.IMLDRElement;
-import mpdr.MPDRParameter;
-import mpdr.interfaces.IMPDRElementWithSource;
 
 import java.util.ArrayList;
 

@@ -1,11 +1,6 @@
 package mdr.services;
 
-import exceptions.CodeApplException;
-import mdr.MDRFK;
-import mdr.MDRFKNature;
 import mdr.MDRUnique;
-import mdr.MDRUniqueNature;
-import utilities.Trace;
 
 public class MDRUniqueService {
     final static int HAUT = -1 ;

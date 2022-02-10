@@ -2,7 +2,8 @@ package window.editor.mdr.unique;
 
 import m.MElement;
 import main.MVCCDElement;
-import mdr.*;
+import mdr.MDRParameter;
+import mdr.MDRUnique;
 import mldr.MLDRParameter;
 import mldr.MLDRUnique;
 import mldr.interfaces.IMLDRElement;

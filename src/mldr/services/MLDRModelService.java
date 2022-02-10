@@ -4,7 +4,6 @@ import main.MVCCDElement;
 import mcd.MCDAssociation;
 import mcd.MCDElement;
 import mcd.MCDEntity;
-import mcd.MCDRelation;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import mcd.services.IMCDModelService;

@@ -7,7 +7,7 @@ import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
-import mldr.interfaces.IMLDRSourceMPDRCheck;
+import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.*;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.tapis.*;
@@ -57,16 +57,24 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
     }
 
     @Override
+    public MPDRIndex createIndex(MLDRFK mldrFK) {
+        MPDROracleIndex newIndex = MVCCDElementFactory.instance().createMPDROracleIndex(
+                getMDRContConstraints(), mldrFK);
+        return newIndex;
+    }
+
+    @Override
     public MPDRUnique createUnique(MLDRUnique mldrUnique) {
         MPDROracleUnique newUnique = MVCCDElementFactory.instance().createMPDROracleUnique(
                 getMDRContConstraints(), mldrUnique);
         return newUnique;
     }
 
+
     @Override
-    public MPDRCheck createCheck(IMLDRSourceMPDRCheck imldrSourceMPDRCheck) {
-        MPDROracleCheck newCheck = MVCCDElementFactory.instance().createMPDROracleCheck(
-                getMDRContConstraints(), imldrSourceMPDRCheck);
+    public  MPDRCheckSpecific createCheckSpecific(IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
+        MPDROracleCheckSpecific newCheck = MVCCDElementFactory.instance().createMPDROracleCheckSpecific(
+                getMDRContConstraints(), imldrSourceMPDRCConstraintSpecifc);
         return newCheck;
     }
 

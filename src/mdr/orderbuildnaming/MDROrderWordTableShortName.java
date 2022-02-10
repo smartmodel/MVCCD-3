@@ -1,6 +1,5 @@
 package mdr.orderbuildnaming;
 
-import mcd.MCDAssociation;
 import mcd.MCDEntity;
 import preferences.Preferences;
 

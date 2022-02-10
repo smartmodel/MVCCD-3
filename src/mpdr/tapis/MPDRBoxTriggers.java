@@ -144,4 +144,9 @@ public abstract class MPDRBoxTriggers extends MDRElement implements IMPDRElement
     public MPDRTable getMPDRTableAccueil (){
         return getMPDRContTAPIs().getMPDRTableAccueil();
     }
+
+    //TODO-0 A retirer en ayant les icones
+    public String toString(){
+        return "Triggers - " + super.toString();
+    }
 }

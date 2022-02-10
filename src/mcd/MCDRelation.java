@@ -8,7 +8,6 @@ import exceptions.CodeApplException;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
 import m.interfaces.IMUMLExtensionNamingInLine;
-import m.services.MElementService;
 import main.MVCCDManager;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDSourceMLDRRelationFK;

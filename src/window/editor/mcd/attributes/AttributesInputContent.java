@@ -1,19 +1,15 @@
 package window.editor.mcd.attributes;
 
-import constraints.Constraint;
-import constraints.ConstraintService;
 import datatypes.MCDDatatype;
 import datatypes.MDDatatypeService;
 import exceptions.service.ExceptionService;
 import m.MElement;
 import main.MVCCDElement;
-import mcd.*;
+import mcd.MCDAttribute;
+import mcd.MCDContAttributes;
 import mcd.services.MCDNIDService;
 import repository.editingTreat.EditingTreat;
 import repository.editingTreat.mcd.MCDAttributeEditingTreat;
-import stereotypes.Stereotype;
-import stereotypes.StereotypeService;
-import utilities.UtilDivers;
 import utilities.window.editor.PanelInputContentTable;
 import utilities.window.services.PanelService;
 

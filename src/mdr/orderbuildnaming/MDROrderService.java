@@ -1,11 +1,8 @@
 package mdr.orderbuildnaming;
 
 import m.services.MElementService;
-import mcd.MCDAssociation;
 import mcd.MCDElement;
-import mcd.MCDEntity;
 import org.apache.commons.lang.StringUtils;
-import preferences.Preferences;
 import preferences.PreferencesManager;
 
 public class MDROrderService {

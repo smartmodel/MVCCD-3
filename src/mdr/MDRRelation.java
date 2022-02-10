@@ -3,12 +3,8 @@ package mdr;
 import exceptions.CodeApplException;
 import m.interfaces.IMRelEnd;
 import m.interfaces.IMRelation;
-import mcd.MCDRelEnd;
-import mcd.MCDRelation;
 import mdr.interfaces.IMDRElementWithIteration;
 import project.ProjectElement;
-
-import java.util.ArrayList;
 
 public abstract class MDRRelation extends MDRElement implements IMRelation, IMDRElementWithIteration {
 

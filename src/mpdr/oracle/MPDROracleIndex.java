@@ -8,15 +8,15 @@ import mpdr.MPDRParameter;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import project.ProjectElement;
 
-public class OracleMPDRIndex extends MPDRIndex implements IMPDROracleElement {
+public class MPDROracleIndex extends MPDRIndex implements IMPDROracleElement {
 
     private  static final long serialVersionUID = 1000;
 
-    public OracleMPDRIndex(ProjectElement parent, IMLDRElement mldrElementSource) {
+    public MPDROracleIndex(ProjectElement parent, IMLDRElement mldrElementSource) {
         super(parent, mldrElementSource);
     }
 
-    public OracleMPDRIndex(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+    public MPDROracleIndex(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
         super(parent, mldrElementSource, id);
     }
 

@@ -1,7 +1,5 @@
 package utilities;
 
-import main.MVCCDElement;
-
 import java.util.ArrayList;
 import java.util.Collections;
 

@@ -1,12 +1,10 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
-import java.awt.Graphics2D;
-
 import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 
-import javax.naming.ldap.PagedResultsControl;
+import java.awt.*;
 
 public class MCDCompositionShape extends RelationShape {
 

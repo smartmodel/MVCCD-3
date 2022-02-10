@@ -3,17 +3,12 @@ package m.services;
 import exceptions.CodeApplException;
 import m.MElement;
 import mcd.MCDContModels;
-import mcd.MCDElement;
-import mcd.MCDModel;
-import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMPathOnlyRepositoryTree;
 import messages.MessagesBuilder;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
-import utilities.Trace;
 import utilities.UtilDivers;
 
 public class MElementService {

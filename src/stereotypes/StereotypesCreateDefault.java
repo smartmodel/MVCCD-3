@@ -2,10 +2,12 @@ package stereotypes;
 
 import mcd.*;
 import mdr.*;
+import mpdr.MPDRIndex;
 import mpdr.MPDRSequence;
 import mpdr.mysql.MPDRMySQLTable;
 import mpdr.oracle.MPDROracleTable;
 import mpdr.postgresql.MPDRPostgreSQLTable;
+import mpdr.tapis.MPDRBoxProceduresOrFunctions;
 import mpdr.tapis.MPDRBoxTriggers;
 import preferences.Preferences;
 
@@ -158,6 +160,11 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_U_LIENPROG,
                 MDRUnique.class.getName());
 
+        createStereotype(
+                Preferences.STEREOTYPE_CHECK_NAME,
+                Preferences.STEREOTYPE_CHECK_LIENPROG,
+                MDRCheck.class.getName());
+
         createStereotypesMDRFK();
         createStereotypesMDRPFK();
         createStereotypesMDRNID();  // Pour les colonnes et non les contraintes
@@ -241,7 +248,12 @@ public class StereotypesCreateDefault {
         createStereotype(
                 Preferences.STEREOTYPE_PROCEDURES_NAME,
                 Preferences.STEREOTYPE_PROCEDURES_LIENPROG,
-                MPDRBoxTriggers.class.getName());
+                MPDRBoxProceduresOrFunctions.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_INDEX_NAME,
+                Preferences.STEREOTYPE_INDEX_LIENPROG,
+                MPDRIndex.class.getName());
     }
 
     private void createMPDROracle() {

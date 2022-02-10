@@ -8,11 +8,11 @@ import md.MDElement;
 import mdr.MDRColumn;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
-import mldr.interfaces.IMLDRSourceMPDRCheck;
+import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import project.ProjectElement;
 
 public class MLDRColumn extends MDRColumn implements IMLDRElement, IMLDRElementWithSource,
-        IMLDRSourceMPDRCheck {
+        IMLDRSourceMPDRCConstraintSpecifc {
 
     private static final long serialVersionUID = 1000;
 

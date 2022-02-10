@@ -1,6 +1,5 @@
 package window.editor.mcd.relation.link;
 
-import m.services.MElementService;
 import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDModel;

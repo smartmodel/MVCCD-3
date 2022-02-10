@@ -1,15 +1,10 @@
 package repository.editingTreat.naming;
 
 import main.MVCCDElement;
-import mdr.MDRColumn;
-import mdr.MDRContColumns;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
-import window.editor.mdr.column.MDRColumnEditor;
-import window.editor.mdr.column.MDRColumnInputContent;
 import window.editor.naming.NamingEditor;
-import window.editor.naming.NamingInputContent;
 
 import java.awt.*;
 

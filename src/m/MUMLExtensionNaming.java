@@ -1,8 +1,6 @@
 package m;
 
-import mdr.MDRNamingFormat;
 import messages.MessagesBuilder;
-import preferences.Preferences;
 
 public enum MUMLExtensionNaming {
     ONELINE_ONEMARKER ("m.uml.extension.naming.oneline.onemarker"),

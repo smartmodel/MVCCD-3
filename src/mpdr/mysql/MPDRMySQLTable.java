@@ -6,7 +6,7 @@ import constraints.ConstraintsManager;
 import main.MVCCDElementFactory;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
-import mldr.interfaces.IMLDRSourceMPDRCheck;
+import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.*;
 import mpdr.mysql.interfaces.IMPDRMySQLElement;
 import mpdr.tapis.*;
@@ -58,17 +58,24 @@ public class MPDRMySQLTable extends MPDRTable implements IMPDRMySQLElement {
     }
 
     @Override
+    public MPDRIndex createIndex(MLDRFK mldrFK) {
+        MPDRMySQLIndex newIndex = MVCCDElementFactory.instance().createMPDRMySQLIndex(
+                getMDRContConstraints(), mldrFK);
+        return newIndex;
+    }
+
+    @Override
     public MPDRUnique createUnique(MLDRUnique mldrUnique) {
         MPDRMySQLUnique newUnique = MVCCDElementFactory.instance().createMPDRMySQLUnique(
             getMDRContConstraints(), mldrUnique);
         return newUnique;
+    }
 
-}
 
     @Override
-    public MPDRCheck createCheck(IMLDRSourceMPDRCheck imldrSourceMPDRCheck) {
-        MPDRMySQLCheck newCheck = MVCCDElementFactory.instance().createMPDRMySQLCheck(
-                getMDRContConstraints(), imldrSourceMPDRCheck);
+    public  MPDRCheckSpecific createCheckSpecific(IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
+        MPDRMySQLCheckSpecific newCheck = MVCCDElementFactory.instance().createMPDRMySQLCheckSpecific(
+                getMDRContConstraints(), imldrSourceMPDRCConstraintSpecifc);
         return newCheck;
     }
 

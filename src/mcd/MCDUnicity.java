@@ -1,14 +1,12 @@
 package mcd;
 
 import constraints.Constraint;
-import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import mdr.MDRUniqueNature;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
-import stereotypes.Stereotype;
 
 import java.util.ArrayList;
 

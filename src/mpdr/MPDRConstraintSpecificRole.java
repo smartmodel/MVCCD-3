@@ -4,12 +4,13 @@ import exceptions.CodeApplException;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 
-public enum MPDRCheckRole {
-    DATATYPE (Preferences.MPDR_CHECK_DATATYPE);
+public enum MPDRConstraintSpecificRole {
+    DATATYPE (Preferences.MPDR_CHECK_DATATYPE),
+    INDEX (Preferences.MPDR_FK_INDEX);
 
     private final String name;
 
-    MPDRCheckRole(String name) {
+    MPDRConstraintSpecificRole(String name) {
         this.name = name;
     }
 
@@ -21,8 +22,8 @@ public enum MPDRCheckRole {
         return MessagesBuilder.getMessagesProperty(name);
     }
 
-    public static MPDRCheckRole findByText(String text){
-        for (MPDRCheckRole element: MPDRCheckRole.values()){
+    public static MPDRConstraintSpecificRole findByText(String text){
+        for (MPDRConstraintSpecificRole element: MPDRConstraintSpecificRole.values()){
             if (element.getText().equals(text)) {
                 return element;
             }

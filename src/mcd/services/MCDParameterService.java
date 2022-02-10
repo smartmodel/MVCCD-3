@@ -8,7 +8,6 @@ import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import mcd.*;
 import mcd.interfaces.IMCDParameter;
-import mdr.MDRColumn;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;

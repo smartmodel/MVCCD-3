@@ -1,11 +1,10 @@
 package mdr;
 
 import main.MVCCDElement;
-import mcd.MCDConstraint;
-import mcd.services.MCDConstraintService;
 import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRConstraintService;
 import project.ProjectElement;
+import stereotypes.StereotypeService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,4 +60,13 @@ public abstract class MDRConstraint extends MDROperation{
         return MDRConstraintService.compareToDefault(this, other);
     }
 
+
+    //TODO-0 A retirer en ayant les icones
+    public String toString(){
+        try {
+            return StereotypeService.getUMLName(getDefaultStereotype()) + " " + getName();
+        } catch (Exception e){
+            return "Nom et nature à affecter";
+        }
+    }
 }

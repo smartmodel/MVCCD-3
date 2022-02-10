@@ -1,11 +1,10 @@
 package window.editor.diagrammer.elements.shapes.classes;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import mcd.MCDEntity;
-import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.listeners.MCDEntityShapeListener;
+
+import java.awt.*;
 
 public class MCDEntityShape extends ClassShape {
 

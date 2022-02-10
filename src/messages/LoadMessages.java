@@ -2,7 +2,6 @@ package messages;
 
 import exceptions.CodeApplException;
 import preferences.Preferences;
-import utilities.Trace;
 
 import java.util.HashMap;
 import java.util.Locale;

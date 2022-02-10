@@ -47,8 +47,8 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     protected SCheckBox fieldTAPIs;
     protected JLabel labelSeqPKNameFormat ;
     protected STextField fieldSeqPKNameFormat;
-
-
+    protected JLabel labelCheckColumnDatatypeNameFormat;
+    protected STextField fieldCheckColumnDatatypeNameFormat;
 
     public MPDRModelInputContent(MPDRModelInput mpdrModelInput) {
         super(mpdrModelInput);
@@ -118,6 +118,12 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         fieldSeqPKNameFormat.setToolTipText("Format de nommage de la séquence de PK");
         fieldSeqPKNameFormat.setReadOnly(true);
 
+        labelCheckColumnDatatypeNameFormat = new JLabel("Check de contrôle de type de données : ");
+        fieldCheckColumnDatatypeNameFormat = new STextField(this, labelCheckColumnDatatypeNameFormat);
+        fieldCheckColumnDatatypeNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldCheckColumnDatatypeNameFormat.setToolTipText("Format de la contraint CHECK de type de données");
+        fieldCheckColumnDatatypeNameFormat.setReadOnly(true);
+
         fieldConnectionLienProg.setName("fieldConnectionLienProg");
         fieldConnectionURL.setName("fieldConnectionURL");
         fieldDropBeforeCreate.setName("fieldDropBeforeCreate");
@@ -128,6 +134,7 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         super.getSComponents().add(fieldMPDRDbPK);
         super.getSComponents().add(fieldTAPIs);
         super.getSComponents().add(fieldSeqPKNameFormat);
+        super.getSComponents().add(fieldCheckColumnDatatypeNameFormat);
     }
 
     protected void createPanelMaster(GridBagConstraints gbc) {
@@ -185,6 +192,12 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         panelOptionsTransform.add(labelSeqPKNameFormat, gbcA);
         gbcA.gridx++;
         panelOptionsTransform.add(fieldSeqPKNameFormat, gbcA);
+
+        gbcA.gridx = 0;
+        gbcA.gridy++;
+        panelOptionsTransform.add(labelCheckColumnDatatypeNameFormat, gbcA);
+        gbcA.gridx++;
+        panelOptionsTransform.add(fieldCheckColumnDatatypeNameFormat, gbcA);
     }
 
 
@@ -196,6 +209,7 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         fieldMPDRDbPK.setText(mpdrModel.getMpdrDbPK().getText());
         fieldTAPIs.setSelected(mpdrModel.isTapis());
         fieldSeqPKNameFormat.setText(mpdrModel.getSequencePKNameFormat());
+        fieldCheckColumnDatatypeNameFormat.setText(mpdrModel.getCheckColumnDatatypeNameFormat());
 
         if (conDB == ConDB.POSTGRESQL) {
             MPDRPostgreSQLModel mpdrPostgreSQLModel = (MPDRPostgreSQLModel) mpdrModel;

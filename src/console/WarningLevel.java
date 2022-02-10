@@ -1,6 +1,5 @@
 package console;
 
-import mcd.MCDAssociationNature;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 

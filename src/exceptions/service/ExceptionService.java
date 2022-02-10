@@ -2,13 +2,10 @@ package exceptions.service;
 
 import console.ViewLogsManager;
 import m.MElement;
-import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
-import org.apache.commons.lang.StringUtils;
 import utilities.window.editor.PanelInputContent;
-import utilities.window.scomponents.SComponent;
 
 import java.awt.*;
 

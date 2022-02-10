@@ -33,7 +33,7 @@ public class MPDROracleColumn extends MPDRColumn implements IMPDROracleElement {
     @Override
     public MPDRCheck createMPDRCheckDatatype(MLDRColumn mldrColumn) {
         MDRContConstraints mdrContConstraints = this.getMPDRTableAccueil().getMDRContConstraints();
-        MPDROracleCheck newCheck = MVCCDElementFactory.instance().createMPDROracleCheck( mdrContConstraints, mldrColumn);
+        MPDROracleCheckSpecific newCheck = MVCCDElementFactory.instance().createMPDROracleCheckSpecific( mdrContConstraints, mldrColumn);
         return newCheck;
     }
 

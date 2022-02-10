@@ -32,7 +32,7 @@ public class MPDRMySQLColumn extends MPDRColumn implements IMPDRMySQLElement {
     @Override
     public MPDRCheck createMPDRCheckDatatype(MLDRColumn mldrColumn) {
         MDRContConstraints mdrContConstraints = this.getMPDRTableAccueil().getMDRContConstraints();
-        MPDRMySQLCheck newCheck = MVCCDElementFactory.instance().createMPDRMySQLCheck( mdrContConstraints, mldrColumn);
+        MPDRMySQLCheckSpecific newCheck = MVCCDElementFactory.instance().createMPDRMySQLCheckSpecific( mdrContConstraints, mldrColumn);
         return newCheck;
     }
 

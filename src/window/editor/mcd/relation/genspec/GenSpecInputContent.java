@@ -1,10 +1,12 @@
 package window.editor.mcd.relation.genspec;
 
-import m.services.MElementService;
 import main.MVCCDElement;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
-import mcd.services.*;
+import mcd.services.IMCDModelService;
+import mcd.services.MCDElementConvert;
+import mcd.services.MCDEntityService;
+import mcd.services.MCDUtilService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.editor.DialogEditor;

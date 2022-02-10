@@ -1,30 +1,24 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.swing.JComponent;
-import javax.swing.JLayeredPane;
 import m.interfaces.IMRelation;
 import main.MVCCDManager;
 import md.MDElement;
 import preferences.Preferences;
-import project.ProjectService;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.Position;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class RelationShape extends JComponent implements IShape {
 

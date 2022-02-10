@@ -4,15 +4,12 @@ import exceptions.CodeApplException;
 import m.MRelEndMulti;
 import m.MRelEndMultiPart;
 import m.MRelationDegree;
-import m.services.MElementService;
 import m.services.MRelEndService;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.Trace;
-import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 
 import java.util.ArrayList;

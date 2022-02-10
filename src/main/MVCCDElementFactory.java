@@ -18,7 +18,7 @@ import mdr.*;
 import mdr.interfaces.IMDRParameter;
 import messages.MessagesBuilder;
 import mldr.*;
-import mldr.interfaces.IMLDRSourceMPDRCheck;
+import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mldr.services.MLDRContConstraintsService;
 import mpdr.*;
 import mpdr.mysql.*;
@@ -567,14 +567,20 @@ public class MVCCDElementFactory {
         return mpdrOracleFK;
     }
 
+
+    public MPDROracleIndex createMPDROracleIndex(MDRContConstraints mdrContConstraints, MLDRFK mldrFK) {
+        MPDROracleIndex mpdrOracleIndex = new MPDROracleIndex(mdrContConstraints, mldrFK);
+        return mpdrOracleIndex ;
+    }
+
     public MPDROracleUnique createMPDROracleUnique(MDRContConstraints mdrContConstraints, MLDRUnique mldrUnique) {
         MPDROracleUnique mpdrOracleUnique = new MPDROracleUnique(mdrContConstraints, mldrUnique);
         return mpdrOracleUnique;
     }
 
-    public MPDROracleCheck createMPDROracleCheck(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCheck imldrSourceMPDRCheck) {
-        MPDROracleCheck mpdrOracleCheck = new MPDROracleCheck(mdrContConstraints, imldrSourceMPDRCheck);
-        return mpdrOracleCheck;
+    public MPDROracleCheckSpecific createMPDROracleCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
+        MPDROracleCheckSpecific mpdrOracleCheckSpecific = new MPDROracleCheckSpecific(mdrContConstraints, imldrSourceMPDRCConstraintSpecifc);
+        return mpdrOracleCheckSpecific;
     }
 
     public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, MLDRParameter mldrParameter){
@@ -598,8 +604,8 @@ public class MVCCDElementFactory {
 
 
     // Création d'un paramètre qui n'est pas issu de la transformation d'un paramètre logique
-    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMLDRSourceMPDRCheck imldrSourceMPDRCheck){
-        return new MPDROracleParameter( impdrOracleElement, imldrSourceMPDRCheck);
+    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc){
+        return new MPDROracleParameter( impdrOracleElement, imldrSourceMPDRCConstraintSpecifc);
     }
 
 
@@ -682,15 +688,19 @@ public class MVCCDElementFactory {
         return mpdrMySQLFK;
     }
     
+    public MPDRMySQLIndex createMPDRMySQLIndex(MDRContConstraints mdrContConstraints, MLDRFK mldrFK) {
+        MPDRMySQLIndex mpdrMySQLIndex = new MPDRMySQLIndex(mdrContConstraints, mldrFK);
+        return mpdrMySQLIndex ;
+    }
+
     public MPDRMySQLUnique createMPDRMySQLUnique(MDRContConstraints mdrContConstraints, MLDRUnique mldrUnique) {
         MPDRMySQLUnique mpdrMySQLUnique = new MPDRMySQLUnique(mdrContConstraints, mldrUnique);
         return mpdrMySQLUnique;
     }
 
-
-    public MPDRMySQLCheck createMPDRMySQLCheck(MDRContConstraints mdrContConstraints,IMLDRSourceMPDRCheck imldrSourceMPDRCheck) {
-        MPDRMySQLCheck mpdrMySQLCheck = new MPDRMySQLCheck(mdrContConstraints, imldrSourceMPDRCheck);
-        return mpdrMySQLCheck;
+    public MPDRMySQLCheckSpecific createMPDRMySQLCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
+        MPDRMySQLCheckSpecific mpdrMySQLCheckSpecific = new MPDRMySQLCheckSpecific(mdrContConstraints, imldrSourceMPDRCConstraintSpecifc);
+        return mpdrMySQLCheckSpecific;
     }
 
     public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement impdrMySQLElement, MLDRParameter mldrParameter){
@@ -703,8 +713,8 @@ public class MVCCDElementFactory {
 
 
     // Création d'un paramètre qui n'est pas issu de la transformation d'un paramètre logique
-    public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement mpdrMySQLParameter, IMLDRSourceMPDRCheck imldrSourceMPDRCheck){
-        return new MPDRMySQLParameter( mpdrMySQLParameter, imldrSourceMPDRCheck);
+    public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement mpdrMySQLParameter, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc){
+        return new MPDRMySQLParameter( mpdrMySQLParameter, imldrSourceMPDRCConstraintSpecifc);
     }
 
     
@@ -771,7 +781,11 @@ public class MVCCDElementFactory {
         MPDRPostgreSQLFK mpdrPostgreSQLFK = new MPDRPostgreSQLFK(mdrContConstraints, mldrFK);
         return mpdrPostgreSQLFK;
     }
-
+    
+    public MPDRPostgreSQLIndex createMPDRPostgreSQLIndex(MDRContConstraints mdrContConstraints, MLDRFK mldrFK) {
+        MPDRPostgreSQLIndex mpdrPostgreSQLIndex = new MPDRPostgreSQLIndex(mdrContConstraints, mldrFK);
+        return mpdrPostgreSQLIndex ;
+    }
 
     public MPDRPostgreSQLUnique createMPDRPostgreSQLUnique(MDRContConstraints mdrContConstraints, MLDRUnique mldrUnique) {
         MPDRPostgreSQLUnique mpdrPostgreSQLUnique = new MPDRPostgreSQLUnique(mdrContConstraints, mldrUnique);
@@ -779,9 +793,9 @@ public class MVCCDElementFactory {
     }
 
 
-    public MPDRPostgreSQLCheck createMPDRPostgreSQLCheck(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCheck imldrSourceMPDRCheck) {
-        MPDRPostgreSQLCheck mpdrPostgreSQLCheck = new MPDRPostgreSQLCheck(mdrContConstraints, imldrSourceMPDRCheck);
-        return mpdrPostgreSQLCheck;
+    public MPDRPostgreSQLCheckSpecific createMPDRPostgreSQLCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
+        MPDRPostgreSQLCheckSpecific mpdrPostgreSQLCheckSpecific = new MPDRPostgreSQLCheckSpecific(mdrContConstraints, imldrSourceMPDRCConstraintSpecifc);
+        return mpdrPostgreSQLCheckSpecific;
     }
 
 
@@ -795,8 +809,8 @@ public class MVCCDElementFactory {
     }
 
     // Création d'un paramètre qui n'est pas issu de la transformation d'un paramètre logique
-    public MPDRParameter createMPDRPostgreSQLParameter(IMPDRPostgreSQLElement impdrPostgreSQLElement, IMLDRSourceMPDRCheck imldrSourceMPDRCheck){
-        return new MPDRPostgreSQLParameter( impdrPostgreSQLElement, imldrSourceMPDRCheck);
+    public MPDRParameter createMPDRPostgreSQLParameter(IMPDRPostgreSQLElement impdrPostgreSQLElement, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc){
+        return new MPDRPostgreSQLParameter( impdrPostgreSQLElement, imldrSourceMPDRCConstraintSpecifc);
     }
 
     public MPDRPostgreSQLSequence createMPDRPostgreSQLSequence(MPDRColumn mpdrColumn, MLDRColumn mldrColumn) {
@@ -890,5 +904,4 @@ public class MVCCDElementFactory {
 
         return mpdrRelationFK;
     }
-
 }

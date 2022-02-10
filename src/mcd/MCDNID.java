@@ -6,7 +6,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import stereotypes.Stereotype;
-import stereotypes.StereotypeService;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 

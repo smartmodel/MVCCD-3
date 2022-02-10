@@ -1,7 +1,5 @@
 package console;
 
-import utilities.Trace;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.charset.StandardCharsets;

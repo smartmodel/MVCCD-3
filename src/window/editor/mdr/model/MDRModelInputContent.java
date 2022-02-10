@@ -90,7 +90,7 @@ public abstract class MDRModelInputContent extends PanelInputContent  {
         fieldNamingFormatActual.addFocusListener(this);
         fieldNamingFormatActual.setReadOnly(true);
 
-        labelNamingFormatFuture = new JLabel("Format propre au modèl");
+        labelNamingFormatFuture = new JLabel("Format propre au modèle");
         fieldNamingFormatFuture = new SComboBox(this, labelNamingFormatFuture);
         fieldNamingFormatFuture.addItem(MDRNamingFormat.NOTHING.getText());
         fieldNamingFormatFuture.addItem(MDRNamingFormat.UPPERCASE.getText());

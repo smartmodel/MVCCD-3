@@ -1,9 +1,7 @@
 package window.editor.mdr.table;
 
-import console.ViewLogsManager;
 import exceptions.service.ExceptionService;
 import mdr.MDRTable;
-import messages.MessagesBuilder;
 import repository.editingTreat.mdr.MDRTableEditingTreat;
 import utilities.window.editor.PanelNavBtn;
 import utilities.window.editor.PanelNavBtnContent;

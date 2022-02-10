@@ -1,11 +1,11 @@
 package window.editor.diagrammer.menus.actions;
 
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class PointAncrageDeleteAction extends AbstractAction {
 

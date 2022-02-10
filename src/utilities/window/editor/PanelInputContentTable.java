@@ -9,8 +9,6 @@ import project.ProjectElement;
 import project.ProjectService;
 import repository.RepositoryService;
 import repository.editingTreat.EditingTreat;
-import repository.editingTreat.mcd.MCDAttributeEditingTreat;
-import utilities.Trace;
 import utilities.UtilDivers;
 import utilities.window.ReadTableModel;
 import utilities.window.editor.services.PanelInputContentTableService;

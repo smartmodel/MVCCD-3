@@ -1,14 +1,11 @@
 package mcd.services;
 
 import exceptions.CodeApplException;
-import m.services.MElementService;
 import mcd.MCDElement;
 import mcd.MCDModel;
 import mcd.interfaces.IMCDModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import preferences.PreferencesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

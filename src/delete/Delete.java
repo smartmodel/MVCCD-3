@@ -1,8 +1,5 @@
 package delete;
 
-import main.MVCCDElement;
-import main.MVCCDManager;
-
 public class Delete {
 
     // Classe à supprimer !

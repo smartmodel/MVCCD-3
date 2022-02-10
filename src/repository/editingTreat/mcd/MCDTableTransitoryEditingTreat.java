@@ -2,13 +2,7 @@ package repository.editingTreat.mcd;
 
 import main.MVCCDElement;
 import main.MVCCDManager;
-import mcd.MCDContConstraints;
-import mcd.MCDUnicity;
 import repository.editingTreat.EditingTreat;
-import utilities.window.editor.DialogEditor;
-import utilities.window.editor.PanelInputContent;
-import window.editor.mcd.operation.constraint.unicity.nid.NIDEditor;
-import window.editor.mcd.operation.constraint.unicity.nid.NIDInputContent;
 
 import java.awt.*;
 

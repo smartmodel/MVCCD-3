@@ -151,7 +151,7 @@ public class Preferences extends MVCCDElement {
   public static Integer ENTITY_SHORT_NAME_LENGTH = 6;
   public static Integer ENTITY_LONG_NAME_LENGTH = 50;
   public static Integer ENTITY_TABLE_NAME_LENGTH = ENTITY_NAME_LENGTH;
-  public static Integer ATTRIBUTE_NAME_LENGTH = 22;  // Ramené de 26 à 22 pour pouvoir nommer la contrainte de Check de type d'attribut
+  public static Integer ATTRIBUTE_NAME_LENGTH = 26;
   public static Integer ATTRIBUTE_SHORT_NAME_LENGTH = 6;
   public static Integer ATTRIBUTE_LONG_NAME_LENGTH = 50;
   public static Integer ATTRIBUTE_PEA_NAME_LENGTH = 15;
@@ -366,8 +366,11 @@ public class Preferences extends MVCCDElement {
     public static String STEREOTYPE_PFK_LIENPROG = "PFK";
 
 
-  public static String STEREOTYPE_CHECK_NAME = "CHK";
-  public static String STEREOTYPE_CHECK_LIENPROG = "CHK";
+    public static String STEREOTYPE_CHECK_NAME = "CHK";
+    public static String STEREOTYPE_CHECK_LIENPROG = "CHK";
+    public static String STEREOTYPE_INDEX_NAME = "IDX";
+    public static String STEREOTYPE_INDEX_LIENPROG = "IDX";
+
 
 
   public static String CONSTRAINT_ORDERED_NAME = "ordered";
@@ -595,6 +598,7 @@ public class Preferences extends MVCCDElement {
 
   public static String MPDR_SEQUENCE_PK = "mpdr.sequence.pk";
   public static String MPDR_CHECK_DATATYPE = "mpdr.check.datatype";
+  public static String MPDR_FK_INDEX = "mpdr.fk.index";
 
   public static String MLDRDATATYPE_ROOT_NAME = "MLD-R";
   public static String MLDRDATATYPE_ROOT_LIENPROG = "MLD-R";
@@ -635,7 +639,7 @@ public class Preferences extends MVCCDElement {
   public static MPDRDBPK MPDRORACLE_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
   public static String MPDRORACLE_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
   public static String MPDRORACLE_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
-  public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{mpdrColumnName}{_DTY}";
+  public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
   public static String MPDRORACLE_EMPTY_SCHEMA = "empty_schema";
 
   public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
@@ -669,7 +673,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRMYSQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
   public static MPDRDBPK MPDRMYSQL_PK_GENERATE_DEFAULT = MPDRDBPK.IDENTITY;
   public static String MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
-  public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{mpdrColumnName}{_DTY}";
+  public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
   public static String MPDRMYSQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
 
 
@@ -703,7 +707,7 @@ public class Preferences extends MVCCDElement {
   public static MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
   public static String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
   public static String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
-  public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{mpdrColumnName}{_DTY}";
+  public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
   public static String MPDRPOSTGRESQL_EMPTY_SCHEMA = "empty_schema";
 
 
@@ -831,6 +835,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_TYPE_TRIGGER_MARKER_WORD = "typeTriggerMarker";
 
   public static Integer MDR_MARKER_DERIVED_LENGTH = 4;
+  public static Integer MDR_MARKER_PEA_LENGTH = 4;
   public static Integer MDR_MARKER_CUSTOM_TABLE_NAME_LENGTH = 3;
   public static Integer MDR_MARKER_CUSTOM_COLUMN_NAME_LENGTH = 3;
   public static Integer MDR_MARKER_CUSTOM_PK_LENGTH = 3;

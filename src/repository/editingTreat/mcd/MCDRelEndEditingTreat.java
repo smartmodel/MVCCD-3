@@ -3,7 +3,6 @@ package repository.editingTreat.mcd;
 import m.interfaces.IMRelation;
 import main.MVCCDElement;
 import mcd.MCDRelEnd;
-import mcd.MCDRelation;
 import repository.editingTreat.EditingTreat;
 
 import java.awt.*;

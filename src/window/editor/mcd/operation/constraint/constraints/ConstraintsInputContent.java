@@ -1,7 +1,5 @@
 package window.editor.mcd.operation.constraint.constraints;
 
-import constraints.Constraint;
-import constraints.ConstraintService;
 import exceptions.CodeApplException;
 import m.MElement;
 import main.MVCCDElement;
@@ -9,10 +7,8 @@ import mcd.*;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
-import repository.editingTreat.mcd.*;
-import stereotypes.Stereotype;
-import stereotypes.StereotypeService;
-import utilities.UtilDivers;
+import repository.editingTreat.mcd.MCDNIDEditingTreat;
+import repository.editingTreat.mcd.MCDUniqueEditingTreat;
 import utilities.window.DialogMessage;
 import utilities.window.editor.PanelInputContentTable;
 import utilities.window.services.PanelService;

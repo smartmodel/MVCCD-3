@@ -50,7 +50,7 @@ public abstract class MPDRGenerateSQLTable {
         // Avec nos règles de conformité, une table doit avoir au moins une colonne,
 
         boolean firstColumn = true;
-        for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumns()) {
+        for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumnsSortDefault()) {
             if (!firstColumn) {
                 generateSQLCode +=  System.lineSeparator() + tabsApplicable;
             }

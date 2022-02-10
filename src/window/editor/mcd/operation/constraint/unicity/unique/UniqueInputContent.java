@@ -1,6 +1,5 @@
 package window.editor.mcd.operation.constraint.unicity.unique;
 
-import m.MElement;
 import m.MRelationDegree;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
@@ -8,9 +7,7 @@ import mcd.*;
 import mcd.services.MCDUniqueService;
 import project.ProjectService;
 import repository.editingTreat.EditingTreat;
-import repository.editingTreat.mcd.MCDUniqueParameterEditingTreat;
 import repository.editingTreat.mcd.MCDUniqueParameterTransientEditingTreat;
-import utilities.window.editor.DialogEditor;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.services.STableService;
@@ -18,8 +15,6 @@ import utilities.window.services.PanelService;
 import window.editor.mcd.operation.OperationParamTableColumn;
 import window.editor.mcd.operation.constraint.unicity.UnicityInput;
 import window.editor.mcd.operation.constraint.unicity.UnicityInputContent;
-import window.editor.mcd.operation.parameter.ParameterEditor;
-import window.editor.mcd.operation.parameter.ParameterTransientEditor;
 
 import javax.swing.*;
 import java.awt.*;

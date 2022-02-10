@@ -168,4 +168,5 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
     public String getMDRColumnsRefPKNameAsParamStr() {
         return MDRFKService.getMDRColumnsRefPKNameAsParamStr(this);
     }
+
 }

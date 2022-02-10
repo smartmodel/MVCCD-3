@@ -34,7 +34,7 @@ public class MPDRPostgreSQLColumn extends MPDRColumn implements IMPDROracleEleme
     @Override
     public MPDRCheck createMPDRCheckDatatype(MLDRColumn mldrColumn) {
         MDRContConstraints mdrContConstraints = this.getMPDRTableAccueil().getMDRContConstraints();
-        MPDRPostgreSQLCheck newCheck = MVCCDElementFactory.instance().createMPDRPostgreSQLCheck( mdrContConstraints, mldrColumn);
+        MPDRPostgreSQLCheckSpecific newCheck = MVCCDElementFactory.instance().createMPDRPostgreSQLCheckSpecific( mdrContConstraints, mldrColumn);
         return newCheck;
     }
 

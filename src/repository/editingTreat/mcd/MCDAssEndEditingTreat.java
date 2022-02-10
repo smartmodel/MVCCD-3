@@ -6,7 +6,6 @@ import mcd.MCDAssEnd;
 import mcd.MCDAssociation;
 import mcd.MCDContRelations;
 import mcd.MCDEntity;
-import repository.editingTreat.EditingTreat;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import window.editor.mcd.relation.association.AssociationEditor;

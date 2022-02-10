@@ -1,6 +1,5 @@
 package window.editor.mcd.entity;
 
-import m.services.MElementService;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import mcd.MCDContEntities;
@@ -9,7 +8,6 @@ import mcd.MCDEntity;
 import mcd.interfaces.IMCDModel;
 import mcd.services.IMCDModelService;
 import mcd.services.MCDContEntitiesService;
-import mcd.services.MCDElementService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.editor.PanelInputContentId;

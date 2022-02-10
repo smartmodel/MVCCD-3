@@ -1,18 +1,5 @@
 package window.editor.diagrammer.listeners;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.geom.Line2D;
-import java.util.ListIterator;
-import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
-
 import main.MVCCDManager;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
@@ -26,6 +13,12 @@ import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.RelationCreator;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.Line2D;
+import java.util.ListIterator;
 
 public class DrawPanelListener extends MouseAdapter implements KeyListener {
 

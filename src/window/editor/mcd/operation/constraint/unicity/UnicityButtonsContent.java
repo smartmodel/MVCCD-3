@@ -1,6 +1,5 @@
 package window.editor.mcd.operation.constraint.unicity;
 
-import main.MVCCDElement;
 import utilities.window.editor.PanelButtonsContent;
 
 public abstract class UnicityButtonsContent extends PanelButtonsContent {

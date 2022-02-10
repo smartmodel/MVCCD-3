@@ -3,23 +3,18 @@ package mcd;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
-import exceptions.CodeApplException;
 import m.MRelEndMulti;
 import m.MRelEndMultiPart;
-import m.services.MElementService;
 import m.services.MRelEndService;
-import main.MVCCDElement;
 import mcd.interfaces.IMCDParameter;
 import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import mcd.services.MCDRelEndService;
-import mcd.services.MCDRelationService;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
-import utilities.Trace;
 
 import java.util.ArrayList;
 

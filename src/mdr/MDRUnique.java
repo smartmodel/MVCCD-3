@@ -1,12 +1,7 @@
 package mdr;
 
 import constraints.Constraint;
-import constraints.ConstraintService;
-import mcd.MCDAttribute;
-import mcd.MCDNID;
 import mcd.MCDUnicity;
-import mdr.services.MDRColumnsService;
-import mdr.services.MDRFKService;
 import mdr.services.MDRUniqueService;
 import preferences.Preferences;
 import preferences.PreferencesManager;

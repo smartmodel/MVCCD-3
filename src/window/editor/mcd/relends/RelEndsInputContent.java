@@ -1,17 +1,14 @@
 package window.editor.mcd.relends;
 
-import constraints.Constraint;
-import constraints.ConstraintService;
 import exceptions.CodeApplException;
 import m.MElement;
 import main.MVCCDElement;
 import mcd.*;
 import messages.MessagesBuilder;
 import repository.editingTreat.EditingTreat;
-import repository.editingTreat.mcd.*;
-import stereotypes.Stereotype;
-import stereotypes.StereotypeService;
-import utilities.UtilDivers;
+import repository.editingTreat.mcd.MCDAssEndEditingTreat;
+import repository.editingTreat.mcd.MCDGSEndEditingTreat;
+import repository.editingTreat.mcd.MCDLinkEndEditingTreat;
 import utilities.window.DialogMessage;
 import utilities.window.editor.PanelInputContentTable;
 import utilities.window.scomponents.services.STableService;
