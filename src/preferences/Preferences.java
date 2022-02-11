@@ -640,6 +640,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRORACLE_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
   public static String MPDRORACLE_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
   public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
+  public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
   public static String MPDRORACLE_EMPTY_SCHEMA = "empty_schema";
 
   public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
@@ -674,6 +675,7 @@ public class Preferences extends MVCCDElement {
   public static MPDRDBPK MPDRMYSQL_PK_GENERATE_DEFAULT = MPDRDBPK.IDENTITY;
   public static String MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
   public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
+  public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
   public static String MPDRMYSQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
 
 
@@ -708,6 +710,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
   public static String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
   public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
+  public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
   public static String MPDRPOSTGRESQL_EMPTY_SCHEMA = "empty_schema";
 
 
@@ -743,6 +746,7 @@ public class Preferences extends MVCCDElement {
     public static String MDR_NAMING_UNIQUE = "mdr.unique";
   public static String MPDR_NAMING_SEQUENCE_PK = "mpdr.sequence.pk";
   public static String MPDR_NAMING_CHECK_COLUMNDATATYPE = "mpdr.check.datatype";
+  public static String MPDR_NAMING_CHECK_COLUMNDATATYPE_MAX30 = "mpdr.check.datatype.max30";
   public static String MPDR_NAMING_TRIGGER_TABLE = "mpdr.trigger.table";
   public static String MPDR_NAMING_TRIGGER_VIEW = "mpdr.trigger.view";
   public static String MPDR_NAMING_FUNCTION = "mpdr.function";
@@ -776,6 +780,8 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_FUNCTION_NAME_WORD = "functionName";
   public static String MPDR_PROCEDURE_NAME_WORD = "functionName";
   public static String MPDR_COLUMN_NAME_WORD = "mpdrColumnName";
+  public static String MCD_ATTRIBUTE_NAME_WORD = "mcdAttrName";
+  public static String MCD_ATTRIBUTE_SHORT_NAME_WORD = "mcdAttrShortName";
 
   public static String MPDR_CHECK_PARAM_EXPRESSION_NAME = "expr";  // Le nom du paramètre qui contient l'expression'
 
@@ -802,8 +808,6 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_STOREDCODE_USAGE_WITHOUT_TAPIS = "mpdr.storedcode.usage.without.tapis";
 
 
-  public static String MDR_ATTR_NAME_WORD = "attrName";
-  public static String MDR_ATTR_SHORT_NAME_WORD = "attrShortName";
   public static String MDR_COL_NAME_WORD = "colName";
   public static String MDR_COL_NAME_ONE_ANCESTOR_WORD = "colNameOneAncestor";
   public static String MDR_COLUMN_DERIVED_WORD = "colDerived";
@@ -851,9 +855,9 @@ public class Preferences extends MVCCDElement {
     public static String MDR_TABLE_NAME_FORMAT_DEFAULT = "{tableName}";
     public static String MDR_TABLE_NN_NAME_FORMAT_DEFAULT = "{ATableShortName}{tableSep}{assShortName}{roleA}{roleSep}{roleB}{tableSep}{BTableShortName}";
     public static String MDR_TABLE_NN_NAME_INDICE_FORMAT_DEFAULT = "{ATableShortName}{tableSep}{BTableShortName}{indTableNN}";
-    public static String MDR_COLUMN_PK_NAME_FORMAT_DEFAULT = "{attrName}";
-    public static String MDR_COLUMN_ATTR_NAME_FORMAT_DEFAULT = "{colDerived}{peaShortName}{peaSep}{attrName}";
-    public static String MDR_COLUMN_ATTR_SHORT_NAME_FORMAT_DEFAULT = "{colDerived}{peaShortName}{peaSep}{attrShortName}";
+    public static String MDR_COLUMN_PK_NAME_FORMAT_DEFAULT = "{mcdAttrName}";
+    public static String MDR_COLUMN_ATTR_NAME_FORMAT_DEFAULT = "{colDerived}{peaShortName}{peaSep}{mcdAttrName}";
+    public static String MDR_COLUMN_ATTR_SHORT_NAME_FORMAT_DEFAULT = "{colDerived}{peaShortName}{peaSep}{mcdAttrShortName}";
     public static String MDR_COLUMN_DERIVED_MARKER_DEFAULT = "DER_";
     public static String MDR_COLUMN_FK_NAME_FORMAT_DEFAULT = "{parentTableShortName}{tableSep}{parentRoleShortName}{roleSep}{colName}";
     public static String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT_DEFAULT = "{colNameOneAncestor}{indColFK}";
@@ -1042,6 +1046,7 @@ public class Preferences extends MVCCDElement {
   private String MPDRORACLE_SEQPK_NAME_FORMAT;
   private String MPDRORACLE_TRIGGER_NAME_FORMAT;
   private String MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  private String MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
 
 
   // MPDR MySQL Préférences
@@ -1053,6 +1058,7 @@ public class Preferences extends MVCCDElement {
   private String MPDRMYSQL_SEQPK_NAME_FORMAT;
   private String MPDRMYSQL_TRIGGER_NAME_FORMAT;
   private String MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  private String MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
 
   // MPDR PostgreSQL Préférences
   private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
@@ -1063,6 +1069,8 @@ public class Preferences extends MVCCDElement {
   private String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
   private String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT;
   private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
+
 
   private Boolean DIAGRAMMER_SHOW_GRID = null;
 
@@ -1897,8 +1905,16 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
   }
 
+  public String getMPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT() {
+    if (this.MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT == null) {
+      this.MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRORACLE_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
+  }
 
-
+  public void setMPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT(String MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT) {
+    this.MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
+  }
 
   // MySQL
   public void setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH) {
@@ -1981,6 +1997,17 @@ public class Preferences extends MVCCDElement {
 
   public void setMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT(String MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT) {
     this.MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  }
+
+  public String getMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT() {
+    if (this. MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT == null) {
+      this. MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRMYSQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
+  }
+
+  public void setMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT(String MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT) {
+    this.MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
   }
 
   // PostgreSQL
@@ -2073,6 +2100,17 @@ public class Preferences extends MVCCDElement {
 
   public void setMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT(String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT) {
     this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  }
+
+  public String getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT() {
+    if (this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT == null) {
+      this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
+  }
+
+  public void setMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT(String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT) {
+    this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
   }
 
   //

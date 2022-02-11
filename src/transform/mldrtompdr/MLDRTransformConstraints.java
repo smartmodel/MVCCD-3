@@ -62,6 +62,7 @@ public class MLDRTransformConstraints {
         // Le temps de développement
         if (mpdrConstraint != null) {
             modifyConstraint(mldrConstraint, mpdrConstraint );
+
             // Transformation des paramètres
             MLDRTransformParameters mldrTransformParameters = new MLDRTransformParameters(
                     mldrTransform, mldrConstraint, mpdrModel, mpdrConstraint);

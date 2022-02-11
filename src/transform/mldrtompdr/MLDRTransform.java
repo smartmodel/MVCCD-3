@@ -91,6 +91,7 @@ public class MLDRTransform extends MDTransform {
             mpdrOracleModel.setSequencePKNameFormat(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
             mpdrOracleModel.setTriggerNameFormat(preferences.getMPDRORACLE_TRIGGER_NAME_FORMAT());
             mpdrOracleModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT());
+            mpdrOracleModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
             return mpdrOracleModel;
         }
         if (mldrtompdrDb.equals(Preferences.DB_MYSQL)){
@@ -104,6 +105,7 @@ public class MLDRTransform extends MDTransform {
             mpdrMySQLModel.setSequencePKNameFormat(preferences.getMPDRMYSQL_SEQPK_NAME_FORMAT());
             mpdrMySQLModel.setTriggerNameFormat(preferences.getMPDRMYSQL_TRIGGER_NAME_FORMAT());
             mpdrMySQLModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
+            mpdrMySQLModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
             return mpdrMySQLModel;
         }
         if (mldrtompdrDb.equals(Preferences.DB_POSTGRESQL)){
@@ -117,6 +119,7 @@ public class MLDRTransform extends MDTransform {
             mpdrPostgreSQLModel.setSequencePKNameFormat(preferences.getMPDRPOSTGRESQL_SEQPK_NAME_FORMAT());
             mpdrPostgreSQLModel.setTriggerNameFormat(preferences.getMPDRPOSTGRESQL_TRIGGER_NAME_FORMAT());
             mpdrPostgreSQLModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
+            mpdrPostgreSQLModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
             return mpdrPostgreSQLModel;
         }
 

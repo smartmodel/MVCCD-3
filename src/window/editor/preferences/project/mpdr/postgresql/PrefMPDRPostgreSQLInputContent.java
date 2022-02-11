@@ -40,6 +40,8 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
         fieldTAPIs.setSelected(preferences.getMPDRPOSTGRESQL_TAPIS());
         fieldSeqPKNameFormat.setText(preferences.getMPDRPOSTGRESQL_SEQPK_NAME_FORMAT());
         fieldCheckColumnDatatypeNameFormat.setText(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
+        fieldCheckColumnDatatypeMax30NameFormat.setText(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
+
     }
 
     @Override
@@ -103,6 +105,10 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
 
         if (fieldCheckColumnDatatypeNameFormat.checkIfUpdated()){
             preferences.setMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT(fieldCheckColumnDatatypeNameFormat.getText());
+        }
+
+        if (fieldCheckColumnDatatypeMax30NameFormat.checkIfUpdated()){
+            preferences.setMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT(fieldCheckColumnDatatypeMax30NameFormat.getText());
         }
 
 

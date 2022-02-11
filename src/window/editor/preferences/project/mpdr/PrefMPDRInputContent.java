@@ -31,6 +31,8 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
     protected STextField fieldTriggerNameFormat;
     protected JLabel labelCheckColumnDatatypeNameFormat ;
     protected STextField fieldCheckColumnDatatypeNameFormat;
+    protected JLabel labelCheckColumnDatatypeMax30NameFormat ;
+    protected STextField fieldCheckColumnDatatypeMax30NameFormat;
 
 
 
@@ -76,13 +78,21 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
         fieldTriggerNameFormat.getDocument().addDocumentListener(this);
         fieldTriggerNameFormat.addFocusListener(this);
 
-        labelCheckColumnDatatypeNameFormat = new JLabel("CheckColumnDatatypes");
+        labelCheckColumnDatatypeNameFormat = new JLabel("Check des types de colonnes");
         fieldCheckColumnDatatypeNameFormat = new STextField(this, labelCheckColumnDatatypeNameFormat);
         fieldCheckColumnDatatypeNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
-        fieldCheckColumnDatatypeNameFormat.setToolTipText("Format de nommage des triggers de table");
+        fieldCheckColumnDatatypeNameFormat.setToolTipText("Format de des contraintes de Check des colonnes numériques...");
         //TODO-1 Prévoir un formattage/contrôle minimal
         fieldCheckColumnDatatypeNameFormat.getDocument().addDocumentListener(this);
         fieldCheckColumnDatatypeNameFormat.addFocusListener(this);
+
+        labelCheckColumnDatatypeMax30NameFormat = new JLabel("Check des types de colonnes (Max30)");
+        fieldCheckColumnDatatypeMax30NameFormat = new STextField(this, labelCheckColumnDatatypeMax30NameFormat);
+        fieldCheckColumnDatatypeMax30NameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldCheckColumnDatatypeMax30NameFormat.setToolTipText("Format de des contraintes de Check des colonnes numériques avec nom court de l'attribut source...");
+        //TODO-1 Prévoir un formattage/contrôle minimal
+        fieldCheckColumnDatatypeMax30NameFormat.getDocument().addDocumentListener(this);
+        fieldCheckColumnDatatypeMax30NameFormat.addFocusListener(this);
 
         super.getSComponents().add(fieldDelimiterInstructions);
         super.getSComponents().add(fieldPKGenerate);
@@ -90,6 +100,7 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
         super.getSComponents().add(fieldSeqPKNameFormat);
         super.getSComponents().add(fieldTriggerNameFormat);
         super.getSComponents().add(fieldCheckColumnDatatypeNameFormat);
+        super.getSComponents().add(fieldCheckColumnDatatypeMax30NameFormat);
 
         createPanelMaster();
     }
@@ -145,6 +156,12 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
         panelFormatNames.add(labelCheckColumnDatatypeNameFormat, gbcA);
         gbcA.gridx++ ;
         panelFormatNames.add(fieldCheckColumnDatatypeNameFormat, gbcA);
+
+        gbcA.gridx = 0;
+        gbcA.gridy++;
+        panelFormatNames.add(labelCheckColumnDatatypeMax30NameFormat, gbcA);
+        gbcA.gridx++ ;
+        panelFormatNames.add(fieldCheckColumnDatatypeMax30NameFormat, gbcA);
     }
 
 

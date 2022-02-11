@@ -91,6 +91,7 @@ public class MLDRTransformToCheck {
         MDRElementNames names = new MDRElementNames();
         for (MDRNamingLength element: MDRNamingLength.values()) {
             MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
+            orderBuild.setMpdrModel(mpdrModel);
             orderBuild.setFormat(mpdrConstraintSpecificRole.getNameFormat(mpdrModel));
             orderBuild.setFormatUserMarkerLengthMax(mpdrConstraintSpecificRole.getFormatUserMarkerLengthMax());
             if (mpdrConstraintSpecificRole ==  MPDRConstraintSpecificRole.DATATYPE) {
@@ -101,17 +102,18 @@ public class MLDRTransformToCheck {
             orderBuild.getTableSep().setValue();
             orderBuild.getMpdrColumnName().setValue(mpdrColumn.getName());
 
+            // Pour name MAX30
+             orderBuild.getAttrShortName().setValue(mpdrColumn.getMcdAttributeSource().getShortName());
+
             String name;
 
             try {
                 name = orderBuild.buildNaming();
             } catch (OrderBuildNameException e) {
-                String message = "";
+                String message = MessagesBuilder.getMessagesProperty("mpdrcheck.columndatatype.build.name.error",
+                        new String[]{mpdrColumn.getNamePath(), mpdrColumn.getMcdAttributeSource().getNamePath()});
                 if (StringUtils.isNotEmpty(e.getMessage())) {
-                    message = e.getMessage();
-                } else {
-                    message = MessagesBuilder.getMessagesProperty("mpdrcheck.columndatatype.build.name.error",
-                            new String[]{mpdrColumn.getNamePath()});
+                    message += System.lineSeparator() + e.getMessage();
                 }
                 throw new CodeApplException(message, e);
             }

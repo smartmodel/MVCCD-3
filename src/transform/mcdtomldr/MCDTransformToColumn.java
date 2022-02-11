@@ -251,18 +251,7 @@ public class MCDTransformToColumn {
             try {
                 name = orderBuild.buildNaming();
             } catch (OrderBuildNameException e) {
-                /*
-                String message = "";
-                if (StringUtils.isNotEmpty(e.getMessage())) {
-                    message = e.getMessage();
-                } else {
-                    message = MessagesBuilder.getMessagesProperty("mdrcolumn.build.name.attribute.error",
-                            new String[]{mcdEntityAccueil.getName(), mcdAttribute.getName()});
-                }
-                throw new TransformMCDException(message, e);
-
-                 */
-                String message = MessagesBuilder.getMessagesProperty("mdrcolumn.build.name.attribute.error",
+               String message = MessagesBuilder.getMessagesProperty("mdrcolumn.build.name.attribute.error",
                         new String[]{mcdEntityAccueil.getNamePath(), mcdAttribute.getName()});
                 if (StringUtils.isNotEmpty(e.getMessage())) {
                     message += System.lineSeparator() + e.getMessage();

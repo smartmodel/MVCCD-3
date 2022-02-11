@@ -4,6 +4,7 @@ import exceptions.CodeApplException;
 import exceptions.orderbuildnaming.*;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
+import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -20,6 +21,8 @@ public class MDROrderBuildNaming {
 
     //private Integer lengthMax ;
     private MDROrderBuildTargets targetNaming ; // Cible de nommage table, column ...
+
+    private MPDRModel mpdrModel ;
 
 
     private MDROrderWordTableName tableName;
@@ -76,8 +79,8 @@ public class MDROrderBuildNaming {
         tableShortNameParent = new MDROrderWordTableShortNameParent(Preferences.MDR_TABLE_SHORT_NAME_PARENT_WORD);
         tableShortNameChild = new MDROrderWordTableShortNameChild(Preferences.MDR_TABLE_SHORT_NAME_CHILD_WORD);
 
-        attrName = new MDROrderWordAttrName(Preferences.MDR_ATTR_NAME_WORD);
-        attrShortName = new MDROrderWordAttrShortName(Preferences.MDR_ATTR_NAME_WORD);
+        attrName = new MDROrderWordAttrName(Preferences.MCD_ATTRIBUTE_NAME_WORD);
+        attrShortName = new MDROrderWordAttrShortName(Preferences.MCD_ATTRIBUTE_SHORT_NAME_WORD);
         colName = new MDROrderWordColName(Preferences.MDR_COL_NAME_WORD);
         colNameOneAncestor = new MDROrderWordColNameOneAncestor(Preferences.MDR_COL_NAME_ONE_ANCESTOR_WORD);
         colDerived = new MDROrderWordColDerived(Preferences.MDR_COLUMN_DERIVED_WORD);
@@ -151,10 +154,10 @@ public class MDROrderBuildNaming {
                 } else if (mg.equals(Preferences.MDR_TABLE_SHORT_NAME_CHILD_WORD)) {
                     value = pushValue(tableShortNameChild);
 
-                } else if (mg.equals(Preferences.MDR_ATTR_NAME_WORD)) {
+                } else if (mg.equals(Preferences.MCD_ATTRIBUTE_NAME_WORD)) {
                     value = pushValue(attrName);
 
-                } else if (mg.equals(Preferences.MDR_ATTR_SHORT_NAME_WORD)) {
+                } else if (mg.equals(Preferences.MCD_ATTRIBUTE_SHORT_NAME_WORD)) {
                     value = pushValue(attrShortName);
 
                 } else if (mg.equals(Preferences.MDR_COL_NAME_WORD)) {
@@ -293,6 +296,15 @@ public class MDROrderBuildNaming {
             return buildNaming();
         }
 
+
+        catch (OrderBuildNameCheckColDatatypeSizeLimitException e){
+            // Calcul du nom avec le shortName (s'il existe )
+            format = mpdrModel.getCheckColumnDatatypeMax30NameFormat();
+            targetNaming = MDROrderBuildTargets.CHECKCOLUMNDATATYPEMAX30;
+            return buildNaming();
+        }
+
+
         catch (OrderBuildNameWordNullException e) {
             String message = MessagesBuilder.getMessagesProperty("mdr.build.name.word.null.error",
                     new String[]{e.getMessage(), format, targetNaming.getMessageOfTarget()});
@@ -340,6 +352,7 @@ public class MDROrderBuildNaming {
             boolean colFKFromEntityNoInd = targetNaming == MDROrderBuildTargets.COLUMNFKFROMENTITYNOIND;
             boolean colFKOneAncestor = targetNaming == MDROrderBuildTargets.COLUMNFKONEANCESTOR;
             boolean  uniqueWithName = targetNaming == MDROrderBuildTargets.UNIQUE;
+            boolean checkColDatatype = targetNaming == MDROrderBuildTargets.CHECKCOLUMNDATATYPE;
 
             boolean pk = targetNaming == MDROrderBuildTargets.PK;
             boolean pkNN = targetNaming == MDROrderBuildTargets.PKNN;
@@ -367,6 +380,8 @@ public class MDROrderBuildNaming {
                     return limitSizeFK(newName);
                 } else if (uniqueWithName) {
                     return limitUniqueWithName(newName);
+                } else if (checkColDatatype) {
+                    return limitSizeCheckColDatatype(newName);
                 } else {
                     limitCodeError(newName);
                 }
@@ -403,11 +418,7 @@ public class MDROrderBuildNaming {
                     // Relancement du calcul avec shortname de l'attribut
                     throw new OrderBuildNameColumnAttrSizeLimitException();
                 } else {
-                    String message = MessagesBuilder.getMessagesProperty("mdr.build.column.attr.sizeLimit.error",
-                            new String[] { "" + (newName.length() - namingLength.getLength()), namingLength.getLength().toString()});
-                    message += System.lineSeparator();
-                    message +=  MessagesBuilder.getMessagesProperty("mdr.build.column.attr.sizeLimit.error.advice",
-                            MessagesBuilder.getMessagesProperty("menu.preferences.mcd"));
+                    String message = messageExceptionSizeAttribute(newName);
                     throw new OrderBuildNameException(message);
                 }
             }
@@ -488,6 +499,26 @@ public class MDROrderBuildNaming {
     }
 
 
+    private String limitSizeCheckColDatatype(String newName) {
+        if (namingLength == MDRNamingLength.LENGTH30) {
+            if (targetNaming == MDROrderBuildTargets.CHECKCOLUMNDATATYPE) {
+                if (StringUtils.isNotEmpty(attrShortName.getValue())) {
+                    // Relancement du calcul avec shortname de l'attribut
+                    throw new OrderBuildNameCheckColDatatypeSizeLimitException();
+                } else {
+                    String message = messageExceptionSizeAttribute(newName);
+                    throw new OrderBuildNameException(message);
+                }
+            }
+            if (targetNaming == MDROrderBuildTargets.COLUMNATTRSHORTNAME) {
+                limitCodeError(newName);;
+            }
+        } else {
+            limitCodeError(newName);
+        }
+        throw new CodeApplException("Erreur limitSizeCheckColDatatype");
+    }
+
     private String limitSizeColFK(String newName) {
         throw new OrderBuildNameColumnFKSizeLimitException();
     }
@@ -495,6 +526,18 @@ public class MDROrderBuildNaming {
     private String limitUniqueWithName(String newName) {
         throw new OrderBuildNameUniqueSizeLimitException();
     }
+
+
+    private String messageExceptionSizeAttribute(String newName) {
+        String message = MessagesBuilder.getMessagesProperty("mdr.build.column.attr.sizeLimit.error",
+                new String[] { "" + (newName.length() - namingLength.getLength()), namingLength.getLength().toString()});
+        message += System.lineSeparator();
+        message +=  MessagesBuilder.getMessagesProperty("mdr.build.column.attr.sizeLimit.error.advice",
+                MessagesBuilder.getMessagesProperty("menu.preferences.mcd"));
+        return message;
+    }
+
+
 
     public String getFormat() {
         return format;
@@ -516,16 +559,13 @@ public class MDROrderBuildNaming {
         return namingLength;
     }
 
-    /*
-    public MDRNamingFormat getNamingFormat() {
-        return namingFormat;
+    public MPDRModel getMpdrModel() {
+        return mpdrModel;
     }
 
-    public void setNamingFormat(MDRNamingFormat namingFormat) {
-        this.namingFormat = namingFormat;
+    public void setMpdrModel(MPDRModel mpdrModel) {
+        this.mpdrModel = mpdrModel;
     }
-
-     */
 
     public MDROrderBuildTargets getTargetNaming() {
         return targetNaming;

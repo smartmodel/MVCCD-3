@@ -34,6 +34,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     private String sequencePKNameFormat;
     private String triggerNameFormat;
     private String checkColumnDatatypeNameFormat;
+    private String checkColumnDatatypeMax30NameFormat;
 
     public MPDRModel(ProjectElement parent, String name, MPDRDB db) {
         super(parent, name);
@@ -183,6 +184,14 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
 
     public void setCheckColumnDatatypeNameFormat(String checkColumnDatatypeNameFormat) {
         this.checkColumnDatatypeNameFormat = checkColumnDatatypeNameFormat;
+    }
+
+    public String getCheckColumnDatatypeMax30NameFormat() {
+        return checkColumnDatatypeMax30NameFormat;
+    }
+
+    public void setCheckColumnDatatypeMax30NameFormat(String checkColumnDatatypeMax30NameFormat) {
+        this.checkColumnDatatypeMax30NameFormat = checkColumnDatatypeMax30NameFormat;
     }
 
     public abstract Boolean getMPDR_TAPIs() ;
