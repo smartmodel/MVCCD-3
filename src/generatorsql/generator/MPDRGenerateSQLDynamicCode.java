@@ -8,7 +8,7 @@ import mpdr.MPDRTable;
 import mpdr.tapis.MPDRDynamicCodeType;
 import mpdr.tapis.interfaces.IMPDRWithDynamicCode;
 import preferences.Preferences;
-import utilities.TemplateFile;
+import utilities.ReadFile;
 
 import java.util.ArrayList;
 
@@ -38,7 +38,7 @@ public abstract class MPDRGenerateSQLDynamicCode {
 
 
     protected String loadTemplate(MPDRDynamicCodeType mpdrDynamicCodeType){
-        return TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirDynamicCodeDB(), mpdrDynamicCodeType.getTemplateFileName()) ;
+        return ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirDynamicCodeDB(), mpdrDynamicCodeType.getTemplateFileName()) ;
     }
 
     /*

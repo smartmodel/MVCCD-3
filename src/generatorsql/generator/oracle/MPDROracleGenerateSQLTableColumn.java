@@ -1,21 +1,21 @@
 package generatorsql.generator.oracle;
 
 import generatorsql.generator.MPDRGenerateSQL;
-import generatorsql.generator.MPDRGenerateSQLColumn;
+import generatorsql.generator.MPDRGenerateSQLTableColumn;
 import mpdr.MPDRColumn;
 import mpdr.MPDRDBPK;
 import preferences.PreferencesManager;
 
-public class MPDROracleGenerateSQLColumn extends MPDRGenerateSQLColumn {
+public class MPDROracleGenerateSQLTableColumn extends MPDRGenerateSQLTableColumn {
 
 
     MPDROracleGenerateSQL mpdrOracleGenerateSQL ;
-    public MPDROracleGenerateSQLColumn(MPDROracleGenerateSQL mpdrOracleGenerateSQL) {
+    public MPDROracleGenerateSQLTableColumn(MPDROracleGenerateSQL mpdrOracleGenerateSQL) {
         this.mpdrOracleGenerateSQL = mpdrOracleGenerateSQL;
     }
 
-    public String generateSQLCreateColumn(MPDRColumn mpdrColumn) {
-        String generateSQLCode = super.generateSQLCreateColumn(mpdrColumn);
+    public String generateSQLCreateTableColumn(MPDRColumn mpdrColumn) {
+        String generateSQLCode = super.generateSQLCreateTableColumn(mpdrColumn);
         return generateSQLCode;
     }
 

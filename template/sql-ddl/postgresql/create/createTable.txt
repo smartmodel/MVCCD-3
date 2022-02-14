@@ -1,4 +1,6 @@
 CREATE TABLE {tableName}(
     {createTableColumns.txt}
     {createTablePK.txt}
+    {createTableChecks.txt}
+    {createTableUniques.txt}
 )

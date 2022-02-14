@@ -151,6 +151,14 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         return MPDRConstraintService.getMPDRFKs(getMDRConstraints());
     }
 
+    public ArrayList<MPDRUnique> getMPDRUniques() {
+        return MPDRConstraintService.getMPDRUniques(getMDRConstraints());
+    }
+
+    public ArrayList<MPDRIndex> getMPDRIndexes() {
+        return MPDRConstraintService.getMPDRIndexes(getMDRConstraints());
+    }
+
     public MPDRModel getMPDRModelParent() {
         return (MPDRModel) getMDRModelParent();
     }

@@ -8,6 +8,8 @@ import exceptions.CodeApplException;
 import mcd.MCDAttribute;
 import mcd.MCDNID;
 import mdr.MDRColumn;
+import mldr.MLDRColumn;
+import mpdr.MPDRColumn;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
@@ -179,4 +181,25 @@ public class MDRColumnsService {
         }
         return resultat;
     }
+
+    public static ArrayList<MPDRColumn> toMPDRColumns(ArrayList<MDRColumn> mdrColumns) {
+        ArrayList<MPDRColumn> resultat = new ArrayList<MPDRColumn>();
+        for (MDRColumn mdrColumn : mdrColumns){
+            if (mdrColumn instanceof MPDRColumn){
+                resultat.add((MPDRColumn) mdrColumn );
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MLDRColumn> toMLDRColumns(ArrayList<MDRColumn> mdrColumns) {
+        ArrayList<MLDRColumn> resultat = new ArrayList<MLDRColumn>();
+        for (MDRColumn mdrColumn : mdrColumns){
+            if (mdrColumn instanceof MLDRColumn){
+                resultat.add((MLDRColumn) mdrColumn );
+            }
+        }
+        return resultat;
+    }
+
 }

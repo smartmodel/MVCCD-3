@@ -223,14 +223,14 @@ public class SQLViewerParametersContent extends PanelContent implements IPanelIn
 
 
         if ( MVCCDManager.instance().getFileProjectCurrent() != null) {
-            String directorySQL = MPDRGenerateSQLUtil.directorySQLFiles().getPath();
+            String directorySQL = MPDRGenerateSQLUtil.directorySQLFiles(mpdrModel).getPath();
             fieldDirectorySQL.setText(directorySQL);
         } else {
             fieldDirectorySQL.setText("");
             fieldDirectorySQL.setColor(SComponent.COLORERROR);
             SQLViewerButtonsContent sqlViewerButtonsContent = sqlViewer.getSqlViewerButtons().getSqlViewerButtonsContent();
-            sqlViewerButtonsContent.getBtnSave().setEnabled(false);
-            sqlViewerButtonsContent.getBtnExecute().setEnabled(false);
+            sqlViewerButtonsContent.getBtnDDLSave().setEnabled(false);
+            sqlViewerButtonsContent.getBtnDDLExecute().setEnabled(false);
             String message = MessagesBuilder.getMessagesProperty("generatesql.project.not.saved");
             SQLViewerConsoleContent sqlViewerConsoleContent = sqlViewer.getSqlViewerConsole().getSqlViewerConsoleContent();
             sqlViewerConsoleContent.getTextArea().append(message);

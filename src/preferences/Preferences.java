@@ -228,12 +228,17 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATE_DROP_SEQUENCE = "dropSequence.txt";
   public static String TEMPLATE_DROP_TRIGGER = "dropTrigger.txt";
   public static String TEMPLATE_DROP_FUNCTION = "dropFunction.txt";
+  public static String TEMPLATE_DROP_INDEX = "dropIndex.txt";
 
   public static String TEMPLATE_CREATE_TABLE = "createTable.txt";
   public static String TEMPLATE_CREATE_TABLE_COLUMNS = "createTableColumns.txt";
   public static String TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY = "createTableColumnIdentity.txt";
   public static String TEMPLATE_CREATE_TABLE_PK = "createTablePK.txt";
+  public static String TEMPLATE_CREATE_TABLE_CHECKS = "createTableChecks.txt";
+  public static String TEMPLATE_CREATE_TABLE_UNIQUES = "createTableUniques.txt";
   public static String TEMPLATE_CREATE_SEQUENCE = "createSequence.txt";
+  public static String TEMPLATE_CREATE_INDEX = "createIndex.txt";
+  public static String TEMPLATE_CREATE_INDEX_COLUMNS = "createIndexColumns.txt";
 
   public static String TEMPLATES_ALTER_TABLE_FK = "alterTableFK.txt";
 
@@ -766,6 +771,8 @@ public class Preferences extends MVCCDElement {
   public static String MDR_FK_COLUMNS_REF_WORD = "fkColumnsRef"; // Il ne faut pas utiliser MDR_PK_COLUMNS_WORD qui ne garanti pas le lien entre colonnes
   public static String MDR_PK_NAME_WORD = "pkName";
   public static String MDR_PK_COLUMNS_WORD = "pkColumns";
+  public static String MDR_UNIQUE_NAME_WORD = "uniqueName";
+  public static String MDR_UNIQUE_COLUMNS_WORD = "uniqueColumns";
   public static String MDR_COLUMN_NAME_WORD =  "columnName";
   public static String MDR_COLUMN_PK_NAME_WORD =  "columnPKName";
   public static String MDR_COLUMN_TYPE_WORD =  "columnType";
@@ -782,6 +789,9 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_COLUMN_NAME_WORD = "mpdrColumnName";
   public static String MCD_ATTRIBUTE_NAME_WORD = "mcdAttrName";
   public static String MCD_ATTRIBUTE_SHORT_NAME_WORD = "mcdAttrShortName";
+  public static String MDR_CHECK_NAME_WORD =  "checkName";
+  public static String MDR_CHECK_EXPRESSION_WORD =  "checkExpression";
+  public static String MPDR_INDEX_NAME_WORD =  "indexName";
 
   public static String MPDR_CHECK_PARAM_EXPRESSION_NAME = "expr";  // Le nom du paramètre qui contient l'expression'
 
@@ -823,7 +833,6 @@ public class Preferences extends MVCCDElement {
   public static String MDR_PEA_SHORT_NAME_WORD = "peaShortName";
 
   public static String MDR_UNIQUE_NATURE_NAME_WORD = "uniqueNature";
-  public static String MDR_UNIQUE_NAME_WORD = "uniqueName";
   public static String MDR_UNIQUE_SHORT_NAME_WORD = "uniqueShortName";
 
   public static String MDR_INDICE_TABLENN_WORD = "indTableNN";

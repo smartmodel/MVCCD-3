@@ -1,10 +1,13 @@
 package generatorsql.generator;
 
 import generatorsql.MPDRGenerateSQLUtil;
+import mpdr.MPDRCheck;
 import mpdr.MPDRColumn;
 import mpdr.MPDRTable;
+import mpdr.MPDRUnique;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.TemplateFile;
+import utilities.ReadFile;
 
 public abstract class MPDRGenerateSQLTable {
 
@@ -13,7 +16,7 @@ public abstract class MPDRGenerateSQLTable {
 
     public String generateSQLDropTable(MPDRTable mpdrTable) {
         String generateSQLCode = "";
-        generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirDropDB(), Preferences.TEMPLATE_DROP_TABLE);
+        generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirDropDB(), Preferences.TEMPLATE_DROP_TABLE);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
         return generateSQLCode;
@@ -22,8 +25,8 @@ public abstract class MPDRGenerateSQLTable {
     public String generateSQLCreateTable(MPDRTable mpdrTable) {
         String generateSQLCode = "";
 
-        //Génération des tables
-        generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE) ;
+        //Génération de la table
+        generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE) ;
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
 
@@ -34,18 +37,34 @@ public abstract class MPDRGenerateSQLTable {
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_COLUMNS, columnsInCreateTable);
 
         //Génération de la contrainte de PK
-        //generateSQLCode += Preferences.SQL_SEPARATOR_ARGUMENTS + System.lineSeparator();
         MPDRGenerateSQLPK mpdrGenerateSQLPK = getMPDRGenerateSQLPK();
         String pkInCreateTable =mpdrGenerateSQLPK.generateSQLCreatePK(mpdrTable);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_PK, pkInCreateTable);
 
-        generateSQLCode = MPDRGenerateSQLUtil.cleanSeparatorArguments(generateSQLCode);
+        //Génération des contraintes de CHECK
+        tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_CHECKS);
+        String checksInCreateTable = generateSQLCreateChecks(mpdrTable, tabsApplicable);
+        if (StringUtils.isNotEmpty(checksInCreateTable)){
+            generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_CHECKS, checksInCreateTable);
+        } else {
+            generateSQLCode = getMPDRGenerateSQL().nullifyKey(generateSQLCode, System.lineSeparator()+ tabsApplicable,  Preferences.TEMPLATE_CREATE_TABLE_CHECKS  ,  "");
+        }
 
+        //Génération des contraintes UNIQUE
+        tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_UNIQUES);
+        String uniquesInCreateTable = generateSQLCreateUniques(mpdrTable, tabsApplicable);
+        if (StringUtils.isNotEmpty(uniquesInCreateTable)){
+            generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_UNIQUES, uniquesInCreateTable);
+        } else {
+            generateSQLCode = getMPDRGenerateSQL().nullifyKey(generateSQLCode, System.lineSeparator()+ tabsApplicable, Preferences.TEMPLATE_CREATE_TABLE_UNIQUES ,  "");
+        }
+
+
+        generateSQLCode = MPDRGenerateSQLUtil.cleanSeparatorArguments(generateSQLCode);
         return generateSQLCode ;
     }
 
-
-    public String generateSQLCreateColumns(MPDRTable mpdrTable, String tabsApplicable) {
+    public String generateSQLCreateColumns(MPDRTable mpdrTable, String tabsApplicable){
         String generateSQLCode = "";
         // Avec nos règles de conformité, une table doit avoir au moins une colonne,
 
@@ -54,18 +73,51 @@ public abstract class MPDRGenerateSQLTable {
             if (!firstColumn) {
                 generateSQLCode +=  System.lineSeparator() + tabsApplicable;
             }
-            generateSQLCode += getMPDRGenerateSQLColumn().generateSQLCreateColumn(mpdrColumn);
+            generateSQLCode += getMPDRGenerateSQLColumn().generateSQLCreateTableColumn(mpdrColumn);
             firstColumn = false;
+        }
+        return generateSQLCode;
+    }
+
+    public String generateSQLCreateChecks(MPDRTable mpdrTable, String tabsApplicable) {
+        String generateSQLCode = "";
+
+        boolean firstCheck = true;
+        for (MPDRCheck mpdrCheck : mpdrTable.getMPDRChecks()) {
+            if (!firstCheck) {
+                generateSQLCode +=  System.lineSeparator() + tabsApplicable;
+            }
+            generateSQLCode += getMPDRGenerateSQLCheck().generateSQLCreateCheck(mpdrCheck);
+            firstCheck = false;
+        }
+        return generateSQLCode;
+    }
+
+    protected String generateSQLCreateUniques(MPDRTable mpdrTable, String tabsApplicable) {
+        String generateSQLCode = "";
+
+        boolean firstUnique = true;
+        for (MPDRUnique mpdrUnique : mpdrTable.getMPDRUniques()) {
+            if (!firstUnique) {
+                generateSQLCode +=  System.lineSeparator() + tabsApplicable;
+            }
+            generateSQLCode += getMPDRGenerateSQLUnique().generateSQLCreateUnique(mpdrUnique);
+            firstUnique = false;
         }
         return generateSQLCode;
 
     }
 
+    protected abstract MPDRGenerateSQLUnique getMPDRGenerateSQLUnique();
+
 
     protected abstract MPDRGenerateSQLPK getMPDRGenerateSQLPK();
 
-    protected abstract MPDRGenerateSQLColumn getMPDRGenerateSQLColumn();
+    protected abstract MPDRGenerateSQLTableColumn getMPDRGenerateSQLColumn();
+
+    protected abstract MPDRGenerateSQLCheck getMPDRGenerateSQLCheck();
 
     public abstract MPDRGenerateSQL getMPDRGenerateSQL() ;
+
 
 }

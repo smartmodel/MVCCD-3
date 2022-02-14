@@ -1,9 +1,6 @@
 package generatorsql.generator.oracle;
 
-import generatorsql.generator.MPDRGenerateSQL;
-import generatorsql.generator.MPDRGenerateSQLColumn;
-import generatorsql.generator.MPDRGenerateSQLPK;
-import generatorsql.generator.MPDRGenerateSQLTable;
+import generatorsql.generator.*;
 import mpdr.MPDRTable;
 
 public class MPDROracleGenerateSQLTable extends MPDRGenerateSQLTable {
@@ -20,13 +17,23 @@ public class MPDROracleGenerateSQLTable extends MPDRGenerateSQLTable {
     }
 
     @Override
+    protected MPDRGenerateSQLUnique getMPDRGenerateSQLUnique() {
+        return new MPDROracleGenerateSQLUnique(mpdrOracleGenerateSQL);
+    }
+
+    @Override
     protected MPDRGenerateSQLPK getMPDRGenerateSQLPK() {
         return new MPDROracleGenerateSQLPK(mpdrOracleGenerateSQL) ;
     }
 
     @Override
-    protected MPDRGenerateSQLColumn getMPDRGenerateSQLColumn() {
-        return new MPDROracleGenerateSQLColumn(mpdrOracleGenerateSQL);
+    protected MPDRGenerateSQLTableColumn getMPDRGenerateSQLColumn() {
+        return new MPDROracleGenerateSQLTableColumn(mpdrOracleGenerateSQL);
+    }
+
+    @Override
+    protected MPDRGenerateSQLCheck getMPDRGenerateSQLCheck() {
+        return new MPDROracleGenerateSQLCheck(mpdrOracleGenerateSQL);
     }
 
     @Override

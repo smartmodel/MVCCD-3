@@ -1,0 +1,8 @@
+DECLARE nb_ind  PLS_INTEGER;
+
+BEGIN
+    SELECT count(*) INTO nb_ind from user_indexes WHERE index_name = UPPER('{indexName}');
+    IF nb_ind = 1 then
+        EXECUTE IMMEDIATE 'DROP INDEX {indexName}';
+    END IF;
+END;

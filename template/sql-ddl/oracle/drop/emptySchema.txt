@@ -25,11 +25,14 @@ BEGIN
      END LOOP;
 
     -- Suppresion des autres objets que les tables et sans la présente procédure en cours d'exécution.
+    -- A priori manque INDEX
 	drops_select := q'$SELECT 'DROP ' || object_type || ' ' || object_name   || ''
                     FROM user_objects
                     WHERE (object_type IN ('SEQUENCE', 'TRIGGER', 'PACKAGE',
 					'FUNCTION', 'VIEW', 'DATABASE LINK', 'SYNONYM')
                     OR (( object_type = 'PROCEDURE') AND (object_name != Upper('{emptySchema}'))))$';
+
+
 
     EXECUTE IMMEDIATE drops_select BULK COLLECT INTO drops_commands;
 

@@ -18,6 +18,7 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
     private MPDRPostgreSQLGenerateSQLTrigger mpdrPostgreSQLGenerateSQLTrigger;
     private MPDRPostgreSQLGenerateSQLFunction mpdrPostgreSQLGenerateSQLFunction;
     private MPDRPostgreSQLGenerateSQLDynamicCode mpdrPostgreSQLGenerateSQLDynamicCode;
+    private MPDRPostgreSQLGenerateSQLIndex mpdrPostgreSQLGenerateSQLIndex;
 
     public MPDRPostgreSQLGenerateSQL(MPDRModel mpdrModel) {
         super (mpdrModel);
@@ -33,6 +34,7 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
         mpdrPostgreSQLGenerateSQLTrigger = new MPDRPostgreSQLGenerateSQLTrigger(this);
         mpdrPostgreSQLGenerateSQLFunction = new MPDRPostgreSQLGenerateSQLFunction(this);
         mpdrPostgreSQLGenerateSQLDynamicCode = new MPDRPostgreSQLGenerateSQLDynamicCode(this);
+        mpdrPostgreSQLGenerateSQLIndex = new MPDRPostgreSQLGenerateSQLIndex(this);
     }
 
     public String generate() {
@@ -74,6 +76,11 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
     @Override
     public MPDRGenerateSQLFK getMpdrGenerateSQLFK() {
         return mpdrPostgreSQLGenerateSQLFK;
+    }
+
+    @Override
+    protected MPDRGenerateSQLIndex getMpdrGenerateSQLIndex() {
+        return mpdrPostgreSQLGenerateSQLIndex;
     }
 
     @Override

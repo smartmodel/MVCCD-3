@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import treatment.services.TreatmentService;
+import utilities.ReadFile;
 import utilities.UtilDivers;
 import utilities.files.UtilFiles;
 import utilities.window.PanelContent;
@@ -44,6 +45,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     private MPDRModel mpdrModel;
 
     File sqlCreateFile = null;
+    File sqlPopulateFile = null;
 
 
     private JPanel panelContent = new JPanel();
@@ -52,8 +54,10 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
 
     private SButton btnConnectionTest;
     private SButton btnConnectorTest;
-    private SButton btnExecute;
-    private SButton btnSave;
+    private SButton btnDDLExecute;
+    private SButton btnDDLSave;
+    private SButton btnDMLExecute;
+    private SButton btnDMLView;
     private SButton btnClose;
 
     private JLabel labelDDLName;
@@ -63,6 +67,13 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     private JLabel labelDDLExecuted;
     private STextField fieldDDLExecuted;
 
+    private JLabel labelDMLName;
+    private STextField fieldDMLName;
+    private JLabel labelDMLSaved;
+    private STextField fieldDMLSaved;
+    private JLabel labelDMLExecuted;
+    private STextField fieldDMLExecuted;
+
     public SQLViewerButtonsContent(SQLViewerButtons sqlViewerButtons) {
         super(sqlViewerButtons);
         this.sqlViewerButtons = sqlViewerButtons;
@@ -70,8 +81,9 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         sqlViewer = sqlViewerButtons.getSQLViewer();
         mpdrModel = sqlViewer.getMpdrModel();
         if ( MVCCDManager.instance().getFileProjectCurrent() != null) {
-            sqlCreateFile = MPDRGenerateSQLUtil.sqlCreateFile();
+            sqlCreateFile = MPDRGenerateSQLUtil.sqlCreateFile(mpdrModel);
         }
+        sqlPopulateFile = MPDRGenerateSQLUtil.sqlPopulateFile(mpdrModel);
         createContent();
         createPanelContent();
         loadDatas();
@@ -87,11 +99,18 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         btnConnectorTest = new SButton("Test du connecteur");
         btnConnectorTest.addActionListener(this);
 
-        btnExecute = new SButton("Exécuter");
-        btnExecute.addActionListener(this);
+        btnDDLExecute = new SButton("Sauver et exécuter");
+        btnDDLExecute.addActionListener(this);
 
-        btnSave = new SButton("Sauver");
-        btnSave.addActionListener(this);
+        btnDDLSave = new SButton("Sauver");
+        btnDDLSave.addActionListener(this);
+
+
+        btnDMLExecute = new SButton("Exécuter");
+        btnDMLExecute.addActionListener(this);
+
+        btnDMLView = new SButton("Visualiser");
+        btnDMLView.addActionListener(this);
 
         btnClose = new SButton("Fermer");
         btnClose.addActionListener(this);
@@ -115,6 +134,26 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         fieldDDLExecuted.setToolTipText("Dernière exécution pour cette session...");
         fieldDDLExecuted.setReadOnly(true);
 
+
+
+        labelDMLName = new JLabel("Nom : ");
+        fieldDMLName = new STextField(this, labelDMLName);
+        fieldDMLName.setPreferredSize((new Dimension(200, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldDMLName.setToolTipText("Nom du fichier script de peuplement SQL/DML...");
+        fieldDMLName.setReadOnly(true);
+
+        labelDMLSaved = new JLabel("Sauvé : ");
+        fieldDMLSaved = new STextField(this, labelDMLSaved);
+        fieldDMLSaved.setPreferredSize((new Dimension(200, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldDMLSaved.setToolTipText("Si existant, date de la dernière modification...");
+        fieldDMLSaved.setReadOnly(true);
+
+        labelDMLExecuted = new JLabel("Exécuté : ");
+        fieldDMLExecuted = new STextField(this, labelDMLExecuted);
+        fieldDMLExecuted.setPreferredSize((new Dimension(200, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldDMLExecuted.setToolTipText("Dernière exécution pour cette session...");
+        fieldDMLExecuted.setReadOnly(true);
+
     }
 
 
@@ -136,10 +175,11 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         gbc.gridy++ ;
         createPanelDDL();
         panelContent.add(panelDDL, gbc);
+
         gbc.gridy++ ;
-        panelContent.add(btnExecute, gbc);
-        gbc.gridy++ ;
-        panelContent.add(btnSave, gbc);
+        createPanelDML();
+        panelContent.add(panelDML, gbc);
+        
         gbc.gridy++ ;
         panelContent.add(btnClose, gbc);
 
@@ -176,6 +216,52 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         gbcD.gridx++;
         panelDDL.add(fieldDDLExecuted, gbcD);
 
+        gbcD.gridx = 0;
+        gbcD.gridy++ ;
+        panelDDL.add(btnDDLExecute, gbcD);
+
+        gbcD.gridx++;
+        panelDDL.add(btnDDLSave, gbcD);
+    }
+
+
+    private void createPanelDML() {
+        Border border = BorderFactory.createLineBorder(Color.black);
+        TitledBorder panelDMLBorder = BorderFactory.createTitledBorder(border, "Script SQL/DML");
+        panelDML.setBorder(panelDMLBorder);
+
+        panelDML.setLayout(new GridBagLayout());
+        GridBagConstraints gbcD = new GridBagConstraints();
+        gbcD.anchor = GridBagConstraints.NORTHWEST;
+        gbcD.insets = new Insets(10, 10, 0, 0);
+
+        gbcD.gridx = 0;
+        gbcD.gridy = 0;
+        gbcD.gridwidth = 1;
+        gbcD.gridheight = 1;
+
+        panelDML.add(labelDMLName , gbcD);
+        gbcD.gridx++;
+        panelDML.add(fieldDMLName, gbcD);
+
+        gbcD.gridx = 0;
+        gbcD.gridy++ ;
+        panelDML.add(labelDMLSaved, gbcD);
+        gbcD.gridx++;
+        panelDML.add(fieldDMLSaved, gbcD);
+
+        gbcD.gridx = 0;
+        gbcD.gridy++ ;
+        panelDML.add(labelDMLExecuted, gbcD);
+        gbcD.gridx++;
+        panelDML.add(fieldDMLExecuted, gbcD);
+
+        gbcD.gridx = 0;
+        gbcD.gridy++ ;
+        panelDML.add(btnDMLExecute, gbcD);
+
+        gbcD.gridx++;
+        panelDML.add(btnDMLView, gbcD);
     }
 
 
@@ -188,10 +274,13 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         } else {
             fieldDDLName.setText("");
         }
-        setFieldDDLSaved();
+        fieldDMLName.setText(sqlPopulateFile.getName());
+        //setFieldDDLSaved();
+        setFieldSaved(sqlCreateFile, fieldDDLSaved);
+        setFieldSaved(sqlPopulateFile, fieldDMLSaved);
         fieldDDLExecuted.setText("");
     }
-
+/*
     private void setFieldDDLSaved() {
         Date ddlDateLastModified = null;
         if (sqlCreateFile != null) {
@@ -203,6 +292,23 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
             fieldDDLSaved.setText(formattedDateLastModified);
         } else {
             fieldDDLSaved.setText("Inexistant");
+        }
+    }
+
+ */
+
+
+    private void setFieldSaved(File sqlFile, STextField fieldSaved) {
+        Date ddlDateLastModified = null;
+        if (sqlFile != null) {
+            ddlDateLastModified = UtilFiles.getLastModifiedDate(sqlFile);
+        }
+        if (ddlDateLastModified != null) {
+            Date dateLastModified = ddlDateLastModified;
+            String formattedDateLastModified = UtilDivers.dateHourFormatted(dateLastModified);
+            fieldSaved.setText(formattedDateLastModified);
+        } else {
+            fieldSaved.setText("Inexistant");
         }
     }
 
@@ -249,15 +355,21 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                         actionTestConnector(true);
                     }
 
-                    if (source == btnExecute) {
-                        propertyAction = "sqlviewer.execute.btn.exception.test";
-                        actionExecute();
+                    if (source == btnDDLExecute) {
+                        propertyAction = "sqlviewer.sql.ddl.execute.btn.exception.test";
+                        actionDDLExecute();
                     }
 
-                    if (source == btnSave) {
+                    if (source == btnDDLSave) {
                         propertyAction = "sqlviewer.save.btn.exception.test";
-                        actionSave(true);
+                        actionDDLSave(true);
                     }
+
+                    if (source == btnDMLExecute) {
+                        propertyAction = "sqlviewer.sql.dml.execute.btn.exception.test";
+                        actionDMLExecute();
+                    }
+
                     if (source == btnClose) {
                         sqlViewer.dispose();
                     }
@@ -283,31 +395,118 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     }
 
 
-    private boolean actionSave(boolean autonomous)  {
+    private boolean actionDDLSave(boolean autonomous)  {
+        SQLViewer sqlViewer = sqlViewerButtons.getSQLViewer();
+        MPDRModel mpdrModel = sqlViewer.getMpdrModel();
 
         boolean ok = true ;
-        File sqlCreateFile = MPDRGenerateSQLUtil.sqlCreateFile();
+        File sqlCreateFile = MPDRGenerateSQLUtil.sqlCreateFile(mpdrModel);
 
         try {
-            String message = MessagesBuilder.getMessagesProperty("sqlviewer.dml.file.saved.start", sqlCreateFile.getPath());
+            String message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.ddl.file.saved.start", sqlCreateFile.getPath());
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
-            MPDRGenerateSQLUtil.generateSQLFile(sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL());
+            MPDRGenerateSQLUtil.generateSQLFile(mpdrModel, sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL());
         } catch (Exception e){
             ok = false ;
         }
 
         if (ok) {
-            setFieldDDLSaved();
+            setFieldSaved(sqlCreateFile, fieldDDLSaved);
         }
 
         TreatmentService.treatmentFinish(sqlViewer, new String[] {sqlCreateFile.getPath()}, ok, autonomous,
-                "sqlviewer.dml.file.saved.ok", "sqlviewer.dml.file.saved.abort") ;
+                "sqlviewer.sql.ddl.file.saved.ok", "sqlviewer.sql.ddl.file.saved.abort") ;
 
         return ok;
     }
 
+    private boolean actionDDLExecute() {
 
-    private boolean actionExecute() {
+        String message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.ddl.execute.start",
+                new String[]{mpdrModel.getNamePath()});
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+
+        // Sauvegarde du fichier de script
+        boolean ok = actionDDLSave(false);
+
+        // Etablissement de la connexion
+        if (ok) {
+            String codeSQL = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
+            ok = actionExecute(codeSQL, "Le script SQL-DDL n'a pas pu être exécuté :");
+            if (ok) {
+                String formattedHourExecuted = UtilDivers.hourFormatted(new Date());
+                fieldDDLExecuted.setText(formattedHourExecuted);
+            }
+        }
+
+        TreatmentService.treatmentFinish(sqlViewer, new String[]{mpdrModel.getNamePath()}, ok, true,
+                "sqlviewer.sql.ddl.execute.ok", "sqlviewer.sql.ddl.execute.abort") ;
+        return ok;
+    }
+
+    private boolean actionDMLExecute() {
+
+        String message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.dml.execute.start",
+                new String[]{mpdrModel.getNamePath()});
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+
+        String codeSQL = ReadFile.fileToString(sqlPopulateFile);
+        boolean ok = actionExecute(codeSQL, "Le script SQL-DML n'a pas pu être exécuté :");
+        if (ok) {
+            String formattedHourExecuted = UtilDivers.hourFormatted(new Date());
+            fieldDMLExecuted.setText(formattedHourExecuted);
+        }
+
+        TreatmentService.treatmentFinish(sqlViewer, new String[]{mpdrModel.getNamePath()}, ok, true,
+                "sqlviewer.sql.dml.execute.ok", "sqlviewer.sql.dml.execute.abort") ;
+        return ok;
+    }
+
+    private boolean actionExecute(String codeToExecute, String messageError ) {
+        boolean ok = true;
+        String message = MessagesBuilder.getMessagesProperty("con.connection.start.test");
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        Connection connection = null;
+        if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTION) {
+            connection = actionTestConnection(false);
+        }
+        if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
+            connection = actionTestConnector(false);
+        }
+        // Exécution du script
+        if (connection != null) {
+            String commandCopy = "";
+            try {
+                //TODO-0 A paramétrer
+                String[] commands = codeToExecute.split(mpdrModel.getDb().getDelimiterInstructions());
+                for (String command : commands) {
+                    commandCopy = command;
+                    command = MPDRGenerateSQLUtil.clearCommandSQL(command);
+                    if (StringUtils.isNotEmpty(command)) {
+                        Statement statement = connection.createStatement();
+                        statement.executeUpdate(command);
+                        statement.close();
+                    }
+                }
+            } catch (Exception e) {
+                ok = false;
+                ViewLogsManager.catchException(e, messageError + System.lineSeparator() + commandCopy);
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    ViewLogsManager.catchException(e, "La connexion n''a pas pu être coupée");
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            ok = false;
+        }
+        return ok;
+    }
+
+/*
+    private boolean actionDDLExecute() {
         boolean ok = true ;
 
         String message = MessagesBuilder.getMessagesProperty("sqlviewer.sql.execute.start",
@@ -316,7 +515,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
 
         // Sauvegarde du fichier de script
         String codeSQL = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
-        ok = actionSave(false);
+        ok = actionDDLSave(false);
 
         // Etablissement de la connexion
         if (ok) {
@@ -357,7 +556,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                     try {
                         connection.close();
                     } catch (SQLException e) {
-                        ViewLogsManager.catchException(e, "La connexion n''a pas pu être ");
+                        ViewLogsManager.catchException(e, "La connexion n''a pas pu être coupée");
                         e.printStackTrace();
                     }
                 }
@@ -370,13 +569,13 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                 "sqlviewer.sql.execute.ok", "sqlviewer.sql.execute.abort") ;
         return ok;
     }
+*/
 
-
-    public SButton getBtnExecute() {
-        return btnExecute;
+    public SButton getBtnDDLExecute() {
+        return btnDDLExecute;
     }
 
-    public SButton getBtnSave() {
-        return btnSave;
+    public SButton getBtnDDLSave() {
+        return btnDDLSave;
     }
 }

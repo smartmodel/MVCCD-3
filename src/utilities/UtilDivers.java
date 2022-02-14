@@ -3,6 +3,7 @@ package utilities;
 import exceptions.CodeApplException;
 import messages.MessagesBuilder;
 import org.apache.commons.lang.StringUtils;
+import preferences.Preferences;
 
 import javax.swing.*;
 import java.time.LocalDate;
@@ -273,8 +274,9 @@ public class UtilDivers {
 
 
     public static String replaceKeyValue(String code, String key, String value) {
-        return code.replaceAll("\\{" + key + "}", value);
+        //return code.replaceAll("\\{" + key + "}", value);
+        //return StringUtils.replace(code, "{" + key + "}", value);
+        String search = Preferences.MDR_WORDS_BEGIN + key + Preferences.MDR_WORDS_END;
+        return StringUtils.replace(code, search, value);
     }
-
-
 }

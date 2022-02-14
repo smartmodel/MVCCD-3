@@ -3,9 +3,7 @@ package mpdr.services;
 import mdr.MDRConstraint;
 import mdr.MDRParameter;
 import mldr.MLDRParameter;
-import mpdr.MPDRFK;
-import mpdr.MPDRPK;
-import mpdr.MPDRParameter;
+import mpdr.*;
 import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElementWithSource;
 
@@ -41,6 +39,29 @@ public class MPDRConstraintService {
         } else {
             return false;
         }
+    }
+
+
+    public static ArrayList<MPDRIndex> getMPDRIndexes(ArrayList<MDRConstraint> mdrConstraints) {
+        ArrayList<MPDRIndex> resultat = new ArrayList<MPDRIndex>();
+
+        for (MDRConstraint mdrConstraint : mdrConstraints) {
+            if (mdrConstraint instanceof MPDRIndex) {
+                resultat.add((MPDRIndex) mdrConstraint);
+            }
+        }
+        return resultat;
+    }
+
+    public static ArrayList<MPDRUnique> getMPDRUniques(ArrayList<MDRConstraint> mdrConstraints) {
+        ArrayList<MPDRUnique> resultat = new ArrayList<MPDRUnique>();
+
+        for (MDRConstraint mdrConstraint : mdrConstraints) {
+            if (mdrConstraint instanceof MPDRUnique) {
+                resultat.add((MPDRUnique) mdrConstraint);
+            }
+        }
+        return resultat;
     }
 
     public static ArrayList<MPDRParameter> getMPDRParameters(IMPDRConstraint mdrConstraint) {

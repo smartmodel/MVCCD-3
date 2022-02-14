@@ -1,7 +1,7 @@
 package generatorsql.generator.postgresql;
 
 import generatorsql.generator.MPDRGenerateSQL;
-import generatorsql.generator.MPDRGenerateSQLColumn;
+import generatorsql.generator.MPDRGenerateSQLTableColumn;
 import mpdr.MPDRColumn;
 import mpdr.MPDRDBPK;
 import preferences.Preferences;
@@ -9,16 +9,16 @@ import preferences.PreferencesManager;
 
 import java.util.ArrayList;
 
-public class MPDRPostgreSQLGenerateSQLColumn extends MPDRGenerateSQLColumn {
+public class MPDRPostgreSQLGenerateSQLTableColumn extends MPDRGenerateSQLTableColumn {
 
 
     MPDRPostgreSQLGenerateSQL mpdrPostgreSQLGenerateSQL;
-    public MPDRPostgreSQLGenerateSQLColumn(MPDRPostgreSQLGenerateSQL mpdrPostgreSQLGenerateSQL) {
+    public MPDRPostgreSQLGenerateSQLTableColumn(MPDRPostgreSQLGenerateSQL mpdrPostgreSQLGenerateSQL) {
         this.mpdrPostgreSQLGenerateSQL = mpdrPostgreSQLGenerateSQL;
     }
 
-    public String generateSQLCreateColumn(MPDRColumn mpdrColumn) {
-        String generateSQLCode = super.generateSQLCreateColumn(mpdrColumn);
+    public String generateSQLCreateTableColumn(MPDRColumn mpdrColumn) {
+        String generateSQLCode = super.generateSQLCreateTableColumn(mpdrColumn);
 
         return generateSQLCode;
     }

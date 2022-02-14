@@ -6,6 +6,7 @@ import messages.MessagesBuilder;
 import mpdr.*;
 import mpdr.tapis.MPDRFunction;
 import mpdr.tapis.MPDRTrigger;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.UtilDivers;
 
@@ -51,6 +52,14 @@ public abstract class MPDRGenerateSQL {
             message = MessagesBuilder.getMessagesProperty("generate.sql.drop.functions");
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
             generateSQLCode += generateSQLCommandFunctions(DROP);
+
+            message = MessagesBuilder.getMessagesProperty("generate.sql.drop.functions");
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+            generateSQLCode += generateSQLCommandFunctions(DROP);
+
+            message = MessagesBuilder.getMessagesProperty("generate.sql.drop.indexes");
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+            generateSQLCode += generateSQLCommandIndexes(DROP);
         }
 
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.tables");
@@ -72,6 +81,10 @@ public abstract class MPDRGenerateSQL {
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.triggers");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
         generateSQLCode += generateSQLCommandTriggers(CREATE);
+
+        message = MessagesBuilder.getMessagesProperty("generate.sql.create.indexes");
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        generateSQLCode += generateSQLCommandIndexes(CREATE);
 
         return generateSQLCode;
     }
@@ -199,6 +212,28 @@ public abstract class MPDRGenerateSQL {
         return generateSQLCode;
     }
 
+    public String generateSQLCommandIndexes(int command) {
+        String generateSQLCode = "";
+        ArrayList<MPDRTable> mpdrTables = mpdrModel.getMPDRTables();
+
+        for (MPDRTable mpdrTable : mpdrTables) {
+            ArrayList<MPDRIndex> mpdrIndexes = mpdrTable.getMPDRIndexes();
+            for (MPDRIndex mpdrIndex : mpdrIndexes) {
+                if (command == CREATE) {
+                    generateSQLCode += getMpdrGenerateSQLIndex().generateSQLCreateIndex(mpdrIndex);
+                    generateSQLCode += delimiter();
+                }
+                if (command == DROP) {
+                    generateSQLCode += getMpdrGenerateSQLIndex().generateSQLDropIndex(mpdrIndex);
+                    generateSQLCode += delimiter();
+                }
+
+            }
+        }
+        return generateSQLCode;
+    }
+
+
     public abstract MPDRGenerateSQLEmptySchema getMpdrGenerateSQLEmptySchema() ;
 
     public abstract MPDRGenerateSQLTable getMpdrGenerateSQLTable() ;
@@ -212,6 +247,8 @@ public abstract class MPDRGenerateSQL {
     public abstract MPDRGenerateSQLDynamicCode getMpdrGenerateSQLCodeDynamic() ;
 
     public abstract MPDRGenerateSQLFK getMpdrGenerateSQLFK();
+
+    protected abstract MPDRGenerateSQLIndex getMpdrGenerateSQLIndex();
 
     private String getTemplateDirBase() {
         return Preferences.DIRECTORY_TEMPLATES_NAME + Preferences.SYSTEM_FILE_SEPARATOR +
@@ -294,11 +331,13 @@ public abstract class MPDRGenerateSQL {
     public abstract String getDelimiterInstructions();
 
 
-
     // Surcharge si nécessité d'indiquer le schéma (PostgreSQL)
     public String replaceKeyValue(String code, String key, String value) {
         return UtilDivers.replaceKeyValue(code, key, value);
     }
 
+    public static String nullifyKey(String code, String beforeKey, String key, String value) {
+        return StringUtils.replace(code, beforeKey +"{" + key + "}", value);
+    }
 
 }

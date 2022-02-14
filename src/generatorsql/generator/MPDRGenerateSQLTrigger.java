@@ -3,7 +3,7 @@ package generatorsql.generator;
 import mpdr.tapis.MPDRTrigger;
 import mpdr.tapis.MPDRTriggerType;
 import preferences.Preferences;
-import utilities.TemplateFile;
+import utilities.ReadFile;
 
 public abstract class MPDRGenerateSQLTrigger {
 
@@ -14,7 +14,7 @@ public abstract class MPDRGenerateSQLTrigger {
 
     public String generateSQLDropTrigger(MPDRTrigger mpdrTrigger){
         String generateSQLCode = "";
-        generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirDropTriggersDB(), Preferences.TEMPLATE_DROP_TRIGGER);
+        generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirDropTriggersDB(), Preferences.TEMPLATE_DROP_TRIGGER);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_TRIGGER_NAME_WORD, mpdrTrigger.getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD,
                 mpdrTrigger.getMPDRTableAccueil().getName());
@@ -25,7 +25,7 @@ public abstract class MPDRGenerateSQLTrigger {
     public String generateSQLCreateTrigger(MPDRTrigger mpdrTrigger) {
         String generateSQLCode = "";
         MPDRTriggerType mpdrTriggerType = mpdrTrigger.getType();
-        generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateTriggersDB(), mpdrTriggerType.getTemplateFileName()) ;
+        generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirCreateTriggersDB(), mpdrTriggerType.getTemplateFileName()) ;
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_TRIGGER_NAME_WORD, mpdrTrigger.getName());
         // La fonction porte le même nom que le trigger
         // TODO-1 A voir si à terme, il faut associer le trigger à une fonction qui pourrait être réutilisable

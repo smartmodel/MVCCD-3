@@ -3,7 +3,7 @@ package generatorsql.generator;
 import mpdr.tapis.MPDRFunction;
 import mpdr.tapis.MPDRFunctionType;
 import preferences.Preferences;
-import utilities.TemplateFile;
+import utilities.ReadFile;
 
 public abstract class MPDRGenerateSQLFunction {
 
@@ -14,7 +14,7 @@ public abstract class MPDRGenerateSQLFunction {
 
     public String generateSQLDropFunction(MPDRFunction mpdrFunction){
         String generateSQLCode = "";
-        generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirDropStoredCodeDB(), Preferences.TEMPLATE_DROP_FUNCTION);
+        generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirDropStoredCodeDB(), Preferences.TEMPLATE_DROP_FUNCTION);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_FUNCTION_NAME_WORD, mpdrFunction.getName());
 
         return generateSQLCode;
@@ -23,7 +23,7 @@ public abstract class MPDRGenerateSQLFunction {
     public String generateSQLCreateFunction(MPDRFunction mpdrFunction) {
         String generateSQLCode = "";
         MPDRFunctionType mpdrFunctionType = mpdrFunction.getType();
-        generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateStoredCodeDB(), mpdrFunctionType.getTemplateFileName()) ;
+        generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirCreateStoredCodeDB(), mpdrFunctionType.getTemplateFileName()) ;
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_FUNCTION_NAME_WORD, mpdrFunction.getName());
 
 

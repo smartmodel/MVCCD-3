@@ -4,23 +4,23 @@ import datatypes.MDDatatypeService;
 import mpdr.MPDRColumn;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.TemplateFile;
+import utilities.ReadFile;
 
-public abstract class MPDRGenerateSQLColumn {
+public abstract class MPDRGenerateSQLTableColumn {
 
 
-    public MPDRGenerateSQLColumn() {
+    public MPDRGenerateSQLTableColumn() {
     }
 
-    public String generateSQLCreateColumn(MPDRColumn mpdrColumn) {
+    public String generateSQLCreateTableColumn(MPDRColumn mpdrColumn) {
         String generateSQLCode = "";
         boolean identityColumn = pkGenerateIdentity() && mpdrColumn.isPkNotFk();
         if (identityColumn){
-            generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY) +
+            generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY) +
                     Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
 
         } else {
-            generateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMNS) +
+            generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMNS) +
                     Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
         }
 

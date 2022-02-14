@@ -8,6 +8,7 @@ import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRConstraintSpecific;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.services.MPDRIndexService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -86,6 +87,10 @@ public abstract class MPDRIndex extends MDRConstraint implements IMPDRElement, I
     @Override
     public ArrayList<Constraint> getConstraints() {
         return new ArrayList<Constraint>();
+    }
+
+    public ArrayList<MPDRColumn> getMPDRColumns(){
+        return MPDRIndexService.getMPDRColumns(this);
     }
 
 }

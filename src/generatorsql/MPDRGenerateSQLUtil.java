@@ -2,6 +2,7 @@ package generatorsql;
 
 import exceptions.CodeApplException;
 import main.MVCCDManager;
+import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.files.UtilFiles;
@@ -12,17 +13,23 @@ import java.io.FileWriter;
 public class MPDRGenerateSQLUtil {
 
 
-    public static File directorySQLFiles() {
+    public static File directorySQLFiles(MPDRModel mpdrModel) {
         if (MVCCDManager.instance().getFileProjectCurrent() != null) {
             String filePathProjectCurrent = MVCCDManager.instance().getFileProjectCurrent().getPath();
             String fileNameProjectCurrent = MVCCDManager.instance().getFileProjectCurrent().getName();
             String fileShortNameProjectCurrent = UtilFiles.fileShortName(fileNameProjectCurrent);
             String directoryProjectCurrent = UtilFiles.getStrDirectory(MVCCDManager.instance().getFileProjectCurrent());
 
-            String folderSQLFiles = UtilFiles.filePath(directoryProjectCurrent, fileShortNameProjectCurrent);
-            File directory = new File(folderSQLFiles);
-            directory.mkdirs(); //Create folder if necessary
-            return directory;
+            String folderProjectSQLFiles = UtilFiles.filePath(directoryProjectCurrent, fileShortNameProjectCurrent);
+            File directoryProjectSQLFile = new File(folderProjectSQLFiles);
+            directoryProjectSQLFile.mkdirs(); //Create folder if necessary
+
+            String folderMPDRModelSQLFiles = UtilFiles.filePath(folderProjectSQLFiles, mpdrModel.getName());
+            File directoryMPDRModelSQLFile = new File(folderMPDRModelSQLFiles);
+            directoryMPDRModelSQLFile.mkdirs(); //Create folder if necessary
+
+
+            return directoryMPDRModelSQLFile;
         } else {
             return null;
         }
@@ -33,18 +40,27 @@ public class MPDRGenerateSQLUtil {
         return UtilFiles.fileName(Preferences.FILE_CREATE_SQL_SHORT_NAME, Preferences.FILE_SQL_DDL_EXTENSION);
     }
 
-    public static File sqlCreateFile(){
-        String folderSQLFiles = directorySQLFiles().getPath();
-        String nameSQLCreateFile = nameSQLCreateFile();
-        return UtilFiles.createFile(folderSQLFiles, nameSQLCreateFile);
-
+    public static String nameSQLPopulateFile() {
+        return UtilFiles.fileName(Preferences.FILE_POPULATE_SQL_SHORT_NAME, Preferences.FILE_SQL_DDL_EXTENSION);
     }
 
-    public static void generateSQLFile(String code) {
+    public static File sqlCreateFile(MPDRModel mpdrModel){
+        String folderSQLFiles = directorySQLFiles(mpdrModel).getPath();
+        String nameSQLCreateFile = nameSQLCreateFile();
+        return UtilFiles.createFile(folderSQLFiles, nameSQLCreateFile);
+    }
+
+    public static File sqlPopulateFile(MPDRModel mpdrModel){
+        String folderSQLFiles = directorySQLFiles(mpdrModel).getPath();
+        String nameSQLPopulateFile = nameSQLPopulateFile();
+        return UtilFiles.createFile(folderSQLFiles, nameSQLPopulateFile);
+    }
+
+    public static void generateSQLFile(MPDRModel mpdrModel, String code) {
         //TODO-0 A voir le traitement d'erreur
         //TODO-1 Voir la librairie de Steve (FilesManager)
         try {
-            File sqlCreateFile = sqlCreateFile();
+            File sqlCreateFile = sqlCreateFile(mpdrModel);
             FileWriter fileWriter = new FileWriter(sqlCreateFile);
 
             fileWriter.write(code);

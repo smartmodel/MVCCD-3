@@ -1,9 +1,6 @@
 package generatorsql.generator.postgresql;
 
-import generatorsql.generator.MPDRGenerateSQL;
-import generatorsql.generator.MPDRGenerateSQLColumn;
-import generatorsql.generator.MPDRGenerateSQLPK;
-import generatorsql.generator.MPDRGenerateSQLTable;
+import generatorsql.generator.*;
 import mpdr.MPDRTable;
 
 public class MPDRPostgreSQLGenerateSQLTable extends MPDRGenerateSQLTable {
@@ -20,13 +17,23 @@ public class MPDRPostgreSQLGenerateSQLTable extends MPDRGenerateSQLTable {
     }
 
     @Override
+    protected MPDRGenerateSQLUnique getMPDRGenerateSQLUnique() {
+        return new MPDRPostgreSQLGenerateSQLUnique(mpdrPostgreSQLGenerateSQL);
+    }
+
+    @Override
     protected MPDRGenerateSQLPK getMPDRGenerateSQLPK() {
         return new MPDRPostgreSQLGenerateSQLPK(mpdrPostgreSQLGenerateSQL) ;
     }
 
     @Override
-    protected MPDRGenerateSQLColumn getMPDRGenerateSQLColumn() {
-        return new MPDRPostgreSQLGenerateSQLColumn(mpdrPostgreSQLGenerateSQL);
+    protected MPDRGenerateSQLTableColumn getMPDRGenerateSQLColumn() {
+        return new MPDRPostgreSQLGenerateSQLTableColumn(mpdrPostgreSQLGenerateSQL);
+    }
+
+    @Override
+    protected MPDRGenerateSQLCheck getMPDRGenerateSQLCheck() {
+        return new MPDRPostgreSQLGenerateSQLCheck(mpdrPostgreSQLGenerateSQL);
     }
 
     @Override
