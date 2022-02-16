@@ -2,7 +2,7 @@ package generatorsql.generator;
 
 import mpdr.MPDRSequence;
 import preferences.Preferences;
-import utilities.ReadFile;
+import utilities.files.FileRead;
 
 public abstract class MPDRGenerateSQLSequence {
 
@@ -13,7 +13,7 @@ public abstract class MPDRGenerateSQLSequence {
 
     public String generateSQLDropSequence(MPDRSequence mpdrSequence){
         String generateSQLCode = "";
-        generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirDropDB(), Preferences.TEMPLATE_DROP_SEQUENCE);
+        generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirDropDB(), Preferences.TEMPLATE_DROP_SEQUENCE);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                 Preferences.MPDR_SEQUENCE_NAME_WORD, mpdrSequence.getName());
         return generateSQLCode;
@@ -21,7 +21,7 @@ public abstract class MPDRGenerateSQLSequence {
     }
 
     public String generateSQLCreateSequence(MPDRSequence mpdrSequence) {
-        String generateSQLCode = ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_SEQUENCE) ;
+        String generateSQLCode = FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_SEQUENCE) ;
 
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                 Preferences.MPDR_SEQUENCE_NAME_WORD, mpdrSequence.getName());

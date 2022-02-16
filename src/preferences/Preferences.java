@@ -297,8 +297,10 @@ public class Preferences extends MVCCDElement {
     public static Integer CON_CONNECTION_WINDOW_HEIGHT = 800;
     public static Integer CON_CONNECTOR_WINDOW_WIDTH = 1000;
     public static Integer CON_CONNECTOR_WINDOW_HEIGHT = 600;
-    public static Integer GENERATOR_SQL_WINDOW_WIDTH = 1000;
-    public static Integer GENERATOR_SQL_WINDOW_HEIGHT = 1000;
+   public static Integer GENERATOR_SQL_WINDOW_WIDTH = 1000;
+  public static Integer GENERATOR_SQL_WINDOW_HEIGHT = 1000;
+  public static Integer TEXTEDITOR_WINDOW_WIDTH = 600;
+  public static Integer TEXTEDITOR_SQL_WINDOW_HEIGHT = 600;
 
   public static Integer MDRTABLE_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
     public static Integer MDRTABLE_WINDOW_HEIGHT = 600;

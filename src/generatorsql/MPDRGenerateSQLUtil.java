@@ -1,14 +1,13 @@
 package generatorsql;
 
-import exceptions.CodeApplException;
 import main.MVCCDManager;
 import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.files.FileWrite;
 import utilities.files.UtilFiles;
 
 import java.io.File;
-import java.io.FileWriter;
 
 public class MPDRGenerateSQLUtil {
 
@@ -57,17 +56,21 @@ public class MPDRGenerateSQLUtil {
     }
 
     public static void generateSQLFile(MPDRModel mpdrModel, String code) {
+        File sqlCreateFile = sqlCreateFile(mpdrModel);
+        FileWrite.writeFromString(code, sqlCreateFile);
+        /*
         //TODO-0 A voir le traitement d'erreur
         //TODO-1 Voir la librairie de Steve (FilesManager)
         try {
             File sqlCreateFile = sqlCreateFile(mpdrModel);
             FileWriter fileWriter = new FileWriter(sqlCreateFile);
-
             fileWriter.write(code);
             fileWriter.close();
         } catch (Exception e) {
             throw new CodeApplException("Erreur de génération du fichier SQL-DDL");
         }
+
+         */
     }
 
 /*

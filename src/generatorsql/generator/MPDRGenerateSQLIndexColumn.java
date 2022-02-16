@@ -2,7 +2,7 @@ package generatorsql.generator;
 
 import mpdr.MPDRColumn;
 import preferences.Preferences;
-import utilities.ReadFile;
+import utilities.files.FileRead;
 
 public abstract class MPDRGenerateSQLIndexColumn {
 
@@ -12,7 +12,7 @@ public abstract class MPDRGenerateSQLIndexColumn {
 
     public String generateSQLCreateIndexColumn(MPDRColumn mpdrColumn) {
         String generateSQLCode = "";
-        generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_INDEX_COLUMNS) +
+        generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_INDEX_COLUMNS) +
                     Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
 
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());

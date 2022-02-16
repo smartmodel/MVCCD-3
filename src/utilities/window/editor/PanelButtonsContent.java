@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
-import utilities.files.UtilFiles;
+import utilities.files.FileRead;
 import utilities.window.PanelContent;
 import utilities.window.scomponents.SButton;
 import utilities.window.services.ComponentService;
@@ -262,7 +262,7 @@ public abstract class PanelButtonsContent extends PanelContent
     }
 
     protected void treatHelp(){
-        String helpText = UtilFiles.fileTextToString(getHelpFileName());
+        String helpText = FileRead.readToString(getHelpFileName());
         HelpWindow fen = new HelpWindow(getEditor());
         fen.setVisible(true);
         fen.setHelpText(helpText);

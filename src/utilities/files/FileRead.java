@@ -1,4 +1,4 @@
-package utilities;
+package utilities.files;
 
 import exceptions.CodeApplException;
 
@@ -9,20 +9,26 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ReadFile {
+public class FileRead {
 
-    public static String fileToString(String dir, String fileName) {
+    public static String readToString(String dir, String fileName) {
         Path path = Paths.get(dir, fileName);
-        return fileToString(path);
+        return readToString(path);
     }
 
 
-    public static String fileToString(File file) {
+    public static String readToString(String  filePath) {
+        Path path = Paths.get(filePath);
+        return readToString(path);
+    }
+
+    public static String readToString(File file) {
         Path path = file.toPath();
-        return fileToString(path);
+        return readToString(path);
     }
 
-    public static String fileToString(Path path) {
+    // A voir la version dans UtilFile
+    public static String readToString(Path path) {
         String content = "";
         try (BufferedReader bufferedReader = Files.newBufferedReader(path)) {
             String line = null;
@@ -32,6 +38,7 @@ public class ReadFile {
                 }
                 content += line;
             }
+            bufferedReader.close();
         } catch (IOException e) {
             throw new CodeApplException("Erreur de lecture du fichier" + path.toString());
         }

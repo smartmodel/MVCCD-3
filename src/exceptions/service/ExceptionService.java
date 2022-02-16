@@ -8,15 +8,33 @@ import messages.MessagesBuilder;
 import utilities.window.editor.PanelInputContent;
 
 import java.awt.*;
+import java.io.File;
 
 public class ExceptionService {
 
 
     public static void exceptionUnhandled(Exception e,
-                                    Window window,
-                                    MVCCDElement mvccdElement,
-                                    String propertyMessage,
-                                    String propertyAction) {
+                                          Window window,
+                                          File file,
+                                          String propertyMessage,
+                                          String propertyAction) {
+
+        try {
+            String action = MessagesBuilder.getMessagesProperty(propertyAction);
+            String message = MessagesBuilder.getMessagesProperty(propertyMessage,
+                    new String[]{action, file.getPath()});
+            ViewLogsManager.catchException(e, window, message);
+        } catch (Exception eInterne){
+            ViewLogsManager.catchException(eInterne, MVCCDManager.instance().getMvccdWindow(),
+                    "ExceptionService.exceptionUnhandled() - Erreur dans la résolution de l'exception");
+        }
+    }
+
+    public static void exceptionUnhandled(Exception e,
+                                          Window window,
+                                          MVCCDElement mvccdElement,
+                                          String propertyMessage,
+                                          String propertyAction) {
 
         try {
             String action = MessagesBuilder.getMessagesProperty(propertyAction);

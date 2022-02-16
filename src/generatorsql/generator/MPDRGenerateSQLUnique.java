@@ -2,7 +2,7 @@ package generatorsql.generator;
 
 import mpdr.MPDRUnique;
 import preferences.Preferences;
-import utilities.ReadFile;
+import utilities.files.FileRead;
 
 public abstract class MPDRGenerateSQLUnique {
 
@@ -12,7 +12,7 @@ public abstract class MPDRGenerateSQLUnique {
     public String generateSQLCreateUnique(MPDRUnique mpdrUnique) {
         String generateSQLCode = "";
 
-        generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_UNIQUES)  +
+        generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_UNIQUES)  +
                 Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS ;
 
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_UNIQUE_NAME_WORD, mpdrUnique.getName());

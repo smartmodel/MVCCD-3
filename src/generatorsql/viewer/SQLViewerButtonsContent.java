@@ -16,11 +16,12 @@ import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import treatment.services.TreatmentService;
-import utilities.ReadFile;
 import utilities.UtilDivers;
+import utilities.files.FileRead;
 import utilities.files.UtilFiles;
 import utilities.window.PanelContent;
 import utilities.window.editor.DialogEditor;
+import utilities.window.editor.texteditor.TextEditor;
 import utilities.window.scomponents.IPanelInputContent;
 import utilities.window.scomponents.SButton;
 import utilities.window.scomponents.STextField;
@@ -57,7 +58,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     private SButton btnDDLExecute;
     private SButton btnDDLSave;
     private SButton btnDMLExecute;
-    private SButton btnDMLView;
+    private SButton btnDMLEdit;
     private SButton btnClose;
 
     private JLabel labelDDLName;
@@ -109,8 +110,8 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         btnDMLExecute = new SButton("Exécuter");
         btnDMLExecute.addActionListener(this);
 
-        btnDMLView = new SButton("Visualiser");
-        btnDMLView.addActionListener(this);
+        btnDMLEdit = new SButton("Editer");
+        btnDMLEdit.addActionListener(this);
 
         btnClose = new SButton("Fermer");
         btnClose.addActionListener(this);
@@ -261,7 +262,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         panelDML.add(btnDMLExecute, gbcD);
 
         gbcD.gridx++;
-        panelDML.add(btnDMLView, gbcD);
+        panelDML.add(btnDMLEdit, gbcD);
     }
 
 
@@ -370,6 +371,11 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                         actionDMLExecute();
                     }
 
+                    if (source == btnDMLEdit) {
+                        propertyAction = "sqlviewer.sql.dml.view.btn.exception.test";
+                        actionDMLView();
+                    }
+
                     if (source == btnClose) {
                         sqlViewer.dispose();
                     }
@@ -450,7 +456,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                 new String[]{mpdrModel.getNamePath()});
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
 
-        String codeSQL = ReadFile.fileToString(sqlPopulateFile);
+        String codeSQL = FileRead.readToString(sqlPopulateFile);
         boolean ok = actionExecute(codeSQL, "Le script SQL-DML n'a pas pu être exécuté :");
         if (ok) {
             String formattedHourExecuted = UtilDivers.hourFormatted(new Date());
@@ -570,6 +576,21 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         return ok;
     }
 */
+
+
+    private void actionDMLView() {
+        /*
+        SQLViewer sqlViewer = sqlViewerButtons.getSQLViewer();
+        String codeSQL = ReadFile.fileToString(sqlPopulateFile);
+        DialogMessage.showOk(sqlViewer ,codeSQL, "Vue du script de peuplement");
+
+         */
+
+        SQLViewer sqlViewer = sqlViewerButtons.getSQLViewer();
+        TextEditor fen = new TextEditor(sqlViewer, sqlPopulateFile);
+        fen.setVisible(true);
+
+    }
 
     public SButton getBtnDDLExecute() {
         return btnDDLExecute;

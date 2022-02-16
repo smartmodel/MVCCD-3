@@ -11,13 +11,9 @@ import utilities.UtilDivers;
 import utilities.window.DialogMessage;
 
 import javax.swing.*;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
 
@@ -101,6 +97,8 @@ public class UtilFiles {
         return filePath.toString();
     }
 
+    /*
+    // A voir la version dans ReadFile
     public static String fileTextToString(String filePath) {
         String content = "";
 
@@ -125,6 +123,8 @@ public class UtilFiles {
         String filePath = filePath(directory, fileName);
         return fileTextToString(filePath);
     }
+
+     */
 
     public static ImageIcon getImageIcon(String dir, String fileName) {
         return new ImageIcon(Preferences.DIRECTORY_RESSOURCES_NAME + Preferences.SYSTEM_FILE_SEPARATOR +

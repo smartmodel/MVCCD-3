@@ -2,7 +2,7 @@ package generatorsql.generator;
 
 import mpdr.MPDRCheck;
 import preferences.Preferences;
-import utilities.ReadFile;
+import utilities.files.FileRead;
 
 public abstract class MPDRGenerateSQLCheck {
 
@@ -12,7 +12,7 @@ public abstract class MPDRGenerateSQLCheck {
     public String generateSQLCreateCheck(MPDRCheck mpdrCheck) {
         String generateSQLCode = "";
 
-        generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_CHECKS)  +
+        generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_CHECKS)  +
                 Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS ;
 
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_CHECK_NAME_WORD, mpdrCheck.getName());

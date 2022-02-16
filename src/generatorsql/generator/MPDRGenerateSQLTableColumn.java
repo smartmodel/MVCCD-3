@@ -4,7 +4,7 @@ import datatypes.MDDatatypeService;
 import mpdr.MPDRColumn;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.ReadFile;
+import utilities.files.FileRead;
 
 public abstract class MPDRGenerateSQLTableColumn {
 
@@ -16,11 +16,11 @@ public abstract class MPDRGenerateSQLTableColumn {
         String generateSQLCode = "";
         boolean identityColumn = pkGenerateIdentity() && mpdrColumn.isPkNotFk();
         if (identityColumn){
-            generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY) +
+            generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY) +
                     Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
 
         } else {
-            generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMNS) +
+            generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMNS) +
                     Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
         }
 

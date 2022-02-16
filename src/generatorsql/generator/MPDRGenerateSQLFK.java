@@ -3,7 +3,7 @@ package generatorsql.generator;
 import mpdr.MPDRFK;
 import mpdr.MPDRPK;
 import preferences.Preferences;
-import utilities.ReadFile;
+import utilities.files.FileRead;
 
 public abstract class MPDRGenerateSQLFK {
 
@@ -13,7 +13,7 @@ public abstract class MPDRGenerateSQLFK {
 
     public String generateSQLFK(MPDRFK mpdrfk) {
         String generateSQLCode = "";
-        generateSQLCode += ReadFile.fileToString(getMPDRGenerateSQL().getTemplateDirAlterDB(), Preferences.TEMPLATES_ALTER_TABLE_FK) ;
+        generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirAlterDB(), Preferences.TEMPLATES_ALTER_TABLE_FK) ;
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_CHILD_WORD, mpdrfk.getParent().getParent().getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_FK_NAME_WORD, mpdrfk.getName());
