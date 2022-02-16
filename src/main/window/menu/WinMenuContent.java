@@ -10,6 +10,8 @@ import preferences.PreferencesManager;
 import project.Project;
 import repository.editingTreat.ProjectEditingTreat;
 import utilities.window.DialogMessage;
+import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
+import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -149,10 +151,16 @@ public class WinMenuContent implements ActionListener {
             Object source = e.getSource();
             if (source == imprimer) {
                 // messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.print.exception");
+                // Déselectionne toutes les formes
+                DiagrammerService.getDrawPanel().deselectAllShapes();
                 printComponent(mvccdWindow.getDiagrammer().getContent().getPanelDraw());
+
             }
             if (source == exporter) {
                 //messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.export.exception");
+                // Déselectionne toutes les formes
+                DiagrammerService.getDrawPanel().deselectAllShapes();
+                // Ouvre une boîte de dialogue pour que l'utilisateur choisisse l'emplacement de sauvegarde et le nom du fichier
                 JFileChooser fileChooser = new JFileChooser();
                 int returnVal = fileChooser.showSaveDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -225,7 +233,7 @@ public class WinMenuContent implements ActionListener {
             ImageIO.write(image, "png", new File(fileName.trim() + ".png"));
         } catch (IOException exp) {
             exp.printStackTrace();
-        }finally {
+        } finally {
             PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(true);
         }
     }
