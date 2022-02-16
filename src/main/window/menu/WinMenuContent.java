@@ -214,7 +214,7 @@ public class WinMenuContent implements ActionListener {
      * @param fileName  -> Le chemin complet + nom du fichier à enregistrer
      */
     public void exportComponent(Component component, String fileName) {
-        BufferedImage image = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g = image.createGraphics();
         // Désactive temporairement la grille de dessin du Diagrammer
         PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
