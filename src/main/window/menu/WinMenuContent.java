@@ -215,8 +215,9 @@ public class WinMenuContent implements ActionListener {
      */
     public void exportComponent(Component component, String fileName) {
         BufferedImage image = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB);
-        PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
         Graphics2D g = image.createGraphics();
+        // Désactive temporairement la grille de dessin du Diagrammer
+        PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
         component.printAll(g);
         g.dispose();
         try {
@@ -240,7 +241,6 @@ public class WinMenuContent implements ActionListener {
         PrinterJob pj = PrinterJob.getPrinterJob();
         pj.setJobName(" Print Component ");
 
-        PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
 
         PageFormat pf = pj.defaultPage();
         pf = pj.defaultPage();
@@ -255,6 +255,8 @@ public class WinMenuContent implements ActionListener {
                 return Printable.NO_SUCH_PAGE;
             }
             Graphics2D g2 = (Graphics2D) pg;
+            // Désactive temporairement la grille de dessin du Diagrammer
+            PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
             g2.translate(pf1.getImageableX() + pf1.getImageableWidth() / 2 - component.getWidth() / 2, pf1.getImageableY() + pf1.getImageableHeight() / 2 - component.getHeight() / 2);
             component.print(g2);
             return Printable.PAGE_EXISTS;
