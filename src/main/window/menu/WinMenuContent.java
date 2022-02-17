@@ -10,7 +10,7 @@ import preferences.PreferencesManager;
 import project.Project;
 import repository.editingTreat.ProjectEditingTreat;
 import utilities.window.DialogMessage;
-import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
+import window.editor.diagrammer.drawpanel.DrawPanelComponent;
 import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.imageio.ImageIO;
@@ -153,8 +153,8 @@ public class WinMenuContent implements ActionListener {
                 // messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.print.exception");
                 // Déselectionne toutes les formes
                 DiagrammerService.getDrawPanel().deselectAllShapes();
-                printComponent(mvccdWindow.getDiagrammer().getContent().getPanelDraw());
-
+                //printComponent(mvccdWindow.getDiagrammer().getContent().getPanelDraw());
+                printComponentBasique(mvccdWindow.getDiagrammer().getContent().getPanelDraw());
             }
             if (source == exporter) {
                 //messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.export.exception");
@@ -164,7 +164,7 @@ public class WinMenuContent implements ActionListener {
                 JFileChooser fileChooser = new JFileChooser();
                 int returnVal = fileChooser.showSaveDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    exportComponent(mvccdWindow.getDiagrammer().getContent().getPanelDraw(), fileChooser.getSelectedFile().toString());
+                    exportComponentOptimized(mvccdWindow.getDiagrammer().getContent().getPanelDraw(), fileChooser.getSelectedFile().toString());
                 }
             }
             if (source == projectNew) {
@@ -216,6 +216,47 @@ public class WinMenuContent implements ActionListener {
 
 
     /**
+     * Exporte un composant au format JPG & PNG en prenant soin de dessiner le plus petit rectangle autour afin d'avoir
+     * le moins de fond blanc possible dans l'image exportée
+     *
+     * @param component -> Le composant à imprimer
+     * @param fileName  -> Le chemin complet + nom du fichier à enregistrer
+     */
+    public void exportComponentOptimized(Component component, String fileName) {
+        // On redessine le plus petit rectangle possible autour des entités en gardant une bordure de 2 pixels
+        Rectangle rectangle = DiagrammerService.getDrawPanel().getContentBounds(DiagrammerService.getDrawPanel().getShapes(), 2);
+        BufferedImage image;
+
+        if (rectangle.getWidth() > 0) {
+            // Pour choper le plus petit rectangle autour des entités à imprimer
+            final DrawPanelComponent drawPanelComponent = mvccdWindow.getDiagrammer().getContent().getPanelDraw();
+            drawPanelComponent.getViewport().setLocation(
+                    new Point(-rectangle.x, -rectangle.y));
+            drawPanelComponent.getViewport().revalidate();
+
+            image = new BufferedImage((int) rectangle.getWidth(), (int) rectangle.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+        } else {
+            image = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+        }
+        Graphics2D g = image.createGraphics();
+
+        // Désactive temporairement la grille de dessin du Diagrammer
+        PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
+
+        component.printAll(g);
+        g.dispose();
+        try {
+            ImageIO.write(image, "jpg", new File(fileName.trim() + ".jpg"));
+            ImageIO.write(image, "png", new File(fileName.trim() + ".png"));
+        } catch (IOException exp) {
+            exp.printStackTrace();
+        } finally {
+            PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(true);
+        }
+    }
+
+
+    /**
      * Exporte un composant au format JPG & PNG
      *
      * @param component -> Le composant à imprimer
@@ -240,7 +281,42 @@ public class WinMenuContent implements ActionListener {
 
     /**
      * Lance une boîte de dialogue pour l'impression d'un composant et s'occupe de formater le rendu de celui-ci.
-     * Le composant est mis en mode landscape au format A4, la grille est de dessin est temporairement désactivée
+     * La grille est de dessin est temporairement désactivée le temps de l'impression et est réactivée ensuite.
+     *
+     * @param component -> Le composant à imprimer
+     */
+    public void printComponentBasique(Component component) {
+        PrinterJob pj = PrinterJob.getPrinterJob();
+        pj.setJobName(" Print Component ");
+
+        pj.setPrintable((pg, pf, pageNum) -> {
+            if (pageNum > 0) {
+                return Printable.NO_SUCH_PAGE;
+            }
+
+            Graphics2D g2 = (Graphics2D) pg;
+            g2.translate(pf.getImageableX(), pf.getImageableY());
+            // Désactive temporairement la grille de dessin du Diagrammer
+            PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
+            component.paint(g2);
+            return Printable.PAGE_EXISTS;
+        });
+        if (!pj.printDialog()) {
+            return;
+        }
+
+        try {
+            pj.print();
+        } catch (PrinterException ex) {
+            // handle exception
+        } finally {
+            PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(true);
+        }
+    }
+
+    /**
+     * Lance une boîte de dialogue pour l'impression d'un composant et s'occupe de formater le rendu de celui-ci.
+     * Le composant est mis en mode landscape au format A4, la grille de dessin est temporairement désactivée
      * le temps de l'impression et est réactivée ensuite.
      *
      * @param component -> Le composant à imprimer
