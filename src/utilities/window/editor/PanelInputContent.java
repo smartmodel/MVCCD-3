@@ -283,6 +283,8 @@ public abstract class PanelInputContent
         getButtonsContent().clearMessages();
         if (!alreadyFocusGained) {
             checkDatas(null);
+            //#MAJ 2022-02-17  CheckPreSave dand focusGained
+            preSaveOk = checkDatasPreSave(null);
             enabledButtons();
             alreadyFocusGained = true;
         }

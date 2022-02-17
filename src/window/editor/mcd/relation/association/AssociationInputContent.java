@@ -498,14 +498,19 @@ public class AssociationInputContent extends PanelInputContentId {
 
     @Override
     public boolean checkDatasPreSave(SComponent sComponent) {
+        //#MAJ 2022-02-17 Appel de CheckDatasPresave pour Association
+        boolean ok = super.checkDatasPreSave(sComponent);
+
         boolean notBatch = panelInput != null;
         boolean unitaire;
 
-        unitaire = notBatch && (sComponent == fieldFromEntity);
-        boolean ok = checkAssociationFrom(unitaire);
+        if (ok) {
+            unitaire = notBatch && (sComponent == fieldFromEntity);
+            ok = checkAssociationFrom(unitaire);
 
-        unitaire = notBatch && (sComponent == fieldToEntity);
-        ok = checkAssociationTo(unitaire) && ok;
+            unitaire = notBatch && (sComponent == fieldToEntity);
+            ok = checkAssociationTo(unitaire) && ok;
+        }
 
         if (ok) {
 
@@ -545,13 +550,6 @@ public class AssociationInputContent extends PanelInputContentId {
                 }
             }
 
-
-            unitaire = notBatch && (sComponent == fieldFromMulti);
-            ok = checkMulti(fieldFromMulti, null, MCDAssEnd.FROM, unitaire) && ok;
-
-            unitaire = notBatch && (sComponent == fieldToMulti);
-            ok = checkMulti(fieldToMulti, null, MCDAssEnd.TO, unitaire) & ok;
-
         }
         setPreSaveOk(ok);
 
@@ -565,6 +563,14 @@ public class AssociationInputContent extends PanelInputContentId {
         if (ok) {
             boolean notBatch = panelInput != null;
             boolean unitaire;
+
+
+
+            unitaire = notBatch && (sComponent == fieldFromMulti);
+            ok = checkMulti(fieldFromMulti, null, MCDAssEnd.FROM, unitaire) && ok;
+
+            unitaire = notBatch && (sComponent == fieldToMulti);
+            ok = checkMulti(fieldToMulti, null, MCDAssEnd.TO, unitaire) & ok;
 
             //#MAJ 2020-12-16 AssociationInputContent shortName obligatoire
             unitaire = notBatch && (sComponent == fieldShortName);
@@ -580,29 +586,25 @@ public class AssociationInputContent extends PanelInputContentId {
             boolean okCheckFromRoleShortName = checkFromRoleShortName(unitaire);
 
             ok = okCheckFromRoleShortName && ok;
-
-            //if (unitaire) {
             if (okCheckFromRoleShortName) {
                 ok = checkFromRoleNaming(unitaire) && ok;
             }
-            //}
 
             unitaire = notBatch && (sComponent == fieldToRoleShortName);
             boolean okCheckToRoleShortName = checkToRoleShortName(unitaire);
 
             ok = okCheckToRoleShortName && ok;
-
-            //if (unitaire) {
             if (okCheckToRoleShortName) {
                 ok = checkToRoleNaming(unitaire) && ok;
             }
-            //}
 
             unitaire = notBatch && (sComponent == fieldNature);
             ok = checkNature(fieldNature, unitaire) && ok;
 
-            unitaire = notBatch && (sComponent == fieldOriented);
-            ok = checkOrientedOrNotOriented(fieldOriented, unitaire) && ok;
+            if (ok) {
+                unitaire = notBatch && (sComponent == fieldOriented);
+                ok = checkOrientedOrNotOriented(fieldOriented, unitaire) && ok;
+            }
 
             unitaire = notBatch &&
                     ( (sComponent == fieldFromRoleShortName) || (sComponent == fieldToRoleShortName));
