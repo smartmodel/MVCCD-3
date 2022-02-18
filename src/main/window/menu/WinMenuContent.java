@@ -227,6 +227,7 @@ public class WinMenuContent implements ActionListener {
         Rectangle rectangle = DiagrammerService.getDrawPanel().getContentBounds(DiagrammerService.getDrawPanel().getShapes(), 2);
         BufferedImage image;
 
+        // Si notre diagramme n'est pas vide de formes ...
         if (rectangle.getWidth() > 0) {
             // Pour choper le plus petit rectangle autour des entités à imprimer
             final DrawPanelComponent drawPanelComponent = mvccdWindow.getDiagrammer().getContent().getPanelDraw();
@@ -235,7 +236,9 @@ public class WinMenuContent implements ActionListener {
             drawPanelComponent.getViewport().revalidate();
 
             image = new BufferedImage((int) rectangle.getWidth(), (int) rectangle.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-        } else {
+        }
+        // Si notre diagramme est pas vide de formes ...
+        else {
             image = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         }
         Graphics2D g = image.createGraphics();
@@ -246,31 +249,6 @@ public class WinMenuContent implements ActionListener {
         component.printAll(g);
         g.dispose();
         try {
-            ImageIO.write(image, "jpg", new File(fileName.trim() + ".jpg"));
-            ImageIO.write(image, "png", new File(fileName.trim() + ".png"));
-        } catch (IOException exp) {
-            exp.printStackTrace();
-        } finally {
-            PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(true);
-        }
-    }
-
-
-    /**
-     * Exporte un composant au format JPG & PNG
-     *
-     * @param component -> Le composant à imprimer
-     * @param fileName  -> Le chemin complet + nom du fichier à enregistrer
-     */
-    public void exportComponent(Component component, String fileName) {
-        BufferedImage image = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-        Graphics2D g = image.createGraphics();
-        // Désactive temporairement la grille de dessin du Diagrammer
-        PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
-        component.printAll(g);
-        g.dispose();
-        try {
-            ImageIO.write(image, "jpg", new File(fileName.trim() + ".jpg"));
             ImageIO.write(image, "png", new File(fileName.trim() + ".png"));
         } catch (IOException exp) {
             exp.printStackTrace();
@@ -280,7 +258,7 @@ public class WinMenuContent implements ActionListener {
     }
 
     /**
-     * Lance une boîte de dialogue pour l'impression d'un composant et s'occupe de formater le rendu de celui-ci.
+     * Lance une boîte de dialogue pour l'impression d'un composant
      * La grille est de dessin est temporairement désactivée le temps de l'impression et est réactivée ensuite.
      *
      * @param component -> Le composant à imprimer
@@ -321,7 +299,7 @@ public class WinMenuContent implements ActionListener {
      *
      * @param component -> Le composant à imprimer
      */
-    public void printComponent(Component component) {
+    public void printComponentLandscapeMode(Component component) {
         PrinterJob pj = PrinterJob.getPrinterJob();
         pj.setJobName(" Print Component ");
 
