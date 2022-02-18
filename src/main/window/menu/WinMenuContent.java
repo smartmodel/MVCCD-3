@@ -260,8 +260,9 @@ public class WinMenuContent implements ActionListener {
     }
 
     /**
-     * Lance une boîte de dialogue pour l'impression d'un composant
-     * La grille est de dessin est temporairement désactivée le temps de l'impression et est réactivée ensuite.
+     * Lance une boîte de dialogue pour l'impression d'un composant et l'imprime selon les paramètres choisis
+     * par l'utilisateur.
+     * La grille de dessin est temporairement désactivée le temps de l'impression et est réactivée ensuite.
      *
      * @param component -> Le composant à imprimer
      */
