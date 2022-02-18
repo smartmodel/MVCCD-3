@@ -237,7 +237,7 @@ public class WinMenuContent implements ActionListener {
 
             image = new BufferedImage((int) rectangle.getWidth(), (int) rectangle.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         }
-        // Si notre diagramme est pas vide de formes ...
+        // Si notre diagramme est vide de formes ...
         else {
             image = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         }
