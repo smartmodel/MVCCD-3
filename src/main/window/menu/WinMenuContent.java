@@ -14,6 +14,9 @@ import window.editor.diagrammer.drawpanel.DrawPanelComponent;
 import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.imageio.ImageIO;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.PrinterResolution;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -266,6 +269,10 @@ public class WinMenuContent implements ActionListener {
         PrinterJob pj = PrinterJob.getPrinterJob();
         pj.setJobName(" Print Component ");
 
+        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+        aset.add(new PrinterResolution(300, 300, PrinterResolution.DPI));
+
+
         pj.setPrintable((pg, pf, pageNum) -> {
             if (pageNum > 0) {
                 return Printable.NO_SUCH_PAGE;
@@ -283,7 +290,7 @@ public class WinMenuContent implements ActionListener {
         }
 
         try {
-            pj.print();
+            pj.print(aset);
         } catch (PrinterException ex) {
             // handle exception
         } finally {
