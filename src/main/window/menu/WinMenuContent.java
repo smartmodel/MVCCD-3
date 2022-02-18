@@ -153,7 +153,6 @@ public class WinMenuContent implements ActionListener {
                 // messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.print.exception");
                 // Déselectionne toutes les formes
                 DiagrammerService.getDrawPanel().deselectAllShapes();
-                //printComponent(mvccdWindow.getDiagrammer().getContent().getPanelDraw());
                 printComponentBasique(mvccdWindow.getDiagrammer().getContent().getPanelDraw());
             }
             if (source == exporter) {
