@@ -17,6 +17,7 @@ public abstract class MPDRGenerateSQLTable {
     public String generateSQLDropTable(MPDRTable mpdrTable) {
         String generateSQLCode = "";
         generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirDropDB(), Preferences.TEMPLATE_DROP_TABLE);
+        generateSQLCode = MPDRGenerateSQLUtil.caseReservedWords(generateSQLCode, getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
         return generateSQLCode;
@@ -27,6 +28,7 @@ public abstract class MPDRGenerateSQLTable {
 
         //Génération de la table
         generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE) ;
+        generateSQLCode = MPDRGenerateSQLUtil.caseReservedWords(generateSQLCode, getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
 

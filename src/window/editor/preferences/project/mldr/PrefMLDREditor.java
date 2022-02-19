@@ -5,12 +5,12 @@ import preferences.Preferences;
 import repository.editingTreat.EditingTreat;
 import utilities.window.editor.PanelButtons;
 import utilities.window.editor.PanelInput;
-import window.editor.preferences.project.PrefEditor;
 import window.editor.preferences.project.PrefProjectMenu;
+import window.editor.preferences.project.mdr.PrefMDREditor;
 
 import java.awt.*;
 
-public class PrefMLDREditor extends PrefEditor {
+public class PrefMLDREditor extends PrefMDREditor {
 
 
     //TODO-0 Il faut appuyer 2 * pour fermer la fenêtre!

@@ -3,7 +3,7 @@ package mdr;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 
-public enum MDRNamingFormat {
+public enum MDRCaseFormat {
     NOTHING (Preferences.MDR_NAMING_FORMAT_NOTHING),
     UPPERCASE (Preferences.MDR_NAMING_FORMAT_UPPERCASE),
     LOWERCASE (Preferences.MDR_NAMING_FORMAT_LOWERCASE),
@@ -12,7 +12,7 @@ public enum MDRNamingFormat {
 
     private final String name;
 
-    MDRNamingFormat(String name) {
+    MDRCaseFormat(String name) {
         this.name = name;
      }
 
@@ -25,8 +25,8 @@ public enum MDRNamingFormat {
         return MessagesBuilder.getMessagesProperty(name);
     }
 
-    public static MDRNamingFormat findByText(String text){
-        for (MDRNamingFormat element: MDRNamingFormat.values()){
+    public static MDRCaseFormat findByText(String text){
+        for (MDRCaseFormat element: MDRCaseFormat.values()){
             if (element.getText().equals(text)) {
                 return element;
             }

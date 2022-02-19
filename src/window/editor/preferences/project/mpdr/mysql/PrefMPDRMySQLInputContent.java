@@ -1,7 +1,7 @@
 package window.editor.preferences.project.mpdr.mysql;
 
 import main.MVCCDElement;
-import mdr.MDRNamingFormat;
+import mdr.MDRCaseFormat;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
 import mpdr.MPDRDBPK;
@@ -31,6 +31,8 @@ public class PrefMPDRMySQLInputContent extends PrefMPDRInputContent {
                 preferences.getMPDRMYSQL_PREF_NAMING_LENGTH().getText());
         SComboBoxService.selectByText(fieldNamingFormat,
                 preferences.getMPDRMYSQL_PREF_NAMING_FORMAT().getText());
+        SComboBoxService.selectByText(fieldReservedWordsFormat,
+                preferences.getMPDRMYSQL_PREF_RESERDWORDS_FORMAT().getText());
         fieldDelimiterInstructions.setText(preferences.getMPDRMYSQL_DELIMITER_INSTRUCTIONS());
         SComboBoxService.selectByText(fieldPKGenerate,
                 preferences.getMPDRMYSQL_PK_GENERATE().getText());
@@ -62,16 +64,32 @@ public class PrefMPDRMySQLInputContent extends PrefMPDRInputContent {
         if (fieldNamingFormat.checkIfUpdated()){
             String text = (String) fieldNamingFormat.getSelectedItem();
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_NOTHING))){
-                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING);
+                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRCaseFormat.NOTHING);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_UPPERCASE))){
-                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE);
+                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRCaseFormat.UPPERCASE);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_LOWERCASE))){
-                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE);
+                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRCaseFormat.LOWERCASE);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_CAPITALIZE))){
-                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE);
+                preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRCaseFormat.CAPITALIZE);
+            }
+        }
+
+        if (fieldReservedWordsFormat.checkIfUpdated()){
+            String text = (String) fieldReservedWordsFormat.getSelectedItem();
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_NOTHING))){
+                preferences.setMPDRMYSQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat.NOTHING);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_UPPERCASE))){
+                preferences.setMPDRMYSQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat.UPPERCASE);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_LOWERCASE))){
+                preferences.setMPDRMYSQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat.LOWERCASE);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_CAPITALIZE))){
+                preferences.setMPDRMYSQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat.CAPITALIZE);
             }
         }
 

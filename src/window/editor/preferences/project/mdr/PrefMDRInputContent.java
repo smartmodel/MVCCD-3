@@ -41,14 +41,12 @@ public class PrefMDRInputContent extends PanelInputContent {
     private SCheckBox fieldNamingLength60;
     private JLabel labelNamingLength120 ;
     private SCheckBox fieldNamingLength120;
-    
 
     public PrefMDRInputContent(PrefMDRInput prefMDRInput) {
         super(prefMDRInput);
      }
 
     public void createContentCustom() {
-
 
         labelColumnFKOneAncestor = new JLabel("1 seul ancêtre");
         fieldColumnFKOneAncestor = new SCheckBox(this, labelColumnFKOneAncestor);
@@ -88,16 +86,22 @@ public class PrefMDRInputContent extends PanelInputContent {
         fieldNamingLength30 = new SCheckBox(this, labelNamingLength30);
         fieldNamingLength30.addItemListener(this);
         fieldNamingLength30.addFocusListener(this);
+        // TODO-1 A reprendre lorsque le besoin sera évident
+        fieldNamingLength30.setReadOnly(true);
 
         labelNamingLength60 = new JLabel("60 :");
         fieldNamingLength60 = new SCheckBox(this, labelNamingLength60);
         fieldNamingLength60.addItemListener(this);
         fieldNamingLength60.addFocusListener(this);
+        // TODO-1 A reprendre lorsque le besoin sera évident
+        fieldNamingLength60.setReadOnly(true);
 
         labelNamingLength120 = new JLabel("120 :");
         fieldNamingLength120 = new SCheckBox(this, labelNamingLength120);
         fieldNamingLength120.addItemListener(this);
         fieldNamingLength120.addFocusListener(this);
+        // TODO-1 A reprendre lorsque le besoin sera évident
+        fieldNamingLength120.setReadOnly(true);
 
         super.getSComponents().add(fieldColumnFKOneAncestor);
         super.getSComponents().add(fieldColumnFKOneAncestorDiff);
@@ -111,7 +115,7 @@ public class PrefMDRInputContent extends PanelInputContent {
 
     }
 
-    private void createPanelMaster() {
+    protected void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
 
         createPanelStereotypes();
@@ -186,10 +190,7 @@ public class PrefMDRInputContent extends PanelInputContent {
         panelNamingLengths.add(labelNamingLength120, gbcA);
         gbcA.gridx++ ;
         panelNamingLengths.add(fieldNamingLength120, gbcA);
-
-
     }
-
 
     @Override
     protected void enabledContent() {
@@ -293,6 +294,7 @@ public class PrefMDRInputContent extends PanelInputContent {
             MDRNamingLength.LENGTH120.setRequired(fieldNamingLength120.isSelected());
             PrefMDRService.adjustMDRPrefNaming(MDRNamingLength.LENGTH120);
         }
+
     }
 
     @Override

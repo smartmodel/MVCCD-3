@@ -11,7 +11,13 @@ public class PrefMDRService {
      public static void adjustMDRPrefNaming(MDRNamingLength namingLength) {
         Preferences preferences = PreferencesManager.instance().preferences();
 
-        for (MDRNamingLength mdrNamingLength : MDRNamingLength.values()){
+
+        //TODO-1 Tout le traitement est invalidé
+         /*
+         Dans un premier temps, la préférence calcul est toujours vraie pour toute les longueurs !
+         Lorsque cela change, il faudra faire une analyse plus complète!
+          */
+         for (MDRNamingLength mdrNamingLength : MDRNamingLength.values()){
             if (preferences.getMLDR_PREF_NAMING_LENGTH() == mdrNamingLength){
                 if (!mdrNamingLength.isRequired()) {
                     adjustMDRPrefNamingInternal();

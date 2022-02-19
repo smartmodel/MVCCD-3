@@ -132,21 +132,21 @@ public class MDRModelService {
             name = mdrElement.getNames().getName120();
         }
         //TODO-PAS Mettre un message si toujours name =""
-        MDRNamingFormat mdrNamingFormat = mdrModel.getNamingFormatForDB();
-        return formatNaming(name, mdrNamingFormat);
+        MDRCaseFormat mdrCaseFormat = mdrModel.getNamingFormatForDB();
+        return formatNaming(name, mdrCaseFormat);
     }
 
-    private static String formatNaming(String name, MDRNamingFormat mdrNamingFormat){
-        if (mdrNamingFormat == MDRNamingFormat.NOTHING) {
+    private static String formatNaming(String name, MDRCaseFormat mdrCaseFormat){
+        if (mdrCaseFormat == MDRCaseFormat.NOTHING) {
             // name tel que repris de MPDRModelService.builName
         }
-        if (mdrNamingFormat == MDRNamingFormat.UPPERCASE) {
+        if (mdrCaseFormat == MDRCaseFormat.UPPERCASE) {
              name = StringUtils.upperCase( name);
         }
-        if (mdrNamingFormat == MDRNamingFormat.LOWERCASE) {
+        if (mdrCaseFormat == MDRCaseFormat.LOWERCASE) {
             name = StringUtils.lowerCase(name);
         }
-        if (mdrNamingFormat == MDRNamingFormat.CAPITALIZE) {
+        if (mdrCaseFormat == MDRCaseFormat.CAPITALIZE) {
             name = capitalize(name);
         }
 

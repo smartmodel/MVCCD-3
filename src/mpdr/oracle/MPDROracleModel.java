@@ -4,7 +4,7 @@ import datatypes.MPDRDatatype;
 import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.oracle.MPDROracleGenerateSQL;
 import main.MVCCDElementFactory;
-import mdr.MDRNamingFormat;
+import mdr.MDRCaseFormat;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
@@ -61,16 +61,27 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement {
         setNamingLengthFuture( preferences.getMPDRORACLE_PREF_NAMING_LENGTH());
         setNamingFormatActual( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
         setNamingFormatFuture( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
+        setReservedWordsFormatActual(preferences.getMPDRORACLE_PREF_RESERDWORDS_FORMAT());
+        setReservedWordsFormatFuture(preferences.getMPDRORACLE_PREF_RESERDWORDS_FORMAT());
     }
 
 
     // Surchargé pour les BD qui ont formattage particulier
     // majuscule pour Oracle
-    public MDRNamingFormat getNamingFormatForDB() {
-        if (namingFormatFuture == MDRNamingFormat.LIKEBD){
-            return MDRNamingFormat.UPPERCASE;
+    public MDRCaseFormat getNamingFormatForDB() {
+        if (namingFormatFuture == MDRCaseFormat.LIKEBD){
+            return MDRCaseFormat.UPPERCASE;
         }
         return namingFormatFuture;
+    }
+
+    // Surchargé pour les BD qui ont formattage particulier
+    // minuscule pour Oracle
+    public MDRCaseFormat getReservedWordsFormatForDB() {
+        if (reservedWordsFormatFuture == MDRCaseFormat.LIKEBD){
+            return MDRCaseFormat.LOWERCASE;
+        }
+        return reservedWordsFormatFuture;
     }
 
 }

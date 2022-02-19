@@ -1,7 +1,7 @@
 package window.editor.preferences.project.mpdr.postgresql;
 
 import main.MVCCDElement;
-import mdr.MDRNamingFormat;
+import mdr.MDRCaseFormat;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
 import mpdr.MPDRDBPK;
@@ -21,7 +21,8 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
     public void createContentCustom() {
 
         super.createContentCustom();
-        fieldNamingFormat.addItem(MDRNamingFormat.LIKEBD.getText());
+        fieldNamingFormat.addItem(MDRCaseFormat.LIKEBD.getText());
+        fieldReservedWordsFormat.addItem(MDRCaseFormat.LIKEBD.getText());
 
         fieldPKGenerate.addItem(MPDRDBPK.SEQUENCE.getText());
         fieldPKGenerate.addItem(MPDRDBPK.IDENTITY.getText());
@@ -34,6 +35,8 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
                 preferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH().getText());
         SComboBoxService.selectByText(fieldNamingFormat,
                 preferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT().getText());
+        SComboBoxService.selectByText(fieldReservedWordsFormat,
+                preferences.getMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT().getText());
         fieldDelimiterInstructions.setText(preferences.getMPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS());
         SComboBoxService.selectByText(fieldPKGenerate,
                 preferences.getMPDRPOSTGRESQL_PK_GENERATE().getText());
@@ -64,19 +67,38 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
         if (fieldNamingFormat.checkIfUpdated()){
             String text = (String) fieldNamingFormat.getSelectedItem();
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_NOTHING))){
-                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRCaseFormat.NOTHING);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_UPPERCASE))){
-                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRCaseFormat.UPPERCASE);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_LOWERCASE))){
-                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRCaseFormat.LOWERCASE);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_CAPITALIZE))){
-                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRCaseFormat.CAPITALIZE);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MPDR_NAMING_FORMAT_LIKEDB))){
-                preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.LIKEBD);
+                preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRCaseFormat.LIKEBD);
+            }
+        }
+
+        if (fieldReservedWordsFormat.checkIfUpdated()){
+            String text = (String) fieldReservedWordsFormat.getSelectedItem();
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_NOTHING))){
+                preferences.setMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat.NOTHING);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_UPPERCASE))){
+                preferences.setMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat.UPPERCASE);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_LOWERCASE))){
+                preferences.setMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat.LOWERCASE);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MDR_NAMING_FORMAT_CAPITALIZE))){
+                preferences.setMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat.CAPITALIZE);
+            }
+            if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MPDR_NAMING_FORMAT_LIKEDB))){
+                preferences.setMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat.LIKEBD);
             }
         }
 

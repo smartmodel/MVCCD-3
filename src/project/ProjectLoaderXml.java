@@ -217,10 +217,10 @@ public class ProjectLoaderXml {
             case 120: preferences.setMLDR_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
         }
         switch(this.getTextInTag(racine, "mldrPrefNamingFormatName")){
-            case "mdr.naming.format.nothing": preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
-            case "mdr.naming.format.uppercase": preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
-            case "mdr.naming.format.lowercase": preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
-            case "mdr.naming.format.capitalize":preferences.setMLDR_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+            case "mdr.naming.format.nothing": preferences.setMLDR_PREF_NAMING_FORMAT(MDRCaseFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMLDR_PREF_NAMING_FORMAT(MDRCaseFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMLDR_PREF_NAMING_FORMAT(MDRCaseFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMLDR_PREF_NAMING_FORMAT(MDRCaseFormat.CAPITALIZE); break;
         }
 
         // Préférences MPDR Oracle (préférences de type enum)
@@ -230,10 +230,10 @@ public class ProjectLoaderXml {
             case 120: preferences.setMPDRORACLE_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
         }
         switch(this.getTextInTag(racine, "mpdrOraclePrefNamingFormatName")){
-            case "mdr.naming.format.nothing": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
-            case "mdr.naming.format.uppercase": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
-            case "mdr.naming.format.lowercase": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
-            case "mdr.naming.format.capitalize":preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+            case "mdr.naming.format.nothing": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRCaseFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRCaseFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRCaseFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRCaseFormat.CAPITALIZE); break;
         }
 
         // Préférences MPDR MySQL (préférences de type enum)
@@ -243,10 +243,10 @@ public class ProjectLoaderXml {
             case 120: preferences.setMPDRMYSQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
         }
         switch(this.getTextInTag(racine, "mpdrMySQLPrefNamingFormatName")){
-            case "mdr.naming.format.nothing": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
-            case "mdr.naming.format.uppercase": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
-            case "mdr.naming.format.lowercase": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
-            case "mdr.naming.format.capitalize":preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+            case "mdr.naming.format.nothing": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRCaseFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRCaseFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRCaseFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMPDRMYSQL_PREF_NAMING_FORMAT(MDRCaseFormat.CAPITALIZE); break;
         }
 
         // Préférences MPDR PostgreSQL (préférences de type enum)
@@ -256,10 +256,10 @@ public class ProjectLoaderXml {
             case 120: preferences.setMPDRPOSTGRESQL_PREF_NAMING_LENGTH(MDRNamingLength.LENGTH120); break;
         }
         switch(this.getTextInTag(racine, "mpdrPostgreSQLPrefNamingFormatName")){
-            case "mdr.naming.format.nothing": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.NOTHING); break;
-            case "mdr.naming.format.uppercase": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.UPPERCASE); break;
-            case "mdr.naming.format.lowercase": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.LOWERCASE); break;
-            case "mdr.naming.format.capitalize":preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRNamingFormat.CAPITALIZE); break;
+            case "mdr.naming.format.nothing": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRCaseFormat.NOTHING); break;
+            case "mdr.naming.format.uppercase": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRCaseFormat.UPPERCASE); break;
+            case "mdr.naming.format.lowercase": preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRCaseFormat.LOWERCASE); break;
+            case "mdr.naming.format.capitalize":preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRCaseFormat.CAPITALIZE); break;
         }
     }
 

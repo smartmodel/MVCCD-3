@@ -153,6 +153,8 @@ public abstract class MLDRModel extends MDRModel implements IMLDRElement {
         setNamingLengthFuture( preferences.getMLDR_PREF_NAMING_LENGTH());
         setNamingFormatActual( preferences.getMLDR_PREF_NAMING_FORMAT());
         setNamingFormatFuture( preferences.getMLDR_PREF_NAMING_FORMAT());
+        setReservedWordsFormatActual( preferences.getMLDR_PREF_RESERDWORDS_FORMAT());
+        setReservedWordsFormatFuture( preferences.getMLDR_PREF_RESERDWORDS_FORMAT());
     }
 
 }

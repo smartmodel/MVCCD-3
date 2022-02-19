@@ -4,7 +4,7 @@ import connections.ConConnection;
 import connections.ConDB;
 import connections.ConManager;
 import main.MVCCDElement;
-import mdr.MDRNamingFormat;
+import mdr.MDRCaseFormat;
 import mpdr.MPDRDropBefore;
 import mpdr.MPDRModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
@@ -31,6 +31,13 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     protected SComboBox fieldConnectionLienProg;
     protected JLabel labelConnectionURL;
     protected STextField fieldConnectionURL;
+
+
+    private JPanel panelReservedWords = new JPanel ();
+    private JLabel labelReservedWordsFormatFuture;
+    protected SComboBox fieldReservedWordsFormatFuture;
+    private JLabel labelReservedWordsFormatActual;
+    private STextField fieldReservedWordsFormatActual;
 
 
     protected JLabel labelSchema;
@@ -60,7 +67,7 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         conDB = ((MPDRModelEditor) getEditor()).getConDB();
         boolean conBDWithNamingFormat = (conDB == ConDB.ORACLE) || (conDB == ConDB.POSTGRESQL);
         if (conBDWithNamingFormat){
-            fieldNamingFormatFuture.addItem(MDRNamingFormat.LIKEBD.getText());
+            fieldNamingFormatFuture.addItem(MDRCaseFormat.LIKEBD.getText());
         }
 
         labelConnectionLienProg = new JLabel("Name : ");
@@ -82,6 +89,27 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         fieldConnectionURL.setPreferredSize((new Dimension(400, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldConnectionURL.setToolTipText("Chaîne de connexion construite...");
         fieldConnectionURL.setReadOnly(true);
+
+
+        // Casse
+        labelReservedWordsFormatActual = new JLabel("Casse de caractères en préférence");
+        fieldReservedWordsFormatActual = new STextField (this, labelReservedWordsFormatActual);
+        fieldReservedWordsFormatActual.getDocument().addDocumentListener(this);
+        fieldReservedWordsFormatActual.addFocusListener(this);
+        fieldReservedWordsFormatActual.setReadOnly(true);
+
+        labelReservedWordsFormatFuture = new JLabel("Casse de caractères propre au modèle");
+        fieldReservedWordsFormatFuture = new SComboBox(this, labelReservedWordsFormatFuture);
+        fieldReservedWordsFormatFuture.addItem(MDRCaseFormat.NOTHING.getText());
+        fieldReservedWordsFormatFuture.addItem(MDRCaseFormat.UPPERCASE.getText());
+        fieldReservedWordsFormatFuture.addItem(MDRCaseFormat.LOWERCASE.getText());
+        fieldReservedWordsFormatFuture.addItem(MDRCaseFormat.LIKEBD.getText());
+
+
+        fieldReservedWordsFormatFuture.setToolTipText("Casse de caractères appliqué à tous les objets du modèles");
+        fieldReservedWordsFormatFuture.addItemListener(this);
+        fieldReservedWordsFormatFuture.addFocusListener(this);
+
 
         labelSchema = new JLabel("Schéma : ");
         fieldSchema = new STextField(this, labelSchema);
@@ -127,8 +155,11 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         fieldConnectionLienProg.setName("fieldConnectionLienProg");
         fieldConnectionURL.setName("fieldConnectionURL");
         fieldDropBeforeCreate.setName("fieldDropBeforeCreate");
+
         super.getSComponents().add(fieldConnectionLienProg);
         super.getSComponents().add(fieldConnectionURL);
+        super.getSComponents().add(fieldReservedWordsFormatActual);
+        super.getSComponents().add(fieldReservedWordsFormatFuture);
         super.getSComponents().add(fieldSchema);
         super.getSComponents().add(fieldDropBeforeCreate);
         super.getSComponents().add(fieldMPDRDbPK);
@@ -139,6 +170,13 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
 
     protected void createPanelMaster(GridBagConstraints gbc) {
         super.createPanelMaster(gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 4;
+        createPanelReservedWords();
+        panelInputContentCustom.add(panelReservedWords, gbc);
+        gbc.gridwidth = 1;
 
         if (conDB == ConDB.POSTGRESQL) {
             gbc.gridx = 0;
@@ -201,6 +239,21 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     }
 
 
+    private void createPanelReservedWords() {
+        GridBagConstraints gbcA = PanelService.createSubPanelGridBagConstraints(panelReservedWords,
+                "Ecriture des mots réservés du SGBD-R");
+
+        panelReservedWords.add(labelReservedWordsFormatActual, gbcA);
+        gbcA.gridx++;
+        panelReservedWords.add(fieldReservedWordsFormatActual, gbcA);
+
+        gbcA.gridx++;
+        panelReservedWords.add(labelReservedWordsFormatFuture, gbcA);
+        gbcA.gridx++;
+        panelReservedWords.add(fieldReservedWordsFormatFuture, gbcA);
+    }
+
+
     @Override
     public void loadDatas(MVCCDElement mvccdElementCrt) {
         super.loadDatas(mvccdElementCrt);
@@ -215,6 +268,9 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
             MPDRPostgreSQLModel mpdrPostgreSQLModel = (MPDRPostgreSQLModel) mpdrModel;
             fieldSchema.setText(mpdrPostgreSQLModel.getSchema());
         }
+        fieldReservedWordsFormatActual.setText(mpdrModel.getReservedWordsFormatForDB().getText());
+        SComboBoxService.selectByText(fieldReservedWordsFormatFuture, mpdrModel.getReservedWordsFormatForDB().getText());
+
     }
 
 
@@ -237,6 +293,15 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
             MPDRPostgreSQLModel mpdrPostgreSQLModel = (MPDRPostgreSQLModel) mpdrModel;
             if (fieldSchema.checkIfUpdated()) {
                 mpdrPostgreSQLModel.setSchema(fieldSchema.getText());
+            }
+        }
+
+        if (fieldReservedWordsFormatFuture.checkIfUpdated()) {
+            String text = (String) fieldReservedWordsFormatFuture.getSelectedItem();
+            for (MDRCaseFormat mdrCaseFormat : MDRCaseFormat.values()) {
+                if (text.equals(mdrCaseFormat.getText())) {
+                    mpdrModel.setReservedWordsFormatFuture(mdrCaseFormat);
+                }
             }
         }
     }

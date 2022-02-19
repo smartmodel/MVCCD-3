@@ -86,7 +86,6 @@ public class MPDRModelConnectorInputContent extends MPDRModelInputContent implem
         gbc.gridy++;
         panelInputContentCustom.add(panelConnection, gbc);
 
-
         this.add(panelInputContentCustom);
     }
 

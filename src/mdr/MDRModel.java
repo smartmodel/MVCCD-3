@@ -16,9 +16,13 @@ public abstract class MDRModel extends MDRElement  {
     // Renommer les 2 attributs qui modifient le nommage pour le modèle
     // Synchroniser avec la sauvegarde XML
     private MDRNamingLength namingLengthActual ;  // Venant des préférences en lecture seule
-    private MDRNamingFormat namingFormatActual ;  // Idem
+    private MDRCaseFormat namingFormatActual ;  // Idem
     private MDRNamingLength namingLengthFuture ;  // Modifiable et propre au modèle
-    protected MDRNamingFormat namingFormatFuture ;  // Idem
+    protected MDRCaseFormat namingFormatFuture ;  // Idem
+    // Même remarque pour les 2 attributs ci-dessous
+    private MDRCaseFormat reservedWordsFormatActual ;
+    protected MDRCaseFormat reservedWordsFormatFuture ;
+
 
     private Integer iteration = 0 ;
 
@@ -50,27 +54,52 @@ public abstract class MDRModel extends MDRElement  {
         this.namingLengthFuture = namingLengthFuture;
     }
 
-    public MDRNamingFormat getNamingFormatActual() {
+    public MDRCaseFormat getNamingFormatActual() {
         return namingFormatActual;
     }
 
-    public void setNamingFormatActual(MDRNamingFormat namingFormatActual) {
+    public void setNamingFormatActual(MDRCaseFormat namingFormatActual) {
         this.namingFormatActual = namingFormatActual;
     }
 
-    public MDRNamingFormat getNamingFormatFuture() {
+    public MDRCaseFormat getNamingFormatFuture() {
         return namingFormatFuture;
     }
 
-    // Surchargé pour les BD qui ont formattage partziculier
+    // Surchargé pour les BD qui ont un formattage particulier
     // minuscule pour PostgreSQL
     // majuscule pour Oracle
-    public MDRNamingFormat getNamingFormatForDB() {
+    // Utilisé par défaut pour MLDR !
+    public MDRCaseFormat getNamingFormatForDB() {
         return namingFormatFuture;
     }
 
-    public void setNamingFormatFuture(MDRNamingFormat namingFormatFuture) {
+    public void setNamingFormatFuture(MDRCaseFormat namingFormatFuture) {
         this.namingFormatFuture = namingFormatFuture;
+    }
+
+    public MDRCaseFormat getReservedWordsFormatActual() {
+        return reservedWordsFormatActual;
+    }
+
+    public void setReservedWordsFormatActual(MDRCaseFormat reservedWordsFormatActual) {
+        this.reservedWordsFormatActual = reservedWordsFormatActual;
+    }
+
+    public MDRCaseFormat getReservedWordsFormatFuture() {
+        return reservedWordsFormatFuture;
+    }
+
+    // Surchargé pour les BD qui ont un formattage particulier
+    // minuscule pour PostgreSQL
+    // majuscule pour Oracle
+    // Utilisé par défaut pour MLDR !
+    public MDRCaseFormat getReservedWordsFormatForDB() {
+        return reservedWordsFormatFuture;
+    }
+
+    public void setReservedWordsFormatFuture(MDRCaseFormat reservedWordsFormatFuture) {
+        this.reservedWordsFormatFuture = reservedWordsFormatFuture;
     }
 
     /*

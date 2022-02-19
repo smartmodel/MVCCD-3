@@ -1,13 +1,15 @@
 package window.editor.preferences.project.mpdr;
 
 import main.MVCCDElement;
+import mdr.MDRCaseFormat;
+import mdr.MDRNamingLength;
 import preferences.Preferences;
+import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.SComponent;
 import utilities.window.scomponents.STextField;
 import utilities.window.services.PanelService;
-import window.editor.preferences.project.mdr.utilities.PrefMDRInputContent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -15,9 +17,19 @@ import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
-public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
+public abstract class PrefMPDRInputContent extends PanelInputContent {
 
-    private JPanel panelFormatNames = new JPanel ();
+
+    protected JPanel panelNaming;
+    protected JLabel labelNamingLength = new JLabel();
+    protected SComboBox fieldNamingLength;
+    protected JLabel labelNamingFormat = new JLabel();
+    protected SComboBox fieldNamingFormat;
+
+    protected JPanel panelReservedWords;
+    protected JLabel labelReservedWordsFormat = new JLabel();
+    protected SComboBox fieldReservedWordsFormat;
+
 
     protected JLabel labelDelimiterInstructions ;
     protected STextField fieldDelimiterInstructions;
@@ -25,6 +37,8 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
     protected SComboBox fieldPKGenerate;
     protected JLabel labelTAPIs;
     protected SCheckBox fieldTAPIs;
+
+    private JPanel panelFormatNames = new JPanel ();
     protected JLabel labelSeqPKNameFormat ;
     protected STextField fieldSeqPKNameFormat;
     protected JLabel labelTriggerNameFormat ;
@@ -42,7 +56,46 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
 
     public void createContentCustom() {
 
-        super.createContentCustom();
+        panelNaming = new JPanel();
+        panelReservedWords = new JPanel();
+
+
+        labelNamingLength = new JLabel("Nombre de caractères");
+        fieldNamingLength = new SComboBox(this, labelNamingLength);
+        if (MDRNamingLength.LENGTH30.isRequired()){
+            fieldNamingLength.addItem(MDRNamingLength.LENGTH30.getText());
+        }
+        if (MDRNamingLength.LENGTH60.isRequired()){
+            fieldNamingLength.addItem(MDRNamingLength.LENGTH60.getText());
+        }
+        if (MDRNamingLength.LENGTH120.isRequired()){
+            fieldNamingLength.addItem(MDRNamingLength.LENGTH120.getText());
+        }
+        fieldNamingLength.setToolTipText("Taillle maximales des noms de tous les objets du modèle");
+        fieldNamingLength.addItemListener(this);
+        fieldNamingLength.addFocusListener(this);
+
+
+        labelNamingFormat = new JLabel("Casse de caractères");
+        fieldNamingFormat = new SComboBox(this, labelNamingFormat);
+        fieldNamingFormat.addItem(MDRCaseFormat.NOTHING.getText());
+        fieldNamingFormat.addItem(MDRCaseFormat.UPPERCASE.getText());
+        fieldNamingFormat.addItem(MDRCaseFormat.LOWERCASE.getText());
+        fieldNamingFormat.addItem(MDRCaseFormat.LIKEBD.getText());
+        fieldNamingFormat.setToolTipText("Casse de caractères des noms de tous les objets du modèle");
+        fieldNamingFormat.addItemListener(this);
+        fieldNamingFormat.addFocusListener(this);
+
+
+
+        labelReservedWordsFormat = new JLabel("Casse de caractères");
+        fieldReservedWordsFormat = new SComboBox(this, labelReservedWordsFormat);
+        fieldReservedWordsFormat.addItem(MDRCaseFormat.NOTHING.getText());
+        fieldReservedWordsFormat.addItem(MDRCaseFormat.UPPERCASE.getText());
+        fieldReservedWordsFormat.addItem(MDRCaseFormat.LOWERCASE.getText());
+        fieldReservedWordsFormat.setToolTipText("Casse de caractères des mots réservés du SGBD-R");
+        fieldReservedWordsFormat.addItemListener(this);
+        fieldReservedWordsFormat.addFocusListener(this);
 
         labelDelimiterInstructions = new JLabel("Délimiteur d'instructions");
         fieldDelimiterInstructions = new STextField(this, labelDelimiterInstructions);
@@ -94,6 +147,9 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
         fieldCheckColumnDatatypeMax30NameFormat.getDocument().addDocumentListener(this);
         fieldCheckColumnDatatypeMax30NameFormat.addFocusListener(this);
 
+        super.getSComponents().add(fieldNamingLength);
+        super.getSComponents().add(fieldNamingFormat);
+        super.getSComponents().add(fieldReservedWordsFormat);
         super.getSComponents().add(fieldDelimiterInstructions);
         super.getSComponents().add(fieldPKGenerate);
         super.getSComponents().add(fieldTAPIs);
@@ -107,7 +163,18 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
 
     private void createPanelMaster() {
         GridBagConstraints gbc = PanelService.createGridBagConstraints(panelInputContentCustom);
-        super.affectPanelMaster(gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+
+        createPanelNaming();
+        panelInputContentCustom.add(panelNaming, gbc);
+
+        createPanelReservedWords();
+        gbc.gridy++;
+        panelInputContentCustom.add(panelReservedWords, gbc);
+
+        gbc.gridwidth = 1;
 
         gbc.gridx = 0;
         gbc.gridy++;
@@ -132,6 +199,34 @@ public abstract class PrefMPDRInputContent extends PrefMDRInputContent {
         gbc.gridwidth = 2;
         createFormatNames();
         panelInputContentCustom.add(panelFormatNames, gbc);
+    }
+
+    private void createPanelNaming(){
+        GridBagConstraints gbcN = PanelService.createSubPanelGridBagConstraints(panelNaming,
+                "Taille et écriture des noms d'objets créés" );
+
+        gbcN.gridx = 0;
+        gbcN.gridy = 0 ;
+        panelNaming.add(labelNamingLength, gbcN);
+        gbcN.gridx++ ;
+        panelNaming.add(fieldNamingLength, gbcN);
+
+        gbcN.gridx = 0;
+        gbcN.gridy++ ;
+        panelNaming.add(labelNamingFormat, gbcN);
+        gbcN.gridx++ ;
+        panelNaming.add(fieldNamingFormat, gbcN);
+    }
+
+    private void createPanelReservedWords(){
+        GridBagConstraints gbcN = PanelService.createSubPanelGridBagConstraints(panelReservedWords,
+                "Ecriture des mots réservés du SGBD-R" );
+
+        gbcN.gridx = 0;
+        gbcN.gridy = 0 ;
+        panelReservedWords.add(labelReservedWordsFormat, gbcN);
+        gbcN.gridx++ ;
+        panelReservedWords.add(fieldReservedWordsFormat, gbcN);
     }
 
     protected  void createFormatNames(){

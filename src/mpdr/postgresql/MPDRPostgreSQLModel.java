@@ -4,7 +4,7 @@ import datatypes.MPDRDatatype;
 import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.postgresql.MPDRPostgreSQLGenerateSQL;
 import main.MVCCDElementFactory;
-import mdr.MDRNamingFormat;
+import mdr.MDRCaseFormat;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
@@ -66,6 +66,8 @@ public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLEle
         setNamingLengthFuture( preferences.getMPDRPOSTGRESQL_PREF_NAMING_LENGTH());
         setNamingFormatActual( preferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT());
         setNamingFormatFuture( preferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT());
+        setReservedWordsFormatActual(preferences.getMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT());
+        setReservedWordsFormatFuture(preferences.getMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT());
 
     }
 
@@ -80,11 +82,21 @@ public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLEle
 
     // Surchargé pour les BD qui ont formattage particulier
     // minuscule pour PostgreSQL
-     public MDRNamingFormat getNamingFormatForDB() {
-         if (namingFormatFuture == MDRNamingFormat.LIKEBD){
-            return MDRNamingFormat.LOWERCASE;
+     public MDRCaseFormat getNamingFormatForDB() {
+         if (namingFormatFuture == MDRCaseFormat.LIKEBD){
+            return MDRCaseFormat.LOWERCASE;
         }
         return namingFormatFuture;
+    }
+
+
+    // Surchargé pour les BD qui ont formattage particulier
+    // majuscule pour PostgreSQL
+    public MDRCaseFormat getReservedWordsFormatForDB() {
+        if (reservedWordsFormatFuture == MDRCaseFormat.LIKEBD){
+            return MDRCaseFormat.UPPERCASE;
+        }
+        return reservedWordsFormatFuture;
     }
 
 }

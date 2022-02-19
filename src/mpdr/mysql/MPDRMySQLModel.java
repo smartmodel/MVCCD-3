@@ -58,6 +58,8 @@ public class MPDRMySQLModel extends MPDRModel implements IMPDRMySQLElement {
         setNamingLengthFuture( preferences.getMPDRMYSQL_PREF_NAMING_LENGTH());
         setNamingFormatActual( preferences.getMPDRMYSQL_PREF_NAMING_FORMAT());
         setNamingFormatFuture( preferences.getMPDRMYSQL_PREF_NAMING_FORMAT());
+        setReservedWordsFormatActual(preferences.getMPDRMYSQL_PREF_RESERDWORDS_FORMAT());
+        setReservedWordsFormatFuture(preferences.getMPDRMYSQL_PREF_RESERDWORDS_FORMAT());
     }
 
 

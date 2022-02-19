@@ -337,7 +337,8 @@ public abstract class MPDRGenerateSQL {
     }
 
     public static String nullifyKey(String code, String beforeKey, String key, String value) {
-        return StringUtils.replace(code, beforeKey +"{" + key + "}", value);
+        return StringUtils.replace(code, beforeKey +
+                Preferences.MDR_WORDS_BEGIN+ key + Preferences.MDR_WORDS_END, value);
     }
 
 }

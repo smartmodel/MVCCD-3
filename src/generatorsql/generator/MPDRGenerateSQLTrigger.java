@@ -1,5 +1,6 @@
 package generatorsql.generator;
 
+import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.tapis.MPDRTrigger;
 import mpdr.tapis.MPDRTriggerType;
 import preferences.Preferences;
@@ -15,6 +16,7 @@ public abstract class MPDRGenerateSQLTrigger {
     public String generateSQLDropTrigger(MPDRTrigger mpdrTrigger){
         String generateSQLCode = "";
         generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirDropTriggersDB(), Preferences.TEMPLATE_DROP_TRIGGER);
+        generateSQLCode = MPDRGenerateSQLUtil.caseReservedWords(generateSQLCode, getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_TRIGGER_NAME_WORD, mpdrTrigger.getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD,
                 mpdrTrigger.getMPDRTableAccueil().getName());
@@ -26,6 +28,7 @@ public abstract class MPDRGenerateSQLTrigger {
         String generateSQLCode = "";
         MPDRTriggerType mpdrTriggerType = mpdrTrigger.getType();
         generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateTriggersDB(), mpdrTriggerType.getTemplateFileName()) ;
+        generateSQLCode = MPDRGenerateSQLUtil.caseReservedWords(generateSQLCode, getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_TRIGGER_NAME_WORD, mpdrTrigger.getName());
         // La fonction porte le même nom que le trigger
         // TODO-1 A voir si à terme, il faut associer le trigger à une fonction qui pourrait être réutilisable

@@ -1,9 +1,11 @@
 package generatorsql;
 
 import main.MVCCDManager;
+import mdr.MDRCaseFormat;
 import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.Trace;
 import utilities.files.FileWrite;
 import utilities.files.UtilFiles;
 
@@ -84,7 +86,7 @@ public class MPDRGenerateSQLUtil {
 
     public static boolean find(String code, String key) {
         //TODO-1 A voir expression régulière
-        return code.indexOf("{" + key + "}") >= 0;
+        return code.indexOf(Preferences.MDR_WORDS_BEGIN + key + Preferences.MDR_WORDS_END) >= 0;
     }
 
 
@@ -147,5 +149,46 @@ public class MPDRGenerateSQLUtil {
             }
         }
         return "";
+    }
+
+    public static String caseReservedWords(String template, MPDRModel mpdrModel) {
+        if (template != null) {
+            String resultat = "";
+            boolean treat = true;
+            for (int i = 0; i < template.length(); i++){
+                char  c = template.charAt(i);
+                boolean markerBEGINWord = StringUtils.contains(Preferences.MDR_WORDS_BEGIN, c);
+                boolean markerENDWord = StringUtils.contains(Preferences.MDR_WORDS_END, c);
+                if (treat) {
+                    if (markerBEGINWord) {
+                        treat = false;
+                        resultat += c;
+                    } else {
+                        Trace.println("" + caseApplicable(c, mpdrModel) + " " + markerBEGINWord);
+                        resultat += caseApplicable(c, mpdrModel);
+                    }
+                } else {
+                    resultat += c ;
+                    if (markerENDWord) {
+                        treat = true;
+                    }
+                }
+            }
+            return resultat;
+        } else {
+            return null;
+        }
+    }
+
+    private static char caseApplicable(char c, MPDRModel mpdrModel) {
+        if (mpdrModel.getReservedWordsFormatForDB() == MDRCaseFormat.LOWERCASE){
+            return Character.toLowerCase(c);
+        } else if (mpdrModel.getReservedWordsFormatForDB() == MDRCaseFormat.UPPERCASE){
+            return Character.toUpperCase(c);
+        } else {
+            return c ;
+        }
+
+
     }
 }
