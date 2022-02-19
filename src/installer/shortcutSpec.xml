@@ -1,0 +1,13 @@
+<shortcuts>
+    <programGroup defaultName="ArcDataModeler" location="applications"/>
+    <shortcut
+            name="ArcDataModeler"
+            target="${INSTALL_PATH}/MVCCD-3.jar"
+            iconFile="$INSTALL_PATH/icon/heg_arc_log_rs.ico"
+            desktop="yes"
+            applications="yes"
+            startMenu="yes"
+    >
+    </shortcut>
+</shortcuts>
+
