@@ -5,7 +5,7 @@
     <!-- Informations about the software -->
     <info>
         <appname>ArcDataModeler</appname>
-        <appversion>2.0</appversion>
+        <appversion>1.0</appversion>
         <authors>
             <author name="Fabrice Camus" email="fabrice.camus@he-arc.ch"/>
             <author name="Melvyn Vogelsang" email="melvyn.vogelsang@he-arc.ch"/>
@@ -25,13 +25,20 @@
         <res src="C:/Users/marro/Bachelor/ArcDataModeler/src/installer/shortcutSpec.xml" id="shortcutSpec.xml"/>
     </resources>
 
+    <!-- The native library -->
+    <natives>
+        <native type="izpack" name="ShellLink.dll"/>
+        <native type="izpack" name="ShellLink_x64.dll"/>
+    </natives>
+
     <!-- The panels section. We indicate here wich panels we want to use. The order will be respected. -->
     <panels>
-        <panel classname="HelloPanel"/>
-        <panel classname="TargetPanel"/>
-        <panel classname="PacksPanel"/>
-        <panel classname="InstallPanel"/>
-        <panel classname="FinishPanel"/>
+        <panel classname="HelloPanel" id="hellopanel"/>
+        <panel classname="TargetPanel" id="targetpanel"/>
+        <panel classname="PacksPanel" id="packspanel"/>
+        <panel classname="InstallPanel" id="installpanel"/>
+        <panel classname="ShortcutPanel" id="shortcutpanel"/>
+        <panel classname="FinishPanel" id="finishpanel"/>
     </panels>
 
     <!-- Packs represents the modules created during the installation -->
