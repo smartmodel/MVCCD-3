@@ -255,12 +255,6 @@ public abstract class MPDRGenerateSQL {
                 Preferences.DIRECTORY_TEMPLATES_SQLDDL_NAME  ;
     }
 
-
-    public String getTemplateDirDrop() {
-        return getTemplateDirBase() + Preferences.SYSTEM_FILE_SEPARATOR +
-                Preferences.DIRECTORY_TEMPLATES_DROP;
-    }
-
     private String getTemplateDirBaseDB() {
         return getTemplateDirBase() + Preferences.SYSTEM_FILE_SEPARATOR +
                 getTemplateBDDirectory()  ;
@@ -276,10 +270,14 @@ public abstract class MPDRGenerateSQL {
                 Preferences.DIRECTORY_TEMPLATES_ALTER;
     }
 
-
     public String getTemplateDirDropDB() {
         return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR+
                 Preferences.DIRECTORY_TEMPLATES_DROP;
+    }
+
+    public String getTemplateDirOptionsDB() {
+        return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR+
+                Preferences.DIRECTORY_TEMPLATES_OPTIONS;
     }
 
     public String getTemplateDirTriggersDB() {
@@ -296,7 +294,6 @@ public abstract class MPDRGenerateSQL {
         return getTemplateDirTriggersDB() + Preferences.SYSTEM_FILE_SEPARATOR +
                 Preferences.DIRECTORY_TEMPLATES_DROP;
     }
-
 
     public String getTemplateDirStoredCodeDB() {
         return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR +

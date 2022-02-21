@@ -54,10 +54,7 @@ public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLEle
 
     }
 
-    @Override
-    public String getNewRecordWord() {
-        return Preferences.MPDR_POSTGRESQL_NEW_RECORD_WORD;
-    }
+
 
     @Override
     public void adjustProperties() {

@@ -4,7 +4,6 @@ import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.MPDRColumn;
 import mpdr.MPDRIndex;
 import preferences.Preferences;
-import utilities.files.FileRead;
 
 public abstract class MPDRGenerateSQLIndex {
 
@@ -12,18 +11,19 @@ public abstract class MPDRGenerateSQLIndex {
    }
 
     public String generateSQLDropIndex(MPDRIndex mpdrIndex) {
-        String generateSQLCode = "";
-        generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirDropDB(), Preferences.TEMPLATE_DROP_INDEX);
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirDropDB(),
+                Preferences.TEMPLATE_DROP_INDEX,
+                getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                 Preferences.MPDR_INDEX_NAME_WORD, mpdrIndex.getName());
         return generateSQLCode;
     }
 
     public String generateSQLCreateIndex(MPDRIndex mpdrIndex) {
-        String generateSQLCode = "";
-
         //Génération de l'index
-        generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_INDEX) ;
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateDB(),
+                Preferences.TEMPLATE_CREATE_INDEX,
+                getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_INDEX_NAME_WORD, mpdrIndex.getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrIndex.getMDRTableAccueil().getName());
 

@@ -3,6 +3,7 @@ package transform.mldrtompdr;
 import main.MVCCDManager;
 import mldr.MLDRTable;
 import mpdr.MPDRColumn;
+import mpdr.MPDRDBPK;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.tapis.MPDRBoxTriggers;
@@ -56,8 +57,10 @@ public class MLDRTransformToBoxTriggers {
         ArrayList<MPDRTrigger> mpdrTriggers = new ArrayList<MPDRTrigger>();
 
         if (mldrTable.isIndependant()) {
-            if (MPDRTriggerType.BIR_PKIND.applicableToMPDRDB(mpdrModel.getDb())){
-                mpdrTriggers.add(mldrTransformToTrigger.createOrModifyTrigger(MPDRTriggerType.BIR_PKIND));
+            if (mpdrModel.getMpdrDbPK() == MPDRDBPK.SEQUENCE) {
+                if (MPDRTriggerType.BIR_PKIND.applicableToMPDRDB(mpdrModel.getDb())) {
+                    mpdrTriggers.add(mldrTransformToTrigger.createOrModifyTrigger(MPDRTriggerType.BIR_PKIND));
+                }
             }
         }
         if (mldrTable.isKindDependant()){

@@ -41,7 +41,6 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         this.db = db;
     }
 
-
     public MPDRTable getMPDRTableByMLDRTableSource(MLDRTable mldrTable) {
         return MPDRModelService.getMPDRTableByMLDRTableSource(this, mldrTable);
     }
@@ -195,7 +194,5 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     }
 
     public abstract Boolean getMPDR_TAPIs() ;
-
-    public abstract String getNewRecordWord();
 
  }

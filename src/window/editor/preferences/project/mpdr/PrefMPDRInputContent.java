@@ -74,6 +74,7 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         fieldNamingLength.setToolTipText("Taillle maximales des noms de tous les objets du modèle");
         fieldNamingLength.addItemListener(this);
         fieldNamingLength.addFocusListener(this);
+        fieldNamingLength.setName("fieldNamingLength");
 
 
         labelNamingFormat = new JLabel("Casse de caractères");
@@ -81,10 +82,10 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         fieldNamingFormat.addItem(MDRCaseFormat.NOTHING.getText());
         fieldNamingFormat.addItem(MDRCaseFormat.UPPERCASE.getText());
         fieldNamingFormat.addItem(MDRCaseFormat.LOWERCASE.getText());
-        fieldNamingFormat.addItem(MDRCaseFormat.LIKEBD.getText());
         fieldNamingFormat.setToolTipText("Casse de caractères des noms de tous les objets du modèle");
         fieldNamingFormat.addItemListener(this);
         fieldNamingFormat.addFocusListener(this);
+        fieldNamingFormat.setName("fieldNamingFormat");
 
 
 
@@ -96,6 +97,7 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         fieldReservedWordsFormat.setToolTipText("Casse de caractères des mots réservés du SGBD-R");
         fieldReservedWordsFormat.addItemListener(this);
         fieldReservedWordsFormat.addFocusListener(this);
+        fieldReservedWordsFormat.setName("fieldReservedWordsFormat");
 
         labelDelimiterInstructions = new JLabel("Délimiteur d'instructions");
         fieldDelimiterInstructions = new STextField(this, labelDelimiterInstructions);

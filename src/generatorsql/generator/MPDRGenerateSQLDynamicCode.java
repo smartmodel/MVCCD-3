@@ -8,7 +8,6 @@ import mpdr.MPDRTable;
 import mpdr.tapis.MPDRDynamicCodeType;
 import mpdr.tapis.interfaces.IMPDRWithDynamicCode;
 import preferences.Preferences;
-import utilities.files.FileRead;
 
 import java.util.ArrayList;
 
@@ -25,7 +24,7 @@ public abstract class MPDRGenerateSQLDynamicCode {
         for (MPDRDynamicCodeType mpdrDynamicCodeType : MPDRDynamicCodeType.getAllForDB(mpdrDB)){
             if (MPDRGenerateSQLUtil.find(generateSQLCode, mpdrDynamicCodeType.getKey())){
                 //String sqlCodeDynamic = loadTemplate(impdrWithDynamicCode, mpdrDynamicCodeType);
-                String templateSQLCode = loadTemplate(mpdrDynamicCodeType);
+                String templateSQLCode = template(mpdrDynamicCodeType);
                 String tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, mpdrDynamicCodeType.getKey());
 
                 String sqlCodeDynamic = generateFromTemplate(impdrWithDynamicCode, mpdrDynamicCodeType, templateSQLCode, tabsApplicable);
@@ -37,20 +36,11 @@ public abstract class MPDRGenerateSQLDynamicCode {
     }
 
 
-    protected String loadTemplate(MPDRDynamicCodeType mpdrDynamicCodeType){
-        return FileRead.readToString(getMPDRGenerateSQL().getTemplateDirDynamicCodeDB(), mpdrDynamicCodeType.getTemplateFileName()) ;
+    protected String template(MPDRDynamicCodeType mpdrDynamicCodeType){
+        return MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirDynamicCodeDB(),
+                mpdrDynamicCodeType.getTemplateFileName(),
+                getMPDRGenerateSQL().mpdrModel);
     }
-
-    /*
-    protected String loadTemplate(IMPDRWithDynamicCode impdrWithDynamicCode,
-                                  MPDRDynamicCodeType mpdrDynamicCodeType){
-
-        String templateSQLCode = "";
-        templateSQLCode += TemplateFile.templateFileToString(getMPDRGenerateSQL().getTemplateDirDynamicCodeDB(), mpdrDynamicCodeType.getTemplateFileName()) ;
-        return generateFromTemplate(impdrWithDynamicCode, mpdrDynamicCodeType, templateSQLCode);
-    }
-
-     */
 
     protected String generateFromTemplate(IMPDRWithDynamicCode impdrWithDynamicCode,
                                           MPDRDynamicCodeType mpdrDynamicCodeType,
@@ -77,9 +67,6 @@ public abstract class MPDRGenerateSQLDynamicCode {
                     }
                     firstColumn = false;
                     generateSQLCode += templateSQLCode ;
-                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
-                            Preferences.MPDR_NEW_RECORD_WORD,
-                            getMPDRGenerateSQL().mpdrModel.getNewRecordWord());
                     generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                             Preferences.MDR_TABLE_NAME_WORD,
                             mdrColumn.getMDRTableAccueil().getName());

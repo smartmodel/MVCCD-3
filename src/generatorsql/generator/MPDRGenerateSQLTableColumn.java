@@ -1,10 +1,10 @@
 package generatorsql.generator;
 
 import datatypes.MDDatatypeService;
+import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.MPDRColumn;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.files.FileRead;
 
 public abstract class MPDRGenerateSQLTableColumn {
 
@@ -13,61 +13,57 @@ public abstract class MPDRGenerateSQLTableColumn {
     }
 
     public String generateSQLCreateTableColumn(MPDRColumn mpdrColumn) {
-        String generateSQLCode = "";
-        boolean identityColumn = pkGenerateIdentity() && mpdrColumn.isPkNotFk();
-        if (identityColumn){
-            generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMN_IDENTITY) +
-                    Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
-
-        } else {
-            generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_COLUMNS) +
-                    Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
-        }
+        // Nom
+        String  generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateDB(),
+                Preferences.TEMPLATE_CREATE_TABLE_COLUMNS,
+                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;;
 
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
-        // Correction PAS Nom et pas lienProg
+
+        // Datatype
         String datatypeName = MDDatatypeService.convertMPDRLienProgToName(getMPDRGenerateSQL().mpdrModel.getDb(), mpdrColumn.getDatatypeLienProg());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_TYPE_WORD, datatypeName);
+        String datatypeSizeScale = generateDatatypeSizeScale(mpdrColumn);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_DATATYPE_WORD, datatypeName + datatypeSizeScale);
 
-        generateSQLCode = generateSizeScale(generateSQLCode , mpdrColumn);
 
-        if (mpdrColumn.isMandatory()) {
-            //TODO-PAS Voir pour le paramétrage de la clause NOT NULL
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_MANDATORY_WORD, "NOT NULL");
-        } else {
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_MANDATORY_WORD, "");
+        //Options
+        String codeOption = "";
+
+        // Options identité
+        boolean c1 = pkGenerateIdentity();
+        boolean c2 = mpdrColumn.isPkNotFk();
+        boolean c3 = mpdrColumn.getMPDRTableAccueil().isIndependant();
+
+        boolean identityColumn = c1 && c2 && c3;
+        if (identityColumn){
+            codeOption =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirOptionsDB(),
+                    Preferences.TEMPLATE_OPTION_COLUMN_IDENTITY,
+                    getMPDRGenerateSQL().mpdrModel);
         }
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_IDENTITY, codeOption);
 
-        if (StringUtils.isNotEmpty(mpdrColumn.getInitValue())) {
-            //TODO-0 Faire le traitement correct de valeur par défaut
-            /*
-            if (mpdrColumn.getDatatypeLienProg() == "NUMBER") {
-                generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_DEFAULT_WORD, " DEFAULT " + mpdrColumn.getInitValue());
-            } else {
-                generateSQLCode = MPDRGenerateSQLUtil.replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_DEFAULT_WORD, " DEFAULT '" + mpdrColumn.getInitValue() + "'");
-            }
-
-             */
-        } else {
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_DEFAULT_WORD, "");
+        // Options not null
+        codeOption = "";
+        if (mpdrColumn.isMandatory()  && (! identityColumn)) {
+            codeOption =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirOptionsDB(),
+                    Preferences.TEMPLATE_OPTION_COLUMN_NOTNULL,
+                    getMPDRGenerateSQL().mpdrModel);
         }
-        return generateSQLCode;
-    }
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_NOTNULL, codeOption);
 
-    // Méthode surchargéle pour PostgreSQL
-    protected String generateSizeScale(String generateSQLCode, MPDRColumn mpdrColumn){
-        if (mpdrColumn.getSize() != null) {
-            if (mpdrColumn.getScale() != null) {
-                generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SIZE_WORD, "(" + mpdrColumn.getSize().toString());
-                generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SCALE_WORD, ", " + mpdrColumn.getScale().toString() + ")");
-            } else {
-                generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SIZE_WORD, "(" + mpdrColumn.getSize().toString() + ")");
-                generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SCALE_WORD, "");
-            }
-        } else {
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SIZE_WORD, "");
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SCALE_WORD, "");
+
+        // Option default value
+        codeOption = "";
+        if (StringUtils.isNotEmpty(mpdrColumn.getInitValue())  && (! identityColumn)) {
+            codeOption =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirOptionsDB(),
+                Preferences.TEMPLATE_OPTION_COLUMN_DEFAULTVALUE,
+                getMPDRGenerateSQL().mpdrModel);
+            //TODO-0 Vérfier que mpdrColumn.getInitValue() rendre une valeur conforme au mpdr cible
+            codeOption = getMPDRGenerateSQL().replaceKeyValue(codeOption, Preferences.MDR_DEFAULT_VALUE_WORD, mpdrColumn.getInitValue());
+
         }
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_DEFAULTVALUE, codeOption);
+
         return generateSQLCode;
     }
 
@@ -75,4 +71,5 @@ public abstract class MPDRGenerateSQLTableColumn {
 
     public abstract MPDRGenerateSQL getMPDRGenerateSQL() ;
 
+    protected abstract String generateDatatypeSizeScale(MPDRColumn mpdrColumn);
 }

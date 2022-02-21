@@ -79,7 +79,7 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
                 preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRCaseFormat.CAPITALIZE);
             }
             if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.MPDR_NAMING_FORMAT_LIKEDB))){
-                preferences.setMPDRORACLE_PREF_NAMING_FORMAT(MDRCaseFormat.LIKEBD);
+                preferences.setMPDRPOSTGRESQL_PREF_NAMING_FORMAT(MDRCaseFormat.LIKEBD);
             }
         }
 

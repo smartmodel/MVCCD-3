@@ -50,11 +50,6 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement {
     }
 
     @Override
-    public String getNewRecordWord() {
-        return Preferences.MPDR_ORACLE_NEW_RECORD_WORD;
-    }
-
-    @Override
     public void adjustProperties() {
         Preferences preferences = PreferencesManager.instance().preferences();
         setNamingLengthActual( preferences.getMPDRORACLE_PREF_NAMING_LENGTH());

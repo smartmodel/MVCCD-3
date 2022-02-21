@@ -81,7 +81,6 @@ public class SComboBox<S> extends JComboBox<S> implements SComponent {
     public boolean checkIfUpdated() {
         boolean updated;
         updated = (getSelectedIndex() != oldIndex) || (getSelectedItem() != oldObject);
-
         // Si ce n'est pas un appel directement pour le contrôle de conformité
         if (panel.getEditor() != null) {
             if (panel.getEditor().getMode().equals(DialogEditor.NEW)) {

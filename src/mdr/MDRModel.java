@@ -28,14 +28,22 @@ public abstract class MDRModel extends MDRElement  {
 
     public MDRModel(ProjectElement parent, int id) {
         super(parent, id);
+        init();
     }
 
     public MDRModel(ProjectElement parent, String name) {
         super(parent, name);
+        init();
     }
 
     public MDRModel(ProjectElement parent) {
         super(parent);
+        init();
+    }
+
+
+    private void init(){
+        adjustProperties();
     }
 
     public MDRNamingLength getNamingLengthActual() {

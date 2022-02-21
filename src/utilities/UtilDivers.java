@@ -279,4 +279,5 @@ public class UtilDivers {
         String search = Preferences.MDR_WORDS_BEGIN + key + Preferences.MDR_WORDS_END;
         return StringUtils.replace(code, search, value);
     }
+
 }

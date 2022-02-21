@@ -47,11 +47,6 @@ public class MPDRMySQLModel extends MPDRModel implements IMPDRMySQLElement {
     }
 
     @Override
-    public String getNewRecordWord() {
-        return Preferences.MPDR_MYSQL_NEW_RECORD_WORD;
-    }
-
-    @Override
     public void adjustProperties() {
         Preferences preferences = PreferencesManager.instance().preferences();
         setNamingLengthActual( preferences.getMPDRMYSQL_PREF_NAMING_LENGTH());

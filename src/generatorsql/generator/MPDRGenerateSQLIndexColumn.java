@@ -1,8 +1,8 @@
 package generatorsql.generator;
 
+import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.MPDRColumn;
 import preferences.Preferences;
-import utilities.files.FileRead;
 
 public abstract class MPDRGenerateSQLIndexColumn {
 
@@ -11,10 +11,9 @@ public abstract class MPDRGenerateSQLIndexColumn {
     }
 
     public String generateSQLCreateIndexColumn(MPDRColumn mpdrColumn) {
-        String generateSQLCode = "";
-        generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_INDEX_COLUMNS) +
-                    Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
-
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateDB(),
+                Preferences.TEMPLATE_CREATE_INDEX_COLUMNS,
+                getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
 
         return generateSQLCode;

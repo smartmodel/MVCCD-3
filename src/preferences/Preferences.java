@@ -223,6 +223,7 @@ public class Preferences extends MVCCDElement {
   public static String DIRECTORY_TEMPLATES_TRIGGERS = "triggers";
   public static String DIRECTORY_TEMPLATES_STOREDCODE = "storedCode";
   public static String DIRECTORY_TEMPLATES_DYNAMIC_CODE = "dynamicCode";
+  public static String DIRECTORY_TEMPLATES_OPTIONS = "options";
 
   public static String TEMPLATE_DROP_TABLE = "dropTable.txt";
   public static String TEMPLATE_DROP_SEQUENCE = "dropSequence.txt";
@@ -239,6 +240,9 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATE_CREATE_SEQUENCE = "createSequence.txt";
   public static String TEMPLATE_CREATE_INDEX = "createIndex.txt";
   public static String TEMPLATE_CREATE_INDEX_COLUMNS = "createIndexColumns.txt";
+  public static String TEMPLATE_OPTION_COLUMN_IDENTITY = "columnIdentity.txt";
+  public static String TEMPLATE_OPTION_COLUMN_NOTNULL =  "columnNotNull.txt";
+  public static String TEMPLATE_OPTION_COLUMN_DEFAULTVALUE =  "columnDefaultValue.txt";
 
   public static String TEMPLATES_ALTER_TABLE_FK = "alterTableFK.txt";
 
@@ -777,11 +781,8 @@ public class Preferences extends MVCCDElement {
   public static String MDR_UNIQUE_COLUMNS_WORD = "uniqueColumns";
   public static String MDR_COLUMN_NAME_WORD =  "columnName";
   public static String MDR_COLUMN_PK_NAME_WORD =  "columnPKName";
-  public static String MDR_COLUMN_TYPE_WORD =  "columnType";
-  public static String MDR_COLUMN_SIZE_WORD =  "columnSize";
-  public static String MDR_COLUMN_SCALE_WORD =  "columnScale";
-  public static String MDR_COLUMN_DEFAULT_WORD =  "columnDefault";
-  public static String MDR_COLUMN_MANDATORY_WORD =  "columnMandatory";
+  public static String MDR_COLUMN_DATATYPE_WORD =  "columnDataType";
+  public static String MDR_DEFAULT_VALUE_WORD =  "defaultValue";
   public static String MPDR_SEQUENCE_NAME_WORD = "sequenceName";
   public static String MPDR_MIN_VALUE_WORD = "minValue";
   public static String MPDR_INCREMENT_WORD = "increment";
@@ -797,15 +798,20 @@ public class Preferences extends MVCCDElement {
 
   public static String MPDR_CHECK_PARAM_EXPRESSION_NAME = "expr";  // Le nom du paramètre qui contient l'expression'
 
+  /*
   public static String MPDR_NEW_RECORD_WORD = "newRecord";
 
   public static String MPDR_ORACLE_NEW_RECORD_WORD = ":NEW";
-  //TODO-= Voir déplacement dans un cadre spécifique
-  public static String MPDR_ORACLE_PIO_CRT_RECORD_WORD = "pio_crtrec";
 
   public static String MPDR_MYSQL_NEW_RECORD_WORD = "NEW";
 
   public static String MPDR_POSTGRESQL_NEW_RECORD_WORD = "NEW";
+
+   */
+
+  //TODO-= Voir déplacement dans un cadre spécifique
+  public static String MPDR_ORACLE_PIO_CRT_RECORD_WORD = "pio_crtrec";
+
 
   public static String MPDR_EMPTY_SCHEMA_NAME_WORD = "emptySchema";
   public static String MPDR_DROP_BEFORE_NOTHING = "mpdr.drop.before.nothing";
@@ -860,9 +866,9 @@ public class Preferences extends MVCCDElement {
   public static Integer MARKER_CHECK_LENGTH = 4;
   public static Integer MDR_SEPARATOR_NAMING_LENGTH = 1;
 
-    public static String MDR_WORDS_BEGIN = "{";
-    public static String MDR_WORDS_END = "}";
-    public static String MDR_WORDS_PATTERN = "\\{[a-zA-Z_]+\\}";
+  public static String MDR_WORDS_BEGIN = "{";
+  public static String MDR_WORDS_END = "}";
+  public static String MDR_WORDS_PATTERN = "\\{[a-zA-Z_]+\\}";
     public static String MDR_TABLE_NAME_FORMAT_DEFAULT = "{tableName}";
     public static String MDR_TABLE_NN_NAME_FORMAT_DEFAULT = "{ATableShortName}{tableSep}{assShortName}{roleA}{roleSep}{roleB}{tableSep}{BTableShortName}";
     public static String MDR_TABLE_NN_NAME_INDICE_FORMAT_DEFAULT = "{ATableShortName}{tableSep}{BTableShortName}{indTableNN}";

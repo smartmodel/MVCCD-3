@@ -1,9 +1,9 @@
 package generatorsql.generator;
 
+import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.MPDRFK;
 import mpdr.MPDRPK;
 import preferences.Preferences;
-import utilities.files.FileRead;
 
 public abstract class MPDRGenerateSQLFK {
 
@@ -12,8 +12,9 @@ public abstract class MPDRGenerateSQLFK {
     }
 
     public String generateSQLFK(MPDRFK mpdrfk) {
-        String generateSQLCode = "";
-        generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirAlterDB(), Preferences.TEMPLATES_ALTER_TABLE_FK) ;
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+                Preferences.TEMPLATES_ALTER_TABLE_FK,
+                getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_CHILD_WORD, mpdrfk.getParent().getParent().getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_FK_NAME_WORD, mpdrfk.getName());

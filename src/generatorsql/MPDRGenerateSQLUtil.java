@@ -5,14 +5,13 @@ import mdr.MDRCaseFormat;
 import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.Trace;
+import utilities.files.FileRead;
 import utilities.files.FileWrite;
 import utilities.files.UtilFiles;
 
 import java.io.File;
 
 public class MPDRGenerateSQLUtil {
-
 
     public static File directorySQLFiles(MPDRModel mpdrModel) {
         if (MVCCDManager.instance().getFileProjectCurrent() != null) {
@@ -164,7 +163,6 @@ public class MPDRGenerateSQLUtil {
                         treat = false;
                         resultat += c;
                     } else {
-                        Trace.println("" + caseApplicable(c, mpdrModel) + " " + markerBEGINWord);
                         resultat += caseApplicable(c, mpdrModel);
                     }
                 } else {
@@ -188,7 +186,11 @@ public class MPDRGenerateSQLUtil {
         } else {
             return c ;
         }
+    }
 
+    public static String template(String dirTemplate, String fileNameTemplate, MPDRModel mpdrModel){
+        String template = FileRead.readToString(dirTemplate, fileNameTemplate);
+        return MPDRGenerateSQLUtil.caseReservedWords(template, mpdrModel);
 
     }
 }

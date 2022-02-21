@@ -36,6 +36,7 @@ public class MLDRTransform extends MDTransform {
         boolean ok = true;
         try {
             mpdrModel.incrementeIteration();
+            // Au cas où il y aurait changement de préférences
             mpdrModel.adjustProperties();
 
             // Transformation des tables

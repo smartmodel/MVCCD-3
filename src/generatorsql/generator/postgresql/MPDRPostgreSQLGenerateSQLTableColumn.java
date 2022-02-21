@@ -33,32 +33,25 @@ public class MPDRPostgreSQLGenerateSQLTableColumn extends MPDRGenerateSQLTableCo
         return mpdrPostgreSQLGenerateSQL;
     }
 
-    // Surcharge de la méthode générique
-    protected String generateSizeScale(String generateSQLCode, MPDRColumn mpdrColumn){
+    @Override
+    protected String generateDatatypeSizeScale(MPDRColumn mpdrColumn) {
+        String sizeScale = "";
         if (mpdrColumn.getSize() != null) {
             if (mpdrColumn.getScale() != null) {
-                generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SIZE_WORD, "(" + mpdrColumn.getSize().toString());
-                generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SCALE_WORD, ", " + mpdrColumn.getScale().toString() + ")");
+                sizeScale = "(" + mpdrColumn.getSize().toString() + ", " + mpdrColumn.getScale().toString() + ")";
             } else {
                 // Suppression de la taille pour les colonnes de la fraterie entière
                 ArrayList<String> lienProgsSibling = new ArrayList<String>();
                 lienProgsSibling.add(Preferences.MPDRPOSTGRESQLDATATYPE_SMALLINT_LIENPROG);
                 lienProgsSibling.add(Preferences.MPDRPOSTGRESQLDATATYPE_INTEGER_LIENPROG);
                 lienProgsSibling.add(Preferences.MPDRPOSTGRESQLDATATYPE_BIGINT_LIENPROG);
-                if (lienProgsSibling.contains(mpdrColumn.getDatatypeLienProg())){
-                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SIZE_WORD, "");
-                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SCALE_WORD, "");
-                } else {
-                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SIZE_WORD, "(" + mpdrColumn.getSize().toString() + ")");
-                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SCALE_WORD, "");
+                if (! lienProgsSibling.contains(mpdrColumn.getDatatypeLienProg())) {
+                    sizeScale = "(" + mpdrColumn.getSize().toString() + ")";
                 }
             }
-        } else {
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SIZE_WORD, "");
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_SCALE_WORD, "");
         }
-        return generateSQLCode;
-    }
+        return sizeScale;
 
+    }
 
 }

@@ -1,8 +1,8 @@
 package generatorsql.generator;
 
+import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.MPDRTable;
 import preferences.Preferences;
-import utilities.files.FileRead;
 
 public abstract class MPDRGenerateSQLPK {
 
@@ -10,12 +10,9 @@ public abstract class MPDRGenerateSQLPK {
     }
 
     public String generateSQLCreatePK(MPDRTable mpdrTable) {
-        String generateSQLCode = "";
-        //generateSQLCode += Preferences.SQL_SEPARATOR_ARGUMENTS + System.lineSeparator();
-
-        generateSQLCode += FileRead.readToString(getMPDRGenerateSQL().getTemplateDirCreateDB(), Preferences.TEMPLATE_CREATE_TABLE_PK)  +
-                Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS ;
-
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateDB(),
+                Preferences.TEMPLATE_CREATE_TABLE_PK,
+                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS ;
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_PK_NAME_WORD, mpdrTable.getMPDRPK().getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_PK_COLUMNS_WORD, mpdrTable.getMPDRPK().getParametersNameAsStr());
 

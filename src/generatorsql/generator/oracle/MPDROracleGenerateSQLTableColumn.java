@@ -30,4 +30,17 @@ public class MPDROracleGenerateSQLTableColumn extends MPDRGenerateSQLTableColumn
         return mpdrOracleGenerateSQL;
     }
 
+    @Override
+    protected String generateDatatypeSizeScale(MPDRColumn mpdrColumn) {
+        String sizeScale = "";
+        if (mpdrColumn.getSize() != null) {
+            if (mpdrColumn.getScale() != null) {
+                sizeScale = "(" + mpdrColumn.getSize().toString() + ", " + mpdrColumn.getScale().toString() + ")";
+            } else {
+                sizeScale = "(" + mpdrColumn.getSize().toString() + ")";
+            }
+        }
+        return sizeScale;
+    }
+
 }
