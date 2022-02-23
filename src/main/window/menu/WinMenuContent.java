@@ -221,6 +221,9 @@ public class WinMenuContent implements ActionListener {
      * Exporte un composant au format JPG & PNG en prenant soin de dessiner le plus petit rectangle autour afin d'avoir
      * le moins de fond blanc possible dans l'image exportée
      *
+     * Code trouvé sur un post StackOverFlow et adapté selon les besoins métiers
+     *   -> https://stackoverflow.com/questions/17690275/exporting-a-jpanel-to-an-image
+     *
      * @param component -> Le composant à imprimer
      * @param fileName  -> Le chemin complet + nom du fichier à enregistrer
      */
@@ -264,6 +267,9 @@ public class WinMenuContent implements ActionListener {
      * par l'utilisateur.
      * La grille de dessin est temporairement désactivée le temps de l'impression et est réactivée ensuite.
      *
+     * Code trouvé sur un post StackOverFlow et adapté selon les besoins métiers
+     *   -> https://stackoverflow.com/questions/750310/how-can-i-print-a-single-jpanels-contents
+     *
      * @param component -> Le composant à imprimer
      */
     public void printComponentBasique(Component component) {
@@ -303,6 +309,9 @@ public class WinMenuContent implements ActionListener {
      * Lance une boîte de dialogue pour l'impression d'un composant et s'occupe de formater le rendu de celui-ci.
      * Le composant est mis en mode landscape au format A4, la grille de dessin est temporairement désactivée
      * le temps de l'impression et est réactivée ensuite.
+     *
+     * Code trouvé sur un post StackOverFlow et adapté selon les besoins métiers
+     *   -> https://stackoverflow.com/questions/54055481/jpanel-not-being-printed-in-landscape-mode-by-default-when-i-call-the-print-meth
      *
      * @param component -> Le composant à imprimer
      */
