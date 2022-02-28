@@ -4,6 +4,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="preferences"/>
+        <xs:element ref="connections" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -59,6 +60,15 @@
         <xs:element ref="repositoryMcdPackagesAuthorizeds"/>
         <xs:element ref="persistenceSerialisationInsteadofXML"/>
         <xs:element ref="showDiagrammerGrid"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="connections">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" type="xs:string" />
+        <xs:element name="username" type="xs:string" />
+        <xs:element name="password" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

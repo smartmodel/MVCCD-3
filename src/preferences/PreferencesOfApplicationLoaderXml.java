@@ -1,12 +1,21 @@
 package preferences;
 
+import connections.ConConnection;
+import connections.ConConnector;
+import connections.ConDB;
 import connections.ConDBMode;
+import connections.ConIDDBName;
+import connections.mysql.ConnectionsMySQL;
+import connections.oracle.ConConnectionOracle;
+import connections.oracle.ConConnectorOracle;
+import connections.oracle.ConnectionsOracle;
+import connections.postgresql.ConConnectionPostgreSQL;
+import connections.postgresql.ConConnectorPostgreSQL;
+import connections.postgresql.ConnectionsPostgreSQL;
 import console.WarningLevel;
-import exceptions.CodeApplException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
-
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,13 +24,16 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import main.MVCCDElementApplicationConnections;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Cette classe fournit le nécessaire pour charger les préférences d'application sauvegardées dans le fichier des préférences XML (application.pref). Les préférences sont récupérées de ce fichier et sont affectées aux préférences d'application existantes dans Preferences.java.
- *
  * @author Giorgio Roncallo, adaptée et complétée par Steve Berberat
  */
 public class PreferencesOfApplicationLoaderXml {
@@ -68,6 +80,7 @@ public class PreferencesOfApplicationLoaderXml {
       applicationPrefs.setDEBUG_EDITOR_DATAS_CHANGED(Boolean.valueOf(debugEditorDatasChanged.getTextContent()));
       applicationPrefs.setDEBUG_TD_PRINT(Boolean.valueOf(debugTdPrint.getTextContent()));
       applicationPrefs.setDEBUG_TD_UNICITY_PRINT(Boolean.valueOf(debugTdUnicityPrint.getTextContent()));
+
       //Lire la constante de texte (warning.level.info par exemple) et non le texte (info)
       applicationPrefs.setWARNING_LEVEL(WarningLevel.findByName(warningLevel.getTextContent()));
       applicationPrefs.setCON_DB_MODE(ConDBMode.findByName(conDBMode.getTextContent()));
@@ -80,11 +93,113 @@ public class PreferencesOfApplicationLoaderXml {
       validator.validate(new DOMSource(document));
 
     } catch (FileNotFoundException e) {
-      throw (e);
+      // throw (e);
     } catch (ParserConfigurationException | IOException | SAXException e) {
-      throw new CodeApplException(e);
+      // throw new CodeApplException(e);
     }
     return applicationPrefs;
+  }
+
+  public static void loadConnections(Document document, MVCCDElementApplicationConnections applicationConnections) {
+    // On récupère toutes les balise connection
+    NodeList allConnectionTags = document.getElementsByTagName("connection");
+
+    ConnectionsOracle applicationConnexionsOracle = new ConnectionsOracle(applicationConnections);
+    ConnectionsPostgreSQL applicationConnexionsPostgreSQL = new ConnectionsPostgreSQL(applicationConnections);
+    ConnectionsMySQL applicationConnexionsMySQL = new ConnectionsMySQL(applicationConnections);
+
+    for (int i = 0; i < allConnectionTags.getLength(); i++) {
+
+      Node currentConnection = allConnectionTags.item(i);
+
+      // On récupère le constructeur (Oracle, PostgreSQL, ...)
+      String constructorName = allConnectionTags.item(i).getParentNode().getParentNode().getNodeName();
+
+      // On récupère les attributs de la balise courante
+      NamedNodeMap attributes = currentConnection.getAttributes();
+
+      if (attributes != null) {
+        String name = attributes.getNamedItem("name").getNodeValue();
+        String dbName = attributes.getNamedItem("dbName").getNodeValue();
+        String hostName = attributes.getNamedItem("hostname").getNodeValue();
+        String port = attributes.getNamedItem("port").getNodeValue();
+        ConIDDBName conIDDBName = ConIDDBName.findByName(attributes.getNamedItem("conIDDBName").getNodeValue());
+        String username = attributes.getNamedItem("username").getNodeValue();
+        boolean driverDefault = Boolean.parseBoolean(attributes.getNamedItem("driverDefault").getNodeValue());
+        String driverFileCustom = attributes.getNamedItem("driverFileCustom").getNodeValue();
+
+        // Vérifie si le mot de passe est persisté
+        String password = null;
+        if (attributes.getNamedItem("password") != null) {
+          password = attributes.getNamedItem("password").getNodeValue();
+        }
+
+        ConConnection connection = null;
+
+        // Oracle
+        if (constructorName.equals(ConDB.ORACLE.getLienProg())) {
+          connection = new ConConnectionOracle(applicationConnexionsOracle);
+        }
+
+        // PostgreSQL
+        if (constructorName.equals(ConDB.POSTGRESQL.getLienProg())) {
+          connection = new ConConnectionPostgreSQL(applicationConnexionsPostgreSQL);
+        }
+
+        // Set les propriétés à la connexion
+        if (connection != null) {
+          connection.setName(name);
+          connection.setDbName(dbName);
+          connection.setHostName(hostName);
+          connection.setPort(port);
+          connection.setConIDDBName(conIDDBName);
+          connection.setUserName(username);
+          connection.setDriverDefault(driverDefault);
+          connection.setDriverFileCustom(driverFileCustom);
+          if (password != null) {
+            connection.setUserPW(password);
+          }
+        }
+
+        // On charge les connecteurs pour la connexion courante
+        loadConnectors(connection, currentConnection);
+
+      }
+    }
+
+  }
+
+  private static void loadConnectors(ConConnection connection, Node currentConnection) {
+
+    Node connectorsTag = currentConnection.getChildNodes().item(1);
+    NodeList allConnectorTags = connectorsTag.getChildNodes();
+
+    for (int i = 0; i < allConnectorTags.getLength(); i++) {
+      Node currentConnector = allConnectorTags.item(i);
+
+      NamedNodeMap connectorAttributes = currentConnector.getAttributes();
+
+      if (connectorAttributes != null) {
+
+        ConConnector connector = null;
+
+        if (connection instanceof ConConnectionOracle) {
+          connector = new ConConnectorOracle(connection);
+        }
+
+        if (connection instanceof ConConnectionPostgreSQL) {
+          connector = new ConConnectorPostgreSQL(connection);
+        }
+
+        connector.setName(connectorAttributes.getNamedItem("name").getNodeValue());
+        connector.setUserName(connectorAttributes.getNamedItem("username").getNodeValue());
+
+        if (connectorAttributes.getNamedItem("password") != null) {
+          connector.setUserPW(connectorAttributes.getNamedItem("password").getNodeValue());
+        }
+
+      }
+    }
   }
 
 }

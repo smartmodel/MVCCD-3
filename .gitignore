@@ -13,6 +13,6 @@
 # Logs files and encoding charset specifications of logs files
 /logs/*
 /.idea/encodings.xml
-
+/.idea/*
 /.idea/codeStyles
 /.idea/saveactions_settings.xml

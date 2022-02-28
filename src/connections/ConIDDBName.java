@@ -18,6 +18,18 @@ public enum ConIDDBName {
         return MessagesBuilder.getMessagesProperty(name);
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public static ConIDDBName findByName(String name){
+        for (ConIDDBName element: ConIDDBName.values()){
+            if (element.getName().equals(name)) {
+                return element;
+            }
+        }
+        return null;
+    }
 
     public static ConIDDBName findByText(String text){
         for (ConIDDBName element: ConIDDBName.values()){
