@@ -1,12 +1,20 @@
 package window.editor.diagrammer.utils;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
-public final class ResizableBorder implements Border {
+public final class ResizableBorder implements Border, Serializable {
 
+  private static final long serialVersionUID = 1000;
+  
   private final int DISTANCE = 8;
   int[] locations = {SwingConstants.NORTH, SwingConstants.SOUTH, SwingConstants.WEST, SwingConstants.EAST, //SwingConstants.NORTH_WEST,
       //SwingConstants.NORTH_EAST, //SwingConstants.SOUTH_WEST,

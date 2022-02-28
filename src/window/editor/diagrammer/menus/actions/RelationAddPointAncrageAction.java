@@ -1,15 +1,17 @@
 package window.editor.diagrammer.menus.actions;
 
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.io.Serializable;
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-
-public class RelationAddPointAncrageAction extends AbstractAction {
+public class RelationAddPointAncrageAction extends AbstractAction implements Serializable {
 
   private final RelationShape relation;
   private final Point point;
+  private static final long serialVersionUID = 1000;
 
   public RelationAddPointAncrageAction(String name, Icon icon, RelationShape shape, Point point) {
     super(name, icon);

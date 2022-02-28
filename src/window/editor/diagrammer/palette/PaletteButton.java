@@ -1,9 +1,13 @@
 package window.editor.diagrammer.palette;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.io.Serializable;
+import javax.swing.Icon;
+import javax.swing.JButton;
 
-public class PaletteButton extends JButton {
+public class PaletteButton extends JButton implements Serializable {
+
+  private static final long serialVersionUID = 1000;
 
   public PaletteButton(String text) {
     super();

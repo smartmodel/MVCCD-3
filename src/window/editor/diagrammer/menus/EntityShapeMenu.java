@@ -1,12 +1,15 @@
 package window.editor.diagrammer.menus;
 
+import java.io.Serializable;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.menus.actions.MCDEntityShapeDeleteAction;
 import window.editor.diagrammer.menus.actions.MCDEntityShapeEditAction;
 
-import javax.swing.*;
+public class EntityShapeMenu extends JPopupMenu implements Serializable {
 
-public class EntityShapeMenu extends JPopupMenu {
+  private static final long serialVersionUID = 1000;
 
   public EntityShapeMenu(MCDEntityShape shape) {
     super();

@@ -1,15 +1,17 @@
 package window.editor.diagrammer.listeners;
 
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.Serializable;
+import javax.swing.SwingUtilities;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.menus.EntityShapeMenu;
 import window.editor.diagrammer.services.DiagrammerService;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+public class MCDEntityShapeListener extends MouseAdapter implements Serializable {
 
-public class MCDEntityShapeListener extends MouseAdapter {
+  private static final long serialVersionUID = 1000;
 
   @Override
   public void mouseClicked(MouseEvent e) {
