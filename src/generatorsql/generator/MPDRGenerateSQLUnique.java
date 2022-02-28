@@ -13,8 +13,8 @@ public abstract class MPDRGenerateSQLUnique {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateDB(),
                 Preferences.TEMPLATE_CREATE_TABLE_UNIQUES,
                 getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS ;
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_UNIQUE_NAME_WORD, mpdrUnique.getName());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_UNIQUE_COLUMNS_WORD, mpdrUnique.getParametersNameAsStr());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_UNIQUE_NAME_WORD, mpdrUnique.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_UNIQUE_COLUMNS_WORD, mpdrUnique.getParametersNameAsStr());
 
         return generateSQLCode;
     }

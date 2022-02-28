@@ -74,14 +74,6 @@ public abstract class MDRModel extends MDRElement  {
         return namingFormatFuture;
     }
 
-    // Surchargé pour les BD qui ont un formattage particulier
-    // minuscule pour PostgreSQL
-    // majuscule pour Oracle
-    // Utilisé par défaut pour MLDR !
-    public MDRCaseFormat getNamingFormatForDB() {
-        return namingFormatFuture;
-    }
-
     public void setNamingFormatFuture(MDRCaseFormat namingFormatFuture) {
         this.namingFormatFuture = namingFormatFuture;
     }
@@ -95,14 +87,6 @@ public abstract class MDRModel extends MDRElement  {
     }
 
     public MDRCaseFormat getReservedWordsFormatFuture() {
-        return reservedWordsFormatFuture;
-    }
-
-    // Surchargé pour les BD qui ont un formattage particulier
-    // minuscule pour PostgreSQL
-    // majuscule pour Oracle
-    // Utilisé par défaut pour MLDR !
-    public MDRCaseFormat getReservedWordsFormatForDB() {
         return reservedWordsFormatFuture;
     }
 

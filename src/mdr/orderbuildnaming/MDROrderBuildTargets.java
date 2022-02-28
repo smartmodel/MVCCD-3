@@ -25,7 +25,8 @@ public enum MDROrderBuildTargets {
     SEQUENCEPK(Preferences.MPDR_NAMING_SEQUENCE_PK, "mpdr.of.pk.column.pk"),
     TRIGGERTABLE(Preferences.MPDR_NAMING_TRIGGER_TABLE, "mpdr.of.trigger.table"),
     TRIGGERVIEW(Preferences.MPDR_NAMING_TRIGGER_VIEW, "mpdr.of.trigger.table"),
-    FUNCTION(Preferences.MPDR_NAMING_FUNCTION, "mpdr.of.function.table");
+    FUNCTION(Preferences.MPDR_NAMING_FUNCTION, "mpdr.of.function.table"),
+    PACKAGE(Preferences.MPDR_NAMING_PACKAGE, "mpdr.of.package.table");
 
     private final String name;
     private final String propertyOfTarget;

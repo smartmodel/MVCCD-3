@@ -93,8 +93,7 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
         return MPDRDB.POSTGRESQL.getDelimiterInstructions();
     }
 
-    public String replaceKeyValue(String code, String key, String value) {
-
+    private String adjustValue(String key, String value){
         String replacement = value ;
 
         ArrayList<String>  keysWithSchema = new ArrayList<String>();
@@ -103,6 +102,7 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
         keysWithSchema.add(Preferences.MDR_TABLE_NAME_PARENT_WORD);
         keysWithSchema.add(Preferences.MPDR_SEQUENCE_NAME_WORD);
         keysWithSchema.add(Preferences.MPDR_FUNCTION_NAME_WORD);
+        keysWithSchema.add(Preferences.MDR_CHECK_NAME_WORD);
 
         if (keysWithSchema.contains(key)) {
             MPDRPostgreSQLModel mpdrPostgreSQLModel = (MPDRPostgreSQLModel) mpdrModel;
@@ -114,8 +114,17 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
                 replacement = schema + "." + value;
             }
         }
+        return replacement;
+    }
+    public String replaceKeyValueWithSpecific(String code, String key, String value) {
+        String replacement = adjustValue(key, value) ;
+        return super.replaceKeyValueWithSpecific(code, key, replacement);
+    }
 
-        return super.replaceKeyValue(code, key, replacement);
+
+    public String replaceKeyValueWithSpecific(String code, String key, String value, String beforeKey, String afterKey) {
+        String replacement = adjustValue(key, value) ;
+        return super.replaceKeyValueWithSpecific(code, key, value, beforeKey, afterKey);
     }
 
 

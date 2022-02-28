@@ -15,16 +15,16 @@ public abstract class MPDRGenerateSQLFK {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
                 Preferences.TEMPLATES_ALTER_TABLE_FK,
                 getMPDRGenerateSQL().mpdrModel);
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_CHILD_WORD, mpdrfk.getParent().getParent().getName());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_FK_NAME_WORD, mpdrfk.getName());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_FK_COLUMNS_WORD, mpdrfk.getParametersNameAsStr());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_FK_NAME_WORD, mpdrfk.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_FK_COLUMNS_WORD, mpdrfk.getParametersNameAsStr());
 
         //Contraite PK de référence
         MPDRPK reference = (MPDRPK) mpdrfk.getMdrPK();
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_PARENT_WORD, reference.getMDRTableAccueil().getName());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_FK_COLUMNS_REF_WORD, reference.getParametersNameAsStr());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_FK_COLUMNS_REF_WORD, reference.getParametersNameAsStr());
 
         return generateSQLCode;
     }

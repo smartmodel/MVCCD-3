@@ -1,5 +1,8 @@
 package mdr.orderbuildnaming;
 
+import mdr.MDRCaseFormat;
+import mdr.services.MDRModelService;
+import mpdr.MPDRModel;
 import mpdr.tapis.MPDRTriggerType;
 import preferences.Preferences;
 
@@ -9,8 +12,9 @@ public class MDROrderWordTypeTriggerMarker extends MDROrderWord{
         super(name, Preferences.MARKER_TRIGGER_LENGTH );
     }
 
-    public void setValue(MPDRTriggerType mpdrTriggerType){
-        super.setValue(mpdrTriggerType.getMarker());
+    public void setValue(MPDRModel mpdrModel, MPDRTriggerType mpdrTriggerType){
+        MDRCaseFormat mdrCaseFormat = mpdrModel.getNamingFormatForDB();
+        super.setValue(MDRModelService.caseNaming(mpdrTriggerType.getMarker(), mdrCaseFormat));
     }
 
 }

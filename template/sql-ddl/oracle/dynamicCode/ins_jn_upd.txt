@@ -1,0 +1,1 @@
+{packageName}.{ins_jn}({vl_newrec}, '{upd}');

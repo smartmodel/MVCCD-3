@@ -280,4 +280,11 @@ public class UtilDivers {
         return StringUtils.replace(code, search, value);
     }
 
+    public static String replaceKeyValue(String code, String key, String value, String beforeKey, String afterKey) {
+        //return code.replaceAll("\\{" + key + "}", value);
+        //return StringUtils.replace(code, "{" + key + "}", value);
+        String search = beforeKey + Preferences.MDR_WORDS_BEGIN + key + Preferences.MDR_WORDS_END + afterKey;
+        return StringUtils.replace(code, search, value);
+    }
+
 }

@@ -3,6 +3,7 @@ package window.editor.preferences.project.mpdr;
 import main.MVCCDElement;
 import mdr.MDRCaseFormat;
 import mdr.MDRNamingLength;
+import mpdr.MPDRDB;
 import preferences.Preferences;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.SCheckBox;
@@ -19,6 +20,7 @@ import java.awt.event.ItemEvent;
 
 public abstract class PrefMPDRInputContent extends PanelInputContent {
 
+    private MPDRDB mpdrDb = null;
 
     protected JPanel panelNaming;
     protected JLabel labelNamingLength = new JLabel();
@@ -43,6 +45,8 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
     protected STextField fieldSeqPKNameFormat;
     protected JLabel labelTriggerNameFormat ;
     protected STextField fieldTriggerNameFormat;
+    protected JLabel labelPackageNameFormat ;
+    protected STextField fieldPackageNameFormat;
     protected JLabel labelCheckColumnDatatypeNameFormat ;
     protected STextField fieldCheckColumnDatatypeNameFormat;
     protected JLabel labelCheckColumnDatatypeMax30NameFormat ;
@@ -133,6 +137,14 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         fieldTriggerNameFormat.getDocument().addDocumentListener(this);
         fieldTriggerNameFormat.addFocusListener(this);
 
+        labelPackageNameFormat = new JLabel("Packages");
+        fieldPackageNameFormat = new STextField(this, labelPackageNameFormat);
+        fieldPackageNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldPackageNameFormat.setToolTipText("Format de nommage des paquetages de table");
+        //TODO-1 Prévoir un formattage/contrôle minimal
+        fieldPackageNameFormat.getDocument().addDocumentListener(this);
+        fieldPackageNameFormat.addFocusListener(this);
+
         labelCheckColumnDatatypeNameFormat = new JLabel("Check des types de colonnes");
         fieldCheckColumnDatatypeNameFormat = new STextField(this, labelCheckColumnDatatypeNameFormat);
         fieldCheckColumnDatatypeNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
@@ -157,6 +169,7 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         super.getSComponents().add(fieldTAPIs);
         super.getSComponents().add(fieldSeqPKNameFormat);
         super.getSComponents().add(fieldTriggerNameFormat);
+        super.getSComponents().add(fieldPackageNameFormat);
         super.getSComponents().add(fieldCheckColumnDatatypeNameFormat);
         super.getSComponents().add(fieldCheckColumnDatatypeMax30NameFormat);
 
@@ -241,12 +254,20 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         panelFormatNames.add(labelSeqPKNameFormat, gbcA);
         gbcA.gridx++ ;
         panelFormatNames.add(fieldSeqPKNameFormat, gbcA);
-        
+
         gbcA.gridx = 0;
         gbcA.gridy++;
         panelFormatNames.add(labelTriggerNameFormat, gbcA);
         gbcA.gridx++ ;
         panelFormatNames.add(fieldTriggerNameFormat, gbcA);
+
+        if (mpdrDb == MPDRDB.ORACLE) {
+            gbcA.gridx = 0;
+            gbcA.gridy++;
+            panelFormatNames.add(labelPackageNameFormat, gbcA);
+            gbcA.gridx++;
+            panelFormatNames.add(fieldPackageNameFormat, gbcA);
+        }
 
         gbcA.gridx = 0;
         gbcA.gridy++;
@@ -310,5 +331,8 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
     }
 
 
+    protected void setMPDRDB(MPDRDB db){
+        mpdrDb = db;
+    }
 }
 

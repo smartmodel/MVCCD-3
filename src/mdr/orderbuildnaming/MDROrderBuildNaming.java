@@ -61,6 +61,7 @@ public class MDROrderBuildNaming {
     private MDROrderWordUniqueNatureSep uniqueNatSep;
 
     private MDROrderWordTypeTriggerMarker typeTriggerMarker ;
+    private MDROrderWordTypePackageMarker typePackageMarker ;
     private MDROrderWordMPDRColumnName mpdrColumnName ;
 
 
@@ -108,6 +109,7 @@ public class MDROrderBuildNaming {
         uniqueNatSep = new MDROrderWordUniqueNatureSep(Preferences.MDR_UNIQUE_NATURE_SEP_WORD);
 
         typeTriggerMarker = new MDROrderWordTypeTriggerMarker(Preferences.MPDR_TYPE_TRIGGER_MARKER_WORD);
+        typePackageMarker = new MDROrderWordTypePackageMarker(Preferences.MPDR_TYPE_PACKAGE_MARKER_WORD);
         mpdrColumnName = new MDROrderWordMPDRColumnName(Preferences.MPDR_COLUMN_NAME_WORD);
     }
 
@@ -218,6 +220,9 @@ public class MDROrderBuildNaming {
 
                 } else if (mg.equals(Preferences.MPDR_TYPE_TRIGGER_MARKER_WORD)) {
                     value = pushValue(typeTriggerMarker);
+
+                } else if (mg.equals(Preferences.MPDR_TYPE_PACKAGE_MARKER_WORD)) {
+                    value = pushValue(typePackageMarker);
 
                 } else if (mg.equals(Preferences.MPDR_COLUMN_NAME_WORD)) {
                     value = pushValue(mpdrColumnName);
@@ -797,6 +802,14 @@ public class MDROrderBuildNaming {
 
     public void setTypeTriggerMarker(MDROrderWordTypeTriggerMarker typeTriggerMarker) {
         this.typeTriggerMarker = typeTriggerMarker;
+    }
+
+    public MDROrderWordTypePackageMarker getTypePackageMarker() {
+        return typePackageMarker;
+    }
+
+    public void setTypePackageMarker(MDROrderWordTypePackageMarker typePackageMarker) {
+        this.typePackageMarker = typePackageMarker;
     }
 
     public MDROrderWordMPDRColumnName getMpdrColumnName() {

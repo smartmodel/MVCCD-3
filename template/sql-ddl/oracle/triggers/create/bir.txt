@@ -1,0 +1,16 @@
+CREATE OR REPLACE TRIGGER {triggerName}
+BEFORE INSERT ON {tableName} FOR EACH ROW
+DECLARE
+    {vl_newrec} {tableName}%ROWTYPE;
+
+BEGIN
+    {-NODML-}
+    {-TRIGGER_NEW_TO_RECORD-}
+    {packageName}.{autogen_column_ins}(vl_newrec);
+    {packageName}.{autogen_column}(vl_newrec);
+    {packageName}.{checktype_column}({vl_newrec});
+    {packageName}.{uppercase_column}(vl_newrec);
+    {packageName}.{column_PEA}({vl_newrec});
+    {-INS_JN_INS-}
+    {-TRIGGER_RECORD_TO_NEW-}
+END;

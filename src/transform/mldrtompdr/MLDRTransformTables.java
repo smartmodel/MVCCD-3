@@ -5,6 +5,8 @@ import mldr.MLDRModel;
 import mldr.MLDRTable;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
+import mpdr.interfaces.IMPDRModelRequirePackages;
+import mpdr.interfaces.IMPDRTableRequirePackages;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 
@@ -66,6 +68,20 @@ public class MLDRTransformTables {
         if ((mpdrModel instanceof MPDROracleModel) || (mpdrModel instanceof MPDRPostgreSQLModel)) {
 
             if (mpdrModel.getMPDR_TAPIs()) {
+                //TODO-PAS En cours de développement
+                if (mpdrModel instanceof MPDROracleModel) {
+
+                    MLDRTransformToBoxTriggers mldrTransformToBoxTriggers = new MLDRTransformToBoxTriggers(
+                            mldrTransform, mldrTable, mpdrModel, mpdrTable);
+                    mldrTransformToBoxTriggers.createOrModifyBoxTriggersForTAPIs();
+
+                    if (mpdrModel instanceof IMPDRModelRequirePackages) {
+                        MLDRTransformToBoxPackages mldrTransformToBoxPackages = new MLDRTransformToBoxPackages(
+                                mldrTransform, mldrTable, (IMPDRModelRequirePackages) mpdrModel,
+                                (IMPDRTableRequirePackages) mpdrTable);
+                        mldrTransformToBoxPackages.createOrModifyBoxPackages();
+                    }
+                }
 
             } else {
                 if (mpdrTable.getMPDRColumnPKProper() != null) {

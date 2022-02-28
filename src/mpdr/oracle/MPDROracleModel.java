@@ -9,21 +9,22 @@ import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
+import mpdr.interfaces.IMPDRModelRequirePackages;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDROracleDatatype;
 
-public class MPDROracleModel extends MPDRModel implements IMPDROracleElement {
+public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IMPDRModelRequirePackages {
 
     private  static final long serialVersionUID = 1000;
+
+    private String packageNameFormat;
 
     public MPDROracleModel(ProjectElement parent, String name) {
         super(parent, name, MPDRDB.ORACLE);
     }
-
-
     @Override
     public MPDROracleTable createTable(MLDRTable mldrTable){
         MPDROracleTable newTable = MVCCDElementFactory.instance().createMPDROracleTable(
@@ -58,6 +59,8 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement {
         setNamingFormatFuture( preferences.getMPDRORACLE_PREF_NAMING_FORMAT());
         setReservedWordsFormatActual(preferences.getMPDRORACLE_PREF_RESERDWORDS_FORMAT());
         setReservedWordsFormatFuture(preferences.getMPDRORACLE_PREF_RESERDWORDS_FORMAT());
+        setObjectsInCodeFormatActual(preferences.getMPDRORACLE_PREF_OBJECTSINCODE_FORMAT());
+        setObjectsInCodeFormatFuture(preferences.getMPDRORACLE_PREF_OBJECTSINCODE_FORMAT());
     }
 
 
@@ -77,6 +80,26 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement {
             return MDRCaseFormat.LOWERCASE;
         }
         return reservedWordsFormatFuture;
+    }
+
+
+    // Surchargé pour les BD qui doivent avoir un formattage particulier
+    // majuscule pour Oracle
+    public MDRCaseFormat getObjectsInCodeFormatForDB() {
+        if (objectsInCodeFormatFuture == MDRCaseFormat.LIKEBD){
+            return MDRCaseFormat.UPPERCASE;
+        }
+        return objectsInCodeFormatFuture;
+    }
+
+    @Override
+    public String getPackageNameFormat() {
+        return packageNameFormat;
+    }
+
+    @Override
+    public void setPackageNameFormat(String packageNameFormat) {
+        this.packageNameFormat = packageNameFormat;
     }
 
 }

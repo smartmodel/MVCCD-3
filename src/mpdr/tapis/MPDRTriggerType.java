@@ -5,26 +5,26 @@ import mpdr.MPDRDB;
 import java.util.ArrayList;
 
 public enum MPDRTriggerType {
-    BIR_PKDEP("_BIR", "birPKDEP.txt", MPDRTriggerUsage.WITHOUTTAPIS, MPDRTriggerScope.TABLE,
+    BIR_PKDEP("BIR", "birPKDEP.txt", MPDRTriggerUsage.WITHOUTTAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE, MPDRDB.POSTGRESQL}),
-    BIR_PKIND("_BIR", "birPKIND.txt", MPDRTriggerUsage.WITHOUTTAPIS, MPDRTriggerScope.TABLE,
+    BIR_PKIND("BIR", "birPKIND.txt", MPDRTriggerUsage.WITHOUTTAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE, MPDRDB.POSTGRESQL}),
-    BIR("_BIR", "bir.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
+    BIR("BIR", "bir.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
+            new MPDRDB[]{MPDRDB.ORACLE})/*,
+    BUR("BUR", "bur.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),
-    BUR("_BUR", "bur.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
+    BIU("BIU", "biu.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),
-    BIU("_BIU", "biu.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
+    BDR("BDR", "bdr.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),
-    BDR("_BDR", "bdr.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
+    AIUD("AIUD",  "aiud.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),
-    AIUD("_AIUD",  "aiud.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
+    IOINS_ASSNNNONORIENTD("IOINS", "ioins_AssNNNonOriented.txt", MPDRTriggerUsage.TAPIS,  MPDRTriggerScope.VIEW,
             new MPDRDB[]{MPDRDB.ORACLE}),
-    IOINS_ASSNNNONORIENTD("_IOINS", "ioins_AssNNNonOriented.txt", MPDRTriggerUsage.TAPIS,  MPDRTriggerScope.VIEW,
+    IODEL_ASSNNNONORIENTD("IODEL", "iodel_AssNNNonOriented.txt", MPDRTriggerUsage.TAPIS,  MPDRTriggerScope.VIEW,
             new MPDRDB[]{MPDRDB.ORACLE}),
-    IODEL_ASSNNNONORIENTD("_IODEL", "iodel_AssNNNonOriented.txt", MPDRTriggerUsage.TAPIS,  MPDRTriggerScope.VIEW,
-            new MPDRDB[]{MPDRDB.ORACLE}),
-    IOUPD_ASSNNNONORIENTD("_IOUPD", "ioupd_AssNNNonOriented.txt", MPDRTriggerUsage.TAPIS,  MPDRTriggerScope.VIEW,
-            new MPDRDB[]{MPDRDB.ORACLE});
+    IOUPD_ASSNNNONORIENTD("IOUPD", "ioupd_AssNNNonOriented.txt", MPDRTriggerUsage.TAPIS,  MPDRTriggerScope.VIEW,
+            new MPDRDB[]{MPDRDB.ORACLE})*/;
 
 
     private String marker;
@@ -65,7 +65,7 @@ public enum MPDRTriggerType {
         return mpdrTriggerScope;
     }
 
-    public MPDRTriggerType[] getAll() {
+    public static MPDRTriggerType[] getAll() {
         return values();
     }
 
@@ -84,7 +84,21 @@ public enum MPDRTriggerType {
         return mpdrDBs;
     }
 
-    public boolean applicableToMPDRDB(MPDRDB mpdrDB){
+    public boolean applicableForMPDRDB(MPDRDB mpdrDB){
         return mpdrDBs.contains(mpdrDB);
     }
+
+    public static ArrayList<MPDRTriggerType> applicableForSelection(MPDRDB mpdrDB, MPDRTriggerUsage usage, MPDRTriggerScope scope) {
+        ArrayList<MPDRTriggerType> resultat = new ArrayList<MPDRTriggerType>();
+        for ( int i = 0 ; i < getAll().length ; i++){
+            boolean c1 = getAll()[i].applicableForMPDRDB(mpdrDB);
+            boolean c2 = getAll()[i].getMpdrTriggerUsage() == usage;
+            boolean c3 = getAll()[i].getMpdrTriggerScope() == scope;
+            if (c1  && c2 && c3 ){
+                resultat.add(getAll()[i]);
+            }
+        }
+        return resultat;
+    }
+
 }

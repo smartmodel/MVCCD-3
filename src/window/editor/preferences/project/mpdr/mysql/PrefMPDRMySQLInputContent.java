@@ -4,8 +4,10 @@ import main.MVCCDElement;
 import mdr.MDRCaseFormat;
 import mdr.MDRNamingLength;
 import messages.MessagesBuilder;
+import mpdr.MPDRDB;
 import mpdr.MPDRDBPK;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import utilities.window.scomponents.services.SComboBoxService;
 import window.editor.preferences.project.mpdr.PrefMPDRInputContent;
 
@@ -15,33 +17,14 @@ public class PrefMPDRMySQLInputContent extends PrefMPDRInputContent {
 
     public PrefMPDRMySQLInputContent(PrefMPDRMySQLInput prefMPDRMySQLInput) {
         super(prefMPDRMySQLInput);
-     }
+        super.setMPDRDB(MPDRDB.MYSQL);
+
+    }
 
 
     public void createContentCustom() {
-
         super.createContentCustom();
         fieldPKGenerate.addItem(MPDRDBPK.IDENTITY.getText());
-    }
-
-    @Override
-    public void loadDatas(MVCCDElement mvccdElement) {
-        Preferences preferences = (Preferences) mvccdElement;
-        SComboBoxService.selectByText(fieldNamingLength,
-                preferences.getMPDRMYSQL_PREF_NAMING_LENGTH().getText());
-        SComboBoxService.selectByText(fieldNamingFormat,
-                preferences.getMPDRMYSQL_PREF_NAMING_FORMAT().getText());
-        SComboBoxService.selectByText(fieldReservedWordsFormat,
-                preferences.getMPDRMYSQL_PREF_RESERDWORDS_FORMAT().getText());
-        fieldDelimiterInstructions.setText(preferences.getMPDRMYSQL_DELIMITER_INSTRUCTIONS());
-        SComboBoxService.selectByText(fieldPKGenerate,
-                preferences.getMPDRMYSQL_PK_GENERATE().getText());
-        fieldTAPIs.setSelected(preferences.getMPDRMYSQL_TAPIS());
-        fieldSeqPKNameFormat.setText(preferences.getMPDRMYSQL_SEQPK_NAME_FORMAT());
-        fieldTriggerNameFormat.setText(preferences.getMPDRMYSQL_TRIGGER_NAME_FORMAT());
-        fieldCheckColumnDatatypeNameFormat.setText(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
-        fieldCheckColumnDatatypeMax30NameFormat.setText(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
-
     }
 
     @Override
@@ -124,8 +107,65 @@ public class PrefMPDRMySQLInputContent extends PrefMPDRInputContent {
         if (fieldCheckColumnDatatypeMax30NameFormat.checkIfUpdated()){
             preferences.setMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT(fieldCheckColumnDatatypeMax30NameFormat.getText());
         }
-
     }
+
+/*
+    @Override
+    public void loadDatas(MVCCDElement mvccdElement) {
+        Preferences preferences = (Preferences) mvccdElement;
+        SComboBoxService.selectByText(fieldNamingLength,
+                preferences.getMPDRMYSQL_PREF_NAMING_LENGTH().getText());
+        SComboBoxService.selectByText(fieldNamingFormat,
+                preferences.getMPDRMYSQL_PREF_NAMING_FORMAT().getText());
+        SComboBoxService.selectByText(fieldReservedWordsFormat,
+                preferences.getMPDRMYSQL_PREF_RESERDWORDS_FORMAT().getText());
+        fieldDelimiterInstructions.setText(preferences.getMPDRMYSQL_DELIMITER_INSTRUCTIONS());
+        SComboBoxService.selectByText(fieldPKGenerate,
+                preferences.getMPDRMYSQL_PK_GENERATE().getText());
+        fieldTAPIs.setSelected(preferences.getMPDRMYSQL_TAPIS());
+        fieldSeqPKNameFormat.setText(preferences.getMPDRMYSQL_SEQPK_NAME_FORMAT());
+        fieldTriggerNameFormat.setText(preferences.getMPDRMYSQL_TRIGGER_NAME_FORMAT());
+        fieldCheckColumnDatatypeNameFormat.setText(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
+        fieldCheckColumnDatatypeMax30NameFormat.setText(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
+    }
+
+ */
+
+    @Override
+    public void loadDatas(MVCCDElement mvccdElement) {
+        Preferences preferences = (Preferences) mvccdElement;
+        loadDatasWithSource(mvccdElement, preferences);
+    }
+
+
+    protected void reInitDatas(MVCCDElement mvccdElement){
+        Preferences preferences ;
+        if (PreferencesManager.instance().getProfilePref() != null) {
+            preferences = PreferencesManager.instance().getProfilePref();
+        } else {
+            preferences = PreferencesManager.instance().getApplicationPref();
+        }
+        loadDatasWithSource(mvccdElement, preferences);
+    }
+
+    public void loadDatasWithSource(MVCCDElement mvccdElement, Preferences preferences) {
+        SComboBoxService.selectByText(fieldNamingLength,
+                preferences.getMPDRMYSQL_PREF_NAMING_LENGTH().getText());
+        SComboBoxService.selectByText(fieldNamingFormat,
+                preferences.getMPDRMYSQL_PREF_NAMING_FORMAT().getText());
+        SComboBoxService.selectByText(fieldReservedWordsFormat,
+                preferences.getMPDRMYSQL_PREF_RESERDWORDS_FORMAT().getText());
+        fieldDelimiterInstructions.setText(preferences.getMPDRMYSQL_DELIMITER_INSTRUCTIONS());
+        SComboBoxService.selectByText(fieldPKGenerate,
+                preferences.getMPDRMYSQL_PK_GENERATE().getText());
+        fieldTAPIs.setSelected(preferences.getMPDRMYSQL_TAPIS());
+        fieldSeqPKNameFormat.setText(preferences.getMPDRMYSQL_SEQPK_NAME_FORMAT());
+        fieldTriggerNameFormat.setText(preferences.getMPDRMYSQL_TRIGGER_NAME_FORMAT());
+        fieldCheckColumnDatatypeNameFormat.setText(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
+        fieldCheckColumnDatatypeMax30NameFormat.setText(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
+    }
+
+
 
 }
 

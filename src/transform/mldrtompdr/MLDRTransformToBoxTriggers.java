@@ -6,9 +6,7 @@ import mpdr.MPDRColumn;
 import mpdr.MPDRDBPK;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
-import mpdr.tapis.MPDRBoxTriggers;
-import mpdr.tapis.MPDRTrigger;
-import mpdr.tapis.MPDRTriggerType;
+import mpdr.tapis.*;
 
 import java.util.ArrayList;
 
@@ -58,26 +56,50 @@ public class MLDRTransformToBoxTriggers {
 
         if (mldrTable.isIndependant()) {
             if (mpdrModel.getMpdrDbPK() == MPDRDBPK.SEQUENCE) {
-                if (MPDRTriggerType.BIR_PKIND.applicableToMPDRDB(mpdrModel.getDb())) {
+                if (MPDRTriggerType.BIR_PKIND.applicableForMPDRDB(mpdrModel.getDb())) {
                     mpdrTriggers.add(mldrTransformToTrigger.createOrModifyTrigger(MPDRTriggerType.BIR_PKIND));
                 }
             }
         }
         if (mldrTable.isKindDependant()){
-            if (MPDRTriggerType.BIR_PKDEP.applicableToMPDRDB(mpdrModel.getDb())){
+            if (MPDRTriggerType.BIR_PKDEP.applicableForMPDRDB(mpdrModel.getDb())){
                 mpdrTriggers.add(mldrTransformToTrigger.createOrModifyTrigger(MPDRTriggerType.BIR_PKDEP));
             }
         }
 
         if (mpdrTriggers.size() > 0) {
-            // Conteneur de triggers et trigger d'alimentation
+            // Conteneur de fonctions et fonction d'alimentation (Si un trigger nécessite une fonction)
             MLDRTransformToBoxProceduresOrFunctions mldrTransformToBoxProceduresOrFunctions = new MLDRTransformToBoxProceduresOrFunctions(
                         mldrTransform, mldrTable, mpdrModel, mpdrTable);
-            mldrTransformToBoxProceduresOrFunctions.createOrModifyBoxProceduresOrFunctionsForColumnPKWithoutTAPIs(mpdrTable.getMPDRColumnPKProper(), mpdrTriggers);
+            mldrTransformToBoxProceduresOrFunctions.createOrModifyBoxProceduresOrFunctionsRealizedTrigger(mpdrTriggers);
         }
 
         return mpdrBoxTriggers;
     }
 
 
+    public void createOrModifyBoxTriggersForTAPIs() {
+        MPDRBoxTriggers mpdrBoxTriggers = createOrModifyBoxTriggers();
+        MLDRTransformToTrigger mldrTransformToTrigger = new MLDRTransformToTrigger(mldrTransform, mldrTable, mpdrModel, mpdrTable);
+        ArrayList<MPDRTrigger> mpdrTriggers = new ArrayList<MPDRTrigger>();
+
+        for (MPDRTriggerType mpdrTriggerType : MPDRTriggerType.applicableForSelection(mpdrModel.getDb(),
+                MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE)){
+            mpdrTriggers.add(mldrTransformToTrigger.createOrModifyTrigger(mpdrTriggerType));
+        }
+
+        /*
+        if (MPDRTriggerType.BIR.applicableToMPDRDB(mpdrModel.getDb())) {
+            mpdrTriggers.add(mldrTransformToTrigger.createOrModifyTrigger(MPDRTriggerType.BIR));
+        }
+
+         */
+
+        // Conteneur de fonctions et fonction d'alimentation (Si un trigger nécessite une fonction propre (PostgreSQL))
+        if (mpdrTriggers.size() > 0) {
+            MLDRTransformToBoxProceduresOrFunctions mldrTransformToBoxProceduresOrFunctions = new MLDRTransformToBoxProceduresOrFunctions(
+                    mldrTransform, mldrTable, mpdrModel, mpdrTable);
+            mldrTransformToBoxProceduresOrFunctions.createOrModifyBoxProceduresOrFunctionsRealizedTrigger(mpdrTriggers);
+        }
+    }
 }

@@ -9,9 +9,12 @@ import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.*;
+import mpdr.interfaces.IMPDRTableRequirePackages;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.tapis.*;
+import mpdr.tapis.oracle.MPDROracleBoxPackages;
 import mpdr.tapis.oracle.MPDROracleBoxTriggers;
+import mpdr.tapis.oracle.MPDROraclePackage;
 import mpdr.tapis.oracle.MPDROracleTrigger;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -22,7 +25,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
+public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IMPDRTableRequirePackages {
 
     private static final long serialVersionUID = 1000;
 
@@ -99,6 +102,7 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
         }
     }
 
+    //TODO-0 mettre des interfaces pour ne créer les procédures stockées que pour les BD qui le supporte
     @Override
     public MPDRBoxProceduresOrFunctions createBoxProceduresOrFunctions(MLDRTable mldrTable) {
         return null;
@@ -132,6 +136,45 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement {
 
     @Override
     public MPDRFunction createFunction(MPDRFunctionType type, MLDRTable mldrTable) {
+        return null;
+    }
+
+    @Override
+    public MPDRBoxPackages getMPDRBoxPackages() {
+        return getMPDRContTAPIs().getMPDRBoxPackages();
+    }
+
+    @Override
+    public MPDRBoxPackages createBoxPackages(MLDRTable mldrTable) {
+        MPDRBoxPackages mpdrBoxPackages = MVCCDElementFactory.instance().createMPDROracleBoxPackages(
+                getMPDRContTAPIs(), mldrTable);
+        return mpdrBoxPackages;
+
+    }
+
+
+    @Override
+    public MPDRPackage getMPDRPackageByType(MPDRPackageType type) {
+        return getMPDRBoxPackages().getMPDRPackageByType(type);
+    }
+
+    @Override
+    public MPDRPackage createPackage(MPDRPackageType type, MLDRTable mldrTable) {
+        MPDROracleBoxPackages mpdrOracleBoxPackages = (MPDROracleBoxPackages) getMPDRBoxPackages();
+        if (mpdrOracleBoxPackages != null){
+            MPDROraclePackage mpdrOraclePackage = MVCCDElementFactory.instance().createMPDROraclePackage(
+                    mpdrOracleBoxPackages, mldrTable);
+            return mpdrOraclePackage;
+        } else {
+            throw new CodeApplException("La boîte Procédures/Functions doit exister avant de créer un trigger");
+        }
+
+    }
+
+    public ArrayList<MPDRPackage> getMPDRPackages(){
+        if ( getMPDRBoxPackages() != null) {
+            return getMPDRBoxPackages().getAllPackages();
+        }
         return null;
     }
 

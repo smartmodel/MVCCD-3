@@ -27,9 +27,12 @@ import mpdr.oracle.*;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.postgresql.*;
 import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
+import mpdr.tapis.MPDRBoxPackages;
 import mpdr.tapis.MPDRBoxTriggers;
 import mpdr.tapis.MPDRContTAPIs;
+import mpdr.tapis.oracle.MPDROracleBoxPackages;
 import mpdr.tapis.oracle.MPDROracleBoxTriggers;
+import mpdr.tapis.oracle.MPDROraclePackage;
 import mpdr.tapis.oracle.MPDROracleTrigger;
 import mpdr.tapis.postgresql.MPDRPostgreSQLBoxProceduresOrFunctions;
 import mpdr.tapis.postgresql.MPDRPostgreSQLBoxTriggers;
@@ -594,10 +597,19 @@ public class MVCCDElementFactory {
         return mpdrOracleTriggers;
     }
 
-
     public MPDROracleTrigger createMPDROracleTrigger(MPDRBoxTriggers mpdrBoxTriggers, MLDRTable mldrTable) {
         MPDROracleTrigger mpdrOracleTrigger = new MPDROracleTrigger(mpdrBoxTriggers, mldrTable);
         return mpdrOracleTrigger;
+    }
+
+    public MPDROracleBoxPackages createMPDROracleBoxPackages(MPDRContTAPIs mpdrContTAPIs, MLDRTable mldrTable) {
+        MPDROracleBoxPackages mpdrOracleBoxPackages = new MPDROracleBoxPackages(mpdrContTAPIs, mldrTable);
+        return mpdrOracleBoxPackages;
+    }
+
+    public MPDROraclePackage createMPDROraclePackage(MPDRBoxPackages mpdrBoxPackages, MLDRTable mldrTable) {
+        MPDROraclePackage mpdrOraclePackage = new MPDROraclePackage(mpdrBoxPackages, mldrTable);
+        return mpdrOraclePackage;
     }
 
 

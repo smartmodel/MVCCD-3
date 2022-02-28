@@ -14,7 +14,7 @@ public abstract class MPDRGenerateSQLIndex {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirDropDB(),
                 Preferences.TEMPLATE_DROP_INDEX,
                 getMPDRGenerateSQL().mpdrModel);
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                 Preferences.MPDR_INDEX_NAME_WORD, mpdrIndex.getName());
         return generateSQLCode;
     }
@@ -24,13 +24,13 @@ public abstract class MPDRGenerateSQLIndex {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateDB(),
                 Preferences.TEMPLATE_CREATE_INDEX,
                 getMPDRGenerateSQL().mpdrModel);
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_INDEX_NAME_WORD, mpdrIndex.getName());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrIndex.getMDRTableAccueil().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_INDEX_NAME_WORD, mpdrIndex.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrIndex.getMDRTableAccueil().getName());
 
         //Génération des colonnes
         String tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, Preferences.TEMPLATE_CREATE_INDEX_COLUMNS);
         String columnsInCreateIndex = generateSQLCreateColumns(mpdrIndex, tabsApplicable);
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_CREATE_INDEX_COLUMNS, columnsInCreateIndex);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_CREATE_INDEX_COLUMNS, columnsInCreateIndex);
 
         generateSQLCode = MPDRGenerateSQLUtil.cleanSeparatorArguments(generateSQLCode);
 

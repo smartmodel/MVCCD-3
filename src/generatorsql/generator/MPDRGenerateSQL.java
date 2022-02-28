@@ -316,6 +316,14 @@ public abstract class MPDRGenerateSQL {
                 Preferences.DIRECTORY_TEMPLATES_DYNAMIC_CODE;
     }
 
+    /*
+    public String getTemplateDirBlocksDB() {
+        return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR +
+                Preferences.DIRECTORY_TEMPLATES_BLOCKS;
+    }
+
+     */
+
     public String delimiter(){
         return Preferences.SYSTEM_LINE_SEPARATOR + getDelimiterInstructions() + Preferences.SYSTEM_LINE_SEPARATOR;
 
@@ -329,8 +337,12 @@ public abstract class MPDRGenerateSQL {
 
 
     // Surcharge si nécessité d'indiquer le schéma (PostgreSQL)
-    public String replaceKeyValue(String code, String key, String value) {
+    public String replaceKeyValueWithSpecific(String code, String key, String value) {
         return UtilDivers.replaceKeyValue(code, key, value);
+    }
+
+    public String replaceKeyValueWithSpecific(String code, String key, String value, String beforeKey, String afterKey) {
+        return UtilDivers.replaceKeyValue(code, key, value, beforeKey, afterKey);
     }
 
     public static String nullifyKey(String code, String beforeKey, String key, String value) {

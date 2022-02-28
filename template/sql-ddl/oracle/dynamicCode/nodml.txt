@@ -1,0 +1,3 @@
+IF NOT {packageName}.{vg_insteadof_call} THEN
+    raise_application_error(-20001,'La manipulation directe de la table n''est pas possible. Il faut passer par la vue  {viewName');
+END IF;

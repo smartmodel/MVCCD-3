@@ -3,10 +3,11 @@ package generatorsql.generator;
 import exceptions.CodeApplException;
 import generatorsql.MPDRGenerateSQLUtil;
 import mdr.MDRColumn;
+import mpdr.MPDRColumn;
 import mpdr.MPDRDB;
 import mpdr.MPDRTable;
-import mpdr.tapis.MPDRDynamicCodeType;
 import mpdr.tapis.interfaces.IMPDRWithDynamicCode;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 
 import java.util.ArrayList;
@@ -21,14 +22,22 @@ public abstract class MPDRGenerateSQLDynamicCode {
     public String generateSQLCodeDynamic(IMPDRWithDynamicCode impdrWithDynamicCode, String generateSQLCode ){
         MPDRDB mpdrDB = getMPDRGenerateSQL().mpdrModel.getDb();
 
-        for (MPDRDynamicCodeType mpdrDynamicCodeType : MPDRDynamicCodeType.getAllForDB(mpdrDB)){
-            if (MPDRGenerateSQLUtil.find(generateSQLCode, mpdrDynamicCodeType.getKey())){
+        for (MPDRGenerateSQLDynamicCodeType mpdrGenerateSQLDynamicCodeType : MPDRGenerateSQLDynamicCodeType.getAllForDB(mpdrDB)){
+            if (MPDRGenerateSQLUtil.find(generateSQLCode, mpdrGenerateSQLDynamicCodeType.getKey())){
                 //String sqlCodeDynamic = loadTemplate(impdrWithDynamicCode, mpdrDynamicCodeType);
-                String templateSQLCode = template(mpdrDynamicCodeType);
-                String tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, mpdrDynamicCodeType.getKey());
 
-                String sqlCodeDynamic = generateFromTemplate(impdrWithDynamicCode, mpdrDynamicCodeType, templateSQLCode, tabsApplicable);
-                generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, mpdrDynamicCodeType.getKey(), sqlCodeDynamic);
+                String key = mpdrGenerateSQLDynamicCodeType.getKey();
+                String templateSQLCode = template(mpdrGenerateSQLDynamicCodeType);
+                String tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, key);
+
+                String sqlCodeDynamic = generateFromTemplate(impdrWithDynamicCode, mpdrGenerateSQLDynamicCodeType, templateSQLCode, tabsApplicable);
+                String beforeKey = "";
+                String afterKey = "";
+                if (StringUtils.isEmpty(sqlCodeDynamic)){
+                    // Suppression du saut de ligne et des tabs
+                    beforeKey = System.lineSeparator() + tabsApplicable  ;
+                }
+                generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, key, sqlCodeDynamic, beforeKey, afterKey);
             }
         }
 
@@ -36,20 +45,61 @@ public abstract class MPDRGenerateSQLDynamicCode {
     }
 
 
-    protected String template(MPDRDynamicCodeType mpdrDynamicCodeType){
+    protected String template(MPDRGenerateSQLDynamicCodeType mpdrGenerateSQLDynamicCodeType){
         return MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirDynamicCodeDB(),
-                mpdrDynamicCodeType.getTemplateFileName(),
+                mpdrGenerateSQLDynamicCodeType.getTemplateFileName(),
                 getMPDRGenerateSQL().mpdrModel);
     }
 
     protected String generateFromTemplate(IMPDRWithDynamicCode impdrWithDynamicCode,
-                                          MPDRDynamicCodeType mpdrDynamicCodeType,
+                                          MPDRGenerateSQLDynamicCodeType mpdrGenerateSQLDynamicCodeType,
                                           String templateSQLCode,
                                           String tabsApplicable){
-        if (mpdrDynamicCodeType == MPDRDynamicCodeType.TABLE_DEP_JOIN_PARENT){
+        if (    (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_INS) ||
+                (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_UPD) ||
+                (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_UPD) ||
+                (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_SPEC) ||
+                (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_BODY)    )
+
+        {
+            return templateSQLCode;
+        }if (    (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.TRIGGER_NEW_TO_RECORD) ||
+                (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.TRIGGER_OLD_TO_RECORD) ||
+                (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.TRIGGER_RECORD_TO_NEW)    )
+
+        {
+            return generateTriggerCopyInOrToRecord(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
+        }
+        if (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.TABLE_DEP_JOIN_PARENT){
             return generateTableDepJoinParent(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
         }
-        throw new CodeApplException("Le code dynamique " + mpdrDynamicCodeType.getKey() + "n'est pas encore traité");
+        if (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.NODML){
+            return generateNoDML(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
+        }
+        throw new CodeApplException("Le code dynamique " + mpdrGenerateSQLDynamicCodeType.getKey() + "n'est pas encore traité");
+    }
+
+    private String generateTriggerCopyInOrToRecord(IMPDRWithDynamicCode impdrWithDynamicCode,
+                                                   String templateSQLCode,
+                                                   String tabsApplicable) {
+        String generateSQLCode = "";
+        MPDRTable tableAccueil = impdrWithDynamicCode.getMPDRTableAccueil();
+
+        boolean firstColumn = true;
+        for (MPDRColumn mpdrColumn : tableAccueil.getMPDRColumns()){
+            if (StringUtils.isEmpty(mpdrColumn.getDerivedValue())){
+                if (!firstColumn) {
+                    generateSQLCode +=  System.lineSeparator() + tabsApplicable;
+                }
+                firstColumn = false;
+                generateSQLCode += templateSQLCode ;
+                generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                        Preferences.MDR_COLUMN_NAME_WORD,
+                        mpdrColumn.getName());
+            }
+        }
+
+        return generateSQLCode;
     }
 
     protected String generateTableDepJoinParent(IMPDRWithDynamicCode impdrWithDynamicCode,
@@ -67,16 +117,26 @@ public abstract class MPDRGenerateSQLDynamicCode {
                     }
                     firstColumn = false;
                     generateSQLCode += templateSQLCode ;
-                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
+                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                             Preferences.MDR_TABLE_NAME_WORD,
                             mdrColumn.getMDRTableAccueil().getName());
-                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
+                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                             Preferences.MDR_COLUMN_NAME_WORD,
                             mdrColumn.getName());
                 }
             }
             return generateSQLCode;
+    }
 
+
+    protected String generateNoDML(IMPDRWithDynamicCode impdrWithDynamicCode,
+                                                String templateSQLCode,
+                                                String tabsApplicable) {
+        String generateSQLCode = "";
+        if (false) {
+            //TODO-0 A traiter
+        }
+        return generateSQLCode;
     }
 
 

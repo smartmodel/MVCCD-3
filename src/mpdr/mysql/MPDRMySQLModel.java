@@ -3,6 +3,7 @@ package mpdr.mysql;
 import datatypes.MPDRDatatype;
 import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
+import mdr.MDRCaseFormat;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
@@ -55,7 +56,37 @@ public class MPDRMySQLModel extends MPDRModel implements IMPDRMySQLElement {
         setNamingFormatFuture( preferences.getMPDRMYSQL_PREF_NAMING_FORMAT());
         setReservedWordsFormatActual(preferences.getMPDRMYSQL_PREF_RESERDWORDS_FORMAT());
         setReservedWordsFormatFuture(preferences.getMPDRMYSQL_PREF_RESERDWORDS_FORMAT());
+        setObjectsInCodeFormatActual(preferences.getMPDRMYSQL_PREF_OBJECTSINCODE_FORMAT());
+        setObjectsInCodeFormatFuture(preferences.getMPDRMYSQL_PREF_OBJECTSINCODE_FORMAT());
+        setObjectsInCodeFormatActual(preferences.getMPDRMYSQL_PREF_OBJECTSINCODE_FORMAT());
+        setObjectsInCodeFormatFuture(preferences.getMPDRMYSQL_PREF_OBJECTSINCODE_FORMAT());
+
     }
 
+
+    @Override
+    public MDRCaseFormat getNamingFormatForDB() {
+        if (namingFormatFuture == MDRCaseFormat.LIKEBD){
+            return MDRCaseFormat.UPPERCASE;
+        }
+        return namingFormatFuture;
+
+    }
+
+    @Override
+    public MDRCaseFormat getReservedWordsFormatForDB() {
+        if (reservedWordsFormatFuture == MDRCaseFormat.LIKEBD){
+            return MDRCaseFormat.LOWERCASE;
+        }
+        return reservedWordsFormatFuture;
+    }
+
+    @Override
+    public MDRCaseFormat getObjectsInCodeFormatForDB() {
+        if (objectsInCodeFormatFuture == MDRCaseFormat.LIKEBD){
+            return MDRCaseFormat.UPPERCASE;
+        }
+        return objectsInCodeFormatFuture;
+    }
 
 }

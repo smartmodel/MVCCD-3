@@ -18,12 +18,12 @@ public abstract class MPDRGenerateSQLTableColumn {
                 Preferences.TEMPLATE_CREATE_TABLE_COLUMNS,
                 getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;;
 
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
 
         // Datatype
         String datatypeName = MDDatatypeService.convertMPDRLienProgToName(getMPDRGenerateSQL().mpdrModel.getDb(), mpdrColumn.getDatatypeLienProg());
         String datatypeSizeScale = generateDatatypeSizeScale(mpdrColumn);
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_DATATYPE_WORD, datatypeName + datatypeSizeScale);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_DATATYPE_WORD, datatypeName + datatypeSizeScale);
 
 
         //Options
@@ -40,7 +40,7 @@ public abstract class MPDRGenerateSQLTableColumn {
                     Preferences.TEMPLATE_OPTION_COLUMN_IDENTITY,
                     getMPDRGenerateSQL().mpdrModel);
         }
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_IDENTITY, codeOption);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_IDENTITY, codeOption);
 
         // Options not null
         codeOption = "";
@@ -49,7 +49,7 @@ public abstract class MPDRGenerateSQLTableColumn {
                     Preferences.TEMPLATE_OPTION_COLUMN_NOTNULL,
                     getMPDRGenerateSQL().mpdrModel);
         }
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_NOTNULL, codeOption);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_NOTNULL, codeOption);
 
 
         // Option default value
@@ -59,10 +59,10 @@ public abstract class MPDRGenerateSQLTableColumn {
                 Preferences.TEMPLATE_OPTION_COLUMN_DEFAULTVALUE,
                 getMPDRGenerateSQL().mpdrModel);
             //TODO-0 Vérfier que mpdrColumn.getInitValue() rendre une valeur conforme au mpdr cible
-            codeOption = getMPDRGenerateSQL().replaceKeyValue(codeOption, Preferences.MDR_DEFAULT_VALUE_WORD, mpdrColumn.getInitValue());
+            codeOption = getMPDRGenerateSQL().replaceKeyValueWithSpecific(codeOption, Preferences.MDR_DEFAULT_VALUE_WORD, mpdrColumn.getInitValue());
 
         }
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_DEFAULTVALUE, codeOption);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_DEFAULTVALUE, codeOption);
 
         return generateSQLCode;
     }

@@ -15,7 +15,7 @@ public abstract class MPDRGenerateSQLSequence {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirDropDB(),
                 Preferences.TEMPLATE_DROP_SEQUENCE,
                 getMPDRGenerateSQL().mpdrModel);
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                 Preferences.MPDR_SEQUENCE_NAME_WORD, mpdrSequence.getName());
         return generateSQLCode;
 
@@ -25,10 +25,10 @@ public abstract class MPDRGenerateSQLSequence {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateDB(),
                 Preferences.TEMPLATE_CREATE_SEQUENCE,
                 getMPDRGenerateSQL().mpdrModel);
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode,
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                 Preferences.MPDR_SEQUENCE_NAME_WORD, mpdrSequence.getName());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_MIN_VALUE_WORD, mpdrSequence.getMinValue().toString());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_INCREMENT_WORD, mpdrSequence.getIncrement().toString());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_MIN_VALUE_WORD, mpdrSequence.getMinValue().toString());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_INCREMENT_WORD, mpdrSequence.getIncrement().toString());
 
         return generateSQLCode;
     }

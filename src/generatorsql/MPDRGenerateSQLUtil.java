@@ -1,10 +1,13 @@
 package generatorsql;
 
+import generatorsql.generator.MPDRGenerateSQLObjectInCode;
 import main.MVCCDManager;
 import mdr.MDRCaseFormat;
+import mdr.services.MDRModelService;
 import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.UtilDivers;
 import utilities.files.FileRead;
 import utilities.files.FileWrite;
 import utilities.files.UtilFiles;
@@ -193,4 +196,28 @@ public class MPDRGenerateSQLUtil {
         return MPDRGenerateSQLUtil.caseReservedWords(template, mpdrModel);
 
     }
+
+    public static String customizeNameObjectInCode(String generateSQLCode, MPDRModel mpdrModel) {
+        for (MPDRGenerateSQLObjectInCode mpdrGenerateSQLObjectInCode : MPDRGenerateSQLObjectInCode.getAll()){
+            String key = mpdrGenerateSQLObjectInCode.getKey();
+            String name = mpdrGenerateSQLObjectInCode.getNameByDb(mpdrModel.getDb());
+            name = MDRModelService.caseNaming(name, mpdrModel.getObjectsInCodeFormatForDB());
+            generateSQLCode = UtilDivers.replaceKeyValue(generateSQLCode, key, name);
+        }
+        return generateSQLCode;
+    }
+
+    /*
+    public static String customizeNameObjectInCode(String generateSQLCode, MPDRDB db) {
+        for (MPDRGenerateSQLObjectInCode mpdrGenerateSQLObjectInCode : MPDRGenerateSQLObjectInCode.getAll()){
+            String key = mpdrGenerateSQLObjectInCode.getKey();
+            String name = mpdrGenerateSQLObjectInCode.getNameByDb(db);
+            name = MDRModelService.caseNaming(name, mpdrDb.get)
+
+            generateSQLCode = UtilDivers.replaceKeyValue(generateSQLCode, key, name);
+        }
+        return generateSQLCode;
+    }
+
+     */
 }

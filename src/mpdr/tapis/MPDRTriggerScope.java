@@ -4,8 +4,8 @@ import messages.MessagesBuilder;
 import preferences.Preferences;
 
 public enum MPDRTriggerScope {
-    TABLE (Preferences.MPDR_TRIGGER_USAGE_TAPIS),
-    VIEW (Preferences.MPDR_TRIGGER_USAGE_WITHOUT_TAPIS);
+    TABLE (Preferences.MPDR_TRIGGER_SCOPE_TABLE),
+    VIEW (Preferences.MPDR_TRIGGER_SCOPE_VIEW);
 
     private final String name;
 

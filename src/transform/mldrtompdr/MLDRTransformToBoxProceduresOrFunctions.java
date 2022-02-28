@@ -2,7 +2,6 @@ package transform.mldrtompdr;
 
 import main.MVCCDManager;
 import mldr.MLDRTable;
-import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.tapis.MPDRBoxProceduresOrFunctions;
@@ -49,8 +48,8 @@ public class MLDRTransformToBoxProceduresOrFunctions {
         MLDRTransformService.modifyName(mpdrModel, mpdrBoxProceduresOrFunctions);
    }
 
-    public MPDRBoxProceduresOrFunctions createOrModifyBoxProceduresOrFunctionsForColumnPKWithoutTAPIs(MPDRColumn mpdrColumnPKProper, ArrayList<MPDRTrigger> mpdrTriggers){
-        if (MPDRFunctionType.isFunctionForDBAndTriggers(mpdrModel.getDb(), mpdrTriggers)) {
+    public MPDRBoxProceduresOrFunctions createOrModifyBoxProceduresOrFunctionsRealizedTrigger(ArrayList<MPDRTrigger> mpdrTriggers){
+        if (MPDRFunctionType.requireFunctionForDBAndTriggers(mpdrModel.getDb(), mpdrTriggers)) {
             MPDRBoxProceduresOrFunctions mpdrBoxProceduresOrFunctions = createOrModifyBoxProceduresOrFunctions();
             MLDRTransformToFunction mldrTransformToFunction = new MLDRTransformToFunction(mldrTransform, mldrTable, mpdrModel, mpdrTable);
             for (MPDRTrigger mpdrTrigger : mpdrTriggers) {

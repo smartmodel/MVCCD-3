@@ -1,0 +1,18 @@
+CREATE OR REPLACE PACKAGE {packageName} IS
+    PROCEDURE {autogen_column}({pio_crtrec} IN OUT {tableName}%ROWTYPE);
+    PROCEDURE {autogen_column_ins}({pio_crtrec} IN OUT {tableName}%ROWTYPE);
+    PROCEDURE {autogen_column_upd}({pio_crtrec} IN OUT {tableName}%ROWTYPE);
+    PROCEDURE {uppercase_column}({pio_crtrec} IN OUT {tableName}%ROWTYPE);
+    PROCEDURE {checktype_column}({pio_crtrec} IN OUT {tableName}%ROWTYPE);
+    PROCEDURE {column_PEA}({pio_crtrec} IN OUT {tableName}%ROWTYPE);
+    PROCEDURE {frozen_column}(  {pio_newrec} IN OUT {tableName}%ROWTYPE
+        , {pio_oldrec} IN OUT {tableName}%ROWTYPE);
+    PROCEDURE {tree_or_list_loop};
+    PROCEDURE {tree_or_list_onlyone};
+    {-INS_JN_SPEC-}
+
+    TYPE {type_}{tableName}  IS TABLE OF {tableName}%ROWTYPE INDEX BY PLS_INTEGER;
+    {vg_}{tableName} {type_}{tableName};
+
+    {vg_insteadof_call} BOOLEAN := FALSE;
+END;

@@ -5,7 +5,6 @@ import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import m.interfaces.IMClass;
-import main.MVCCDElement;
 import md.MDElement;
 import mdr.MDRElement;
 import mdr.interfaces.IMDRElementNamingPreferences;
@@ -118,6 +117,7 @@ public abstract class MPDRBoxStoredCode extends MDRElement implements IMPDREleme
         return ConstraintService.getUMLNamingInLine(getConstraints());
     }
 
+    /*
     public ArrayList<MPDRTrigger> getAllTriggers(){
         ArrayList<MPDRTrigger> resultat = new ArrayList<MPDRTrigger>();
             for ( MVCCDElement mvccdElement : getChilds()){
@@ -136,6 +136,8 @@ public abstract class MPDRBoxStoredCode extends MDRElement implements IMPDREleme
         }
         return null;
     }
+
+     */
 
     public MPDRContTAPIs getMPDRContTAPIs (){
         return (MPDRContTAPIs) getParent();

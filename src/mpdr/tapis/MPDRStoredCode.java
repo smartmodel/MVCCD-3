@@ -64,12 +64,12 @@ public abstract class MPDRStoredCode extends MDRElement implements IMPDRElement,
         return (MDElement) getMldrElementSource();
     }
 
-    public MPDRBoxProceduresOrFunctions getMPDRBoxProcedures (){
-        return (MPDRBoxProceduresOrFunctions) getParent();
+    public MPDRBoxStoredCode getMPDRStoredCode(){
+        return (MPDRBoxStoredCode) getParent();
     }
 
     public MPDRTable getMPDRTableAccueil (){
-        return getMPDRBoxProcedures().getMPDRTableAccueil();
+        return getMPDRStoredCode().getMPDRTableAccueil();
     }
 
     public abstract String generateSQLDDL() ;

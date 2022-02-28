@@ -65,6 +65,8 @@ public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLEle
         setNamingFormatFuture( preferences.getMPDRPOSTGRESQL_PREF_NAMING_FORMAT());
         setReservedWordsFormatActual(preferences.getMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT());
         setReservedWordsFormatFuture(preferences.getMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT());
+        setObjectsInCodeFormatActual(preferences.getMPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT());
+        setObjectsInCodeFormatFuture(preferences.getMPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT());
 
     }
 
@@ -94,6 +96,16 @@ public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLEle
             return MDRCaseFormat.UPPERCASE;
         }
         return reservedWordsFormatFuture;
+    }
+
+
+    // Surchargé pour les BD qui doivent avoir un formattage particulier
+    // minuscule pour PostgreSQL
+    public MDRCaseFormat getObjectsInCodeFormatForDB() {
+        if (objectsInCodeFormatFuture == MDRCaseFormat.LIKEBD){
+            return MDRCaseFormat.LOWERCASE;
+        }
+        return objectsInCodeFormatFuture;
     }
 
 }

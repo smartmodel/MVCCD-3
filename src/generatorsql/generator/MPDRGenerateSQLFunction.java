@@ -16,7 +16,7 @@ public abstract class MPDRGenerateSQLFunction {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirDropStoredCodeDB(),
                 Preferences.TEMPLATE_DROP_FUNCTION,
                 getMPDRGenerateSQL().mpdrModel);
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_FUNCTION_NAME_WORD, mpdrFunction.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_FUNCTION_NAME_WORD, mpdrFunction.getName());
 
         return generateSQLCode;
     }
@@ -26,27 +26,31 @@ public abstract class MPDRGenerateSQLFunction {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateStoredCodeDB(),
                 mpdrFunctionType.getTemplateFileName(),
                 getMPDRGenerateSQL().mpdrModel);
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_FUNCTION_NAME_WORD, mpdrFunction.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_FUNCTION_NAME_WORD, mpdrFunction.getName());
 
 
         // Les fonctions pour alimenter les colonnes de PK sans les TAPIs
         boolean c1 = mpdrFunctionType == MPDRFunctionType.BIR_PKIND;
         boolean c2 = mpdrFunctionType == MPDRFunctionType.BIR_PKDEP;
         if (c1 || c2){
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_COLUMN_PK_NAME_WORD,
+            generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_PK_NAME_WORD,
                     mpdrFunction.getMPDRTableAccueil().getMPDRColumnPKProper().getName());
 
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD,
+            generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD,
                     mpdrFunction.getMPDRTableAccueil().getName());
 
             if (c1){
-                generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MPDR_SEQUENCE_NAME_WORD,
+                generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_SEQUENCE_NAME_WORD,
                         mpdrFunction.getMPDRTableAccueil().getMPDRColumnPKProper().getMPDRSequence().getName());
             }
         }
 
         // Traitement du code dynamique
         generateSQLCode = getMPDRGenerateSQL().getMpdrGenerateSQLCodeDynamic().generateSQLCodeDynamic(mpdrFunction, generateSQLCode);
+
+
+        // Customisation des noms des objets de programmation
+        generateSQLCode = MPDRGenerateSQLUtil.customizeNameObjectInCode(generateSQLCode , getMPDRGenerateSQL().mpdrModel);
 
         return generateSQLCode;
     }

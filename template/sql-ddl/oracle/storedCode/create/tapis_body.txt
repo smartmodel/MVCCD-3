@@ -1,0 +1,70 @@
+CREATE OR REPLACE PACKAGE BODY {packageName} IS
+
+PROCEDURE {autogen_column}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+    BEGIN
+        NULL;
+    END;
+
+PROCEDURE {autogen_column_ins}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+    BEGIN
+        NULL;
+        {-BLOCK_COLUMN_PK_IND-}
+        {-BLOCK_COLUMN_PK_DEP-}
+        {-COLUMN_DEFAULT_VALUE-}
+        {-ORDERED_INS-}
+        {-BLOCK_COLUMN_AUDIT_AJ-}
+        {-BLOCK_COLUMN_LIEN_PROG-}
+    END;
+
+PROCEDURE {autogen_column_upd}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+BEGIN
+	NULL;
+	{-BLOCK_COLUMN_AUDIT_MO-}
+END;
+
+
+PROCEDURE {uppercase_column}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+BEGIN
+	NULL;
+	{-COLUMNS_UPPERCASE-}
+END;
+
+PROCEDURE {checktype_column}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+BEGIN
+	NULL;
+	{-COLUMNS_TYPE_CHECK-}
+END;
+
+PROCEDURE {column_PEA}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+BEGIN
+	NULL;
+	{-COLUMNS_PEA-}
+END;
+
+PROCEDURE {frozen_column}(	{pio_newrec} IN OUT {tableName}%ROWTYPE,
+    {pio_oldrec} IN OUT {tableName}%ROWTYPE) IS
+    BEGIN
+	    NULL;
+	    {-COLUMNS_FROZEN-}
+    END;
+
+
+PROCEDURE {tree_or_list_loop} IS
+v_temp NUMBER;
+BEGIN
+	NULL;
+	{-BLOCK_TREE_OR_LIST_AFTER_STATEMENT-}
+END;
+
+PROCEDURE {tree_or_list_onlyone} IS
+    v_temp NUMBER;
+    BEGIN
+	    NULL;
+	    {-BLOCK_TREE_OR_LIST_ONLYONE_AFTER_STATEMENT-}
+    END;
+
+{-INS_JN_BODY-}
+
+BEGIN
+	NULL;
+END;

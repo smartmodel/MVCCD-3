@@ -7,6 +7,7 @@ import mpdr.MPDRSequence;
 import mpdr.mysql.MPDRMySQLTable;
 import mpdr.oracle.MPDROracleTable;
 import mpdr.postgresql.MPDRPostgreSQLTable;
+import mpdr.tapis.MPDRBoxPackages;
 import mpdr.tapis.MPDRBoxProceduresOrFunctions;
 import mpdr.tapis.MPDRBoxTriggers;
 import preferences.Preferences;
@@ -249,6 +250,11 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_PROCEDURES_NAME,
                 Preferences.STEREOTYPE_PROCEDURES_LIENPROG,
                 MPDRBoxProceduresOrFunctions.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_PACKAGES_NAME,
+                Preferences.STEREOTYPE_PACKAGES_LIENPROG,
+                MPDRBoxPackages.class.getName());
 
         createStereotype(
                 Preferences.STEREOTYPE_INDEX_NAME,

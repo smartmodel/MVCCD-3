@@ -14,8 +14,8 @@ public abstract class MPDRGenerateSQLCheck {
                 Preferences.TEMPLATE_CREATE_TABLE_CHECKS,
                 getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS;
 
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_CHECK_NAME_WORD, mpdrCheck.getName());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValue(generateSQLCode, Preferences.MDR_CHECK_EXPRESSION_WORD, mpdrCheck.getMPDRParameter().getValue());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_CHECK_NAME_WORD, mpdrCheck.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_CHECK_EXPRESSION_WORD, mpdrCheck.getMPDRParameter().getValue());
 
         return generateSQLCode;
     }

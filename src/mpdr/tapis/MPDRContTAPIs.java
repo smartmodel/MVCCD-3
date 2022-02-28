@@ -35,6 +35,16 @@ public class MPDRContTAPIs extends MDRElement {
     }
 
 
+    public MPDRBoxPackages getMPDRBoxPackages() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MPDRBoxPackages){
+                return (MPDRBoxPackages) mvccdElement ;
+            }
+        }
+        return null ;
+    }
+
+
     public MPDRTable getMPDRTableAccueil (){
         return (MPDRTable) getParent();
     }

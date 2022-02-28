@@ -1,0 +1,24 @@
+PROCEDURE {ins_jn} ({pi_crtrec} IN {tableName}%ROWTYPE
+    , {pi_mode} IN VARCHAR2) IS
+
+BEGIN
+    IF {pi_mode} = '{del}' THEN
+        INSERT INTO {table_jn} (
+            {JN_COLUMNS_NAME}
+            , {PK_COLUMNS_NAME}
+		)
+		VALUES (
+		    {JN_COLUMNS_VALUE}
+		    , {PK_COLUMNS_VALUE}
+        );
+    ELSE
+        INSERT INTO {table_jn} (
+            {JN_COLUMNS_NAME}
+            , {ALL_COLUMNS_NAME}
+        )
+        VALUES (
+            {JN_COLUMNS_VALUE}
+            , {ALL_COLUMNS_VALUE}
+		);
+	END IF;	
+END;	

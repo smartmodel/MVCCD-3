@@ -75,20 +75,9 @@ public enum MPDRFunctionType {
         }
         return null;
     }
-/*
-    public static MPDRFunctionType getFunctionTypeByTriggerType(MPDRTriggerType mpdrTriggerType){
-        for (MPDRFunctionType element: MPDRFunctionType.values()){
-            if (element.getMpdrTriggerType() == mpdrTriggerType) {
-                return element;
-            }
-        }
-        return null;
-    }
 
- */
-
-    public static boolean isFunctionForDBAndTriggers(MPDRDB mpdrDB,
-                                                     ArrayList<MPDRTrigger> mpdrTriggers){
+    public static boolean requireFunctionForDBAndTriggers(MPDRDB mpdrDB,
+                                                          ArrayList<MPDRTrigger> mpdrTriggers){
         for (MPDRTrigger mpdrTrigger : mpdrTriggers){
             if (getFunctionTypeByDBAndTriggerType(mpdrDB, mpdrTrigger.getType()) != null) {
                 return true;

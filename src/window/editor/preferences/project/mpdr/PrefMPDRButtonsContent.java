@@ -1,11 +1,11 @@
 package window.editor.preferences.project.mpdr;
 
 import main.MVCCDElement;
-import utilities.window.editor.PanelButtonsContent;
+import utilities.window.editor.PanelButtonsContentReInit;
 
 import java.awt.event.ActionListener;
 
-public abstract class PrefMPDRButtonsContent extends PanelButtonsContent implements ActionListener {
+public abstract class PrefMPDRButtonsContent extends PanelButtonsContentReInit implements ActionListener {
 
     private PrefMPDRButtons prefMPDRButtons;
 

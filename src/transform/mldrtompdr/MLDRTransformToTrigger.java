@@ -86,8 +86,9 @@ public class MLDRTransformToTrigger {
                 throw new CodeApplException("MPDRTriggerScope n'est pas défini...");
             }
 
+            orderBuild.getTableSep().setValue();
             orderBuild.getTableShortName().setValue(mldrTable.getShortName());
-            orderBuild.getTypeTriggerMarker().setValue(type);
+            orderBuild.getTypeTriggerMarker().setValue(mpdrModel, type);
 
             String name;
 

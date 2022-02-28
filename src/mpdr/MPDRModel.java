@@ -3,6 +3,7 @@ package mpdr;
 import datatypes.MPDRDatatype;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
+import mdr.MDRCaseFormat;
 import mdr.MDRElement;
 import mdr.MDRModel;
 import mdr.interfaces.IMDRElementWithIteration;
@@ -35,6 +36,11 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     private String triggerNameFormat;
     private String checkColumnDatatypeNameFormat;
     private String checkColumnDatatypeMax30NameFormat;
+
+    // Même remarque pour les 2 attributs de casse de caractère de MDR
+    private MDRCaseFormat objectsInCodeFormatActual;
+    protected MDRCaseFormat objectsInCodeFormatFuture;
+
 
     public MPDRModel(ProjectElement parent, String name, MPDRDB db) {
         super(parent, name);
@@ -195,4 +201,39 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
 
     public abstract Boolean getMPDR_TAPIs() ;
 
- }
+
+
+    public MDRCaseFormat getObjectsInCodeFormatActual() {
+        return objectsInCodeFormatActual;
+    }
+
+    public void setObjectsInCodeFormatActual(MDRCaseFormat objectsInCodeFormatActual) {
+        this.objectsInCodeFormatActual = objectsInCodeFormatActual;
+    }
+
+    public MDRCaseFormat getObjectsInCodeFormatFuture() {
+        return objectsInCodeFormatFuture;
+    }
+
+
+    // Surchargé pour les BD qui ont un formattage particulier
+    // minuscule pour PostgreSQL
+    // majuscule pour Oracle
+    // Utilisé par défaut pour MLDR !
+    public abstract MDRCaseFormat getNamingFormatForDB();
+
+
+    // Surchargé pour les BD qui ont un formattage particulier
+    // minuscule pour PostgreSQL
+    // majuscule pour Oracle
+    // Utilisé par défaut pour MLDR !
+    public abstract MDRCaseFormat getReservedWordsFormatForDB();
+
+
+    // Surchargé pour les BD qui doivent avoir un formattage particulier
+    public abstract MDRCaseFormat getObjectsInCodeFormatForDB();
+
+    public void setObjectsInCodeFormatFuture(MDRCaseFormat objectsInCodeFormatFuture) {
+        this.objectsInCodeFormatFuture = objectsInCodeFormatFuture;
+    }
+}

@@ -5,6 +5,7 @@ import md.MDElement;
 import md.interfaces.IMDElementWithSource;
 import mdr.*;
 import mdr.interfaces.IMDRElementNamingPreferences;
+import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.UtilDivers;
@@ -131,12 +132,18 @@ public class MDRModelService {
         if (namingLength == MDRNamingLength.LENGTH120) {
             name = mdrElement.getNames().getName120();
         }
+
         //TODO-PAS Mettre un message si toujours name =""
-        MDRCaseFormat mdrCaseFormat = mdrModel.getNamingFormatForDB();
-        return formatNaming(name, mdrCaseFormat);
+        MDRCaseFormat mdrCaseFormat ;
+        if (mdrModel instanceof MPDRModel) {
+            mdrCaseFormat = ((MPDRModel)mdrModel).getNamingFormatForDB();
+        } else {
+            mdrCaseFormat = mdrModel.getNamingFormatFuture();
+        }
+        return caseNaming(name, mdrCaseFormat);
     }
 
-    private static String formatNaming(String name, MDRCaseFormat mdrCaseFormat){
+    public static String caseNaming(String name, MDRCaseFormat mdrCaseFormat){
         if (mdrCaseFormat == MDRCaseFormat.NOTHING) {
             // name tel que repris de MPDRModelService.builName
         }

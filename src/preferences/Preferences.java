@@ -224,11 +224,13 @@ public class Preferences extends MVCCDElement {
   public static String DIRECTORY_TEMPLATES_STOREDCODE = "storedCode";
   public static String DIRECTORY_TEMPLATES_DYNAMIC_CODE = "dynamicCode";
   public static String DIRECTORY_TEMPLATES_OPTIONS = "options";
+  //public static String DIRECTORY_TEMPLATES_BLOCKS = "blocks";
 
   public static String TEMPLATE_DROP_TABLE = "dropTable.txt";
   public static String TEMPLATE_DROP_SEQUENCE = "dropSequence.txt";
   public static String TEMPLATE_DROP_TRIGGER = "dropTrigger.txt";
   public static String TEMPLATE_DROP_FUNCTION = "dropFunction.txt";
+  public static String TEMPLATE_DROP_PACKAGE = "dropPackage.txt";
   public static String TEMPLATE_DROP_INDEX = "dropIndex.txt";
 
   public static String TEMPLATE_CREATE_TABLE = "createTable.txt";
@@ -243,6 +245,9 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATE_OPTION_COLUMN_IDENTITY = "columnIdentity.txt";
   public static String TEMPLATE_OPTION_COLUMN_NOTNULL =  "columnNotNull.txt";
   public static String TEMPLATE_OPTION_COLUMN_DEFAULTVALUE =  "columnDefaultValue.txt";
+
+  //public static String TEMPLATE_BLOCK_NODML =  "nodml.txt";
+
 
   public static String TEMPLATES_ALTER_TABLE_FK = "alterTableFK.txt";
 
@@ -335,6 +340,8 @@ public class Preferences extends MVCCDElement {
   public static String STEREOTYPE_TRIGGERS_LIENPROG = "Triggers";
   public static String STEREOTYPE_PROCEDURES_NAME = "Procedures";
   public static String STEREOTYPE_PROCEDURES_LIENPROG = "Procedures";
+  public static String STEREOTYPE_PACKAGES_NAME = "Paquetages";
+  public static String STEREOTYPE_PACKAGES_LIENPROG = "Paquetages";
   public static String STEREOTYPE_ORACLE_NAME = "Oracle";
     public static String STEREOTYPE_ORACLE_LIENPROG = "Oracle";
     public static String STEREOTYPE_MYSQL_NAME = "MySQL";
@@ -649,7 +656,8 @@ public class Preferences extends MVCCDElement {
   public static String MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
   public static MPDRDBPK MPDRORACLE_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
   public static String MPDRORACLE_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
-  public static String MPDRORACLE_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
+  public static String MPDRORACLE_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRORACLE_PACKAGE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typePackageMarker}";
   public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
   public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
   public static String MPDRORACLE_EMPTY_SCHEMA = "empty_schema";
@@ -687,7 +695,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
   public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
   public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
-  public static String MPDRMYSQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
+  public static String MPDRMYSQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
 
 
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_NAME = "MPDR-PostgreSQL";
@@ -719,7 +727,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
   public static MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
   public static String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
-  public static String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{typeTriggerMarker}";
+  public static String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
   public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
   public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
   public static String MPDRPOSTGRESQL_EMPTY_SCHEMA = "empty_schema";
@@ -761,6 +769,7 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_NAMING_TRIGGER_TABLE = "mpdr.trigger.table";
   public static String MPDR_NAMING_TRIGGER_VIEW = "mpdr.trigger.view";
   public static String MPDR_NAMING_FUNCTION = "mpdr.function";
+  public static String MPDR_NAMING_PACKAGE = "mpdr.package";
 
   public static String MDR_PATH_WORD = "path";
   public static String MDR_PATH_SEP_WORD = "pathSep";
@@ -787,8 +796,9 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_MIN_VALUE_WORD = "minValue";
   public static String MPDR_INCREMENT_WORD = "increment";
   public static String MPDR_TRIGGER_NAME_WORD = "triggerName";
+  public static String MPDR_PACKAGE_NAME_WORD = "packageName";
   public static String MPDR_FUNCTION_NAME_WORD = "functionName";
-  public static String MPDR_PROCEDURE_NAME_WORD = "functionName";
+  public static String MPDR_PROCEDURE_NAME_WORD = "procedureName";
   public static String MPDR_COLUMN_NAME_WORD = "mpdrColumnName";
   public static String MCD_ATTRIBUTE_NAME_WORD = "mcdAttrName";
   public static String MCD_ATTRIBUTE_SHORT_NAME_WORD = "mcdAttrShortName";
@@ -797,21 +807,6 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_INDEX_NAME_WORD =  "indexName";
 
   public static String MPDR_CHECK_PARAM_EXPRESSION_NAME = "expr";  // Le nom du paramètre qui contient l'expression'
-
-  /*
-  public static String MPDR_NEW_RECORD_WORD = "newRecord";
-
-  public static String MPDR_ORACLE_NEW_RECORD_WORD = ":NEW";
-
-  public static String MPDR_MYSQL_NEW_RECORD_WORD = "NEW";
-
-  public static String MPDR_POSTGRESQL_NEW_RECORD_WORD = "NEW";
-
-   */
-
-  //TODO-= Voir déplacement dans un cadre spécifique
-  public static String MPDR_ORACLE_PIO_CRT_RECORD_WORD = "pio_crtrec";
-
 
   public static String MPDR_EMPTY_SCHEMA_NAME_WORD = "emptySchema";
   public static String MPDR_DROP_BEFORE_NOTHING = "mpdr.drop.before.nothing";
@@ -824,6 +819,8 @@ public class Preferences extends MVCCDElement {
 
   public static String MPDR_STOREDCODE_USAGE_TAPIS = "mpdr.storedcode.usage.tapis";
   public static String MPDR_STOREDCODE_USAGE_WITHOUT_TAPIS = "mpdr.storedcode.usage.without.tapis";
+  public static String MPDR_STOREDCODE_SCOPE_TABLE = "mpdr.storedcode.scope.table";
+  public static String MPDR_STOREDCODE_SCOPE_VIEW = "mpdr.storedcode.scope.view";
 
 
   public static String MDR_COL_NAME_WORD = "colName";
@@ -854,6 +851,7 @@ public class Preferences extends MVCCDElement {
   public static String MDR_UNIQUE_NATURE_SEP_WORD = "uniqueNatSep";
 
   public static String MPDR_TYPE_TRIGGER_MARKER_WORD = "typeTriggerMarker";
+  public static String MPDR_TYPE_PACKAGE_MARKER_WORD = "typePackageMarker";
 
   public static Integer MDR_MARKER_DERIVED_LENGTH = 4;
   public static Integer MDR_MARKER_PEA_LENGTH = 4;
@@ -863,6 +861,7 @@ public class Preferences extends MVCCDElement {
   public static Integer MDR_MARKER_CUSTOM_FK_LENGTH = 3;
   public static Integer MARKER_CUSTOM_SEQPK_LENGTH = 8;
   public static Integer MARKER_TRIGGER_LENGTH = 8;
+  public static Integer MARKER_PACKAGE_LENGTH = 10;
   public static Integer MARKER_CHECK_LENGTH = 4;
   public static Integer MDR_SEPARATOR_NAMING_LENGTH = 1;
 
@@ -1059,11 +1058,13 @@ public class Preferences extends MVCCDElement {
   private MDRNamingLength MPDRORACLE_PREF_NAMING_LENGTH = null;
   private MDRCaseFormat MPDRORACLE_PREF_NAMING_FORMAT = null;
   private MDRCaseFormat MPDRORACLE_PREF_RESERDWORDS_FORMAT = null;
+  private MDRCaseFormat MPDRORACLE_PREF_OBJECTSINCODE_FORMAT = null;
   private String MPDRORACLE_DELIMITER_INSTRUCTIONS = null;
   private MPDRDBPK MPDRORACLE_PK_GENERATE = null;
   private Boolean MPDRORACLE_TAPIS = null;
   private String MPDRORACLE_SEQPK_NAME_FORMAT;
   private String MPDRORACLE_TRIGGER_NAME_FORMAT;
+  private String MPDRORACLE_PACKAGE_NAME_FORMAT;
   private String MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
   private String MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
 
@@ -1072,6 +1073,7 @@ public class Preferences extends MVCCDElement {
   private MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH = null;
   private MDRCaseFormat MPDRMYSQL_PREF_NAMING_FORMAT = null;
   private MDRCaseFormat MPDRMYSQL_PREF_RESERDWORDS_FORMAT = null;
+  private MDRCaseFormat MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT = null;
   private String MPDRMYSQL_DELIMITER_INSTRUCTIONS = null;
   private MPDRDBPK MPDRMYSQL_PK_GENERATE = null;
   private Boolean MPDRMYSQL_TAPIS = null;
@@ -1084,6 +1086,7 @@ public class Preferences extends MVCCDElement {
   private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
   private MDRCaseFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT = null;
   private MDRCaseFormat MPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT = null;
+  private MDRCaseFormat MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT = null;
   private String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS = null;
   private MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE = null;
   private Boolean MPDRPOSTGRESQL_TAPIS = null;
@@ -1876,6 +1879,18 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_PREF_RESERDWORDS_FORMAT = MPDRORACLE_PREF_RESERDWORDS_FORMAT;
   }
 
+  public MDRCaseFormat getMPDRORACLE_PREF_OBJECTSINCODE_FORMAT() {
+    if (this.MPDRORACLE_PREF_OBJECTSINCODE_FORMAT == null) {
+      this.MPDRORACLE_PREF_OBJECTSINCODE_FORMAT = MDRCaseFormat.LIKEBD;
+    }
+    return MPDRORACLE_PREF_OBJECTSINCODE_FORMAT;
+  }
+
+  public void setMPDRORACLE_PREF_OBJECTSINCODE_FORMAT(MDRCaseFormat MPDRORACLE_PREF_OBJECTSINCODE_FORMAT) {
+    this.MPDRORACLE_PREF_OBJECTSINCODE_FORMAT = MPDRORACLE_PREF_OBJECTSINCODE_FORMAT;
+  }
+
+  
   public String getMPDRORACLE_DELIMITER_INSTRUCTIONS() {
     if (this.MPDRORACLE_DELIMITER_INSTRUCTIONS == null) {
       this.MPDRORACLE_DELIMITER_INSTRUCTIONS = MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT;
@@ -1931,6 +1946,17 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_TRIGGER_NAME_FORMAT = MPDRORACLE_TRIGGER_NAME_FORMAT;
   }
 
+  public String getMPDRORACLE_PACKAGE_NAME_FORMAT() {
+    if (this.MPDRORACLE_PACKAGE_NAME_FORMAT == null) {
+      this.MPDRORACLE_PACKAGE_NAME_FORMAT = MPDRORACLE_PACKAGE_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRORACLE_PACKAGE_NAME_FORMAT;
+  }
+
+  public void setMPDRORACLE_PACKAGE_NAME_FORMAT(String MPDRORACLE_PACKAGE_NAME_FORMAT) {
+    this.MPDRORACLE_PACKAGE_NAME_FORMAT = MPDRORACLE_PACKAGE_NAME_FORMAT;
+  }
+
   public String getMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT() {
     if (this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT == null) {
       this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT;
@@ -1976,6 +2002,7 @@ public class Preferences extends MVCCDElement {
     this.MPDRMYSQL_PREF_NAMING_FORMAT = MPDRMYSQL_PREF_NAMING_FORMAT;
   }
 
+
   public MDRCaseFormat getMPDRMYSQL_PREF_RESERDWORDS_FORMAT() {
     if (this.MPDRMYSQL_PREF_RESERDWORDS_FORMAT == null) {
       this.MPDRMYSQL_PREF_RESERDWORDS_FORMAT = MDRCaseFormat.NOTHING;
@@ -1985,6 +2012,17 @@ public class Preferences extends MVCCDElement {
 
   public void setMPDRMYSQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat MPDRMYSQL_PREF_RESERDWORDS_FORMAT) {
     this.MPDRMYSQL_PREF_RESERDWORDS_FORMAT = MPDRMYSQL_PREF_RESERDWORDS_FORMAT;
+  }
+  
+  public MDRCaseFormat getMPDRMYSQL_PREF_OBJECTSINCODE_FORMAT() {
+    if (this.MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT == null) {
+      this.MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT = MDRCaseFormat.NOTHING;
+    }
+    return MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT;
+  }
+
+  public void setMPDRMYSQL_PREF_OBJECTSINCODE_FORMAT(MDRCaseFormat MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT) {
+    this.MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT = MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT;
   }
 
   public String getMPDRMYSQL_DELIMITER_INSTRUCTIONS() {
@@ -2099,6 +2137,17 @@ public class Preferences extends MVCCDElement {
 
   public void setMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat MPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT) {
     this.MPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT = MPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT;
+  }
+
+  public MDRCaseFormat getMPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT() {
+    if (this.MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT == null) {
+      this.MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT = MDRCaseFormat.LIKEBD;
+    }
+    return MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT;
+  }
+
+  public void setMPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT(MDRCaseFormat MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT) {
+    this.MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT = MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT;
   }
 
   public String getMPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS() {

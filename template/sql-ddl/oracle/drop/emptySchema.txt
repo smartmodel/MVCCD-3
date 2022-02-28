@@ -29,7 +29,7 @@ BEGIN
 	drops_select := q'$SELECT 'DROP ' || object_type || ' ' || object_name   || ''
                     FROM user_objects
                     WHERE (object_type IN ('SEQUENCE', 'TRIGGER', 'PACKAGE',
-					'FUNCTION', 'VIEW', 'DATABASE LINK', 'SYNONYM')
+					'FUNCTION', 'VIEW', 'DATABASE LINK', 'SYNONYM', 'INDEX')
                     OR (( object_type = 'PROCEDURE') AND (object_name != Upper('{emptySchema}'))))$';
 
 

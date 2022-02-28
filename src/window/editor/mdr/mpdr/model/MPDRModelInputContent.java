@@ -39,6 +39,12 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     private JLabel labelReservedWordsFormatActual;
     private STextField fieldReservedWordsFormatActual;
 
+    private JPanel panelObjectsInCode = new JPanel ();
+    private JLabel labelObjectsInCodeFormatFuture;
+    protected SComboBox fieldObjectsInCodeFormatFuture;
+    private JLabel labelObjectsInCodeFormatActual;
+    private STextField fieldObjectsInCodeFormatActual;
+
 
     protected JLabel labelSchema;
     protected STextField fieldSchema;
@@ -105,10 +111,28 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         fieldReservedWordsFormatFuture.addItem(MDRCaseFormat.LOWERCASE.getText());
         fieldReservedWordsFormatFuture.addItem(MDRCaseFormat.LIKEBD.getText());
 
-
-        fieldReservedWordsFormatFuture.setToolTipText("Casse de caractères appliqué à tous les objets du modèles");
+        fieldReservedWordsFormatFuture.setToolTipText("Casse de caractères appliqué à tous les objets du modèle");
         fieldReservedWordsFormatFuture.addItemListener(this);
         fieldReservedWordsFormatFuture.addFocusListener(this);
+
+
+        labelObjectsInCodeFormatActual = new JLabel("Casse de caractères en préférence");
+        fieldObjectsInCodeFormatActual = new STextField (this, labelObjectsInCodeFormatActual);
+        fieldObjectsInCodeFormatActual.getDocument().addDocumentListener(this);
+        fieldObjectsInCodeFormatActual.addFocusListener(this);
+        fieldObjectsInCodeFormatActual.setReadOnly(true);
+
+        labelObjectsInCodeFormatFuture = new JLabel("Casse de caractères propre au modèle");
+        fieldObjectsInCodeFormatFuture = new SComboBox(this, labelObjectsInCodeFormatFuture);
+        fieldObjectsInCodeFormatFuture.addItem(MDRCaseFormat.NOTHING.getText());
+        fieldObjectsInCodeFormatFuture.addItem(MDRCaseFormat.UPPERCASE.getText());
+        fieldObjectsInCodeFormatFuture.addItem(MDRCaseFormat.LOWERCASE.getText());
+        fieldObjectsInCodeFormatFuture.addItem(MDRCaseFormat.LIKEBD.getText());
+
+
+        fieldObjectsInCodeFormatFuture.setToolTipText("Casse de caractères appliqué à tous les objets de programmation du modèle");
+        fieldObjectsInCodeFormatFuture.addItemListener(this);
+        fieldObjectsInCodeFormatFuture.addFocusListener(this);
 
 
         labelSchema = new JLabel("Schéma : ");
@@ -160,6 +184,8 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         super.getSComponents().add(fieldConnectionURL);
         super.getSComponents().add(fieldReservedWordsFormatActual);
         super.getSComponents().add(fieldReservedWordsFormatFuture);
+        super.getSComponents().add(fieldObjectsInCodeFormatActual);
+        super.getSComponents().add(fieldObjectsInCodeFormatFuture);
         super.getSComponents().add(fieldSchema);
         super.getSComponents().add(fieldDropBeforeCreate);
         super.getSComponents().add(fieldMPDRDbPK);
@@ -171,11 +197,16 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     protected void createPanelMaster(GridBagConstraints gbc) {
         super.createPanelMaster(gbc);
 
+        gbc.gridwidth = 4;
         gbc.gridx = 0;
         gbc.gridy++;
-        gbc.gridwidth = 4;
         createPanelReservedWords();
         panelInputContentCustom.add(panelReservedWords, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        createPanelObjectsInCode();
+        panelInputContentCustom.add(panelObjectsInCode, gbc);
         gbc.gridwidth = 1;
 
         if (conDB == ConDB.POSTGRESQL) {
@@ -254,6 +285,22 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
     }
 
 
+
+    private void createPanelObjectsInCode() {
+        GridBagConstraints gbcA = PanelService.createSubPanelGridBagConstraints(panelObjectsInCode,
+                "Ecriture des objets de programmation du SGBD-R");
+
+        panelObjectsInCode.add(labelObjectsInCodeFormatActual, gbcA);
+        gbcA.gridx++;
+        panelObjectsInCode.add(fieldObjectsInCodeFormatActual, gbcA);
+
+        gbcA.gridx++;
+        panelObjectsInCode.add(labelObjectsInCodeFormatFuture, gbcA);
+        gbcA.gridx++;
+        panelObjectsInCode.add(fieldObjectsInCodeFormatFuture, gbcA);
+    }
+
+
     @Override
     public void loadDatas(MVCCDElement mvccdElementCrt) {
         super.loadDatas(mvccdElementCrt);
@@ -270,7 +317,8 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
         }
         fieldReservedWordsFormatActual.setText(mpdrModel.getReservedWordsFormatForDB().getText());
         SComboBoxService.selectByText(fieldReservedWordsFormatFuture, mpdrModel.getReservedWordsFormatForDB().getText());
-
+        fieldObjectsInCodeFormatActual.setText(mpdrModel.getObjectsInCodeFormatForDB().getText());
+        SComboBoxService.selectByText(fieldObjectsInCodeFormatFuture, mpdrModel.getObjectsInCodeFormatForDB().getText());
     }
 
 
@@ -301,6 +349,15 @@ public abstract class MPDRModelInputContent extends MDRModelInputContent  {
             for (MDRCaseFormat mdrCaseFormat : MDRCaseFormat.values()) {
                 if (text.equals(mdrCaseFormat.getText())) {
                     mpdrModel.setReservedWordsFormatFuture(mdrCaseFormat);
+                }
+            }
+        }
+
+        if (fieldObjectsInCodeFormatFuture.checkIfUpdated()) {
+            String text = (String) fieldObjectsInCodeFormatFuture.getSelectedItem();
+            for (MDRCaseFormat mdrCaseFormat : MDRCaseFormat.values()) {
+                if (text.equals(mdrCaseFormat.getText())) {
+                    mpdrModel.setObjectsInCodeFormatFuture(mdrCaseFormat);
                 }
             }
         }

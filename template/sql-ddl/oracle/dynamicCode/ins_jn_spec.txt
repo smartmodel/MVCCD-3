@@ -1,0 +1,2 @@
+PROCEDURE {ins_jn} ({pi_crtrec} IN {tableName}%ROWTYPE
+    , {pi_mode} IN VARCHAR2);

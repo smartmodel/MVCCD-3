@@ -91,6 +91,7 @@ public class MLDRTransform extends MDTransform {
             mpdrOracleModel.setTapis(preferences.getMPDRORACLE_TAPIS());
             mpdrOracleModel.setSequencePKNameFormat(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
             mpdrOracleModel.setTriggerNameFormat(preferences.getMPDRORACLE_TRIGGER_NAME_FORMAT());
+            mpdrOracleModel.setPackageNameFormat(preferences.getMPDRORACLE_PACKAGE_NAME_FORMAT());
             mpdrOracleModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT());
             mpdrOracleModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
             return mpdrOracleModel;
