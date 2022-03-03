@@ -1,5 +1,18 @@
 package window.editor.diagrammer.listeners;
 
+import java.awt.Cursor;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.geom.Line2D;
+import java.io.Serializable;
+import java.util.ListIterator;
+import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 import main.MVCCDManager;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
@@ -14,14 +27,9 @@ import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.RelationCreator;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.Line2D;
-import java.util.ListIterator;
+public class DrawPanelListener extends MouseAdapter implements KeyListener, Serializable {
 
-public class DrawPanelListener extends MouseAdapter implements KeyListener {
-
+  private static final long serialVersionUID = 1000;
   private final Cursor CURSOR_ENTITY_ICON;
   private boolean ctrlKeyPressed = false;
   private boolean mouseWheelPressed = false;
@@ -198,7 +206,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener {
     final MCDEntityShape shape = new MCDEntityShape();
 
     shape.setLocation(GridUtils.alignToGrid(mouseClick.x, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(mouseClick.y, DiagrammerService.getDrawPanel().getGridSize()));
-
 
     MVCCDManager.instance().getCurrentDiagram().addShape(shape);
     DiagrammerService.getDrawPanel().addShape(shape);

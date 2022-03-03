@@ -1,14 +1,16 @@
 package window.editor.diagrammer.drawpanel;
 
+import java.awt.Dimension;
+import java.io.Serializable;
+import javax.swing.JScrollPane;
 import preferences.Preferences;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * Cette classe représente le composant du diagrammer. Le DrawPanelComponent est un JScrollPane dont la vue est un DrawPanel (la zone de dessin).
  */
-public class DrawPanelComponent extends JScrollPane {
+public class DrawPanelComponent extends JScrollPane implements Serializable {
+
+  private static final long serialVersionUID = 1000;
 
   public DrawPanelComponent(DrawPanel drawPanel) {
     super(drawPanel);

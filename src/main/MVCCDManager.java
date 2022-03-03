@@ -8,6 +8,10 @@ import console.WarningLevel;
 import datatypes.MDDatatypesManager;
 import diagram.Diagram;
 import exceptions.CodeApplException;
+import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import main.window.console.WinConsoleContent;
 import main.window.diagram.WinDiagram;
 import main.window.diagram.WinDiagrammer;
@@ -19,8 +23,11 @@ import mcd.MCDRelEnd;
 import mcd.MCDRelation;
 import messages.LoadMessages;
 import messages.MessagesBuilder;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import preferences.PreferencesOfApplicationLoaderXml;
 import project.*;
 import repository.Repository;
 import utilities.files.UtilFiles;
@@ -98,7 +105,15 @@ public class MVCCDManager {
 
 
         // Création du référentiel
-        startRepository();
+        try {
+            startRepository();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
 
         // Ajustement de la taille de la zone d'affichage du référentiel
         mvccdWindow.adjustPanelRepository();
@@ -127,11 +142,14 @@ public class MVCCDManager {
     /**
      * Créé le référentiel et l'affiche à l'écran d'accueil.
      */
-    private void startRepository() {
+    private void startRepository() throws ParserConfigurationException, IOException, SAXException {
         // Création de l'élément root du référentiel
         rootMVCCDElement = MVCCDFactory.instance().createRepositoryRoot();
         // Création des types de données
         MDDatatypesManager.instance().mdDatatypes();
+
+
+
         // Création du noeud root de l'arbre du référentiel
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootMVCCDElement);
         // Création du référentiel

@@ -1,16 +1,18 @@
 package window.editor.diagrammer.menus.actions;
 
+import java.awt.event.ActionEvent;
+import java.io.Serializable;
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-
-public class MCDEntityShapeEditAction extends AbstractAction {
+public class MCDEntityShapeEditAction extends AbstractAction implements Serializable {
 
   private final MCDEntityShape shape;
+  private static final long serialVersionUID = 1000;
 
   public MCDEntityShapeEditAction(String name, Icon icon, MCDEntityShape shape) {
     super(name, icon);
@@ -20,10 +22,11 @@ public class MCDEntityShapeEditAction extends AbstractAction {
   @Override
   public void actionPerformed(ActionEvent e) {
 
-    if (this.shape.getEntity() != null)
+    if (this.shape.getEntity() != null) {
       this.edit();
-    else
+    } else {
       this.create();
+    }
 
     // Affiche les diverses informations de l'entité
     shape.refreshInformations();

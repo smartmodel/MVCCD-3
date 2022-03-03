@@ -1,14 +1,15 @@
 package window.editor.diagrammer.listeners;
 
-import window.editor.diagrammer.elements.shapes.relations.LabelShape;
-
-import java.awt.*;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
+import window.editor.diagrammer.elements.shapes.relations.LabelShape;
 
-public class LabelShapeListener extends MouseAdapter {
+public class LabelShapeListener extends MouseAdapter implements Serializable {
 
-  Point origin;
+  private static final long serialVersionUID = 1000;
+  private Point origin;
 
   @Override
   public void mousePressed(MouseEvent e) {

@@ -1,15 +1,16 @@
 package window.editor.diagrammer.listeners;
 
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.Serializable;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.utils.RelationCreator;
 
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+public class ClassShapeListener extends MouseAdapter implements Serializable {
 
-public class ClassShapeListener extends MouseAdapter {
-
+  private static final long serialVersionUID = 1000;
   private final ClassShape shape;
 
   public ClassShapeListener(ClassShape shape) {

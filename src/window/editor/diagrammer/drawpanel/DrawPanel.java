@@ -2,6 +2,23 @@ package window.editor.diagrammer.drawpanel;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
@@ -15,18 +32,12 @@ import window.editor.diagrammer.listeners.DrawPanelListener;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.RelationCreator;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Représente la zone de dessin du diagrammeur. C'est sur ce composant que la grille sera dessinée et que les éléments graphiques sont ajoutés (entités, relations, ...)
  */
-public class DrawPanel extends JLayeredPane {
+public class DrawPanel extends JLayeredPane implements Serializable {
 
+  private static final long serialVersionUID = 1000;
   private final Point origin;
   private List<IShape> shapes;
   private int gridSize = Preferences.DIAGRAMMER_DEFAULT_GRID_SIZE;
@@ -70,10 +81,10 @@ public class DrawPanel extends JLayeredPane {
     }
   }
 
-  public MCDEntityShape getMcdEntityShapeById(int id){
-    for (ClassShape shape : this.getClassShapes()){
-      if (shape instanceof MCDEntityShape){
-        if (shape.getId() == id){
+  public MCDEntityShape getMcdEntityShapeById(int id) {
+    for (ClassShape shape : this.getClassShapes()) {
+      if (shape instanceof MCDEntityShape) {
+        if (shape.getId() == id) {
           return (MCDEntityShape) shape;
         }
       }
@@ -109,16 +120,16 @@ public class DrawPanel extends JLayeredPane {
   }
 
   public void addShape(IShape element) {
-      if (element != null) {
-        this.add((JComponent) element);
-        this.shapes.add(element);
-        this.repaint();
-      } else {
-        DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.add.null.element"));
-      }
+    if (element != null) {
+      this.add((JComponent) element);
+      this.shapes.add(element);
+      this.repaint();
+    } else {
+      DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.add.null.element"));
+    }
   }
 
-  public void loadShapes(List<IShape> shapes){
+  public void loadShapes(List<IShape> shapes) {
     this.shapes.addAll(shapes);
     for (IShape shape : shapes) {
       this.add((JComponent) shape);
@@ -152,7 +163,7 @@ public class DrawPanel extends JLayeredPane {
     this.repaint();
   }
 
-  public void unloadAllShapes(){
+  public void unloadAllShapes() {
     removeAll();
     shapes.clear();
     revalidate();
@@ -181,8 +192,8 @@ public class DrawPanel extends JLayeredPane {
     }
   }
 
-  public void repaintElements(){
-    for (IShape shape : getShapes()){
+  public void repaintElements() {
+    for (IShape shape : getShapes()) {
       shape.repaint();
     }
   }
@@ -395,10 +406,10 @@ public class DrawPanel extends JLayeredPane {
     return relations;
   }
 
-  public List<ClassShape> getClassShapes(){
+  public List<ClassShape> getClassShapes() {
     List<ClassShape> classShapes = new ArrayList<>();
-    for (IShape shape : this.shapes){
-      if (shape instanceof ClassShape){
+    for (IShape shape : this.shapes) {
+      if (shape instanceof ClassShape) {
         classShapes.add((ClassShape) shape);
       }
     }

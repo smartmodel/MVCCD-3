@@ -1,16 +1,21 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.io.Serializable;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
 
-import javax.swing.*;
-import java.awt.*;
+public class LabelShape extends JLabel implements Serializable {
 
-public class LabelShape extends JLabel {
-
+  private static final long serialVersionUID = 1000;
   private final int MARGIN = 20;
   private int distanceInXFromPointAncrage;
   private int distanceInYFromPointAncrage;
@@ -43,14 +48,11 @@ public class LabelShape extends JLabel {
     DiagrammerService.getDrawPanel().repaint();
   }
 
-
-
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     Graphics2D graphics2D = (Graphics2D) g;
     Dimension size = this.calculateSize(graphics2D);
-
 
     this.setBounds(pointAncrage.getBounds().x + distanceInXFromPointAncrage, pointAncrage.getBounds().y + distanceInYFromPointAncrage, size.width, size.height);
 
@@ -63,7 +65,6 @@ public class LabelShape extends JLabel {
     this.setVerticalAlignment(SwingConstants.CENTER);
     this.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
   }
-
 
   private void addListeners() {
     LabelShapeListener listener = new LabelShapeListener();
@@ -178,12 +179,13 @@ public class LabelShape extends JLabel {
         return new Point(this.pointAncrage.x + this.distanceInXFromPointAncrage, this.pointAncrage.y + this.distanceInYFromPointAncrage);
       }
     } else {
-      if (this.relationShape.isFirstPoint(this.pointAncrage))
+      if (this.relationShape.isFirstPoint(this.pointAncrage)) {
         return this.calculateSourceInformationsFirstDisplay();
-      else if (this.relationShape.isLastPoint(this.pointAncrage))
+      } else if (this.relationShape.isLastPoint(this.pointAncrage)) {
         return this.calculateDestionationInformationsFirstDisplay();
-      else
+      } else {
         return this.relationShape.getCenter();
+      }
     }
   }
 
@@ -203,7 +205,7 @@ public class LabelShape extends JLabel {
     this.distanceInYFromPointAncrage = distanceInYFromPointAncrage;
   }
 
-  public String getXmlTagName(){
+  public String getXmlTagName() {
     return Preferences.DIAGRAMMER_LABEL_XML_TAG;
   }
 

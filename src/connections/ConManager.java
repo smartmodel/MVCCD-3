@@ -6,6 +6,7 @@ import connections.services.ConnectionsService;
 import console.ViewLogsManager;
 import console.WarningLevel;
 import exceptions.CodeApplException;
+import java.util.List;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationConnections;
 import main.MVCCDManager;
@@ -38,7 +39,6 @@ public class ConManager {
         applicationConnections = MVCCDManager.instance().getConnectionsRoot();
         connectionsOracle = (ConnectionsOracle) getConnectionsDB(ConDB.ORACLE);
     }
-
 
 
     private ConnectionsDB getConnectionsDB(ConDB conDB) {

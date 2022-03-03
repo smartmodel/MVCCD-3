@@ -1,13 +1,15 @@
 package window.editor.diagrammer.menus;
 
+import java.io.Serializable;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.menus.actions.PointAncrageDeleteAction;
 
-import javax.swing.*;
+public class PointAncrageMenu extends JPopupMenu implements Serializable {
 
-public class PointAncrageMenu extends JPopupMenu {
-
+  private static final long serialVersionUID = 1000;
   private final RelationPointAncrageShape shape;
   private final RelationShape relation;
 
