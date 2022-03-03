@@ -1,0 +1,2 @@
+{pio_crtrec}.{auditAjUserName} := user;
+{pio_crtrec}.{auditAjDateName} := sysdate;

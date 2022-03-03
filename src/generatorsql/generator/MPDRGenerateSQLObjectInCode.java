@@ -12,6 +12,7 @@ public enum MPDRGenerateSQLObjectInCode {
     PIO_OLDREC("pio_oldrec", null, null, null),
     PI_CRTREC("pi_crtrec", null, null, null),
     PI_MODE("pi_mode", null, null, null),
+    PI_VALUE("pi_value", null, null, null),
     VL_NEWREC("vl_newrec", null, null, null),
     AUTOGEN_COLUMN("autogen_column", null, null, null),
     AUTOGEN_COLUMN_INS("autogen_column_ins", null, null, null),
@@ -28,8 +29,10 @@ public enum MPDRGenerateSQLObjectInCode {
     DEL("del", null, null, null),
     TYPE_("type_", null, null, null),
     VG_("vg_", null, null, null),
-    VG_INSTEADOF_CALL("vg_insteadof_call", null, null, null);
-
+    VG_INSTEADOF_CALL("vg_insteadof_call", null, null, null),
+    CHECK_NORMALIZED_STRING("check_normalized_string", null, null, null),
+    CHECK_TOKEN("check_token", null, null, null),
+    CHECK_WORD("check_word", null, null, null);
 
     private String key;
     private String oracleName;

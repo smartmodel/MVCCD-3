@@ -1,0 +1,5 @@
+IF {pio_crtrec}.{columnPKName} IS NULL THEN
+    SELECT {sequenceName}.NEXTVAL
+    INTO {pio_crtrec}.{columnPKName}
+    FROM DUAL;
+END IF;

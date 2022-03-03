@@ -51,9 +51,6 @@ public abstract class MPDRGenerateSQLTrigger {
             }
         }
 
-        // Traitement du code dynamique
-        generateSQLCode = getMPDRGenerateSQL().getMpdrGenerateSQLCodeDynamic().generateSQLCodeDynamic(mpdrTrigger, generateSQLCode);
-
         // les noms d'objets doivent être traités après le code dynamique qui peut y référer
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD,
                 mpdrTrigger.getMPDRTableAccueil().getName());

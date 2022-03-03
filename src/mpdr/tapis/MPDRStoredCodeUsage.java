@@ -5,7 +5,8 @@ import preferences.Preferences;
 
 public enum MPDRStoredCodeUsage {
     TAPIS (Preferences.MPDR_STOREDCODE_USAGE_TAPIS),
-    WITHOUTTAPIS (Preferences.MPDR_STOREDCODE_USAGE_WITHOUT_TAPIS);
+    WITHOUTTAPIS (Preferences.MPDR_STOREDCODE_USAGE_WITHOUT_TAPIS),
+    RESOURCES (Preferences.MPDR_STOREDCODE_USAGE_RESOURCES);
 
     private final String name;
 

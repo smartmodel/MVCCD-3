@@ -804,6 +804,12 @@ public class Preferences extends MVCCDElement {
   public static String MCD_ATTRIBUTE_SHORT_NAME_WORD = "mcdAttrShortName";
   public static String MDR_CHECK_NAME_WORD =  "checkName";
   public static String MDR_CHECK_EXPRESSION_WORD =  "checkExpression";
+  public static String MPDR_COLUMN_AUDIT_AJUSER_NAME_WORD = "auditAjUserName";
+  public static String MPDR_COLUMN_AUDIT_AJDATE_NAME_WORD = "auditAjDateName";
+  public static String MPDR_COLUMN_AUDIT_MOUSER_NAME_WORD = "auditMoUserName";
+  public static String MPDR_COLUMN_AUDIT_MODATE_NAME_WORD = "auditMoDateName";
+  public static String MDR_COLUMN_LIEN_PROG_NAME_WORD =  "columnTargetLienProgName";
+
   public static String MPDR_INDEX_NAME_WORD =  "indexName";
 
   public static String MPDR_CHECK_PARAM_EXPRESSION_NAME = "expr";  // Le nom du paramètre qui contient l'expression'
@@ -819,9 +825,16 @@ public class Preferences extends MVCCDElement {
 
   public static String MPDR_STOREDCODE_USAGE_TAPIS = "mpdr.storedcode.usage.tapis";
   public static String MPDR_STOREDCODE_USAGE_WITHOUT_TAPIS = "mpdr.storedcode.usage.without.tapis";
+  public static String MPDR_STOREDCODE_USAGE_RESOURCES = "mpdr.storedcode.usage.resources";
   public static String MPDR_STOREDCODE_SCOPE_TABLE = "mpdr.storedcode.scope.table";
   public static String MPDR_STOREDCODE_SCOPE_VIEW = "mpdr.storedcode.scope.view";
+  public static String MPDR_STOREDCODE_SCOPE_MPDR = "mpdr.storedcode.scope.mpdr";
 
+
+  public static String MPDR_COLUMN_AUDIT_AJUSER_NAME = "mpdr.column.audit.ajuser.name";
+  public static String MPDR_COLUMN_AUDIT_AJDATE_NAME = "mpdr.column.audit.ajdate.name";
+  public static String MPDR_COLUMN_AUDIT_MOUSER_NAME = "mpdr.column.audit.mouser.name";
+  public static String MPDR_COLUMN_AUDIT_MODATE_NAME = "mpdr.column.audit.modate.name";
 
   public static String MDR_COL_NAME_WORD = "colName";
   public static String MDR_COL_NAME_ONE_ANCESTOR_WORD = "colNameOneAncestor";
@@ -867,6 +880,7 @@ public class Preferences extends MVCCDElement {
 
   public static String MDR_WORDS_BEGIN = "{";
   public static String MDR_WORDS_END = "}";
+  public static String MPDR_MARKER_DYNAMIC_CODE = "-";
   public static String MDR_WORDS_PATTERN = "\\{[a-zA-Z_]+\\}";
     public static String MDR_TABLE_NAME_FORMAT_DEFAULT = "{tableName}";
     public static String MDR_TABLE_NN_NAME_FORMAT_DEFAULT = "{ATableShortName}{tableSep}{assShortName}{roleA}{roleSep}{roleB}{tableSep}{BTableShortName}";

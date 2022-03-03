@@ -4,8 +4,9 @@ import messages.MessagesBuilder;
 import preferences.Preferences;
 
 public enum MPDRStoredCodeScope {
-    TABLE (Preferences.MPDR_TRIGGER_SCOPE_TABLE),
-    VIEW (Preferences.MPDR_TRIGGER_SCOPE_VIEW);
+    TABLE (Preferences.MPDR_STOREDCODE_SCOPE_TABLE),
+    VIEW (Preferences.MPDR_STOREDCODE_SCOPE_VIEW),
+    MPDR (Preferences.MPDR_STOREDCODE_SCOPE_MPDR);
 
     private final String name;
 

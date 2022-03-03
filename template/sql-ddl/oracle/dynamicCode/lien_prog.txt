@@ -1,0 +1,3 @@
+IF {pio_crtrec}.{columnName} IS NULL THEN
+	{pio_crtrec}.{columnName} := {pio_crtrec}.{columnTargetLienProgName};
+END IF;	

@@ -1,0 +1,3 @@
+if :new.{columnName} is null then
+    set :new.{columnName} = {defaultValue};
+end if;

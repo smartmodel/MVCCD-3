@@ -1,0 +1,7 @@
+CREATE OR REPLACE PACKAGE {packageName} IS
+    PROCEDURE {check_normalized_string}({pi_value} IN VARCHAR2);
+    PROCEDURE {check_token}({pi_value} IN VARCHAR2);
+    PROCEDURE {check_word}({pi_value} IN VARCHAR2);
+
+    {co_marker_noerr} CONSTANT := '#';
+END;

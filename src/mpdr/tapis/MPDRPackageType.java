@@ -8,6 +8,10 @@ public enum MPDRPackageType {
     TAPIS_SPEC("TAPIS", "tapis_spec.txt", MPDRStoredCodeUsage.TAPIS, MPDRStoredCodeScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),
     TAPIS_BODY("TAPIS_BODY","tapis_body.txt", MPDRStoredCodeUsage.TAPIS,MPDRStoredCodeScope.TABLE,
+            new MPDRDB[]{MPDRDB.ORACLE}),
+    RESOURCES_SPEC("RESOURCES", "resources_spec.txt", MPDRStoredCodeUsage.RESOURCES, MPDRStoredCodeScope.TABLE,
+            new MPDRDB[]{MPDRDB.ORACLE}),
+    RESOURCES_BODY("RESOURCES_BODY","resources_body.txt", MPDRStoredCodeUsage.RESOURCES,MPDRStoredCodeScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE});
 
 

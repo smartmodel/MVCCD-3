@@ -9,6 +9,7 @@ import mdr.interfaces.IMDRElementWithIteration;
 import mldr.*;
 import mldr.services.MLDRModelService;
 import mpdr.*;
+import mpdr.interfaces.IMPDRModelRequirePackages;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
@@ -39,7 +40,15 @@ public class MLDRTransform extends MDTransform {
             // Au cas où il y aurait changement de préférences
             mpdrModel.adjustProperties();
 
-            // Transformation des tables
+            // Ressources pour les APIs de tables
+            if (mpdrModel.getMPDR_TAPIs()) {
+                if (mpdrModel instanceof IMPDRModelRequirePackages) {
+                    MLDRTransformResources mldrTransformResources = new MLDRTransformResources(this, mldrModel, mpdrModel);
+                    //mldrTransformResources.createOrModifyBoxPackages();
+                }
+            }
+
+                // Transformation des tables
             MLDRTransformTables mldrTransformTables = new MLDRTransformTables(this, mldrModel, mpdrModel);
             mldrTransformTables.transformTables();
 

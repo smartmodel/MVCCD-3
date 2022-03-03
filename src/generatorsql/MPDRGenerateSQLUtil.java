@@ -7,6 +7,7 @@ import mdr.services.MDRModelService;
 import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import utilities.Trace;
 import utilities.UtilDivers;
 import utilities.files.FileRead;
 import utilities.files.FileWrite;
@@ -129,9 +130,12 @@ public class MPDRGenerateSQLUtil {
 
     public static String tabsApplicable(String generateSQLCode, String marker) {
 
-        String tabsApplicable = tabsApplicableInternal(generateSQLCode, marker, "{", "}");
+        String tabsApplicable = tabsApplicableInternal(generateSQLCode, marker,
+                Preferences.MDR_WORDS_BEGIN, Preferences.MDR_WORDS_END);
         if (StringUtils.isEmpty(tabsApplicable)) {
-            tabsApplicable = tabsApplicableInternal(generateSQLCode, marker, "{-", "-}");
+            String begin = Preferences.MDR_WORDS_BEGIN + Preferences.MPDR_MARKER_DYNAMIC_CODE;
+            String end = Preferences.MDR_WORDS_END + Preferences.MPDR_MARKER_DYNAMIC_CODE;
+            tabsApplicable = tabsApplicableInternal(generateSQLCode, marker, begin, end);
         }
         return tabsApplicable;
     }
@@ -151,6 +155,20 @@ public class MPDRGenerateSQLUtil {
             }
         }
         return "";
+    }
+
+
+    public static String integreTabsApplicable(String sqlCodeDynamic, String tabsApplicable) {
+        Trace.println(sqlCodeDynamic);
+        String resultat = "";
+        String[] parts = StringUtils.split(sqlCodeDynamic, System.lineSeparator());
+        if (parts.length >= 1){
+            resultat += parts[0];
+            for (int i = 1; i < parts.length; i++ ){
+                resultat +=  System.lineSeparator() + tabsApplicable + parts[i];
+            }
+        }
+        return resultat;
     }
 
     public static String caseReservedWords(String template, MPDRModel mpdrModel) {
