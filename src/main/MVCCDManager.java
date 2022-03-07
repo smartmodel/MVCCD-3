@@ -3,15 +3,12 @@ package main;
 import connections.ConElement;
 import connections.services.ConnectionsService;
 import console.ConsoleManager;
+import console.ResultatInStart;
 import console.ViewLogsManager;
 import console.WarningLevel;
 import datatypes.MDDatatypesManager;
 import diagram.Diagram;
 import exceptions.CodeApplException;
-import java.io.IOException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import main.window.console.WinConsoleContent;
 import main.window.diagram.WinDiagram;
 import main.window.diagram.WinDiagrammer;
@@ -23,11 +20,9 @@ import mcd.MCDRelEnd;
 import mcd.MCDRelation;
 import messages.LoadMessages;
 import messages.MessagesBuilder;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import preferences.PreferencesOfApplicationLoaderXml;
 import project.*;
 import repository.Repository;
 import utilities.files.UtilFiles;
@@ -39,7 +34,9 @@ import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +74,8 @@ public class MVCCDManager {
      * Lance MVC-CD-3
      */
     public void start() {
+        // Mémorisation des éventuelles erreurs de chargement (préférences) avant que la console ne soit disponible
+        ResultatInStart resultatInStart = new ResultatInStart();
 
         // Chargement des messages de traduction
         LoadMessages.main();
@@ -84,7 +83,7 @@ public class MVCCDManager {
         //Chargement des préférences de l'application
         String message = null;
         try {
-            PreferencesManager.instance().loadOrCreateFileXMLApplicationPref(); //Ajout de Giorgio Roncallo
+            PreferencesManager.instance().loadOrCreateFileXMLApplicationPref(resultatInStart); //Ajout de Giorgio Roncallo
         } catch (Exception e){
             message = MessagesBuilder.getMessagesProperty("mvccd.treat.pref.appl.error");
         }
@@ -97,6 +96,7 @@ public class MVCCDManager {
 
         // Console disponible
         ViewLogsManager.clear();
+        resultatInStart.print();
         ViewLogsManager.printMessage("MVCCD est en cours de démarrage", WarningLevel.INFO);
         //Eventuelle erreur de chargement des préférences d'application
         if (message != null) {
@@ -128,7 +128,7 @@ public class MVCCDManager {
 
             // Ouverture du fichier
             //TODO-0 Désactivé pour Mise au point
-             openLastProject();
+            openLastProject();
         } catch (Exception e ){
             throw e ;
         }

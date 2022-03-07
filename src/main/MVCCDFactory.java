@@ -1,13 +1,14 @@
 package main;
 
-import java.io.File;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import preferences.Preferences;
 import preferences.PreferencesOfApplicationLoaderXml;
 import profile.Profile;
 import project.Project;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 
 public class MVCCDFactory {
 
@@ -57,11 +58,18 @@ public class MVCCDFactory {
     } catch (Exception e) {
       e.printStackTrace();
     }
-/*
+
+
+    //#MAJ 2022-03-03 Persistance XML des connexions
+    /*
     ConnectionsOracle applicationConnexionsOracle = new ConnectionsOracle(applicationConnexions);
     ConnectionsMySQL applicationConnexionsMySQL = new ConnectionsMySQL(applicationConnexions);
     ConnectionsPostgreSQL applicationConnexionsPostgreSQL = new ConnectionsPostgreSQL(applicationConnexions);
 
+     */
+
+
+    /*
     //TODO-0 Phase de mise au point
     ConConnectionOracle conConnectionOracleLocal = new ConConnectionOracle(applicationConnexionsOracle);
     conConnectionOracleLocal.setName("LocalTEST1");
@@ -107,7 +115,9 @@ public class MVCCDFactory {
     conConnectorPostgreSQLVM.setName("VMTEST2");
     conConnectorPostgreSQLVM.setUserName("role1");
     conConnectorPostgreSQLVM.setUserPW("role1");
-*/
+
+     */
+
     return applicationConnexions;
   }
 

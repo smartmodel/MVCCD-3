@@ -1,11 +1,12 @@
 package project;
 
 import exceptions.CodeApplException;
+import main.MVCCDManager;
+import preferences.Preferences;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import main.MVCCDManager;
-import preferences.Preferences;
 
 public class ProjectsRecentsSaver {
 
@@ -20,7 +21,6 @@ public class ProjectsRecentsSaver {
         File file = new File(Preferences.FILE_FILES_RECENTS_NAME);
         writer = new ObjectOutputStream(new FileOutputStream(file));
         writer.writeObject(projectsRecents);
-        System.out.println("Sérialization réussie !");
       } catch (Exception e) {
         throw (new CodeApplException(e));    // L'erreur est renvoyée
       } finally {

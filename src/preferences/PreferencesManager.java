@@ -1,5 +1,7 @@
 package preferences;
 
+import console.ResultatInStart;
+import console.ResultatInStartElement;
 import console.ViewLogsManager;
 import console.WarningLevel;
 import exceptions.CodeApplException;
@@ -140,13 +142,12 @@ public class PreferencesManager {
         }
         // Fin provisoire !
 
-        // Pour le moment pas de changement possible pour un projet existant
+         // Pour le moment pas de changement possible pour un projet existant
         // A analyser et reprendre plus tard
         if (projectState == Project.NEW) {
             projectPref.setREPOSITORY_MCD_MODELS_MANY(applicationPref.getREPOSITORY_MCD_MODELS_MANY());
         }
-
-        projectPref.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
+       projectPref.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(applicationPref.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
     }
 
     public void copyProfilePref() {
@@ -262,7 +263,7 @@ public class PreferencesManager {
      * Cette méthode est créée dans le cadre de la persistance XML au lieu et place de la persistance avec sérialisation.
      * @author Giorgio Roncallo
      */
-    public void loadOrCreateFileXMLApplicationPref() {
+    public void loadOrCreateFileXMLApplicationPref(ResultatInStart resultatInStart) {
         try {
             applicationPref = new PreferencesOfApplicationLoaderXml().loadFileApplicationPref();
         } catch (Exception eLoad) {
@@ -272,12 +273,24 @@ public class PreferencesManager {
                 String message= "";
                 if (eLoad instanceof FileNotFoundException ){
                     message = MessagesBuilder.getMessagesProperty("pref.appl.load.not.file.error");
+                    resultatInStart.add (new ResultatInStartElement(message, false));
                 } else  if (eLoad instanceof CodeApplException){
                     message = MessagesBuilder.getMessagesProperty("pref.appl.load.file.corrupt.error");
+                    resultatInStart.add (new ResultatInStartElement(message, true));
                 } else {
                     message = MessagesBuilder.getMessagesProperty("pref.appl.load.error");
+                    resultatInStart.add (new ResultatInStartElement(message, true));
                 }
+
+                //#MAJ 2022-03-04B Traitement d'erreur tant que MVC-CD n'est pas complètement chargé
+                // Pas d'affichage utilisateur possible!
+                // Mise en place de ResultatInStart ci-dessus
+                /*
+                ViewLogsManager.printMessageAndDialog(MVCCDManager.instance().getMvccdWindow(),
+                message, WarningLevel.INFO);
                 ViewLogsManager.catchException(eLoad, message);
+                */
+                //System.out.println(message);
 
                 applicationPref = new Preferences(null, null);
                 new PreferencesOfApplicationSaverXml().createFileApplicationPref();

@@ -1,10 +1,6 @@
 package preferences;
 
-import connections.ConConnection;
-import connections.ConConnector;
-import connections.ConDB;
-import connections.ConDBMode;
-import connections.ConIDDBName;
+import connections.*;
 import connections.mysql.ConnectionsMySQL;
 import connections.oracle.ConConnectionOracle;
 import connections.oracle.ConConnectorOracle;
@@ -13,9 +9,10 @@ import connections.postgresql.ConConnectionPostgreSQL;
 import connections.postgresql.ConConnectorPostgreSQL;
 import connections.postgresql.ConnectionsPostgreSQL;
 import console.WarningLevel;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import main.MVCCDElementApplicationConnections;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,13 +21,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import main.MVCCDElementApplicationConnections;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Cette classe fournit le nécessaire pour charger les préférences d'application sauvegardées dans le fichier des préférences XML (application.pref). Les préférences sont récupérées de ce fichier et sont affectées aux préférences d'application existantes dans Preferences.java.
@@ -38,7 +30,7 @@ import org.xml.sax.SAXException;
  */
 public class PreferencesOfApplicationLoaderXml {
 
-  public Preferences loadFileApplicationPref() throws FileNotFoundException {
+  public Preferences loadFileApplicationPref() throws IOException, SAXException, ParserConfigurationException {
     Preferences applicationPrefs = new Preferences(null, null);
     try {
 
@@ -92,18 +84,19 @@ public class PreferencesOfApplicationLoaderXml {
       // Validation du fichier
       validator.validate(new DOMSource(document));
 
-    } catch (FileNotFoundException e) {
-      // throw (e);
-    } catch (ParserConfigurationException | IOException | SAXException e) {
-      // throw new CodeApplException(e);
+    } catch (Exception e) {
+      //throw new CodeApplException("Erreur de lecture du fichier de préférences");
+      throw e;
     }
     return applicationPrefs;
   }
 
-  public static void loadConnections(Document document, MVCCDElementApplicationConnections applicationConnections) {
+  public static void loadConnections(Document document, MVCCDElementApplicationConnections applicationConnections) throws ParserConfigurationException, IOException, SAXException {
+
     // On récupère toutes les balise connection
     NodeList allConnectionTags = document.getElementsByTagName("connection");
 
+    //#MAJ 2022-03-03 Persistance XML des connexions
     ConnectionsOracle applicationConnexionsOracle = new ConnectionsOracle(applicationConnections);
     ConnectionsPostgreSQL applicationConnexionsPostgreSQL = new ConnectionsPostgreSQL(applicationConnections);
     ConnectionsMySQL applicationConnexionsMySQL = new ConnectionsMySQL(applicationConnections);
@@ -135,6 +128,8 @@ public class PreferencesOfApplicationLoaderXml {
         }
 
         ConConnection connection = null;
+
+        //#MAJ 2022-03-03 Persistance XML des connexions
 
         // Oracle
         if (constructorName.equals(ConDB.ORACLE.getLienProg())) {

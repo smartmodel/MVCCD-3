@@ -130,17 +130,17 @@ public class ViewLogsManager {
 
 
     public static void catchException(Exception e, String message){
-        /*
-        StackTraceElement[] stackTrace = e.getStackTrace();
-        if (stackTrace.length > 0){
-            ViewLogsManager.printMessage(stackTrace[0].toString(), WarningLevel.INFO);
 
-        }
-        */
-        ViewLogsManager.printMessage(message, WarningLevel.INFO);
-        if (StringUtils.isNotEmpty(e.getMessage())) {
-            ViewLogsManager.printMessage(e.getMessage(), WarningLevel.INFO);
-            System.out.println(e.getMessage());
+        //#MAJ 2022-03-04B Traitement d'erreur tant que MVC-CD n'est pas complètement chargé
+        try {
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+            if (StringUtils.isNotEmpty(e.getMessage())) {
+                ViewLogsManager.printMessage(e.getMessage(), WarningLevel.INFO);
+                System.out.println(e.getMessage());
+            }
+        } catch(Exception eViewLog) {
+            // Pas d'info utilisateur tant que tout n'est pas chargé via ViewLogsManager.
+            System.out.println(message);
         }
         System.out.println(e.toString());
         e.printStackTrace();

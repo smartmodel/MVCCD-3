@@ -14,6 +14,8 @@ import main.MVCCDElement;
 import mcd.services.MCDUtilService;
 import messages.MessagesBuilder;
 import preferences.Preferences;
+import preferences.PreferencesOfApplicationSaverXml;
+import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.*;
@@ -599,6 +601,11 @@ public abstract class ConConnectionInputContent extends PanelInputContent implem
         if (fieldConfExecScript.checkIfUpdated()){
             conConnection.setConfExecScript(fieldConfExecScript.isSelected());
         }
+
+        // Sauvegarde (fichier) des préférences d'application
+        new PreferencesOfApplicationSaverXml().createFileApplicationPref();
+        String message = MessagesBuilder.getMessagesProperty("preferences.connections.saved");
+        new DialogMessage().showOk(getEditor(), message);
     }
 
     @Override

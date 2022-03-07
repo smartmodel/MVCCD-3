@@ -8,7 +8,10 @@ import connections.services.ConConnectorService;
 import exceptions.service.ExceptionService;
 import main.MVCCDElement;
 import mcd.services.MCDUtilService;
+import messages.MessagesBuilder;
 import preferences.Preferences;
+import preferences.PreferencesOfApplicationSaverXml;
+import utilities.window.DialogMessage;
 import utilities.window.editor.DialogEditor;
 import utilities.window.editor.PanelInputContent;
 import utilities.window.scomponents.*;
@@ -337,6 +340,13 @@ public abstract class ConConnectorInputContent extends PanelInputContent impleme
         if (fieldSaveUserPW.checkIfUpdated()){
             conConnector.setSavePW(fieldSaveUserPW.isSelected());
         }
+
+
+        // Sauvegarde (fichier) des préférences d'application
+        new PreferencesOfApplicationSaverXml().createFileApplicationPref();
+        String message = MessagesBuilder.getMessagesProperty("preferences.connectors.saved");
+        new DialogMessage().showOk(getEditor(), message);
+
     }
 
     @Override

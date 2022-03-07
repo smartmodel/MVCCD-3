@@ -1,16 +1,18 @@
 package connections;
 
 import connections.interfaces.IConConnectionOrConnector;
+import connections.mysql.ConnectionsMySQL;
 import connections.oracle.ConnectionsOracle;
+import connections.postgresql.ConnectionsPostgreSQL;
 import connections.services.ConnectionsService;
 import console.ViewLogsManager;
 import console.WarningLevel;
 import exceptions.CodeApplException;
-import java.util.List;
 import main.MVCCDElement;
 import main.MVCCDElementApplicationConnections;
 import main.MVCCDManager;
 import preferences.Preferences;
+import utilities.Trace;
 
 import java.io.File;
 import java.net.URL;
@@ -26,6 +28,8 @@ public class ConManager {
     private static ConManager instance;
     private MVCCDElementApplicationConnections applicationConnections;
     private ConnectionsOracle connectionsOracle;
+    private ConnectionsMySQL connectionsMySQL;
+    private ConnectionsPostgreSQL connectionsPostgreSQL;
 
     public static synchronized ConManager instance() {
 
@@ -38,6 +42,8 @@ public class ConManager {
     public ConManager() {
         applicationConnections = MVCCDManager.instance().getConnectionsRoot();
         connectionsOracle = (ConnectionsOracle) getConnectionsDB(ConDB.ORACLE);
+        connectionsMySQL = (ConnectionsMySQL) getConnectionsDB(ConDB.MYSQL);
+        connectionsPostgreSQL = (ConnectionsPostgreSQL) getConnectionsDB(ConDB.POSTGRESQL);
     }
 
 
@@ -105,6 +111,7 @@ public class ConManager {
     public ArrayList<ConElement> getConElements() {
         ArrayList<ConElement> resultat = new ArrayList<ConElement>();
         for (ConDB conDB : ConDB.values()) {
+            Trace.println(conDB.getText());
             resultat.addAll(getConElements(conDB));
         }
         return resultat;

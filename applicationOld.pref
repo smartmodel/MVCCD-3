@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<applicationPreferences>
+    <preferences>
+        <debug>false</debug>
+        <debugBackgroudPanel>false</debugBackgroudPanel>
+        <debugPrintMvccdElement>false</debugPrintMvccdElement>
+        <debugShowTableColHidden>false</debugShowTableColHidden>
+        <debugInspectObjectInTree>false</debugInspectObjectInTree>
+        <debugEditorDatasChanged>false</debugEditorDatasChanged>
+        <debugTdPrint>false</debugTdPrint>
+        <debugTdUnicityPrint>false</debugTdUnicityPrint>
+        <warningLevel>warning.level.details</warningLevel>
+        <conDBMode>con.db.mode.connection</conDBMode>
+        <repositoryMcdModelsMany>false</repositoryMcdModelsMany>
+        <repositoryMcdPackagesAuthorizeds>false</repositoryMcdPackagesAuthorizeds>
+        <persistenceSerialisationInsteadofXML>false</persistenceSerialisationInsteadofXML>
+        <showDiagrammerGrid>true</showDiagrammerGrid>
+    </preferences>
+</applicationPreferences>

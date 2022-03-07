@@ -3,12 +3,13 @@ package preferences;
 import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConDB;
-import connections.ConElement;
 import connections.ConManager;
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import console.ViewLogsManager;
+import exceptions.CodeApplException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import utilities.files.TranformerForXml;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,9 +17,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import utilities.files.TranformerForXml;
+import java.io.File;
+import java.util.List;
 
 /**
  * Cette classe fournit le nécessaire pour sauvegarder les préférences d'application dans le fichier XML application.pref. Cette méthode de sauvegarde vise à remplacer la sauvegarde dans un fichier sérialisé.
@@ -101,8 +101,16 @@ public class PreferencesOfApplicationSaverXml {
       //Formatage du fichier
       Transformer transformer = new TranformerForXml().createTransformer();
 
-      // Création des connexions
-      saveConnections(document, racine);
+      // Création des connexions si le gestionnaire de connexion est en place
+      // Il n'est pas en place lorsque le fichier des préférences doit être créé lors de l'installation du programme
+      //#MAJ 2022-03-04 Création du fichier des préférences sans connexions
+      try {
+        if (ConManager.instance() != null) {
+          saveConnections(document, racine);
+        }
+      } catch (Exception e){
+        // Pas de connexion à sauver!
+      }
 
       //Création du fichier
       DOMSource source = new DOMSource(document);
@@ -110,9 +118,14 @@ public class PreferencesOfApplicationSaverXml {
       transformer.transform(source, result);
 
     } catch (ParserConfigurationException | TransformerException pce) {
-      //TODO-PAS STB faire un throw(e) - Intégration dans la transaction d'ouverture (Si fichier inexistant - A checker)
-      // et transaction d'édition
-      pce.printStackTrace();
+      //#MAJ 2022-03-04 Création du fichier des préférences sans connexions
+      //TODO1-PAS Mettre un/des messages explicites lié au Parser ou au transformer
+      // Erreur du Parser ou Transformer
+      throw new CodeApplException("Le fichier de préférence n'a pas pu être créé...");
+    } catch (Exception e){
+      //#MAJ 2022-03-04 Création du fichier des préférences sans connexions
+      // Erreur inconnue
+      ViewLogsManager.catchException(e, "Le fichier ne préférence ne peut pas être créé");
     }
 
   }
@@ -120,39 +133,40 @@ public class PreferencesOfApplicationSaverXml {
   private void saveConnections(Document document, Element rootTag) {
     Element connectionsRoot = document.createElement("dbConnections");
 
-    List<ConElement> connections = ConManager.instance().getConElements();
-    Map<String, List<ConConnection>> constructors = new HashMap<>();
+    //#MAJ 2022-03-03 Persistance XML des connexions
+    //L'instruction ci-dessous est erronnée
+    //List<ConElement> connections = ConManager.instance().getConElements();
+    //Map<String, List<ConConnection>> constructors = new HashMap<>();
 
     // Pour chaque élément
-    for (int i = 0; i < connections.size(); i++) {
-      ConDB con = connections.get(i).getConDB();
+    //for (int i = 0; i < connections.size(); i++) {
+      //Trace.println(connections.toString());
+      //ConDB con = connections.get(i).getConDB();
+    /*
+    for (ConDB con : ConDB.values()){
       List<ConConnection> relatedConnections = ConManager.instance().getConConnections(con);
-
       // Pour chaque connexion
       for (int j = 0; j < relatedConnections.size(); j++) {
         List<ConConnector> relatedConnectors = ConManager.instance().getConConnectors(relatedConnections.get(j));
-
-        // Récupère les constructeurs
-        for (int k = 0; k < relatedConnectors.size(); k++) {
-          constructors.put(relatedConnectors.get(k).getParent().getParent().getName(), relatedConnections);
-        }
       }
     }
 
-    // Création des éléments
-    for (String constructorName : constructors.keySet()) {
-      // Création des constructeurs (Oracle, PostgreSQL, ...)
-      Element constructorTag = document.createElement(constructorName);
-      connectionsRoot.appendChild(constructorTag);
+     */
 
-      // Pour chaque connexion
-      List<ConConnection> relatedConnetions = constructors.get(constructorName);
+    // Création des éléments
+    //for (String constructorName : constructors.keySet()) {
+    for (ConDB con : ConDB.values()){
+      // Création des constructeurs (Oracle, PostgreSQL, ...)
+      Element constructorTag = document.createElement(con.getText());
+      List<ConConnection> relatedConnections = ConManager.instance().getConConnections(con);
+      connectionsRoot.appendChild(constructorTag);
 
       // Création de la balise parents des connexions
       Element connectionsTag = document.createElement("connections");
       constructorTag.appendChild(connectionsTag);
 
-      for (ConConnection c : relatedConnetions) {
+      // Pour chaque connexion
+      for (ConConnection c : relatedConnections) {
 
         // On crée un nouvel élément pour chaque connexion
         Element connectionTag = document.createElement("connection");
