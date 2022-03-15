@@ -23,6 +23,7 @@ import messages.MessagesBuilder;
 import org.xml.sax.SAXException;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import profile.Profile;
 import project.*;
 import repository.Repository;
 import utilities.files.UtilFiles;

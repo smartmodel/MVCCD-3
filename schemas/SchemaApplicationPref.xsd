@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- GESTION DES PRÉFÉRENCES -->
+
   <xs:element name="applicationPreferences">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="preferences"/>
-        <xs:element ref="connections" minOccurs="0"/>
+        <xs:element ref="dbConnections" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -63,12 +66,83 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+
+  <!-- GESTION DES CONNEXIONS -->
+
+  <!-- Définition de la balise englobant toutes les connexions d'un constructeur -->
   <xs:element name="connections">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="name" type="xs:string" />
-        <xs:element name="username" type="xs:string" />
-        <xs:element name="password" type="xs:string" />
+        <xs:element ref="connection" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Définition de l'élement représentant une connexion -->
+  <xs:element name="connection">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="connectors">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="connector" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="conIDDBName" type="xs:string" use="required"/>
+      <xs:attribute name="dbName" type="xs:string" use="required"/>
+      <xs:attribute name="driverDefault" type="xs:string" use="required"/>
+      <xs:attribute name="driverFileCustom" type="xs:string" use="required"/>
+      <xs:attribute name="hostname" type="xs:string" use="required"/>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="port" type="xs:string" use="required"/>
+      <xs:attribute name="username" type="xs:string" use="required"/>
+      <xs:attribute name="password" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Définition de la balise représentant un connecteur -->
+  <xs:element name="connector">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="username" type="xs:string" use="required"/>
+      <xs:attribute name="password" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Définition des éléments représentant les constructeurs (Oracle, MySQL, PostgreSQL, ...) -->
+  <xs:element name="Oracle">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="connections"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="MySQL">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="connections"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="PostgreSQL">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="connections"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Définition de la balise globale stockant l'ensemble des connexions et connecteurs -->
+  <xs:element name="dbConnections">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Oracle" />
+        <xs:element ref="MySQL" />
+        <xs:element ref="PostgreSQL"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -29,8 +29,12 @@ public class MVCCDFactory {
   }
 
   public Profile createProfile(String profileFileName) {
-
     Profile profile = new Profile(profileEntry, profileFileName);
+    return profile;
+  }
+
+  public Profile createProfile(String profileFileName, String version){
+    Profile profile = new Profile(profileEntry, profileFileName, version);
     return profile;
   }
 

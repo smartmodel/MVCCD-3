@@ -5,6 +5,7 @@
             <xs:sequence>
                 <xs:element ref="preferences"/>
             </xs:sequence>
+            <xs:attribute name="version" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
     <xs:element name="mcdAidDataTypeLienProg">

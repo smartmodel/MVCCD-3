@@ -31,6 +31,8 @@ public class ProfileManager {
         return resultat;
     }
 
+
+
     /*public Preferences loadFileProfile(String profileFileName) {
         Preferences profilePref = null;
         if (profileFileName != null) {

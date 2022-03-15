@@ -4,16 +4,21 @@ import main.MVCCDManager;
 
 public class ProjectManager {
 
-    private static ProjectManager instance;
-    private static Project project;
+  private static ProjectManager instance;
+  private static Project project;
 
-    public static synchronized ProjectManager instance() {
-        if (instance == null) {
-            instance = new ProjectManager();
-        }
-        project = MVCCDManager.instance().getProject();
-        return instance;
+  public static synchronized ProjectManager instance() {
+    if (instance == null) {
+      instance = new ProjectManager();
     }
+    project = MVCCDManager.instance().getProject();
+    return instance;
+  }
+
+  public static Project getProject() {
+    return MVCCDManager.instance().getProject();
+  }
+
 }
 
     /*

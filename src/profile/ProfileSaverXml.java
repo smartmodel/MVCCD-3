@@ -2,6 +2,7 @@ package profile;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import preferences.Preferences;
 import project.ProjectFileChooser;
 import project.ProjectSaverXml;
 import utilities.files.TranformerForXml;
@@ -32,6 +33,7 @@ public class ProfileSaverXml {
 
             //Création des éléments
             Element racine = document.createElement("fileProfile");
+            racine.setAttribute("version", Preferences.APPLICATION_VERSION);
             document.appendChild(racine);
 
             //récuperation des préférences du projet

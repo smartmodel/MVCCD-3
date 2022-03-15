@@ -25,6 +25,7 @@ public class Preferences extends MVCCDElement {
   public static String APPLICATION_NAME = "MVCCD";
   public static String LANGUAGE = "fr";
   public static String APPLICATION_VERSION = "3.0.19"; //Format: x.y.z (x, y et z devait être des chiffres ou des nombres)
+  public static String APPLICATION_LATEST_VERSION_RELEASED = "3.0.20";
   public static Integer JPANEL_HGAP = 5;
   public static Integer JPANEL_VGAP = 5;
   public static Integer PANEL_REPOSITORY_WIDTH = 200;
