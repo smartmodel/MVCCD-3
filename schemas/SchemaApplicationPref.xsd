@@ -9,6 +9,7 @@
         <xs:element ref="preferences"/>
         <xs:element ref="dbConnections" minOccurs="0"/>
       </xs:sequence>
+      <xs:attribute name="version" use="required" type="xs:string"  />
     </xs:complexType>
   </xs:element>
   <xs:element name="debug" type="xs:boolean"/>

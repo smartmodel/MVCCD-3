@@ -36,7 +36,9 @@ public class PreferencesOfApplicationSaverXml {
 
       //Création des éléments
       Element racine = document.createElement("applicationPreferences");
+      racine.setAttribute("version", Preferences.APPLICATION_VERSION);
       document.appendChild(racine);
+
 
       Element preferences = document.createElement("preferences");
       racine.appendChild(preferences);

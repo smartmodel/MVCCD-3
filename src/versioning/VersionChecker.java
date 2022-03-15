@@ -15,16 +15,15 @@ public class VersionChecker {
   private final String VERSION_3_0_19 = "3.0.19";
 
   private final String projectVersion = ProjectManager.getProject().getVersion();
-  private final String profileVersion = null;
+  private final String applicationPreferencesVersion = MVCCDManager.instance().getProject().getPreferences().getVERSION();
   private final String applicationVersion = Preferences.APPLICATION_VERSION;
   private final String applicationLatestRelease = Preferences.APPLICATION_LATEST_VERSION_RELEASED;
 
   private Integer projectVersionWeight;
-  // private Integer profileVersionWeight;
   private Integer applicationVersionWeight;
   private Integer projectApplicationLatestReleaseWeight;
+  private Integer applicationPreferencesWeight;
 
-  private final UserProfileChecker userProfileChecker = new UserProfileChecker();
   private final ProjectChecker projectChecker = new ProjectChecker();
   private final ApplicationPreferencesChecker applicationPreferencesChecker = new ApplicationPreferencesChecker();
 
@@ -49,16 +48,16 @@ public class VersionChecker {
     applicationVersionWeight = Version.weightVersion(applicationVersion);
     projectVersionWeight = Version.weightVersion(projectVersion);
     projectApplicationLatestReleaseWeight = Version.weightVersion(applicationLatestRelease);
-
-    System.out.println("Poids de la version actuelle de l'app : " + applicationVersionWeight);
-    System.out.println("Poids de la version du projet : " + projectVersionWeight);
-
+    applicationPreferencesWeight = Version.weightVersion(applicationPreferencesVersion);
   }
 
   private void compareVersions() throws VersionFormatException {
 
     // Compare la version de l'application
     compareApplicationVersions();
+
+    // Compare la version des préférences d'application
+    compareApplicationPreferencesVersions();
 
     // Compare le projet
     compareProjectVersions();
@@ -89,6 +88,13 @@ public class VersionChecker {
     // Une mise à jour de l'application est disponible
     if (applicationVersionWeight < projectApplicationLatestReleaseWeight){
       String message = MessagesBuilder.getMessagesProperty("application.version.update.available", new String[]{applicationLatestRelease});
+      DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), message);
+    }
+  }
+
+  private void compareApplicationPreferencesVersions(){
+    if (applicationPreferencesWeight < applicationVersionWeight){
+      String message = MessagesBuilder.getMessagesProperty("application.preferences.version.older", new String[]{applicationVersion});
       DialogMessage.showOk(MVCCDManager.instance().getMvccdWindow(), message);
     }
   }

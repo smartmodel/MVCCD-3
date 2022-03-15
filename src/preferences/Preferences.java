@@ -969,6 +969,7 @@ public class Preferences extends MVCCDElement {
  *  - la classe PreferencesOfApplicationLeaderXml: de sorte à ce que la nouvelle préférence soit chargée lors des prochains chargements de sauvegardes.
  *  - le schéma SchemaApplicationPref.xsd: de sorte à ce que les futurs sauvegardes soient valides selon le schéma XSD.
  */
+  private String VERSION = APPLICATION_VERSION;
   private Boolean DEBUG = false;
   private Boolean DEBUG_BACKGROUND_PANEL = false;
   private Boolean DEBUG_PRINT_MVCCDELEMENT = false;
@@ -1535,6 +1536,14 @@ public class Preferences extends MVCCDElement {
 
   public void setMDR_TABLE_NAME_FORMAT(String MDR_TABLE_NAME_FORMAT) {
     this.MDR_TABLE_NAME_FORMAT = MDR_TABLE_NAME_FORMAT;
+  }
+
+  public void setVERSION(String VERSION){
+    this.VERSION = VERSION;
+  }
+
+  public String getVERSION(){
+    return this.VERSION;
   }
 
   public String getMDR_TABLE_NN_NAME_FORMAT() {

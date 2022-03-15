@@ -45,6 +45,8 @@ public class PreferencesOfApplicationLoaderXml {
       Schema schema = factory.newSchema(applicationPrefsSchemaPath); //Parse et charge le fichier en tant que schema XSD. Si le fichier n'existe pas, une FileNotFoundException est levée (IOexception)
       Validator validator = schema.newValidator();
 
+
+
       //Récupération des valeurs en mémoire
       Element racine = document.getDocumentElement();
       Element preferences = (Element) racine.getElementsByTagName("preferences").item(0);
@@ -72,6 +74,7 @@ public class PreferencesOfApplicationLoaderXml {
       applicationPrefs.setDEBUG_EDITOR_DATAS_CHANGED(Boolean.valueOf(debugEditorDatasChanged.getTextContent()));
       applicationPrefs.setDEBUG_TD_PRINT(Boolean.valueOf(debugTdPrint.getTextContent()));
       applicationPrefs.setDEBUG_TD_UNICITY_PRINT(Boolean.valueOf(debugTdUnicityPrint.getTextContent()));
+      applicationPrefs.setVERSION(racine.getAttribute("version"));
 
       //Lire la constante de texte (warning.level.info par exemple) et non le texte (info)
       applicationPrefs.setWARNING_LEVEL(WarningLevel.findByName(warningLevel.getTextContent()));
@@ -196,5 +199,6 @@ public class PreferencesOfApplicationLoaderXml {
       }
     }
   }
+
 
 }

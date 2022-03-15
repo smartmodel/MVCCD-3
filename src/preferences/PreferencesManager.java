@@ -97,6 +97,7 @@ public class PreferencesManager {
 
     public void copyApplicationPref(int projectState) {
         projectPref.setDEBUG(applicationPref.isDEBUG());
+        projectPref.setVERSION(applicationPref.getVERSION());
         projectPref.setDEBUG_PRINT_MVCCDELEMENT(applicationPref.isDEBUG_PRINT_MVCCDELEMENT());
         projectPref.setDEBUG_BACKGROUND_PANEL(applicationPref.isDEBUG_BACKGROUND_PANEL());
         projectPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(applicationPref.isDEBUG_SHOW_TABLE_COL_HIDDEN());
@@ -165,6 +166,7 @@ public class PreferencesManager {
         // Général
         //to.setPROJET_VERSION(from.getPROJET_VERSION());
         to.setGENERAL_RELATION_NOTATION(from.getGENERAL_RELATION_NOTATION()) ;
+        to.setVERSION(from.getVERSION());
 
         // MCD
         to.setMCD_JOURNALIZATION(from.getMCD_JOURNALIZATION());
