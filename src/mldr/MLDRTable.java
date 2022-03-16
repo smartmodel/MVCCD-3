@@ -8,6 +8,7 @@ import main.MVCCDElementFactory;
 import mcd.*;
 import md.MDElement;
 import mdr.MDRTable;
+import mdr.orderbuildnaming.MDROrderService;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mldr.services.MLDRColumnService;
@@ -169,6 +170,16 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
     }
 
 
+    public MLDRConstraintCustomSpecialized getMLDRSpecializeByMCDElementSource(MCDElement mcdElement){
+        return MLDRTableService.getMLDRSpecializeByMCDElementSource(this, mcdElement);
+    }
+
+
+    public MLDRConstraintCustomSpecialized createSpecialized(MCDGeneralization mcdGeneralization) {
+        MLDRConstraintCustomSpecialized mldrSpecialized= MVCCDElementFactory.instance().createMLDRSpecialized(
+                (MLDRContConstraints) getMDRContConstraints(), mcdGeneralization);
+        return mldrSpecialized;
+    }
 
     @Override
     public ArrayList<Stereotype> getStereotypes() {
@@ -213,10 +224,10 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         MCDEntity mcdEntityParentSource = getEntityParentSource();
         MCDAssociation mcdAssNNParentSource = getAssNNParentSource();
         if (mcdEntityParentSource != null) {
-            return mcdEntityParentSource.getShortName();
+            return MDROrderService.getPath(mcdEntityParentSource) + mcdEntityParentSource.getShortName();
         }  else if (mcdAssNNParentSource != null) {
             if (StringUtils.isNotEmpty(mcdAssNNParentSource.getShortName())) {
-                return mcdAssNNParentSource.getShortName();
+                return MDROrderService.getPath(mcdAssNNParentSource) + mcdAssNNParentSource.getShortName();
             } else {
                 throw new CodeApplException("Le shortName de l'association n:n " + mcdAssNNParentSource.getNamePath() + "n'est pas déterminé");
             }

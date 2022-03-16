@@ -69,6 +69,11 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
     }
 
     @Override
+    public MPDRGenerateSQLPackage getMpdrGenerateSQLPackage() {
+        return null;
+    }
+
+    @Override
     public MPDRGenerateSQLDynamicCode getMpdrGenerateSQLCodeDynamic() {
         return mpdrPostgreSQLGenerateSQLDynamicCode;
     }

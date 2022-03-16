@@ -1,6 +1,6 @@
 package mpdr.interfaces;
 
-public interface IMPDRModelRequirePackages {
+public interface IMPDRModelRequirePackage {
 
     String getPackageNameFormat();
 

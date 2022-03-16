@@ -2,10 +2,9 @@ package transform.mldrtompdr;
 
 import main.MVCCDManager;
 import mdr.MDRConstraint;
-import mldr.MLDRColumn;
+import mdr.interfaces.IMDRParameter;
 import mldr.MLDRParameter;
 import mldr.services.MLDRConstraintService;
-import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRParameter;
 import mpdr.MPDRTable;
@@ -54,6 +53,7 @@ public class MLDRTransformParameters {
     private void modifyParameter(MLDRParameter mldrParameter, MPDRParameter mpdrParameter ) {
         // Le nom est repris de Target pour les paramètrees de type colonnes!
 
+        /*
         //Target
         MLDRColumn mldrColumnTarget = (MLDRColumn) mldrParameter.getTarget();
         MPDRTable mpdrTable = (MPDRTable) mpdrParameter.getMDRTableAccueil();
@@ -68,6 +68,24 @@ public class MLDRTransformParameters {
             }
         } else {
             mpdrParameter.setTargetId(mpdrColumnTargetIdNew);
+        }
+
+         */
+
+        //Target
+        IMDRParameter impdrParameterTarget = (IMDRParameter) mldrParameter.getTarget();
+        MPDRTable mpdrTable = (MPDRTable) mpdrParameter.getMDRTableAccueil();
+        IMDRParameter impdrParameterTargetNew = mpdrTable.getIMPDRParameterByMLDRParameterSource(impdrParameterTarget);
+        Integer impdrParameterTargetIdNew = impdrParameterTargetNew.getIdProjectElement();
+        IMDRParameter impdrParameterTargetOld = (IMDRParameter) mpdrParameter.getTarget();
+
+
+        if (impdrParameterTargetOld != null) {
+            if ( impdrParameterTargetOld != impdrParameterTargetNew) {
+                mpdrParameter.setTargetId(impdrParameterTargetIdNew);
+            }
+        } else {
+            mpdrParameter.setTargetId(impdrParameterTargetIdNew);
         }
     }
 

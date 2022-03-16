@@ -2,7 +2,7 @@ package generatorsql.generator;
 
 import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.MPDRTable;
-import mpdr.interfaces.IMPDRTableRequirePackages;
+import mpdr.interfaces.IMPDRTableRequirePackage;
 import mpdr.tapis.MPDRPackageType;
 import mpdr.tapis.MPDRTrigger;
 import mpdr.tapis.MPDRTriggerType;
@@ -54,11 +54,11 @@ public abstract class MPDRGenerateSQLTrigger {
         // les noms d'objets doivent être traités après le code dynamique qui peut y référer
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD,
                 mpdrTrigger.getMPDRTableAccueil().getName());
-        if (tableAccueil instanceof IMPDRTableRequirePackages) {
+        if (tableAccueil instanceof IMPDRTableRequirePackage){
+            String namePackageTAPIs = ((IMPDRTableRequirePackage) tableAccueil).getMPDRPackageByType(MPDRPackageType.TAPIS_SPEC).getName();
             generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_PACKAGE_NAME_WORD,
-                    ((IMPDRTableRequirePackages) tableAccueil).getMPDRPackageByType(MPDRPackageType.TAPIS_SPEC).getName());
+                    namePackageTAPIs);
         }
-
 
         // Customisation des noms des objets de programmation
         generateSQLCode = MPDRGenerateSQLUtil.customizeNameObjectInCode(generateSQLCode , getMPDRGenerateSQL().mpdrModel);

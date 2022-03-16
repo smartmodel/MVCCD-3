@@ -115,6 +115,10 @@ public class PrefMPDROracleInputContent extends PrefMPDRInputContent {
             preferences.setMPDRORACLE_PACKAGE_NAME_FORMAT(fieldPackageNameFormat.getText());
         }
 
+        if (fieldViewNameFormat.checkIfUpdated()){
+            preferences.setMPDRORACLE_VIEW_NAME_FORMAT(fieldViewNameFormat.getText());
+        }
+
         if (fieldCheckColumnDatatypeNameFormat.checkIfUpdated()){
             preferences.setMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT(fieldCheckColumnDatatypeNameFormat.getText());
         }
@@ -180,6 +184,7 @@ public class PrefMPDROracleInputContent extends PrefMPDRInputContent {
         fieldSeqPKNameFormat.setText(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
         fieldTriggerNameFormat.setText(preferences.getMPDRORACLE_TRIGGER_NAME_FORMAT());
         fieldPackageNameFormat.setText(preferences.getMPDRORACLE_PACKAGE_NAME_FORMAT());
+        fieldViewNameFormat.setText(preferences.getMPDRORACLE_VIEW_NAME_FORMAT());
         fieldCheckColumnDatatypeNameFormat.setText(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT());
         fieldCheckColumnDatatypeMax30NameFormat.setText(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
     }

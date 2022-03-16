@@ -14,6 +14,7 @@ import mdr.MDRNamingLength;
 import mdr.MDRUniqueNature;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
 import mdr.orderbuildnaming.MDROrderBuildTargets;
+import mdr.services.IMDRParameterService;
 import messages.MessagesBuilder;
 import mldr.MLDRColumn;
 import mldr.MLDRModel;
@@ -94,7 +95,8 @@ public class MCDTransformToUnique {
         mdrColumnParameters.addAll(mdrColumnsFromMCDUnicity(mcdUnicity, mldrTable));
 
         // Ajustement des paramètres
-        MCDTransformService.adjustParameters(mcdTransform, mldrTable, mldrUnique, mdrColumnParameters);
+        MCDTransformService.adjustParameters(mcdTransform, mldrUnique,
+                IMDRParameterService.to(mdrColumnParameters));
 
     }
 

@@ -3,8 +3,8 @@ package transform.mldrtompdr;
 import main.MVCCDManager;
 import mldr.MLDRTable;
 import mpdr.MPDRModel;
-import mpdr.interfaces.IMPDRModelRequirePackages;
-import mpdr.interfaces.IMPDRTableRequirePackages;
+import mpdr.interfaces.IMPDRModelRequirePackage;
+import mpdr.interfaces.IMPDRTableRequirePackage;
 import mpdr.tapis.*;
 
 import java.util.ArrayList;
@@ -13,13 +13,13 @@ public class MLDRTransformToBoxPackages {
 
     private MLDRTransform mldrTransform ;
     private MLDRTable mldrTable;
-    private IMPDRModelRequirePackages mpdrModel ;
-    private IMPDRTableRequirePackages mpdrTable;
+    private IMPDRModelRequirePackage mpdrModel ;
+    private IMPDRTableRequirePackage mpdrTable;
 
     public MLDRTransformToBoxPackages(MLDRTransform mldrTransform,
                                       MLDRTable mldrTable,
-                                      IMPDRModelRequirePackages mpdrModel,
-                                      IMPDRTableRequirePackages mpdrTable) {
+                                      IMPDRModelRequirePackage mpdrModel,
+                                      IMPDRTableRequirePackage mpdrTable) {
         this.mldrTransform = mldrTransform;
         this.mldrTable = mldrTable;
         this.mpdrModel = mpdrModel;

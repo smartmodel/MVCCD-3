@@ -9,7 +9,7 @@ import mdr.interfaces.IMDRElementWithIteration;
 import mldr.*;
 import mldr.services.MLDRModelService;
 import mpdr.*;
-import mpdr.interfaces.IMPDRModelRequirePackages;
+import mpdr.interfaces.IMPDRModelRequirePackage;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
@@ -42,7 +42,7 @@ public class MLDRTransform extends MDTransform {
 
             // Ressources pour les APIs de tables
             if (mpdrModel.getMPDR_TAPIs()) {
-                if (mpdrModel instanceof IMPDRModelRequirePackages) {
+                if (mpdrModel instanceof IMPDRModelRequirePackage) {
                     MLDRTransformResources mldrTransformResources = new MLDRTransformResources(this, mldrModel, mpdrModel);
                     //mldrTransformResources.createOrModifyBoxPackages();
                 }
@@ -101,6 +101,7 @@ public class MLDRTransform extends MDTransform {
             mpdrOracleModel.setSequencePKNameFormat(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
             mpdrOracleModel.setTriggerNameFormat(preferences.getMPDRORACLE_TRIGGER_NAME_FORMAT());
             mpdrOracleModel.setPackageNameFormat(preferences.getMPDRORACLE_PACKAGE_NAME_FORMAT());
+            mpdrOracleModel.setViewNameFormat(preferences.getMPDRORACLE_VIEW_NAME_FORMAT());
             mpdrOracleModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT());
             mpdrOracleModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
             return mpdrOracleModel;
@@ -115,6 +116,7 @@ public class MLDRTransform extends MDTransform {
             mpdrMySQLModel.setTapis(preferences.getMPDRMYSQL_TAPIS());
             mpdrMySQLModel.setSequencePKNameFormat(preferences.getMPDRMYSQL_SEQPK_NAME_FORMAT());
             mpdrMySQLModel.setTriggerNameFormat(preferences.getMPDRMYSQL_TRIGGER_NAME_FORMAT());
+            mpdrMySQLModel.setViewNameFormat(preferences.getMPDRMYSQL_VIEW_NAME_FORMAT());
             mpdrMySQLModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
             mpdrMySQLModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
             return mpdrMySQLModel;
@@ -129,6 +131,7 @@ public class MLDRTransform extends MDTransform {
             mpdrPostgreSQLModel.setTapis(preferences.getMPDRORACLE_TAPIS());
             mpdrPostgreSQLModel.setSequencePKNameFormat(preferences.getMPDRPOSTGRESQL_SEQPK_NAME_FORMAT());
             mpdrPostgreSQLModel.setTriggerNameFormat(preferences.getMPDRPOSTGRESQL_TRIGGER_NAME_FORMAT());
+            mpdrPostgreSQLModel.setViewNameFormat(preferences.getMPDRPOSTGRESQL_VIEW_NAME_FORMAT());
             mpdrPostgreSQLModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
             mpdrPostgreSQLModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
             return mpdrPostgreSQLModel;

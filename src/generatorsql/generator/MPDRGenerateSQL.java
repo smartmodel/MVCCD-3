@@ -4,7 +4,10 @@ import console.ViewLogsManager;
 import console.WarningLevel;
 import messages.MessagesBuilder;
 import mpdr.*;
+import mpdr.interfaces.IMPDRModelRequirePackage;
+import mpdr.interfaces.IMPDRTableRequirePackage;
 import mpdr.tapis.MPDRFunction;
+import mpdr.tapis.MPDRPackage;
 import mpdr.tapis.MPDRTrigger;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
@@ -53,9 +56,9 @@ public abstract class MPDRGenerateSQL {
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
             generateSQLCode += generateSQLCommandFunctions(DROP);
 
-            message = MessagesBuilder.getMessagesProperty("generate.sql.drop.functions");
+            message = MessagesBuilder.getMessagesProperty("generate.sql.drop.packages");
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
-            generateSQLCode += generateSQLCommandFunctions(DROP);
+            generateSQLCode += generateSQLCommandPackages(DROP);
 
             message = MessagesBuilder.getMessagesProperty("generate.sql.drop.indexes");
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
@@ -77,6 +80,10 @@ public abstract class MPDRGenerateSQL {
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.functions");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
         generateSQLCode += generateSQLCommandFunctions(CREATE);
+
+        message = MessagesBuilder.getMessagesProperty("generate.sql.create.packages");
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        generateSQLCode += generateSQLCommandPackages(CREATE);
 
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.triggers");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
@@ -120,17 +127,18 @@ public abstract class MPDRGenerateSQL {
     private String generateSQLCommandTables(int command) {
 
         String generateSQLCode = "";
-        for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
-            if (command == CREATE) {
-                generateSQLCode += getMpdrGenerateSQLTable().generateSQLCreateTable(mpdrTable);
-                generateSQLCode += delimiter();
-            }
-            if (command == DROP) {
-                generateSQLCode += getMpdrGenerateSQLTable().generateSQLDropTable(mpdrTable);
-                generateSQLCode += delimiter() ;
+            for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
+                if (command == CREATE) {
+                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLCreateTable(mpdrTable);
+                    generateSQLCode += delimiter();
+                }
+                if (command == DROP) {
+                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLDropTable(mpdrTable);
+                    generateSQLCode += delimiter();
 
+                }
             }
-        }
+
         return generateSQLCode;
     }
 
@@ -196,6 +204,28 @@ public abstract class MPDRGenerateSQL {
     }
 
 
+    private String generateSQLCommandPackages(int command) {
+
+        String generateSQLCode = "";
+        if (mpdrModel instanceof IMPDRModelRequirePackage) {
+            for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
+                if (((IMPDRTableRequirePackage) mpdrTable).getMPDRPackages() != null) {
+                    for (MPDRPackage mpdrPackage : ((IMPDRTableRequirePackage) mpdrTable).getMPDRPackages()) {
+                        if (command == CREATE) {
+                            generateSQLCode += getMpdrGenerateSQLPackage().generateSQLCreatePackage(mpdrPackage);
+                            generateSQLCode += delimiter();
+                        }
+                        if (command == DROP) {
+                            generateSQLCode += getMpdrGenerateSQLPackage().generateSQLDropPackage(mpdrPackage);
+                            generateSQLCode += delimiter();
+                        }
+                    }
+                }
+            }
+        }
+        return generateSQLCode;
+    }
+
     public String generateSQLCommandFKs(int command) {
         String generateSQLCode = "";
         ArrayList<MPDRTable> mpdrTables = mpdrModel.getMPDRTables();
@@ -243,6 +273,8 @@ public abstract class MPDRGenerateSQL {
     public abstract MPDRGenerateSQLTrigger getMpdrGenerateSQLTrigger() ;
 
     public abstract MPDRGenerateSQLFunction getMpdrGenerateSQLFunction() ;
+
+    public abstract MPDRGenerateSQLPackage getMpdrGenerateSQLPackage() ;
 
     public abstract MPDRGenerateSQLDynamicCode getMpdrGenerateSQLCodeDynamic() ;
 

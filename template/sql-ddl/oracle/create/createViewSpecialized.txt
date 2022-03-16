@@ -1,0 +1,4 @@
+create view {viewName} as
+select {-SPEC_COLUMNS-}
+from {tableName}
+{-SPEC_JOINS}

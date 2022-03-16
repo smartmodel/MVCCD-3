@@ -8,6 +8,7 @@ import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.*;
+import mpdr.interfaces.IMPDRConstraint;
 import mpdr.mysql.interfaces.IMPDRMySQLElement;
 import mpdr.tapis.*;
 import preferences.Preferences;
@@ -71,6 +72,14 @@ public class MPDRMySQLTable extends MPDRTable implements IMPDRMySQLElement {
         return newUnique;
     }
 
+    @Override
+    public IMPDRConstraint createSpecialized(MLDRConstraintCustomSpecialized mldrSpecialized) {
+        MPDRMySQLConstraintCustomSpecialized newSpecialized = MVCCDElementFactory.instance().createMPDRMySQLConstraintCustomSpecialized(
+                getMDRContConstraints(), mldrSpecialized);
+        return newSpecialized;}
+
+
+
 
     @Override
     public  MPDRCheckSpecific createCheckSpecific(IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -86,6 +95,11 @@ public class MPDRMySQLTable extends MPDRTable implements IMPDRMySQLElement {
 
     @Override
     public MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, MLDRTable mldrTable) {
+        return null;
+    }
+
+    @Override
+    public MPDRView createView(MLDRConstraintCustomSpecialized mldrSpecialized) {
         return null;
     }
 

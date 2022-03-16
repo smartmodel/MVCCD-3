@@ -9,14 +9,14 @@ import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
-import mpdr.interfaces.IMPDRModelRequirePackages;
+import mpdr.interfaces.IMPDRModelRequirePackage;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDROracleDatatype;
 
-public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IMPDRModelRequirePackages {
+public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IMPDRModelRequirePackage {
 
     private  static final long serialVersionUID = 1000;
 

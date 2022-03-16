@@ -3,6 +3,7 @@ package mpdr.services;
 import main.MVCCDElement;
 import mdr.MDRConstraint;
 import mdr.MDRContColumns;
+import mdr.interfaces.IMDRParameter;
 import mldr.MLDRColumn;
 import mldr.MLDRFK;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
@@ -38,12 +39,21 @@ public class MPDRTableService {
         return resultat;
     }
 
-
     public static MPDRColumn getMPDRColumnByMLDRColumnSource(MPDRTable mpdrTable, MLDRColumn mldrColumn) {
         for (MPDRColumn mpdrColumn : getMPDRColumns(mpdrTable)){
             if (mpdrColumn.getMldrElementSource() == mldrColumn){
                 return mpdrColumn;
             }
+        }
+        return null ;
+    }
+
+    public static IMDRParameter getIMPDRParameterByMLDRParameterSource(MPDRTable mpdrTable, IMDRParameter imldrParameter) {
+        if (imldrParameter instanceof MLDRColumn) {
+            return getMPDRColumnByMLDRColumnSource(mpdrTable, (MLDRColumn) imldrParameter);
+        }
+        if (imldrParameter instanceof MLDRFK) {
+            return getMPDRFKByMLDRFKSource(mpdrTable, (MLDRFK) imldrParameter);
         }
         return null ;
     }

@@ -2,6 +2,7 @@ package mdr;
 
 import constraints.Constraint;
 import mdr.interfaces.IMDRConstraintIndice;
+import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRFKService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -13,7 +14,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndice {
+public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndice, IMDRParameter {
 
     private static final long serialVersionUID = 1000;
 
@@ -167,6 +168,12 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
 
     public String getMDRColumnsRefPKNameAsParamStr() {
         return MDRFKService.getMDRColumnsRefPKNameAsParamStr(this);
+    }
+
+
+    @Override
+    public String getClassShortNameUI() {
+        return null;
     }
 
 }

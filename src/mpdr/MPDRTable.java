@@ -7,6 +7,7 @@ import exceptions.CodeApplException;
 import md.MDElement;
 import mdr.MDRConstraint;
 import mdr.MDRTable;
+import mdr.interfaces.IMDRParameter;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
@@ -80,6 +81,9 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         return MPDRTableService.getMPDRColumnByMLDRColumnSource(this, mldrColumn);
     }
 
+    public IMDRParameter getIMPDRParameterByMLDRParameterSource(IMDRParameter imldrParameter) {
+        return MPDRTableService.getIMPDRParameterByMLDRParameterSource(this, imldrParameter);
+    }
 
     public IMPDRConstraint getMPDRConstraintInheritedByMLDRConstraintSource(MDRConstraint mldrConstraint) {
         return MPDRTableService.getMPDRConstraintInheritedByMLDRConstraintSource(this, mldrConstraint);
@@ -112,11 +116,15 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public abstract MPDRUnique createUnique(MLDRUnique mldrUnique);
 
+    public abstract IMPDRConstraint createSpecialized(MLDRConstraintCustomSpecialized mldrSpecialized);
+
     public abstract MPDRCheckSpecific createCheckSpecific(IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc);
 
     public abstract MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable);
 
     public abstract MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, MLDRTable mldrTable);
+
+    public abstract MPDRView createView(MLDRConstraintCustomSpecialized mldrSpecialized);
 
 
     public abstract MPDRBoxProceduresOrFunctions createBoxProceduresOrFunctions(MLDRTable mldrTable);
@@ -231,5 +239,14 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     }
 
     public abstract MPDRFunction createFunction(MPDRFunctionType type, MLDRTable mldrTable);
+
+
+    public MPDRView getMPDRViewByType(MPDRViewType type){
+        return getMPDRContTAPIs().getMPDRViewByType(type);
+    }
+
+    public ArrayList<MPDRView> getMPDRViews(){
+        return getMPDRContTAPIs().getMPDRAllViews();
+    }
 
 }

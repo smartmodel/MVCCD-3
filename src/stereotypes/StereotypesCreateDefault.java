@@ -166,6 +166,11 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_CHECK_LIENPROG,
                 MDRCheck.class.getName());
 
+        createStereotype(
+                Preferences.STEREOTYPE_SPECIALIZED_NAME,
+                Preferences.STEREOTYPE_SPECIALIZED_LIENPROG,
+                MDRConstraintCustomSpecialized.class.getName());
+
         createStereotypesMDRFK();
         createStereotypesMDRPFK();
         createStereotypesMDRNID();  // Pour les colonnes et non les contraintes

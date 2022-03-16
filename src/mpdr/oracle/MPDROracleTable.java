@@ -9,13 +9,11 @@ import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.*;
-import mpdr.interfaces.IMPDRTableRequirePackages;
+import mpdr.interfaces.IMPDRConstraint;
+import mpdr.interfaces.IMPDRTableRequirePackage;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.tapis.*;
-import mpdr.tapis.oracle.MPDROracleBoxPackages;
-import mpdr.tapis.oracle.MPDROracleBoxTriggers;
-import mpdr.tapis.oracle.MPDROraclePackage;
-import mpdr.tapis.oracle.MPDROracleTrigger;
+import mpdr.tapis.oracle.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -25,7 +23,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IMPDRTableRequirePackages {
+public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IMPDRTableRequirePackage {
 
     private static final long serialVersionUID = 1000;
 
@@ -73,6 +71,12 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IM
         return newUnique;
     }
 
+    @Override
+    public IMPDRConstraint createSpecialized(MLDRConstraintCustomSpecialized mldrSpecialized) {
+        MPDROracleConstraintCustomSpecialized newSpecialized = MVCCDElementFactory.instance().createMPDROracleConstraintCustomSpecialized(
+                getMDRContConstraints(), mldrSpecialized);
+        return newSpecialized;
+    }
 
     @Override
     public  MPDRCheckSpecific createCheckSpecific(IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -100,6 +104,13 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IM
         } else {
             throw new CodeApplException("La boîte Triggers doit exister avant de créer un trigger");
         }
+    }
+
+    @Override
+    public MPDRView createView(MLDRConstraintCustomSpecialized mldrSpecialized) {
+        MPDROracleView mpdrOracleView = MVCCDElementFactory.instance().createMPDROracleView(
+                getMPDRContTAPIs(), mldrSpecialized);
+        return mpdrOracleView;
     }
 
     //TODO-0 mettre des interfaces pour ne créer les procédures stockées que pour les BD qui le supporte

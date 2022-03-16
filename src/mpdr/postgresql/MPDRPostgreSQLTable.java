@@ -9,6 +9,7 @@ import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.*;
+import mpdr.interfaces.IMPDRConstraint;
 import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
 import mpdr.tapis.*;
 import mpdr.tapis.postgresql.MPDRPostgreSQLBoxProceduresOrFunctions;
@@ -71,6 +72,13 @@ public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLEle
         return newUnique;
     }
 
+    @Override
+    public IMPDRConstraint createSpecialized(MLDRConstraintCustomSpecialized mldrSpecialized) {
+        MPDRPostgreSQLConstraintCustomSpecialized newSpecialized = MVCCDElementFactory.instance().createMPDRPostgreSQLConstraintCustomSpecialized(
+                getMDRContConstraints(), mldrSpecialized);
+        return newSpecialized;
+   }
+
 
     @Override
     public MPDRCheckSpecific createCheckSpecific(IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -97,6 +105,11 @@ public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLEle
         } else {
             throw new CodeApplException("La boîte Triggers doit exister avant de créer un trigger");
         }
+    }
+
+    @Override
+    public MPDRView createView(MLDRConstraintCustomSpecialized mldrSpecialized) {
+        return null;
     }
 
     @Override

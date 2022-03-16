@@ -12,7 +12,6 @@ import main.MVCCDElement;
 import main.MVCCDElementApplicationConnections;
 import main.MVCCDManager;
 import preferences.Preferences;
-import utilities.Trace;
 
 import java.io.File;
 import java.net.URL;
@@ -111,7 +110,6 @@ public class ConManager {
     public ArrayList<ConElement> getConElements() {
         ArrayList<ConElement> resultat = new ArrayList<ConElement>();
         for (ConDB conDB : ConDB.values()) {
-            Trace.println(conDB.getText());
             resultat.addAll(getConElements(conDB));
         }
         return resultat;

@@ -62,6 +62,7 @@ public class MDROrderBuildNaming {
 
     private MDROrderWordTypeTriggerMarker typeTriggerMarker ;
     private MDROrderWordTypePackageMarker typePackageMarker ;
+    private MDROrderWordTypeViewMarker typeViewMarker ;
     private MDROrderWordMPDRColumnName mpdrColumnName ;
 
 
@@ -110,6 +111,7 @@ public class MDROrderBuildNaming {
 
         typeTriggerMarker = new MDROrderWordTypeTriggerMarker(Preferences.MPDR_TYPE_TRIGGER_MARKER_WORD);
         typePackageMarker = new MDROrderWordTypePackageMarker(Preferences.MPDR_TYPE_PACKAGE_MARKER_WORD);
+        typeViewMarker = new MDROrderWordTypeViewMarker(Preferences.MPDR_TYPE_VIEW_MARKER_WORD);
         mpdrColumnName = new MDROrderWordMPDRColumnName(Preferences.MPDR_COLUMN_NAME_WORD);
     }
 
@@ -223,6 +225,9 @@ public class MDROrderBuildNaming {
 
                 } else if (mg.equals(Preferences.MPDR_TYPE_PACKAGE_MARKER_WORD)) {
                     value = pushValue(typePackageMarker);
+
+                } else if (mg.equals(Preferences.MPDR_TYPE_VIEW_MARKER_WORD)) {
+                    value = pushValue(typeViewMarker);
 
                 } else if (mg.equals(Preferences.MPDR_COLUMN_NAME_WORD)) {
                     value = pushValue(mpdrColumnName);
@@ -810,6 +815,14 @@ public class MDROrderBuildNaming {
 
     public void setTypePackageMarker(MDROrderWordTypePackageMarker typePackageMarker) {
         this.typePackageMarker = typePackageMarker;
+    }
+
+    public MDROrderWordTypeViewMarker getTypeViewMarker() {
+        return typeViewMarker;
+    }
+
+    public void setTypeViewMarker(MDROrderWordTypeViewMarker typeViewMarker) {
+        this.typeViewMarker = typeViewMarker;
     }
 
     public MDROrderWordMPDRColumnName getMpdrColumnName() {

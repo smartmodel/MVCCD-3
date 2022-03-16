@@ -1,0 +1,8 @@
+DECLARE nb_view  PLS_INTEGER;
+
+BEGIN
+    SELECT count(*) INTO nb_view from user_views WHERE view_name = UPPER('{viewName}');
+    IF nb_view = 1 then
+        EXECUTE IMMEDIATE 'DROP VIEW {viewName}';
+    END IF;
+END;

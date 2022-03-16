@@ -38,7 +38,7 @@ public class MDRConstraintService {
                 return HAUT;
             }
         } else if (courant instanceof MDRCheck) {
-            if ((other instanceof MDRPK) || other instanceof MDRFK || other instanceof MDRCheck) {
+            if ((other instanceof MDRPK) || other instanceof MDRFK || other instanceof MDRUnique) {
                 return BAS ;
             } else if (other instanceof MDRCheck){
                 return ((MDRCheck) courant).compareToDefault((MDRCheck) other);
@@ -46,17 +46,28 @@ public class MDRConstraintService {
                 return HAUT;
             }
         } else if (courant instanceof MPDRIndex) {
-            if ((other instanceof MDRPK) || other instanceof MDRFK || other instanceof MDRCheck
-                    || other instanceof MPDRIndex) {
+            if ((other instanceof MDRPK) || other instanceof MDRFK || other instanceof MDRUnique
+                    || other instanceof MDRCheck) {
                 return BAS ;
             } else if (other instanceof MPDRIndex){
                 return ((MPDRIndex) courant).compareToDefault((MPDRIndex) other);
             } else {
                 return HAUT;
             }
+        } else if (courant instanceof MDRConstraintCustom) {
+            if ((other instanceof MDRPK) || other instanceof MDRFK || other instanceof MDRUnique
+                    || other instanceof MDRCheck || other instanceof MPDRIndex ) {
+                return BAS ;
+            } else if (other instanceof MDRConstraintCustom){
+                return ((MDRConstraintCustom) courant).compareToDefault((MDRConstraintCustom) other);
+            } else {
+                return HAUT;
+            }
         } else {
-            throw new CodeApplException(courant.getName() + "La classification de la contrainte est inconnue ou pas encore traitée.");
+            throw new CodeApplException( "La classe de contrainte " + courant.getClass().getName() + " est inconnue ou pas encore traitée.");
         }
+
+
 
     }
 

@@ -21,10 +21,13 @@ public abstract class MDTransform {
                 // En remplaçant MdElementSource par son Id, la référence sera nulle mais, pas léa valeur d'id!
                 //if (mdElementSource != null){
                     //Vérifier que les 2 itérations soient différentes
-                    if (imdrElementWithIteration.getIteration() != getIteration()){
-                        //Delete.deleteMVCCDElement((MVCCDElement) imdrElementWithIteration);
-                        ((MVCCDElement) imdrElementWithIteration).delete();
-                    }
+                if (imdrElementWithIteration.getIteration() == null){
+                    // Cas d'erreur en développement
+                    ((MVCCDElement) imdrElementWithIteration).delete();
+                } else if (imdrElementWithIteration.getIteration() != getIteration()){
+                    //Delete.deleteMVCCDElement((MVCCDElement) imdrElementWithIteration);
+                    ((MVCCDElement) imdrElementWithIteration).delete();
+                }
                 //}
             }
         }

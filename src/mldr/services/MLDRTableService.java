@@ -5,10 +5,7 @@ import mcd.MCDElement;
 import mcd.MCDRelEnd;
 import mdr.MDRContColumns;
 import mdr.MDRContConstraints;
-import mldr.MLDRColumn;
-import mldr.MLDRFK;
-import mldr.MLDRTable;
-import mldr.MLDRUnique;
+import mldr.*;
 
 import java.util.ArrayList;
 
@@ -117,6 +114,17 @@ public class MLDRTableService {
         for (MLDRUnique mldrUnique : getMLDRUniques(mldrTable)){
             if (mldrUnique.getMcdElementSource() == mcdElementSource){
                 return mldrUnique;
+            }
+        }
+        return null ;
+    }
+
+
+    public static MLDRConstraintCustomSpecialized getMLDRSpecializeByMCDElementSource(MLDRTable mldrTable, MCDElement mcdElementSource) {
+        MDRContConstraints mdrContConstraints= getMDRContConstraints(mldrTable);
+        for (MVCCDElement mvccdElement: mdrContConstraints.getChilds()) {
+            if (mvccdElement instanceof MLDRConstraintCustomSpecialized) {
+                return (MLDRConstraintCustomSpecialized) mvccdElement;
             }
         }
         return null ;

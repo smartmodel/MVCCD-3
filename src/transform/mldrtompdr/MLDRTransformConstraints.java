@@ -6,14 +6,14 @@ import main.MVCCDElement;
 import main.MVCCDManager;
 import mdr.MDRConstraint;
 import mdr.MDRElement;
-import mldr.MLDRFK;
-import mldr.MLDRPK;
-import mldr.MLDRTable;
-import mldr.MLDRUnique;
+import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mpdr.*;
 import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElement;
+import mpdr.oracle.MPDROracleConstraintCustomSpecialized;
+import mpdr.tapis.MPDRView;
+import mpdr.tapis.MPDRViewType;
 
 public class MLDRTransformConstraints {
 
@@ -54,6 +54,10 @@ public class MLDRTransformConstraints {
             if (mldrConstraint instanceof MLDRUnique){
                 MLDRUnique mldrUnique = (MLDRUnique) mldrConstraint;
                 mpdrConstraint = mpdrTable.createUnique(mldrUnique);
+            }
+            if (mldrConstraint instanceof MLDRConstraintCustomSpecialized){
+                MLDRConstraintCustomSpecialized mldrSpecialized = (MLDRConstraintCustomSpecialized) mldrConstraint;
+                mpdrConstraint = mpdrTable.createSpecialized(mldrSpecialized);
             }
             MVCCDManager.instance().addNewMVCCDElementInRepository((MVCCDElement) mpdrConstraint);
 
@@ -99,6 +103,13 @@ public class MLDRTransformConstraints {
                 mpdrUnique.setMdrUniqueNature(mldrUnique.getMdrUniqueNature());
             }
         }
+
+        // Custom - Spécialized
+        if (mpdrConstraint instanceof MPDROracleConstraintCustomSpecialized) {
+            MLDRConstraintCustomSpecialized mldrSpecialized = (MLDRConstraintCustomSpecialized) mldrConstraint;
+            MPDRConstraintCustomSpecialized mpdrSpecialized = (MPDRConstraintCustomSpecialized) mpdrConstraint;
+            modifyConstraintSpecialized(mldrSpecialized, mpdrSpecialized);
+        }
     }
 
     private void modifyConstraintFK(MLDRFK mldrFK, MPDRFK mpdrFK) {
@@ -129,7 +140,15 @@ public class MLDRTransformConstraints {
                 mldrTransform, mldrFK, mpdrModel, mpdrTable);
         MPDRIndex mpdrIndex = mldrTransformToIndex.createOrModifyIndex();
 
-
     }
+
+
+    private void modifyConstraintSpecialized(MLDRConstraintCustomSpecialized mldrSpecialized,
+                                             MPDRConstraintCustomSpecialized mpdrSpecialized) {
+        MLDRTransformToView mldrTransformToView = new MLDRTransformToView(
+                mldrTransform, mldrSpecialized, mpdrModel, mpdrTable);
+        MPDRView mpdrView = mldrTransformToView.createOrModifyView(MPDRViewType.SPEC);
+    }
+
 
 }

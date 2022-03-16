@@ -5,6 +5,7 @@ import main.MVCCDManager;
 import mcd.MCDAssociation;
 import mcd.MCDAssociationNature;
 import mdr.*;
+import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRModelService;
 import mldr.interfaces.IMLDROperation;
 import transform.MDTransform;
@@ -65,6 +66,39 @@ public class MCDTransformService {
 
 
     public static void adjustParameters(MDTransform mdTransform,
+                                        IMLDROperation mdrOperation,
+                                        IMDRParameter imdrParameter) {
+
+        ArrayList<IMDRParameter> imdrParameters = new ArrayList<IMDRParameter>();
+        imdrParameters.add(imdrParameter);
+        adjustParameters(mdTransform, mdrOperation, imdrParameters);
+    }
+
+
+
+    public static void adjustParameters(MDTransform mdTransform,
+                                        IMLDROperation mdrOperation,
+                                        ArrayList<IMDRParameter> imdrParameters) {
+
+        for (IMDRParameter imdrParameter : imdrParameters){
+
+            MDRParameter mdrParameter = mdrOperation.getParameter(imdrParameter);
+            // Ajout des paramètres de colonnes manquants
+            if (mdrParameter == null) {
+                // Le tri est fait par par la méthode de base compareToDefault()
+                mdrParameter = mdrOperation.createParameter(imdrParameter);
+                MVCCDManager.instance().addNewMVCCDElementInRepository(mdrParameter);
+            }
+            // Pas de modification car les propriétés viennent de la colonne
+            // Mémorisation de l'itération courante
+            mdrParameter.setIteration(mdTransform.getIteration());
+            // La supression se fait sur la base de la valeur d'itération comme tout MDRElement!
+        }
+
+    }
+
+/*
+    public static void adjustParameters(MDTransform mdTransform,
                                         MDRTableOrView mdrTableOrView,
                                         IMLDROperation mdrOperation,
                                         ArrayList<MDRColumn> mdrColumns) {
@@ -83,7 +117,8 @@ public class MCDTransformService {
             mdrParameter.setIteration(mdTransform.getIteration());
             // La supression se fait sur la base de la valeur d'itération comme tout MDRElement!
         }
-
     }
+
+ */
 
 }

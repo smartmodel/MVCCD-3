@@ -13,6 +13,8 @@ import mcd.services.IMCDModelService;
 import mdr.*;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
 import mdr.orderbuildnaming.MDROrderBuildTargets;
+import mdr.orderbuildnaming.MDROrderService;
+import mdr.services.IMDRParameterService;
 import messages.MessagesBuilder;
 import mldr.*;
 import org.apache.commons.lang.StringUtils;
@@ -62,7 +64,6 @@ public class MCDTransformToFK {
         modifyFK(mldrModel, mcdRelEndSource, mldrTable, mldrFK, fkNature);
         mldrFK.setIteration(mcdTransform.getIteration());
 
-
         // Relation FK
         createOrModifyRelationFromRelEndSource(mldrModel, mcdRelEndSource, mldrTable, mldrFK,fkNature);
 
@@ -95,13 +96,13 @@ public class MCDTransformToFK {
         }
 
         // Nom
-        String tableShortNameChild = "";
         MCDElement mcdElementSource = mldrTable.getMcdElementSource();
+        String tableShortNameChild = MDROrderService.getPath((MCDElement) mcdElementSource);
         if (mcdElementSource instanceof MCDEntity){
-            tableShortNameChild = mcdElementSource.getShortName();
+            tableShortNameChild += mcdElementSource.getShortName();
         }
         if (mcdElementSource instanceof MCDAssociation){
-            tableShortNameChild = mcdElementSource.getShortName();
+            tableShortNameChild += mcdElementSource.getShortName();
             // Si pas de shortName pour l'association n:n, il faut prendre le nom de la table qui a été créé avec
             // les shortName des tables constitutives et des rôles
             if (StringUtils.isEmpty(tableShortNameChild)){
@@ -196,7 +197,16 @@ public class MCDTransformToFK {
         }
 
         // Transformation des paramètres PK en paramètres FK
-        MCDTransformService.adjustParameters(mcdTransform, mldrTable, mldrFK, mdrColumnsFK);
+        MCDTransformService.adjustParameters(mcdTransform, mldrFK,
+                IMDRParameterService.to(mdrColumnsFK));
+
+        // Création de la contrainte de spécialisation
+
+        if (mcdGeneralization != null){
+            MCDTransformToSpecialize mcdTransformToSpecialize = new MCDTransformToSpecialize(mcdTransform);
+            MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized =
+                    mcdTransformToSpecialize.createOrModifyFromGenSpec(mldrTable, mcdGeneralization, mldrFK);
+        }
     }
 
 

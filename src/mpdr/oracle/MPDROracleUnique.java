@@ -12,7 +12,8 @@ public class MPDROracleUnique extends MPDRUnique implements IMPDROracleElement {
 
     private  static final long serialVersionUID = 1000;
 
-    public MPDROracleUnique(ProjectElement parent, IMLDRElement mldrElementSource) {
+    public MPDROracleUnique(ProjectElement parent, IMLDRElement mldrElementSource)
+    {
         super(parent, mldrElementSource);
     }
 

@@ -6,7 +6,7 @@ import mcd.MCDUnicity;
 import md.MDElement;
 import mdr.MDRUnique;
 import mdr.interfaces.IMDRParameter;
-import mldr.interfaces.IMDLRConstraint;
+import mldr.interfaces.IMLDRConstraint;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mldr.services.MLDRConstraintService;
@@ -15,7 +15,7 @@ import project.ProjectElement;
 import java.util.ArrayList;
 
 public class MLDRUnique extends MDRUnique implements IMLDRElement,
-        IMLDRElementWithSource, IMDLRConstraint {
+        IMLDRElementWithSource, IMLDRConstraint {
 
     private  static final long serialVersionUID = 1000;
 

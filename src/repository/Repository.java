@@ -49,6 +49,8 @@ public class Repository extends DefaultTreeModel{
         ArrayList <? extends MVCCDElement> childs = mvccdElementParent.getChildsSortDefault();
         int i = 0 ;
         while ( i < childs.size() ){
+
+
             // La trace ci-dessous provoque une erreur !
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(childs.get(i));
             if (childs.get(i) instanceof MVCCDElementProfileEntry){

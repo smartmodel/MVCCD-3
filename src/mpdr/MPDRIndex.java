@@ -4,7 +4,6 @@ import constraints.Constraint;
 import md.MDElement;
 import mdr.MDRConstraint;
 import mldr.interfaces.IMLDRElement;
-import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRConstraintSpecific;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
@@ -19,7 +18,7 @@ import stereotypes.StereotypesManager;
 import java.util.ArrayList;
 
 public abstract class MPDRIndex extends MDRConstraint implements IMPDRElement, IMPDRElementWithSource,
-        IMPDRConstraint, IMPDRConstraintSpecific {
+        IMPDRConstraintSpecific {
 
     private  static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;
@@ -91,6 +90,10 @@ public abstract class MPDRIndex extends MDRConstraint implements IMPDRElement, I
 
     public ArrayList<MPDRColumn> getMPDRColumns(){
         return MPDRIndexService.getMPDRColumns(this);
+    }
+
+    public int compareToDefault(MPDRIndex other) {
+        return MPDRIndexService.compareToDefault(this,  other);
     }
 
 }

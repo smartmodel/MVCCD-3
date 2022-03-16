@@ -100,6 +100,10 @@ public class PrefMPDRMySQLInputContent extends PrefMPDRInputContent {
             preferences.setMPDRMYSQL_TRIGGER_NAME_FORMAT(fieldTriggerNameFormat.getText());
         }
 
+        if (fieldViewNameFormat.checkIfUpdated()){
+            preferences.setMPDRMYSQL_VIEW_NAME_FORMAT(fieldViewNameFormat.getText());
+        }
+
         if (fieldCheckColumnDatatypeNameFormat.checkIfUpdated()){
             preferences.setMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT(fieldCheckColumnDatatypeNameFormat.getText());
         }
@@ -161,6 +165,7 @@ public class PrefMPDRMySQLInputContent extends PrefMPDRInputContent {
         fieldTAPIs.setSelected(preferences.getMPDRMYSQL_TAPIS());
         fieldSeqPKNameFormat.setText(preferences.getMPDRMYSQL_SEQPK_NAME_FORMAT());
         fieldTriggerNameFormat.setText(preferences.getMPDRMYSQL_TRIGGER_NAME_FORMAT());
+        fieldViewNameFormat.setText(preferences.getMPDRMYSQL_VIEW_NAME_FORMAT());
         fieldCheckColumnDatatypeNameFormat.setText(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
         fieldCheckColumnDatatypeMax30NameFormat.setText(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
     }

@@ -47,6 +47,8 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
     protected STextField fieldTriggerNameFormat;
     protected JLabel labelPackageNameFormat ;
     protected STextField fieldPackageNameFormat;
+    protected JLabel labelViewNameFormat ;
+    protected STextField fieldViewNameFormat;
     protected JLabel labelCheckColumnDatatypeNameFormat ;
     protected STextField fieldCheckColumnDatatypeNameFormat;
     protected JLabel labelCheckColumnDatatypeMax30NameFormat ;
@@ -145,6 +147,14 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         fieldPackageNameFormat.getDocument().addDocumentListener(this);
         fieldPackageNameFormat.addFocusListener(this);
 
+        labelViewNameFormat = new JLabel("Views");
+        fieldViewNameFormat = new STextField(this, labelViewNameFormat);
+        fieldViewNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldViewNameFormat.setToolTipText("Format de nommage des vues des TAPIs");
+        //TODO-1 Prévoir un formattage/contrôle minimal
+        fieldViewNameFormat.getDocument().addDocumentListener(this);
+        fieldViewNameFormat.addFocusListener(this);
+
         labelCheckColumnDatatypeNameFormat = new JLabel("Check des types de colonnes");
         fieldCheckColumnDatatypeNameFormat = new STextField(this, labelCheckColumnDatatypeNameFormat);
         fieldCheckColumnDatatypeNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
@@ -170,6 +180,7 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         super.getSComponents().add(fieldSeqPKNameFormat);
         super.getSComponents().add(fieldTriggerNameFormat);
         super.getSComponents().add(fieldPackageNameFormat);
+        super.getSComponents().add(fieldViewNameFormat);
         super.getSComponents().add(fieldCheckColumnDatatypeNameFormat);
         super.getSComponents().add(fieldCheckColumnDatatypeMax30NameFormat);
 
@@ -268,6 +279,12 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
             gbcA.gridx++;
             panelFormatNames.add(fieldPackageNameFormat, gbcA);
         }
+
+        gbcA.gridx = 0;
+        gbcA.gridy++;
+        panelFormatNames.add(labelViewNameFormat, gbcA);
+        gbcA.gridx++ ;
+        panelFormatNames.add(fieldViewNameFormat, gbcA);
 
         gbcA.gridx = 0;
         gbcA.gridy++;

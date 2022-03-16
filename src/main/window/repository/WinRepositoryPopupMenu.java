@@ -30,6 +30,7 @@ import mpdr.*;
 import mpdr.interfaces.IMPDRElementWithSource;
 import mpdr.tapis.MPDRStoredCode;
 import mpdr.tapis.MPDRTrigger;
+import mpdr.tapis.MPDRView;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
@@ -44,10 +45,7 @@ import repository.editingTreat.mcd.*;
 import repository.editingTreat.md.MDDatatypeEditingTreat;
 import repository.editingTreat.mdr.*;
 import repository.editingTreat.mldr.MLDRModelEditingTreat;
-import repository.editingTreat.mpdr.MPDRModelEditingTreat;
-import repository.editingTreat.mpdr.MPDRSequenceEditingTreat;
-import repository.editingTreat.mpdr.MPDRStoredCodeEditingTreat;
-import repository.editingTreat.mpdr.MPDRTriggerEditingTreat;
+import repository.editingTreat.mpdr.*;
 import repository.editingTreat.naming.NamingEditingTreat;
 import repository.editingTreat.preferences.*;
 import utilities.DefaultMutableTreeNodeService;
@@ -376,6 +374,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
             if (node.getUserObject() instanceof MPDRStoredCode) {
                 treatGenericRead(this, new MPDRStoredCodeEditingTreat());
+            }
+
+            if (node.getUserObject() instanceof MPDRView) {
+                treatGenericRead(this, new MPDRViewEditingTreat());
             }
 
         } catch (Exception e){

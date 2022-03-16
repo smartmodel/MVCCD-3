@@ -6,7 +6,7 @@ import md.MDElement;
 import mdr.MDRFK;
 import mdr.MDRParameter;
 import mdr.interfaces.IMDRParameter;
-import mldr.interfaces.IMDLRConstraint;
+import mldr.interfaces.IMLDRConstraint;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
@@ -16,7 +16,7 @@ import project.ProjectElement;
 import java.util.ArrayList;
 
 public class MLDRFK extends MDRFK implements IMLDRElement, IMLDRElementWithSource,
-        IMDLRConstraint, IMLDRSourceMPDRCConstraintSpecifc {
+        IMLDRConstraint, IMDRParameter, IMLDRSourceMPDRCConstraintSpecifc {
 
     private MCDElement mcdElementSource ;
 
@@ -68,6 +68,5 @@ public class MLDRFK extends MDRFK implements IMLDRElement, IMLDRElementWithSourc
     public ArrayList<MLDRColumn> getMLDRColumns(){
         return MLDRConstraintService.getMLDRColumns(this);
     }
-
 
 }

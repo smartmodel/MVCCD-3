@@ -7,7 +7,6 @@ import mdr.services.MDRModelService;
 import mpdr.MPDRModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
-import utilities.Trace;
 import utilities.UtilDivers;
 import utilities.files.FileRead;
 import utilities.files.FileWrite;
@@ -159,7 +158,6 @@ public class MPDRGenerateSQLUtil {
 
 
     public static String integreTabsApplicable(String sqlCodeDynamic, String tabsApplicable) {
-        Trace.println(sqlCodeDynamic);
         String resultat = "";
         String[] parts = StringUtils.split(sqlCodeDynamic, System.lineSeparator());
         if (parts.length >= 1){

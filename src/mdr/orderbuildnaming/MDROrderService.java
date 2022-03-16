@@ -3,7 +3,6 @@ package mdr.orderbuildnaming;
 import m.services.MElementService;
 import mcd.MCDElement;
 import org.apache.commons.lang.StringUtils;
-import preferences.PreferencesManager;
 
 public class MDROrderService {
 
@@ -11,8 +10,9 @@ public class MDROrderService {
         String value = "";
 
         String pathMode = MElementService.PATHSHORTNAME;
-        String separator = PreferencesManager.instance().preferences().getMDR_PATH_SEP_FORMAT();
 
+        //String separator = PreferencesManager.instance().preferences().getMDR_PATH_SEP_FORMAT();
+        String separator = "";
         String path = mcdElement.getPathCustomized(pathMode, separator);
 
         if (StringUtils.isNotEmpty(path)){

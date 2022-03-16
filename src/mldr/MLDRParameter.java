@@ -40,6 +40,7 @@ public class MLDRParameter extends MDRParameter implements IMLDRElement, IMLDREl
     }
 
 
+    // Pour l'affichage de la source MCD dans le formulaire de visualisation des contraintes d'unicité
     public String getTargetMCDType() {
         IMDRParameter imdrTarget = getTarget();
         if (imdrTarget != null) {

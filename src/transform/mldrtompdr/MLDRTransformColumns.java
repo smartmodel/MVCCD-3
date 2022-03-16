@@ -130,16 +130,17 @@ public class MLDRTransformColumns {
             mpdrColumn.setDerivedValue(mpdrDefaultValue);
         }
 
-
-        // Séquence de clé primaire associée
-        boolean c1 = mldrColumn.isPkNotFk();
-        boolean c2 = mldrColumn.getEntityParentSource().isInd();
-        boolean c3 = mpdrModel.getMpdrDbPK() == MPDRDBPK.SEQUENCE ;
-        if (c1 && c2 && c3) {
-            // Création de la séquence de PK
-            MLDRTransformToSequence mldrTransformToSequence = new MLDRTransformToSequence(
-                            mldrTransform, mldrColumn, mpdrModel, mpdrColumn);
-            MPDRSequence mpdrSequence = mldrTransformToSequence.createOrModifySeq(MPDRSequenceRole.PK);
+        // Séquence de clé primaire associée à une entité indépendante
+        if (mldrColumn.getEntityParentSource() != null) {
+            boolean c1 = mldrColumn.isPkNotFk();
+            boolean c2 = mldrColumn.getEntityParentSource().isInd();
+            boolean c3 = mpdrModel.getMpdrDbPK() == MPDRDBPK.SEQUENCE;
+            if (c1 && c2 && c3) {
+                // Création de la séquence de PK
+                MLDRTransformToSequence mldrTransformToSequence = new MLDRTransformToSequence(
+                        mldrTransform, mldrColumn, mpdrModel, mpdrColumn);
+                MPDRSequence mpdrSequence = mldrTransformToSequence.createOrModifySeq(MPDRSequenceRole.PK);
+            }
         }
 
 

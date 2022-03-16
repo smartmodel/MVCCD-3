@@ -5,8 +5,8 @@ import mldr.MLDRModel;
 import mldr.MLDRTable;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
-import mpdr.interfaces.IMPDRModelRequirePackages;
-import mpdr.interfaces.IMPDRTableRequirePackages;
+import mpdr.interfaces.IMPDRModelRequirePackage;
+import mpdr.interfaces.IMPDRTableRequirePackage;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
 
@@ -68,21 +68,7 @@ public class MLDRTransformTables {
         if ((mpdrModel instanceof MPDROracleModel) || (mpdrModel instanceof MPDRPostgreSQLModel)) {
 
             if (mpdrModel.getMPDR_TAPIs()) {
-                //TODO-PAS En cours de développement
-                if (mpdrModel instanceof MPDROracleModel) {
-
-                    MLDRTransformToBoxTriggers mldrTransformToBoxTriggers = new MLDRTransformToBoxTriggers(
-                            mldrTransform, mldrTable, mpdrModel, mpdrTable);
-                    mldrTransformToBoxTriggers.createOrModifyBoxTriggersForTAPIs();
-
-                    if (mpdrModel instanceof IMPDRModelRequirePackages) {
-                        MLDRTransformToBoxPackages mldrTransformToBoxPackages = new MLDRTransformToBoxPackages(
-                                mldrTransform, mldrTable, (IMPDRModelRequirePackages) mpdrModel,
-                                (IMPDRTableRequirePackages) mpdrTable);
-                        mldrTransformToBoxPackages.createOrModifyBoxPackages();
-                    }
-                }
-
+                createOrModifyTAPIs(mldrTable, mpdrTable);
             } else {
                 if (mpdrTable.getMPDRColumnPKProper() != null) {
                     // Conteneur de triggers et trigger d'alimentation
@@ -97,7 +83,25 @@ public class MLDRTransformTables {
     private void modifyTable(MLDRTable mldrTable, MPDRTable mpdrTable ) {
         MLDRTransformService.modifyNames(mldrTable, mpdrTable);
         MLDRTransformService.modifyName(mpdrModel, mpdrTable);
+    }
+
+    private void createOrModifyTAPIs(MLDRTable mldrTable, MPDRTable mpdrTable) {
+
+        //TODO-PAS En cours de développement
+        if (mpdrModel instanceof MPDROracleModel) {
+            MLDRTransformToBoxTriggers mldrTransformToBoxTriggers = new MLDRTransformToBoxTriggers(
+                    mldrTransform, mldrTable, mpdrModel, mpdrTable);
+            mldrTransformToBoxTriggers.createOrModifyBoxTriggersForTAPIs();
+
+            if (mpdrModel instanceof IMPDRModelRequirePackage) {
+                MLDRTransformToBoxPackages mldrTransformToBoxPackages = new MLDRTransformToBoxPackages(
+                        mldrTransform, mldrTable, (IMPDRModelRequirePackage) mpdrModel,
+                        (IMPDRTableRequirePackage) mpdrTable);
+                mldrTransformToBoxPackages.createOrModifyBoxPackages();
+            }
         }
+
+    }
 
 
 }

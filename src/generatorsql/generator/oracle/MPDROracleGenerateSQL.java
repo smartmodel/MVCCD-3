@@ -13,8 +13,10 @@ public class MPDROracleGenerateSQL extends MPDRGenerateSQL {
     private MPDROracleGenerateSQLSequence mpdrOracleGenerateSQLSequence;
     private MPDROracleGenerateSQLTrigger mpdrOracleGenerateSQLTrigger;
     private MPDROracleGenerateSQLFunction mpdrOracleGenerateSQLFunction;
+    private MPDROracleGenerateSQLPackage mpdrOracleGenerateSQLPackage;
     private MPDROracleGenerateSQLDynamicCode mpdrOracleGenerateSQLCodeDynamic;
     private MPDROracleGenerateSQLIndex mpdrOracleGenerateSQLIndex;
+    private MPDROracleGenerateSQLView mpdrOracleGenerateSQLView;
 
     public MPDROracleGenerateSQL(MPDRModel mpdrModel) {
         super (mpdrModel);
@@ -29,8 +31,10 @@ public class MPDROracleGenerateSQL extends MPDRGenerateSQL {
         mpdrOracleGenerateSQLSequence = new MPDROracleGenerateSQLSequence(this);
         mpdrOracleGenerateSQLTrigger = new MPDROracleGenerateSQLTrigger(this);
         mpdrOracleGenerateSQLFunction = new MPDROracleGenerateSQLFunction(this);
+        mpdrOracleGenerateSQLPackage = new MPDROracleGenerateSQLPackage(this);
         mpdrOracleGenerateSQLCodeDynamic = new MPDROracleGenerateSQLDynamicCode(this);
         mpdrOracleGenerateSQLIndex = new MPDROracleGenerateSQLIndex(this);
+        mpdrOracleGenerateSQLView = new MPDROracleGenerateSQLView(this);
     }
 
     public String generate() {
@@ -65,6 +69,11 @@ public class MPDROracleGenerateSQL extends MPDRGenerateSQL {
     }
 
     @Override
+    public MPDRGenerateSQLPackage getMpdrGenerateSQLPackage() {
+        return mpdrOracleGenerateSQLPackage;
+    }
+
+    @Override
     public MPDRGenerateSQLDynamicCode getMpdrGenerateSQLCodeDynamic() {
         return mpdrOracleGenerateSQLCodeDynamic;
     }
@@ -77,6 +86,10 @@ public class MPDROracleGenerateSQL extends MPDRGenerateSQL {
     @Override
     protected MPDRGenerateSQLIndex getMpdrGenerateSQLIndex() {
         return mpdrOracleGenerateSQLIndex;
+    }
+
+    public MPDROracleGenerateSQLView getMpdrOracleGenerateSQLView() {
+        return mpdrOracleGenerateSQLView;
     }
 
     @Override

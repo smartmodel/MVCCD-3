@@ -30,10 +30,7 @@ import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
 import mpdr.tapis.MPDRBoxPackages;
 import mpdr.tapis.MPDRBoxTriggers;
 import mpdr.tapis.MPDRContTAPIs;
-import mpdr.tapis.oracle.MPDROracleBoxPackages;
-import mpdr.tapis.oracle.MPDROracleBoxTriggers;
-import mpdr.tapis.oracle.MPDROraclePackage;
-import mpdr.tapis.oracle.MPDROracleTrigger;
+import mpdr.tapis.oracle.*;
 import mpdr.tapis.postgresql.MPDRPostgreSQLBoxProceduresOrFunctions;
 import mpdr.tapis.postgresql.MPDRPostgreSQLBoxTriggers;
 import mpdr.tapis.postgresql.MPDRPostgreSQLFunction;
@@ -493,6 +490,13 @@ public class MVCCDElementFactory {
     }
 
 
+    public MLDRConstraintCustomSpecialized createMLDRSpecialized(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
+        MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized =
+                new MLDRConstraintCustomSpecialized(mldrContConstraints, mcdElementSource);
+        return mldrConstraintCustomSpecialized;
+    }
+
+
     // Oracle
     public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {
         MPDROracleModel mpdrOracleModel = new MPDROracleModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_ORACLE_NAME);
@@ -553,6 +557,18 @@ public class MVCCDElementFactory {
     public MPDROracleUnique createMPDROracleUnique(MDRContConstraints mdrContConstraints, MLDRUnique mldrUnique) {
         MPDROracleUnique mpdrOracleUnique = new MPDROracleUnique(mdrContConstraints, mldrUnique);
         return mpdrOracleUnique;
+    }
+
+    public  MPDROracleConstraintCustomSpecialized createMPDROracleConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
+                                                                        MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
+        MPDROracleConstraintCustomSpecialized newSpecialized = new MPDROracleConstraintCustomSpecialized(mdrContConstraints, mldrConstraintCustomSpecialized);
+        return newSpecialized;
+    }
+
+    public MPDROracleView createMPDROracleView(MPDRContTAPIs mpdrContTAPIs,
+                                               MLDRConstraintCustomSpecialized mldrSpecialized) {
+        MPDROracleView mpdrOracleView = new MPDROracleView(mpdrContTAPIs, mldrSpecialized);
+        return mpdrOracleView;
     }
 
     public MPDROracleCheckSpecific createMPDROracleCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -675,6 +691,13 @@ public class MVCCDElementFactory {
         return mpdrMySQLUnique;
     }
 
+
+    public  MPDRMySQLConstraintCustomSpecialized createMPDRMySQLConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
+                                                                                              MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
+        MPDRMySQLConstraintCustomSpecialized newSpecialized = new MPDRMySQLConstraintCustomSpecialized(mdrContConstraints, mldrConstraintCustomSpecialized);
+        return newSpecialized;
+    }
+
     public MPDRMySQLCheckSpecific createMPDRMySQLCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
         MPDRMySQLCheckSpecific mpdrMySQLCheckSpecific = new MPDRMySQLCheckSpecific(mdrContConstraints, imldrSourceMPDRCConstraintSpecifc);
         return mpdrMySQLCheckSpecific;
@@ -761,6 +784,11 @@ public class MVCCDElementFactory {
         return mpdrPostgreSQLUnique;
     }
 
+    public  MPDRPostgreSQLConstraintCustomSpecialized createMPDRPostgreSQLConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
+                                                                                            MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
+        MPDRPostgreSQLConstraintCustomSpecialized newSpecialized = new MPDRPostgreSQLConstraintCustomSpecialized(mdrContConstraints, mldrConstraintCustomSpecialized);
+        return newSpecialized;
+    }
 
     public MPDRPostgreSQLCheckSpecific createMPDRPostgreSQLCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
         MPDRPostgreSQLCheckSpecific mpdrPostgreSQLCheckSpecific = new MPDRPostgreSQLCheckSpecific(mdrContConstraints, imldrSourceMPDRCConstraintSpecifc);
@@ -873,4 +901,5 @@ public class MVCCDElementFactory {
 
         return mpdrRelationFK;
     }
-}
+
+ }

@@ -11,8 +11,8 @@ import mdr.orderbuildnaming.MDROrderBuildTargets;
 import messages.MessagesBuilder;
 import mldr.MLDRTable;
 import mpdr.MPDRModel;
-import mpdr.interfaces.IMPDRModelRequirePackages;
-import mpdr.interfaces.IMPDRTableRequirePackages;
+import mpdr.interfaces.IMPDRModelRequirePackage;
+import mpdr.interfaces.IMPDRTableRequirePackage;
 import mpdr.tapis.MPDRPackage;
 import mpdr.tapis.MPDRPackageType;
 import org.apache.commons.lang.StringUtils;
@@ -22,15 +22,16 @@ import transform.mcdtomldr.services.MCDTransformService;
 
 public class MLDRTransformToPackage {
 
+
     private MLDRTransform mldrTransform ;
     private MLDRTable mldrTable;
-    private IMPDRModelRequirePackages mpdrModel ;
-    private IMPDRTableRequirePackages mpdrTable;
+    private IMPDRModelRequirePackage mpdrModel ;
+    private IMPDRTableRequirePackage mpdrTable;
 
     public MLDRTransformToPackage(MLDRTransform mldrTransform,
                                   MLDRTable mldrTable,
-                                  IMPDRModelRequirePackages mpdrModel,
-                                  IMPDRTableRequirePackages mpdrTable) {
+                                  IMPDRModelRequirePackage mpdrModel,
+                                  IMPDRTableRequirePackage mpdrTable) {
         this.mldrTransform = mldrTransform;
         this.mldrTable = mldrTable;
         this.mpdrModel = mpdrModel;
@@ -105,5 +106,6 @@ public class MLDRTransformToPackage {
         return names;
 
     }
+
 
 }

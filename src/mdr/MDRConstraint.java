@@ -4,7 +4,6 @@ import main.MVCCDElement;
 import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRConstraintService;
 import project.ProjectElement;
-import stereotypes.StereotypeService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,16 +56,60 @@ public abstract class MDRConstraint extends MDROperation{
 
 
     public int compareToDefault(MDRConstraint other) {
+
         return MDRConstraintService.compareToDefault(this, other);
     }
 
 
     //TODO-0 A retirer en ayant les icones
     public String toString(){
+
+        /*
+        if (StringUtils.isNotEmpty(getName())){
+            return StereotypeService.getUMLName(getDefaultStereotype()) + " " + getName();
+        } else {
+            return "Nom à affecter" ;
+        }
+
+         */
+
+        /*
         try {
             return StereotypeService.getUMLName(getDefaultStereotype()) + " " + getName();
         } catch (Exception e){
-            return "Nom et nature à affecter";
+            if (getName() != null){
+                return "Err. stéréo " + getName() ;
+            }
+            return "Nom (et nature à affecter)";
         }
+        */
+
+
+
+        /*
+        String resultat = "";
+        if (getDefaultStereotype() != null ){
+            if (StringUtils.isNotEmpty(StereotypeService.getUMLName(getDefaultStereotype()))){
+                resultat += StereotypeService.getUMLName(getDefaultStereotype()) ;
+            } else {
+                resultat = "Err. stéréo UML";
+            }
+        } else {
+            resultat = "Err. stéréo défault ";
+        }
+        if (StringUtils.isNotEmpty(getName())){
+            resultat += getName();
+        } else {
+            resultat += "Err. name ";
+        }
+        return resultat;
+
+         */
+
+        //TODO-0 getDefaultStereotype() provoque une erreur ....
+        //Trace.println(this.getName() + "   " + this.getClass().getName());
+        //Trace.println(getDefaultStereotype().getName());
+        //return getDefaultStereotype() + " " + getName();
+        return getName();
     }
 }

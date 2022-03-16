@@ -12,6 +12,7 @@ import mdr.MDRFKNature;
 import mdr.MDRNamingLength;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
 import mdr.orderbuildnaming.MDROrderBuildTargets;
+import mdr.services.IMDRParameterService;
 import messages.MessagesBuilder;
 import mldr.*;
 import org.apache.commons.lang.StringUtils;
@@ -41,7 +42,8 @@ public class MCDTransformToPK {
         ArrayList<MDRColumn> mdrColumnPKs = new ArrayList<MDRColumn>();
         mdrColumnPKs.add(createOrModifyColumnPKProper(mcdEntity, mldrTable));
 
-        MCDTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
+        MCDTransformService.adjustParameters(mcdTransform, mldrPK,
+                IMDRParameterService.to(mdrColumnPKs));
     }
 
 
@@ -70,7 +72,8 @@ public class MCDTransformToPK {
             mdrColumnPKs.add(mdrColumnPKProper);
         }
 
-        MCDTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
+        MCDTransformService.adjustParameters(mcdTransform, mldrPK,
+                IMDRParameterService.to(mdrColumnPKs));
 
         return mldrPK;
     }
@@ -90,7 +93,8 @@ public class MCDTransformToPK {
 
         MLDRPK mldrPK = createOrModifyPKAssNN(mcdAssNN,mldrTable);
 
-        MCDTransformService.adjustParameters(mcdTransform, mldrTable, mldrPK, mdrColumnPKs);
+        MCDTransformService.adjustParameters(mcdTransform, mldrPK,
+                IMDRParameterService.to(mdrColumnPKs));
 
         return mldrPK;
     }

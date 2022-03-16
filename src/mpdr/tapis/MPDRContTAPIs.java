@@ -5,6 +5,8 @@ import mdr.MDRElement;
 import mpdr.MPDRTable;
 import project.ProjectElement;
 
+import java.util.ArrayList;
+
 public class MPDRContTAPIs extends MDRElement {
 
     private static final long serialVersionUID = 1000;
@@ -45,8 +47,27 @@ public class MPDRContTAPIs extends MDRElement {
     }
 
 
+    public ArrayList<MPDRView> getMPDRAllViews() {
+        ArrayList<MPDRView> resultat = new ArrayList<MPDRView>();
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MPDRView){
+                resultat.add((MPDRView) mvccdElement) ;
+            }
+        }
+        return resultat ;
+    }
+
+
+    public MPDRView getMPDRViewByType(MPDRViewType type) {
+        for (MPDRView mpdrView : getMPDRAllViews()){
+             if (mpdrView.getType() == MPDRViewType.SPEC){
+                 return mpdrView ;
+             }
+        }
+        return null;
+    }
+
     public MPDRTable getMPDRTableAccueil (){
         return (MPDRTable) getParent();
     }
-
 }
