@@ -5,7 +5,13 @@ import mpdr.MPDRDB;
 
 import java.util.ArrayList;
 
+// Important
+// Le code inclu doit se trouver dans la liste après le code d'appel
+
 public enum MPDRGenerateSQLDynamicCodeType {
+    INNER_JOIN("-INNER_JOIN-", "inner_join.txt",new MPDRDB[]{MPDRDB.ORACLE}),
+    IOIR_VIEW_SPECIALIZED("-IOIR_VIEW_SPECIALIZED-", "ioir_view_specialized.txt",new MPDRDB[]{MPDRDB.ORACLE}),
+    IOIR_VIEW_MEMBER_SPECIALIZED("-IOIR_VIEW_MEMBER_SPECIALIZED-", "ioir_view_member_specialized.txt",new MPDRDB[]{MPDRDB.ORACLE}),
     TRIGGER_NEW_TO_RECORD("-TRIGGER_NEW_TO_RECORD-", "trigger_new_to_record.txt", new MPDRDB[]{MPDRDB.ORACLE} ),
     TRIGGER_OLD_TO_RECORD("-TRIGGER_OLD_TO_RECORD-", "trigger_old_to_record.txt", new MPDRDB[]{MPDRDB.ORACLE} ),
     TRIGGER_RECORD_TO_NEW("-TRIGGER_RECORD_TO_NEW-", "trigger_record_to_new.txt", new MPDRDB[]{MPDRDB.ORACLE} ),
@@ -49,6 +55,8 @@ public enum MPDRGenerateSQLDynamicCodeType {
     COLUMNS_AUDIT_AJ("-COLUMNS_AUDIT_AJ-", "columns_audit_aj.txt",new MPDRDB[]{MPDRDB.ORACLE}),
     COLUMNS_AUDIT_MO("-COLUMNS_AUDIT_MO-", "columns_audit_mo.txt",new MPDRDB[]{MPDRDB.ORACLE}),
     COLUMN_LIEN_PROG("-COLUMN_LIEN_PROG-", "lien_prog.txt",new MPDRDB[]{MPDRDB.ORACLE});
+
+
 
 
     private java.lang.String key;

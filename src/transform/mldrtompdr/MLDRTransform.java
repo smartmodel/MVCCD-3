@@ -13,6 +13,8 @@ import mpdr.interfaces.IMPDRModelRequirePackage;
 import mpdr.mysql.MPDRMySQLModel;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.postgresql.MPDRPostgreSQLModel;
+import mpdr.tapis.MPDRView;
+import mpdr.tapis.MPDRViewType;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.MDTransform;
@@ -59,6 +61,20 @@ public class MLDRTransform extends MDTransform {
             MLDRTransformRelations mldrTransformRelations = new MLDRTransformRelations(this, mldrModel, mpdrModel);
             mldrTransformRelations.transformRelations();
 
+            // Vues des TAPIs
+            //#MAJ 2022-03-25 Erreur génération des vues. La contrainte PK de la table parent doit exister ...
+            // Donc la génération doit se faire lorsque toutes les contraintes de tables sont créées
+            for (MLDRTable mldrTable : mldrModel.getMLDRTables()){
+                // A généraliser car que pour les vues de spécialisation...
+                if (mldrTable.getMDRConstraintCustomSpecialized() != null){
+                    MLDRTransformToView mldrTransformToView = new MLDRTransformToView(
+                            this,
+                            (MLDRConstraintCustomSpecialized) mldrTable.getMDRConstraintCustomSpecialized(),
+                            mpdrModel,
+                            mpdrModel.getMPDRTableByMLDRTableSource(mldrTable));
+                    MPDRView mpdrView = mldrTransformToView.createOrModifyView(MPDRViewType.SPEC);
+                }
+            }
             //Suppression des MPDRElement absents de l'itération
             deleteMDRElementNotInIteration();
 
@@ -99,7 +115,8 @@ public class MLDRTransform extends MDTransform {
             mpdrOracleModel.setMpdrDbPK(preferences.getMPDRORACLE_PK_GENERATE());
             mpdrOracleModel.setTapis(preferences.getMPDRORACLE_TAPIS());
             mpdrOracleModel.setSequencePKNameFormat(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
-            mpdrOracleModel.setTriggerNameFormat(preferences.getMPDRORACLE_TRIGGER_NAME_FORMAT());
+            mpdrOracleModel.setTriggerTableNameFormat(preferences.getMPDRORACLE_TRIGGER_TABLE_NAME_FORMAT());
+            mpdrOracleModel.setTriggerViewNameFormat(preferences.getMPDRORACLE_TRIGGER_VIEW_NAME_FORMAT());
             mpdrOracleModel.setPackageNameFormat(preferences.getMPDRORACLE_PACKAGE_NAME_FORMAT());
             mpdrOracleModel.setViewNameFormat(preferences.getMPDRORACLE_VIEW_NAME_FORMAT());
             mpdrOracleModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT());
@@ -115,7 +132,8 @@ public class MLDRTransform extends MDTransform {
             mpdrMySQLModel.setMpdrDbPK(preferences.getMPDRMYSQL_PK_GENERATE());
             mpdrMySQLModel.setTapis(preferences.getMPDRMYSQL_TAPIS());
             mpdrMySQLModel.setSequencePKNameFormat(preferences.getMPDRMYSQL_SEQPK_NAME_FORMAT());
-            mpdrMySQLModel.setTriggerNameFormat(preferences.getMPDRMYSQL_TRIGGER_NAME_FORMAT());
+            mpdrMySQLModel.setTriggerTableNameFormat(preferences.getMPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT());
+            mpdrMySQLModel.setTriggerViewNameFormat(preferences.getMPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT());
             mpdrMySQLModel.setViewNameFormat(preferences.getMPDRMYSQL_VIEW_NAME_FORMAT());
             mpdrMySQLModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
             mpdrMySQLModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
@@ -130,7 +148,8 @@ public class MLDRTransform extends MDTransform {
             mpdrPostgreSQLModel.setMpdrDbPK(preferences.getMPDRPOSTGRESQL_PK_GENERATE());
             mpdrPostgreSQLModel.setTapis(preferences.getMPDRORACLE_TAPIS());
             mpdrPostgreSQLModel.setSequencePKNameFormat(preferences.getMPDRPOSTGRESQL_SEQPK_NAME_FORMAT());
-            mpdrPostgreSQLModel.setTriggerNameFormat(preferences.getMPDRPOSTGRESQL_TRIGGER_NAME_FORMAT());
+            mpdrPostgreSQLModel.setTriggerTableNameFormat(preferences.getMPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT());
+            mpdrPostgreSQLModel.setTriggerViewNameFormat(preferences.getMPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT());
             mpdrPostgreSQLModel.setViewNameFormat(preferences.getMPDRPOSTGRESQL_VIEW_NAME_FORMAT());
             mpdrPostgreSQLModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
             mpdrPostgreSQLModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());

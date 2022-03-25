@@ -10,6 +10,8 @@ public enum MPDRTriggerType {
     BIR_PKIND("BIR", "birPKIND.txt", MPDRTriggerUsage.WITHOUTTAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE, MPDRDB.POSTGRESQL}),
     BIR("BIR", "bir.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
+            new MPDRDB[]{MPDRDB.ORACLE}),
+    IOIR("IOIR", "ioir.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.VIEW,
             new MPDRDB[]{MPDRDB.ORACLE})/*,
     BUR("BUR", "bur.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),

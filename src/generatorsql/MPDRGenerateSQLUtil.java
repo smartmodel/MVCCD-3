@@ -217,7 +217,7 @@ public class MPDRGenerateSQLUtil {
         for (MPDRGenerateSQLObjectInCode mpdrGenerateSQLObjectInCode : MPDRGenerateSQLObjectInCode.getAll()){
             String key = mpdrGenerateSQLObjectInCode.getKey();
             String name = mpdrGenerateSQLObjectInCode.getNameByDb(mpdrModel.getDb());
-            name = MDRModelService.caseNaming(name, mpdrModel.getObjectsInCodeFormatForDB());
+            name = MDRModelService.caseFormat(name, mpdrModel.getObjectsInCodeFormatForDB());
             generateSQLCode = UtilDivers.replaceKeyValue(generateSQLCode, key, name);
         }
         return generateSQLCode;

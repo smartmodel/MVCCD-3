@@ -10,6 +10,8 @@ import mcd.MCDNID;
 import mdr.MDRColumn;
 import mldr.MLDRColumn;
 import mpdr.MPDRColumn;
+import mpdr.tapis.MPDRColumnView;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
@@ -50,7 +52,12 @@ public class MDRColumnsService {
 
 
     public static int compareToDefault(MDRColumn courant, MDRColumn other) {
-        return compareToInternal(courant, other, COMPARE_DEFAULT);
+        //#MAJ 2022-03-18 Tri par défaut des colonnes (pas de tri pour les colonnes de vues)
+        if (! (courant instanceof MPDRColumnView)) {
+            return compareToInternal(courant, other, COMPARE_DEFAULT);
+        } else {
+            return COMPARE_DEFAULT;
+        }
     }
 
 
@@ -62,7 +69,6 @@ public class MDRColumnsService {
         // 2. La PK seules
         // 3. Les FK seules
         // 4. les colonnes non clés provenant d'attribut ou colonnes générées !
-
         if (courant.isPFk()) {
             if (other.isPFk()) {
                 return compareFKs(courant, other);
@@ -198,6 +204,41 @@ public class MDRColumnsService {
             if (mdrColumn instanceof MLDRColumn){
                 resultat.add((MLDRColumn) mdrColumn );
             }
+        }
+        return resultat;
+    }
+
+
+    public static String getListColumnsAsString(ArrayList<? extends MDRColumn> mdrcolumns,
+                                                String separator,
+                                                boolean withTableOrView ){
+        String resultat = "";
+        for (MDRColumn mdrColumn : mdrcolumns){
+            if (StringUtils.isNotEmpty(resultat)){
+                resultat =  resultat+ separator;
+            }
+            String name = "";
+            if (withTableOrView){
+                name += mdrColumn.getMDRTableAccueil().getName() + Preferences.SQL_MARKER_NAMESPACE;
+            }
+            name += mdrColumn.getName();
+            resultat = resultat + name;
+        }
+        return resultat;
+    }
+
+
+    public static String getListRecordColumnsAsString(ArrayList<? extends MDRColumn> mdrcolumns,
+                                                String separator,
+                                                String record){
+        String resultat = "";
+        for (MDRColumn mdrColumn : mdrcolumns){
+            if (StringUtils.isNotEmpty(resultat)){
+                resultat =  resultat+ separator;
+            }
+            String name = "";
+            name += record + Preferences.SQL_MARKER_NAMESPACE + mdrColumn.getName();
+            resultat = resultat + name;
         }
         return resultat;
     }

@@ -89,6 +89,11 @@ public class MPDRPostgreSQLGenerateSQL extends MPDRGenerateSQL {
     }
 
     @Override
+    protected MPDRGenerateSQLView getMpdrGenerateSQLView() {
+        return null;
+    }
+
+    @Override
     protected String getTemplateBDDirectory() {
         return Preferences.DIRECTORY_TEMPLATES_POSTGRESQL_NAME;
     }

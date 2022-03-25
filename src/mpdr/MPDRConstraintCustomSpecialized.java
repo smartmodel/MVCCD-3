@@ -37,4 +37,12 @@ public abstract class MPDRConstraintCustomSpecialized extends MDRConstraintCusto
     }
 
 
+    public MPDRFK getMPDRFKToTableGen(){
+        return (MPDRFK) getMDRFKToTableGen();
+    }
+
+    public MPDRTable getMPDRTableGen(){
+        return (MPDRTable) getMDRTableGen();
+    }
+
 }

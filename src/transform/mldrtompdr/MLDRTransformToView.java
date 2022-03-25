@@ -66,6 +66,21 @@ public class MLDRTransformToView {
         MCDTransformService.names(mpdrView,
                 buildNameView((MLDRTable) mldrSpecialized.getMDRTableAccueil(), mpdrViewType),
                 (MDRModel) mpdrModel);
+
+
+
+
+        // Colonnes
+        MPDRTransformToColumnsView mpdrTransformToColumnsView = new MPDRTransformToColumnsView(mldrTransform, mpdrTable, mpdrModel, mpdrView);
+        mpdrTransformToColumnsView.transformColumns();
+
+
+
+        // Triggers
+        MLDRTransformToBoxTriggersView mldrTransformToBoxTriggersView = new MLDRTransformToBoxTriggersView(
+                mldrTransform, mldrSpecialized, mpdrModel, mpdrView);
+        mldrTransformToBoxTriggersView.createOrModifyBoxTriggers();
+
     }
 
 

@@ -111,10 +111,14 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
             preferences.setMPDRPOSTGRESQL_SEQPK_NAME_FORMAT(fieldSeqPKNameFormat.getText());
         }
 
-        if (fieldTriggerNameFormat.checkIfUpdated()){
-            preferences.setMPDRPOSTGRESQL_TRIGGER_NAME_FORMAT(fieldTriggerNameFormat.getText());
+        if (fieldTriggerTableNameFormat.checkIfUpdated()){
+            preferences.setMPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT(fieldTriggerTableNameFormat.getText());
         }
-        
+
+        if (fieldTriggerViewNameFormat.checkIfUpdated()){
+            preferences.setMPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT(fieldTriggerViewNameFormat.getText());
+        }
+
         if (fieldViewNameFormat.checkIfUpdated()){
             preferences.setMPDRPOSTGRESQL_VIEW_NAME_FORMAT(fieldViewNameFormat.getText());
         }
@@ -178,7 +182,8 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
                 preferences.getMPDRPOSTGRESQL_PK_GENERATE().getText());
         fieldTAPIs.setSelected(preferences.getMPDRPOSTGRESQL_TAPIS());
         fieldSeqPKNameFormat.setText(preferences.getMPDRPOSTGRESQL_SEQPK_NAME_FORMAT());
-        fieldTriggerNameFormat.setText(preferences.getMPDRPOSTGRESQL_TRIGGER_NAME_FORMAT());
+        fieldTriggerTableNameFormat.setText(preferences.getMPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT());
+        fieldTriggerViewNameFormat.setText(preferences.getMPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT());
         fieldViewNameFormat.setText(preferences.getMPDRPOSTGRESQL_VIEW_NAME_FORMAT());
         fieldCheckColumnDatatypeNameFormat.setText(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
         fieldCheckColumnDatatypeMax30NameFormat.setText(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());

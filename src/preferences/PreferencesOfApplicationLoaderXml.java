@@ -17,7 +17,6 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
@@ -82,7 +81,7 @@ public class PreferencesOfApplicationLoaderXml {
       applicationPrefs.setDIAGRAMMER_SHOW_GRID(Boolean.valueOf(showDiagrammerGrid.getTextContent()));
 
       // Validation du fichier
-      validator.validate(new DOMSource(document));
+      //validator.validate(new DOMSource(document));
 
     } catch (Exception e) {
       //throw new CodeApplException("Erreur de lecture du fichier de préférences");

@@ -10,17 +10,17 @@ import mpdr.tapis.*;
 
 import java.util.ArrayList;
 
-public class MLDRTransformToBoxTriggers {
+public class MLDRTransformToBoxTriggersTable {
 
     private MLDRTransform mldrTransform ;
     private MLDRTable mldrTable;
     private MPDRModel mpdrModel ;
     private MPDRTable mpdrTable;
 
-    public MLDRTransformToBoxTriggers(MLDRTransform mldrTransform,
-                                      MLDRTable mldrTable,
-                                      MPDRModel mpdrModel,
-                                      MPDRTable mpdrTable) {
+    public MLDRTransformToBoxTriggersTable(MLDRTransform mldrTransform,
+                                           MLDRTable mldrTable,
+                                           MPDRModel mpdrModel,
+                                           MPDRTable mpdrTable) {
         this.mldrTransform = mldrTransform;
         this.mldrTable = mldrTable;
         this.mpdrModel = mpdrModel;

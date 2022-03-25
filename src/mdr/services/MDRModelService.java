@@ -140,10 +140,10 @@ public class MDRModelService {
         } else {
             mdrCaseFormat = mdrModel.getNamingFormatFuture();
         }
-        return caseNaming(name, mdrCaseFormat);
+        return caseFormat(name, mdrCaseFormat);
     }
 
-    public static String caseNaming(String name, MDRCaseFormat mdrCaseFormat){
+    public static String caseFormat(String name, MDRCaseFormat mdrCaseFormat){
         if (mdrCaseFormat == MDRCaseFormat.NOTHING) {
             // name tel que repris de MPDRModelService.builName
         }

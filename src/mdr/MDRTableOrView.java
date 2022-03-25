@@ -6,6 +6,7 @@ import main.MVCCDElement;
 import mdr.interfaces.IMDRElementNamingPreferences;
 import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
+import mdr.services.MDRTableOrViewService;
 import project.ProjectElement;
 import stereotypes.StereotypeService;
 
@@ -100,8 +101,6 @@ public abstract class MDRTableOrView extends MDRElement implements IMDRElementWi
         return false;
     }
 
-
-
     @Override
     public String getStereotypesInBox() {
         return StereotypeService.getUMLNamingInBox(getStereotypes());
@@ -120,6 +119,11 @@ public abstract class MDRTableOrView extends MDRElement implements IMDRElementWi
     @Override
     public String getConstraintsInLine() {
         return ConstraintService.getUMLNamingInLine(getConstraints());
+    }
+
+    public String getListColumnsAsString(String separator,
+                                         boolean withTableOrView){
+        return MDRTableOrViewService.getListColumnsAsString(this, separator, withTableOrView);
     }
 
 }

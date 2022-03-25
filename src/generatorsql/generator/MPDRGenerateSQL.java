@@ -9,6 +9,7 @@ import mpdr.interfaces.IMPDRTableRequirePackage;
 import mpdr.tapis.MPDRFunction;
 import mpdr.tapis.MPDRPackage;
 import mpdr.tapis.MPDRTrigger;
+import mpdr.tapis.MPDRView;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.UtilDivers;
@@ -63,6 +64,10 @@ public abstract class MPDRGenerateSQL {
             message = MessagesBuilder.getMessagesProperty("generate.sql.drop.indexes");
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
             generateSQLCode += generateSQLCommandIndexes(DROP);
+
+            message = MessagesBuilder.getMessagesProperty("generate.sql.drop.views");
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+            generateSQLCode += generateSQLCommandViews(DROP);
         }
 
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.tables");
@@ -92,6 +97,10 @@ public abstract class MPDRGenerateSQL {
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.indexes");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
         generateSQLCode += generateSQLCommandIndexes(CREATE);
+
+        message = MessagesBuilder.getMessagesProperty("generate.sql.create.views");
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        generateSQLCode += generateSQLCommandViews(CREATE);
 
         return generateSQLCode;
     }
@@ -263,6 +272,27 @@ public abstract class MPDRGenerateSQL {
         return generateSQLCode;
     }
 
+    public String generateSQLCommandViews(int command) {
+        String generateSQLCode = "";
+        ArrayList<MPDRTable> mpdrTables = mpdrModel.getMPDRTables();
+
+        for (MPDRTable mpdrTable : mpdrTables) {
+            ArrayList<MPDRView> mpdrViews = mpdrTable.getMPDRViews();
+            for (MPDRView mpdrView : mpdrViews) {
+                if (command == CREATE) {
+                    generateSQLCode += getMpdrGenerateSQLView().generateSQLCreateView(mpdrView);
+                    generateSQLCode += delimiter();
+                }
+                if (command == DROP) {
+                    generateSQLCode += getMpdrGenerateSQLView().generateSQLDropView(mpdrView);
+                    generateSQLCode += delimiter();
+                }
+
+            }
+        }
+        return generateSQLCode;
+    }
+
 
     public abstract MPDRGenerateSQLEmptySchema getMpdrGenerateSQLEmptySchema() ;
 
@@ -281,6 +311,9 @@ public abstract class MPDRGenerateSQL {
     public abstract MPDRGenerateSQLFK getMpdrGenerateSQLFK();
 
     protected abstract MPDRGenerateSQLIndex getMpdrGenerateSQLIndex();
+
+    protected abstract MPDRGenerateSQLView getMpdrGenerateSQLView();
+
 
     private String getTemplateDirBase() {
         return Preferences.DIRECTORY_TEMPLATES_NAME + Preferences.SYSTEM_FILE_SEPARATOR +

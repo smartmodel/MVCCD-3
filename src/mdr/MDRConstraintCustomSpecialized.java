@@ -1,6 +1,8 @@
 package mdr;
 
 import constraints.Constraint;
+import exceptions.CodeApplException;
+import mdr.interfaces.IMDRParameter;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -13,8 +15,6 @@ import java.util.ArrayList;
 public abstract class MDRConstraintCustomSpecialized extends MDRConstraintCustom  {
 
     private  static final long serialVersionUID = 1000;
-
-
 
     public MDRConstraintCustomSpecialized(ProjectElement parent) {
         super(parent);
@@ -49,6 +49,21 @@ public abstract class MDRConstraintCustomSpecialized extends MDRConstraintCustom
     public ArrayList<Constraint> getConstraints() {
         return new ArrayList<Constraint>();
     }
+
+
+    public MDRFK getMDRFKToTableGen(){
+        ArrayList<IMDRParameter> imdrParameters = getTargets();
+        if (imdrParameters.get(0) instanceof MDRFK){
+            return (MDRFK) imdrParameters.get(0);
+        } else {
+            throw new CodeApplException("La contrainte de spécialisation de la table " + this.getMDRTableAccueil()+ " n'est pas correctement structurée");
+        }
+    }
+
+    public MDRTable getMDRTableGen(){
+        return getMDRFKToTableGen().getMdrPK().getMDRTableAccueil();
+    }
+
 
 }
 

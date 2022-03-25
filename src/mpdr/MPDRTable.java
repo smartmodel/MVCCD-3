@@ -14,6 +14,7 @@ import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.interfaces.IMPDRTableOrView;
 import mpdr.services.MPDRColumnService;
 import mpdr.services.MPDRConstraintService;
 import mpdr.services.MPDRTableService;
@@ -27,7 +28,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRElementWithSource {
+public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRElementWithSource, IMPDRTableOrView {
 
     private static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;
@@ -122,7 +123,8 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public abstract MPDRBoxTriggers createBoxTriggers(MLDRTable mldrTable);
 
-    public abstract MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, MLDRTable mldrTable);
+    public abstract MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType,
+                                              IMLDRElement imldrElement);
 
     public abstract MPDRView createView(MLDRConstraintCustomSpecialized mldrSpecialized);
 
@@ -153,6 +155,10 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public MPDRPK getMPDRPK() {
         return MPDRConstraintService.getMPDRPK(getMDRConstraints());
+    }
+
+    public MPDRConstraintCustomSpecialized getMPDRConstraintCustomSpecialized(){
+        return (MPDRConstraintCustomSpecialized) getMDRConstraintCustomSpecialized();
     }
 
     public ArrayList<MPDRFK> getMPDRFKs() {

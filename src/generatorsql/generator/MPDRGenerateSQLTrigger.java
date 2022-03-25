@@ -5,6 +5,7 @@ import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRTableRequirePackage;
 import mpdr.tapis.MPDRPackageType;
 import mpdr.tapis.MPDRTrigger;
+import mpdr.tapis.MPDRTriggerScope;
 import mpdr.tapis.MPDRTriggerType;
 import preferences.Preferences;
 
@@ -20,8 +21,12 @@ public abstract class MPDRGenerateSQLTrigger {
                 Preferences.TEMPLATE_DROP_TRIGGER,
                 getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_TRIGGER_NAME_WORD, mpdrTrigger.getName());
+
+        /*
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD,
                 mpdrTrigger.getMPDRTableAccueil().getName());
+
+         */
 
         return generateSQLCode;
     }
@@ -51,9 +56,17 @@ public abstract class MPDRGenerateSQLTrigger {
             }
         }
 
+        // Traitement du code dynamique
+        generateSQLCode = getMPDRGenerateSQL().getMpdrGenerateSQLCodeDynamic().generateSQLCodeDynamic(mpdrTrigger, generateSQLCode);
+
         // les noms d'objets doivent être traités après le code dynamique qui peut y référer
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD,
                 mpdrTrigger.getMPDRTableAccueil().getName());
+        if (mpdrTrigger.getType().getMpdrTriggerScope() == MPDRTriggerScope.VIEW) {
+            generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_VIEW_NAME_WORD,
+                    mpdrTrigger.getMPDRViewAccueil().getName());
+        }
+
         if (tableAccueil instanceof IMPDRTableRequirePackage){
             String namePackageTAPIs = ((IMPDRTableRequirePackage) tableAccueil).getMPDRPackageByType(MPDRPackageType.TAPIS_SPEC).getName();
             generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_PACKAGE_NAME_WORD,

@@ -60,6 +60,8 @@ public class MDROrderBuildNaming {
     private MDROrderWordFKIndSep fkIndSep;
     private MDROrderWordUniqueNatureSep uniqueNatSep;
 
+    private MDROrderWordViewName viewName;
+
     private MDROrderWordTypeTriggerMarker typeTriggerMarker ;
     private MDROrderWordTypePackageMarker typePackageMarker ;
     private MDROrderWordTypeViewMarker typeViewMarker ;
@@ -108,6 +110,8 @@ public class MDROrderBuildNaming {
         fkIndSep = new MDROrderWordFKIndSep(Preferences.MDR_FKIND_SEP_WORD);
         peaSep = new MDROrderWordPEASep(Preferences.MDR_PEA_SEP_WORD);
         uniqueNatSep = new MDROrderWordUniqueNatureSep(Preferences.MDR_UNIQUE_NATURE_SEP_WORD);
+
+        viewName = new MDROrderWordViewName(Preferences.MPDR_VIEW_NAME_WORD);
 
         typeTriggerMarker = new MDROrderWordTypeTriggerMarker(Preferences.MPDR_TYPE_TRIGGER_MARKER_WORD);
         typePackageMarker = new MDROrderWordTypePackageMarker(Preferences.MPDR_TYPE_PACKAGE_MARKER_WORD);
@@ -219,6 +223,9 @@ public class MDROrderBuildNaming {
 
                 } else if (mg.equals(Preferences.MDR_UNIQUE_NATURE_SEP_WORD)) {
                     value = pushValue(uniqueNatSep);
+
+                } else if (mg.equals(Preferences.MPDR_VIEW_NAME_WORD)) {
+                    value = pushValue(viewName);
 
                 } else if (mg.equals(Preferences.MPDR_TYPE_TRIGGER_MARKER_WORD)) {
                     value = pushValue(typeTriggerMarker);
@@ -783,6 +790,14 @@ public class MDROrderBuildNaming {
 
     public void setUniqueNatSep(MDROrderWordUniqueNatureSep uniqueNatSep) {
         this.uniqueNatSep = uniqueNatSep;
+    }
+
+    public MDROrderWordViewName getViewName() {
+        return viewName;
+    }
+
+    public void setViewName(MDROrderWordViewName viewName) {
+        this.viewName = viewName;
     }
 
     public MDROrderWordUniqueName getUniqueName() {

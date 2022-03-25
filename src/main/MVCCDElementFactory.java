@@ -18,6 +18,7 @@ import mdr.*;
 import mdr.interfaces.IMDRParameter;
 import messages.MessagesBuilder;
 import mldr.*;
+import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mldr.services.MLDRContConstraintsService;
 import mpdr.*;
@@ -30,6 +31,7 @@ import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
 import mpdr.tapis.MPDRBoxPackages;
 import mpdr.tapis.MPDRBoxTriggers;
 import mpdr.tapis.MPDRContTAPIs;
+import mpdr.tapis.MPDRView;
 import mpdr.tapis.oracle.*;
 import mpdr.tapis.postgresql.MPDRPostgreSQLBoxProceduresOrFunctions;
 import mpdr.tapis.postgresql.MPDRPostgreSQLBoxTriggers;
@@ -318,7 +320,7 @@ public class MVCCDElementFactory {
 
     private void createContentPackage(MCDElement parent) {
         MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(parent,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
-        MCDContEntities mcdContEntities = MVCCDElementFactory.instance().createMCDEntities(parent,Preferences.REPOSITORY_MCD_ENTITIES_NAME);
+        MCDContEntities mcdContEntities = MVCCDElementFactory.instance().createMCDEntities(parent, Preferences.REPOSITORY_MCD_ENTITIES_NAME );
         MCDContRelations mcdContRelations = MVCCDElementFactory.instance().createMCDContRelations(parent,Preferences.REPOSITORY_MCD_RELATIONS_NAME);
     }
 
@@ -527,6 +529,12 @@ public class MVCCDElementFactory {
         return mpdrOracleColumn;
     }
 
+
+    public MPDROracleColumnView createMPDROracleColumnView(MDRContColumns mdrContColumns) {
+        MPDROracleColumnView mpdrOracleColumnView = new MPDROracleColumnView(mdrContColumns, null);
+        return mpdrOracleColumnView;
+    }
+
     public MPDROraclePK createMPDROraclePK(MDRContConstraints mdrContConstraints, MLDRPK mldrPK) {
         MPDROraclePK mpdrOraclePK = new MPDROraclePK(mdrContConstraints, mldrPK);
         return mpdrOraclePK;
@@ -563,12 +571,6 @@ public class MVCCDElementFactory {
                                                                         MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
         MPDROracleConstraintCustomSpecialized newSpecialized = new MPDROracleConstraintCustomSpecialized(mdrContConstraints, mldrConstraintCustomSpecialized);
         return newSpecialized;
-    }
-
-    public MPDROracleView createMPDROracleView(MPDRContTAPIs mpdrContTAPIs,
-                                               MLDRConstraintCustomSpecialized mldrSpecialized) {
-        MPDROracleView mpdrOracleView = new MPDROracleView(mpdrContTAPIs, mldrSpecialized);
-        return mpdrOracleView;
     }
 
     public MPDROracleCheckSpecific createMPDROracleCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -613,8 +615,8 @@ public class MVCCDElementFactory {
         return mpdrOracleTriggers;
     }
 
-    public MPDROracleTrigger createMPDROracleTrigger(MPDRBoxTriggers mpdrBoxTriggers, MLDRTable mldrTable) {
-        MPDROracleTrigger mpdrOracleTrigger = new MPDROracleTrigger(mpdrBoxTriggers, mldrTable);
+    public MPDROracleTrigger createMPDROracleTrigger(MPDRBoxTriggers mpdrBoxTriggers, IMLDRElement imldrElement) {
+        MPDROracleTrigger mpdrOracleTrigger = new MPDROracleTrigger(mpdrBoxTriggers, imldrElement);
         return mpdrOracleTrigger;
     }
 
@@ -627,6 +629,21 @@ public class MVCCDElementFactory {
         MPDROraclePackage mpdrOraclePackage = new MPDROraclePackage(mpdrBoxPackages, mldrTable);
         return mpdrOraclePackage;
     }
+
+
+    public MPDROracleView createMPDROracleView(MPDRContTAPIs mpdrContTAPIs,
+                                               MLDRConstraintCustomSpecialized mldrSpecialized) {
+        MPDROracleView mpdrOracleView = new MPDROracleView(mpdrContTAPIs, mldrSpecialized);
+        initMPDRView(mpdrOracleView);
+        return mpdrOracleView;
+    }
+
+
+    public MPDROracleBoxTriggers createMPDROracleBoxTriggers(MPDRView mpdrView, MLDRConstraintCustomSpecialized mldrSpecialized) {
+        MPDROracleBoxTriggers mpdrOracleTriggers = new MPDROracleBoxTriggers(mpdrView, mldrSpecialized);
+        return mpdrOracleTriggers;
+    }
+
 
 
     // MySQL
@@ -822,8 +839,8 @@ public class MVCCDElementFactory {
         return mpdrPostgreSQLBoxTriggers;
     }
 
-    public MPDRPostgreSQLTrigger createMPDRPostgreSQLTrigger(MPDRBoxTriggers mpdrBoxTriggers, MLDRTable mldrTable) {
-        MPDRPostgreSQLTrigger mpdrPostgreSQLTrigger = new MPDRPostgreSQLTrigger(mpdrBoxTriggers, mldrTable);
+    public MPDRPostgreSQLTrigger createMPDRPostgreSQLTrigger(MPDRBoxTriggers mpdrBoxTriggers, IMLDRElement imldrElement) {
+        MPDRPostgreSQLTrigger mpdrPostgreSQLTrigger = new MPDRPostgreSQLTrigger(mpdrBoxTriggers, imldrElement);
         return mpdrPostgreSQLTrigger;
     }
 
@@ -853,6 +870,11 @@ public class MVCCDElementFactory {
         // Le conteneur est toujours créé car sinon il faut le créer/supprimer lors du changement de préférence
         //TODO-2 A faire à terme
         MPDRContTAPIs  mpdrContTAPIs = new MPDRContTAPIs(mpdrTable, Preferences.REPOSITORY_MDR_TAPIS_NAME);
+    }
+
+    private void initMPDRView(MPDRView mpdrView){
+        new MPDRContColumns(mpdrView, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        //new MPDRContConstraints(mpdrView, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
     }
 
 

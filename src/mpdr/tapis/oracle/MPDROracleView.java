@@ -3,9 +3,15 @@ package mpdr.tapis.oracle;
 import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import exceptions.CodeApplException;
+import generatorsql.generator.oracle.MPDROracleGenerateSQL;
+import generatorsql.generator.oracle.MPDROracleGenerateSQLView;
+import main.MVCCDElementFactory;
+import mldr.MLDRConstraintCustomSpecialized;
 import mldr.interfaces.IMLDRElement;
+import mpdr.oracle.MPDROracleColumnView;
 import mpdr.oracle.interfaces.IMPDROracleElement;
-import mpdr.tapis.MPDRView;
+import mpdr.tapis.*;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -29,7 +35,9 @@ public class MPDROracleView extends MPDRView implements IMPDROracleElement {
 
     @Override
     public String generateSQLDDL() {
-        return null;
+        MPDROracleGenerateSQL mpdrOracleGenerateSQL = new MPDROracleGenerateSQL(getMPDRModelParent());
+        MPDROracleGenerateSQLView mpdrOracleGenerateSQLView = new MPDROracleGenerateSQLView(mpdrOracleGenerateSQL);
+        return mpdrOracleGenerateSQLView.generateSQLCreateView(this);
     }
 
     @Override
@@ -57,5 +65,37 @@ public class MPDROracleView extends MPDRView implements IMPDROracleElement {
         return resultat;
     }
 
+    @Override
+    public MPDRBoxTriggers createBoxTriggers(MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
+        MPDROracleBoxTriggers mpdrOracleBoxTriggers = MVCCDElementFactory.instance().createMPDROracleBoxTriggers(
+                this, mldrConstraintCustomSpecialized);
+        return mpdrOracleBoxTriggers;
+    }
+
+    @Override
+    public MPDRColumnView createColumnView() {
+        MPDROracleColumnView newColumnView = MVCCDElementFactory.instance().createMPDROracleColumnView(
+                getMDRContColumns());
+
+        return newColumnView;
+    }
+
+    @Override
+    public MPDRTrigger getMPDRTriggerByType(MPDRTriggerType type) {
+        return null;
+    }
+
+    @Override
+    public MPDRTrigger createTrigger(MPDRTriggerType type, IMLDRElement imldrElement) {
+        MPDROracleBoxTriggers mpdrOracleBoxTriggers = (MPDROracleBoxTriggers) getMPDRBoxTriggers();
+        if (mpdrOracleBoxTriggers != null){
+            MPDROracleTrigger mpdrOracleTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(
+                    getMPDRBoxTriggers(), imldrElement);
+            return mpdrOracleTrigger;
+        } else {
+            throw new CodeApplException("La boîte Triggers doit exister avant de créer un trigger");
+        }
+
+    }
 }
 

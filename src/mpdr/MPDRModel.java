@@ -33,7 +33,8 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     private MPDRDBPK mpdrDbPK ;
     private boolean tapis ;
     private String sequencePKNameFormat;
-    private String triggerNameFormat;
+    private String triggerTableNameFormat;
+    private String triggerViewNameFormat;
     private String viewNameFormat;
     private String checkColumnDatatypeNameFormat;
     private String checkColumnDatatypeMax30NameFormat;
@@ -176,12 +177,20 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
         this.sequencePKNameFormat = sequencePKNameFormat;
     }
 
-    public void setTriggerNameFormat(String triggerNameFormat) {
-        this.triggerNameFormat = triggerNameFormat;
+    public void setTriggerTableNameFormat(String triggerTableNameFormat) {
+        this.triggerTableNameFormat = triggerTableNameFormat;
     }
 
-    public String getTriggerNameFormat() {
-        return triggerNameFormat;
+    public String getTriggerTableNameFormat() {
+        return triggerTableNameFormat;
+    }
+
+    public String getTriggerViewNameFormat() {
+        return triggerViewNameFormat;
+    }
+
+    public void setTriggerViewNameFormat(String triggerViewNameFormat) {
+        this.triggerViewNameFormat = triggerViewNameFormat;
     }
 
     public String getViewNameFormat() {
@@ -245,4 +254,9 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     public void setObjectsInCodeFormatFuture(MDRCaseFormat objectsInCodeFormatFuture) {
         this.objectsInCodeFormatFuture = objectsInCodeFormatFuture;
     }
+
+    public abstract String getWordRecordNew();
+
+    public abstract String getWordRecordOld();
+
 }

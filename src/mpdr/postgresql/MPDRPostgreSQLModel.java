@@ -5,6 +5,7 @@ import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.postgresql.MPDRPostgreSQLGenerateSQL;
 import main.MVCCDElementFactory;
 import mdr.MDRCaseFormat;
+import mdr.services.MDRModelService;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
@@ -106,6 +107,16 @@ public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLEle
             return MDRCaseFormat.LOWERCASE;
         }
         return objectsInCodeFormatFuture;
+    }
+
+    @Override
+    public String getWordRecordNew() {
+        return MDRModelService.caseFormat(Preferences.MPDRPOSTGRESQL_RECORD_NEW, getReservedWordsFormatForDB());
+    }
+
+    @Override
+    public String getWordRecordOld() {
+        return MDRModelService.caseFormat(Preferences.MPDRPOSTGRESQL_RECORD_OLD, getReservedWordsFormatForDB());
     }
 
 }

@@ -5,6 +5,7 @@ import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.oracle.MPDROracleGenerateSQL;
 import main.MVCCDElementFactory;
 import mdr.MDRCaseFormat;
+import mdr.services.MDRModelService;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
@@ -100,6 +101,17 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
     @Override
     public void setPackageNameFormat(String packageNameFormat) {
         this.packageNameFormat = packageNameFormat;
+    }
+
+
+    @Override
+    public String getWordRecordNew() {
+        return MDRModelService.caseFormat(Preferences.MPDRORACLE_RECORD_NEW, getReservedWordsFormatForDB());
+    }
+
+    @Override
+    public String getWordRecordOld() {
+        return MDRModelService.caseFormat(Preferences.MPDRORACLE_RECORD_OLD, getReservedWordsFormatForDB());
     }
 
 }

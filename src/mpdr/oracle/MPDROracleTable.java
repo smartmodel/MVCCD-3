@@ -92,8 +92,19 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IM
         return mpdrOracleBoxTriggers;
     }
 
+    public MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, IMLDRElement imldrElement) {
+        MPDROracleBoxTriggers mpdrOracleBoxTriggers = (MPDROracleBoxTriggers) getMPDRBoxTriggers();
+        if (mpdrOracleBoxTriggers != null){
+            MPDROracleTrigger mpdrOracleTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(
+                    getMPDRBoxTriggers(), imldrElement);
+            return mpdrOracleTrigger;
+        } else {
+            throw new CodeApplException("La boîte Triggers doit exister avant de créer un trigger");
+        }
+    }
 
 
+    /*
     @Override
     public MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, MLDRTable mldrTable) {
         MPDROracleBoxTriggers mpdrOracleBoxTriggers = (MPDROracleBoxTriggers) getMPDRBoxTriggers();
@@ -105,6 +116,8 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IM
             throw new CodeApplException("La boîte Triggers doit exister avant de créer un trigger");
         }
     }
+
+     */
 
     @Override
     public MPDRView createView(MLDRConstraintCustomSpecialized mldrSpecialized) {

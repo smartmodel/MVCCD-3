@@ -96,6 +96,19 @@ public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLEle
     }
 
     @Override
+    public MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, IMLDRElement imldrElement) {
+        MPDRPostgreSQLBoxTriggers mpdrPostgreSQLBoxTriggers = (MPDRPostgreSQLBoxTriggers) getMPDRBoxTriggers();
+        if (mpdrPostgreSQLBoxTriggers != null){
+            MPDRPostgreSQLTrigger mpdrPostgreSQLTrigger = MVCCDElementFactory.instance().createMPDRPostgreSQLTrigger(
+                    mpdrPostgreSQLBoxTriggers, imldrElement);
+            return mpdrPostgreSQLTrigger;
+        } else {
+            throw new CodeApplException("La boîte Triggers doit exister avant de créer un trigger");
+        }
+    }
+
+    /*
+    @Override
     public MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, MLDRTable mldrTable) {
         MPDRPostgreSQLBoxTriggers mpdrPostgreSQLBoxTriggers = (MPDRPostgreSQLBoxTriggers) getMPDRBoxTriggers();
         if (mpdrPostgreSQLBoxTriggers != null){
@@ -106,6 +119,9 @@ public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLEle
             throw new CodeApplException("La boîte Triggers doit exister avant de créer un trigger");
         }
     }
+
+     */
+
 
     @Override
     public MPDRView createView(MLDRConstraintCustomSpecialized mldrSpecialized) {

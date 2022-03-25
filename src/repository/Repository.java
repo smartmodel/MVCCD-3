@@ -167,8 +167,7 @@ public class Repository extends DefaultTreeModel{
             insertNodeInto(node, nodeParent, index);
         }
 
-
-        // Insertion des éventuels enfants
+       // Insertion des éventuels enfants
         if (mvccdElement.getChilds().size()>0){
             for (int i = 0 ; i < mvccdElement.getChilds().size(); i++ ){
                 addMVCCDElement(node, mvccdElement.getChilds().get(i));

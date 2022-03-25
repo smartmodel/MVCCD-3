@@ -1,5 +1,6 @@
 package mpdr.tapis;
 
+import exceptions.CodeApplException;
 import md.MDElement;
 import mdr.MDRElement;
 import mdr.interfaces.IMDRElementNamingPreferences;
@@ -77,7 +78,20 @@ public abstract class MPDRTrigger extends MDRElement implements IMPDRElement, IM
     }
 
     public MPDRTable getMPDRTableAccueil (){
-        return getMPDRBoxTriggers().getMPDRTableAccueil();
+        if (getType().getMpdrTriggerScope() == MPDRTriggerScope.TABLE) {
+            return getMPDRBoxTriggers().getMPDRTableAccueil();
+        }
+        if (getType().getMpdrTriggerScope() == MPDRTriggerScope.VIEW) {
+            return getMPDRViewAccueil().getMPDRTableAccueil();
+        }
+        throw new CodeApplException("La portée de Trigger " + getType().getMpdrTriggerScope().getText() +  " n'est pas connue");
+    }
+
+    public MPDRView getMPDRViewAccueil (){
+        if (getType().getMpdrTriggerScope() == MPDRTriggerScope.VIEW) {
+            return (MPDRView) getParent().getParent();
+        }
+        throw new CodeApplException("Le Trigger " + getType().getMpdrTriggerScope().getText() +  " n'est pas applicable à une vue");
     }
 
     public abstract String generateSQLDDL() ;

@@ -94,7 +94,7 @@ public class MPDRMySQLTable extends MPDRTable implements IMPDRMySQLElement {
     }
 
     @Override
-    public MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, MLDRTable mldrTable) {
+    public MPDRTrigger createTrigger(MPDRTriggerType mpdrTriggerType, IMLDRElement imldrElement) {
         return null;
     }
 

@@ -107,8 +107,12 @@ public class PrefMPDROracleInputContent extends PrefMPDRInputContent {
             preferences.setMPDRORACLE_SEQPK_NAME_FORMAT(fieldSeqPKNameFormat.getText());
         }
 
-        if (fieldTriggerNameFormat.checkIfUpdated()){
-            preferences.setMPDRORACLE_TRIGGER_NAME_FORMAT(fieldTriggerNameFormat.getText());
+        if (fieldTriggerTableNameFormat.checkIfUpdated()){
+            preferences.setMPDRORACLE_TRIGGER_TABLE_NAME_FORMAT(fieldTriggerTableNameFormat.getText());
+        }
+
+        if (fieldTriggerViewNameFormat.checkIfUpdated()){
+            preferences.setMPDRORACLE_TRIGGER_VIEW_NAME_FORMAT(fieldTriggerViewNameFormat.getText());
         }
 
         if (fieldPackageNameFormat.checkIfUpdated()){
@@ -182,7 +186,8 @@ public class PrefMPDROracleInputContent extends PrefMPDRInputContent {
                 preferences.getMPDRORACLE_PK_GENERATE().getText());
         fieldTAPIs.setSelected(preferences.getMPDRORACLE_TAPIS());
         fieldSeqPKNameFormat.setText(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
-        fieldTriggerNameFormat.setText(preferences.getMPDRORACLE_TRIGGER_NAME_FORMAT());
+        fieldTriggerTableNameFormat.setText(preferences.getMPDRORACLE_TRIGGER_TABLE_NAME_FORMAT());
+        fieldTriggerViewNameFormat.setText(preferences.getMPDRORACLE_TRIGGER_VIEW_NAME_FORMAT());
         fieldPackageNameFormat.setText(preferences.getMPDRORACLE_PACKAGE_NAME_FORMAT());
         fieldViewNameFormat.setText(preferences.getMPDRORACLE_VIEW_NAME_FORMAT());
         fieldCheckColumnDatatypeNameFormat.setText(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT());

@@ -72,9 +72,9 @@ public class MLDRTransformTables {
             } else {
                 if (mpdrTable.getMPDRColumnPKProper() != null) {
                     // Conteneur de triggers et trigger d'alimentation
-                    MLDRTransformToBoxTriggers mldrTransformToBoxTriggers = new MLDRTransformToBoxTriggers(
+                    MLDRTransformToBoxTriggersTable mldrTransformToBoxTriggersTable = new MLDRTransformToBoxTriggersTable(
                             mldrTransform, mldrTable, mpdrModel, mpdrTable);
-                    mldrTransformToBoxTriggers.createOrModifyBoxTriggersForColumnPKWithoutTAPIs(mpdrTable.getMPDRColumnPKProper());
+                    mldrTransformToBoxTriggersTable.createOrModifyBoxTriggersForColumnPKWithoutTAPIs(mpdrTable.getMPDRColumnPKProper());
                 }
            }
         }
@@ -89,9 +89,9 @@ public class MLDRTransformTables {
 
         //TODO-PAS En cours de développement
         if (mpdrModel instanceof MPDROracleModel) {
-            MLDRTransformToBoxTriggers mldrTransformToBoxTriggers = new MLDRTransformToBoxTriggers(
+            MLDRTransformToBoxTriggersTable mldrTransformToBoxTriggersTable = new MLDRTransformToBoxTriggersTable(
                     mldrTransform, mldrTable, mpdrModel, mpdrTable);
-            mldrTransformToBoxTriggers.createOrModifyBoxTriggersForTAPIs();
+            mldrTransformToBoxTriggersTable.createOrModifyBoxTriggersForTAPIs();
 
             if (mpdrModel instanceof IMPDRModelRequirePackage) {
                 MLDRTransformToBoxPackages mldrTransformToBoxPackages = new MLDRTransformToBoxPackages(

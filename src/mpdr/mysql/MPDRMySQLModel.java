@@ -4,6 +4,7 @@ import datatypes.MPDRDatatype;
 import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
 import mdr.MDRCaseFormat;
+import mdr.services.MDRModelService;
 import mldr.MLDRColumn;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
@@ -87,6 +88,17 @@ public class MPDRMySQLModel extends MPDRModel implements IMPDRMySQLElement {
             return MDRCaseFormat.UPPERCASE;
         }
         return objectsInCodeFormatFuture;
+    }
+
+
+    @Override
+    public String getWordRecordNew() {
+        return MDRModelService.caseFormat(Preferences.MPDRMYSQL_RECORD_NEW, getReservedWordsFormatForDB());
+    }
+
+    @Override
+    public String getWordRecordOld() {
+        return MDRModelService.caseFormat(Preferences.MPDRMYSQL_RECORD_OLD, getReservedWordsFormatForDB());
     }
 
 }

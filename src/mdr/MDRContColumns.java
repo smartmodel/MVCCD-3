@@ -20,7 +20,7 @@ public abstract class MDRContColumns extends MDRElement implements IMPathOnlyRep
         for (MVCCDElement mvccdElement: getChilds()){
             resultat.add((MDRColumn) mvccdElement);
         }
-        return resultat;
+       return resultat;
     }
 
     public ArrayList<MDRColumn> getMDRColumnsSortDefault(){
@@ -36,7 +36,7 @@ public abstract class MDRContColumns extends MDRElement implements IMPathOnlyRep
 
     // Surcharge pour l'affichage trié PFK - PK - FK
     public ArrayList<? extends  MVCCDElement> getChildsSortDefault() {
-        ArrayList<MDRColumn> mdrColumns = getMDRColumnsSortDefault();
+        ArrayList<? extends MDRColumn> mdrColumns = getMDRColumnsSortDefault();
         return mdrColumns ;
     }
 }

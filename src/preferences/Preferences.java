@@ -167,6 +167,7 @@ public class Preferences extends MVCCDElement {
   public static String MCD_AID_IND_COLUMN_NAME_DEFAULT = "num";
   public static String MCD_AID_DEP_COLUMN_NAME_DEFAULT = "numDep";
   public static Integer MCD_AID_COLUMN_NAME_LENGTH = 5;
+  public static Integer MPDR_VIEW_NAME_LENGTH = 15;  //Calculé
 
   public static String INTEGER_REGEXPR = "([0])|([-]{0,1}[1-9]{1,1}[0-9]*)";
   //public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -256,6 +257,7 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATES_DROP_EXECUTE_EMPTY_SCHEMA = "executeEmptySchema.txt";
   public static String SQL_SEPARATOR_ARGUMENTS = ",";
   public static String SQL_MARKER_SEPARATOR_ARGUMENTS = "__separatorArguments";
+  public static String SQL_MARKER_NAMESPACE = ".";
 
   public static String SYSTEM_LINE_SEPARATOR = System.getProperty("line.separator");
   public static String SYSTEM_FILE_SEPARATOR = System.getProperty("file.separator");
@@ -666,12 +668,15 @@ public class Preferences extends MVCCDElement {
   public static String MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
   public static MPDRDBPK MPDRORACLE_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
   public static String MPDRORACLE_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
-  public static String MPDRORACLE_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
   public static String MPDRORACLE_PACKAGE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typePackageMarker}";
   public static String MPDRORACLE_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
   public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
   public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
   public static String MPDRORACLE_EMPTY_SCHEMA = "empty_schema";
+  public static String MPDRORACLE_RECORD_NEW = ":NEW";
+  public static String MPDRORACLE_RECORD_OLD = ":OLD";
 
   public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
   public static String MPDRMySQLDATATYPE_ROOT_LIENPROG = "MPDR-MySQL";
@@ -706,8 +711,11 @@ public class Preferences extends MVCCDElement {
   public static String MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
   public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
   public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
-  public static String MPDRMYSQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
   public static String MPDRMYSQL_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
+  public static String MPDRMYSQL_RECORD_NEW = "NEW";
+  public static String MPDRMYSQL_RECORD_OLD = "OLD";
 
 
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_NAME = "MPDR-PostgreSQL";
@@ -739,11 +747,14 @@ public class Preferences extends MVCCDElement {
   public static String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
   public static MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
   public static String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
-  public static String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
   public static String MPDRPOSTGRESQL_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
   public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
   public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
   public static String MPDRPOSTGRESQL_EMPTY_SCHEMA = "empty_schema";
+  public static String MPDRPOSTGRESQL_RECORD_NEW = "NEW";
+  public static String MPDRPOSTGRESQL_RECORD_OLD = "OLD";
 
 
   public static String MDR_TABLE_NATURE_IND = "mdr.table.nature.ind";
@@ -788,6 +799,9 @@ public class Preferences extends MVCCDElement {
   public static String MDR_PATH_WORD = "path";
   public static String MDR_PATH_SEP_WORD = "pathSep";
   public static String MDR_TABLE_NAME_WORD = "tableName";
+  public static String MDR_TABLE_PK_NAME_WORD = "tablePKName";
+  public static String MDR_TABLE_FK_NAME_WORD = "tableFKName";
+  public static String MDR_TABLE_ORIGIN_NAME_WORD = "tableOriginName";
   public static String MDR_TABLE_SHORT_NAME_WORD = "tableShortName";
   public static String MDR_TABLE_SHORT_NAME_A_WORD = "ATableShortName";
   public static String MDR_TABLE_SHORT_NAME_B_WORD = "BTableShortName";
@@ -797,6 +811,10 @@ public class Preferences extends MVCCDElement {
   public static String MDR_TABLE_NAME_CHILD_WORD = "childTableName";
   public static String MDR_FK_NAME_WORD = "fkName";
   public static String MDR_FK_COLUMNS_WORD = "fkColumns";
+  public static String MDR_VIEW_COLUMNS_WORD = "viewColumns";
+  public static String MDR_LIST_COLUMNS_WORD = "listColumns";
+  public static String MDR_LIST_NEW_COLUMNS_WORD = "listNewColumns";
+  public static String MDR_VIEW_SELECT_COLUMNS_WORD = "viewSelectColumns";
   public static String MDR_FK_COLUMNS_REF_WORD = "fkColumnsRef"; // Il ne faut pas utiliser MDR_PK_COLUMNS_WORD qui ne garanti pas le lien entre colonnes
   public static String MDR_PK_NAME_WORD = "pkName";
   public static String MDR_PK_COLUMNS_WORD = "pkColumns";
@@ -804,6 +822,7 @@ public class Preferences extends MVCCDElement {
   public static String MDR_UNIQUE_COLUMNS_WORD = "uniqueColumns";
   public static String MDR_COLUMN_NAME_WORD =  "columnName";
   public static String MDR_COLUMN_PK_NAME_WORD =  "columnPKName";
+  public static String MDR_COLUMN_FK_NAME_WORD =  "columnFKName";
   public static String MDR_COLUMN_DATATYPE_WORD =  "columnDataType";
   public static String MDR_DEFAULT_VALUE_WORD =  "defaultValue";
   public static String MPDR_SEQUENCE_NAME_WORD = "sequenceName";
@@ -1095,7 +1114,8 @@ public class Preferences extends MVCCDElement {
   private MPDRDBPK MPDRORACLE_PK_GENERATE = null;
   private Boolean MPDRORACLE_TAPIS = null;
   private String MPDRORACLE_SEQPK_NAME_FORMAT;
-  private String MPDRORACLE_TRIGGER_NAME_FORMAT;
+  private String MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT;
+  private String MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT;
   private String MPDRORACLE_PACKAGE_NAME_FORMAT;
   private String MPDRORACLE_VIEW_NAME_FORMAT;
   private String MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
@@ -1111,7 +1131,8 @@ public class Preferences extends MVCCDElement {
   private MPDRDBPK MPDRMYSQL_PK_GENERATE = null;
   private Boolean MPDRMYSQL_TAPIS = null;
   private String MPDRMYSQL_SEQPK_NAME_FORMAT;
-  private String MPDRMYSQL_TRIGGER_NAME_FORMAT;
+  private String MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT;
+  private String MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT;
   private String MPDRMYSQL_VIEW_NAME_FORMAT;
   private String MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
   private String MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
@@ -1125,7 +1146,8 @@ public class Preferences extends MVCCDElement {
   private MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE = null;
   private Boolean MPDRPOSTGRESQL_TAPIS = null;
   private String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
-  private String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT;
+  private String MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT;
+  private String MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT;
   private String MPDRPOSTGRESQL_VIEW_NAME_FORMAT;
   private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
   private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
@@ -1970,17 +1992,30 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_SEQPK_NAME_FORMAT = MPDRORACLE_SEQPK_NAME_FORMAT;
   }
 
-  public String getMPDRORACLE_TRIGGER_NAME_FORMAT() {
-    if (this.MPDRORACLE_TRIGGER_NAME_FORMAT == null) {
-      this.MPDRORACLE_TRIGGER_NAME_FORMAT = MPDRORACLE_TRIGGER_NAME_FORMAT_DEFAULT;
+  public String getMPDRORACLE_TRIGGER_TABLE_NAME_FORMAT() {
+    if (this.MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT == null) {
+      this.MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT = MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT_DEFAULT;
     }
-    return MPDRORACLE_TRIGGER_NAME_FORMAT;
+    return MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT;
   }
 
-  public void setMPDRORACLE_TRIGGER_NAME_FORMAT(String MPDRORACLE_TRIGGER_NAME_FORMAT) {
-    this.MPDRORACLE_TRIGGER_NAME_FORMAT = MPDRORACLE_TRIGGER_NAME_FORMAT;
+  public void setMPDRORACLE_TRIGGER_TABLE_NAME_FORMAT(String MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT) {
+    this.MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT = MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT;
   }
 
+  public String getMPDRORACLE_TRIGGER_VIEW_NAME_FORMAT() {
+    if (this.MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT == null) {
+      this.MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT = MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT;
+  }
+
+  public void setMPDRORACLE_TRIGGER_VIEW_NAME_FORMAT(String MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT) {
+    this.MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT = MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT;
+  }
+
+  
+  
   public String getMPDRORACLE_PACKAGE_NAME_FORMAT() {
     if (this.MPDRORACLE_PACKAGE_NAME_FORMAT == null) {
       this.MPDRORACLE_PACKAGE_NAME_FORMAT = MPDRORACLE_PACKAGE_NAME_FORMAT_DEFAULT;
@@ -2115,17 +2150,29 @@ public class Preferences extends MVCCDElement {
     this.MPDRMYSQL_SEQPK_NAME_FORMAT = MPDRMYSQL_SEQPK_NAME_FORMAT;
   }
 
-  public String getMPDRMYSQL_TRIGGER_NAME_FORMAT() {
-    if (this.MPDRMYSQL_TRIGGER_NAME_FORMAT == null) {
-      this.MPDRMYSQL_TRIGGER_NAME_FORMAT = MPDRMYSQL_TRIGGER_NAME_FORMAT_DEFAULT;
+  public String getMPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT() {
+    if (this.MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT == null) {
+      this.MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT = MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT;
     }
-    return MPDRMYSQL_TRIGGER_NAME_FORMAT;
+    return MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT;
   }
 
-  public void setMPDRMYSQL_TRIGGER_NAME_FORMAT(String MPDRMYSQL_TRIGGER_NAME_FORMAT) {
-    this.MPDRMYSQL_TRIGGER_NAME_FORMAT = MPDRMYSQL_TRIGGER_NAME_FORMAT;
+  public void setMPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT(String MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT) {
+    this.MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT = MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT;
   }
 
+
+  public String getMPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT() {
+    if (this.MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT == null) {
+      this.MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT = MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT;
+  }
+
+  public void setMPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT(String MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT) {
+    this.MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT = MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT;
+  }
+  
   public String getMPDRMYSQL_VIEW_NAME_FORMAT() {
     if (this.MPDRMYSQL_VIEW_NAME_FORMAT == null) {
       this.MPDRMYSQL_VIEW_NAME_FORMAT = MPDRMYSQL_VIEW_NAME_FORMAT_DEFAULT;
@@ -2250,15 +2297,26 @@ public class Preferences extends MVCCDElement {
     this.MPDRPOSTGRESQL_SEQPK_NAME_FORMAT = MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
   }
 
-  public String getMPDRPOSTGRESQL_TRIGGER_NAME_FORMAT() {
-    if (this.MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT == null) {
-      this.MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT = MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT_DEFAULT;
+  public String getMPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT() {
+    if (this.MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT == null) {
+      this.MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT = MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT;
     }
-    return MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT;
+    return MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT;
   }
 
-  public void setMPDRPOSTGRESQL_TRIGGER_NAME_FORMAT(String MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT) {
-    this.MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT = MPDRPOSTGRESQL_TRIGGER_NAME_FORMAT;
+  public void setMPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT(String MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT) {
+    this.MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT = MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT;
+  }
+
+  public String getMPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT() {
+    if (this.MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT == null) {
+      this.MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT = MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT;
+    }
+    return MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT;
+  }
+
+  public void setMPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT(String MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT) {
+    this.MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT = MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT;
   }
 
   public String getMPDRPOSTGRESQL_VIEW_NAME_FORMAT() {

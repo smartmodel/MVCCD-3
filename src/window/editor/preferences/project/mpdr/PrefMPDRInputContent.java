@@ -43,8 +43,10 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
     private JPanel panelFormatNames = new JPanel ();
     protected JLabel labelSeqPKNameFormat ;
     protected STextField fieldSeqPKNameFormat;
-    protected JLabel labelTriggerNameFormat ;
-    protected STextField fieldTriggerNameFormat;
+    protected JLabel labelTriggerTableNameFormat;
+    protected STextField fieldTriggerTableNameFormat;
+    protected JLabel labelTriggerViewNameFormat;
+    protected STextField fieldTriggerViewNameFormat;
     protected JLabel labelPackageNameFormat ;
     protected STextField fieldPackageNameFormat;
     protected JLabel labelViewNameFormat ;
@@ -131,13 +133,21 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         fieldSeqPKNameFormat.getDocument().addDocumentListener(this);
         fieldSeqPKNameFormat.addFocusListener(this);
 
-        labelTriggerNameFormat = new JLabel("Triggers");
-        fieldTriggerNameFormat = new STextField(this, labelTriggerNameFormat);
-        fieldTriggerNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
-        fieldTriggerNameFormat.setToolTipText("Format de nommage des triggers de table");
+        labelTriggerTableNameFormat = new JLabel("Triggers de tables");
+        fieldTriggerTableNameFormat = new STextField(this, labelTriggerTableNameFormat);
+        fieldTriggerTableNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldTriggerTableNameFormat.setToolTipText("Format de nommage des triggers de table");
         //TODO-1 Prévoir un formattage/contrôle minimal
-        fieldTriggerNameFormat.getDocument().addDocumentListener(this);
-        fieldTriggerNameFormat.addFocusListener(this);
+        fieldTriggerTableNameFormat.getDocument().addDocumentListener(this);
+        fieldTriggerTableNameFormat.addFocusListener(this);
+
+        labelTriggerViewNameFormat = new JLabel("Triggers de vues");
+        fieldTriggerViewNameFormat = new STextField(this, labelTriggerViewNameFormat);
+        fieldTriggerViewNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldTriggerViewNameFormat.setToolTipText("Format de nommage des triggers de vues");
+        //TODO-1 Prévoir un formattage/contrôle minimal
+        fieldTriggerViewNameFormat.getDocument().addDocumentListener(this);
+        fieldTriggerViewNameFormat.addFocusListener(this);
 
         labelPackageNameFormat = new JLabel("Packages");
         fieldPackageNameFormat = new STextField(this, labelPackageNameFormat);
@@ -178,7 +188,8 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         super.getSComponents().add(fieldPKGenerate);
         super.getSComponents().add(fieldTAPIs);
         super.getSComponents().add(fieldSeqPKNameFormat);
-        super.getSComponents().add(fieldTriggerNameFormat);
+        super.getSComponents().add(fieldTriggerTableNameFormat);
+        super.getSComponents().add(fieldTriggerViewNameFormat);
         super.getSComponents().add(fieldPackageNameFormat);
         super.getSComponents().add(fieldViewNameFormat);
         super.getSComponents().add(fieldCheckColumnDatatypeNameFormat);
@@ -268,9 +279,15 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
 
         gbcA.gridx = 0;
         gbcA.gridy++;
-        panelFormatNames.add(labelTriggerNameFormat, gbcA);
+        panelFormatNames.add(labelTriggerTableNameFormat, gbcA);
         gbcA.gridx++ ;
-        panelFormatNames.add(fieldTriggerNameFormat, gbcA);
+        panelFormatNames.add(fieldTriggerTableNameFormat, gbcA);
+
+        gbcA.gridx = 0;
+        gbcA.gridy++;
+        panelFormatNames.add(labelTriggerViewNameFormat, gbcA);
+        gbcA.gridx++ ;
+        panelFormatNames.add(fieldTriggerViewNameFormat, gbcA);
 
         if (mpdrDb == MPDRDB.ORACLE) {
             gbcA.gridx = 0;

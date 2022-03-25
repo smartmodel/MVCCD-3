@@ -12,8 +12,7 @@ import mpdr.*;
 import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.oracle.MPDROracleConstraintCustomSpecialized;
-import mpdr.tapis.MPDRView;
-import mpdr.tapis.MPDRViewType;
+import utilities.Trace;
 
 public class MLDRTransformConstraints {
 
@@ -33,9 +32,10 @@ public class MLDRTransformConstraints {
 
 
     void transformConstraints() {
-        for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
+         for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
             IMPDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
         }
+
     }
 
 
@@ -48,6 +48,7 @@ public class MLDRTransformConstraints {
                 mpdrConstraint = mpdrTable.createPK(mldrPK);
             }
             if (mldrConstraint instanceof MLDRFK){
+                Trace.println("Create FK");
                 MLDRFK mldrFK = (MLDRFK) mldrConstraint;
                 mpdrConstraint = mpdrTable.createFK(mldrFK);
             }
@@ -65,9 +66,9 @@ public class MLDRTransformConstraints {
 
         // Le temps de développement
         if (mpdrConstraint != null) {
+
             modifyConstraint(mldrConstraint, mpdrConstraint );
 
-            // Transformation des paramètres
             MLDRTransformParameters mldrTransformParameters = new MLDRTransformParameters(
                     mldrTransform, mldrConstraint, mpdrModel, mpdrConstraint);
             mldrTransformParameters.transformParameters();
@@ -145,9 +146,15 @@ public class MLDRTransformConstraints {
 
     private void modifyConstraintSpecialized(MLDRConstraintCustomSpecialized mldrSpecialized,
                                              MPDRConstraintCustomSpecialized mpdrSpecialized) {
+        //#MAJ 2022-03-25 Erreur génération des vues. La contrainte PK de la table parent doit exister ...
+        // Les contraintes PK et FK doivent être en place pour générer la vue des TAPIs
+        // cela confirme qu'il faudrait céer les TAPIS après la transformation du modèle physique
+        /*
         MLDRTransformToView mldrTransformToView = new MLDRTransformToView(
                 mldrTransform, mldrSpecialized, mpdrModel, mpdrTable);
         MPDRView mpdrView = mldrTransformToView.createOrModifyView(MPDRViewType.SPEC);
+
+         */
     }
 
 

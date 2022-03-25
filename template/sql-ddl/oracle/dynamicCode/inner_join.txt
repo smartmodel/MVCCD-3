@@ -1,0 +1,1 @@
+INNER JOIN {tableFKName} ON {tablePKName}.{columnPKName} = {tableFKName}.{columnFKName}

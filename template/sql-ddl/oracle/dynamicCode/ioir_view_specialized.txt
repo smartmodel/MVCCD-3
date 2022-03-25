@@ -1,0 +1,5 @@
+INSERT INTO {tableOriginName}({listColumns})
+VALUES({listNewColumns})
+RETURNING {columnPKName} INTO {vl_pk};
+
+{-IOIR_VIEW_MEMBER_SPECIALIZED-}

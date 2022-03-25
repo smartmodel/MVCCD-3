@@ -40,6 +40,7 @@ public abstract class MDRConstraint extends MDROperation{
     public ArrayList<MDRColumn> getMDRColumnsSortDefault(){
         ArrayList<MDRColumn> resultat = getMDRColumns();
         Collections.sort(resultat, MDRColumn::compareToDefault) ;
+
         return resultat;
     }
 

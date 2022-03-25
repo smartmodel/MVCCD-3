@@ -14,7 +14,7 @@ public class MDROrderWordTypeTriggerMarker extends MDROrderWord{
 
     public void setValue(MPDRModel mpdrModel, MPDRTriggerType mpdrTriggerType){
         MDRCaseFormat mdrCaseFormat = mpdrModel.getNamingFormatForDB();
-        super.setValue(MDRModelService.caseNaming(mpdrTriggerType.getMarker(), mdrCaseFormat));
+        super.setValue(MDRModelService.caseFormat(mpdrTriggerType.getMarker(), mdrCaseFormat));
     }
 
 }

@@ -14,7 +14,7 @@ public class MDROrderWordTypeViewMarker extends MDROrderWord{
 
     public void setValue(MPDRModel mpdrModel, MPDRViewType mpdrViewType){
         MDRCaseFormat mdrCaseFormat = mpdrModel.getNamingFormatForDB();
-        super.setValue(MDRModelService.caseNaming(mpdrViewType.getMarker(), mdrCaseFormat));
+        super.setValue(MDRModelService.caseFormat(mpdrViewType.getMarker(), mdrCaseFormat));
     }
 
 }

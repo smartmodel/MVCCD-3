@@ -24,7 +24,7 @@ public abstract class MPDRGenerateSQLFK {
         MPDRPK reference = (MPDRPK) mpdrfk.getMdrPK();
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_PARENT_WORD, reference.getMDRTableAccueil().getName());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_FK_COLUMNS_REF_WORD, reference.getParametersNameAsStr());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_FK_COLUMNS_REF_WORD, mpdrfk.getMDRColumnsRefPKNameAsParamStr());
 
         return generateSQLCode;
     }

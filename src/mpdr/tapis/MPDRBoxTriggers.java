@@ -33,7 +33,7 @@ public abstract class MPDRBoxTriggers extends MDRElement implements IMPDRElement
     private IMLDRElement mldrElementSource;
 
     public MPDRBoxTriggers(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
-        super(parent);
+        super(parent,name);
         this.mldrElementSource = mldrElementSource;
     }
 

@@ -88,7 +88,8 @@ public class MPDROracleGenerateSQL extends MPDRGenerateSQL {
         return mpdrOracleGenerateSQLIndex;
     }
 
-    public MPDROracleGenerateSQLView getMpdrOracleGenerateSQLView() {
+    @Override
+    protected MPDRGenerateSQLView getMpdrGenerateSQLView() {
         return mpdrOracleGenerateSQLView;
     }
 

@@ -22,7 +22,6 @@ public class Stereotypes extends MVCCDElement {
             if (mvccdElement instanceof Stereotype){
                 Stereotype stereotype = (Stereotype) mvccdElement;
                 if (stereotype.getClassTargetName().equals(className)){
-                    //Trace.println(stereotype.getName());
                     resultat.add(stereotype);
                 }
             }
@@ -34,8 +33,7 @@ public class Stereotypes extends MVCCDElement {
     public Stereotype getStereotypeByLienProg(String className, String lienProg){
         for (Stereotype stereotype : getStereotypesByClassName(className)){
             if (stereotype.getLienProg().equals(lienProg)){
-                //Trace.println(stereotype.getName());
-                return stereotype;
+               return stereotype;
             }
         }
         String message = MessagesBuilder.getMessagesProperty("error.stereotype.lienProg",

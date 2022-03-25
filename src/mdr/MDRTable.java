@@ -46,6 +46,23 @@ public abstract class MDRTable extends MDRTableOrView {
         throw new CodeApplException("La table  " + this.getNamePath() + "retourne : " + resultat.size() + " PK.");
     }
 
+    public MDRConstraintCustomSpecialized getMDRConstraintCustomSpecialized(){
+        ArrayList<MDRConstraintCustomSpecialized> resultat = new ArrayList<MDRConstraintCustomSpecialized>();
+        for (MDRConstraint mdrConstraint : getMDRConstraints()){
+            if (mdrConstraint instanceof MDRConstraintCustomSpecialized){
+                resultat.add ((MDRConstraintCustomSpecialized) mdrConstraint);
+            }
+        }
+        if (resultat.size() == 0){
+            return null ;
+        }
+        if (resultat.size() == 1){
+            return resultat.get(0) ;
+        }
+        throw new CodeApplException("La table  " + this.getNamePath() + "retourne : " + resultat.size() + " ConstraintCustomSpcialized.");
+    }
+
+
 
     public ArrayList<MDRFK> getMDRFKs(){
         ArrayList<MDRFK> resultat = new ArrayList<MDRFK>();

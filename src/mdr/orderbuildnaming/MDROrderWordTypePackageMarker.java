@@ -14,7 +14,7 @@ public class MDROrderWordTypePackageMarker extends MDROrderWord{
 
     public void setValue(MPDRModel mpdrModel, MPDRPackageType mpdrPackageType){
         MDRCaseFormat mdrCaseFormat = mpdrModel.getNamingFormatForDB();
-        super.setValue(MDRModelService.caseNaming(mpdrPackageType.getMarker(), mdrCaseFormat));
+        super.setValue(MDRModelService.caseFormat(mpdrPackageType.getMarker(), mdrCaseFormat));
     }
 
 }
