@@ -1,12 +1,13 @@
 package window.editor.diagrammer.elements.shapes.classes;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.io.Serializable;
-import javax.swing.JPanel;
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+
 import main.MVCCDManager;
+import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IResizable;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
@@ -17,22 +18,18 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
 
   private static final long serialVersionUID = 1000;
   protected int id;
-  protected final ResizableBorder BORDER = new ResizableBorder();
   protected boolean isSelected = false;
 
   public SquaredShape(int id) {
     this.id = id;
     this.addListeners();
-    this.setBorder(this.BORDER);
   }
 
   public SquaredShape() {
     if (MVCCDManager.instance().getProject() != null) {
       this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
     }
-
     this.addListeners();
-    this.setBorder(this.BORDER);
   }
 
   public Point getCenter() {
@@ -50,9 +47,8 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
     super.paintComponent(g);
   }
 
-  @Override
-  public ResizableBorder getBorder() {
-    return this.BORDER;
+  public Rectangle getHoverArea(){
+    return new Rectangle(Preferences.DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN, Preferences.DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN, getWidth() - 2 * Preferences.DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN, getHeight() - 2 * Preferences.DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN);
   }
 
   @Override
@@ -84,7 +80,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   @Override
   public void setSelected(boolean selected) {
     this.isSelected = selected;
-    this.BORDER.setVisible(selected);
+    this.repaint();
   }
 
   @Override

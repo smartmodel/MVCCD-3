@@ -14,7 +14,8 @@ import javax.swing.border.Border;
 public final class ResizableBorder implements Border, Serializable {
 
   private static final long serialVersionUID = 1000;
-  
+  private boolean isVisible = false;
+
   private final int DISTANCE = 8;
   int[] locations = {SwingConstants.NORTH, SwingConstants.SOUTH, SwingConstants.WEST, SwingConstants.EAST, //SwingConstants.NORTH_WEST,
       //SwingConstants.NORTH_EAST, //SwingConstants.SOUTH_WEST,
@@ -23,12 +24,11 @@ public final class ResizableBorder implements Border, Serializable {
   int[] cursors = {Cursor.N_RESIZE_CURSOR, Cursor.S_RESIZE_CURSOR, Cursor.W_RESIZE_CURSOR, Cursor.E_RESIZE_CURSOR, //Cursor.NW_RESIZE_CURSOR, //Cursor.NE_RESIZE_CURSOR,
       // Cursor.SW_RESIZE_CURSOR,// Cursor.SE_RESIZE_CURSOR
   };
-  private boolean isVisible = false;
+
 
   @Override
   public void paintBorder(Component component, Graphics g, int x, int y, int w, int h) {
     if (this.isVisible) {
-      g.setColor(Color.black);
       for (int location : this.locations) {
         Rectangle rect = this.getRectangle(x, y, w, h, location);
         g.setColor(Color.WHITE);

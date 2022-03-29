@@ -1,12 +1,11 @@
 package window.editor.diagrammer.listeners;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+
 import preferences.Preferences;
 import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
@@ -26,6 +25,17 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
   }
 
   @Override
+  public void mouseExited(MouseEvent e) {
+    super.mouseExited(e);
+    shape.setBorder(null);
+  }
+
+  @Override
+  public void mouseEntered(MouseEvent e) {
+    super.mouseEntered(e);
+  }
+
+  @Override
   public void mouseClicked(MouseEvent e) {
     super.mouseClicked(e);
     this.shape.setSelected(true);
@@ -38,7 +48,7 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
     this.shape.setSelected(true);
     DiagrammerService.getDrawPanel().deselectAllOtherShape(this.shape);
     this.moveComponentToFront(mouseEvent);
-    ResizableBorder resizableBorder = this.shape.getBorder();
+    ResizableBorder resizableBorder = new ResizableBorder();
     this.cursor = resizableBorder.getCursor(mouseEvent);
     this.startPoint = mouseEvent.getPoint();
     this.shape.repaint();
@@ -59,10 +69,12 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
 
   @Override
   public void mouseMoved(MouseEvent e) {
-    if (this.shape.isSelected()) {
-      ResizableBorder resizableBorder = this.shape.getBorder();
-      this.shape.setCursor(Cursor.getPredefinedCursor(resizableBorder.getCursor(e)));
-    }
+      ResizableBorder resizableBorder = new ResizableBorder();
+      shape.setBorder(resizableBorder);
+      resizableBorder.setVisible(true);
+      resizableBorder.paintBorder(shape, shape.getGraphics(), shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
+      shape.setCursor(Cursor.getPredefinedCursor(resizableBorder.getCursor(e)));
+      shape.repaint();
   }
 
   private void handleMovements(Point mouseClick) {

@@ -18,8 +18,9 @@ public class PalettePanel extends JPanel implements Serializable {
     this.setBackground(Color.WHITE);
     this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     this.add(new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT, new ImageIcon("ressources/icons-diagrammer/palette/icon_entity.png")));
+    this.add(new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ENTITE_ASSOCIATIVE, new ImageIcon("ressources/icons-diagrammer/palette/icon_association_class.png")));
     this.add(new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT, new ImageIcon("ressources/icons-diagrammer/palette/icon_association.png")));
-    this.add(new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT, new ImageIcon("ressources/icons-diagrammer/palette/icon_reflexive.png")));
+    this.add(new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT, new ImageIcon("ressources/icons-diagrammer/palette/icon_association.png")));
     this.add(new PaletteButton(Preferences.DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT, new ImageIcon("ressources/icons-diagrammer/palette/icon_generalization.png")));
     this.add(new PaletteButton(Preferences.DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT, new ImageIcon("ressources/icons-diagrammer/palette/icon_composition.png")));
   }

@@ -101,6 +101,7 @@ public class Preferences extends MVCCDElement {
   public static final int DIAGRAMMER_DEFAULT_ENTITY_POSITION_Y = 60;
   public static final int DIAGRAMMER_DEFAULT_CLASS_WIDTH = 200;
   public static final int DIAGRAMMER_DEFAULT_CLASS_HEIGHT = 100;
+  public static final int DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN = 7;
   public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
   public static final Font DIAGRAMMER_CLASS_NAME_FONT = new Font("Arial", Font.BOLD, 13);
   public static final Font DIAGRAMMER_CLASS_FONT = new Font("Arial", Font.PLAIN, 13);
@@ -111,12 +112,14 @@ public class Preferences extends MVCCDElement {
   public static final String DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT = "Généralisation";
   public static final String DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT = "Composition";
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT = "Association réflexive";
+  public static final String DIAGRAMMER_PALETTE_ENTITE_ASSOCIATIVE = "Entité associative";
   public static final int DIAGRAMMER_RELATION_CLICK_AREA = 5;
   public static final String DIAGRAMMER_ENTITY_STEREOTYPE_TEXT = "<<Entity>>";
   public static final String DIAGRAMMER_ENTITY_ORDERED_TEXT = "{ordered}";
   public static final String DIAGRAMMER_MCD_ENTITY_XML_TAG = "mcdEntityShape";
   public static final String DIAGRAMMER_MCD_ASSOCIATION_XML_TAG = "mcdAssociationShape";
   public static final String DIAGRAMMER_MCD_GENERALIZATION_XML_TAG = "mcdGeneralizationShape";
+  public static final String DIAGRAMMER_MCD_LINK_XML_TAG = "mcdLinkShape";
   public static final String DIAGRAMMER_MCD_COMPOSITION_XML_TAG = "mcdCompositionShape";
   public static final String DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG = "anchorPoint";
   public static final String DIAGRAMMER_LABEL_XML_TAG = "labelShape";

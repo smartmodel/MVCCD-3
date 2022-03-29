@@ -2,12 +2,10 @@ package window.editor.diagrammer.utils;
 
 import main.MVCCDManager;
 import preferences.Preferences;
+import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
-import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
-import window.editor.diagrammer.elements.shapes.relations.MCDCompositionShape;
-import window.editor.diagrammer.elements.shapes.relations.MCDGeneralizationShape;
-import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.shapes.relations.*;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
 
@@ -17,7 +15,7 @@ import window.editor.diagrammer.services.DiagrammerService;
 public final class RelationCreator {
 
   public static ClassShape source = null;
-  public static ClassShape destination = null;
+  public static IShape destination = null;
   public static boolean isCreating = false;
 
   public static void setSource(ClassShape source) {
@@ -51,6 +49,10 @@ public final class RelationCreator {
           // Réflexive
           relation = new MCDAssociationShape((MCDEntityShape) RelationCreator.source, (MCDEntityShape) RelationCreator.destination, true);
           break;
+        case Preferences.DIAGRAMMER_PALETTE_ENTITE_ASSOCIATIVE:
+          // Entité associative
+          System.out.println("Entité associative créée");
+          relation = new MCDLinkShape((MCDEntityShape) RelationCreator.source, (RelationShape) RelationCreator.destination);
       }
       // Ajoute l'élément au diagramme courant et au diagrammeur
       MVCCDManager.instance().getCurrentDiagram().addShape(relation);

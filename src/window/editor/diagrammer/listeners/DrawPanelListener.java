@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import main.MVCCDManager;
 import preferences.Preferences;
+import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
