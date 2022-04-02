@@ -90,6 +90,10 @@ public abstract class MPDRGenerateSQL {
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
         generateSQLCode += generateSQLCommandPackages(CREATE);
 
+        message = MessagesBuilder.getMessagesProperty("generate.sql.create.views");
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        generateSQLCode += generateSQLCommandViews(CREATE);
+
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.triggers");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
         generateSQLCode += generateSQLCommandTriggers(CREATE);
@@ -97,10 +101,6 @@ public abstract class MPDRGenerateSQL {
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.indexes");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
         generateSQLCode += generateSQLCommandIndexes(CREATE);
-
-        message = MessagesBuilder.getMessagesProperty("generate.sql.create.views");
-        ViewLogsManager.printMessage(message, WarningLevel.INFO);
-        generateSQLCode += generateSQLCommandViews(CREATE);
 
         return generateSQLCode;
     }
@@ -175,6 +175,7 @@ public abstract class MPDRGenerateSQL {
     private String generateSQLCommandTriggers(int command) {
 
         String generateSQLCode = "";
+        // Triggers de table
         for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
             if (mpdrTable.getMPDRTriggers() != null) {
                 for (MPDRTrigger mpdrTrigger : mpdrTable.getMPDRTriggers()) {
@@ -185,6 +186,25 @@ public abstract class MPDRGenerateSQL {
                     if (command == DROP) {
                         generateSQLCode += getMpdrGenerateSQLTrigger().generateSQLDropTrigger(mpdrTrigger);
                         generateSQLCode += delimiter();
+                    }
+                }
+            }
+        }
+        // Triggers de vue
+        for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
+            if (mpdrTable.getMPDRViews() != null) {
+                for(MPDRView mpdrView : mpdrTable.getMPDRViews()) {
+                    if (mpdrView.getMPDRTriggers() != null) {
+                        for (MPDRTrigger mpdrTrigger : mpdrView.getMPDRTriggers()) {
+                            if (command == CREATE) {
+                                generateSQLCode += getMpdrGenerateSQLTrigger().generateSQLCreateTrigger(mpdrTrigger);
+                                generateSQLCode += delimiter();
+                            }
+                            if (command == DROP) {
+                                generateSQLCode += getMpdrGenerateSQLTrigger().generateSQLDropTrigger(mpdrTrigger);
+                                generateSQLCode += delimiter();
+                            }
+                        }
                     }
                 }
             }

@@ -35,7 +35,8 @@ public abstract class MPDRGenerateSQLView {
         //Les 2 requêtes getList ci-dessous se basent toutes deux sur getMDRColumnsSortDefault()
         // pour que le maaaping entre le nom de colonne et le nom de la source dans la requête SQL soit préservé !
         MDRCaseFormat mdrNamingCaseFormat = getMPDRGenerateSQL().mpdrModel.getNamingFormatForDB();
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_VIEW_COLUMNS_WORD, mpdrView.getListColumnsAsString(Preferences.PARAMETERS_SEPARATOR,
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_VIEW_COLUMNS_WORD,
+                mpdrView.getListColumnsAsString(Preferences.PARAMETERS_SEPARATOR,
                 false));
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_VIEW_SELECT_COLUMNS_WORD,
                 mpdrView.getListColumnsRefOriginAsString(Preferences.PARAMETERS_SEPARATOR));

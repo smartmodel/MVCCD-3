@@ -3,6 +3,7 @@ package generatorsql.generator;
 import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.tapis.MPDRPackage;
 import mpdr.tapis.MPDRPackageType;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 
 public abstract class MPDRGenerateSQLPackage {
@@ -36,7 +37,10 @@ public abstract class MPDRGenerateSQLPackage {
         // Customisation des noms des objets de programmation
         generateSQLCode = MPDRGenerateSQLUtil.customizeNameObjectInCode(generateSQLCode , getMPDRGenerateSQL().mpdrModel);
 
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_PACKAGE_NAME_WORD, mpdrPackage.getName());
+        String packageName = mpdrPackage.getName() ;
+        // Suppression du marqueur _BODY pour le corps de package
+        packageName = StringUtils.replace(packageName, Preferences.MARKER_PACKAGE_BODY, "");
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_PACKAGE_NAME_WORD, packageName);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrPackage.getMPDRTableAccueil().getName());
 
         return generateSQLCode;

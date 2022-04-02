@@ -1,7 +1,7 @@
 DECLARE nb_package  PLS_INTEGER;
 
 BEGIN
-    SELECT count(*) INTO nb_package from user_packages WHERE package_name = UPPER('{packageName}');
+    SELECT count(*) INTO nb_package from user_procedures WHERE procedure_name = UPPER('{packageName}');
     IF nb_package = 1 then
         EXECUTE IMMEDIATE 'DROP PACKAGE {packageName}';
     END IF;

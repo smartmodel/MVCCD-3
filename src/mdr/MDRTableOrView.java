@@ -50,6 +50,14 @@ public abstract class MDRTableOrView extends MDRElement implements IMDRElementWi
         return getMDRContColumns().getMDRColumns();
     }
 
+    public ArrayList<String> getMDRColumnsNames() {
+        ArrayList<String> resultat = new ArrayList<String>();
+        for (MDRColumn mdrColumns : getMDRColumns()){
+            resultat.add(mdrColumns.getName());
+        }
+        return resultat;
+    }
+
     public ArrayList<MDRColumn> getMDRColumnsSortDefault(){
         return getMDRContColumns().getMDRColumnsSortDefault();
     }

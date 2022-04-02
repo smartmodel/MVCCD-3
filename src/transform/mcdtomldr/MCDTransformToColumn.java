@@ -307,9 +307,16 @@ public class MCDTransformToColumn {
             MDROrderBuildNaming orderBuild = new MDROrderBuildNaming(element);
             //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
             if (mldrColumnPK.isFk() && preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()) {
-            //if (mcdEntityParent.isNoInd() && preferences.getMDR_PREF_COLUMN_FK_ONE_ANCESTOR()) {
-                orderBuild.setFormat(preferences.getMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT());
-                orderBuild.setTargetNaming(MDROrderBuildTargets.COLUMNFKONEANCESTOR);
+                //#MAJ 2022-03-28-B nommage de la colonne PK venant d'une spécialisation du nom de l'entité spécialisée
+                boolean c1 = mldrColumnPK.getMLDRTableAccueil().isSpecialized();
+                boolean c2 = ! mldrColumnFK.getFk().isIdComp();
+                if (c1 && c2) {
+                    orderBuild.setFormat(preferences.getMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT());
+                    orderBuild.setTargetNaming(MDROrderBuildTargets.COLUMNFKFROMENTITYSPECIALIZED);
+                } else {
+                    orderBuild.setFormat(preferences.getMDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT());
+                    orderBuild.setTargetNaming(MDROrderBuildTargets.COLUMNFKONEANCESTOR);
+                }
 
             } else {
                 orderBuild.setFormat(preferences.getMDR_COLUMN_FK_NAME_FORMAT());

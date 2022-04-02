@@ -202,9 +202,23 @@ public abstract class MPDRView extends MDRTableOrView implements IMPDRElement, I
                 MPDRColumn  mpdrColumnInTable = mpdrColumnView.getMpdrColumnAsQuerry() ;
                 if (mpdrColumnInTable.getMPDRTableAccueil() == mpdrTableIn){
                     resultat.add(mpdrColumnInTable);
+                } else  {
+                    // Au départ je ne dupliquais pas les colonnes en surcharge mais, cela amenait à violer des contraintes de la
+                    // table génénralisée. Par exemple, l'obligation de valeur !
+                    if (mpdrTableIn.getMDRColumnsNames().contains(mdrColumn.getName())) {
+                        resultat.add(mpdrColumnInTable);
+                    }
                 }
             }
         }
         return resultat;
     }
+
+    public ArrayList<MPDRTrigger> getMPDRTriggers() {
+        if ( getMPDRBoxTriggers() != null) {
+            return getMPDRBoxTriggers().getAllTriggers();
+        }
+        return null;
+    }
+
 }

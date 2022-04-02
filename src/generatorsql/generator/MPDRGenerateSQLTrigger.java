@@ -67,7 +67,7 @@ public abstract class MPDRGenerateSQLTrigger {
                     mpdrTrigger.getMPDRViewAccueil().getName());
         }
 
-        if (tableAccueil instanceof IMPDRTableRequirePackage){
+        if ((tableAccueil instanceof IMPDRTableRequirePackage) && (getMPDRGenerateSQL().mpdrModel.isTapis()) ){
             String namePackageTAPIs = ((IMPDRTableRequirePackage) tableAccueil).getMPDRPackageByType(MPDRPackageType.TAPIS_SPEC).getName();
             generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_PACKAGE_NAME_WORD,
                     namePackageTAPIs);

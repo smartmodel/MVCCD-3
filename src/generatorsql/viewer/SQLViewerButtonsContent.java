@@ -388,7 +388,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     private Connection actionTestConnection(boolean autonomous) {
          ConConnection conConnection = sqlViewer.getConConnection();
         return ConnectionsService.actionTestIConConnectionOrConnector(sqlViewer,
-                true,
+                autonomous,
                 conConnection);
    }
 
@@ -435,7 +435,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         // Sauvegarde du fichier de script
         boolean ok = actionDDLSave(false);
 
-        // Etablissement de la connexion
+        // Exécution du code
         if (ok) {
             String codeSQL = sqlViewer.getSqlViewerCodeSQL().getSqlViewerCodeSQLContent().getCodeSQL();
             ok = actionExecute(codeSQL, "Le script SQL-DDL n'a pas pu être exécuté :");

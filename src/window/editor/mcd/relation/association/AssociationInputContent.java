@@ -1023,12 +1023,16 @@ public class AssociationInputContent extends PanelInputContentId {
 
         //Pas compris pourquoi cette restriction a été levée //#MAJ 2021-03-30
         // Par contre pourrait l'être ! A voir si nécessaire
+        //#MAJ 2022-04-01 Nommage conjoint de rôle et de nom d'association autorisé
+        /*
         if ( r2 ) {
             message = MessagesBuilder.getMessagesProperty("association.name.and.role.name.error");
             fieldName.setColor(SComponent.COLORERROR);
             fieldFromRoleName.setColor(SComponent.COLORERROR);
             fieldToRoleName.setColor(SComponent.COLORERROR);
         }
+
+         */
 
         if (r3) {
             message = MessagesBuilder.getMessagesProperty("association.role.name.error");

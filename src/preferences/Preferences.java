@@ -914,6 +914,8 @@ public class Preferences extends MVCCDElement {
   public static Integer MARKER_CHECK_LENGTH = 4;
   public static Integer MDR_SEPARATOR_NAMING_LENGTH = 1;
 
+  public static String MARKER_PACKAGE_BODY = "_BODY";
+
   public static String MDR_WORDS_BEGIN = "{";
   public static String MDR_WORDS_END = "}";
   public static String MPDR_MARKER_DYNAMIC_CODE = "-";

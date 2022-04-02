@@ -1,19 +1,20 @@
 package mpdr.tapis;
 
 import mpdr.MPDRDB;
+import preferences.Preferences;
 
 import java.util.ArrayList;
 
 public enum MPDRPackageType {
-    TAPIS_SPEC("TAPIS", "tapis_spec.txt", MPDRStoredCodeUsage.TAPIS, MPDRStoredCodeScope.TABLE,
+     TAPIS_SPEC("TAPIS", "tapis_spec.txt", MPDRStoredCodeUsage.TAPIS, MPDRStoredCodeScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),
-    TAPIS_BODY("TAPIS_BODY","tapis_body.txt", MPDRStoredCodeUsage.TAPIS,MPDRStoredCodeScope.TABLE,
+    TAPIS_BODY("TAPIS" + Preferences.MARKER_PACKAGE_BODY,"tapis_body.txt", MPDRStoredCodeUsage.TAPIS,MPDRStoredCodeScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),
     RESOURCES_SPEC("RESOURCES", "resources_spec.txt", MPDRStoredCodeUsage.RESOURCES, MPDRStoredCodeScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),
-    RESOURCES_BODY("RESOURCES_BODY","resources_body.txt", MPDRStoredCodeUsage.RESOURCES,MPDRStoredCodeScope.TABLE,
+    RESOURCES_BODY("RESOURCES" + Preferences.MARKER_PACKAGE_BODY,"resources_body.txt", MPDRStoredCodeUsage.RESOURCES,MPDRStoredCodeScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE});
-
+    public static String markerBody = "_BODY";
 
     private String marker;
     private String templateFileName;

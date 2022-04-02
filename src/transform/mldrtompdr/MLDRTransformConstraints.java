@@ -12,7 +12,6 @@ import mpdr.*;
 import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.oracle.MPDROracleConstraintCustomSpecialized;
-import utilities.Trace;
 
 public class MLDRTransformConstraints {
 
@@ -48,7 +47,6 @@ public class MLDRTransformConstraints {
                 mpdrConstraint = mpdrTable.createPK(mldrPK);
             }
             if (mldrConstraint instanceof MLDRFK){
-                Trace.println("Create FK");
                 MLDRFK mldrFK = (MLDRFK) mldrConstraint;
                 mpdrConstraint = mpdrTable.createFK(mldrFK);
             }
@@ -139,7 +137,10 @@ public class MLDRTransformConstraints {
         // Index de performance
         MLDRTransformToIndex mldrTransformToIndex = new MLDRTransformToIndex(
                 mldrTransform, mldrFK, mpdrModel, mpdrTable);
-        MPDRIndex mpdrIndex = mldrTransformToIndex.createOrModifyIndex();
+        //#MAJ 2022-03-28  La clé étrangère de lien avec l'entité généralisée correspond à la PK et ne doit pas être indexée
+        if ( ! (mpdrTable.isSpecialized() && (mldrFK.isIdComp()) )) {
+            MPDRIndex mpdrIndex = mldrTransformToIndex.createOrModifyIndex();
+        }
 
     }
 

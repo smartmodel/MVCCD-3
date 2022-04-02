@@ -33,10 +33,10 @@ public class MPDRTransformToColumnsView {
 
     public void transformColumns() {
 
-        // Préparation de la liste des colonnes des tables de la généralisation-spécialisation
+        // Préparation de la liste des colonnes
         ArrayList<MPDRColumn> mpdrColumns = prepareColumns(mpdrTable);
 
-        // Suprresion des colonnes surchargées par une spécialisation
+        //Suppression des colonnes surchargées par une spécialisation
         mpdrColumns = withOverloadColumns(mpdrColumns);
 
         // Tranfromation proprement dite
@@ -58,10 +58,11 @@ public class MPDRTransformToColumnsView {
         return mpdrColumns;
     }
 
+
     private ArrayList<MPDRColumn> withOverloadColumns(ArrayList<MPDRColumn> mpdrColumns) {
         ArrayList<MPDRColumn> mpdrColumnsOverload = new ArrayList<MPDRColumn>();
         // Il faut retirer les colonnes de même nom qui sont généralisées
-        // Le parcours commence donc par la spéciatisation qui est en fin du tableau de colonnes
+        // Le parcours commence donc par la spécialisation qui est en fin du tableau de colonnes
         if (mpdrColumns.size() > 0 ){
             mpdrColumnsOverload.add( mpdrColumns.get(mpdrColumns.size() - 1));
             for (int i = mpdrColumns.size() - 2 ; i >= 0 ; i--){
@@ -97,7 +98,7 @@ public class MPDRTransformToColumnsView {
 
         // Suppression des anciennes colonnes et création de nouvelle car il y a 2 sources logiques qui peuvent changer :
         // - La colonne elle-même
-        // - la relation de généralisation - spécialisation
+        // - la relation de généralisation - spécialisation (par exemple)
         MPDRColumnView mpdrColumnView = mpdrView.createColumnView();
         MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrColumnView);
 
