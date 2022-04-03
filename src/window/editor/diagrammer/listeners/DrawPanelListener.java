@@ -1,8 +1,6 @@
 package window.editor.diagrammer.listeners;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -13,11 +11,16 @@ import java.io.Serializable;
 import java.util.ListIterator;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
+
+import jdk.jshell.Diag;
+import jdk.swing.interop.SwingInterOpUtils;
 import main.MVCCDManager;
 import preferences.Preferences;
+import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.menus.PointAncrageMenu;
@@ -49,11 +52,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
 
     // Déselectionne toutes les formes et reset la création de relation
     DiagrammerService.getDrawPanel().deselectAllShapes();
-
-    if (RelationCreator.isCreating) {
-      RelationCreator.resetSourceAndDestination();
-      RelationCreator.setIsCreating(false);
-    }
 
     this.relationClicked = this.setAssociationClicked(e);
 
@@ -93,12 +91,15 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   @Override
   public void mouseReleased(MouseEvent e) {
     super.mouseReleased(e);
+
     if (!this.pointAncrageClickedIsNull() && !this.relationClickedIsNull()) {
       //this.deletePointsAncrageIfNecessary();
     }
+
     if (this.mouseWheelPressed && SwingUtilities.isMiddleMouseButton(e)) {
       this.mouseWheelPressed = false;
     }
+
     this.pointAncrageClicked = null;
     this.updateCursor();
 
@@ -123,7 +124,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   @Override
   public void mouseDragged(MouseEvent e) {
     super.mouseDragged(e);
-
     final int differenceX = e.getPoint().x - this.origin.x;
     final int differenceY = e.getPoint().y - this.origin.y;
 

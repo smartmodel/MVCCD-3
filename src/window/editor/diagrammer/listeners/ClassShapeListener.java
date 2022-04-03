@@ -23,9 +23,6 @@ public class ClassShapeListener extends MouseAdapter implements Serializable {
   @Override
   public void mouseClicked(MouseEvent e) {
     super.mouseClicked(e);
-    if (PalettePanel.activeButton != null) {
-      this.handleRelationCreation(this.shape);
-    }
   }
 
   @Override
@@ -40,8 +37,7 @@ public class ClassShapeListener extends MouseAdapter implements Serializable {
   @Override
   public void mouseMoved(MouseEvent e) {
     super.mouseMoved(e);
-    ClassShape source = (ClassShape) e.getSource();
-    //source.setSelected(true);
+
   }
 
   @Override
@@ -64,17 +60,5 @@ public class ClassShapeListener extends MouseAdapter implements Serializable {
     }
   }
 
-  public void handleRelationCreation(ClassShape shape) {
-    if (RelationCreator.source == null) {
-      RelationCreator.setSource(shape);
-    } else if (RelationCreator.destination == null) {
-      RelationCreator.setDestination(shape);
-    }
-    // Création
-    if (RelationCreator.source != null && RelationCreator.destination != null) {
-      RelationCreator.createRelation();
-      PalettePanel.setActiveButton(null);
-    }
-  }
 
 }

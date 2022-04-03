@@ -27,6 +27,7 @@ import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.DrawPanelListener;
 import window.editor.diagrammer.utils.GridUtils;
@@ -404,6 +405,16 @@ public class DrawPanel extends JLayeredPane implements Serializable {
       }
     }
     return relations;
+  }
+
+  public List<SquaredShape> getSquaredShapes(){
+    List<SquaredShape> squaredShapes = new ArrayList<>();
+    for (IShape shape : this.shapes) {
+      if (shape instanceof SquaredShape) {
+        squaredShapes.add((SquaredShape) shape);
+      }
+    }
+    return squaredShapes;
   }
 
   public List<ClassShape> getClassShapes() {
