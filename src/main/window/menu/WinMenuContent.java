@@ -6,22 +6,38 @@ import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import project.Project;
 import repository.editingTreat.ProjectEditingTreat;
 import utilities.window.DialogMessage;
+import window.editor.diagrammer.drawpanel.DrawPanelComponent;
+import window.editor.diagrammer.services.DiagrammerService;
 
+import javax.imageio.ImageIO;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.PrinterResolution;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.awt.print.*;
+import java.io.File;
+import java.io.IOException;
 
 public class WinMenuContent implements ActionListener {
 
     private MVCCDWindow mvccdWindow;
     private JMenuBar menuBar;
+    private JMenu fichier;
     private JMenu project;
     private JMenu edit;
     private JMenu profile;
     private JMenu help;
+
+    private JMenuItem imprimer;
+    private JMenuItem exporter;
 
     private JMenuItem projectNew;
     private JMenuItem projectEdit;
@@ -48,6 +64,8 @@ public class WinMenuContent implements ActionListener {
         this.mvccdWindow = mvccdWindow;
         this.menuBar = menuBar;
 
+        fichier = new JMenu("Fichier");
+        menuBar.add(fichier);
         project = new JMenu("Projet");
         menuBar.add(project);
         edit = new JMenu("Edition");
@@ -59,6 +77,13 @@ public class WinMenuContent implements ActionListener {
 
         help = new JMenu("Aide");
         menuBar.add(help);
+
+        imprimer = new JMenuItem("Imprimer");
+        imprimer.addActionListener(this);
+        fichier.add(imprimer);
+        exporter = new JMenuItem("Exporter");
+        exporter.addActionListener(this);
+        fichier.add(exporter);
 
         projectNew = new JMenuItem("Nouveau");
         projectNew.addActionListener(this);
@@ -75,11 +100,11 @@ public class WinMenuContent implements ActionListener {
         project.add(projectOpenRecents);
 
         projectOpenRecentsItems = new JMenuItem[Preferences.FILES_RECENTS_AUTHORIZED];
-        for (int i=1 ; i<= Preferences.FILES_RECENTS_AUTHORIZED; i++){
-            projectOpenRecentsItems[i-1] = new JMenuItem();
-            projectOpenRecentsItems[i-1].addActionListener(this);
-            projectOpenRecentsItems[i-1].setVisible(false);
-            projectOpenRecents.add(projectOpenRecentsItems[i-1]);
+        for (int i = 1; i <= Preferences.FILES_RECENTS_AUTHORIZED; i++) {
+            projectOpenRecentsItems[i - 1] = new JMenuItem();
+            projectOpenRecentsItems[i - 1].addActionListener(this);
+            projectOpenRecentsItems[i - 1].setVisible(false);
+            projectOpenRecents.add(projectOpenRecentsItems[i - 1]);
         }
 
 
@@ -127,6 +152,23 @@ public class WinMenuContent implements ActionListener {
         String messageExceptionTarget = "";
         try {
             Object source = e.getSource();
+            if (source == imprimer) {
+                // messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.print.exception");
+                // Déselectionne toutes les formes
+                DiagrammerService.getDrawPanel().deselectAllShapes();
+                printComponentBasique(mvccdWindow.getDiagrammer().getContent().getPanelDraw());
+            }
+            if (source == exporter) {
+                //messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.export.exception");
+                // Déselectionne toutes les formes
+                DiagrammerService.getDrawPanel().deselectAllShapes();
+                // Ouvre une boîte de dialogue pour que l'utilisateur choisisse l'emplacement de sauvegarde et le nom du fichier
+                JFileChooser fileChooser = new JFileChooser();
+                int returnVal = fileChooser.showSaveDialog(null);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    exportComponentOptimized(mvccdWindow.getDiagrammer().getContent().getPanelDraw(), fileChooser.getSelectedFile().toString());
+                }
+            }
             if (source == projectNew) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.new.exception");
                 newProject();
@@ -138,7 +180,7 @@ public class WinMenuContent implements ActionListener {
             if (source == projectOpen) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.open.exception");
                 openProject();
-             }
+            }
             for (int i = 0; i < Preferences.FILES_RECENTS_AUTHORIZED; i++) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.recent.open.exception");
                 if (source == projectOpenRecentsItems[i]) {
@@ -167,24 +209,160 @@ public class WinMenuContent implements ActionListener {
                 MVCCDManager.instance().saveAsProject(false);
             }
 
-        } catch(Exception exception){
+        } catch (Exception exception) {
             String messageException = MessagesBuilder.getMessagesProperty("bar.menu.exception",
                     messageExceptionTarget);
             ViewLogsManager.catchException(exception, messageException);
         }
     }
 
+
+    /**
+     * Exporte un composant au format JPG & PNG en prenant soin de dessiner le plus petit rectangle autour afin d'avoir
+     * le moins de fond blanc possible dans l'image exportée
+     *
+     * Code trouvé sur un post StackOverFlow et adapté selon les besoins métiers
+     *   -> https://stackoverflow.com/questions/17690275/exporting-a-jpanel-to-an-image
+     *
+     * @param component -> Le composant à imprimer
+     * @param fileName  -> Le chemin complet + nom du fichier à enregistrer
+     */
+    public void exportComponentOptimized(Component component, String fileName) {
+        // On redessine le plus petit rectangle possible autour des entités en gardant une bordure de 2 pixels
+        Rectangle rectangle = DiagrammerService.getDrawPanel().getContentBounds(DiagrammerService.getDrawPanel().getShapes(), 2);
+        BufferedImage image;
+
+        // Si notre diagramme n'est pas vide de formes ...
+        if (rectangle.getWidth() > 0) {
+            // Pour choper le plus petit rectangle autour des entités à imprimer
+            final DrawPanelComponent drawPanelComponent = mvccdWindow.getDiagrammer().getContent().getPanelDraw();
+            drawPanelComponent.getViewport().setLocation(
+                    new Point(-rectangle.x, -rectangle.y));
+            drawPanelComponent.getViewport().revalidate();
+
+            image = new BufferedImage((int) rectangle.getWidth(), (int) rectangle.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+        }
+        // Si notre diagramme est vide de formes ...
+        else {
+            image = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+        }
+        Graphics2D g = image.createGraphics();
+
+        // Désactive temporairement la grille de dessin du Diagrammer
+        PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
+
+        component.printAll(g);
+        g.dispose();
+        try {
+            ImageIO.write(image, "png", new File(fileName.trim() + ".png"));
+        } catch (IOException exp) {
+            exp.printStackTrace();
+        } finally {
+            PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(true);
+        }
+    }
+
+    /**
+     * Lance une boîte de dialogue pour l'impression d'un composant et l'imprime selon les paramètres choisis
+     * par l'utilisateur.
+     * La grille de dessin est temporairement désactivée le temps de l'impression et est réactivée ensuite.
+     *
+     * Code trouvé sur un post StackOverFlow et adapté selon les besoins métiers
+     *   -> https://stackoverflow.com/questions/750310/how-can-i-print-a-single-jpanels-contents
+     *
+     * @param component -> Le composant à imprimer
+     */
+    public void printComponentBasique(Component component) {
+        PrinterJob pj = PrinterJob.getPrinterJob();
+        pj.setJobName(" Print Component ");
+
+        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+        aset.add(new PrinterResolution(300, 300, PrinterResolution.DPI));
+
+
+        pj.setPrintable((pg, pf, pageNum) -> {
+            if (pageNum > 0) {
+                return Printable.NO_SUCH_PAGE;
+            }
+
+            Graphics2D g2 = (Graphics2D) pg;
+            g2.translate(pf.getImageableX(), pf.getImageableY());
+            // Désactive temporairement la grille de dessin du Diagrammer
+            PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
+            component.paint(g2);
+            return Printable.PAGE_EXISTS;
+        });
+        if (!pj.printDialog()) {
+            return;
+        }
+
+        try {
+            pj.print(aset);
+        } catch (PrinterException ex) {
+            // handle exception
+        } finally {
+            PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(true);
+        }
+    }
+
+    /**
+     * Lance une boîte de dialogue pour l'impression d'un composant et s'occupe de formater le rendu de celui-ci.
+     * Le composant est mis en mode landscape au format A4, la grille de dessin est temporairement désactivée
+     * le temps de l'impression et est réactivée ensuite.
+     *
+     * Code trouvé sur un post StackOverFlow et adapté selon les besoins métiers
+     *   -> https://stackoverflow.com/questions/54055481/jpanel-not-being-printed-in-landscape-mode-by-default-when-i-call-the-print-meth
+     *
+     * @param component -> Le composant à imprimer
+     */
+    public void printComponentLandscapeMode(Component component) {
+        PrinterJob pj = PrinterJob.getPrinterJob();
+        pj.setJobName(" Print Component ");
+
+
+        PageFormat pf = pj.defaultPage();
+        pf = pj.defaultPage();
+        Paper paper = pf.getPaper();
+        paper.setSize(8.5 * 72, 13 * 72);
+        paper.setImageableArea(0.5 * 72, 0.0 * 72, 8 * 72, 14 * 72);
+        pf.setPaper(paper);
+        pf.setOrientation(PageFormat.LANDSCAPE);
+        Book book = new Book();//java.awt.print.Book
+        book.append(((pg, pf1, pageNum) -> {
+            if (pageNum > 0) {
+                return Printable.NO_SUCH_PAGE;
+            }
+            Graphics2D g2 = (Graphics2D) pg;
+            // Désactive temporairement la grille de dessin du Diagrammer
+            PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
+            g2.translate(pf1.getImageableX() + pf1.getImageableWidth() / 2 - component.getWidth() / 2, pf1.getImageableY() + pf1.getImageableHeight() / 2 - component.getHeight() / 2);
+            component.print(g2);
+            return Printable.PAGE_EXISTS;
+        }), pf);
+        pj.setPageable(book);
+        if (pj.printDialog() == false)
+            return;
+
+        try {
+            pj.print();
+        } catch (PrinterException ex) {
+            // handle exception
+        } finally {
+            PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(true);
+        }
+    }
+
     private void newProject() {
         if (MVCCDManager.instance().getProject() == null) {
             Project project = ProjectEditingTreat.treatNew(mvccdWindow);
-            if (project != null){
+            if (project != null) {
                 // Quittance de création d'un nouveau projet
-                String message = MessagesBuilder.getMessagesProperty ("project.new", project.getName());
+                String message = MessagesBuilder.getMessagesProperty("project.new", project.getName());
                 ViewLogsManager.printMessage(message, WarningLevel.INFO);
             }
         } else {
-            String message = MessagesBuilder.getMessagesProperty ("project.new.not.close");
-            DialogMessage.showOk(mvccdWindow,message);
+            String message = MessagesBuilder.getMessagesProperty("project.new.not.close");
+            DialogMessage.showOk(mvccdWindow, message);
         }
     }
 
@@ -192,8 +370,8 @@ public class WinMenuContent implements ActionListener {
         if (MVCCDManager.instance().getProject() == null) {
             MVCCDManager.instance().openProject();
         } else {
-            String message = MessagesBuilder.getMessagesProperty ("project.open.not.close");
-            DialogMessage.showOk(mvccdWindow,message);
+            String message = MessagesBuilder.getMessagesProperty("project.open.not.close");
+            DialogMessage.showOk(mvccdWindow, message);
         }
     }
 
@@ -201,8 +379,8 @@ public class WinMenuContent implements ActionListener {
         if (MVCCDManager.instance().getProject() == null) {
             MVCCDManager.instance().openProjectRecent(fileName);
         } else {
-            String message = MessagesBuilder.getMessagesProperty ("project.open.not.close");
-            DialogMessage.showOk(mvccdWindow,message);
+            String message = MessagesBuilder.getMessagesProperty("project.open.not.close");
+            DialogMessage.showOk(mvccdWindow, message);
         }
 
     }
@@ -228,7 +406,9 @@ public class WinMenuContent implements ActionListener {
     public JMenuItem getProjectSaveAs() {
         return projectSaveAs;
 
-    }public JMenuItem getProjectSave() {
+    }
+
+    public JMenuItem getProjectSave() {
         return projectSave;
     }
 

@@ -38,6 +38,15 @@ public class WinDiagrammer extends PanelContent {
 
   }
 
+  /**
+   * Utile pour le print et l'export JPG & PNG
+   *
+   * @return Le Draw Panel comportant uniquement les entités
+   */
+  public DrawPanelComponent getPanelDraw() {
+    return panelDraw;
+  }
+
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
