@@ -33,15 +33,15 @@ public class MCDAssociationEditAction extends AbstractAction implements Serializ
   }
 
   private void edit() {
-    final MVCCDManager manager = MVCCDManager.instance();
-    final MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
+    MVCCDManager manager = MVCCDManager.instance();
+    MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
     mcdAssociationEditingTreat.treatUpdate(manager.getMvccdWindow(), this.shape.getMCDAssociation());
     shape.createLabelsAfterRelationShapeEdit();
   }
 
   private void create() {
-     MVCCDManager manager = MVCCDManager.instance();
-     MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
+    MVCCDManager manager = MVCCDManager.instance();
+    MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
 
     MCDEntityShape entityShapeSource = (MCDEntityShape) shape.getSource();
     MCDEntityShape entityShapeDestination = (MCDEntityShape) shape.getDestination();

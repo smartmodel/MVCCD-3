@@ -98,7 +98,7 @@ public class MCDEntityShape extends ClassShape {
   }
 
   private void addListeners() {
-    MCDEntityShapeListener listener = new MCDEntityShapeListener();
+    MCDEntityShapeListener listener = new MCDEntityShapeListener(this);
     this.addMouseListener(listener);
     this.addMouseMotionListener(listener);
   }

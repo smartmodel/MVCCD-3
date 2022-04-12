@@ -3,8 +3,6 @@ package window.editor.diagrammer.elements.shapes.classes;
 import java.awt.*;
 import java.io.Serializable;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 
 import main.MVCCDManager;
 import preferences.Preferences;
@@ -12,13 +10,13 @@ import window.editor.diagrammer.elements.interfaces.IResizable;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
 import window.editor.diagrammer.utils.GridUtils;
-import window.editor.diagrammer.utils.ResizableBorder;
 
 public abstract class SquaredShape extends JPanel implements IShape, IResizable, Serializable {
 
   private static final long serialVersionUID = 1000;
   protected int id;
-  protected boolean isSelected = false;
+  protected boolean isFocused = false;
+  protected boolean isResizing = false;
 
   public SquaredShape(int id) {
     this.id = id;
@@ -45,11 +43,9 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
+    setBorder(BorderFactory.createLineBorder(Color.BLACK, isFocused || isResizing ? 3 : 1));
   }
 
-  public Rectangle getHoverArea(){
-    return new Rectangle(Preferences.DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN, Preferences.DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN, getWidth() - 2 * Preferences.DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN, getHeight() - 2 * Preferences.DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN);
-  }
 
   @Override
   public void zoom(int fromFactor, int toFactor) {
@@ -73,13 +69,13 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   }
 
   @Override
-  public boolean isSelected() {
-    return this.isSelected;
+  public boolean isFocused() {
+    return this.isFocused;
   }
 
   @Override
-  public void setSelected(boolean selected) {
-    this.isSelected = selected;
+  public void setFocused(boolean selected) {
+    this.isFocused = selected;
     this.repaint();
   }
 
@@ -95,5 +91,13 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   @Override
   public String toString() {
     return "SquaredShape{" + "id=" + id + '}';
+  }
+
+  public boolean isResizing() {
+    return isResizing;
+  }
+
+  public void setResizing(boolean resizing) {
+    isResizing = resizing;
   }
 }

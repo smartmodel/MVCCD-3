@@ -105,12 +105,12 @@ public class RelationPointAncrageShape extends Point implements IShape, Serializ
   }
 
   @Override
-  public boolean isSelected() {
+  public boolean isFocused() {
     return this.isSelected;
   }
 
   @Override
-  public void setSelected(boolean isSelected) {
+  public void setFocused(boolean isSelected) {
     this.isSelected = isSelected;
   }
 

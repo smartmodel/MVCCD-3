@@ -175,9 +175,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     graphics2D.setColor(Color.BLACK);
     for (RelationShape relationShape : this.getRelationShapes()) {
       relationShape.draw(graphics2D);
-      if (relationShape.isSelected()) {
-        relationShape.drawPointsAncrage(graphics2D);
-      }
+
     }
   }
 
@@ -439,7 +437,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
 
   public void deselectAllShapes() {
     for (IShape shape : this.getShapes()) {
-      shape.setSelected(false);
+      shape.setFocused(false);
     }
     this.repaint();
   }
@@ -447,7 +445,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   public void deselectAllOtherShape(IShape shapeToKeepSelected) {
     for (IShape shape : this.getShapes()) {
       if (shape != shapeToKeepSelected) {
-        shape.setSelected(false);
+        shape.setFocused(false);
       }
     }
     this.repaint();

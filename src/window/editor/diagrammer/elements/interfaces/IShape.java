@@ -16,8 +16,8 @@ public interface IShape {
   default void setLocation(int x, int y) {
     this.setLocation(new Point(x, y));
   }
-  boolean isSelected();
-  void setSelected(boolean isSelected);
+  boolean isFocused();
+  void setFocused(boolean isSelected);
   default void setSize(int width, int height) {
     this.setSize(new Dimension(width, height));
   }

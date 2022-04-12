@@ -5,11 +5,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.palette.PalettePanel;
-import window.editor.diagrammer.utils.RelationCreator;
-
-import javax.swing.*;
-import javax.swing.border.LineBorder;
 
 public class ClassShapeListener extends MouseAdapter implements Serializable {
 
@@ -29,8 +24,8 @@ public class ClassShapeListener extends MouseAdapter implements Serializable {
   public void mouseExited(MouseEvent e) {
     super.mouseExited(e);
     ClassShape source = (ClassShape) e.getSource();
-    if (!source.isSelected()){
-      source.setSelected(false);
+    if (!source.isFocused()){
+      source.setFocused(false);
     }
   }
 

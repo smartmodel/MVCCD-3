@@ -20,6 +20,7 @@ public class MCDLinkShape extends RelationShape{
     public void doDraw(Graphics2D graphics2D) {
         Point linkedRelationShapeCenter = linkedRelationShape.getCenter();
         graphics2D.drawLine(linkedRelationShapeCenter.x, linkedRelationShapeCenter.y, this.source.getX(), this.source.getY());
+        System.out.println("dreaing");
     }
 
     @Override

@@ -1,11 +1,6 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
@@ -15,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
+
 import m.interfaces.IMRelation;
 import main.MVCCDManager;
 import md.MDElement;
@@ -30,7 +26,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   private static final long serialVersionUID = 1000;
   protected int id;
   protected List<RelationPointAncrageShape> pointsAncrage = new LinkedList<>();
-  protected boolean isSelected = false;
+  protected boolean isFocused = false;
   protected ClassShape source;
   protected ClassShape destination;
   protected IMRelation relation;
@@ -126,16 +122,6 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   }
 
   @Override
-  public boolean isSelected() {
-    return this.isSelected;
-  }
-
-  @Override
-  public void setSelected(boolean isSelected) {
-    this.isSelected = isSelected;
-  }
-
-  @Override
   public void setSize(int width, int height) {
     IShape.super.setSize(width, height);
   }
@@ -154,13 +140,21 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   }
 
   public void drawSegments(Graphics2D graphics2D) {
+    if (isFocused){
+      graphics2D.setStroke(new BasicStroke(3));
+    }
+
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
     // Pour chaque point d'ancrage
     for (int i = 0; i < this.pointsAncrage.size(); i++) {
       if (i != this.pointsAncrage.size() - 1) {
         graphics2D.drawLine((int) this.pointsAncrage.get(i).getX(), (int) this.pointsAncrage.get(i).getY(), (int) this.pointsAncrage.get(i + 1).getX(), (int) this.pointsAncrage.get(i + 1).getY());
       }
     }
+
+    graphics2D.setStroke(new BasicStroke(1));
+
   }
 
   public int getPointAncrageIndex(RelationPointAncrageShape pointAncrage) {
@@ -294,8 +288,13 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     return segments;
   }
 
+
+
   public void draw(Graphics2D graphics2D) {
     this.drawSegments(graphics2D);
+    if (isFocused){
+      drawPointsAncrage(graphics2D);
+    }
     this.doDraw(graphics2D);
   }
 
@@ -543,6 +542,15 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   public List<LabelShape> getLabels() {
     return labels;
+  }
+
+  public boolean isFocused() {
+    return isFocused;
+  }
+
+  public void setFocused(boolean focused) {
+    isFocused = focused;
+    DiagrammerService.getDrawPanel().repaint();
   }
 
   @Override

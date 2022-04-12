@@ -12,15 +12,10 @@ import java.util.ListIterator;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
-import jdk.jshell.Diag;
-import jdk.swing.interop.SwingInterOpUtils;
 import main.MVCCDManager;
 import preferences.Preferences;
-import window.editor.diagrammer.drawpanel.DrawPanel;
-import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
-import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.menus.PointAncrageMenu;
@@ -40,7 +35,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   private boolean spaceBarPressed = false;
   private Point origin;
   private RelationPointAncrageShape pointAncrageClicked = null;
-  private RelationShape relationClicked = null;
+  private RelationShape focusedRelation = null;
 
   public DrawPanelListener() {
     this.CURSOR_ENTITY_ICON = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("ressources/icons-diagrammer/palette/icon_entity.png").getImage(), new Point(0, 0), "cursorEntityIcon");
@@ -53,14 +48,13 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     // Déselectionne toutes les formes et reset la création de relation
     DiagrammerService.getDrawPanel().deselectAllShapes();
 
-    this.relationClicked = this.setAssociationClicked(e);
+    checkForClickedRelation(e);
 
     // Aucune association n'est cliquée
-    if (this.relationClickedIsNull()) {
+    if (focusedRelation != null) {
       DiagrammerService.getDrawPanel().deselectAllShapes();
     } else {
       // Sélectionne l'association et vérifie si un point d'ancrage est cliqué
-      this.relationClicked.setSelected(true);
       this.pointAncrageClicked = this.getPointAncrageClicked(e);
     }
 
@@ -72,9 +66,9 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
 
     // Gestion du clic droit
     if (SwingUtilities.isRightMouseButton(e)) {
-      if (!this.pointAncrageClickedIsNull()) {
+      if (pointAncrageClicked != null) {
         this.showPointAncrageMenu(e);
-      } else if (!this.relationClickedIsNull()) {
+      } else if (focusedRelation != null) {
         this.showRelationMenu(e);
       }
     }
@@ -92,8 +86,8 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   public void mouseReleased(MouseEvent e) {
     super.mouseReleased(e);
 
-    if (!this.pointAncrageClickedIsNull() && !this.relationClickedIsNull()) {
-      //this.deletePointsAncrageIfNecessary();
+    if (pointAncrageClicked != null && focusedRelation != null) {
+      this.deletePointsAncrageIfNecessary();
     }
 
     if (this.mouseWheelPressed && SwingUtilities.isMiddleMouseButton(e)) {
@@ -131,9 +125,9 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
       DiagrammerService.getDrawPanel().scroll(differenceX, differenceY);
     }
 
-    if (!this.pointAncrageClickedIsNull() && !this.relationClickedIsNull()) {
+    if (pointAncrageClicked != null && focusedRelation != null) {
       this.dragPointAncrageSelected(e);
-    } else if (!this.relationClickedIsNull() && this.pointAncrageClickedIsNull()) {
+    } else if (focusedRelation != null) {
       this.dragAssociation(differenceX, differenceY);
     }
 
@@ -144,9 +138,11 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   public void mouseMoved(MouseEvent e) {
     super.mouseMoved(e);
 
+    checkForHoveredRelation(e);
+
     // Change le curseur lors du survol de l'association cliquée
-    if (!this.relationClickedIsNull()) {
-      for (Line2D segment : this.relationClicked.getSegments()) {
+    if (focusedRelation != null) {
+      for (Line2D segment : this.focusedRelation.getSegments()) {
         if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, e.getPoint()) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
           DiagrammerService.getDrawPanel().setCursor(new Cursor(Cursor.MOVE_CURSOR));
         } else {
@@ -231,29 +227,30 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     return null;
   }
 
-  private RelationShape setAssociationClicked(MouseEvent event) {
+  private void checkForClickedRelation(MouseEvent event) {
     for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapes()) {
       for (int i = 0; i < relation.getPointsAncrage().size() - 1; i++) {
         final Line2D segment = new Line2D.Double();
         segment.setLine(relation.getPointsAncrage().get(i).getX(), relation.getPointsAncrage().get(i).getY(), relation.getPointsAncrage().get(i + 1).getX(), relation.getPointsAncrage().get(i + 1).getY());
         if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, event.getPoint()) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
-          return relation;
+          this.focusedRelation = relation;
+          relation.setFocused(true);
+          System.out.println("trouv");
         }
       }
     }
-    return null;
   }
 
   private void dragPointAncrageSelected(MouseEvent e) {
     final Point newPoint = new Point(GridUtils.alignToGrid(e.getX(), DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(e.getY(), DiagrammerService.getDrawPanel().getGridSize()));
-    if (this.relationClicked.isFirstOrLastPoint(this.pointAncrageClicked)) {
-      ClassShape nearestClassShape = this.relationClicked.getNearestClassShape(this.pointAncrageClicked);
+    if (this.focusedRelation.isFirstOrLastPoint(this.pointAncrageClicked)) {
+      ClassShape nearestClassShape = this.focusedRelation.getNearestClassShape(this.pointAncrageClicked);
       this.dragFirstOrLastPointAncrage(newPoint, nearestClassShape);
     } else {
       this.dragPointAncrage(newPoint);
     }
     // TODO -> Enlever le !relationClicked.isReflexive() lorsque le comportement des points d'ancrage d'une association réflexive aura été implémenté.
-    if (this.relationClicked.getPointsAncrage().size() == 3 && !this.relationClicked.isReflexive()) {
+    if (this.focusedRelation.getPointsAncrage().size() == 3 && !this.focusedRelation.isReflexive()) {
       // Met à jour les points aux index 1 ou n-1 si nécessaire
       this.dragPointAtIndex1orNMinus1(newPoint);
     }
@@ -262,8 +259,8 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
 
   private void deletePointsAncrageIfNecessary() {
     boolean updateNecessary = false;
-    if (this.relationClicked.getPointsAncrage().size() > 2) {
-      final ListIterator<RelationPointAncrageShape> iterator = this.relationClicked.getPointsAncrage().listIterator();
+    if (this.focusedRelation.getPointsAncrage().size() > 2) {
+      final ListIterator<RelationPointAncrageShape> iterator = this.focusedRelation.getPointsAncrage().listIterator();
       RelationPointAncrageShape leftNeighbour = iterator.next();
       RelationPointAncrageShape pointToCheck = iterator.next();
       while (iterator.hasNext()) {
@@ -281,7 +278,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
       }
     }
     if (updateNecessary) {
-      this.relationClicked.reindexAllPointsAncrage();
+      this.focusedRelation.reindexAllPointsAncrage();
     }
     DiagrammerService.getDrawPanel().repaint();
   }
@@ -312,12 +309,12 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
 
   private void dragPointAtIndex1orNMinus1(Point newPoint) {
     // Si le point sélectionné est le deuxième point de l'association ou l'avant dernier
-    if (this.pointAncrageClicked.getIndex() == 1 || this.pointAncrageClicked.getIndex() == this.relationClicked.getLastPoint().getIndex() - 1) {
-      final ClassShape leftShape = (ClassShape) GeometryUtils.getShapeOnTheLeft(this.relationClicked.getSource(), this.relationClicked.getDestination());
-      final ClassShape rightShape = (ClassShape) GeometryUtils.getShapeOnTheRight(this.relationClicked.getSource(), this.relationClicked.getDestination());
+    if (this.pointAncrageClicked.getIndex() == 1 || this.pointAncrageClicked.getIndex() == this.focusedRelation.getLastPoint().getIndex() - 1) {
+      final ClassShape leftShape = (ClassShape) GeometryUtils.getShapeOnTheLeft(this.focusedRelation.getSource(), this.focusedRelation.getDestination());
+      final ClassShape rightShape = (ClassShape) GeometryUtils.getShapeOnTheRight(this.focusedRelation.getSource(), this.focusedRelation.getDestination());
 
-      final RelationPointAncrageShape previousPoint = GeometryUtils.getNearestPointAncrage(leftShape, this.relationClicked);
-      final RelationPointAncrageShape nextPoint = GeometryUtils.getNearestPointAncrage(rightShape, this.relationClicked);
+      final RelationPointAncrageShape previousPoint = GeometryUtils.getNearestPointAncrage(leftShape, this.focusedRelation);
+      final RelationPointAncrageShape nextPoint = GeometryUtils.getNearestPointAncrage(rightShape, this.focusedRelation);
 
       if (rightShape != null && leftShape != null) {
         // Si la forme à droite est plus haute que celle de gauche
@@ -328,7 +325,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
           // Si le point à l'index 1 se situe au dessus de la ClassShape de gauche
           if (GeometryUtils.pointIsAboveShape(newPoint, leftShape)) {
             // Si le point précédent est celui croché sur une ClassShape, on le met à jour
-            if (this.relationClicked.isFirstOrLastPoint(previousPoint)) {
+            if (this.focusedRelation.isFirstOrLastPoint(previousPoint)) {
               newPreviousPoint = new Point(newPoint.x, (int) leftShape.getBounds().getMinY());
               newNextPoint = new Point((int) rightShape.getBounds().getMinX(), newPoint.y);
             }
@@ -336,7 +333,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
           // Si le point à l'index 1 se situe en dessous de la ClassShape de droite
           if (GeometryUtils.pointIsUnderShape(newPoint, rightShape)) {
             // Si le point suivant est celui croché sur la ClassShape, on le met à jour
-            if (this.relationClicked.isFirstOrLastPoint(nextPoint)) {
+            if (this.focusedRelation.isFirstOrLastPoint(nextPoint)) {
               newPreviousPoint = new Point((int) leftShape.getBounds().getMaxX(), newPoint.y);
               newNextPoint = new Point(newPoint.x, (int) rightShape.getBounds().getMaxY());
             }
@@ -359,7 +356,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
           // Si le point à l'index 1 se situe au dessus de la ClassShape de droite
           if (GeometryUtils.pointIsAboveShape(newPoint, rightShape)) {
             // Si le point suivant est celui croché sur une ClassShape, on le met à jour
-            if (this.relationClicked.isFirstOrLastPoint(nextPoint)) {
+            if (this.focusedRelation.isFirstOrLastPoint(nextPoint)) {
               newPreviousPoint = new Point((int) leftShape.getBounds().getMaxX(), newPoint.y);
               newNextPoint = new Point(newPoint.x, (int) rightShape.getBounds().getMinY());
             }
@@ -367,7 +364,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
           // Si le point à l'index 1 se situe en dessous de la ClassShape de gauche
           else if (GeometryUtils.pointIsUnderShape(newPoint, leftShape)) {
             // Si le point précédent est celui croché sur la ClassShape, on le met à jour
-            if (this.relationClicked.isFirstOrLastPoint(previousPoint)) {
+            if (this.focusedRelation.isFirstOrLastPoint(previousPoint)) {
               newPreviousPoint = new Point(newPoint.x, (int) leftShape.getBounds().getMaxY());
               newNextPoint = new Point((int) rightShape.getBounds().getMinX(), newPoint.y);
             }
@@ -394,9 +391,9 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   }
 
   private void dragAssociation(int differenceX, int differenceY) {
-    if (this.relationClicked.getPointsAncrage().size() == 2) {
-      final Point firstPoint = this.relationClicked.getFirstPoint();
-      final Point lastPoint = this.relationClicked.getLastPoint();
+    if (this.focusedRelation.getPointsAncrage().size() == 2) {
+      final Point firstPoint = this.focusedRelation.getFirstPoint();
+      final Point lastPoint = this.focusedRelation.getLastPoint();
 
       // Crée un segment fictif
       final Line2D segment = new Line2D.Double();
@@ -407,13 +404,13 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
 
       // Si le segment est horizontal, on déplace l'association
       if (GeometryUtils.isHorizontal(segment)) {
-        if (GeometryUtils.pointIsAroundShape(newFirstPoint, this.relationClicked.getSource()) && GeometryUtils.pointIsAroundShape(newSecondPoint, this.relationClicked.getDestination())) {
-          this.relationClicked.setLocationDifference(0, differenceY);
+        if (GeometryUtils.pointIsAroundShape(newFirstPoint, this.focusedRelation.getSource()) && GeometryUtils.pointIsAroundShape(newSecondPoint, this.focusedRelation.getDestination())) {
+          this.focusedRelation.setLocationDifference(0, differenceY);
         }
         // Si le segment est vertical, on déplace l'association
       } else if (GeometryUtils.isVertical(segment)) {
-        if (GeometryUtils.pointIsAroundShape(newFirstPoint, this.relationClicked.getSource()) && GeometryUtils.pointIsAroundShape(newSecondPoint, this.relationClicked.getDestination())) {
-          this.relationClicked.setLocationDifference(differenceX, 0);
+        if (GeometryUtils.pointIsAroundShape(newFirstPoint, this.focusedRelation.getSource()) && GeometryUtils.pointIsAroundShape(newSecondPoint, this.focusedRelation.getDestination())) {
+          this.focusedRelation.setLocationDifference(differenceX, 0);
         }
       }
       DiagrammerService.getDrawPanel().repaint();
@@ -421,23 +418,30 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   }
 
   private void showPointAncrageMenu(MouseEvent event) {
-    final Point converted = SwingUtilities.convertPoint(this.relationClicked, event.getPoint(), DiagrammerService.getDrawPanel());
-    final PointAncrageMenu menu = new PointAncrageMenu(this.pointAncrageClicked, this.relationClicked);
+    final Point converted = SwingUtilities.convertPoint(this.focusedRelation, event.getPoint(), DiagrammerService.getDrawPanel());
+    final PointAncrageMenu menu = new PointAncrageMenu(this.pointAncrageClicked, this.focusedRelation);
     menu.show(DiagrammerService.getDrawPanel(), converted.x, converted.y);
   }
 
   private void showRelationMenu(MouseEvent event) {
-    final Point converted = SwingUtilities.convertPoint(this.relationClicked, event.getPoint(), DiagrammerService.getDrawPanel());
-    final RelationShapeMenu menu = new RelationShapeMenu(this.relationClicked, converted.x, converted.y);
+    final Point converted = SwingUtilities.convertPoint(this.focusedRelation, event.getPoint(), DiagrammerService.getDrawPanel());
+    final RelationShapeMenu menu = new RelationShapeMenu(this.focusedRelation, converted.x, converted.y);
     menu.show(DiagrammerService.getDrawPanel(), converted.x, converted.y);
   }
 
-  private boolean relationClickedIsNull() {
-    return this.relationClicked == null;
-  }
 
-  private boolean pointAncrageClickedIsNull() {
-    return this.pointAncrageClicked == null;
+  private void checkForHoveredRelation(MouseEvent e){
+    // Vérifie si une association est survolée
+    for (RelationShape relationShape : DiagrammerService.getDrawPanel().getRelationShapes()){
+      boolean oneSegmentIsHovered = false;
+      for (Line2D segment : relationShape.getSegments()) {
+        if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, e.getPoint()) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
+          oneSegmentIsHovered = true;
+        }
+      }
+      if (oneSegmentIsHovered) focusedRelation = relationShape;
+      relationShape.setFocused(oneSegmentIsHovered);
+      DiagrammerService.getDrawPanel().setCursor(new Cursor(oneSegmentIsHovered ? Cursor.MOVE_CURSOR : Cursor.DEFAULT_CURSOR));
+    }
   }
-
 }
