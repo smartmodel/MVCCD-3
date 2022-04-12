@@ -72,6 +72,7 @@ public final class RelationCreator {
     source = null;
     destination = null;
     isCreating = false;
+    DiagrammerService.getDrawPanel().repaint();
   }
 
   public static void setIsCreating(boolean isCreating) {

@@ -64,11 +64,18 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
 
     if (RelationCreator.isCreating){
       Point converted = SwingUtilities.convertPoint(shape, e.getPoint(), DiagrammerService.getDrawPanel());
-      SquaredShape shapeReleasedOn = (SquaredShape) DiagrammerService.getDrawPanel().findComponentAt(converted);
-      if (shapeReleasedOn != null){
-        RelationCreator.setDestination(shapeReleasedOn);
+      Component componentFound = DiagrammerService.getDrawPanel().findComponentAt(converted);
+      // Vérifie que le composant sur lequel le clic est relaché n'est pas la zone de dessin
+      if (componentFound != DiagrammerService.getDrawPanel()){
+        SquaredShape shapeReleasedOn = (SquaredShape) componentFound;
+        if (shapeReleasedOn != null ){
+          RelationCreator.setDestination(shapeReleasedOn);
+        } else {
+          RelationCreator.resetSourceAndDestination();
+        }
       } else {
-        RelationCreator.resetSourceAndDestination();
+          System.out.println("Clic lâché au dessus de la zone de dessin.");
+          RelationCreator.resetSourceAndDestination();
       }
     }
 

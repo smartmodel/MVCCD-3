@@ -6,7 +6,10 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDAssociation;
+import mcd.MCDAssociationNature;
+import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDAssociationEditingTreat;
+import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 
 public class MCDAssociationEditAction extends AbstractAction implements Serializable {
@@ -37,9 +40,17 @@ public class MCDAssociationEditAction extends AbstractAction implements Serializ
   }
 
   private void create() {
-    final MVCCDManager manager = MVCCDManager.instance();
-    final MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
-    final MCDAssociation association = mcdAssociationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations());
+     MVCCDManager manager = MVCCDManager.instance();
+     MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
+
+    MCDEntityShape entityShapeSource = (MCDEntityShape) shape.getSource();
+    MCDEntityShape entityShapeDestination = (MCDEntityShape) shape.getDestination();
+
+    MCDEntity entitySource = entityShapeSource.getEntity();
+    MCDEntity entityDestination = entityShapeDestination.getEntity();
+
+    MCDAssociation association = mcdAssociationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations(), entitySource, entityDestination, MCDAssociationNature.NOID, false);
+
     this.shape.setMCDAssociation(association);
     shape.createLabelsAfterRelationShapeEdit();
   }
