@@ -134,4 +134,9 @@ public class RelationPointAncrageShape extends Point implements IShape, Serializ
   public int getId() {
     return id;
   }
+
+  @Override
+  public Point getCenter() {
+    return new Point(x, y);
+  }
 }

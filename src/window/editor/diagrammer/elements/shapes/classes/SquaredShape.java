@@ -46,6 +46,10 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
     setBorder(BorderFactory.createLineBorder(Color.BLACK, isFocused || isResizing ? 3 : 1));
   }
 
+  @Override
+  public boolean contains(int x, int y) {
+    return getBounds().contains(x, y);
+  }
 
   @Override
   public void zoom(int fromFactor, int toFactor) {

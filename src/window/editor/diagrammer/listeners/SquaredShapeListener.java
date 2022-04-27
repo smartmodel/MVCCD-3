@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import preferences.Preferences;
 import window.editor.diagrammer.drawpanel.DrawPanel;
+import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.palette.PaletteButtonType;
 import window.editor.diagrammer.palette.PalettePanel;
@@ -70,8 +71,9 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
       Point converted = SwingUtilities.convertPoint(shape, e.getPoint(), DiagrammerService.getDrawPanel());
       Component componentFound = DiagrammerService.getDrawPanel().findComponentAt(converted);
       // Vérifie que le composant sur lequel le clic est relaché n'est pas la zone de dessin
+      System.out.println(componentFound);
       if (componentFound != DiagrammerService.getDrawPanel()){
-        SquaredShape shapeReleasedOn = (SquaredShape) componentFound;
+        IShape shapeReleasedOn = (IShape) componentFound;
         if (shapeReleasedOn != null ){
           RelationCreator.setDestination(shapeReleasedOn);
         } else {

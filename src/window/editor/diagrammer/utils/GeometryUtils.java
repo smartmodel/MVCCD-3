@@ -1,5 +1,6 @@
 package window.editor.diagrammer.utils;
 
+import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
@@ -100,7 +101,19 @@ public final class GeometryUtils {
   public static boolean pointIsAroundShape(Point point, ClassShape shape) {
     // On convertit le point pour le rendre relatif à la ClassShape
     Point converted = SwingUtilities.convertPoint(DiagrammerService.getDrawPanel(), point, shape);
-    return (converted.x >= 0 && converted.x <= shape.getWidth() && (converted.y == 0 || converted.y == shape.getHeight())) || (converted.y >= 0 && converted.y <= shape.getHeight() && (converted.x == 0 || converted.x == shape.getWidth()));
+    return  (converted.x >= 0 && converted.x <= shape.getWidth() &&
+            (converted.y == 0 || converted.y == shape.getHeight())) ||
+            (converted.y >= 0 && converted.y <= shape.getHeight() &&
+            (converted.x == 0 || converted.x == shape.getWidth()));
+  }
+
+  public static boolean pointIsOnRelation(Point point, RelationShape relationShape){
+    for (Line2D segment : relationShape.getSegments()) {
+      if (segment.contains(point)){
+        return true;
+      }
+    }
+    return false;
   }
 
   public static RelationPointAncrageShape getNearestPointAncrage(ClassShape shape, RelationShape relation) {
@@ -163,27 +176,27 @@ public final class GeometryUtils {
     return p.y == bounds.getMaxY() && p.x >= bounds.getMinX() && p.x <= bounds.getMaxX();
   }
 
-  public static Position getClassShapePosition(ClassShape shape, ClassShape comparedTo) {
+  public static Position getSourceShapePosition(ClassShape source, ClassShape comparedTo) {
 
-    if (isRight(shape, comparedTo) && isTop(shape, comparedTo)) {
+    if (isRight(source, comparedTo) && isTop(source, comparedTo)) {
       return Position.TOP_CORNER_RIGHT;
-    } else if (isLeft(shape, comparedTo) && isTop(shape, comparedTo)) {
+    } else if (isLeft(source, comparedTo) && isTop(source, comparedTo)) {
       return Position.TOP_CORNER_LEFT;
-    } else if (isRight(shape, comparedTo) && isBottom(shape, comparedTo)) {
+    } else if (isRight(source, comparedTo) && isBottom(source, comparedTo)) {
       return Position.BOTTOM_CORNER_RIGHT;
-    } else if (isLeft(shape, comparedTo) && isBottom(shape, comparedTo)) {
+    } else if (isLeft(source, comparedTo) && isBottom(source, comparedTo)) {
       return Position.BOTTOM_CORNER_LEFT;
-    } else if (isXCenteredTopLeft(shape, comparedTo) || isXCenteredTopRight(shape, comparedTo)) {
-      if (isTop(shape, comparedTo)) {
-        return isXCenteredTopLeft(shape, comparedTo) ? Position.TOP_CENTER_LEFT : Position.TOP_CENTER_RIGHT;
-      } else if (isBottom(shape, comparedTo)) {
-        return isXCenteredTopLeft(shape, comparedTo) ? Position.BOTTOM_CENTER_LEFT : Position.BOTTOM_CENTER_RIGHT;
+    } else if (isXCenteredTopLeft(source, comparedTo) || isXCenteredTopRight(source, comparedTo)) {
+      if (isTop(source, comparedTo)) {
+        return isXCenteredTopLeft(source, comparedTo) ? Position.TOP_CENTER_LEFT : Position.TOP_CENTER_RIGHT;
+      } else if (isBottom(source, comparedTo)) {
+        return isXCenteredTopLeft(source, comparedTo) ? Position.BOTTOM_CENTER_LEFT : Position.BOTTOM_CENTER_RIGHT;
       }
-    } else if (isYCenteredTop(shape, comparedTo) || isYCenteredBottom(shape, comparedTo)) {
-      if (isLeft(shape, comparedTo)) {
-        return isYCenteredTop(shape, comparedTo) ? Position.LEFT_CENTER_TOP : Position.LEFT_CENTER_BOTTOM;
-      } else if (isRight(shape, comparedTo)) {
-        return isYCenteredTop(shape, comparedTo) ? Position.RIGHT_CENTER_TOP : Position.RIGHT_CENTER_BOTTOM;
+    } else if (isYCenteredTop(source, comparedTo) || isYCenteredBottom(source, comparedTo)) {
+      if (isLeft(source, comparedTo)) {
+        return isYCenteredTop(source, comparedTo) ? Position.LEFT_CENTER_TOP : Position.LEFT_CENTER_BOTTOM;
+      } else if (isRight(source, comparedTo)) {
+        return isYCenteredTop(source, comparedTo) ? Position.RIGHT_CENTER_TOP : Position.RIGHT_CENTER_BOTTOM;
       }
     }
     return Position.UNHANDLED;

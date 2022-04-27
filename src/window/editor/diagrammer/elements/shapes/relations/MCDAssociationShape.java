@@ -25,6 +25,12 @@ public class MCDAssociationShape extends RelationShape {
   public MCDAssociationShape(int id, MCDAssociation relatedRepositoryAssociation, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
     super(id, relatedRepositoryAssociation, source, destination, isReflexive);
   }
+
+  @Override
+  public void setLineAspect(Graphics2D graphics2D) {
+    graphics2D.setStroke(new BasicStroke(1));
+  }
+
   @Override
   public void doDraw(Graphics2D graphics2D) {}
 

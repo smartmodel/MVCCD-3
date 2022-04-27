@@ -28,7 +28,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   protected List<RelationPointAncrageShape> pointsAncrage = new LinkedList<>();
   protected boolean isFocused = false;
   protected ClassShape source;
-  protected ClassShape destination;
+  protected IShape destination;
   protected IMRelation relation;
   protected MDElement relatedRepositoryElement;
   protected boolean isReflexive;
@@ -44,7 +44,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     }
   }
 
-  public RelationShape(ClassShape source, ClassShape destination, boolean isReflexive) {
+  public RelationShape(ClassShape source, IShape destination, boolean isReflexive) {
     this();
     this.source = source;
     this.destination = destination;
@@ -55,7 +55,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.setFocusable(true);
   }
 
-  public RelationShape(int id, ClassShape source, ClassShape destination, boolean isReflexive) {
+  public RelationShape(int id, ClassShape source, IShape destination, boolean isReflexive) {
     this.source = source;
     this.destination = destination;
     this.isReflexive = isReflexive;
@@ -66,7 +66,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.setFocusable(true);
   }
 
-  public RelationShape(int id, MDElement relatedRepositoryElement, ClassShape source, ClassShape destination, boolean isReflexive) {
+  public RelationShape(int id, MDElement relatedRepositoryElement, ClassShape source, IShape destination, boolean isReflexive) {
     this.id = id;
     this.source = source;
     this.destination = destination;
@@ -144,6 +144,8 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
       graphics2D.setStroke(new BasicStroke(3));
     }
 
+    setLineAspect(graphics2D);
+
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
     // Pour chaque point d'ancrage
@@ -153,9 +155,10 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
       }
     }
 
-    graphics2D.setStroke(new BasicStroke(1));
 
   }
+
+  public abstract void setLineAspect(Graphics2D graphics2D);
 
   public int getPointAncrageIndex(RelationPointAncrageShape pointAncrage) {
     int index = Integer.MAX_VALUE;
@@ -232,11 +235,17 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     return new Rectangle(minX, minY, maxX - minX, maxY - minY);
   }
 
+  @Override
+  public boolean contains(int x, int y) {
+    Line2D nearestSegment = getNearestSegment(new Point(x, y));
+    return nearestSegment != null;
+  }
+
   public ClassShape getSource() {
     return this.source;
   }
 
-  public ClassShape getDestination() {
+  public IShape getDestination() {
     return this.destination;
   }
 
@@ -247,7 +256,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   }
 
   public ClassShape getNearestClassShape(RelationPointAncrageShape pointAncrage) {
-    return pointAncrage == this.getFirstPoint() ? this.source : this.destination;
+    return pointAncrage == this.getFirstPoint() ? this.source : (ClassShape) this.destination;
   }
 
   public Point getCenter() {
@@ -312,7 +321,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     }
   }
 
-  private Line2D getNearestSegment(Point point) {
+  public Line2D getNearestSegment(Point point) {
     for (Line2D segment : this.getSegments()) {
       if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, point) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
         return segment;
@@ -344,7 +353,11 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
       this.isReflexive = true;
 
     } else {
-      this.pointsAncrage.addAll(this.generatePointAncrage());
+      if (destination instanceof RelationShape){
+        generatePointsAncrageWhenDestinationIsRelationShape();
+      } else {
+        generatePointAncrage();
+      }
     }
   }
 
@@ -437,18 +450,25 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     labels.clear();
   }
 
+  public void generatePointsAncrageWhenDestinationIsRelationShape(){
+    pointsAncrage.clear();
+
+    pointsAncrage.add(new RelationPointAncrageShape(source.getX(), source.getY(), 0));
+    pointsAncrage.add(new RelationPointAncrageShape(destination.getCenter().x, destination.getCenter().y, 1));
+
+  }
+
   /**
-   * Génère les points d'ancrage lorsque l'association est créée
+   * Génère les points d'ancrage lorsque l'association est créée entre deux SquaredShape
    * @return Une liste contenant les points d'ancrage de l'association
    */
-  public List<RelationPointAncrageShape> generatePointAncrage() {
+  public void generatePointAncrage() {
 
     this.pointsAncrage.clear();
 
-    final Position sourcePosition = GeometryUtils.getClassShapePosition(this.source, this.destination);
-    final Rectangle sourceBounds = this.source.getBounds();
-    final Rectangle destBounds = this.destination.getBounds();
-    final List<RelationPointAncrageShape> pointsAncrage = new ArrayList<>();
+    Position sourcePosition = GeometryUtils.getSourceShapePosition(this.source, (ClassShape) this.destination);
+    Rectangle sourceBounds = this.source.getBounds();
+    Rectangle destBounds = this.destination.getBounds();
 
     int x;
     int y;
@@ -507,7 +527,6 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
         pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMaxX(), (int) destBounds.getCenterY(), 0));
       }
     }
-    return pointsAncrage;
   }
 
   public RelationPointAncrageShape getLastPoint() {

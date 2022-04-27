@@ -21,6 +21,11 @@ public class MCDCompositionShape extends RelationShape {
 
 
   @Override
+  public void setLineAspect(Graphics2D graphics2D) {
+    graphics2D.setStroke(new BasicStroke(1));
+  }
+
+  @Override
   public void doDraw(Graphics2D graphics2D) {
     this.drawDiamond(graphics2D);
   }

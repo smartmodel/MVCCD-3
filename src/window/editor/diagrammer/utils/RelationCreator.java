@@ -59,6 +59,7 @@ public final class RelationCreator {
           System.out.println("entité associative créée");
           relation = new MCDLinkShape((MCDEntityShape) RelationCreator.source, (RelationShape) RelationCreator.destination);
       }
+
       // Ajoute l'élément au diagramme courant et au diagrammeur
       MVCCDManager.instance().getCurrentDiagram().addShape(relation);
       DiagrammerService.getDrawPanel().addShape(relation);
