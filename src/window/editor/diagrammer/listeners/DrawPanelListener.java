@@ -1,6 +1,8 @@
 package window.editor.diagrammer.listeners;
 
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -8,16 +10,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Line2D;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
-
 import main.MVCCDManager;
 import preferences.Preferences;
-import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
@@ -41,7 +40,8 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   private Point origin;
   private RelationPointAncrageShape pointAncrageClicked = null;
   private RelationShape focusedRelation = null;
-  private List<RelationPointAncrageShape> anchorPointsToMove = new LinkedList<>();;
+  private List<RelationPointAncrageShape> anchorPointsToMove = new LinkedList<>();
+  ;
 
   public DrawPanelListener() {
     this.CURSOR_ENTITY_ICON = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("ressources/icons-diagrammer/palette/icon_entity.png").getImage(), new Point(0, 0), "cursorEntityIcon");
@@ -54,14 +54,14 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     // Déselectionne toutes les formes et reset la création de relation
     DiagrammerService.getDrawPanel().deselectAllShapes();
 
-    checkForClickedRelation(e);
+    this.checkForClickedRelation(e);
 
     // Aucune association n'est cliquée
-    if (focusedRelation != null) {
+    if (this.focusedRelation != null) {
       DiagrammerService.getDrawPanel().deselectAllShapes();
     } else {
       // Sélectionne l'association et vérifie si un point d'ancrage est cliqué
-      pointAncrageClicked = this.getPointAncrageClicked(e);
+      this.pointAncrageClicked = this.getPointAncrageClicked(e);
     }
 
     // Gestion de l'action à exécuter lors d'un clic gauche
@@ -72,9 +72,9 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
 
     // Gestion du clic droit
     if (SwingUtilities.isRightMouseButton(e)) {
-      if (pointAncrageClicked != null) {
+      if (this.pointAncrageClicked != null) {
         this.showPointAncrageMenu(e);
-      } else if (focusedRelation != null) {
+      } else if (this.focusedRelation != null) {
         this.showRelationMenu(e);
       }
     }
@@ -92,7 +92,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   public void mouseReleased(MouseEvent e) {
     super.mouseReleased(e);
 
-    if (pointAncrageClicked != null && focusedRelation != null) {
+    if (this.pointAncrageClicked != null && this.focusedRelation != null) {
       this.deletePointsAncrageIfNecessary();
     }
 
@@ -131,39 +131,23 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
       DiagrammerService.getDrawPanel().scroll(differenceX, differenceY);
     }
 
-    if (pointAncrageClicked != null && focusedRelation != null) {
+    if (this.pointAncrageClicked != null && this.focusedRelation != null) {
       this.dragPointAncrageSelected(e);
-    } else if (focusedRelation != null) {
+    } else if (this.focusedRelation != null) {
       this.dragAssociation(differenceX, differenceY);
     }
 
     this.origin = e.getPoint();
   }
 
-  public void selectAnchorPointsToMove(RelationPointAncrageShape pointAncrage){
-    anchorPointsToMove.clear();
-
-    if (pointAncrage.getIndex() == 0){
-      anchorPointsToMove.add(focusedRelation.getPointsAncrage().get(pointAncrage.getIndex() + 1));
-      System.out.println("1 point ajouté");
-    } else if (pointAncrage.getIndex() == focusedRelation.getPointsAncrage().size() -1){
-      anchorPointsToMove.add(focusedRelation.getPointsAncrage().get(focusedRelation.getPointsAncrage().size() - 1));
-      System.out.println("1 point ajouté");
-    } else {
-      anchorPointsToMove.add(focusedRelation.getPointsAncrage().get(pointAncrage.getIndex() - 1));
-      anchorPointsToMove.add(focusedRelation.getPointsAncrage().get(pointAncrage.getIndex() + 1));
-      System.out.println("2 points ajoutés");
-    }
-  }
-
   @Override
   public void mouseMoved(MouseEvent e) {
     super.mouseMoved(e);
 
-    checkForHoveredRelation(e);
+    this.checkForHoveredRelation(e);
 
     // Change le curseur lors du survol de l'association cliquée
-    if (focusedRelation != null) {
+    if (this.focusedRelation != null) {
       for (Line2D segment : this.focusedRelation.getSegments()) {
         if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, e.getPoint()) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
           DiagrammerService.getDrawPanel().setCursor(new Cursor(Cursor.MOVE_CURSOR));
@@ -181,6 +165,22 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
       DiagrammerService.getDrawPanel().setCursor(this.CURSOR_ENTITY_ICON);
     }
 
+  }
+
+  public void selectAnchorPointsToMove(RelationPointAncrageShape pointAncrage) {
+    this.anchorPointsToMove.clear();
+
+    if (pointAncrage == this.focusedRelation.getFirstPoint()) {
+      // Premier point
+      this.anchorPointsToMove.add(this.focusedRelation.getPointsAncrage().get(pointAncrage.getIndex() + 1));
+    } else if (pointAncrage == this.focusedRelation.getLastPoint()) {
+      // Dernier point
+      this.anchorPointsToMove.add(this.focusedRelation.getPointsAncrage().get(pointAncrage.getIndex() - 1));
+    } else {
+      // Tout autre point entre l'indice 1 et n-1
+      this.anchorPointsToMove.add(this.focusedRelation.getPointsAncrage().get(pointAncrage.getIndex() - 1));
+      this.anchorPointsToMove.add(this.focusedRelation.getPointsAncrage().get(pointAncrage.getIndex() + 1));
+    }
   }
 
   @Override
@@ -242,7 +242,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapes()) {
       for (RelationPointAncrageShape pointAncrage : relation.getPointsAncrage()) {
         if (pointAncrage.contains(event.getPoint())) {
-          selectAnchorPointsToMove(pointAncrage);
+          this.selectAnchorPointsToMove(pointAncrage);
           return pointAncrage;
         }
       }
@@ -295,146 +295,69 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     DiagrammerService.getDrawPanel().repaint();
   }
 
-  private void dragFirstOrLastPointAncrage(Point newPoint, ClassShape nearestClassShape) {
-    // Si le point sélectionné est le premier ou le dernier de la relation (sur les ClassShape), on ne le déplace que s'il est sur les bords d'une ClassShape
-    if (GeometryUtils.pointIsAroundShape(newPoint, nearestClassShape)) {
+  /***
+   * Cette méthode gère le déplacement du premier ou dernier point d'ancrage d'une relation
+   * @param newPoint Nouveau point aux coordonnées x et y
+   */
+  private void dragFirstOrLastPointAncrage(Point newPoint) {
+    boolean dragAllowed = false;
+    if (this.focusedRelation.getDestination() instanceof RelationShape) {
+      dragAllowed = GeometryUtils.pointIsOnRelation(newPoint, (RelationShape) this.focusedRelation.getDestination());
+
+    } else if (this.focusedRelation.getDestination() instanceof SquaredShape) {
+      dragAllowed = GeometryUtils.pointIsAroundShape(newPoint, (ClassShape) this.focusedRelation.getDestination()) || GeometryUtils.pointIsAroundShape(newPoint, this.focusedRelation.getSource());
+    }
+    if (dragAllowed) {
+      this.pointAncrageClicked.drag(newPoint.x, newPoint.y);
+    }
+  }
+
+  /***
+   * Cette méthode gère les déplacements des points d'ancrage de la relation cliquée.
+   * @param newPoint Nouveau point aux coordonnées x et y
+   */
+  private void dragPointAncrage(Point newPoint) {
+    if (this.pointAncrageClicked != this.focusedRelation.getLastPoint() && this.pointAncrageClicked != this.focusedRelation.getFirstPoint()) {
+      // Point situé entre l'indice 1 et n-1
+      // On déplace les points annexes
+      for (RelationPointAncrageShape anchorPointToMove : this.anchorPointsToMove) {
+
+        Point newPosition = new Point(anchorPointToMove.x, anchorPointToMove.y);
+
+        if (this.pointAncrageClicked.x == anchorPointToMove.x) {
+          newPosition.x = newPoint.x;
+        }
+
+        if (this.pointAncrageClicked.y == anchorPointToMove.y) {
+          newPosition.y = newPoint.y;
+        }
+
+        boolean dragAllowed = false;
+
+        if (this.focusedRelation.getDestination() instanceof RelationShape) {
+          dragAllowed = GeometryUtils.pointIsOnRelation(newPosition, (RelationShape) this.focusedRelation.getDestination());
+        } else if (this.focusedRelation.getDestination() instanceof SquaredShape) {
+          dragAllowed = GeometryUtils.pointIsAroundShape(newPosition, (ClassShape) this.focusedRelation.getDestination()) || GeometryUtils.pointIsAroundShape(newPosition, this.focusedRelation.getSource());
+        }
+
+        // S'il s'agit du premier ou dernier point, on effectue un test pour voir s'il peut être déplacé
+        if (anchorPointToMove == this.focusedRelation.getFirstPoint() || anchorPointToMove == this.focusedRelation.getLastPoint()) {
+          if (dragAllowed) {
+            anchorPointToMove.drag(newPosition.x, newPosition.y);
+          }
+        } else {
+          anchorPointToMove.drag(newPosition.x, newPosition.y);
+        }
+
+      }
+      // On déplace le point cliqué
       this.pointAncrageClicked.drag(newPoint.x, newPoint.y);
     } else {
-      // Si la nouvelle coordonnée X est hors du contour de la ClassShape, on met quand même à jour le point d'ancrage sans modifier sa position X
-      if (GeometryUtils.xCoordinateIsOutsideShape(newPoint.x, nearestClassShape)) {
-        if (GeometryUtils.pointIsAroundShape(new Point(this.pointAncrageClicked.x, newPoint.y), nearestClassShape)) {
-          this.pointAncrageClicked.drag(this.pointAncrageClicked.x, newPoint.y);
-        }
-      }
-      // Si la nouvelle coordonnée Y est hors du contour de la ClassShape, on met quand même à jour le point d'ancrage sans modifier sa position Y
-      if (GeometryUtils.yCoordinateIsOutsideShape(newPoint.y, nearestClassShape)) {
-        if (GeometryUtils.pointIsAroundShape(new Point(newPoint.x, this.pointAncrageClicked.y), nearestClassShape)) {
-          this.pointAncrageClicked.drag(newPoint.x, this.pointAncrageClicked.y);
-        }
-      }
+      // Premier ou dernier point
+      this.dragFirstOrLastPointAncrage(newPoint);
     }
   }
 
-  private void dragPointAncrage(Point newPoint) {
-    for (RelationPointAncrageShape anchorPointToMove : anchorPointsToMove) {
-
-      Point newPosition = new Point(anchorPointToMove.x, anchorPointToMove.y);
-
-      if (pointAncrageClicked.x == anchorPointToMove.x) {
-        newPosition.x = newPoint.x;
-      }
-
-      if (pointAncrageClicked.y == anchorPointToMove.y) {
-        newPosition.y = newPoint.y;
-      }
-
-
-      boolean dragAllowed = false;
-
-      if (focusedRelation.getDestination() instanceof RelationShape){
-        dragAllowed = GeometryUtils.pointIsOnRelation(newPosition, (RelationShape) focusedRelation.getDestination());
-      } else if (focusedRelation.getDestination() instanceof SquaredShape) {
-        dragAllowed = GeometryUtils.pointIsAroundShape(newPosition, (ClassShape) focusedRelation.getDestination()) || GeometryUtils.pointIsAroundShape(newPosition, focusedRelation.getSource());
-      }
-
-      System.out.println(dragAllowed);
-
-      if (dragAllowed){
-        anchorPointToMove.drag(newPosition.x, newPosition.y);
-      }
-
-    }
-      pointAncrageClicked.drag(newPoint.x, newPoint.y);
-
-  }
-
-  private void dragPointAtIndex1orNMinus1(Point newPoint){
-
-  }
-
-  /*private void dragPointAtIndex1orNMinus1(Point newPoint) {
-    // Si le point sélectionné est le deuxième point de l'association ou l'avant dernier
-    if (this.pointAncrageClicked.getIndex() == 1 || this.pointAncrageClicked.getIndex() == this.focusedRelation.getLastPoint().getIndex() - 1) {
-      IShape leftShape = GeometryUtils.getShapeOnTheLeft(this.focusedRelation.getSource(), this.focusedRelation.getDestination());
-      IShape rightShape = GeometryUtils.getShapeOnTheRight(this.focusedRelation.getSource(), this.focusedRelation.getDestination());
-
-      RelationPointAncrageShape previousPoint = GeometryUtils.getNearestPointAncrage(leftShape, this.focusedRelation);
-      RelationPointAncrageShape nextPoint = GeometryUtils.getNearestPointAncrage(rightShape, this.focusedRelation);
-
-      if (rightShape != null && leftShape != null) {
-        // Si la forme à droite est plus haute que celle de gauche
-        if (GeometryUtils.isHigher(rightShape, leftShape)) {
-
-          Point newPreviousPoint = newPoint;
-          Point newNextPoint = newPoint;
-          // Si le point à l'index 1 se situe au dessus de la ClassShape de gauche
-          if (GeometryUtils.pointIsAboveShape(newPoint, leftShape)) {
-            // Si le point précédent est celui croché sur une ClassShape, on le met à jour
-            if (this.focusedRelation.isFirstOrLastPoint(previousPoint)) {
-              newPreviousPoint = new Point(newPoint.x, (int) leftShape.getBounds().getMinY());
-              newNextPoint = new Point((int) rightShape.getBounds().getMinX(), newPoint.y);
-            }
-          }
-          // Si le point à l'index 1 se situe en dessous de la ClassShape de droite
-          if (GeometryUtils.pointIsUnderShape(newPoint, rightShape)) {
-            // Si le point suivant est celui croché sur la ClassShape, on le met à jour
-            if (this.focusedRelation.isFirstOrLastPoint(nextPoint)) {
-              newPreviousPoint = new Point((int) leftShape.getBounds().getMaxX(), newPoint.y);
-              newNextPoint = new Point(newPoint.x, (int) rightShape.getBounds().getMaxY());
-            }
-          }
-          // Si le point à l'index 1 à un point commun en Y entre les deux ClassShape
-          if (GeometryUtils.pointHasCommonYWithShapes(newPoint, leftShape, rightShape)) {
-            newNextPoint = new Point((int) rightShape.getBounds().getMinX(), newPoint.y);
-            newPreviousPoint = new Point((int) leftShape.getBounds().getMaxX(), newPoint.y);
-          }
-          // Si les nouveaux points se situent autour des ClassShape
-          if (GeometryUtils.pointIsAroundShape(newPreviousPoint, leftShape) && GeometryUtils.pointIsAroundShape(newNextPoint, rightShape)) {
-            previousPoint.drag(newPreviousPoint.x, newPreviousPoint.y);
-            nextPoint.drag(newNextPoint.x, newNextPoint.y);
-          }
-        }
-        // Si la forme à gauche est plus haute que celle de droite
-        if (GeometryUtils.isHigher(leftShape, rightShape)) {
-          Point newPreviousPoint = newPoint;
-          Point newNextPoint = newPoint;
-          // Si le point à l'index 1 se situe au dessus de la ClassShape de droite
-          if (GeometryUtils.pointIsAboveShape(newPoint, rightShape)) {
-            // Si le point suivant est celui croché sur une ClassShape, on le met à jour
-            if (this.focusedRelation.isFirstOrLastPoint(nextPoint)) {
-              newPreviousPoint = new Point((int) leftShape.getBounds().getMaxX(), newPoint.y);
-              newNextPoint = new Point(newPoint.x, (int) rightShape.getBounds().getMinY());
-            }
-          }
-          // Si le point à l'index 1 se situe en dessous de la ClassShape de gauche
-          else if (GeometryUtils.pointIsUnderShape(newPoint, leftShape)) {
-            // Si le point précédent est celui croché sur la ClassShape, on le met à jour
-            if (this.focusedRelation.isFirstOrLastPoint(previousPoint)) {
-              newPreviousPoint = new Point(newPoint.x, (int) leftShape.getBounds().getMaxY());
-              newNextPoint = new Point((int) rightShape.getBounds().getMinX(), newPoint.y);
-            }
-          }
-          // Si le point à l'index 1 à un point commun en Y entre les deux ClassShape
-          if (GeometryUtils.pointHasCommonYWithShapes(newPoint, leftShape, rightShape)) {
-            newNextPoint = new Point((int) rightShape.getBounds().getMinX(), newPoint.y);
-            newPreviousPoint = new Point((int) leftShape.getBounds().getMaxX(), newPoint.y);
-          }
-          // Si le point à l'index 1 à un point commun en X entre les deux ClassShape
-          if (GeometryUtils.pointHasCommonXWithShapes(newPoint, leftShape, rightShape)) {
-            newNextPoint = new Point(newPoint.x, (int) rightShape.getBounds().getMinY());
-            newPreviousPoint = new Point(newPoint.x, (int) leftShape.getBounds().getMaxY());
-          }
-          // Si les nouveaux points se situent autour des ClassShape
-          if (GeometryUtils.pointIsAroundShape(newPreviousPoint, leftShape) && GeometryUtils.pointIsAroundShape(newNextPoint, rightShape)) {
-            // Si le prochain point est le dernier, celui croché sur la ClassShape, on met à jour le point sur l'entité
-            previousPoint.drag(newPreviousPoint.x, newPreviousPoint.y);
-            nextPoint.drag(newNextPoint.x, newNextPoint.y);
-          }
-        }
-      }
-    }
-  }
-*/
   private void dragAssociation(int differenceX, int differenceY) {
     if (this.focusedRelation.getPointsAncrage().size() == 2) {
       final Point firstPoint = this.focusedRelation.getFirstPoint();
@@ -474,17 +397,18 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     menu.show(DiagrammerService.getDrawPanel(), converted.x, converted.y);
   }
 
-
-  private void checkForHoveredRelation(MouseEvent e){
+  private void checkForHoveredRelation(MouseEvent e) {
     // Vérifie si une association est survolée
-    for (RelationShape relationShape : DiagrammerService.getDrawPanel().getRelationShapes()){
+    for (RelationShape relationShape : DiagrammerService.getDrawPanel().getRelationShapes()) {
       boolean oneSegmentIsHovered = false;
       for (Line2D segment : relationShape.getSegments()) {
         if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, e.getPoint()) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
           oneSegmentIsHovered = true;
         }
       }
-      if (oneSegmentIsHovered) focusedRelation = relationShape;
+      if (oneSegmentIsHovered) {
+        this.focusedRelation = relationShape;
+      }
       relationShape.setFocused(oneSegmentIsHovered);
       DiagrammerService.getDrawPanel().setCursor(new Cursor(oneSegmentIsHovered ? Cursor.MOVE_CURSOR : Cursor.DEFAULT_CURSOR));
     }
