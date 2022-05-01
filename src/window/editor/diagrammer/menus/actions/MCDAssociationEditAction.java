@@ -9,13 +9,13 @@ import mcd.MCDAssociation;
 import mcd.MCDAssociationNature;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDAssociationEditingTreat;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 
 public class MCDAssociationEditAction extends AbstractAction implements Serializable {
 
-  private final MCDAssociationShape shape;
   private static final long serialVersionUID = 1000;
+  private final MCDAssociationShape shape;
 
   public MCDAssociationEditAction(String name, Icon icon, MCDAssociationShape shape) {
     super(name, icon);
@@ -36,15 +36,15 @@ public class MCDAssociationEditAction extends AbstractAction implements Serializ
     MVCCDManager manager = MVCCDManager.instance();
     MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
     mcdAssociationEditingTreat.treatUpdate(manager.getMvccdWindow(), this.shape.getMCDAssociation());
-    shape.createLabelsAfterRelationShapeEdit();
+    this.shape.createLabelsAfterRelationShapeEdit();
   }
 
   private void create() {
     MVCCDManager manager = MVCCDManager.instance();
     MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
 
-    MCDEntityShape entityShapeSource = (MCDEntityShape) shape.getSource();
-    MCDEntityShape entityShapeDestination = (MCDEntityShape) shape.getDestination();
+    MCDEntityShape entityShapeSource = (MCDEntityShape) this.shape.getSource();
+    MCDEntityShape entityShapeDestination = (MCDEntityShape) this.shape.getDestination();
 
     MCDEntity entitySource = entityShapeSource.getEntity();
     MCDEntity entityDestination = entityShapeDestination.getEntity();
@@ -52,6 +52,6 @@ public class MCDAssociationEditAction extends AbstractAction implements Serializ
     MCDAssociation association = mcdAssociationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations(), entitySource, entityDestination, MCDAssociationNature.NOID, false);
 
     this.shape.setMCDAssociation(association);
-    shape.createLabelsAfterRelationShapeEdit();
+    this.shape.createLabelsAfterRelationShapeEdit();
   }
 }

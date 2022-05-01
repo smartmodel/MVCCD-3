@@ -1,21 +1,24 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import mcd.MCDAssociation;
 import preferences.Preferences;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.services.DiagrammerService;
 
-import java.awt.*;
-
 public class MCDAssociationShape extends RelationShape {
+
+  private static final long serialVersionUID = 5405071714676740739L;
 
   public MCDAssociationShape(MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
     super(source, destination, isReflexive);
   }
+
   public MCDAssociationShape(int id, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
     super(id, source, destination, isReflexive);
   }
-
 
   public MCDAssociationShape(MCDAssociation relatedRepositoryAssociation, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
     this(source, destination, isReflexive);
@@ -27,7 +30,7 @@ public class MCDAssociationShape extends RelationShape {
   }
 
   @Override
-  public void setLineAspect(Graphics2D graphics2D) {
+  public void defineLineAspect(Graphics2D graphics2D) {
     graphics2D.setStroke(new BasicStroke(1));
   }
 
@@ -35,62 +38,62 @@ public class MCDAssociationShape extends RelationShape {
   public void doDraw(Graphics2D graphics2D) {}
 
   @Override
-  public void createLabelsAfterRelationShapeEdit(){
+  public void createLabelsAfterRelationShapeEdit() {
 
-    MCDAssociation association = getMCDAssociation();
+    MCDAssociation association = this.getMCDAssociation();
 
     // Nom d'association
-    if (!association.getName().isEmpty()){
+    if (!association.getName().isEmpty()) {
       LabelShape labelShape;
-      if (pointsAncrage.size() <= 2){
-        RelationPointAncrageShape anchorPoint = pointsAncrage.get(0);
-        Point relationCenter = getCenter();
+      if (this.pointsAncrage.size() <= 2) {
+        RelationPointAncrageShape anchorPoint = this.pointsAncrage.get(0);
+        Point relationCenter = this.getCenter();
         int distanceInXFromAnchorPoint = Math.abs(relationCenter.x - anchorPoint.x);
         int distanceInYFromAnchorPoint = Math.abs(relationCenter.y - anchorPoint.y);
-        labelShape = createOrUpdateLabel(anchorPoint, association.getName(), LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+        labelShape = this.createOrUpdateLabel(anchorPoint, association.getName(), LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
 
       } else {
-        int middleIndex = pointsAncrage.size() / 2;
-        labelShape = createOrUpdateLabel(pointsAncrage.get(middleIndex), association.getName(), LabelType.ASSOCIATION_NAME, 0, 0);
+        int middleIndex = this.pointsAncrage.size() / 2;
+        labelShape = this.createOrUpdateLabel(this.pointsAncrage.get(middleIndex), association.getName(), LabelType.ASSOCIATION_NAME, 0, 0);
       }
-        DiagrammerService.getDrawPanel().add(labelShape);
+      DiagrammerService.getDrawPanel().add(labelShape);
     } else {
-      deleteLabel(LabelType.ASSOCIATION_NAME);
+      this.deleteLabel(LabelType.ASSOCIATION_NAME);
     }
 
     // Rôle source
-    if (!association.getFrom().getName().isEmpty()){
-      LabelShape labelShape = createOrUpdateLabel(getFirstPoint(), association.getFrom().getName(), LabelType.SOURCE_ROLE, 0, 0);
+    if (!association.getFrom().getName().isEmpty()) {
+      LabelShape labelShape = this.createOrUpdateLabel(this.getFirstPoint(), association.getFrom().getName(), LabelType.SOURCE_ROLE, 0, 0);
       DiagrammerService.getDrawPanel().add(labelShape);
     } else {
-      deleteLabel(LabelType.SOURCE_ROLE);
+      this.deleteLabel(LabelType.SOURCE_ROLE);
     }
 
     // Rôle destination
-    if (!association.getTo().getName().isEmpty()){
-      LabelShape labelShape = createOrUpdateLabel(getLastPoint(), association.getTo().getName(), LabelType.DESTINATION_ROLE, 0, 0);
+    if (!association.getTo().getName().isEmpty()) {
+      LabelShape labelShape = this.createOrUpdateLabel(this.getLastPoint(), association.getTo().getName(), LabelType.DESTINATION_ROLE, 0, 0);
       DiagrammerService.getDrawPanel().add(labelShape);
     } else {
-      deleteLabel(LabelType.DESTINATION_ROLE);
+      this.deleteLabel(LabelType.DESTINATION_ROLE);
     }
 
     // Cardinalités source
-    if (!association.getFrom().getMultiStr().isEmpty()){
-      LabelShape labelShape = createOrUpdateLabel(getFirstPoint(), association.getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY, 0, 0);
+    if (!association.getFrom().getMultiStr().isEmpty()) {
+      LabelShape labelShape = this.createOrUpdateLabel(this.getFirstPoint(), association.getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY, 0, 0);
       DiagrammerService.getDrawPanel().add(labelShape);
     } else {
-      deleteLabel(LabelType.SOURCE_CARDINALITY);
+      this.deleteLabel(LabelType.SOURCE_CARDINALITY);
     }
 
     // Cardinalités destination
-    if (!association.getTo().getMultiStr().isEmpty()){
-      LabelShape labelShape = createOrUpdateLabel(getLastPoint(), association.getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY, 0, 0);
+    if (!association.getTo().getMultiStr().isEmpty()) {
+      LabelShape labelShape = this.createOrUpdateLabel(this.getLastPoint(), association.getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY, 0, 0);
       DiagrammerService.getDrawPanel().add(labelShape);
-    } else
-      deleteLabel(LabelType.DESTINATION_CARDINALITY);
+    } else {
+      this.deleteLabel(LabelType.DESTINATION_CARDINALITY);
+    }
 
     DiagrammerService.getDrawPanel().repaint();
-
 
   }
 
@@ -106,6 +109,5 @@ public class MCDAssociationShape extends RelationShape {
   public void setMCDAssociation(MCDAssociation association) {
     this.relatedRepositoryElement = association;
   }
-
 
 }

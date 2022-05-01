@@ -4,13 +4,13 @@ import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.services.DiagrammerService;
 
 public class MCDEntityShapeDeleteAction extends AbstractAction implements Serializable {
 
-  private MCDEntityShape shape;
   private static final long serialVersionUID = 1000;
+  private MCDEntityShape shape;
 
   public MCDEntityShapeDeleteAction(String name, Icon icon, MCDEntityShape shape) {
     super(name, icon);
@@ -19,10 +19,10 @@ public class MCDEntityShapeDeleteAction extends AbstractAction implements Serial
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    delete();
+    this.delete();
   }
 
   private void delete() {
-    DiagrammerService.getDrawPanel().deleteShape(shape);
+    DiagrammerService.getDrawPanel().deleteShape(this.shape);
   }
 }

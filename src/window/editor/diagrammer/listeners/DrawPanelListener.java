@@ -18,8 +18,8 @@ import javax.swing.SwingUtilities;
 import main.MVCCDManager;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.menus.PointAncrageMenu;
@@ -145,7 +145,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     super.mouseMoved(e);
 
     this.checkForHoveredRelation(e);
-
     // Change le curseur lors du survol de l'association cliquée
     if (this.focusedRelation != null) {
       for (Line2D segment : this.focusedRelation.getSegments()) {
@@ -317,44 +316,44 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
    * @param newPoint Nouveau point aux coordonnées x et y
    */
   private void dragPointAncrage(Point newPoint) {
-    if (this.pointAncrageClicked != this.focusedRelation.getLastPoint() && this.pointAncrageClicked != this.focusedRelation.getFirstPoint()) {
-      // Point situé entre l'indice 1 et n-1
-      // On déplace les points annexes
-      for (RelationPointAncrageShape anchorPointToMove : this.anchorPointsToMove) {
+    // Point situé entre l'indice 1 et n-1
+    // On déplace les points annexes
+    for (RelationPointAncrageShape anchorPointToMove : this.anchorPointsToMove) {
 
-        Point newPosition = new Point(anchorPointToMove.x, anchorPointToMove.y);
+      Point newPosition = new Point(anchorPointToMove.x, anchorPointToMove.y);
 
-        if (this.pointAncrageClicked.x == anchorPointToMove.x) {
-          newPosition.x = newPoint.x;
-        }
+      if (this.pointAncrageClicked.x == anchorPointToMove.x) {
+        newPosition.x = newPoint.x;
+      }
 
-        if (this.pointAncrageClicked.y == anchorPointToMove.y) {
-          newPosition.y = newPoint.y;
-        }
+      if (this.pointAncrageClicked.y == anchorPointToMove.y) {
+        newPosition.y = newPoint.y;
+      }
 
-        boolean dragAllowed = false;
+      boolean dragAllowed = false;
 
-        if (this.focusedRelation.getDestination() instanceof RelationShape) {
-          dragAllowed = GeometryUtils.pointIsOnRelation(newPosition, (RelationShape) this.focusedRelation.getDestination());
-        } else if (this.focusedRelation.getDestination() instanceof SquaredShape) {
-          dragAllowed = GeometryUtils.pointIsAroundShape(newPosition, (ClassShape) this.focusedRelation.getDestination()) || GeometryUtils.pointIsAroundShape(newPosition, this.focusedRelation.getSource());
-        }
+      if (this.focusedRelation.getDestination() instanceof RelationShape) {
+        dragAllowed = GeometryUtils.pointIsOnRelation(newPosition, (RelationShape) this.focusedRelation.getDestination());
+      } else if (this.focusedRelation.getDestination() instanceof SquaredShape) {
+        dragAllowed = GeometryUtils.pointIsAroundShape(newPosition, (ClassShape) this.focusedRelation.getDestination()) || GeometryUtils.pointIsAroundShape(newPosition, this.focusedRelation.getSource());
+      }
 
-        // S'il s'agit du premier ou dernier point, on effectue un test pour voir s'il peut être déplacé
-        if (anchorPointToMove == this.focusedRelation.getFirstPoint() || anchorPointToMove == this.focusedRelation.getLastPoint()) {
-          if (dragAllowed) {
-            anchorPointToMove.drag(newPosition.x, newPosition.y);
-          }
-        } else {
+      // S'il s'agit du premier ou dernier point, on effectue un test pour voir s'il peut être déplacé
+      if (anchorPointToMove == this.focusedRelation.getFirstPoint() || anchorPointToMove == this.focusedRelation.getLastPoint()) {
+        if (dragAllowed) {
           anchorPointToMove.drag(newPosition.x, newPosition.y);
         }
-
+      } else {
+        System.out.println("cc");
+        anchorPointToMove.drag(newPosition.x, newPosition.y);
       }
+
+    }
+    if (this.pointAncrageClicked == this.focusedRelation.getFirstPoint() || this.pointAncrageClicked == this.focusedRelation.getLastPoint()) {
+      this.dragFirstOrLastPointAncrage(newPoint);
+    } else {
       // On déplace le point cliqué
       this.pointAncrageClicked.drag(newPoint.x, newPoint.y);
-    } else {
-      // Premier ou dernier point
-      this.dragFirstOrLastPointAncrage(newPoint);
     }
   }
 
@@ -386,8 +385,8 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   }
 
   private void showPointAncrageMenu(MouseEvent event) {
-    final Point converted = SwingUtilities.convertPoint(this.focusedRelation, event.getPoint(), DiagrammerService.getDrawPanel());
-    final PointAncrageMenu menu = new PointAncrageMenu(this.pointAncrageClicked, this.focusedRelation);
+    Point converted = SwingUtilities.convertPoint(this.focusedRelation, event.getPoint(), DiagrammerService.getDrawPanel());
+    PointAncrageMenu menu = new PointAncrageMenu(this.pointAncrageClicked, this.focusedRelation);
     menu.show(DiagrammerService.getDrawPanel(), converted.x, converted.y);
   }
 

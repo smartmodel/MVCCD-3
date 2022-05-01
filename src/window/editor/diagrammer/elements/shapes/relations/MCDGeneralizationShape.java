@@ -1,12 +1,14 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 import mcd.MCDGeneralization;
 import preferences.Preferences;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
-
-import java.awt.*;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 
 public class MCDGeneralizationShape extends RelationShape {
+
+  private static final long serialVersionUID = -4638463083584589287L;
 
   public MCDGeneralizationShape(MCDGeneralization relatedRepositoryGeneralization, MCDEntityShape source, MCDEntityShape destination) {
     this(source, destination);
@@ -18,7 +20,7 @@ public class MCDGeneralizationShape extends RelationShape {
   }
 
   @Override
-  public void setLineAspect(Graphics2D graphics2D) {
+  public void defineLineAspect(Graphics2D graphics2D) {
     graphics2D.setStroke(new BasicStroke(1));
   }
 

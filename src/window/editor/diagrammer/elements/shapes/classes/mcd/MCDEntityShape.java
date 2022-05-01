@@ -1,12 +1,15 @@
-package window.editor.diagrammer.elements.shapes.classes;
+package window.editor.diagrammer.elements.shapes.classes.mcd;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import mcd.MCDEntity;
 import preferences.Preferences;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.MCDEntityShapeListener;
 
-import java.awt.*;
-
 public class MCDEntityShape extends ClassShape {
+
+  private static final long serialVersionUID = -2773299390415893067L;
 
   public MCDEntityShape(MCDEntity relatedRepositoryEntity) {
     super(relatedRepositoryEntity);
@@ -62,11 +65,6 @@ public class MCDEntityShape extends ClassShape {
   }
 
   @Override
-  protected void setBackgroundColor() {
-    this.setBackground(Preferences.DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR);
-  }
-
-  @Override
   protected String getLongestProperty() {
     if (this.getEntity() != null) {
       String longestProperty = "";
@@ -95,6 +93,16 @@ public class MCDEntityShape extends ClassShape {
   @Override
   public String getXmlTagName() {
     return Preferences.DIAGRAMMER_MCD_ENTITY_XML_TAG;
+  }
+
+  @Override
+  protected void defineBackgroundColor() {
+    this.setBackground(Preferences.DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR);
+  }
+
+  @Override
+  protected void defineSize() {
+    this.setSize(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH, Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT);
   }
 
   private void addListeners() {
