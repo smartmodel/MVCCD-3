@@ -30,7 +30,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   private static final long serialVersionUID = 1000;
   protected int id;
-  protected List<RelationPointAncrageShape> pointsAncrage = new LinkedList<>();
+  protected List<RelationAnchorPointShape> pointsAncrage = new LinkedList<>();
   protected boolean isFocused = false;
   protected ClassShape source;
   protected IShape destination;
@@ -89,23 +89,23 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   }
 
   public void drawPointsAncrage(Graphics2D graphics2D) {
-    for (RelationPointAncrageShape pointAncrage : this.pointsAncrage) {
+    for (RelationAnchorPointShape pointAncrage : this.pointsAncrage) {
       graphics2D.fillOval(pointAncrage.x - pointAncrage.DIAMETER / 2, pointAncrage.y - pointAncrage.DIAMETER / 2, pointAncrage.DIAMETER, pointAncrage.DIAMETER);
     }
   }
 
-  public void addPointAncrage(RelationPointAncrageShape pointAncrage, int index) {
+  public void addPointAncrage(RelationAnchorPointShape pointAncrage, int index) {
     this.pointsAncrage.add(index, pointAncrage);
   }
 
-  public void deletePointAncrage(RelationPointAncrageShape pointAncrage) {
+  public void deletePointAncrage(RelationAnchorPointShape pointAncrage) {
     this.pointsAncrage.remove(pointAncrage);
-    this.reindexAllPointsAncrage();
+    this.reindexAllAnchorPoint();
   }
 
   @Override
   public void setLocationDifference(int differenceX, int differenceY) {
-    for (RelationPointAncrageShape pointAncrage : this.pointsAncrage) {
+    for (RelationAnchorPointShape pointAncrage : this.pointsAncrage) {
       pointAncrage.setLocationDifference(differenceX, differenceY);
     }
   }
@@ -117,8 +117,8 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   @Override
   public Point getCenter() {
-    final RelationPointAncrageShape left = GeometryUtils.getLeftPoint(this.getFirstPoint(), this.getLastPoint());
-    final RelationPointAncrageShape right = GeometryUtils.getRightPoint(this.getFirstPoint(), this.getLastPoint());
+    final RelationAnchorPointShape left = GeometryUtils.getLeftPoint(this.getFirstPoint(), this.getLastPoint());
+    final RelationAnchorPointShape right = GeometryUtils.getRightPoint(this.getFirstPoint(), this.getLastPoint());
     final Line2D segment = new Line2D.Double();
     segment.setLine(this.getFirstPoint().x, this.getFirstPoint().y, this.getLastPoint().x, this.getLastPoint().y);
 
@@ -138,15 +138,15 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
       return new Point(this.pointsAncrage.get(indexCenter).x, this.pointsAncrage.get(indexCenter).y);
     } else {
       int indexCenter = this.pointsAncrage.size() / 2 - 1;
-      final RelationPointAncrageShape centerPoint = this.pointsAncrage.get(indexCenter);
-      final RelationPointAncrageShape pointNextToCenter = this.pointsAncrage.get(indexCenter + 1);
+      final RelationAnchorPointShape centerPoint = this.pointsAncrage.get(indexCenter);
+      final RelationAnchorPointShape pointNextToCenter = this.pointsAncrage.get(indexCenter + 1);
       return new Point((centerPoint.x + pointNextToCenter.x) / 2, (centerPoint.y + pointNextToCenter.y) / 2);
     }
   }
 
   @Override
   public void zoom(int fromFactor, int toFactor) {
-    for (RelationPointAncrageShape pointAncrageShape : this.pointsAncrage) {
+    for (RelationAnchorPointShape pointAncrageShape : this.pointsAncrage) {
       pointAncrageShape.zoom(fromFactor, toFactor);
     }
   }
@@ -190,7 +190,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     return "RelationShape{" + "relatedRepositoryElement=" + this.relatedRepositoryElement + '}';
   }
 
-  public List<RelationPointAncrageShape> getPointsAncrage() {
+  public List<RelationAnchorPointShape> getAnchorPoints() {
     return this.pointsAncrage;
   }
 
@@ -214,7 +214,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   public abstract void defineLineAspect(Graphics2D graphics2D);
 
-  public int getPointAncrageIndex(RelationPointAncrageShape pointAncrage) {
+  public int getPointAncrageIndex(RelationAnchorPointShape pointAncrage) {
     int index = Integer.MAX_VALUE;
     for (int i = 0; i < this.pointsAncrage.size(); i++) {
       if (pointAncrage.equals(this.pointsAncrage.get(i))) {
@@ -224,18 +224,14 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     return index;
   }
 
-  public RelationPointAncrageShape convertPoint2DToPointAncrage(Point2D point2D) {
-    return new RelationPointAncrageShape((int) point2D.getX(), (int) point2D.getY());
+  public RelationAnchorPointShape convertPoint2DToPointAncrage(Point2D point2D) {
+    return new RelationAnchorPointShape((int) point2D.getX(), (int) point2D.getY());
   }
 
   public void updateFirstAndLastPointsAncrage(ClassShape shape, boolean isResize) {
 
-    RelationPointAncrageShape point;
-    if (shape == this.source) {
-      point = this.getFirstPoint();
-    } else {
-      point = this.getLastPoint();
-    }
+    RelationAnchorPointShape point = shape == this.source ? this.getFirstPoint() : this.getLastPoint();
+
     if (isResize) {
       int cursor = shape.getCursor().getType();
       if (cursor == Cursor.E_RESIZE_CURSOR) {
@@ -280,7 +276,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     int minY = Integer.MAX_VALUE;
     int maxX = 0;
     int maxY = 0;
-    for (RelationPointAncrageShape pointAncrage : this.getPointsAncrage()) {
+    for (RelationAnchorPointShape pointAncrage : this.getAnchorPoints()) {
       minX = Math.min(minX, pointAncrage.getBounds().x);
       minY = Math.min(minY, pointAncrage.getBounds().y);
       maxX = Math.max(maxX, pointAncrage.getBounds().x + pointAncrage.getBounds().width);
@@ -303,13 +299,13 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     return this.destination;
   }
 
-  public void reindexAllPointsAncrage() {
+  public void reindexAllAnchorPoint() {
     for (int i = 0; i < this.pointsAncrage.size(); i++) {
       this.pointsAncrage.get(i).setIndex(i);
     }
   }
 
-  public ClassShape getNearestClassShape(RelationPointAncrageShape pointAncrage) {
+  public ClassShape getNearestClassShape(RelationAnchorPointShape pointAncrage) {
     return pointAncrage == this.getFirstPoint() ? this.source : (ClassShape) this.destination;
   }
 
@@ -338,9 +334,9 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     if (nearestSegment != null) {
       int newIndex = this.getPointAncrageIndex(this.convertPoint2DToPointAncrage(nearestSegment.getP2()));
       Point nearestPointOnSegment = GeometryUtils.getNearestPointOnLine(nearestSegment.getX1(), nearestSegment.getY1(), nearestSegment.getX2(), nearestSegment.getY2(), point.x, point.y, true, null);
-      RelationPointAncrageShape newPointAncrage = new RelationPointAncrageShape(nearestPointOnSegment, newIndex);
+      RelationAnchorPointShape newPointAncrage = new RelationAnchorPointShape(nearestPointOnSegment, newIndex);
       this.addPointAncrage(newPointAncrage, newIndex);
-      this.reindexAllPointsAncrage();
+      this.reindexAllAnchorPoint();
       DiagrammerService.getDrawPanel().repaint();
     }
   }
@@ -362,11 +358,11 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     final int MARGIN = 50;
 
     if (isReflexive) {
-      RelationPointAncrageShape p1 = new RelationPointAncrageShape((int) this.source.getBounds().getMaxX() - MARGIN, (int) this.source.getBounds().getMinY(), 0);
-      RelationPointAncrageShape p2 = new RelationPointAncrageShape((int) this.source.getBounds().getMaxX() - MARGIN, (int) this.source.getBounds().getMinY() - MARGIN, 1);
-      RelationPointAncrageShape p3 = new RelationPointAncrageShape((int) this.source.getBounds().getMaxX() + MARGIN, (int) this.source.getBounds().getMinY() - MARGIN, 2);
-      RelationPointAncrageShape p4 = new RelationPointAncrageShape((int) this.source.getBounds().getMaxX() + MARGIN, (int) this.source.getBounds().getMinY() + MARGIN, 3);
-      RelationPointAncrageShape p5 = new RelationPointAncrageShape((int) this.source.getBounds().getMaxX(), (int) this.source.getBounds().getMinY() + MARGIN, 4);
+      RelationAnchorPointShape p1 = new RelationAnchorPointShape((int) this.source.getBounds().getMaxX() - MARGIN, (int) this.source.getBounds().getMinY(), 0);
+      RelationAnchorPointShape p2 = new RelationAnchorPointShape((int) this.source.getBounds().getMaxX() - MARGIN, (int) this.source.getBounds().getMinY() - MARGIN, 1);
+      RelationAnchorPointShape p3 = new RelationAnchorPointShape((int) this.source.getBounds().getMaxX() + MARGIN, (int) this.source.getBounds().getMinY() - MARGIN, 2);
+      RelationAnchorPointShape p4 = new RelationAnchorPointShape((int) this.source.getBounds().getMaxX() + MARGIN, (int) this.source.getBounds().getMinY() + MARGIN, 3);
+      RelationAnchorPointShape p5 = new RelationAnchorPointShape((int) this.source.getBounds().getMaxX(), (int) this.source.getBounds().getMinY() + MARGIN, 4);
 
       this.addPointAncrage(p1, p1.getIndex());
       this.addPointAncrage(p2, p2.getIndex());
@@ -387,7 +383,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   public abstract void createLabelsAfterRelationShapeEdit();
 
-  public LabelShape createOrUpdateLabel(RelationPointAncrageShape anchorPoint, String text, LabelType type, int distanceInXFromAnchorPoint, int distanceInYFromAnchorPoint) {
+  public LabelShape createOrUpdateLabel(RelationAnchorPointShape anchorPoint, String text, LabelType type, int distanceInXFromAnchorPoint, int distanceInYFromAnchorPoint) {
 
     LabelShape labelShape;
 
@@ -403,7 +399,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   }
 
-  public LabelShape createLabel(RelationPointAncrageShape anchorPoint, String text, LabelType type, int distanceInXFromAnchorPoint, int distanceInYFromAnchorPoint) {
+  public LabelShape createLabel(RelationAnchorPointShape anchorPoint, String text, LabelType type, int distanceInXFromAnchorPoint, int distanceInYFromAnchorPoint) {
 
     // La relation possède déjà un label du type fourni en paramètre
     LabelShape label = new LabelShape(anchorPoint, type, this, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
@@ -477,8 +473,8 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   public void generatePointsAncrageWhenDestinationIsRelationShape() {
     this.pointsAncrage.clear();
 
-    this.pointsAncrage.add(new RelationPointAncrageShape(this.source.getX(), this.source.getY(), 0));
-    this.pointsAncrage.add(new RelationPointAncrageShape(this.destination.getCenter().x, this.destination.getCenter().y, 1));
+    this.pointsAncrage.add(new RelationAnchorPointShape(this.source.getX(), this.source.getY(), 0));
+    this.pointsAncrage.add(new RelationAnchorPointShape(this.destination.getCenter().x, this.destination.getCenter().y, 1));
 
   }
 
@@ -499,77 +495,77 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
     if (sourcePosition == Position.BOTTOM_CENTER_RIGHT) {
       x = (int) (sourceBounds.getMinX() + ((destBounds.getMaxX() - sourceBounds.getMinX()) / 2));
-      this.pointsAncrage.add(new RelationPointAncrageShape(x, (int) sourceBounds.getMinY(), 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape(x, (int) destBounds.getMaxY(), 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMinY(), 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape(x, (int) destBounds.getMaxY(), 1));
     } else if (sourcePosition == Position.BOTTOM_CENTER_LEFT) {
       x = (int) (sourceBounds.getMaxX() - ((sourceBounds.getMaxX() - destBounds.getMinX()) / 2));
-      this.pointsAncrage.add(new RelationPointAncrageShape(x, (int) sourceBounds.getMinY(), 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape(x, (int) destBounds.getMaxY(), 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMinY(), 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape(x, (int) destBounds.getMaxY(), 1));
     } else if (sourcePosition == Position.TOP_CENTER_RIGHT) {
       x = (int) (sourceBounds.getMinX() + ((destBounds.getMaxX() - sourceBounds.getMinX()) / 2));
-      this.pointsAncrage.add(new RelationPointAncrageShape(x, (int) sourceBounds.getMaxY(), 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape(x, (int) destBounds.getMinY(), 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMaxY(), 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape(x, (int) destBounds.getMinY(), 1));
     } else if (sourcePosition == Position.TOP_CENTER_LEFT) {
       x = (int) (sourceBounds.getMaxX() - ((sourceBounds.getMaxX() - destBounds.getMinX()) / 2));
-      this.pointsAncrage.add(new RelationPointAncrageShape(x, (int) sourceBounds.getMaxY(), 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape(x, (int) destBounds.getMinY(), 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMaxY(), 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape(x, (int) destBounds.getMinY(), 1));
     } else if (sourcePosition == Position.LEFT_CENTER_TOP) {
       y = (int) (sourceBounds.getMaxY() - ((sourceBounds.getMaxY() - destBounds.getMinY()) / 2));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getMaxX(), y, 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMinX(), y, 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getMaxX(), y, 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) destBounds.getMinX(), y, 1));
     } else if (sourcePosition == Position.LEFT_CENTER_BOTTOM) {
       y = (int) (sourceBounds.getMinY() + ((destBounds.getMaxY() - sourceBounds.getMinY()) / 2));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getMaxX(), y, 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMinX(), y, 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getMaxX(), y, 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) destBounds.getMinX(), y, 1));
     } else if (sourcePosition == Position.RIGHT_CENTER_TOP) {
       y = (int) (sourceBounds.getMinY() + ((sourceBounds.getMaxY() - destBounds.getMinY()) / 2));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getMinX(), y, 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMaxX(), y, 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getMinX(), y, 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) destBounds.getMaxX(), y, 1));
     } else if (sourcePosition == Position.RIGHT_CENTER_BOTTOM) {
       y = (int) (sourceBounds.getMinY() + ((destBounds.getMaxY() - sourceBounds.getMinY()) / 2));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getMinX(), y, 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMaxX(), y, 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getMinX(), y, 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) destBounds.getMaxX(), y, 1));
     } else if (sourcePosition == Position.TOP_CORNER_RIGHT) {
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMaxY(), 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMaxX(), (int) destBounds.getCenterY(), 2));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMaxY(), 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) destBounds.getMaxX(), (int) destBounds.getCenterY(), 2));
     } else if (sourcePosition == Position.TOP_CORNER_LEFT) {
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMaxY(), 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMinX(), (int) destBounds.getCenterY(), 2));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMaxY(), 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) destBounds.getMinX(), (int) destBounds.getCenterY(), 2));
     } else if (sourcePosition == Position.BOTTOM_CORNER_RIGHT) {
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMinY(), 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMaxX(), (int) destBounds.getCenterY(), 2));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMinY(), 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) destBounds.getMaxX(), (int) destBounds.getCenterY(), 2));
     } else if (sourcePosition == Position.BOTTOM_CORNER_LEFT) {
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMinY(), 0));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
-      this.pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMinX(), (int) destBounds.getCenterY(), 2));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getCenterX(), (int) sourceBounds.getMinY(), 0));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getCenterX(), (int) destBounds.getCenterY(), 1));
+      this.pointsAncrage.add(new RelationAnchorPointShape((int) destBounds.getMinX(), (int) destBounds.getCenterY(), 2));
     } else {
       if (sourceBounds.intersects(destBounds)) {
-        this.pointsAncrage.add(new RelationPointAncrageShape((int) sourceBounds.getMaxX(), (int) sourceBounds.getCenterY(), 0));
-        this.pointsAncrage.add(new RelationPointAncrageShape((int) destBounds.getMaxX(), (int) destBounds.getCenterY(), 0));
+        this.pointsAncrage.add(new RelationAnchorPointShape((int) sourceBounds.getMaxX(), (int) sourceBounds.getCenterY(), 0));
+        this.pointsAncrage.add(new RelationAnchorPointShape((int) destBounds.getMaxX(), (int) destBounds.getCenterY(), 0));
       }
     }
   }
 
-  public RelationPointAncrageShape getLastPoint() {
+  public RelationAnchorPointShape getLastPoint() {
     return this.pointsAncrage.get(this.pointsAncrage.size() - 1);
   }
 
-  public RelationPointAncrageShape getFirstPoint() {
+  public RelationAnchorPointShape getFirstPoint() {
     return this.pointsAncrage.get(0);
   }
 
-  public boolean isFirstOrLastPoint(RelationPointAncrageShape pointAncrage) {
+  public boolean isFirstOrLastPoint(RelationAnchorPointShape pointAncrage) {
     return this.isFirstPoint(pointAncrage) || this.isLastPoint(pointAncrage);
   }
 
-  public boolean isFirstPoint(RelationPointAncrageShape pointAncrage) {
+  public boolean isFirstPoint(RelationAnchorPointShape pointAncrage) {
     return pointAncrage == this.getFirstPoint();
   }
 
-  public boolean isLastPoint(RelationPointAncrageShape pointAncrage) {
+  public boolean isLastPoint(RelationAnchorPointShape pointAncrage) {
     return pointAncrage == this.getLastPoint();
   }
 

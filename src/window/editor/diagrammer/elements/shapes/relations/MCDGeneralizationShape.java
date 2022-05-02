@@ -42,8 +42,8 @@ public class MCDGeneralizationShape extends RelationShape {
   public void drawArrow(Graphics2D graphics2D) {
     // TODO -> Faire en sorte que la flêche ait une bordune noire et un fond blanc
 
-    final RelationPointAncrageShape previousPoint = this.pointsAncrage.get(this.pointsAncrage.get(this.getPointsAncrage().size() - 1).getIndex() - 1);
-    final RelationPointAncrageShape lastPoint = this.pointsAncrage.get(this.getPointsAncrage().size() - 1);
+    final RelationAnchorPointShape previousPoint = this.pointsAncrage.get(this.pointsAncrage.get(this.getAnchorPoints().size() - 1).getIndex() - 1);
+    final RelationAnchorPointShape lastPoint = this.pointsAncrage.get(this.getAnchorPoints().size() - 1);
     final int differenceX = lastPoint.x - previousPoint.x;
     final int differenceY = lastPoint.y - previousPoint.y;
     final double squareRoot = Math.sqrt(differenceX * differenceX + differenceY * differenceY);

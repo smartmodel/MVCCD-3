@@ -92,7 +92,7 @@ import profile.Profile;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.LabelType;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
-import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 
 public class ProjectLoaderXml {
 
@@ -137,8 +137,8 @@ public class ProjectLoaderXml {
       Preferences preferences = MVCCDElementFactory.instance().createPreferences(project, Preferences.REPOSITORY_PREFERENCES_NAME); //Ceci va automatiquement créer un objet "Preferences" qui se trouve dans le référentiel sous le Project.
 
       // Ajout des éléments du projet
-        this.addPropertiesProject(projectTag, project);
-        this.addPreferences(projectTag, preferences);
+      this.addPropertiesProject(projectTag, project);
+      this.addPreferences(projectTag, preferences);
 
       // Chargement du modèle MCD
       Element mcdTag = (Element) projectTag.getElementsByTagName("MCD").item(0);
@@ -148,24 +148,24 @@ public class ProjectLoaderXml {
       // Chargement des modèles ou des 3 conteneurs principaux
       ArrayList<Element> modelsTagsList = this.loadModels(mcd, mcdTag);
       // Chargement des packages
-        this.loadPackages(mcd, mcdTag);
+      this.loadPackages(mcd, mcdTag);
       // Chargement des entités
-        this.loadEntities(mcd, mcdTag, modelsTagsList);
+      this.loadEntities(mcd, mcdTag, modelsTagsList);
       // Chargement des attributs
-        this.loadAttributs();
+      this.loadAttributs();
       // Chargements des contraintes
-        this.loadContraints();
+      this.loadContraints();
       // Chargements des rélations ( associations et généralisations)
-        this.loadRelations(mcd, mcdTag, modelsTagsList);
+      this.loadRelations(mcd, mcdTag, modelsTagsList);
       // Chargements des liens d'entités associatives
-        this.loadLinks(mcd, mcdTag, modelsTagsList);
+      this.loadLinks(mcd, mcdTag, modelsTagsList);
 
       //Chargement du (ou des) MLDR
-        this.loadMLDRs(mcd, mcdTag);
+      this.loadMLDRs(mcd, mcdTag);
 
       // Chargement des diagrammes
       Element diagramsTag = (Element) projectTag.getElementsByTagName(Preferences.NODE_DIAGRAMS).item(0);
-        this.loadMCDDiagrams(project, diagramsTag, mcd);
+      this.loadMCDDiagrams(project, diagramsTag, mcd);
 
       // Validation du fichier
       validator.validate(new DOMSource(document));
@@ -410,7 +410,7 @@ public class ProjectLoaderXml {
           mcdModel.setName(childOfMcdTag.getAttribute("name"));
 
           // Ajout des propriétés du modèle
-            this.addPropertiesModelOrPackage(mcdModel, childOfMcdTag);
+          this.addPropertiesModelOrPackage(mcdModel, childOfMcdTag);
         }
                 /*
                 Chargement des conteneurs sans modèle
@@ -445,10 +445,10 @@ public class ProjectLoaderXml {
         if (mcdChild.getNodeName().equals("model")) {
           Element modelElement = (Element) mcdChild;
           // Ajout des paquetages pour les modèles
-            this.addPackagesModels(childs, modelElement);
+          this.addPackagesModels(childs, modelElement);
         }
         // Ajout des paquetages sans modèles
-          this.addPackages(mcdChild, mcd);
+        this.addPackages(mcdChild, mcd);
       }
     }
   }
@@ -463,7 +463,7 @@ public class ProjectLoaderXml {
           // Création de l'element de paquetage
           Element pack = (Element) packChild;
           // Remplissage de la listes des éléments pour les paquetages
-            this.elementsPackages.add(pack);
+          this.elementsPackages.add(pack);
 
           // Récupération du nom du parent du paquetage
           Element nameParent = (Element) pack.getElementsByTagName("parent").item(0);
@@ -481,11 +481,11 @@ public class ProjectLoaderXml {
             MCDPackage mcdPackage = MVCCDElementFactory.instance().createMCDPackage(mcdModel);
             mcdPackage.setName(pack.getAttribute("name"));
             // Remplissage de la listes des MVCCDElements pour les paquetages
-              this.loadedPackages.add(mcdPackage);
+            this.loadedPackages.add(mcdPackage);
             // Ajout des propriétés du paquetage
-              this.addPropertiesModelOrPackage(mcdPackage, pack);
+            this.addPropertiesModelOrPackage(mcdPackage, pack);
             // Ajout d'autres paquetages
-              this.loadOthersPackages(mcdPackage, pack);
+            this.loadOthersPackages(mcdPackage, pack);
           }
         }
       }
@@ -499,7 +499,7 @@ public class ProjectLoaderXml {
       Node packChild = packagesList.item(i);
       if (packChild instanceof Element) {
         // Ajout des paquetages
-          this.addPackages(packChild, mcdPackage);
+        this.addPackages(packChild, mcdPackage);
 
       }
     }
@@ -510,16 +510,16 @@ public class ProjectLoaderXml {
       // Création de l'element de paquetage
       Element pack = (Element) packChild;
       // Remplissage de la listes des éléments pour les paquetages
-        this.elementsPackages.add(pack);
+      this.elementsPackages.add(pack);
       // Création du paquetage
       MCDPackage mcdPackage = MVCCDElementFactory.instance().createMCDPackage(paquetage);
       mcdPackage.setName(pack.getAttribute("name"));
       // Remplissage de la listes des MVCCDElements pour les paquetages
-        this.loadedPackages.add(mcdPackage);
+      this.loadedPackages.add(mcdPackage);
       // Ajout des propriétés du paquetage
-        this.addPropertiesModelOrPackage(mcdPackage, pack);
+      this.addPropertiesModelOrPackage(mcdPackage, pack);
       // Ajout d'autres paquetages
-        this.loadOthersPackages(mcdPackage, pack);
+      this.loadOthersPackages(mcdPackage, pack);
     }
   }
 
@@ -586,8 +586,8 @@ public class ProjectLoaderXml {
 
         // Chargement des shapes
         if (diagramTag.getElementsByTagName(Preferences.NODE_SHAPES).getLength() > 0) {
-            this.loadClassShapes(diagramTag, diagram, mcdSource);
-            this.loadRelationShapes(diagramTag, diagram, mcdSource);
+          this.loadClassShapes(diagramTag, diagram, mcdSource);
+          this.loadRelationShapes(diagramTag, diagram, mcdSource);
         }
       }
     }
@@ -603,20 +603,20 @@ public class ProjectLoaderXml {
     for (MVCCDElement mvccdElement : mcdElements) {
       if (mvccdElement instanceof MCDContEntities) {
         mcdContEntities = (MCDContEntities) mvccdElement;
-          this.addEntities(mcdContEntities, element);
+        this.addEntities(mcdContEntities, element);
       }
     }
     // entités avec paquetages
     for (MVCCDElement mvccdElement : this.loadedPackages) {
       ArrayList<MVCCDElement> childsPackage = mvccdElement.getChilds();
-        this.addEntitiesPackagesOrModels(childsPackage, this.elementsPackages, mvccdElement);
+      this.addEntitiesPackagesOrModels(childsPackage, this.elementsPackages, mvccdElement);
 
     }
     // entités avec modèles
     for (MVCCDElement mcdChild : mcdElements) {
       if (mcdChild instanceof MCDModel) {
         ArrayList<MVCCDElement> childModel = mcdChild.getChilds();
-          this.addEntitiesPackagesOrModels(childModel, elementsModeles, mcdChild);
+        this.addEntitiesPackagesOrModels(childModel, elementsModeles, mcdChild);
 
       }
     }
@@ -626,18 +626,18 @@ public class ProjectLoaderXml {
     // Ajout des entités pour les paquetage ou les modèles
     MCDContEntities mcdContEntities;
     // Parcours de la liste des éléments MVCCD de paquetage ou de modèle
-      for (MVCCDElement elementChild : listMVCCD) {
-          if (elementChild instanceof MCDContEntities) {
-              // Récupération du conteneur des entités
-              mcdContEntities = (MCDContEntities) elementChild;
-              for (Element element : listElement) {
-                  // // Ajout des entités si l'élément parent(paquetage ou modèle) cré dans l'application est égal à celui du fichier
-                  if (element.getAttribute("name").equals(mvccdElement.getName())) {
-                      this.addEntities(mcdContEntities, element);
-                  }
-              }
+    for (MVCCDElement elementChild : listMVCCD) {
+      if (elementChild instanceof MCDContEntities) {
+        // Récupération du conteneur des entités
+        mcdContEntities = (MCDContEntities) elementChild;
+        for (Element element : listElement) {
+          // // Ajout des entités si l'élément parent(paquetage ou modèle) cré dans l'application est égal à celui du fichier
+          if (element.getAttribute("name").equals(mvccdElement.getName())) {
+            this.addEntities(mcdContEntities, element);
           }
+        }
       }
+    }
   }
 
   private void addEntities(MCDContEntities mcdContEntities, Element element) {
@@ -651,16 +651,16 @@ public class ProjectLoaderXml {
         // Création de l'element entité
         Element entityTag = (Element) entitiesChild;
         // Remplissage de la listes des éléments pour les entités
-          this.elementsEntities.add(entityTag);
+        this.elementsEntities.add(entityTag);
 
         // Création de l'entité
         MCDEntity mcdEntity = MVCCDElementFactory.instance().createMCDEntity(mcdContEntities, Integer.parseInt(entityTag.getAttribute("id")));
         mcdEntity.setName(entityTag.getAttribute("name"));
 
         // Remplissage de la listes des éléments MVCCD pour les entités
-          this.loadedEntities.add(mcdEntity);
+        this.loadedEntities.add(mcdEntity);
         // // Ajout des propriétés des entités
-          this.addPropertiesEntities(mcdEntity, entityTag);
+        this.addPropertiesEntities(mcdEntity, entityTag);
       }
     }
 
@@ -684,9 +684,9 @@ public class ProjectLoaderXml {
     mcdEntity.setAudit(Boolean.valueOf(audit.getTextContent()));
 
     Element mldrTableName = (Element) entite.getElementsByTagName("mldrTableName").item(0);
-      if (mldrTableName != null) {
-          mcdEntity.setMldrTableName(mldrTableName.getTextContent());
-      }
+    if (mldrTableName != null) {
+      mcdEntity.setMldrTableName(mldrTableName.getTextContent());
+    }
 
   }
 
@@ -703,7 +703,7 @@ public class ProjectLoaderXml {
           for (Element child : this.elementsEntities) {
             // Ajout des attributs si l'élément entité créée dans l'application est égale à celui du fichier
             if (child.getAttribute("name").equals(mvccdElement.getName())) {
-                this.addAttributs(mcdContAttributes, child);
+              this.addAttributs(mcdContAttributes, child);
             }
           }
         }
@@ -723,7 +723,7 @@ public class ProjectLoaderXml {
         int attributeId = Integer.parseInt(attributeTag.getAttribute("id")); // Récupération de l'id de l'attribut
         MCDAttribute mcdAttribute = MVCCDElementFactory.instance().createMCDAttribute(mcdContAttributes, attributeId); // Création de l'attribut dans l'application
         mcdAttribute.setName(attributeTag.getAttribute("name")); //Attribuer le "name" de l'attribut
-          this.addPropertiesAttributs(mcdAttribute, attributeTag); // Ajout des propriétés de l'attribut (des balises enfants)
+        this.addPropertiesAttributs(mcdAttribute, attributeTag); // Ajout des propriétés de l'attribut (des balises enfants)
       }
     }
   }
@@ -789,7 +789,7 @@ public class ProjectLoaderXml {
           for (Element child : this.elementsEntities) {
             // Ajout des contraintes si l'élément entité créé dans l'application est égal à celui du fichier
             if (child.getAttribute("name").equals(mvccdElement.getName())) {
-                this.addContraints(mcdContConstraints, child);
+              this.addContraints(mcdContConstraints, child);
             }
           }
         }
@@ -807,7 +807,7 @@ public class ProjectLoaderXml {
         // Création de l'element attribut
         Element constraintTag = (Element) constraintsChilds.item(i);
         // Ajout de la contrainte NID ou Unique en fonction de son type
-          this.addTypeConstraintes(constraintTag, mcdContConstraints);
+        this.addTypeConstraintes(constraintTag, mcdContConstraints);
       }
     }
   }
@@ -852,21 +852,21 @@ public class ProjectLoaderXml {
     // Recherche du conteneur de relations existant (créé automatiquement lors de la création du modèle MCD)
     for (MVCCDElement mcdChild : mcdChilds) {
       if (mcdChild instanceof MCDContRelations) {
-          this.addRelations((MCDContRelations) mcdChild, mcdTag);
+        this.addRelations((MCDContRelations) mcdChild, mcdTag);
       }
     }
 
     // relations avec paquetages
     for (MVCCDElement mvccdElement : this.loadedPackages) {
       ArrayList<MVCCDElement> childsPackage = mvccdElement.getChilds();
-        this.addRelationsPackagesOrModels(childsPackage, this.elementsPackages, mvccdElement);
+      this.addRelationsPackagesOrModels(childsPackage, this.elementsPackages, mvccdElement);
     }
 
     // relations avec modèles
     for (MVCCDElement mcdChild : mcdChilds) {
       if (mcdChild instanceof MCDModel) {
         ArrayList<MVCCDElement> childModel = mcdChild.getChilds();
-          this.addRelationsPackagesOrModels(childModel, modelsTagsList, mcdChild);
+        this.addRelationsPackagesOrModels(childModel, modelsTagsList, mcdChild);
       }
     }
   }
@@ -875,18 +875,18 @@ public class ProjectLoaderXml {
     //Ajout des relations pour les paquetage ou les modèles
     MCDContRelations mcdContRelations;
     // Parcours de la liste des éléments MVCCD de paquetage ou de modèle
-      for (MVCCDElement elementChild : listMVCCD) {
-          if (elementChild instanceof MCDContRelations) {
-              // Récupération du conteneur des relations
-              mcdContRelations = (MCDContRelations) elementChild;
-              for (Element element : listElement) {
-                  // Ajout des relations si l'élément parent(paquetage ou modèle) cré dans l'application est égal à celui du fichier
-                  if (element.getAttribute("name").equals(mvccdElement.getName())) {
-                      this.addRelations(mcdContRelations, element);
-                  }
-              }
+    for (MVCCDElement elementChild : listMVCCD) {
+      if (elementChild instanceof MCDContRelations) {
+        // Récupération du conteneur des relations
+        mcdContRelations = (MCDContRelations) elementChild;
+        for (Element element : listElement) {
+          // Ajout des relations si l'élément parent(paquetage ou modèle) cré dans l'application est égal à celui du fichier
+          if (element.getAttribute("name").equals(mvccdElement.getName())) {
+            this.addRelations(mcdContRelations, element);
           }
+        }
       }
+    }
   }
 
   private void addRelations(MCDContRelations mcdContRelations, Element mcdTag) {
@@ -901,12 +901,12 @@ public class ProjectLoaderXml {
 
         // Chargement des associations
         if (relationsChildTag.getNodeName().equals("associations")) {
-            this.addAssociations(mcdContRelations, relationsChildTag);
+          this.addAssociations(mcdContRelations, relationsChildTag);
         }
 
         //Chargement des généralisations
         if (relationsChildTag.getNodeName().equals("generalisations")) {
-            this.addGeneralisation(mcdContRelations, relationsChildTag);
+          this.addGeneralisation(mcdContRelations, relationsChildTag);
         }
       }
     }
@@ -944,13 +944,13 @@ public class ProjectLoaderXml {
         if (!associationTag.getAttribute("shortName").equals("")) {
           mcdAssociation.setShortName(associationTag.getAttribute("shortName"));
         }
-          this.loadedAssociations.add(mcdAssociation);
+        this.loadedAssociations.add(mcdAssociation);
 
         // Ajout des extrémités d'associations
-          this.addExtremiteElement(extremiteFromTag, mcdAssociation, associationTag);
-          this.addExtremiteElement(extremiteToTag, mcdAssociation, associationTag);
+        this.addExtremiteElement(extremiteFromTag, mcdAssociation, associationTag);
+        this.addExtremiteElement(extremiteToTag, mcdAssociation, associationTag);
         // Ajout des propriétés des associations
-          this.addProprietesAssociation(associationTag, mcdAssociation);
+        this.addProprietesAssociation(associationTag, mcdAssociation);
       }
     }
   }
@@ -1047,19 +1047,19 @@ public class ProjectLoaderXml {
     //  Relations général
     for (MVCCDElement mcdChild : mcdChilds) {
       if (mcdChild instanceof MCDContRelations) {
-          this.loadRelationsLink((MCDContRelations) mcdChild, mcdTag);
+        this.loadRelationsLink((MCDContRelations) mcdChild, mcdTag);
       }
     }
     //  Relations avec paquetages
     for (MVCCDElement packagee : this.loadedPackages) { //remarque: le nommage "packagee" est volontaire, car "package" est un nom réservé.
       ArrayList<MVCCDElement> childsPackage = packagee.getChilds();
-        this.addLinksPackagesOrModels(childsPackage, this.elementsPackages, packagee);
+      this.addLinksPackagesOrModels(childsPackage, this.elementsPackages, packagee);
 
     }
     // Relations avec modèles
     for (MVCCDElement mcdChild : mcdChilds) {
       if (mcdChild instanceof MCDModel) {
-          this.addLinksPackagesOrModels(mcdChild.getChilds(), modelsTagsList, mcdChild);
+        this.addLinksPackagesOrModels(mcdChild.getChilds(), modelsTagsList, mcdChild);
       }
     }
   }
@@ -1067,18 +1067,18 @@ public class ProjectLoaderXml {
   private void addLinksPackagesOrModels(ArrayList<MVCCDElement> listMVCCD, ArrayList<Element> listElement, MVCCDElement mvccdElement) {
     //Ajout des relations pour les paquetage ou les modèles
     MCDContRelations mcdContRelations;
-      for (MVCCDElement elementChild : listMVCCD) {
-          if (elementChild instanceof MCDContRelations) {
-              // Récupération du conteneur des relations
-              mcdContRelations = (MCDContRelations) elementChild;
-              for (Element element : listElement) {
-                  // Ajout des liens d'entités associatives si l'élément parent(paquetage ou modèle) créé dans l'application est égal à celui du fichier
-                  if (element.getAttribute("name").equals(mvccdElement.getName())) {
-                      this.loadRelationsLink(mcdContRelations, element);
-                  }
-              }
+    for (MVCCDElement elementChild : listMVCCD) {
+      if (elementChild instanceof MCDContRelations) {
+        // Récupération du conteneur des relations
+        mcdContRelations = (MCDContRelations) elementChild;
+        for (Element element : listElement) {
+          // Ajout des liens d'entités associatives si l'élément parent(paquetage ou modèle) créé dans l'application est égal à celui du fichier
+          if (element.getAttribute("name").equals(mvccdElement.getName())) {
+            this.loadRelationsLink(mcdContRelations, element);
           }
+        }
       }
+    }
   }
 
   private void loadRelationsLink(MCDContRelations mcdContRelations, Element mcdTag) {
@@ -1092,7 +1092,7 @@ public class ProjectLoaderXml {
         if (relationsChilds.item(i).getNodeName().equals("links")) {
 
           // Ajout des liens d'entités associatives
-            this.addLink(mcdContRelations, (Element) relationsChilds.item(i)); //passage en 2e paramètre de la balise <links>
+          this.addLink(mcdContRelations, (Element) relationsChilds.item(i)); //passage en 2e paramètre de la balise <links>
         }
       }
     }
@@ -1817,7 +1817,7 @@ public class ProjectLoaderXml {
 
         // La balise courante est une entité d'un MCD
         if (currentNode.getNodeName().equals(Preferences.DIAGRAMMER_MCD_ENTITY_XML_TAG)) {
-            this.loadMCDEntityShape(currentNode, mcdSource, diagram, diagramTag, id);
+          this.loadMCDEntityShape(currentNode, mcdSource, diagram, diagramTag, id);
         }
       }
     }
@@ -1862,7 +1862,7 @@ public class ProjectLoaderXml {
 
         // La balise courante est une entité d'un MCD
         if (currentNode.getNodeName().equals(Preferences.DIAGRAMMER_MCD_ASSOCIATION_XML_TAG)) {
-            this.loadMCDAssociationShape(currentNode, shapes, diagram, diagramTag, id, mcdSource);
+          this.loadMCDAssociationShape(currentNode, shapes, diagram, diagramTag, id, mcdSource);
         }
 
       }
@@ -1910,12 +1910,12 @@ public class ProjectLoaderXml {
     }
 
     // Ajoute les points d'ancrage
-      this.loadAnchorPoints(newAssociation, node);
+    this.loadAnchorPoints(newAssociation, node);
 
     // Ajoute les labels
-      if (this.elementHasChildByTagName(node, Preferences.DIAGRAMMER_LABELS_XML_TAG_NAME)) {
-          this.loadLabelShapes(newAssociation, node, diagramTag);
-      }
+    if (this.elementHasChildByTagName(node, Preferences.DIAGRAMMER_LABELS_XML_TAG_NAME)) {
+      this.loadLabelShapes(newAssociation, node, diagramTag);
+    }
 
     // Ajoute l'association au diagramme
     diagram.addShape(newAssociation);
@@ -1940,7 +1940,7 @@ public class ProjectLoaderXml {
         int distanceInYFromAnchorPoint = Integer.parseInt(currentLabelTag.getAttribute(Preferences.ATTRIBUTE_Y_DISTANCE_FROM_ANCHOR_POINT));
 
         // Récupère le point d'ancrage lié
-        List<RelationPointAncrageShape> anchorPointFound = associationShape.getPointsAncrage().stream().filter(anchorPoint -> anchorPoint.getId() == relatedAnchorPointId).collect(Collectors.toList());
+        List<RelationAnchorPointShape> anchorPointFound = associationShape.getAnchorPoints().stream().filter(anchorPoint -> anchorPoint.getId() == relatedAnchorPointId).collect(Collectors.toList());
 
         // Crée le LabelShape
         if (!anchorPointFound.isEmpty()) {
@@ -1968,7 +1968,7 @@ public class ProjectLoaderXml {
 
   private void loadAnchorPoints(MCDAssociationShape associationShape, Element currentNode) {
     // Vide la liste des points d'ancrage
-    associationShape.getPointsAncrage().clear();
+    associationShape.getAnchorPoints().clear();
 
     // Récupère les points d'ancrage
     NodeList anchorPointsParentTag = currentNode.getElementsByTagName(Preferences.DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME);
@@ -1978,12 +1978,12 @@ public class ProjectLoaderXml {
       if (allAnchorPointTags.item(i) instanceof Element) {
         Element pointTag = (Element) allAnchorPointTags.item(i);
         Point point = new Point(Integer.parseInt(pointTag.getAttribute("x")), Integer.parseInt(pointTag.getAttribute("y")));
-        RelationPointAncrageShape pointAncrageShape = new RelationPointAncrageShape(Integer.parseInt(pointTag.getAttribute("id")), point);
-        associationShape.getPointsAncrage().add(pointAncrageShape);
+        RelationAnchorPointShape pointAncrageShape = new RelationAnchorPointShape(Integer.parseInt(pointTag.getAttribute("id")), point);
+        associationShape.getAnchorPoints().add(pointAncrageShape);
       }
     }
 
-    associationShape.reindexAllPointsAncrage();
+    associationShape.reindexAllAnchorPoint();
   }
 
   private boolean elementHasChildByTagName(Element element, String tagNameToFind) {

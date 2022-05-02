@@ -10,7 +10,7 @@ import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
 
-public class RelationPointAncrageShape extends Point implements IShape, Serializable {
+public class RelationAnchorPointShape extends Point implements IShape, Serializable {
 
   private static final long serialVersionUID = 1000;
   public int DIAMETER = 10;
@@ -18,7 +18,7 @@ public class RelationPointAncrageShape extends Point implements IShape, Serializ
   private boolean isSelected = false;
   private int id;
 
-  public RelationPointAncrageShape(Point p, int index) {
+  public RelationAnchorPointShape(Point p, int index) {
     super(p);
 
     this.generateId();
@@ -27,33 +27,33 @@ public class RelationPointAncrageShape extends Point implements IShape, Serializ
     this.setSize(this.DIAMETER, this.DIAMETER);
   }
 
-  public RelationPointAncrageShape(int x, int y) {
+  public RelationAnchorPointShape(int x, int y) {
     super(x, y);
     this.generateId();
     this.setSize(this.DIAMETER, this.DIAMETER);
   }
 
-  public RelationPointAncrageShape(int x, int y, int index) {
+  public RelationAnchorPointShape(int x, int y, int index) {
     super(x, y);
     this.generateId();
     this.index = index;
     this.setSize(this.DIAMETER, this.DIAMETER);
   }
 
-  public RelationPointAncrageShape(int id, Point p, int index) {
+  public RelationAnchorPointShape(int id, Point p, int index) {
     super(p);
     this.id = id;
     this.index = index;
     this.setSize(this.DIAMETER, this.DIAMETER);
   }
 
-  public RelationPointAncrageShape(int id, Point p) {
+  public RelationAnchorPointShape(int id, Point p) {
     super(p);
     this.id = id;
     this.setSize(this.DIAMETER, this.DIAMETER);
   }
 
-  public RelationPointAncrageShape(int id, int x, int y, int index) {
+  public RelationAnchorPointShape(int id, int x, int y, int index) {
     super(x, y);
     this.id = id;
     this.index = index;
@@ -70,16 +70,25 @@ public class RelationPointAncrageShape extends Point implements IShape, Serializ
 
   }
 
-  private void generateId() {
-    // Génère un id utile à la persistance
-    if (MVCCDManager.instance().getProject() != null) {
-      this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
-    }
-  }
-
   @Override
   public void setSize(Dimension dimension) {
     this.DIAMETER = dimension.height;
+  }
+
+  @Override
+  public int getId() {
+    return this.id;
+  }
+
+  @Override
+  public Point getCenter() {
+    return new Point(this.x, this.y);
+  }
+
+  @Override
+  public boolean contains(Point point) {
+    Rectangle bounds = this.getBounds();
+    return bounds.contains(point);
   }
 
   @Override
@@ -114,9 +123,11 @@ public class RelationPointAncrageShape extends Point implements IShape, Serializ
     this.isSelected = isSelected;
   }
 
-  public boolean contains(Point point) {
-    Rectangle bounds = this.getBounds();
-    return bounds.contains(point);
+  private void generateId() {
+    // Génère un id utile à la persistance
+    if (MVCCDManager.instance().getProject() != null) {
+      this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
+    }
   }
 
   public int getIndex() {
@@ -131,12 +142,8 @@ public class RelationPointAncrageShape extends Point implements IShape, Serializ
     return Preferences.DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG;
   }
 
-  public int getId() {
-    return id;
-  }
-
   @Override
-  public Point getCenter() {
-    return new Point(x, y);
+  public String toString() {
+    return "RelationPointAncrageShape{" + "index=" + this.index + ", x=" + this.x + ", y=" + this.y + '}';
   }
 }

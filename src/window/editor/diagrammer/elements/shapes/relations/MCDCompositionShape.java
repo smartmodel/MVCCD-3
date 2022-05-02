@@ -42,8 +42,8 @@ public class MCDCompositionShape extends RelationShape {
   }
 
   public void drawDiamond(Graphics2D graphics2D) {
-    final RelationPointAncrageShape previousPoint = this.pointsAncrage.get(this.getLastPoint().getIndex() - 1);
-    final RelationPointAncrageShape lastPoint = this.getLastPoint();
+    final RelationAnchorPointShape previousPoint = this.pointsAncrage.get(this.getLastPoint().getIndex() - 1);
+    final RelationAnchorPointShape lastPoint = this.getLastPoint();
 
     final int NUMBER_OF_POINTS = 4;
     final int DIAMOND_WIDTH = 8;

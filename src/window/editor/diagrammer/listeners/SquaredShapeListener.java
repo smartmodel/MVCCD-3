@@ -108,8 +108,6 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
       if (PalettePanel.activeButton.getType() == PaletteButtonType.RELATION_CREATION) {
         if (RelationCreator.source == null) {
           RelationCreator.setSource(this.shape);
-          System.out.println(this.shape);
-          System.out.println(RelationCreator.isCreating);
         }
       }
     }

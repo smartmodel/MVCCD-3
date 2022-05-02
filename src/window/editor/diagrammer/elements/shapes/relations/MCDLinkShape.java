@@ -2,7 +2,11 @@ package window.editor.diagrammer.elements.shapes.relations;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import main.MVCCDManager;
+import mcd.MCDAssociation;
+import mcd.MCDEntity;
 import preferences.Preferences;
+import repository.editingTreat.mcd.MCDLinkEditingTreat;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 
 public class MCDLinkShape extends RelationShape {
@@ -11,6 +15,11 @@ public class MCDLinkShape extends RelationShape {
 
   public MCDLinkShape(ClassShape source, RelationShape linkedRelationShape) {
     super(source, linkedRelationShape, false);
+
+    // Création de l'objet du référentiel
+    MCDLinkEditingTreat editingTreat = new MCDLinkEditingTreat();
+    MVCCDManager manager = MVCCDManager.instance();
+    this.relatedRepositoryElement = editingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations(), (MCDEntity) source.getRelatedRepositoryElement(), (MCDAssociation) linkedRelationShape.relatedRepositoryElement, false);
   }
 
   @Override

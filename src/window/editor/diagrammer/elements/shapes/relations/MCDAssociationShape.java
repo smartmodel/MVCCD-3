@@ -46,7 +46,7 @@ public class MCDAssociationShape extends RelationShape {
     if (!association.getName().isEmpty()) {
       LabelShape labelShape;
       if (this.pointsAncrage.size() <= 2) {
-        RelationPointAncrageShape anchorPoint = this.pointsAncrage.get(0);
+        RelationAnchorPointShape anchorPoint = this.pointsAncrage.get(0);
         Point relationCenter = this.getCenter();
         int distanceInXFromAnchorPoint = Math.abs(relationCenter.x - anchorPoint.x);
         int distanceInYFromAnchorPoint = Math.abs(relationCenter.y - anchorPoint.y);

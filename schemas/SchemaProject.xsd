@@ -1077,4 +1077,3 @@
 		<xs:union memberTypes="xs:int emptyString" />
 	</xs:simpleType> -->
 </xs:schema>
-
