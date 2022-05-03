@@ -70,11 +70,11 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.files.TranformerForXml;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.relations.LabelShape;
-import window.editor.diagrammer.elements.shapes.relations.LabelType;
-import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
+import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAssociationShape;
 
 /**
  * @author Giorgio Roncallo, adapté et complété par Steve Berberat
@@ -104,10 +104,10 @@ public class ProjectSaverXml {
       projectTag.setAttributeNode(idAttrOfProjectTag);
 
       //Propriété du projet
-        this.addProperties(document, projectTag);
+      this.addProperties(document, projectTag);
 
       //Préférences du projet
-        this.addProjectPreferences(document, projectTag);
+      this.addProjectPreferences(document, projectTag);
 
       //Création de la balise <MCD>
       MCDContModels mcdContModels = this.project.getMCDContModels();
@@ -121,24 +121,24 @@ public class ProjectSaverXml {
 
       //Modèle
       if (this.manyModelsAuthorized) {
-          this.addModelAndChilds(document, mcdTag, mcdModels, projectTag);
+        this.addModelAndChilds(document, mcdTag, mcdModels, projectTag);
 
         //Package
       } else if (this.packagesAuthorized) {
 
-          this.addDiagrams(document, mcdModels, projectTag);
-          this.addEntities(document, mcdModels, mcdTag);
-          this.addMCDRelations(document, mcdModels, mcdTag);
-          this.addPackages(document, mcdContModels, mcdTag, projectTag);
-          this.addMLD(document, mcdModels, mcdTag);
+        this.addDiagrams(document, mcdModels, projectTag);
+        this.addEntities(document, mcdModels, mcdTag);
+        this.addMCDRelations(document, mcdModels, mcdTag);
+        this.addPackages(document, mcdContModels, mcdTag, projectTag);
+        this.addMLD(document, mcdModels, mcdTag);
 
         //projet simple
       } else {
 
-          this.addDiagrams(document, mcdModels, projectTag);
-          this.addEntities(document, mcdModels, mcdTag);
-          this.addMCDRelations(document, mcdModels, mcdTag);
-          this.addMLD(document, mcdModels, mcdTag);
+        this.addDiagrams(document, mcdModels, projectTag);
+        this.addEntities(document, mcdModels, mcdTag);
+        this.addMCDRelations(document, mcdModels, mcdTag);
+        this.addMLD(document, mcdModels, mcdTag);
       }
 
       //Formatage du fichier
@@ -248,9 +248,9 @@ public class ProjectSaverXml {
    */
   private Element addNewChildTag(Document doc, Element parentTag, String childTagName, String childTagText) {
     Element childTag = doc.createElement(childTagName);
-      if (childTagText != null) {
-          childTag.appendChild(doc.createTextNode(childTagText));
-      }
+    if (childTagText != null) {
+      childTag.appendChild(doc.createTextNode(childTagText));
+    }
     parentTag.appendChild(childTag);
     return childTag;
   }
@@ -271,19 +271,19 @@ public class ProjectSaverXml {
 
       if (this.packagesAuthorized) {
         // Création des différents éléments du modèle avec packages
-          this.addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
-          this.addDiagrams(doc, modelsChilds, projectTag);
-          this.addEntities(doc, modelsChilds, modelTag);
-          this.addMCDRelations(doc, modelsChilds, modelTag);
-          this.addPackages(doc, mcdModel, modelTag, projectTag);
-          this.addMLD(doc, modelsChilds, modelTag);
+        this.addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
+        this.addDiagrams(doc, modelsChilds, projectTag);
+        this.addEntities(doc, modelsChilds, modelTag);
+        this.addMCDRelations(doc, modelsChilds, modelTag);
+        this.addPackages(doc, mcdModel, modelTag, projectTag);
+        this.addMLD(doc, modelsChilds, modelTag);
       } else {
         // Création des différents éléments du modèle sans packages
-          this.addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
-          this.addDiagrams(doc, modelsChilds, projectTag);
-          this.addEntities(doc, modelsChilds, modelTag);
-          this.addMCDRelations(doc, modelsChilds, modelTag);
-          this.addMLD(doc, modelsChilds, modelTag);
+        this.addPropertiesModelsOrPackages(doc, modelTag, mcdModel);
+        this.addDiagrams(doc, modelsChilds, projectTag);
+        this.addEntities(doc, modelsChilds, modelTag);
+        this.addMCDRelations(doc, modelsChilds, modelTag);
+        this.addMLD(doc, modelsChilds, modelTag);
       }
     }
 
@@ -308,11 +308,11 @@ public class ProjectSaverXml {
         packages.setAttributeNode(name);
 
         // Ajout des éléments qui composent un paquetage
-          this.addPropertiesModelsOrPackages(doc, packages, pack);
-          this.addDiagrams(doc, packageChilds, projectTag);
-          this.addEntities(doc, packageChilds, packages);
-          this.addMCDRelations(doc, packageChilds, packages);
-          this.addPackages(doc, pack, packages, projectTag);
+        this.addPropertiesModelsOrPackages(doc, packages, pack);
+        this.addDiagrams(doc, packageChilds, projectTag);
+        this.addEntities(doc, packageChilds, packages);
+        this.addMCDRelations(doc, packageChilds, packages);
+        this.addPackages(doc, pack, packages, projectTag);
         racine.appendChild(packages);
       }
     }
@@ -383,12 +383,12 @@ public class ProjectSaverXml {
 
               // ClassShapes
               for (ClassShape classShape : mcdDiagram.getClassShapes()) {
-                  this.addClassShape(doc, classShape, shapesTag);
+                this.addClassShape(doc, classShape, shapesTag);
               }
 
               // RelationShapes
               for (RelationShape relation : mcdDiagram.getRelationShapes()) {
-                  this.addRelationShape(doc, relation, shapesTag);
+                this.addRelationShape(doc, relation, shapesTag);
               }
             }
           }
@@ -465,9 +465,9 @@ public class ProjectSaverXml {
 
           // Ajout des éléments qui composent une entité
           ArrayList<MVCCDElement> entityChilds = entity.getChilds();
-            this.addPropertiesEntity(doc, entityTag, entity, racineTag);
-            this.addAttributs(doc, entityTag, entityChilds);
-            this.addContraints(doc, entityTag, entityChilds);
+          this.addPropertiesEntity(doc, entityTag, entity, racineTag);
+          this.addAttributs(doc, entityTag, entityChilds);
+          this.addContraints(doc, entityTag, entityChilds);
         }
       }
     }
@@ -598,7 +598,7 @@ public class ProjectSaverXml {
         ArrayList<MVCCDElement> attributsChilds = entitychild.getChilds();
 
         // Ajout des attributs
-          this.addAttributsChilds(doc, attributsChilds, attributsTag);
+        this.addAttributsChilds(doc, attributsChilds, attributsTag);
 
       }
     }
@@ -705,7 +705,7 @@ public class ProjectSaverXml {
         ArrayList<MVCCDElement> contraintsChilds = entitychild.getChilds();
 
         // Ajout des contraintes au document
-          this.addContraintsChilds(doc, contraintsChilds, contraintes);
+        this.addContraintsChilds(doc, contraintsChilds, contraintes);
       }
     }
   }
@@ -743,7 +743,7 @@ public class ProjectSaverXml {
         typeConstrainte.appendChild(doc.createTextNode("NID"));
         constraintTag.appendChild(typeConstrainte);
         // Ajout des parameters ( encore pas implémenté dans l'application)
-          this.addParameters(doc, nid, constraintTag);
+        this.addParameters(doc, nid, constraintTag);
 
       }
       if (mcdConstraint instanceof MCDUnique) {
@@ -756,7 +756,7 @@ public class ProjectSaverXml {
         typeConstrainte.appendChild(doc.createTextNode("Unique"));
         constraintTag.appendChild(typeConstrainte);
         // Ajout des parameters
-          this.addParameters(doc, unique, constraintTag);
+        this.addParameters(doc, unique, constraintTag);
       }
     }
   }
@@ -782,7 +782,7 @@ public class ProjectSaverXml {
         relationsTag.setAttributeNode(idAttrOfRelationsTag);
 
         // Ajout des relations au document
-          this.addRelationsChilds(doc, mcdModel.getChilds(), relationsTag);
+        this.addRelationsChilds(doc, mcdModel.getChilds(), relationsTag);
 
       }
     }
@@ -806,17 +806,17 @@ public class ProjectSaverXml {
 
       // Persistance d'une relation de type association
       if (relationsChild instanceof MCDAssociation) {
-          this.addAssociation(doc, (MCDAssociation) relationsChild, associations);
+        this.addAssociation(doc, (MCDAssociation) relationsChild, associations);
       }
 
       // Persistance d'une relation de type généralisation
       else if (relationsChild instanceof MCDGeneralization) {
-          this.addGeneralization(doc, (MCDGeneralization) relationsChild, generalisations);
+        this.addGeneralization(doc, (MCDGeneralization) relationsChild, generalisations);
       }
 
       // Persistance d'une relation qui est un lien d'entité associative
       else if (relationsChild instanceof MCDLink) {
-          this.addlink(doc, (MCDLink) relationsChild, links);
+        this.addlink(doc, (MCDLink) relationsChild, links);
       }
     }
   }
@@ -906,9 +906,9 @@ public class ProjectSaverXml {
 
     // Association dans nom général (noms dans les rôles)
     if (mcdAssociation.getName().equals("")) {
-        this.addPropertiesAssociation(doc, associationTag, mcdAssociation);
-        this.addExtremite(doc, associationTag, extremiteFrom);
-        this.addExtremite(doc, associationTag, extremiteTo);
+      this.addPropertiesAssociation(doc, associationTag, mcdAssociation);
+      this.addExtremite(doc, associationTag, extremiteFrom);
+      this.addExtremite(doc, associationTag, extremiteTo);
 
     } else {
       // Association avec nom général
@@ -920,9 +920,9 @@ public class ProjectSaverXml {
       shortName.setValue(mcdAssociation.getShortName());
       associationTag.setAttributeNode(shortName);
 
-        this.addPropertiesAssociation(doc, associationTag, mcdAssociation);
-        this.addExtremite(doc, associationTag, extremiteFrom);
-        this.addExtremite(doc, associationTag, extremiteTo);
+      this.addPropertiesAssociation(doc, associationTag, mcdAssociation);
+      this.addExtremite(doc, associationTag, extremiteFrom);
+      this.addExtremite(doc, associationTag, extremiteTo);
     }
   }
 
@@ -1169,11 +1169,11 @@ public class ProjectSaverXml {
     tableTag.setAttribute("name120", mdrTable.getNames().getName120());
 
     //Ajout de l'attribut "element_source_id" (en récupérant le bon élément en fonction du cas MLDR ou MPDR)
-      if (mdrTable instanceof MLDRTable) {
-          tableTag.setAttribute("element_source_id", ((MLDRTable) mdrTable).getMcdElementSource().getIdProjectElementAsString());
-      } else if (mdrTable instanceof MPDRTable) {
-          tableTag.setAttribute("element_source_id", ((MPDRTable) mdrTable).getMldrElementSource().getIdProjectElementAsString());
-      }
+    if (mdrTable instanceof MLDRTable) {
+      tableTag.setAttribute("element_source_id", ((MLDRTable) mdrTable).getMcdElementSource().getIdProjectElementAsString());
+    } else if (mdrTable instanceof MPDRTable) {
+      tableTag.setAttribute("element_source_id", ((MPDRTable) mdrTable).getMldrElementSource().getIdProjectElementAsString());
+    }
 
     //Persistance des colonnes
     this.addColumns(doc, mdrTable, tableTag);
@@ -1231,11 +1231,11 @@ public class ProjectSaverXml {
     columnTag.setAttribute("name120", mdrColumn.getNames().getName120());
 
     //Ajout de l'attribut "element_source_id"
-      if (mdrColumn instanceof MLDRColumn) {
-          columnTag.setAttribute("element_source_id", ((MLDRColumn) mdrColumn).getMcdElementSource().getIdProjectElementAsString());
-      } else if (mdrColumn instanceof MPDRColumn) {
-          columnTag.setAttribute("element_source_id", ((MPDRColumn) mdrColumn).getMldrElementSource().getIdProjectElementAsString());
-      }
+    if (mdrColumn instanceof MLDRColumn) {
+      columnTag.setAttribute("element_source_id", ((MLDRColumn) mdrColumn).getMcdElementSource().getIdProjectElementAsString());
+    } else if (mdrColumn instanceof MPDRColumn) {
+      columnTag.setAttribute("element_source_id", ((MPDRColumn) mdrColumn).getMldrElementSource().getIdProjectElementAsString());
+    }
 
     //Ajout des autres propriétés relatives à une colonne
     columnTag.setAttribute("mandatory", mdrColumn.isMandatory() ? "true" : "false");
@@ -1306,11 +1306,11 @@ public class ProjectSaverXml {
       tableConstraintsTag.appendChild(constraintTag);
 
       //Ajout des propriétés d'identification spécifiques à une contrainte PK
-        if (pkConstraint instanceof MLDRPK) {
-            constraintTag.setAttribute("element_source_id", ((MLDRPK) pkConstraint).getMcdElementSource().getIdProjectElementAsString());
-        } else if (pkConstraint instanceof MPDRPK) {
-            constraintTag.setAttribute("element_source_id", ((MPDRPK) pkConstraint).getMldrElementSource().getIdProjectElementAsString());
-        }
+      if (pkConstraint instanceof MLDRPK) {
+        constraintTag.setAttribute("element_source_id", ((MLDRPK) pkConstraint).getMcdElementSource().getIdProjectElementAsString());
+      } else if (pkConstraint instanceof MPDRPK) {
+        constraintTag.setAttribute("element_source_id", ((MPDRPK) pkConstraint).getMldrElementSource().getIdProjectElementAsString());
+      }
     }
 
     //Sauvegarde d'une contrainte FK
@@ -1322,11 +1322,11 @@ public class ProjectSaverXml {
       tableConstraintsTag.appendChild(constraintTag);
 
       //Ajout des propriétés d'identification spécifiques à une contrainte FK
-        if (fkConstraint instanceof MLDRFK) {
-            constraintTag.setAttribute("element_source_id", ((MLDRFK) fkConstraint).getMcdElementSource().getIdProjectElementAsString());
-        } else if (fkConstraint instanceof MPDRFK) {
-            constraintTag.setAttribute("element_source_id", ((MPDRFK) fkConstraint).getMldrElementSource().getIdProjectElementAsString());
-        }
+      if (fkConstraint instanceof MLDRFK) {
+        constraintTag.setAttribute("element_source_id", ((MLDRFK) fkConstraint).getMcdElementSource().getIdProjectElementAsString());
+      } else if (fkConstraint instanceof MPDRFK) {
+        constraintTag.setAttribute("element_source_id", ((MPDRFK) fkConstraint).getMldrElementSource().getIdProjectElementAsString());
+      }
 
       //Ajout de la référence vers la PK (id de la PK)
       constraintTag.setAttribute("target_pk", fkConstraint.getMdrPK().getIdProjectElementAsString());
@@ -1501,9 +1501,9 @@ public class ProjectSaverXml {
     shapeElement.setAttribute(Preferences.ATTRIBUTE_Y, String.valueOf(shape.getY()));
 
     // Vérifie si la forme a bien un objet du référentiel lié
-      if (shape.getRelatedRepositoryElement() != null) {
-          shapeElement.setAttribute(Preferences.ATTRIBUTE_REPOSITORY_ENTITY_ID, shape.getRelatedRepositoryElement().getIdProjectElementAsString());
-      }
+    if (shape.getRelatedRepositoryElement() != null) {
+      shapeElement.setAttribute(Preferences.ATTRIBUTE_REPOSITORY_ENTITY_ID, shape.getRelatedRepositoryElement().getIdProjectElementAsString());
+    }
 
     // Ajoute l'élément à la balise parent
     shapesTag.appendChild(shapeElement);
@@ -1518,17 +1518,17 @@ public class ProjectSaverXml {
     shapeElement.setAttribute(Preferences.ATTRIBUTE_DESTINATION_ENTITY_SHAPE_ID, String.valueOf(shape.getDestination().getId()));
 
     // Vérifie si la forme a bien un objet du référentiel lié
-      if (shape.getRelatedRepositoryElement() != null) {
-          shapeElement.setAttribute(Preferences.ATTRIBUTE_REPOSITORY_ASSOCIATION_ID, shape.getRelatedRepositoryElement().getIdProjectElementAsString());
-      }
+    if (shape.getRelatedRepositoryElement() != null) {
+      shapeElement.setAttribute(Preferences.ATTRIBUTE_REPOSITORY_ASSOCIATION_ID, shape.getRelatedRepositoryElement().getIdProjectElementAsString());
+    }
 
     // Ajoute les points d'ancrage
-      this.addAnchorPointsShapes(doc, shape, shapeElement);
+    this.addAnchorPointsShapes(doc, shape, shapeElement);
 
     // Ajoute les labels
-      if (!shape.getLabels().isEmpty()) {
-          this.addLabelShapes(doc, shape, shapeElement);
-      }
+    if (!shape.getLabels().isEmpty()) {
+      this.addLabelShapes(doc, shape, shapeElement);
+    }
 
     // Ajoute l'élément à la balise parent
     shapeTags.appendChild(shapeElement);

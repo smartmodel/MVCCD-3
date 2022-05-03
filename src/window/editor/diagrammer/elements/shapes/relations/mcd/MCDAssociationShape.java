@@ -1,4 +1,4 @@
-package window.editor.diagrammer.elements.shapes.relations;
+package window.editor.diagrammer.elements.shapes.relations.mcd;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
@@ -6,6 +6,10 @@ import java.awt.Point;
 import mcd.MCDAssociation;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
+import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
 import window.editor.diagrammer.services.DiagrammerService;
 
 public class MCDAssociationShape extends RelationShape {

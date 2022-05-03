@@ -7,12 +7,12 @@ import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDGeneralization;
 import repository.editingTreat.mcd.MCDGeneralizationEditingTreat;
-import window.editor.diagrammer.elements.shapes.relations.MCDGeneralizationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDGeneralizationShape;
 
 public class MCDGeneralizationEditAction extends AbstractAction implements Serializable {
 
-  private final MCDGeneralizationShape shape;
   private static final long serialVersionUID = 1000;
+  private final MCDGeneralizationShape shape;
 
   public MCDGeneralizationEditAction(String name, Icon icon, MCDGeneralizationShape shape) {
     super(name, icon);

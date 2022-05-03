@@ -1,4 +1,4 @@
-package window.editor.diagrammer.elements.shapes.classes;
+package window.editor.diagrammer.elements.shapes;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -49,10 +49,13 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
     this.addMouseMotionListener(listener);
   }
 
+  protected abstract void doDraw(Graphics graphics);
+
   @Override
-  protected void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    this.setBorder(BorderFactory.createLineBorder(Color.BLACK, this.isFocused || this.isResizing ? 3 : 1));
+  protected void paintComponent(Graphics graphics) {
+    super.paintComponent(graphics);
+    this.setBorder(BorderFactory.createLineBorder(Color.BLACK, this.isFocused || this.isResizing ? 0 : 0));
+    this.doDraw(graphics);
   }
 
   @Override

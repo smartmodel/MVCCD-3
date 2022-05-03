@@ -8,6 +8,7 @@ import java.awt.RenderingHints;
 import java.util.List;
 import md.MDElement;
 import preferences.Preferences;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;

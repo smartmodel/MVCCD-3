@@ -1,10 +1,12 @@
-package window.editor.diagrammer.elements.shapes.relations;
+package window.editor.diagrammer.elements.shapes.relations.mcd;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import mcd.MCDGeneralization;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
 public class MCDGeneralizationShape extends RelationShape {
 

@@ -9,8 +9,8 @@ import project.ProjectElement;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
-import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAssociationShape;
 
 /**
  * Tous les diagrammes concrets sont des descendants de Diagram.
@@ -51,7 +51,7 @@ public abstract class Diagram extends ProjectElement {
   }
 
   public void addShape(IShape shape) {
-      this.shapes.add(shape);
+    this.shapes.add(shape);
     ViewLogsManager.printMessage(shape.getClass().getSimpleName() + " ajoutée au diagramme " + this.getName(), WarningLevel.INFO);
   }
 

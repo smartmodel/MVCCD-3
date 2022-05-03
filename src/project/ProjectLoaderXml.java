@@ -90,9 +90,9 @@ import org.xml.sax.SAXException;
 import preferences.Preferences;
 import profile.Profile;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
-import window.editor.diagrammer.elements.shapes.relations.LabelType;
-import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
+import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAssociationShape;
 
 public class ProjectLoaderXml {
 

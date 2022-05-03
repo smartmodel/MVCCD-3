@@ -105,6 +105,11 @@ public class MCDEntityShape extends ClassShape {
     this.setSize(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH, Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT);
   }
 
+  @Override
+  protected void doDraw(Graphics graphics) {
+
+  }
+
   private void addListeners() {
     MCDEntityShapeListener listener = new MCDEntityShapeListener(this);
     this.addMouseListener(listener);

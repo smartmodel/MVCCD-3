@@ -17,8 +17,9 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import main.MVCCDManager;
 import preferences.Preferences;
+import window.editor.diagrammer.elements.shapes.NoteShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
@@ -219,9 +220,20 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     return this.spaceBarPressed || this.mouseWheelPressed;
   }
 
+  private void createNoteShape(MouseEvent event) {
+    Point mouseClick = event.getPoint();
+    NoteShape shape = new NoteShape();
+
+    shape.setLocation(GridUtils.alignToGrid(mouseClick.x, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(mouseClick.y, DiagrammerService.getDrawPanel().getGridSize()));
+
+    MVCCDManager.instance().getCurrentDiagram().addShape(shape);
+    DiagrammerService.getDrawPanel().addShape(shape);
+    DiagrammerService.getDrawPanel().repaint();
+  }
+
   private void createEntityShape(MouseEvent event) {
-    final Point mouseClick = event.getPoint();
-    final MCDEntityShape shape = new MCDEntityShape();
+    Point mouseClick = event.getPoint();
+    MCDEntityShape shape = new MCDEntityShape();
 
     shape.setLocation(GridUtils.alignToGrid(mouseClick.x, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(mouseClick.y, DiagrammerService.getDrawPanel().getGridSize()));
 
@@ -232,8 +244,13 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   }
 
   private void executeButtonAction(MouseEvent event) {
-    if (PalettePanel.activeButton.getText().equals(Preferences.DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT)) {
-      this.createEntityShape(event);
+    switch (PalettePanel.activeButton.getText()) {
+      case Preferences.DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT:
+        this.createEntityShape(event);
+        break;
+      case Preferences.DIAGRAMMER_PALETTE_NOTE_BUTTON_TEXT:
+        this.createNoteShape(event);
+        break;
     }
   }
 

@@ -3,13 +3,13 @@ package window.editor.diagrammer.utils;
 import main.MVCCDManager;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
-import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
-import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
-import window.editor.diagrammer.elements.shapes.relations.MCDCompositionShape;
-import window.editor.diagrammer.elements.shapes.relations.MCDGeneralizationShape;
-import window.editor.diagrammer.elements.shapes.relations.MCDLinkShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAssociationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDCompositionShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDGeneralizationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDLinkShape;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
 

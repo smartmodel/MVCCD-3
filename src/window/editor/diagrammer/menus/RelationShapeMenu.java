@@ -4,8 +4,10 @@ import java.awt.Point;
 import java.io.Serializable;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-
-import window.editor.diagrammer.elements.shapes.relations.*;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAssociationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDCompositionShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDGeneralizationShape;
 import window.editor.diagrammer.menus.actions.MCDAssociationEditAction;
 import window.editor.diagrammer.menus.actions.MCDGeneralizationEditAction;
 import window.editor.diagrammer.menus.actions.RelationAddPointAncrageAction;

@@ -22,6 +22,8 @@ import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
+import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.Position;
@@ -320,11 +322,12 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   }
 
   public void draw(Graphics2D graphics2D) {
-    this.drawSegments(graphics2D);
+    Graphics2D copied = (Graphics2D) graphics2D.create();
+    this.drawSegments(copied);
     if (this.isFocused) {
-      this.drawPointsAncrage(graphics2D);
+      this.drawPointsAncrage(copied);
     }
-    this.doDraw(graphics2D);
+    this.doDraw(copied);
   }
 
   public abstract void doDraw(Graphics2D graphics2D);

@@ -10,7 +10,7 @@ import mcd.MCDAssociationNature;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDAssociationEditingTreat;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
-import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAssociationShape;
 
 public class MCDAssociationEditAction extends AbstractAction implements Serializable {
 

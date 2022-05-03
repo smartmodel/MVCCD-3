@@ -25,8 +25,8 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.DrawPanelListener;
@@ -188,12 +188,6 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     }
     for (int i = 0; i < height; i += this.gridSize) {
       graphics2D.drawLine(0, i, width, i);
-    }
-  }
-
-  public void repaintElements() {
-    for (IShape shape : this.getShapes()) {
-      shape.repaint();
     }
   }
 
