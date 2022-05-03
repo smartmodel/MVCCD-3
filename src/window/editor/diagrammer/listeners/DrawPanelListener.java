@@ -363,6 +363,17 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
 
     // Maintenant, on déplace le point d'ancrage cliqué
     this.dragClickedAnchorPoint(newPoint);
+
+    List<RelationAnchorPointShape> linkAnchorPointsToMove = new LinkedList<>();
+    for (RelationShape relationShape : DiagrammerService.getDrawPanel().getRelationShapes()) {
+      if (relationShape != this.focusedRelation) {
+        for (RelationAnchorPointShape anchorPoint : relationShape.getAnchorPoints()) {
+          if (this.focusedRelation.contains(anchorPoint.x, anchorPoint.y)) {
+
+          }
+        }
+      }
+    }
   }
 
   private void dragClickedAnchorPoint(Point newPoint) {

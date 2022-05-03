@@ -49,16 +49,16 @@ public class MCDAssociationShape extends RelationShape {
     // Nom d'association
     if (!association.getName().isEmpty()) {
       LabelShape labelShape;
-      if (this.pointsAncrage.size() <= 2) {
-        RelationAnchorPointShape anchorPoint = this.pointsAncrage.get(0);
+      if (this.anchorPoints.size() <= 2) {
+        RelationAnchorPointShape anchorPoint = this.anchorPoints.get(0);
         Point relationCenter = this.getCenter();
         int distanceInXFromAnchorPoint = Math.abs(relationCenter.x - anchorPoint.x);
         int distanceInYFromAnchorPoint = Math.abs(relationCenter.y - anchorPoint.y);
         labelShape = this.createOrUpdateLabel(anchorPoint, association.getName(), LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
 
       } else {
-        int middleIndex = this.pointsAncrage.size() / 2;
-        labelShape = this.createOrUpdateLabel(this.pointsAncrage.get(middleIndex), association.getName(), LabelType.ASSOCIATION_NAME, 0, 0);
+        int middleIndex = this.anchorPoints.size() / 2;
+        labelShape = this.createOrUpdateLabel(this.anchorPoints.get(middleIndex), association.getName(), LabelType.ASSOCIATION_NAME, 0, 0);
       }
       DiagrammerService.getDrawPanel().add(labelShape);
     } else {

@@ -28,7 +28,7 @@ public class PointAncrageDeleteAction extends AbstractAction implements Serializ
   private void delete() {
     // Suppression possible uniquement s'il y a plus de 2 points d'ancrage dans l'association
     if (this.relation.getAnchorPoints().size() > 2) {
-      this.relation.deletePointAncrage(this.pointAncrage);
+      this.relation.deleteAnchorPoint(this.pointAncrage);
       DiagrammerService.getDrawPanel().repaint();
     }
   }

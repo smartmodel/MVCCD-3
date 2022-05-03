@@ -173,7 +173,7 @@ public abstract class ClassShape extends SquaredShape {
   public void updateRelations() {
     for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapes()) {
       if (relation.getSource() == this || relation.getDestination() == this) {
-        relation.updateFirstAndLastPointsAncrage(this, true);
+        relation.updateFirstAndLastAnchorPoint(this, true);
       }
     }
   }

@@ -103,6 +103,10 @@ public final class GeometryUtils {
     return (converted.x >= 0 && converted.x <= shape.getWidth() && (converted.y == 0 || converted.y == shape.getHeight())) || (converted.y >= 0 && converted.y <= shape.getHeight() && (converted.x == 0 || converted.x == shape.getWidth()));
   }
 
+  public static boolean anchorPointsAreOnSameSegment(Line2D segment, RelationAnchorPointShape p1, RelationAnchorPointShape p2) {
+    return segment.contains(p1) && segment.contains(p2);
+  }
+
   public static boolean pointIsOnRelation(Point point, RelationShape relationShape) {
     return relationShape.contains(point);
   }
