@@ -3,6 +3,7 @@ package window.editor.diagrammer.listeners;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -105,7 +106,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     this.anchorPointClicked = null;
     this.updateCursor();
 
-    DiagrammerService.getDrawPanel().endScroll();
   }
 
   @Override
@@ -117,21 +117,15 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   @Override
   public void mouseWheelMoved(MouseWheelEvent e) {
     super.mouseWheelMoved(e);
-    if (this.isZoomAllowed()) {
-      final int actualZoom = DiagrammerService.getDrawPanel().getGridSize();
-      DiagrammerService.getDrawPanel().zoom(actualZoom - e.getWheelRotation());
-    }
+    boolean isHorizontal = (e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK;
+    //DiagrammerService.getDrawPanel().scroll(e.getWheelRotation(), isHorizontal);
   }
 
   @Override
   public void mouseDragged(MouseEvent e) {
     super.mouseDragged(e);
-    final int differenceX = e.getPoint().x - this.origin.x;
-    final int differenceY = e.getPoint().y - this.origin.y;
-
-    if (this.isScrollAllowed()) {
-      DiagrammerService.getDrawPanel().scroll(differenceX, differenceY);
-    }
+    int differenceX = e.getPoint().x - this.origin.x;
+    int differenceY = e.getPoint().y - this.origin.y;
 
     if (this.anchorPointClicked != null && this.focusedRelation != null) {
       this.dragAnchorPointSelected(e);
@@ -139,7 +133,12 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
       this.dragAssociation(differenceX, differenceY);
     }
 
+/*    for (IShape shape : DiagrammerService.getDrawPanel().getShapes()) {
+      shape.drag(differenceX, differenceY);
+    }*/
+
     this.origin = e.getPoint();
+
   }
 
   @Override
@@ -201,7 +200,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
       this.spaceBarPressed = false;
     }
     this.updateCursor();
-    DiagrammerService.getDrawPanel().endScroll();
   }
 
   private void updateCursor() {
@@ -330,7 +328,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     if (this.focusedRelation.getDestination() instanceof RelationShape) {
       dragAllowed = GeometryUtils.pointIsOnRelation(newPoint, (RelationShape) this.focusedRelation.getDestination());
     } else if (this.focusedRelation.getDestination() instanceof SquaredShape) {
-      dragAllowed = GeometryUtils.pointIsAroundShape(newPoint, (ClassShape) this.focusedRelation.getDestination());
+      dragAllowed = GeometryUtils.pointIsAroundShape(newPoint, (SquaredShape) this.focusedRelation.getDestination());
     }
     if (dragAllowed) {
       this.anchorPointClicked.drag(newPoint.x, newPoint.y);
@@ -364,16 +362,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     // Maintenant, on déplace le point d'ancrage cliqué
     this.dragClickedAnchorPoint(newPoint);
 
-    List<RelationAnchorPointShape> linkAnchorPointsToMove = new LinkedList<>();
-    for (RelationShape relationShape : DiagrammerService.getDrawPanel().getRelationShapes()) {
-      if (relationShape != this.focusedRelation) {
-        for (RelationAnchorPointShape anchorPoint : relationShape.getAnchorPoints()) {
-          if (this.focusedRelation.contains(anchorPoint.x, anchorPoint.y)) {
-
-          }
-        }
-      }
-    }
   }
 
   private void dragClickedAnchorPoint(Point newPoint) {

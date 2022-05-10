@@ -1,17 +1,21 @@
 package window.editor.diagrammer.elements.shapes;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import window.editor.diagrammer.elements.interfaces.IResizable;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
-import window.editor.diagrammer.utils.GridUtils;
+import window.editor.diagrammer.services.DiagrammerService;
+import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.IDManager;
 
 public abstract class SquaredShape extends JPanel implements IShape, IResizable, Serializable {
@@ -74,23 +78,46 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   }
 
   @Override
-  public void zoom(int fromFactor, int toFactor) {
-
-    int newXPosition = this.getBounds().x * toFactor / fromFactor;
-    int newYPosition = this.getBounds().y * toFactor / fromFactor;
-    int newWidth = this.getBounds().width * toFactor / fromFactor;
-    int newHeight = this.getBounds().height * toFactor / fromFactor;
-
-    // Set la nouvelle position, la nouvelle taille de l'élément et met à jour la nouvelle taille minimale de l'élément
-    this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
-    this.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
-    this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
-  }
-
-  @Override
   public void drag(int differenceX, int differenceY) {
     Rectangle bounds = this.getBounds();
     bounds.translate(differenceX, differenceY);
+
+    for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapesBySquaredShape(this)) {
+      // Récupère le point positionné autour de la forme
+      RelationAnchorPointShape pointAroundShape = GeometryUtils.getAnchorPointOnShape(relation, this);
+
+      List<RelationAnchorPointShape> pointsToMove = new LinkedList<>(relation.getAnchorPoints());
+
+      RelationAnchorPointShape firstPoint;
+      RelationAnchorPointShape secondPoint;
+
+      if (pointAroundShape == relation.getFirstPoint() && pointAroundShape != null) {
+        firstPoint = pointsToMove.get(0);
+        secondPoint = pointsToMove.get(1);
+      } else {
+        firstPoint = pointsToMove.get(pointsToMove.size() - 1);
+        secondPoint = pointsToMove.get(pointsToMove.size() - 2);
+      }
+
+      if (GeometryUtils.isVertical(new Point(firstPoint.x, firstPoint.y), new Point(secondPoint.x, secondPoint.y))) {
+        if (differenceX == 0) {
+          firstPoint.drag(firstPoint.x + differenceX, firstPoint.y + differenceY);
+        } else {
+          firstPoint.drag(firstPoint.x + differenceX, firstPoint.y + differenceY);
+          secondPoint.drag(secondPoint.x + differenceX, secondPoint.y + differenceY);
+        }
+      }
+
+      if (GeometryUtils.isHorizontal(new Point(firstPoint.x, firstPoint.y), new Point(secondPoint.x, secondPoint.y))) {
+        if (differenceY == 0) {
+          firstPoint.drag(firstPoint.x + differenceX, firstPoint.y + differenceY);
+        } else {
+          firstPoint.drag(firstPoint.x + differenceX, firstPoint.y + differenceY);
+          secondPoint.drag(secondPoint.x + differenceX, secondPoint.y + differenceY);
+        }
+      }
+
+    }
     this.setBounds(bounds);
     this.repaint();
   }

@@ -9,11 +9,9 @@ import java.util.List;
 import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
-import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.GeometryUtils;
 
 public abstract class ClassShape extends SquaredShape {
 
@@ -158,7 +156,7 @@ public abstract class ClassShape extends SquaredShape {
   @Override
   public void drag(int differenceX, int differenceY) {
     super.drag(differenceX, differenceY);
-    for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapesByClassShape(this)) {
+/*    for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapesByClassShape(this)) {
       if (relation.isReflexive()) {
         for (RelationAnchorPointShape pointAncrage : relation.getAnchorPoints()) {
           pointAncrage.setLocationDifference(differenceX, differenceY);
@@ -167,7 +165,7 @@ public abstract class ClassShape extends SquaredShape {
         RelationAnchorPointShape nearestPointAncrage = GeometryUtils.getNearestPointAncrage(this, relation);
         nearestPointAncrage.setLocationDifference(differenceX, differenceY);
       }
-    }
+    }*/
   }
 
   public void updateRelations() {

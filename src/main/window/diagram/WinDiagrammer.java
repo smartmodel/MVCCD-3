@@ -1,12 +1,13 @@
 package main.window.diagram;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import javax.swing.JPanel;
 import utilities.window.PanelContent;
-import window.editor.diagrammer.drawpanel.DrawPanelComponent;
+import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * La classe crée les panneaux du diagrammeur (en-tête, palette et zone de dessin). La classe ajoute ensuite les panneaux comme contenu de son ancêtre PanelContent. L'ancêtre PanelContent crée la barre de défilement si nécessaire (décision à prendre). Remarque: la palette et la zone de dessin du diagrammeur seront créés spécifiquement pour le genre de modèle à réaliser (MCD, MLD-R, MPD-R ou
@@ -14,17 +15,18 @@ import java.awt.*;
  */
 public class WinDiagrammer extends PanelContent {
 
+  private static final long serialVersionUID = 7004724382489968350L;
   JPanel content = new JPanel(); //Diagrammeur dans son ensemble
   JPanel panelTitle = new JPanel(); //En-tête du diagrammeur
   PalettePanel panelPalette = new PalettePanel(); //Palette du diagrammeur
-  DrawPanelComponent panelDraw; //Zone de dessin du diagrammeur
+  DrawPanel panelDraw; //Zone de dessin du diagrammeur
 
   public WinDiagrammer(WinDiagram diagram) {
     super(diagram);
 
     this.setVisible(true);
 
-    this.panelDraw = new DrawPanelComponent(DiagrammerService.getDrawPanel());
+    this.panelDraw = DiagrammerService.getDrawPanel();
 
     //Création des panneaux du diagrammeur
     BorderLayout layout = new BorderLayout();

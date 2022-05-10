@@ -84,4 +84,9 @@ public class NoteShape extends SquaredShape {
     graphics.setColor(Color.BLACK);
     graphics.drawLine(this.getWidth() - this.MARGIN, 0, this.getWidth(), this.MARGIN);
   }
+
+  @Override
+  public void zoom(int fromFactor, int toFactor) {
+
+  }
 }

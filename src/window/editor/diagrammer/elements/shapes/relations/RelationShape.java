@@ -155,6 +155,9 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   @Override
   public void drag(int differenceX, int differenceY) {
+    for (RelationAnchorPointShape anchorPoint : this.anchorPoints) {
+      anchorPoint.drag(anchorPoint.x + differenceX, anchorPoint.y + differenceY);
+    }
   }
 
   @Override

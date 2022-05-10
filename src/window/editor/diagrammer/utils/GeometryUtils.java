@@ -6,6 +6,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import javax.swing.SwingUtilities;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
@@ -97,7 +98,7 @@ public final class GeometryUtils {
     }
   }
 
-  public static boolean pointIsAroundShape(Point point, ClassShape shape) {
+  public static boolean pointIsAroundShape(Point point, SquaredShape shape) {
     // On convertit le point pour le rendre relatif à la ClassShape
     Point converted = SwingUtilities.convertPoint(DiagrammerService.getDrawPanel(), point, shape);
     return (converted.x >= 0 && converted.x <= shape.getWidth() && (converted.y == 0 || converted.y == shape.getHeight())) || (converted.y >= 0 && converted.y <= shape.getHeight() && (converted.x == 0 || converted.x == shape.getWidth()));
@@ -149,6 +150,28 @@ public final class GeometryUtils {
 
   public static boolean isVertical(Line2D segment) {
     return segment.getX1() == segment.getX2();
+  }
+
+  public static boolean isVertical(Point p1, Point p2) {
+    Line2D segment = new Line2D.Double();
+    segment.setLine(p1.x, p1.y, p2.x, p2.y);
+    return isVertical(segment);
+  }
+
+  public static boolean isHorizontal(Point p1, Point p2) {
+    Line2D segment = new Line2D.Double();
+    segment.setLine(p1.x, p1.y, p2.x, p2.y);
+    return isHorizontal(segment);
+  }
+
+  public static RelationAnchorPointShape getAnchorPointOnShape(RelationShape relation, SquaredShape shape) {
+    if (relation.getSource() == shape) {
+      return relation.getFirstPoint();
+    } else if (relation.getDestination() == shape) {
+      return relation.getLastPoint();
+    } else {
+      return null;
+    }
   }
 
   public static boolean isHorizontal(Line2D segment) {

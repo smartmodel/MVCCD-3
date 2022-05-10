@@ -81,6 +81,8 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
       PalettePanel.setActiveButton(null);
     }
 
+    // Met à jour les espaces du diagrammeur
+    DiagrammerService.getDrawPanel().updatePanelAndScrollbars();
   }
 
   @Override
@@ -101,7 +103,6 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
     if (PalettePanel.activeButton == null) {
       // Aucun bouton de la palette n'est sélectionné
       this.handleMovements(e.getPoint());
-      DiagrammerService.getDrawPanel().updatePanelAndScrollbars();
     } else {
       // Un bouton de la palette est sélectionné
       // Création d'une relation

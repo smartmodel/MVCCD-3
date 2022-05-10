@@ -1,8 +1,11 @@
 package window.editor.diagrammer.drawpanel;
 
-import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.io.Serializable;
+import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import preferences.Preferences;
 
 /**
@@ -15,9 +18,21 @@ public class DrawPanelComponent extends JScrollPane implements Serializable {
   public DrawPanelComponent(DrawPanel drawPanel) {
     super(drawPanel);
     this.setName(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME);
-    this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+    this.getHorizontalScrollBar().setUnitIncrement(50); // Using mousewheel on bar or click on arrow
+    this.getHorizontalScrollBar().setSize(0, 15);
+    this.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+    this.getVerticalScrollBar().setUnitIncrement(50);
+    this.getVerticalScrollBar().setSize(15, 0);
+    this.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
     this.setViewportView(drawPanel);
-    this.getViewport().setPreferredSize(new Dimension(1, 1)); // On set width = 1 et height = 1 pour éviter que le viewport prenne la dimension du DrawPanel (de la zone de dessin)
+
+    this.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+  }
+
+  @Override
+  protected void paintComponent(Graphics g) {
+
   }
 }

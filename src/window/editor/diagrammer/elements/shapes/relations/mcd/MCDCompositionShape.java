@@ -48,8 +48,8 @@ public class MCDCompositionShape extends RelationShape {
     final RelationAnchorPointShape lastPoint = this.getLastPoint();
 
     final int NUMBER_OF_POINTS = 4;
-    final int DIAMOND_WIDTH = 8;
-    final int DIAMOND_HEIGHT = 13;
+    final int DIAMOND_WIDTH = 7;
+    final int DIAMOND_HEIGHT = 10;
 
     final int dx = lastPoint.x - previousPoint.x, dy = lastPoint.y - previousPoint.y;
     final double D = Math.sqrt(dx * dx + dy * dy);

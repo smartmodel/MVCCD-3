@@ -96,6 +96,11 @@ public class MCDEntityShape extends ClassShape {
   }
 
   @Override
+  public void zoom(int fromFactor, int toFactor) {
+
+  }
+
+  @Override
   protected void defineBackgroundColor() {
     this.setBackground(Preferences.DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR);
   }
