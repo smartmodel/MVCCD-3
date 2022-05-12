@@ -67,7 +67,7 @@ public class MCDTransformToPK {
 
         if ( (mcdEntity.getNature() == MCDEntityNature.DEP)  ||
                 (mcdEntity.getNature() == MCDEntityNature.ENTASSDEP) ||
-                (mcdEntity.getNature() == MCDEntityNature.ENTASSDEP ))  {
+                (mcdEntity.getNature() == MCDEntityNature.NAIREDEP ))  {
             MDRColumn mdrColumnPKProper = createOrModifyColumnPKProper(mcdEntity, mldrTable);
             mdrColumnPKs.add(mdrColumnPKProper);
         }

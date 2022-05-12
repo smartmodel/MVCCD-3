@@ -1,5 +1,7 @@
 package generatorsql.generator;
 
+import datatypes.MCDDatatype;
+import datatypes.MDDatatypeService;
 import exceptions.CodeApplException;
 import generatorsql.MPDRGenerateSQLUtil;
 import mdr.MDRColumn;
@@ -10,6 +12,7 @@ import mpdr.MPDRColumn;
 import mpdr.MPDRDB;
 import mpdr.MPDRFK;
 import mpdr.MPDRTable;
+import mpdr.tapis.MPDRPackageType;
 import mpdr.tapis.MPDRTrigger;
 import mpdr.tapis.MPDRView;
 import mpdr.tapis.interfaces.IMPDRWithDynamicCode;
@@ -128,8 +131,8 @@ public abstract class MPDRGenerateSQLDynamicCode {
         if ( mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.COLUMNS_UPPERCASE ){
             return generateColumnsUppercase(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
         }
-        if ( mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.COLUMNS_UPPERCASE ){
-            return generateColumnsUppercase(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
+        if ( mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.COLUMNS_TYPE_CHECK ){
+            return generateColumnsDatatypeCheck(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
         }
         if ( mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INNER_JOIN ){
             return generateInnerJoin(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
@@ -285,6 +288,165 @@ public abstract class MPDRGenerateSQLDynamicCode {
         }
 
         return generateSQLCode;
+    }
+
+    private String generateColumnsDatatypeCheck(IMPDRWithDynamicCode impdrWithDynamicCode, String templateSQLCode, String tabsApplicable) {
+        String generateSQLCode = "";
+        MPDRTable tableAccueil = impdrWithDynamicCode.getMPDRTableAccueil();
+
+        for (MPDRColumn mpdrColumn : tableAccueil.getMPDRColumns()){
+            if (mpdrColumn.isBusiness()){
+                generateSQLCode += generateColumnDatatypeCheck(mpdrColumn,templateSQLCode, tabsApplicable);
+            }
+        }
+
+        return generateSQLCode;
+    }
+
+    private String generateColumnDatatypeCheck(MPDRColumn mpdrColumn, String templateSQLCode, String tabsApplicable) {
+        String generateSQLCode = "";
+        // Text
+        MCDDatatype mcdDatatype = MDDatatypeService.getMCDDatatypeByLienProg(mpdrColumn.getDatatypeConstraintLienProg());
+        if (mcdDatatype.isSelfOrDescendantOf(MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_NORMALIZEDSTRING_LIENPROG))) {
+            generateSQLCode = generateColumnDatatypeCheckDescendantOrSelfNormalizedString(mpdrColumn, templateSQLCode, tabsApplicable, mcdDatatype);
+        }
+        return generateSQLCode;
+    }
+
+    //TODO-1 Revoir le code de check des types textuels pour faire le parcours en remontant la hiérarchie des types
+    private String generateColumnDatatypeCheckDescendantOrSelfNormalizedString(MPDRColumn mpdrColumn,
+                                                                               String templateSQLCode,
+                                                                               String tabsApplicable,
+                                                                               MCDDatatype mcdDatatype) {
+        /*
+        String generateSQLCode = templateSQLCode;
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_PACKAGE_RESOURCES_NAME_WORD,
+                MPDRPackageType.RESOURCES_SPEC.getMarker());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_PROCEDURE_RESOURCES_CHECK_DATATYPE_WORD,
+                "check_normalized_string");
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_TABLE_NAME_WORD,
+                mpdrColumn.getMDRTableAccueil().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_COLUMN_NAME_WORD,
+                mpdrColumn.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_COLUMN_VALUE_WORD,
+                mpdrColumn.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_CONSTRAINT_DATATYPE_NAME_WORD,
+                mpdrColumn.getDatatypeConstraintLienProg());
+
+         */
+
+        String templateSQLCodeWithTabsApplicable = templateSQLCode;
+        String generateSQLCode =  generateColumnDatatypeCheckDescendantOrSelfConstraint(mpdrColumn, templateSQLCodeWithTabsApplicable, mcdDatatype, "check_normalized_string");
+
+        if (mcdDatatype.isSelfOrDescendantOf(MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_TOKEN_LIENPROG))) {
+            templateSQLCodeWithTabsApplicable = System.lineSeparator() + tabsApplicable + templateSQLCode;
+            generateSQLCode += generateColumnDatatypeCheckDescendantOrSelfToken(mpdrColumn, templateSQLCodeWithTabsApplicable, mcdDatatype);
+        }
+        return generateSQLCode;
+    }
+
+    private String generateColumnDatatypeCheckDescendantOrSelfToken(MPDRColumn mpdrColumn,
+                                                                    String templateSQLCodeWithTabsApplicable,
+                                                                    MCDDatatype mcdDatatype) {
+        /*
+        String generateSQLCode = System.lineSeparator() + tabsApplicable + templateSQLCode;
+
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_PACKAGE_RESOURCES_NAME_WORD,
+                MPDRPackageType.RESOURCES_SPEC.getMarker());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_PROCEDURE_RESOURCES_CHECK_DATATYPE_WORD,
+                "check_token");
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_TABLE_NAME_WORD,
+                mpdrColumn.getMDRTableAccueil().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_COLUMN_NAME_WORD,
+                mpdrColumn.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_COLUMN_VALUE_WORD,
+                mpdrColumn.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_CONSTRAINT_DATATYPE_NAME_WORD,
+                mpdrColumn.getDatatypeConstraintLienProg());
+
+         */
+        String generateSQLCode =  generateColumnDatatypeCheckDescendantOrSelfConstraint(mpdrColumn, templateSQLCodeWithTabsApplicable, mcdDatatype, "check_token");
+
+        if (mcdDatatype.isSelfOrDescendantOf(MDDatatypeService.getMCDDatatypeByLienProg(Preferences.MCDDATATYPE_WORD_LIENPROG))) {
+            generateSQLCode += generateColumnDatatypeCheckDescendantOrSelfWord(mpdrColumn, templateSQLCodeWithTabsApplicable, mcdDatatype);
+        }
+        return generateSQLCode;
+    }
+
+    private String generateColumnDatatypeCheckDescendantOrSelfWord(MPDRColumn mpdrColumn,
+                                                                   String templateSQLCodeWithTabsApplicable,
+                                                                   MCDDatatype mcdDatatype) {
+
+        /*
+        String generateSQLCode = System.lineSeparator() + tabsApplicable + templateSQLCode;
+
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_PACKAGE_RESOURCES_NAME_WORD,
+                MPDRPackageType.RESOURCES_SPEC.getMarker());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_PROCEDURE_RESOURCES_CHECK_DATATYPE_WORD,
+                "check_word");
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_TABLE_NAME_WORD,
+                mpdrColumn.getMDRTableAccueil().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_COLUMN_NAME_WORD,
+                mpdrColumn.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_COLUMN_VALUE_WORD,
+                mpdrColumn.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_CONSTRAINT_DATATYPE_NAME_WORD,
+                mpdrColumn.getDatatypeConstraintLienProg());
+
+        return generateSQLCode;
+
+         */
+
+        return generateColumnDatatypeCheckDescendantOrSelfConstraint(mpdrColumn, templateSQLCodeWithTabsApplicable, mcdDatatype, "check_word");
+
+    }
+
+    private String generateColumnDatatypeCheckDescendantOrSelfConstraint(MPDRColumn mpdrColumn,
+                                                                         String templateSQLCodeWithTabsApplicable,
+                                                                         MCDDatatype mcdDatatype,
+                                                                         String procedure    ) {
+
+        String generateSQLCode = templateSQLCodeWithTabsApplicable;
+
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_PACKAGE_RESOURCES_NAME_WORD,
+                MPDRPackageType.RESOURCES_SPEC.getMarker());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_PROCEDURE_RESOURCES_CHECK_DATATYPE_WORD,
+                procedure);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_TABLE_NAME_WORD,
+                mpdrColumn.getMDRTableAccueil().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_COLUMN_NAME_WORD,
+                mpdrColumn.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_COLUMN_VALUE_WORD,
+                mpdrColumn.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_CONSTRAINT_DATATYPE_NAME_WORD,
+                mpdrColumn.getDatatypeConstraintLienProg());
+
+        return generateSQLCode;
+
     }
 
 

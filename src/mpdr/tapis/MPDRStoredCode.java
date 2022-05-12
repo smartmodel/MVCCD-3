@@ -9,6 +9,7 @@ import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.services.MPDRModelService;
 import mpdr.tapis.interfaces.IMPDRWithDynamicCode;
 import project.ProjectElement;
 
@@ -76,7 +77,7 @@ public abstract class MPDRStoredCode extends MDRElement implements IMPDRElement,
 
 
     public MPDRModel getMPDRModelParent(){
-        return getMPDRTableAccueil ().getMPDRModelParent();
+        return MPDRModelService.getMPDRModelParent(this);
     }
 
 }

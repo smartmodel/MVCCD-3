@@ -821,6 +821,7 @@ public class Preferences extends MVCCDElement {
   public static String MDR_UNIQUE_NAME_WORD = "uniqueName";
   public static String MDR_UNIQUE_COLUMNS_WORD = "uniqueColumns";
   public static String MDR_COLUMN_NAME_WORD =  "columnName";
+  public static String MDR_COLUMN_VALUE_WORD =  "columnValue";
   public static String MDR_COLUMN_PK_NAME_WORD =  "columnPKName";
   public static String MDR_COLUMN_FK_NAME_WORD =  "columnFKName";
   public static String MDR_COLUMN_DATATYPE_WORD =  "columnDataType";
@@ -830,9 +831,12 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_INCREMENT_WORD = "increment";
   public static String MPDR_TRIGGER_NAME_WORD = "triggerName";
   public static String MPDR_PACKAGE_NAME_WORD = "packageName";
+  public static String MPDR_PACKAGE_RESOURCES_NAME_WORD = "packageResourcesName";
+  public static String MPDR_PROCEDURE_RESOURCES_CHECK_DATATYPE_WORD = "procedureResourcesCheckDatatypeWord";
   public static String MPDR_FUNCTION_NAME_WORD = "functionName";
   public static String MPDR_PROCEDURE_NAME_WORD = "procedureName";
   public static String MPDR_COLUMN_NAME_WORD = "mpdrColumnName";
+  public static String MDR_CONSTRAINT_DATATYPE_NAME_WORD = "constraintDatatypeName";
   public static String MCD_ATTRIBUTE_NAME_WORD = "mcdAttrName";
   public static String MCD_ATTRIBUTE_SHORT_NAME_WORD = "mcdAttrShortName";
   public static String MDR_CHECK_NAME_WORD =  "checkName";

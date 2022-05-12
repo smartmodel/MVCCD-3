@@ -68,6 +68,13 @@ public class MLDRTransformTables {
         if ((mpdrModel instanceof MPDROracleModel) || (mpdrModel instanceof MPDRPostgreSQLModel)) {
 
             if (mpdrModel.getMPDR_TAPIs()) {
+                if (mpdrModel instanceof IMPDRModelRequirePackage) {
+                    // Paquetage de ressources
+                    MLDRTransformToBoxPackagesResources mldrTransformToBoxPackagesResources = new MLDRTransformToBoxPackagesResources(
+                            mldrTransform, mldrModel, (IMPDRModelRequirePackage) mpdrModel);
+                    mldrTransformToBoxPackagesResources.createOrModifyBoxPackages();
+                }
+
                 createOrModifyTAPIs(mldrTable, mpdrTable);
             } else {
                 if (mpdrTable.getMPDRColumnPKProper() != null) {
@@ -94,10 +101,10 @@ public class MLDRTransformTables {
             mldrTransformToBoxTriggersTable.createOrModifyBoxTriggersForTAPIs();
 
             if (mpdrModel instanceof IMPDRModelRequirePackage) {
-                MLDRTransformToBoxPackages mldrTransformToBoxPackages = new MLDRTransformToBoxPackages(
+                MLDRTransformToBoxPackagesTable mldrTransformToBoxPackagesTable = new MLDRTransformToBoxPackagesTable(
                         mldrTransform, mldrTable, (IMPDRModelRequirePackage) mpdrModel,
                         (IMPDRTableRequirePackage) mpdrTable);
-                mldrTransformToBoxPackages.createOrModifyBoxPackages();
+                mldrTransformToBoxPackagesTable.createOrModifyBoxPackages();
             }
         }
 

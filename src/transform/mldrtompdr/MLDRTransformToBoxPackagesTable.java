@@ -9,17 +9,17 @@ import mpdr.tapis.*;
 
 import java.util.ArrayList;
 
-public class MLDRTransformToBoxPackages {
+public class MLDRTransformToBoxPackagesTable {
 
     private MLDRTransform mldrTransform ;
     private MLDRTable mldrTable;
     private IMPDRModelRequirePackage mpdrModel ;
     private IMPDRTableRequirePackage mpdrTable;
 
-    public MLDRTransformToBoxPackages(MLDRTransform mldrTransform,
-                                      MLDRTable mldrTable,
-                                      IMPDRModelRequirePackage mpdrModel,
-                                      IMPDRTableRequirePackage mpdrTable) {
+    public MLDRTransformToBoxPackagesTable(MLDRTransform mldrTransform,
+                                           MLDRTable mldrTable,
+                                           IMPDRModelRequirePackage mpdrModel,
+                                           IMPDRTableRequirePackage mpdrTable) {
         this.mldrTransform = mldrTransform;
         this.mldrTable = mldrTable;
         this.mpdrModel = mpdrModel;
@@ -49,12 +49,12 @@ public class MLDRTransformToBoxPackages {
 
 
     public void createPackages() {
-        MLDRTransformToPackage mldrTransformToPackage = new MLDRTransformToPackage(mldrTransform, mldrTable, mpdrModel, mpdrTable);
+        MLDRTransformToPackageTable mldrTransformToPackageTable = new MLDRTransformToPackageTable(mldrTransform, mldrTable, mpdrModel, mpdrTable);
         ArrayList<MPDRPackage> mpdrPackages = new ArrayList<MPDRPackage>();
 
         for (MPDRPackageType mpdrPackageType : MPDRPackageType.applicableForSelection(((MPDRModel)mpdrModel).getDb(),
                 MPDRStoredCodeUsage.TAPIS, MPDRStoredCodeScope.TABLE)){
-            mpdrPackages.add(mldrTransformToPackage.createOrModifyPackage(mpdrPackageType));
+            mpdrPackages.add(mldrTransformToPackageTable.createOrModifyPackage(mpdrPackageType));
         }
     }
 

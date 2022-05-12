@@ -184,29 +184,6 @@ public class UtilDivers {
     }
 
     public static String toEscapedForRegex (String str){
-        /*
-        char BLANK = ' ';
-        char DOT = '.';
-        String ESCAPE = "\\\\";
-        if (str != null){
-            String resultat = "";
-            char[] chars = str.toCharArray();
-            for (int i = 0  ; i < chars.length ; i++){
-                if (chars[i] == BLANK){
-                    resultat += ESCAPE + BLANK;
-                } else if (chars[i] == DOT){
-                    resultat += ESCAPE + DOT;
-                } else {
-                    resultat += chars[i];
-                }
-            }
-
-            return resultat;
-        } else {
-            return null;
-        }
-
-         */
 
         char SP = ' ';
         String UC_SP = "\\u0020";

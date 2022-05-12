@@ -22,6 +22,7 @@ import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mldr.services.MLDRContConstraintsService;
 import mpdr.*;
+import mpdr.interfaces.IMPDRModelRequirePackage;
 import mpdr.mysql.*;
 import mpdr.mysql.interfaces.IMPDRMySQLElement;
 import mpdr.oracle.*;
@@ -625,8 +626,18 @@ public class MVCCDElementFactory {
         return mpdrOracleBoxPackages;
     }
 
+    public MPDROracleBoxPackages createMPDROracleBoxPackages(IMPDRModelRequirePackage mpdrModel, MLDRModel mldrModel) {
+        MPDROracleBoxPackages mpdrOracleBoxPackages = new MPDROracleBoxPackages((MPDRModel) mpdrModel, mldrModel);
+        return mpdrOracleBoxPackages;
+    }
+
     public MPDROraclePackage createMPDROraclePackage(MPDRBoxPackages mpdrBoxPackages, MLDRTable mldrTable) {
         MPDROraclePackage mpdrOraclePackage = new MPDROraclePackage(mpdrBoxPackages, mldrTable);
+        return mpdrOraclePackage;
+    }
+
+    public MPDROraclePackage createMPDROraclePackage(MPDRBoxPackages mpdrBoxPackages, MLDRModel mldrModel) {
+        MPDROraclePackage mpdrOraclePackage = new MPDROraclePackage(mpdrBoxPackages, mldrModel);
         return mpdrOraclePackage;
     }
 
