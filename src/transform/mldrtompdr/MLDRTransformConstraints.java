@@ -138,7 +138,9 @@ public class MLDRTransformConstraints {
         MLDRTransformToIndex mldrTransformToIndex = new MLDRTransformToIndex(
                 mldrTransform, mldrFK, mpdrModel, mpdrTable);
         //#MAJ 2022-03-28  La clé étrangère de lien avec l'entité généralisée correspond à la PK et ne doit pas être indexée
-        if ( ! (mpdrTable.isSpecialized() && (mldrFK.isIdComp()) )) {
+        //if ( ! (mpdrTable.isSpecialized() && (mldrFK.isIdComp()) )) {
+        //#MAJ 2022-05-12 La clé étrangère de lien avec l'entité généralisée correspond à la PK et ne doit pas être indexée
+        if ( ! mldrFK.isSpecialized()  ) {
             MPDRIndex mpdrIndex = mldrTransformToIndex.createOrModifyIndex();
         }
 

@@ -190,7 +190,7 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IM
                     mpdrOracleBoxPackages, mldrTable);
             return mpdrOraclePackage;
         } else {
-            throw new CodeApplException("La boîte Procédures/Functions doit exister avant de créer un trigger");
+            throw new CodeApplException("La boîte Paqetages doit exister avant de créer un paquetage");
         }
 
     }

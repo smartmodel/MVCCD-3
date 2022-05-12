@@ -1,6 +1,7 @@
 package mdr;
 
 import constraints.Constraint;
+import constraints.ConstraintsManager;
 import mdr.interfaces.IMDRConstraintIndice;
 import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRFKService;
@@ -176,4 +177,23 @@ public abstract class MDRFK extends MDRConstraint implements IMDRConstraintIndic
         return null;
     }
 
+
+    //Pas encore testé
+    private boolean containStereotype(String lienProg) {
+        return getStereotypes().contains(StereotypesManager.instance().stereotypes().getStereotypeByLienProg(lienProg, MDRFK.class.getName()));
+    }
+
+    //#MAJ 2022-05-12 La clé étrangère de lien avec l'entité généralisée correspond à la PK et ne doit pas être indexée
+    //Pas encore testé
+    private boolean containConstraint(String lienProg) {
+        return getConstraints().contains(ConstraintsManager.instance().constraints().getConstraintByLienProg(lienProg, MDRFK.class.getName()));
+    }
+
+    public boolean isSpecialized() {
+        MDRConstraintCustomSpecialized  mdrConstraintCustomSpecialized = getMDRTableAccueil().getMDRConstraintCustomSpecialized();
+        if (mdrConstraintCustomSpecialized != null){
+            return mdrConstraintCustomSpecialized.getMDRFKToTableGen() == this ;
+        }
+        return false ;
+    }
 }

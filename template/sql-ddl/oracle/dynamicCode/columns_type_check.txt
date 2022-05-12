@@ -1,3 +1,1 @@
-{-COLUMN_TYPE_CHECK_WORD-}
-{-COLUMN_TYPE_CHECK_TOKEN-}
-{-COLUMN_TYPE_CHECK_NORMALIZED-}
+{packageResourcesName}.{procedureResourcesCheckDatatypeWord} ('{tableName}'', '{columnName}'', {columnValue}, {constraintDatatypeName}) ;

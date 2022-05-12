@@ -2,6 +2,8 @@ package mdr;
 
 import constraints.Constraint;
 import constraints.ConstraintService;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import m.MRelEndMultiPart;
 import m.interfaces.IMUMLExtensionNamingInLine;
 import mcd.MCDAttribute;
@@ -105,6 +107,11 @@ public abstract class MDRColumn extends MDRElement implements
 
     public String getDatatypeConstraintLienProg() {
         return datatypeConstraintLienProg;
+    }
+
+    public Constraint getDatatypeConstraint() {
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        return constraints.getConstraintByLienProg(MDRColumn.class.getName(), getDatatypeConstraintLienProg());
     }
 
     public void setDatatypeConstraintLienProg(String datatypeConstraintLienProg) {

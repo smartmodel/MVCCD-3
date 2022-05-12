@@ -20,7 +20,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import transform.mcdtomldr.services.MCDTransformService;
 
-public class MLDRTransformToPackage {
+public class MLDRTransformToPackageTable {
 
 
     private MLDRTransform mldrTransform ;
@@ -28,10 +28,10 @@ public class MLDRTransformToPackage {
     private IMPDRModelRequirePackage mpdrModel ;
     private IMPDRTableRequirePackage mpdrTable;
 
-    public MLDRTransformToPackage(MLDRTransform mldrTransform,
-                                  MLDRTable mldrTable,
-                                  IMPDRModelRequirePackage mpdrModel,
-                                  IMPDRTableRequirePackage mpdrTable) {
+    public MLDRTransformToPackageTable(MLDRTransform mldrTransform,
+                                       MLDRTable mldrTable,
+                                       IMPDRModelRequirePackage mpdrModel,
+                                       IMPDRTableRequirePackage mpdrTable) {
         this.mldrTransform = mldrTransform;
         this.mldrTable = mldrTable;
         this.mpdrModel = mpdrModel;
