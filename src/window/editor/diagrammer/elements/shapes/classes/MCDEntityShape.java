@@ -63,7 +63,7 @@ public class MCDEntityShape extends ClassShape {
 
   @Override
   protected void setBackgroundColor() {
-    this.setBackground(Preferences.DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR);
+    this.setBackground(new Color(125, 200, 243));
   }
 
   @Override
