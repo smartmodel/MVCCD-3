@@ -101,7 +101,8 @@ public class Preferences extends MVCCDElement {
   public static final int DIAGRAMMER_DEFAULT_ENTITY_POSITION_Y = 60;
   public static final int DIAGRAMMER_DEFAULT_CLASS_WIDTH = 200;
   public static final int DIAGRAMMER_DEFAULT_CLASS_HEIGHT = 100;
-  public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
+  // Couleur de fond d'entité MCD
+  public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(255, 255, 255);
   public static final Font DIAGRAMMER_CLASS_NAME_FONT = new Font("Arial", Font.BOLD, 13);
   public static final Font DIAGRAMMER_CLASS_FONT = new Font("Arial", Font.PLAIN, 13);
   public static final Font DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT = new Font("Arial", Font.ITALIC + Font.BOLD, 13);

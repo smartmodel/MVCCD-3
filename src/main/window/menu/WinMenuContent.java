@@ -229,7 +229,7 @@ public class WinMenuContent implements ActionListener {
      */
     public void exportComponentOptimized(Component component, String fileName) {
         // On redessine le plus petit rectangle possible autour des entités en gardant une bordure de 2 pixels
-        Rectangle rectangle = DiagrammerService.getDrawPanel().getContentBounds(DiagrammerService.getDrawPanel().getShapes(), 2);
+        Rectangle rectangle = DiagrammerService.getDrawPanel().getContentBounds(DiagrammerService.getDrawPanel().getShapes(), 10);
         BufferedImage image;
 
         // Si notre diagramme n'est pas vide de formes ...
