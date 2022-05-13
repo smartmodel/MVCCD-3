@@ -8,7 +8,11 @@ import connections.postgresql.ConConnectorPostgreSQL;
 import connections.postgresql.ConnectionsPostgreSQL;
 import console.ViewLogsManager;
 import console.WarningLevel;
+import diagram.Diagram;
 import diagram.mcd.MCDDiagram;
+import diagram.mldr.MLDRDiagram;
+import diagram.mpdr.MPDRDiagram;
+import diagram.mpdr.MPDROraDiagram;
 import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDSourceMLDRRelationFK;
@@ -42,6 +46,8 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
+import project.ProjectService;
+
 
 public class MVCCDElementFactory {
 
@@ -355,6 +361,11 @@ public class MVCCDElementFactory {
     private void createMLDRContModel(MLDRModel mldrModel) {
         new MLDRContTables(mldrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
         new MLDRContRelations(mldrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
+
+        // Ajout d'un noeud Diagrammes au noeud MLDR_DT
+        MLDRDiagram noeudDiagrammes = new MLDRDiagram(mldrModel,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+        // Ajout du diagramme MLD-R au noeud Diagrammes avec le nom, par défaut, donné au diagramme MCD
+        new MLDRDiagram(noeudDiagrammes, ProjectService.getProjectRoot(mldrModel).getName());
     }
 
     public MLDRContTables createMLDRContTables(MLDRModel mldrModel, int id) {
@@ -870,6 +881,11 @@ public class MVCCDElementFactory {
     private void createMPDRContModel(MPDRModel mpdrModel) {
         new MPDRContTables(mpdrModel, Preferences.REPOSITORY_MDR_TABLES_NAME);
         new MPDRContRelations(mpdrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
+
+        // Ajout d'un noeud Diagrammes au noeud MPDR_Oracle
+        MPDROraDiagram noeudDiagrammes = new MPDROraDiagram(mpdrModel,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+        // Ajout du diagramme MPD-R au noeud Diagrammes avec le nom, par défaut, donné au diagramme MCD
+        new MPDROraDiagram(noeudDiagrammes,ProjectService.getProjectRoot(mpdrModel).getName());
     }
 
 
