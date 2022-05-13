@@ -1,11 +1,13 @@
 package window.editor.diagrammer.elements.shapes.classes;
 
+import preferences.Preferences;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MDTableShape extends ClassShape {
 
-    private Color backgroundColor = Color.decode("#F09396");
+    private Color backgroundColor = Color.decode("#A0F0CF");
 
     public MDTableShape() {
         super();
@@ -29,9 +31,9 @@ public class MDTableShape extends ClassShape {
         graphics.dispose();
     }
 
+
     @Override
     protected void setZoneEnTeteContent() {
-
     }
 
     @Override
