@@ -28,6 +28,5 @@ public class MPDRTriggerShape extends SquaredShape {
         graphics.fillArc(-17, 0, 30, height - 1, -90, 180);
 
         graphics.setColor(getForeground());
-        graphics.dispose();
     }
 }

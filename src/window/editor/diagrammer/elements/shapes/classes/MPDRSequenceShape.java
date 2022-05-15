@@ -37,7 +37,6 @@ public class MPDRSequenceShape extends SquaredShape {
         gp.closePath();
         graphics.fill(gp);
         graphics.setColor(getForeground());
-        graphics.dispose();
     }
 
 }

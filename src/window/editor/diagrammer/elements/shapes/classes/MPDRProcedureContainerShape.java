@@ -27,6 +27,5 @@ public class MPDRProcedureContainerShape extends SquaredShape {
         graphics.fillRoundRect(0, 0, width, height, 40, 40);
 
         graphics.setColor(getForeground());
-        graphics.dispose();
     }
 }
