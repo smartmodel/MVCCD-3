@@ -1,0 +1,37 @@
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"JavadocGenerationManager\">\n    <option name=\"OUTPUT_DIRECTORY\" value=\"$PROJECT_DIR$/out/javadoc\" />\n    <option name=\"OPTION_SCOPE\" value=\"private\" />\n    <option name=\"OTHER_OPTIONS\" value=\"-encoding utf8\" />\n  </component>\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" default=\"true\" project-jdk-name=\"11\" project-jdk-type=\"JavaSDK\">\n    <output url=\"file://$PROJECT_DIR$/out\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 1fe6c04043c84cd46a610c5786bce6691de16308)
++++ b/.idea/misc.xml	(date 1651891240416)
+@@ -8,4 +8,7 @@
+   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
++  <component name="ProjectType">
++    <option name="id" value="jpab" />
++  </component>
+ </project>
+\ No newline at end of file
+Index: MVCCD-3.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<module type=\"JAVA_MODULE\" version=\"4\">\n  <component name=\"NewModuleRootManager\" inherit-compiler-output=\"true\">\n    <exclude-output />\n    <content url=\"file://$MODULE_DIR$\">\n      <sourceFolder url=\"file://$MODULE_DIR$/src\" isTestSource=\"false\" />\n      <sourceFolder url=\"file://$MODULE_DIR$/ressources\" type=\"java-resource\" />\n    </content>\n    <orderEntry type=\"inheritedJdk\" />\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\n    <orderEntry type=\"library\" name=\"org.apache.directory.studio:org.apache.commons.lang:2.6\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"org.apache.directory.studio:org.apache.commons.io:2.4\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"com.oracle.ojdbc:ojdbc8:19.3.0.0\" level=\"project\" />\n  </component>\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/MVCCD-3.iml b/MVCCD-3.iml
+--- a/MVCCD-3.iml	(revision 1fe6c04043c84cd46a610c5786bce6691de16308)
++++ b/MVCCD-3.iml	(date 1651688030356)
+@@ -11,5 +11,6 @@
+     <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.lang:2.6" level="project" />
+     <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.io:2.4" level="project" />
+     <orderEntry type="library" name="com.oracle.ojdbc:ojdbc8:19.3.0.0" level="project" />
++    <orderEntry type="library" name="flatlaf-2.2" level="project" />
+   </component>
+ </module>
+\ No newline at end of file
