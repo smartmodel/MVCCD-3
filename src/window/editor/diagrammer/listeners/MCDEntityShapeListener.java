@@ -5,13 +5,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
 import javax.swing.SwingUtilities;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.menus.EntityShapeMenu;
+import window.editor.diagrammer.palette.PaletteButtonType;
+import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
+import window.editor.diagrammer.utils.RelationCreator;
 
 public class MCDEntityShapeListener extends MouseAdapter implements Serializable {
 
   private static final long serialVersionUID = 1000;
+  private final MCDEntityShape shape;
+
+  public MCDEntityShapeListener(MCDEntityShape shape) {
+    this.shape = shape;
+  }
 
   @Override
   public void mouseClicked(MouseEvent e) {
@@ -21,10 +29,21 @@ public class MCDEntityShapeListener extends MouseAdapter implements Serializable
     }
   }
 
+  @Override
+  public void mouseDragged(MouseEvent e) {
+    super.mouseDragged(e);
+
+    if (PalettePanel.activeButton != null) {
+      if (PalettePanel.activeButton.getType() == PaletteButtonType.LINK_CREATION) {
+        RelationCreator.setSource(this.shape);
+      }
+    }
+
+  }
+
   private void showMenu(MouseEvent event) {
-    final MCDEntityShape shape = (MCDEntityShape) event.getSource();
-    final Point converted = SwingUtilities.convertPoint(shape, event.getPoint(), DiagrammerService.getDrawPanel());
-    final EntityShapeMenu menu = new EntityShapeMenu(shape);
+    Point converted = SwingUtilities.convertPoint(this.shape, event.getPoint(), DiagrammerService.getDrawPanel());
+    EntityShapeMenu menu = new EntityShapeMenu(this.shape);
 
     menu.show(DiagrammerService.getDrawPanel(), converted.x, converted.y);
   }

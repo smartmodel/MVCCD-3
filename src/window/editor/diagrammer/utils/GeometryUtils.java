@@ -1,15 +1,15 @@
 package window.editor.diagrammer.utils;
 
-import window.editor.diagrammer.elements.interfaces.IShape;
-import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
-import window.editor.diagrammer.elements.shapes.relations.RelationShape;
-import window.editor.diagrammer.services.DiagrammerService;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import javax.swing.SwingUtilities;
+import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.services.DiagrammerService;
 
 public final class GeometryUtils {
 
@@ -103,15 +103,23 @@ public final class GeometryUtils {
     return (converted.x >= 0 && converted.x <= shape.getWidth() && (converted.y == 0 || converted.y == shape.getHeight())) || (converted.y >= 0 && converted.y <= shape.getHeight() && (converted.x == 0 || converted.x == shape.getWidth()));
   }
 
-  public static RelationPointAncrageShape getNearestPointAncrage(ClassShape shape, RelationShape relation) {
+  public static boolean anchorPointsAreOnSameSegment(Line2D segment, RelationAnchorPointShape p1, RelationAnchorPointShape p2) {
+    return segment.contains(p1) && segment.contains(p2);
+  }
+
+  public static boolean pointIsOnRelation(Point point, RelationShape relationShape) {
+    return relationShape.contains(point);
+  }
+
+  public static RelationAnchorPointShape getNearestPointAncrage(ClassShape shape, RelationShape relation) {
     return shape == relation.getSource() ? relation.getFirstPoint() : relation.getLastPoint();
   }
 
-  public static double getDistanceBetweenLineAndPoint(RelationPointAncrageShape start, RelationPointAncrageShape end, RelationPointAncrageShape pointToCheck) {
+  public static double getDistanceBetweenLineAndPoint(RelationAnchorPointShape start, RelationAnchorPointShape end, RelationAnchorPointShape pointToCheck) {
     return getDistanceBetweenLineAndPoint(start.x, start.y, end.x, end.y, pointToCheck.x, pointToCheck.y);
   }
 
-  public static RelationPointAncrageShape getLeftPoint(RelationPointAncrageShape firstPoint, RelationPointAncrageShape secondPoint) {
+  public static RelationAnchorPointShape getLeftPoint(RelationAnchorPointShape firstPoint, RelationAnchorPointShape secondPoint) {
     if (firstPoint.x < secondPoint.x) {
       return firstPoint;
     } else if (secondPoint.x < firstPoint.x) {
@@ -121,7 +129,7 @@ public final class GeometryUtils {
     }
   }
 
-  public static RelationPointAncrageShape getRightPoint(RelationPointAncrageShape firstPoint, RelationPointAncrageShape secondPoint) {
+  public static RelationAnchorPointShape getRightPoint(RelationAnchorPointShape firstPoint, RelationAnchorPointShape secondPoint) {
     if (firstPoint.x > secondPoint.x) {
       return firstPoint;
     } else if (secondPoint.x > firstPoint.x) {
@@ -163,27 +171,27 @@ public final class GeometryUtils {
     return p.y == bounds.getMaxY() && p.x >= bounds.getMinX() && p.x <= bounds.getMaxX();
   }
 
-  public static Position getClassShapePosition(ClassShape shape, ClassShape comparedTo) {
+  public static Position getSourceShapePosition(ClassShape source, ClassShape comparedTo) {
 
-    if (isRight(shape, comparedTo) && isTop(shape, comparedTo)) {
+    if (isRight(source, comparedTo) && isTop(source, comparedTo)) {
       return Position.TOP_CORNER_RIGHT;
-    } else if (isLeft(shape, comparedTo) && isTop(shape, comparedTo)) {
+    } else if (isLeft(source, comparedTo) && isTop(source, comparedTo)) {
       return Position.TOP_CORNER_LEFT;
-    } else if (isRight(shape, comparedTo) && isBottom(shape, comparedTo)) {
+    } else if (isRight(source, comparedTo) && isBottom(source, comparedTo)) {
       return Position.BOTTOM_CORNER_RIGHT;
-    } else if (isLeft(shape, comparedTo) && isBottom(shape, comparedTo)) {
+    } else if (isLeft(source, comparedTo) && isBottom(source, comparedTo)) {
       return Position.BOTTOM_CORNER_LEFT;
-    } else if (isXCenteredTopLeft(shape, comparedTo) || isXCenteredTopRight(shape, comparedTo)) {
-      if (isTop(shape, comparedTo)) {
-        return isXCenteredTopLeft(shape, comparedTo) ? Position.TOP_CENTER_LEFT : Position.TOP_CENTER_RIGHT;
-      } else if (isBottom(shape, comparedTo)) {
-        return isXCenteredTopLeft(shape, comparedTo) ? Position.BOTTOM_CENTER_LEFT : Position.BOTTOM_CENTER_RIGHT;
+    } else if (isXCenteredTopLeft(source, comparedTo) || isXCenteredTopRight(source, comparedTo)) {
+      if (isTop(source, comparedTo)) {
+        return isXCenteredTopLeft(source, comparedTo) ? Position.TOP_CENTER_LEFT : Position.TOP_CENTER_RIGHT;
+      } else if (isBottom(source, comparedTo)) {
+        return isXCenteredTopLeft(source, comparedTo) ? Position.BOTTOM_CENTER_LEFT : Position.BOTTOM_CENTER_RIGHT;
       }
-    } else if (isYCenteredTop(shape, comparedTo) || isYCenteredBottom(shape, comparedTo)) {
-      if (isLeft(shape, comparedTo)) {
-        return isYCenteredTop(shape, comparedTo) ? Position.LEFT_CENTER_TOP : Position.LEFT_CENTER_BOTTOM;
-      } else if (isRight(shape, comparedTo)) {
-        return isYCenteredTop(shape, comparedTo) ? Position.RIGHT_CENTER_TOP : Position.RIGHT_CENTER_BOTTOM;
+    } else if (isYCenteredTop(source, comparedTo) || isYCenteredBottom(source, comparedTo)) {
+      if (isLeft(source, comparedTo)) {
+        return isYCenteredTop(source, comparedTo) ? Position.LEFT_CENTER_TOP : Position.LEFT_CENTER_BOTTOM;
+      } else if (isRight(source, comparedTo)) {
+        return isYCenteredTop(source, comparedTo) ? Position.RIGHT_CENTER_TOP : Position.RIGHT_CENTER_BOTTOM;
       }
     }
     return Position.UNHANDLED;

@@ -1,12 +1,17 @@
-package window.editor.diagrammer.elements.shapes.relations;
+package window.editor.diagrammer.elements.shapes.relations.mcd;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import mcd.MCDGeneralization;
 import preferences.Preferences;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
-
-import java.awt.*;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
 public class MCDGeneralizationShape extends RelationShape {
+
+  private static final long serialVersionUID = -4638463083584589287L;
 
   public MCDGeneralizationShape(MCDGeneralization relatedRepositoryGeneralization, MCDEntityShape source, MCDEntityShape destination) {
     this(source, destination);
@@ -15,6 +20,11 @@ public class MCDGeneralizationShape extends RelationShape {
 
   public MCDGeneralizationShape(MCDEntityShape source, MCDEntityShape destination) {
     super(source, destination, false);
+  }
+
+  @Override
+  public void defineLineAspect(Graphics2D graphics2D) {
+    graphics2D.setStroke(new BasicStroke(1));
   }
 
   @Override
@@ -35,13 +45,13 @@ public class MCDGeneralizationShape extends RelationShape {
   public void drawArrow(Graphics2D graphics2D) {
     // TODO -> Faire en sorte que la flêche ait une bordune noire et un fond blanc
 
-    final RelationPointAncrageShape previousPoint = this.pointsAncrage.get(this.pointsAncrage.get(this.getPointsAncrage().size() - 1).getIndex() - 1);
-    final RelationPointAncrageShape lastPoint = this.pointsAncrage.get(this.getPointsAncrage().size() - 1);
+    final RelationAnchorPointShape previousPoint = this.anchorPoints.get(this.anchorPoints.get(this.getAnchorPoints().size() - 1).getIndex() - 1);
+    final RelationAnchorPointShape lastPoint = this.anchorPoints.get(this.getAnchorPoints().size() - 1);
     final int differenceX = lastPoint.x - previousPoint.x;
     final int differenceY = lastPoint.y - previousPoint.y;
     final double squareRoot = Math.sqrt(differenceX * differenceX + differenceY * differenceY);
 
-    final int ARROW_WIDTH = 10;
+    final int ARROW_WIDTH = 8;
     final int ARROW_HEIGHT = 13;
 
     double xm = squareRoot - ARROW_HEIGHT;
@@ -63,7 +73,11 @@ public class MCDGeneralizationShape extends RelationShape {
     int[] xPoints = {lastPoint.x, (int) xm, (int) xn};
     int[] yPoints = {lastPoint.y, (int) ym, (int) yn};
 
-    graphics2D.fillPolygon(xPoints, yPoints, NUMBER_OF_POINTS);
+    Graphics2D copied = (Graphics2D) graphics2D.create();
+    copied.setColor(Color.WHITE);
+    copied.fillPolygon(xPoints, yPoints, NUMBER_OF_POINTS);
+    copied.setColor(Color.BLACK);
+    copied.drawPolygon(xPoints, yPoints, NUMBER_OF_POINTS);
   }
 
   public MCDGeneralization getGeneralization() {

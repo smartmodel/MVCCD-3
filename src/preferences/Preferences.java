@@ -2,6 +2,10 @@ package preferences;
 
 import connections.ConDBMode;
 import console.WarningLevel;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Point;
 import m.MUMLExtensionNaming;
 import main.MVCCDElement;
 import mdr.MDRCaseFormat;
@@ -101,7 +105,11 @@ public class Preferences extends MVCCDElement {
   public static final int DIAGRAMMER_DEFAULT_ENTITY_POSITION_Y = 60;
   public static final int DIAGRAMMER_DEFAULT_CLASS_WIDTH = 200;
   public static final int DIAGRAMMER_DEFAULT_CLASS_HEIGHT = 100;
+  public static final int DIAGRAMMER_DEFAULT_NOTE_WIDTH = 100;
+  public static final int DIAGRAMMER_DEFAULT_NOTE_HEIGHT = 70;
+  public static final int DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN = 7;
   public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
+  public static final Color DIAGRAMMER_NOTE_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
   public static final Font DIAGRAMMER_CLASS_NAME_FONT = new Font("Arial", Font.BOLD, 13);
   public static final Font DIAGRAMMER_CLASS_FONT = new Font("Arial", Font.PLAIN, 13);
   public static final Font DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT = new Font("Arial", Font.ITALIC + Font.BOLD, 13);
@@ -110,13 +118,16 @@ public class Preferences extends MVCCDElement {
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT = "Association";
   public static final String DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT = "Généralisation";
   public static final String DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT = "Composition";
+  public static final String DIAGRAMMER_PALETTE_NOTE_BUTTON_TEXT = "Note";
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT = "Association réflexive";
+  public static final String DIAGRAMMER_PALETTE_ENTITE_ASSOCIATIVE = "Entité associative";
   public static final int DIAGRAMMER_RELATION_CLICK_AREA = 5;
   public static final String DIAGRAMMER_ENTITY_STEREOTYPE_TEXT = "<<Entity>>";
   public static final String DIAGRAMMER_ENTITY_ORDERED_TEXT = "{ordered}";
   public static final String DIAGRAMMER_MCD_ENTITY_XML_TAG = "mcdEntityShape";
   public static final String DIAGRAMMER_MCD_ASSOCIATION_XML_TAG = "mcdAssociationShape";
   public static final String DIAGRAMMER_MCD_GENERALIZATION_XML_TAG = "mcdGeneralizationShape";
+  public static final String DIAGRAMMER_MCD_LINK_XML_TAG = "mcdLinkShape";
   public static final String DIAGRAMMER_MCD_COMPOSITION_XML_TAG = "mcdCompositionShape";
   public static final String DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG = "anchorPoint";
   public static final String DIAGRAMMER_LABEL_XML_TAG = "labelShape";
@@ -167,7 +178,6 @@ public class Preferences extends MVCCDElement {
   public static String MCD_AID_IND_COLUMN_NAME_DEFAULT = "num";
   public static String MCD_AID_DEP_COLUMN_NAME_DEFAULT = "numDep";
   public static Integer MCD_AID_COLUMN_NAME_LENGTH = 5;
-  public static Integer MPDR_VIEW_NAME_LENGTH = 15;  //Calculé
 
   public static String INTEGER_REGEXPR = "([0])|([-]{0,1}[1-9]{1,1}[0-9]*)";
   //public static String XML_ENTETE_FICHIER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -257,7 +267,6 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATES_DROP_EXECUTE_EMPTY_SCHEMA = "executeEmptySchema.txt";
   public static String SQL_SEPARATOR_ARGUMENTS = ",";
   public static String SQL_MARKER_SEPARATOR_ARGUMENTS = "__separatorArguments";
-  public static String SQL_MARKER_NAMESPACE = ".";
 
   public static String SYSTEM_LINE_SEPARATOR = System.getProperty("line.separator");
   public static String SYSTEM_FILE_SEPARATOR = System.getProperty("file.separator");
@@ -2020,8 +2029,8 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT = MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT;
   }
 
-  
-  
+
+
   public String getMPDRORACLE_PACKAGE_NAME_FORMAT() {
     if (this.MPDRORACLE_PACKAGE_NAME_FORMAT == null) {
       this.MPDRORACLE_PACKAGE_NAME_FORMAT = MPDRORACLE_PACKAGE_NAME_FORMAT_DEFAULT;
@@ -2178,7 +2187,7 @@ public class Preferences extends MVCCDElement {
   public void setMPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT(String MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT) {
     this.MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT = MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT;
   }
-  
+
   public String getMPDRMYSQL_VIEW_NAME_FORMAT() {
     if (this.MPDRMYSQL_VIEW_NAME_FORMAT == null) {
       this.MPDRMYSQL_VIEW_NAME_FORMAT = MPDRMYSQL_VIEW_NAME_FORMAT_DEFAULT;

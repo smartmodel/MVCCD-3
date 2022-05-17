@@ -1,5 +1,6 @@
 package window.editor.diagrammer.listeners;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -9,16 +10,20 @@ import java.io.Serializable;
 import javax.swing.SwingUtilities;
 import preferences.Preferences;
 import window.editor.diagrammer.drawpanel.DrawPanel;
-import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
+import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
+import window.editor.diagrammer.palette.PaletteButtonType;
+import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
+import window.editor.diagrammer.utils.RelationCreator;
 import window.editor.diagrammer.utils.ResizableBorder;
 
 public class SquaredShapeListener extends MouseAdapter implements Serializable {
 
   private static final long serialVersionUID = 1000;
-  private int cursor;
   private final SquaredShape shape;
+  private int cursor;
   private Point startPoint = null;
 
   public SquaredShapeListener(SquaredShape shape) {
@@ -28,17 +33,17 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
   @Override
   public void mouseClicked(MouseEvent e) {
     super.mouseClicked(e);
-    this.shape.setSelected(true);
+    this.shape.setFocused(true);
     DiagrammerService.getDrawPanel().deselectAllOtherShape(this.shape);
     this.moveComponentToFront(e);
   }
 
   @Override
   public void mousePressed(MouseEvent mouseEvent) {
-    this.shape.setSelected(true);
+    this.shape.setFocused(true);
     DiagrammerService.getDrawPanel().deselectAllOtherShape(this.shape);
     this.moveComponentToFront(mouseEvent);
-    ResizableBorder resizableBorder = this.shape.getBorder();
+    ResizableBorder resizableBorder = new ResizableBorder();
     this.cursor = resizableBorder.getCursor(mouseEvent);
     this.startPoint = mouseEvent.getPoint();
     this.shape.repaint();
@@ -48,21 +53,82 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
   public void mouseReleased(MouseEvent e) {
     super.mouseReleased(e);
     this.startPoint = null;
+
+    this.shape.setResizing(false);
+    this.shape.setFocused(false);
+
+    if (RelationCreator.isCreating) {
+      Point converted = SwingUtilities.convertPoint(this.shape, e.getPoint(), DiagrammerService.getDrawPanel());
+      Component componentFound = DiagrammerService.getDrawPanel().findComponentAt(converted);
+      // Vérifie que le composant sur lequel le clic est relaché n'est pas la zone de dessin
+      System.out.println(componentFound);
+      if (componentFound != DiagrammerService.getDrawPanel()) {
+        IShape shapeReleasedOn = (IShape) componentFound;
+        if (shapeReleasedOn != null) {
+          RelationCreator.setDestination(shapeReleasedOn);
+        } else {
+          RelationCreator.resetSourceAndDestination();
+        }
+      } else {
+        System.out.println("Clic lâché au dessus de la zone de dessin.");
+        RelationCreator.resetSourceAndDestination();
+      }
+    }
+
+    // Création
+    if (RelationCreator.source != null && RelationCreator.destination != null) {
+      RelationCreator.createRelation();
+      PalettePanel.setActiveButton(null);
+    }
+
   }
 
   @Override
-  public void mouseDragged(MouseEvent mouseEvent) {
-    this.handleMovements(mouseEvent.getPoint());
-    // On met à jour le drawPanel
-    DiagrammerService.getDrawPanel().updatePanelAndScrollbars();
+  public void mouseEntered(MouseEvent e) {
+    super.mouseEntered(e);
+    this.shape.grabFocus();
+    this.shape.setFocused(true);
+  }
+
+  @Override
+  public void mouseExited(MouseEvent e) {
+    super.mouseExited(e);
+    this.shape.setFocused(false);
+  }
+
+  @Override
+  public void mouseDragged(MouseEvent e) {
+    if (PalettePanel.activeButton == null) {
+      // Aucun bouton de la palette n'est sélectionné
+      this.handleMovements(e.getPoint());
+      DiagrammerService.getDrawPanel().updatePanelAndScrollbars();
+    } else {
+      // Un bouton de la palette est sélectionné
+      // Création d'une relation
+      if (PalettePanel.activeButton.getType() == PaletteButtonType.RELATION_CREATION) {
+        if (RelationCreator.source == null) {
+          RelationCreator.setSource(this.shape);
+        }
+      }
+    }
+    DiagrammerService.getDrawPanel().repaint();
   }
 
   @Override
   public void mouseMoved(MouseEvent e) {
-    if (this.shape.isSelected()) {
-      ResizableBorder resizableBorder = this.shape.getBorder();
+    ResizableBorder resizableBorder = new ResizableBorder();
+
+    if (resizableBorder.isOneRectangleHovered(e)) {
+      // Redimensionnement en cours
+      this.shape.setBorder(resizableBorder);
+      resizableBorder.setVisible(true);
       this.shape.setCursor(Cursor.getPredefinedCursor(resizableBorder.getCursor(e)));
+    } else {
+      this.shape.setFocused(true);
+      this.shape.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
     }
+
+    this.shape.repaint();
   }
 
   private void handleMovements(Point mouseClick) {
@@ -76,6 +142,7 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
   }
 
   private void handleResize(Point mouseClick) {
+    this.shape.setResizing(true);
     if (this.startPoint != null) {
       int x = this.shape.getX();
       int y = this.shape.getY();

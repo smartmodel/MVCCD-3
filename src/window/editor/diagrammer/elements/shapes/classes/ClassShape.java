@@ -1,25 +1,30 @@
 package window.editor.diagrammer.elements.shapes.classes;
 
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.util.List;
 import md.MDElement;
 import preferences.Preferences;
-import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
 
-import java.awt.*;
-import java.util.List;
-
 public abstract class ClassShape extends SquaredShape {
 
+  private static final long serialVersionUID = -7287863958022851391L;
   protected ClassShapeZone zoneEnTete = new ClassShapeZone();
   protected ClassShapeZone zoneProprietes = new ClassShapeZone();
   protected ClassShapeZone zoneOperations = new ClassShapeZone();
   protected ClassShapeZone zoneServices = new ClassShapeZone();
   protected MDElement relatedRepositoryElement;
 
-  public ClassShape(int id){
+  public ClassShape(int id) {
     super(id);
     this.initUI();
     this.addListeners();
@@ -45,42 +50,17 @@ public abstract class ClassShape extends SquaredShape {
     this.initUI();
   }
 
-  @Override
-  protected void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    Graphics2D graphics2D = (Graphics2D) g;
-    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    this.setBackgroundColor();
-    this.drawZoneEnTete(graphics2D);
-    this.drawZoneProprietes(graphics2D);
-  }
-
-  public void refreshInformations(){
-    setZoneEnTeteContent();
-    setZoneProprietesContent();
-    repaint();
-  }
-
-  @Override
-  public void drag(int differenceX, int differenceY) {
-    super.drag(differenceX, differenceY);
-    for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapesByClassShape(this)) {
-      if (relation.isReflexive()) {
-        for (RelationPointAncrageShape pointAncrage : relation.getPointsAncrage()) {
-          pointAncrage.setLocationDifference(differenceX, differenceY);
-        }
-      } else {
-        RelationPointAncrageShape nearestPointAncrage = GeometryUtils.getNearestPointAncrage(this, relation);
-        nearestPointAncrage.setLocationDifference(differenceX, differenceY);
-      }
-    }
+  public void refreshInformations() {
+    this.setZoneEnTeteContent();
+    this.setZoneProprietesContent();
+    this.repaint();
   }
 
   private void initUI() {
+
     // Lorsque la ClassShape est créée, seule la zone d'en-tête est affichée
     this.setZoneEnTeteContent();
     this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH, Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT));
-    this.setSize(this.getMinimumSize());
   }
 
   private void addListeners() {
@@ -152,7 +132,7 @@ public abstract class ClassShape extends SquaredShape {
     int width = Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH;
     if (longestProperty != null) {
       int newWidth = Preferences.DIAGRAMMER_CLASS_PADDING * 2 + fontMetrics.stringWidth(longestProperty);
-      if (longestProperty.isEmpty() ||newWidth < Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH) {
+      if (longestProperty.isEmpty() || newWidth < Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH) {
         width = Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH;
       } else {
         width = Preferences.DIAGRAMMER_CLASS_PADDING * 2 + fontMetrics.stringWidth(longestProperty);
@@ -161,16 +141,45 @@ public abstract class ClassShape extends SquaredShape {
     return new Dimension(width, height);
   }
 
+  @Override
+  protected void defineMinimumSize() {
+    this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH, Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT));
+  }
+
+  @Override
+  protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    Graphics2D graphics2D = (Graphics2D) g;
+    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    this.drawZoneEnTete(graphics2D);
+    this.drawZoneProprietes(graphics2D);
+  }
+
+  @Override
+  public void drag(int differenceX, int differenceY) {
+    super.drag(differenceX, differenceY);
+    for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapesByClassShape(this)) {
+      if (relation.isReflexive()) {
+        for (RelationAnchorPointShape pointAncrage : relation.getAnchorPoints()) {
+          pointAncrage.setLocationDifference(differenceX, differenceY);
+        }
+      } else {
+        RelationAnchorPointShape nearestPointAncrage = GeometryUtils.getNearestPointAncrage(this, relation);
+        nearestPointAncrage.setLocationDifference(differenceX, differenceY);
+      }
+    }
+  }
+
   public void updateRelations() {
     for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapes()) {
       if (relation.getSource() == this || relation.getDestination() == this) {
-        relation.updateFirstAndLastPointsAncrage(this, true);
+        relation.updateFirstAndLastAnchorPoint(this, true);
       }
     }
   }
 
   protected void updateSizeAndMinimumSize() {
-    final Dimension minimumSize = this.calculateMinimumSize();
+    Dimension minimumSize = this.calculateMinimumSize();
     if (minimumSize.width >= Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH && minimumSize.height >= Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT) {
       this.setMinimumSize(minimumSize);
       this.setSize(minimumSize);
@@ -181,15 +190,13 @@ public abstract class ClassShape extends SquaredShape {
 
   protected abstract void setZoneProprietesContent();
 
-  protected abstract void setBackgroundColor();
-
   protected abstract String getLongestProperty();
 
   protected abstract void setNameFont(Graphics2D graphics2D);
 
   public MDElement getRelatedRepositoryElement() {
 
-    return relatedRepositoryElement;
+    return this.relatedRepositoryElement;
   }
 
   public abstract String getXmlTagName();

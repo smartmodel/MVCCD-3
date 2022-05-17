@@ -25,8 +25,9 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.DrawPanelListener;
 import window.editor.diagrammer.utils.GridUtils;
@@ -134,8 +135,8 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     for (IShape shape : shapes) {
       this.add((JComponent) shape);
     }
-    revalidate();
-    repaint();
+    this.revalidate();
+    this.repaint();
     ViewLogsManager.printMessage(shapes.size() + " formes ont été ajoutées à la zone de dessin.", WarningLevel.INFO);
   }
 
@@ -159,24 +160,22 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   public void deleteShape(IShape shape) {
     this.remove((JComponent) shape);
     this.shapes.remove(shape);
-    revalidate();
+    this.revalidate();
     this.repaint();
   }
 
   public void unloadAllShapes() {
-    removeAll();
-    shapes.clear();
-    revalidate();
-    repaint();
+    this.removeAll();
+    this.shapes.clear();
+    this.revalidate();
+    this.repaint();
   }
 
   public void drawRelations(Graphics2D graphics2D) {
     graphics2D.setColor(Color.BLACK);
     for (RelationShape relationShape : this.getRelationShapes()) {
       relationShape.draw(graphics2D);
-      if (relationShape.isSelected()) {
-        relationShape.drawPointsAncrage(graphics2D);
-      }
+
     }
   }
 
@@ -189,12 +188,6 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     }
     for (int i = 0; i < height; i += this.gridSize) {
       graphics2D.drawLine(0, i, width, i);
-    }
-  }
-
-  public void repaintElements() {
-    for (IShape shape : getShapes()) {
-      shape.repaint();
     }
   }
 
@@ -389,6 +382,10 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     for (IShape element : this.getShapes()) {
       element.setLocationDifference(differenceX, differenceY);
     }
+/*
+    DrawPanelComponent parent = (DrawPanelComponent) this.getParent().getParent();
+    parent.getHorizontalScrollBar().setValue(parent.getHorizontalScrollBar().getValue() + differenceX);
+*/
   }
 
   public void endScroll() {
@@ -404,6 +401,16 @@ public class DrawPanel extends JLayeredPane implements Serializable {
       }
     }
     return relations;
+  }
+
+  public List<SquaredShape> getSquaredShapes() {
+    List<SquaredShape> squaredShapes = new ArrayList<>();
+    for (IShape shape : this.shapes) {
+      if (shape instanceof SquaredShape) {
+        squaredShapes.add((SquaredShape) shape);
+      }
+    }
+    return squaredShapes;
   }
 
   public List<ClassShape> getClassShapes() {
@@ -428,7 +435,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
 
   public void deselectAllShapes() {
     for (IShape shape : this.getShapes()) {
-      shape.setSelected(false);
+      shape.setFocused(false);
     }
     this.repaint();
   }
@@ -436,7 +443,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   public void deselectAllOtherShape(IShape shapeToKeepSelected) {
     for (IShape shape : this.getShapes()) {
       if (shape != shapeToKeepSelected) {
-        shape.setSelected(false);
+        shape.setFocused(false);
       }
     }
     this.repaint();

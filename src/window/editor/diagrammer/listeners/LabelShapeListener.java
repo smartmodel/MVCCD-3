@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
-import window.editor.diagrammer.elements.shapes.relations.LabelShape;
+import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
 
 public class LabelShapeListener extends MouseAdapter implements Serializable {
 

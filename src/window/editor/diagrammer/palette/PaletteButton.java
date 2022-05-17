@@ -8,16 +8,18 @@ import javax.swing.JButton;
 public class PaletteButton extends JButton implements Serializable {
 
   private static final long serialVersionUID = 1000;
+  private PaletteButtonType type;
 
-  public PaletteButton(String text) {
+  public PaletteButton(String text, PaletteButtonType type) {
     super();
     this.setAction(new PaletteAction());
     this.setText(text);
+    this.type = type;
     this.initUI();
   }
 
-  public PaletteButton(String text, Icon icon) {
-    this(text);
+  public PaletteButton(String text, PaletteButtonType type, Icon icon) {
+    this(text, type);
     this.setIcon(icon);
   }
 
@@ -27,4 +29,7 @@ public class PaletteButton extends JButton implements Serializable {
     this.setBackground(Color.WHITE);
   }
 
+  public PaletteButtonType getType() {
+    return type;
+  }
 }

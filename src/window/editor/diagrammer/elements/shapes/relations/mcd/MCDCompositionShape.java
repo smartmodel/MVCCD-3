@@ -1,12 +1,16 @@
-package window.editor.diagrammer.elements.shapes.relations;
+package window.editor.diagrammer.elements.shapes.relations.mcd;
 
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 import md.MDElement;
 import preferences.Preferences;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
-
-import java.awt.*;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
 public class MCDCompositionShape extends RelationShape {
+
+  private static final long serialVersionUID = 1660545571630623463L;
 
   // TODO -> Changer le premier paramètre en MCDComposition lorsqu'elle aura été implémentée (ne pas oublier de changer le getter)
 
@@ -19,6 +23,10 @@ public class MCDCompositionShape extends RelationShape {
     this.relatedRepositoryElement = relatedRepositoryComposition;
   }
 
+  @Override
+  public void defineLineAspect(Graphics2D graphics2D) {
+    graphics2D.setStroke(new BasicStroke(1));
+  }
 
   @Override
   public void doDraw(Graphics2D graphics2D) {
@@ -36,8 +44,8 @@ public class MCDCompositionShape extends RelationShape {
   }
 
   public void drawDiamond(Graphics2D graphics2D) {
-    final RelationPointAncrageShape previousPoint = this.pointsAncrage.get(this.getLastPoint().getIndex() - 1);
-    final RelationPointAncrageShape lastPoint = this.getLastPoint();
+    final RelationAnchorPointShape previousPoint = this.anchorPoints.get(this.getLastPoint().getIndex() - 1);
+    final RelationAnchorPointShape lastPoint = this.getLastPoint();
 
     final int NUMBER_OF_POINTS = 4;
     final int DIAMOND_WIDTH = 8;
@@ -70,7 +78,7 @@ public class MCDCompositionShape extends RelationShape {
     graphics2D.fillPolygon(xpoints, ypoints, NUMBER_OF_POINTS);
   }
 
-  public MDElement getMCDComposition(){
+  public MDElement getMCDComposition() {
     return this.relatedRepositoryElement;
   }
 }
