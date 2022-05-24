@@ -89,7 +89,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
 
   @Override
   public void resize(Rectangle newBounds) {
-    this.setBounds(newBounds.x, newBounds.y, newBounds.width, newBounds.height);
+    this.setBounds(newBounds);
   }
 
   public int getId() {

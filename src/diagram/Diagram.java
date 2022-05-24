@@ -7,6 +7,7 @@ import project.ProjectElement;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.MDTableShape;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
@@ -44,11 +45,18 @@ public abstract class Diagram extends ProjectElement {
         return serialVersionUID;
     }
 
+    public List<MDTableShape> getMDTableShapeList() {
+        return getShapes().stream()
+                .filter(e -> e.getClass().getName().endsWith("MDTableShape"))
+                .map(md -> (MDTableShape) md)
+                .collect(Collectors.toList());
+    }
+
     public List<IShape> getShapes() {
         return shapes;
     }
 
-    public void addShape(IShape shape){
+    public void addShape(IShape shape) {
         shapes.add(shape);
         ViewLogsManager.printMessage(shape.getClass().getSimpleName() + " ajoutée au diagramme " + getName(), WarningLevel.INFO);
     }
@@ -57,19 +65,19 @@ public abstract class Diagram extends ProjectElement {
         this.shapes = shapes;
     }
 
-    public List<ClassShape> getClassShapes(){
+    public List<ClassShape> getClassShapes() {
         return shapes.stream().filter(shape -> shape instanceof ClassShape).map(s -> (ClassShape) s).collect(Collectors.toList());
     }
 
-    public List<RelationShape> getRelationShapes(){
+    public List<RelationShape> getRelationShapes() {
         return shapes.stream().filter(shape -> shape instanceof RelationShape).map(s -> (RelationShape) s).collect(Collectors.toList());
     }
 
-    public MCDEntityShape getMCDEntityShapeByID(int id){
-        for (IShape shape : shapes){
-            if (shape instanceof MCDEntityShape){
+    public MCDEntityShape getMCDEntityShapeByID(int id) {
+        for (IShape shape : shapes) {
+            if (shape instanceof MCDEntityShape) {
                 MCDEntityShape mcdEntityShape = (MCDEntityShape) shape;
-                if (mcdEntityShape.getId() == id){
+                if (mcdEntityShape.getId() == id) {
                     return mcdEntityShape;
                 }
             }
@@ -77,7 +85,7 @@ public abstract class Diagram extends ProjectElement {
         return null;
     }
 
-    public List<MCDAssociationShape> getMCDAssociationShapes(){
+    public List<MCDAssociationShape> getMCDAssociationShapes() {
         return shapes.stream().filter(shape -> shape instanceof MCDAssociationShape).map(s -> (MCDAssociationShape) s).collect(Collectors.toList());
     }
 

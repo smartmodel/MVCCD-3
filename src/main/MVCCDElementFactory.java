@@ -363,7 +363,7 @@ public class MVCCDElementFactory {
         new MLDRContRelations(mldrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
 
         // Ajout d'un noeud Diagrammes au noeud MLDR_DT
-        MLDRDiagram noeudDiagrammes = new MLDRDiagram(mldrModel,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+        MLDRContDiagrams noeudDiagrammes = new MLDRContDiagrams(mldrModel,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
         // Ajout du diagramme MLD-R au noeud Diagrammes avec le nom, par défaut, donné au diagramme MCD
         new MLDRDiagram(noeudDiagrammes, ProjectService.getProjectRoot(mldrModel).getName());
     }
@@ -883,7 +883,7 @@ public class MVCCDElementFactory {
         new MPDRContRelations(mpdrModel, Preferences.REPOSITORY_MDR_RELATIONS_NAME);
 
         // Ajout d'un noeud Diagrammes au noeud MPDR_Oracle
-        MPDROraDiagram noeudDiagrammes = new MPDROraDiagram(mpdrModel,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+        MPDRContDiagrams noeudDiagrammes = new MPDRContDiagrams(mpdrModel,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
         // Ajout du diagramme MPD-R au noeud Diagrammes avec le nom, par défaut, donné au diagramme MCD
         new MPDROraDiagram(noeudDiagrammes,ProjectService.getProjectRoot(mpdrModel).getName());
     }

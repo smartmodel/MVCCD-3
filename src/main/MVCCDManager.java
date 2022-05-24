@@ -84,7 +84,7 @@ public class MVCCDManager {
         String message = null;
         try {
             PreferencesManager.instance().loadOrCreateFileXMLApplicationPref(resultatInStart); //Ajout de Giorgio Roncallo
-        } catch (Exception e){
+        } catch (Exception e) {
             message = MessagesBuilder.getMessagesProperty("mvccd.treat.pref.appl.error");
         }
 
@@ -129,8 +129,8 @@ public class MVCCDManager {
             // Ouverture du fichier
             //TODO-0 Désactivé pour Mise au point
             openLastProject();
-        } catch (Exception e ){
-            throw e ;
+        } catch (Exception e) {
+            throw e;
         }
 
         // Quittance de fin
@@ -147,7 +147,6 @@ public class MVCCDManager {
         rootMVCCDElement = MVCCDFactory.instance().createRepositoryRoot();
         // Création des types de données
         MDDatatypesManager.instance().mdDatatypes();
-
 
 
         // Création du noeud root de l'arbre du référentiel
@@ -222,7 +221,7 @@ public class MVCCDManager {
             ConElement parent = (ConElement) mvccdElementNew.getParent();
             nodeParent = ConnectionsService.getNodeByLienProg(parent.getLienProg());
             nodeNew = MVCCDManager.instance().getRepository().addMVCCDElement(nodeParent, mvccdElementNew);
-         }
+        }
         getWinRepositoryContent().getTree().changeModel(repository);
         getWinRepositoryContent().getTree().scrollPathToVisible(new TreePath(nodeNew.getPath()));
 
@@ -239,7 +238,7 @@ public class MVCCDManager {
         if (c2) {
             ConElement conElement = (ConElement) mvccdElement;
             node = ConnectionsService.getNodeByLienProg(conElement.getLienProg());
-         }
+        }
         if (c1 || c2) {
             //getWinRepositoryContent().getTree().changeModel(repository);
             getWinRepositoryContent().getTree().getTreeModel().reload(node);
@@ -262,7 +261,7 @@ public class MVCCDManager {
             // Erreur Comodification...
             // TODO-0 A voir !!!
             // for (MVCCDElement child : parent.getChilds()){
-            for (int i = 0 ; i < parent.getChilds().size() ; i ++){
+            for (int i = 0; i < parent.getChilds().size(); i++) {
                 addNewMVCCDElementInRepository(parent.getChilds().get(i), nodeParent);
             }
             showMVCCDElementInRepository(parent);
@@ -272,12 +271,12 @@ public class MVCCDManager {
     public void removeMVCCDElementInRepository(MVCCDElement mvccdElementToRemove, MVCCDElement parent) {
         // Suppression dans l'arbre de référentiel
         DefaultMutableTreeNode nodeChild = null;
-        if ( mvccdElementToRemove instanceof ProjectElement) {
+        if (mvccdElementToRemove instanceof ProjectElement) {
             //DefaultMutableTreeNode nodeParent = ProjectService.getNodeById(((ProjectElement) parent).getIdProjectElement());
             ProjectElement child = (ProjectElement) mvccdElementToRemove;
             nodeChild = ProjectService.getNodeById(child.getIdProjectElement());
         }
-        if ( mvccdElementToRemove instanceof ConElement) {
+        if (mvccdElementToRemove instanceof ConElement) {
             ConElement child = (ConElement) mvccdElementToRemove;
             nodeChild = ConnectionsService.getNodeByLienProg(child.getLienProg());
         }
@@ -293,7 +292,7 @@ public class MVCCDManager {
             //getWinRepositoryContent().getTree().getTreeModel().reload();
             setDatasProjectChanged(true);
         }
-}
+    }
 
     public void changeParentMVCCDElementInRepository(MVCCDElement mvccdElementChanged, MVCCDElement oldParent) {
         removeMVCCDElementInRepository(mvccdElementChanged, oldParent);
@@ -318,13 +317,13 @@ public class MVCCDManager {
         //TODO-0 A voir La remarque ci-dessous
         // Les tests sont mis car une seule extrémité peut avoir été supprimée suite à une erreur de programmation
         // ou si le code n'est pas encore complètement terminé
-        if ((MCDRelEnd)mcdRelation.getA() != null) {
+        if ((MCDRelEnd) mcdRelation.getA() != null) {
             if (((MCDRelEnd) mcdRelation.getA()).getParent() != null) {
                 removeMVCCDElementInRepository((MCDRelEnd) mcdRelation.getA(), ((MCDRelEnd) mcdRelation.getA()).getParent());
             }
         }
-        if ((MCDRelEnd)mcdRelation.getB() != null) {
-            if (((MCDRelEnd) mcdRelation.getB()).getParent() != null){
+        if ((MCDRelEnd) mcdRelation.getB() != null) {
+            if (((MCDRelEnd) mcdRelation.getB()).getParent() != null) {
                 removeMVCCDElementInRepository((MCDRelEnd) mcdRelation.getB(), ((MCDRelEnd) mcdRelation.getB()).getParent());
             }
         }
@@ -347,15 +346,15 @@ public class MVCCDManager {
 
 
     private void openLastProject() {
-        String message ="";
+        String message = "";
         if (projectsRecents.getRecents().size() > 0) {
             File file = projectsRecents.getRecents().get(0);
             openProjectBase(file);
-             if (project != null){
-                message = MessagesBuilder.getMessagesProperty("mvccd.treat.last.project.ok",file.getPath());
-             } else {
-                 message = MessagesBuilder.getMessagesProperty("mvccd.treat.last.project.error",file.getPath());
-             }
+            if (project != null) {
+                message = MessagesBuilder.getMessagesProperty("mvccd.treat.last.project.ok", file.getPath());
+            } else {
+                message = MessagesBuilder.getMessagesProperty("mvccd.treat.last.project.error", file.getPath());
+            }
         } else {
             message = MessagesBuilder.getMessagesProperty("mvccd.treat.last.project.null");
         }
@@ -466,13 +465,13 @@ public class MVCCDManager {
         } else {
             extensionApplicationFile = "xml";
         }
-        if (!extensionOpenFile.equals (extensionApplicationFile)){
+        if (!extensionOpenFile.equals(extensionApplicationFile)) {
             String message = "Le fichier a été ouvert à partir du format : " + extensionOpenFile + System.lineSeparator() +
-                             "La prochaine sauvegarde se fera au format : " + extensionApplicationFile;
-            if (extensionApplicationFile.equals("xml")){
+                    "La prochaine sauvegarde se fera au format : " + extensionApplicationFile;
+            if (extensionApplicationFile.equals("xml")) {
                 message = message + System.lineSeparator() + "Tant que la sauvegarde xml n'est pas finalisée des données du projet peuvent être perdues!";
             }
-            DialogMessage.showOk(mvccdWindow,message, "Changement de format");
+            DialogMessage.showOk(mvccdWindow, message, "Changement de format");
         }
     }
 
@@ -496,20 +495,20 @@ public class MVCCDManager {
     public void saveAsProject(boolean nameProposed) {
         ProjectFileChooser fileChooser = new ProjectFileChooser(ProjectFileChooser.SAVE);
         File fileChoose = fileChooser.fileChoose(nameProposed);
-        if (fileChoose != null){
+        if (fileChoose != null) {
             if (UtilFiles.confirmIfExist(mvccdWindow, fileChoose)) {
                 fileProjectCurrent = fileChoose;
                 //#MAJ 2021-06-18B Save As - Message complémentaire de changement de nom de projet
-                saveProjectBase(MessagesBuilder.getMessagesProperty ("project.save.as.additionnal"));
+                saveProjectBase(MessagesBuilder.getMessagesProperty("project.save.as.additionnal"));
                 projectsRecents.add(fileProjectCurrent);
                 changeActivateProjectOpenRecentsItems();
             }
         }
     }
 
-    private void saveProjectBase(String messageAdditionnal){
+    private void saveProjectBase(String messageAdditionnal) {
         String message = MessagesBuilder.getMessagesProperty("project.save.start",
-                new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() } );
+                new String[]{MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath()});
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
 
         try {
@@ -524,12 +523,12 @@ public class MVCCDManager {
             }
 
             // Fin provisoire !
-            message = MessagesBuilder.getMessagesProperty ("project.save.finish.ok",
-                    new String[] {MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath() });
+            message = MessagesBuilder.getMessagesProperty("project.save.finish.ok",
+                    new String[]{MVCCDManager.instance().getProject().getName(), fileProjectCurrent.getPath()});
 
             message += System.lineSeparator() + messageAdditionnal;
-        } catch (Exception e){
-            message = MessagesBuilder.getMessagesProperty ("project.save.finish.abort");
+        } catch (Exception e) {
+            message = MessagesBuilder.getMessagesProperty("project.save.finish.abort");
             ViewLogsManager.catchException(e, mvccdWindow, message);
         }
 
@@ -539,7 +538,7 @@ public class MVCCDManager {
 
 
     public void closeProject() {
-       String message = MessagesBuilder.getMessagesProperty("project.close", new String[] {project.getName()});
+        String message = MessagesBuilder.getMessagesProperty("project.close", new String[]{project.getName()});
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
         project = null;
         //#MAJ 2021-06-18 Message intempestif relatif aux extension par défaut lors de la création d'un nouveau projet
@@ -717,7 +716,7 @@ public class MVCCDManager {
         ViewLogsManager.printMessage("Diagramme " + currentDiagram.getName() + " ajouté en tant que diagramme courant.", WarningLevel.INFO);
     }
 
-    private void loadDiagram(Diagram diagram){
+    private void loadDiagram(Diagram diagram) {
 
         // Récupère les shapes du diagramme courant
         List<IShape> currentDiagramShapes = diagram.getShapes();

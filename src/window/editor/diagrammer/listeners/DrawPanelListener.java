@@ -1,22 +1,9 @@
 package window.editor.diagrammer.listeners;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.geom.Line2D;
-import java.io.Serializable;
-import java.util.ListIterator;
-import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
 import main.MVCCDManager;
 import preferences.Preferences;
-import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.menus.PointAncrageMenu;
@@ -26,6 +13,13 @@ import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.RelationCreator;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.Line2D;
+import java.io.Serializable;
+import java.util.ListIterator;
 
 public class DrawPanelListener extends MouseAdapter implements KeyListener, Serializable {
 
@@ -246,7 +240,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   private void dragPointAncrageSelected(MouseEvent e) {
     final Point newPoint = new Point(GridUtils.alignToGrid(e.getX(), DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(e.getY(), DiagrammerService.getDrawPanel().getGridSize()));
     if (this.relationClicked.isFirstOrLastPoint(this.pointAncrageClicked)) {
-      ClassShape nearestClassShape = this.relationClicked.getNearestClassShape(this.pointAncrageClicked);
+      SquaredShape nearestClassShape = (SquaredShape) this.relationClicked.getNearestClassShape(this.pointAncrageClicked);
       this.dragFirstOrLastPointAncrage(newPoint, nearestClassShape);
     } else {
       this.dragPointAncrage(newPoint);
@@ -285,7 +279,7 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     DiagrammerService.getDrawPanel().repaint();
   }
 
-  private void dragFirstOrLastPointAncrage(Point newPoint, ClassShape nearestClassShape) {
+  private void dragFirstOrLastPointAncrage(Point newPoint, SquaredShape nearestClassShape) {
     // Si le point sélectionné est le premier ou le dernier de la relation (sur les ClassShape), on ne le déplace que s'il est sur les bords d'une ClassShape
     if (GeometryUtils.pointIsAroundShape(newPoint, nearestClassShape)) {
       this.pointAncrageClicked.drag(newPoint.x, newPoint.y);
@@ -312,8 +306,8 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   private void dragPointAtIndex1orNMinus1(Point newPoint) {
     // Si le point sélectionné est le deuxième point de l'association ou l'avant dernier
     if (this.pointAncrageClicked.getIndex() == 1 || this.pointAncrageClicked.getIndex() == this.relationClicked.getLastPoint().getIndex() - 1) {
-      final ClassShape leftShape = (ClassShape) GeometryUtils.getShapeOnTheLeft(this.relationClicked.getSource(), this.relationClicked.getDestination());
-      final ClassShape rightShape = (ClassShape) GeometryUtils.getShapeOnTheRight(this.relationClicked.getSource(), this.relationClicked.getDestination());
+      final SquaredShape leftShape = (SquaredShape) GeometryUtils.getShapeOnTheLeft(this.relationClicked.getSource(), this.relationClicked.getDestination());
+      final SquaredShape rightShape = (SquaredShape) GeometryUtils.getShapeOnTheRight(this.relationClicked.getSource(), this.relationClicked.getDestination());
 
       final RelationPointAncrageShape previousPoint = GeometryUtils.getNearestPointAncrage(leftShape, this.relationClicked);
       final RelationPointAncrageShape nextPoint = GeometryUtils.getNearestPointAncrage(rightShape, this.relationClicked);

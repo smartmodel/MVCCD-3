@@ -5,7 +5,7 @@ import mdr.*;
 import mpdr.MPDRIndex;
 
 public class MDRConstraintService {
-    final static int HAUT = -1 ;
+    final static int HAUT = -1;
     final static int BAS = 1;
 
     public static int compareToDefault(MDRConstraint courant, MDRConstraint other) {
@@ -30,43 +30,42 @@ public class MDRConstraintService {
                 return HAUT;
             }
         } else if (courant instanceof MDRUnique) {
-            if ((other instanceof MDRPK) ||other instanceof MDRFK) {
-                return BAS ;
-            } else if (other instanceof MDRUnique){
+            if ((other instanceof MDRPK) || other instanceof MDRFK) {
+                return BAS;
+            } else if (other instanceof MDRUnique) {
                 return ((MDRUnique) courant).compareToDefault((MDRUnique) other);
             } else {
                 return HAUT;
             }
         } else if (courant instanceof MDRCheck) {
-            if ((other instanceof MDRPK) || other instanceof MDRFK || other instanceof MDRUnique) {
+           /* if ((other instanceof MDRPK) || other instanceof MDRFK || other instanceof MDRUnique) {*/
                 return BAS ;
-            } else if (other instanceof MDRCheck){
-                return ((MDRCheck) courant).compareToDefault((MDRCheck) other);
+          /*  } else if (other instanceof MDRCheck){
+                return courant.compareToDefault(other);
             } else {
                 return HAUT;
-            }
-        } else if (courant instanceof MPDRIndex) {
+            }*/
+        }  else if (courant instanceof MPDRIndex) {
             if ((other instanceof MDRPK) || other instanceof MDRFK || other instanceof MDRUnique
                     || other instanceof MDRCheck) {
-                return BAS ;
-            } else if (other instanceof MPDRIndex){
+                return BAS;
+            } else if (other instanceof MPDRIndex) {
                 return ((MPDRIndex) courant).compareToDefault((MPDRIndex) other);
             } else {
                 return HAUT;
             }
         } else if (courant instanceof MDRConstraintCustom) {
             if ((other instanceof MDRPK) || other instanceof MDRFK || other instanceof MDRUnique
-                    || other instanceof MDRCheck || other instanceof MPDRIndex ) {
-                return BAS ;
-            } else if (other instanceof MDRConstraintCustom){
+                    || other instanceof MDRCheck || other instanceof MPDRIndex) {
+                return BAS;
+            } else if (other instanceof MDRConstraintCustom) {
                 return ((MDRConstraintCustom) courant).compareToDefault((MDRConstraintCustom) other);
             } else {
                 return HAUT;
             }
         } else {
-            throw new CodeApplException( "La classe de contrainte " + courant.getClass().getName() + " est inconnue ou pas encore traitée.");
+            throw new CodeApplException("La classe de contrainte " + courant.getClass().getName() + " est inconnue ou pas encore traitée.");
         }
-
 
 
     }

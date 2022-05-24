@@ -22,6 +22,7 @@ import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.Position;
@@ -32,8 +33,8 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   protected int id;
   protected List<RelationPointAncrageShape> pointsAncrage = new LinkedList<>();
   protected boolean isSelected = false;
-  protected MCDEntityShape source;
-  protected MCDEntityShape destination;
+  protected SquaredShape source;
+  protected SquaredShape destination;
   protected IMRelation relation;
   protected MDElement relatedRepositoryElement;
   protected boolean isReflexive;
@@ -49,7 +50,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     }
   }
 
-  public RelationShape(MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+  public RelationShape(SquaredShape source, SquaredShape destination, boolean isReflexive) {
     this();
     this.source = source;
     this.destination = destination;
@@ -239,11 +240,11 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     return new Rectangle(minX, minY, maxX - minX, maxY - minY);
   }
 
-  public MCDEntityShape getSource() {
+  public SquaredShape getSource() {
     return this.source;
   }
 
-  public MCDEntityShape getDestination() {
+  public SquaredShape getDestination() {
     return this.destination;
   }
 
@@ -253,7 +254,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     }
   }
 
-  public ClassShape getNearestClassShape(RelationPointAncrageShape pointAncrage) {
+  public SquaredShape getNearestClassShape(RelationPointAncrageShape pointAncrage) {
     return pointAncrage == this.getFirstPoint() ? this.source : this.destination;
   }
 

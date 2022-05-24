@@ -27,6 +27,7 @@ import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.DrawPanelListener;
 import window.editor.diagrammer.utils.GridUtils;
@@ -416,7 +417,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     return classShapes;
   }
 
-  public List<RelationShape> getRelationShapesByClassShape(ClassShape shape) {
+  public List<RelationShape> getRelationShapesByClassShape(SquaredShape shape) {
     List<RelationShape> relations = new ArrayList<>();
     for (RelationShape relation : this.getRelationShapes()) {
       if (relation.getSource() == shape || relation.getDestination() == shape) {

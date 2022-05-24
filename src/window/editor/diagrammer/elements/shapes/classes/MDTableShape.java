@@ -1,20 +1,25 @@
 package window.editor.diagrammer.elements.shapes.classes;
 
-import mcd.MCDEntity;
+import mpdr.oracle.MPDROracleTable;
 import preferences.Preferences;
+import window.editor.diagrammer.listeners.MDTableShapeListener;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class MDTableShape extends ClassShape {
 
-    private Color backgroundColor = Color.decode("#A0F0CF");
-    private String name;
+    private Color color = Color.decode("#A0F0CF");
+    private boolean initialized = false;
+    private MPDROracleTable relatedRepositoryElement;
 
-    public MDTableShape(String name) {
-        super();
-        this.name = name;
+
+    public MDTableShape(MPDROracleTable mpdrOracleTable) {
+        super(mpdrOracleTable, true);
+        this.relatedRepositoryElement = mpdrOracleTable;
+        this.addListeners();
     }
 
     @Override
@@ -25,19 +30,21 @@ public class MDTableShape extends ClassShape {
         Graphics2D graphics = (Graphics2D) g;
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        graphics.setColor(backgroundColor);
+        graphics.setColor(color);
 
         graphics.fillRoundRect(0, 0, width, height, 20, 20);
 
         graphics.setColor(Color.black);
 
-        graphics.setColor(getForeground());
         this.drawZoneEnTete(graphics);
         this.drawZoneProprietes(graphics);
+        this.drawZoneOperations(graphics);
+        this.initialized = true;
     }
 
+    @Override
     protected void drawZoneEnTete(Graphics2D graphics2D) {
-        setZoneEnTeteContent();
+        this.setZoneEnTeteContent();
         int y = Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
         for (int i = 0; i < this.zoneEnTete.getElements().size(); i++) {
             if (i == 1) {
@@ -49,16 +56,46 @@ public class MDTableShape extends ClassShape {
             graphics2D.drawString(this.zoneEnTete.getElements().get(i), x, y);
             y += graphics2D.getFontMetrics().getHeight();
         }
-        this.drawZoneEnTeteBorder(graphics2D);
+    }
+
+    @Override
+    protected void drawZoneProprietes(Graphics2D graphics2D) {
+        this.setZoneProprietesContent();
+        int y = this.getZoneMinHeight(this.zoneEnTete.getElements()) + Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+        this.drawElements(graphics2D, this.zoneProprietes.getElements(), y);
+    }
+
+
+    private void drawZoneOperations(Graphics2D graphics2D) {
+        this.setZoneOperationsContent();
+        int y = this.getZoneMinHeight(this.zoneProprietes.getElements()) + this.getZoneMinHeight(this.zoneEnTete.getElements()) + Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+        this.drawElements(graphics2D, this.zoneOperations.getElements(), y);
+        this.drawBorders(graphics2D);
+    }
+
+    private void drawBorders(Graphics2D graphics2D) {
+        graphics2D.drawRoundRect(0, 0, this.getWidth() - 1, this.getHeight() - 1, 20, 20);
+        graphics2D.drawLine(0, this.getZoneMinHeight(this.zoneEnTete.getElements()), this.getWidth(), this.getZoneMinHeight(this.zoneEnTete.getElements()));
+
+        int height = this.getZoneMinHeight(this.zoneProprietes.getElements()) + this.getZoneMinHeight(this.zoneEnTete.getElements());
+        graphics2D.drawLine(0, height, this.getWidth(), height);
+    }
+
+    @Override
+    public void refreshInformations() {
+        setZoneEnTeteContent();
+        setZoneProprietesContent();
+        setZoneOperationsContent();
+        repaint();
+    }
+
+    @Override
+    public void drag(int differenceX, int differenceY) {
+        super.drag(differenceX, differenceY);
     }
 
     private int getCenterTextPositionX(String element, Graphics2D graphics2D) {
         return this.getWidth() / 2 - graphics2D.getFontMetrics().stringWidth(element) / 2;
-    }
-
-    private void drawZoneEnTeteBorder(Graphics2D graphics2D) {
-        final int height = this.getZoneMinHeight(this.zoneEnTete.getElements());
-        graphics2D.drawRoundRect(0, 0, this.getWidth() - 1, height, 20, 20);
     }
 
     private void drawElements(Graphics2D graphics2D, List<String> elements, int y) {
@@ -70,22 +107,6 @@ public class MDTableShape extends ClassShape {
         }
     }
 
-    private void drawZoneProprietesBorder(Graphics2D graphics2D) {
-        int height;
-        if (this.zoneOperations.getElements().isEmpty() && this.zoneServices.getElements().isEmpty()) {
-            height = this.getHeight() - this.getZoneMinHeight(this.zoneEnTete.getElements());
-        } else {
-            height = Preferences.DIAGRAMMER_CLASS_PADDING * 2 + this.zoneProprietes.getElements().size() * graphics2D.getFontMetrics().getHeight();
-        }
-        graphics2D.drawRect(0, 0, this.getWidth() - 1, height - 1);
-    }
-
-    protected void drawZoneProprietes(Graphics2D graphics2D) {
-        int y = this.getZoneMinHeight(this.zoneEnTete.getElements()) + Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
-        this.drawElements(graphics2D, this.zoneProprietes.getElements(), y);
-        this.drawZoneProprietesBorder(graphics2D);
-    }
-
     private int getZoneMinHeight(List<String> elements) {
         final FontMetrics fontMetrics = this.getFontMetrics(Preferences.DIAGRAMMER_CLASS_FONT);
         int minHeight = Preferences.DIAGRAMMER_CLASS_PADDING * 2;
@@ -93,26 +114,103 @@ public class MDTableShape extends ClassShape {
         return minHeight;
     }
 
+    private void addListeners() {
+        MDTableShapeListener listener = new MDTableShapeListener();
+        this.addMouseListener(listener);
+        this.addMouseMotionListener(listener);
+    }
+
+    public MPDROracleTable getEntity() {
+        return (MPDROracleTable) this.getRelatedRepositoryElement();
+    }
+
     @Override
     protected void setZoneEnTeteContent() {
         this.zoneEnTete.getElements().clear();
-        this.zoneEnTete.addElement(Preferences.DIAGRAMMER_TABLE_STEREOTYPE_TEXT);
-        this.zoneEnTete.addElement(name);
+
+        MPDROracleTable mpdrTable = this.relatedRepositoryElement;
+        mpdrTable.getStereotypes().forEach(
+                e -> this.zoneEnTete.addElement("<<" + e.toString() + ">>")
+        );
+        this.zoneEnTete.addElement(mpdrTable.getName());
+
+
+        if (!initialized) {
+            updateSizeAndMinimumSize();
+        }
     }
 
+    private void setZoneOperationsContent() {
+        this.zoneOperations.getElements().clear();
 
-    public MCDEntity getEntity() {
-        return (MCDEntity) this.getRelatedRepositoryElement();
+        MPDROracleTable mpdrTable = this.relatedRepositoryElement;
+
+        String columnsCommaSeparated = mpdrTable.getMPDRPK().getMDRColumns().stream()
+                .map(e -> e.toString().toLowerCase())
+                .collect(Collectors.joining(","));
+
+        zoneOperations.addElement(
+                mpdrTable.getMPDRColumnPKProper().getStereotypesInLine() + " " + mpdrTable.getMPDRPK().getName() + "(" + columnsCommaSeparated + ")"
+        );
+
+
+        mpdrTable.getMPDRFKs().forEach(
+                e -> zoneOperations.addElement(e.getStereotypesInLine() + " " + e.getName() + "(" +
+                        (e.getMDRColumns().stream()
+                                .map(ee -> ee.toString().toLowerCase())
+                                .collect(Collectors.joining(","))
+                        )
+                        + ")"
+                )
+        );
+
+
+        mpdrTable.getMPDRUniques().forEach(
+                e -> zoneOperations.addElement(e.getStereotypesInLine() + " " + e.getName() + "(" +
+                        (e.getMDRColumns().stream()
+                                .map(ee -> ee.toString().toLowerCase())
+                                .collect(Collectors.joining(","))
+                        )
+                        + ")"
+                )
+        );
+
+        mpdrTable.getMPDRChecks().forEach(
+                e -> zoneOperations.addElement(e.getStereotypesInLine() + " " + e.getName() + "(" +
+                        (e.getMldrElementSource().getName())
+                        + ")"
+                )
+        );
+
+        if (!initialized) {
+            updateSizeAndMinimumSize();
+        }
     }
 
     @Override
     protected void setZoneProprietesContent() {
+        this.zoneProprietes.getElements().clear();
 
+        MPDROracleTable mpdrTable = this.relatedRepositoryElement;
+
+        mpdrTable.getMPDRColumnsSortDefault().forEach(
+                e -> zoneProprietes.addElement(
+                        e.getStereotypesInLine() + " "
+                                + e.getMldrElementSource().getName() + " : "
+                                + e.getDatatypeLienProg()
+                                + "(" + e.getSize() + ") "
+                                + "{" + e.getDatatypeConstraint() + "}")
+        );
+
+
+        if (!initialized) {
+            updateSizeAndMinimumSize();
+        }
     }
 
     @Override
     protected void setBackgroundColor() {
-
+        this.setBackground(new Color(255, 255, 255));
     }
 
     @Override
@@ -125,8 +223,27 @@ public class MDTableShape extends ClassShape {
 
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MDTableShape that = (MDTableShape) o;
+        return getRelatedRepositoryElement().equals(that.getRelatedRepositoryElement());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getRelatedRepositoryElement());
+    }
+
     @Override
     public String getXmlTagName() {
         return null;
+    }
+
+    public void setEntity(MPDROracleTable entity) {
+        this.relatedRepositoryElement = entity;
+        this.updateSizeAndMinimumSize();
     }
 }

@@ -2,6 +2,7 @@ package window.editor.diagrammer.utils;
 
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
@@ -97,13 +98,13 @@ public final class GeometryUtils {
     }
   }
 
-  public static boolean pointIsAroundShape(Point point, ClassShape shape) {
+  public static boolean pointIsAroundShape(Point point, SquaredShape shape) {
     // On convertit le point pour le rendre relatif à la ClassShape
     Point converted = SwingUtilities.convertPoint(DiagrammerService.getDrawPanel(), point, shape);
     return (converted.x >= 0 && converted.x <= shape.getWidth() && (converted.y == 0 || converted.y == shape.getHeight())) || (converted.y >= 0 && converted.y <= shape.getHeight() && (converted.x == 0 || converted.x == shape.getWidth()));
   }
 
-  public static RelationPointAncrageShape getNearestPointAncrage(ClassShape shape, RelationShape relation) {
+  public static RelationPointAncrageShape getNearestPointAncrage(SquaredShape shape, RelationShape relation) {
     return shape == relation.getSource() ? relation.getFirstPoint() : relation.getLastPoint();
   }
 
@@ -163,7 +164,7 @@ public final class GeometryUtils {
     return p.y == bounds.getMaxY() && p.x >= bounds.getMinX() && p.x <= bounds.getMaxX();
   }
 
-  public static Position getClassShapePosition(ClassShape shape, ClassShape comparedTo) {
+  public static Position getClassShapePosition(SquaredShape shape, SquaredShape comparedTo) {
 
     if (isRight(shape, comparedTo) && isTop(shape, comparedTo)) {
       return Position.TOP_CORNER_RIGHT;
@@ -189,39 +190,39 @@ public final class GeometryUtils {
     return Position.UNHANDLED;
   }
 
-  public static boolean isTop(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isTop(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMaxY() <= comparedTo.getBounds().getMinY();
   }
 
-  public static boolean isBottom(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isBottom(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMinY() >= comparedTo.getBounds().getMaxY();
   }
 
-  public static boolean isRight(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isRight(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMinX() >= comparedTo.getBounds().getMaxX();
   }
 
-  public static boolean isLeft(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isLeft(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMaxX() <= comparedTo.getBounds().getMinX();
   }
 
-  public static boolean isXCenteredTopLeft(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isXCenteredTopLeft(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMaxX() >= comparedTo.getBounds().getMinX() && shape.getBounds().getMaxX() <= comparedTo.getBounds().getMaxX();
   }
 
-  public static boolean isXCenteredTopRight(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isXCenteredTopRight(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMinX() <= comparedTo.getBounds().getMaxX() && shape.getBounds().getMinX() >= comparedTo.getBounds().getMinX();
   }
 
-  public static boolean isYCenteredTop(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isYCenteredTop(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMaxY() >= comparedTo.getBounds().getMinY() && shape.getBounds().getMaxY() <= comparedTo.getBounds().getMaxY();
   }
 
-  public static boolean isYCenteredBottom(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isYCenteredBottom(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMinY() <= comparedTo.getBounds().getMaxY() && shape.getBounds().getMinY() >= comparedTo.getBounds().getMinY();
   }
 
-  public static boolean isHigher(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isHigher(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMinY() < comparedTo.getBounds().getMinY();
   }
 
@@ -241,11 +242,11 @@ public final class GeometryUtils {
     return x < shape.getBounds().getMinX() || x > shape.getBounds().getMaxX();
   }
 
-  public static boolean pointHasCommonYWithShapes(Point point, ClassShape leftShape, ClassShape rightShape) {
+  public static boolean pointHasCommonYWithShapes(Point point, SquaredShape leftShape, SquaredShape rightShape) {
     return (point.y >= leftShape.getBounds().getMinY() && point.y <= leftShape.getBounds().getMaxY()) && (point.y >= rightShape.getBounds().getMinY() && point.y <= rightShape.getBounds().getMaxY());
   }
 
-  public static boolean pointHasCommonXWithShapes(Point point, ClassShape leftShape, ClassShape rightShape) {
+  public static boolean pointHasCommonXWithShapes(Point point, SquaredShape leftShape, SquaredShape rightShape) {
     return (point.x >= leftShape.getBounds().getMinX() && point.x <= leftShape.getBounds().getMaxX()) && (point.x >= rightShape.getBounds().getMinX() && point.x <= rightShape.getBounds().getMaxX());
   }
 }

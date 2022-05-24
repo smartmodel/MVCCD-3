@@ -113,6 +113,8 @@ public class Preferences extends MVCCDElement {
   public static final String DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT = "Composition";
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT = "Association réflexive";
   public static final int DIAGRAMMER_RELATION_CLICK_AREA = 5;
+
+  public static final String DIAGRAMMER_TABLE_STEREOTYPE_TEXT = "<<Table>>";
   public static final String DIAGRAMMER_ENTITY_STEREOTYPE_TEXT = "<<Entity>>";
   public static final String DIAGRAMMER_ENTITY_ORDERED_TEXT = "{ordered}";
   public static final String DIAGRAMMER_MCD_ENTITY_XML_TAG = "mcdEntityShape";

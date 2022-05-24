@@ -1,47 +1,32 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
-import m.interfaces.IMRelation;
-import main.MVCCDManager;
-import mcd.MCDAssociation;
-import md.MDElement;
-import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
-import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
+import window.editor.diagrammer.listeners.LabelShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.GeometryUtils;
-import window.editor.diagrammer.utils.Position;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Inspiré de https://coderanch.com/t/340443/java/Draw-arrow-head-line
+ * Inspiré de <a href="https://coderanch.com/t/340443/java/Draw-arrow-head-line">...</a>
  */
 
-public abstract class RelationShapeDashed extends MCDAssociationShape {
+public class RelationShapeDashed extends RelationShape implements IShape, Serializable {
+
+    private final String label;
+
     double phi = Math.toRadians(25);
     int barb = 16;
 
-    public RelationShapeDashed(MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
+    public RelationShapeDashed(SquaredShape source, SquaredShape destination, String label) {
         super(source, destination, false);
+        this.label = label;
+        addListeners();
+        createLabelsAfterRelationShapeEdit();
     }
 
-    public RelationShapeDashed(int id, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
-        super(id, source, destination, false);
-    }
-
-    public RelationShapeDashed(int id, MCDAssociation relatedRepositoryAssociation, MCDEntityShape source, MCDEntityShape destination, boolean isReflexive) {
-        super(id, relatedRepositoryAssociation, source, destination, false);
-    }
 
     @Override
     public void drawSegments(Graphics2D graphics2D) {
@@ -50,18 +35,57 @@ public abstract class RelationShapeDashed extends MCDAssociationShape {
         // Pour chaque point d'ancrage
         for (int i = 0; i < this.pointsAncrage.size(); i++) {
             if (i != this.pointsAncrage.size() - 1) {
-                // Tests de lignes ici
+                // Lignes de flèche
                 float[] dash1 = {2f, 0f, 2f};
                 var bs1 = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1.0f, dash1, 2f);
                 graphics2D.setStroke(bs1);
                 graphics2D.drawLine((int) this.pointsAncrage.get(i).getX(), (int) this.pointsAncrage.get(i).getY(), (int) this.pointsAncrage.get(i + 1).getX(), (int) this.pointsAncrage.get(i + 1).getY());
-                // Test de tête de flèche
+                // Tête de flèche
                 Point sw = new Point((int) this.pointsAncrage.get(i).getX(), (int) this.pointsAncrage.get(i).getY());
                 Point ne = new Point((int) this.pointsAncrage.get(i + 1).getX(), (int) this.pointsAncrage.get(i + 1).getY());
 
                 drawArrowHead(graphics2D, ne, sw);
             }
         }
+
+    }
+
+    @Override
+    public void doDraw(Graphics2D graphics2D) {
+    }
+
+    @Override
+    public void createLabelsAfterRelationShapeEdit() {
+        if (!label.isEmpty()) {
+            LabelShape labelShape;
+            if (pointsAncrage.size() <= 2) {
+                RelationPointAncrageShape anchorPoint = pointsAncrage.get(0);
+                Point relationCenter = getCenter();
+                int distanceInXFromAnchorPoint = Math.abs(relationCenter.x - anchorPoint.x);
+                int distanceInYFromAnchorPoint = Math.abs(relationCenter.y - anchorPoint.y);
+                labelShape = createOrUpdateLabel(anchorPoint, label, LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+
+            } else {
+                int middleIndex = pointsAncrage.size() / 2;
+                labelShape = createOrUpdateLabel(pointsAncrage.get(middleIndex), label, LabelType.ASSOCIATION_NAME, 0, 0);
+            }
+            DiagrammerService.getDrawPanel().add(labelShape);
+        } else {
+            deleteLabel(LabelType.ASSOCIATION_NAME);
+        }
+
+        DiagrammerService.getDrawPanel().repaint();
+    }
+
+    private void addListeners() {
+        LabelShapeListener listener = new LabelShapeListener();
+        this.addMouseListener(listener);
+        this.addMouseMotionListener(listener);
+    }
+
+    @Override
+    public String getXmlTagName() {
+        return null;
     }
 
     private void drawArrowHead(Graphics2D graphics2D, Point tip, Point tail) {
@@ -73,7 +97,9 @@ public abstract class RelationShapeDashed extends MCDAssociationShape {
         double dx = tip.x - tail.x;
         double theta = Math.atan2(dy, dx);
 
-        double x, y, rho = theta + phi;
+        double x;
+        double y;
+        double rho = theta + phi;
         for (int j = 0; j < 2; j++) {
             x = tip.x - barb * Math.cos(rho);
             y = tip.y - barb * Math.sin(rho);
@@ -81,7 +107,6 @@ public abstract class RelationShapeDashed extends MCDAssociationShape {
             rho = theta - phi;
         }
     }
-
 
 }
 

@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
@@ -75,7 +76,7 @@ public class LabelShape extends JLabel implements Serializable {
   private Point calculateDestionationInformationsFirstDisplay() {
     int x;
     int y;
-    ClassShape nearestClassShape = this.relationShape.getNearestClassShape(this.pointAncrage);
+    ClassShape nearestClassShape = (ClassShape) this.relationShape.getNearestClassShape(this.pointAncrage);
 
     if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté gauche de la ClassShape
@@ -122,7 +123,7 @@ public class LabelShape extends JLabel implements Serializable {
     int x;
     int y;
 
-    ClassShape nearestClassShape = this.relationShape.getNearestClassShape(this.pointAncrage);
+    SquaredShape nearestClassShape =  this.relationShape.getNearestClassShape(this.pointAncrage);
 
     if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté gauche de la ClassShape
