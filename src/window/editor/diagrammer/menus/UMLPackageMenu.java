@@ -1,6 +1,6 @@
 package window.editor.diagrammer.menus;
 
-import window.editor.diagrammer.elements.shapes.classes.UMLPackage;
+import window.editor.diagrammer.elements.shapes.UMLPackage;
 import window.editor.diagrammer.menus.actions.UMLPackageDeleteAction;
 
 import javax.swing.*;

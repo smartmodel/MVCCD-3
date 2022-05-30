@@ -1,6 +1,6 @@
 package window.editor.diagrammer.menus;
 
-import window.editor.diagrammer.elements.shapes.classes.MDTableShape;
+import window.editor.diagrammer.elements.shapes.MDTableShape;
 import window.editor.diagrammer.menus.actions.MDTableShapeDeleteAction;
 
 import javax.swing.*;

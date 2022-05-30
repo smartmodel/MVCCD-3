@@ -23,7 +23,7 @@ public class RelationShapeMenu extends JPopupMenu implements Serializable {
             edit = new JMenuItem(new MCDGeneralizationEditAction("Ouvrir l'assistant de modélisation", null, (MCDGeneralizationShape) shape));
         } else if (shape instanceof MCDCompositionShape) {
             // TODO -> Ajouter le traitement pour l'association de composition
-        } else if (shape instanceof MPDAssociationShape) {
+        } else if (shape instanceof MPDRelationShape) {
             // TODO -> Ajouter le traitement pour l'association MPD
         }
         if (edit != null) {

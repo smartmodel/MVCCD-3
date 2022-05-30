@@ -1,13 +1,13 @@
 package window.editor.diagrammer.menus.actions;
 
-import java.awt.event.ActionEvent;
-import java.io.Serializable;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.io.Serializable;
 
 public class MCDEntityShapeEditAction extends AbstractAction implements Serializable {
 

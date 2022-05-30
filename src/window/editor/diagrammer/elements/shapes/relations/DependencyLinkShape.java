@@ -1,7 +1,7 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
 import window.editor.diagrammer.elements.interfaces.IShape;
-import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
 
@@ -13,14 +13,14 @@ import java.io.Serializable;
  * Inspiré de <a href="https://coderanch.com/t/340443/java/Draw-arrow-head-line">...</a>
  */
 
-public class RelationShapeDashed extends RelationShape implements IShape, Serializable {
+public class DependencyLinkShape extends RelationShape implements IShape, Serializable {
 
     private final String label;
 
     double phi = Math.toRadians(25);
     int barb = 16;
 
-    public RelationShapeDashed(SquaredShape source, SquaredShape destination, String label) {
+    public DependencyLinkShape(SquaredShape source, SquaredShape destination, String label) {
         super(source, destination, false);
         this.label = label;
         addListeners();
@@ -43,8 +43,6 @@ public class RelationShapeDashed extends RelationShape implements IShape, Serial
                 // Tête de flèche
                 Point sw = new Point((int) this.pointsAncrage.get(i).getX(), (int) this.pointsAncrage.get(i).getY());
                 Point ne = new Point((int) this.pointsAncrage.get(i + 1).getX(), (int) this.pointsAncrage.get(i + 1).getY());
-
-                drawArrowHead(graphics2D, ne, sw);
             }
         }
 
@@ -52,6 +50,11 @@ public class RelationShapeDashed extends RelationShape implements IShape, Serial
 
     @Override
     public void doDraw(Graphics2D graphics2D) {
+        // On repère les points d'ancrage pour dessinger la tête de flèche
+        Point tail = getFirstPoint();
+        Point tip = getLastPoint();
+
+        this.drawArrowHead(graphics2D, tip, tail);
     }
 
     @Override
@@ -59,7 +62,7 @@ public class RelationShapeDashed extends RelationShape implements IShape, Serial
         if (!label.isEmpty()) {
             LabelShape labelShape;
             if (pointsAncrage.size() <= 2) {
-                RelationPointAncrageShape anchorPoint = pointsAncrage.get(0);
+                RelationPointAncrageShape anchorPoint = pointsAncrage.  get(0);
                 Point relationCenter = getCenter();
                 int distanceInXFromAnchorPoint = Math.abs(relationCenter.x - anchorPoint.x);
                 int distanceInYFromAnchorPoint = Math.abs(relationCenter.y - anchorPoint.y);

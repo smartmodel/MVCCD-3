@@ -1,17 +1,15 @@
-package window.editor.diagrammer.elements.shapes.classes;
+package window.editor.diagrammer.elements.shapes;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.io.Serializable;
-import javax.swing.JPanel;
 import main.MVCCDManager;
 import window.editor.diagrammer.elements.interfaces.IResizable;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.ResizableBorder;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.Serializable;
 
 public abstract class SquaredShape extends JPanel implements IShape, IResizable, Serializable {
 

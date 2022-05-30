@@ -2,7 +2,7 @@ package window.editor.diagrammer.elements.shapes.relations;
 
 import md.MDElement;
 import preferences.Preferences;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 
 import java.awt.*;
 

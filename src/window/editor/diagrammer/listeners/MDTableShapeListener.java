@@ -1,6 +1,6 @@
 package window.editor.diagrammer.listeners;
 
-import window.editor.diagrammer.elements.shapes.classes.MDTableShape;
+import window.editor.diagrammer.elements.shapes.MDTableShape;
 import window.editor.diagrammer.menus.MDTableShapeMenu;
 import window.editor.diagrammer.services.DiagrammerService;
 
@@ -20,9 +20,9 @@ public class MDTableShapeListener  extends MouseAdapter implements Serializable 
         }
     }
 
-    private void showMenu(MouseEvent event) {
-        final MDTableShape shape = (MDTableShape) event.getSource();
-        final Point converted = SwingUtilities.convertPoint(shape, event.getPoint(), DiagrammerService.getDrawPanel());
+    private void showMenu(MouseEvent e) {
+        final MDTableShape shape = (MDTableShape) e.getSource();
+        final Point converted = SwingUtilities.convertPoint(shape, e.getPoint(), DiagrammerService.getDrawPanel());
         final MDTableShapeMenu menu = new MDTableShapeMenu(shape);
 
         menu.show(DiagrammerService.getDrawPanel(), converted.x, converted.y);

@@ -1,6 +1,6 @@
 package window.editor.diagrammer.listeners;
 
-import window.editor.diagrammer.elements.shapes.classes.UMLPackage;
+import window.editor.diagrammer.elements.shapes.UMLPackage;
 import window.editor.diagrammer.menus.UMLPackageMenu;
 import window.editor.diagrammer.services.DiagrammerService;
 

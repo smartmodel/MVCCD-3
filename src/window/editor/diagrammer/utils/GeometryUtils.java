@@ -1,8 +1,7 @@
 package window.editor.diagrammer.utils;
 
 import window.editor.diagrammer.elements.interfaces.IShape;
-import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;

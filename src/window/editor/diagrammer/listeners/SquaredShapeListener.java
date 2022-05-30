@@ -1,18 +1,17 @@
 package window.editor.diagrammer.listeners;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.Serializable;
-import javax.swing.SwingUtilities;
 import preferences.Preferences;
 import window.editor.diagrammer.drawpanel.DrawPanel;
-import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.ResizableBorder;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.Serializable;
 
 public class SquaredShapeListener extends MouseAdapter implements Serializable {
 

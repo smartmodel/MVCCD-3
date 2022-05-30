@@ -1,28 +1,35 @@
-package window.editor.diagrammer.elements.shapes.classes;
+package window.editor.diagrammer.elements.shapes;
 
 import preferences.Preferences;
+import window.editor.diagrammer.elements.interfaces.UMLPackageIntegrableShapes;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
-import window.editor.diagrammer.listeners.MDTableShapeListener;
 import window.editor.diagrammer.listeners.UMLPackageListener;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
 
 import java.awt.*;
-import java.awt.geom.GeneralPath;
+import java.util.List;
 import java.util.Objects;
 
 public class UMLPackage extends SquaredShape {
 
-    private Color color = Color.decode("#BFF0F0");
+    private Color COLOR = Color.decode("#BFF0F0");
 
+    private List<UMLPackageIntegrableShapes> tapisElements;
     private String name;
 
-    public UMLPackage(String name) {
+    public UMLPackage(String name, List<UMLPackageIntegrableShapes> tapisElements) {
         super();
         this.name = name;
+        this.tapisElements = tapisElements;
+
         initUI();
         this.addListeners();
+    }
+
+    public List<UMLPackageIntegrableShapes> getTapisElements() {
+        return tapisElements;
     }
 
     @Override
@@ -38,7 +45,7 @@ public class UMLPackage extends SquaredShape {
         graphics.setStroke(new BasicStroke(3));
         graphics.setColor(Color.white);
         graphics.fillRect(0, heightBigRectangle, width, height - heightBigRectangle);
-        graphics.setColor(color);
+        graphics.setColor(COLOR);
         graphics.drawRect(0, heightBigRectangle, width, height - heightBigRectangle);
         graphics.fillRect(0, 0, width / 2, height / 6);
 
@@ -50,7 +57,7 @@ public class UMLPackage extends SquaredShape {
 
 
     private void initUI() {
-        this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH * 2, Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT * 2));
+        this.setMinimumSize(new Dimension((int) (Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH * 2.5), (int) (Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT * 2.5)));
         this.setSize(this.getMinimumSize());
     }
 

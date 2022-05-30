@@ -1,18 +1,15 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.io.Serializable;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import preferences.Preferences;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.Serializable;
 
 public class LabelShape extends JLabel implements Serializable {
 

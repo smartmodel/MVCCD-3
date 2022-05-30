@@ -12,7 +12,7 @@ public class ClassShapeZone extends Rectangle {
     this.elements = new ArrayList<>();
   }
 
-  protected void addElement(String element) {
+  public void addElement(String element) {
     this.elements.add(element);
   }
 

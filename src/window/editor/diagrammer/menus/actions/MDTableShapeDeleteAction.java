@@ -2,8 +2,7 @@ package window.editor.diagrammer.menus.actions;
 
 import main.MVCCDManager;
 import window.editor.diagrammer.elements.interfaces.IShape;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
-import window.editor.diagrammer.elements.shapes.classes.MDTableShape;
+import window.editor.diagrammer.elements.shapes.MDTableShape;
 import window.editor.diagrammer.services.DiagrammerService;
 
 import javax.swing.*;

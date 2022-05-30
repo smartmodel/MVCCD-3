@@ -2,6 +2,7 @@ package window.editor.diagrammer.elements.shapes.classes;
 
 import md.MDElement;
 import preferences.Preferences;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;

@@ -2,8 +2,8 @@ package window.editor.diagrammer.listeners;
 
 import main.MVCCDManager;
 import preferences.Preferences;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
-import window.editor.diagrammer.elements.shapes.classes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.menus.PointAncrageMenu;

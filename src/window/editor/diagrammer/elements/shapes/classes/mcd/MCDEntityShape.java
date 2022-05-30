@@ -1,7 +1,8 @@
-package window.editor.diagrammer.elements.shapes.classes;
+package window.editor.diagrammer.elements.shapes.classes.mcd;
 
 import mcd.MCDEntity;
 import preferences.Preferences;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.MCDEntityShapeListener;
 
 import java.awt.*;

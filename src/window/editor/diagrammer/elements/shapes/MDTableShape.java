@@ -1,7 +1,9 @@
-package window.editor.diagrammer.elements.shapes.classes;
+package window.editor.diagrammer.elements.shapes;
 
+import mdr.MDRTable;
 import mpdr.oracle.MPDROracleTable;
 import preferences.Preferences;
+import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.MDTableShapeListener;
 
 import java.awt.*;
@@ -10,15 +12,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MDTableShape extends ClassShape {
-
-    private Color color = Color.decode("#A0F0CF");
+    private final String name;
+    private final Color COLOR = Color.decode("#A0F0CF");
     private boolean initialized = false;
-    private MPDROracleTable relatedRepositoryElement;
 
-
-    public MDTableShape(MPDROracleTable mpdrOracleTable) {
-        super(mpdrOracleTable, true);
-        this.relatedRepositoryElement = mpdrOracleTable;
+    public MDTableShape(MDRTable mdrTable) {
+        super(mdrTable, true);
+        this.name = mdrTable.getName();
         this.addListeners();
     }
 
@@ -30,7 +30,7 @@ public class MDTableShape extends ClassShape {
         Graphics2D graphics = (Graphics2D) g;
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        graphics.setColor(color);
+        graphics.setColor(COLOR);
 
         graphics.fillRoundRect(0, 0, width, height, 20, 20);
 
@@ -89,10 +89,6 @@ public class MDTableShape extends ClassShape {
         repaint();
     }
 
-    @Override
-    public void drag(int differenceX, int differenceY) {
-        super.drag(differenceX, differenceY);
-    }
 
     private int getCenterTextPositionX(String element, Graphics2D graphics2D) {
         return this.getWidth() / 2 - graphics2D.getFontMetrics().stringWidth(element) / 2;
@@ -128,7 +124,7 @@ public class MDTableShape extends ClassShape {
     protected void setZoneEnTeteContent() {
         this.zoneEnTete.getElements().clear();
 
-        MPDROracleTable mpdrTable = this.relatedRepositoryElement;
+        MPDROracleTable mpdrTable = (MPDROracleTable) this.relatedRepositoryElement;
         mpdrTable.getStereotypes().forEach(
                 e -> this.zoneEnTete.addElement("<<" + e.toString() + ">>")
         );
@@ -143,7 +139,7 @@ public class MDTableShape extends ClassShape {
     private void setZoneOperationsContent() {
         this.zoneOperations.getElements().clear();
 
-        MPDROracleTable mpdrTable = this.relatedRepositoryElement;
+        MPDROracleTable mpdrTable = (MPDROracleTable) this.relatedRepositoryElement;
 
         String columnsCommaSeparated = mpdrTable.getMPDRPK().getMDRColumns().stream()
                 .map(e -> e.toString().toLowerCase())
@@ -191,7 +187,7 @@ public class MDTableShape extends ClassShape {
     protected void setZoneProprietesContent() {
         this.zoneProprietes.getElements().clear();
 
-        MPDROracleTable mpdrTable = this.relatedRepositoryElement;
+        MPDROracleTable mpdrTable = (MPDROracleTable) this.relatedRepositoryElement;
 
         mpdrTable.getMPDRColumnsSortDefault().forEach(
                 e -> zoneProprietes.addElement(
@@ -223,18 +219,17 @@ public class MDTableShape extends ClassShape {
 
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MDTableShape that = (MDTableShape) o;
-        return getRelatedRepositoryElement().equals(that.getRelatedRepositoryElement());
+        return getName().equals(that.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRelatedRepositoryElement());
+        return Objects.hash(getName());
     }
 
     @Override
@@ -245,5 +240,10 @@ public class MDTableShape extends ClassShape {
     public void setEntity(MPDROracleTable entity) {
         this.relatedRepositoryElement = entity;
         this.updateSizeAndMinimumSize();
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

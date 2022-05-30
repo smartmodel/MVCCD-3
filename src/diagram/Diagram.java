@@ -5,9 +5,9 @@ import console.ViewLogsManager;
 import console.WarningLevel;
 import project.ProjectElement;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.MDTableShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
-import window.editor.diagrammer.elements.shapes.classes.MDTableShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
