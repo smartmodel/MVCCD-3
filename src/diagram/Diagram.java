@@ -36,13 +36,27 @@ public abstract class Diagram extends ProjectElement {
         super(parent, name);
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     public String getParentIdAsString() {
         ProjectElement p = (ProjectElement) this.getParent();
         return p.getIdProjectElementAsString();
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+
+    public List<IShape> getShapes() {
+        return this.shapes;
+    }
+
+    public void setShapes(List<IShape> shapes) {
+        this.shapes = shapes;
+    }
+
+    public void addShape(IShape shape) {
+        this.shapes.add(shape);
+        ViewLogsManager.printMessage(shape.getClass().getSimpleName() + " ajoutée au diagramme " + this.getName(), WarningLevel.INFO);
     }
 
     public List<MDTableShape> getMDTableShapeList() {
@@ -50,19 +64,6 @@ public abstract class Diagram extends ProjectElement {
                 .filter(e -> e.getClass().getName().endsWith("MDTableShape"))
                 .map(md -> (MDTableShape) md)
                 .collect(Collectors.toList());
-    }
-
-    public List<IShape> getShapes() {
-        return shapes;
-    }
-
-    public void addShape(IShape shape) {
-        shapes.add(shape);
-        ViewLogsManager.printMessage(shape.getClass().getSimpleName() + " ajoutée au diagramme " + getName(), WarningLevel.INFO);
-    }
-
-    public void setShapes(List<IShape> shapes) {
-        this.shapes = shapes;
     }
 
     public List<ClassShape> getClassShapes() {

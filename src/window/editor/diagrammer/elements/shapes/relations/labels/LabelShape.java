@@ -1,8 +1,10 @@
-package window.editor.diagrammer.elements.shapes.relations;
+package window.editor.diagrammer.elements.shapes.relations.labels;
 
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
@@ -17,7 +19,7 @@ public class LabelShape extends JLabel implements Serializable {
   private final int MARGIN = 20;
   private int distanceInXFromPointAncrage;
   private int distanceInYFromPointAncrage;
-  private RelationPointAncrageShape pointAncrage;
+  private RelationAnchorPointShape pointAncrage;
   private RelationShape relationShape;
   private boolean isRole;
   private LabelType type;
@@ -27,7 +29,7 @@ public class LabelShape extends JLabel implements Serializable {
     this.addListeners();
   }
 
-  public LabelShape(RelationPointAncrageShape pointAncrage, LabelType type, RelationShape relationShape, int distanceInXFromPointAncrage, int distanceInYFromPointAncrage) {
+  public LabelShape(RelationAnchorPointShape pointAncrage, LabelType type, RelationShape relationShape, int distanceInXFromPointAncrage, int distanceInYFromPointAncrage) {
     this();
 
     this.type = type;
@@ -42,7 +44,7 @@ public class LabelShape extends JLabel implements Serializable {
 
     this.setBounds(initialLocation.x + distanceInXFromPointAncrage, initialLocation.y + distanceInYFromPointAncrage, 110, 30);
 
-    repaint();
+    this.repaint();
     DiagrammerService.getDrawPanel().repaint();
   }
 
@@ -52,7 +54,7 @@ public class LabelShape extends JLabel implements Serializable {
     Graphics2D graphics2D = (Graphics2D) g;
     Dimension size = this.calculateSize(graphics2D);
 
-    this.setBounds(pointAncrage.getBounds().x + distanceInXFromPointAncrage, pointAncrage.getBounds().y + distanceInYFromPointAncrage, size.width, size.height);
+    this.setBounds(this.pointAncrage.getBounds().x + this.distanceInXFromPointAncrage, this.pointAncrage.getBounds().y + this.distanceInYFromPointAncrage, size.width, size.height);
 
   }
 
@@ -207,11 +209,11 @@ public class LabelShape extends JLabel implements Serializable {
     return Preferences.DIAGRAMMER_LABEL_XML_TAG;
   }
 
-  public RelationPointAncrageShape getPointAncrage() {
-    return pointAncrage;
+  public RelationAnchorPointShape getPointAncrage() {
+    return this.pointAncrage;
   }
 
   public LabelType getType() {
-    return type;
+    return this.type;
   }
 }

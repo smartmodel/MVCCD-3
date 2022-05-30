@@ -4,17 +4,17 @@ import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import window.editor.diagrammer.elements.shapes.relations.RelationPointAncrageShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
 
 public class PointAncrageDeleteAction extends AbstractAction implements Serializable {
 
-  private final RelationPointAncrageShape pointAncrage;
-  private final RelationShape relation;
   private static final long serialVersionUID = 1000;
+  private final RelationAnchorPointShape pointAncrage;
+  private final RelationShape relation;
 
-  public PointAncrageDeleteAction(String name, Icon icon, RelationPointAncrageShape shape, RelationShape relation) {
+  public PointAncrageDeleteAction(String name, Icon icon, RelationAnchorPointShape shape, RelationShape relation) {
     super(name, icon);
     this.pointAncrage = shape;
     this.relation = relation;
@@ -27,8 +27,8 @@ public class PointAncrageDeleteAction extends AbstractAction implements Serializ
 
   private void delete() {
     // Suppression possible uniquement s'il y a plus de 2 points d'ancrage dans l'association
-    if (this.relation.getPointsAncrage().size() > 2) {
-      this.relation.deletePointAncrage(this.pointAncrage);
+    if (this.relation.getAnchorPoints().size() > 2) {
+      this.relation.deleteAnchorPoint(this.pointAncrage);
       DiagrammerService.getDrawPanel().repaint();
     }
   }

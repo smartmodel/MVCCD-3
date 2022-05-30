@@ -1,11 +1,10 @@
 package window.editor.diagrammer.elements.shapes;
 
-import main.MVCCDManager;
 import window.editor.diagrammer.elements.interfaces.IResizable;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
 import window.editor.diagrammer.utils.GridUtils;
-import window.editor.diagrammer.utils.ResizableBorder;
+import window.editor.diagrammer.utils.IDManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,89 +12,106 @@ import java.io.Serializable;
 
 public abstract class SquaredShape extends JPanel implements IShape, IResizable, Serializable {
 
-  private static final long serialVersionUID = 1000;
-  protected int id;
-  protected final ResizableBorder BORDER = new ResizableBorder();
-  protected boolean isSelected = false;
+    private static final long serialVersionUID = 1000;
+    protected int id;
+    protected boolean isFocused = false;
+    protected boolean isResizing = false;
 
-  public SquaredShape(int id) {
-    this.id = id;
-    this.addListeners();
-    this.setBorder(this.BORDER);
-  }
-
-  public SquaredShape() {
-    if (MVCCDManager.instance().getProject() != null) {
-      this.id = MVCCDManager.instance().getProject().getNextIdElementSequence();
+    public SquaredShape(int id) {
+        this();
+        this.id = id;
+        this.addListeners();
+        this.setBorder(this.BORDER);
     }
 
-    this.addListeners();
-    this.setBorder(this.BORDER);
-  }
+    public SquaredShape() {
+        super();
+        this.id = IDManager.generateId();
+        this.addListeners();
+        this.initUI();
+    }
 
-  public Point getCenter() {
-    return new Point((int) this.getBounds().getCenterX(), (int) this.getBounds().getCenterY());
-  }
+    protected abstract void defineBackgroundColor();
 
-  private void addListeners() {
-    final SquaredShapeListener listener = new SquaredShapeListener(this);
-    this.addMouseListener(listener);
-    this.addMouseMotionListener(listener);
-  }
+    protected abstract void defineMinimumSize();
 
-  @Override
-  protected void paintComponent(Graphics g) {
-    super.paintComponent(g);
-  }
+    protected abstract void defineSize();
 
-  @Override
-  public ResizableBorder getBorder() {
-    return this.BORDER;
-  }
+    private void initUI() {
+        this.defineMinimumSize();
+        this.defineBackgroundColor();
+        this.defineSize();
+    }
 
-  @Override
-  public void zoom(int fromFactor, int toFactor) {
-    final int newXPosition = this.getBounds().x * toFactor / fromFactor;
-    final int newYPosition = this.getBounds().y * toFactor / fromFactor;
-    final int newWidth = this.getBounds().width * toFactor / fromFactor;
-    final int newHeight = this.getBounds().height * toFactor / fromFactor;
+    private void addListeners() {
+        SquaredShapeListener listener = new SquaredShapeListener(this);
+        this.addMouseListener(listener);
+        this.addMouseMotionListener(listener);
+    }
 
-    // Set la nouvelle position, la nouvelle taille de l'élément et met à jour la nouvelle taille minimale de l'élément
-    this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
-    this.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
-    this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
-  }
+    protected abstract void doDraw(Graphics graphics);
 
-  @Override
-  public void drag(int differenceX, int differenceY) {
-    final Rectangle bounds = this.getBounds();
-    bounds.translate(differenceX, differenceY);
-    this.setBounds(bounds);
-    this.repaint();
-  }
+    @Override
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+        this.setBorder(BorderFactory.createLineBorder(Color.BLACK, this.isFocused || this.isResizing ? 0 : 0));
+        this.doDraw(graphics);
+    }
 
-  @Override
-  public boolean isSelected() {
-    return this.isSelected;
-  }
+    @Override
+    public void resize(Rectangle newBounds) {
+        this.setBounds(newBounds.x, newBounds.y, newBounds.width, newBounds.height);
+    }
 
-  @Override
-  public void setSelected(boolean selected) {
-    this.isSelected = selected;
-    this.BORDER.setVisible(selected);
-  }
+    @Override
+    public int getId() {
+        return this.id;
+    }
 
-  @Override
-  public void resize(Rectangle newBounds) {
-    this.setBounds(newBounds);
-  }
+    @Override
+    public Point getCenter() {
+        return new Point((int) this.getBounds().getCenterX(), (int) this.getBounds().getCenterY());
+    }
 
-  public int getId() {
-    return id;
-  }
+    @Override
+    public void zoom(int fromFactor, int toFactor) {
 
-  @Override
-  public String toString() {
-    return "SquaredShape{" + "id=" + id + '}';
-  }
+        int newXPosition = this.getBounds().x * toFactor / fromFactor;
+        int newYPosition = this.getBounds().y * toFactor / fromFactor;
+        int newWidth = this.getBounds().width * toFactor / fromFactor;
+        int newHeight = this.getBounds().height * toFactor / fromFactor;
+
+        // Set la nouvelle position, la nouvelle taille de l'élément et met à jour la nouvelle taille minimale de l'élément
+        this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
+        this.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
+        this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
+    }
+
+    @Override
+    public void drag(int differenceX, int differenceY) {
+        Rectangle bounds = this.getBounds();
+        bounds.translate(differenceX, differenceY);
+        this.setBounds(bounds);
+        this.repaint();
+    }
+
+    @Override
+    public boolean isFocused() {
+        return this.isFocused;
+    }
+
+    @Override
+    public void setFocused(boolean selected) {
+        this.isFocused = selected;
+        this.repaint();
+    }
+
+    @Override
+    public String toString() {
+        return "SquaredShape{" + "id=" + this.id + '}';
+    }
+
+    public void setResizing(boolean resizing) {
+        this.isResizing = resizing;
+    }
 }

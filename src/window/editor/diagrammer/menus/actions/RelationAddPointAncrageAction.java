@@ -9,9 +9,9 @@ import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
 public class RelationAddPointAncrageAction extends AbstractAction implements Serializable {
 
+  private static final long serialVersionUID = 1000;
   private final RelationShape relation;
   private final Point point;
-  private static final long serialVersionUID = 1000;
 
   public RelationAddPointAncrageAction(String name, Icon icon, RelationShape shape, Point point) {
     super(name, icon);
@@ -21,7 +21,7 @@ public class RelationAddPointAncrageAction extends AbstractAction implements Ser
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    this.relation.addPointAncrage(this.point);
+    this.relation.addAnchorPoint(this.point);
   }
 
 }

@@ -1,18 +1,18 @@
 package main;
 
 import console.ViewLogsManager;
+import java.io.Console;
 import messages.MessagesBuilder;
 
-import java.io.Console;
+public class MVCCD {
 
-public class MVCCD  {
-    /**
-     * Démarre MVC-CD-3  
-     */
-    public static void main(String[] args) {
-        Console console;
+  /**
+   * Démarre MVC-CD-3
+   */
+  public static void main(String[] args) {
+    Console console;
 
-        try {
+    try {
             /*
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
@@ -21,14 +21,15 @@ public class MVCCD  {
             });
 
             */
-            MVCCDManager.instance().start();
-        } catch(Exception e){
-            if (MVCCDManager.instance().getConsoleManager() != null) {
-                String message = MessagesBuilder.getMessagesProperty("main.finish.error");
-                ViewLogsManager.catchException(e, MVCCDManager.instance().getMvccdWindow(), message);
-            } else {
-                e.printStackTrace();
-            }
-        }
+      MVCCDManager.instance().start();
+
+    } catch (Exception e) {
+      if (MVCCDManager.instance().getConsoleManager() != null) {
+        String message = MessagesBuilder.getMessagesProperty("main.finish.error");
+        ViewLogsManager.catchException(e, MVCCDManager.instance().getMvccdWindow(), message);
+      } else {
+        e.printStackTrace();
+      }
     }
+  }
 }

@@ -9,8 +9,8 @@ import java.io.Serializable;
 
 public class MCDEntityShapeDeleteAction extends AbstractAction implements Serializable {
 
-  private MCDEntityShape shape;
   private static final long serialVersionUID = 1000;
+  private MCDEntityShape shape;
 
   public MCDEntityShapeDeleteAction(String name, Icon icon, MCDEntityShape shape) {
     super(name, icon);
@@ -19,10 +19,10 @@ public class MCDEntityShapeDeleteAction extends AbstractAction implements Serial
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    delete();
+    this.delete();
   }
 
   private void delete() {
-    DiagrammerService.getDrawPanel().deleteShape(shape);
+    DiagrammerService.getDrawPanel().deleteShape(this.shape);
   }
 }

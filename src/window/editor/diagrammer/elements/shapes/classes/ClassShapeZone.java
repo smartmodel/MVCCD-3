@@ -1,11 +1,12 @@
 package window.editor.diagrammer.elements.shapes.classes;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClassShapeZone extends Rectangle {
 
+  private static final long serialVersionUID = -8400562139584806739L;
   private List<String> elements;
 
   public ClassShapeZone() {

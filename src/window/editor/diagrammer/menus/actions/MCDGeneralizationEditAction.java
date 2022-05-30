@@ -7,12 +7,12 @@ import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDGeneralization;
 import repository.editingTreat.mcd.MCDGeneralizationEditingTreat;
-import window.editor.diagrammer.elements.shapes.relations.MCDGeneralizationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDGeneralizationShape;
 
 public class MCDGeneralizationEditAction extends AbstractAction implements Serializable {
 
-  private final MCDGeneralizationShape shape;
   private static final long serialVersionUID = 1000;
+  private final MCDGeneralizationShape shape;
 
   public MCDGeneralizationEditAction(String name, Icon icon, MCDGeneralizationShape shape) {
     super(name, icon);
@@ -29,15 +29,15 @@ public class MCDGeneralizationEditAction extends AbstractAction implements Seria
   }
 
   private void edit() {
-    final MVCCDManager manager = MVCCDManager.instance();
-    final MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
+    MVCCDManager manager = MVCCDManager.instance();
+    MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
     mcdGeneralizationEditingTreat.treatUpdate(manager.getMvccdWindow(), this.shape.getGeneralization());
   }
 
   private void create() {
-    final MVCCDManager manager = MVCCDManager.instance();
-    final MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
-    final MCDGeneralization generalization = mcdGeneralizationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations());
+    MVCCDManager manager = MVCCDManager.instance();
+    MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
+    MCDGeneralization generalization = mcdGeneralizationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations());
 
     this.shape.setGeneralization(generalization);
   }
