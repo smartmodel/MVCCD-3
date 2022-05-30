@@ -1,9 +1,12 @@
 package window.editor.diagrammer.elements.shapes;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.UMLPackageIntegrableShapes;
-
-import java.awt.*;
 
 public class MPDRProcedureContainerShape extends SquaredShape implements UMLPackageIntegrableShapes {
 
@@ -14,9 +17,29 @@ public class MPDRProcedureContainerShape extends SquaredShape implements UMLPack
     }
 
     @Override
+    protected void defineBackgroundColor() {
+
+    }
+
+    @Override
+    protected void defineMinimumSize() {
+
+    }
+
+    @Override
+    protected void defineSize() {
+
+    }
+
+    @Override
     public void initUI(){
         this.setMinimumSize(new Dimension((int) (Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH / 1.5), Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT));
         this.setSize(this.getMinimumSize());
+    }
+
+    @Override
+    protected void doDraw(Graphics graphics) {
+
     }
 
     @Override

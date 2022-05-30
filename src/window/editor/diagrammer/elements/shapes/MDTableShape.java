@@ -1,17 +1,21 @@
 package window.editor.diagrammer.elements.shapes;
 
+import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import mdr.MDRTable;
 import mpdr.oracle.MPDROracleTable;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.MDTableShapeListener;
 
-import java.awt.*;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-public class MDTableShape extends ClassShape {
+public class MDTableShape extends ClassShape implements Serializable {
     private final String name;
     private final Color COLOR = Color.decode("#A0F0CF");
     private boolean initialized = false;
@@ -110,14 +114,29 @@ public class MDTableShape extends ClassShape {
         return minHeight;
     }
 
+    @Override
+    protected void defineBackgroundColor() {
+        this.setBackgroundColor();
+    }
+
+    @Override
+    protected void defineSize() {
+
+    }
+
     private void addListeners() {
         MDTableShapeListener listener = new MDTableShapeListener();
         this.addMouseListener(listener);
         this.addMouseMotionListener(listener);
     }
 
-    public MPDROracleTable getEntity() {
-        return (MPDROracleTable) this.getRelatedRepositoryElement();
+    @Override
+    protected void doDraw(Graphics graphics) {
+
+    }
+
+    public MDRTable getEntity() {
+        return (MDRTable) this.getRelatedRepositoryElement();
     }
 
     @Override
@@ -237,10 +256,6 @@ public class MDTableShape extends ClassShape {
         return null;
     }
 
-    public void setEntity(MPDROracleTable entity) {
-        this.relatedRepositoryElement = entity;
-        this.updateSizeAndMinimumSize();
-    }
 
     @Override
     public String getName() {

@@ -1,13 +1,15 @@
 package window.editor.diagrammer.elements.shapes.classes.mcd;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.io.Serializable;
 import mcd.MCDEntity;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.MCDEntityShapeListener;
 
-import java.awt.*;
-
-public class MCDEntityShape extends ClassShape {
+public class MCDEntityShape extends ClassShape implements Serializable {
 
   public MCDEntityShape(MCDEntity relatedRepositoryEntity) {
     super(relatedRepositoryEntity);
@@ -28,6 +30,16 @@ public class MCDEntityShape extends ClassShape {
   public MCDEntityShape() {
     super();
     this.addListeners();
+  }
+
+  @Override
+  protected void defineBackgroundColor() {
+
+  }
+
+  @Override
+  protected void defineSize() {
+
   }
 
   @Override
@@ -99,9 +111,14 @@ public class MCDEntityShape extends ClassShape {
   }
 
   private void addListeners() {
-    MCDEntityShapeListener listener = new MCDEntityShapeListener();
+    MCDEntityShapeListener listener = new MCDEntityShapeListener(this);
     this.addMouseListener(listener);
     this.addMouseMotionListener(listener);
+  }
+
+  @Override
+  protected void doDraw(Graphics graphics) {
+
   }
 
   public MCDEntity getEntity() {

@@ -2,6 +2,23 @@ package window.editor.diagrammer.drawpanel;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
@@ -9,20 +26,13 @@ import preferences.PreferencesManager;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.MDTableShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.DrawPanelListener;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.RelationCreator;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Représente la zone de dessin du diagrammeur. C'est sur ce composant que la grille sera dessinée et que les éléments graphiques sont ajoutés (entités, relations, ...)
@@ -427,6 +437,16 @@ public class DrawPanel extends JLayeredPane implements Serializable {
             }
         }
         return classShapes;
+    }
+
+    public List<RelationShape> getRelationShapesBySquaredShape(SquaredShape shape) {
+        List<RelationShape> relations = new ArrayList<>();
+        for (RelationShape relation : this.getRelationShapes()) {
+            if (relation.getSource() == shape || relation.getDestination() == shape) {
+                relations.add(relation);
+            }
+        }
+        return relations;
     }
 
     public List<RelationShape> getRelationShapesByClassShape(ClassShape shape) {

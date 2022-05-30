@@ -1,10 +1,12 @@
 package window.editor.diagrammer.utils;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
@@ -19,7 +21,7 @@ public final class ResizableBorder implements Border, Serializable {
 
   @Override
   public void paintBorder(Component component, Graphics g, int x, int y, int w, int h) {
-    if (this.isVisible) {
+/*    if (this.isVisible) {
       for (int location : this.locations) {
         Rectangle rect = this.getRectangle(x, y, w, h, location);
         g.setColor(Color.WHITE);
@@ -27,7 +29,7 @@ public final class ResizableBorder implements Border, Serializable {
         g.setColor(Color.BLACK);
         g.drawRect(rect.x, rect.y, rect.width - 1, rect.height - 1);
       }
-    }
+    }*/
   }
 
   @Override

@@ -1,13 +1,14 @@
 package window.editor.diagrammer.elements.shapes.relations.mcd;
 
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+import java.io.Serializable;
+import m.interfaces.IMRelation;
 import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
-
-import java.awt.*;
-import java.io.Serializable;
 
 public class MCDCompositionShape extends RelationShape implements Serializable {
 
@@ -21,7 +22,7 @@ public class MCDCompositionShape extends RelationShape implements Serializable {
 
     public MCDCompositionShape(MDElement relatedRepositoryComposition, MCDEntityShape source, MCDEntityShape destination) {
         this(source, destination);
-        this.relatedRepositoryElement = relatedRepositoryComposition;
+        this.relatedRepositoryElement = (IMRelation) relatedRepositoryComposition;
     }
 
     @Override
@@ -80,6 +81,6 @@ public class MCDCompositionShape extends RelationShape implements Serializable {
     }
 
     public MDElement getMCDComposition() {
-        return this.relatedRepositoryElement;
+        return (MDElement) this.relatedRepositoryElement;
     }
 }

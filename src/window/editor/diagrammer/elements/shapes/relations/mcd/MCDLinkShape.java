@@ -1,11 +1,11 @@
 package window.editor.diagrammer.elements.shapes.relations.mcd;
 
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+import java.io.Serializable;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
-
-import java.awt.*;
-import java.io.Serializable;
 
 public class MCDLinkShape extends RelationShape implements Serializable {
 
