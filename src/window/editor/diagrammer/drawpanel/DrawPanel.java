@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
+import javax.swing.JScrollBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import main.MVCCDManager;
@@ -49,6 +50,10 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     this.initUI();
     this.addListeners();
     this.repaint();
+  }
+
+  public double getZoomFactor() {
+    return this.gridSize / (double) Preferences.DIAGRAMMER_DEFAULT_GRID_SIZE;
   }
 
   public int getGridSize() {
@@ -93,9 +98,13 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     return null;
   }
 
+  private boolean isZoomAllowed(int zoomFactor) {
+    return zoomFactor >= Preferences.DIAGRAMMER_MINIMUM_ALLOWED_ZOOM && zoomFactor <= Preferences.DIAGRAMMER_MAXIMUM_ALLOWED_ZOOM;
+  }
+
   public void zoom(int zoomFactor) {
     int oldGridSize = this.gridSize;
-    if (zoomFactor >= Preferences.DIAGRAMMER_MINIMUM_ALLOWED_ZOOM && zoomFactor <= Preferences.DIAGRAMMER_MAXIMUM_ALLOWED_ZOOM) {
+    if (this.isZoomAllowed(zoomFactor)) {
       this.setGridSize(zoomFactor);
     }
     this.zoomElements(oldGridSize, this.gridSize);
@@ -104,17 +113,22 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     Point viewportLocation = parent.getViewport().getLocationOnScreen();
     double x = mouseLocation.x - viewportLocation.x;
     double y = mouseLocation.y - viewportLocation.y;
+
     // Ajoute l'espace accessible par la scrollbar
     x += parent.getViewport().getViewPosition().getX();
     y += parent.getViewport().getViewPosition().getY();
+
     // Le résultat est là où le zoom s'effectuera
-    double differenceX, differenceY;
+    double differenceX;
+    double differenceY;
     differenceX = x - x * this.gridSize / oldGridSize;
     differenceY = y - y * this.gridSize / oldGridSize;
+
     // On déplace l'origine
     this.moveOrigin(GridUtils.alignToGrid(-differenceX, this.gridSize), GridUtils.alignToGrid(-differenceY, this.gridSize));
+
     for (IShape e : this.getShapes()) {
-      e.setLocationDifference(GridUtils.alignToGrid(differenceX, this.gridSize), GridUtils.alignToGrid(differenceX, this.gridSize));
+      e.zoom(oldGridSize, this.gridSize);
     }
     this.updatePanelAndScrollbars();
 
@@ -378,14 +392,17 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     }
   }
 
-  public void scroll(int differenceX, int differenceY) {
-    for (IShape element : this.getShapes()) {
-      element.setLocationDifference(differenceX, differenceY);
+  public void drag(int differenceX, int differenceY) {
+    for (IShape shape : this.shapes) {
+      shape.drag(differenceX, differenceY);
     }
-/*
+  }
+
+  public void scroll(int amount, boolean isHorizontal) {
     DrawPanelComponent parent = (DrawPanelComponent) this.getParent().getParent();
-    parent.getHorizontalScrollBar().setValue(parent.getHorizontalScrollBar().getValue() + differenceX);
-*/
+    JScrollBar scrollBar = isHorizontal ? parent.getHorizontalScrollBar() : parent.getVerticalScrollBar();
+    int increment = scrollBar.getUnitIncrement();
+    scrollBar.setValue(scrollBar.getValue() + amount * increment);
   }
 
   public void endScroll() {
@@ -424,6 +441,16 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   }
 
   public List<RelationShape> getRelationShapesByClassShape(ClassShape shape) {
+    List<RelationShape> relations = new ArrayList<>();
+    for (RelationShape relation : this.getRelationShapes()) {
+      if (relation.getSource() == shape || relation.getDestination() == shape) {
+        relations.add(relation);
+      }
+    }
+    return relations;
+  }
+
+  public List<RelationShape> getRelationShapesByClSquaredShape(SquaredShape shape) {
     List<RelationShape> relations = new ArrayList<>();
     for (RelationShape relation : this.getRelationShapes()) {
       if (relation.getSource() == shape || relation.getDestination() == shape) {

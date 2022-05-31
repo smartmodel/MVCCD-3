@@ -62,12 +62,8 @@ public class RelationAnchorPointShape extends Point implements IShape, Serializa
 
   @Override
   public void setLocationDifference(int differenceX, int differenceY) {
+    System.out.println("d" + differenceX);
     this.translate(differenceX, differenceY);
-  }
-
-  @Override
-  public void repaint() {
-
   }
 
   @Override
@@ -98,19 +94,18 @@ public class RelationAnchorPointShape extends Point implements IShape, Serializa
 
   @Override
   public void zoom(int fromFactor, int toFactor) {
-    int newXPosition = this.getBounds().x * toFactor / fromFactor;
-    int newYPosition = this.getBounds().y * toFactor / fromFactor;
-    int newWidth = this.getBounds().width * toFactor / fromFactor;
-    int newHeight = this.getBounds().height * toFactor / fromFactor;
-    // Set la nouvelle position, la nouvelle taille de l'élément et met à jour la nouvelle taille minimale de l'élément
-    this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
-    this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
+    int newX = this.x * toFactor / fromFactor;
+    int newY = this.y * toFactor / fromFactor;
+    this.x = newX;
+    this.y = newY;
   }
 
   @Override
-  public void drag(int x, int y) {
-    this.move(x, y);
-    DiagrammerService.getDrawPanel().repaint();
+  public void drag(int differenceX, int differenceY) {
+    int newX = GridUtils.alignToGrid(this.getX() + differenceX, DiagrammerService.getDrawPanel().getGridSize());
+    int newY = GridUtils.alignToGrid(this.getY() + differenceY, DiagrammerService.getDrawPanel().getGridSize());
+    this.move(newX, newY);
+    System.out.println("Point " + this.index + " dragged !");
   }
 
   @Override

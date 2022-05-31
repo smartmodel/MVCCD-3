@@ -107,9 +107,9 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   @Override
   public void setLocationDifference(int differenceX, int differenceY) {
-    for (RelationAnchorPointShape anchorPoint : this.anchorPoints) {
-      anchorPoint.setLocationDifference(differenceX, differenceY);
-    }
+/*    for (RelationAnchorPointShape anchorPoint : this.anchorPoints) {
+      anchorPoint.drag(anchorPoint.x + differenceX, anchorPoint.y + differenceY);
+    }*/
   }
 
   @Override
@@ -140,8 +140,8 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
       return new Point(this.anchorPoints.get(indexCenter).x, this.anchorPoints.get(indexCenter).y);
     } else {
       int indexCenter = this.anchorPoints.size() / 2 - 1;
-      final RelationAnchorPointShape centerPoint = this.anchorPoints.get(indexCenter);
-      final RelationAnchorPointShape pointNextToCenter = this.anchorPoints.get(indexCenter + 1);
+      RelationAnchorPointShape centerPoint = this.anchorPoints.get(indexCenter);
+      RelationAnchorPointShape pointNextToCenter = this.anchorPoints.get(indexCenter + 1);
       return new Point((centerPoint.x + pointNextToCenter.x) / 2, (centerPoint.y + pointNextToCenter.y) / 2);
     }
   }
@@ -155,6 +155,9 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   @Override
   public void drag(int differenceX, int differenceY) {
+    for (RelationAnchorPointShape p : this.anchorPoints) {
+      p.setLocationDifference(differenceX, differenceY);
+    }
   }
 
   @Override

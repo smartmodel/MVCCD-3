@@ -118,7 +118,8 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   public void mouseWheelMoved(MouseWheelEvent e) {
     super.mouseWheelMoved(e);
     if (this.isZoomAllowed()) {
-      final int actualZoom = DiagrammerService.getDrawPanel().getGridSize();
+      int actualZoom = DiagrammerService.getDrawPanel().getGridSize();
+      System.out.println(DiagrammerService.getDrawPanel().getZoomFactor());
       DiagrammerService.getDrawPanel().zoom(actualZoom - e.getWheelRotation());
     }
   }
@@ -126,11 +127,11 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   @Override
   public void mouseDragged(MouseEvent e) {
     super.mouseDragged(e);
-    final int differenceX = e.getPoint().x - this.origin.x;
-    final int differenceY = e.getPoint().y - this.origin.y;
+    int differenceX = e.getPoint().x - this.origin.x;
+    int differenceY = e.getPoint().y - this.origin.y;
 
     if (this.isScrollAllowed()) {
-      DiagrammerService.getDrawPanel().scroll(differenceX, differenceY);
+      DiagrammerService.getDrawPanel().drag(differenceX, differenceY);
     }
 
     if (this.anchorPointClicked != null && this.focusedRelation != null) {
@@ -280,8 +281,16 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
   }
 
   private void dragAnchorPointSelected(MouseEvent e) {
-    Point newPoint = new Point(GridUtils.alignToGrid(e.getX(), DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(e.getY(), DiagrammerService.getDrawPanel().getGridSize()));
-    this.dragAnchorPoint(newPoint);
+    int differenceX = this.anchorPointClicked.x - e.getX();
+    int differenceY = this.anchorPointClicked.y - e.getY();
+    Point newPosition = new Point(GridUtils.alignToGrid(this.anchorPointClicked.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(this.anchorPointClicked.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
+    boolean dragAllowed = this.checkIfAnchorPointCanBeDragged(this.anchorPointClicked, newPosition);
+    System.out.println("X " + differenceX);
+    System.out.println("Y " + differenceY);
+    if (dragAllowed) {
+      this.anchorPointClicked.drag(differenceX, differenceY);
+    }
+
     DiagrammerService.getDrawPanel().repaint();
   }
 
@@ -313,10 +322,10 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
 
   /***
    * Cette méthode gère le déplacement du premier ou dernier point d'ancrage d'une relation
-   * @param newPoint Nouveau point aux coordonnées x et y
    */
-  private void dragFirstAnchorPoint(Point newPoint) {
+  private void dragFirstAnchorPoint(int differenceX, int differenceY) {
 
+    Point newPoint = new Point(GridUtils.alignToGrid(this.anchorPointClicked.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(this.anchorPointClicked.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
     boolean dragAllowed = GeometryUtils.pointIsAroundShape(newPoint, this.focusedRelation.getSource());
 
     if (dragAllowed) {
@@ -324,8 +333,10 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     }
   }
 
-  private void dragLastAnchorPoint(Point newPoint) {
+  private void dragLastAnchorPoint(int differenceX, int differenceY) {
     boolean dragAllowed = false;
+
+    Point newPoint = new Point(GridUtils.alignToGrid(this.anchorPointClicked.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(this.anchorPointClicked.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
 
     if (this.focusedRelation.getDestination() instanceof RelationShape) {
       dragAllowed = GeometryUtils.pointIsOnRelation(newPoint, (RelationShape) this.focusedRelation.getDestination());
@@ -333,36 +344,27 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
       dragAllowed = GeometryUtils.pointIsAroundShape(newPoint, (ClassShape) this.focusedRelation.getDestination());
     }
     if (dragAllowed) {
-      this.anchorPointClicked.drag(newPoint.x, newPoint.y);
+      this.anchorPointClicked.drag(differenceX, differenceY);
     }
   }
 
   /***
    * Cette méthode gère les déplacements des points d'ancrage de la relation cliquée.
-   * @param newPoint Nouveau point aux coordonnées x et y
    */
-  private void dragAnchorPoint(Point newPoint) {
+  private void dragAnchorPoint(int differenceX, int differenceY) {
     for (RelationAnchorPointShape anchorPointToMove : this.anchorPointsToMove) {
 
-      Point newPosition = new Point(anchorPointToMove.x, anchorPointToMove.y);
-
-      if (this.anchorPointClicked.x == anchorPointToMove.x) {
-        newPosition.x = newPoint.x;
-      }
-
-      if (this.anchorPointClicked.y == anchorPointToMove.y) {
-        newPosition.y = newPoint.y;
-      }
+      Point newPosition = new Point(anchorPointToMove.x + differenceX, anchorPointToMove.y + differenceY);
 
       boolean dragAllowed = this.checkIfAnchorPointCanBeDragged(anchorPointToMove, newPosition);
 
       if (dragAllowed) {
-        anchorPointToMove.drag(newPosition.x, newPosition.y);
+        anchorPointToMove.drag(differenceX, differenceY);
       }
     }
 
     // Maintenant, on déplace le point d'ancrage cliqué
-    this.dragClickedAnchorPoint(newPoint);
+    this.dragClickedAnchorPoint(differenceX, differenceY);
 
     List<RelationAnchorPointShape> linkAnchorPointsToMove = new LinkedList<>();
     for (RelationShape relationShape : DiagrammerService.getDrawPanel().getRelationShapes()) {
@@ -376,13 +378,13 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     }
   }
 
-  private void dragClickedAnchorPoint(Point newPoint) {
+  private void dragClickedAnchorPoint(int differenceX, int differenceY) {
     if (this.anchorPointClicked == this.focusedRelation.getFirstPoint()) {
-      this.dragFirstAnchorPoint(newPoint);
+      this.dragFirstAnchorPoint(differenceX, differenceY);
     } else if (this.anchorPointClicked == this.focusedRelation.getLastPoint()) {
-      this.dragLastAnchorPoint(newPoint);
+      this.dragLastAnchorPoint(differenceX, differenceY);
     } else {
-      this.anchorPointClicked.drag(newPoint.x, newPoint.y);
+      this.anchorPointClicked.drag(differenceX, differenceY);
     }
   }
 

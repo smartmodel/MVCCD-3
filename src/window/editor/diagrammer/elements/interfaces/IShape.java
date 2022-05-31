@@ -1,13 +1,14 @@
 package window.editor.diagrammer.elements.interfaces;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Rectangle;
 
 public interface IShape {
 
   default void setLocationDifference(int differenceX, int differenceY) {
     this.setLocation(this.getBounds().x + differenceX, this.getBounds().y + differenceY);
   }
-  void repaint();
   void setLocation(Point location);
   void setSize(Dimension dimension);
   int getId();

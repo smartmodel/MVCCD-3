@@ -6,6 +6,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import javax.swing.SwingUtilities;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
@@ -111,7 +112,7 @@ public final class GeometryUtils {
     return relationShape.contains(point);
   }
 
-  public static RelationAnchorPointShape getNearestPointAncrage(ClassShape shape, RelationShape relation) {
+  public static RelationAnchorPointShape getNearestPointAncrage(SquaredShape shape, RelationShape relation) {
     return shape == relation.getSource() ? relation.getFirstPoint() : relation.getLastPoint();
   }
 
