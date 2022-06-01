@@ -25,8 +25,8 @@ import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.Position;
+import window.editor.diagrammer.utils.ShapeUtils;
 
 public abstract class RelationShape extends JComponent implements IShape, Serializable {
 
@@ -119,13 +119,13 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   @Override
   public Point getCenter() {
-    final RelationAnchorPointShape left = GeometryUtils.getLeftPoint(this.getFirstPoint(), this.getLastPoint());
-    final RelationAnchorPointShape right = GeometryUtils.getRightPoint(this.getFirstPoint(), this.getLastPoint());
+    final RelationAnchorPointShape left = ShapeUtils.getLeftPoint(this.getFirstPoint(), this.getLastPoint());
+    final RelationAnchorPointShape right = ShapeUtils.getRightPoint(this.getFirstPoint(), this.getLastPoint());
     final Line2D segment = new Line2D.Double();
     segment.setLine(this.getFirstPoint().x, this.getFirstPoint().y, this.getLastPoint().x, this.getLastPoint().y);
 
     if (this.anchorPoints.size() == 2) {
-      if (GeometryUtils.isVertical(segment) || GeometryUtils.isHorizontal(segment)) {
+      if (ShapeUtils.isVertical(segment) || ShapeUtils.isHorizontal(segment)) {
         int x = (int) segment.getBounds().getCenterX();
         int y = (int) segment.getBounds().getCenterY();
         return new Point(x, y);
@@ -243,7 +243,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
         if (point.y != shape.getBounds().getMaxY() && point.y != shape.getBounds().getMinY() && point.x != shape.getBounds().getMinX()) {
           point.drag((int) shape.getBounds().getMaxX(), point.y);
         } else {
-          if (!GeometryUtils.pointIsAroundShape(point, shape)) {
+          if (!ShapeUtils.pointIsAroundShape(point, shape)) {
             point.drag((int) shape.getBounds().getMaxX(), point.y);
           }
         }
@@ -251,7 +251,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
         if (point.y != shape.getBounds().getMaxY() && point.y != shape.getBounds().getMinY() && point.x != shape.getBounds().getMaxX()) {
           point.drag((int) shape.getBounds().getMinX(), point.y);
         } else {
-          if (!GeometryUtils.pointIsAroundShape(point, shape)) {
+          if (!ShapeUtils.pointIsAroundShape(point, shape)) {
             point.drag((int) shape.getBounds().getMinX(), point.y);
           }
         }
@@ -259,7 +259,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
         if (point.x != shape.getBounds().getMaxX() && point.x != shape.getBounds().getMinX() && point.y != shape.getBounds().getMinY()) {
           point.drag(point.x, (int) shape.getBounds().getMaxY());
         } else {
-          if (!GeometryUtils.pointIsAroundShape(point, shape)) {
+          if (!ShapeUtils.pointIsAroundShape(point, shape)) {
             point.drag(point.x, (int) shape.getBounds().getMaxY());
           }
         }
@@ -267,7 +267,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
         if (point.x != shape.getBounds().getMaxX() && point.x != shape.getBounds().getMinX() && point.y != shape.getBounds().getMaxY()) {
           point.drag(point.x, (int) shape.getBounds().getMinY());
         } else {
-          if (!GeometryUtils.pointIsAroundShape(point, shape)) {
+          if (!ShapeUtils.pointIsAroundShape(point, shape)) {
             point.drag(point.x, (int) shape.getBounds().getMinY());
           }
         }
@@ -339,7 +339,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     Line2D nearestSegment = this.getNearestSegment(point);
     if (nearestSegment != null) {
       int newIndex = this.getAnchorPointIndex(this.convertPoint2DToAnchorPoint(nearestSegment.getP2()));
-      Point nearestPointOnSegment = GeometryUtils.getNearestPointOnLine(nearestSegment.getX1(), nearestSegment.getY1(), nearestSegment.getX2(), nearestSegment.getY2(), point.x, point.y, true, null);
+      Point nearestPointOnSegment = ShapeUtils.getNearestPointOnLine(nearestSegment.getX1(), nearestSegment.getY1(), nearestSegment.getX2(), nearestSegment.getY2(), point.x, point.y, true, null);
       RelationAnchorPointShape newAnchorPoint = new RelationAnchorPointShape(nearestPointOnSegment, newIndex);
       this.addAnchorPoint(newAnchorPoint, newIndex);
       this.reindexAllAnchorPoint();
@@ -349,7 +349,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   public Line2D getNearestSegment(Point point) {
     for (Line2D segment : this.getSegments()) {
-      if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, point) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
+      if (ShapeUtils.getDistanceBetweenLineAndPoint(segment, point) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
         return segment;
       }
     }
@@ -492,7 +492,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
     this.anchorPoints.clear();
 
-    Position sourcePosition = GeometryUtils.getSourceShapePosition(this.source, (ClassShape) this.destination);
+    Position sourcePosition = ShapeUtils.getSourceShapePosition(this.source, (ClassShape) this.destination);
     Rectangle sourceBounds = this.source.getBounds();
     Rectangle destBounds = this.destination.getBounds();
 

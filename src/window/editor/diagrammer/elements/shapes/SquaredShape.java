@@ -15,9 +15,9 @@ import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointSha
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.IDManager;
+import window.editor.diagrammer.utils.ShapeUtils;
 
 public abstract class SquaredShape extends JPanel implements IShape, IResizable, Serializable {
 
@@ -91,7 +91,6 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
     int newHeight = this.getBounds().height * toFactor / fromFactor;
 
     this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
-
     this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
   }
 
@@ -99,7 +98,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   public void drag(int differenceX, int differenceY) {
     List<RelationShape> linkedRelations = DiagrammerService.getDrawPanel().getRelationShapesByClSquaredShape(this);
     for (RelationShape relation : linkedRelations) {
-      RelationAnchorPointShape nearestPointAncrage = GeometryUtils.getNearestPointAncrage(this, relation);
+      RelationAnchorPointShape nearestPointAncrage = ShapeUtils.getNearestPointAncrage(this, relation);
       nearestPointAncrage.drag(nearestPointAncrage.x + differenceX, nearestPointAncrage.y + differenceY);
     }
     this.setLocation(this.getX() + differenceX, this.getY() + differenceY);

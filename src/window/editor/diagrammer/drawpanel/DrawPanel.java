@@ -160,7 +160,6 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     this.addMouseListener(listener);
     this.addMouseMotionListener(listener);
     this.addMouseWheelListener(listener);
-    this.addKeyListener(listener);
   }
 
   public List<IShape> getShapes() {

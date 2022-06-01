@@ -13,7 +13,7 @@ import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointSha
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.GeometryUtils;
+import window.editor.diagrammer.utils.ShapeUtils;
 
 public class LabelShape extends JLabel implements Serializable {
 
@@ -79,7 +79,7 @@ public class LabelShape extends JLabel implements Serializable {
     int y;
     ClassShape nearestClassShape = this.relationShape.getNearestClassShape(this.pointAncrage);
 
-    if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
+    if (ShapeUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté gauche de la ClassShape
       if (this.isRole) {
         x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
@@ -88,7 +88,7 @@ public class LabelShape extends JLabel implements Serializable {
         x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
         y = this.pointAncrage.y + this.MARGIN;
       }
-    } else if (GeometryUtils.pointIsOnRightSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
+    } else if (ShapeUtils.pointIsOnRightSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté droit de la ClassShape
       if (this.isRole) {
         x = this.pointAncrage.x + this.MARGIN;
@@ -97,7 +97,7 @@ public class LabelShape extends JLabel implements Serializable {
         x = this.pointAncrage.x + this.MARGIN;
         y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       }
-    } else if (GeometryUtils.pointIsOnBottomSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
+    } else if (ShapeUtils.pointIsOnBottomSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le bas de la ClassShape
       if (this.isRole) {
         x = this.pointAncrage.x + this.MARGIN;
@@ -126,7 +126,7 @@ public class LabelShape extends JLabel implements Serializable {
 
     ClassShape nearestClassShape = this.relationShape.getNearestClassShape(this.pointAncrage);
 
-    if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
+    if (ShapeUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté gauche de la ClassShape
       if (this.isRole) {
         x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
@@ -135,7 +135,7 @@ public class LabelShape extends JLabel implements Serializable {
         x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
         y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       }
-    } else if (GeometryUtils.pointIsOnRightSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
+    } else if (ShapeUtils.pointIsOnRightSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté droit de la ClassShape
       if (this.isRole) {
         x = this.pointAncrage.x + this.MARGIN;
@@ -144,7 +144,7 @@ public class LabelShape extends JLabel implements Serializable {
         x = this.pointAncrage.x + this.MARGIN;
         y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       }
-    } else if (GeometryUtils.pointIsOnBottomSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
+    } else if (ShapeUtils.pointIsOnBottomSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
       // Le point d'ancrage est situé sur le bas de la ClassShape
       if (this.isRole) {
         x = this.pointAncrage.x - this.getWidth() - this.MARGIN;

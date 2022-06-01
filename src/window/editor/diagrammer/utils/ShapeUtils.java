@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.util.List;
 import javax.swing.SwingUtilities;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
@@ -12,7 +13,7 @@ import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointSha
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
 
-public final class GeometryUtils {
+public final class ShapeUtils {
 
   public static double getDistanceBetweenTwoPoints(Point p1, Point p2) {
     double ac = Math.abs(p1.y - p2.y);
@@ -106,10 +107,6 @@ public final class GeometryUtils {
 
   public static boolean anchorPointsAreOnSameSegment(Line2D segment, RelationAnchorPointShape p1, RelationAnchorPointShape p2) {
     return segment.contains(p1) && segment.contains(p2);
-  }
-
-  public static boolean pointIsOnRelation(Point point, RelationShape relationShape) {
-    return relationShape.contains(point);
   }
 
   public static RelationAnchorPointShape getNearestPointAncrage(SquaredShape shape, RelationShape relation) {
@@ -248,6 +245,22 @@ public final class GeometryUtils {
 
   public static boolean xCoordinateIsOutsideShape(double x, IShape shape) {
     return x < shape.getBounds().getMinX() || x > shape.getBounds().getMaxX();
+  }
+
+  public static RelationShape getRelationFromAnchorPoint(RelationAnchorPointShape anchorPoint) {
+    List<RelationShape> allRelations = DiagrammerService.getDrawPanel().getRelationShapes();
+    for (RelationShape relation : allRelations) {
+      for (RelationAnchorPointShape point : relation.getAnchorPoints()) {
+        if (point == anchorPoint) {
+          return relation;
+        }
+      }
+    }
+    return null;
+  }
+
+  public static boolean pointIsOnRelation(Point point, RelationShape relationShape) {
+    return relationShape.contains(point);
   }
 
   public static boolean pointHasCommonYWithShapes(Point point, ClassShape leftShape, ClassShape rightShape) {

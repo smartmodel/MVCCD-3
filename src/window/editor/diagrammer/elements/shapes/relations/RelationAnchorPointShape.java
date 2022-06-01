@@ -96,8 +96,10 @@ public class RelationAnchorPointShape extends Point implements IShape, Serializa
   public void zoom(int fromFactor, int toFactor) {
     int newX = this.x * toFactor / fromFactor;
     int newY = this.y * toFactor / fromFactor;
-    this.x = newX;
-    this.y = newY;
+
+    this.x = GridUtils.alignToGrid(newX, DiagrammerService.getDrawPanel().getGridSize());
+    this.y = GridUtils.alignToGrid(newY, DiagrammerService.getDrawPanel().getGridSize());
+
   }
 
   @Override
