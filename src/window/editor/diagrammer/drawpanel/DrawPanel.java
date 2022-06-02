@@ -17,7 +17,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
-import javax.swing.JScrollBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import main.MVCCDManager;
@@ -75,6 +74,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     Graphics2D graphics2D = (Graphics2D) g;
+
     // Si l'option "Afficher la grille" est cochée dans les préférences, on affiche la grille dans le diagrammeur
     if (PreferencesManager.instance().getApplicationPref().isDIAGRAMMER_SHOW_GRID()) {
       this.drawGrid(graphics2D);
@@ -383,7 +383,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   }
 
   private void setVerticalScrollbarVisibility(boolean visible) {
-    final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
+    DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
     if (visible) {
       parent.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     } else {
@@ -395,13 +395,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     for (IShape shape : this.shapes) {
       shape.drag(differenceX, differenceY);
     }
-  }
-
-  public void scroll(int amount, boolean isHorizontal) {
-    DrawPanelComponent parent = (DrawPanelComponent) this.getParent().getParent();
-    JScrollBar scrollBar = isHorizontal ? parent.getHorizontalScrollBar() : parent.getVerticalScrollBar();
-    int increment = scrollBar.getUnitIncrement();
-    scrollBar.setValue(scrollBar.getValue() + amount * increment);
+    this.repaint();
   }
 
   public void endScroll() {
@@ -449,7 +443,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     return relations;
   }
 
-  public List<RelationShape> getRelationShapesByClSquaredShape(SquaredShape shape) {
+  public List<RelationShape> getRelationShapesBySquaredShape(SquaredShape shape) {
     List<RelationShape> relations = new ArrayList<>();
     for (RelationShape relation : this.getRelationShapes()) {
       if (relation.getSource() == shape || relation.getDestination() == shape) {

@@ -28,4 +28,8 @@ public class UIUtils {
   public static double getClassPadding() {
     return Preferences.DIAGRAMMER_CLASS_PADDING * DiagrammerService.getDrawPanel().getZoomFactor();
   }
+
+  public static double getAnchorPointSize() {
+    return Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE * DiagrammerService.getDrawPanel().getZoomFactor();
+  }
 }

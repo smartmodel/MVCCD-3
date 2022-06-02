@@ -27,6 +27,7 @@ import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.Position;
 import window.editor.diagrammer.utils.ShapeUtils;
+import window.editor.diagrammer.utils.UIUtils;
 
 public abstract class RelationShape extends JComponent implements IShape, Serializable {
 
@@ -92,7 +93,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   public void drawAnchorPoints(Graphics2D graphics2D) {
     for (RelationAnchorPointShape anchorPoint : this.anchorPoints) {
-      graphics2D.fillOval(anchorPoint.x - anchorPoint.DIAMETER / 2, anchorPoint.y - anchorPoint.DIAMETER / 2, anchorPoint.DIAMETER, anchorPoint.DIAMETER);
+      graphics2D.fillOval(anchorPoint.x - (int) UIUtils.getAnchorPointSize() / 2, anchorPoint.y - (int) UIUtils.getAnchorPointSize() / 2, (int) UIUtils.getAnchorPointSize(), (int) UIUtils.getAnchorPointSize());
     }
   }
 
@@ -107,9 +108,9 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   @Override
   public void setLocationDifference(int differenceX, int differenceY) {
-/*    for (RelationAnchorPointShape anchorPoint : this.anchorPoints) {
-      anchorPoint.drag(anchorPoint.x + differenceX, anchorPoint.y + differenceY);
-    }*/
+    for (RelationAnchorPointShape anchorPoint : this.anchorPoints) {
+      anchorPoint.setLocationDifference(differenceX, differenceY);
+    }
   }
 
   @Override

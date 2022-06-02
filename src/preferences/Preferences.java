@@ -65,6 +65,7 @@ public class Preferences extends MVCCDElement {
   public static final Font DIAGRAMMER_CLASS_FONT = new Font("Arial", Font.PLAIN, 13);
   public static final Font DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT = new Font("Arial", Font.ITALIC + Font.BOLD, 13);
   public static final int DIAGRAMMER_CLASS_PADDING = 10;
+  public static final int DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE = 10;
   public static final String DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT = "Entité";
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT = "Association";
   public static final String DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT = "Généralisation";

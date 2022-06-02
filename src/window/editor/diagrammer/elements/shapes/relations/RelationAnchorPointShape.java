@@ -13,7 +13,7 @@ import window.editor.diagrammer.utils.GridUtils;
 public class RelationAnchorPointShape extends Point implements IShape, Serializable {
 
   private static final long serialVersionUID = 1000;
-  public int DIAMETER = 10;
+
   private int index;
   private boolean isSelected = false;
   private int id;
@@ -24,51 +24,50 @@ public class RelationAnchorPointShape extends Point implements IShape, Serializa
     this.generateId();
 
     this.index = index;
-    this.setSize(this.DIAMETER, this.DIAMETER);
+    this.setSize(Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE, Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE);
   }
 
   public RelationAnchorPointShape(int x, int y) {
     super(x, y);
     this.generateId();
-    this.setSize(this.DIAMETER, this.DIAMETER);
+    this.setSize(Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE, Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE);
   }
 
   public RelationAnchorPointShape(int x, int y, int index) {
     super(x, y);
     this.generateId();
     this.index = index;
-    this.setSize(this.DIAMETER, this.DIAMETER);
+    this.setSize(Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE, Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE);
   }
 
   public RelationAnchorPointShape(int id, Point p, int index) {
     super(p);
     this.id = id;
     this.index = index;
-    this.setSize(this.DIAMETER, this.DIAMETER);
+    this.setSize(Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE, Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE);
   }
 
   public RelationAnchorPointShape(int id, Point p) {
     super(p);
     this.id = id;
-    this.setSize(this.DIAMETER, this.DIAMETER);
+    this.setSize(Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE, Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE);
   }
 
   public RelationAnchorPointShape(int id, int x, int y, int index) {
     super(x, y);
     this.id = id;
     this.index = index;
-    this.setSize(this.DIAMETER, this.DIAMETER);
+    this.setSize(Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE, Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE);
   }
 
   @Override
   public void setLocationDifference(int differenceX, int differenceY) {
-    System.out.println("d" + differenceX);
     this.translate(differenceX, differenceY);
   }
 
   @Override
   public void setSize(Dimension dimension) {
-    this.DIAMETER = dimension.height;
+
   }
 
   @Override
@@ -89,7 +88,7 @@ public class RelationAnchorPointShape extends Point implements IShape, Serializa
 
   @Override
   public Rectangle getBounds() {
-    return new Rectangle(this.x - this.DIAMETER / 2, this.y - this.DIAMETER / 2, this.DIAMETER, this.DIAMETER);
+    return new Rectangle(this.x - Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE / 2, this.y - Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE / 2, Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE, Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE);
   }
 
   @Override
@@ -104,10 +103,9 @@ public class RelationAnchorPointShape extends Point implements IShape, Serializa
 
   @Override
   public void drag(int differenceX, int differenceY) {
-    int newX = GridUtils.alignToGrid(this.getX() + differenceX, DiagrammerService.getDrawPanel().getGridSize());
-    int newY = GridUtils.alignToGrid(this.getY() + differenceY, DiagrammerService.getDrawPanel().getGridSize());
+    int newX = GridUtils.alignToGrid(differenceX, DiagrammerService.getDrawPanel().getGridSize());
+    int newY = GridUtils.alignToGrid(differenceY, DiagrammerService.getDrawPanel().getGridSize());
     this.move(newX, newY);
-    System.out.println("Point " + this.index + " dragged !");
   }
 
   @Override

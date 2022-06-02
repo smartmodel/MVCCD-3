@@ -33,11 +33,14 @@ public class DrawPanelListener extends MouseAdapter implements Serializable {
 
   private static final long serialVersionUID = 1000;
   private final Cursor CURSOR_ENTITY_ICON;
-  private boolean ctrlKeyPressed = false;
   private boolean mouseWheelPressed = false;
-  private boolean spaceBarPressed = false;
   private Point origin;
+  private int tempNewX = 0;
+  private int tempNewAlignedX = 0;
+  private int tempNewY = 0;
+  private int tempNewAlignedY = 0;
   private RelationAnchorPointShape anchorPointClicked = null;
+
   private RelationShape focusedRelation = null;
   private List<RelationAnchorPointShape> anchorPointsToMove = new LinkedList<>();
 
@@ -85,6 +88,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable {
     this.mouseWheelPressed = SwingUtilities.isMiddleMouseButton(e);
     this.anchorPointClicked = this.getAnchorPointClicked(e);
     this.updateCursor(e);
+
   }
 
   @Override
@@ -101,8 +105,8 @@ public class DrawPanelListener extends MouseAdapter implements Serializable {
 
     this.anchorPointClicked = null;
     this.updateCursor(e);
-
-    DiagrammerService.getDrawPanel().endScroll();
+    this.resetTemporaryLocations();
+    //DiagrammerService.getDrawPanel().endScroll();
   }
 
   @Override
@@ -123,18 +127,39 @@ public class DrawPanelListener extends MouseAdapter implements Serializable {
   @Override
   public void mouseDragged(MouseEvent e) {
     super.mouseDragged(e);
+
     int differenceX = e.getPoint().x - this.origin.x;
     int differenceY = e.getPoint().y - this.origin.y;
 
-    if (this.isScrollAllowed(e)) {
-      DiagrammerService.getDrawPanel().drag(differenceX, differenceY);
+    this.origin = e.getPoint();
+    this.tempNewX += differenceX;
+    this.tempNewY += differenceY;
+
+    boolean xNeedsRealignment = this.tempNewX == GridUtils.alignToGrid(this.tempNewX + differenceX, DiagrammerService.getDrawPanel().getGridSize());
+    boolean yNeedsRealignement = this.tempNewY == GridUtils.alignToGrid(this.tempNewY + differenceY, DiagrammerService.getDrawPanel().getGridSize());
+
+    if (xNeedsRealignment && yNeedsRealignement) {
+      DiagrammerService.getDrawPanel().drag(this.tempNewX, this.tempNewY);
+      System.out.println("on update tous les 2");
+      this.tempNewX = 0;
+      this.tempNewY = 0;
+    }
+
+    if (xNeedsRealignment && !yNeedsRealignement) {
+      DiagrammerService.getDrawPanel().drag(this.tempNewX, 0);
+      System.out.println("on update x");
+      this.tempNewX = 0;
+    }
+
+    if (!xNeedsRealignment && yNeedsRealignement) {
+      DiagrammerService.getDrawPanel().drag(0, this.tempNewY);
+      System.out.println("on update y");
+      this.tempNewY = 0;
     }
 
     if (this.anchorPointClicked != null && this.focusedRelation != null) {
       this.dragAnchorPointSelected(e);
     }
-
-    this.origin = e.getPoint();
   }
 
   @Override
@@ -352,6 +377,11 @@ public class DrawPanelListener extends MouseAdapter implements Serializable {
     RelationShapeMenu menu = new RelationShapeMenu(this.focusedRelation, converted.x, converted.y);
     menu.show(DiagrammerService.getDrawPanel(), converted.x, converted.y);
 
+  }
+
+  private void resetTemporaryLocations() {
+    this.tempNewX = 0;
+    this.tempNewAlignedX = 0;
   }
 
   private void checkForHoveredRelation(MouseEvent e) {

@@ -8,8 +8,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
 import javax.swing.SwingUtilities;
-import preferences.Preferences;
-import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.palette.PaletteButtonType;
@@ -35,14 +33,14 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
     super.mouseClicked(e);
     this.shape.setFocused(true);
     DiagrammerService.getDrawPanel().deselectAllOtherShape(this.shape);
-    this.moveComponentToFront(e);
+    this.moveComponentToFront();
   }
 
   @Override
   public void mousePressed(MouseEvent mouseEvent) {
     this.shape.setFocused(true);
     DiagrammerService.getDrawPanel().deselectAllOtherShape(this.shape);
-    this.moveComponentToFront(mouseEvent);
+    this.moveComponentToFront();
     ResizableBorder resizableBorder = new ResizableBorder();
     this.cursor = resizableBorder.getCursor(mouseEvent);
     this.startPoint = mouseEvent.getPoint();
@@ -214,14 +212,13 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
   }
 
   private void handleDrag(Point mouseClick) {
-    int differenceX = GridUtils.alignToGrid(mouseClick.x - this.startPoint.x, DiagrammerService.getDrawPanel().getGridSize());
-    int differenceY = GridUtils.alignToGrid(mouseClick.y - this.startPoint.y, DiagrammerService.getDrawPanel().getGridSize());
+    int differenceX = mouseClick.x - this.startPoint.x;
+    int differenceY = mouseClick.y - this.startPoint.y;
+    System.out.println(differenceX);
     this.shape.drag(differenceX, differenceY);
   }
 
-  private void moveComponentToFront(MouseEvent event) {
-    SquaredShape shape = (SquaredShape) event.getSource();
-    DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_NAME, shape);
-    drawPanel.moveToFront(shape);
+  private void moveComponentToFront() {
+    DiagrammerService.getDrawPanel().moveToFront(this.shape);
   }
 }
