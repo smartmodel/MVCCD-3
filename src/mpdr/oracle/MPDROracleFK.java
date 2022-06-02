@@ -20,6 +20,17 @@ public class MPDROracleFK extends MPDRFK implements IMPDROracleElement {
         super(parent, mldrElementSource, id);
     }
 
+    //TODO VINCENT
+    /*
+    public MPDROracleFK(String name, String fkTableName, String pkTableName, String pkColumnName, boolean deleteCascade){
+        super();
+        this.setMdrPK(pkTableName);
+        this.setName(name);
+        this.set
+        this.setDeleteCascade(deleteCascade);
+    }
+*/
+
     public MPDRParameter createParameter(MLDRParameter  mldrParameter) {
         MPDRParameter mpdrParameter = MVCCDElementFactory.instance().createMPDROracleParameter(this, mldrParameter);
         return mpdrParameter;

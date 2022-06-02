@@ -1,0 +1,152 @@
+JFDML JFormDesigner: "7.0.5.4.420" Java: "11.0.14.1" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"title": "Synchronisation de la base de données - Liste des opérations"
+			"defaultCloseOperation": 3
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "dialogPane"
+				"border": new javax.swing.border.EmptyBorder( 12, 12, 12, 12 )
+				"preferredSize": new java.awt.Dimension( 700, 700 )
+				"font": new java.awt.Font( "Arial", 0, 13 )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "134, 198, 101, 209"
+					"$rowSpecs": "35, 35"
+					"$hGap": 5
+					"$vGap": 5
+					"$alignLeft": true
+					"$alignTop": true
+				} ) {
+					name: "panelDonneesConnexion2"
+					"border": new javax.swing.border.LineBorder( sfield java.awt.Color black, 1, false )
+					"font": new java.awt.Font( "Arial", 0, 13 )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "modeleSource2"
+						"text": "Modèle source :"
+						"font": new java.awt.Font( "Arial", 0, 13 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"insets": new java.awt.Insets( 5, 5, 0, 0 )
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "modeleSourceVar2"
+						"text": "MPDR_perso"
+						"font": new java.awt.Font( "Arial", 1, 13 )
+						"editable": false
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+						"insets": new java.awt.Insets( 5, 0, 0, 0 )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "nomSchema2"
+						"text": "Nom du schéma :"
+						"font": new java.awt.Font( "Arial", 0, 13 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 2
+						"insets": new java.awt.Insets( 5, 0, 0, 0 )
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "nomSchemaVar2"
+						"text": "VINCENT_CHASSOT"
+						"font": new java.awt.Font( "Arial", 1, 13 )
+						"editable": false
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 3
+						"insets": new java.awt.Insets( 5, 0, 0, 5 )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "nomConnexion2"
+						"text": "Nom de la connexion :"
+						"font": new java.awt.Font( "Arial", 0, 13 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 1
+						"insets": new java.awt.Insets( 0, 5, 5, 0 )
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "nomConnexionVar2"
+						"text": "ECRISOFT"
+						"font": new java.awt.Font( "Arial", 1, 13 )
+						"editable": false
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+						"gridy": 1
+						"insets": new java.awt.Insets( 0, 0, 5, 0 )
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "North"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "318, 32, 302"
+					"$rowSpecs": "0, 37, 270"
+					"$hGap": 5
+					"$vGap": 5
+					"$alignLeft": true
+					"$alignTop": true
+				} ) {
+					name: "contentPanel"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "textComparaison"
+						"text": "Liste des opérations"
+						"font": new java.awt.Font( "Arial", 0, 13 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 1
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPane1"
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "tableListeOperations"
+							"font": new java.awt.Font( "Arial", 0, 13 )
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 2
+						"gridwidth": 3
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "386, 91, 82, 85"
+					"$rowSpecs": "0"
+					"$hGap": 5
+					"$vGap": 5
+					"$alignLeft": true
+				} ) {
+					name: "buttonBar"
+					"border": new javax.swing.border.EmptyBorder( 12, 0, 0, 0 )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "textInformation"
+						"text": "*Information : Les packages et déclencheurs ne sont pas listés"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 2, 0, false )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "btnFermer"
+						"text": "Fermer"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button1"
+						"text": "Retour"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 2
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "btnSuivant"
+						"text": "Suivant"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 3
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "South"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 690, 535 )
+		} )
+	}
+}

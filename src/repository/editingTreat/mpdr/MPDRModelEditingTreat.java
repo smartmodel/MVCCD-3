@@ -4,6 +4,7 @@ import console.ViewLogsManager;
 import console.WarningLevel;
 import generatorsql.viewer.SQLViewer;
 import main.MVCCDElement;
+import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import repository.editingTreat.EditingTreat;
@@ -59,4 +60,34 @@ public class MPDRModelEditingTreat extends EditingTreat {
         }
         return ok ;
    }
+
+   //TODO VINCENT
+    //A implémenter
+    public boolean treatSync(MVCCDWindow owner, MVCCDElement mvccdElement) {
+        MPDRModel mpdrModel = (MPDRModel) mvccdElement;
+
+        boolean ok = true;
+        String generateSQLCode = "";
+        try {
+            //A faire VC : créer un message spécifique
+            String message = MessagesBuilder.getMessagesProperty("generate.sql.mpdrtosql.start",
+                    new String[]{mpdrModel.getNamePath()});
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+
+            generateSQLCode = mpdrModel.treatSync();
+
+        } catch (Exception e){
+            //A faire VC : mettre ce message en property
+            ViewLogsManager.catchException(e, owner, "La synchronisation du code SQL-DDL a échoué.");
+            ok = false ;
+        }
+        //A faire VC : changer les message de propertie
+        TreatmentService.treatmentFinish(owner, mvccdElement, ok,
+                getPropertyTheElement(), "generate.sql.mpdrtosql.ok", "generate.sql.mpdrtosql.abort") ;
+        if (ok) {
+            SQLViewer fen = new SQLViewer(mpdrModel, generateSQLCode);
+            fen.setVisible(true);
+        }
+        return ok ;
+    }
 }

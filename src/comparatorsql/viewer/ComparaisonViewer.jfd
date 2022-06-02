@@ -1,0 +1,156 @@
+JFDML JFormDesigner: "7.0.5.4.420" Java: "11.0.14.1" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"title": "Synchronisation de la base de données - Comparaison"
+			"defaultCloseOperation": 3
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "dialogPane"
+				"border": new javax.swing.border.EmptyBorder( 12, 12, 12, 12 )
+				"preferredSize": new java.awt.Dimension( 700, 700 )
+				"font": new java.awt.Font( "Arial", 0, 13 )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "318, 32, 302"
+					"$rowSpecs": "0, 37, 309"
+					"$hGap": 5
+					"$vGap": 5
+					"$alignLeft": true
+					"$alignTop": true
+				} ) {
+					name: "contentPanel"
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+						"$columnSpecs": "134, 198, 101, 209"
+						"$rowSpecs": "35, 35"
+						"$hGap": 5
+						"$vGap": 5
+						"$alignLeft": true
+						"$alignTop": true
+					} ) {
+						name: "panelDonneesConnexion"
+						"border": new javax.swing.border.LineBorder( sfield java.awt.Color black, 1, false )
+						"font": new java.awt.Font( "Arial", 0, 13 )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "modeleSource"
+							"text": "Modèle source :"
+							"font": new java.awt.Font( "Arial", 0, 13 )
+						}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+							"insets": new java.awt.Insets( 5, 5, 0, 0 )
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "modeleSourceVar"
+							"text": "MPDR_perso"
+							"font": new java.awt.Font( "Arial", 1, 13 )
+							"editable": false
+						}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+							"gridx": 1
+							"insets": new java.awt.Insets( 5, 0, 0, 0 )
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "nomSchema"
+							"text": "Nom du schéma :"
+							"font": new java.awt.Font( "Arial", 0, 13 )
+						}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+							"gridx": 2
+							"insets": new java.awt.Insets( 5, 0, 0, 0 )
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "nomSchemaVar"
+							"text": "VINCENT_CHASSOT"
+							"font": new java.awt.Font( "Arial", 1, 13 )
+							"editable": false
+						}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+							"gridx": 3
+							"insets": new java.awt.Insets( 5, 0, 0, 5 )
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "nomConnexion"
+							"text": "Nom de la connexion :"
+							"font": new java.awt.Font( "Arial", 0, 13 )
+						}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+							"gridy": 1
+							"insets": new java.awt.Insets( 0, 5, 5, 0 )
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "nomConnexionVar"
+							"text": "ECRISOFT"
+							"font": new java.awt.Font( "Arial", 1, 13 )
+							"editable": false
+						}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+							"gridx": 1
+							"gridy": 1
+							"insets": new java.awt.Insets( 0, 0, 5, 0 )
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridwidth": 3
+						"hAlign": 0
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "textComparaison"
+						"text": "Comparaison des structures de données"
+						"font": new java.awt.Font( "Arial", 0, 13 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 1
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPaneGauche"
+						add( new FormComponent( "javax.swing.JTree" ) {
+							name: "treeMPDR"
+							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "tree_MPDRMouseClicked", true ) )
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 2
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPaneDroite"
+						add( new FormComponent( "javax.swing.JTree" ) {
+							name: "treeSGBDR"
+							"font": new java.awt.Font( "Arial", 0, 13 )
+							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "tree_SGBDRMouseClicked", true ) )
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 2
+						"gridy": 2
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "0:1.0, 80, 80"
+					"$rowSpecs": "0"
+					"$hGap": 5
+					"$vGap": 5
+				} ) {
+					name: "buttonBar"
+					"border": new javax.swing.border.EmptyBorder( 12, 0, 0, 0 )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "textInformation"
+						"text": "*Information : Les packages et déclencheurs ne sont pas regénérés"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 2, 0, false )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "btnFermer"
+						"text": "Fermer"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "btnSuivant"
+						"text": "Suivant"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 2
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "South"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 690, 535 )
+		} )
+	}
+}

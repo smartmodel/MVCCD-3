@@ -26,6 +26,11 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
     public MPDROracleModel(ProjectElement parent, String name) {
         super(parent, name, MPDRDB.ORACLE);
     }
+
+    //TODO VINCENT
+    //public MPDROracleModel(){};
+
+
     @Override
     public MPDROracleTable createTable(MLDRTable mldrTable){
         MPDROracleTable newTable = MVCCDElementFactory.instance().createMPDROracleTable(
@@ -34,6 +39,12 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
         return newTable;
     }
 
+    //TODO VINCENT
+    /*
+    public MPDROracleTable createTable(String tableName){
+        return null;
+    }
+*/
     @Override
     public MPDRDatatype fromMLDRDatatype(MLDRColumn mldrColumn) {
         return MLDRTransformToMPDROracleDatatype.fromMLDRDatatype(mldrColumn);
@@ -43,6 +54,12 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
     public String treatGenerate() {
         MPDRGenerateSQL mpdrGenerateSQL = new MPDROracleGenerateSQL(this);
         return mpdrGenerateSQL.generate();
+    }
+
+    //TODO VINCENT
+    public String treatSync(){
+
+        return "Script de synchronisation à mettre en place";
     }
 
     @Override

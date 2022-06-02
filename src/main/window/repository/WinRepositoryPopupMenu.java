@@ -327,6 +327,24 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 });
             }
 
+            //TODO VINCENT
+            //créer une méthode de traintement pour treatSync à la place de treatGenerate
+            if (node.getUserObject() instanceof MPDRModel) {
+                JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(
+                        "menu.generate.sql.from.mpdr.and.sgbdr"));
+                addItem(this, menuItem);
+                menuItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        try {
+                            (new MPDRModelEditingTreat()).treatSync(mvccdWindow, mvccdElement);
+                        } catch (Exception e){
+                            exceptionUnhandled(e, mvccdElement, "repository.menu.exception.generate.sql");
+                        }
+                    }
+                });
+            }
+
             if (node.getUserObject() instanceof MPDRTable) {
                 treatGenericRead(this, new MDRTableEditingTreat());
             }

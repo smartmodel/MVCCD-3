@@ -1,5 +1,9 @@
 package generatorsql.viewer;
 
+import comparatorsql.DbFetcher;
+import comparatorsql.DbOracleStructure;
+import comparatorsql.SqlComparatorGenerator;
+import comparatorsql.oracle.OracleComparator;
 import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConDBMode;
@@ -9,12 +13,20 @@ import console.WarningLevel;
 import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
 import generatorsql.MPDRGenerateSQLUtil;
+import generatorsql.generator.MPDRGenerateSQL;
+import generatorsql.generator.oracle.MPDROracleGenerateSQL;
+import main.MVCCDElementFactory;
 import main.MVCCDManager;
+import mcd.MCDContModels;
+import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
+import mldr.MLDRModel;
 import mpdr.MPDRModel;
+import mpdr.oracle.MPDROracleModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
+import project.Project;
 import treatment.services.TreatmentService;
 import utilities.UtilDivers;
 import utilities.files.FileRead;
@@ -53,6 +65,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     private JPanel panelDDL = new JPanel();
     private JPanel panelDML = new JPanel();
 
+    private SButton btnSynchronisationSGBDR;
     private SButton btnConnectionTest;
     private SButton btnConnectorTest;
     private SButton btnDDLExecute;
@@ -93,6 +106,9 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
 
 
     public void createContent() {
+
+        btnSynchronisationSGBDR = new SButton("Synchronisation du SGBD-R");
+        btnSynchronisationSGBDR.addActionListener(this);
 
         btnConnectionTest = new SButton("Test de connexion");
         btnConnectionTest.addActionListener(this);
@@ -172,6 +188,9 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
             panelContent.add(btnConnectorTest, gbc);
         }
+
+        gbc.gridy++;
+        panelContent.add(btnSynchronisationSGBDR, gbc);
 
         gbc.gridy++ ;
         createPanelDDL();
@@ -348,6 +367,23 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                     if (source == btnConnectionTest) {
                         propertyAction = "editor.mpdr.connection.btn.exception.test";
                         //Resultat resultat = actionTestConnection(true, connection);
+                        actionTestConnection(true);
+                    }
+
+                    if (source == btnSynchronisationSGBDR){
+                        propertyAction = "editor.mpdr.connection.btn.exception.test";
+                        DbFetcher dbFetcher = new DbFetcher();
+                        DbOracleStructure dbOracleStructure = dbFetcher.getDatabaseStructure();
+                        OracleComparator oracleComparator = new OracleComparator(mpdrModel, dbOracleStructure);
+                        oracleComparator.comparator(mpdrModel, dbOracleStructure);
+                        String sqlComparatorProject = "sqlComparatorProject";
+                        Project project = MVCCDElementFactory.instance().createProject("sqlComparatorProject");
+                        MCDContModels mcdContModels = MVCCDElementFactory.instance().createMCDModels(project, sqlComparatorProject);
+                        IMCDModel imcdModel = MVCCDElementFactory.instance().createMCDModel(mcdContModels);
+                        MLDRModel mldrModel = MVCCDElementFactory.instance().createMLDRModelDT(imcdModel);
+                        MPDROracleModel mpdrModelOracle = MVCCDElementFactory.instance().createMPDRModelOracle(mldrModel);
+                        SqlComparatorGenerator sqlComparatorGenerator = new SqlComparatorGenerator(mpdrModelOracle);
+                        MPDRGenerateSQL mpdrGenerateSQL = new MPDROracleGenerateSQL(mpdrModelOracle);
                         actionTestConnection(true);
                     }
 

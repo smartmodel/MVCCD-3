@@ -59,6 +59,10 @@ public abstract class MVCCDElement implements Serializable, Cloneable {
         init();
     }
 
+    public MVCCDElement() {
+
+    }
+
     /**
      * Établit le lien avec le parent et affecte la valeur d'ordonnancement dans la fratrie.
      */

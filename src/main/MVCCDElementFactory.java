@@ -528,7 +528,12 @@ public class MVCCDElementFactory {
         MPDROracleColumn mpdrOracleColumn = new MPDROracleColumn(mdrContColumns, mldrColumn, id);
         return mpdrOracleColumn;
     }
-
+/*
+    public MPDROracleColumn creatMPDROracleColumn(String name, String dataType, Integer size, boolean isMandatory, String initValue){
+        MPDROracleColumn mpdrOracleColumn = new MPDROracleColumn(name, dataType,size,isMandatory,initValue);
+        return mpdrOracleColumn;
+    }
+*/
 
     public MPDROracleColumnView createMPDROracleColumnView(MDRContColumns mdrContColumns) {
         MPDROracleColumnView mpdrOracleColumnView = new MPDROracleColumnView(mdrContColumns, null);

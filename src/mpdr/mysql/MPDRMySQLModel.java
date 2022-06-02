@@ -41,6 +41,11 @@ public class MPDRMySQLModel extends MPDRModel implements IMPDRMySQLElement {
         throw new CodeApplException("La génération SQL pour " + this.getDb().getText() + " n'est pas encore développée");
     }
 
+    //TODO VINCENT
+    public String treatSync(){
+        throw new CodeApplException("La synchronisation SQL pour " + this.getDb().getText() + " n'est pas encore développée");
+    }
+
     @Override
     public Boolean getMPDR_TAPIs() {
         Preferences preferences = PreferencesManager.instance().preferences();

@@ -53,7 +53,7 @@ public class Preferences extends MVCCDElement {
   public static String REPOSITORY_MPDR_MODEL_MYSQL_NAME = "MPDR_MySQL";
   public static String REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME = "MPDR_PostgreSQL";
 
-
+  public static String FETCHER_ORACLE_DBTABLE_NAME = "TABLE_NAME";
 
   public static String CON_DB_MODE_CONNECTION = "con.db.mode.connection";
   public static String CON_DB_MODE_CONNECTOR = "con.db.mode.connector";

@@ -1,0 +1,8 @@
+BEGIN
+FOR enable_all_fk IN (
+select 'ALTER TABLE ' || OWNER || '.' || table_name || ' enable CONSTRAINT ' || constraint_name || '' AS command_sql
+from user_constraints where constraint_type in ('R') and status in ('DISABLED')
+) LOOP
+EXECUTE IMMEDIATE (enable_all_fk.command_sql);
+END LOOP;
+END;

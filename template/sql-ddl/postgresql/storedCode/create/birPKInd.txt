@@ -1,9 +1,0 @@
-CREATE OR REPLACE FUNCTION {functionName}() RETURNS TRIGGER
-LANGUAGE plpgsql AS $BODY$
-BEGIN
-    IF NEW.{columnPKName} IS NULL THEN
-        NEW.{columnPKName} := NEXTVAL ('{sequenceName}');
-    END IF;
-    RETURN NEW;
-END;
-$BODY$
