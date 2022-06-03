@@ -1,6 +1,7 @@
 package generatorsql.viewer;
 
 import comparatorsql.DbFetcher;
+import comparatorsql.DbFetcher2;
 import comparatorsql.DbOracleStructure;
 import comparatorsql.SqlComparatorGenerator;
 import comparatorsql.oracle.OracleComparator;
@@ -28,6 +29,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import treatment.services.TreatmentService;
+import utilities.Trace;
 import utilities.UtilDivers;
 import utilities.files.FileRead;
 import utilities.files.UtilFiles;
@@ -373,17 +375,22 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                     if (source == btnSynchronisationSGBDR){
                         propertyAction = "editor.mpdr.connection.btn.exception.test";
                         DbFetcher dbFetcher = new DbFetcher();
+                        //DbFetcher2 dbFetcher2 = new DbFetcher2();
                         DbOracleStructure dbOracleStructure = dbFetcher.getDatabaseStructure();
                         OracleComparator oracleComparator = new OracleComparator(mpdrModel, dbOracleStructure);
                         oracleComparator.comparator(mpdrModel, dbOracleStructure);
-                        String sqlComparatorProject = "sqlComparatorProject";
+                        /*String sqlComparatorProject = "sqlComparatorProject";
                         Project project = MVCCDElementFactory.instance().createProject("sqlComparatorProject");
                         MCDContModels mcdContModels = MVCCDElementFactory.instance().createMCDModels(project, sqlComparatorProject);
                         IMCDModel imcdModel = MVCCDElementFactory.instance().createMCDModel(mcdContModels);
                         MLDRModel mldrModel = MVCCDElementFactory.instance().createMLDRModelDT(imcdModel);
                         MPDROracleModel mpdrModelOracle = MVCCDElementFactory.instance().createMPDRModelOracle(mldrModel);
                         SqlComparatorGenerator sqlComparatorGenerator = new SqlComparatorGenerator(mpdrModelOracle);
-                        MPDRGenerateSQL mpdrGenerateSQL = new MPDROracleGenerateSQL(mpdrModelOracle);
+                        MPDRGenerateSQL mpdrGenerateSQL = new MPDROracleGenerateSQL(mpdrModelOracle);*/
+                        MPDROracleModel mpdrModelOracleDb = MVCCDElementFactory.instance().createMPDRModelOracle(null);
+                        //ATTENTION le passage en mode Debug efface le mot de passe enregistré pour la connection
+                        /*Trace.println(mpdrModelOracleDb.toString());
+                        Trace.println(mpdrModelOracleDb.getChilds().toString());*/
                         actionTestConnection(true);
                     }
 
