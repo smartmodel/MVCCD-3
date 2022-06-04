@@ -29,10 +29,7 @@ import mpdr.oracle.*;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.postgresql.*;
 import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
-import mpdr.tapis.MPDRBoxPackages;
-import mpdr.tapis.MPDRBoxTriggers;
-import mpdr.tapis.MPDRContTAPIs;
-import mpdr.tapis.MPDRView;
+import mpdr.tapis.*;
 import mpdr.tapis.oracle.*;
 import mpdr.tapis.postgresql.MPDRPostgreSQLBoxProceduresOrFunctions;
 import mpdr.tapis.postgresql.MPDRPostgreSQLBoxTriggers;
@@ -42,6 +39,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
+import stereotypes.Stereotype;
 
 public class MVCCDElementFactory {
 
@@ -499,6 +497,18 @@ public class MVCCDElementFactory {
         return mldrConstraintCustomSpecialized;
     }
 
+    public MLDRConstraintCustomJnal createMLDRJnal(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
+        MLDRConstraintCustomJnal mldrConstraintCustomJnal =
+                new MLDRConstraintCustomJnal(mldrContConstraints, mcdElementSource);
+        return mldrConstraintCustomJnal;
+    }
+
+    public MLDRConstraintCustomAudit createMLDRAudit(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
+        MLDRConstraintCustomAudit mldrConstraintCustomAudit =
+                new MLDRConstraintCustomAudit(mldrContConstraints, mcdElementSource);
+        return mldrConstraintCustomAudit;
+    }
+
 
     // Oracle
     public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {
@@ -530,6 +540,26 @@ public class MVCCDElementFactory {
         return mpdrOracleColumn;
     }
 
+    public MPDROracleColumnAudit createMPDROracleColumnAudit(MDRContColumns mdrContColumns,
+                                                             MLDRConstraintCustomAudit mldrConstraintCustomAudit,
+                                                             Stereotype stereotype) {
+        MPDROracleColumnAudit mpdrOracleColumnAudit = new MPDROracleColumnAudit(mdrContColumns, mldrConstraintCustomAudit, stereotype);
+        return mpdrOracleColumnAudit;
+    }
+
+    public MPDROracleColumnJnal createMPDROracleColumnJnal(MDRContColumns mdrContColumns,
+                                                           MPDRConstraintCustomJnal mpdrConstraintCustomJnal,
+                                                           Stereotype stereotype) {
+        MPDROracleColumnJnal mpdrOracleColumnJnal = new MPDROracleColumnJnal(mdrContColumns, mpdrConstraintCustomJnal, stereotype);
+        return mpdrOracleColumnJnal;
+    }
+
+
+    public MPDROracleColumnJnal createMPDROracleColumnJnal(MDRContColumns mdrContColumns,
+                                                           MPDRColumn mpdrColumnSource) {
+        MPDROracleColumnJnal mpdrOracleColumnJnal = new MPDROracleColumnJnal(mdrContColumns, mpdrColumnSource);
+        return mpdrOracleColumnJnal;
+    }
 
     public MPDROracleColumnView createMPDROracleColumnView(MDRContColumns mdrContColumns) {
         MPDROracleColumnView mpdrOracleColumnView = new MPDROracleColumnView(mdrContColumns, null);
@@ -569,9 +599,21 @@ public class MVCCDElementFactory {
     }
 
     public  MPDROracleConstraintCustomSpecialized createMPDROracleConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
-                                                                        MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
+                                                                                              MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
         MPDROracleConstraintCustomSpecialized newSpecialized = new MPDROracleConstraintCustomSpecialized(mdrContConstraints, mldrConstraintCustomSpecialized);
         return newSpecialized;
+    }
+
+    public  MPDROracleConstraintCustomJnal createMPDROracleConstraintCustomJnal(MDRContConstraints mdrContConstraints,
+                                                                                  MLDRConstraintCustomJnal mldrConstraintCustomJnal) {
+        MPDROracleConstraintCustomJnal newJnal = new MPDROracleConstraintCustomJnal(mdrContConstraints, mldrConstraintCustomJnal);
+        return newJnal;
+    }
+
+    public  MPDROracleConstraintCustomAudit createMPDROracleConstraintCustomAudit(MDRContConstraints mdrContConstraints,
+                                                                                  MLDRConstraintCustomAudit mldrConstraintCustomAudit) {
+        MPDROracleConstraintCustomAudit newAudit = new MPDROracleConstraintCustomAudit(mdrContConstraints, mldrConstraintCustomAudit);
+        return newAudit;
     }
 
     public MPDROracleCheckSpecific createMPDROracleCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -649,6 +691,11 @@ public class MVCCDElementFactory {
         return mpdrOracleView;
     }
 
+    public MPDROracleTableJnal createMPDROracleTableJnal(MPDRContTAPIs mpdrContTAPIs, MLDRConstraintCustomJnal mldrConstraintCustomJnal) {
+        MPDROracleTableJnal mpdrOracleTableJnal = new MPDROracleTableJnal(mpdrContTAPIs, mldrConstraintCustomJnal);
+        new MPDRContColumnsJnal(mpdrOracleTableJnal, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        return mpdrOracleTableJnal;
+    }
 
     public MPDROracleBoxTriggers createMPDROracleBoxTriggers(MPDRView mpdrView, MLDRConstraintCustomSpecialized mldrSpecialized) {
         MPDROracleBoxTriggers mpdrOracleTriggers = new MPDROracleBoxTriggers(mpdrView, mldrSpecialized);
@@ -721,9 +768,23 @@ public class MVCCDElementFactory {
 
 
     public  MPDRMySQLConstraintCustomSpecialized createMPDRMySQLConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
-                                                                                              MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
+                                                                                            MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
         MPDRMySQLConstraintCustomSpecialized newSpecialized = new MPDRMySQLConstraintCustomSpecialized(mdrContConstraints, mldrConstraintCustomSpecialized);
         return newSpecialized;
+    }
+
+
+    public  MPDRMySQLConstraintCustomJnal createMPDRMySQLConstraintCustomJnal(MDRContConstraints mdrContConstraints,
+                                                                                MLDRConstraintCustomJnal mldrConstraintCustomJnal) {
+        MPDRMySQLConstraintCustomJnal newJnal = new MPDRMySQLConstraintCustomJnal(mdrContConstraints, mldrConstraintCustomJnal);
+        return newJnal;
+    }
+
+
+    public  MPDRMySQLConstraintCustomAudit createMPDRMySQLConstraintCustomAudit(MDRContConstraints mdrContConstraints,
+                                                                                MLDRConstraintCustomAudit mldrConstraintCustomAudit) {
+        MPDRMySQLConstraintCustomAudit newAudit = new MPDRMySQLConstraintCustomAudit(mdrContConstraints, mldrConstraintCustomAudit);
+        return newAudit;
     }
 
     public MPDRMySQLCheckSpecific createMPDRMySQLCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -813,9 +874,22 @@ public class MVCCDElementFactory {
     }
 
     public  MPDRPostgreSQLConstraintCustomSpecialized createMPDRPostgreSQLConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
-                                                                                            MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
+                                                                                                      MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
         MPDRPostgreSQLConstraintCustomSpecialized newSpecialized = new MPDRPostgreSQLConstraintCustomSpecialized(mdrContConstraints, mldrConstraintCustomSpecialized);
         return newSpecialized;
+    }
+
+    public  MPDRPostgreSQLConstraintCustomJnal createMPDRPostgreSQLConstraintCustomJnal(MDRContConstraints mdrContConstraints,
+                                                                                          MLDRConstraintCustomJnal mldrConstraintCustomJnal) {
+        MPDRPostgreSQLConstraintCustomJnal newJnal = new MPDRPostgreSQLConstraintCustomJnal(mdrContConstraints, mldrConstraintCustomJnal);
+        return newJnal;
+    }
+
+
+    public  MPDRPostgreSQLConstraintCustomAudit createMPDRPostgreSQLConstraintCustomAudit(MDRContConstraints mdrContConstraints,
+                                                                                          MLDRConstraintCustomAudit mldrConstraintCustomAudit) {
+        MPDRPostgreSQLConstraintCustomAudit newAudit = new MPDRPostgreSQLConstraintCustomAudit(mdrContConstraints, mldrConstraintCustomAudit);
+        return newAudit;
     }
 
     public MPDRPostgreSQLCheckSpecific createMPDRPostgreSQLCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -935,4 +1009,4 @@ public class MVCCDElementFactory {
         return mpdrRelationFK;
     }
 
- }
+}

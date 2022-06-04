@@ -45,6 +45,11 @@ public class MPDRMySQLTable extends MPDRTable implements IMPDRMySQLElement {
     }
 
     @Override
+    public MPDRColumnAudit createColumnAudit(MLDRConstraintCustomAudit mldrConstraintCustomAudit, Stereotype stereotype) {
+        return null;
+    }
+
+    @Override
     public MPDRPK createPK(MLDRPK mldrPK) {
         MPDRMySQLPK newPK = MVCCDElementFactory.instance().createMPDRMySQLPK(
                 getMDRContConstraints(), mldrPK);
@@ -76,9 +81,22 @@ public class MPDRMySQLTable extends MPDRTable implements IMPDRMySQLElement {
     public IMPDRConstraint createSpecialized(MLDRConstraintCustomSpecialized mldrSpecialized) {
         MPDRMySQLConstraintCustomSpecialized newSpecialized = MVCCDElementFactory.instance().createMPDRMySQLConstraintCustomSpecialized(
                 getMDRContConstraints(), mldrSpecialized);
-        return newSpecialized;}
+        return newSpecialized;
+    }
 
+    @Override
+    public IMPDRConstraint createJnal(MLDRConstraintCustomJnal mldrJournal) {
+        MPDRMySQLConstraintCustomJnal newJnal = MVCCDElementFactory.instance().createMPDRMySQLConstraintCustomJnal(
+                getMDRContConstraints(), mldrJournal);
+        return newJnal;
+    }
 
+    @Override
+    public IMPDRConstraint createAudit(MLDRConstraintCustomAudit mldrAudit) {
+        MPDRMySQLConstraintCustomAudit newAudit = MVCCDElementFactory.instance().createMPDRMySQLConstraintCustomAudit(
+                getMDRContConstraints(), mldrAudit);
+        return newAudit;
+    }
 
 
     @Override
@@ -135,6 +153,11 @@ public class MPDRMySQLTable extends MPDRTable implements IMPDRMySQLElement {
 
     @Override
     public MPDRFunction createFunction(MPDRFunctionType type, MLDRTable mldrTable) {
+        return null;
+    }
+
+    @Override
+    public MPDRTableJnal createTableJnal(MLDRConstraintCustomJnal mldrConstraintCustomJnal) {
         return null;
     }
 

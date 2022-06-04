@@ -5,7 +5,6 @@ import main.MVCCDFactory;
 import main.MVCCDManager;
 import mcd.MCDContDiagrams;
 import mcd.MCDContModels;
-import mcd.services.MCDAdjustPref;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
@@ -112,7 +111,8 @@ public class Project extends ProjectElement {
             // A priori c'est une erreur!
             //PreferencesManager.instance().copyDefaultPref();
         }
-        new MCDAdjustPref(this).changeProfile();
+        //TODO-1 A voir plus précisément l'impact des changements de préférences qui impactie le MCD : Audit, Journal ...
+        //new MCDAdjustPref(this).changeProfile();
         MVCCDManager.instance().profileToRepository();
         return profile;
     }

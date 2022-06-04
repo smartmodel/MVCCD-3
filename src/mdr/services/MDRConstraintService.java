@@ -67,8 +67,6 @@ public class MDRConstraintService {
             throw new CodeApplException( "La classe de contrainte " + courant.getClass().getName() + " est inconnue ou pas encore traitée.");
         }
 
-
-
     }
 
 }

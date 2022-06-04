@@ -181,6 +181,29 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         return mldrSpecialized;
     }
 
+
+    public MLDRConstraintCustomJnal getMLDRJnalByMCDElementSource(MCDElement mcdElement){
+        return MLDRTableService.getMLDRJnalByMCDElementSource(this, mcdElement);
+    }
+
+
+    public MLDRConstraintCustomJnal createJnal(MCDEntity mcdEntity) {
+        MLDRConstraintCustomJnal mldrJnal = MVCCDElementFactory.instance().createMLDRJnal(
+                (MLDRContConstraints) getMDRContConstraints(), mcdEntity);
+        return mldrJnal;
+    }
+
+    public MLDRConstraintCustomAudit getMLDRAuditByMCDElementSource(MCDElement mcdElement){
+        return MLDRTableService.getMLDRAuditByMCDElementSource(this, mcdElement);
+    }
+
+
+    public MLDRConstraintCustomAudit createAudit(MCDEntity mcdEntity) {
+        MLDRConstraintCustomAudit mldrAudit = MVCCDElementFactory.instance().createMLDRAudit(
+                (MLDRContConstraints) getMDRContConstraints(), mcdEntity);
+        return mldrAudit;
+    }
+
     @Override
     public ArrayList<Stereotype> getStereotypes() {
         // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage

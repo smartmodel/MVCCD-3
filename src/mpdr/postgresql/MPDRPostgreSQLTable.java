@@ -45,6 +45,11 @@ public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLEle
     }
 
     @Override
+    public MPDRColumnAudit createColumnAudit(MLDRConstraintCustomAudit mldrConstraintCustomAudit, Stereotype stereotype) {
+        return null;
+    }
+
+    @Override
     public MPDRPK createPK(MLDRPK mldrPK)  {
         MPDRPostgreSQLPK newPK = MVCCDElementFactory.instance().createMPDRPostgreSQLPK(
             getMDRContConstraints(), mldrPK);
@@ -78,6 +83,20 @@ public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLEle
                 getMDRContConstraints(), mldrSpecialized);
         return newSpecialized;
    }
+
+    @Override
+    public IMPDRConstraint createJnal(MLDRConstraintCustomJnal mldrJournal) {
+        MPDRPostgreSQLConstraintCustomJnal newJnal = MVCCDElementFactory.instance().createMPDRPostgreSQLConstraintCustomJnal(
+                getMDRContConstraints(), mldrJournal);
+        return newJnal;
+    }
+
+    @Override
+    public IMPDRConstraint createAudit(MLDRConstraintCustomAudit mldrAudit) {
+        MPDRPostgreSQLConstraintCustomAudit newAudit = MVCCDElementFactory.instance().createMPDRPostgreSQLConstraintCustomAudit(
+                getMDRContConstraints(), mldrAudit);
+        return newAudit;
+    }
 
 
     @Override
@@ -147,6 +166,11 @@ public class MPDRPostgreSQLTable extends MPDRTable implements IMPDRPostgreSQLEle
             throw new CodeApplException("La boîte Procédures/Functions doit exister avant de créer un trigger");
         }
 
+    }
+
+    @Override
+    public MPDRTableJnal createTableJnal(MLDRConstraintCustomJnal mldrConstraintCustomJnal) {
+        return null;
     }
 
 

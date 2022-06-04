@@ -130,6 +130,25 @@ public class MLDRTableService {
         return null ;
     }
 
+    public static MLDRConstraintCustomJnal getMLDRJnalByMCDElementSource(MLDRTable mldrTable, MCDElement mcdElementSource) {
+        MDRContConstraints mdrContConstraints= getMDRContConstraints(mldrTable);
+        for (MVCCDElement mvccdElement: mdrContConstraints.getChilds()) {
+            if (mvccdElement instanceof MLDRConstraintCustomJnal) {
+                return (MLDRConstraintCustomJnal) mvccdElement;
+            }
+        }
+        return null ;
+    }
+    public static MLDRConstraintCustomAudit getMLDRAuditByMCDElementSource(MLDRTable mldrTable, MCDElement mcdElementSource) {
+        MDRContConstraints mdrContConstraints= getMDRContConstraints(mldrTable);
+        for (MVCCDElement mvccdElement: mdrContConstraints.getChilds()) {
+            if (mvccdElement instanceof MLDRConstraintCustomAudit) {
+                return (MLDRConstraintCustomAudit) mvccdElement;
+            }
+        }
+        return null ;
+    }
+
 
 
 }

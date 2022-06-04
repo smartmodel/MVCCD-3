@@ -7,7 +7,12 @@ import connections.ConnectionsDB;
 import console.ConsoleManager;
 import console.LogsManager;
 import console.ViewLogsManager;
+import constraints.Constraint;
+import constraints.ConstraintService;
+import constraints.ConstraintsManager;
 import datatypes.MDDatatype;
+import datatypes.MDDatatypeService;
+import datatypes.MPDRDatatype;
 import diagram.mcd.MCDDiagram;
 import exceptions.service.ExceptionService;
 import m.interfaces.IMCompletness;
@@ -19,6 +24,7 @@ import mcd.interfaces.IMCDCompliant;
 import mcd.interfaces.IMCDElementWithTargets;
 import mcd.interfaces.IMCDModel;
 import mcd.services.MCDNIDService;
+import mdr.MDRColumn;
 import mdr.MDRRelFKEnd;
 import mdr.MDRRelationFK;
 import mdr.interfaces.IMDRElementWithIteration;
@@ -27,10 +33,13 @@ import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
 import mpdr.*;
+import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.tapis.MPDRColumnJnal;
 import mpdr.tapis.MPDRStoredCode;
 import mpdr.tapis.MPDRTrigger;
 import mpdr.tapis.MPDRView;
+import mpdr.tapis.interfaces.ITapisElementWithSource;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import profile.Profile;
@@ -98,8 +107,12 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 treatSourceMLDRElementWithSource();
             }
 
-            if (node.getUserObject() instanceof IMPDRElementWithSource) {
+            if (node.getUserObject() instanceof IMPDRElementWithSource){
                 treatSourceMPDRElementWithSource();
+            }
+
+            if (node.getUserObject() instanceof ITapisElementWithSource){
+                treatSourceITapisElementWithSource();
             }
 
             if (node.getUserObject() instanceof MVCCDElementApplicationPreferences) {
@@ -335,6 +348,10 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                 treatGenericRead(this, new MDRColumnEditingTreat());
             }
 
+            if (node.getUserObject() instanceof MPDRColumnJnal){
+                treatViewMPRDColumnJnal();
+            }
+
             if (node.getUserObject() instanceof MPDRPK) {
                 treatGenericRead(this, new MDRPKEditingTreat());
             }
@@ -487,6 +504,57 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mldrElementSource.getIdProjectElement();
                     new DialogMessage().showOk(mvccdWindow, message,
                             "Source de niveau logique de l'objet : " + mvccdElement.getName());
+                } catch(Exception e){
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.source.mldr");
+                }
+            }
+        });
+    }
+
+    private void treatSourceITapisElementWithSource() {
+        JMenuItem source = new JMenuItem("Source physique");
+        this.add(source);
+        source.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    ITapisElementWithSource iTapisElementWithSource = (ITapisElementWithSource) mvccdElement;
+                    IMPDRElement mpdrElementSource = iTapisElementWithSource.getMpdrElementSource();
+                    String message = "Classe : " + mpdrElementSource.getClass().getName();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mpdrElementSource.getNameTreePath();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mpdrElementSource.getIdProjectElement();
+                    new DialogMessage().showOk(mvccdWindow, message,
+                            "Source de niveau physique de l'objet : " + mvccdElement.getName());
+                } catch(Exception e){
+                    exceptionUnhandled(e, mvccdElement, "repository.menu.exception.source.mpdr");
+                }
+            }
+        });
+    }
+
+    private void treatViewMPRDColumnJnal() {
+        JMenuItem source = new JMenuItem("Visualisation");
+        this.add(source);
+        source.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    MPDRColumnJnal mpdrColumnJnal  = (MPDRColumnJnal) mvccdElement;
+                    MPDRDB mpdrdb = mpdrColumnJnal.getMPDRTableToJournalize().getMPDRModelParent().getDb();
+                    MPDRDatatype mpdrDatatype =  MDDatatypeService.getMPDRDatatypeByLienProg(mpdrdb, mpdrColumnJnal.getDatatypeLienProg());
+                    Integer size = mpdrColumnJnal.getSize();
+                    Constraint constraint = ConstraintsManager.instance().constraints().getConstraintByLienProg(MDRColumn.class.getName(),
+                            mpdrColumnJnal.getDatatypeConstraintLienProg());
+                    String message = "Nom : " + mpdrColumnJnal.getName();
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Datatype     : " + mpdrColumnJnal.getDatatypeLienProg();
+                    if (size != null) {
+                        message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Taille     : " + size;
+                    }
+                    message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte     : " + ConstraintService.getUMLName(constraint);
+
+
+                    new DialogMessage().showOk(mvccdWindow, message,
+                            "Lecture : " + mvccdElement.getName());
                 } catch(Exception e){
                     exceptionUnhandled(e, mvccdElement, "repository.menu.exception.source.mldr");
                 }

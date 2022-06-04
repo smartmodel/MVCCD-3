@@ -90,6 +90,10 @@ public abstract class MDRTableOrView extends MDRElement implements IMDRElementWi
         return getMDRContConstraints().getMDRConstraints();
     }
 
+    public ArrayList<MDRConstraint> getMDRConstraintsSortDefault(){
+        return getMDRContConstraints().getMDRConstraintsSortDefault();
+    }
+
 
     public boolean existColumn(MDRColumn mdrColumn){
         for (MDRColumn aMdrColumn : getMDRColumns()){

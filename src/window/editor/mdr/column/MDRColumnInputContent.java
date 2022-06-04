@@ -229,6 +229,7 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
                 MPDRColumn mpdrColumn = (MPDRColumn) mdrColumn;
                 MPDRTable mpdrTable = mpdrColumn.getMPDRTableAccueil();
                 datatypeName = MDDatatypeService.convertMPDRLienProgToName(mpdrTable.getMPDRModelParent().getDb(), mdrColumn.getDatatypeLienProg());
+
             }
         }
         fieldDatatypeName.setText(datatypeName);

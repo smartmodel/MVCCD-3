@@ -9,7 +9,7 @@ CREATE OR REPLACE PACKAGE {packageName} IS
         , {pio_oldrec} IN OUT {tableName}%ROWTYPE);
     PROCEDURE {tree_or_list_loop};
     PROCEDURE {tree_or_list_onlyone};
-    --{-INS_JN_SPEC-}
+    {-INS_JN_SPEC-}
 
     TYPE {type_}{tableName}  IS TABLE OF {tableName}%ROWTYPE INDEX BY PLS_INTEGER;
     {vg_}{tableName} {type_}{tableName};

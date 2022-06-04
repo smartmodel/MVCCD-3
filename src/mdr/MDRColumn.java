@@ -13,6 +13,7 @@ import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRColumnsService;
 import mldr.MLDRColumn;
+import mpdr.tapis.MPDRColumnAudit;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -194,7 +195,7 @@ public abstract class MDRColumn extends MDRElement implements
 
 
     protected boolean isAudit() {
-        return this instanceof MDRColumnAudit;
+        return this instanceof MPDRColumnAudit;
     }
 
     public boolean isNotBusiness() {

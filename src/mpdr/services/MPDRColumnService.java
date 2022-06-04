@@ -3,6 +3,8 @@ package mpdr.services;
 import exceptions.CodeApplException;
 import mdr.MDRColumn;
 import mpdr.MPDRColumn;
+import mpdr.MPDRTable;
+import mpdr.tapis.MPDRColumnAudit;
 
 import java.util.ArrayList;
 
@@ -32,4 +34,12 @@ public class MPDRColumnService {
         }
     }
 
+    public static ArrayList<MPDRColumnAudit> getDRColumnsAudit(MPDRTable mpdrTable) {
+        ArrayList<MPDRColumnAudit> resultat = new ArrayList<MPDRColumnAudit>();
+        for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumns()){
+            if (mpdrColumn instanceof MPDRColumnAudit)
+            resultat.add((MPDRColumnAudit) mpdrColumn);
+        }
+        return resultat;
+    }
 }

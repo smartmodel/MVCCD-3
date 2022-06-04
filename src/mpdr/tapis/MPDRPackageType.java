@@ -10,9 +10,9 @@ public enum MPDRPackageType {
             new MPDRDB[]{MPDRDB.ORACLE}),
     TAPIS_BODY("TAPIS" + Preferences.MARKER_PACKAGE_BODY,"tapis_body.txt", MPDRStoredCodeUsage.TAPIS,MPDRStoredCodeScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),
-    RESOURCES_SPEC("", "resources_spec.txt", MPDRStoredCodeUsage.RESOURCES, MPDRStoredCodeScope.MPDR,
+    RESOURCES_SPEC("RESOURCES", "resources_spec.txt", MPDRStoredCodeUsage.RESOURCES, MPDRStoredCodeScope.MPDR,
             new MPDRDB[]{MPDRDB.ORACLE}),
-    RESOURCES_BODY("" + Preferences.MARKER_PACKAGE_BODY,"resources_body.txt", MPDRStoredCodeUsage.RESOURCES,MPDRStoredCodeScope.MPDR,
+    RESOURCES_BODY("RESOURCES" + Preferences.MARKER_PACKAGE_BODY,"resources_body.txt", MPDRStoredCodeUsage.RESOURCES,MPDRStoredCodeScope.MPDR,
             new MPDRDB[]{MPDRDB.ORACLE});
     public static String markerBody = "_BODY";
 

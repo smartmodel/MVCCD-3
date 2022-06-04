@@ -159,7 +159,7 @@ public class UtilDivers {
         return !isNotEmpty(arrayList);
     }
 
-    public boolean equals(String str1, String str2){
+    public static boolean equalsWithNull(String str1, String str2){
         boolean c1 = str1 == null;
         boolean c2 = str2 == null;
 
@@ -167,7 +167,7 @@ public class UtilDivers {
             return true;
         }
         if ( c1 && !c2){
-                return false;
+            return false;
         }
         if ( !c1 && c2){
             return false;
@@ -181,6 +181,30 @@ public class UtilDivers {
             }
         }
         throw new CodeApplException("str1:" + str1 +  "  -  str2:" + str2);
+    }
+
+    public static boolean equalsWithNull(Integer int1, Integer int2){
+        boolean c1 = int1 == null;
+        boolean c2 = int2 == null;
+
+        if ( c1 && c2 ) {
+            return true;
+        }
+        if ( c1 && !c2){
+            return false;
+        }
+        if ( !c1 && c2){
+            return false;
+        }
+        if ( !c1 && !c2){
+            if ( int1.intValue() == int2.intValue()) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        throw new CodeApplException("int1:" + int1 +  "  -  int2:" + int2);
     }
 
     public static String toEscapedForRegex (String str){
