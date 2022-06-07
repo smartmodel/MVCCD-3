@@ -1,12 +1,9 @@
 package window.editor.diagrammer.elements.shapes;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import window.editor.diagrammer.elements.interfaces.IResizable;
 import window.editor.diagrammer.elements.interfaces.IShape;
@@ -20,7 +17,6 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   protected int id;
   protected boolean isFocused = false;
   protected boolean isResizing = false;
-  protected Dimension sizeAtDefaultZoom;
 
   public SquaredShape(int id) {
     this();
@@ -58,7 +54,6 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   @Override
   protected void paintComponent(Graphics graphics) {
     super.paintComponent(graphics);
-    this.setBorder(BorderFactory.createLineBorder(Color.BLACK, this.isFocused || this.isResizing ? 0 : 0));
     this.doDraw(graphics);
   }
 
@@ -70,6 +65,11 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   @Override
   public void setLocationDifference(int differenceX, int differenceY) {
     this.setLocation(this.getX() + differenceX, this.getY() + differenceY);
+  /*   List<RelationShape> linkedRelations = DiagrammerService.getDrawPanel().getRelationShapesBySquaredShape(this);
+   for (RelationShape relation : linkedRelations) {
+      RelationAnchorPointShape nearestPointAncrage = ShapeUtils.getNearestPointAncrage(this, relation);
+      nearestPointAncrage.drag(nearestPointAncrage.x + differenceX, nearestPointAncrage.y + differenceY);
+    }*/
   }
 
   @Override
@@ -97,13 +97,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
 
   @Override
   public void drag(int differenceX, int differenceY) {
-/*    List<RelationShape> linkedRelations = DiagrammerService.getDrawPanel().getRelationShapesBySquaredShape(this);
-    for (RelationShape relation : linkedRelations) {
-      RelationAnchorPointShape nearestPointAncrage = ShapeUtils.getNearestPointAncrage(this, relation);
-      nearestPointAncrage.drag(nearestPointAncrage.x + differenceX, nearestPointAncrage.y + differenceY);
-    }*/
 
-    //this.setLocation(this.getX() + differenceX, this.getY() + differenceY);;
     this.setLocationDifference(differenceX, differenceY);
   }
 

@@ -21,6 +21,7 @@ import main.MVCCDManager;
 import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
@@ -35,7 +36,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   protected int id;
   protected List<RelationAnchorPointShape> anchorPoints = new LinkedList<>();
   protected boolean isFocused = false;
-  protected ClassShape source;
+  protected SquaredShape source;
   protected IShape destination;
   protected IMRelation relation;
   protected MDElement relatedRepositoryElement;
@@ -150,7 +151,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   @Override
   public void zoom(int fromFactor, int toFactor) {
     for (RelationAnchorPointShape anchorPointShape : this.anchorPoints) {
-      anchorPointShape.zoom(fromFactor, toFactor);
+      anchorPointShape.zoom(fromFactor, toFactor, this);
     }
   }
 
@@ -297,7 +298,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     return nearestSegment != null;
   }
 
-  public ClassShape getSource() {
+  public SquaredShape getSource() {
     return this.source;
   }
 
@@ -311,8 +312,8 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     }
   }
 
-  public ClassShape getNearestClassShape(RelationAnchorPointShape anchorPoint) {
-    return anchorPoint == this.getFirstPoint() ? this.source : (ClassShape) this.destination;
+  public SquaredShape getNearestSquaredShape(RelationAnchorPointShape anchorPoint) {
+    return anchorPoint == this.getFirstPoint() ? this.source : (SquaredShape) this.destination;
   }
 
   public List<Line2D> getSegments() {
@@ -493,7 +494,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
     this.anchorPoints.clear();
 
-    Position sourcePosition = ShapeUtils.getSourceShapePosition(this.source, (ClassShape) this.destination);
+    Position sourcePosition = ShapeUtils.getSourceShapePosition(this.source, (SquaredShape) this.destination);
     Rectangle sourceBounds = this.source.getBounds();
     Rectangle destBounds = this.destination.getBounds();
 

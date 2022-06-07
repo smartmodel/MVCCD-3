@@ -13,17 +13,6 @@ public class ClassShapeZone extends Rectangle {
     this.elements = new ArrayList<>();
   }
 
-  public String getElementsAsString() {
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < this.elements.size(); i++) {
-      sb.append(this.elements.get(i));
-      if (i != this.elements.size() - 1) {
-        sb.append("\n");
-      }
-    }
-    return sb.toString();
-  }
-
   public void addElement(String element) {
     this.elements.add(element);
   }
@@ -35,4 +24,5 @@ public class ClassShapeZone extends Rectangle {
   public void setElements(List<String> elements) {
     this.elements = elements;
   }
+
 }

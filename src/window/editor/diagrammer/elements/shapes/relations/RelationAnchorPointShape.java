@@ -7,8 +7,10 @@ import java.io.Serializable;
 import main.MVCCDManager;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
+import window.editor.diagrammer.utils.ShapeUtils;
 
 public class RelationAnchorPointShape extends Point implements IShape, Serializable {
 
@@ -116,6 +118,29 @@ public class RelationAnchorPointShape extends Point implements IShape, Serializa
   @Override
   public void setFocused(boolean isSelected) {
     this.isSelected = isSelected;
+  }
+
+  public void zoom(int fromFactor, int toFactor, RelationShape relation) {
+    int newX = this.x * toFactor / fromFactor;
+    int newY = this.y * toFactor / fromFactor;
+
+    int x = GridUtils.alignToGrid(newX, DiagrammerService.getDrawPanel().getGridSize());
+    int y = GridUtils.alignToGrid(newY, DiagrammerService.getDrawPanel().getGridSize());
+
+    boolean zoomAllowed = true;
+
+    if (this == relation.getFirstPoint()) {
+      if (!ShapeUtils.pointIsAroundShape(new Point(x, y), relation.getSource())) {
+        zoomAllowed = false;
+      }
+    } else if (this == relation.getDestination()) {
+      if (!ShapeUtils.pointIsAroundShape(new Point(x, y), (SquaredShape) relation.getDestination())) {
+        zoomAllowed = false;
+      }
+    }
+
+    this.x = x;
+    this.y = y;
   }
 
   private void generateId() {

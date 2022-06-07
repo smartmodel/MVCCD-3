@@ -35,11 +35,6 @@ public class MCDEntityShape extends ClassShape implements Serializable {
   }
 
   @Override
-  protected void paintComponent(Graphics g) {
-    super.paintComponent(g);
-  }
-
-  @Override
   public void setZoneEnTeteContent() {
     this.zoneEnTete.getElements().clear();
 

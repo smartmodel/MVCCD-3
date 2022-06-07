@@ -99,7 +99,7 @@ public final class ShapeUtils {
     }
   }
 
-  public static boolean pointIsAroundShape(Point point, ClassShape shape) {
+  public static boolean pointIsAroundShape(Point point, SquaredShape shape) {
     // On convertit le point pour le rendre relatif à la ClassShape
     Point converted = SwingUtilities.convertPoint(DiagrammerService.getDrawPanel(), point, shape);
     return (converted.x >= 0 && converted.x <= shape.getWidth() && (converted.y == 0 || converted.y == shape.getHeight())) || (converted.y >= 0 && converted.y <= shape.getHeight() && (converted.x == 0 || converted.x == shape.getWidth()));
@@ -169,7 +169,7 @@ public final class ShapeUtils {
     return p.y == bounds.getMaxY() && p.x >= bounds.getMinX() && p.x <= bounds.getMaxX();
   }
 
-  public static Position getSourceShapePosition(ClassShape source, ClassShape comparedTo) {
+  public static Position getSourceShapePosition(SquaredShape source, SquaredShape comparedTo) {
 
     if (isRight(source, comparedTo) && isTop(source, comparedTo)) {
       return Position.TOP_CORNER_RIGHT;
@@ -195,39 +195,39 @@ public final class ShapeUtils {
     return Position.UNHANDLED;
   }
 
-  public static boolean isTop(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isTop(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMaxY() <= comparedTo.getBounds().getMinY();
   }
 
-  public static boolean isBottom(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isBottom(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMinY() >= comparedTo.getBounds().getMaxY();
   }
 
-  public static boolean isRight(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isRight(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMinX() >= comparedTo.getBounds().getMaxX();
   }
 
-  public static boolean isLeft(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isLeft(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMaxX() <= comparedTo.getBounds().getMinX();
   }
 
-  public static boolean isXCenteredTopLeft(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isXCenteredTopLeft(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMaxX() >= comparedTo.getBounds().getMinX() && shape.getBounds().getMaxX() <= comparedTo.getBounds().getMaxX();
   }
 
-  public static boolean isXCenteredTopRight(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isXCenteredTopRight(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMinX() <= comparedTo.getBounds().getMaxX() && shape.getBounds().getMinX() >= comparedTo.getBounds().getMinX();
   }
 
-  public static boolean isYCenteredTop(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isYCenteredTop(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMaxY() >= comparedTo.getBounds().getMinY() && shape.getBounds().getMaxY() <= comparedTo.getBounds().getMaxY();
   }
 
-  public static boolean isYCenteredBottom(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isYCenteredBottom(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMinY() <= comparedTo.getBounds().getMaxY() && shape.getBounds().getMinY() >= comparedTo.getBounds().getMinY();
   }
 
-  public static boolean isHigher(ClassShape shape, ClassShape comparedTo) {
+  public static boolean isHigher(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMinY() < comparedTo.getBounds().getMinY();
   }
 

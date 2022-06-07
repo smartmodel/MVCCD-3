@@ -44,7 +44,6 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
     ResizableBorder resizableBorder = new ResizableBorder();
     this.cursor = resizableBorder.getCursor(mouseEvent);
     this.startPoint = mouseEvent.getPoint();
-    this.shape.repaint();
   }
 
   @Override
@@ -59,7 +58,7 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
       Point converted = SwingUtilities.convertPoint(this.shape, e.getPoint(), DiagrammerService.getDrawPanel());
       Component componentFound = DiagrammerService.getDrawPanel().findComponentAt(converted);
       // Vérifie que le composant sur lequel le clic est relaché n'est pas la zone de dessin
-      System.out.println(componentFound);
+
       if (componentFound != DiagrammerService.getDrawPanel()) {
         IShape shapeReleasedOn = (IShape) componentFound;
         if (shapeReleasedOn != null) {
@@ -68,7 +67,6 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
           RelationCreator.resetSourceAndDestination();
         }
       } else {
-        System.out.println("Clic lâché au dessus de la zone de dessin.");
         RelationCreator.resetSourceAndDestination();
       }
     }
@@ -109,13 +107,11 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
         }
       }
     }
-    DiagrammerService.getDrawPanel().repaint();
   }
 
   @Override
   public void mouseMoved(MouseEvent e) {
     ResizableBorder resizableBorder = new ResizableBorder();
-
     if (resizableBorder.isOneRectangleHovered(e)) {
       // Redimensionnement en cours
       this.shape.setBorder(resizableBorder);
@@ -125,8 +121,6 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
       this.shape.setFocused(true);
       this.shape.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
     }
-
-    this.shape.repaint();
   }
 
   private void handleMovements(Point mouseClick) {
@@ -214,7 +208,6 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
   private void handleDrag(Point mouseClick) {
     int differenceX = mouseClick.x - this.startPoint.x;
     int differenceY = mouseClick.y - this.startPoint.y;
-    System.out.println(differenceX);
     this.shape.drag(differenceX, differenceY);
   }
 

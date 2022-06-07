@@ -48,7 +48,6 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     this.origin = new Point();
     this.initUI();
     this.addListeners();
-    this.repaint();
   }
 
   public double getZoomFactor() {
@@ -104,13 +103,15 @@ public class DrawPanel extends JLayeredPane implements Serializable {
 
   public void zoom(int zoomFactor) {
     int oldGridSize = this.gridSize;
+
     if (this.isZoomAllowed(zoomFactor)) {
       this.setGridSize(zoomFactor);
     }
-    this.zoomElements(oldGridSize, this.gridSize);
+
     DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
     Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
     Point viewportLocation = parent.getViewport().getLocationOnScreen();
+
     double x = mouseLocation.x - viewportLocation.x;
     double y = mouseLocation.y - viewportLocation.y;
 
@@ -127,18 +128,16 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     // On déplace l'origine
     this.moveOrigin(GridUtils.alignToGrid(-differenceX, this.gridSize), GridUtils.alignToGrid(-differenceY, this.gridSize));
 
-    for (IShape e : this.getShapes()) {
-      e.zoom(oldGridSize, this.gridSize);
-    }
-    this.updatePanelAndScrollbars();
+    this.zoomElements(oldGridSize, this.gridSize);
 
+    this.updatePanelAndScrollbars();
+    this.repaint();
   }
 
   public void addShape(IShape element) {
     if (element != null) {
       this.add((JComponent) element);
       this.shapes.add(element);
-      this.repaint();
     } else {
       DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.add.null.element"));
     }
@@ -149,8 +148,6 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     for (IShape shape : shapes) {
       this.add((JComponent) shape);
     }
-    this.revalidate();
-    this.repaint();
     ViewLogsManager.printMessage(shapes.size() + " formes ont été ajoutées à la zone de dessin.", WarningLevel.INFO);
   }
 
@@ -173,22 +170,18 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   public void deleteShape(IShape shape) {
     this.remove((JComponent) shape);
     this.shapes.remove(shape);
-    this.revalidate();
-    this.repaint();
   }
 
   public void unloadAllShapes() {
     this.removeAll();
     this.shapes.clear();
     this.revalidate();
-    this.repaint();
   }
 
   public void drawRelations(Graphics2D graphics2D) {
     graphics2D.setColor(Color.BLACK);
     for (RelationShape relationShape : this.getRelationShapes()) {
       relationShape.draw(graphics2D);
-
     }
   }
 
@@ -215,7 +208,6 @@ public class DrawPanel extends JLayeredPane implements Serializable {
         element.zoom(fromFactor, toFactor);
       }
     }
-    this.repaint();
   }
 
   public void moveOrigin(int differenceX, int differenceY) {
@@ -342,7 +334,6 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   public void updatePanelAndScrollbars() {
     this.insertWhiteSpaceInUpperLeftCorner();
     //this.removeUnnecessaryWhitespaceAroundDiagram();
-    this.repaint();
   }
 
   private void insertWhiteSpaceInUpperLeftCorner() {
@@ -395,7 +386,6 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     for (IShape shape : this.shapes) {
       shape.drag(differenceX, differenceY);
     }
-    this.repaint();
   }
 
   public void endScroll() {

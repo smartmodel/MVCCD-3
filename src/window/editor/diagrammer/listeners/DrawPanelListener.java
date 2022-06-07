@@ -128,38 +128,37 @@ public class DrawPanelListener extends MouseAdapter implements Serializable {
   public void mouseDragged(MouseEvent e) {
     super.mouseDragged(e);
 
-    int differenceX = e.getPoint().x - this.origin.x;
-    int differenceY = e.getPoint().y - this.origin.y;
-
-    this.origin = e.getPoint();
-    this.tempNewX += differenceX;
-    this.tempNewY += differenceY;
-
-    boolean xNeedsRealignment = this.tempNewX == GridUtils.alignToGrid(this.tempNewX + differenceX, DiagrammerService.getDrawPanel().getGridSize());
-    boolean yNeedsRealignement = this.tempNewY == GridUtils.alignToGrid(this.tempNewY + differenceY, DiagrammerService.getDrawPanel().getGridSize());
-
-    if (xNeedsRealignment && yNeedsRealignement) {
-      DiagrammerService.getDrawPanel().drag(this.tempNewX, this.tempNewY);
-      System.out.println("on update tous les 2");
-      this.tempNewX = 0;
-      this.tempNewY = 0;
-    }
-
-    if (xNeedsRealignment && !yNeedsRealignement) {
-      DiagrammerService.getDrawPanel().drag(this.tempNewX, 0);
-      System.out.println("on update x");
-      this.tempNewX = 0;
-    }
-
-    if (!xNeedsRealignment && yNeedsRealignement) {
-      DiagrammerService.getDrawPanel().drag(0, this.tempNewY);
-      System.out.println("on update y");
-      this.tempNewY = 0;
-    }
-
+    // Si un point d'ancrage est sélectionné
     if (this.anchorPointClicked != null && this.focusedRelation != null) {
       this.dragAnchorPointSelected(e);
+    } else {
+      int differenceX = e.getPoint().x - this.origin.x;
+      int differenceY = e.getPoint().y - this.origin.y;
+
+      this.origin = e.getPoint();
+      this.tempNewX += differenceX;
+      this.tempNewY += differenceY;
+
+      boolean xNeedsRealignment = this.tempNewX == GridUtils.alignToGrid(this.tempNewX + differenceX, DiagrammerService.getDrawPanel().getGridSize());
+      boolean yNeedsRealignement = this.tempNewY == GridUtils.alignToGrid(this.tempNewY + differenceY, DiagrammerService.getDrawPanel().getGridSize());
+
+      if (xNeedsRealignment && yNeedsRealignement) {
+        DiagrammerService.getDrawPanel().drag(this.tempNewX, this.tempNewY);
+        this.tempNewX = 0;
+        this.tempNewY = 0;
+      }
+
+      if (xNeedsRealignment && !yNeedsRealignement) {
+        DiagrammerService.getDrawPanel().drag(this.tempNewX, 0);
+        this.tempNewX = 0;
+      }
+
+      if (!xNeedsRealignment && yNeedsRealignement) {
+        DiagrammerService.getDrawPanel().drag(0, this.tempNewY);
+        this.tempNewY = 0;
+      }
     }
+
   }
 
   @Override
@@ -227,7 +226,6 @@ public class DrawPanelListener extends MouseAdapter implements Serializable {
 
     MVCCDManager.instance().getCurrentDiagram().addShape(shape);
     DiagrammerService.getDrawPanel().addShape(shape);
-    DiagrammerService.getDrawPanel().repaint();
   }
 
   private void createEntityShape(MouseEvent event) {
@@ -238,7 +236,6 @@ public class DrawPanelListener extends MouseAdapter implements Serializable {
 
     MVCCDManager.instance().getCurrentDiagram().addShape(shape);
     DiagrammerService.getDrawPanel().addShape(shape);
-    DiagrammerService.getDrawPanel().repaint();
 
   }
 

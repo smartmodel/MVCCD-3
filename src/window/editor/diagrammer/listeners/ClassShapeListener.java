@@ -67,7 +67,6 @@ public class ClassShapeListener extends MouseAdapter implements Serializable {
   @Override
   public void mouseMoved(MouseEvent e) {
     super.mouseMoved(e);
-
   }
 
   private void checkForHoveredRelation(MouseEvent e) {

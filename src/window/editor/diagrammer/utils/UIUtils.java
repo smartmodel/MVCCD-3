@@ -18,6 +18,7 @@ public class UIUtils {
   }
 
   public static Font getClassNameFont() {
+
     return new Font(Preferences.DIAGRAMMER_DEFAULT_FONT_FAMILY, Font.BOLD, (int) getFontSize());
   }
 
@@ -31,5 +32,9 @@ public class UIUtils {
 
   public static double getAnchorPointSize() {
     return Preferences.DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE * DiagrammerService.getDrawPanel().getZoomFactor();
+  }
+
+  public static double getNoteCornerSize() {
+    return Preferences.DIAGRAMMER_DEFAULT_NOTE_CORNER_SIZE * DiagrammerService.getDrawPanel().getZoomFactor();
   }
 }
