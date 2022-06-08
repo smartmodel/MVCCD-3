@@ -103,8 +103,6 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
 
   private void drawZoneEnTeteBorder(Graphics2D graphics2D) {
     int height = this.getZoneMinHeight(this.zoneEnTete.getElements());
-    System.out.println(UIUtils.getShapeFont());
-
     graphics2D.drawRect(0, 0, this.getWidth() - 1, height);
   }
 

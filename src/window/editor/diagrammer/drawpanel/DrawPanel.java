@@ -41,6 +41,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   private static final long serialVersionUID = 1000;
   private final Point origin;
   private List<IShape> shapes;
+  private boolean isManualScrolling = false;
   private int gridSize = Preferences.DIAGRAMMER_DEFAULT_GRID_SIZE;
 
   public DrawPanel() {
@@ -157,6 +158,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     this.addMouseListener(listener);
     this.addMouseMotionListener(listener);
     this.addMouseWheelListener(listener);
+    this.addKeyListener(listener);
   }
 
   public List<IShape> getShapes() {
@@ -457,6 +459,14 @@ public class DrawPanel extends JLayeredPane implements Serializable {
       }
     }
     this.repaint();
+  }
+
+  public boolean isManualScrolling() {
+    return this.isManualScrolling;
+  }
+
+  public void setManualScrolling(boolean manualScrolling) {
+    this.isManualScrolling = manualScrolling;
   }
 
   private void showRelationProjectionLine(Graphics2D graphics2D) {

@@ -4,12 +4,17 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
+import java.util.List;
 import javax.swing.JPanel;
 import window.editor.diagrammer.elements.interfaces.IResizable;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
+import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.IDManager;
+import window.editor.diagrammer.utils.ShapeUtils;
 
 public abstract class SquaredShape extends JPanel implements IShape, IResizable, Serializable {
 
@@ -65,11 +70,16 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   @Override
   public void setLocationDifference(int differenceX, int differenceY) {
     this.setLocation(this.getX() + differenceX, this.getY() + differenceY);
-  /*   List<RelationShape> linkedRelations = DiagrammerService.getDrawPanel().getRelationShapesBySquaredShape(this);
-   for (RelationShape relation : linkedRelations) {
-      RelationAnchorPointShape nearestPointAncrage = ShapeUtils.getNearestPointAncrage(this, relation);
-      nearestPointAncrage.drag(nearestPointAncrage.x + differenceX, nearestPointAncrage.y + differenceY);
-    }*/
+
+    // S'il s'agit d'une scroll manuel de l'utilisateur, on déplace les points d'ancrage attachés à la forme
+    System.out.println(DiagrammerService.getDrawPanel().isManualScrolling());
+    if (!DiagrammerService.getDrawPanel().isManualScrolling()) {
+      List<RelationShape> linkedRelations = DiagrammerService.getDrawPanel().getRelationShapesBySquaredShape(this);
+      for (RelationShape relation : linkedRelations) {
+        RelationAnchorPointShape nearestPointAncrage = ShapeUtils.getNearestPointAncrage(this, relation);
+        nearestPointAncrage.drag(nearestPointAncrage.x + differenceX, nearestPointAncrage.y + differenceY);
+      }
+    }
   }
 
   @Override
