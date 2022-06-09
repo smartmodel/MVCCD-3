@@ -129,11 +129,11 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     FontMetrics fontMetrics = this.getFontMetrics(UIUtils.getShapeFont());
     int height = this.getZoneMinHeight(this.zoneEnTete.getElements()) + this.getZoneMinHeight(this.zoneProprietes.getElements());
     String longestProperty = this.getLongestProperty();
-    double width = Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH;
+    double width = UIUtils.getClassShapeDefaultSize().width;
     if (longestProperty != null) {
       double newWidth = UIUtils.getClassPadding() * 2 + fontMetrics.stringWidth(longestProperty);
-      if (longestProperty.isEmpty() || newWidth < Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH) {
-        width = Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH;
+      if (longestProperty.isEmpty() || newWidth < UIUtils.getClassShapeDefaultSize().width) {
+        width = UIUtils.getClassShapeDefaultSize().width;
       } else {
         width = UIUtils.getClassPadding() * 2 + fontMetrics.stringWidth(longestProperty);
       }
@@ -143,12 +143,12 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
 
   @Override
   protected void defineMinimumSize() {
-    this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH, Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT));
+    this.setMinimumSize(UIUtils.getClassShapeDefaultSize());
   }
 
   @Override
   protected void defineSizeAtDefaultZoom() {
-    this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH, Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT));
+    this.setMinimumSize(UIUtils.getClassShapeDefaultSize());
   }
 
   @Override
@@ -169,11 +169,11 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
   }
 
   protected void updateSizeAndMinimumSize() {
-    //Dimension minimumSize = this.calculateMinimumSize();
-/*    if (minimumSize.width >= Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH && minimumSize.height >= Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT) {
+    Dimension minimumSize = this.calculateMinimumSize();
+    if (minimumSize.width >= UIUtils.getClassShapeDefaultSize().width && minimumSize.height >= UIUtils.getClassShapeDefaultSize().height) {
       this.setMinimumSize(minimumSize);
       this.setSize(minimumSize);
-    }*/
+    }
   }
 
   protected abstract void setZoneEnTeteContent();

@@ -1,23 +1,26 @@
 package window.editor.diagrammer.elements.shapes.relations.labels;
 
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.Serializable;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.JPanel;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
+import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.ShapeUtils;
+import window.editor.diagrammer.utils.UIUtils;
 
-public class LabelShape extends JLabel implements Serializable {
+public class LabelShape extends JPanel implements Serializable {
 
   private static final long serialVersionUID = 1000;
   private final int MARGIN = 20;
+  private String text;
   private int distanceInXFromPointAncrage;
   private int distanceInYFromPointAncrage;
   private RelationAnchorPointShape pointAncrage;
@@ -30,9 +33,10 @@ public class LabelShape extends JLabel implements Serializable {
     this.addListeners();
   }
 
-  public LabelShape(RelationAnchorPointShape pointAncrage, LabelType type, RelationShape relationShape, int distanceInXFromPointAncrage, int distanceInYFromPointAncrage) {
+  public LabelShape(RelationAnchorPointShape pointAncrage, String text, LabelType type, RelationShape relationShape, int distanceInXFromPointAncrage, int distanceInYFromPointAncrage) {
     this();
 
+    this.text = text;
     this.type = type;
     this.pointAncrage = pointAncrage;
     this.relationShape = relationShape;
@@ -43,7 +47,7 @@ public class LabelShape extends JLabel implements Serializable {
 
     Point initialLocation = this.calculateLocation(true);
 
-    this.setBounds(initialLocation.x + distanceInXFromPointAncrage, initialLocation.y + distanceInYFromPointAncrage, 110, 30);
+    this.setBounds(initialLocation.x + distanceInXFromPointAncrage, initialLocation.y + distanceInYFromPointAncrage, 1, 1);
 
     this.repaint();
   }
@@ -53,17 +57,24 @@ public class LabelShape extends JLabel implements Serializable {
     super.paintComponent(g);
     Graphics2D graphics2D = (Graphics2D) g;
     Dimension size = this.calculateSize(graphics2D);
-
-    this.setBounds(this.pointAncrage.getBounds().x + this.distanceInXFromPointAncrage, this.pointAncrage.getBounds().y + this.distanceInYFromPointAncrage, size.width, size.height);
-
+    this.setFont(UIUtils.getCardinalityFont());
+    this.setSize(size);
+    graphics2D.drawString(this.text, this.calculateTextXCoordinate(graphics2D), this.calculateTextYCoordinate(graphics2D));
   }
 
   private void initUI() {
     this.setOpaque(false); // Pour la transparence
     this.setVisible(false);
-    this.setHorizontalAlignment(SwingConstants.CENTER);
-    this.setVerticalAlignment(SwingConstants.CENTER);
-    this.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
+  }
+
+  private int calculateTextXCoordinate(Graphics2D graphics2D) {
+    FontMetrics fontMetrics = graphics2D.getFontMetrics();
+    return (this.getWidth() / 2) - (fontMetrics.stringWidth(this.text) / 2);
+  }
+
+  private int calculateTextYCoordinate(Graphics2D graphics2D) {
+    FontMetrics fontMetrics = graphics2D.getFontMetrics();
+    return (this.getHeight() / 2) + (fontMetrics.getAscent() / 2);
   }
 
   private void addListeners() {
@@ -165,9 +176,19 @@ public class LabelShape extends JLabel implements Serializable {
   }
 
   private Dimension calculateSize(Graphics2D graphics2D) {
-    int width = graphics2D.getFontMetrics().stringWidth(this.getText());
-    int height = graphics2D.getFontMetrics().getHeight();
+    int width = (int) (graphics2D.getFontMetrics().stringWidth(this.text) + 2 * UIUtils.getCardinalityPadding());
+    int height = (int) (graphics2D.getFontMetrics().getHeight() + 2 * UIUtils.getCardinalityPadding());
     return new Dimension(width, height);
+  }
+
+  public void zoom(int fromFactor, int toFactor) {
+    int newXPosition = GridUtils.alignToGrid((double) this.getX() * toFactor / fromFactor, toFactor);
+    int newYPosition = GridUtils.alignToGrid((double) this.getY() * toFactor / fromFactor, toFactor);
+    int newWidth = GridUtils.alignToGrid((double) this.getBounds().width * toFactor / fromFactor, toFactor);
+    int newHeight = GridUtils.alignToGrid((double) this.getBounds().height * toFactor / fromFactor, toFactor);
+
+    this.setSize(newWidth, newHeight);
+    this.setLocation(newXPosition, newYPosition);
   }
 
   public Point calculateLocation(boolean firstDisplay) {
@@ -215,5 +236,13 @@ public class LabelShape extends JLabel implements Serializable {
 
   public LabelType getType() {
     return this.type;
+  }
+
+  public String getText() {
+    return this.text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
   }
 }

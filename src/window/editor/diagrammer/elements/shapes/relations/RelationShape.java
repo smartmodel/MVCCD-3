@@ -150,8 +150,14 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   @Override
   public void zoom(int fromFactor, int toFactor) {
+    // Zoom les points d'ancrage qui composent la relation
     for (RelationAnchorPointShape anchorPointShape : this.anchorPoints) {
       anchorPointShape.zoom(fromFactor, toFactor, this);
+    }
+
+    // Zoom les labels associsé
+    for (LabelShape label : this.labels) {
+      label.zoom(fromFactor, toFactor);
     }
   }
 
@@ -410,8 +416,8 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   public LabelShape createLabel(RelationAnchorPointShape anchorPoint, String text, LabelType type, int distanceInXFromAnchorPoint, int distanceInYFromAnchorPoint) {
 
     // La relation possède déjà un label du type fourni en paramètre
-    LabelShape label = new LabelShape(anchorPoint, type, this, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
-    label.setText(text);
+    LabelShape label = new LabelShape(anchorPoint, text, type, this, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+    //label.setText(text);
     label.setVisible(true);
 
     // Ajoute le label à la liste des labels

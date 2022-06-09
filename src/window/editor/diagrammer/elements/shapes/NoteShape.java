@@ -21,12 +21,12 @@ public class NoteShape extends SquaredShape implements Serializable {
 
   @Override
   protected void defineMinimumSize() {
-    this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_NOTE_WIDTH, Preferences.DIAGRAMMER_DEFAULT_NOTE_HEIGHT));
+    this.setMinimumSize(UIUtils.getNoteDefaultSize());
   }
 
   @Override
   protected void defineSize() {
-    this.setSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_NOTE_WIDTH, Preferences.DIAGRAMMER_DEFAULT_NOTE_HEIGHT));
+    this.setSize(UIUtils.getNoteDefaultSize());
   }
 
   @Override

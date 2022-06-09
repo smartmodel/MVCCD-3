@@ -94,7 +94,7 @@ public class MCDEntityShape extends ClassShape implements Serializable {
 
   @Override
   protected void defineSize() {
-    this.setSize(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH, Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT);
+    this.setSize(UIUtils.getClassShapeDefaultSize());
   }
 
   @Override
