@@ -1,16 +1,15 @@
 package window.editor.diagrammer.listeners;
 
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.Serializable;
+import javax.swing.SwingUtilities;
 import window.editor.diagrammer.elements.shapes.MDTableShape;
 import window.editor.diagrammer.menus.MDTableShapeMenu;
 import window.editor.diagrammer.services.DiagrammerService;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.Serializable;
-
-public class MDTableShapeListener  extends MouseAdapter implements Serializable {
+public class MDTableShapeListener extends MouseAdapter implements Serializable {
 
     @Override
     public void mouseClicked(MouseEvent e) {

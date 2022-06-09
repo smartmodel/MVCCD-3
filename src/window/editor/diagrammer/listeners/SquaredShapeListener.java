@@ -11,7 +11,9 @@ import javax.swing.SwingUtilities;
 import preferences.Preferences;
 import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.interfaces.UMLPackageIntegrableShapes;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.UMLPackage;
 import window.editor.diagrammer.palette.PaletteButtonType;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
@@ -298,7 +300,44 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
         DiagrammerService.getDrawPanel().getGridSize());
     int differenceY = GridUtils.alignToGrid(mouseClick.y - this.startPoint.y,
         DiagrammerService.getDrawPanel().getGridSize());
+
+    if (shape instanceof UMLPackageIntegrableShapes) {
+      // Pour ne pas laisser les composants se déplacer hors du UMLPackage
+      if ((
+          (shape.getBounds().getMaxX() > ((UMLPackageIntegrableShapes) shape).getParentUMLPackage()
+              .getBounds().getMaxX())
+              ||
+              (shape.getBounds().getMaxY()
+                  > ((UMLPackageIntegrableShapes) shape).getParentUMLPackage()
+                  .getBounds().getMaxY())
+              ||
+              (shape.getBounds().getMinX()
+                  < ((UMLPackageIntegrableShapes) shape).getParentUMLPackage()
+                  .getBounds().getMinX())
+              ||
+              (shape.getBounds().getMinY()
+                  < ((UMLPackageIntegrableShapes) shape).getParentUMLPackage()
+                  .getBounds().getMinY())
+      )) {
+        return;
+      }
+    }
+
     this.shape.drag(differenceX, differenceY);
+
+    if (shape instanceof UMLPackage) {
+      // Pour que les composants suivent le déplacement du UMLPackage
+      ((UMLPackage) shape).getTapisElements().forEach(e ->
+          {
+            int diffX = GridUtils.alignToGrid(mouseClick.x - this.startPoint.x,
+                DiagrammerService.getDrawPanel().getGridSize());
+            int diffY = GridUtils.alignToGrid(mouseClick.y - this.startPoint.y,
+                DiagrammerService.getDrawPanel().getGridSize());
+
+            ((SquaredShape) e).drag(diffX, diffY);
+          }
+      );
+    }
   }
 
   private void moveComponentToFront(MouseEvent event) {

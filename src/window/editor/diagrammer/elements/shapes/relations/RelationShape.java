@@ -557,7 +557,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.anchorPoints.clear();
 
     Position sourcePosition = GeometryUtils.getSourceShapePosition(this.source,
-        (ClassShape) this.destination);
+        (SquaredShape) this.destination);
     Rectangle sourceBounds = this.source.getBounds();
     Rectangle destBounds = this.destination.getBounds();
 

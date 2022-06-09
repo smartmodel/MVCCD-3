@@ -324,7 +324,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
         int maxx = 0;
         int maxy = 0;
         for (IShape element : elements) {
-            if (element instanceof ClassShape) {
+            if (element != null) {
                 minx = Math.min(minx, element.getBounds().x - borderWidth);
                 miny = Math.min(miny, element.getBounds().y - borderWidth);
                 maxx = Math.max(maxx, element.getBounds().x + element.getBounds().width + borderWidth);

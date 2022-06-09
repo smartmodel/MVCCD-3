@@ -37,15 +37,6 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     this.addListeners();
   }
 
-  public ClassShape(MDElement relatedRepositoryElement, boolean mdTableShape) {
-    super();
-    this.addListeners();
-    this.relatedRepositoryElement = relatedRepositoryElement;
-    this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH,
-        Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT));
-    this.setSize(this.getMinimumSize());
-  }
-
   public ClassShape(MDElement relatedRepositoryElement, int id) {
     super(id);
     this.addListeners();
@@ -66,7 +57,6 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     Graphics2D graphics2D = (Graphics2D) g;
     graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
         RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    this.setBackgroundColor();
     this.drawZoneEnTete(graphics2D);
     this.drawZoneProprietes(graphics2D);
   }
@@ -95,7 +85,7 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
   }
 
 
-  private void initUI() {
+  protected void initUI() {
     // Lorsque la ClassShape est créée, seule la zone d'en-tête est affichée
     this.setZoneEnTeteContent();
     this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH,
@@ -132,11 +122,11 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     this.drawZoneProprietesBorder(graphics2D);
   }
 
-  private int getCenterTextPositionX(String element, Graphics2D graphics2D) {
+  protected int getCenterTextPositionX(String element, Graphics2D graphics2D) {
     return this.getWidth() / 2 - graphics2D.getFontMetrics().stringWidth(element) / 2;
   }
 
-  private int getZoneMinHeight(List<String> elements) {
+  protected int getZoneMinHeight(List<String> elements) {
     final FontMetrics fontMetrics = this.getFontMetrics(Preferences.DIAGRAMMER_CLASS_FONT);
     int minHeight = Preferences.DIAGRAMMER_CLASS_PADDING * 2;
     minHeight += fontMetrics.getHeight() * elements.size();
@@ -160,7 +150,7 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
         this.getWidth() - 1, height - 1);
   }
 
-  private void drawElements(Graphics2D graphics2D, List<String> elements, int y) {
+  protected void drawElements(Graphics2D graphics2D, List<String> elements, int y) {
     graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
     final int x = Preferences.DIAGRAMMER_CLASS_PADDING;
     for (String element : elements) {
@@ -173,7 +163,8 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     final FontMetrics fontMetrics = this.getFontMetrics(Preferences.DIAGRAMMER_CLASS_FONT);
     final int height = this.getZoneMinHeight(this.zoneEnTete.getElements())
         + this.getZoneMinHeight(this.zoneProprietes.getElements())
-        + (this.zoneOperations.getElements().size() > 0 ? this.getZoneMinHeight(this.zoneOperations.getElements()) : 0);
+        + (!this.zoneOperations.getElements().isEmpty() ? this.getZoneMinHeight(
+        this.zoneOperations.getElements()) : 0);
     final String longestProperty = this.getLongestProperty();
     int width = Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH;
     if (longestProperty != null) {
@@ -214,8 +205,6 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
   protected abstract void setZoneEnTeteContent();
 
   protected abstract void setZoneProprietesContent();
-
-  protected abstract void setBackgroundColor();
 
   protected abstract String getLongestProperty();
 

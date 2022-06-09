@@ -1,7 +1,12 @@
 package window.editor.diagrammer.elements.interfaces;
 
-public interface UMLPackageIntegrableShapes {
-    void initUI();
+import window.editor.diagrammer.elements.shapes.UMLPackage;
 
-    void setLocation(int alignToGrid, int alignToGrid1);
+public interface UMLPackageIntegrableShapes {
+
+  void initUI();
+
+  void setParentUMLPackage(UMLPackage parentUMLPackage);
+
+  UMLPackage getParentUMLPackage();
 }

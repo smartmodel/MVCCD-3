@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.List;
 import java.util.Objects;
@@ -18,22 +19,21 @@ import window.editor.diagrammer.utils.GeometryUtils;
 
 public class UMLPackage extends SquaredShape {
 
-  private Color COLOR = Color.decode("#BFF0F0");
+  private final Color COLOR = Color.decode("#BFF0F0");
 
-  private List<UMLPackageIntegrableShapes> tapisElements;
-  private String name;
+  private final List<UMLPackageIntegrableShapes> tapisElements;
+  private final String parentTableName;
+  private final String name;
 
-  public UMLPackage(String name, List<UMLPackageIntegrableShapes> tapisElements) {
+  public UMLPackage(String name, String parentTableName,
+      List<UMLPackageIntegrableShapes> tapisElements) {
     super();
     this.name = name;
+    this.parentTableName = parentTableName;
     this.tapisElements = tapisElements;
+    tapisElements.forEach(e -> e.setParentUMLPackage(this));
 
-    initUI();
     this.addListeners();
-  }
-
-  public List<UMLPackageIntegrableShapes> getTapisElements() {
-    return tapisElements;
   }
 
   @Override
@@ -51,32 +51,30 @@ public class UMLPackage extends SquaredShape {
     graphics.fillRect(0, heightBigRectangle, width, height - heightBigRectangle);
     graphics.setColor(COLOR);
     graphics.drawRect(0, heightBigRectangle, width, height - heightBigRectangle);
+
     graphics.fillRect(0, 0, width / 2, height / 6);
 
     graphics.setColor(Color.black);
     graphics.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
-    graphics.drawString("<<TAPIs>>", (int) (width / 6.5), (int) (height / 8));
+    Rectangle r = new Rectangle(0, 0, width / 2, height / 6);
+    graphics.drawString("<<TAPIs>>", (int) ((int) r.getCenterX() / 1.5), (int) r.getCenterY());
   }
 
 
   @Override
   protected void defineBackgroundColor() {
-
+    this.setBackground(null);
+    this.setOpaque(false);
   }
 
   @Override
   protected void defineMinimumSize() {
-
+    this.setMinimumSize(new Dimension((int) (Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH * 2.2),
+        (int) (Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT * 2.8)));
   }
 
   @Override
   protected void defineSize() {
-
-  }
-
-  private void initUI() {
-    this.setMinimumSize(new Dimension((int) (Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH * 2.5),
-        (int) (Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT * 2.5)));
     this.setSize(this.getMinimumSize());
   }
 
@@ -85,21 +83,8 @@ public class UMLPackage extends SquaredShape {
     return name;
   }
 
-  @Override
-  public void drag(int differenceX, int differenceY) {
-    super.drag(differenceX, differenceY);
-    for (RelationShape relation : DiagrammerService.getDrawPanel()
-        .getRelationShapesBySquaredShape(this)) {
-      if (relation.isReflexive()) {
-        for (RelationAnchorPointShape pointAncrage : relation.getAnchorPoints()) {
-          pointAncrage.setLocationDifference(differenceX, differenceY);
-        }
-      } else {
-        RelationAnchorPointShape nearestPointAncrage = GeometryUtils.getNearestPointAncrage(this,
-            relation);
-        nearestPointAncrage.setLocationDifference(differenceX, differenceY);
-      }
-    }
+  public String getParentTableName() {
+    return parentTableName;
   }
 
   private void addListeners() {
@@ -109,8 +94,30 @@ public class UMLPackage extends SquaredShape {
   }
 
   @Override
+  public void drag(int differenceX, int differenceY) {
+    Rectangle bounds = this.getBounds();
+    bounds.translate(differenceX, differenceY);
+    this.setBounds(bounds);
+
+    for (RelationShape relation : DiagrammerService.getDrawPanel()
+        .getRelationShapesBySquaredShape(this)) {
+
+      RelationAnchorPointShape nearestPointAncrage = GeometryUtils.getNearestPointAncrage(this,
+          relation);
+      nearestPointAncrage.setLocationDifference(differenceX, differenceY);
+
+    }
+
+    this.repaint();
+  }
+
+  @Override
   protected void doDraw(Graphics graphics) {
 
+  }
+
+  public List<UMLPackageIntegrableShapes> getTapisElements() {
+    return tapisElements;
   }
 
 
@@ -123,13 +130,12 @@ public class UMLPackage extends SquaredShape {
       return false;
     }
     UMLPackage that = (UMLPackage) o;
-    return getName().equals(that.getName());
+    return getParentTableName().equals(that.getParentTableName()) && getName().equals(
+        that.getName());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getName());
+    return Objects.hash(getParentTableName(), getName());
   }
-
-
 }

@@ -2,6 +2,30 @@ package main.window.menu;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
+import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.awt.print.Book;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.PrinterResolution;
+import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
@@ -12,19 +36,6 @@ import repository.editingTreat.ProjectEditingTreat;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.drawpanel.DrawPanelComponent;
 import window.editor.diagrammer.services.DiagrammerService;
-
-import javax.imageio.ImageIO;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.PrinterResolution;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.awt.print.*;
-import java.io.File;
-import java.io.IOException;
 
 public class WinMenuContent implements ActionListener {
 
@@ -234,7 +245,7 @@ public class WinMenuContent implements ActionListener {
 
         // Si notre diagramme n'est pas vide de formes ...
         if (rectangle.getWidth() > 0) {
-            // Pour choper le plus petit rectangle autour des entités à imprimer
+            // Pour choper le plus petit rectangle autour des objets à imprimer
             final DrawPanelComponent drawPanelComponent = mvccdWindow.getDiagrammer().getContent().getPanelDraw();
             drawPanelComponent.getViewport().setLocation(
                     new Point(-rectangle.x, -rectangle.y));

@@ -1,6 +1,5 @@
 package window.editor.diagrammer.elements.shapes.classes.mcd;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.Serializable;
@@ -34,7 +33,7 @@ public class MCDEntityShape extends ClassShape implements Serializable {
 
   @Override
   protected void defineBackgroundColor() {
-
+    this.setBackground(Preferences.DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR);
   }
 
   @Override
@@ -74,10 +73,6 @@ public class MCDEntityShape extends ClassShape implements Serializable {
     }
   }
 
-  @Override
-  protected void setBackgroundColor() {
-    this.setBackground(new Color(125, 200, 243));
-  }
 
   @Override
   protected String getLongestProperty() {
