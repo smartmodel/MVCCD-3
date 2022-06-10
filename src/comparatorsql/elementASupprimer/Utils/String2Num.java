@@ -1,4 +1,4 @@
-package comparatorsql.Utils;
+package comparatorsql.elementASupprimer.Utils;
 
 public class String2Num {
         // We ignore differences above the 2nd byte (e.g. in emoticons) in order to differentiate between the first 3 chars.

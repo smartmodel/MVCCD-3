@@ -9,11 +9,14 @@ import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.oracle.MPDROraclePK;
+import mpdr.services.MPDRTableService;
+import mpdr.tapis.MPDRBoxPackages;
+import mpdr.tapis.oracle.MPDROracleTrigger;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DbFetcherOracle extends DbFetcher {
 
@@ -43,20 +46,23 @@ public class DbFetcherOracle extends DbFetcher {
     }
 
     public void fetch() throws SQLException {
-        fetchTables(this.databaseMetaData,this.databaseName,this.schemaDB,this.mpdrDbModel);
+        fetchTables();
+        fetchSequences();
     }
 
 
-    public void fetchTables(DatabaseMetaData metaData, String databaseName, String schemaName, MPDRModel mpdrModel) throws SQLException {
+    public void fetchTables() throws SQLException {
         String[] types = {"TABLE"};
 
-        try (ResultSet result = metaData.getTables(databaseName, schemaName, "%", types)) {
+        try (ResultSet result = databaseMetaData.getTables(databaseName, schemaDB, "%", types)) {
             while (result.next()) {
                 MPDRTable mpdrTable = MVCCDElementFactory.instance()
-                        .createMPDROracleTable(mpdrModel.getMPDRContTables(), null);
+                        .createMPDROracleTable(this.mpdrDbModel.getMPDRContTables(), null);
                 mpdrTable.setName(result.getString("TABLE_NAME"));
                 fetchColumns(mpdrTable);
                 fetchPk(mpdrTable);
+                fetchTriggers(mpdrTable);
+
                     /*
                 Table table = new Table(databaseName, tableName);   // on met DatabaseName car MySQL n'utilise pas le schéma
                 table.getColumns(metaData, databaseName, schemaName, tableName);
@@ -127,18 +133,75 @@ public class DbFetcherOracle extends DbFetcher {
             ex.printStackTrace();
         }
     }
-    public void fetchSequences(){
-
+    public void fetchSequences() throws SQLException {
+        StringBuilder requeteSQL = new StringBuilder();
+        requeteSQL.append("SELECT sequence_name FROM user_sequences");
+        System.out.println(requeteSQL);
+        PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ResultSet rsCurseur = pStmt.executeQuery();
+        while (rsCurseur.next()){
+            MPDRTable tableParent = findTableAccueilSequence(mpdrDbModel.getMPDRTables(),rsCurseur.getString("SEQUENCE_NAME"));
+            if (tableParent !=null){
+                MVCCDElementFactory.instance().createMPDROracleSequence(tableParent.getMPDRColumnPKProper(), null);
+            }
+        }
     }
-    public void fetchPackages(){
 
+    public void fetchPackages() throws SQLException {
+        StringBuilder requeteSQL = new StringBuilder();
+        requeteSQL.append("SELECT name FROM all_source WHERE TYPE IN ('PACKAGE') AND OWNER = '"+schemaDB+"'");
+        PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString());
+        ResultSet rsCurseur = pStmt.executeQuery();
+        while (rsCurseur.next()){
+            //est-ce que la boxPackage est automatiquement créée ? ou faut-il la créer avant la première insertion?
+            MVCCDElementFactory.instance().createMPDROraclePackage(MPDRTableService.getMPDRContTAPIs(findTableAccueil()).getMPDRBoxPackages(),null);
+        }
     }
-    public void fetchTriggers(){
 
+    public void fetchTriggers2(MPDRTable mpdrTable) {
+        String[] types = {"TRIGGER"};
+
+        try (ResultSet result = databaseMetaData.getTables(databaseName, schemaDB, "%", types)) {
+            while (result.next()) {
+                MPDROracleTrigger mpdrOracleTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(mpdrTable.getMPDRContTAPIs().getMPDRBoxTriggers(),null);
+                mpdrOracleTrigger.setName(result.getString("TRIGGER_NAME"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void fetchTriggers(MPDRTable mpdrTable) throws SQLException {
+        StringBuilder requeteSQL = new StringBuilder();
+        requeteSQL.append("SELECT trigger_name FROM user_triggers");
+        PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString());
+        ResultSet rsCurseur = pStmt.executeQuery();
+        while (rsCurseur.next()){
+            //est-ce que la boxTrigger est automatiquement créée ? ou faut-il la créer avant la première insertion?
+            MPDROracleTrigger mpdrOracleTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(mpdrTable.getMPDRContTAPIs().getMPDRBoxTriggers(),null);
+            mpdrOracleTrigger.setName(rsCurseur.getString("TRIGGER_NAME"));
+        }
     }
     public MPDRTable findTableAccueil(){
         return null;
     }
+
+    public MPDRTable findTableAccueilSequence(List<MPDRTable> mpdrTables, String sequenceName) {
+        MPDRTable tableRetour = null;
+        for (MPDRTable mpdrTable : mpdrTables) {
+            //shortName est déjà en majuscule
+            String shortName = mpdrTable.getShortName();
+            String REGEX = "^SEQ_" + shortName;
+            Pattern pattern = Pattern.compile(REGEX);
+            Matcher matcher = pattern.matcher(sequenceName);
+            boolean matchFound = matcher.find();
+            if (matchFound) {
+                tableRetour = mpdrTable;
+            }
+        }
+        return tableRetour;
+    }
+
     public void fetchIndex(){
         // A développer ultérieurement
     }

@@ -1,4 +1,4 @@
-package comparatorsql.Utils;
+package comparatorsql.elementASupprimer.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;

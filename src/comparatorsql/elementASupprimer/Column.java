@@ -1,8 +1,7 @@
 package comparatorsql.elementASupprimer;
 
-import comparatorsql.Utils.Tokenization;
+import comparatorsql.elementASupprimer.Utils.Tokenization;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
