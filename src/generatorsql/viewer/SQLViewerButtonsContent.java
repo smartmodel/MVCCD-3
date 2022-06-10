@@ -1,10 +1,6 @@
 package generatorsql.viewer;
 
-import comparatorsql.DbFetcher;
-import comparatorsql.DbFetcher2;
-import comparatorsql.DbOracleStructure;
-import comparatorsql.SqlComparatorGenerator;
-import comparatorsql.oracle.OracleComparator;
+import comparatorsql.fetcher.oracle.DbFetcherOracle;
 import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConDBMode;
@@ -14,20 +10,16 @@ import console.WarningLevel;
 import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
 import generatorsql.MPDRGenerateSQLUtil;
-import generatorsql.generator.MPDRGenerateSQL;
-import generatorsql.generator.oracle.MPDROracleGenerateSQL;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
-import mcd.MCDContModels;
-import mcd.interfaces.IMCDModel;
 import messages.MessagesBuilder;
-import mldr.MLDRModel;
 import mpdr.MPDRModel;
+import mpdr.oracle.MPDROracleColumn;
 import mpdr.oracle.MPDROracleModel;
+import mpdr.oracle.MPDROracleTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import project.Project;
 import treatment.services.TreatmentService;
 import utilities.Trace;
 import utilities.UtilDivers;
@@ -374,24 +366,33 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
 
                     if (source == btnSynchronisationSGBDR){
                         propertyAction = "editor.mpdr.connection.btn.exception.test";
+                        /*
                         DbFetcher dbFetcher = new DbFetcher();
-                        //DbFetcher2 dbFetcher2 = new DbFetcher2();
                         DbOracleStructure dbOracleStructure = dbFetcher.getDatabaseStructure();
                         OracleComparator oracleComparator = new OracleComparator(mpdrModel, dbOracleStructure);
                         oracleComparator.comparator(mpdrModel, dbOracleStructure);
-                        /*String sqlComparatorProject = "sqlComparatorProject";
-                        Project project = MVCCDElementFactory.instance().createProject("sqlComparatorProject");
-                        MCDContModels mcdContModels = MVCCDElementFactory.instance().createMCDModels(project, sqlComparatorProject);
-                        IMCDModel imcdModel = MVCCDElementFactory.instance().createMCDModel(mcdContModels);
-                        MLDRModel mldrModel = MVCCDElementFactory.instance().createMLDRModelDT(imcdModel);
-                        MPDROracleModel mpdrModelOracle = MVCCDElementFactory.instance().createMPDRModelOracle(mldrModel);
-                        SqlComparatorGenerator sqlComparatorGenerator = new SqlComparatorGenerator(mpdrModelOracle);
-                        MPDRGenerateSQL mpdrGenerateSQL = new MPDROracleGenerateSQL(mpdrModelOracle);*/
                         MPDROracleModel mpdrModelOracleDb = MVCCDElementFactory.instance().createMPDRModelOracle(null);
+                        */
                         //ATTENTION le passage en mode Debug efface le mot de passe enregistré pour la connection
                         /*Trace.println(mpdrModelOracleDb.toString());
                         Trace.println(mpdrModelOracleDb.getChilds().toString());*/
-                        actionTestConnection(true);
+/*
+                        DbFetcher2 dbFetcher2 = new DbFetcher2();
+                        DbOracleStructure dbOracleStructure = dbFetcher2.getDatabaseStructure();
+                        //OracleComparator oracleComparator = new OracleComparator(mpdrModel, dbOracleStructure);
+                        //oracleComparator.comparator(mpdrModel, dbOracleStructure);
+                        MPDROracleModel mpdrModelOracleDb = MVCCDElementFactory.instance().createMPDRModelOracle(null);
+                        System.out.println(mpdrModelOracleDb.toString());
+*/
+                        connection = ConnectionsService.actionTestIConConnectionOrConnector(sqlViewer,
+                                true,
+                                sqlViewer.getConConnection());
+                        //DbFetcherOracle dbFetcherOracle = new DbFetcherOracle();
+                        DbFetcherOracle dbFetcherOracle = new DbFetcherOracle(sqlViewer.getConConnection(), connection);
+                        dbFetcherOracle.fetch();
+
+
+                        actionTestConnection(false);
                     }
 
                     if (source == btnConnectorTest) {

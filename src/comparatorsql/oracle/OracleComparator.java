@@ -1,8 +1,7 @@
 package comparatorsql.oracle;
 
 import comparatorsql.Comparator;
-import comparatorsql.DbOracleStructure;
-import comparatorsql.elementASupprimer.DbTable;
+import comparatorsql.elementASupprimer.DbOracleStructure;
 import mdr.MDRTable;
 import mpdr.MPDRModel;
 

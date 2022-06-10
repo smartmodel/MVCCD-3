@@ -181,14 +181,6 @@ public class Column {
         return hasMultiplePK;
     }
 
-    public double isEmptyTable() {
-        if (isEmptyTable == null) {
-            return 0.4226982101795587; // Average for pk_isEmptyTable, bench schemas inflate it
-        } else {
-            return isEmptyTable ? 1 : 0;
-        }
-    }
-
     public String toString() {
         return longName;
     }

@@ -1,13 +1,12 @@
 package comparatorsql.oracle;
 
-import comparatorsql.DbOracleStructure;
+import comparatorsql.elementASupprimer.DbOracleStructure;
 import comparatorsql.elementASupprimer.DbTable;
 import mdr.MDRTable;
 import mpdr.MPDRModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OracleComparatorTable {
 
@@ -29,16 +28,16 @@ public class OracleComparatorTable {
 
     //retourne toutes les tables qui ont un nom identique dans le mpdr et la Db
     public List<MDRTable> compareTable(){
-        List<MDRTable> mdrTables = new ArrayList<>();
+    List<MDRTable> mdrTables = new ArrayList<>();
         for (MDRTable mdrTable : getMdrTableList()){
-            for (DbTable dbTable : getDbTableList()) {
-                if (compareTableName(mdrTable.getNames().getName30(), dbTable.getName())){
-                    mdrTables.add(mdrTable);
-                }
+        for (DbTable dbTable : getDbTableList()) {
+            if (compareTableName(mdrTable.getNames().getName30(), dbTable.getName())){
+                mdrTables.add(mdrTable);
             }
         }
-        return mdrTables;
     }
+        return mdrTables;
+}
 
     public boolean compareMdrTable(MDRTable mdrTable1, MDRTable mdrTable2){
         if (mdrTable1.equals(mdrTable2)){

@@ -1,4 +1,4 @@
-package comparatorsql;
+package comparatorsql.elementASupprimer;
 
 import comparatorsql.elementASupprimer.DbTable;
 import comparatorsql.elementASupprimer.Sequence;

@@ -1,6 +1,5 @@
 package comparatorsql.elementASupprimer;
 
-import comparatorsql.DbOracleStructure;
 import main.MVCCDElement;
 import mpdr.MPDRContColumns;
 import mpdr.MPDRContConstraints;
