@@ -1,7 +1,6 @@
 package comparatorsql.fetcher.oracle;
 
 import comparatorsql.RecuperationConnectionDB;
-import comparatorsql.elementASupprimer.Column;
 import comparatorsql.fetcher.DbFetcher;
 import connections.ConConnection;
 import main.MVCCDElementFactory;
@@ -10,7 +9,7 @@ import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.oracle.MPDROraclePK;
 import mpdr.services.MPDRTableService;
-import mpdr.tapis.MPDRBoxPackages;
+import mpdr.tapis.oracle.MPDROraclePackage;
 import mpdr.tapis.oracle.MPDROracleTrigger;
 
 import java.sql.*;
@@ -47,7 +46,7 @@ public class DbFetcherOracle extends DbFetcher {
 
     public void fetch() throws SQLException {
         fetchTables();
-        fetchSequences();
+        //ATTENTION, je ne récupère que les trigger, package et séquences qui sont liés à une table.
     }
 
 
@@ -62,12 +61,8 @@ public class DbFetcherOracle extends DbFetcher {
                 fetchColumns(mpdrTable);
                 fetchPk(mpdrTable);
                 fetchTriggers(mpdrTable);
-
-                    /*
-                Table table = new Table(databaseName, tableName);   // on met DatabaseName car MySQL n'utilise pas le schéma
-                table.getColumns(metaData, databaseName, schemaName, tableName);
-                table.getPrimaryKeys(metaData, databaseName, schemaName, tableName);
-                table.getUniqueConstraint(metaData, databaseName, schemaName, tableName);*/
+                fetchPackages(mpdrTable);
+                fetchSequences(mpdrTable);
 
             }
         }
@@ -109,7 +104,6 @@ public class DbFetcherOracle extends DbFetcher {
             while (result.next()) {
                     if (mpdrColumn.getName().equals(result.getString("COLUMN_NAME"))) {
                         MVCCDElementFactory.instance().createMPDROracleUnique(mpdrTable.getMDRContConstraints(), null);
-
                         //TODO VINCENT
                         //MVCCDElementFactory.instance().createMPDROracleParameter();
                     }
@@ -118,14 +112,18 @@ public class DbFetcherOracle extends DbFetcher {
             ex.printStackTrace();
             }
     }
-    public void fetchCheck(MPDRTable mpdrTable, MPDRColumn mpdrColumn){
+
+    public void fetchCheck(MPDRTable mpdrTable, List<MPDRColumn> mpdrColumns){
         try (ResultSet result = databaseMetaData.getIndexInfo(databaseName, schemaDB, mpdrTable.getName(), true, true)) {
             while (result.next()) {
-                if (mpdrColumn.getName().equals(result.getString("COLUMN_NAME"))) {
-                    if(result.getString("FILTER_CONDITION")!=null) {
-                        MVCCDElementFactory.instance().createMPDROracleCheckSpecific(mpdrTable.getMDRContConstraints(), null);
-                        //TODO VINCENT
-                        //MVCCDElementFactory.instance().createMPDROracleParameter();
+                //TODO VINCENT - A voir comment gérer plusieurs colonnes
+                for (MPDRColumn mpdrColumn : mpdrColumns) {
+                    if (mpdrColumn.getName().equals(result.getString("COLUMN_NAME"))) {
+                        if (result.getString("FILTER_CONDITION") != null) {
+                            MVCCDElementFactory.instance().createMPDROracleCheckSpecific(mpdrTable.getMDRContConstraints(), null);
+                            //TODO VINCENT
+                            //MVCCDElementFactory.instance().createMPDROracleParameter();
+                        }
                     }
                 }
             }
@@ -133,41 +131,33 @@ public class DbFetcherOracle extends DbFetcher {
             ex.printStackTrace();
         }
     }
-    public void fetchSequences() throws SQLException {
+    public void fetchSequences(MPDRTable mpdrTable) throws SQLException {
         StringBuilder requeteSQL = new StringBuilder();
         requeteSQL.append("SELECT sequence_name FROM user_sequences");
         System.out.println(requeteSQL);
-        PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        ResultSet rsCurseur = pStmt.executeQuery();
-        while (rsCurseur.next()){
-            MPDRTable tableParent = findTableAccueilSequence(mpdrDbModel.getMPDRTables(),rsCurseur.getString("SEQUENCE_NAME"));
-            if (tableParent !=null){
-                MVCCDElementFactory.instance().createMPDROracleSequence(tableParent.getMPDRColumnPKProper(), null);
-            }
-        }
-    }
-
-    public void fetchPackages() throws SQLException {
-        StringBuilder requeteSQL = new StringBuilder();
-        requeteSQL.append("SELECT name FROM all_source WHERE TYPE IN ('PACKAGE') AND OWNER = '"+schemaDB+"'");
         PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString());
         ResultSet rsCurseur = pStmt.executeQuery();
         while (rsCurseur.next()){
-            //est-ce que la boxPackage est automatiquement créée ? ou faut-il la créer avant la première insertion?
-            MVCCDElementFactory.instance().createMPDROraclePackage(MPDRTableService.getMPDRContTAPIs(findTableAccueil()).getMPDRBoxPackages(),null);
+            if(findTableAccueilSequence(mpdrTable,rsCurseur.getString("SEQUENCE_NAME"))!=null){
+                //TODO A vérifier comment sélectionner la bonne colonne
+                MVCCDElementFactory.instance().createMPDROracleSequence(mpdrTable.getMPDRColumnPKProper(), null);
+            }
         }
     }
 
-    public void fetchTriggers2(MPDRTable mpdrTable) {
-        String[] types = {"TRIGGER"};
-
-        try (ResultSet result = databaseMetaData.getTables(databaseName, schemaDB, "%", types)) {
-            while (result.next()) {
-                MPDROracleTrigger mpdrOracleTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(mpdrTable.getMPDRContTAPIs().getMPDRBoxTriggers(),null);
-                mpdrOracleTrigger.setName(result.getString("TRIGGER_NAME"));
+    public void fetchPackages(MPDRTable mpdrTable) throws SQLException {
+        StringBuilder requeteSQL = new StringBuilder();
+        requeteSQL.append("SELECT DISTINCT(OBJECT_NAME) FROM USER_PROCEDURES WHERE OBJECT_TYPE='PACKAGE'");
+        PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString());
+        ResultSet rsCurseur = pStmt.executeQuery();
+        while (rsCurseur.next()){
+            if (findTableAccueilTriggerOrPackage(mpdrTable, rsCurseur.getString("OBJECT_NAME"))!=null) {
+                if(mpdrTable.getMPDRContTAPIs().getMPDRBoxPackages()== null){
+                    MVCCDElementFactory.instance().createMPDROracleBoxPackages(mpdrTable.getMPDRContTAPIs(), null);
+                }
+                MPDROraclePackage mpdrOraclePackage = MVCCDElementFactory.instance().createMPDROraclePackage(mpdrTable.getMPDRContTAPIs().getMPDRBoxPackages(),null);
+                mpdrOraclePackage.setName(rsCurseur.getString("OBJECT_NAME"));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
@@ -176,32 +166,31 @@ public class DbFetcherOracle extends DbFetcher {
         requeteSQL.append("SELECT trigger_name FROM user_triggers");
         PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString());
         ResultSet rsCurseur = pStmt.executeQuery();
-        while (rsCurseur.next()){
-            if(mpdrTable.getMPDRContTAPIs().getMPDRBoxTriggers()== null){
-                MVCCDElementFactory.instance().createMPDROracleBoxTriggers(mpdrTable.getMPDRContTAPIs(),null);
+        while (rsCurseur.next()) {
+            if (findTableAccueilTriggerOrPackage(mpdrTable, rsCurseur.getString("TRIGGER_NAME"))!=null) {
+                if (mpdrTable.getMPDRContTAPIs().getMPDRBoxTriggers() == null) {
+                    MVCCDElementFactory.instance().createMPDROracleBoxTriggers(mpdrTable.getMPDRContTAPIs(), null);
+                }
+                MPDROracleTrigger mpdrOracleTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(mpdrTable.getMPDRContTAPIs().getMPDRBoxTriggers(), null);
+                mpdrOracleTrigger.setName(rsCurseur.getString("TRIGGER_NAME"));
             }
-            MPDROracleTrigger mpdrOracleTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(mpdrTable.getMPDRContTAPIs().getMPDRBoxTriggers(),null);
-            mpdrOracleTrigger.setName(rsCurseur.getString("TRIGGER_NAME"));
         }
     }
-    public MPDRTable findTableAccueil(){
+
+    public MPDRTable findTableAccueilSequence(MPDRTable mpdrTable, String sequenceName) {
+        String seqTableName = sequenceName.split("_")[0];
+        if(mpdrTable.getName().startsWith(seqTableName)) {
+            return mpdrTable;
+        }
         return null;
     }
 
-    public MPDRTable findTableAccueilSequence(List<MPDRTable> mpdrTables, String sequenceName) {
-        MPDRTable tableRetour = null;
-        for (MPDRTable mpdrTable : mpdrTables) {
-            //shortName est déjà en majuscule
-            String shortName = mpdrTable.getShortName();
-            String REGEX = "^" + shortName+"_SEQPK$";
-            Pattern pattern = Pattern.compile(REGEX);
-            Matcher matcher = pattern.matcher(sequenceName);
-            boolean matchFound = matcher.find();
-            if (matchFound) {
-                tableRetour = mpdrTable;
+    public MPDRTable findTableAccueilTriggerOrPackage(MPDRTable mpdrTable, String triggerOrPackageName) {
+        String triggerOrPackageTableName = triggerOrPackageName.split("_")[0];
+        if(mpdrTable.getName().startsWith(triggerOrPackageTableName)) {
+                return mpdrTable;
             }
-        }
-        return tableRetour;
+        return null;
     }
 
     public void fetchIndex(){
