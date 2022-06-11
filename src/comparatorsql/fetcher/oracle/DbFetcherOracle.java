@@ -177,7 +177,9 @@ public class DbFetcherOracle extends DbFetcher {
         PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString());
         ResultSet rsCurseur = pStmt.executeQuery();
         while (rsCurseur.next()){
-            //est-ce que la boxTrigger est automatiquement créée ? ou faut-il la créer avant la première insertion?
+            if(mpdrTable.getMPDRContTAPIs().getMPDRBoxTriggers()== null){
+                MVCCDElementFactory.instance().createMPDROracleBoxTriggers(mpdrTable.getMPDRContTAPIs(),null);
+            }
             MPDROracleTrigger mpdrOracleTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(mpdrTable.getMPDRContTAPIs().getMPDRBoxTriggers(),null);
             mpdrOracleTrigger.setName(rsCurseur.getString("TRIGGER_NAME"));
         }
@@ -191,7 +193,7 @@ public class DbFetcherOracle extends DbFetcher {
         for (MPDRTable mpdrTable : mpdrTables) {
             //shortName est déjà en majuscule
             String shortName = mpdrTable.getShortName();
-            String REGEX = "^SEQ_" + shortName;
+            String REGEX = "^" + shortName+"_SEQPK$";
             Pattern pattern = Pattern.compile(REGEX);
             Matcher matcher = pattern.matcher(sequenceName);
             boolean matchFound = matcher.find();
