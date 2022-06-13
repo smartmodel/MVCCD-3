@@ -4,15 +4,21 @@ import comparatorsql.RecuperationConnectionDB;
 import comparatorsql.fetcher.DbFetcher;
 import connections.ConConnection;
 import main.MVCCDElementFactory;
+import mdr.MDRColumn;
+import mdr.MDRTable;
+import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.oracle.MPDROraclePK;
+import mpdr.oracle.MPDROracleUnique;
+import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.services.MPDRTableService;
 import mpdr.tapis.oracle.MPDROraclePackage;
 import mpdr.tapis.oracle.MPDROracleTrigger;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,6 +53,12 @@ public class DbFetcherOracle extends DbFetcher {
     public void fetch() throws SQLException {
         fetchTables();
         //ATTENTION, je ne récupère que les trigger, package et séquences qui sont liés à une table.
+        fetchTriggers(mpdrDbModel.getMPDRTables());
+        /*for (MPDRTable mpdrTable : mpdrDbModel.getMPDRTables()) {
+            fetchPackages(mpdrTable);
+            fetchTriggers(mpdrTable);
+            }
+         */
     }
 
 
@@ -60,13 +72,15 @@ public class DbFetcherOracle extends DbFetcher {
                 mpdrTable.setName(result.getString("TABLE_NAME"));
                 fetchColumns(mpdrTable);
                 fetchPk(mpdrTable);
-                fetchTriggers(mpdrTable);
-                fetchPackages(mpdrTable);
+                fetchUnique(mpdrTable, mpdrTable.getMPDRColumns());
+                //fetchCheck();
+                //fetchFk();
                 fetchSequences(mpdrTable);
 
             }
         }
     }
+
     public void fetchColumns(MPDRTable mpdrTable){
         try (ResultSet result = this.databaseMetaData.getColumns(this.databaseName, this.schemaDB, mpdrTable.getName(), null)) {
             while (result.next()) {
@@ -99,14 +113,16 @@ public class DbFetcherOracle extends DbFetcher {
             }
         }
     }
-    public void fetchUnique(MPDRTable mpdrTable, MPDRColumn mpdrColumn){
+    public void fetchUnique(MPDRTable mpdrTable, List<MPDRColumn> mpdrColumns){
         try (ResultSet result = databaseMetaData.getIndexInfo(databaseName, schemaDB, mpdrTable.getName(), true, true)) {
             while (result.next()) {
+                for (MPDRColumn mpdrColumn : mpdrColumns) {
                     if (mpdrColumn.getName().equals(result.getString("COLUMN_NAME"))) {
-                        MVCCDElementFactory.instance().createMPDROracleUnique(mpdrTable.getMDRContConstraints(), null);
+                        MPDROracleUnique mpdrOracleUnique = MVCCDElementFactory.instance().createMPDROracleUnique(mpdrTable.getMDRContConstraints(), null);
                         //TODO VINCENT
-                        //MVCCDElementFactory.instance().createMPDROracleParameter();
+                        //MVCCDElementFactory.instance().createMPDROracleParameter((IMPDROracleElement) mpdrOracleUnique, mpdrColumn);
                     }
+                }
                 }
             } catch (SQLException ex) {
             ex.printStackTrace();
@@ -131,6 +147,11 @@ public class DbFetcherOracle extends DbFetcher {
             ex.printStackTrace();
         }
     }
+
+    private void fetchFk(MPDRTable mpdrTable) {
+
+    }
+
     public void fetchSequences(MPDRTable mpdrTable) throws SQLException {
         StringBuilder requeteSQL = new StringBuilder();
         requeteSQL.append("SELECT sequence_name FROM user_sequences");
@@ -177,6 +198,36 @@ public class DbFetcherOracle extends DbFetcher {
         }
     }
 
+    public void fetchTriggers(List<MPDRTable> mpdrTables) throws SQLException {
+        List<String> triggers = new ArrayList<>();
+        StringBuilder requeteSQL = new StringBuilder();
+        requeteSQL.append("SELECT trigger_name FROM user_triggers");
+        PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString());
+        ResultSet rsCurseur = pStmt.executeQuery();
+        while (rsCurseur.next()){
+            triggers.add(rsCurseur.getString("TRIGGER_NAME"));
+        }
+        //Copie de la liste de trigger dans une nouvelle liste car je ne peux pas supprimer d'éléments dans la liste sur laquelle la boucle tourne
+        List<String> triggersNotInTable = new ArrayList<>(triggers);
+        for (MPDRTable mpdrTable : mpdrTables) {
+            for (String trigger : triggers) {
+                if (findTableAccueilTriggerOrPackage(mpdrTable, trigger)!=null) {
+                    if (mpdrTable.getMPDRContTAPIs().getMPDRBoxTriggers() == null) {
+                        MVCCDElementFactory.instance().createMPDROracleBoxTriggers(mpdrTable.getMPDRContTAPIs(), null);
+                    }
+                    MPDROracleTrigger mpdrOracleTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(mpdrTable.getMPDRContTAPIs().getMPDRBoxTriggers(), null);
+                    mpdrOracleTrigger.setName(trigger);
+                    triggersNotInTable.remove(trigger);
+                }
+            }
+        }
+        if(!triggersNotInTable.isEmpty()){
+            //TODO VINCENT
+            //Ajouter les éléments de la liste dans les éléments à droper du script !
+        }
+    }
+
+
     public MPDRTable findTableAccueilSequence(MPDRTable mpdrTable, String sequenceName) {
         String seqTableName = sequenceName.split("_")[0];
         if(mpdrTable.getName().startsWith(seqTableName)) {
@@ -185,11 +236,25 @@ public class DbFetcherOracle extends DbFetcher {
         return null;
     }
 
+    //Si on veut pour une table spécifique uniquement
     public MPDRTable findTableAccueilTriggerOrPackage(MPDRTable mpdrTable, String triggerOrPackageName) {
         String triggerOrPackageTableName = triggerOrPackageName.split("_")[0];
         if(mpdrTable.getName().startsWith(triggerOrPackageTableName)) {
                 return mpdrTable;
             }
+        return null;
+    }
+
+    //Si on veut trouver un correspondance dans l'ensembles des tables récupérées
+    public MPDRTable findTableAccueilTriggerOrPackage(List<MPDRTable> mpdrTablesList, List<String> triggers) {
+        for (MPDRTable mpdrTable : mpdrTablesList) {
+            for (String trigger : triggers) {
+                String triggerOrPackageTableName = trigger.split("_")[0];
+                if (mpdrTable.getName().startsWith(triggerOrPackageTableName)) {
+                    return mpdrTable;
+                }
+            }
+        }
         return null;
     }
 
