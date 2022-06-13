@@ -3,19 +3,13 @@ package comparatorsql.fetcher.oracle;
 import comparatorsql.RecuperationConnectionDB;
 import comparatorsql.fetcher.DbFetcher;
 import connections.ConConnection;
-import constraints.Constraint;
 import main.MVCCDElementFactory;
-import mdr.MDRConstraint;
 import mldr.MLDRParameter;
 import mpdr.*;
-import mpdr.oracle.MPDROracleCheckSpecific;
-import mpdr.oracle.MPDROraclePK;
-import mpdr.oracle.MPDROracleParameter;
-import mpdr.oracle.MPDROracleUnique;
+import mpdr.oracle.*;
 import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.tapis.oracle.MPDROraclePackage;
 import mpdr.tapis.oracle.MPDROracleTrigger;
-import org.ietf.jgss.GSSContext;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -31,6 +25,9 @@ public class DbFetcherOracle extends DbFetcher {
     private String schemaDB;
     private String databaseName;
     private MPDRModel mpdrDbModel;
+    private List<String> sequencesNotInTable = new ArrayList<>();
+    private List<String> packagesNotInTable = new ArrayList<>();
+    private List<String> triggersNotInTable = new ArrayList<>();
 
     public DbFetcherOracle() throws SQLException {
         RecuperationConnectionDB recuperationConnectionDB = new RecuperationConnectionDB();
@@ -69,10 +66,8 @@ public class DbFetcherOracle extends DbFetcher {
                 mpdrTable.setName(result.getString("TABLE_NAME"));
                 fetchColumns(mpdrTable);
                 fetchPk(mpdrTable);
-                fetchUnique2(mpdrTable);
-                fetchCheck2(mpdrTable);
-                //fetchUnique(mpdrTable);
-                //fetchCheck();
+                fetchUnique(mpdrTable);
+                fetchCheck(mpdrTable);
                 //fetchFk();
                 fetchSequences(mpdrTable);
 
@@ -120,27 +115,8 @@ public class DbFetcherOracle extends DbFetcher {
             }
         }
     }
-    public void fetchUnique(MPDRTable mpdrTable){
-        MPDROracleUnique mpdrOracleUnique = null;
-        try (ResultSet result = databaseMetaData.getIndexInfo(databaseName, schemaDB, mpdrTable.getName(), true, true)) {
-            while (result.next()) {
-                if(mpdrOracleUnique == null){
-                    mpdrOracleUnique = MVCCDElementFactory.instance().createMPDROracleUnique(mpdrTable.getMDRContConstraints(), null);
-                    mpdrOracleUnique.setName(result.getString("COLUMN_NAME"));
-                }
-                for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumns()) {
-                    if (mpdrColumn.getName().equals(result.getString("COLUMN_NAME"))) {
-                        MVCCDElementFactory.instance().createMPDROracleParameter(mpdrOracleUnique, (MLDRParameter) null);
-                        //TODO VINCENT
-                        //MVCCDElementFactory.instance().createMPDROracleParameter((IMPDROracleElement) mpdrOracleUnique, mpdrColumn);
-                    }
-                }
-                }
-            } catch (SQLException ex) {
-            ex.printStackTrace();
-            }
-    }
-    public void fetchUnique2(MPDRTable mpdrTable) throws SQLException {
+
+    public void fetchUnique(MPDRTable mpdrTable) throws SQLException {
         MPDROracleUnique mpdrOracleUnique = null;
         StringBuilder requeteSQL = new StringBuilder();
         //On ne récupère que les contraintes Unique
@@ -179,7 +155,7 @@ public class DbFetcherOracle extends DbFetcher {
     }
 
     //ATTENTION, J'écrase les contraintes car j'en crée une seulement alors que la db en possède 2
-    public void fetchCheck2 (MPDRTable mpdrTable) throws SQLException {
+    public void fetchCheck(MPDRTable mpdrTable) throws SQLException {
         MPDROracleCheckSpecific mpdrOracleCheckSpecific = null;
         Map<String,String> conditions = new HashMap<>();
         MPDROracleParameter mpdrOracleParameter;
@@ -223,15 +199,24 @@ public class DbFetcherOracle extends DbFetcher {
 
     }
 
+    //A VOIR POUR SORTIR CETTE METHODE DE LA TABLE POUR LA METTRE AU NIVEAU SUPERIEUR A CAUSE DE LA LISTE DES SEQ A SUPPRIMER
     public void fetchSequences(MPDRTable mpdrTable) throws SQLException {
         StringBuilder requeteSQL = new StringBuilder();
-        requeteSQL.append("SELECT sequence_name FROM user_sequences");
+        requeteSQL.append("SELECT * FROM user_sequences");
         PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString());
         ResultSet rsCurseur = pStmt.executeQuery();
         while (rsCurseur.next()){
-            if(findTableAccueilSequence(mpdrTable,rsCurseur.getString("SEQUENCE_NAME"))!=null){
+            String sequenceName = rsCurseur.getString("SEQUENCE_NAME");
+            if(!sequencesNotInTable.contains(sequenceName))
+            sequencesNotInTable.add(sequenceName);
+            if(findTableAccueilSequence(mpdrTable,sequenceName)!=null){
                 //TODO A vérifier comment sélectionner la bonne colonne
-                MVCCDElementFactory.instance().createMPDROracleSequence(mpdrTable.getMPDRColumnPKProper(), null);
+                MPDROracleSequence mpdrOracleSequence = MVCCDElementFactory.instance().createMPDROracleSequence(mpdrTable.getMPDRColumnsSortDefault().get(0), null);
+                mpdrOracleSequence.setName(sequenceName);
+                mpdrOracleSequence.setMinValue(rsCurseur.getInt("MIN_VALUE"));
+                mpdrOracleSequence.setMinValue(rsCurseur.getInt("INCREMENT_BY"));
+                //ATTENTION, les séquence ne sont pas supprimés lorsque les recharges dans une autre table.
+                sequencesNotInTable.remove(sequenceName);
             }
         }
     }
@@ -244,9 +229,8 @@ public class DbFetcherOracle extends DbFetcher {
         ResultSet rsCurseur = pStmt.executeQuery();
         while (rsCurseur.next()){
             packages.add(rsCurseur.getString("OBJECT_NAME"));
+            packagesNotInTable.add(rsCurseur.getString("OBJECT_NAME"));
         }
-        //Copie de la liste de packages dans une nouvelle liste car je ne peux pas supprimer d'éléments dans la liste sur laquelle la boucle tourne
-        List<String> packagesNotInTable = new ArrayList<>(packages);
         for (MPDRTable mpdrTable : mpdrTables) {
             //package est un mot réservé donc utilisation du nom de variable "paquet"
             for (String paquet : packages) {
@@ -260,10 +244,6 @@ public class DbFetcherOracle extends DbFetcher {
                 }
             }
         }
-        if(!packagesNotInTable.isEmpty()){
-            //TODO VINCENT
-            //Ajouter les éléments de la liste dans les éléments à droper du script !
-        }
     }
 
     public void fetchTriggers(List<MPDRTable> mpdrTables) throws SQLException {
@@ -274,9 +254,8 @@ public class DbFetcherOracle extends DbFetcher {
         ResultSet rsCurseur = pStmt.executeQuery();
         while (rsCurseur.next()){
             triggers.add(rsCurseur.getString("TRIGGER_NAME"));
+            triggersNotInTable.add(rsCurseur.getString("TRIGGER_NAME"));
         }
-        //Copie de la liste de trigger dans une nouvelle liste car je ne peux pas supprimer d'éléments dans la liste sur laquelle la boucle tourne
-        List<String> triggersNotInTable = new ArrayList<>(triggers);
         for (MPDRTable mpdrTable : mpdrTables) {
             for (String trigger : triggers) {
                 if (findTableAccueilTriggerOrPackage(mpdrTable, trigger)!=null) {
@@ -288,10 +267,6 @@ public class DbFetcherOracle extends DbFetcher {
                     triggersNotInTable.remove(trigger);
                 }
             }
-        }
-        if(!triggersNotInTable.isEmpty()){
-            //TODO VINCENT
-            //Ajouter les éléments de la liste dans les éléments à droper du script !
         }
     }
 
@@ -338,10 +313,44 @@ public class DbFetcherOracle extends DbFetcher {
         return mpdrDbModel;
     }
 
+    public List<String> getSequencesNotInTable() {
+        return sequencesNotInTable;
+        //TODO VINCENT
+        // Ajouter au script pour suppression
+    }
+
+    public List<String> getPackagesNotInTable() {
+        return packagesNotInTable;
+    }
+
+    public List<String> getTriggersNotInTable() {
+        return triggersNotInTable;
+    }
+
     public void fetchIndex(){
         // A développer ultérieurement
     }
 /*
+    public void fetchUnique(MPDRTable mpdrTable){
+        MPDROracleUnique mpdrOracleUnique = null;
+        try (ResultSet result = databaseMetaData.getIndexInfo(databaseName, schemaDB, mpdrTable.getName(), true, true)) {
+            while (result.next()) {
+                if(mpdrOracleUnique == null){
+                    mpdrOracleUnique = MVCCDElementFactory.instance().createMPDROracleUnique(mpdrTable.getMDRContConstraints(), null);
+                    mpdrOracleUnique.setName(result.getString("COLUMN_NAME"));
+                }
+                for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumns()) {
+                    if (mpdrColumn.getName().equals(result.getString("COLUMN_NAME"))) {
+                        MVCCDElementFactory.instance().createMPDROracleParameter(mpdrOracleUnique, (MLDRParameter) null);
+                        //MVCCDElementFactory.instance().createMPDROracleParameter((IMPDROracleElement) mpdrOracleUnique, mpdrColumn);
+                    }
+                }
+                }
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
+    }
+
     public void fetchCheck(MPDRTable mpdrTable, List<MPDRColumn> mpdrColumns){
         try (ResultSet result = databaseMetaData.getIndexInfo(databaseName, schemaDB, mpdrTable.getName(), true, true)) {
             while (result.next()) {
