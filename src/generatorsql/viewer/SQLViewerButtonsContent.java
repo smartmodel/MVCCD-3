@@ -390,6 +390,7 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                         //DbFetcherOracle dbFetcherOracle = new DbFetcherOracle();
                         DbFetcherOracle dbFetcherOracle = new DbFetcherOracle(sqlViewer.getConConnection(), connection);
                         dbFetcherOracle.fetch();
+                        dbFetcherOracle.getMpdrDbModel();
 
 
                         actionTestConnection(false);
