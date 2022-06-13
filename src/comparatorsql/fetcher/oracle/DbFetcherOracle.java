@@ -4,24 +4,17 @@ import comparatorsql.RecuperationConnectionDB;
 import comparatorsql.fetcher.DbFetcher;
 import connections.ConConnection;
 import main.MVCCDElementFactory;
-import mdr.MDRColumn;
-import mdr.MDRTable;
-import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.oracle.MPDROraclePK;
 import mpdr.oracle.MPDROracleUnique;
-import mpdr.oracle.interfaces.IMPDROracleElement;
-import mpdr.services.MPDRTableService;
 import mpdr.tapis.oracle.MPDROraclePackage;
 import mpdr.tapis.oracle.MPDROracleTrigger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DbFetcherOracle extends DbFetcher {
 
@@ -52,13 +45,8 @@ public class DbFetcherOracle extends DbFetcher {
 
     public void fetch() throws SQLException {
         fetchTables();
-        //ATTENTION, je ne récupère que les trigger, package et séquences qui sont liés à une table.
         fetchTriggers(mpdrDbModel.getMPDRTables());
-        /*for (MPDRTable mpdrTable : mpdrDbModel.getMPDRTables()) {
-            fetchPackages(mpdrTable);
-            fetchTriggers(mpdrTable);
-            }
-         */
+        fetchPackages(mpdrDbModel.getMPDRTables());
     }
 
 
@@ -181,6 +169,37 @@ public class DbFetcherOracle extends DbFetcher {
             }
         }
     }
+
+    public void fetchPackages(List<MPDRTable> mpdrTables) throws SQLException {
+        List<String> packages = new ArrayList<>();
+        StringBuilder requeteSQL = new StringBuilder();
+        requeteSQL.append("SELECT DISTINCT(OBJECT_NAME) FROM USER_PROCEDURES WHERE OBJECT_TYPE='PACKAGE'");
+        PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString());
+        ResultSet rsCurseur = pStmt.executeQuery();
+        while (rsCurseur.next()){
+            packages.add(rsCurseur.getString("OBJECT_NAME"));
+        }
+        //Copie de la liste de packages dans une nouvelle liste car je ne peux pas supprimer d'éléments dans la liste sur laquelle la boucle tourne
+        List<String> packagesNotInTable = new ArrayList<>(packages);
+        for (MPDRTable mpdrTable : mpdrTables) {
+            //package est un mot réservé donc utilisation du nom de variable "paquet"
+            for (String paquet : packages) {
+                if (findTableAccueilTriggerOrPackage(mpdrTable, paquet)!=null) {
+                    if (mpdrTable.getMPDRContTAPIs().getMPDRBoxPackages() == null) {
+                        MVCCDElementFactory.instance().createMPDROracleBoxPackages(mpdrTable.getMPDRContTAPIs(), null);
+                    }
+                    MPDROraclePackage mpdrOraclePackage = MVCCDElementFactory.instance().createMPDROraclePackage(mpdrTable.getMPDRContTAPIs().getMPDRBoxPackages(), null);
+                    mpdrOraclePackage.setName(paquet);
+                    packagesNotInTable.remove(paquet);
+                }
+            }
+        }
+        if(!packagesNotInTable.isEmpty()){
+            //TODO VINCENT
+            //Ajouter les éléments de la liste dans les éléments à droper du script !
+        }
+    }
+
 
     public void fetchTriggers(MPDRTable mpdrTable) throws SQLException {
         StringBuilder requeteSQL = new StringBuilder();
