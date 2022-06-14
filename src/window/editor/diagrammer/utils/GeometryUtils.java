@@ -195,6 +195,10 @@ public final class GeometryUtils {
       return Position.BOTTOM_CORNER_RIGHT;
     } else if (isLeft(shape, comparedTo) && isBottom(shape, comparedTo)) {
       return Position.BOTTOM_CORNER_LEFT;
+    } else if (isTopCentered(shape, comparedTo)) {
+      return Position.TOP_CENTER;
+    } else if (isBottomCentered(shape, comparedTo)) {
+      return Position.BOTTOM_CENTER;
     } else if (isXCenteredTopLeft(shape, comparedTo) || isXCenteredTopRight(shape, comparedTo)) {
       if (isTop(shape, comparedTo)) {
         return isXCenteredTopLeft(shape, comparedTo) ? Position.TOP_CENTER_LEFT
@@ -211,7 +215,16 @@ public final class GeometryUtils {
         return isYCenteredTop(shape, comparedTo) ? Position.RIGHT_CENTER_TOP
             : Position.RIGHT_CENTER_BOTTOM;
       }
+    } else if (isBottom(shape, comparedTo)) {
+      return Position.BOTTOM_CENTER;
+    } else if (isTop(shape, comparedTo)) {
+      return Position.TOP_CENTER;
+    } else if (isLeft(shape, comparedTo)) {
+      return Position.LEFT_CENTER_TOP;
+    } else if (isRight(shape, comparedTo)) {
+      return Position.RIGHT_CENTER_TOP;
     }
+
     return Position.UNHANDLED;
   }
 
@@ -229,6 +242,18 @@ public final class GeometryUtils {
 
   public static boolean isLeft(SquaredShape shape, SquaredShape comparedTo) {
     return shape.getBounds().getMaxX() <= comparedTo.getBounds().getMinX();
+  }
+
+  public static boolean isXCentered(SquaredShape shape, SquaredShape comparedTo) {
+    return shape.getBounds().getMinX() == comparedTo.getBounds().getMinX();
+  }
+
+  public static boolean isTopCentered(SquaredShape shape, SquaredShape comparedTo) {
+    return isTop(shape, comparedTo) && isXCentered(shape, comparedTo);
+  }
+
+  public static boolean isBottomCentered(SquaredShape shape, SquaredShape comparedTo) {
+    return isBottom(shape, comparedTo) && isXCentered(shape, comparedTo);
   }
 
   public static boolean isXCenteredTopLeft(SquaredShape shape, SquaredShape comparedTo) {
