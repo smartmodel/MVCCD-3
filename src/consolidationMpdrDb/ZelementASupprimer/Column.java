@@ -1,6 +1,6 @@
-package comparatorsql.elementASupprimer;
+package consolidationMpdrDb.ZelementASupprimer;
 
-import comparatorsql.elementASupprimer.Utils.Tokenization;
+import consolidationMpdrDb.ZelementASupprimer.Utils.Tokenization;
 
 import java.util.ArrayList;
 import java.util.Collections;

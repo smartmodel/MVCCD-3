@@ -1,4 +1,4 @@
-package comparatorsql.elementASupprimer;
+package consolidationMpdrDb.ZelementASupprimer;
 
 import main.MVCCDElement;
 import mpdr.MPDRContColumns;

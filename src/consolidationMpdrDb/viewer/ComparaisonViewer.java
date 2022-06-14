@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Tue May 17 10:05:25 CEST 2022
  */
 
-package comparatorsql.viewer;
+package consolidationMpdrDb.viewer;
 
 import java.awt.*;
 import java.awt.event.*;

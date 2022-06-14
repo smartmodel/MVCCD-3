@@ -1,13 +1,7 @@
-package comparatorsql;
+package consolidationMpdrDb;
 
-import main.MVCCDElementFactory;
-import mcd.MCDContModels;
-import mcd.interfaces.IMCDModel;
-import mdr.MDRModel;
 import mdr.MDRTable;
-import mldr.MLDRModel;
 import mpdr.MPDRModel;
-import project.Project;
 
 import java.util.List;
 

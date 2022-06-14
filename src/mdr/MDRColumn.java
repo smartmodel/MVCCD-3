@@ -311,4 +311,9 @@ public abstract class MDRColumn extends MDRElement implements
 
 
     public abstract boolean isPKForEntityIndependant() ;
+
+    //utilisé pour une colonne provenant de la database
+    public boolean getMandatory(){
+        return this.mandatory;
+    }
 }

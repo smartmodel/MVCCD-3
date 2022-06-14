@@ -1,4 +1,4 @@
-package comparatorsql.elementASupprimer.Utils;
+package consolidationMpdrDb.ZelementASupprimer.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;

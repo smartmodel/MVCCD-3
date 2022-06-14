@@ -1,6 +1,6 @@
 package generatorsql.viewer;
 
-import comparatorsql.fetcher.oracle.DbFetcherOracle;
+import consolidationMpdrDb.fetcher.oracle.DbFetcherOracle;
 import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConDBMode;
@@ -10,18 +10,13 @@ import console.WarningLevel;
 import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
 import generatorsql.MPDRGenerateSQLUtil;
-import main.MVCCDElementFactory;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
-import mpdr.oracle.MPDROracleColumn;
-import mpdr.oracle.MPDROracleModel;
-import mpdr.oracle.MPDROracleTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import treatment.services.TreatmentService;
-import utilities.Trace;
 import utilities.UtilDivers;
 import utilities.files.FileRead;
 import utilities.files.UtilFiles;
@@ -387,10 +382,10 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                         connection = ConnectionsService.actionTestIConConnectionOrConnector(sqlViewer,
                                 true,
                                 sqlViewer.getConConnection());
-                        //DbFetcherOracle dbFetcherOracle = new DbFetcherOracle();
                         DbFetcherOracle dbFetcherOracle = new DbFetcherOracle(sqlViewer.getConConnection(), connection);
                         dbFetcherOracle.fetch();
                         dbFetcherOracle.getMpdrDbModel();
+                        //OracleComparatorDb oracleComparatorDb = new OracleComparatorDb(this.mpdrModel, sqlViewer.getConConnection(), connection);
 
 
                         actionTestConnection(false);

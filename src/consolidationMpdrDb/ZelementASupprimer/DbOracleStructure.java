@@ -1,9 +1,4 @@
-package comparatorsql.elementASupprimer;
-
-import comparatorsql.elementASupprimer.DbTable;
-import comparatorsql.elementASupprimer.Sequence;
-import comparatorsql.elementASupprimer.Trigger;
-import comparatorsql.elementASupprimer.Package;
+package consolidationMpdrDb.ZelementASupprimer;
 
 import java.util.ArrayList;
 import java.util.List;

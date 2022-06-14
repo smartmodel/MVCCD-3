@@ -1,7 +1,7 @@
-package comparatorsql.fetcher.oracle;
+package consolidationMpdrDb.fetcher.oracle;
 
-import comparatorsql.RecuperationConnectionDB;
-import comparatorsql.fetcher.DbFetcher;
+import consolidationMpdrDb.RecuperationConnectionDB;
+import consolidationMpdrDb.fetcher.DbFetcher;
 import connections.ConConnection;
 import main.MVCCDElementFactory;
 import mldr.MLDRParameter;
@@ -11,6 +11,7 @@ import mpdr.oracle.interfaces.IMPDROracleElement;
 import mpdr.tapis.oracle.MPDROraclePackage;
 import mpdr.tapis.oracle.MPDROracleTrigger;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,10 +26,11 @@ public class DbFetcherOracle extends DbFetcher {
     private DatabaseMetaData databaseMetaData;
     private String schemaDB;
     private String databaseName;
-    private MPDRModel mpdrDbModel;
+    private MPDROracleModel mpdrDbModel;
     private List<String> sequencesNotInTable = new ArrayList<>();
     private List<String> packagesNotInTable = new ArrayList<>();
     private List<String> triggersNotInTable = new ArrayList<>();
+    private Preferences pref = PreferencesManager.instance().getProjectPref();
 
     public DbFetcherOracle() throws SQLException {
         RecuperationConnectionDB recuperationConnectionDB = new RecuperationConnectionDB();
@@ -59,10 +61,9 @@ public class DbFetcherOracle extends DbFetcher {
 
     public void fetchTables() throws SQLException {
         String[] types = {Preferences.FETCHER_ORACLE_TYPE_TABLE};
-
         try (ResultSet result = databaseMetaData.getTables(databaseName, schemaDB, "%", types)) {
             while (result.next()) {
-                MPDRTable mpdrTable = MVCCDElementFactory.instance()
+                MPDROracleTable mpdrTable = MVCCDElementFactory.instance()
                         .createMPDROracleTable(this.mpdrDbModel.getMPDRContTables(), null);
                 mpdrTable.setName(result.getString(Preferences.FETCHER_ORACLE_TABLE_NAME));
                 fetchColumns(mpdrTable);
@@ -76,17 +77,13 @@ public class DbFetcherOracle extends DbFetcher {
         }
     }
 
-    public void fetchColumns(MPDRTable mpdrTable){
+    public void fetchColumns(MPDROracleTable mpdrTable){
         try (ResultSet result = this.databaseMetaData.getColumns(this.databaseName, this.schemaDB, mpdrTable.getName(), null)) {
             while (result.next()) {
-                MPDRColumn mpdrColumn = MVCCDElementFactory.instance().createMPDROracleColumn(mpdrTable.getMDRContColumns(), null);
+                MPDROracleColumn mpdrColumn = MVCCDElementFactory.instance().createMPDROracleColumn(mpdrTable.getMDRContColumns(), null);
                 mpdrColumn.setName(result.getString(Preferences.FETCHER_ORACLE_COLUMN_NAME));
                 mpdrColumn.setDatatypeLienProg(result.getString(Preferences.FETCHER_ORACLE_TYPE_NAME));
-                if (result.getBoolean(Preferences.FETCHER_ORACLE_NULLABLE)){
-                    mpdrColumn.setMandatory(false); //Si nullable -> non obligatoire
-                } else{
-                    mpdrColumn.setMandatory(true); //Si non-nullable -> obligatoire
-                }
+                mpdrColumn.setMandatory(!result.getBoolean(Preferences.FETCHER_ORACLE_NULLABLE)); //Si nullable -> non obligatoire
                 mpdrColumn.setSize(result.getInt(Preferences.FETCHER_ORACLE_COLUMN_SIZE));
                 mpdrColumn.setScale(result.getInt(Preferences.FETCHER_ORACLE_DECIMAL_DIGITS));
                 mpdrColumn.setInitValue(result.getString(Preferences.FETCHER_ORACLE_COLUMN_DEF));
@@ -98,7 +95,7 @@ public class DbFetcherOracle extends DbFetcher {
     }
 
 
-    public void fetchPk(MPDRTable mpdrTable) throws SQLException {
+    public void fetchPk(MPDROracleTable mpdrTable) throws SQLException {
         MPDROraclePK mpdrOraclePK = null;
         try (ResultSet result = this.databaseMetaData.getPrimaryKeys(this.databaseName, this.schemaDB, mpdrTable.getName())) {
             while (result.next()) {
@@ -117,17 +114,17 @@ public class DbFetcherOracle extends DbFetcher {
         }
     }
 
-    public void fetchUnique(MPDRTable mpdrTable) throws SQLException {
+    public void fetchUnique(MPDROracleTable mpdrTable) throws SQLException {
         MPDROracleUnique mpdrOracleUnique = null;
         //On ne récupère que les contraintes Unique
-        //Remplacer par ? le getTable et setter ensuite
         String requeteSQL = Preferences.FETCHER_ORACLE_REQUETE_SQL_USER_CONSTRAINTS;
         PreparedStatement pStmt = connection.prepareStatement(requeteSQL);
         pStmt.setString(1,Preferences.FETCHER_ORACLE_CONSTRAINT_TYPE_UNIQUE);
         pStmt.setString(2, mpdrTable.getName());
         ResultSet rsCurseur = pStmt.executeQuery();
         while (rsCurseur.next()) {
-            if (mpdrOracleUnique == null) {
+            //Si le nom de la contrainte n'existe pas, on en crée une
+            if (!mpdrOracleUnique.getName().equals(rsCurseur.getString(Preferences.FETCHER_ORACLE_CONSTRAINT_NAME))) {
                 mpdrOracleUnique = MVCCDElementFactory.instance().createMPDROracleUnique(mpdrTable.getMDRContConstraints(), null);
                 mpdrOracleUnique.setName(rsCurseur.getString(Preferences.FETCHER_ORACLE_CONSTRAINT_NAME));
             }
@@ -136,14 +133,14 @@ public class DbFetcherOracle extends DbFetcher {
         String requeteSQLUserConsColumns = Preferences.FETCHER_ORACLE_REQUETE_SQL_USER_CONS_COLUMNS;
         PreparedStatement pStmtUserConsColumns = connection.prepareStatement(requeteSQLUserConsColumns);
         pStmtUserConsColumns.setString(1, mpdrTable.getName());
-        ResultSet rsCurseur1 = pStmtUserConsColumns.executeQuery();
-        while (rsCurseur1.next()){
-            String constraintName = rsCurseur1.getString(Preferences.FETCHER_ORACLE_CONSTRAINT_NAME);
-            String columnName = rsCurseur1.getString(Preferences.FETCHER_ORACLE_COLUMN_NAME);
-            int positionColumn = rsCurseur1.getInt(Preferences.FETCHER_ORACLE_POSITION);
+        ResultSet rsCurseurUserConsColumns = pStmtUserConsColumns.executeQuery();
+        while (rsCurseurUserConsColumns.next()){
+            String constraintName = rsCurseurUserConsColumns.getString(Preferences.FETCHER_ORACLE_CONSTRAINT_NAME);
+            String columnName = rsCurseurUserConsColumns.getString(Preferences.FETCHER_ORACLE_COLUMN_NAME);
+            int positionColumn = rsCurseurUserConsColumns.getInt(Preferences.FETCHER_ORACLE_POSITION);
             for (MPDRUnique mpdrUnique : mpdrTable.getMPDRUniques()) {
                 if (mpdrUnique instanceof MPDROracleUnique){
-                    //si la position est null, il s'agit d'une contrainte qui ne peut être mise que sur une seule colonne (= Not Nul)
+                    //si la position est null, il s'agit d'une contrainte qui ne peut être mise que sur une seule colonne (par exemple NOT NULL)
                     if(positionColumn>0 && constraintName.equals(mpdrUnique.getName())){
                         MPDRParameter mpdrParameter = MVCCDElementFactory.instance().createMPDROracleParameter((IMPDROracleElement) mpdrUnique, (MLDRParameter) null);
                         for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumns()) {
@@ -164,12 +161,10 @@ public class DbFetcherOracle extends DbFetcher {
         MPDROracleParameter mpdrOracleParameter;
         StringBuilder requeteSQL = new StringBuilder();
         //Utilisation de la colonne search_condition_vc (introduit à la version 12c) qui est de type varchar car search_condition est de type long
-        //Lors de la création d'une contrainte check, la DB en crée une identique mais avec le nom qui commence par SYS donc on ne la veut pas
+        //Lors de la création d'une contrainte sans nom, la DB en crée une avec le nom qui commence par SYS_
         requeteSQL.append(Preferences.FETCHER_ORACLE_REQUETE_SQL_USER_CONSTRAINTS);
         requeteSQL.append(Preferences.FETCHER_ORACLE_AND);
         requeteSQL.append(Preferences.FETCHER_ORACLE_REQUETE_SEARCH_CONDITION_VC);
-        requeteSQL.append(Preferences.FETCHER_ORACLE_AND);
-        requeteSQL.append(Preferences.FETCHER_ORACLE_REQUETE_CONSTRAINT_NAME_NOT_LIKE);
         PreparedStatement pStmt = connection.prepareStatement(requeteSQL.toString());
         pStmt.setString(1, Preferences.FETCHER_ORACLE_CONSTRAINT_TYPE_CHECK);
         pStmt.setString(2, mpdrTable.getName());
@@ -207,7 +202,7 @@ public class DbFetcherOracle extends DbFetcher {
     }
 
     //A VOIR POUR SORTIR CETTE METHODE DE LA TABLE POUR LA METTRE AU NIVEAU SUPERIEUR A CAUSE DE LA LISTE DES SEQ A SUPPRIMER
-    public void fetchSequences(MPDRTable mpdrTable) throws SQLException {
+    public void fetchSequences(MPDROracleTable mpdrTable) throws SQLException {
         String requeteSQL = Preferences.FETCHER_ORACLE_REQUETE_SQL_USER_SEQUENCES;
         PreparedStatement pStmt = connection.prepareStatement(requeteSQL);
         ResultSet rsCurseur = pStmt.executeQuery();
@@ -285,8 +280,12 @@ public class DbFetcherOracle extends DbFetcher {
         return mpdrColumns;
     }
 
-    public MPDRTable findTableAccueilSequence(MPDRTable mpdrTable, String sequenceName) {
-        String seqTableName = sequenceName.split("_")[0];
+    //Une séquence est nommée {tableShortName}{_SEQPK} = QUAL_SEQPK
+    //ATTENTION: le format peut être modifié par l'utilisateur dans ses préférences de projet
+    //-> Cette méthode gère uniquement le cas où le nom de la table est au début
+    public MPDRTable findTableAccueilSequence(MPDROracleTable mpdrTable, String sequenceName) {
+        //String seqTableName = sequenceName.split("_")[0];
+        String seqTableName = sequenceName.split(pref.getMDR_TABLE_SEP_FORMAT())[0];
         if(mpdrTable.getName().startsWith(seqTableName)) {
             return mpdrTable;
         }
@@ -294,8 +293,13 @@ public class DbFetcherOracle extends DbFetcher {
     }
 
     //Si on veut pour une table spécifique uniquement
+    //Un trigger est nommée {tableShortName}{tableSep}{typeTriggerMarker} = QUAL_BIR
+    //Un package est nommé {tableShortName}{tableSep}{typePackageMarker} = QUAL_TAPIs
+    //ATTENTION: le format peut être modifié par l'utilisateur dans ses préférences de projet
+    //-> Cette méthode gère uniquement le cas où le nom de la table est au début
     public MPDRTable findTableAccueilTriggerOrPackage(MPDRTable mpdrTable, String triggerOrPackageName) {
-        String triggerOrPackageTableName = triggerOrPackageName.split("_")[0];
+        //String triggerOrPackageTableName = triggerOrPackageName.split("_")[0];
+        String triggerOrPackageTableName = triggerOrPackageName.split(pref.getMDR_TABLE_SEP_FORMAT())[0];
         if(mpdrTable.getName().startsWith(triggerOrPackageTableName)) {
                 return mpdrTable;
             }
@@ -303,8 +307,8 @@ public class DbFetcherOracle extends DbFetcher {
     }
 
     //Si on veut trouver un correspondance dans l'ensembles des tables récupérées
-    public MPDRTable findTableAccueilTriggerOrPackage(List<MPDRTable> mpdrTablesList, List<String> triggersOrPackages) {
-        for (MPDRTable mpdrTable : mpdrTablesList) {
+    public MPDRTable findTableAccueilTriggerOrPackage(List<MPDROracleTable> mpdrTablesList, List<String> triggersOrPackages) {
+        for (MPDROracleTable mpdrTable : mpdrTablesList) {
             for (String trigger : triggersOrPackages) {
                 String triggerOrPackageTableName = trigger.split("_")[0];
                 if (mpdrTable.getName().startsWith(triggerOrPackageTableName)) {
@@ -315,7 +319,7 @@ public class DbFetcherOracle extends DbFetcher {
         return null;
     }
 
-    public MPDRModel getMpdrDbModel() {
+    public MPDROracleModel getMpdrDbModel() {
         return mpdrDbModel;
     }
 

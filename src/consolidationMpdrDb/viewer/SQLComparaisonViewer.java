@@ -1,4 +1,4 @@
-package comparatorsql.viewer;
+package consolidationMpdrDb.viewer;
 
 import utilities.window.PanelBorderLayout;
 import utilities.window.PanelContent;

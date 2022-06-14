@@ -1,4 +1,4 @@
-package comparatorsql.elementASupprimer;
+package consolidationMpdrDb.ZelementASupprimer;
 
 public class Sequence {
     private String name;

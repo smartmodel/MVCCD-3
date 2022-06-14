@@ -1,15 +1,4 @@
-package comparatorsql.fetcher;
-
-import comparatorsql.elementASupprimer.DbOracleStructure;
-import comparatorsql.RecuperationConnectionDB;
-import connections.ConConnection;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import main.MVCCDElementFactory;
-import mpdr.MPDRModel;
-import mpdr.MPDRTable;
+package consolidationMpdrDb.fetcher;
 
 public class DbFetcher {
 /*

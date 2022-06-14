@@ -1,4 +1,4 @@
-package comparatorsql;
+package consolidationMpdrDb;
 
 import connections.*;
 import connections.oracle.ConConnectionOracle;
