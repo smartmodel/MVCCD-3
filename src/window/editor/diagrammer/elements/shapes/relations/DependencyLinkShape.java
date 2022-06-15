@@ -9,6 +9,7 @@ import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
+import window.editor.diagrammer.services.DiagrammerService;
 
 
 public class DependencyLinkShape extends RelationShape implements IShape, Serializable {
@@ -16,7 +17,6 @@ public class DependencyLinkShape extends RelationShape implements IShape, Serial
   private final String label;
 
   private final double phi = Math.toRadians(25);
-  private final int barb = 16;
 
   public DependencyLinkShape(SquaredShape source, SquaredShape destination, String label) {
     super(source, destination, false);
@@ -44,10 +44,23 @@ public class DependencyLinkShape extends RelationShape implements IShape, Serial
     if (!label.isEmpty()) {
       LabelShape labelShape;
 
-      int middleIndex = anchorPoints.size() / 2;
-      labelShape = createOrUpdateLabel(anchorPoints.get(middleIndex), label,
-          LabelType.ASSOCIATION_NAME, 0, 0);
+      if (this.anchorPoints.size() <= 2) {
+        RelationAnchorPointShape anchorPoint = this.anchorPoints.get(0);
+        Point relationCenter = this.getCenter();
 
+        int distanceInXFromAnchorPoint = (int) (relationCenter.x - anchorPoint.x * 1.1);
+        int distanceInYFromAnchorPoint = (relationCenter.y - anchorPoint.y);
+
+        labelShape = this.createOrUpdateLabel(anchorPoint, label,
+            LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
+      } else {
+        int middleIndex = anchorPoints.size() / 2;
+
+        labelShape = createOrUpdateLabel(anchorPoints.get(middleIndex),
+            label,
+            LabelType.ASSOCIATION_NAME, 0, 0);
+      }
+      DiagrammerService.getDrawPanel().add(labelShape);
       super.getLabels().add(labelShape);
     } else {
       deleteLabel(LabelType.ASSOCIATION_NAME);
@@ -80,6 +93,7 @@ public class DependencyLinkShape extends RelationShape implements IShape, Serial
       double x;
       double y;
       double rho = theta + phi;
+      int barb = 16;
       for (int j = 0; j < 2; j++) {
         x = tip.x - barb * Math.cos(rho);
         y = tip.y - barb * Math.sin(rho);
