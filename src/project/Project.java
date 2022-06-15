@@ -5,6 +5,7 @@ import main.MVCCDFactory;
 import main.MVCCDManager;
 import mcd.MCDContDiagrams;
 import mcd.MCDContModels;
+import mcd.MCDContRelations;
 import mcd.services.MCDAdjustPref;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -86,7 +87,7 @@ public class Project extends ProjectElement {
 
   public Profile adjustProfile() {
     if (this.getProfileFileName() != null) {
-        this.profile = MVCCDFactory.instance().createProfile(this.getProfileFileName());
+      this.profile = MVCCDFactory.instance().createProfile(this.getProfileFileName());
       //Preferences profilePref = ProfileManager.instance().loadFileProfile(Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR + this.getProfileFileName());
       Preferences profilePref = new ProfileLoaderXml().loadFileProfileXML(this.getProfileFileName());
       if (profilePref != null) {
@@ -96,7 +97,7 @@ public class Project extends ProjectElement {
         PreferencesManager.instance().copyProfilePref();
       }
     } else {
-        this.profile = null;
+      this.profile = null;
       PreferencesManager.instance().setProfilePref(null);
       // A priori c'est une erreur!
       //PreferencesManager.instance().copyDefaultPref();
@@ -120,7 +121,7 @@ public class Project extends ProjectElement {
   }
 
   public int getNextIdElementSequence() {
-      this.idElementSequence++;
+    this.idElementSequence++;
     return this.idElementSequence;
   }
 
@@ -191,6 +192,15 @@ public class Project extends ProjectElement {
     for (MVCCDElement mvccdElementChild : this.getChilds()) {
       if (mvccdElementChild instanceof MCDContDiagrams) {
         return (MCDContDiagrams) mvccdElementChild;
+      }
+    }
+    return null;
+  }
+
+  public MCDContRelations getMCDContRelations() {
+    for (MVCCDElement mvccdElementChild : this.getChilds()) {
+      if (mvccdElementChild instanceof MCDContRelations) {
+        return (MCDContRelations) mvccdElementChild;
       }
     }
     return null;

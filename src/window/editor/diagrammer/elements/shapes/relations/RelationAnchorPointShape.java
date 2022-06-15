@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
 import main.MVCCDManager;
+import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
@@ -118,6 +119,11 @@ public class RelationAnchorPointShape extends Point implements IShape, Serializa
   @Override
   public void setFocused(boolean isSelected) {
     this.isSelected = isSelected;
+  }
+
+  @Override
+  public MDElement getRelatedRepositoryElement() {
+    return null;
   }
 
   public void zoom(int fromFactor, int toFactor, RelationShape relation) {

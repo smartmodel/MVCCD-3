@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.List;
 import javax.swing.JPanel;
+import md.MDElement;
 import window.editor.diagrammer.elements.interfaces.IResizable;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
@@ -22,6 +23,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   protected int id;
   protected boolean isFocused = false;
   protected boolean isResizing = false;
+  protected MDElement relatedRepositoryElement;
 
   public SquaredShape(int id) {
     this();
@@ -72,7 +74,6 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
     this.setLocation(this.getX() + differenceX, this.getY() + differenceY);
 
     // S'il s'agit d'une scroll manuel de l'utilisateur, on déplace les points d'ancrage attachés à la forme
-    System.out.println(DiagrammerService.getDrawPanel().isManualScrolling());
     if (!DiagrammerService.getDrawPanel().isManualScrolling()) {
       List<RelationShape> linkedRelations = DiagrammerService.getDrawPanel().getRelationShapesBySquaredShape(this);
       for (RelationShape relation : linkedRelations) {
@@ -80,6 +81,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
         nearestPointAncrage.drag(nearestPointAncrage.x + differenceX, nearestPointAncrage.y + differenceY);
       }
     }
+
   }
 
   @Override
@@ -123,6 +125,11 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   }
 
   @Override
+  public MDElement getRelatedRepositoryElement() {
+    return this.relatedRepositoryElement;
+  }
+
+  @Override
   public String toString() {
     return "SquaredShape{" + "id=" + this.id + '}';
   }
@@ -130,4 +137,5 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   public void setResizing(boolean resizing) {
     this.isResizing = resizing;
   }
+
 }

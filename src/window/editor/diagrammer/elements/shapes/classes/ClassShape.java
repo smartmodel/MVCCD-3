@@ -23,7 +23,6 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
   protected ClassShapeZone zoneProprietes = new ClassShapeZone();
   protected ClassShapeZone zoneOperations = new ClassShapeZone();
   protected ClassShapeZone zoneServices = new ClassShapeZone();
-  protected MDElement relatedRepositoryElement;
 
   public ClassShape(int id) {
     super(id);
@@ -183,10 +182,6 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
   protected abstract String getLongestProperty();
 
   protected abstract void setNameFont(Graphics2D graphics2D);
-
-  public MDElement getRelatedRepositoryElement() {
-    return this.relatedRepositoryElement;
-  }
 
   public abstract String getXmlTagName();
 }

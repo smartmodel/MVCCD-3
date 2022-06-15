@@ -3,6 +3,7 @@ package window.editor.diagrammer.elements.interfaces;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import md.MDElement;
 
 public interface IShape {
 
@@ -20,6 +21,7 @@ public interface IShape {
   }
   boolean isFocused();
   void setFocused(boolean isSelected);
+  MDElement getRelatedRepositoryElement();
   default void setSize(int width, int height) {
     this.setSize(new Dimension(width, height));
   }
