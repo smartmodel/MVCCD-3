@@ -21,6 +21,7 @@ import main.MVCCDManager;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.UMLPackage;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
@@ -568,6 +569,27 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
       x = (int) (sourceBounds.getMinX() + ((destBounds.getMaxX() - sourceBounds.getMinX()) / 2));
       this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMinY(), 0));
       this.anchorPoints.add(new RelationAnchorPointShape(x, (int) destBounds.getMaxY(), 1));
+    } else if (sourcePosition == Position.TOP_CENTER) {
+      if(this.source instanceof UMLPackage) {
+        x = (int) sourceBounds.getCenterX();
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMaxY(), 0));
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) destBounds.getMinY(), 1));
+      }else {
+        x = sourceBounds.x;
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMaxY(), 0));
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) destBounds.getMinY(), 1));
+      }
+    } else if (sourcePosition == Position.BOTTOM_CENTER) {
+      if(this.source instanceof UMLPackage) {
+        x = (int) sourceBounds.getCenterX();
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMinY(), 0));
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) destBounds.getMaxY(), 1));
+      }else {
+        x = sourceBounds.x;
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMinY(), 0));
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) destBounds.getMaxY(), 1));
+      }
+
     } else if (sourcePosition == Position.BOTTOM_CENTER_LEFT) {
       x = (int) (sourceBounds.getMaxX() - ((sourceBounds.getMaxX() - destBounds.getMinX()) / 2));
       this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMinY(), 0));

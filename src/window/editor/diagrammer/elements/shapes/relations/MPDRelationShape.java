@@ -37,13 +37,23 @@ public class MPDRelationShape extends RelationShape {
   public void createLabelsAfterRelationShapeEdit() {
     if (!this.getRelatedRepositoryElement().getName().isEmpty()) {
       LabelShape labelShape;
+      if (this.anchorPoints.size() <= 2) {
+        RelationAnchorPointShape anchorPoint = this.anchorPoints.get(0);
+        Point relationCenter = this.getCenter();
 
-      int middleIndex = anchorPoints.size() / 2;
+        int distanceInXFromAnchorPoint = (int) (relationCenter.x - anchorPoint.x * 1.1);
+        int distanceInYFromAnchorPoint = (int) (relationCenter.y - anchorPoint.y);
 
-      labelShape = createOrUpdateLabel(anchorPoints.get(middleIndex),
-          getRelatedRepositoryElement().getName(),
-          LabelType.ASSOCIATION_NAME, 0, 0);
+        labelShape = this.createOrUpdateLabel(anchorPoint,  getRelatedRepositoryElement().getName(),
+            LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
 
+      } else {
+        int middleIndex = anchorPoints.size() / 2;
+
+        labelShape = createOrUpdateLabel(anchorPoints.get(middleIndex),
+            getRelatedRepositoryElement().getName(),
+            LabelType.ASSOCIATION_NAME, 0, 0);
+      }
       super.getLabels().add(labelShape);
     } else {
       deleteLabel(LabelType.ASSOCIATION_NAME);
