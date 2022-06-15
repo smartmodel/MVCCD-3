@@ -66,12 +66,16 @@ public class DbFetcherOracle extends DbFetcher {
                 MPDROracleTable mpdrTable = MVCCDElementFactory.instance()
                         .createMPDROracleTable(this.mpdrDbModel.getMPDRContTables(), null);
                 mpdrTable.setName(result.getString(Preferences.FETCHER_ORACLE_TABLE_NAME));
+                //On crée un box pour les packages et triggers pour éviter d'avoir un nullpointeur lors des comparaisons quand on boucle sur les box
+                MVCCDElementFactory.instance().createMPDROracleBoxPackages(mpdrTable.getMPDRContTAPIs(), null);
+                MVCCDElementFactory.instance().createMPDROracleBoxTriggers(mpdrTable.getMPDRContTAPIs(), null);
                 fetchColumns(mpdrTable);
                 fetchPk(mpdrTable);
                 fetchUnique(mpdrTable);
                 fetchCheck(mpdrTable);
                 //fetchFk();
                 fetchSequences(mpdrTable);
+
 
             }
         }
@@ -124,7 +128,7 @@ public class DbFetcherOracle extends DbFetcher {
         ResultSet rsCurseur = pStmt.executeQuery();
         while (rsCurseur.next()) {
             //Si le nom de la contrainte n'existe pas, on en crée une
-            if (!mpdrOracleUnique.getName().equals(rsCurseur.getString(Preferences.FETCHER_ORACLE_CONSTRAINT_NAME))) {
+            if (!mpdrTable.getMPDRUniques().contains(rsCurseur.getString((Preferences.FETCHER_ORACLE_CONSTRAINT_NAME)))){
                 mpdrOracleUnique = MVCCDElementFactory.instance().createMPDROracleUnique(mpdrTable.getMDRContConstraints(), null);
                 mpdrOracleUnique.setName(rsCurseur.getString(Preferences.FETCHER_ORACLE_CONSTRAINT_NAME));
             }
@@ -157,7 +161,7 @@ public class DbFetcherOracle extends DbFetcher {
     //ATTENTION, J'écrase les contraintes car j'en crée une seulement alors que la db en possède 2
     public void fetchCheck(MPDRTable mpdrTable) throws SQLException {
         MPDROracleCheckSpecific mpdrOracleCheckSpecific = null;
-        Map<String,String> conditions = new HashMap<>();
+        //Map<String,String> conditions = new HashMap<>();
         MPDROracleParameter mpdrOracleParameter;
         StringBuilder requeteSQL = new StringBuilder();
         //Utilisation de la colonne search_condition_vc (introduit à la version 12c) qui est de type varchar car search_condition est de type long
@@ -172,7 +176,7 @@ public class DbFetcherOracle extends DbFetcher {
         while (rsCurseur.next()) {
             String constraintName = rsCurseur.getString(Preferences.FETCHER_ORACLE_CONSTRAINT_NAME);
             String condition = rsCurseur.getString(Preferences.FETCHER_ORACLE_SEARCH_CONDITION_VC);
-            conditions.put(constraintName,condition);
+            //conditions.put(constraintName,condition);
                 mpdrOracleCheckSpecific = MVCCDElementFactory.instance().createMPDROracleCheckSpecific(mpdrTable.getMDRContConstraints(), null);
                 mpdrOracleCheckSpecific.setName(constraintName);
                 mpdrOracleParameter = (MPDROracleParameter) MVCCDElementFactory.instance().createMPDROracleParameter(mpdrOracleCheckSpecific, (MLDRParameter) null);
