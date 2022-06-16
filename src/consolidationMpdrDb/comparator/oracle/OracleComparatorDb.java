@@ -3,43 +3,41 @@ package consolidationMpdrDb.comparator.oracle;
 import connections.ConConnection;
 import consolidationMpdrDb.comparator.MpdrDbComparator;
 import consolidationMpdrDb.fetcher.oracle.DbFetcherOracle;
-import generatorsql.generator.oracle.*;
 import mpdr.MPDRColumn;
 import mpdr.MPDRTable;
 import mpdr.oracle.MPDROracleModel;
-import mpdr.oracle.MPDROracleTable;
 import mpdr.tapis.*;
-import mpdr.tapis.oracle.MPDROracleBoxPackages;
-import mpdr.tapis.oracle.MPDROraclePackage;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OracleComparatorDb extends MpdrDbComparator{
+//ATTENTION, pour oracle, on utilise toUpperCase pour les noms
+public class OracleComparatorDb extends MpdrDbComparator {
 
     List<MPDRTable> mpdrTablesSameName = new ArrayList<>();
     List<MPDRTable> mpdrTablesMissing = new ArrayList<>();
     private MPDROracleModel mpdrModel;
     private MPDROracleModel mpdrDbModelOracle;
     private DbFetcherOracle dbFetcherOracle;
-/*
-    private MPDROracleGenerateSQLTable mpdrOracleGenerateSQLTable;
-    private MPDROracleGenerateSQLFK mpdrOracleGenerateSQLFK;
-    private MPDROracleGenerateSQLSequence mpdrOracleGenerateSQLSequence;
-    private MPDROracleGenerateSQLTrigger mpdrOracleGenerateSQLTrigger;
-    private MPDROracleGenerateSQLFunction mpdrOracleGenerateSQLFunction;
-    private MPDROracleGenerateSQLPackage mpdrOracleGenerateSQLPackage;
-    private MPDROracleGenerateSQLDynamicCode mpdrOracleGenerateSQLCodeDynamic;
-    private MPDROracleGenerateSQLIndex mpdrOracleGenerateSQLIndex;
-    private MPDROracleGenerateSQLView mpdrOracleGenerateSQLView;
-*/
+
+    /*
+        private MPDROracleGenerateSQLTable mpdrOracleGenerateSQLTable;
+        private MPDROracleGenerateSQLFK mpdrOracleGenerateSQLFK;
+        private MPDROracleGenerateSQLSequence mpdrOracleGenerateSQLSequence;
+        private MPDROracleGenerateSQLTrigger mpdrOracleGenerateSQLTrigger;
+        private MPDROracleGenerateSQLFunction mpdrOracleGenerateSQLFunction;
+        private MPDROracleGenerateSQLPackage mpdrOracleGenerateSQLPackage;
+        private MPDROracleGenerateSQLDynamicCode mpdrOracleGenerateSQLCodeDynamic;
+        private MPDROracleGenerateSQLIndex mpdrOracleGenerateSQLIndex;
+        private MPDROracleGenerateSQLView mpdrOracleGenerateSQLView;
+    */
     public OracleComparatorDb(MPDROracleModel mpdrModel, ConConnection conConnection, Connection connection) throws SQLException {
         this.mpdrModel = mpdrModel;
         dbFetcherOracle = new DbFetcherOracle(conConnection, connection);
         dbFetcherOracle.fetch();
-        mpdrDbModelOracle = dbFetcherOracle.getMpdrDbModel();
+        mpdrDbModelOracle = dbFetcherOracle.getDbModel();
     }
 
     public void compare() {
@@ -56,15 +54,26 @@ public class OracleComparatorDb extends MpdrDbComparator{
                     compareTriggers(mpdrTable.getMPDRBoxTriggers(), dbTable.getMPDRBoxTriggers());
                     //comparePackages((MPDROracleBoxPackages) mpdrTable.getMPDRContTAPIs().getMPDRBoxPackages(), (MPDROracleBoxPackages) dbTable.getMPDRContTAPIs().getMPDRBoxPackages());
                 } else {
-                    //FAUX
+                    //FAUX add trop de tables
                     mpdrTablesMissing.add(mpdrTable);
                 }
             }
         }
     }
 
+
+    public void compareTables2() {
+        for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
+            boolean dbTableByName = findDbTableByName();
+            }
+    }
+
+    public boolean findDbTableByName(){
+return false;
+    }
+
     public boolean compareTableName(MPDRTable mpdrTable, MPDRTable dbTable) {
-        return mpdrTable.getName().equals(dbTable.getName());
+        return mpdrTable.getName().toUpperCase().equals(dbTable.getName());
     }
 
 
@@ -79,16 +88,31 @@ public class OracleComparatorDb extends MpdrDbComparator{
     }
 
     public boolean compareColumnName(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
-        if (mpdrColumn.getName().equals(dbColumn.getName())) {
+        if (mpdrColumn.getName().toUpperCase().equals(dbColumn.getName().toUpperCase())) {
             //Si le nom est identique, on compare alors les attributs de la colonne
-            if(!compareColumnDataType(mpdrColumn, dbColumn)){
-                //ALTER TABLE MODIFY {+mpdrColumn+}
+            boolean columnIdentique = true;
+            if (!compareColumnDataType(mpdrColumn, dbColumn)) {
+                columnIdentique = false;
             }
-            compareColumnSize(mpdrColumn, dbColumn);
-            compareColumnScale(mpdrColumn, dbColumn);
-            compareColumnMandatory(mpdrColumn, dbColumn);
-            compareColumnInitValue(mpdrColumn, dbColumn);
-            compareSequencesName(mpdrColumn, dbColumn);
+            if (!compareColumnSize(mpdrColumn, dbColumn)) {
+                columnIdentique = false;
+            }
+            if (!compareColumnScale(mpdrColumn, dbColumn)) {
+                columnIdentique = false;
+            }
+            if (compareColumnMandatory(mpdrColumn, dbColumn)) {
+                columnIdentique = false;
+            }
+            if (compareColumnInitValue(mpdrColumn, dbColumn)) {
+                columnIdentique = false;
+            }
+            if (!columnIdentique) {
+                //méthode qui fera : ALTER TABLE MODIFY {+mpdrColumn+}...
+            }
+
+            if (compareSequencesName(mpdrColumn, dbColumn)) {
+
+            }
             return true;
         }
         return false;
@@ -115,14 +139,14 @@ public class OracleComparatorDb extends MpdrDbComparator{
     }
 
     public boolean compareSequencesName(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
-        if(mpdrColumn.getMPDRSequence()!=null && dbColumn.getMPDRSequence()!=null) {
+        if (mpdrColumn.getMPDRSequence() != null && dbColumn.getMPDRSequence() != null) {
             return mpdrColumn.getMPDRSequence().getName().equals(dbColumn.getMPDRSequence().getName());
         }
         return false;
     }
 
     public void compareTriggers(MPDRBoxTriggers mpdrBoxTriggers, MPDRBoxTriggers dbBoxTriggers) {
-        if (mpdrBoxTriggers.getAllTriggers()!=null && dbBoxTriggers.getAllTriggers()!=null) {
+        if (mpdrBoxTriggers.getAllTriggers() != null && dbBoxTriggers.getAllTriggers() != null) {
             for (MPDRTrigger mpdrTrigger : mpdrBoxTriggers.getAllTriggers()) {
                 for (MPDRTrigger dbTrigger : dbBoxTriggers.getAllTriggers()) {
                     compareTriggerName(mpdrTrigger, dbTrigger);
