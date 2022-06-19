@@ -54,15 +54,12 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
         return mpdrGenerateSQL.generate();
     }
 
-    //TODO VINCENT
-    // A voir comment récupérer la connection
     public String treatSync(MVCCDWindow owner) throws SQLException {
         ConConnection conConnection = ConnectionsService.getConConnectionByLienProg(this.getConnectionLienProg());
         OracleSyncGeneratorSQL oracleSyncGeneratorSQL = new OracleSyncGeneratorSQL(this,new OracleComparatorDb(this, conConnection, ConnectionsService.actionTestIConConnectionOrConnector(owner,
                 true,
                 conConnection)));
         return oracleSyncGeneratorSQL.sync();
-        //return "Script de synchronisation à mettre en place";
     }
 
     @Override

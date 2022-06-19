@@ -6,6 +6,7 @@ import consolidationMpdrDb.fetcher.oracle.DbFetcherOracle;
 import mpdr.*;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.tapis.*;
+import mpdr.tapis.oracle.MPDROracleBoxPackages;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -35,6 +36,11 @@ public class OracleComparatorDb extends MpdrDbComparator {
     private List<MPDRFK> mpdrfksToDrop = new ArrayList<>();
     private List<MPDRSequence> mpdrSequencesToCreate = new ArrayList<>();
     private List<MPDRSequence> mpdrSequencesToDrop = new ArrayList<>();
+    private List<MPDRTrigger> mpdrTriggersToCreate = new ArrayList<>();
+    private List<MPDRTrigger> mpdrTriggersToDrop = new ArrayList<>();
+    private List<MPDRPackage> mpdrPackagesToCreateOrReplace = new ArrayList<>();
+    private List<MPDRPackage> mpdrPackagesToDrop = new ArrayList<>();
+
 
     private MPDROracleModel mpdrModel;
     private MPDROracleModel mpdrDbModelOracle;
@@ -65,7 +71,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
                 compareColumns(mpdrTable.getMPDRColumns(), dbTable.getMPDRColumns());
                 compareUnique(mpdrTable, dbTable);
                 compareTriggers(mpdrTable.getMPDRBoxTriggers(), dbTable.getMPDRBoxTriggers());
-                //comparePackages((MPDROracleBoxPackages) mpdrTable.getMPDRContTAPIs().getMPDRBoxPackages(), (MPDROracleBoxPackages) dbTable.getMPDRContTAPIs().getMPDRBoxPackages());
+                comparePackages((MPDROracleBoxPackages) mpdrTable.getMPDRContTAPIs().getMPDRBoxPackages(), (MPDROracleBoxPackages) dbTable.getMPDRContTAPIs().getMPDRBoxPackages());
             }
         }
     }
@@ -213,38 +219,40 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public void compareColumnInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn){
+    public void compareColumnInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         compareColumnDropInitValue(mpdrColumn, dbColumn);
         compareColumnAddOrModifyInitValue(mpdrColumn, dbColumn);
     }
 
-    public void compareColumnDropInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn){
-        if(mpdrColumn.getInitValue().equals("") && dbColumn.getInitValue()!=null){
+    public void compareColumnDropInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+        if (mpdrColumn.getInitValue().equals("") && dbColumn.getInitValue() != null) {
             mpdrColumnsToModifyDropDefault.add(mpdrColumn);
         }
     }
 
     //L'ajout ou la modification de la clause ont la même instruction SQL
-    public void compareColumnAddOrModifyInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn){
-        if(!mpdrColumn.getInitValue().equals("")) {
+    public void compareColumnAddOrModifyInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+        if (!mpdrColumn.getInitValue().equals("")) {
             if (!mpdrColumn.getInitValue().toUpperCase().equals(dbColumn.getInitValue().toUpperCase())) {
                 mpdrColumnsToModifyAddOrModifyDefault.add(mpdrColumn);
             }
         }
     }
 
-    public void compareUnique(MPDRTable mpdrTable, MPDRTable dbTable){
+    public void compareUnique(MPDRTable mpdrTable, MPDRTable dbTable) {
         compareUniqueToCreate(mpdrTable, dbTable);
         compareUniqueToDrop(mpdrTable, dbTable);
     }
-    public void compareUniqueToDrop(MPDRTable mpdrTable, MPDRTable dbTable){
+
+    public void compareUniqueToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
         for (MPDRUnique dbUnique : dbTable.getMPDRUniques()) {
             if (!mpdrTable.getMPDRUniques().contains(dbUnique.getName())) {
                 mpdrUniquesToDrop.add(dbUnique);
             }
         }
     }
-    public void compareUniqueToCreate(MPDRTable mpdrTable, MPDRTable dbTable){
+
+    public void compareUniqueToCreate(MPDRTable mpdrTable, MPDRTable dbTable) {
         for (MPDRUnique mpdrUnique : mpdrTable.getMPDRUniques()) {
             if (!dbTable.getMPDRUniques().contains(mpdrUnique.getName())) {
                 mpdrUniquesToCreate.add(mpdrUnique);
@@ -275,36 +283,54 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-
-    public void compareTriggers(MPDRBoxTriggers mpdrBoxTriggers, MPDRBoxTriggers dbBoxTriggers) {
+    public void compareTriggerToCreateOrReplace(MPDRBoxTriggers mpdrBoxTriggers){
+        if (mpdrBoxTriggers.getAllTriggers() != null ) {
+            for (MPDRTrigger trigger : mpdrBoxTriggers.getAllTriggers()) {
+                mpdrTriggersToCreate.add(trigger);
+            }
+        }
+    }
+    public void compareTriggersToDrop(MPDRBoxTriggers mpdrBoxTriggers, MPDRBoxTriggers dbBoxTriggers) {
         if (mpdrBoxTriggers.getAllTriggers() != null && dbBoxTriggers.getAllTriggers() != null) {
-            for (MPDRTrigger mpdrTrigger : mpdrBoxTriggers.getAllTriggers()) {
-                for (MPDRTrigger dbTrigger : dbBoxTriggers.getAllTriggers()) {
-                    compareTriggerName(mpdrTrigger, dbTrigger);
+            for (MPDRTrigger trigger : dbBoxTriggers.getAllTriggers()) {
+                if(mpdrBoxTriggers.getAllTriggers().contains(trigger.getName())){
+                    mpdrTriggersToDrop.add(trigger);
                 }
             }
         }
     }
 
-    public boolean compareTriggerName(MPDRTrigger mpdrTrigger, MPDRTrigger dbTrigger) {
-        return mpdrTrigger.getName().toUpperCase().equals(dbTrigger.getName());
+
+    public void compareTriggers(MPDRBoxTriggers mpdrBoxTriggers, MPDRBoxTriggers dbBoxTriggers) {
+        compareTriggerToCreateOrReplace(mpdrBoxTriggers);
+        compareTriggersToDrop(mpdrBoxTriggers, dbBoxTriggers);
+
     }
 
-    //TODO VINCENT
-    // Ne fonctionne pas car mpdrOracleBoxPackages est nullpointer car non créer par ADM, est-ce parce que les packages ne sont pas terminé
-    // -> pas forcément de package ou trigger si l'option tapis n'est pas sélectionnée dans les préf de projet
-    /*
     private void comparePackages(MPDROracleBoxPackages mpdrOracleBoxPackages, MPDROracleBoxPackages dbOracleBoxPackages) {
-        for (MPDRPackage mpdrPackage : mpdrOracleBoxPackages.getAllPackages()) {
-            for (MPDRPackage dbPackage : dbOracleBoxPackages.getAllPackages()) {
-                comparePackagesName(mpdrPackage, dbPackage);
+        comparePackagesToCreateOrReplace(mpdrOracleBoxPackages);
+        comparePackagesToDrop(mpdrOracleBoxPackages, dbOracleBoxPackages);
+    }
+
+    private void comparePackagesToCreateOrReplace(MPDROracleBoxPackages mpdrOracleBoxPackages) {
+        if (mpdrOracleBoxPackages != null) {
+            for (MPDRPackage mpdrPackage : mpdrOracleBoxPackages.getAllPackages()) {
+                mpdrPackagesToCreateOrReplace.add(mpdrPackage);
             }
         }
     }
-*/
-    private boolean comparePackagesName(MPDRPackage mpdrPackage, MPDRPackage dbPackage) {
-        return mpdrPackage.getName().equals(dbPackage.getName());
+
+    private void comparePackagesToDrop(MPDROracleBoxPackages mpdrOracleBoxPackages, MPDROracleBoxPackages dbOracleBoxPackages) {
+        if (mpdrOracleBoxPackages != null && dbOracleBoxPackages != null) {
+            for (MPDRPackage dbPackage : dbOracleBoxPackages.getAllPackages()) {
+                //TODO NE FONCTIONNE PAS CAR LE GETCHILDS EST FAUX
+                if (!mpdrOracleBoxPackages.getChilds().contains(dbPackage.getName())) {
+                    mpdrPackagesToDrop.add(dbPackage);
+                }
+            }
+        }
     }
+
 
     public void generateSQLScriptForTableToCreate() {
         for (MPDRTable mpdrTable : mpdrTablesToCreate) {

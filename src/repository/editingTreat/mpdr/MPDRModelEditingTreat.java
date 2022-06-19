@@ -67,14 +67,14 @@ public class MPDRModelEditingTreat extends EditingTreat {
         MPDRModel mpdrModel = (MPDRModel) mvccdElement;
 
         boolean ok = true;
-        String generateSQLCode = "";
+        String syncSQLCode = "";
         try {
             //A faire VC : créer un message spécifique
             String message = MessagesBuilder.getMessagesProperty("generate.sql.mpdrtosql.start",
                     new String[]{mpdrModel.getNamePath()});
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
 
-            generateSQLCode = mpdrModel.treatSync(owner);
+            syncSQLCode = mpdrModel.treatSync(owner);
 
         } catch (Exception e){
             //A faire VC : mettre ce message en property
@@ -85,7 +85,7 @@ public class MPDRModelEditingTreat extends EditingTreat {
         TreatmentService.treatmentFinish(owner, mvccdElement, ok,
                 getPropertyTheElement(), "generate.sql.mpdrtosql.ok", "generate.sql.mpdrtosql.abort") ;
         if (ok) {
-            SQLViewer fen = new SQLViewer(mpdrModel, generateSQLCode);
+            SQLViewer fen = new SQLViewer(mpdrModel, syncSQLCode);
             fen.setVisible(true);
         }
         return ok ;

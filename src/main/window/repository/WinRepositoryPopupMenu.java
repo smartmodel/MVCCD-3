@@ -329,7 +329,6 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
             }
 
             //TODO VINCENT
-            //créer une méthode de traitement pour treatSync à la place de treatGenerate
             if (node.getUserObject() instanceof MPDRModel) {
                 JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(
                         "menu.generate.sql.from.mpdr.and.sgbdr"));
@@ -338,8 +337,9 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         try {
-                            new WaitingSyncViewer();
+                            WaitingSyncViewer waitingSyncViewer = new WaitingSyncViewer();
                             new MPDRModelEditingTreat().treatSyncMpdrDb(mvccdWindow, mvccdElement);
+                            waitingSyncViewer.setVisible(false);
                         } catch (Exception e){
                             exceptionUnhandled(e, mvccdElement, "repository.menu.exception.generate.sql");
                         }

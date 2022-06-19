@@ -5,6 +5,7 @@ import generatorsql.generator.oracle.MPDROracleGenerateSQL;
 import generatorsql.generator.oracle.MPDROracleGenerateSQLTable;
 import generatorsql.generator.oracle.MPDROracleGenerateSQLTableColumn;
 import generatorsql.generator.oracle.MPDROracleGenerateSQLUnique;
+import messages.MessagesBuilder;
 import mpdr.*;
 import preferences.Preferences;
 
@@ -23,6 +24,7 @@ public class OracleSyncGeneratorSQL {
         this.mpdrOracleGenerateSQLTableColumn = new MPDROracleGenerateSQLTableColumn(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLUnique = new MPDROracleGenerateSQLUnique(mpdrOracleGenerateSQL);
         this.oracleComparatorDb = oracleComparatorDb;
+        this.oracleComparatorDb.compare();
     }
 
     public String delimiter(){
@@ -35,6 +37,7 @@ public class OracleSyncGeneratorSQL {
     public String sync(){
         StringBuilder generateSQLCodeSync = new StringBuilder();
         String message ; //A voir si nécessaire
+        message = MessagesBuilder.getMessagesProperty("generate.sql.drop.tables");
         generateSQLCodeSync.append(syncTablesToDrop());
         generateSQLCodeSync.append(syncUniqueToDrop());
         generateSQLCodeSync.append(syncColumnsToDrop());
