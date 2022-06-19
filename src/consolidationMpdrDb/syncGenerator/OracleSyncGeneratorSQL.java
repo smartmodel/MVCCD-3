@@ -40,6 +40,7 @@ public class OracleSyncGeneratorSQL {
         generateSQLCodeSync.append(syncColumnsToDrop());
         generateSQLCodeSync.append(syncTablesToCreate());
         generateSQLCodeSync.append(syncColumnsToAdd());
+        generateSQLCodeSync.append(syncColumnsToModify());
         generateSQLCodeSync.append(syncUniqueToAdd());
         System.out.println(generateSQLCodeSync);
         return generateSQLCodeSync.toString();
@@ -77,6 +78,16 @@ public class OracleSyncGeneratorSQL {
         StringBuilder code=new StringBuilder();
         for (MPDRColumn mpdrColumn : oracleComparatorDb.getMpdrColumnsToAdd()) {
             code.append(mpdrOracleGenerateSQLTableColumn.generateSQLAddColumn(mpdrColumn));
+            code.append(delimiter());
+        }
+
+        return code.toString();
+    }
+
+    public String syncColumnsToModify(){
+        StringBuilder code=new StringBuilder();
+        for (MPDRColumn mpdrColumn : oracleComparatorDb.getMpdrColumnsToModify()) {
+            code.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumn(mpdrColumn));
             code.append(delimiter());
         }
 

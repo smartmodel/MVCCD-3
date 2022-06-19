@@ -95,6 +95,7 @@ public abstract class MPDRGenerateSQLTableColumn {
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_NOTNULL, codeOption);
 
         // Option default value
+        //TODO A vérifier si ca fonctionne
         codeOption = "";
         if (StringUtils.isNotEmpty(mpdrColumn.getInitValue())) {
             codeOption =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirOptionsDB(),
@@ -111,8 +112,23 @@ public abstract class MPDRGenerateSQLTableColumn {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_COLUMN,
                 getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrColumn.getParent().getName());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_UNIQUE_NAME_WORD, mpdrColumn.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrColumn.getParent().getParent().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
+
+        return generateSQLCode;
+    }
+
+    public String generateSQLModifyColumn(MPDRColumn mpdrColumn) {
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+                Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN,
+                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrColumn.getParent().getParent().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
+
+        // Datatype
+        String datatypeName = MDDatatypeService.convertMPDRLienProgToName(getMPDRGenerateSQL().mpdrModel.getDb(), mpdrColumn.getDatatypeLienProg());
+        String datatypeSizeScale = generateDatatypeSizeScale(mpdrColumn);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_DATATYPE_WORD, datatypeName + datatypeSizeScale);
 
         return generateSQLCode;
     }

@@ -1193,7 +1193,8 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATE_ALTER_TABLE_CREATE_UNIQUE = "alterTableCreateUnique.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_UNIQUE = "alterTableDropUnique.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_COLUMN = "alterTableDropColumn.txt";
-  public static String TEMPLATE_ALTER_TABLE_ADD_COLUMN = "alterTableADDColumn.txt";
+  public static String TEMPLATE_ALTER_TABLE_ADD_COLUMN = "alterTableAddColumn.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN = "alterTableModifyColumn.txt";
 
 
 

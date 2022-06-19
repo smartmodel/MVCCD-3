@@ -29,6 +29,11 @@ public class MPDROracleGenerateSQLTableColumn extends MPDRGenerateSQLTableColumn
         return generateSQLCode;
     }
 
+    public String generateSQLModifyColumn(MPDRColumn mpdrColumn) {
+        String generateSQLCode = super.generateSQLModifyColumn(mpdrColumn);
+        return generateSQLCode;
+    }
+
     @Override
     protected boolean pkGenerateIdentity() {
         return  PreferencesManager.instance().preferences().getMPDRORACLE_PK_GENERATE() == MPDRDBPK.IDENTITY;
