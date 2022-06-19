@@ -1189,7 +1189,11 @@ public class Preferences extends MVCCDElement {
   public static String FETCHER_ORACLE_REQUETE_SQL_USER_TRIGGERS = "SELECT TRIGGER_NAME FROM USER_TRIGGERS";
   public static String FETCHER_ORACLE_TRIGGER_NAME = "TRIGGER_NAME";
 
-
+  public static String SQL_MARKER_SEPARATOR_ARGUMENTS_END = ";";
+  public static String TEMPLATE_ALTER_TABLE_CREATE_UNIQUE = "alterTableCreateUnique.txt";
+  public static String TEMPLATE_ALTER_TABLE_DROP_UNIQUE = "alterTableDropUnique.txt";
+  public static String TEMPLATE_ALTER_TABLE_DROP_COLUMN = "alterTableDropColumn.txt";
+  public static String TEMPLATE_ALTER_TABLE_ADD_COLUMN = "alterTableADDColumn.txt";
 
 
 

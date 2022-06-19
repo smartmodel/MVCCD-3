@@ -62,8 +62,8 @@ public class MPDRModelEditingTreat extends EditingTreat {
    }
 
    //TODO VINCENT
-    //A implémenter
-    public boolean treatSync(MVCCDWindow owner, MVCCDElement mvccdElement) {
+   // A implémenter
+    public boolean treatSyncMpdrDb(MVCCDWindow owner, MVCCDElement mvccdElement) {
         MPDRModel mpdrModel = (MPDRModel) mvccdElement;
 
         boolean ok = true;
@@ -74,7 +74,7 @@ public class MPDRModelEditingTreat extends EditingTreat {
                     new String[]{mpdrModel.getNamePath()});
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
 
-            generateSQLCode = mpdrModel.treatSync();
+            generateSQLCode = mpdrModel.treatSync(owner);
 
         } catch (Exception e){
             //A faire VC : mettre ce message en property

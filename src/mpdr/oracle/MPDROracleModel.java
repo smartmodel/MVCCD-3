@@ -1,9 +1,15 @@
 package mpdr.oracle;
 
+import connections.ConConnection;
+import connections.services.ConnectionsService;
+import consolidationMpdrDb.RecuperationConnectionDB;
+import consolidationMpdrDb.comparator.oracle.OracleComparatorDb;
+import consolidationMpdrDb.syncGenerator.OracleSyncGeneratorSQL;
 import datatypes.MPDRDatatype;
 import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.oracle.MPDROracleGenerateSQL;
 import main.MVCCDElementFactory;
+import main.MVCCDWindow;
 import mdr.MDRCaseFormat;
 import mdr.services.MDRModelService;
 import mldr.MLDRColumn;
@@ -17,6 +23,8 @@ import preferences.PreferencesManager;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDROracleDatatype;
 
+import java.sql.SQLException;
+
 public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IMPDRModelRequirePackage {
 
     private  static final long serialVersionUID = 1000;
@@ -27,10 +35,6 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
         super(parent, name, MPDRDB.ORACLE);
     }
 
-    //TODO VINCENT
-    //public MPDROracleModel(){};
-
-
     @Override
     public MPDROracleTable createTable(MLDRTable mldrTable){
         MPDROracleTable newTable = MVCCDElementFactory.instance().createMPDROracleTable(
@@ -39,12 +43,6 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
         return newTable;
     }
 
-    //TODO VINCENT
-    /*
-    public MPDROracleTable createTable(String tableName){
-        return null;
-    }
-*/
     @Override
     public MPDRDatatype fromMLDRDatatype(MLDRColumn mldrColumn) {
         return MLDRTransformToMPDROracleDatatype.fromMLDRDatatype(mldrColumn);
@@ -57,9 +55,14 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
     }
 
     //TODO VINCENT
-    public String treatSync(){
-
-        return "Script de synchronisation à mettre en place";
+    // A voir comment récupérer la connection
+    public String treatSync(MVCCDWindow owner) throws SQLException {
+        ConConnection conConnection = ConnectionsService.getConConnectionByLienProg(this.getConnectionLienProg());
+        OracleSyncGeneratorSQL oracleSyncGeneratorSQL = new OracleSyncGeneratorSQL(this,new OracleComparatorDb(this, conConnection, ConnectionsService.actionTestIConConnectionOrConnector(owner,
+                true,
+                conConnection)));
+        return oracleSyncGeneratorSQL.sync();
+        //return "Script de synchronisation à mettre en place";
     }
 
     @Override

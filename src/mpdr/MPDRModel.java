@@ -3,6 +3,7 @@ package mpdr;
 import datatypes.MPDRDatatype;
 import main.MVCCDElementFactory;
 import main.MVCCDManager;
+import main.MVCCDWindow;
 import mdr.MDRCaseFormat;
 import mdr.MDRElement;
 import mdr.MDRModel;
@@ -18,6 +19,7 @@ import mpdr.interfaces.IMPDRRelation;
 import mpdr.services.MPDRModelService;
 import project.ProjectElement;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
@@ -91,7 +93,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     public abstract String treatGenerate() ;
 
     //TODO VINCENT
-    public abstract String treatSync();
+    public abstract String treatSync(MVCCDWindow owner) throws SQLException;
 
 
     //TODO-1 A suppimer si la solution du listner est possible

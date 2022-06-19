@@ -8,6 +8,7 @@ import connections.ConDBMode;
 import connections.services.ConnectionsService;
 import console.ViewLogsManager;
 import console.WarningLevel;
+import consolidationMpdrDb.syncGenerator.OracleSyncGeneratorSQL;
 import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
 import generatorsql.MPDRGenerateSQLUtil;
@@ -389,6 +390,8 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                         OracleComparatorDb oracleComparatorDb =
                                 new OracleComparatorDb((MPDROracleModel)this.mpdrModel, sqlViewer.getConConnection(), connection);
                         oracleComparatorDb.compare();
+                        OracleSyncGeneratorSQL oracleSyncGeneratorSQL = new OracleSyncGeneratorSQL(mpdrModel, oracleComparatorDb);
+                        oracleSyncGeneratorSQL.sync();
 
 
                         actionTestConnection(false);

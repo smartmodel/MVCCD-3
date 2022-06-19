@@ -3,6 +3,7 @@ package mpdr.mysql;
 import datatypes.MPDRDatatype;
 import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
+import main.MVCCDWindow;
 import mdr.MDRCaseFormat;
 import mdr.services.MDRModelService;
 import mldr.MLDRColumn;
@@ -14,6 +15,8 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDRMySQLDatatype;
+
+import java.sql.SQLException;
 
 public class MPDRMySQLModel extends MPDRModel implements IMPDRMySQLElement {
 
@@ -39,6 +42,11 @@ public class MPDRMySQLModel extends MPDRModel implements IMPDRMySQLElement {
 
     public String treatGenerate() {
         throw new CodeApplException("La génération SQL pour " + this.getDb().getText() + " n'est pas encore développée");
+    }
+
+    @Override
+    public String treatSync(MVCCDWindow owner) throws SQLException {
+        return null;
     }
 
     //TODO VINCENT

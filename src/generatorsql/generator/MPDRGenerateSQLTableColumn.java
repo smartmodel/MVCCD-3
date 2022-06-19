@@ -67,6 +67,56 @@ public abstract class MPDRGenerateSQLTableColumn {
         return generateSQLCode;
     }
 
+    public String generateSQLAddColumn(MPDRColumn mpdrColumn) {
+        //TODO VINCENT A voir si on veut également générer le not null et default directement dans cette méthode - Normalement oui!
+        //L'option identity n'est pas générée lors d'un ajout de colonne
+
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+                Preferences.TEMPLATE_ALTER_TABLE_ADD_COLUMN,
+                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrColumn.getParent().getParent().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
+
+        // Datatype
+        String datatypeName = MDDatatypeService.convertMPDRLienProgToName(getMPDRGenerateSQL().mpdrModel.getDb(), mpdrColumn.getDatatypeLienProg());
+        String datatypeSizeScale = generateDatatypeSizeScale(mpdrColumn);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_DATATYPE_WORD, datatypeName + datatypeSizeScale);
+
+        //Options
+        String codeOption = "";
+
+        // Options not null
+        codeOption = "";
+        if (mpdrColumn.isMandatory()) {
+            codeOption =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirOptionsDB(),
+                    Preferences.TEMPLATE_OPTION_COLUMN_NOTNULL,
+                    getMPDRGenerateSQL().mpdrModel);
+        }
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_NOTNULL, codeOption);
+
+        // Option default value
+        codeOption = "";
+        if (StringUtils.isNotEmpty(mpdrColumn.getInitValue())) {
+            codeOption =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirOptionsDB(),
+                    Preferences.TEMPLATE_OPTION_COLUMN_DEFAULTVALUE,
+                    getMPDRGenerateSQL().mpdrModel);
+            codeOption = getMPDRGenerateSQL().replaceKeyValueWithSpecific(codeOption, Preferences.MDR_DEFAULT_VALUE_WORD, mpdrColumn.getInitValue());
+        }
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_OPTION_COLUMN_DEFAULTVALUE, codeOption);
+
+        return generateSQLCode;
+    }
+
+    public String generateSQLDropColumn(MPDRColumn mpdrColumn) {
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+                Preferences.TEMPLATE_ALTER_TABLE_DROP_COLUMN,
+                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrColumn.getParent().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_UNIQUE_NAME_WORD, mpdrColumn.getName());
+
+        return generateSQLCode;
+    }
+
     protected abstract boolean pkGenerateIdentity();
 
     public abstract MPDRGenerateSQL getMPDRGenerateSQL() ;
