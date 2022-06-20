@@ -8,7 +8,7 @@ import mpdr.MPDRConstraintCustomJnal;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
 import mpdr.tapis.MPDRColumnJnal;
-import mpdr.tapis.MPDREnumColumnsJnal;
+import mpdr.tapis.MPDREnumColumnsJnalTech;
 import mpdr.tapis.MPDRTableJnal;
 import stereotypes.Stereotype;
 import stereotypes.StereotypesManager;
@@ -37,8 +37,8 @@ public class MLDRTransformToColumnsJnal {
 
     void transformColumnsJnal() {
         // Colonnes spécifiques à la table de journalisation
-        for (MPDREnumColumnsJnal mpdrEnumColumnsJnal : MPDREnumColumnsJnal.getValuesByDb(mpdrModel.getDb())){
-            MPDRColumnJnal mpdrColumnJnal = transformColumnJnalTechnical(mpdrEnumColumnsJnal);
+        for (MPDREnumColumnsJnalTech mpdrEnumColumnsJnalTech : MPDREnumColumnsJnalTech.getValuesByDb(mpdrModel.getDb())){
+            MPDRColumnJnal mpdrColumnJnal = transformColumnJnalTechnical(mpdrEnumColumnsJnalTech);
         }
         
         // Colonnes de la table à journaliser
@@ -51,22 +51,22 @@ public class MLDRTransformToColumnsJnal {
     }
 
 
-    private MPDRColumnJnal transformColumnJnalTechnical(MPDREnumColumnsJnal mpdrEnumColumnsJnal) {
+    private MPDRColumnJnal transformColumnJnalTechnical(MPDREnumColumnsJnalTech mpdrEnumColumnsJnalTech) {
 
         Stereotype stereotype = StereotypesManager.instance().stereotypes().getStereotypeByLienProg(
-                MPDRColumnJnal.class.getName(), mpdrEnumColumnsJnal.getStereotypeLienprog());
-        MPDRColumnJnal mpdrColumnJnal = mpdrTableJnal.getMPDRColumnJnalByStereotypeJnal(stereotype);
+                MPDRColumnJnal.class.getName(), mpdrEnumColumnsJnalTech.getStereotypeLienprog());
+        MPDRColumnJnal mpdrColumnJnal = mpdrTableJnal.getMPDRColumnJnalTechByStereotypeJnal(stereotype);
         if (mpdrColumnJnal == null){
-            mpdrColumnJnal= mpdrTableJnal.createColumnJnal(mpdrConstraintCustomJnal, stereotype);
+            mpdrColumnJnal= mpdrTableJnal.createColumnJnalTech(mpdrConstraintCustomJnal, stereotype);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrColumnJnal);
         }
-        modifyColumnTechnical(mpdrEnumColumnsJnal, mpdrColumnJnal );
+        modifyColumnTechnical(mpdrEnumColumnsJnalTech, mpdrColumnJnal );
         mpdrColumnJnal.setIteration(mldrTransform.getIteration());
         return mpdrColumnJnal;
     }
 
-    private void modifyColumnTechnical(MPDREnumColumnsJnal mpdrEnumColumnsJnal, MPDRColumnJnal mpdrColumnJnal ) {
-        String name = mpdrEnumColumnsJnal.getName();
+    private void modifyColumnTechnical(MPDREnumColumnsJnalTech mpdrEnumColumnsJnalTech, MPDRColumnJnal mpdrColumnJnal ) {
+        String name = mpdrEnumColumnsJnalTech.getName();
         // Casse selon les préférences de la DB
         MDRCaseFormat mdrCaseFormat = mpdrModel.getNamingFormatForDB();
         name = MDRModelService.caseFormat(name, mdrCaseFormat);
@@ -76,18 +76,18 @@ public class MLDRTransformToColumnsJnal {
 
 
         // Datatype
-        if (! UtilDivers.equalsWithNull(mpdrColumnJnal.getDatatypeLienProg(), mpdrEnumColumnsJnal.getDatatypeLienprog())){
-            mpdrColumnJnal.setDatatypeLienProg(mpdrEnumColumnsJnal.getDatatypeLienprog());
+        if (! UtilDivers.equalsWithNull(mpdrColumnJnal.getDatatypeLienProg(), mpdrEnumColumnsJnalTech.getDatatypeLienprog())){
+            mpdrColumnJnal.setDatatypeLienProg(mpdrEnumColumnsJnalTech.getDatatypeLienprog());
         }
 
          // Size Datatype
-        if (! UtilDivers.equalsWithNull(mpdrColumnJnal.getSize(), mpdrEnumColumnsJnal.getSize())){
-            mpdrColumnJnal.setSize(mpdrEnumColumnsJnal.getSize());
+        if (! UtilDivers.equalsWithNull(mpdrColumnJnal.getSize(), mpdrEnumColumnsJnalTech.getSize())){
+            mpdrColumnJnal.setSize(mpdrEnumColumnsJnalTech.getSize());
         }
 
         // Contrainte de type
-        if (! UtilDivers.equalsWithNull(mpdrColumnJnal.getDatatypeConstraintLienProg(), mpdrEnumColumnsJnal.getDatatypeConstraintLienProg())){
-            mpdrColumnJnal.setDatatypeConstraintLienProg(mpdrEnumColumnsJnal.getDatatypeConstraintLienProg());
+        if (! UtilDivers.equalsWithNull(mpdrColumnJnal.getDatatypeConstraintLienProg(), mpdrEnumColumnsJnalTech.getDatatypeConstraintLienProg())){
+            mpdrColumnJnal.setDatatypeConstraintLienProg(mpdrEnumColumnsJnalTech.getDatatypeConstraintLienProg());
         }
     }
 
@@ -95,7 +95,7 @@ public class MLDRTransformToColumnsJnal {
     private MPDRColumnJnal transformColumnJnalDatas(MPDRColumn mpdrColumnSource) {
         MPDRColumnJnal mpdrColumnJnal = mpdrTableJnal.getMPDRColumnJnalByMPDRColumnSource(mpdrColumnSource);
         if (mpdrColumnJnal == null) {
-            mpdrColumnJnal = mpdrTableJnal.createColumnJnal(mpdrColumnSource);
+            mpdrColumnJnal = mpdrTableJnal.createColumnJnalDatas(mpdrColumnSource);
             MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrColumnJnal);
         }
 

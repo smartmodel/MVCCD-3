@@ -51,23 +51,22 @@ public class MPDROracleTableJnal extends MPDRTableJnal {
     }
 
     @Override
-    public MPDRColumnJnal createColumnJnal(MPDRConstraintCustomJnal mpdrConstraintCustomJnal,
-                                           Stereotype stereotype) {
+    public MPDRColumnJnal createColumnJnalTech(MPDRConstraintCustomJnal mpdrConstraintCustomJnal,
+                                               Stereotype stereotype) {
 
-        MPDROracleColumnJnal newColumn = MVCCDElementFactory.instance().createMPDROracleColumnJnal(
+        MPDROracleColumnJnalTech newColumn = MVCCDElementFactory.instance().createMPDROracleColumnJnalTech(
                 getMDRContColumns(), mpdrConstraintCustomJnal, stereotype);
 
         return newColumn;
     }
 
     @Override
-    public MPDRColumnJnal createColumnJnal(MPDRColumn mpdrColumnSource) {
+    public MPDRColumnJnal createColumnJnalDatas(MPDRColumn mpdrColumnSource) {
 
-        MPDROracleColumnJnal newColumn = MVCCDElementFactory.instance().createMPDROracleColumnJnal(
+        MPDROracleColumnJnalDatas newColumn = MVCCDElementFactory.instance().createMPDROracleColumnJnalDatas(
                 getMDRContColumns(), mpdrColumnSource);
 
         return newColumn;
     }
-
 
 }

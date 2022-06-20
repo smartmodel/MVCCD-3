@@ -6,12 +6,14 @@ import mpdr.MPDRCheck;
 import mpdr.MPDRColumn;
 import mpdr.MPDRSequence;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.tapis.interfaces.IMPDRColumnForTAPIs;
+import mpdr.tapis.services.MPDRColumnAuditService;
 import project.ProjectElement;
 import stereotypes.Stereotype;
 
 import java.util.ArrayList;
 
-public abstract class MPDRColumnAudit extends MPDRColumn implements IMPDRElementWithSource {
+public abstract class MPDRColumnAudit extends MPDRColumn implements IMPDRElementWithSource, IMPDRColumnForTAPIs {
 
     private  static final long serialVersionUID = 1000;
 
@@ -50,6 +52,11 @@ public abstract class MPDRColumnAudit extends MPDRColumn implements IMPDRElement
     @Override
     public MPDRCheck createMPDRCheckDatatype(MLDRColumn mldrColumn) {
         return null;
+    }
+
+
+    public int compareToDefault(MPDRColumnAudit other) {
+        return MPDRColumnAuditService.compareToDefault(this, other);
     }
 
 }

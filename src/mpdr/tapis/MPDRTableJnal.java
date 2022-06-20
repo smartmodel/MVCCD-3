@@ -9,8 +9,11 @@ import mdr.MDRTableOrView;
 import mldr.interfaces.IMLDRElement;
 import mpdr.MPDRColumn;
 import mpdr.MPDRConstraintCustomJnal;
+import mpdr.interfaces.IMPDRColumn;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.interfaces.IMPDRTable;
+import mpdr.services.IMPDRColumnService;
 import mpdr.tapis.services.MPDRTableJnalService;
 import preferences.Preferences;
 import preferences.PreferencesManager;
@@ -21,7 +24,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public abstract class MPDRTableJnal extends MDRTableOrView implements IMPDRElement, IMPDRElementWithSource {
+public abstract class MPDRTableJnal extends MDRTableOrView implements IMPDRElement, IMPDRElementWithSource, IMPDRTable {
 
     private  static final long serialVersionUID = 1000;
 
@@ -80,15 +83,33 @@ public abstract class MPDRTableJnal extends MDRTableOrView implements IMPDREleme
         return (MDElement) getMldrElementSource();
     }
 
-    public MPDRColumnJnal getMPDRColumnJnalByStereotypeJnal(Stereotype stereotypeJnal) {
-        return MPDRTableJnalService.getMPDRColumnJnalByStereotypeJnal(this, stereotypeJnal);
+    public MPDRColumnJnal getMPDRColumnJnalTechByStereotypeJnal(Stereotype stereotypeJnal) {
+        return MPDRTableJnalService.getMPDRColumnJnalTechByStereotypeJnal(this, stereotypeJnal);
     }
 
 
     public MPDRColumnJnal getMPDRColumnJnalByMPDRColumnSource(MPDRColumn mpdrColumnSource) {
-        return MPDRTableJnalService.getMPDRColumnJnalByMPDRColumnSource(this, mpdrColumnSource);
+        return MPDRTableJnalService.getMPDRColumnJnalDatasByMPDRColumnSource(this, mpdrColumnSource);
     }
 
-    public abstract MPDRColumnJnal createColumnJnal(MPDRConstraintCustomJnal mpdrConstraintCustomJnal, Stereotype stereotype);
-    public abstract MPDRColumnJnal createColumnJnal(MPDRColumn mpdrColumnSource);
+    public abstract MPDRColumnJnal createColumnJnalTech(MPDRConstraintCustomJnal mpdrConstraintCustomJnal, Stereotype stereotype);
+
+    public abstract MPDRColumnJnal createColumnJnalDatas(MPDRColumn mpdrColumnSource);
+
+
+    public ArrayList<IMPDRColumn> getIMPDRColumnsSortDefault() {
+        return IMPDRColumnService.to(getMDRColumnsSortDefault());
+    }
+
+    public ArrayList<MPDRColumnJnal> getMPDRColumnsJnal() {
+        return MPDRTableJnalService.getMPDRColumnsJnal(this);
+    }
+
+    public ArrayList<MPDRColumnJnalTech> getMPDRColumnsJnalTech() {
+        return MPDRTableJnalService.getMPDRColumnsJnalTech(this);
+    }
+
+    public ArrayList<MPDRColumnJnalDatas> getMPDRColumnsJnalDatas() {
+        return MPDRTableJnalService.getMPDRColumnsJnalDatas(this);
+    }
 }

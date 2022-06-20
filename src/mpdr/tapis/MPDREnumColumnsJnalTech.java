@@ -5,7 +5,7 @@ import preferences.Preferences;
 
 import java.util.ArrayList;
 
-public enum MPDREnumColumnsJnal {
+public enum MPDREnumColumnsJnalTech {
     DATETIME(MPDRDB.ORACLE, Preferences.MPDR_COLUMN_JNAL_DATETIME_NAME, Preferences.STEREOTYPE_JNAL_DATETIME_LIENPROG,
             Preferences.MPDRORACLEDATATYPE_TIMESTAMP_LIENPROG, null,
             Preferences.MCDDATATYPE_DATETIME_LIENPROG),
@@ -32,12 +32,12 @@ public enum MPDREnumColumnsJnal {
     private Integer size;
     private String datatypeConstraintLienProg;
 
-    MPDREnumColumnsJnal(MPDRDB mpdrDb,
-                        String name,
-                        String stereotypeLienprog,
-                        String datatypeLienprog,
-                        Integer size,
-                        String constraintDatatypeLienProg) {
+    MPDREnumColumnsJnalTech(MPDRDB mpdrDb,
+                            String name,
+                            String stereotypeLienprog,
+                            String datatypeLienprog,
+                            Integer size,
+                            String constraintDatatypeLienProg) {
 
         this.mpdrDb = mpdrDb;
         this.name = name;
@@ -71,9 +71,9 @@ public enum MPDREnumColumnsJnal {
         return datatypeConstraintLienProg;
     }
 
-    public static ArrayList<MPDREnumColumnsJnal> getValuesByDb (MPDRDB mpdrDB){
-        ArrayList<MPDREnumColumnsJnal> resultat = new ArrayList<MPDREnumColumnsJnal>();
-        for (MPDREnumColumnsJnal mpdrEnumColumnsAudit : values()){
+    public static ArrayList<MPDREnumColumnsJnalTech> getValuesByDb (MPDRDB mpdrDB){
+        ArrayList<MPDREnumColumnsJnalTech> resultat = new ArrayList<MPDREnumColumnsJnalTech>();
+        for (MPDREnumColumnsJnalTech mpdrEnumColumnsAudit : values()){
             if ( mpdrEnumColumnsAudit.mpdrDb == mpdrDB){
                 resultat.add(mpdrEnumColumnsAudit);
             }
@@ -81,8 +81,8 @@ public enum MPDREnumColumnsJnal {
         return resultat;
     }
 
-   public static MPDREnumColumnsJnal getByStereotypeLienProg(MPDRDB mpdrDB, String stereotypeLienprog){
-        for (MPDREnumColumnsJnal mpdrEnumColumnsAudit : getValuesByDb(mpdrDB)){
+   public static MPDREnumColumnsJnalTech getByStereotypeLienProg(MPDRDB mpdrDB, String stereotypeLienprog){
+        for (MPDREnumColumnsJnalTech mpdrEnumColumnsAudit : getValuesByDb(mpdrDB)){
             if (mpdrEnumColumnsAudit.name.equals(stereotypeLienprog)){
                 return mpdrEnumColumnsAudit;
             }

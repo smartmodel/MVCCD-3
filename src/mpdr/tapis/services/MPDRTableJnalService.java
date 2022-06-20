@@ -4,6 +4,8 @@ import main.MVCCDElement;
 import mdr.MDRContColumns;
 import mpdr.MPDRColumn;
 import mpdr.tapis.MPDRColumnJnal;
+import mpdr.tapis.MPDRColumnJnalDatas;
+import mpdr.tapis.MPDRColumnJnalTech;
 import mpdr.tapis.MPDRTableJnal;
 import stereotypes.Stereotype;
 
@@ -34,22 +36,41 @@ public class MPDRTableJnalService {
         return resultat;
     }
 
-    public static MPDRColumnJnal getMPDRColumnJnalByStereotypeJnal(MPDRTableJnal mpdrTableJnal, Stereotype stereotypeJnal) {
+    public static ArrayList<MPDRColumnJnalTech> getMPDRColumnsJnalTech(MPDRTableJnal mpdrTableJnal) {
+        ArrayList<MPDRColumnJnalTech> resultat = new ArrayList<MPDRColumnJnalTech>();
         for (MPDRColumnJnal mpdrColumnJnal : getMPDRColumnsJnal(mpdrTableJnal)){
-                if (mpdrColumnJnal.getSterereotypeJnal() == stereotypeJnal) {
-                    return mpdrColumnJnal;
-                }
+            if (mpdrColumnJnal instanceof MPDRColumnJnalTech) {
+                resultat.add((MPDRColumnJnalTech) mpdrColumnJnal);
+            }
+        }
+        return resultat ;
+    }
+
+    public static MPDRColumnJnalTech getMPDRColumnJnalTechByStereotypeJnal(MPDRTableJnal mpdrTableJnal, Stereotype stereotypeJnal) {
+        for (MPDRColumnJnalTech mpdrColumnJnalTech : getMPDRColumnsJnalTech(mpdrTableJnal)){
+            if (mpdrColumnJnalTech.getSterereotypeJnal() == stereotypeJnal) {
+                return mpdrColumnJnalTech;
+            }
         }
         return null ;
     }
 
-    public static MPDRColumnJnal getMPDRColumnJnalByMPDRColumnSource(MPDRTableJnal mpdrTableJnal,
-                                                                     MPDRColumn mpdrColumnSource) {
+
+    public static ArrayList<MPDRColumnJnalDatas> getMPDRColumnsJnalDatas(MPDRTableJnal mpdrTableJnal) {
+        ArrayList<MPDRColumnJnalDatas> resultat = new ArrayList<MPDRColumnJnalDatas>();
         for (MPDRColumnJnal mpdrColumnJnal : getMPDRColumnsJnal(mpdrTableJnal)){
-            if (mpdrColumnJnal.getMpdrColumnSource() != null ){
-                if (mpdrColumnJnal.getMpdrColumnSource() == mpdrColumnSource) {
-                    return (MPDRColumnJnal) mpdrColumnJnal;
-                }
+            if (mpdrColumnJnal instanceof MPDRColumnJnalDatas) {
+                resultat.add((MPDRColumnJnalDatas) mpdrColumnJnal);
+            }
+        }
+        return resultat ;
+    }
+
+    public static MPDRColumnJnal getMPDRColumnJnalDatasByMPDRColumnSource(MPDRTableJnal mpdrTableJnal,
+                                                                     MPDRColumn mpdrColumnSource) {
+        for (MPDRColumnJnalDatas mpdrColumnJnalDatas : getMPDRColumnsJnalDatas(mpdrTableJnal)){
+            if (mpdrColumnJnalDatas.getMpdrColumnSource() == mpdrColumnSource) {
+                return mpdrColumnJnalDatas;
             }
         }
         return null ;

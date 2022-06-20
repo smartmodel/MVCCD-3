@@ -1,67 +1,57 @@
 package mpdr.tapis;
 
+import mcd.MCDAttribute;
+import md.MDElement;
 import mdr.MDRColumn;
-import mpdr.MPDRColumn;
 import mpdr.MPDRTable;
+import mpdr.interfaces.IMPDRColumn;
 import mpdr.interfaces.IMPDRElement;
+import mpdr.tapis.interfaces.IMPDRColumnForTAPIs;
 import mpdr.tapis.interfaces.ITapisElementWithSource;
+import mpdr.tapis.services.MPDRColumnsJnalService;
 import project.ProjectElement;
-import stereotypes.Stereotype;
 
-import java.util.ArrayList;
-
-public abstract class MPDRColumnJnal extends MDRColumn implements IMPDRElement, ITapisElementWithSource {
+public abstract class MPDRColumnJnal extends MDRColumn implements IMPDRElement, IMPDRColumn, ITapisElementWithSource,
+        IMPDRColumnForTAPIs {
 
     private static final long serialVersionUID = 1000;
-
-    //protected MPDRDB mpdrDb;
-    //ArrayList<Stereotype> stereotypes = new ArrayList<Stereotype>();
     IMPDRElement mpdrElementSource ;
-    Stereotype sterereotypeJnal  ;
+
 
     // Constructeur pour les données techniques JN_xxx
-    public MPDRColumnJnal(ProjectElement parent,
-                          IMPDRElement mpdrElementSource,
-                          Stereotype stereotypeJnal) {
+    public MPDRColumnJnal(ProjectElement parent, IMPDRElement mpdrElementSource) {
         super(parent);
         this.mpdrElementSource = mpdrElementSource;
-        this.sterereotypeJnal = stereotypeJnal;
-    }
+   }
 
-    // Constructeur pour les données de datas journalisées
-    public MPDRColumnJnal(ProjectElement parent,
-                          IMPDRElement mpdrElementSource
-                          ) {
-        super(parent);
-        this.mpdrElementSource = mpdrElementSource;
 
-    }
-
-    public MPDRColumnJnal(ProjectElement parent, IMPDRElement mpdrElementSource, int id) {
-        super(parent, id);
-        this.mpdrElementSource = mpdrElementSource;
-    }
 
     @Override
     public IMPDRElement getMpdrElementSource() {
         return mpdrElementSource;
     }
 
+
     @Override
     public void setMpdrElementSource(IMPDRElement mpdrElementSource) {
         this.mpdrElementSource = mpdrElementSource;
     }
 
-    public Stereotype getSterereotypeJnal() {
-        return sterereotypeJnal;
+
+    @Override
+    public MDElement getMdElementSource() {
+        return null;
     }
 
-    public ArrayList<Stereotype> getStereotypes(){
-        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
-        resultat.add(sterereotypeJnal);
-        return resultat;
+    @Override
+    public MCDAttribute getMcdAttributeSource() {
+        return null;
     }
 
+    @Override
+    public boolean isPKForEntityIndependant() {
+        return false;
+    }
 
     public MPDRTableJnal getMPDRTableJnalAccueil(){
         return (MPDRTableJnal) getParent().getParent();
@@ -71,11 +61,12 @@ public abstract class MPDRColumnJnal extends MDRColumn implements IMPDRElement, 
         return (MPDRTable) getMPDRTableJnalAccueil().getParent().getParent();
     }
 
-    public MPDRColumn getMpdrColumnSource(){
-        if (getMpdrElementSource() instanceof MPDRColumn){
-            return (MPDRColumn) getMpdrElementSource();
-        }
-        return null;
+    public boolean isMandatory(){
+        return false;
+    }
+
+    public int compareToDefault(MPDRColumnJnal other) {
+        return MPDRColumnsJnalService.compareToDefault(this, other);
     }
 
 }

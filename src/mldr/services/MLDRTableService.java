@@ -3,8 +3,10 @@ package mldr.services;
 import main.MVCCDElement;
 import mcd.MCDElement;
 import mcd.MCDRelEnd;
+import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.MDRContColumns;
 import mdr.MDRContConstraints;
+import mdr.MDRUniqueNature;
 import mldr.*;
 
 import java.util.ArrayList;
@@ -53,10 +55,25 @@ public class MLDRTableService {
         return resultat;
     }
 
-    public static MLDRColumn getMLDRColumnByMCDElementSource(MLDRTable mldrTable, MCDElement mcdElement) {
+    public static MLDRColumn getMLDRColumnByMCDElementSource(MLDRTable mldrTable,
+                                                             MCDElement mcdElementSource) {
         for (MLDRColumn mldrColumn : getMLDRColumns(mldrTable)){
-            if (mldrColumn.getMcdElementSource() == mcdElement){
-                return mldrColumn;
+            if (mldrColumn.getMcdElementSource() == mcdElementSource){
+                    return mldrColumn;
+
+            }
+        }
+        return null ;
+    }
+
+    public static MLDRColumn getMLDRColumnByMCDElementSource(MLDRTable mldrTable,
+                                                             IMCDSourceMLDRTable imcdSourceMLDRTable,
+                                                             boolean columnPKTI) {
+        for (MLDRColumn mldrColumn : getMLDRColumns(mldrTable)){
+            if (mldrColumn.getMcdElementSource() == imcdSourceMLDRTable){
+                if (mldrColumn.isColumnPKTI() == columnPKTI) {
+                    return mldrColumn;
+                }
             }
         }
         return null ;
@@ -120,7 +137,22 @@ public class MLDRTableService {
     }
 
 
-    public static MLDRConstraintCustomSpecialized getMLDRSpecializeByMCDElementSource(MLDRTable mldrTable, MCDElement mcdElementSource) {
+    public static MLDRUnique getMLDRUniqueByMCDElementSourceAndNature(MLDRTable mldrTable,
+                                                                      MCDElement mcdElementSource,
+                                                                      MDRUniqueNature mdrUniqueNature) {
+        for (MLDRUnique mldrUnique : getMLDRUniques(mldrTable)){
+            boolean c1 = mldrUnique.getMcdElementSource() == mcdElementSource;
+            boolean c2 = mldrUnique.getMdrUniqueNature() == mdrUniqueNature;
+            if (c1 && c2){
+                return mldrUnique;
+            }
+        }
+        return null ;
+    }
+
+
+    public static MLDRConstraintCustomSpecialized getMLDRSpecializeByMCDElementSource(MLDRTable mldrTable,
+                                                                                      MCDElement mcdElementSource) {
         MDRContConstraints mdrContConstraints= getMDRContConstraints(mldrTable);
         for (MVCCDElement mvccdElement: mdrContConstraints.getChilds()) {
             if (mvccdElement instanceof MLDRConstraintCustomSpecialized) {
@@ -139,7 +171,8 @@ public class MLDRTableService {
         }
         return null ;
     }
-    public static MLDRConstraintCustomAudit getMLDRAuditByMCDElementSource(MLDRTable mldrTable, MCDElement mcdElementSource) {
+    public static MLDRConstraintCustomAudit getMLDRAuditByMCDElementSource(MLDRTable mldrTable,
+                                                                           MCDElement mcdElementSource) {
         MDRContConstraints mdrContConstraints= getMDRContConstraints(mldrTable);
         for (MVCCDElement mvccdElement: mdrContConstraints.getChilds()) {
             if (mvccdElement instanceof MLDRConstraintCustomAudit) {

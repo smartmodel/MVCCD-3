@@ -145,6 +145,11 @@ public class StereotypesCreateDefault {
                 MDRColumn.class.getName());
 
         createStereotype(
+                Preferences.STEREOTYPE_TI_SIM_PK_NAME,
+                Preferences.STEREOTYPE_TI_SIM_PK_LIENPROG,
+                MDRColumn.class.getName());
+
+        createStereotype(
                 Preferences.STEREOTYPE_PK_NAME,
                 Preferences.STEREOTYPE_PK_LIENPROG,
                 MDRConstraint.class.getName());

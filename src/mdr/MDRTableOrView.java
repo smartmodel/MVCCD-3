@@ -58,8 +58,8 @@ public abstract class MDRTableOrView extends MDRElement implements IMDRElementWi
         return resultat;
     }
 
-    public ArrayList<MDRColumn> getMDRColumnsSortDefault(){
-        return getMDRContColumns().getMDRColumnsSortDefault();
+    public ArrayList<? extends MDRColumn> getMDRColumnsSortDefault(){
+         return getMDRContColumns().getMDRColumnsSortDefault();
     }
 
 

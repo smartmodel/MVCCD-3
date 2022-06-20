@@ -11,11 +11,9 @@ import mdr.interfaces.IMDRParameter;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
-import mpdr.interfaces.IMPDRConstraint;
-import mpdr.interfaces.IMPDRElement;
-import mpdr.interfaces.IMPDRElementWithSource;
-import mpdr.interfaces.IMPDRTableOrView;
-import mpdr.services.MPDRColumnService;
+import mpdr.interfaces.*;
+import mpdr.services.IMPDRColumnService;
+import mpdr.services.MPDRColumnsService;
 import mpdr.services.MPDRConstraintService;
 import mpdr.services.MPDRTableService;
 import mpdr.tapis.*;
@@ -28,7 +26,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRElementWithSource, IMPDRTableOrView {
+public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRElementWithSource, IMPDRTableOrView, IMPDRTable {
 
     private static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;
@@ -105,15 +103,20 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     }
 
     public ArrayList<MPDRColumn> getMPDRColumns() {
-        return MPDRColumnService.to(getMDRColumns());
+        return MPDRColumnsService.to(getMDRColumns());
     }
 
 
     public ArrayList<MPDRColumnAudit> getMPDRColumnsAudit() {
-        return MPDRColumnService.getDRColumnsAudit(this);
+        return MPDRColumnsService.getDRColumnsAudit(this);
     }
+
     public ArrayList<MPDRColumn> getMPDRColumnsSortDefault() {
-        return MPDRColumnService.to(getMDRColumnsSortDefault());
+        return MPDRColumnsService.to(getMDRColumnsSortDefault());
+    }
+
+    public ArrayList<IMPDRColumn> getIMPDRColumnsSortDefault() {
+        return IMPDRColumnService.to(getMDRColumnsSortDefault());
     }
 
     public abstract MPDRColumn createColumn(MLDRColumn mldrColumn);

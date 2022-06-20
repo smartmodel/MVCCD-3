@@ -6,8 +6,10 @@ import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
 import main.MVCCDElementFactory;
 import mcd.*;
+import mcd.interfaces.IMCDSourceMLDRTable;
 import md.MDElement;
 import mdr.MDRTable;
+import mdr.MDRUniqueNature;
 import mdr.orderbuildnaming.MDROrderService;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRElementWithSource;
@@ -90,10 +92,14 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         return MLDRColumnService.to(getMDRColumnPKProper());
     }
 
-
     public MLDRColumn getMLDRColumnByMCDElementSource(MCDElement mcdElement){
         return MLDRTableService.getMLDRColumnByMCDElementSource(this, mcdElement);
     }
+
+    public MLDRColumn getMLDRColumnByMCDElementSource(IMCDSourceMLDRTable imcdSourceMLDRTable, boolean columnPKTI){
+        return MLDRTableService.getMLDRColumnByMCDElementSource(this, imcdSourceMLDRTable, columnPKTI);
+    }
+
 
     public ArrayList<MLDRColumn> getMLDRColumnsByMCDElementSource(MCDElement mcdElement){
         return MLDRTableService.getMLDRColumnsByMCDElementSource(this, mcdElement);
@@ -110,9 +116,10 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         return mldrColumn;
     }
 
-    public MLDRColumn createColumnPK(MCDEntity mcdEntity) {
+
+    public MLDRColumn createColumnPK(IMCDSourceMLDRTable imcdSourceMLDRTable) {
         MLDRColumn mldrColumn = MVCCDElementFactory.instance().createMLDRColumn(
-                getMDRContColumns(), mcdEntity);
+                getMDRContColumns(), (MCDElement) imcdSourceMLDRTable);
         return mldrColumn;
     }
 
@@ -163,11 +170,24 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
         return MLDRTableService.getMLDRUniqueByMCDElementSource(this, mcdElement);
     }
 
+    public MLDRUnique getMLDRUniqueByMCDElementSourceAndNature(MCDElement mcdElement, MDRUniqueNature mdrUniqueNature){
+        return MLDRTableService.getMLDRUniqueByMCDElementSourceAndNature(this, mcdElement, mdrUniqueNature);
+    }
+
+    public MLDRUnique createUnique(MCDElement mcdElement) {
+        MLDRUnique mldrUnique= MVCCDElementFactory.instance().createMLDRUnique(
+                (MLDRContConstraints) getMDRContConstraints(), mcdElement);
+        return mldrUnique;
+    }
+
+    /*
     public MLDRUnique createUnique(MCDUnicity mcdUnicity) {
         MLDRUnique mldrUnique= MVCCDElementFactory.instance().createMLDRUnique(
                 (MLDRContConstraints) getMDRContConstraints(), mcdUnicity);
         return mldrUnique;
     }
+
+     */
 
 
     public MLDRConstraintCustomSpecialized getMLDRSpecializeByMCDElementSource(MCDElement mcdElement){
@@ -252,7 +272,7 @@ public class MLDRTable extends MDRTable implements IMLDRElement, IMLDRElementWit
             if (StringUtils.isNotEmpty(mcdAssNNParentSource.getShortName())) {
                 return MDROrderService.getPath(mcdAssNNParentSource) + mcdAssNNParentSource.getShortName();
             } else {
-                throw new CodeApplException("Le shortName de l'association n:n " + mcdAssNNParentSource.getNamePath() + "n'est pas déterminé");
+                throw new CodeApplException("Le shortName de l'association n:n " + mcdAssNNParentSource.getNameTreePath() + " n'est pas déterminé");
             }
         } else {
             throw new CodeApplException("Le shortName n'est calculé que pour une table provenant d'une entité ou d'une association n:n");
