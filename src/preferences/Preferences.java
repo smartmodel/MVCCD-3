@@ -1196,6 +1196,15 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATE_ALTER_TABLE_DROP_COLUMN = "alterTableDropColumn.txt";
   public static String TEMPLATE_ALTER_TABLE_ADD_COLUMN = "alterTableAddColumn.txt";
   public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN = "alterTableModifyColumn.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_NN = "alterTableModifyColumnAddNN.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_NN = "alterTableModifyColumnDropNN.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_DEFAULT = "alterTableModifyColumnAddDefault.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_DEFAULT = "alterTableModifyColumnDropDefault.txt";
+  public static String TEMPLATE_ALTER_TABLE_ADD_PK = "alterTableAddPk.txt";
+  public static String TEMPLATE_ALTER_TABLE_DROP_PK_CASCADE = "alterTableDropPkCascade.txt";
+  //public static String TEMPLATE_ALTER_TABLE_ADD_FK = "alterTableAddFk.txt"; //déjà existant
+  public static String TEMPLATE_ALTER_TABLE_DROP_FK = "alterTableDropFk.txt";
+  public static String TEMPLATES_ALTER_TABLE_ADD_FK_WITH_DELETE_CASCADE = "alterTableAddFkWithDeleteCascade.txt";
 
 
 

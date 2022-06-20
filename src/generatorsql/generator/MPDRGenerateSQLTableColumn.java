@@ -108,6 +108,7 @@ public abstract class MPDRGenerateSQLTableColumn {
         return generateSQLCode;
     }
 
+    // AJOUT DES METHODES PAR VINCENT
     public String generateSQLDropColumn(MPDRColumn mpdrColumn) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_COLUMN,
@@ -121,6 +122,69 @@ public abstract class MPDRGenerateSQLTableColumn {
     public String generateSQLModifyColumn(MPDRColumn mpdrColumn) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN,
+                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrColumn.getParent().getParent().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
+
+        // Datatype
+        String datatypeName = MDDatatypeService.convertMPDRLienProgToName(getMPDRGenerateSQL().mpdrModel.getDb(), mpdrColumn.getDatatypeLienProg());
+        String datatypeSizeScale = generateDatatypeSizeScale(mpdrColumn);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_DATATYPE_WORD, datatypeName + datatypeSizeScale);
+
+        return generateSQLCode;
+    }
+
+    public String generateSQLModifyColumnAddNotNul(MPDRColumn mpdrColumn){
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+                Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_NN,
+                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrColumn.getParent().getParent().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
+
+        // Datatype
+        String datatypeName = MDDatatypeService.convertMPDRLienProgToName(getMPDRGenerateSQL().mpdrModel.getDb(), mpdrColumn.getDatatypeLienProg());
+        String datatypeSizeScale = generateDatatypeSizeScale(mpdrColumn);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_DATATYPE_WORD, datatypeName + datatypeSizeScale);
+
+        return generateSQLCode;
+    }
+
+    public String generateSQLModifyColumnDropNotNul(MPDRColumn mpdrColumn){
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+                Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_NN,
+                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrColumn.getParent().getParent().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
+
+        // Datatype
+        String datatypeName = MDDatatypeService.convertMPDRLienProgToName(getMPDRGenerateSQL().mpdrModel.getDb(), mpdrColumn.getDatatypeLienProg());
+        String datatypeSizeScale = generateDatatypeSizeScale(mpdrColumn);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_DATATYPE_WORD, datatypeName + datatypeSizeScale);
+
+        return generateSQLCode;
+    }
+
+    public String generateSQLModifyColumnAddOrModifyDefault(MPDRColumn mpdrColumn){
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+                Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_DEFAULT,
+                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrColumn.getParent().getParent().getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());
+
+        // Datatype
+        String datatypeName = MDDatatypeService.convertMPDRLienProgToName(getMPDRGenerateSQL().mpdrModel.getDb(), mpdrColumn.getDatatypeLienProg());
+        String datatypeSizeScale = generateDatatypeSizeScale(mpdrColumn);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_DATATYPE_WORD, datatypeName + datatypeSizeScale);
+
+        //DefaultValue
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_DEFAULT_VALUE_WORD, mpdrColumn.getInitValue());
+
+        return generateSQLCode;
+    }
+
+    public String generateSQLModifyColumnDropDefault(MPDRColumn mpdrColumn){
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+                Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_DEFAULT,
                 getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrColumn.getParent().getParent().getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_NAME_WORD, mpdrColumn.getName());

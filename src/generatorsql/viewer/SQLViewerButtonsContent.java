@@ -8,7 +8,7 @@ import connections.ConDBMode;
 import connections.services.ConnectionsService;
 import console.ViewLogsManager;
 import console.WarningLevel;
-import consolidationMpdrDb.syncGenerator.OracleSyncGeneratorSQL;
+import consolidationMpdrDb.syncGenerator.oracle.OracleSyncGeneratorSQL;
 import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
 import generatorsql.MPDRGenerateSQLUtil;

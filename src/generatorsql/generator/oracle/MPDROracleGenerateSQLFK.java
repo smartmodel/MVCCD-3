@@ -17,6 +17,11 @@ public class MPDROracleGenerateSQLFK extends MPDRGenerateSQLFK {
         String generateSQLCode = super.generateSQLFK(mpdrfk);
         return generateSQLCode ;}
 
+    public String generateSQLFkToDropConsolidation(MPDRFK mpdrfk){
+        String generateSQLCode = super.generateSQLFkToDropConsolidation(mpdrfk);
+        return generateSQLCode ;
+    }
+
     @Override
     public MPDRGenerateSQL getMPDRGenerateSQL() {
         return mpdrOracleGenerateSQL;

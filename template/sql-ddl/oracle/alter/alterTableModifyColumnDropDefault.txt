@@ -1,0 +1,1 @@
+ALTER TABLE {tableName} MODIFY ( {columnName} {columnDataType} DEFAULT( NULL ))

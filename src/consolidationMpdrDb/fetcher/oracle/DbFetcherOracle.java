@@ -24,7 +24,7 @@ public class DbFetcherOracle extends DbFetcher {
     private final Connection connection;
     private final ConConnection conConnection;
     Map<String, String> triggersBody = new HashMap<>();
-    Map<String, String> packagesBody = new HashMap<>();
+    Map<String, String> packagesSpec = new HashMap<>();
     private DatabaseMetaData databaseMetaData;
     private String schemaDB;
     private String databaseName;
@@ -284,14 +284,17 @@ public class DbFetcherOracle extends DbFetcher {
         pStmt.close();
         rsCurseur.close();
         String requetePackageGetDDL;
+        //Afin d'avoir une liste pour la méthode findTableAcceuillePackage
         for (String aPackage : packages) {
             requetePackageGetDDL = "select dbms_metadata.get_ddl(\'PACKAGE\',\'" + aPackage + "\') from dual";
             PreparedStatement pStmtGetDdl = connection.prepareStatement(requetePackageGetDDL);
             ResultSet rsPackage = pStmtGetDdl.executeQuery();
             while (rsPackage.next()) {
-                packagesBody.put(rsPackage.getString(1).toUpperCase(), aPackage);
+                packagesSpec.put(rsPackage.getString(1).toUpperCase(), aPackage);
             }
         }
+        pStmt.close();
+
         for (MPDRTable dbTable : dbTables) {
             //package est un mot réservé donc utilisation du nom de variable "paquet"
             for (String paquet : packages) {
@@ -322,11 +325,11 @@ public class DbFetcherOracle extends DbFetcher {
     //on se base sur la ligne "type TYPE_COLLABORATEURS  is table of COLLABORATEURS%rowtype index by pls_integer" dans le corps du package pour
     //trouver le nom de la table auquel il est lié
     private MPDRTable findTableAccueillePackage(MPDRTable dbTable, String packageName) {
-        for (Map.Entry map : packagesBody.entrySet()) {
+        for (Map.Entry map : packagesSpec.entrySet()) {
             if (map.getValue().equals(packageName)) {
                 String regex = ".IS TABLE OF " + dbTable.getName() + "%ROWTYPE";
                 if (Pattern.compile(regex).matcher(map.getKey().toString()).find()) {
-                    packagesBody.remove(map.getKey());
+                    packagesSpec.remove(map.getKey());
                     return dbTable;
                 }
             }

@@ -2,9 +2,8 @@ package mpdr.oracle;
 
 import connections.ConConnection;
 import connections.services.ConnectionsService;
-import consolidationMpdrDb.RecuperationConnectionDB;
 import consolidationMpdrDb.comparator.oracle.OracleComparatorDb;
-import consolidationMpdrDb.syncGenerator.OracleSyncGeneratorSQL;
+import consolidationMpdrDb.syncGenerator.oracle.OracleSyncGeneratorSQL;
 import datatypes.MPDRDatatype;
 import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.oracle.MPDROracleGenerateSQL;

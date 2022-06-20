@@ -78,7 +78,7 @@ public class MPDRModelEditingTreat extends EditingTreat {
 
         } catch (Exception e){
             //A faire VC : mettre ce message en property
-            ViewLogsManager.catchException(e, owner, "La synchronisation du code SQL-DDL a échoué.");
+            ViewLogsManager.catchException(e, owner, "La synchronisation du code de consolidation SQL-DDL a échoué.");
             ok = false ;
         }
         //A faire VC : changer les message de propertie

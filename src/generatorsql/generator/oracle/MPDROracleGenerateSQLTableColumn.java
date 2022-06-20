@@ -9,7 +9,8 @@ import preferences.PreferencesManager;
 public class MPDROracleGenerateSQLTableColumn extends MPDRGenerateSQLTableColumn {
 
 
-    MPDROracleGenerateSQL mpdrOracleGenerateSQL ;
+    MPDROracleGenerateSQL mpdrOracleGenerateSQL;
+
     public MPDROracleGenerateSQLTableColumn(MPDROracleGenerateSQL mpdrOracleGenerateSQL) {
         this.mpdrOracleGenerateSQL = mpdrOracleGenerateSQL;
     }
@@ -34,9 +35,29 @@ public class MPDROracleGenerateSQLTableColumn extends MPDRGenerateSQLTableColumn
         return generateSQLCode;
     }
 
+    public String generateSQLModifyColumnAddNotNul(MPDRColumn mpdrColumn){
+        String generateSQLCode = super.generateSQLModifyColumnAddNotNul(mpdrColumn);
+        return generateSQLCode;
+    }
+
+    public String generateSQLModifyColumnDropNotNul(MPDRColumn mpdrColumn){
+        String generateSQLCode = super.generateSQLModifyColumnDropNotNul(mpdrColumn);
+        return generateSQLCode;
+    }
+
+    public String generateSQLModifyColumnAddOrModifyDefault(MPDRColumn mpdrColumn){
+        String generateSQLCode = super.generateSQLModifyColumnAddOrModifyDefault(mpdrColumn);
+        return generateSQLCode;
+    }
+
+    public String generateSQLModifyColumnDropDefault(MPDRColumn mpdrColumn){
+        String generateSQLCode = super.generateSQLModifyColumnDropDefault(mpdrColumn);
+        return generateSQLCode;
+    }
+
     @Override
     protected boolean pkGenerateIdentity() {
-        return  PreferencesManager.instance().preferences().getMPDRORACLE_PK_GENERATE() == MPDRDBPK.IDENTITY;
+        return PreferencesManager.instance().preferences().getMPDRORACLE_PK_GENERATE() == MPDRDBPK.IDENTITY;
     }
 
 
