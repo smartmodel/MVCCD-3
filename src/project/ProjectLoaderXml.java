@@ -1,71 +1,14 @@
 package project;
 
 import diagram.Diagram;
-import java.awt.Point;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDFactory;
-import mcd.MCDAssEnd;
-import mcd.MCDAssociation;
-import mcd.MCDAssociationNature;
-import mcd.MCDAttribute;
-import mcd.MCDConstraint;
-import mcd.MCDContAttributes;
-import mcd.MCDContConstraints;
-import mcd.MCDContDiagrams;
-import mcd.MCDContEntities;
-import mcd.MCDContModels;
-import mcd.MCDContRelations;
-import mcd.MCDElement;
-import mcd.MCDEntity;
-import mcd.MCDModel;
-import mcd.MCDNID;
-import mcd.MCDPackage;
-import mcd.MCDParameter;
-import mcd.MCDUnique;
+import mcd.*;
 import mcd.interfaces.IMCDSourceMLDRTable;
-import mdr.MDRCaseFormat;
-import mdr.MDRColumn;
-import mdr.MDRConstraint;
-import mdr.MDRContColumns;
-import mdr.MDRContConstraints;
-import mdr.MDRContRelEnds;
-import mdr.MDRContTables;
-import mdr.MDRElementNames;
-import mdr.MDRFK;
-import mdr.MDRModel;
-import mdr.MDRNamingLength;
-import mdr.MDRPK;
-import mdr.MDRRelFKEnd;
-import mdr.MDRRelationFK;
-import mdr.MDRTable;
+import mdr.*;
 import messages.MessagesBuilder;
-import mldr.MLDRColumn;
-import mldr.MLDRContRelEnds;
-import mldr.MLDRContRelations;
-import mldr.MLDRFK;
-import mldr.MLDRModel;
-import mldr.MLDRPK;
-import mldr.MLDRParameter;
-import mldr.MLDRRelFKEnd;
-import mldr.MLDRTable;
+import mldr.*;
 import mpdr.MPDRColumn;
 import mpdr.MPDRModel;
 import mpdr.MPDRTable;
@@ -93,6 +36,21 @@ import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
 import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAssociationShape;
+
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+import java.awt.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProjectLoaderXml {
 
@@ -1292,7 +1250,7 @@ public class ProjectLoaderXml {
     MPDRModel mpdrModel = null; //Modèle MPDR dans lequel sera chargé tous les éléments à partir de la balise <MPDR_XX>
     switch (mpdrTag.getNodeName()) {
       case "MPDR_Oracle":
-        mpdrModel = MVCCDElementFactory.instance().createMPDRModelOracle(mldrModel);
+        mpdrModel = MVCCDElementFactory.instance().createMPDROracleModel(mldrModel);
         break;
       case "MPDR_PostgreSQL":
         mpdrModel = MVCCDElementFactory.instance().createMPDRPostgreSQLModel(mldrModel);

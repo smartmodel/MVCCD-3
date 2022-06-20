@@ -511,7 +511,7 @@ public class MVCCDElementFactory {
 
 
     // Oracle
-    public MPDROracleModel createMPDRModelOracle(MLDRModel mldrModel) {
+    public MPDROracleModel createMPDROracleModel(MLDRModel mldrModel) {
         MPDROracleModel mpdrOracleModel = new MPDROracleModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_ORACLE_NAME);
         // Conteneur générique
         createMPDRContModel(mpdrOracleModel);
@@ -547,18 +547,18 @@ public class MVCCDElementFactory {
         return mpdrOracleColumnAudit;
     }
 
-    public MPDROracleColumnJnal createMPDROracleColumnJnal(MDRContColumns mdrContColumns,
-                                                           MPDRConstraintCustomJnal mpdrConstraintCustomJnal,
-                                                           Stereotype stereotype) {
-        MPDROracleColumnJnal mpdrOracleColumnJnal = new MPDROracleColumnJnal(mdrContColumns, mpdrConstraintCustomJnal, stereotype);
-        return mpdrOracleColumnJnal;
+    public MPDROracleColumnJnalTech createMPDROracleColumnJnalTech(MDRContColumns mdrContColumns,
+                                                               MPDRConstraintCustomJnal mpdrConstraintCustomJnal,
+                                                               Stereotype stereotype) {
+        MPDROracleColumnJnalTech mpdrOracleColumnJnalTech = new MPDROracleColumnJnalTech(mdrContColumns, mpdrConstraintCustomJnal, stereotype);
+        return mpdrOracleColumnJnalTech;
     }
 
 
-    public MPDROracleColumnJnal createMPDROracleColumnJnal(MDRContColumns mdrContColumns,
-                                                           MPDRColumn mpdrColumnSource) {
-        MPDROracleColumnJnal mpdrOracleColumnJnal = new MPDROracleColumnJnal(mdrContColumns, mpdrColumnSource);
-        return mpdrOracleColumnJnal;
+    public MPDROracleColumnJnalDatas createMPDROracleColumnJnalDatas(MDRContColumns mdrContColumns,
+                                                               MPDRColumn mpdrColumnSource) {
+        MPDROracleColumnJnalDatas mpdrOracleColumnJnalDatas = new MPDROracleColumnJnalDatas(mdrContColumns, mpdrColumnSource);
+        return mpdrOracleColumnJnalDatas;
     }
 
     public MPDROracleColumnView createMPDROracleColumnView(MDRContColumns mdrContColumns) {

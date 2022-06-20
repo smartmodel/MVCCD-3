@@ -2,9 +2,10 @@ package generatorsql.generator;
 
 import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.MPDRCheck;
-import mpdr.MPDRColumn;
 import mpdr.MPDRTable;
 import mpdr.MPDRUnique;
+import mpdr.interfaces.IMPDRColumn;
+import mpdr.interfaces.IMPDRTable;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 
@@ -13,67 +14,74 @@ public abstract class MPDRGenerateSQLTable {
     public MPDRGenerateSQLTable() {
    }
 
-    public String generateSQLDropTable(MPDRTable mpdrTable) {
+    public String generateSQLDropTable(IMPDRTable impdrTable) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirDropDB(),
                 Preferences.TEMPLATE_DROP_TABLE,
                 getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
-                Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
+                Preferences.MDR_TABLE_NAME_WORD, impdrTable.getName());
         return generateSQLCode;
     }
 
-    public String generateSQLCreateTable(MPDRTable mpdrTable) {
+    public String generateSQLCreateTable(IMPDRTable impdrTable) {
         //Génération de la table
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateDB(),
                 Preferences.TEMPLATE_CREATE_TABLE,
                 getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
-                Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
+                Preferences.MDR_TABLE_NAME_WORD, impdrTable.getName());
 
 
         //Génération des colonnes
         String tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_COLUMNS);
-        String columnsInCreateTable = generateSQLCreateColumns(mpdrTable, tabsApplicable);
+        String columnsInCreateTable = generateSQLCreateColumns(impdrTable, tabsApplicable);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_COLUMNS, columnsInCreateTable);
 
-        //Génération de la contrainte de PK
-        MPDRGenerateSQLPK mpdrGenerateSQLPK = getMPDRGenerateSQLPK();
-        String pkInCreateTable =mpdrGenerateSQLPK.generateSQLCreatePK(mpdrTable);
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_PK, pkInCreateTable);
+        if (impdrTable instanceof MPDRTable) {
+            MPDRTable mpdrTable = (MPDRTable)impdrTable;
+            //Génération de la contrainte de PK
+            MPDRGenerateSQLPK mpdrGenerateSQLPK = getMPDRGenerateSQLPK();
+            String pkInCreateTable = mpdrGenerateSQLPK.generateSQLCreatePK(mpdrTable);
+            generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_PK, pkInCreateTable);
 
-        //Génération des contraintes de CHECK
-        tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_CHECKS);
-        String checksInCreateTable = generateSQLCreateChecks(mpdrTable, tabsApplicable);
-        if (StringUtils.isNotEmpty(checksInCreateTable)){
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_CHECKS, checksInCreateTable);
+            //Génération des contraintes de CHECK
+            tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_CHECKS);
+            String checksInCreateTable = generateSQLCreateChecks(mpdrTable, tabsApplicable);
+            if (StringUtils.isNotEmpty(checksInCreateTable)) {
+                generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_CHECKS, checksInCreateTable);
+            } else {
+                generateSQLCode = getMPDRGenerateSQL().nullifyKey(generateSQLCode, System.lineSeparator() + tabsApplicable, Preferences.TEMPLATE_CREATE_TABLE_CHECKS, "");
+            }
+
+            //Génération des contraintes UNIQUE
+            tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_UNIQUES);
+            String uniquesInCreateTable = generateSQLCreateUniques(mpdrTable, tabsApplicable);
+            if (StringUtils.isNotEmpty(uniquesInCreateTable)) {
+                generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_UNIQUES, uniquesInCreateTable);
+            } else {
+                generateSQLCode = getMPDRGenerateSQL().nullifyKey(generateSQLCode, System.lineSeparator() + tabsApplicable, Preferences.TEMPLATE_CREATE_TABLE_UNIQUES, "");
+            }
+
         } else {
-            generateSQLCode = getMPDRGenerateSQL().nullifyKey(generateSQLCode, System.lineSeparator()+ tabsApplicable,  Preferences.TEMPLATE_CREATE_TABLE_CHECKS  ,  "");
+            // tables de journalisation MPDRTableJnal
+            generateSQLCode = getMPDRGenerateSQL().nullifyKey(generateSQLCode, System.lineSeparator() + tabsApplicable, Preferences.TEMPLATE_CREATE_TABLE_PK, "");
+            generateSQLCode = getMPDRGenerateSQL().nullifyKey(generateSQLCode, System.lineSeparator() + tabsApplicable, Preferences.TEMPLATE_CREATE_TABLE_CHECKS, "");
+            generateSQLCode = getMPDRGenerateSQL().nullifyKey(generateSQLCode, System.lineSeparator() + tabsApplicable, Preferences.TEMPLATE_CREATE_TABLE_UNIQUES, "");
         }
-
-        //Génération des contraintes UNIQUE
-        tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_UNIQUES);
-        String uniquesInCreateTable = generateSQLCreateUniques(mpdrTable, tabsApplicable);
-        if (StringUtils.isNotEmpty(uniquesInCreateTable)){
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.TEMPLATE_CREATE_TABLE_UNIQUES, uniquesInCreateTable);
-        } else {
-            generateSQLCode = getMPDRGenerateSQL().nullifyKey(generateSQLCode, System.lineSeparator()+ tabsApplicable, Preferences.TEMPLATE_CREATE_TABLE_UNIQUES ,  "");
-        }
-
-
         generateSQLCode = MPDRGenerateSQLUtil.cleanSeparatorArguments(generateSQLCode);
         return generateSQLCode ;
     }
 
-    public String generateSQLCreateColumns(MPDRTable mpdrTable, String tabsApplicable){
+    public String generateSQLCreateColumns(IMPDRTable impdrTable, String tabsApplicable){
         String generateSQLCode = "";
         // Avec nos règles de conformité, une table doit avoir au moins une colonne,
 
         boolean firstColumn = true;
-        for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumnsSortDefault()) {
+        for (IMPDRColumn impdrColumn : impdrTable.getIMPDRColumnsSortDefault()) {
             if (!firstColumn) {
                 generateSQLCode +=  System.lineSeparator() + tabsApplicable;
             }
-            generateSQLCode += getMPDRGenerateSQLColumn().generateSQLCreateTableColumn(mpdrColumn);
+            generateSQLCode += getMPDRGenerateSQLColumn().generateSQLCreateTableColumn(impdrColumn);
             firstColumn = false;
         }
         return generateSQLCode;

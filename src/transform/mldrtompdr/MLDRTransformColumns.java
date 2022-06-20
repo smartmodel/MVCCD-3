@@ -143,9 +143,7 @@ public class MLDRTransformColumns {
             }
         }
 
-
-
-        // Contrainte de Check de type de donnée
+       // Contrainte de Check de type de donnée
         if (mldrColumn.isBusiness()) {
             createCheckForDatatype(mldrColumn, mpdrColumn);
         }

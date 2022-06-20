@@ -17,6 +17,8 @@ public class MLDRColumn extends MDRColumn implements IMLDRElement, IMLDRElementW
     private static final long serialVersionUID = 1000;
 
     private MCDElement mcdElementSource;
+    private boolean columnPKTI = false ; // Pour la création d'une colonne de PK indépendante lors d'une transformation en tables indépendantes
+    private boolean columnSimPK = false ; // Colonne de simulation de PK pour les entitésnon indépendantes et transormées en tables indépendantes
 
     public MLDRColumn(ProjectElement parent, MCDElement mcdElementSource) {
         super(parent);
@@ -64,6 +66,21 @@ public class MLDRColumn extends MDRColumn implements IMLDRElement, IMLDRElementW
         return mldrTable.getEntityParentSource();
     }
 
+    public boolean isColumnPKTI() {
+        return columnPKTI;
+    }
+
+    public void setColumnPKTI(boolean columnPKTI) {
+        this.columnPKTI = columnPKTI;
+    }
+
+    public boolean isColumnSimPK() {
+        return columnSimPK;
+    }
+
+    public void setColumnSimPK(boolean columnSimPK) {
+        this.columnSimPK = columnSimPK;
+    }
 
     public MCDAssociation getAssNNParentSource() {
         MLDRTable mldrTable = (MLDRTable) this.getMDRTableAccueil();

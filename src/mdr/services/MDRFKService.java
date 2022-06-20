@@ -37,7 +37,8 @@ public class MDRFKService {
                 throw new CodeApplException(other.getName() + "La nature de la contrainte FK est inconnue ou inexistante.");
             }
         } else {
-            throw new CodeApplException(courant.getName() + "La nature de la contrainte FK est inconnue ou inexistante.");
+            resultat = 0;
+            //throw new CodeApplException(courant.getName() + "La nature de la contrainte FK est inconnue ou inexistante.");
         }
         return resultat;
     }

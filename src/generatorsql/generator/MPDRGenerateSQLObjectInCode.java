@@ -14,6 +14,7 @@ public enum MPDRGenerateSQLObjectInCode {
     PI_MODE("pi_mode", null, null, null),
     PI_VALUE("pi_value", null, null, null),
     VL_NEWREC("vl_newrec", null, null, null),
+    VL_OLDREC("vl_oldrec", null, null, null),
     VL_PK("vl_pk", null, null, null),
     AUTOGEN_COLUMNS("autogen_columns", null, null, null),
     AUTOGEN_COLUMNS_INS("autogen_columns_ins", null, null, null),

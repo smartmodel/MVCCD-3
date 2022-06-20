@@ -4,25 +4,18 @@ import mcd.MCDAttribute;
 import md.MDElement;
 import mpdr.MPDRDB;
 import mpdr.interfaces.IMPDRElement;
-import mpdr.tapis.MPDRColumnJnal;
+import mpdr.tapis.MPDRColumnJnalDatas;
 import project.ProjectElement;
-import stereotypes.Stereotype;
 
-public class MPDROracleColumnJnal extends MPDRColumnJnal {
+public class MPDROracleColumnJnalDatas extends MPDRColumnJnalDatas {
 
     protected MPDRDB mpdrDb ;
 
-    public MPDROracleColumnJnal(ProjectElement parent,
-                                IMPDRElement mpdrElementSource,
-                                Stereotype stereotype) {
-        super(parent, mpdrElementSource, stereotype);
-    }
-
-
-    public MPDROracleColumnJnal(ProjectElement parent,
-                                IMPDRElement mpdrElementSource) {
+    public MPDROracleColumnJnalDatas(ProjectElement parent,
+                                     IMPDRElement mpdrElementSource) {
         super(parent, mpdrElementSource);
     }
+
 
     @Override
     public MDElement getMdElementSource() {

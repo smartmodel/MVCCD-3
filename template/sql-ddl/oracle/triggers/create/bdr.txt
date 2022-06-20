@@ -1,0 +1,10 @@
+CREATE OR REPLACE TRIGGER {triggerName}
+BEFORE DELETE ON {tableName} FOR EACH ROW
+DECLARE
+    {vl_oldrec} {tableName}%ROWTYPE;
+
+BEGIN
+    {-NODML-}
+    {-TRIGGER_OLD_TO_RECORD-}
+    {-INS_JN_DEL-}
+END;

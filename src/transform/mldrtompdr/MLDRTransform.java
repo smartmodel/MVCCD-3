@@ -106,7 +106,7 @@ public class MLDRTransform extends MDTransform {
         if (mldrtompdrDb.equals(Preferences.DB_ORACLE)){
             MPDROracleModel mpdrOracleModel = MLDRModelService.getMPDRModelOracle(mldrModel);
             if (mpdrOracleModel == null){
-                mpdrOracleModel = MVCCDElementFactory.instance().createMPDRModelOracle(mldrModel);
+                mpdrOracleModel = MVCCDElementFactory.instance().createMPDROracleModel(mldrModel);
                 MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrOracleModel);
             }
             //TODO-2 A voir l'organisation des préférences et MPDR

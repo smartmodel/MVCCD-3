@@ -43,7 +43,11 @@ public abstract class MPDRGenerateSQL {
         } else if (mpdrModel.getDropBeforeCreate() == MPDRDropBefore.OBJECTSCREATED){
             message = MessagesBuilder.getMessagesProperty("generate.sql.drop.tables");
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
-            generateSQLCode += generateSQLDropTables();
+            generateSQLCode += generateSQLCommandTables(DROP);
+
+            message = MessagesBuilder.getMessagesProperty("generate.sql.drop.tables.jnal");
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+            generateSQLCode += generateSQLCommandTablesJnal(DROP);
 
             message = MessagesBuilder.getMessagesProperty("generate.sql.drop.sequences");
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
@@ -73,6 +77,10 @@ public abstract class MPDRGenerateSQL {
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.tables");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
         generateSQLCode += generateSQLCommandTables(CREATE);
+
+        message = MessagesBuilder.getMessagesProperty("generate.sql.create.tables.jnal");
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        generateSQLCode += generateSQLCommandTablesJnal(CREATE);
 
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.sequences");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
@@ -123,6 +131,7 @@ public abstract class MPDRGenerateSQL {
 
     }
 
+    /*
     private String generateSQLDropTables(){
 
         String generateSQLCode = "";
@@ -132,6 +141,20 @@ public abstract class MPDRGenerateSQL {
         }
         return generateSQLCode;
     }
+
+    private String generateSQLDropTablesJnal(){
+
+        String generateSQLCode = "";
+        for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
+            if (mpdrTable.getMPDRTableJnal() != null) {
+                generateSQLCode += getMpdrGenerateSQLTable().generateSQLDropTable(mpdrTable.getMPDRTableJnal());
+                generateSQLCode += delimiter();
+            }
+        }
+        return generateSQLCode;
+    }
+
+     */
 
     private String generateSQLCommandTables(int command) {
 
@@ -147,6 +170,26 @@ public abstract class MPDRGenerateSQL {
 
                 }
             }
+
+        return generateSQLCode;
+    }
+
+
+    private String generateSQLCommandTablesJnal(int command) {
+
+        String generateSQLCode = "";
+        for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
+            if (mpdrTable.getMPDRTableJnal() != null) {
+                if (command == CREATE) {
+                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLCreateTable(mpdrTable.getMPDRTableJnal());
+                    generateSQLCode += delimiter();
+                }
+                if (command == DROP) {
+                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLDropTable(mpdrTable.getMPDRTableJnal());
+                    generateSQLCode += delimiter();
+                }
+            }
+        }
 
         return generateSQLCode;
     }

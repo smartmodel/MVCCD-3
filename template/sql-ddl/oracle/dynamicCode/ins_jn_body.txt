@@ -3,22 +3,22 @@ PROCEDURE {ins_jn} ({pi_crtrec} IN {tableName}%ROWTYPE
 
 BEGIN
     IF {pi_mode} = '{del}' THEN
-        INSERT INTO {table_jn} (
-            {JN_COLUMNS_NAME}
-            , {PK_COLUMNS_NAME}
-		)
-		VALUES (
-		    {JN_COLUMNS_VALUE}
-		    , {PK_COLUMNS_VALUE}
-        );
-    ELSE
-        INSERT INTO {table_jn} (
-            {JN_COLUMNS_NAME}
-            , {ALL_COLUMNS_NAME}
+        INSERT INTO {tableJnalName} (
+            {-COLUMNS_JN_TECH_NAME-}
+            , {-COLUMNS_JN_OLD_NAME-}
         )
         VALUES (
-            {JN_COLUMNS_VALUE}
-            , {ALL_COLUMNS_VALUE}
-		);
-	END IF;	
+            {-COLUMNS_JN_TECH_VALUE-}
+            , {-COLUMNS_JN_OLD_VALUE-}
+        );
+    ELSE
+        INSERT INTO {tableJnalName} (
+            {-COLUMNS_JN_TECH_NAME-}
+            , {-COLUMNS_JN_NEW_NAME-}
+        )
+        VALUES (
+            {-COLUMNS_JN_TECH_VALUE-}
+            , {-COLUMNS_JN_NEW_VALUE-}
+        );
+    END IF;
 END;	

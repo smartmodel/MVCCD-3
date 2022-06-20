@@ -61,6 +61,7 @@ public class MCDTransformToUnique {
 
     }
 
+
     private void modifyUnique(MLDRModel mldrModel,
                               MCDUnicity mcdUnicity,
                               MLDRTable mldrTable,
@@ -99,6 +100,8 @@ public class MCDTransformToUnique {
                 IMDRParameterService.to(mdrColumnParameters));
 
     }
+
+
 
     private ArrayList<MDRColumn> mdrColumnsFromMCDUnicity(MCDUnicity mcdUnicity,
                                                           MLDRTable mldrTable) {
@@ -165,5 +168,6 @@ public class MCDTransformToUnique {
 
         return names;
     }
+
 
 }

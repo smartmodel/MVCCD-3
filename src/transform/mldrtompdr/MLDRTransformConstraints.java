@@ -52,7 +52,7 @@ public class MLDRTransformConstraints {
             if (mldrConstraint instanceof MLDRFK){
                 MLDRFK mldrFK = (MLDRFK) mldrConstraint;
                 mpdrConstraint = mpdrTable.createFK(mldrFK);
-            }
+           }
             if (mldrConstraint instanceof MLDRUnique){
                 MLDRUnique mldrUnique = (MLDRUnique) mldrConstraint;
                 mpdrConstraint = mpdrTable.createUnique(mldrUnique);

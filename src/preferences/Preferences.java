@@ -417,6 +417,9 @@ public class Preferences extends MVCCDElement {
     public static String STEREOTYPE_JNAL_NOTES_LIENPROG = "JNNO";
     public static String STEREOTYPE_JNAL_NOTES_NAME = "JNNO";
 
+    public static String STEREOTYPE_TI_SIM_PK_LIENPROG = "SIMPK";
+    public static String STEREOTYPE_TI_SIM_PK_NAME = "SIMPK";
+
 
     public static String CONSTRAINT_ORDERED_NAME = "ordered";
     public static String CONSTRAINT_ORDERED_LIENPROG = "ordered";
@@ -874,6 +877,7 @@ public class Preferences extends MVCCDElement {
     public static String MPDR_COLUMN_AUDIT_AJDATE_NAME_WORD = "auditAjDateName";
     public static String MPDR_COLUMN_AUDIT_MOUSER_NAME_WORD = "auditMoUserName";
     public static String MPDR_COLUMN_AUDIT_MODATE_NAME_WORD = "auditMoDateName";
+    public static String MPDR_TABLE_JNAL_NAME_WORD = "tableJnalName";
     public static String MPDR_COLUMN_JNAL_DATETIME_NAME_WORD = "jnDatetimeName";
     public static String MPDR_COLUMN_JNAL_OPERATION_NAME_WORD = "jnOperationName";
     public static String MPDR_COLUMN_JNAL_USER_NAME_WORD = "jnUserName";
