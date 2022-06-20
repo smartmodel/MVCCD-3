@@ -2,9 +2,17 @@ package generatorsql.generator;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
+import java.util.ArrayList;
 import messages.MessagesBuilder;
-import mpdr.*;
+import mpdr.MPDRColumn;
+import mpdr.MPDRDropBefore;
+import mpdr.MPDRFK;
+import mpdr.MPDRIndex;
+import mpdr.MPDRModel;
+import mpdr.MPDRSequence;
+import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRModelRequirePackage;
+import mpdr.interfaces.IMPDRTable;
 import mpdr.interfaces.IMPDRTableRequirePackage;
 import mpdr.tapis.MPDRFunction;
 import mpdr.tapis.MPDRPackage;
@@ -13,8 +21,6 @@ import mpdr.tapis.MPDRView;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.UtilDivers;
-
-import java.util.ArrayList;
 
 public abstract class MPDRGenerateSQL {
 
@@ -161,11 +167,13 @@ public abstract class MPDRGenerateSQL {
         String generateSQLCode = "";
             for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
                 if (command == CREATE) {
-                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLCreateTable(mpdrTable);
+                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLCreateTable(
+                        (IMPDRTable) mpdrTable);
                     generateSQLCode += delimiter();
                 }
                 if (command == DROP) {
-                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLDropTable(mpdrTable);
+                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLDropTable(
+                        (IMPDRTable) mpdrTable);
                     generateSQLCode += delimiter();
 
                 }

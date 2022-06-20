@@ -6,12 +6,7 @@ import java.util.stream.Collectors;
 import main.MVCCDElement;
 import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRConstraintService;
-import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
-import stereotypes.StereotypeService;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public abstract class MDRConstraint extends MDROperation{
 
@@ -130,5 +125,6 @@ public abstract class MDRConstraint extends MDROperation{
 
          */
         //return getName();
+      return null;
     }
 }
