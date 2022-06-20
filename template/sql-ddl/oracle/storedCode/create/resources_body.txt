@@ -12,31 +12,48 @@ PROCEDURE raise_column_error (pi_table_name IN VARCHAR2,
     END;
 
 
-PROCEDURE check_datatype_error (pi_table_name IN VARCHAR2,
+PROCEDURE check_token_string(pi_table_name IN VARCHAR2,
     pi_column_name IN VARCHAR2,
     pi_value IN VARCHAR2,
-    pi_datatype_name IN VARCHAR2) IS
-
-    vl_message_error VARCHAR2(1000);
-    BEGIN
-        vl_message_error := 'La valeur ' + pi_value + ' ne respecte pas le type ' + pi_datatype_name;
-        --raise_column_error(pi_table_name, pi_column_name, co_datatype_noerr, vl_message_error);
-    END;
-
-PROCEDURE check_normalized_string(pi_table_name IN VARCHAR2,
-    pi_column_name IN VARCHAR2,
-    pi_value IN VARCHAR2,
-    pi_datatype_name IN VARCHAR2)  IS
-
+    pi_no_error IN VARCHAR2,
+    pi_mess_error IN VARCHAR2)  IS
 
     BEGIN
         IF (INSTR( pi_value , CHR(9)) > 0) OR
             (INSTR( pi_value , CHR(10)) > 0) OR
             (INSTR( pi_value, CHR(13)) > 0) THEN
-                check_datatype_error(pi_table_name, pi_column_name, pi_value, pi_datatype_name);
+            raise_column_error(pi_table_name, pi_column_name, pi_no_error, pi_mess_error);
         END IF;
     END;
 
+BEGIN
+	NULL;
+END;
+
+
+PROCEDURE check_token(pi_table_name IN VARCHAR2,
+    pi_column_name IN VARCHAR2,
+    pi_value IN VARCHAR2,
+    pi_no_error IN VARCHAR2,
+    pi_mess_error IN VARCHAR2)  IS
+
+    BEGIN
+        IF (INSTR( pi_value , '  ') > 0)  THEN
+            raise_column_error(pi_table_name, pi_column_name, pi_no_error, pi_mess_error);
+        END IF;
+    END;
+
+PROCEDURE check_word(pi_table_name IN VARCHAR2,
+    pi_column_name IN VARCHAR2,
+    pi_value IN VARCHAR2,
+    pi_no_error IN VARCHAR2,
+    pi_mess_error IN VARCHAR2)  IS
+
+    BEGIN
+        IF (INSTR( pi_value , ' ') > 0)  THEN
+            raise_column_error(pi_table_name, pi_column_name, pi_no_error, pi_mess_error);
+        END IF;
+    END;
 
 BEGIN
 	NULL;

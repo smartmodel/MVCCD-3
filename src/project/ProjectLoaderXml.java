@@ -563,7 +563,7 @@ public class ProjectLoaderXml {
 
     // Création du contenur de diagrammes MCD
     MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(mcdSource, Integer.parseInt(diagramsTag.getAttribute(Preferences.ATTRIBUTE_ID)));
-    mcdContDiagrams.setName(Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+    mcdContDiagrams.setName(Preferences.REPOSITORY_DIAGRAMS_NAME);
 
     // Parcours de tous les diagrammes MCD
     for (int i = 0; i < diagramsTag.getChildNodes().getLength(); i++) {
@@ -1292,7 +1292,7 @@ public class ProjectLoaderXml {
     MPDRModel mpdrModel = null; //Modèle MPDR dans lequel sera chargé tous les éléments à partir de la balise <MPDR_XX>
     switch (mpdrTag.getNodeName()) {
       case "MPDR_Oracle":
-        mpdrModel = MVCCDElementFactory.instance().createMPDRModelOracle(mldrModel);
+        mpdrModel = MVCCDElementFactory.instance().createMPDROracleModel(mldrModel);
         break;
       case "MPDR_PostgreSQL":
         mpdrModel = MVCCDElementFactory.instance().createMPDRPostgreSQLModel(mldrModel);

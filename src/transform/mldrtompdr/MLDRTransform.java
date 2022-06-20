@@ -106,12 +106,12 @@ public class MLDRTransform extends MDTransform {
         if (mldrtompdrDb.equals(Preferences.DB_ORACLE)){
             MPDROracleModel mpdrOracleModel = MLDRModelService.getMPDRModelOracle(mldrModel);
             if (mpdrOracleModel == null){
-                mpdrOracleModel = MVCCDElementFactory.instance().createMPDRModelOracle(mldrModel);
+                mpdrOracleModel = MVCCDElementFactory.instance().createMPDROracleModel(mldrModel);
                 MVCCDManager.instance().addNewMVCCDElementInRepository(mpdrOracleModel);
             }
             //TODO-2 A voir l'organisation des préférences et MPDR
             // Provisoirement,m il faut le faire ici pour que tout changement dans les préférences soient répercutées
-            // Ensuite, les préférences ne devraient être utiles que pour la création ? A voir! 
+            // Ensuite, les préférences ne devraient être utiles que pour la création ? A voir!
             mpdrOracleModel.setMpdrDbPK(preferences.getMPDRORACLE_PK_GENERATE());
             mpdrOracleModel.setTapis(preferences.getMPDRORACLE_TAPIS());
             mpdrOracleModel.setSequencePKNameFormat(preferences.getMPDRORACLE_SEQPK_NAME_FORMAT());
@@ -119,6 +119,7 @@ public class MLDRTransform extends MDTransform {
             mpdrOracleModel.setTriggerViewNameFormat(preferences.getMPDRORACLE_TRIGGER_VIEW_NAME_FORMAT());
             mpdrOracleModel.setPackageNameFormat(preferences.getMPDRORACLE_PACKAGE_NAME_FORMAT());
             mpdrOracleModel.setViewNameFormat(preferences.getMPDRORACLE_VIEW_NAME_FORMAT());
+            mpdrOracleModel.setTableJnalNameFormat(preferences.getMPDRORACLE_TABLEJNAL_NAME_FORMAT());
             mpdrOracleModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT());
             mpdrOracleModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
             return mpdrOracleModel;
@@ -135,6 +136,7 @@ public class MLDRTransform extends MDTransform {
             mpdrMySQLModel.setTriggerTableNameFormat(preferences.getMPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT());
             mpdrMySQLModel.setTriggerViewNameFormat(preferences.getMPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT());
             mpdrMySQLModel.setViewNameFormat(preferences.getMPDRMYSQL_VIEW_NAME_FORMAT());
+            mpdrMySQLModel.setTableJnalNameFormat(preferences.getMPDRMYSQL_TABLEJNAL_NAME_FORMAT());
             mpdrMySQLModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
             mpdrMySQLModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
             return mpdrMySQLModel;
@@ -151,6 +153,7 @@ public class MLDRTransform extends MDTransform {
             mpdrPostgreSQLModel.setTriggerTableNameFormat(preferences.getMPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT());
             mpdrPostgreSQLModel.setTriggerViewNameFormat(preferences.getMPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT());
             mpdrPostgreSQLModel.setViewNameFormat(preferences.getMPDRPOSTGRESQL_VIEW_NAME_FORMAT());
+            mpdrPostgreSQLModel.setTableJnalNameFormat(preferences.getMPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT());
             mpdrPostgreSQLModel.setCheckColumnDatatypeNameFormat(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
             mpdrPostgreSQLModel.setCheckColumnDatatypeMax30NameFormat(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
             return mpdrPostgreSQLModel;

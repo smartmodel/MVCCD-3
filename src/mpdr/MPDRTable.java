@@ -11,11 +11,9 @@ import mdr.interfaces.IMDRParameter;
 import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
-import mpdr.interfaces.IMPDRConstraint;
-import mpdr.interfaces.IMPDRElement;
-import mpdr.interfaces.IMPDRElementWithSource;
-import mpdr.interfaces.IMPDRTableOrView;
-import mpdr.services.MPDRColumnService;
+import mpdr.interfaces.*;
+import mpdr.services.IMPDRColumnService;
+import mpdr.services.MPDRColumnsService;
 import mpdr.services.MPDRConstraintService;
 import mpdr.services.MPDRTableService;
 import mpdr.tapis.*;
@@ -28,7 +26,7 @@ import stereotypes.StereotypesManager;
 
 import java.util.ArrayList;
 
-public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRElementWithSource, IMPDRTableOrView {
+public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRElementWithSource, IMPDRTableOrView, IMPDRTable {
 
     private static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;
@@ -82,6 +80,10 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         return MPDRTableService.getMPDRColumnByMLDRColumnSource(this, mldrColumn);
     }
 
+    public MPDRColumnAudit getMPDRColumnAuditByStereotypeAudit(Stereotype stereotypeAudit) {
+        return MPDRTableService.getMPDRColumnAuditByStereotypeAudit(this, stereotypeAudit);
+    }
+
     public IMDRParameter getIMPDRParameterByMLDRParameterSource(IMDRParameter imldrParameter) {
         return MPDRTableService.getIMPDRParameterByMLDRParameterSource(this, imldrParameter);
     }
@@ -101,14 +103,24 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     }
 
     public ArrayList<MPDRColumn> getMPDRColumns() {
-        return MPDRColumnService.to(getMDRColumns());
+        return MPDRColumnsService.to(getMDRColumns());
+    }
+
+
+    public ArrayList<MPDRColumnAudit> getMPDRColumnsAudit() {
+        return MPDRColumnsService.getDRColumnsAudit(this);
     }
 
     public ArrayList<MPDRColumn> getMPDRColumnsSortDefault() {
-        return MPDRColumnService.to(getMDRColumnsSortDefault());
+        return MPDRColumnsService.to(getMDRColumnsSortDefault());
+    }
+
+    public ArrayList<IMPDRColumn> getIMPDRColumnsSortDefault() {
+        return IMPDRColumnService.to(getMDRColumnsSortDefault());
     }
 
     public abstract MPDRColumn createColumn(MLDRColumn mldrColumn);
+    public abstract MPDRColumnAudit createColumnAudit(MLDRConstraintCustomAudit mldrConstraintCustomAudit, Stereotype stereotype);
 
     public abstract MPDRPK createPK(MLDRPK mldrPK);
 
@@ -118,6 +130,10 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     public abstract MPDRUnique createUnique(MLDRUnique mldrUnique);
 
     public abstract IMPDRConstraint createSpecialized(MLDRConstraintCustomSpecialized mldrSpecialized);
+
+    public abstract IMPDRConstraint createJnal(MLDRConstraintCustomJnal mldrJournal);
+
+    public abstract IMPDRConstraint createAudit(MLDRConstraintCustomAudit mldrAudit);
 
     public abstract MPDRCheckSpecific createCheckSpecific(IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc);
 
@@ -159,6 +175,10 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public MPDRConstraintCustomSpecialized getMPDRConstraintCustomSpecialized(){
         return (MPDRConstraintCustomSpecialized) getMDRConstraintCustomSpecialized();
+    }
+
+    public MPDRConstraintCustomAudit getMPDRConstraintCustomAudit(){
+        return (MPDRConstraintCustomAudit) getMDRConstraintCustomAudit();
     }
 
     public ArrayList<MPDRFK> getMPDRFKs() {
@@ -254,5 +274,12 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     public ArrayList<MPDRView> getMPDRViews(){
         return getMPDRContTAPIs().getMPDRAllViews();
     }
+
+
+    public MPDRTableJnal getMPDRTableJnal() {
+        return getMPDRContTAPIs().getMPDRTableJnal();
+    }
+
+    public abstract MPDRTableJnal createTableJnal(MLDRConstraintCustomJnal mldrConstraintCustomJnal) ;
 
 }

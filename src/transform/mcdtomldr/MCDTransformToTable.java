@@ -64,6 +64,18 @@ public class MCDTransformToTable {
         // Attributs
         MCDTransformToColumn mcdTransformToColumn = new MCDTransformToColumn(mcdTransform);
         mcdTransformToColumn.createOrModifyFromAttributes(mcdEntity, mldrTable);
+
+        // Contrainte de journalisation
+        if (mcdEntity.isJournal()){
+            MCDTransformToJnal mcdTransformToJnal = new MCDTransformToJnal(mcdTransform);
+            mcdTransformToJnal.createOrModifyFromEntity(mcdEntity, mldrTable);
+        }
+
+        // Contrainte d'audit
+        if (mcdEntity.isAudit()){
+            MCDTransformToAudit mcdTransformToAudit = new MCDTransformToAudit(mcdTransform);
+            mcdTransformToAudit.createOrModifyFromEntity(mcdEntity, mldrTable);
+        }
     }
 
     private void createOrModifyPKEntitiesInd(ArrayList<MCDEntity> mcdEntitiesIndependants)  {

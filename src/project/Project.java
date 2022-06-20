@@ -85,6 +85,33 @@ public class Project extends ProjectElement {
     this.profile = profile;
   }
 
+
+    public void setProfileFileName(String profileFileName) {
+        this.profileFileName = profileFileName;
+    }
+
+    public Profile adjustProfile() {
+        if (this.getProfileFileName() != null) {
+            profile = MVCCDFactory.instance().createProfile(this.getProfileFileName());
+            //Preferences profilePref = ProfileManager.instance().loadFileProfile(Preferences.DIRECTORY_PROFILE_NAME + Preferences.SYSTEM_FILE_SEPARATOR + this.getProfileFileName());
+            Preferences profilePref = new ProfileLoaderXml().loadFileProfileXML(this.getProfileFileName());
+            if (profilePref != null) {
+                profilePref.setOrChangeParent(profile);
+                profilePref.setName(Preferences.REPOSITORY_PREFERENCES_PROFILE_NAME);
+                PreferencesManager.instance().setProfilePref(profilePref);
+                PreferencesManager.instance().copyProfilePref();
+            }
+        } else {
+            profile = null;
+            PreferencesManager.instance().setProfilePref(null);
+            // A priori c'est une erreur!
+            //PreferencesManager.instance().copyDefaultPref();
+        }
+        //TODO-1 A voir plus précisément l'impact des changements de préférences qui impactie le MCD : Audit, Journal ...
+        //new MCDAdjustPref(this).changeProfile();
+        MVCCDManager.instance().profileToRepository();
+        return profile;
+    }
   public Profile adjustProfile() {
     if (this.getProfileFileName() != null) {
       this.profile = MVCCDFactory.instance().createProfile(this.getProfileFileName());

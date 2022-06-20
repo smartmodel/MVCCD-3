@@ -63,7 +63,7 @@ PROCEDURE {tree_or_list_onlyone} IS
 	    --{-BLOCK_TREE_OR_LIST_ONLYONE_AFTER_STATEMENT-}
     END;
 
---{-INS_JN_BODY-}
+{-INS_JN_BODY-}
 
 BEGIN
 	NULL;

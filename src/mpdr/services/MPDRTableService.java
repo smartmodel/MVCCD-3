@@ -12,7 +12,9 @@ import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRConstraintInheritedMLDR;
 import mpdr.interfaces.IMPDRConstraintSpecific;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.tapis.MPDRColumnAudit;
 import mpdr.tapis.MPDRContTAPIs;
+import stereotypes.Stereotype;
 
 import java.util.ArrayList;
 
@@ -43,6 +45,18 @@ public class MPDRTableService {
         for (MPDRColumn mpdrColumn : getMPDRColumns(mpdrTable)){
             if (mpdrColumn.getMldrElementSource() == mldrColumn){
                 return mpdrColumn;
+            }
+        }
+        return null ;
+    }
+
+    public static MPDRColumnAudit getMPDRColumnAuditByStereotypeAudit(MPDRTable mpdrTable, Stereotype stereotypeAudit) {
+        for (MPDRColumn mpdrColumn : getMPDRColumns(mpdrTable)){
+            if (mpdrColumn instanceof MPDRColumnAudit){
+                MPDRColumnAudit mpdrColumnAudit = (MPDRColumnAudit) mpdrColumn;
+                if (mpdrColumnAudit.getSterereotypeAudit() == stereotypeAudit) {
+                    return mpdrColumnAudit;
+                }
             }
         }
         return null ;
@@ -124,4 +138,4 @@ public class MPDRTableService {
         return null ;
     }
 
-}
+ }

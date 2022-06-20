@@ -3,7 +3,9 @@ package mdr;
 import main.MVCCDElement;
 import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRConstraintService;
+import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
+import stereotypes.StereotypeService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,29 +67,6 @@ public abstract class MDRConstraint extends MDROperation{
     //TODO-0 A retirer en ayant les icones
     public String toString(){
 
-        /*
-        if (StringUtils.isNotEmpty(getName())){
-            return StereotypeService.getUMLName(getDefaultStereotype()) + " " + getName();
-        } else {
-            return "Nom à affecter" ;
-        }
-
-         */
-
-        /*
-        try {
-            return StereotypeService.getUMLName(getDefaultStereotype()) + " " + getName();
-        } catch (Exception e){
-            if (getName() != null){
-                return "Err. stéréo " + getName() ;
-            }
-            return "Nom (et nature à affecter)";
-        }
-        */
-
-
-
-        /*
         String resultat = "";
         if (getDefaultStereotype() != null ){
             if (StringUtils.isNotEmpty(StereotypeService.getUMLName(getDefaultStereotype()))){
@@ -98,6 +77,9 @@ public abstract class MDRConstraint extends MDROperation{
         } else {
             resultat = "Err. stéréo défault ";
         }
+        if (StringUtils.isNotEmpty(resultat)){
+            resultat += " ";
+        }
         if (StringUtils.isNotEmpty(getName())){
             resultat += getName();
         } else {
@@ -105,12 +87,16 @@ public abstract class MDRConstraint extends MDROperation{
         }
         return resultat;
 
-         */
+
 
         //TODO-0 getDefaultStereotype() provoque une erreur ....
-        //Trace.println(this.getName() + "   " + this.getClass().getName());
-        //Trace.println(getDefaultStereotype().getName());
-        //return getDefaultStereotype() + " " + getName();
-        return getName();
+        // Il ne fallait pas utiliser directement getChilds ... ?
+        /*
+        Trace.println(this.getName() + "   " + this.getClass().getName());
+        Trace.println(getDefaultStereotype().getName());
+        return getDefaultStereotype() + " " + getName();
+
+         */
+        //return getName();
     }
 }

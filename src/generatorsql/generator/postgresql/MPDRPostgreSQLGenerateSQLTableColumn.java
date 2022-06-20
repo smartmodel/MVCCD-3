@@ -4,6 +4,7 @@ import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.MPDRGenerateSQLTableColumn;
 import mpdr.MPDRColumn;
 import mpdr.MPDRDBPK;
+import mpdr.interfaces.IMPDRColumn;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 
@@ -34,19 +35,19 @@ public class MPDRPostgreSQLGenerateSQLTableColumn extends MPDRGenerateSQLTableCo
     }
 
     @Override
-    protected String generateDatatypeSizeScale(MPDRColumn mpdrColumn) {
+    protected String generateDatatypeSizeScale(IMPDRColumn impdrColumn) {
         String sizeScale = "";
-        if (mpdrColumn.getSize() != null) {
-            if (mpdrColumn.getScale() != null) {
-                sizeScale = "(" + mpdrColumn.getSize().toString() + ", " + mpdrColumn.getScale().toString() + ")";
+        if (impdrColumn.getSize() != null) {
+            if (impdrColumn.getScale() != null) {
+                sizeScale = "(" + impdrColumn.getSize().toString() + ", " + impdrColumn.getScale().toString() + ")";
             } else {
                 // Suppression de la taille pour les colonnes de la fraterie entière
                 ArrayList<String> lienProgsSibling = new ArrayList<String>();
                 lienProgsSibling.add(Preferences.MPDRPOSTGRESQLDATATYPE_SMALLINT_LIENPROG);
                 lienProgsSibling.add(Preferences.MPDRPOSTGRESQLDATATYPE_INTEGER_LIENPROG);
                 lienProgsSibling.add(Preferences.MPDRPOSTGRESQLDATATYPE_BIGINT_LIENPROG);
-                if (! lienProgsSibling.contains(mpdrColumn.getDatatypeLienProg())) {
-                    sizeScale = "(" + mpdrColumn.getSize().toString() + ")";
+                if (! lienProgsSibling.contains(impdrColumn.getDatatypeLienProg())) {
+                    sizeScale = "(" + impdrColumn.getSize().toString() + ")";
                 }
             }
         }

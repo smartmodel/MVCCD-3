@@ -57,6 +57,8 @@ public class MCDTransform extends MDTransform {
             mcdTransformToFK.createOrModifyFromAllAssNotIdCompAndNotNN(imcdModel, mldrModel);
 
             // Transformation des contraintes d'unicité
+            // Transformation des contraintes d'unicité
+            // Transformation des contraintes d'unicité
             MCDTransformToUnique mcdTransformToUnique = new MCDTransformToUnique(this);
             mcdTransformToUnique.createOrModifyFromAllUnicities(imcdModel, mldrModel);
 
