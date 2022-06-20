@@ -2,6 +2,7 @@ package window.editor.diagrammer.drawpanel;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
+import diagram.Diagram;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,6 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
+import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
@@ -81,6 +83,15 @@ public class DrawPanel extends JLayeredPane implements Serializable {
         if (RelationCreator.isCreating) {
             this.showRelationProjectionLine(graphics2D);
         }
+
+
+        // Pour afficher le label du diagramme ouvert en haut à gauche du diagramme
+        if(MVCCDManager.instance().getCurrentDiagram() != null){
+            Diagram currentDiagram = MVCCDManager.instance().getCurrentDiagram();
+            MVCCDElement typeModele = currentDiagram.getParent().getParent();
+            graphics2D.drawString(typeModele + " " + currentDiagram.getName(), 0,10);
+        }
+
     }
 
     public MCDEntityShape getMcdEntityShapeById(int id) {

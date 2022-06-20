@@ -240,7 +240,6 @@ public class DrawPanelListener extends MouseAdapter implements KeyListener, Seri
     MVCCDManager.instance().getCurrentDiagram().addShape(shape);
     DiagrammerService.getDrawPanel().addShape(shape);
     DiagrammerService.getDrawPanel().repaint();
-
   }
 
   private void createNoteShape(MouseEvent event) {

@@ -12,13 +12,12 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.JLayeredPane;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
+import m.MElement;
 import main.MVCCDManager;
 import mdr.MDRRelationFK;
 import mdr.MDRTable;
 import mpdr.MPDRRelFKEnd;
-import preferences.Preferences;
 import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.MDTableShape;
@@ -37,18 +36,21 @@ public class DropTargetListener extends DropTargetAdapter {
 
   private final DrawPanel panel;
   private final ReferentielListener listener;
+  private Diagram currentDiagram = null;
+  private final DrawPanel drawPanel;
 
 
   public DropTargetListener(DrawPanel panel, ReferentielListener listener) {
     this.panel = panel;
     this.listener = listener;
+    this.drawPanel = DiagrammerService.getDrawPanel();
     new DropTarget(panel, DnDConstants.ACTION_COPY, this, true, null);
   }
 
   @Override
   public void drop(DropTargetDropEvent event) {
     try {
-      final Diagram currentDiagram = MVCCDManager.instance().getCurrentDiagram();
+      currentDiagram = MVCCDManager.instance().getCurrentDiagram();
       final Point mouseClick = event.getLocation();
       DefaultMutableTreeNode node = listener.getNode();
 
@@ -80,49 +82,65 @@ public class DropTargetListener extends DropTargetAdapter {
 
   }
 
-  public void paintTAPIs(DropTargetDropEvent event,
-      DefaultMutableTreeNode fatherNode, Point mouseClick) {
-    final Diagram currentDiagram = MVCCDManager.instance().getCurrentDiagram();
-    UMLPackage shape = new UMLPackage(fatherNode.toString() + " TAPIs", fatherNode.toString(),
-        List.of(new MPDRTriggerShape((MDRTable) fatherNode.getUserObject()),
+  public void paintTAPIs(DropTargetDropEvent event, DefaultMutableTreeNode fatherNode,
+      Point mouseClick) {
+    UMLPackage shape = new UMLPackage(
+        fatherNode.toString() + " TAPIs",
+        fatherNode.toString(),
+        List.of(
+            new MPDRTriggerShape((MDRTable) fatherNode.getUserObject()),
             new MPDRProcedureContainerShape((MDRTable) fatherNode.getUserObject()),
-            new MPDRSequenceShape((MDRTable) fatherNode.getUserObject())));
+            new MPDRSequenceShape((MDRTable) fatherNode.getUserObject())
+        )
+    );
 
     // On contrôle que la shape ne soit pas déjà dans le diagramme et on l'ajoute au diagramme si tel n'est pas le cas
     if (!currentDiagram.getShapes().contains(shape)) {
       event.acceptDrop(DnDConstants.ACTION_COPY);
 
-      shape.setLocation(
-          GridUtils.alignToGrid(mouseClick.x, DiagrammerService.getDrawPanel().getGridSize()),
-          GridUtils.alignToGrid(mouseClick.y, DiagrammerService.getDrawPanel().getGridSize()));
-      currentDiagram.addShape(shape);
-      DiagrammerService.getDrawPanel().addShape(shape);
+      addShapeToDiagram(mouseClick, shape);
 
       // On contrôle si la table parent du TAPIs est présente dans le diagramme
       this.checkDependencyLinkTAPIStoTable(fatherNode, shape);
 
       // Ajout des objets graphiques (Triggers, Séquence et Procedures) dans le UMLPackage
-      AtomicInteger centerPositionX = new AtomicInteger(shape.getCenter().x);
-      shape.getTapisElements().forEach(e -> {
-        e.initUI();
-        ((SquaredShape) e).setLocation(
-            GridUtils.alignToGrid(centerPositionX.getAndAdd(-80),
-                DiagrammerService.getDrawPanel().getGridSize()),
-            GridUtils.alignToGrid(shape.getCenter().y,
-                DiagrammerService.getDrawPanel().getGridSize()));
-        currentDiagram.addShape((IShape) e);
-        DiagrammerService.getDrawPanel().addShape((IShape) e);
-        DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(
-            Preferences.DIAGRAMMER_DRAW_PANEL_NAME, (Component) e);
-        drawPanel.setLayer((Component) e, JLayeredPane.DRAG_LAYER);
-      });
-    }else {
+      addUMLPackageChilds(shape);
+
+    } else {
       event.rejectDrop();
     }
   }
 
+  private void addShapeToDiagram(Point mouseClick, IShape shape) {
+    shape.setLocation(
+        GridUtils.alignToGrid(mouseClick.x, drawPanel.getGridSize()),
+        GridUtils.alignToGrid(mouseClick.y, drawPanel.getGridSize()));
+    addShapToDiagram(shape);
+  }
+
+  private void addUMLPackageChilds(UMLPackage shape) {
+    AtomicInteger centerPositionX = new AtomicInteger(shape.getCenter().x);
+    shape.getTapisElements().forEach(e -> {
+      e.initUI();
+      ((SquaredShape) e).setLocation(
+          GridUtils.alignToGrid(centerPositionX.getAndAdd(-80),
+              drawPanel.getGridSize()),
+          GridUtils.alignToGrid(shape.getCenter().y,
+              drawPanel.getGridSize()));
+
+      addShapToDiagram((IShape) e);
+
+      // On déclare la priorité d'affichage des enfants du UMLPackage pour qu'ils soient affichés par dessus ce dernier
+      drawPanel.setLayer((Component) e, JLayeredPane.DRAG_LAYER);
+    });
+  }
+
+  private void addShapToDiagram(IShape e) {
+    currentDiagram.addShape(e);
+    drawPanel.addShape(e);
+  }
+
   public void checkDependencyLinkTAPIStoTable(DefaultMutableTreeNode fatherNode, UMLPackage shape) {
-    final Diagram currentDiagram = MVCCDManager.instance().getCurrentDiagram();
     // On contrôle si la table parent du TAPIs est présente dans le diagramme
     boolean tablePresent = currentDiagram.getMDTableShapeList()
         .stream().anyMatch(e -> e.getEntity().getName().equals(fatherNode.toString()));
@@ -133,27 +151,20 @@ public class DropTargetListener extends DropTargetAdapter {
 
       DependencyLinkShape tapisAssociationShape = new DependencyLinkShape(shape, tableSource,
           "<<specific-to>>");
-      currentDiagram.addShape(tapisAssociationShape);
-      DiagrammerService.getDrawPanel().addShape(tapisAssociationShape);
+      addShapToDiagram(tapisAssociationShape);
     }
   }
 
   public void paintTable(MDRTable mdrTable, DefaultMutableTreeNode node, DropTargetDropEvent event,
       DefaultMutableTreeNode nodeAllTables, Point mouseClick) {
-    final Diagram currentDiagram = MVCCDManager.instance().getCurrentDiagram();
     MDTableShape shape = new MDTableShape(mdrTable);
-
     DefaultMutableTreeNode nodeRelationExtremite = (DefaultMutableTreeNode) node.getChildAt(2);
 
     // On contrôle que la shape ne soit pas déjà dans le diagramme et on l'ajoute au diagramme si tel n'est pas le cas
     if (!currentDiagram.getShapes().contains(shape)) {
       event.acceptDrop(DnDConstants.ACTION_COPY);
 
-      shape.setLocation(
-          GridUtils.alignToGrid(mouseClick.x, DiagrammerService.getDrawPanel().getGridSize()),
-          GridUtils.alignToGrid(mouseClick.y, DiagrammerService.getDrawPanel().getGridSize()));
-      currentDiagram.addShape(shape);
-      DiagrammerService.getDrawPanel().addShape(shape);
+      addShapeToDiagram(mouseClick, shape);
 
       // Est-ce qu'il y a un lien à créer pour lier la table créée avec une autre table du diagramme ?
       if (currentDiagram.getMDTableShapeList().size() > 1) {
@@ -171,22 +182,19 @@ public class DropTargetListener extends DropTargetAdapter {
   }
 
   public void checkDependencyLinkTableToTAPIS(MDRTable mdrTable, MDTableShape shape) {
-    final Diagram currentDiagram = MVCCDManager.instance().getCurrentDiagram();
-    UMLPackage umlPackage = currentDiagram.getUMLPackagesList()
-        .stream().filter(e -> e.getParentTableName().equals(mdrTable.getName())).findFirst()
+    UMLPackage umlPackage = currentDiagram.getUMLPackagesList().stream()
+        .filter(e -> e.getParentTableName().equals(mdrTable.getName()))
+        .findFirst()
         .orElseThrow(RuntimeException::new);
 
     DependencyLinkShape tapisAssociationShape = new DependencyLinkShape(umlPackage,
         shape, "<<specific-to>>");
-    currentDiagram.addShape(tapisAssociationShape);
-    DiagrammerService.getDrawPanel().addShape(tapisAssociationShape);
+    addShapToDiagram(tapisAssociationShape);
   }
 
 
   public void paintTableLink(DefaultMutableTreeNode nodeRelationExtremite,
       DefaultMutableTreeNode nodeAllTables, DefaultMutableTreeNode node) {
-
-    final Diagram currentDiagram = MVCCDManager.instance().getCurrentDiagram();
 
     for (int i = 0; i < nodeRelationExtremite.getChildCount(); i++) {
       DefaultMutableTreeNode referentielNode = (DefaultMutableTreeNode) nodeRelationExtremite.getChildAt(
@@ -215,24 +223,25 @@ public class DropTargetListener extends DropTargetAdapter {
                   .anyMatch(e -> e.getEntity().getName().equals(nodeControleNom))) {
 
                 MDTableShape table1 = mdTableShapes.stream()
-                    .filter(e -> e.getEntity().getName().equals(node.toString())).findFirst()
+                    .filter(e -> e.getEntity().getName().equals(node.toString()))
+                    .findFirst()
                     .orElseThrow(RuntimeException::new);
 
                 MDTableShape table2 = mdTableShapes.stream()
-                    .filter(e -> e.getEntity().getName().equals(nodeControleNom)).findFirst()
+                    .filter(e -> e.getEntity().getName().equals(nodeControleNom))
+                    .findFirst()
                     .orElseThrow(RuntimeException::new);
 
                 MPDRelationShape relation;
+                MElement mElement = mdrRelationFK.getA().getmElement();
 
-                if (mdrRelationFK.getA().getmElement().toString().equals(table1.getName())) {
+                if (mElement.toString().equals(table1.getName())) {
                   relation = new MPDRelationShape(table2, table1, mdrRelationFK);
                 } else {
                   relation = new MPDRelationShape(table1, table2, mdrRelationFK);
                 }
 
-                currentDiagram.addShape(relation);
-                DiagrammerService.getDrawPanel().addShape(relation);
-                DiagrammerService.getDrawPanel().repaint();
+                addShapToDiagram(relation);
               }
             }
           }

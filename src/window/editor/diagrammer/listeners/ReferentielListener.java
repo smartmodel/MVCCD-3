@@ -77,12 +77,12 @@ public class ReferentielListener extends MouseAdapter implements TreeSelectionLi
           // On supprime la palette d'éléments spécifique au MCD si un autre type de modèle est ouvert
           if (!(clickedNode.getUserObject() instanceof MCDDiagram)) {
             MVCCDManager.instance().getWinDiagram().getContent().removePalette();
+
           } else {
             MVCCDManager.instance().getWinDiagram().getContent().addPalette();
           }
 
           MVCCDManager.instance().setCurrentDiagram(diagramClicked);
-
         }
       }
     }

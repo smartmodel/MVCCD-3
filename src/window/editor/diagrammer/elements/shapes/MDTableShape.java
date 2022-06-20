@@ -46,7 +46,7 @@ public class MDTableShape extends ClassShape implements Serializable {
 
   @Override
   protected void drawZoneEnTete(Graphics2D graphics2D) {
-    int y = Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    int y = getYSize(graphics2D);
     for (int i = 0; i < this.zoneEnTete.getElements().size(); i++) {
       if (i == 1) {
         this.setNameFont(graphics2D);
@@ -59,19 +59,21 @@ public class MDTableShape extends ClassShape implements Serializable {
     }
   }
 
+  private int getYSize(Graphics2D graphics2D) {
+    return Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+  }
+
   @Override
   protected void drawZoneProprietes(Graphics2D graphics2D) {
     int y =
-        this.getZoneMinHeight(this.zoneEnTete.getElements()) + Preferences.DIAGRAMMER_CLASS_PADDING
-            + graphics2D.getFontMetrics().getHeight();
+        this.getZoneMinHeight(this.zoneEnTete.getElements()) + getYSize(graphics2D);
     this.drawElements(graphics2D, this.zoneProprietes.getElements(), y);
   }
 
   private void drawZoneOperations(Graphics2D graphics2D) {
     this.setZoneOperationsContent();
     int y = this.getZoneMinHeight(this.zoneProprietes.getElements()) + this.getZoneMinHeight(
-        this.zoneEnTete.getElements()) + Preferences.DIAGRAMMER_CLASS_PADDING
-        + graphics2D.getFontMetrics().getHeight();
+        this.zoneEnTete.getElements()) + getYSize(graphics2D);
     this.drawElements(graphics2D, this.zoneOperations.getElements(), y);
     this.drawBorders(graphics2D);
   }
@@ -215,5 +217,9 @@ public class MDTableShape extends ClassShape implements Serializable {
   @Override
   public String getName() {
     return name;
+  }
+
+  public int getID() {
+    return super.getId();
   }
 }

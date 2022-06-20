@@ -1,17 +1,17 @@
 package window.editor.diagrammer.menus;
 
+import java.io.Serializable;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import window.editor.diagrammer.elements.shapes.UMLPackage;
 import window.editor.diagrammer.menus.actions.UMLPackageDeleteAction;
 
-import javax.swing.*;
-import java.io.Serializable;
-
 public class UMLPackageMenu extends JPopupMenu implements Serializable {
-    public UMLPackageMenu(UMLPackage shape) {
-        super();
+  public UMLPackageMenu(UMLPackage shape) {
+    super();
+    JMenuItem delete = new JMenuItem(
+        new UMLPackageDeleteAction("Supprimer graphiquement", null, shape));
 
-        JMenuItem delete = new JMenuItem(new UMLPackageDeleteAction("Supprimer le Package TAPIs", null, shape));
-        this.add(delete);
-
-    }
+    this.add(delete);
+  }
 }

@@ -1,13 +1,11 @@
 package window.editor.diagrammer.menus.actions;
 
-import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
-import window.editor.diagrammer.services.DiagrammerService;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
+import javax.swing.Icon;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 
-public class MCDEntityShapeDeleteAction extends AbstractAction implements Serializable {
+public class MCDEntityShapeDeleteAction extends DeleteActions implements Serializable {
 
   private static final long serialVersionUID = 1000;
   private MCDEntityShape shape;
@@ -19,10 +17,15 @@ public class MCDEntityShapeDeleteAction extends AbstractAction implements Serial
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    this.delete();
+    if (e.getActionCommand().equals("Supprimer graphiquement")) {
+      super.deleteGraphically(shape);
+    } else if (e.getActionCommand().equals("Supprimer objet")) {
+      this.deleteObject();
+    }
   }
 
-  private void delete() {
-    DiagrammerService.getDrawPanel().deleteShape(this.shape);
+  private void deleteObject() {
+    super.deleteGraphically(shape);
+    super.deleteObject(shape);
   }
 }
