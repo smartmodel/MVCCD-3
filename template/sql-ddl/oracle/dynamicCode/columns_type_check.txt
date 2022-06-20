@@ -1,1 +1,8 @@
-{packageResourcesName}.{procedureResourcesCheckDatatypeWord} ('{tableName}'', '{columnName}'', {columnValue}, {constraintDatatypeName}) ;
+IF {pio_crtrec}.{columnName} IS NOT NULL THEN
+    {packageResourcesName}.{procedureResourcesCheckDatatypeWord} (
+    '{tableName}',
+    '{columnName}',
+    {pio_crtrec}.{columnName},
+    '{noError}',
+    '{messError}' ) ;
+ END IF ;

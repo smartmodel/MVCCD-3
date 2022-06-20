@@ -13,6 +13,8 @@ import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRColumnsService;
 import mldr.MLDRColumn;
+import mpdr.MPDRColumn;
+import mpdr.tapis.MPDRColumnAudit;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -193,16 +195,44 @@ public abstract class MDRColumn extends MDRElement implements
     }
 
 
+    public boolean isColumnPKTI() {
+        if (this instanceof MLDRColumn ){
+            MLDRColumn mldrColumn = (MLDRColumn) this;
+            return mldrColumn.isColumnPKTI();
+        }
+        if (this instanceof MPDRColumn){
+            MPDRColumn mpdrColumn = (MPDRColumn) this;
+            return mpdrColumn.getMLDRColumnSource().isColumnPKTI();
+        }
+        return false;
+    }
+
+
+    public boolean isColumnSimPK() {
+        if (this instanceof MLDRColumn ){
+            MLDRColumn mldrColumn = (MLDRColumn) this;
+            return mldrColumn.isColumnSimPK();
+        }
+        if (this instanceof MPDRColumn){
+            MPDRColumn mpdrColumn = (MPDRColumn) this;
+            return mpdrColumn.getMLDRColumnSource().isColumnSimPK();
+        }
+        return false;
+    }
+
+
     protected boolean isAudit() {
-        return this instanceof MDRColumnAudit;
+       return this instanceof MPDRColumnAudit;
     }
 
     public boolean isNotBusiness() {
         boolean c1 = isPk() ;
         boolean c2 = isFk() ;
         boolean c3 = isAudit() ;
+        boolean c4 = isColumnPKTI() ;
+        boolean c5 = isColumnSimPK() ;
 
-        return isPk() || isFk() || isAudit();
+        return isPk() || isFk() || isAudit() || isColumnPKTI() || isColumnSimPK();
     }
 
     public boolean isBusiness() {
@@ -289,6 +319,10 @@ public abstract class MDRColumn extends MDRElement implements
                     resultat.add(mcdNID.getDefaultStereotype());
                 }
             }
+            if (isColumnSimPK()){
+                resultat.add(stereotypes.getStereotypeByLienProg(MDRColumn.class.getName(),
+                        preferences.STEREOTYPE_TI_SIM_PK_LIENPROG));
+            }
         }
 
         return resultat;
@@ -318,4 +352,5 @@ public abstract class MDRColumn extends MDRElement implements
 
 
     public abstract boolean isPKForEntityIndependant() ;
+
 }

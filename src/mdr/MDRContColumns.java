@@ -23,7 +23,7 @@ public abstract class MDRContColumns extends MDRElement implements IMPathOnlyRep
        return resultat;
     }
 
-    public ArrayList<MDRColumn> getMDRColumnsSortDefault(){
+    public ArrayList<? extends MDRColumn> getMDRColumnsSortDefault(){
         ArrayList<MDRColumn> mdrColumnsSorted = new ArrayList<MDRColumn>();
         for (MDRColumn mdrColumn : getMDRColumns()){
             mdrColumnsSorted.add(mdrColumn);

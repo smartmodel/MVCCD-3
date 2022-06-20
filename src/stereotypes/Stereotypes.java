@@ -19,13 +19,12 @@ public class Stereotypes extends MVCCDElement {
     public ArrayList<Stereotype> getStereotypesByClassName(String className){
         ArrayList<Stereotype> resultat = new  ArrayList<Stereotype>();
         for (MVCCDElement mvccdElement : this.getChilds()){
-            if (mvccdElement instanceof Stereotype){
-                Stereotype stereotype = (Stereotype) mvccdElement;
-                if (stereotype.getClassTargetName().equals(className)){
-                    resultat.add(stereotype);
+                if (mvccdElement instanceof Stereotype){
+                    Stereotype stereotype = (Stereotype) mvccdElement;
+                    if (stereotype.getClassTargetName().equals(className)){
+                        resultat.add(stereotype);
+                    }
                 }
-            }
-
         }
         return resultat;
     }

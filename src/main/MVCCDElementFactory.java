@@ -9,113 +9,28 @@ import connections.postgresql.ConnectionsPostgreSQL;
 import console.ViewLogsManager;
 import console.WarningLevel;
 import diagram.mcd.MCDDiagram;
-import diagram.mldr.MLDRDiagram;
-import diagram.mpdr.MPDROraDiagram;
-import mcd.MCDAssEnd;
-import mcd.MCDAssociation;
-import mcd.MCDAttribute;
-import mcd.MCDContAttributes;
-import mcd.MCDContConstraints;
-import mcd.MCDContDiagrams;
-import mcd.MCDContEntities;
-import mcd.MCDContModels;
-import mcd.MCDContRelEnds;
-import mcd.MCDContRelations;
-import mcd.MCDElement;
-import mcd.MCDEntity;
-import mcd.MCDGSEnd;
-import mcd.MCDGeneralization;
-import mcd.MCDLink;
-import mcd.MCDLinkEnd;
-import mcd.MCDModel;
-import mcd.MCDNID;
-import mcd.MCDPackage;
-import mcd.MCDParameter;
-import mcd.MCDRelation;
-import mcd.MCDUnique;
+import mcd.*;
 import mcd.interfaces.IMCDModel;
 import mcd.interfaces.IMCDSourceMLDRRelationFK;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mcd.services.IMCDModelService;
-import mdr.MDRConstraint;
-import mdr.MDRContColumns;
-import mdr.MDRContConstraints;
-import mdr.MDRContTables;
-import mdr.MDRFK;
-import mdr.MDRRelFKEnd;
-import mdr.MDRTable;
+import mdr.*;
 import mdr.interfaces.IMDRParameter;
 import messages.MessagesBuilder;
-import mldr.MLDRColumn;
-import mldr.MLDRConstraintCustomSpecialized;
-import mldr.MLDRContColumns;
-import mldr.MLDRContConstraints;
-import mldr.MLDRContDiagrams;
-import mldr.MLDRContRelEnds;
-import mldr.MLDRContRelations;
-import mldr.MLDRContTables;
-import mldr.MLDRFK;
-import mldr.MLDRModel;
-import mldr.MLDRModelDT;
-import mldr.MLDRModelTI;
-import mldr.MLDRPK;
-import mldr.MLDRParameter;
-import mldr.MLDRRelFKEnd;
-import mldr.MLDRRelationFK;
-import mldr.MLDRTable;
-import mldr.MLDRUnique;
+import mldr.*;
 import mldr.interfaces.IMLDRElement;
 import mldr.interfaces.IMLDRSourceMPDRCConstraintSpecifc;
 import mldr.services.MLDRContConstraintsService;
-import mpdr.MPDRColumn;
-import mpdr.MPDRContColumns;
-import mpdr.MPDRContConstraints;
-import mpdr.MPDRContDiagrams;
-import mpdr.MPDRContRelEnds;
-import mpdr.MPDRContRelations;
-import mpdr.MPDRContTables;
-import mpdr.MPDRModel;
-import mpdr.MPDRParameter;
-import mpdr.MPDRRelFKEnd;
-import mpdr.MPDRRelationFK;
-import mpdr.MPDRTable;
+import mpdr.*;
 import mpdr.interfaces.IMPDRModelRequirePackage;
-import mpdr.mysql.MPDRMySQLCheckSpecific;
-import mpdr.mysql.MPDRMySQLColumn;
-import mpdr.mysql.MPDRMySQLConstraintCustomSpecialized;
-import mpdr.mysql.MPDRMySQLFK;
-import mpdr.mysql.MPDRMySQLIndex;
-import mpdr.mysql.MPDRMySQLModel;
-import mpdr.mysql.MPDRMySQLPK;
-import mpdr.mysql.MPDRMySQLParameter;
-import mpdr.mysql.MPDRMySQLTable;
-import mpdr.mysql.MPDRMySQLUnique;
+import mpdr.mysql.*;
 import mpdr.mysql.interfaces.IMPDRMySQLElement;
-import mpdr.oracle.MPDROracleCheckSpecific;
-import mpdr.oracle.MPDROracleColumn;
-import mpdr.oracle.MPDROracleColumnView;
-import mpdr.oracle.MPDROracleConstraintCustomSpecialized;
-import mpdr.oracle.MPDROracleFK;
-import mpdr.oracle.MPDROracleIndex;
-import mpdr.oracle.MPDROracleModel;
-import mpdr.oracle.MPDROraclePK;
-import mpdr.oracle.MPDROracleParameter;
-import mpdr.oracle.MPDROracleSequence;
-import mpdr.oracle.MPDROracleTable;
-import mpdr.oracle.MPDROracleUnique;
+import mpdr.oracle.*;
 import mpdr.oracle.interfaces.IMPDROracleElement;
-import mpdr.postgresql.MPDRPostgreSQLCheckSpecific;
-import mpdr.postgresql.MPDRPostgreSQLColumn;
-import mpdr.postgresql.MPDRPostgreSQLConstraintCustomSpecialized;
-import mpdr.postgresql.MPDRPostgreSQLFK;
-import mpdr.postgresql.MPDRPostgreSQLIndex;
-import mpdr.postgresql.MPDRPostgreSQLModel;
-import mpdr.postgresql.MPDRPostgreSQLPK;
-import mpdr.postgresql.MPDRPostgreSQLParameter;
-import mpdr.postgresql.MPDRPostgreSQLSequence;
-import mpdr.postgresql.MPDRPostgreSQLTable;
-import mpdr.postgresql.MPDRPostgreSQLUnique;
+import mpdr.postgresql.*;
 import mpdr.postgresql.intefaces.IMPDRPostgreSQLElement;
+import mpdr.tapis.*;
+import mpdr.tapis.oracle.*;
 import mpdr.tapis.MPDRBoxPackages;
 import mpdr.tapis.MPDRBoxTriggers;
 import mpdr.tapis.MPDRContTAPIs;
@@ -133,6 +48,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import project.ProjectElement;
+import stereotypes.Stereotype;
 import project.ProjectService;
 
 
@@ -150,7 +66,7 @@ public class MVCCDElementFactory {
     }
 
 
-    public Project createProject(String name) {
+    public Project createProject(String name){
 
         Project project = new Project(name);
 
@@ -159,7 +75,7 @@ public class MVCCDElementFactory {
 
         // Les préférences de projets ne sont pas encore mises à jour...
         if (!PreferencesManager.instance().getApplicationPref().getREPOSITORY_MCD_MODELS_MANY()) {
-            createContentMCDModel(mcdContModels);
+                createContentMCDModel(mcdContModels);
         }
         return project;
     }
@@ -180,27 +96,27 @@ public class MVCCDElementFactory {
         return new ConConnectorPostgreSQL(parent);
     }
 
-    public MCDContModels createMCDModels(Project project, int id) {
+    public MCDContModels createMCDModels(Project project, int id){
         return new MCDContModels(project, id);
     }
 
-    public MCDContModels createMCDModels(Project project, String name) {
+    public MCDContModels createMCDModels(Project project, String name){
         return new MCDContModels(project, name);
     }
 
-    public MCDModel createMCDModel(MCDContModels mcdContModels, int id) {
+    public MCDModel createMCDModel(MCDContModels mcdContModels, int id){
         MCDModel mcdModel = new MCDModel(mcdContModels, id);
         createContentMCDModel(mcdModel);
         return mcdModel;
     }
 
-    public MCDModel createMCDModel(MCDContModels mcdContModels) {
+    public MCDModel createMCDModel(MCDContModels mcdContModels){
         MCDModel mcdModel = new MCDModel(mcdContModels);
         createContentMCDModel(mcdModel);
         return mcdModel;
     }
 
-    public MCDPackage createMCDPackage(ProjectElement parent) {
+    public MCDPackage createMCDPackage(ProjectElement parent){
         MCDPackage mcdPackage = new MCDPackage(parent);
         createContentPackage(mcdPackage);
         return mcdPackage;
@@ -210,88 +126,88 @@ public class MVCCDElementFactory {
         return new Preferences(parent, name);
     }
 
-    public MCDContDiagrams createMCDDiagrams(ProjectElement parent, int id) {
+    public MCDContDiagrams createMCDDiagrams(ProjectElement parent, int id){
         return new MCDContDiagrams(parent, id);
     }
 
-    public MCDContDiagrams createMCDDiagrams(ProjectElement parent, String name) {
+    public MCDContDiagrams createMCDDiagrams(ProjectElement parent, String name){
         return new MCDContDiagrams(parent, name);
     }
 
-    public MCDDiagram createMCDDiagram(ProjectElement parent, int id) {
+    public MCDDiagram createMCDDiagram(ProjectElement parent, int id){
         return new MCDDiagram(parent, id);
     }
 
-    public MCDDiagram createMCDDiagram(ProjectElement parent, String name) {
+    public MCDDiagram createMCDDiagram(ProjectElement parent, String name){
         return new MCDDiagram(parent, name);
     }
 
-    public MCDDiagram createMCDDiagram(ProjectElement parent) {
+    public MCDDiagram createMCDDiagram(ProjectElement parent){
         return new MCDDiagram(parent);
     }
 
-    public MCDContEntities createMCDEntities(ProjectElement parent, String name) {
+    public MCDContEntities createMCDEntities(ProjectElement parent, String name){
         MCDContEntities mcdContEntities = new MCDContEntities(parent, name);
         return mcdContEntities;
     }
 
-    public MCDContRelations createMCDContRelations(ProjectElement parent, String name) {
+    public MCDContRelations createMCDContRelations(ProjectElement parent, String name){
         MCDContRelations mcdContRelations = new MCDContRelations(parent, name);
         return mcdContRelations;
     }
 
-    public MCDContConstraints createMCDConstraints(ProjectElement parent, String name) {
+    public MCDContConstraints createMCDConstraints(ProjectElement parent, String name){
         MCDContConstraints mcdContConstraints = new MCDContConstraints(parent, name);
         return mcdContConstraints;
     }
 
-    public MCDEntity createMCDEntity(ProjectElement parent, int id) {
+    public MCDEntity createMCDEntity(ProjectElement parent, int id){
         MCDEntity mcdEntity = new MCDEntity(parent, id);
         this.createMCDContOfEntity(mcdEntity);
         return mcdEntity;
     }
 
-    public MCDEntity createMCDEntity(ProjectElement parent) {
+    public MCDEntity createMCDEntity(ProjectElement parent){
         MCDEntity mcdEntity = new MCDEntity(parent);
         this.createMCDContOfEntity(mcdEntity);
         return mcdEntity;
     }
 
-    private void createMCDContOfEntity(MCDEntity mcdEntity) {
+    private void createMCDContOfEntity(MCDEntity mcdEntity){
         MVCCDElementFactory.instance().createMCDAttributes(mcdEntity, Preferences.REPOSITORY_MCD_ATTRIBUTES_NAME);
         MVCCDElementFactory.instance().createMCDContEndRels(mcdEntity, Preferences.REPOSITORY_MCD_RELATIONS_ENDS_NAME);
         MVCCDElementFactory.instance().createMCDConstraints(mcdEntity, Preferences.REPOSITORY_MCD_CONSTRAINTS_NAME);
     }
 
-    public MCDContAttributes createMCDAttributes(MCDEntity parent, String name) {
+    public MCDContAttributes createMCDAttributes(MCDEntity parent, String name){
         return new MCDContAttributes(parent, name);
     }
 
-    public MCDContRelEnds createMCDContEndRels(MCDElement parent, String name) {
+    public MCDContRelEnds createMCDContEndRels(MCDElement parent, String name){
         return new MCDContRelEnds(parent, name);
     }
 
-    public MCDAttribute createMCDAttribute(MCDContAttributes parent) {
+    public MCDAttribute createMCDAttribute(MCDContAttributes parent){
         return new MCDAttribute(parent);
     }
 
-    public MCDAttribute createMCDAttribute(MCDContAttributes parent, int id) {
+    public MCDAttribute createMCDAttribute(MCDContAttributes parent, int id){
         return new MCDAttribute(parent, id);
     }
 
-    public MCDUnique createMCDUnique(MCDContConstraints parent, int id) {
+    public MCDUnique createMCDUnique(MCDContConstraints parent, int id){
         return new MCDUnique(parent, id);
     }
 
-    public MCDUnique createMCDUnique(MCDContConstraints parent) {
+    public MCDUnique createMCDUnique(MCDContConstraints parent){
         return new MCDUnique(parent);
     }
 
-    public MCDNID createMCDNID(MCDContConstraints parent, int id) {
+    public MCDNID createMCDNID(MCDContConstraints parent, int id){
         return new MCDNID(parent, id);
     }
 
-    public MCDNID createMCDNID(MCDContConstraints parent) {
+    public MCDNID createMCDNID(MCDContConstraints parent){
         return new MCDNID(parent);
     }
 
@@ -299,25 +215,25 @@ public class MVCCDElementFactory {
         return new MCDParameter(parent);
     }
 
-    public MCDAssociation createMCDAssociation(MCDContRelations mcdContRelations,
-                                               MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, int idAssociation, int idAssEndFrom, int idAssEndTo) {
+    public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
+                                                MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, int idAssociation, int idAssEndFrom, int idAssEndTo) {
         MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations, idAssociation);
         MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdEntityFrom.getMCDContRelEnds(), idAssEndFrom);
         MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdEntityTo.getMCDContRelEnds(), idAssEndTo);
         this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo, mcdAssEndFrom, mcdAssEndTo);
         return mcdAssociation;
-    }
+}
 
-    public MCDAssociation createMCDAssociation(MCDContRelations mcdContRelations,
-                                               MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo) {
-        MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations);
-        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdEntityFrom.getMCDContRelEnds());
-        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdEntityTo.getMCDContRelEnds());
+    public MCDAssociation createMCDAssociation( MCDContRelations mcdContRelations,
+                                                MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo) {
+        MCDAssociation mcdAssociation = new MCDAssociation(mcdContRelations) ;
+        MCDAssEnd mcdAssEndFrom = new MCDAssEnd(mcdEntityFrom.getMCDContRelEnds()) ;
+        MCDAssEnd mcdAssEndTo = new MCDAssEnd(mcdEntityTo.getMCDContRelEnds()) ;
         this.initMCDAssociation(mcdAssociation, mcdEntityFrom, mcdEntityTo, mcdAssEndFrom, mcdAssEndTo);
         return mcdAssociation;
     }
 
-    private void initMCDAssociation(MCDAssociation mcdAssociation, MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, MCDAssEnd mcdAssEndFrom, MCDAssEnd mcdAssEndTo) {
+    private void initMCDAssociation(MCDAssociation mcdAssociation, MCDEntity mcdEntityFrom, MCDEntity mcdEntityTo, MCDAssEnd mcdAssEndFrom, MCDAssEnd mcdAssEndTo){
         mcdAssociation.setFrom(mcdAssEndFrom);
         mcdAssociation.setTo(mcdAssEndTo);
 
@@ -332,18 +248,18 @@ public class MVCCDElementFactory {
     }
 
 
-    public MCDGeneralization createMCDGeneralization(MCDContRelations mcdContRelations,
-                                                     MCDEntity mcdEntityGen,
-                                                     MCDEntity mcdEntitySpec) {
+    public MCDGeneralization createMCDGeneralization( MCDContRelations mcdContRelations,
+                                                      MCDEntity mcdEntityGen,
+                                                      MCDEntity mcdEntitySpec) {
 
-        MCDGeneralization mcdGeneralization = new MCDGeneralization(mcdContRelations);
+        MCDGeneralization mcdGeneralization = new MCDGeneralization(mcdContRelations) ;
 
 
         MCDContRelEnds mcdContRelEndsEntityGen = mcdEntityGen.getMCDContRelEnds();
-        MCDGSEnd mcdGSEndGen = new MCDGSEnd(mcdContRelEndsEntityGen);
+        MCDGSEnd mcdGSEndGen = new MCDGSEnd(mcdContRelEndsEntityGen) ;
 
         MCDContRelEnds mcdContRelEndsEntitySpec = mcdEntitySpec.getMCDContRelEnds();
-        MCDGSEnd mcdGSEndSpec = new MCDGSEnd(mcdContRelEndsEntitySpec);
+        MCDGSEnd mcdGSEndSpec = new MCDGSEnd(mcdContRelEndsEntitySpec) ;
 
 
         mcdGeneralization.setGen(mcdGSEndGen);
@@ -358,7 +274,7 @@ public class MVCCDElementFactory {
         return mcdGeneralization;
     }
 
-    public MCDLink createMCDLink(MCDContRelations mcdContRelations, MCDEntity mcdEntity, MCDAssociation mcdAssociation) {
+    public MCDLink createMCDLink( MCDContRelations mcdContRelations, MCDEntity mcdEntity, MCDAssociation mcdAssociation) {
         MCDLink mcdLink = new MCDLink(mcdContRelations);
         this.initMCDLink(mcdLink, mcdEntity, mcdAssociation);
         this.changeSourceForTable(mcdLink);
@@ -366,18 +282,18 @@ public class MVCCDElementFactory {
     }
 
 
-    public MCDLink createMCDLink(MCDContRelations mcdContRelations, MCDEntity mcdEntity, MCDAssociation mcdAssociation, int id) {
+    public MCDLink createMCDLink( MCDContRelations mcdContRelations, MCDEntity mcdEntity, MCDAssociation mcdAssociation, int id) {
         MCDLink mcdLink = new MCDLink(mcdContRelations, id);
         this.initMCDLink(mcdLink, mcdEntity, mcdAssociation);
         return mcdLink;
     }
 
-    private void initMCDLink(MCDLink mcdLink, MCDEntity mcdEntity, MCDAssociation mcdAssociation) {
+    private void initMCDLink(MCDLink mcdLink, MCDEntity mcdEntity, MCDAssociation mcdAssociation){
         MCDContRelEnds mcdContRelEndsEntity = mcdEntity.getMCDContRelEnds();
-        MCDLinkEnd mcdLinkEndEntity = new MCDLinkEnd(mcdContRelEndsEntity);
+        MCDLinkEnd mcdLinkEndEntity = new MCDLinkEnd(mcdContRelEndsEntity) ;
 
         MCDContRelEnds mcdContRelEndsAssociation = mcdAssociation.getMCDContRelEnds();
-        MCDLinkEnd mcdLinkEndAssociation = new MCDLinkEnd(mcdContRelEndsAssociation);
+        MCDLinkEnd mcdLinkEndAssociation = new MCDLinkEnd(mcdContRelEndsAssociation) ;
 
         mcdLink.setEndEntity(mcdLinkEndEntity);
         mcdLink.setEndAssociation(mcdLinkEndAssociation);
@@ -392,14 +308,14 @@ public class MVCCDElementFactory {
     // Si nécessaire, changment de la source de la table : Association n:n --> Entité associative
     private void changeSourceForTable(MCDLink mcdLink) {
         MCDAssociation mcdAssociation = mcdLink.getAssociation();
-        if (mcdAssociation.isDegreeNN()) {
+        if (mcdAssociation.isDegreeNN()){
             IMCDModel mcdModelAccueil = mcdLink.getIMCDModelAccueil();
-            for (MLDRModel mldrModel : IMCDModelService.getMLDRModels(mcdModelAccueil)) {
+            for (MLDRModel mldrModel : IMCDModelService.getMLDRModels(mcdModelAccueil)){
                 MLDRTable mldrTable = mldrModel.getMLDRTableByAssNNSource(mcdAssociation);
-                if (mldrTable != null) {
+                if (mldrTable != null){
                     mldrTable.setMcdElementSource(mcdLink.getEntity());
                     String message = MessagesBuilder.getMessagesProperty("editor.link.change.source.to.entity.ass",
-                            new String[]{mldrTable.getNameTreePath(), mcdLink.getEntity().getNameTreePath()});
+                            new String[] {mldrTable.getNameTreePath(), mcdLink.getEntity().getNameTreePath()} );
                     ViewLogsManager.printMessage(message, WarningLevel.INFO);
                 }
             }
@@ -413,33 +329,33 @@ public class MVCCDElementFactory {
     }
 
     private void createContentPackage(MCDElement parent) {
-        MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(parent, Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
-        MCDContEntities mcdContEntities = MVCCDElementFactory.instance().createMCDEntities(parent, Preferences.REPOSITORY_MCD_ENTITIES_NAME);
-        MCDContRelations mcdContRelations = MVCCDElementFactory.instance().createMCDContRelations(parent, Preferences.REPOSITORY_MCD_RELATIONS_NAME);
+        MCDContDiagrams mcdContDiagrams = MVCCDElementFactory.instance().createMCDDiagrams(parent,Preferences.REPOSITORY_MCD_DIAGRAMS_NAME);
+        MCDContEntities mcdContEntities = MVCCDElementFactory.instance().createMCDEntities(parent, Preferences.REPOSITORY_MCD_ENTITIES_NAME );
+        MCDContRelations mcdContRelations = MVCCDElementFactory.instance().createMCDContRelations(parent,Preferences.REPOSITORY_MCD_RELATIONS_NAME);
     }
 
 
-    public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel, int id) {
+    public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel, int id){
         MLDRModelDT mldrModelDT = new MLDRModelDT((ProjectElement) imcdModel, id);
         mldrModelDT.setName(Preferences.REPOSITORY_MLDR_MODEL_DT_NAME);
         createMLDRContModel(mldrModelDT);
         return mldrModelDT;
     }
 
-    public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel) {
+    public MLDRModelDT createMLDRModelDT(IMCDModel imcdModel){
         MLDRModelDT mldrModelDT = new MLDRModelDT((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_DT_NAME);
         createMLDRContModel(mldrModelDT);
         return mldrModelDT;
     }
 
-    public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel, int id) {
+    public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel, int id){
         MLDRModelTI mldrModelTI = new MLDRModelTI((ProjectElement) imcdModel, id);
         mldrModelTI.setName(Preferences.REPOSITORY_MLDR_MODEL_TI_NAME);
         createMLDRContModel(mldrModelTI);
         return mldrModelTI;
     }
 
-    public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel) {
+    public MLDRModelTI createMLDRModelTI(IMCDModel imcdModel){
         MLDRModelTI mldrModelTI = new MLDRModelTI((ProjectElement) imcdModel, Preferences.REPOSITORY_MLDR_MODEL_TI_NAME);
         createMLDRContModel(mldrModelTI);
         return mldrModelTI;
@@ -472,7 +388,7 @@ public class MVCCDElementFactory {
         return mldrTable;
     }
 
-    private void initMLDRTable(MLDRTable mldrTable) {
+    private void initMLDRTable(MLDRTable mldrTable){
         new MLDRContColumns(mldrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         new MLDRContConstraints(mldrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
         new MLDRContRelEnds(mldrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
@@ -518,25 +434,25 @@ public class MVCCDElementFactory {
         return mldrFK;
     }
 
-    public void initMLDRFK(MLDRFK mldrFK, MDRContConstraints mdrContConstraints) {
+    public void initMLDRFK(MLDRFK mldrFK, MDRContConstraints mdrContConstraints){
         Integer indice = MLDRContConstraintsService.nextIndice(mdrContConstraints, mldrFK);
         mldrFK.setIndice(indice);
     }
 
 
-    public MLDRRelationFK createMLDRRelationFK(MLDRContRelations mldrContRelations,
-                                               IMCDSourceMLDRRelationFK imcdSourceMLDRRelationFK,
-                                               MLDRTable mldrTableA,
-                                               MLDRTable mldrTableB) {
+    public MLDRRelationFK createMLDRRelationFK( MLDRContRelations mldrContRelations,
+                                                IMCDSourceMLDRRelationFK imcdSourceMLDRRelationFK,
+                                                MLDRTable mldrTableA,
+                                                MLDRTable mldrTableB) {
 
-        MLDRRelationFK mldrRelationFK = new MLDRRelationFK(mldrContRelations, imcdSourceMLDRRelationFK);
+        MLDRRelationFK mldrRelationFK = new MLDRRelationFK(mldrContRelations, imcdSourceMLDRRelationFK) ;
 
 
         MLDRContRelEnds mldrContEndRelsA = (MLDRContRelEnds) mldrTableA.getMDRContRelEnds();
-        MLDRRelFKEnd mldrRelFKEndA = new MLDRRelFKEnd(mldrContEndRelsA);
+        MLDRRelFKEnd mldrRelFKEndA = new MLDRRelFKEnd(mldrContEndRelsA) ;
 
         MLDRContRelEnds mldrContEndRelsB = (MLDRContRelEnds) mldrTableB.getMDRContRelEnds();
-        MLDRRelFKEnd mldrRelFKEndB = new MLDRRelFKEnd(mldrContEndRelsB);
+        MLDRRelFKEnd mldrRelFKEndB = new MLDRRelFKEnd(mldrContEndRelsB) ;
 
         /*
         mldrRelationFK.setEndParent(mldrRelFKEndParent);
@@ -561,13 +477,13 @@ public class MVCCDElementFactory {
         return mldrRelFKEnd;
     }
 
-    public MLDRRelationFK createMLDRRelationFK(MLDRContRelations mldrContRelations,
-                                               MCDRelation mcdRelation,
-                                               MLDRRelFKEnd mldrRelFKA,
-                                               MLDRRelFKEnd mldrRelFKEndA,
-                                               int id) {
+    public MLDRRelationFK createMLDRRelationFK( MLDRContRelations mldrContRelations,
+                                                MCDRelation mcdRelation,
+                                                MLDRRelFKEnd mldrRelFKA,
+                                                MLDRRelFKEnd mldrRelFKEndA,
+                                                int id) {
 
-        MLDRRelationFK mldrRelationFK = new MLDRRelationFK(mldrContRelations, mcdRelation, id);
+        MLDRRelationFK mldrRelationFK = new MLDRRelationFK(mldrContRelations, mcdRelation, id) ;
 
         //Affectation de la relation avec chacune des extrémités de la relation et inversement
         /*
@@ -595,6 +511,18 @@ public class MVCCDElementFactory {
         MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized =
                 new MLDRConstraintCustomSpecialized(mldrContConstraints, mcdElementSource);
         return mldrConstraintCustomSpecialized;
+    }
+
+    public MLDRConstraintCustomJnal createMLDRJnal(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
+        MLDRConstraintCustomJnal mldrConstraintCustomJnal =
+                new MLDRConstraintCustomJnal(mldrContConstraints, mcdElementSource);
+        return mldrConstraintCustomJnal;
+    }
+
+    public MLDRConstraintCustomAudit createMLDRAudit(MLDRContConstraints mldrContConstraints, MCDElement mcdElementSource) {
+        MLDRConstraintCustomAudit mldrConstraintCustomAudit =
+                new MLDRConstraintCustomAudit(mldrContConstraints, mcdElementSource);
+        return mldrConstraintCustomAudit;
     }
 
 
@@ -628,6 +556,26 @@ public class MVCCDElementFactory {
         return mpdrOracleColumn;
     }
 
+    public MPDROracleColumnAudit createMPDROracleColumnAudit(MDRContColumns mdrContColumns,
+                                                             MLDRConstraintCustomAudit mldrConstraintCustomAudit,
+                                                             Stereotype stereotype) {
+        MPDROracleColumnAudit mpdrOracleColumnAudit = new MPDROracleColumnAudit(mdrContColumns, mldrConstraintCustomAudit, stereotype);
+        return mpdrOracleColumnAudit;
+    }
+
+    public MPDROracleColumnJnalTech createMPDROracleColumnJnalTech(MDRContColumns mdrContColumns,
+                                                               MPDRConstraintCustomJnal mpdrConstraintCustomJnal,
+                                                               Stereotype stereotype) {
+        MPDROracleColumnJnalTech mpdrOracleColumnJnalTech = new MPDROracleColumnJnalTech(mdrContColumns, mpdrConstraintCustomJnal, stereotype);
+        return mpdrOracleColumnJnalTech;
+    }
+
+
+    public MPDROracleColumnJnalDatas createMPDROracleColumnJnalDatas(MDRContColumns mdrContColumns,
+                                                               MPDRColumn mpdrColumnSource) {
+        MPDROracleColumnJnalDatas mpdrOracleColumnJnalDatas = new MPDROracleColumnJnalDatas(mdrContColumns, mpdrColumnSource);
+        return mpdrOracleColumnJnalDatas;
+    }
 
     public MPDROracleColumnView createMPDROracleColumnView(MDRContColumns mdrContColumns) {
         MPDROracleColumnView mpdrOracleColumnView = new MPDROracleColumnView(mdrContColumns, null);
@@ -658,7 +606,7 @@ public class MVCCDElementFactory {
 
     public MPDROracleIndex createMPDROracleIndex(MDRContConstraints mdrContConstraints, MLDRFK mldrFK) {
         MPDROracleIndex mpdrOracleIndex = new MPDROracleIndex(mdrContConstraints, mldrFK);
-        return mpdrOracleIndex;
+        return mpdrOracleIndex ;
     }
 
     public MPDROracleUnique createMPDROracleUnique(MDRContConstraints mdrContConstraints, MLDRUnique mldrUnique) {
@@ -666,10 +614,22 @@ public class MVCCDElementFactory {
         return mpdrOracleUnique;
     }
 
-    public MPDROracleConstraintCustomSpecialized createMPDROracleConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
-                                                                                             MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
+    public  MPDROracleConstraintCustomSpecialized createMPDROracleConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
+                                                                        MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
         MPDROracleConstraintCustomSpecialized newSpecialized = new MPDROracleConstraintCustomSpecialized(mdrContConstraints, mldrConstraintCustomSpecialized);
         return newSpecialized;
+    }
+
+    public  MPDROracleConstraintCustomJnal createMPDROracleConstraintCustomJnal(MDRContConstraints mdrContConstraints,
+                                                                                  MLDRConstraintCustomJnal mldrConstraintCustomJnal) {
+        MPDROracleConstraintCustomJnal newJnal = new MPDROracleConstraintCustomJnal(mdrContConstraints, mldrConstraintCustomJnal);
+        return newJnal;
+    }
+
+    public  MPDROracleConstraintCustomAudit createMPDROracleConstraintCustomAudit(MDRContConstraints mdrContConstraints,
+                                                                                  MLDRConstraintCustomAudit mldrConstraintCustomAudit) {
+        MPDROracleConstraintCustomAudit newAudit = new MPDROracleConstraintCustomAudit(mdrContConstraints, mldrConstraintCustomAudit);
+        return newAudit;
     }
 
     public MPDROracleCheckSpecific createMPDROracleCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -677,8 +637,8 @@ public class MVCCDElementFactory {
         return mpdrOracleCheckSpecific;
     }
 
-    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, MLDRParameter mldrParameter) {
-        return new MPDROracleParameter(impdrOracleElement, mldrParameter);
+    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, MLDRParameter mldrParameter){
+        return new MPDROracleParameter( impdrOracleElement, mldrParameter);
     }
 
     /**
@@ -687,20 +647,20 @@ public class MVCCDElementFactory {
      * la (ou les) colonne cible pointé par la FK.
      *
      * @param impdrOracleElement L'élément parent pour qui le parameter est ajouté, par exemple la contrainte FK.
-     * @param target             Élément cible du paramètre (généralement une colonne).
-     * @param mldrParameter      Il s'agit de l'élément MLDR qui est la source du parameter MPDR lors de la transformation
-     *                           MLDR => MPDR.
-     * @param id                 Id déjà connu (lors du chargement du projet depuis le fichier XML) du parameter.
+     * @param target Élément cible du paramètre (généralement une colonne).
+     * @param mldrParameter Il s'agit de l'élément MLDR qui est la source du parameter MPDR lors de la transformation
+     *                      MLDR => MPDR.
+     * @param id Id déjà connu (lors du chargement du projet depuis le fichier XML) du parameter.
      * @return Retourne le parameter de niveau MPDR Oracle créé.
      */
-    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMDRParameter target, MLDRParameter mldrParameter, int id) {
+    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMDRParameter target, MLDRParameter mldrParameter, int id){
         return new MPDROracleParameter(impdrOracleElement, target, mldrParameter, id);
     }
 
 
     // Création d'un paramètre qui n'est pas issu de la transformation d'un paramètre logique
-    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
-        return new MPDROracleParameter(impdrOracleElement, imldrSourceMPDRCConstraintSpecifc);
+    public MPDRParameter createMPDROracleParameter(IMPDROracleElement impdrOracleElement, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc){
+        return new MPDROracleParameter( impdrOracleElement, imldrSourceMPDRCConstraintSpecifc);
     }
 
 
@@ -748,11 +708,17 @@ public class MVCCDElementFactory {
         return mpdrOracleView;
     }
 
+    public MPDROracleTableJnal createMPDROracleTableJnal(MPDRContTAPIs mpdrContTAPIs, MLDRConstraintCustomJnal mldrConstraintCustomJnal) {
+        MPDROracleTableJnal mpdrOracleTableJnal = new MPDROracleTableJnal(mpdrContTAPIs, mldrConstraintCustomJnal);
+        new MPDRContColumnsJnal(mpdrOracleTableJnal, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
+        return mpdrOracleTableJnal;
+    }
 
     public MPDROracleBoxTriggers createMPDROracleBoxTriggers(MPDRView mpdrView, MLDRConstraintCustomSpecialized mldrSpecialized) {
         MPDROracleBoxTriggers mpdrOracleTriggers = new MPDROracleBoxTriggers(mpdrView, mldrSpecialized);
         return mpdrOracleTriggers;
     }
+
 
 
     // MySQL
@@ -806,10 +772,10 @@ public class MVCCDElementFactory {
         MPDRMySQLFK mpdrMySQLFK = new MPDRMySQLFK(mdrContConstraints, mldrFK, id);
         return mpdrMySQLFK;
     }
-
+    
     public MPDRMySQLIndex createMPDRMySQLIndex(MDRContConstraints mdrContConstraints, MLDRFK mldrFK) {
         MPDRMySQLIndex mpdrMySQLIndex = new MPDRMySQLIndex(mdrContConstraints, mldrFK);
-        return mpdrMySQLIndex;
+        return mpdrMySQLIndex ;
     }
 
     public MPDRMySQLUnique createMPDRMySQLUnique(MDRContConstraints mdrContConstraints, MLDRUnique mldrUnique) {
@@ -818,10 +784,24 @@ public class MVCCDElementFactory {
     }
 
 
-    public MPDRMySQLConstraintCustomSpecialized createMPDRMySQLConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
-                                                                                           MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
+    public  MPDRMySQLConstraintCustomSpecialized createMPDRMySQLConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
+                                                                                              MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
         MPDRMySQLConstraintCustomSpecialized newSpecialized = new MPDRMySQLConstraintCustomSpecialized(mdrContConstraints, mldrConstraintCustomSpecialized);
         return newSpecialized;
+    }
+
+
+    public  MPDRMySQLConstraintCustomJnal createMPDRMySQLConstraintCustomJnal(MDRContConstraints mdrContConstraints,
+                                                                                MLDRConstraintCustomJnal mldrConstraintCustomJnal) {
+        MPDRMySQLConstraintCustomJnal newJnal = new MPDRMySQLConstraintCustomJnal(mdrContConstraints, mldrConstraintCustomJnal);
+        return newJnal;
+    }
+
+
+    public  MPDRMySQLConstraintCustomAudit createMPDRMySQLConstraintCustomAudit(MDRContConstraints mdrContConstraints,
+                                                                                MLDRConstraintCustomAudit mldrConstraintCustomAudit) {
+        MPDRMySQLConstraintCustomAudit newAudit = new MPDRMySQLConstraintCustomAudit(mdrContConstraints, mldrConstraintCustomAudit);
+        return newAudit;
     }
 
     public MPDRMySQLCheckSpecific createMPDRMySQLCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -829,21 +809,21 @@ public class MVCCDElementFactory {
         return mpdrMySQLCheckSpecific;
     }
 
-    public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement impdrMySQLElement, MLDRParameter mldrParameter) {
-        return new MPDRMySQLParameter(impdrMySQLElement, mldrParameter);
+    public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement impdrMySQLElement, MLDRParameter mldrParameter){
+        return new MPDRMySQLParameter( impdrMySQLElement, mldrParameter);
     }
 
-    public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement impdrMySQLElement, IMDRParameter target, MLDRParameter mldrParameter, int id) {
+    public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement impdrMySQLElement, IMDRParameter target, MLDRParameter mldrParameter, int id){
         return new MPDRMySQLParameter(impdrMySQLElement, target, mldrParameter, id);
     }
 
 
     // Création d'un paramètre qui n'est pas issu de la transformation d'un paramètre logique
-    public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement mpdrMySQLParameter, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
-        return new MPDRMySQLParameter(mpdrMySQLParameter, imldrSourceMPDRCConstraintSpecifc);
+    public MPDRParameter createMPDRMySQLParameter(IMPDRMySQLElement mpdrMySQLParameter, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc){
+        return new MPDRMySQLParameter( mpdrMySQLParameter, imldrSourceMPDRCConstraintSpecifc);
     }
 
-
+    
     // PostgreSQL
     public MPDRPostgreSQLModel createMPDRPostgreSQLModel(MLDRModel mldrModel) {
         MPDRPostgreSQLModel mpdrPostgreSQLModel = new MPDRPostgreSQLModel(mldrModel, Preferences.REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME);
@@ -863,6 +843,7 @@ public class MVCCDElementFactory {
         this.initMPDRTable(mpdrPostgreSQLTable);
         return mpdrPostgreSQLTable;
     }
+
 
 
     public MPDRPostgreSQLColumn createMPDRPostgreSQLColumn(MDRContColumns mdrContColumns, MLDRColumn mldrColumn) {
@@ -898,10 +879,10 @@ public class MVCCDElementFactory {
         MPDRPostgreSQLFK mpdrPostgreSQLFK = new MPDRPostgreSQLFK(mdrContConstraints, mldrFK);
         return mpdrPostgreSQLFK;
     }
-
+    
     public MPDRPostgreSQLIndex createMPDRPostgreSQLIndex(MDRContConstraints mdrContConstraints, MLDRFK mldrFK) {
         MPDRPostgreSQLIndex mpdrPostgreSQLIndex = new MPDRPostgreSQLIndex(mdrContConstraints, mldrFK);
-        return mpdrPostgreSQLIndex;
+        return mpdrPostgreSQLIndex ;
     }
 
     public MPDRPostgreSQLUnique createMPDRPostgreSQLUnique(MDRContConstraints mdrContConstraints, MLDRUnique mldrUnique) {
@@ -909,10 +890,23 @@ public class MVCCDElementFactory {
         return mpdrPostgreSQLUnique;
     }
 
-    public MPDRPostgreSQLConstraintCustomSpecialized createMPDRPostgreSQLConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
-                                                                                                     MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
+    public  MPDRPostgreSQLConstraintCustomSpecialized createMPDRPostgreSQLConstraintCustomSpecialized(MDRContConstraints mdrContConstraints,
+                                                                                            MLDRConstraintCustomSpecialized mldrConstraintCustomSpecialized) {
         MPDRPostgreSQLConstraintCustomSpecialized newSpecialized = new MPDRPostgreSQLConstraintCustomSpecialized(mdrContConstraints, mldrConstraintCustomSpecialized);
         return newSpecialized;
+    }
+
+    public  MPDRPostgreSQLConstraintCustomJnal createMPDRPostgreSQLConstraintCustomJnal(MDRContConstraints mdrContConstraints,
+                                                                                          MLDRConstraintCustomJnal mldrConstraintCustomJnal) {
+        MPDRPostgreSQLConstraintCustomJnal newJnal = new MPDRPostgreSQLConstraintCustomJnal(mdrContConstraints, mldrConstraintCustomJnal);
+        return newJnal;
+    }
+
+
+    public  MPDRPostgreSQLConstraintCustomAudit createMPDRPostgreSQLConstraintCustomAudit(MDRContConstraints mdrContConstraints,
+                                                                                          MLDRConstraintCustomAudit mldrConstraintCustomAudit) {
+        MPDRPostgreSQLConstraintCustomAudit newAudit = new MPDRPostgreSQLConstraintCustomAudit(mdrContConstraints, mldrConstraintCustomAudit);
+        return newAudit;
     }
 
     public MPDRPostgreSQLCheckSpecific createMPDRPostgreSQLCheckSpecific(MDRContConstraints mdrContConstraints, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -923,16 +917,16 @@ public class MVCCDElementFactory {
 
     //TODO-PAS: Parameter pour PostgreSQL
     public MPDRParameter createMPDRPostgreSQLParameter(IMPDRPostgreSQLElement impdrPostgreSQLElement, IMDRParameter target, MLDRParameter mldrParameter, int id) {
-        return new MPDRPostgreSQLParameter(impdrPostgreSQLElement, target, mldrParameter, id);
+        return new MPDRPostgreSQLParameter( impdrPostgreSQLElement, target, mldrParameter, id);
     }
 
-    public MPDRParameter createMPDRPostgreSQLParameter(IMPDRPostgreSQLElement impdrPostgreSQLElement, MLDRParameter mldrParameter) {
-        return new MPDRPostgreSQLParameter(impdrPostgreSQLElement, mldrParameter);
+    public MPDRParameter createMPDRPostgreSQLParameter(IMPDRPostgreSQLElement impdrPostgreSQLElement, MLDRParameter mldrParameter){
+        return new MPDRPostgreSQLParameter( impdrPostgreSQLElement, mldrParameter);
     }
 
     // Création d'un paramètre qui n'est pas issu de la transformation d'un paramètre logique
-    public MPDRParameter createMPDRPostgreSQLParameter(IMPDRPostgreSQLElement impdrPostgreSQLElement, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
-        return new MPDRPostgreSQLParameter(impdrPostgreSQLElement, imldrSourceMPDRCConstraintSpecifc);
+    public MPDRParameter createMPDRPostgreSQLParameter(IMPDRPostgreSQLElement impdrPostgreSQLElement, IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc){
+        return new MPDRPostgreSQLParameter( impdrPostgreSQLElement, imldrSourceMPDRCConstraintSpecifc);
     }
 
     public MPDRPostgreSQLSequence createMPDRPostgreSQLSequence(MPDRColumn mpdrColumn, MLDRColumn mldrColumn) {
@@ -978,17 +972,17 @@ public class MVCCDElementFactory {
     }
 
 
-    private void initMPDRTable(MPDRTable mpdrTable) {
+    private void initMPDRTable(MPDRTable mpdrTable){
         new MPDRContColumns(mpdrTable, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         new MPDRContConstraints(mpdrTable, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
         new MPDRContRelEnds(mpdrTable, Preferences.REPOSITORY_MDR_RELENDS_NAME);
 
         // Le conteneur est toujours créé car sinon il faut le créer/supprimer lors du changement de préférence
         //TODO-2 A faire à terme
-        MPDRContTAPIs mpdrContTAPIs = new MPDRContTAPIs(mpdrTable, Preferences.REPOSITORY_MDR_TAPIS_NAME);
+        MPDRContTAPIs  mpdrContTAPIs = new MPDRContTAPIs(mpdrTable, Preferences.REPOSITORY_MDR_TAPIS_NAME);
     }
 
-    private void initMPDRView(MPDRView mpdrView) {
+    private void initMPDRView(MPDRView mpdrView){
         new MPDRContColumns(mpdrView, Preferences.REPOSITORY_MDR_COLUMNS_NAME);
         //new MPDRContConstraints(mpdrView, Preferences.REPOSITORY_MDR_CONSTRAINTS_NAME);
     }
@@ -1001,19 +995,20 @@ public class MVCCDElementFactory {
     }
 
 
-    public MPDRRelationFK createMPDRRelationFK(MPDRContRelations mpdrContRelations,
-                                               MLDRRelationFK mldrRelationFK,
-                                               MPDRTable mpdrTableChild,
-                                               MPDRTable mpdrTableParent) {
 
-        MPDRRelationFK mpdrRelationFK = new MPDRRelationFK(mpdrContRelations, mldrRelationFK);
+    public MPDRRelationFK createMPDRRelationFK( MPDRContRelations mpdrContRelations,
+                                                MLDRRelationFK mldrRelationFK,
+                                                MPDRTable mpdrTableChild,
+                                                MPDRTable mpdrTableParent) {
+
+        MPDRRelationFK mpdrRelationFK = new MPDRRelationFK(mpdrContRelations, mldrRelationFK) ;
 
 
         MPDRContRelEnds mpdrContEndRelsChild = (MPDRContRelEnds) mpdrTableChild.getMDRContRelEnds();
-        MPDRRelFKEnd mpdrRelFKEndChild = new MPDRRelFKEnd(mpdrContEndRelsChild);
+        MPDRRelFKEnd mpdrRelFKEndChild = new MPDRRelFKEnd(mpdrContEndRelsChild) ;
 
         MPDRContRelEnds mpdrContEndRelsParent = (MPDRContRelEnds) mpdrTableParent.getMDRContRelEnds();
-        MPDRRelFKEnd mpdrRelFKEndParent = new MPDRRelFKEnd(mpdrContEndRelsParent);
+        MPDRRelFKEnd mpdrRelFKEndParent = new MPDRRelFKEnd(mpdrContEndRelsParent) ;
 
         /*
         mpdrRelationFK.setEndParent(mpdrRelFKEndParent);
@@ -1022,12 +1017,12 @@ public class MVCCDElementFactory {
          */
 
         mpdrRelationFK.setB(mpdrRelFKEndChild);
-        ((MPDRRelFKEnd) mpdrRelationFK.getB()).setRole(MDRRelFKEnd.CHILD);
-        ((MPDRRelFKEnd) mpdrRelationFK.getB()).setMldrElementSource(mldrRelationFK.getEndChild());
+        ((MPDRRelFKEnd)mpdrRelationFK.getB()).setRole(MDRRelFKEnd.CHILD);
+        ((MPDRRelFKEnd) mpdrRelationFK.getB()).setMldrElementSource( mldrRelationFK.getEndChild());
 
         mpdrRelationFK.setA(mpdrRelFKEndParent);
-        ((MPDRRelFKEnd) mpdrRelationFK.getA()).setRole(MDRRelFKEnd.PARENT);
-        ((MPDRRelFKEnd) mpdrRelationFK.getA()).setMldrElementSource(mldrRelationFK.getEndParent());
+        ((MPDRRelFKEnd)mpdrRelationFK.getA()).setRole(MDRRelFKEnd.PARENT);
+        ((MPDRRelFKEnd) mpdrRelationFK.getA()).setMldrElementSource( mldrRelationFK.getEndParent());
 
 
         mpdrRelFKEndChild.setMDRTable(mpdrTableChild);
@@ -1039,4 +1034,4 @@ public class MVCCDElementFactory {
         return mpdrRelationFK;
     }
 
-}
+ }

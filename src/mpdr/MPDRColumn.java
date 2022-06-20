@@ -6,11 +6,13 @@ import md.MDElement;
 import mdr.MDRColumn;
 import mldr.MLDRColumn;
 import mldr.interfaces.IMLDRElement;
+import mpdr.interfaces.IMPDRColumn;
 import mpdr.interfaces.IMPDRElement;
 import mpdr.interfaces.IMPDRElementWithSource;
+import mpdr.services.MPDRColumnsService;
 import project.ProjectElement;
 
-public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPDRElementWithSource {
+public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPDRColumn, IMPDRElementWithSource {
 
     private  static final long serialVersionUID = 1000;
     private IMLDRElement mldrElementSource;
@@ -84,4 +86,10 @@ public abstract class MPDRColumn extends MDRColumn implements IMPDRElement, IMPD
         }
         return null;
     }
+
+
+    public int compareToDefault(MPDRColumn other) {
+        return MPDRColumnsService.compareToDefault(this, other);
+    }
+
 }

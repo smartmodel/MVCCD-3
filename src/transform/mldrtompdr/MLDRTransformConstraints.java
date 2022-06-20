@@ -11,7 +11,7 @@ import mldr.interfaces.IMLDRElement;
 import mpdr.*;
 import mpdr.interfaces.IMPDRConstraint;
 import mpdr.interfaces.IMPDRElement;
-import mpdr.oracle.MPDROracleConstraintCustomSpecialized;
+import mpdr.tapis.MPDRTableJnal;
 
 public class MLDRTransformConstraints {
 
@@ -31,7 +31,10 @@ public class MLDRTransformConstraints {
 
 
     void transformConstraints() {
-         for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraints()){
+
+        // le tri des contraintes est impératif pour :
+        // - générer les colonnes d'audit avsnt les colonnes de journalisation.
+         for (MDRConstraint mldrConstraint : mldrTable.getMDRConstraintsSortDefault()){
             IMPDRConstraint mpdrConstraint = transformConstraint(mldrConstraint);
         }
 
@@ -42,14 +45,14 @@ public class MLDRTransformConstraints {
     private IMPDRConstraint transformConstraint(MDRConstraint mldrConstraint) {
         IMPDRConstraint mpdrConstraint = (IMPDRConstraint) mpdrTable.getMPDRConstraintInheritedByMLDRConstraintSource(mldrConstraint);
         if ( mpdrConstraint == null){
-            if (mldrConstraint instanceof MLDRPK){
+           if (mldrConstraint instanceof MLDRPK){
                 MLDRPK mldrPK = (MLDRPK) mldrConstraint;
                 mpdrConstraint = mpdrTable.createPK(mldrPK);
             }
             if (mldrConstraint instanceof MLDRFK){
                 MLDRFK mldrFK = (MLDRFK) mldrConstraint;
                 mpdrConstraint = mpdrTable.createFK(mldrFK);
-            }
+           }
             if (mldrConstraint instanceof MLDRUnique){
                 MLDRUnique mldrUnique = (MLDRUnique) mldrConstraint;
                 mpdrConstraint = mpdrTable.createUnique(mldrUnique);
@@ -58,8 +61,15 @@ public class MLDRTransformConstraints {
                 MLDRConstraintCustomSpecialized mldrSpecialized = (MLDRConstraintCustomSpecialized) mldrConstraint;
                 mpdrConstraint = mpdrTable.createSpecialized(mldrSpecialized);
             }
+            if (mldrConstraint instanceof MLDRConstraintCustomJnal){
+                MLDRConstraintCustomJnal mldrJnal = (MLDRConstraintCustomJnal) mldrConstraint;
+                mpdrConstraint = mpdrTable.createJnal(mldrJnal);
+            }
+            if (mldrConstraint instanceof MLDRConstraintCustomAudit){
+                MLDRConstraintCustomAudit mldrAudit = (MLDRConstraintCustomAudit) mldrConstraint;
+                mpdrConstraint = mpdrTable.createAudit(mldrAudit);
+            }
             MVCCDManager.instance().addNewMVCCDElementInRepository((MVCCDElement) mpdrConstraint);
-
         }
 
         // Le temps de développement
@@ -103,13 +113,26 @@ public class MLDRTransformConstraints {
             }
         }
 
-        // Custom - Spécialized
-        if (mpdrConstraint instanceof MPDROracleConstraintCustomSpecialized) {
+        // Custom - Specialized
+        if (mpdrConstraint instanceof MPDRConstraintCustomSpecialized) {
             MLDRConstraintCustomSpecialized mldrSpecialized = (MLDRConstraintCustomSpecialized) mldrConstraint;
             MPDRConstraintCustomSpecialized mpdrSpecialized = (MPDRConstraintCustomSpecialized) mpdrConstraint;
             modifyConstraintSpecialized(mldrSpecialized, mpdrSpecialized);
         }
+
+        //Custom - Audit
+        if (mpdrConstraint instanceof MPDRConstraintCustomAudit) {
+            modifyConstraintAudit((MLDRConstraintCustomAudit) mldrConstraint);
+        }
+
+        //Custom - Journal
+        if (mpdrConstraint instanceof MPDRConstraintCustomJnal) {
+            modifyConstraintJnal((MLDRConstraintCustomJnal) mldrConstraint,
+                        (MPDRConstraintCustomJnal) mpdrConstraint);
+        }
     }
+
+
 
     private void modifyConstraintFK(MLDRFK mldrFK, MPDRFK mpdrFK) {
         // Nature
@@ -153,6 +176,8 @@ public class MLDRTransformConstraints {
         // Les contraintes PK et FK doivent être en place pour générer la vue des TAPIs
         // cela confirme qu'il faudrait céer les TAPIS après la transformation du modèle physique
         /*
+
+        // La transformation est exécutée lorsque toutes les tables sont générées depuis la transformation maitresse !!!
         MLDRTransformToView mldrTransformToView = new MLDRTransformToView(
                 mldrTransform, mldrSpecialized, mpdrModel, mpdrTable);
         MPDRView mpdrView = mldrTransformToView.createOrModifyView(MPDRViewType.SPEC);
@@ -160,5 +185,26 @@ public class MLDRTransformConstraints {
          */
     }
 
+    private void modifyConstraintAudit(MLDRConstraintCustomAudit mldrConstraintCustomAudit) {
+        if (mpdrModel.getMPDR_TAPIs()) {
+            MLDRTransformToColumnsAudit mldrTransformToColumnsAudit = new MLDRTransformToColumnsAudit(
+                    mldrTransform, mldrConstraintCustomAudit, mpdrModel, mpdrTable);
+            mldrTransformToColumnsAudit.transformColumnsAudit();
+        }
+    }
+
+    private void modifyConstraintJnal(MLDRConstraintCustomJnal mldrConstraintCustomJnal,
+                                      MPDRConstraintCustomJnal mpdrConstraintCustomJnal ) {
+        if (mpdrModel.getMPDR_TAPIs()) {
+            MLDRTransformToTableJnal mldrTransformToTableJnal = new MLDRTransformToTableJnal(
+                    mldrTransform, mldrConstraintCustomJnal, mpdrModel, mpdrTable);
+            MPDRTableJnal mpdrTableJnal = mldrTransformToTableJnal.createOrModifyTableJnal();
+
+            MLDRTransformToColumnsJnal mldrTransformToColumnsJnal = new MLDRTransformToColumnsJnal(
+                    mldrTransform, mpdrConstraintCustomJnal, mpdrModel, mpdrTableJnal, mpdrTable);
+            mldrTransformToColumnsJnal.transformColumnsJnal();
+
+        }
+    }
 
 }

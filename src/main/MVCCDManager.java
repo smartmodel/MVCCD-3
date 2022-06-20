@@ -7,17 +7,10 @@ import console.ConsoleManager;
 import console.ResultatInStart;
 import console.ViewLogsManager;
 import console.WarningLevel;
+import constraints.ConstraintsManager;
 import datatypes.MDDatatypesManager;
 import diagram.Diagram;
 import exceptions.CodeApplException;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.UIManager;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
-import javax.xml.parsers.ParserConfigurationException;
 import main.window.console.WinConsoleContent;
 import main.window.diagram.WinDiagram;
 import main.window.diagram.WinDiagrammer;
@@ -32,23 +25,24 @@ import messages.MessagesBuilder;
 import org.xml.sax.SAXException;
 import preferences.Preferences;
 import preferences.PreferencesManager;
-import project.LoaderSerializable;
-import project.Project;
-import project.ProjectElement;
-import project.ProjectFileChooser;
-import project.ProjectLoaderXml;
-import project.ProjectSaverXml;
-import project.ProjectService;
-import project.ProjectsRecents;
-import project.ProjectsRecentsLoader;
-import project.SaverSerializable;
+import project.*;
 import repository.Repository;
+import stereotypes.StereotypesManager;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Il s'agit de la classe d'orchestration du programme. Les propriétés permettent cette orchestration.
@@ -100,6 +94,12 @@ public class MVCCDManager {
 
     // Chargement des messages de traduction
     LoadMessages.main();
+
+    // Chargement des stéréotypes
+    StereotypesManager.instance() ;
+
+    // Chargement des contraintes
+    ConstraintsManager.instance();
 
     //Chargement des préférences de l'application
     String message = null;
