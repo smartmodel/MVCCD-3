@@ -3,19 +3,15 @@ package consolidationMpdrDb.comparator.oracle;
 import connections.ConConnection;
 import consolidationMpdrDb.comparator.MpdrDbComparator;
 import consolidationMpdrDb.fetcher.oracle.DbFetcherOracle;
-import mdr.MDRConstraint;
 import mpdr.*;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.tapis.*;
 import mpdr.tapis.oracle.MPDROracleBoxPackages;
-import org.apache.commons.lang.StringUtils;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 //ATTENTION, pour oracle, on utilise toUpperCase pour les noms
 public class OracleComparatorDb extends MpdrDbComparator {
@@ -287,12 +283,23 @@ public class OracleComparatorDb extends MpdrDbComparator {
     //TODO VINCENT
     //ATTENTION : Il faut encore contrôler que les targetId pointent sur les mêmes noms de colonne
     public void comparePkToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
-        for (MDRConstraint constraint : mpdrTable.getMDRContConstraints().getMDRConstraints()) {
-            if (constraint instanceof MPDRPK) {
-                if (!dbTable.getMDRContConstraints().getMDRConstraints().contains(constraint.getName().toUpperCase())) {
-                    if (!mpdrPksToAdd.contains(constraint)) {
-                        mpdrPksToAdd.add((MPDRPK) constraint);
+        if (mpdrTable.getMPDRPK() != null) {
+            if (dbTable.getMPDRPK() == null) {
+                mpdrPksToAdd.add(mpdrTable.getMPDRPK());
+            } else {
+                if (mpdrTable.getMPDRPK().getName().toUpperCase().equals(dbTable.getMPDRPK().getName())) {
+                    //contrôle que les PK pointent sur les mêmes noms de colonne
+                    for (int i=0;i<mpdrTable.getMPDRPK().getMDRParameters().size();i++){
+                        if(!mpdrTable.getMPDRPK().getMDRParameters().get(i).getName().equals(
+                                dbTable.getMPDRPK().getMDRParameters().get(i).getName())){
+                            dbPksToDrop.add(dbTable.getMPDRPK());
+                            mpdrPksToAdd.add(mpdrTable.getMPDRPK());
+                            break;
+                        }
                     }
+                } else{
+                    //a voir si nécessaire ?
+                    mpdrPksToAdd.add(mpdrTable.getMPDRPK());
                 }
             }
         }
@@ -301,6 +308,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     public void compareCheck(MPDRTable mpdrTable, MPDRTable dbTable) {
         compareCheckToAdd(mpdrTable, dbTable);
         compareCheckToDrop(mpdrTable, dbTable);
+        compareCheckToModify(mpdrTable, dbTable);
     }
 
     public void compareCheckToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
@@ -328,7 +336,20 @@ public class OracleComparatorDb extends MpdrDbComparator {
     }
 
     public void compareCheckToModify(MPDRTable mpdrTable, MPDRTable dbTable) {
-        //A voir si nécessaire ?
+        for (MPDRCheck mpdrCheck : mpdrTable.getMPDRChecks()) {
+            for (MPDRCheck dbCheck : dbTable.getMPDRChecks()) {
+                if (mpdrCheck.getName().toUpperCase().equals(dbCheck.getName())) {
+                    String dbValueWithoutSpace = dbCheck.getMPDRParameter().getValue().toUpperCase().replaceAll("\\s+", "");
+                    String mpdrValueWithoutSpace = mpdrCheck.getMPDRParameter().getValue().toUpperCase().replaceAll("\\s+", "");
+                    if (!mpdrValueWithoutSpace.equals(dbValueWithoutSpace)) {
+                        dbChecksToDrop.add(dbCheck);
+                        mpdrChecksToAdd.add(mpdrCheck);
+                    }
+                }
+            }
+
+        }
+
     }
 
     public void compareFk(MPDRTable mpdrTable, MPDRTable dbTable) {
@@ -337,16 +358,26 @@ public class OracleComparatorDb extends MpdrDbComparator {
     }
 
     public void compareFkToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
-        for (MPDRFK mpdrFk : mpdrTable.getMPDRFKs()) {
-            if (!dbTable.getMPDRFKs().contains(mpdrFk.getName().toUpperCase())) {
-                mpdrFksToAdd.add(mpdrFk);
+        List<String> dbFkNameList = new ArrayList<>();
+        for (MPDRFK dbFk : dbTable.getMPDRFKs()) {
+            dbFkNameList.add(dbFk.getName());
+        }
+        for (MPDRFK mpdrfk : mpdrTable.getMPDRFKs()) {
+            if (!dbFkNameList.contains(mpdrfk.getName().toUpperCase())) {
+                mpdrFksToAdd.add(mpdrfk);
             }
         }
     }
 
     public void compareFkToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
-        if (!mpdrTable.getMPDRFKs().contains(dbTable.getMPDRPK().getName())) {
-            dbPksToDrop.add(dbTable.getMPDRPK());
+        List<String> mpdrFkNameList = new ArrayList<>();
+        for (MPDRFK mpdrFk : mpdrTable.getMPDRFKs()) {
+            mpdrFkNameList.add(mpdrFk.getName().toUpperCase());
+        }
+        for (MPDRFK dbFk : dbTable.getMPDRFKs()) {
+            if (!mpdrFkNameList.contains(dbFk.getName())) {
+                dbFksToDrop.add(dbFk);
+            }
         }
     }
 
@@ -379,7 +410,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     public void compareUniqueToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
         List<String> mpdrUniqueNameList = new ArrayList();
         for (MPDRUnique mpdrUnique : mpdrTable.getMPDRUniques()) {
-            mpdrUniqueNameList.add(mpdrUnique.getName());
+            mpdrUniqueNameList.add(mpdrUnique.getName().toUpperCase());
         }
 
         for (MPDRUnique dbUnique : dbTable.getMPDRUniques()) {
@@ -456,7 +487,8 @@ public class OracleComparatorDb extends MpdrDbComparator {
 
     }
 
-    private void comparePackages(MPDROracleBoxPackages mpdrOracleBoxPackages, MPDROracleBoxPackages dbOracleBoxPackages) {
+    private void comparePackages(MPDROracleBoxPackages mpdrOracleBoxPackages, MPDROracleBoxPackages
+            dbOracleBoxPackages) {
         comparePackagesToCreateOrReplace(mpdrOracleBoxPackages);
         comparePackagesToDrop(mpdrOracleBoxPackages, dbOracleBoxPackages);
     }
@@ -469,7 +501,8 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    private void comparePackagesToDrop(MPDROracleBoxPackages mpdrOracleBoxPackages, MPDROracleBoxPackages dbOracleBoxPackages) {
+    private void comparePackagesToDrop(MPDROracleBoxPackages mpdrOracleBoxPackages, MPDROracleBoxPackages
+            dbOracleBoxPackages) {
         if (mpdrOracleBoxPackages != null && dbOracleBoxPackages != null) {
             for (MPDRPackage dbPackage : dbOracleBoxPackages.getAllPackages()) {
                 //TODO NE FONCTIONNE PAS CAR LE GETCHILDS EST FAUX

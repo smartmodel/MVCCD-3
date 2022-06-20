@@ -201,5 +201,4 @@ public class OracleSyncGeneratorSQL {
         }
         return code.toString();
     }
-
 }

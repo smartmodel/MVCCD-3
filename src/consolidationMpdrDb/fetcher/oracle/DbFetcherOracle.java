@@ -103,6 +103,7 @@ public class DbFetcherOracle extends DbFetcher {
                         MPDRParameter mpdrParameter = MVCCDElementFactory.instance().createMPDROracleParameter(dbPK, (MLDRParameter) null);
                         //Ajout de la méthode getId() dans la classe "ProjectElement"
                         mpdrParameter.setTargetId(dbColumn.getId());
+                        mpdrParameter.setName(dbColumn.getName());
                         dbColumn.setPk(true);
                     }
                 }
