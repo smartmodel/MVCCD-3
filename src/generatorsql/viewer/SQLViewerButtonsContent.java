@@ -57,7 +57,6 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
     private JPanel panelDDL = new JPanel();
     private JPanel panelDML = new JPanel();
 
-    private SButton btnSynchronisationSGBDR;
     private SButton btnConnectionTest;
     private SButton btnConnectorTest;
     private SButton btnDDLExecute;
@@ -98,9 +97,6 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
 
 
     public void createContent() {
-
-        btnSynchronisationSGBDR = new SButton("Synchronisation du SGBD-R");
-        btnSynchronisationSGBDR.addActionListener(this);
 
         btnConnectionTest = new SButton("Test de connexion");
         btnConnectionTest.addActionListener(this);
@@ -180,9 +176,6 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
         if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
             panelContent.add(btnConnectorTest, gbc);
         }
-
-        gbc.gridy++;
-        panelContent.add(btnSynchronisationSGBDR, gbc);
 
         gbc.gridy++ ;
         createPanelDDL();
@@ -360,41 +353,6 @@ public class SQLViewerButtonsContent extends PanelContent implements IPanelInput
                         propertyAction = "editor.mpdr.connection.btn.exception.test";
                         //Resultat resultat = actionTestConnection(true, connection);
                         actionTestConnection(true);
-                    }
-
-                    if (source == btnSynchronisationSGBDR){
-                        propertyAction = "editor.mpdr.connection.btn.exception.test";
-                        /*
-                        DbFetcher dbFetcher = new DbFetcher();
-                        DbOracleStructure dbOracleStructure = dbFetcher.getDatabaseStructure();
-                        OracleComparator oracleComparator = new OracleComparator(mpdrModel, dbOracleStructure);
-                        oracleComparator.comparator(mpdrModel, dbOracleStructure);
-                        MPDROracleModel mpdrModelOracleDb = MVCCDElementFactory.instance().createMPDRModelOracle(null);
-                        */
-                        //ATTENTION le passage en mode Debug efface le mot de passe enregistré pour la connection
-                        /*Trace.println(mpdrModelOracleDb.toString());
-                        Trace.println(mpdrModelOracleDb.getChilds().toString());*/
-/*
-                        DbFetcher2 dbFetcher2 = new DbFetcher2();
-                        DbOracleStructure dbOracleStructure = dbFetcher2.getDatabaseStructure();
-                        //OracleComparator oracleComparator = new OracleComparator(mpdrModel, dbOracleStructure);
-                        //oracleComparator.comparator(mpdrModel, dbOracleStructure);
-                        MPDROracleModel mpdrModelOracleDb = MVCCDElementFactory.instance().createMPDRModelOracle(null);
-                        System.out.println(mpdrModelOracleDb.toString());
-*/
-                        connection = ConnectionsService.actionTestIConConnectionOrConnector(sqlViewer,
-                                true,
-                                sqlViewer.getConConnection());
-                        DbFetcherOracle dbFetcherOracle = new DbFetcherOracle(sqlViewer.getConConnection(), connection);
-                        dbFetcherOracle.fetch();
-                        OracleComparatorDb oracleComparatorDb =
-                                new OracleComparatorDb((MPDROracleModel)this.mpdrModel, sqlViewer.getConConnection(), connection);
-                        oracleComparatorDb.compare();
-                        OracleSyncGeneratorSQL oracleSyncGeneratorSQL = new OracleSyncGeneratorSQL(mpdrModel, oracleComparatorDb);
-                        oracleSyncGeneratorSQL.sync();
-
-
-                        actionTestConnection(false);
                     }
 
                     if (source == btnConnectorTest) {
