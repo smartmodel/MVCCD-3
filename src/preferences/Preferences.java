@@ -1191,7 +1191,7 @@ public class Preferences extends MVCCDElement {
   public static String FETCHER_ORACLE_TRIGGER_NAME = "TRIGGER_NAME";
 
   public static String SQL_MARKER_SEPARATOR_ARGUMENTS_END = ";";
-  public static String TEMPLATE_ALTER_TABLE_CREATE_UNIQUE = "alterTableCreateUnique.txt";
+  public static String TEMPLATE_ALTER_TABLE_CREATE_UNIQUE = "alterTableAddUnique.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_UNIQUE = "alterTableDropUnique.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_COLUMN = "alterTableDropColumn.txt";
   public static String TEMPLATE_ALTER_TABLE_ADD_COLUMN = "alterTableAddColumn.txt";
@@ -1205,7 +1205,9 @@ public class Preferences extends MVCCDElement {
   //public static String TEMPLATE_ALTER_TABLE_ADD_FK = "alterTableAddFk.txt"; //déjà existant
   public static String TEMPLATE_ALTER_TABLE_DROP_FK = "alterTableDropFk.txt";
   public static String TEMPLATES_ALTER_TABLE_ADD_FK_WITH_DELETE_CASCADE = "alterTableAddFkWithDeleteCascade.txt";
-
+  public static String TEMPLATE_DROP_TABLE_CONSOLIDATION = "dropTableConsolidation.txt";
+  public static String TEMPLATE_ALTER_TABLE_ADD_CHECK = "alterTableAddCheck.txt";
+  public static String TEMPLATE_ALTER_TABLE_DROP_CHECK = "alterTableDropCheck.txt";
 
 
 

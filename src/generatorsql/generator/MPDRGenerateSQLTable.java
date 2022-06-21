@@ -108,6 +108,16 @@ public abstract class MPDRGenerateSQLTable {
 
     }
 
+    //Ajouté par Vincent
+    public String generateSQLDropTableConsolidation(MPDRTable mpdrTable) {
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+                Preferences.TEMPLATE_DROP_TABLE_CONSOLIDATION,
+                getMPDRGenerateSQL().mpdrModel);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MDR_TABLE_NAME_WORD, mpdrTable.getName());
+        return generateSQLCode;
+    }
+
     protected abstract MPDRGenerateSQLUnique getMPDRGenerateSQLUnique();
 
 

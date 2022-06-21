@@ -1,8 +1,0 @@
-BEGIN
-FOR disable_all_fk IN (
-select 'ALTER TABLE ' || OWNER || '.' || table_name || ' disable CONSTRAINT ' || constraint_name || '' AS command_sql
-from user_constraints where constraint_type in ('R') and status in ('ENABLED')
-) LOOP
-EXECUTE IMMEDIATE (disable_all_fk.command_sql);
-END LOOP;
-END;

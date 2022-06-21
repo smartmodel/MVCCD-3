@@ -14,7 +14,7 @@ public abstract class MPDRGenerateSQLFK {
     public String generateSQLFK(MPDRFK mpdrfk) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
                 Preferences.TEMPLATES_ALTER_TABLE_FK,
-                getMPDRGenerateSQL().mpdrModel)+ Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+                getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_CHILD_WORD, mpdrfk.getParent().getParent().getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_FK_NAME_WORD, mpdrfk.getName());
@@ -33,7 +33,7 @@ public abstract class MPDRGenerateSQLFK {
     public String generateSQLFkToDropConsolidation(MPDRFK mpdrfk){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_FK,
-                getMPDRGenerateSQL().mpdrModel)+ Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+                getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_WORD, mpdrfk.getParent().getParent().getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
@@ -45,7 +45,7 @@ public abstract class MPDRGenerateSQLFK {
     public String generateSQLFKWithDeleteCascadeOption(MPDRFK mpdrfk) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
                 Preferences.TEMPLATES_ALTER_TABLE_ADD_FK_WITH_DELETE_CASCADE,
-                getMPDRGenerateSQL().mpdrModel)+ Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+                getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                 Preferences.MDR_TABLE_NAME_CHILD_WORD, mpdrfk.getParent().getParent().getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_FK_NAME_WORD, mpdrfk.getName());

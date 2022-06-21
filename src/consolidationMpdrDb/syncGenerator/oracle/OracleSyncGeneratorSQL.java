@@ -14,6 +14,7 @@ public class OracleSyncGeneratorSQL {
     private MPDROracleGenerateSQLTableColumn mpdrOracleGenerateSQLTableColumn;
     private MPDROracleGenerateSQLPK mpdrOracleGenerateSQLPK;
     private MPDROracleGenerateSQLUnique mpdrOracleGenerateSQLUnique;
+    private MPDROracleGenerateSQLCheck mpdrOracleGenerateSQLCheck;
     private MPDROracleGenerateSQLFK mpdrOracleGenerateSQLFK;
     private OracleComparatorDb oracleComparatorDb;
 
@@ -21,10 +22,13 @@ public class OracleSyncGeneratorSQL {
         this.mpdrOracleGenerateSQL = new MPDROracleGenerateSQL(mpdrModel);
         this.mpdrOracleGenerateSQLTable = new MPDROracleGenerateSQLTable(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLTableColumn = new MPDROracleGenerateSQLTableColumn(mpdrOracleGenerateSQL);
-        this.mpdrOracleGenerateSQLUnique = new MPDROracleGenerateSQLUnique(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLPK = new MPDROracleGenerateSQLPK(mpdrOracleGenerateSQL);
+        this.mpdrOracleGenerateSQLUnique = new MPDROracleGenerateSQLUnique(mpdrOracleGenerateSQL);
+        this.mpdrOracleGenerateSQLCheck = new MPDROracleGenerateSQLCheck(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLFK = new MPDROracleGenerateSQLFK(mpdrOracleGenerateSQL);
         this.oracleComparatorDb = oracleComparatorDb;
+
+        //Permet d'exécuter le mécanisme de comparaison
         this.oracleComparatorDb.compare();
     }
 
@@ -38,9 +42,11 @@ public class OracleSyncGeneratorSQL {
 
     public String sync() {
         StringBuilder generateSQLCodeSync = new StringBuilder();
+        generateSQLCodeSync.append(" ");
         String message; //A voir si nécessaire
         message = MessagesBuilder.getMessagesProperty("generate.sql.drop.tables");
         generateSQLCodeSync.append(syncUniqueToDrop());
+        generateSQLCodeSync.append(syncCheckToDrop());
         generateSQLCodeSync.append(syncFkToDrop());
         generateSQLCodeSync.append(syncPkToDrop());
         generateSQLCodeSync.append(syncColumnsToDrop());
@@ -55,8 +61,14 @@ public class OracleSyncGeneratorSQL {
         generateSQLCodeSync.append(syncColumnsToModifyDropNotDefault());
         generateSQLCodeSync.append(syncPkToAdd());
         generateSQLCodeSync.append(syncUniqueToAdd());
+        generateSQLCodeSync.append(syncCheckToAdd());
         generateSQLCodeSync.append(syncFkToAdd());
-        System.out.println(generateSQLCodeSync);
+
+        //S'il n'y a rien à générer, affichage d'un message d'information à l'utilisateur
+        if(generateSQLCodeSync.toString().equals(" ")){
+            generateSQLCodeSync.append("La structure du SGBD-R est conforme au modèle");
+        }
+
         return generateSQLCodeSync.toString();
     }
 
@@ -72,7 +84,7 @@ public class OracleSyncGeneratorSQL {
     public String syncTablesToDrop() {
         StringBuilder code = new StringBuilder();
         for (MPDRTable mpdrTableToDrop : oracleComparatorDb.getDbTablesToDrop()) {
-            code.append(mpdrOracleGenerateSQLTable.generateSQLDropTable(mpdrTableToDrop));
+            code.append(mpdrOracleGenerateSQLTable.generateSQLDropTableConsolidation(mpdrTableToDrop));
             code.append(delimiter());
         }
         return code.toString();
@@ -171,6 +183,24 @@ public class OracleSyncGeneratorSQL {
         for (MPDRUnique mpdrUniqueToDrop : oracleComparatorDb.getDbUniquesToDrop()) {
             //DROPPER pas create
             code.append(mpdrOracleGenerateSQLUnique.generateSQLDropUniqueConsolidation(mpdrUniqueToDrop));
+            code.append(delimiter());
+        }
+        return code.toString();
+    }
+
+    public String syncCheckToAdd(){
+        StringBuilder code = new StringBuilder();
+        for (MPDRCheck mpdrCheck : oracleComparatorDb.getMpdrChecksToAdd()) {
+            code.append(mpdrOracleGenerateSQLCheck.generateSQLAddCheck(mpdrCheck));
+            code.append(delimiter());
+        }
+        return code.toString();
+    }
+
+    public String syncCheckToDrop(){
+        StringBuilder code = new StringBuilder();
+        for (MPDRCheck dbCheck : oracleComparatorDb.getDbChecksToDrop()) {
+            code.append(mpdrOracleGenerateSQLCheck.generateSQLDropCheck(dbCheck));
             code.append(delimiter());
         }
         return code.toString();

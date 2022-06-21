@@ -25,7 +25,7 @@ public abstract class MPDRGenerateSQLPK {
     public String generateSQLAddPKConsolidation(MPDRPK mpdrPk) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_ADD_PK,
-                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+                getMPDRGenerateSQL().mpdrModel);
 
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrPk.getParent().getParent().getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_PK_NAME_WORD, mpdrPk.getName());
@@ -37,7 +37,7 @@ public abstract class MPDRGenerateSQLPK {
     public String generateSQLDropPKConsolidation(MPDRPK mpdrPk) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_PK_CASCADE,
-                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+                getMPDRGenerateSQL().mpdrModel);
 
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrPk.getParent().getParent().getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_PK_NAME_WORD, mpdrPk.getName());

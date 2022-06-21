@@ -1,1 +1,1 @@
-ALTER TABLE {tableName} DROP {fkName}
+ALTER TABLE {tableName} DROP CONSTRAINT {fkName}

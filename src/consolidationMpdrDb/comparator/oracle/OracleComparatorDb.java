@@ -245,9 +245,12 @@ public class OracleComparatorDb extends MpdrDbComparator {
         compareColumnAddOrModifyInitValue(mpdrColumn, dbColumn);
     }
 
+    //Si la suppression de la clause par défaut a déjà été effectuée une fois, elle devient une string "null" au lieu d'être null
     public void compareColumnDropInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         if ((mpdrColumn.getInitValue() == null || mpdrColumn.getInitValue().equals("")) && dbColumn.getInitValue() != null) {
-            mpdrColumnsToModifyDropDefault.add(mpdrColumn);
+            if(!dbColumn.getInitValue().equals("null")) {
+                mpdrColumnsToModifyDropDefault.add(mpdrColumn);
+            }
         }
     }
 
