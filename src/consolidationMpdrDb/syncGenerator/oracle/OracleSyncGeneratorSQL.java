@@ -4,6 +4,8 @@ import consolidationMpdrDb.comparator.oracle.OracleComparatorDb;
 import generatorsql.generator.oracle.*;
 import messages.MessagesBuilder;
 import mpdr.*;
+import mpdr.tapis.MPDRPackage;
+import mpdr.tapis.MPDRTrigger;
 import preferences.Preferences;
 
 public class OracleSyncGeneratorSQL {
@@ -17,6 +19,8 @@ public class OracleSyncGeneratorSQL {
     private MPDROracleGenerateSQLCheck mpdrOracleGenerateSQLCheck;
     private MPDROracleGenerateSQLFK mpdrOracleGenerateSQLFK;
     private MPDROracleGenerateSQLSequence mpdrOracleGenerateSQLSequence;
+    private MPDROracleGenerateSQLTrigger mpdrOracleGenerateSQLTrigger;
+    private MPDROracleGenerateSQLPackage mpdrOracleGenerateSQLPackage;
     private OracleComparatorDb oracleComparatorDb;
 
     public OracleSyncGeneratorSQL(MPDRModel mpdrModel, OracleComparatorDb oracleComparatorDb) {
@@ -28,6 +32,8 @@ public class OracleSyncGeneratorSQL {
         this.mpdrOracleGenerateSQLCheck = new MPDROracleGenerateSQLCheck(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLFK = new MPDROracleGenerateSQLFK(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLSequence = new MPDROracleGenerateSQLSequence(mpdrOracleGenerateSQL);
+        this.mpdrOracleGenerateSQLTrigger = new MPDROracleGenerateSQLTrigger(mpdrOracleGenerateSQL);
+        this.mpdrOracleGenerateSQLPackage = new MPDROracleGenerateSQLPackage(mpdrOracleGenerateSQL);
         this.oracleComparatorDb = oracleComparatorDb;
 
         //Permet d'exécuter le mécanisme de comparaison
@@ -42,7 +48,149 @@ public class OracleSyncGeneratorSQL {
         return MPDRDB.ORACLE.getDelimiterInstructions();
     }
 
-    public String sync() {
+    public String syncOrderByTable(){
+        StringBuilder generateSQLCodeSync = new StringBuilder();
+        generateSQLCodeSync.append(" ");
+
+        /*Suppression des tables en cascade efface :
+            - tables
+            - colonnes
+                - contraintes not nul
+            - contraintes uniques, check et pk
+            - contraintes fk de la table
+            - contraintes fk qui pointe sur la table
+            - triggers
+
+            - package NON
+            - séquences NON
+         */
+        generateSQLCodeSync.append(syncTablesToDrop());
+        generateSQLCodeSync.append(syncSequenceToDrop());
+
+        //Création des nouvelles tables
+        generateSQLCodeSync.append(syncTablesToCreate());
+
+
+        for (MPDRTable mpdrTableToModifiy : oracleComparatorDb.getMpdrTablesSameName()) {
+            //Suppression des contraintes UNIQUE
+            for (MPDRUnique dbUniqueToDrop : oracleComparatorDb.getDbUniquesToDrop()) {
+                if(dbUniqueToDrop.getMDRTableAccueil().getName().equals(mpdrTableToModifiy.getName().toUpperCase())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLUnique.generateSQLDropUniqueConsolidation(dbUniqueToDrop));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //Suppression des contraintes CHECK
+            for (MPDRCheck dbCheckToDrop : oracleComparatorDb.getDbChecksToDrop()) {
+                if(dbCheckToDrop.getMDRTableAccueil().getName().equals(mpdrTableToModifiy.getName().toUpperCase())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLCheck.generateSQLDropCheck(dbCheckToDrop));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //Suppression des contraintes FK
+            for (MPDRFK dbFkToDrop : oracleComparatorDb.getDbFksToDrop()) {
+                if(dbFkToDrop.getMDRTableAccueil().getName().equals(mpdrTableToModifiy.getName().toUpperCase())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLFK.generateSQLFkToDropConsolidation(dbFkToDrop));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //Suppression des contraintes PK
+            for (MPDRPK dbPkToDrop : oracleComparatorDb.getDbPksToDrop()) {
+                if(dbPkToDrop.getMDRTableAccueil().getName().equals(mpdrTableToModifiy.getName().toUpperCase()))   {
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLPK.generateSQLDropPKConsolidation(dbPkToDrop));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //Suppression des colonnes
+            for (MPDRColumn dbColumnToDrop : oracleComparatorDb.getDbColumnsToDrop()) {
+                if(dbColumnToDrop.getMPDRTableAccueil().getName().equals(mpdrTableToModifiy.getName().toUpperCase())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLTableColumn.generateSQLDropColumn(dbColumnToDrop));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //Ajout des colonnes
+            for (MPDRColumn mpdrColumnToAdd : oracleComparatorDb.getMpdrColumnsToAdd()) {
+                if(mpdrColumnToAdd.getMPDRTableAccueil().getName().equalsIgnoreCase(mpdrTableToModifiy.getName())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLTableColumn.generateSQLAddColumn(mpdrColumnToAdd));
+                    generateSQLCodeSync.append(delimiter());
+                    }
+                }
+            //Modification des colonnes
+            for (MPDRColumn mpdrColumnToModify : oracleComparatorDb.getMpdrColumnsToModify()) {
+                if(mpdrColumnToModify.getMPDRTableAccueil().getName().equalsIgnoreCase(mpdrTableToModifiy.getName())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumn(mpdrColumnToModify));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //Ajout de la contrainte NOT NULL sur la colonne
+            for (MPDRColumn mpdrColumnAddNN : oracleComparatorDb.getMpdrColumnsToModifyAddNotNull()) {
+                if(mpdrColumnAddNN.getMPDRTableAccueil().getName().equalsIgnoreCase(mpdrTableToModifiy.getName())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumnAddNotNul(mpdrColumnAddNN));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //Suppression de la contrainte NOT NULL de la colonne
+            for (MPDRColumn mpdrColumnDropNN : oracleComparatorDb.getMpdrColumnsToModifyDropNotNull()) {
+                if(mpdrColumnDropNN.getMPDRTableAccueil().getName().equalsIgnoreCase(mpdrTableToModifiy.getName())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumnDropNotNul(mpdrColumnDropNN));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //Ajout de la clause DEFAULT
+            for (MPDRColumn mpdrColumnAddOrModifDefault : oracleComparatorDb.getMpdrColumnsToModifyAddOrModifyDefault()) {
+                if(mpdrColumnAddOrModifDefault.getMPDRTableAccueil().getName().equalsIgnoreCase(mpdrTableToModifiy.getName())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumnAddOrModifyDefault(mpdrColumnAddOrModifDefault));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //SUPPRESSION DE LA CLAUSE DEFAULT
+            for (MPDRColumn mpdrColumDropDefault : oracleComparatorDb.getMpdrColumnsToModifyDropDefault()) {
+                if(mpdrColumDropDefault.getMPDRTableAccueil().getName().equalsIgnoreCase(mpdrTableToModifiy.getName())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumnDropDefault(mpdrColumDropDefault));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //Ajout de la PK
+            for (MPDRPK mpdrPkToAdd : oracleComparatorDb.getMpdrPksToAdd()) {
+                if(mpdrPkToAdd.getMDRTableAccueil().getName().equalsIgnoreCase(mpdrTableToModifiy.getName())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLPK.generateSQLAddPKConsolidation(mpdrPkToAdd));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //Ajout de la contrainte UNIQUE
+            for (MPDRUnique mpdrUniqueToAdd : oracleComparatorDb.getMpdrUniquesToAdd()) {
+                if(mpdrUniqueToAdd.getMDRTableAccueil().getName().equalsIgnoreCase(mpdrTableToModifiy.getName())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLUnique.generateSQLCreateUniqueConsolidation(mpdrUniqueToAdd));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+            //Ajout de la contrainte CHECK
+            for (MPDRCheck mpdrCheckToAdd : oracleComparatorDb.getMpdrChecksToAdd()) {
+                if(mpdrCheckToAdd.getMDRTableAccueil().getName().equalsIgnoreCase(mpdrTableToModifiy.getName())){
+                    generateSQLCodeSync.append(mpdrOracleGenerateSQLCheck.generateSQLAddCheck(mpdrCheckToAdd));
+                    generateSQLCodeSync.append(delimiter());
+                }
+            }
+        }//Fin de boucle des tables identiques
+
+        generateSQLCodeSync.append(syncFkToAdd());
+        generateSQLCodeSync.append(syncSequenceToCreate());
+
+        generateSQLCodeSync.append(syncTriggerToDrop());
+        generateSQLCodeSync.append(syncPackageToDrop());
+        delimiter().replaceAll(".", "/");
+        generateSQLCodeSync.append(syncTriggerToCreateOrReplace());
+        generateSQLCodeSync.append(syncPackageToCreateOrReplace());
+
+        //S'il n'y a rien à générer, affichage d'un message d'information à l'utilisateur
+        if(generateSQLCodeSync.toString().equals(" ")){
+            generateSQLCodeSync.append("La structure du SGBD-R est conforme au modèle");
+        }
+
+        return generateSQLCodeSync.toString();
+    }
+
+
+    public String syncOrderedByOperationType() {
         StringBuilder generateSQLCodeSync = new StringBuilder();
         generateSQLCodeSync.append(" ");
         String message; //A voir si nécessaire
@@ -60,7 +208,7 @@ public class OracleSyncGeneratorSQL {
         generateSQLCodeSync.append(syncColumnsToModifyAddNotNull());
         generateSQLCodeSync.append(syncColumnsToModifyDropNotNull());
         generateSQLCodeSync.append(syncColumnsToModifyAddOrModifyDefault());
-        generateSQLCodeSync.append(syncColumnsToModifyDropNotDefault());
+        generateSQLCodeSync.append(syncColumnsToModifyDropDefault());
         generateSQLCodeSync.append(syncPkToAdd());
         generateSQLCodeSync.append(syncUniqueToAdd());
         generateSQLCodeSync.append(syncCheckToAdd());
@@ -145,7 +293,7 @@ public class OracleSyncGeneratorSQL {
         return code.toString();
     }
 
-    public String syncColumnsToModifyDropNotDefault(){
+    public String syncColumnsToModifyDropDefault(){
         StringBuilder code = new StringBuilder();
         for (MPDRColumn mpdrColumnDropNN : oracleComparatorDb.getMpdrColumnsToModifyDropDefault()) {
             code.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumnDropDefault(mpdrColumnDropNN));
@@ -235,14 +383,60 @@ public class OracleSyncGeneratorSQL {
     }
 
     public String syncFkDropDeleteCascade(){
-        return null;
+        StringBuilder code = new StringBuilder();
+
+        return code.toString();
     }
 
-    public String syncSequenceCreate(){
-        return null;
+    public String syncSequenceToCreate(){
+        StringBuilder code = new StringBuilder();
+
+        return code.toString();
     }
-    public String syncSequenceDrop(){
-        return null;
+
+    public String syncSequenceToDrop(){
+        StringBuilder code = new StringBuilder();
+        for (MPDRSequence dbSequenceToDrop : oracleComparatorDb.getDbSequencesToDrop()) {
+            code.append(mpdrOracleGenerateSQLSequence.generateSQLDropSequence(dbSequenceToDrop));
+            code.append(delimiter());
+        }
+        return code.toString();
+    }
+
+    public String syncTriggerToDrop(){
+        StringBuilder code = new StringBuilder();
+        for (MPDRTrigger dbTriggerToDrop : oracleComparatorDb.getDbTriggersToDrop()) {
+            code.append(mpdrOracleGenerateSQLTrigger.generateSQLDropTrigger(dbTriggerToDrop));
+            code.append(delimiter());
+        }
+        return code.toString();
+    }
+
+    public String syncTriggerToCreateOrReplace(){
+        StringBuilder code = new StringBuilder();
+        for (MPDRTrigger mpdrTriggerToCreateOrReplace : oracleComparatorDb.getMpdrTriggersToCreateOrReplace()) {
+            code.append(mpdrOracleGenerateSQLTrigger.generateSQLCreateTrigger(mpdrTriggerToCreateOrReplace));
+            code.append(delimiter());
+        }
+        return code.toString();
+    }
+
+    public String syncPackageToDrop(){
+        StringBuilder code = new StringBuilder();
+        for (MPDRPackage dbPackageToDrop : oracleComparatorDb.getDbPackagesToDrop()) {
+            code.append(mpdrOracleGenerateSQLPackage.generateSQLDropPackage(dbPackageToDrop));
+            code.append(delimiter());
+        }
+        return code.toString();
+    }
+
+    public String syncPackageToCreateOrReplace(){
+        StringBuilder code = new StringBuilder();
+        for (MPDRPackage mpdrPackageToCreateOrReplace : oracleComparatorDb.getMpdrPackagesToCreateOrReplace()) {
+            code.append(mpdrOracleGenerateSQLPackage.generateSQLCreatePackage(mpdrPackageToCreateOrReplace));
+            code.append(delimiter());
+        }
+        return code.toString();
     }
 
 }

@@ -14,14 +14,14 @@ import preferences.PreferencesManager;
 
 import java.sql.*;
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class DbFetcherOracle extends DbFetcher {
 
     private final Connection connection;
     private final ConConnection conConnection;
-    private Map<String, String> triggersBody = new HashMap<>();
-    private Map<String, String> packagesSpec = new HashMap<>();
+    private Map<String, String> triggersSequencesMap = new HashMap<>(); //K=sequenceName, V=triggerName
+    private Map<String, String> packagesMap = new HashMap<>(); //K=packageName, V= tableName
+    private Map<String, String> triggers = new HashMap<>(); //K=triggerName, V=tableName
     private DatabaseMetaData databaseMetaData;
     private String schemaDB;
     private String databaseName;
@@ -42,8 +42,10 @@ public class DbFetcherOracle extends DbFetcher {
     }
 
     public void fetch() throws SQLException {
+
         fetchTables();
-        fetchTriggers(dbModel.getMPDRTables());
+        fetchTriggers(dbModel.getMPDRTables()); //Trigger avant séquence car la séquence à besoin des trigger pour etre attribuée à une table
+        fetchDependencies();
         fetchSequences(dbModel.getMPDRTables());
         fetchPackages(dbModel.getMPDRTables());
         //fetchIndex(); //Non implémenté dans ce projet - Vincent
@@ -223,7 +225,7 @@ public class DbFetcherOracle extends DbFetcher {
             String sequenceName = rsCursorSequences.getString(Preferences.FETCHER_ORACLE_SEQUENCE_NAME);
             sequencesNotInTable.add(sequenceName);
             for (MPDRTable dbTable : dbTables) {
-                if (findTableAccueilleSequence2(dbTable, sequenceName) != null) {
+                if (findTableAccueilleSequence(dbTable, sequenceName) != null) {
                     MPDROracleSequence mpdrOracleSequence;
                     for (MPDRColumn mpdrColumn : dbTable.getMPDRColumns()) {
                         if (mpdrColumn.getIsPk()) {
@@ -243,7 +245,6 @@ public class DbFetcherOracle extends DbFetcher {
     }
 
     private void fetchTriggers(List<MPDRTable> dbTables) throws SQLException {
-        Map<String, String> triggers = new HashMap<>();
         String requeteSQL = Preferences.FETCHER_ORACLE_REQUETE_SQL_USER_TRIGGERS;
         PreparedStatement pStmtTriggers = connection.prepareStatement(requeteSQL);
         ResultSet rsCursorTriggers = pStmtTriggers.executeQuery();
@@ -253,7 +254,7 @@ public class DbFetcherOracle extends DbFetcher {
             triggers.put(rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TRIGGER_NAME), rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TABLE_NAME));
             triggersNotInTable.add(rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TRIGGER_NAME));
             //On met le body en majuscule car lors de recherche(contains), c'est case sensitive
-            triggersBody.put(rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TRIGGER_BODY).toUpperCase() + "//" + i, rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TABLE_NAME));
+            //triggersBody.put(rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TRIGGER_BODY).toUpperCase() + "//" + i, rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TABLE_NAME));
             i++;
         }
         for (MPDRTable dbTable : dbTables) {
@@ -281,18 +282,6 @@ public class DbFetcherOracle extends DbFetcher {
         }
         pStmtPackages.close();
         rsCursorPackages.close();
-        String requetePackageGetDDL;
-        //Afin d'avoir une liste pour la méthode findTableAcceuillePackage
-        for (String aPackage : packages) {
-            requetePackageGetDDL = "select dbms_metadata.get_ddl(\'PACKAGE\',\'" + aPackage + "\') from dual";
-            PreparedStatement pStmtGetDdl = connection.prepareStatement(requetePackageGetDDL);
-            ResultSet rsPackages = pStmtGetDdl.executeQuery();
-            while (rsPackages.next()) {
-                packagesSpec.put(rsPackages.getString(1).toUpperCase(), aPackage);
-            }
-            pStmtGetDdl.close();
-            rsPackages.close();
-        }
 
         for (MPDRTable dbTable : dbTables) {
             //package est un mot réservé donc utilisation du nom de variable "paquet"
@@ -307,13 +296,14 @@ public class DbFetcherOracle extends DbFetcher {
         }
     }
 
-    //Permet d'aller récupérer le nom de la table en fonction du trigger dans laquelle elle est appelée
     private MPDRTable findTableAccueilleSequence(MPDRTable dbTable, String sequenceName) {
-        if (triggersBody.containsValue(dbTable.getName())) {
-            for (String body : triggersBody.keySet()) {
-                String regex = "." + sequenceName + ".";
-                if (Pattern.compile(regex).matcher(body).find()) {
-                    triggersBody.get(dbTable);
+        Iterator<String> itr = triggersSequencesMap.keySet().iterator(); //K=sequenceName, V=triggerName
+        while (itr.hasNext()) {
+            String seqName = itr.next();
+            String triggerName = triggersSequencesMap.get(seqName);
+            if(seqName.equals(sequenceName)){
+                String tabName= triggers.get(triggerName); //K=triggerName, V=tableName
+                if(tabName.equals(dbTable.getName())){
                     return dbTable;
                 }
             }
@@ -321,34 +311,49 @@ public class DbFetcherOracle extends DbFetcher {
         return null;
     }
 
-    private MPDRTable findTableAccueilleSequence2(MPDRTable dbTable, String sequenceName) {
-        String regex = "." + sequenceName + ".";
-        Iterator<String> itr = triggersBody.keySet().iterator();
-        while (itr.hasNext()){
-            String body = itr.next();
-            String tableName = triggersBody.get(body);
-            if (Pattern.compile(regex).matcher(body).find()) {
-                if (tableName.equals(dbTable.getName())) {
-                    return dbTable;
-                }
-            }
-        }
-        return null;
-    }
 
-    //on se base sur la ligne "type TYPE_COLLABORATEURS  is table of COLLABORATEURS%rowtype index by pls_integer" dans le corps du package pour
-    //trouver le nom de la table auquel il est lié
     private MPDRTable findTableAccueillePackage(MPDRTable dbTable, String packageName) {
-        for (Map.Entry map : packagesSpec.entrySet()) {
-            if (map.getValue().equals(packageName)) {
-                String regex = ".IS TABLE OF " + dbTable.getName() + "%ROWTYPE";
-                if (Pattern.compile(regex).matcher(map.getKey().toString()).find()) {
-                    packagesSpec.remove(map.getKey());
-                    return dbTable;
-                }
+        Iterator itr = packagesMap.keySet().iterator();//K=packageName, V= tableName
+        while (itr.hasNext()) {
+            if (itr.next().equals(packageName)) {
+                return dbTable;
             }
         }
         return null;
+    }
+
+    //Attention, ces méthode ne récupère que les séquences liées à un trigger et que les packages liés à une table
+    private void fetchDependencies() throws SQLException {
+        fetchDependenciesSequence();
+        fetchDependenciesPackages();
+    }
+
+    private void fetchDependenciesSequence() throws SQLException {
+        String requeteSQL = "select * from user_dependencies where referenced_type=? and type=?";
+        PreparedStatement pStmtSequences = connection.prepareStatement(requeteSQL);
+        pStmtSequences.setString(1, "SEQUENCE");
+        pStmtSequences.setString(2, "TRIGGER");
+        ResultSet rsCursorSequences = pStmtSequences.executeQuery();
+        while (rsCursorSequences.next()) {
+            //referenced_type = nom de la séquence, NAME = nom du trigger
+            triggersSequencesMap.put(rsCursorSequences.getString("REFERENCED_NAME"), rsCursorSequences.getString("NAME"));
+        }
+        pStmtSequences.close();
+        rsCursorSequences.close();
+    }
+
+    private void fetchDependenciesPackages() throws SQLException {
+        String requeteSQL = "select * from user_dependencies where referenced_type=? and type=?";
+        PreparedStatement pStmtPackages = connection.prepareStatement(requeteSQL);
+        pStmtPackages.setString(1, "TABLE");
+        pStmtPackages.setString(2, "PACKAGE");
+        ResultSet rsCursorPackages = pStmtPackages.executeQuery();
+        while (rsCursorPackages.next()) {
+            //NAME = nom du package, REFERENCED_NAME = nom de la table
+            packagesMap.put(rsCursorPackages.getString("NAME"), rsCursorPackages.getString("REFERENCED_NAME"));
+        }
+        pStmtPackages.close();
+        rsCursorPackages.close();
     }
 
     public MPDROracleModel getDbModel() {

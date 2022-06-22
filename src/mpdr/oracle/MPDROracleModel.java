@@ -60,7 +60,7 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
                         this, conConnection, ConnectionsService.actionTestIConConnectionOrConnector(
                                 owner,true, conConnection)));
 
-        return oracleSyncGeneratorSQL.sync();
+        return oracleSyncGeneratorSQL.syncOrderByTable();
     }
 
     @Override
