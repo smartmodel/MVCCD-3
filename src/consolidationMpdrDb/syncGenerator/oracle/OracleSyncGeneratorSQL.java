@@ -16,6 +16,7 @@ public class OracleSyncGeneratorSQL {
     private MPDROracleGenerateSQLUnique mpdrOracleGenerateSQLUnique;
     private MPDROracleGenerateSQLCheck mpdrOracleGenerateSQLCheck;
     private MPDROracleGenerateSQLFK mpdrOracleGenerateSQLFK;
+    private MPDROracleGenerateSQLSequence mpdrOracleGenerateSQLSequence;
     private OracleComparatorDb oracleComparatorDb;
 
     public OracleSyncGeneratorSQL(MPDRModel mpdrModel, OracleComparatorDb oracleComparatorDb) {
@@ -26,6 +27,7 @@ public class OracleSyncGeneratorSQL {
         this.mpdrOracleGenerateSQLUnique = new MPDROracleGenerateSQLUnique(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLCheck = new MPDROracleGenerateSQLCheck(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLFK = new MPDROracleGenerateSQLFK(mpdrOracleGenerateSQL);
+        this.mpdrOracleGenerateSQLSequence = new MPDROracleGenerateSQLSequence(mpdrOracleGenerateSQL);
         this.oracleComparatorDb = oracleComparatorDb;
 
         //Permet d'exécuter le mécanisme de comparaison
@@ -231,4 +233,16 @@ public class OracleSyncGeneratorSQL {
         }
         return code.toString();
     }
+
+    public String syncFkDropDeleteCascade(){
+        return null;
+    }
+
+    public String syncSequenceCreate(){
+        return null;
+    }
+    public String syncSequenceDrop(){
+        return null;
+    }
+
 }

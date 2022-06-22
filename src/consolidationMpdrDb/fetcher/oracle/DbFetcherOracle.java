@@ -13,10 +13,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class DbFetcherOracle extends DbFetcher {
@@ -226,7 +223,7 @@ public class DbFetcherOracle extends DbFetcher {
             String sequenceName = rsCursorSequences.getString(Preferences.FETCHER_ORACLE_SEQUENCE_NAME);
             sequencesNotInTable.add(sequenceName);
             for (MPDRTable dbTable : dbTables) {
-                if (findTableAccueilleSequence(dbTable, sequenceName) != null) {
+                if (findTableAccueilleSequence2(dbTable, sequenceName) != null) {
                     MPDROracleSequence mpdrOracleSequence;
                     for (MPDRColumn mpdrColumn : dbTable.getMPDRColumns()) {
                         if (mpdrColumn.getIsPk()) {
@@ -324,6 +321,21 @@ public class DbFetcherOracle extends DbFetcher {
         return null;
     }
 
+    private MPDRTable findTableAccueilleSequence2(MPDRTable dbTable, String sequenceName) {
+        String regex = "." + sequenceName + ".";
+        Iterator<String> itr = triggersBody.keySet().iterator();
+        while (itr.hasNext()){
+            String body = itr.next();
+            String tableName = triggersBody.get(body);
+            if (Pattern.compile(regex).matcher(body).find()) {
+                if (tableName.equals(dbTable.getName())) {
+                    return dbTable;
+                }
+            }
+        }
+        return null;
+    }
+
     //on se base sur la ligne "type TYPE_COLLABORATEURS  is table of COLLABORATEURS%rowtype index by pls_integer" dans le corps du package pour
     //trouver le nom de la table auquel il est lié
     private MPDRTable findTableAccueillePackage(MPDRTable dbTable, String packageName) {
@@ -358,7 +370,7 @@ public class DbFetcherOracle extends DbFetcher {
         return triggersNotInTable;
     }
 
-    public void fetchIndex() {
+    private void fetchIndex() {
         // A développer ultérieurement
     }
 }

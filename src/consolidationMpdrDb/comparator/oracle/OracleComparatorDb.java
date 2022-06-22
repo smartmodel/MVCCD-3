@@ -248,7 +248,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     //Si la suppression de la clause par défaut a déjà été effectuée une fois, elle devient une string "null" au lieu d'être null
     public void compareColumnDropInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         if ((mpdrColumn.getInitValue() == null || mpdrColumn.getInitValue().equals("")) && dbColumn.getInitValue() != null) {
-            if(!dbColumn.getInitValue().equals("null")) {
+            if (!dbColumn.getInitValue().equals("null")) {
                 mpdrColumnsToModifyDropDefault.add(mpdrColumn);
             }
         }
@@ -292,15 +292,15 @@ public class OracleComparatorDb extends MpdrDbComparator {
             } else {
                 if (mpdrTable.getMPDRPK().getName().toUpperCase().equals(dbTable.getMPDRPK().getName())) {
                     //contrôle que les PK pointent sur les mêmes noms de colonne
-                    for (int i=0;i<mpdrTable.getMPDRPK().getMDRParameters().size();i++){
-                        if(!mpdrTable.getMPDRPK().getMDRParameters().get(i).getName().equals(
-                                dbTable.getMPDRPK().getMDRParameters().get(i).getName())){
+                    for (int i = 0; i < mpdrTable.getMPDRPK().getMDRParameters().size(); i++) {
+                        if (!mpdrTable.getMPDRPK().getMDRParameters().get(i).getName().equals(
+                                dbTable.getMPDRPK().getMDRParameters().get(i).getName())) {
                             dbPksToDrop.add(dbTable.getMPDRPK());
                             mpdrPksToAdd.add(mpdrTable.getMPDRPK());
                             break;
                         }
                     }
-                } else{
+                } else {
                     //a voir si nécessaire ?
                     mpdrPksToAdd.add(mpdrTable.getMPDRPK());
                 }
@@ -454,15 +454,20 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    //TODO NE FONCTIONNE PAS - Rien dans les séquence à drop..
+    //Attention, si la PK n'était pas sur la bonne colonne, la séquence sera effacée et recréée
     public void compareSequencesToDrop(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         //On compare uniquement si la colonne de la db possède un enfant, donc une séquence
         if (!dbColumn.getChilds().isEmpty()) {
-            if (!dbColumn.getMPDRSequence().getName().equals(mpdrColumn.getMPDRSequence().getName().toUpperCase())) {
-                dbSequencesToDrop.add(mpdrColumn.getMPDRSequence());
+            if (mpdrColumn.getMPDRSequence() != null) {
+                if (!dbColumn.getMPDRSequence().getName().equals(mpdrColumn.getMPDRSequence().getName().toUpperCase())) {
+                    dbSequencesToDrop.add(dbColumn.getMPDRSequence());
+                }
+            } else {
+                dbSequencesToDrop.add(dbColumn.getMPDRSequence());
             }
         }
     }
+
 
     public void compareTriggerToCreateOrReplace(MPDRBoxTriggers mpdrBoxTriggers) {
         if (mpdrBoxTriggers.getAllTriggers() != null) {
