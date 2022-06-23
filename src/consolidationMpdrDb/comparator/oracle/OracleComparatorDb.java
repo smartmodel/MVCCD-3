@@ -193,16 +193,15 @@ public class OracleComparatorDb extends MpdrDbComparator {
     }
 
     //Attention, si MpdrDataType=DATE -> Size=null mais dans la db la size=7
-    //A voir si on contrôle avec le 7 ou si on part du principe que c'est correct
+    //Selon décision de FC, pas de comparaison de la longueur lorsqu'il s'agit de DATE
     private boolean compareColumnSize(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         boolean sameSize = false;
         if (!mpdrColumn.getDatatypeLienProg().toUpperCase().equals("DATE")) {
             if (mpdrColumn.getSize().equals(dbColumn.getSize())) {
-
                 return sameSize = true;
             }
         } else {
-            return sameSize = dbColumn.getSize().equals(7);
+            return sameSize = true;
         }
         return sameSize;
     }
@@ -317,7 +316,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
             dbCheckNameList.add(dbCheck.getName());
         }
         for (MPDRCheck mpdrCheck : mpdrTable.getMPDRChecks()) {
-            if (!dbCheckNameList.contains(mpdrCheck.getName())) {
+            if (!dbCheckNameList.contains(mpdrCheck.getName().toUpperCase())) {
                 mpdrChecksToAdd.add(mpdrCheck);
             }
         }
@@ -326,7 +325,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     private void compareCheckToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
         List<String> mpdrCheckNameList = new ArrayList<>();
         for (MPDRCheck mpdrCheck : mpdrTable.getMPDRChecks()) {
-            mpdrCheckNameList.add(mpdrCheck.getName());
+            mpdrCheckNameList.add(mpdrCheck.getName().toUpperCase());
         }
         for (MPDRCheck dbCheck : dbTable.getMPDRChecks()) {
             if (!mpdrCheckNameList.contains(dbCheck.getName())) {

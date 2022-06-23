@@ -21,7 +21,7 @@ public class DbFetcherOracle extends DbFetcher {
     private final ConConnection conConnection;
     private Map<String, String> triggersSequencesMap = new HashMap<>(); //K=sequenceName, V=triggerName
     private Map<String, String> packagesMap = new HashMap<>(); //K=packageName, V= tableName
-    private Map<String, String> triggers = new HashMap<>(); //K=triggerName, V=tableName
+    private Map<String, String> triggersMap = new HashMap<>(); //K=triggerName, V=tableName
     private DatabaseMetaData databaseMetaData;
     private String schemaDB;
     private String databaseName;
@@ -249,15 +249,15 @@ public class DbFetcherOracle extends DbFetcher {
         PreparedStatement pStmtTriggers = connection.prepareStatement(requeteSQL);
         ResultSet rsCursorTriggers = pStmtTriggers.executeQuery();
         while (rsCursorTriggers.next()) {
-            triggers.put(rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TRIGGER_NAME), rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TABLE_NAME));
+            triggersMap.put(rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TRIGGER_NAME), rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TABLE_NAME));
             triggersNotInTable.add(rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TRIGGER_NAME));
 
         }
         for (MPDRTable dbTable : dbTables) {
-            if (triggers.containsValue(dbTable.getName())) {
+            if (triggersMap.containsValue(dbTable.getName())) {
                 MPDROracleTrigger dbTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(dbTable.getMPDRContTAPIs().getMPDRBoxTriggers(), null);
                 String triggerName=null;
-                for (Map.Entry<String, String> entry : triggers.entrySet()) {
+                for (Map.Entry<String, String> entry : triggersMap.entrySet()) {
                     if(entry.getValue().equals(dbTable.getName())){
                         triggerName = entry.getKey();
                     }
@@ -303,7 +303,7 @@ public class DbFetcherOracle extends DbFetcher {
             String seqName = itr.next();
             String triggerName = triggersSequencesMap.get(seqName);
             if(seqName.equals(sequenceName)){
-                String tabName= triggers.get(triggerName); //K=triggerName, V=tableName
+                String tabName= triggersMap.get(triggerName); //K=triggerName, V=tableName
                 if(tabName.equals(dbTable.getName())){
                     return dbTable;
                 }
@@ -325,33 +325,34 @@ public class DbFetcherOracle extends DbFetcher {
 
     //Attention, ces méthode ne récupère que les séquences liées à un trigger et que les packages liés à une table
     private void fetchDependencies() throws SQLException {
-        fetchDependenciesSequence();
+        fetchDependenciesSequences();
         fetchDependenciesPackages();
     }
 
-    private void fetchDependenciesSequence() throws SQLException {
-        String requeteSQL = "select * from user_dependencies where referenced_type=? and type=?";
+    private void fetchDependenciesSequences() throws SQLException {
+        String requeteSQL = Preferences.FETCHER_ORACLE_USER_DEPENDENCIES;
         PreparedStatement pStmtSequences = connection.prepareStatement(requeteSQL);
-        pStmtSequences.setString(1, "SEQUENCE");
-        pStmtSequences.setString(2, "TRIGGER");
+        pStmtSequences.setString(1, Preferences.FETCHER_ORACLE_SEQUENCE);
+        pStmtSequences.setString(2, Preferences.FETCHER_ORACLE_TRIGGER);
         ResultSet rsCursorSequences = pStmtSequences.executeQuery();
         while (rsCursorSequences.next()) {
             //referenced_type = nom de la séquence, NAME = nom du trigger
-            triggersSequencesMap.put(rsCursorSequences.getString("REFERENCED_NAME"), rsCursorSequences.getString("NAME"));
+            triggersSequencesMap.put(rsCursorSequences.getString(Preferences.FETCHER_ORACLE_REFERENCED_NAME),
+                    rsCursorSequences.getString(Preferences.FETCHER_ORACLE_NAME));
         }
         pStmtSequences.close();
         rsCursorSequences.close();
     }
 
     private void fetchDependenciesPackages() throws SQLException {
-        String requeteSQL = "select * from user_dependencies where referenced_type=? and type=?";
+        String requeteSQL = Preferences.FETCHER_ORACLE_USER_DEPENDENCIES;
         PreparedStatement pStmtPackages = connection.prepareStatement(requeteSQL);
-        pStmtPackages.setString(1, "TABLE");
-        pStmtPackages.setString(2, "PACKAGE");
+        pStmtPackages.setString(1, Preferences.FETCHER_ORACLE_TABLE);
+        pStmtPackages.setString(2, Preferences.FETCHER_ORACLE_PACKAGE);
         ResultSet rsCursorPackages = pStmtPackages.executeQuery();
         while (rsCursorPackages.next()) {
             //NAME = nom du package, REFERENCED_NAME = nom de la table
-            packagesMap.put(rsCursorPackages.getString("NAME"), rsCursorPackages.getString("REFERENCED_NAME"));
+            packagesMap.put(rsCursorPackages.getString(Preferences.FETCHER_ORACLE_NAME), rsCursorPackages.getString(Preferences.FETCHER_ORACLE_REFERENCED_NAME));
         }
         pStmtPackages.close();
         rsCursorPackages.close();
