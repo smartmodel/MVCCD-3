@@ -21,6 +21,17 @@ public abstract class MPDRGenerateSQLSequence {
 
     }
 
+    //Ajouté par Vincent pour les séquences qui ne sont pas liées à une table
+    public String generateSQLDropSequence(String sequenceName){
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirDropDB(),
+                Preferences.TEMPLATE_DROP_SEQUENCE,
+                getMPDRGenerateSQL().mpdrModel);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_SEQUENCE_NAME_WORD, sequenceName);
+        return generateSQLCode;
+
+    }
+
     public String generateSQLCreateSequence(MPDRSequence mpdrSequence) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateDB(),
                 Preferences.TEMPLATE_CREATE_SEQUENCE,

@@ -248,19 +248,20 @@ public class DbFetcherOracle extends DbFetcher {
         String requeteSQL = Preferences.FETCHER_ORACLE_REQUETE_SQL_USER_TRIGGERS;
         PreparedStatement pStmtTriggers = connection.prepareStatement(requeteSQL);
         ResultSet rsCursorTriggers = pStmtTriggers.executeQuery();
-        //Ajout du +i car si plusieurs triggers ont le même body, ils seront quand même ajoutés à la hashMap
-        int i = 0;
         while (rsCursorTriggers.next()) {
             triggers.put(rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TRIGGER_NAME), rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TABLE_NAME));
             triggersNotInTable.add(rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TRIGGER_NAME));
-            //On met le body en majuscule car lors de recherche(contains), c'est case sensitive
-            //triggersBody.put(rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TRIGGER_BODY).toUpperCase() + "//" + i, rsCursorTriggers.getString(Preferences.FETCHER_ORACLE_TABLE_NAME));
-            i++;
+
         }
         for (MPDRTable dbTable : dbTables) {
             if (triggers.containsValue(dbTable.getName())) {
                 MPDROracleTrigger dbTrigger = MVCCDElementFactory.instance().createMPDROracleTrigger(dbTable.getMPDRContTAPIs().getMPDRBoxTriggers(), null);
-                String triggerName = triggers.get(dbTable.getName());
+                String triggerName=null;
+                for (Map.Entry<String, String> entry : triggers.entrySet()) {
+                    if(entry.getValue().equals(dbTable.getName())){
+                        triggerName = entry.getKey();
+                    }
+                }
                 dbTrigger.setName(triggerName);
                 triggersNotInTable.remove(triggerName);
             }
@@ -313,9 +314,9 @@ public class DbFetcherOracle extends DbFetcher {
 
 
     private MPDRTable findTableAccueillePackage(MPDRTable dbTable, String packageName) {
-        Iterator itr = packagesMap.keySet().iterator();//K=packageName, V= tableName
-        while (itr.hasNext()) {
-            if (itr.next().equals(packageName)) {
+        if(packagesMap.get(packageName)!=null) {
+            String tableName = packagesMap.get(packageName);
+            if(tableName.equals(dbTable.getName())){
                 return dbTable;
             }
         }

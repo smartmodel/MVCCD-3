@@ -31,6 +31,23 @@ public abstract class MPDRGenerateSQLTrigger {
         return generateSQLCode;
     }
 
+    //Ajouté par Vincent pour les triggers qui ne sont pas liés à une table
+    public String generateSQLDropTrigger(String dbTriggerNotInTable){
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirDropTriggersDB(),
+                Preferences.TEMPLATE_DROP_TRIGGER,
+                getMPDRGenerateSQL().mpdrModel);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_TRIGGER_NAME_WORD, dbTriggerNotInTable);
+
+        /*
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD,
+                mpdrTrigger.getMPDRTableAccueil().getName());
+
+         */
+
+        return generateSQLCode;
+    }
+
+
     public String generateSQLCreateTrigger(MPDRTrigger mpdrTrigger) {
         MPDRTriggerType mpdrTriggerType = mpdrTrigger.getType();
         MPDRTable tableAccueil =mpdrTrigger.getMPDRTableAccueil();

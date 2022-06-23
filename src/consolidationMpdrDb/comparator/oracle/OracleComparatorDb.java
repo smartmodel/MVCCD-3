@@ -58,13 +58,13 @@ public class OracleComparatorDb extends MpdrDbComparator {
         compareTables();
     }
 
-    public void compareTables() {
+    private void compareTables() {
         compareTablesIdenticales();
         compareTablesToCreate();
         compareTablesToDrop();
     }
 
-    public void compareTablesIdenticales() {
+    private void compareTablesIdenticales() {
         for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
             MPDRTable dbTable = findDbTableByName(mpdrTable);
             if (dbTable != null) {
@@ -81,7 +81,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public void compareTablesToCreate() {
+    private void compareTablesToCreate() {
         for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
             MPDRTable dbTable = findDbTableByName(mpdrTable);
             if (dbTable == null) {
@@ -90,7 +90,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public void compareTablesToDrop() {
+    private void compareTablesToDrop() {
         for (MPDRTable dbTable : dbModelOracle.getMPDRTables()) {
             MPDRTable mpdrTable = findMpdrTableByName(dbTable);
             if (mpdrTable == null) {
@@ -99,7 +99,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public MPDRTable findDbTableByName(MPDRTable mpdrTable) {
+    private MPDRTable findDbTableByName(MPDRTable mpdrTable) {
         for (MPDRTable dbTable : dbModelOracle.getMPDRTables()) {
             if (mpdrTable.getName().toUpperCase().equals(dbTable.getName())) {
                 return dbTable;
@@ -108,7 +108,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         return null;
     }
 
-    public MPDRTable findMpdrTableByName(MPDRTable dbTable) {
+    private MPDRTable findMpdrTableByName(MPDRTable dbTable) {
         for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
             if (dbTable.getName().equals(mpdrTable.getName().toUpperCase())) {
                 return mpdrTable;
@@ -117,7 +117,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         return null;
     }
 
-    public void compareColumns(List<MPDRColumn> mpdrColumns, List<MPDRColumn> dbColumns) {
+    private void compareColumns(List<MPDRColumn> mpdrColumns, List<MPDRColumn> dbColumns) {
         //Pour toutes les colonnes du Mpdr, soit elles sont identiques, soit elles ne sont pas dans la table de la db et doivent y être ajoutées
         for (MPDRColumn mpdrColumn : mpdrColumns) {
             compareColumnsIdenticales(mpdrColumn, dbColumns);
@@ -129,7 +129,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public void compareColumnsIdenticales(MPDRColumn mpdrColumn, List<MPDRColumn> dbColumns) {
+    private void compareColumnsIdenticales(MPDRColumn mpdrColumn, List<MPDRColumn> dbColumns) {
         MPDRColumn dbColumn = findDbColumnByName(mpdrColumn, dbColumns);
         if (dbColumn != null) {
             //Si le nom est identique, on compare alors les attributs entre les colonnes du mpdr et de la db
@@ -188,13 +188,13 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public boolean compareColumnDataType(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+    private boolean compareColumnDataType(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         return mpdrColumn.getDatatypeLienProg().toUpperCase().equals(dbColumn.getDatatypeLienProg());
     }
 
     //Attention, si MpdrDataType=DATE -> Size=null mais dans la db la size=7
     //A voir si on contrôle avec le 7 ou si on part du principe que c'est correct
-    public boolean compareColumnSize(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+    private boolean compareColumnSize(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         boolean sameSize = false;
         if (!mpdrColumn.getDatatypeLienProg().toUpperCase().equals("DATE")) {
             if (mpdrColumn.getSize().equals(dbColumn.getSize())) {
@@ -208,7 +208,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     }
 
     //Dans le mpdr, s'il n'y a pas de scale=null alors que dans la db=0
-    public boolean compareColumnScale(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+    private boolean compareColumnScale(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         if (mpdrColumn.getScale() == null && dbColumn.getScale() == 0) {
             return true;
         } else {
@@ -222,7 +222,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         return false;
     }
 
-    public void compareColumnMandatory(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+    private void compareColumnMandatory(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         compareColumnAddMandatory(mpdrColumn, dbColumn);
         compareColumnDropMandatory(mpdrColumn, dbColumn);
     }
@@ -240,13 +240,13 @@ public class OracleComparatorDb extends MpdrDbComparator {
     }
 
     //Dans le mpdr les datatype NUMBER ont une initValue à null alors que les autre type = ""
-    public void compareColumnInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+    private void compareColumnInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         compareColumnDropInitValue(mpdrColumn, dbColumn);
         compareColumnAddOrModifyInitValue(mpdrColumn, dbColumn);
     }
 
     //Si la suppression de la clause par défaut a déjà été effectuée une fois, elle devient une string "null" au lieu d'être null
-    public void compareColumnDropInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+    private void compareColumnDropInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         if ((mpdrColumn.getInitValue() == null || mpdrColumn.getInitValue().equals("")) && dbColumn.getInitValue() != null) {
             if (!dbColumn.getInitValue().equals("null")) {
                 mpdrColumnsToModifyDropDefault.add(mpdrColumn);
@@ -255,7 +255,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     }
 
     //L'ajout ou la modification de la clause ont la même instruction SQL donc on les groupe dans la même liste
-    public void compareColumnAddOrModifyInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+    private void compareColumnAddOrModifyInitValue(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         if (mpdrColumn.getInitValue() == null || mpdrColumn.getInitValue().equals("")) {
             //doNothing - pour éviter la nullPointerExeption si la valeur est nulle
         } else {
@@ -272,20 +272,18 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public void comparePk(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void comparePk(MPDRTable mpdrTable, MPDRTable dbTable) {
         comparePkToAdd(mpdrTable, dbTable);
         comparePkToDrop(mpdrTable, dbTable);
     }
 
-    public void comparePkToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void comparePkToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
         if (!mpdrTable.getMPDRPK().getName().toUpperCase().equals(dbTable.getMPDRPK().getName())) {
             dbPksToDrop.add(dbTable.getMPDRPK());
         }
     }
 
-    //TODO VINCENT
-    //ATTENTION : Il faut encore contrôler que les targetId pointent sur les mêmes noms de colonne
-    public void comparePkToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void comparePkToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
         if (mpdrTable.getMPDRPK() != null) {
             if (dbTable.getMPDRPK() == null) {
                 mpdrPksToAdd.add(mpdrTable.getMPDRPK());
@@ -301,20 +299,19 @@ public class OracleComparatorDb extends MpdrDbComparator {
                         }
                     }
                 } else {
-                    //a voir si nécessaire ?
                     mpdrPksToAdd.add(mpdrTable.getMPDRPK());
                 }
             }
         }
     }
 
-    public void compareCheck(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void compareCheck(MPDRTable mpdrTable, MPDRTable dbTable) {
         compareCheckToAdd(mpdrTable, dbTable);
         compareCheckToDrop(mpdrTable, dbTable);
         compareCheckToModify(mpdrTable, dbTable);
     }
 
-    public void compareCheckToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void compareCheckToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
         List<String> dbCheckNameList = new ArrayList<>();
         for (MPDRCheck dbCheck : dbTable.getMPDRChecks()) {
             dbCheckNameList.add(dbCheck.getName());
@@ -326,7 +323,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public void compareCheckToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void compareCheckToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
         List<String> mpdrCheckNameList = new ArrayList<>();
         for (MPDRCheck mpdrCheck : mpdrTable.getMPDRChecks()) {
             mpdrCheckNameList.add(mpdrCheck.getName());
@@ -338,7 +335,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public void compareCheckToModify(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void compareCheckToModify(MPDRTable mpdrTable, MPDRTable dbTable) {
         for (MPDRCheck mpdrCheck : mpdrTable.getMPDRChecks()) {
             for (MPDRCheck dbCheck : dbTable.getMPDRChecks()) {
                 if (mpdrCheck.getName().toUpperCase().equals(dbCheck.getName())) {
@@ -355,12 +352,12 @@ public class OracleComparatorDb extends MpdrDbComparator {
 
     }
 
-    public void compareFk(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void compareFk(MPDRTable mpdrTable, MPDRTable dbTable) {
         compareFkToAdd(mpdrTable, dbTable);
         compareFkToDrop(mpdrTable, dbTable);
     }
 
-    public void compareFkToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void compareFkToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
         List<String> dbFkNameList = new ArrayList<>();
         for (MPDRFK dbFk : dbTable.getMPDRFKs()) {
             dbFkNameList.add(dbFk.getName());
@@ -372,7 +369,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public void compareFkToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void compareFkToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
         List<String> mpdrFkNameList = new ArrayList<>();
         for (MPDRFK mpdrFk : mpdrTable.getMPDRFKs()) {
             mpdrFkNameList.add(mpdrFk.getName().toUpperCase());
@@ -384,7 +381,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public void compareFkOptionDeleteCascadeToAddOrDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void compareFkOptionDeleteCascadeToAddOrDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
         for (MPDRFK mpdrFk : mpdrTable.getMPDRFKs()) {
             for (MPDRFK dbFk : dbTable.getMPDRFKs()) {
                 if (mpdrFk.getName().toUpperCase().equals(dbFk.getName())) {
@@ -404,13 +401,12 @@ public class OracleComparatorDb extends MpdrDbComparator {
 
     }
 
-    //TODO La comparaison ne fonctionne pas dans les 2 méthodes...
-    public void compareUnique(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void compareUnique(MPDRTable mpdrTable, MPDRTable dbTable) {
         compareUniqueToAdd(mpdrTable, dbTable);
         compareUniqueToDrop(mpdrTable, dbTable);
     }
 
-    public void compareUniqueToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void compareUniqueToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
         List<String> mpdrUniqueNameList = new ArrayList();
         for (MPDRUnique mpdrUnique : mpdrTable.getMPDRUniques()) {
             mpdrUniqueNameList.add(mpdrUnique.getName().toUpperCase());
@@ -423,7 +419,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    public void compareUniqueToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
+    private void compareUniqueToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
         List<String> dbUniqueNameList = new ArrayList<>();
         for (MPDRUnique dbUnique : dbTable.getMPDRUniques()) {
             dbUniqueNameList.add(dbUnique.getName());
@@ -436,12 +432,12 @@ public class OracleComparatorDb extends MpdrDbComparator {
     }
 
 
-    public void compareSequence(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+    private void compareSequence(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         compareSequencesToCreate(mpdrColumn, dbColumn);
         compareSequencesToDrop(mpdrColumn, dbColumn);
     }
 
-    public void compareSequencesToCreate(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+    private void compareSequencesToCreate(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         //On compare uniquement si la colonne du mpdr possède un enfant, donc une séquence
         if (!mpdrColumn.getChilds().isEmpty()) {
             if (!dbColumn.getChilds().isEmpty()) {
@@ -455,7 +451,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     }
 
     //Attention, si la PK n'était pas sur la bonne colonne, la séquence sera effacée et recréée
-    public void compareSequencesToDrop(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
+    private void compareSequencesToDrop(MPDRColumn mpdrColumn, MPDRColumn dbColumn) {
         //On compare uniquement si la colonne de la db possède un enfant, donc une séquence
         if (!dbColumn.getChilds().isEmpty()) {
             if (mpdrColumn.getMPDRSequence() != null) {
@@ -469,7 +465,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     }
 
 
-    public void compareTriggerToCreateOrReplace(MPDRBoxTriggers mpdrBoxTriggers) {
+    private void compareTriggerToCreateOrReplace(MPDRBoxTriggers mpdrBoxTriggers) {
         if (mpdrBoxTriggers.getAllTriggers() != null) {
             for (MPDRTrigger trigger : mpdrBoxTriggers.getAllTriggers()) {
                 mpdrTriggersToCreateOrReplace.add(trigger);
@@ -477,8 +473,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    //TODO NE FONCTIONNE PAS - Rien dans les trigger à drop...
-    public void compareTriggersToDrop(MPDRBoxTriggers mpdrBoxTriggers, MPDRBoxTriggers dbBoxTriggers) {
+    private void compareTriggersToDrop(MPDRBoxTriggers mpdrBoxTriggers, MPDRBoxTriggers dbBoxTriggers) {
         if (mpdrBoxTriggers.getAllTriggers() != null && dbBoxTriggers.getAllTriggers() != null) {
             for (MPDRTrigger trigger : dbBoxTriggers.getAllTriggers()) {
                 if (mpdrBoxTriggers.getAllTriggers().contains(trigger.getName())) {
@@ -489,7 +484,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     }
 
 
-    public void compareTriggers(MPDRBoxTriggers mpdrBoxTriggers, MPDRBoxTriggers dbBoxTriggers) {
+    private void compareTriggers(MPDRBoxTriggers mpdrBoxTriggers, MPDRBoxTriggers dbBoxTriggers) {
         compareTriggerToCreateOrReplace(mpdrBoxTriggers);
         compareTriggersToDrop(mpdrBoxTriggers, dbBoxTriggers);
 
@@ -509,13 +504,25 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    private void comparePackagesToDrop(MPDROracleBoxPackages mpdrOracleBoxPackages, MPDROracleBoxPackages
-            dbOracleBoxPackages) {
+    private void comparePackagesToDrop(MPDROracleBoxPackages mpdrOracleBoxPackages, MPDROracleBoxPackages dbOracleBoxPackages) {
         if (mpdrOracleBoxPackages != null && dbOracleBoxPackages != null) {
+            List<MPDRPackage> samePackages = new ArrayList<>();
+            List<MPDRPackage> differentPackages = new ArrayList<>();
             for (MPDRPackage dbPackage : dbOracleBoxPackages.getAllPackages()) {
-                //TODO NE FONCTIONNE PAS CAR LE GETCHILDS EST FAUX
-                if (!mpdrOracleBoxPackages.getChilds().contains(dbPackage.getName())) {
-                    dbPackagesToDrop.add(dbPackage);
+                for (MPDRPackage mpdrPackage : mpdrOracleBoxPackages.getAllPackages()) {
+                    if(mpdrPackage.getName().equals(dbPackage.getName())){
+                        if(!samePackages.contains(dbPackage)){
+                            samePackages.add(dbPackage);
+                        }
+                    } else{
+                        if(!differentPackages.contains(dbPackage))
+                        differentPackages.add(dbPackage);
+                    }
+                }
+            }
+            for (MPDRPackage differentPackage : differentPackages) {
+                if(!samePackages.contains(differentPackage)){
+                    dbPackagesToDrop.add(differentPackage);
                 }
             }
         }

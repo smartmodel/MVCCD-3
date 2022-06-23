@@ -23,6 +23,17 @@ public abstract class MPDRGenerateSQLPackage {
         return generateSQLCode;
     }
 
+    //Ajouté par Vincent pour les packages ne sont pas liés à une table
+    public String generateSQLDropPackage(String packageName){
+
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirDropStoredCodeDB(),
+                Preferences.TEMPLATE_DROP_PACKAGE,
+                getMPDRGenerateSQL().mpdrModel);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_PACKAGE_NAME_WORD, packageName);
+
+        return generateSQLCode;
+    }
+
     public String generateSQLCreatePackage(MPDRPackage mpdrPackage) {
 
         MPDRPackageType mpdrPackageType = mpdrPackage.getType();
