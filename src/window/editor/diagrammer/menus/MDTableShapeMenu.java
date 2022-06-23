@@ -14,62 +14,50 @@ import window.editor.diagrammer.menus.actions.MDTableShapeDeleteAction;
 
 public class MDTableShapeMenu extends JPopupMenu implements Serializable {
 
-  MDTableShape shape;
+  private final MDTableShape shape;
+  private final JMenuItem delete;
+  private final JMenuItem deleteObject;
+  private final JMenuItem deleteObjectAndClones;
 
 
   public MDTableShapeMenu(MDTableShape shape) {
     super();
     this.shape = shape;
-    JMenuItem delete = new JMenuItem(
+    this.delete = new JMenuItem(
         new MDTableShapeDeleteAction("Supprimer graphiquement", null, shape));
-    JMenuItem deleteObject = new JMenuItem(
+    this.deleteObject = new JMenuItem(
         new MDTableShapeDeleteAction("Supprimer objet", null, shape));
+    this.deleteObjectAndClones = new JMenuItem(
+        new MDTableShapeDeleteAction("Supprimer objet et clones", null, shape));
 
-    searchInOtherDiagrams(shape, delete, deleteObject);
+    this.searchInOtherDiagrams();
   }
 
-  private void searchInOtherDiagrams(MDTableShape shape, JMenuItem delete, JMenuItem deleteObject) {
+  private void searchInOtherDiagrams() {
     MDElement mdElement = shape.getRelatedRepositoryElement();
     ArrayList<MVCCDElement> diagramElements = mdElement.getParent().getParent().getChilds().get(2)
         .getChilds();
 
-    // Si le nombre d'enfants dans le noeud diagramme est <= 1, on affiche le menu de suppression avec la suppression
-    // graphique et objet
+    // Si le nombre d'enfants dans le noeud diagramme est <= 1, on affiche le menu de suppression avec la suppression graphique et objet
     if (diagramElements.size() <= 1) {
-      addAllDeletes(delete, deleteObject);
+      addAllDeletes(this.delete, this.deleteObject);
     }
     // Sinon, on va vérifier si la shape sur laquelle l'user clique, existe dans d'autres diagrammes du même niveau d'abstraction
     else {
-      boolean containsSameShapeInOtherDiagrams = false;
-      int smallestID = Integer.MAX_VALUE;
+      int containsSameShapeInOtherDiagrams = 0;
+
       for (MVCCDElement diagram : diagramElements) {
         List<ClassShape> shapes = ((Diagram) diagram).getClassShapes();
 
         if (shapes.contains(shape)) {
-          containsSameShapeInOtherDiagrams = true;
-
-          for (ClassShape s : shapes) {
-            if (s.equals(shape) && ((MDTableShape) s).getID() < smallestID) {
-              smallestID = ((MDTableShape) s).getID();
-            }
-          }
+          containsSameShapeInOtherDiagrams++;
         }
       }
-      if (shape.getID() < smallestID) {
-        smallestID = shape.getID();
-      }
 
-      if (!containsSameShapeInOtherDiagrams) {
-        addAllDeletes(delete, deleteObject);
+      if (containsSameShapeInOtherDiagrams == 1) {
+        addAllDeletes(this.delete, this.deleteObject);
       } else {
-        // Si la shape sur laquelle l'user a cliqué est la shape mère, possible de supprimer graphiquement et objet
-        if (shape.getID() == smallestID) {
-          addAllDeletes(delete, deleteObject);
-        }
-        // Si la shape sur laquelle l'user a cliqué n'est pas la shape mère, possible de supprimer graphiquement seulement
-        else {
-          this.add(delete);
-        }
+        addAllDeletes(this.delete, this.deleteObjectAndClones);
       }
     }
   }

@@ -44,7 +44,7 @@ public class MPDRelationShape extends RelationShape {
         int distanceInXFromAnchorPoint = (int) (relationCenter.x - anchorPoint.x * 1.1);
         int distanceInYFromAnchorPoint = (relationCenter.y - anchorPoint.y);
 
-        labelShape = this.createOrUpdateLabel(anchorPoint,  getRelatedRepositoryElement().getName(),
+        labelShape = this.createOrUpdateLabel(anchorPoint, getRelatedRepositoryElement().getName(),
             LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
 
       } else {

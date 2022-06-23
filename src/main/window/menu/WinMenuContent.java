@@ -260,12 +260,12 @@ public class WinMenuContent implements ActionListener {
       drawPanelComponent.getViewport().revalidate();
 
       image = new BufferedImage((int) rectangle.getWidth(), (int) rectangle.getHeight(),
-          BufferedImage.TYPE_3BYTE_BGR);
+          BufferedImage.TYPE_4BYTE_ABGR_PRE);
     }
     // Si notre diagramme est vide de formes ...
     else {
       image = new BufferedImage(component.getWidth(), component.getHeight(),
-          BufferedImage.TYPE_3BYTE_BGR);
+          BufferedImage.TYPE_4BYTE_ABGR_PRE);
     }
     Graphics2D g = image.createGraphics();
 

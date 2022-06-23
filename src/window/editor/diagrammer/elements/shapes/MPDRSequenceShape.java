@@ -46,6 +46,7 @@ public class MPDRSequenceShape extends ClassShape implements UMLPackageIntegrabl
   protected void setZoneProprietesContent() {
     this.zoneProprietes.getElements().clear();
 
+    // Valeur de Cache par défaut
     this.zoneProprietes.addElement("Cache = 20");
     this.updateSizeAndMinimumSize();
   }

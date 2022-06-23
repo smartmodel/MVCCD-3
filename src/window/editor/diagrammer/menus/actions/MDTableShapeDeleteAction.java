@@ -3,6 +3,8 @@ package window.editor.diagrammer.menus.actions;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
+import main.MVCCDManager;
 import window.editor.diagrammer.elements.shapes.MDTableShape;
 
 public class MDTableShapeDeleteAction extends DeleteActions implements Serializable {
@@ -20,6 +22,13 @@ public class MDTableShapeDeleteAction extends DeleteActions implements Serializa
       super.deleteGraphically(shape);
     } else if (e.getActionCommand().equals("Supprimer objet")) {
       this.deleteObject();
+    } else if (e.getActionCommand().equals("Supprimer objet et clones")) {
+      int result = JOptionPane.showConfirmDialog(MVCCDManager.instance().getMvccdWindow(),
+          "Souhaitez-vous réellement supprimer l'objet ainsi que sa représentation graphique dans tous les diagrammes où celui-ci est présent ?");
+
+      if (result == 0) {
+        super.deleteObjectAndClones(shape);
+      }
     }
   }
 

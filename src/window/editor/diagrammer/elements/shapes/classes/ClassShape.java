@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
@@ -216,4 +217,26 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
   }
 
   public abstract String getXmlTagName();
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ClassShape that = (ClassShape) o;
+    return Objects.equals(zoneEnTete, that.zoneEnTete) && Objects.equals(
+        zoneProprietes, that.zoneProprietes) && Objects.equals(zoneOperations,
+        that.zoneOperations) && Objects.equals(zoneServices, that.zoneServices)
+        && Objects.equals(getRelatedRepositoryElement(),
+        that.getRelatedRepositoryElement());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(zoneEnTete, zoneProprietes, zoneOperations, zoneServices,
+        getRelatedRepositoryElement());
+  }
 }
