@@ -1215,6 +1215,7 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATE_DROP_TABLE_CONSOLIDATION = "dropTableConsolidation.txt";
   public static String TEMPLATE_ALTER_TABLE_ADD_CHECK = "alterTableAddCheck.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_CHECK = "alterTableDropCheck.txt";
+  public static String TEMPLATE_DROP_PACKAGE_AND_BODY = "dropPackageAndBody.txt";
 
 
 

@@ -28,6 +28,11 @@ public class OracleSyncGeneratorSQL {
 
     public OracleSyncGeneratorSQL(MPDRModel mpdrModel, OracleComparatorDb oracleComparatorDb) {
         this.mpdrOracleGenerateSQL = new MPDROracleGenerateSQL(mpdrModel);
+        this.oracleComparatorDb = oracleComparatorDb;
+        init();
+    }
+
+    private void init(){
         this.mpdrOracleGenerateSQLTable = new MPDROracleGenerateSQLTable(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLTableColumn = new MPDROracleGenerateSQLTableColumn(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLPK = new MPDROracleGenerateSQLPK(mpdrOracleGenerateSQL);
@@ -37,7 +42,6 @@ public class OracleSyncGeneratorSQL {
         this.mpdrOracleGenerateSQLSequence = new MPDROracleGenerateSQLSequence(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLTrigger = new MPDROracleGenerateSQLTrigger(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLPackage = new MPDROracleGenerateSQLPackage(mpdrOracleGenerateSQL);
-        this.oracleComparatorDb = oracleComparatorDb;
 
         //Permet d'exécuter le mécanisme de comparaison
         this.oracleComparatorDb.compare();
@@ -380,7 +384,7 @@ public class OracleSyncGeneratorSQL {
     private String syncPackageToDrop() {
         StringBuilder code = new StringBuilder();
         for (MPDRPackage dbPackageToDrop : oracleComparatorDb.getDbPackagesToDrop()) {
-            code.append(mpdrOracleGenerateSQLPackage.generateSQLDropPackage(dbPackageToDrop));
+            code.append(mpdrOracleGenerateSQLPackage.generateSQLDropPackageAndBody(dbPackageToDrop));
             code.append(delimiter);
         }
         return code.toString();
@@ -389,7 +393,7 @@ public class OracleSyncGeneratorSQL {
     private String syncPackageNotInTableToDrop() {
         StringBuilder code = new StringBuilder();
         for (String packageNotInTable : oracleComparatorDb.getDbFetcherOracle().getDbPackagesNotInTable()) {
-            code.append(mpdrOracleGenerateSQLPackage.generateSQLDropPackage(packageNotInTable));
+            code.append(mpdrOracleGenerateSQLPackage.generateSQLDropPackageAndBody(packageNotInTable));
             code.append(delimiter);
         }
         return code.toString();

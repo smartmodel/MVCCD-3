@@ -62,6 +62,8 @@ public class OracleComparatorDb extends MpdrDbComparator {
         compareTablesIdenticales();
         compareTablesToCreate();
         compareTablesToDrop();
+        compareSequencesInTableToDrop();
+        comparePackageInTableToDrop();
     }
 
     private void compareTablesIdenticales() {
@@ -354,16 +356,21 @@ public class OracleComparatorDb extends MpdrDbComparator {
     private void compareFk(MPDRTable mpdrTable, MPDRTable dbTable) {
         compareFkToAdd(mpdrTable, dbTable);
         compareFkToDrop(mpdrTable, dbTable);
+        compareFkRemoveFromDropListIfRefTableDrop(mpdrTable, dbTable);
     }
 
     private void compareFkToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
         List<String> dbFkNameList = new ArrayList<>();
-        for (MPDRFK dbFk : dbTable.getMPDRFKs()) {
-            dbFkNameList.add(dbFk.getName());
+        if(dbTable.getMPDRFKs()!=null) {
+            for (MPDRFK dbFk : dbTable.getMPDRFKs()) {
+                dbFkNameList.add(dbFk.getName());
+            }
         }
+        if(mpdrTable.getMPDRFKs()!=null){
         for (MPDRFK mpdrfk : mpdrTable.getMPDRFKs()) {
             if (!dbFkNameList.contains(mpdrfk.getName().toUpperCase())) {
                 mpdrFksToAdd.add(mpdrfk);
+            }
             }
         }
     }
@@ -376,6 +383,28 @@ public class OracleComparatorDb extends MpdrDbComparator {
         for (MPDRFK dbFk : dbTable.getMPDRFKs()) {
             if (!mpdrFkNameList.contains(dbFk.getName())) {
                 dbFksToDrop.add(dbFk);
+            }
+        }
+    }
+
+//ATTENTION, fonctionne pour autant que Preference.MDR_FK_NAME_FORMAT_DEFAULT =
+// "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}{tableSep}{parentRoleShortName}";
+    private void compareFkRemoveFromDropListIfRefTableDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
+        List<String> mpdrFkNameList = new ArrayList<>(); // par exemple: FK1_COL_QUAL_ATTRIB
+        List<String> mpdrTableShortName = new ArrayList<>();
+        List<String> splitFkName = new ArrayList<>();
+        for (MPDRFK mpdrFk : mpdrTable.getMPDRFKs()) {
+            mpdrFkNameList.add(mpdrFk.getName().toUpperCase());
+            splitFkName.add(mpdrFk.getName().split("_")[2]);
+        }
+        for (MPDRTable mpdrSameTable : mpdrTablesSameName){
+            mpdrTableShortName.add(mpdrSameTable.getShortName());
+        }
+        for (String shortName : mpdrTableShortName) {
+            if(!splitFkName.contains(shortName)){
+                for (MPDRFK dbFk : dbTable.getMPDRFKs()) {
+                    dbFksToDrop.remove(dbFk);
+                }
             }
         }
     }
@@ -463,6 +492,19 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
+    private void compareSequencesInTableToDrop(){
+        //Si la séquence est dans une table qui doit être supprimée
+        for (MPDRTable dbTableToDrop : dbTablesToDrop) {
+            for (MPDRColumn dbColumnInTableToDrop : dbTableToDrop.getMPDRColumns()) {
+                if(!dbColumnInTableToDrop.getChilds().isEmpty()){
+                    if(dbColumnInTableToDrop.getMPDRSequence()!=null){
+                        dbSequencesToDrop.add(dbColumnInTableToDrop.getMPDRSequence());
+                    }
+                }
+            }
+        }
+    }
+
 
     private void compareTriggerToCreateOrReplace(MPDRBoxTriggers mpdrBoxTriggers) {
         if (mpdrBoxTriggers.getAllTriggers() != null) {
@@ -474,9 +516,24 @@ public class OracleComparatorDb extends MpdrDbComparator {
 
     private void compareTriggersToDrop(MPDRBoxTriggers mpdrBoxTriggers, MPDRBoxTriggers dbBoxTriggers) {
         if (mpdrBoxTriggers.getAllTriggers() != null && dbBoxTriggers.getAllTriggers() != null) {
-            for (MPDRTrigger trigger : dbBoxTriggers.getAllTriggers()) {
-                if (mpdrBoxTriggers.getAllTriggers().contains(trigger.getName())) {
-                    dbTriggersToDrop.add(trigger);
+            List<MPDRTrigger> sameTriggers = new ArrayList<>();
+            List<MPDRTrigger> differentTriggers = new ArrayList<>();
+            for (MPDRTrigger dbTrigger : dbBoxTriggers.getAllTriggers()) {
+                for (MPDRTrigger mpdrTrigger : mpdrBoxTriggers.getAllTriggers()) {
+                    if (mpdrTrigger.getName().toUpperCase().equals(dbTrigger.getName())) {
+                        if (!sameTriggers.contains(dbTrigger)) {
+                            sameTriggers.add(dbTrigger);
+                        }
+                    } else {
+                        if (!differentTriggers.contains(dbTrigger)) {
+                            differentTriggers.add(dbTrigger);
+                        }
+                    }
+                }
+            }
+            for (MPDRTrigger differentTrigger : differentTriggers) {
+                if (!sameTriggers.contains(differentTrigger)) {
+                    dbTriggersToDrop.add(differentTrigger);
                 }
             }
         }
@@ -509,7 +566,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
             List<MPDRPackage> differentPackages = new ArrayList<>();
             for (MPDRPackage dbPackage : dbOracleBoxPackages.getAllPackages()) {
                 for (MPDRPackage mpdrPackage : mpdrOracleBoxPackages.getAllPackages()) {
-                    if(mpdrPackage.getName().equals(dbPackage.getName())){
+                    if(mpdrPackage.getName().toUpperCase().equals(dbPackage.getName())){
                         if(!samePackages.contains(dbPackage)){
                             samePackages.add(dbPackage);
                         }
@@ -522,6 +579,17 @@ public class OracleComparatorDb extends MpdrDbComparator {
             for (MPDRPackage differentPackage : differentPackages) {
                 if(!samePackages.contains(differentPackage)){
                     dbPackagesToDrop.add(differentPackage);
+                }
+            }
+        }
+    }
+
+    private void comparePackageInTableToDrop(){
+        //Si la package est dans une table qui doit être supprimée
+        for (MPDRTable dbTableToDrop : dbTablesToDrop) {
+            for (MPDRPackage dbPackageInTableToDrop : dbTableToDrop.getMPDRContTAPIs().getMPDRBoxPackages().getAllPackages()) {
+                if(dbPackageInTableToDrop!=null) {
+                    dbPackagesToDrop.add(dbPackageInTableToDrop);
                 }
             }
         }
