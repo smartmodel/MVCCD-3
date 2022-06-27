@@ -49,25 +49,27 @@ public class Preferences extends MVCCDElement {
   public static final String DIAGRAMMER_PALETTE_PANEL_NAME = "PalettePanel";
   public static final int DIAGRAMMER_MINIMUM_ALLOWED_ZOOM = 4;
   public static final int DIAGRAMMER_MAXIMUM_ALLOWED_ZOOM = 25;
+  public static final int DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE = 10;
   public static final int DIAGRAMMER_DEFAULT_GRID_SIZE = 10;
+  public static final int DIAGRAMMER_ELEMENTS_DEFAULT_FONT_SIZE = 13;
   public static final int DIAGRAMMER_DEFAULT_ENTITY_POSITION_X = 60;
   public static final int DIAGRAMMER_DEFAULT_ENTITY_POSITION_Y = 60;
   public static final int DIAGRAMMER_DEFAULT_CLASS_WIDTH = 200;
-  public static final int DIAGRAMMER_DEFAULT_CLASS_HEIGHT = 250;
+  public static final int DIAGRAMMER_DEFAULT_CLASS_HEIGHT = 100;
   public static final int DIAGRAMMER_DEFAULT_NOTE_WIDTH = 100;
   public static final int DIAGRAMMER_DEFAULT_NOTE_HEIGHT = 70;
+  public static final int DIAGRAMMER_DEFAULT_NOTE_CORNER_SIZE = 20;
+  public static final int DIAGRAMMER_CLASS_PADDING = 10;
+  public static final int DIAGRAMMER_LABEL_PADDING = 5;
   public static final int DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN = 7;
   public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
   public static final Color DIAGRAMMER_NOTE_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
   public static final Font DIAGRAMMER_CLASS_NAME_FONT = new Font("Arial", Font.BOLD, 13);
-  public static final int DIAGRAMMER_ELEMENTS_DEFAULT_FONT_SIZE = 13;
+
   public static final String DIAGRAMMER_DEFAULT_FONT_FAMILY = "Arial";
+
   public static final Font DIAGRAMMER_CLASS_FONT = new Font("Arial", Font.PLAIN, 13);
   public static final Font DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT = new Font("Arial", Font.ITALIC + Font.BOLD, 13);
-  public static final int DIAGRAMMER_CLASS_PADDING = 10;
-  public static final int DIAGRAMMER_LABEL_PADDING = 5;
-  public static final int DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE = 10;
-  public static final int DIAGRAMMER_DEFAULT_NOTE_CORNER_SIZE = 20;
   public static final String DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT = "Entité";
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT = "Association";
   public static final String DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT = "Généralisation";
@@ -101,7 +103,7 @@ public class Preferences extends MVCCDElement {
   public static String REPOSITORY_PREFERENCES_APPLICATION_NAME = "PréférencesApplication";  //Project
   public static String REPOSITORY_MCD_MODELS_NAME = "MCD";
   public static String REPOSITORY_MCD_PACKAGE_NAME = "Paquetage";
-  public static String REPOSITORY_MCD_DIAGRAMS_NAME = "Diagrammes";
+  public static String REPOSITORY_DIAGRAMS_NAME = "Diagrammes";
   public static String REPOSITORY_MCD_ENTITIES_NAME = "Entités";
   public static String REPOSITORY_MCD_RELATIONS_NAME = "Relations";
   public static String REPOSITORY_MCD_RELATIONS_ENDS_NAME = "Extrémités de relations";
@@ -392,20 +394,46 @@ public class Preferences extends MVCCDElement {
   public static String STEREOTYPE_INDEX_NAME = "IDX";
   public static String STEREOTYPE_INDEX_LIENPROG = "IDX";
 
-    public static String STEREOTYPE_SPECIALIZED_NAME = "SPEC";
-    public static String STEREOTYPE_SPECIALIZED_LIENPROG = "SPEC";
+  public static String STEREOTYPE_SPECIALIZED_NAME = "SPEC";
+  public static String STEREOTYPE_SPECIALIZED_LIENPROG = "SPEC";
+  public static String STEREOTYPE_JNAL_NAME = "JNAL";
+  public static String STEREOTYPE_JNAL_LIENPROG = "JNAL";
+  public static String STEREOTYPE_AUDIT_NAME = "AUD";
+  public static String STEREOTYPE_AUDIT_LIENPROG = "AUD";
+  public static String STEREOTYPE_AUDIT_AJUSER_LIENPROG = "AAU";
+  public static String STEREOTYPE_AUDIT_AJUSER_NAME = "AAU";
+  public static String STEREOTYPE_AUDIT_AJDATE_LIENPROG = "AAI";
+  public static String STEREOTYPE_AUDIT_AJDATE_NAME = "AAI";
+  public static String STEREOTYPE_AUDIT_MOUSER_LIENPROG = "AMU";
+  public static String STEREOTYPE_AUDIT_MOUSER_NAME = "AMU";
+  public static String STEREOTYPE_AUDIT_MODATE_LIENPROG = "AMI";
+  public static String STEREOTYPE_AUDIT_MODATE_NAME = "AMI";
+  public static String STEREOTYPE_JNAL_DATETIME_LIENPROG = "JNDT";
+  public static String STEREOTYPE_JNAL_DATETIME_NAME = "JNDT";
+  public static String STEREOTYPE_JNAL_OPERATION_LIENPROG = "JNOP";
+  public static String STEREOTYPE_JNAL_OPERATION_NAME = "JNOP";
+  public static String STEREOTYPE_JNAL_USER_LIENPROG = "JNUS";
+  public static String STEREOTYPE_JNAL_USER_NAME = "JNUS";
+  public static String STEREOTYPE_JNAL_SESSION_LIENPROG = "JNSE";
+  public static String STEREOTYPE_JNAL_SESSION_NAME = "JNSE";
+  public static String STEREOTYPE_JNAL_APPL_LIENPROG = "JNAP";
+  public static String STEREOTYPE_JNAL_APPL_NAME = "JNAP";
+  public static String STEREOTYPE_JNAL_NOTES_LIENPROG = "JNNO";
+  public static String STEREOTYPE_JNAL_NOTES_NAME = "JNNO";
 
+  public static String STEREOTYPE_TI_SIM_PK_LIENPROG = "SIMPK";
+  public static String STEREOTYPE_TI_SIM_PK_NAME = "SIMPK";
 
-    public static String CONSTRAINT_ORDERED_NAME = "ordered";
-    public static String CONSTRAINT_ORDERED_LIENPROG = "ordered";
-    public static String CONSTRAINT_FROZEN_NAME = "frozen";
-    public static String CONSTRAINT_FROZEN_LIENPROG = "frozen";
-    public static String CONSTRAINT_DELETECASCADE_NAME = "deletecascade";
-    public static String CONSTRAINT_DELETECASCADE_LIENPROG = "deletecascade";
-    public static String CONSTRAINT_ORIENTED_NAME = "oriented";
-    public static String CONSTRAINT_ORIENTED_LIENPROG = "oriented";
-    public static String CONSTRAINT_NONORIENTED_NAME = "nonoriented";
-    public static String CONSTRAINT_NONORIENTED_LIENPROG = "nonoriented";
+  public static String CONSTRAINT_ORDERED_NAME = "ordered";
+  public static String CONSTRAINT_ORDERED_LIENPROG = "ordered";
+  public static String CONSTRAINT_FROZEN_NAME = "frozen";
+  public static String CONSTRAINT_FROZEN_LIENPROG = "frozen";
+  public static String CONSTRAINT_DELETECASCADE_NAME = "deletecascade";
+  public static String CONSTRAINT_DELETECASCADE_LIENPROG = "deletecascade";
+  public static String CONSTRAINT_ORIENTED_NAME = "oriented";
+  public static String CONSTRAINT_ORIENTED_LIENPROG = "oriented";
+  public static String CONSTRAINT_NONORIENTED_NAME = "nonoriented";
+  public static String CONSTRAINT_NONORIENTED_LIENPROG = "nonoriented";
 
   public static String CONSTRAINT_ABSOLUTE_NAME = "absolute";
   public static String CONSTRAINT_ABSOLUTE_LIENPROG = "absolute";
@@ -647,108 +675,114 @@ public class Preferences extends MVCCDElement {
   public static String MLDRDATATYPE_TIME_NAME = "TIME";
   public static String MLDRDATATYPE_TIME_LIENPROG = "TIME";
 
-    public static String MPDRORACLEDATATYPE_ROOT_NAME = "MPDR-Oracle";
-    public static String MPDRORACLEDATATYPE_ROOT_LIENPROG = "MPDR-Oracle";
-    public static String MPDRORACLEDATATYPE_VARCHAR2_NAME = "VARCHAR2";
-    public static String MPDRORACLEDATATYPE_VARCHAR2_LIENPROG = "VARCHAR2";
-    public static String MPDRORACLEDATATYPE_NUMBER_NAME = "NUMBER";
-    public static String MPDRORACLEDATATYPE_NUMBER_LIENPROG = "NUMBER";
-    public static String MPDRORACLEDATATYPE_TEMPORAL_NAME = "TEMPORAL";
-    public static String MPDRORACLEDATATYPE_TEMPORAL_LIENPROG = "TEMPORAL";
-    public static String MPDRORACLEDATATYPE_TIMESTAMP_NAME = "TIMESTAMP";
-    public static String MPDRORACLEDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
-    public static String MPDRORACLEDATATYPE_DATE_NAME = "DATE";
-    public static String MPDRORACLEDATATYPE_DATE_LIENPROG = "DATE";
-    public static String MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
-    public static MPDRDBPK MPDRORACLE_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
-    public static String MPDRORACLE_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
-    public static String MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
-    public static String MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
-    public static String MPDRORACLE_PACKAGE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typePackageMarker}";
-    public static String MPDRORACLE_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
-    public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
-    public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
-    public static String MPDRORACLE_EMPTY_SCHEMA = "empty_schema";
-    public static String MPDRORACLE_RECORD_NEW = ":NEW";
-    public static String MPDRORACLE_RECORD_OLD = ":OLD";
+  public static String MPDRORACLEDATATYPE_ROOT_NAME = "MPDR-Oracle";
+  public static String MPDRORACLEDATATYPE_ROOT_LIENPROG = "MPDR-Oracle";
+  public static String MPDRORACLEDATATYPE_VARCHAR2_NAME = "VARCHAR2";
+  public static String MPDRORACLEDATATYPE_VARCHAR2_LIENPROG = "VARCHAR2";
+  public static String MPDRORACLEDATATYPE_NUMBER_NAME = "NUMBER";
+  public static String MPDRORACLEDATATYPE_NUMBER_LIENPROG = "NUMBER";
+  public static String MPDRORACLEDATATYPE_TEMPORAL_NAME = "TEMPORAL";
+  public static String MPDRORACLEDATATYPE_TEMPORAL_LIENPROG = "TEMPORAL";
+  public static String MPDRORACLEDATATYPE_TIMESTAMP_NAME = "TIMESTAMP";
+  public static String MPDRORACLEDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
+  public static String MPDRORACLEDATATYPE_DATE_NAME = "DATE";
+  public static String MPDRORACLEDATATYPE_DATE_LIENPROG = "DATE";
+  public static String MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
+  public static MPDRDBPK MPDRORACLE_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
+  public static String MPDRORACLE_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
+  public static String MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRORACLE_PACKAGE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typePackageMarker}";
+  public static String MPDRORACLE_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
+  public static String MPDRORACLE_TABLEJNAL_NAME_FORMAT_DEFAULT = "{tableShortName}{_JN}";
+  public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
+  public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
+  public static String MPDRORACLE_EMPTY_SCHEMA = "empty_schema";
+  public static String MPDRORACLE_RECORD_NEW = ":NEW";
+  public static String MPDRORACLE_RECORD_OLD = ":OLD";
+  public static Integer MPDRORACLE_USER_NAME_SIZE = 30;
+  public static Integer MPDRORACLE_SESSION_NAME_SIZE = 100;
+  public static Integer MPDRORACLE_APPL_NAME_SIZE = 200;
+  public static Integer MPDRORACLE_NOTES_SIZE = 2000;
 
-    public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
-    public static String MPDRMySQLDATATYPE_ROOT_LIENPROG = "MPDR-MySQL";
-    public static String MPDRMySQLDATATYPE_TEXT_NAME = "TEXT";
-    public static String MPDRMySQLDATATYPE_TEXT_LIENPROG = "TEXT";
-    public static String MPDRMySQLDATATYPE_VARCHAR_NAME = "VARCHAR";
-    public static String MPDRMySQLDATATYPE_VARCHAR_LIENPROG = "VARCHAR";
-    public static String MPDRMySQLDATATYPE_NUMERIC_NAME = "NUMERIC";
-    public static String MPDRMySQLDATATYPE_NUMERIC_LIENPROG = "NUMERIC";
-    public static String MPDRMySQLDATATYPE_TINYINT_NAME = "TINYINT";
-    public static String MPDRMySQLDATATYPE_TINYINT_LIENPROG = "TINYINT";
-    public static String MPDRMySQLDATATYPE_DECIMAL_NAME = "DECIMAL";
-    public static String MPDRMySQLDATATYPE_DECIMAL_LIENPROG = "DECIMAL";
-    public static String MPDRMySQLDATATYPE_BIGINT_NAME = "BIGINT";
-    public static String MPDRMySQLDATATYPE_BIGINT_LIENPROG = "BIGINT";
-    public static String MPDRMySQLDATATYPE_INT_NAME = "INT";
-    public static String MPDRMySQLDATATYPE_INT_LIENPROG = "INT";
-    public static String MPDRMySQLDATATYPE_TEMPORAL_NAME = "TEMPORAL";
-    public static String MPDRMySQLDATATYPE_TEMPORAL_LIENPROG = "TEMPORAL";
-    public static String MPDRMySQLDATATYPE_DATE_NAME = "DATE";
-    public static String MPDRMySQLDATATYPE_DATE_LIENPROG = "DATE";
-    public static String MPDRMySQLDATATYPE_DATETIME_NAME = "DATETIME";
-    public static String MPDRMySQLDATATYPE_DATETIME_LIENPROG = "DATETIME";
-    public static String MPDRMySQLDATATYPE_TIMESTAMP_NAME = "TIMESTAMP";
-    public static String MPDRMySQLDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
-    public static String MPDRMySQLDATATYPE_TIME_NAME = "TIME";
-    public static String MPDRMySQLDATATYPE_TIME_LIENPROG = "TIME";
-    public static String MPDRMySQLDATATYPE_YEAR_NAME = "YEAR";
-    public static String MPDRMySQLDATATYPE_YEAR_LIENPROG = "YEAR";
-    public static String MPDRMYSQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
-    public static MPDRDBPK MPDRMYSQL_PK_GENERATE_DEFAULT = MPDRDBPK.IDENTITY;
-    public static String MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
-    public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
-    public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
-    public static String MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
-    public static String MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
-    public static String MPDRMYSQL_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
-    public static String MPDRMYSQL_RECORD_NEW = "NEW";
-    public static String MPDRMYSQL_RECORD_OLD = "OLD";
+  public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
+  public static String MPDRMySQLDATATYPE_ROOT_LIENPROG = "MPDR-MySQL";
+  public static String MPDRMySQLDATATYPE_TEXT_NAME = "TEXT";
+  public static String MPDRMySQLDATATYPE_TEXT_LIENPROG = "TEXT";
+  public static String MPDRMySQLDATATYPE_VARCHAR_NAME = "VARCHAR";
+  public static String MPDRMySQLDATATYPE_VARCHAR_LIENPROG = "VARCHAR";
+  public static String MPDRMySQLDATATYPE_NUMERIC_NAME = "NUMERIC";
+  public static String MPDRMySQLDATATYPE_NUMERIC_LIENPROG = "NUMERIC";
+  public static String MPDRMySQLDATATYPE_TINYINT_NAME = "TINYINT";
+  public static String MPDRMySQLDATATYPE_TINYINT_LIENPROG = "TINYINT";
+  public static String MPDRMySQLDATATYPE_DECIMAL_NAME = "DECIMAL";
+  public static String MPDRMySQLDATATYPE_DECIMAL_LIENPROG = "DECIMAL";
+  public static String MPDRMySQLDATATYPE_BIGINT_NAME = "BIGINT";
+  public static String MPDRMySQLDATATYPE_BIGINT_LIENPROG = "BIGINT";
+  public static String MPDRMySQLDATATYPE_INT_NAME = "INT";
+  public static String MPDRMySQLDATATYPE_INT_LIENPROG = "INT";
+  public static String MPDRMySQLDATATYPE_TEMPORAL_NAME = "TEMPORAL";
+  public static String MPDRMySQLDATATYPE_TEMPORAL_LIENPROG = "TEMPORAL";
+  public static String MPDRMySQLDATATYPE_DATE_NAME = "DATE";
+  public static String MPDRMySQLDATATYPE_DATE_LIENPROG = "DATE";
+  public static String MPDRMySQLDATATYPE_DATETIME_NAME = "DATETIME";
+  public static String MPDRMySQLDATATYPE_DATETIME_LIENPROG = "DATETIME";
+  public static String MPDRMySQLDATATYPE_TIMESTAMP_NAME = "TIMESTAMP";
+  public static String MPDRMySQLDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
+  public static String MPDRMySQLDATATYPE_TIME_NAME = "TIME";
+  public static String MPDRMySQLDATATYPE_TIME_LIENPROG = "TIME";
+  public static String MPDRMySQLDATATYPE_YEAR_NAME = "YEAR";
+  public static String MPDRMySQLDATATYPE_YEAR_LIENPROG = "YEAR";
+  public static String MPDRMYSQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
+  public static MPDRDBPK MPDRMYSQL_PK_GENERATE_DEFAULT = MPDRDBPK.IDENTITY;
+  public static String MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
+  public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
+  public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
+  public static String MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRMYSQL_TABLEJNAL_NAME_FORMAT_DEFAULT = "{tableShortName}{_JN}";
+  public static String MPDRMYSQL_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
+  public static String MPDRMYSQL_RECORD_NEW = "NEW";
+  public static String MPDRMYSQL_RECORD_OLD = "OLD";
 
-
-    public static String MPDRPOSTGRESQLDATATYPE_ROOT_NAME = "MPDR-PostgreSQL";
-    public static String MPDRPOSTGRESQLDATATYPE_ROOT_LIENPROG = "MPDR-PostgreSQL";
-    public static String MPDRPOSTGRESQLDATATYPE_BOOLEAN_NAME = "BOOLEAN";
-    public static String MPDRPOSTGRESQLDATATYPE_BOOLEAN_LIENPROG = "BOOLEAN";
-    public static String MPDRPOSTGRESQLDATATYPE_TEXT_NAME = "TEXT";
-    public static String MPDRPOSTGRESQLDATATYPE_TEXT_LIENPROG = "TEXT";
-    public static String MPDRPOSTGRESQLDATATYPE_VARCHAR_NAME = "VARCHAR";
-    public static String MPDRPOSTGRESQLDATATYPE_VARCHAR_LIENPROG = "VARCHAR";
-    public static String MPDRPOSTGRESQLDATATYPE_NUMERIC_NAME = "NUMERIC";
-    public static String MPDRPOSTGRESQLDATATYPE_NUMERIC_LIENPROG = "NUMERIC";
-    public static String MPDRPOSTGRESQLDATATYPE_SMALLINT_NAME = "SMALLINT";
-    public static String MPDRPOSTGRESQLDATATYPE_SMALLINT_LIENPROG = "SMALLINT";
-    public static String MPDRPOSTGRESQLDATATYPE_INTEGER_NAME = "INTEGER";
-    public static String MPDRPOSTGRESQLDATATYPE_INTEGER_LIENPROG = "INTEGER";
-    public static String MPDRPOSTGRESQLDATATYPE_BIGINT_NAME = "BIGINT";
-    public static String MPDRPOSTGRESQLDATATYPE_BIGINT_LIENPROG = "BIGINT";
-    public static String MPDRPOSTGRESQLDATATYPE_TEMPORAL_NAME = "TEMPORAL";
-    public static String MPDRPOSTGRESQLDATATYPE_TEMPORAL_LIENPROG = "TEMPORAL";
-    public static String MPDRPOSTGRESQLDATATYPE_INTERVAL_NAME = "INTERVAL";
-    public static String MPDRPOSTGRESQLDATATYPE_INTERVAL_LIENPROG = "INTERVAL";
-    public static String MPDRPOSTGRESQLDATATYPE_DATE_NAME = "DATE";
-    public static String MPDRPOSTGRESQLDATATYPE_DATE_LIENPROG = "DATE";
-    public static String MPDRPOSTGRESQLDATATYPE_TIMESTAMP_NAME = "TIMESTAMP";
-    public static String MPDRPOSTGRESQLDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
-    public static String MPDRPOSTGRESQLDATATYPE_TIME_NAME = "TIME";
-    public static String MPDRPOSTGRESQLDATATYPE_TIME_LIENPROG = "TIME";
-    public static String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
-    public static MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
-    public static String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
-    public static String MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
-    public static String MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
-    public static String MPDRPOSTGRESQL_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
-    public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
-    public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
-    public static String MPDRPOSTGRESQL_EMPTY_SCHEMA = "empty_schema";
-    public static String MPDRPOSTGRESQL_RECORD_NEW = "NEW";
-    public static String MPDRPOSTGRESQL_RECORD_OLD = "OLD";
+  public static String MPDRPOSTGRESQLDATATYPE_ROOT_NAME = "MPDR-PostgreSQL";
+  public static String MPDRPOSTGRESQLDATATYPE_ROOT_LIENPROG = "MPDR-PostgreSQL";
+  public static String MPDRPOSTGRESQLDATATYPE_BOOLEAN_NAME = "BOOLEAN";
+  public static String MPDRPOSTGRESQLDATATYPE_BOOLEAN_LIENPROG = "BOOLEAN";
+  public static String MPDRPOSTGRESQLDATATYPE_TEXT_NAME = "TEXT";
+  public static String MPDRPOSTGRESQLDATATYPE_TEXT_LIENPROG = "TEXT";
+  public static String MPDRPOSTGRESQLDATATYPE_VARCHAR_NAME = "VARCHAR";
+  public static String MPDRPOSTGRESQLDATATYPE_VARCHAR_LIENPROG = "VARCHAR";
+  public static String MPDRPOSTGRESQLDATATYPE_NUMERIC_NAME = "NUMERIC";
+  public static String MPDRPOSTGRESQLDATATYPE_NUMERIC_LIENPROG = "NUMERIC";
+  public static String MPDRPOSTGRESQLDATATYPE_SMALLINT_NAME = "SMALLINT";
+  public static String MPDRPOSTGRESQLDATATYPE_SMALLINT_LIENPROG = "SMALLINT";
+  public static String MPDRPOSTGRESQLDATATYPE_INTEGER_NAME = "INTEGER";
+  public static String MPDRPOSTGRESQLDATATYPE_INTEGER_LIENPROG = "INTEGER";
+  public static String MPDRPOSTGRESQLDATATYPE_BIGINT_NAME = "BIGINT";
+  public static String MPDRPOSTGRESQLDATATYPE_BIGINT_LIENPROG = "BIGINT";
+  public static String MPDRPOSTGRESQLDATATYPE_TEMPORAL_NAME = "TEMPORAL";
+  public static String MPDRPOSTGRESQLDATATYPE_TEMPORAL_LIENPROG = "TEMPORAL";
+  public static String MPDRPOSTGRESQLDATATYPE_INTERVAL_NAME = "INTERVAL";
+  public static String MPDRPOSTGRESQLDATATYPE_INTERVAL_LIENPROG = "INTERVAL";
+  public static String MPDRPOSTGRESQLDATATYPE_DATE_NAME = "DATE";
+  public static String MPDRPOSTGRESQLDATATYPE_DATE_LIENPROG = "DATE";
+  public static String MPDRPOSTGRESQLDATATYPE_TIMESTAMP_NAME = "TIMESTAMP";
+  public static String MPDRPOSTGRESQLDATATYPE_TIMESTAMP_LIENPROG = "TIMESTAMP";
+  public static String MPDRPOSTGRESQLDATATYPE_TIME_NAME = "TIME";
+  public static String MPDRPOSTGRESQLDATATYPE_TIME_LIENPROG = "TIME";
+  public static String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT = "\\\\";
+  public static MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE_DEFAULT = MPDRDBPK.SEQUENCE;
+  public static String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT = "{tableShortName}{_SEQPK}";
+  public static String MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRPOSTGRESQL_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
+  public static String MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT_DEFAULT = "{tableShortName}{_JN}";
+  public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
+  public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
+  public static String MPDRPOSTGRESQL_EMPTY_SCHEMA = "empty_schema";
+  public static String MPDRPOSTGRESQL_RECORD_NEW = "NEW";
+  public static String MPDRPOSTGRESQL_RECORD_OLD = "OLD";
 
   public static String MDR_TABLE_NATURE_IND = "mdr.table.nature.ind";
   public static String MDR_TABLE_NATURE_DEP = "mdr.table.nature.dep";
@@ -768,76 +802,92 @@ public class Preferences extends MVCCDElement {
   public static String MDR_NAMING_FORMAT_CAPITALIZE = "mdr.naming.format.capitalize"; //Idem
   public static String MPDR_NAMING_FORMAT_LIKEDB = "mpdr.naming.format.likedb"; //Idem
 
-    public static String MDR_NAMING_TABLE = "mdr.table";
-    public static String MDR_NAMING_TABLE_NN = "mdr.table.nn";
-    public static String MDR_NAMING_TABLE_NN_INDICE = "mdr.table.nn.indice";
-    public static String MDR_NAMING_COLUMN_ATTR = "mdr.column.attr";
-    public static String MDR_NAMING_COLUMN_PK = "mdr.column.pk";
-    public static String MDR_NAMING_COLUMN_FK = "mdr.column.fk";
-    public static String MDR_NAMING_PK = "mdr.pk";
-    public static String MDR_NAMING_PK_NN = "mdr.pk.nn";
-    public static String MDR_NAMING_PK_NN_INDICE = "mdr.pk.nn.indice";
-    public static String MDR_NAMING_FK = "mdr.fk";
-    public static String MDR_NAMING_UNIQUE = "mdr.unique";
-    public static String MPDR_NAMING_SEQUENCE_PK = "mpdr.sequence.pk";
-    public static String MPDR_NAMING_CHECK_COLUMNDATATYPE = "mpdr.check.datatype";
-    public static String MPDR_NAMING_CHECK_COLUMNDATATYPE_MAX30 = "mpdr.check.datatype.max30";
-    public static String MPDR_NAMING_TRIGGER_TABLE = "mpdr.trigger.table";
-    public static String MPDR_NAMING_TRIGGER_VIEW = "mpdr.trigger.view";
-    public static String MPDR_NAMING_FUNCTION = "mpdr.function";
-    public static String MPDR_NAMING_PACKAGE = "mpdr.package";
-    public static String MPDR_NAMING_VIEW = "mpdr.view";
+  public static String MDR_NAMING_TABLE = "mdr.table";
+  public static String MDR_NAMING_TABLE_NN = "mdr.table.nn";
+  public static String MDR_NAMING_TABLE_NN_INDICE = "mdr.table.nn.indice";
+  public static String MDR_NAMING_COLUMN_ATTR = "mdr.column.attr";
+  public static String MDR_NAMING_COLUMN_PK = "mdr.column.pk";
+  public static String MDR_NAMING_COLUMN_FK = "mdr.column.fk";
+  public static String MDR_NAMING_PK = "mdr.pk";
+  public static String MDR_NAMING_PK_NN = "mdr.pk.nn";
+  public static String MDR_NAMING_PK_NN_INDICE = "mdr.pk.nn.indice";
+  public static String MDR_NAMING_FK = "mdr.fk";
+  public static String MDR_NAMING_UNIQUE = "mdr.unique";
+  public static String MPDR_NAMING_SEQUENCE_PK = "mpdr.sequence.pk";
+  public static String MPDR_NAMING_CHECK_COLUMNDATATYPE = "mpdr.check.datatype";
+  public static String MPDR_NAMING_CHECK_COLUMNDATATYPE_MAX30 = "mpdr.check.datatype.max30";
+  public static String MPDR_NAMING_TRIGGER_TABLE = "mpdr.trigger.table";
+  public static String MPDR_NAMING_TRIGGER_VIEW = "mpdr.trigger.view";
+  public static String MPDR_NAMING_FUNCTION = "mpdr.function";
+  public static String MPDR_NAMING_PACKAGE = "mpdr.package";
+  public static String MPDR_NAMING_VIEW = "mpdr.view";
+  public static String MPDR_NAMING_TABLEJNAL = "mpdr.table.jnal";
 
-    public static String MDR_PATH_WORD = "path";
-    public static String MDR_PATH_SEP_WORD = "pathSep";
-    public static String MDR_TABLE_NAME_WORD = "tableName";
-    public static String MDR_TABLE_PK_NAME_WORD = "tablePKName";
-    public static String MDR_TABLE_FK_NAME_WORD = "tableFKName";
-    public static String MDR_TABLE_ORIGIN_NAME_WORD = "tableOriginName";
-    public static String MDR_TABLE_SHORT_NAME_WORD = "tableShortName";
-    public static String MDR_TABLE_SHORT_NAME_A_WORD = "ATableShortName";
-    public static String MDR_TABLE_SHORT_NAME_B_WORD = "BTableShortName";
-    public static String MDR_TABLE_SHORT_NAME_PARENT_WORD = "parentTableShortName";
-    public static String MDR_TABLE_SHORT_NAME_CHILD_WORD = "childTableShortName";
-    public static String MDR_TABLE_NAME_PARENT_WORD = "parentTableName";
-    public static String MDR_TABLE_NAME_CHILD_WORD = "childTableName";
-    public static String MDR_FK_NAME_WORD = "fkName";
-    public static String MDR_FK_COLUMNS_WORD = "fkColumns";
-    public static String MDR_VIEW_COLUMNS_WORD = "viewColumns";
-    public static String MDR_LIST_COLUMNS_WORD = "listColumns";
-    public static String MDR_LIST_NEW_COLUMNS_WORD = "listNewColumns";
-    public static String MDR_VIEW_SELECT_COLUMNS_WORD = "viewSelectColumns";
-    public static String MDR_FK_COLUMNS_REF_WORD = "fkColumnsRef"; // Il ne faut pas utiliser MDR_PK_COLUMNS_WORD qui ne garanti pas le lien entre colonnes
-    public static String MDR_PK_NAME_WORD = "pkName";
-    public static String MDR_PK_COLUMNS_WORD = "pkColumns";
-    public static String MDR_UNIQUE_NAME_WORD = "uniqueName";
-    public static String MDR_UNIQUE_COLUMNS_WORD = "uniqueColumns";
-    public static String MDR_COLUMN_NAME_WORD = "columnName";
-    public static String MDR_COLUMN_VALUE_WORD = "columnValue";
-    public static String MDR_COLUMN_PK_NAME_WORD = "columnPKName";
-    public static String MDR_COLUMN_FK_NAME_WORD = "columnFKName";
-    public static String MDR_COLUMN_DATATYPE_WORD = "columnDataType";
-    public static String MDR_DEFAULT_VALUE_WORD = "defaultValue";
-    public static String MPDR_SEQUENCE_NAME_WORD = "sequenceName";
-    public static String MPDR_MIN_VALUE_WORD = "minValue";
-    public static String MPDR_INCREMENT_WORD = "increment";
-    public static String MPDR_TRIGGER_NAME_WORD = "triggerName";
-    public static String MPDR_PACKAGE_NAME_WORD = "packageName";
-    public static String MPDR_PACKAGE_RESOURCES_NAME_WORD = "packageResourcesName";
-    public static String MPDR_PROCEDURE_RESOURCES_CHECK_DATATYPE_WORD = "procedureResourcesCheckDatatypeWord";
-    public static String MPDR_FUNCTION_NAME_WORD = "functionName";
-    public static String MPDR_PROCEDURE_NAME_WORD = "procedureName";
-    public static String MPDR_COLUMN_NAME_WORD = "mpdrColumnName";
-    public static String MDR_CONSTRAINT_DATATYPE_NAME_WORD = "constraintDatatypeName";
-    public static String MCD_ATTRIBUTE_NAME_WORD = "mcdAttrName";
-    public static String MCD_ATTRIBUTE_SHORT_NAME_WORD = "mcdAttrShortName";
-    public static String MDR_CHECK_NAME_WORD = "checkName";
-    public static String MDR_CHECK_EXPRESSION_WORD = "checkExpression";
-    public static String MPDR_COLUMN_AUDIT_AJUSER_NAME_WORD = "auditAjUserName";
-    public static String MPDR_COLUMN_AUDIT_AJDATE_NAME_WORD = "auditAjDateName";
-    public static String MPDR_COLUMN_AUDIT_MOUSER_NAME_WORD = "auditMoUserName";
-    public static String MPDR_COLUMN_AUDIT_MODATE_NAME_WORD = "auditMoDateName";
-    public static String MDR_COLUMN_LIEN_PROG_NAME_WORD = "columnTargetLienProgName";
+  public static int MPDR_JNAL_OPERATION_NAME_LENGTH = 3;
+
+  public static String MDR_PATH_WORD = "path";
+  public static String MDR_PATH_SEP_WORD = "pathSep";
+  public static String MDR_TABLE_NAME_WORD = "tableName";
+  public static String MDR_TABLE_PK_NAME_WORD = "tablePKName";
+  public static String MDR_TABLE_FK_NAME_WORD = "tableFKName";
+  public static String MDR_TABLE_ORIGIN_NAME_WORD = "tableOriginName";
+  public static String MDR_TABLE_SHORT_NAME_WORD = "tableShortName";
+  public static String MDR_TABLE_SHORT_NAME_A_WORD = "ATableShortName";
+  public static String MDR_TABLE_SHORT_NAME_B_WORD = "BTableShortName";
+  public static String MDR_TABLE_SHORT_NAME_PARENT_WORD = "parentTableShortName";
+  public static String MDR_TABLE_SHORT_NAME_CHILD_WORD = "childTableShortName";
+  public static String MDR_TABLE_NAME_PARENT_WORD = "parentTableName";
+  public static String MDR_TABLE_NAME_CHILD_WORD = "childTableName";
+  public static String MDR_FK_NAME_WORD = "fkName";
+  public static String MDR_FK_COLUMNS_WORD = "fkColumns";
+  public static String MDR_VIEW_COLUMNS_WORD = "viewColumns";
+  public static String MDR_LIST_COLUMNS_WORD = "listColumns";
+  public static String MDR_LIST_NEW_COLUMNS_WORD = "listNewColumns";
+  public static String MDR_VIEW_SELECT_COLUMNS_WORD = "viewSelectColumns";
+  public static String MDR_FK_COLUMNS_REF_WORD = "fkColumnsRef"; // Il ne faut pas utiliser MDR_PK_COLUMNS_WORD qui ne garanti pas le lien entre colonnes
+  public static String MDR_PK_NAME_WORD = "pkName";
+  public static String MDR_PK_COLUMNS_WORD = "pkColumns";
+  public static String MDR_UNIQUE_NAME_WORD = "uniqueName";
+  public static String MDR_UNIQUE_COLUMNS_WORD = "uniqueColumns";
+  public static String MDR_COLUMN_NAME_WORD = "columnName";
+  public static String MDR_COLUMN_VALUE_WORD = "columnValue";
+  public static String MDR_COLUMN_PK_NAME_WORD = "columnPKName";
+  public static String MDR_COLUMN_FK_NAME_WORD = "columnFKName";
+  public static String MDR_COLUMN_DATATYPE_WORD = "columnDataType";
+  public static String MDR_DEFAULT_VALUE_WORD = "defaultValue";
+  public static String MPDR_SEQUENCE_NAME_WORD = "sequenceName";
+  public static String MPDR_MIN_VALUE_WORD = "minValue";
+  public static String MPDR_INCREMENT_WORD = "increment";
+  public static String MPDR_TRIGGER_NAME_WORD = "triggerName";
+  public static String MPDR_PACKAGE_NAME_WORD = "packageName";
+  public static String MPDR_PACKAGE_RESOURCES_NAME_WORD = "packageResourcesName";
+  public static String MPDR_PROCEDURE_RESOURCES_CHECK_DATATYPE_WORD = "procedureResourcesCheckDatatypeWord";
+  public static String MPDR_FUNCTION_NAME_WORD = "functionName";
+  public static String MPDR_PROCEDURE_NAME_WORD = "procedureName";
+  public static String MPDR_COLUMN_NAME_WORD = "mpdrColumnName";
+  public static String MDR_CONSTRAINT_DATATYPE_NAME_WORD = "constraintDatatypeName";
+  public static String MCD_ATTRIBUTE_NAME_WORD = "mcdAttrName";
+  public static String MCD_ATTRIBUTE_SHORT_NAME_WORD = "mcdAttrShortName";
+  public static String MDR_CHECK_NAME_WORD = "checkName";
+  public static String MDR_CHECK_EXPRESSION_WORD = "checkExpression";
+  public static String MPDR_COLUMN_AUDIT_AJUSER_NAME_WORD = "auditAjUserName";
+  public static String MPDR_COLUMN_AUDIT_AJDATE_NAME_WORD = "auditAjDateName";
+  public static String MPDR_COLUMN_AUDIT_MOUSER_NAME_WORD = "auditMoUserName";
+  public static String MPDR_COLUMN_AUDIT_MODATE_NAME_WORD = "auditMoDateName";
+  public static String MPDR_TABLE_JNAL_NAME_WORD = "tableJnalName";
+  public static String MPDR_COLUMN_JNAL_DATETIME_NAME_WORD = "jnDatetimeName";
+  public static String MPDR_COLUMN_JNAL_OPERATION_NAME_WORD = "jnOperationName";
+  public static String MPDR_COLUMN_JNAL_USER_NAME_WORD = "jnUserName";
+  public static String MPDR_COLUMN_SESSION_USER_NAME_WORD = "jnSessionName";
+  public static String MPDR_COLUMN_JNAL_APPL_NAME_WORD = "jnApplicationName";
+  public static String MPDR_COLUMN_JNAL_NOTES_NAME_WORD = "jnNotesName";
+
+  public static String MDR_COLUMN_LIEN_PROG_NAME_WORD = "columnTargetLienProgName";
+  public static String MPDR_INTEGRITY_NO_ERROR = "noError";
+  public static String MPDR_INTEGRITY_MESS_ERROR = "messError";
+  public static String MPDR_CHECK_NORMALIZED_STRING = "check_normalized_string";
+  public static String MPDR_CHECK_TOKEN = "check_token";
+  public static String MPDR_CHECK_WORD = "check_word";
 
   public static String MPDR_INDEX_NAME_WORD = "indexName";
   public static String MPDR_VIEW_NAME_WORD = "viewName";
@@ -860,11 +910,17 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_STOREDCODE_SCOPE_VIEW = "mpdr.storedcode.scope.view";
   public static String MPDR_STOREDCODE_SCOPE_MPDR = "mpdr.storedcode.scope.mpdr";
 
+  public static String MPDR_COLUMN_AUDIT_AJUSER_NAME = "ajuser";
+  public static String MPDR_COLUMN_AUDIT_AJDATE_NAME = "ajdate";
+  public static String MPDR_COLUMN_AUDIT_MOUSER_NAME = "mouser";
+  public static String MPDR_COLUMN_AUDIT_MODATE_NAME = "modate";
 
-    public static String MPDR_COLUMN_AUDIT_AJUSER_NAME = "mpdr.column.audit.ajuser.name";
-    public static String MPDR_COLUMN_AUDIT_AJDATE_NAME = "mpdr.column.audit.ajdate.name";
-    public static String MPDR_COLUMN_AUDIT_MOUSER_NAME = "mpdr.column.audit.mouser.name";
-    public static String MPDR_COLUMN_AUDIT_MODATE_NAME = "mpdr.column.audit.modate.name";
+  public static String MPDR_COLUMN_JNAL_DATETIME_NAME = "jn_datetime";
+  public static String MPDR_COLUMN_JNAL_OPERATION_NAME = "jn_operation";
+  public static String MPDR_COLUMN_JNAL_USER_NAME = "jn_user";
+  public static String MPDR_COLUMN_JNAL_SESSION_NAME = "jn_session";
+  public static String MPDR_COLUMN_JNAL_APPL_NAME = "jn_application";
+  public static String MPDR_COLUMN_JNAL_NOTES_NAME = "jn_notes";
 
   public static String MDR_COL_NAME_WORD = "colName";
   public static String MDR_COL_NAME_ONE_ANCESTOR_WORD = "colNameOneAncestor";
@@ -897,18 +953,19 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_TYPE_PACKAGE_MARKER_WORD = "typePackageMarker";
   public static String MPDR_TYPE_VIEW_MARKER_WORD = "typeViewMarker";
 
-    public static Integer MDR_MARKER_DERIVED_LENGTH = 4;
-    public static Integer MDR_MARKER_PEA_LENGTH = 4;
-    public static Integer MDR_MARKER_CUSTOM_TABLE_NAME_LENGTH = 3;
-    public static Integer MDR_MARKER_CUSTOM_COLUMN_NAME_LENGTH = 3;
-    public static Integer MDR_MARKER_CUSTOM_PK_LENGTH = 3;
-    public static Integer MDR_MARKER_CUSTOM_FK_LENGTH = 3;
-    public static Integer MARKER_CUSTOM_SEQPK_LENGTH = 8;
-    public static Integer MARKER_TRIGGER_LENGTH = 8;
-    public static Integer MARKER_VIEW_LENGTH = 8;
-    public static Integer MARKER_PACKAGE_LENGTH = 10;
-    public static Integer MARKER_CHECK_LENGTH = 4;
-    public static Integer MDR_SEPARATOR_NAMING_LENGTH = 1;
+  public static Integer MDR_MARKER_DERIVED_LENGTH = 4;
+  public static Integer MDR_MARKER_PEA_LENGTH = 4;
+  public static Integer MDR_MARKER_CUSTOM_TABLE_NAME_LENGTH = 3;
+  public static Integer MDR_MARKER_CUSTOM_COLUMN_NAME_LENGTH = 3;
+  public static Integer MDR_MARKER_CUSTOM_PK_LENGTH = 3;
+  public static Integer MDR_MARKER_CUSTOM_FK_LENGTH = 3;
+  public static Integer MARKER_CUSTOM_SEQPK_LENGTH = 8;
+  public static Integer MARKER_TRIGGER_LENGTH = 8;
+  public static Integer MARKER_VIEW_LENGTH = 8;
+  public static Integer MARKER_PACKAGE_LENGTH = 10;
+  public static Integer MARKER_CHECK_LENGTH = 4;
+  public static Integer MDR_MARKER_CUSTOM_TABLEJNAL_NAME_LENGTH = 3;
+  public static Integer MDR_SEPARATOR_NAMING_LENGTH = 1;
 
   public static String MARKER_PACKAGE_BODY = "_BODY";
 
@@ -1100,52 +1157,54 @@ public class Preferences extends MVCCDElement {
   private MDRCaseFormat MLDR_PREF_NAMING_FORMAT = null;
   private MDRCaseFormat MLDR_PREF_RESERDWORDS_FORMAT = null;
 
-    // MPDR Oracle Préférences
-    private MDRNamingLength MPDRORACLE_PREF_NAMING_LENGTH = null;
-    private MDRCaseFormat MPDRORACLE_PREF_NAMING_FORMAT = null;
-    private MDRCaseFormat MPDRORACLE_PREF_RESERDWORDS_FORMAT = null;
-    private MDRCaseFormat MPDRORACLE_PREF_OBJECTSINCODE_FORMAT = null;
-    private String MPDRORACLE_DELIMITER_INSTRUCTIONS = null;
-    private MPDRDBPK MPDRORACLE_PK_GENERATE = null;
-    private Boolean MPDRORACLE_TAPIS = null;
-    private String MPDRORACLE_SEQPK_NAME_FORMAT;
-    private String MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT;
-    private String MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT;
-    private String MPDRORACLE_PACKAGE_NAME_FORMAT;
-    private String MPDRORACLE_VIEW_NAME_FORMAT;
-    private String MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
-    private String MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
+  // MPDR Oracle Préférences
+  private MDRNamingLength MPDRORACLE_PREF_NAMING_LENGTH = null;
+  private MDRCaseFormat MPDRORACLE_PREF_NAMING_FORMAT = null;
+  private MDRCaseFormat MPDRORACLE_PREF_RESERDWORDS_FORMAT = null;
+  private MDRCaseFormat MPDRORACLE_PREF_OBJECTSINCODE_FORMAT = null;
+  private String MPDRORACLE_DELIMITER_INSTRUCTIONS = null;
+  private MPDRDBPK MPDRORACLE_PK_GENERATE = null;
+  private Boolean MPDRORACLE_TAPIS = null;
+  private String MPDRORACLE_SEQPK_NAME_FORMAT;
+  private String MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT;
+  private String MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT;
+  private String MPDRORACLE_PACKAGE_NAME_FORMAT;
+  private String MPDRORACLE_VIEW_NAME_FORMAT;
+  private String MPDRORACLE_TABLEJNAL_NAME_FORMAT;
+  private String MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  private String MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
 
+  // MPDR MySQL Préférences
+  private MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH = null;
+  private MDRCaseFormat MPDRMYSQL_PREF_NAMING_FORMAT = null;
+  private MDRCaseFormat MPDRMYSQL_PREF_RESERDWORDS_FORMAT = null;
+  private MDRCaseFormat MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT = null;
+  private String MPDRMYSQL_DELIMITER_INSTRUCTIONS = null;
+  private MPDRDBPK MPDRMYSQL_PK_GENERATE = null;
+  private Boolean MPDRMYSQL_TAPIS = null;
+  private String MPDRMYSQL_SEQPK_NAME_FORMAT;
+  private String MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT;
+  private String MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT;
+  private String MPDRMYSQL_VIEW_NAME_FORMAT;
+  private String MPDRMYSQL_TABLEJNAL_NAME_FORMAT;
+  private String MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  private String MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
 
-    // MPDR MySQL Préférences
-    private MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH = null;
-    private MDRCaseFormat MPDRMYSQL_PREF_NAMING_FORMAT = null;
-    private MDRCaseFormat MPDRMYSQL_PREF_RESERDWORDS_FORMAT = null;
-    private MDRCaseFormat MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT = null;
-    private String MPDRMYSQL_DELIMITER_INSTRUCTIONS = null;
-    private MPDRDBPK MPDRMYSQL_PK_GENERATE = null;
-    private Boolean MPDRMYSQL_TAPIS = null;
-    private String MPDRMYSQL_SEQPK_NAME_FORMAT;
-    private String MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT;
-    private String MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT;
-    private String MPDRMYSQL_VIEW_NAME_FORMAT;
-    private String MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
-    private String MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
-
-    // MPDR PostgreSQL Préférences
-    private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
-    private MDRCaseFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT = null;
-    private MDRCaseFormat MPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT = null;
-    private MDRCaseFormat MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT = null;
-    private String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS = null;
-    private MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE = null;
-    private Boolean MPDRPOSTGRESQL_TAPIS = null;
-    private String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
-    private String MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT;
-    private String MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT;
-    private String MPDRPOSTGRESQL_VIEW_NAME_FORMAT;
-    private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
-    private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
+  // MPDR PostgreSQL Préférences
+  private MDRNamingLength MPDRPOSTGRESQL_PREF_NAMING_LENGTH = null;
+  private MDRCaseFormat MPDRPOSTGRESQL_PREF_NAMING_FORMAT = null;
+  private MDRCaseFormat MPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT = null;
+  private MDRCaseFormat MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT = null;
+  private String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS = null;
+  private MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE = null;
+  private Boolean MPDRPOSTGRESQL_TAPIS = null;
+  private String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
+  private String MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT;
+  private String MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT;
+  private String MPDRPOSTGRESQL_VIEW_NAME_FORMAT;
+  private String MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT;
+  private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
 
   private Boolean DIAGRAMMER_SHOW_GRID = null;
 
@@ -2030,12 +2089,23 @@ public class Preferences extends MVCCDElement {
     this.MPDRORACLE_VIEW_NAME_FORMAT = MPDRORACLE_VIEW_NAME_FORMAT;
   }
 
-    public String getMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT() {
-        if (this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT == null) {
-            this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT;
-        }
-        return this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  public String getMPDRORACLE_TABLEJNAL_NAME_FORMAT() {
+    if (this.MPDRORACLE_TABLEJNAL_NAME_FORMAT == null) {
+      this.MPDRORACLE_TABLEJNAL_NAME_FORMAT = MPDRORACLE_TABLEJNAL_NAME_FORMAT_DEFAULT;
     }
+    return this.MPDRORACLE_TABLEJNAL_NAME_FORMAT;
+  }
+
+  public void setMPDRORACLE_TABLEJNAL_NAME_FORMAT(String MPDRORACLE_TABLEJNAL_NAME_FORMAT) {
+    this.MPDRORACLE_TABLEJNAL_NAME_FORMAT = MPDRORACLE_TABLEJNAL_NAME_FORMAT;
+  }
+
+  public String getMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT() {
+    if (this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT == null) {
+      this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT;
+    }
+    return this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  }
 
   public void setMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT(String MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT) {
     this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
@@ -2174,12 +2244,23 @@ public class Preferences extends MVCCDElement {
     this.MPDRMYSQL_VIEW_NAME_FORMAT = MPDRMYSQL_VIEW_NAME_FORMAT;
   }
 
-    public String getMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT() {
-        if (this.MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT == null) {
-            this.MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRMYSQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT;
-        }
-        return this.MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  public String getMPDRMYSQL_TABLEJNAL_NAME_FORMAT() {
+    if (this.MPDRMYSQL_TABLEJNAL_NAME_FORMAT == null) {
+      this.MPDRMYSQL_TABLEJNAL_NAME_FORMAT = MPDRMYSQL_TABLEJNAL_NAME_FORMAT_DEFAULT;
     }
+    return this.MPDRMYSQL_TABLEJNAL_NAME_FORMAT;
+  }
+
+  public void setMPDRMYSQL_TABLEJNAL_NAME_FORMAT(String MPDRMYSQL_TABLEJNAL_NAME_FORMAT) {
+    this.MPDRMYSQL_TABLEJNAL_NAME_FORMAT = MPDRMYSQL_TABLEJNAL_NAME_FORMAT;
+  }
+
+  public String getMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT() {
+    if (this.MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT == null) {
+      this.MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRMYSQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT;
+    }
+    return this.MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  }
 
   public void setMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT(String MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT) {
     this.MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
@@ -2319,12 +2400,23 @@ public class Preferences extends MVCCDElement {
     this.MPDRPOSTGRESQL_VIEW_NAME_FORMAT = MPDRPOSTGRESQL_VIEW_NAME_FORMAT;
   }
 
-    public String getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT() {
-        if (this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT == null) {
-            this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT;
-        }
-        return this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  public String getMPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT() {
+    if (this.MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT == null) {
+      this.MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT = MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT_DEFAULT;
     }
+    return this.MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT;
+  }
+
+  public void setMPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT(String MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT) {
+    this.MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT = MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT;
+  }
+
+  public String getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT() {
+    if (this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT == null) {
+      this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT;
+    }
+    return this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+  }
 
   public void setMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT(String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT) {
     this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
@@ -2350,8 +2442,8 @@ public class Preferences extends MVCCDElement {
     return this.DIAGRAMMER_SHOW_GRID;
   }
 
-    public void setDIAGRAMMER_SHOW_GRID(boolean showGrid) {
-        this.DIAGRAMMER_SHOW_GRID = showGrid;
-        DiagrammerService.getDrawPanel().repaint();
-    }
+  public void setDIAGRAMMER_SHOW_GRID(boolean showGrid) {
+    this.DIAGRAMMER_SHOW_GRID = showGrid;
+    DiagrammerService.getDrawPanel().repaint();
+  }
 }

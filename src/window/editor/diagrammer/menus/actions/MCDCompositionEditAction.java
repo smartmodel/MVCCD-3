@@ -4,6 +4,12 @@ import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
+import main.MVCCDManager;
+import mcd.MCDAssociation;
+import mcd.MCDAssociationNature;
+import mcd.MCDEntity;
+import repository.editingTreat.mcd.MCDAssociationEditingTreat;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.mcd.MCDCompositionShape;
 
 public class MCDCompositionEditAction extends AbstractAction implements Serializable {
@@ -26,11 +32,22 @@ public class MCDCompositionEditAction extends AbstractAction implements Serializ
   }
 
   private void edit() {
-
   }
 
   private void create() {
+    MVCCDManager manager = MVCCDManager.instance();
 
+    MCDEntityShape entityShapeSource = (MCDEntityShape) this.shape.getSource();
+    MCDEntityShape entityShapeDestination = (MCDEntityShape) this.shape.getDestination();
+
+    MCDEntity entitySource = entityShapeSource.getEntity();
+    MCDEntity entityDestination = entityShapeDestination.getEntity();
+
+    MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
+    MCDAssociation association = mcdAssociationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations(), entitySource, entityDestination, MCDAssociationNature.IDCOMP, false);
+
+    this.shape.setMCDComposition(association);
+    this.shape.createLabelsAfterRelationShapeEdit();
   }
 
 }

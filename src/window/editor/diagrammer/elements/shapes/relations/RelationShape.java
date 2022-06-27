@@ -59,7 +59,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.destination = destination;
     this.isReflexive = isReflexive;
 
-    this.createAnchorPoint(isReflexive);
+    this.createAnchorPoints(isReflexive);
 
     this.setFocusable(true);
   }
@@ -70,7 +70,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.isReflexive = isReflexive;
     this.id = id;
 
-    this.createAnchorPoint(isReflexive);
+    this.createAnchorPoints(isReflexive);
 
     this.setFocusable(true);
   }
@@ -82,7 +82,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.isReflexive = isReflexive;
     this.relatedRepositoryElement = relatedRepositoryElement;
 
-    this.createAnchorPoint(isReflexive);
+    this.createAnchorPoints(isReflexive);
 
     this.setFocusable(true);
 
@@ -177,6 +177,11 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   public void setFocused(boolean focused) {
     this.isFocused = focused;
     DiagrammerService.getDrawPanel().repaint();
+  }
+
+  @Override
+  public MDElement getRelatedRepositoryElement() {
+    return this.relatedRepositoryElement;
   }
 
   @Override
@@ -368,7 +373,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     return this.isReflexive;
   }
 
-  private void createAnchorPoint(boolean isReflexive) {
+  private void createAnchorPoints(boolean isReflexive) {
     final int MARGIN = 50;
 
     if (isReflexive) {
@@ -486,10 +491,11 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   public void generateAnchorPointWhenDestinationIsRelationShape() {
     this.anchorPoints.clear();
-
+    System.out.println("link");
     this.anchorPoints.add(new RelationAnchorPointShape(this.source.getX(), this.source.getY(), 0));
-    this.anchorPoints.add(new RelationAnchorPointShape(this.destination.getCenter().x, this.destination.getCenter().y, 1));
-
+    RelationAnchorPointShape anchorPointOnDestinationRelation = new RelationAnchorPointShape(this.destination.getCenter().x, this.destination.getCenter().y, 1);
+    this.anchorPoints.add(anchorPointOnDestinationRelation);
+    ((RelationShape) this.destination).addAnchorPoint(anchorPointOnDestinationRelation);
   }
 
   /**
@@ -581,10 +587,6 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   public boolean isLastPoint(RelationAnchorPointShape anchorPoint) {
     return anchorPoint == this.getLastPoint();
-  }
-
-  public MDElement getRelatedRepositoryElement() {
-    return this.relatedRepositoryElement;
   }
 
   public abstract String getXmlTagName();

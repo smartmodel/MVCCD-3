@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Line2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -40,7 +41,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
   private int tempNewAlignedX = 0;
   private int tempNewY = 0;
   private int tempNewAlignedY = 0;
-  private RelationAnchorPointShape anchorPointClicked = null;
+  private List<RelationAnchorPointShape> anchorPointsClicked = new ArrayList<>();
   private RelationShape focusedRelation = null;
   private List<RelationAnchorPointShape> anchorPointsToMove = new LinkedList<>();
   private boolean spaceBarPressed = false;
@@ -64,7 +65,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
       DiagrammerService.getDrawPanel().deselectAllShapes();
     } else {
       // Sélectionne l'association et vérifie si un point d'ancrage est cliqué
-      this.anchorPointClicked = this.getAnchorPointClicked(e);
+      this.checkAnchorPointsClicked(e);
 
     }
 
@@ -76,7 +77,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
 
     // Gestion du clic droit
     if (SwingUtilities.isRightMouseButton(e)) {
-      if (this.anchorPointClicked != null) {
+      if (!this.anchorPointsClicked.isEmpty()) {
         this.showAnchorPointMenu(e);
       } else if (this.focusedRelation != null) {
         this.showRelationMenu(e);
@@ -88,7 +89,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
   public void mousePressed(MouseEvent e) {
     this.origin = e.getPoint();
     this.mouseWheelPressed = SwingUtilities.isMiddleMouseButton(e);
-    this.anchorPointClicked = this.getAnchorPointClicked(e);
+    this.checkAnchorPointsClicked(e);
     this.updateCursor(e);
 
   }
@@ -97,7 +98,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
   public void mouseReleased(MouseEvent e) {
     super.mouseReleased(e);
 
-    if (this.anchorPointClicked != null && this.focusedRelation != null) {
+    if (!this.anchorPointsClicked.isEmpty() && this.focusedRelation != null) {
       this.deleteAnchorPointsIfNecessary();
     }
 
@@ -105,7 +106,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
       this.mouseWheelPressed = false;
     }
 
-    this.anchorPointClicked = null;
+    this.anchorPointsClicked.clear();
     this.updateCursor(e);
     this.resetTemporaryLocations();
     //DiagrammerService.getDrawPanel().endScroll();
@@ -131,7 +132,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
     super.mouseDragged(e);
 
     // Si un point d'ancrage est sélectionné
-    if (this.anchorPointClicked != null && this.focusedRelation != null) {
+    if (!this.anchorPointsClicked.isEmpty() && this.focusedRelation != null) {
       this.dragAnchorPointSelected(e);
     } else {
       if (this.spaceBarPressed) {
@@ -198,19 +199,21 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
     }
   }
 
-  public void selectAnchorPointsToMove(RelationAnchorPointShape anchorPoint) {
-    this.anchorPointsToMove.clear();
-    if (anchorPoint == this.focusedRelation.getFirstPoint()) {
-      // Premier point
-      this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() + 1));
-    } else if (anchorPoint == this.focusedRelation.getLastPoint()) {
-      // Dernier point
-      this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() - 1));
-    } else {
-      // Tout autre point entre l'indice 1 et n-1
-      this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() - 1));
-      this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() + 1));
-    }
+  public void selectAnchorPointsToMove() {
+/*    this.anchorPointsToMove.clear();
+    for (RelationAnchorPointShape anchorPoint : this.anchorPointsClicked) {
+      if (anchorPoint == this.focusedRelation.getFirstPoint()) {
+        // Premier point
+        this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() + 1));
+      } else if (anchorPoint == this.focusedRelation.getLastPoint()) {
+        // Dernier point
+        this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() - 1));
+      } else {
+        // Tout autre point entre l'indice 1 et n-1
+        this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() - 1));
+        this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() + 1));
+      }
+    }*/
   }
 
   private void updateCursor(MouseEvent event) {
@@ -261,16 +264,15 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
     }
   }
 
-  private RelationAnchorPointShape getAnchorPointClicked(MouseEvent event) {
+  private void checkAnchorPointsClicked(MouseEvent event) {
     for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapes()) {
       for (RelationAnchorPointShape anchorPoint : relation.getAnchorPoints()) {
         if (anchorPoint.contains(event.getPoint())) {
-          this.selectAnchorPointsToMove(anchorPoint);
-          return anchorPoint;
+          this.anchorPointsClicked.add(anchorPoint);
         }
       }
     }
-    return null;
+    this.selectAnchorPointsToMove();
   }
 
   private void checkForClickedRelation(MouseEvent event) {
@@ -287,12 +289,13 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
   }
 
   private void dragAnchorPointSelected(MouseEvent e) {
+    for (RelationAnchorPointShape anchorPoint : this.anchorPointsClicked) {
+      Point newPoint = new Point(GridUtils.alignToGrid(e.getX(), DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(e.getY(), DiagrammerService.getDrawPanel().getGridSize()));
+      boolean dragAllowed = this.checkIfAnchorPointCanBeDragged(anchorPoint, newPoint);
 
-    Point newPoint = new Point(GridUtils.alignToGrid(e.getX(), DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(e.getY(), DiagrammerService.getDrawPanel().getGridSize()));
-    boolean dragAllowed = this.checkIfAnchorPointCanBeDragged(this.anchorPointClicked, newPoint);
-
-    if (dragAllowed) {
-      this.anchorPointClicked.move(newPoint.x, newPoint.y);
+      if (dragAllowed) {
+        anchorPoint.move(newPoint.x, newPoint.y);
+      }
     }
 
     DiagrammerService.getDrawPanel().repaint();
@@ -327,20 +330,20 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
   /***
    * Cette méthode gère le déplacement du premier ou dernier point d'ancrage d'une relation
    */
-  private void dragFirstAnchorPoint(int differenceX, int differenceY) {
+/*  private void dragFirstAnchorPoint(int differenceX, int differenceY) {
 
-    Point newPoint = new Point(GridUtils.alignToGrid(this.anchorPointClicked.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(this.anchorPointClicked.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
+    Point newPoint = new Point(GridUtils.alignToGrid(this.anchorPointsClicked.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(this.anchorPointsClicked.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
     boolean dragAllowed = ShapeUtils.pointIsAroundShape(newPoint, this.focusedRelation.getSource());
 
     if (dragAllowed) {
-      this.anchorPointClicked.drag(newPoint.x, newPoint.y);
+      this.anchorPointsClicked.drag(newPoint.x, newPoint.y);
     }
-  }
+  }*/
 
-  private void dragLastAnchorPoint(int differenceX, int differenceY) {
+ /* private void dragLastAnchorPoint(int differenceX, int differenceY) {
     boolean dragAllowed = false;
 
-    Point newPoint = new Point(GridUtils.alignToGrid(this.anchorPointClicked.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(this.anchorPointClicked.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
+    Point newPoint = new Point(GridUtils.alignToGrid(this.anchorPointsClicked.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(this.anchorPointsClicked.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
 
     if (this.focusedRelation.getDestination() instanceof RelationShape) {
       dragAllowed = ShapeUtils.pointIsOnRelation(newPoint, (RelationShape) this.focusedRelation.getDestination());
@@ -348,10 +351,9 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
       dragAllowed = ShapeUtils.pointIsAroundShape(newPoint, (ClassShape) this.focusedRelation.getDestination());
     }
     if (dragAllowed) {
-      this.anchorPointClicked.drag(differenceX, differenceY);
+      this.anchorPointsClicked.drag(differenceX, differenceY);
     }
-  }
-
+  }*/
   private boolean checkIfAnchorPointCanBeDragged(RelationAnchorPointShape anchorPoint, Point newPosition) {
     boolean dragAllowed;
 
@@ -376,7 +378,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
 
   private void showAnchorPointMenu(MouseEvent event) {
     Point converted = SwingUtilities.convertPoint(this.focusedRelation, event.getPoint(), DiagrammerService.getDrawPanel());
-    AnchorPointMenu menu = new AnchorPointMenu(this.anchorPointClicked, this.focusedRelation);
+    AnchorPointMenu menu = new AnchorPointMenu(this.anchorPointsClicked.get(0), this.focusedRelation); // TODO Check si on prend bien l'indice 0, donc le premier point
     menu.show(DiagrammerService.getDrawPanel(), converted.x, converted.y);
   }
 
