@@ -1,5 +1,6 @@
 package window.editor.diagrammer.elements.shapes.relations;
 
+import mcd.MCDAssociation;
 import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
@@ -72,5 +73,9 @@ public class MCDCompositionShape extends RelationShape {
 
   public MDElement getMCDComposition(){
     return this.relatedRepositoryElement;
+  }
+
+  public void setMCDComposition(MCDAssociation association) {
+    this.relatedRepositoryElement = association;
   }
 }

@@ -9,6 +9,7 @@ import window.editor.diagrammer.elements.shapes.relations.MCDCompositionShape;
 import window.editor.diagrammer.elements.shapes.relations.MCDGeneralizationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.menus.actions.MCDAssociationEditAction;
+import window.editor.diagrammer.menus.actions.MCDCompositionEditAction;
 import window.editor.diagrammer.menus.actions.MCDGeneralizationEditAction;
 import window.editor.diagrammer.menus.actions.RelationAddPointAncrageAction;
 import window.editor.diagrammer.menus.actions.RelationDeleteAction;
@@ -25,7 +26,7 @@ public class RelationShapeMenu extends JPopupMenu implements Serializable {
     } else if (shape instanceof MCDGeneralizationShape) {
       edit = new JMenuItem(new MCDGeneralizationEditAction("Ouvrir l'assistant de modélisation", null, (MCDGeneralizationShape) shape));
     } else if (shape instanceof MCDCompositionShape) {
-      // TODO -> Ajouter le traitement pour l'association de composition
+      edit = this.add(new JMenuItem(new MCDCompositionEditAction("Ouvrir l'assistant de modélisation", null, (MCDCompositionShape) shape)));
     }
     this.add(edit);
     // Ajout d'un point d'ancrage sur la relation
