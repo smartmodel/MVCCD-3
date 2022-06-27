@@ -186,4 +186,5 @@ public abstract class MCDRelEnd extends MCDElement implements IMRelEnd, IMCDElem
         return ConstraintService.getUMLNamingInLine(getConstraints());
     }
 
+
 }

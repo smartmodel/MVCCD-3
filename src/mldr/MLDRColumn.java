@@ -18,7 +18,7 @@ public class MLDRColumn extends MDRColumn implements IMLDRElement, IMLDRElementW
 
     private MCDElement mcdElementSource;
     private boolean columnPKTI = false ; // Pour la création d'une colonne de PK indépendante lors d'une transformation en tables indépendantes
-    private boolean columnSimPK = false ; // Colonne de simulation de PK pour les entitésnon indépendantes et transormées en tables indépendantes
+    private boolean columnSimPK = false ; // Colonne de simulation de PK pour les entités non indépendantes et transormées en tables indépendantes
 
     public MLDRColumn(ProjectElement parent, MCDElement mcdElementSource) {
         super(parent);

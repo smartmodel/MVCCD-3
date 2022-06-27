@@ -46,14 +46,21 @@ public abstract class MPDRGenerateSQLTrigger {
         // Les triggers pour alimenter les colonnes de PK sans les TAPIs
         boolean c1 = mpdrTriggerType == MPDRTriggerType.BIR_PKIND;
         boolean c2 = mpdrTriggerType == MPDRTriggerType.BIR_PKDEP;
-        if (c1 || c2){
-            generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_PK_NAME_WORD,
-                    tableAccueil.getMPDRColumnPKProper().getName());
-
-            if (c1){
+        boolean c3 = mpdrTriggerType == MPDRTriggerType.BIR_PKDEPSIM;
+        if (c1){
+                // Nom de séquence
                 generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_SEQUENCE_NAME_WORD,
                         tableAccueil.getMPDRColumnPKProper().getMPDRSequence().getName());
-            }
+        }
+        if (c1 || c2){
+            // Nom de colonne PK propre à la table
+            generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_PK_NAME_WORD,
+                    tableAccueil.getMPDRColumnPKProper().getName());
+        }
+        if (c3){
+            // Nom de colonne PK de simulation
+            generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_PK_NAME_WORD,
+                    tableAccueil.getMPDRColumnSimPK().getName());
         }
 
         // Traitement du code dynamique

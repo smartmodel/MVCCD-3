@@ -8,7 +8,7 @@ BEGIN
     -- créées pour les colonnes d'identité.
 	drops_select := q'$SELECT 'DROP TABLE ' || object_name   || ' CASCADE CONSTRAINTS PURGE'
                     FROM user_objects
-                    WHERE object_type = 'TABLE'$';
+                    WHERE object_type = Upper('TABLE')$';
 
 	EXECUTE IMMEDIATE drops_select BULK COLLECT INTO drops_commands;
 
@@ -28,9 +28,9 @@ BEGIN
     -- A priori manque INDEX
 	drops_select := q'$SELECT 'DROP ' || object_type || ' ' || object_name   || ''
                     FROM user_objects
-                    WHERE (object_type IN ('SEQUENCE', 'TRIGGER', 'PACKAGE',
-					'FUNCTION', 'VIEW', 'DATABASE LINK', 'SYNONYM', 'INDEX')
-                    OR (( object_type = 'PROCEDURE') AND (object_name != Upper('{emptySchema}'))))$';
+                    WHERE (object_type IN (Upper('SEQUENCE'), Upper('TRIGGER'), Upper('PACKAGE'),
+					Upper('FUNCTION'), Upper('VIEW'), Upper('DATABASE LINK'), Upper('SYNONYM'), Upper('INDEX'))
+                    OR (( object_type = Upper('PROCEDURE')) AND (object_name != Upper('{emptySchema}'))))$';
 
 
 

@@ -4,7 +4,7 @@ CREATE OR REPLACE PACKAGE {packageName} IS
     PROCEDURE {autogen_columns_upd}({pio_crtrec} IN OUT {tableName}%ROWTYPE);
     PROCEDURE {uppercase_columns}({pio_crtrec} IN OUT {tableName}%ROWTYPE);
     PROCEDURE {checktype_columns}({pio_crtrec} IN OUT {tableName}%ROWTYPE);
-    PROCEDURE {column_PEA}({pio_crtrec} IN OUT {tableName}%ROWTYPE);
+    PROCEDURE {PEA_columns}({pio_crtrec} IN OUT {tableName}%ROWTYPE);
     PROCEDURE {frozen_columns}( {pio_newrec} IN OUT {tableName}%ROWTYPE
         , {pio_oldrec} IN OUT {tableName}%ROWTYPE);
     PROCEDURE {tree_or_list_loop};

@@ -282,4 +282,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
 
     public abstract MPDRTableJnal createTableJnal(MLDRConstraintCustomJnal mldrConstraintCustomJnal) ;
 
+    public MPDRColumn getMPDRColumnSimPK() {
+        return (MPDRColumn) super.getMDRColumnSimPK();
+    }
 }
