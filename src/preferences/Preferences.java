@@ -226,6 +226,7 @@ public class Preferences extends MVCCDElement {
   public static String DIRECTORY_TEMPLATES_DYNAMIC_CODE = "dynamicCode";
   public static String DIRECTORY_TEMPLATES_OPTIONS = "options";
   //public static String DIRECTORY_TEMPLATES_BLOCKS = "blocks";
+  public static String DIRECTORY_TEMPLATES_CONSOLIDATION = "consolidation";
 
   public static String TEMPLATE_DROP_TABLE = "dropTable.txt";
   public static String TEMPLATE_DROP_SEQUENCE = "dropSequence.txt";
@@ -1189,14 +1190,35 @@ public class Preferences extends MVCCDElement {
   public static String FETCHER_ORACLE_OBJECT_NAME = "OBJECT_NAME";
   public static String FETCHER_ORACLE_REQUETE_SQL_USER_TRIGGERS = "SELECT TRIGGER_NAME, TABLE_NAME, TRIGGER_BODY FROM USER_TRIGGERS";
   public static String FETCHER_ORACLE_TRIGGER_NAME = "TRIGGER_NAME";
+  public static String FETCHER_ORACLE_USER_DEPENDENCIES = "SELECT * FROM USER_DEPENDENCIES WHERE REFERENCED_TYPE=? and TYPE=?";
+  public static String FETCHER_ORACLE_SEQUENCE = "SEQUENCE";
+  public static String FETCHER_ORACLE_TRIGGER = "TRIGGER";
+  public static String FETCHER_ORACLE_REFERENCED_NAME = "REFERENCED_NAME";
+  public static String FETCHER_ORACLE_NAME = "NAME";
+  public static String FETCHER_ORACLE_TABLE = "TABLE";
+
 
   public static String SQL_MARKER_SEPARATOR_ARGUMENTS_END = ";";
-  public static String TEMPLATE_ALTER_TABLE_CREATE_UNIQUE = "alterTableCreateUnique.txt";
+  public static String TEMPLATE_ALTER_TABLE_CREATE_UNIQUE = "alterTableAddUnique.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_UNIQUE = "alterTableDropUnique.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_COLUMN = "alterTableDropColumn.txt";
   public static String TEMPLATE_ALTER_TABLE_ADD_COLUMN = "alterTableAddColumn.txt";
   public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN = "alterTableModifyColumn.txt";
-
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_NN = "alterTableModifyColumnAddNN.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_NN = "alterTableModifyColumnDropNN.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_DEFAULT = "alterTableModifyColumnAddDefault.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_DEFAULT = "alterTableModifyColumnDropDefault.txt";
+  public static String TEMPLATE_ALTER_TABLE_ADD_PK = "alterTableAddPk.txt";
+  public static String TEMPLATE_ALTER_TABLE_DROP_PK_CASCADE = "alterTableDropPkCascade.txt";
+  //public static String TEMPLATE_ALTER_TABLE_ADD_FK = "alterTableAddFk.txt"; //déjà existant
+  public static String TEMPLATE_ALTER_TABLE_DROP_FK = "alterTableDropFk.txt";
+  public static String TEMPLATES_ALTER_TABLE_ADD_FK_WITH_DELETE_CASCADE = "alterTableAddFkWithDeleteCascade.txt";
+  public static String TEMPLATE_DROP_TABLE_CONSOLIDATION = "dropTableConsolidation.txt";
+  public static String TEMPLATE_ALTER_TABLE_ADD_CHECK = "alterTableAddCheck.txt";
+  public static String TEMPLATE_ALTER_TABLE_DROP_CHECK = "alterTableDropCheck.txt";
+  public static String TEMPLATE_DROP_PACKAGE_AND_BODY = "dropPackageAndBody.txt";
+  public static String TEMPLATE_DROP_SEQUENCE_CONSOLIDATION = "dropSequence.txt";
+  public static String TEMPLATE_DROP_TRIGGER_CONSOLIDATION = "dropTrigger.txt";
 
 
 

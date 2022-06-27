@@ -17,6 +17,17 @@ public class MPDROracleGenerateSQLSequence extends MPDRGenerateSQLSequence {
         return generateSQLCode;
     }
 
+    public String generateSQLDropSequence(String mpdrSequence) {
+        String generateSQLCode = super.generateSQLDropSequence(mpdrSequence);
+        return generateSQLCode;
+    }
+
+
+    public String generateSQLDropSequenceConsolidation(MPDRSequence mpdrSequence) {
+        String generateSQLCode = super.generateSQLDropSequenceConsolidation(mpdrSequence);
+        return generateSQLCode;
+    }
+
 
 
     @Override

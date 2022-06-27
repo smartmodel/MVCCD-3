@@ -20,9 +20,9 @@ public abstract class MPDRGenerateSQLUnique {
     }
 
     public String generateSQLCreateUniqueConsolidation(MPDRUnique mpdrUnique) {
-        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_CREATE_UNIQUE,
-                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+                getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrUnique.getParent().getParent().getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_UNIQUE_NAME_WORD, mpdrUnique.getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_UNIQUE_COLUMNS_WORD, mpdrUnique.getParametersNameAsStr());
@@ -32,9 +32,9 @@ public abstract class MPDRGenerateSQLUnique {
 
     public String generateSQLDropUniqueConsolidation(MPDRUnique mpdrUnique) {
         //getTemplateDirAlterDB permet de savoir qu'il doit aller chercher le fichier txt dans le dossier Alter
-        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_UNIQUE,
-                getMPDRGenerateSQL().mpdrModel) + Preferences.SQL_MARKER_SEPARATOR_ARGUMENTS_END ;
+                getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrUnique.getParent().getParent().getName());
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_UNIQUE_NAME_WORD, mpdrUnique.getName());
 

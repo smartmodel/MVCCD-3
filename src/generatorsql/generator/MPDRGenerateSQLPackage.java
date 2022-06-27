@@ -13,12 +13,33 @@ public abstract class MPDRGenerateSQLPackage {
     }
 
 
+    //Ne supprime pas les body!
     public String generateSQLDropPackage(MPDRPackage mpdrPackage){
 
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirDropStoredCodeDB(),
                 Preferences.TEMPLATE_DROP_PACKAGE,
                 getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_PACKAGE_NAME_WORD, mpdrPackage.getName());
+
+        return generateSQLCode;
+    }
+
+    //Ajouté par Vincent pour supprimer les package et leur body
+    public String generateSQLDropPackageAndBody(MPDRPackage mpdrPackage) {
+        String generateSQLCode = MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
+                Preferences.TEMPLATE_DROP_PACKAGE_AND_BODY,
+                getMPDRGenerateSQL().mpdrModel);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_PACKAGE_NAME_WORD, mpdrPackage.getName());
+
+        return generateSQLCode;
+    }
+
+    //Ajouté par Vincent pour supprimer les packages et leur body
+    public String generateSQLDropPackageAndBody(String packageName) {
+        String generateSQLCode = MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
+                Preferences.TEMPLATE_DROP_PACKAGE_AND_BODY,
+                getMPDRGenerateSQL().mpdrModel);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_PACKAGE_NAME_WORD, packageName);
 
         return generateSQLCode;
     }

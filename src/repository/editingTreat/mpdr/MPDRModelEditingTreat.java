@@ -2,6 +2,7 @@ package repository.editingTreat.mpdr;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
+import consolidationMpdrDb.viewer.WaitingSyncViewer;
 import generatorsql.viewer.SQLViewer;
 import main.MVCCDElement;
 import main.MVCCDWindow;
@@ -61,29 +62,26 @@ public class MPDRModelEditingTreat extends EditingTreat {
         return ok ;
    }
 
-   //TODO VINCENT
-   // A implémenter
-    public boolean treatSyncMpdrDb(MVCCDWindow owner, MVCCDElement mvccdElement) {
+   //Ajouté par Vincent
+    public boolean treatSyncMpdrDb(MVCCDWindow owner, MVCCDElement mvccdElement, WaitingSyncViewer waitingSyncViewer) {
         MPDRModel mpdrModel = (MPDRModel) mvccdElement;
 
         boolean ok = true;
         String syncSQLCode = "";
         try {
-            //A faire VC : créer un message spécifique
-            String message = MessagesBuilder.getMessagesProperty("generate.sql.mpdrtosql.start",
+            String message = MessagesBuilder.getMessagesProperty("consolidation.sql.mpdrtosql.start",
                     new String[]{mpdrModel.getNamePath()});
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
 
             syncSQLCode = mpdrModel.treatSync(owner);
+            waitingSyncViewer.setVisible(false);
 
         } catch (Exception e){
-            //A faire VC : mettre ce message en property
-            ViewLogsManager.catchException(e, owner, "La synchronisation du code SQL-DDL a échoué.");
+            ViewLogsManager.catchException(e, owner, "consolidation.sql.mpdrtosql.error");
             ok = false ;
         }
-        //A faire VC : changer les message de propertie
         TreatmentService.treatmentFinish(owner, mvccdElement, ok,
-                getPropertyTheElement(), "generate.sql.mpdrtosql.ok", "generate.sql.mpdrtosql.abort") ;
+                getPropertyTheElement(), "consolidation.sql.mpdrtosql.ok", "consolidation.sql.mpdrtosql.abort") ;
         if (ok) {
             SQLViewer fen = new SQLViewer(mpdrModel, syncSQLCode);
             fen.setVisible(true);

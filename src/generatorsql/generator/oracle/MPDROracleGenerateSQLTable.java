@@ -16,6 +16,11 @@ public class MPDROracleGenerateSQLTable extends MPDRGenerateSQLTable {
         return generateSQLCode ;
     }
 
+    public String generateSQLDropTableConsolidation(MPDRTable mpdrTable){
+        String generateSQLCode = super.generateSQLDropTableConsolidation(mpdrTable);
+        return generateSQLCode;
+    }
+
     @Override
     protected MPDRGenerateSQLUnique getMPDRGenerateSQLUnique() {
         return new MPDROracleGenerateSQLUnique(mpdrOracleGenerateSQL);
