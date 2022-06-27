@@ -23,7 +23,7 @@ public abstract class MPDRGenerateSQLCheck {
 
     //Ajouté par Vincent
     public String generateSQLAddCheck(MPDRCheck mpdrCheck){
-        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_ADD_CHECK,
                 getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrCheck.getParent().getParent().getName());
@@ -34,7 +34,7 @@ public abstract class MPDRGenerateSQLCheck {
     }
 
     public String generateSQLDropCheck(MPDRCheck mpdrCheck){
-        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_CHECK,
                 getMPDRGenerateSQL().mpdrModel);
 

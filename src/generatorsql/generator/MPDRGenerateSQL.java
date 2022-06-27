@@ -355,6 +355,11 @@ public abstract class MPDRGenerateSQL {
                 Preferences.DIRECTORY_TEMPLATES_ALTER;
     }
 
+    public String getTemplateDirAlterConsolidationDB(){
+        return getTemplateDirAlterDB() + Preferences.SYSTEM_FILE_SEPARATOR +
+                Preferences.DIRECTORY_TEMPLATES_CONSOLIDATION;
+    }
+
     public String getTemplateDirDropDB() {
         return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR+
                 Preferences.DIRECTORY_TEMPLATES_DROP;

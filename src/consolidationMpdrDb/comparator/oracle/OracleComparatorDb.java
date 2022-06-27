@@ -7,10 +7,12 @@ import mpdr.*;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.tapis.*;
 import mpdr.tapis.oracle.MPDROracleBoxPackages;
+import preferences.Preferences;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 //ATTENTION, pour oracle, on utilise toUpperCase pour les noms
@@ -77,6 +79,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
                 compareCheck(mpdrTable, dbTable);
                 compareFk(mpdrTable, dbTable);
                 compareFkOptionDeleteCascadeToAddOrDrop(mpdrTable, dbTable);
+                removeConstraintFromDropColumn();
                 compareTriggers(mpdrTable.getMPDRBoxTriggers(), dbTable.getMPDRBoxTriggers());
                 comparePackages((MPDROracleBoxPackages) mpdrTable.getMPDRContTAPIs().getMPDRBoxPackages(), (MPDROracleBoxPackages) dbTable.getMPDRContTAPIs().getMPDRBoxPackages());
             }
@@ -88,6 +91,14 @@ public class OracleComparatorDb extends MpdrDbComparator {
             MPDRTable dbTable = findDbTableByName(mpdrTable);
             if (dbTable == null) {
                 mpdrTablesToCreate.add(mpdrTable);
+                //Ajout des séquences pour la nouvelle table
+                for (MPDRColumn mpdrColumn : mpdrTable.getMPDRColumns()) {
+                    if (!mpdrColumn.getChilds().isEmpty()) {
+                        if(!mpdrSequencesToCreate.contains(mpdrColumn.getMPDRSequence())){
+                            mpdrSequencesToCreate.add(mpdrColumn.getMPDRSequence());
+                        }
+                    }
+                }
             }
         }
     }
@@ -361,16 +372,16 @@ public class OracleComparatorDb extends MpdrDbComparator {
 
     private void compareFkToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
         List<String> dbFkNameList = new ArrayList<>();
-        if(dbTable.getMPDRFKs()!=null) {
+        if (dbTable.getMPDRFKs() != null) {
             for (MPDRFK dbFk : dbTable.getMPDRFKs()) {
                 dbFkNameList.add(dbFk.getName());
             }
         }
-        if(mpdrTable.getMPDRFKs()!=null){
-        for (MPDRFK mpdrfk : mpdrTable.getMPDRFKs()) {
-            if (!dbFkNameList.contains(mpdrfk.getName().toUpperCase())) {
-                mpdrFksToAdd.add(mpdrfk);
-            }
+        if (mpdrTable.getMPDRFKs() != null) {
+            for (MPDRFK mpdrfk : mpdrTable.getMPDRFKs()) {
+                if (!dbFkNameList.contains(mpdrfk.getName().toUpperCase())) {
+                    mpdrFksToAdd.add(mpdrfk);
+                }
             }
         }
     }
@@ -387,7 +398,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-//ATTENTION, fonctionne pour autant que Preference.MDR_FK_NAME_FORMAT_DEFAULT =
+    //ATTENTION, fonctionne pour autant que Preference.MDR_FK_NAME_FORMAT_DEFAULT =
 // "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}{tableSep}{parentRoleShortName}";
     private void compareFkRemoveFromDropListIfRefTableDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
         List<String> mpdrFkNameList = new ArrayList<>(); // par exemple: FK1_COL_QUAL_ATTRIB
@@ -397,11 +408,11 @@ public class OracleComparatorDb extends MpdrDbComparator {
             mpdrFkNameList.add(mpdrFk.getName().toUpperCase());
             splitFkName.add(mpdrFk.getName().split("_")[2]);
         }
-        for (MPDRTable mpdrSameTable : mpdrTablesSameName){
+        for (MPDRTable mpdrSameTable : mpdrTablesSameName) {
             mpdrTableShortName.add(mpdrSameTable.getShortName());
         }
         for (String shortName : mpdrTableShortName) {
-            if(!splitFkName.contains(shortName)){
+            if (!splitFkName.contains(shortName)) {
                 for (MPDRFK dbFk : dbTable.getMPDRFKs()) {
                     dbFksToDrop.remove(dbFk);
                 }
@@ -492,12 +503,12 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    private void compareSequencesInTableToDrop(){
+    private void compareSequencesInTableToDrop() {
         //Si la séquence est dans une table qui doit être supprimée
         for (MPDRTable dbTableToDrop : dbTablesToDrop) {
             for (MPDRColumn dbColumnInTableToDrop : dbTableToDrop.getMPDRColumns()) {
-                if(!dbColumnInTableToDrop.getChilds().isEmpty()){
-                    if(dbColumnInTableToDrop.getMPDRSequence()!=null){
+                if (!dbColumnInTableToDrop.getChilds().isEmpty()) {
+                    if (dbColumnInTableToDrop.getMPDRSequence() != null) {
                         dbSequencesToDrop.add(dbColumnInTableToDrop.getMPDRSequence());
                     }
                 }
@@ -566,30 +577,80 @@ public class OracleComparatorDb extends MpdrDbComparator {
             List<MPDRPackage> differentPackages = new ArrayList<>();
             for (MPDRPackage dbPackage : dbOracleBoxPackages.getAllPackages()) {
                 for (MPDRPackage mpdrPackage : mpdrOracleBoxPackages.getAllPackages()) {
-                    if(mpdrPackage.getName().toUpperCase().equals(dbPackage.getName())){
-                        if(!samePackages.contains(dbPackage)){
+                    if (mpdrPackage.getName().toUpperCase().equals(dbPackage.getName())) {
+                        if (!samePackages.contains(dbPackage)) {
                             samePackages.add(dbPackage);
                         }
-                    } else{
-                        if(!differentPackages.contains(dbPackage))
-                        differentPackages.add(dbPackage);
+                    } else {
+                        if (!differentPackages.contains(dbPackage))
+                            differentPackages.add(dbPackage);
                     }
                 }
             }
             for (MPDRPackage differentPackage : differentPackages) {
-                if(!samePackages.contains(differentPackage)){
+                if (!samePackages.contains(differentPackage)) {
                     dbPackagesToDrop.add(differentPackage);
                 }
             }
         }
     }
 
-    private void comparePackageInTableToDrop(){
+    private void comparePackageInTableToDrop() {
         //Si la package est dans une table qui doit être supprimée
         for (MPDRTable dbTableToDrop : dbTablesToDrop) {
             for (MPDRPackage dbPackageInTableToDrop : dbTableToDrop.getMPDRContTAPIs().getMPDRBoxPackages().getAllPackages()) {
-                if(dbPackageInTableToDrop!=null) {
+                if (dbPackageInTableToDrop != null) {
                     dbPackagesToDrop.add(dbPackageInTableToDrop);
+                }
+            }
+        }
+    }
+
+    private void removeConstraintFromDropColumn() {
+        List<String> listNameColumnToDrop = new ArrayList<>();
+        List<String> listSplitElement = new ArrayList<>();
+        List<Integer> listTargetIdColumnToDrop = new ArrayList<>();
+        String regex = Preferences.MDR_TABLE_SEP_WORD; // par défaut le caractère "_"
+        for (MPDRColumn dbColumnToDrop : dbColumnsToDrop) {
+            listNameColumnToDrop.add(dbColumnToDrop.getName());
+            listTargetIdColumnToDrop.add(dbColumnToDrop.getId());
+        }
+        for (Iterator<MPDRPK> iterator = dbPksToDrop.iterator(); iterator.hasNext(); ) {
+            MPDRPK dbPk = iterator.next();
+            if (listTargetIdColumnToDrop.contains(dbPk.getTargets())) {
+                iterator.remove();
+            }
+        }
+        for (Iterator<MPDRUnique> iterator = dbUniquesToDrop.iterator(); iterator.hasNext(); ) {
+            MPDRUnique dbUnique = iterator.next();
+            for (String splitter : dbUnique.getName().split(regex)) {
+                listSplitElement.add(splitter);
+            }
+            for (String splitElement : listSplitElement) {
+                if (listNameColumnToDrop.contains(splitElement)) {
+                    iterator.remove();
+                }
+            }
+        }
+        for (Iterator<MPDRCheck> iterator = dbChecksToDrop.iterator(); iterator.hasNext(); ) {
+            MPDRCheck dbCheck = iterator.next();
+            for (String splitter : dbCheck.getName().split(regex)) {
+                listSplitElement.add(splitter);
+            }
+            for (String splitElement : listSplitElement) {
+                if (listNameColumnToDrop.contains(splitElement)) {
+                    iterator.remove();
+                }
+            }
+        }
+        for (Iterator<MPDRFK> iterator = dbFksToDrop.iterator(); iterator.hasNext(); ) {
+            MPDRFK dbFk = iterator.next();
+            for (String splitter : dbFk.getName().split(regex)) {
+                listSplitElement.add(splitter);
+            }
+            for (String splitElement : listSplitElement) {
+                if (listNameColumnToDrop.contains(splitElement)) {
+                    iterator.remove();
                 }
             }
         }

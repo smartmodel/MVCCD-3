@@ -226,6 +226,7 @@ public class Preferences extends MVCCDElement {
   public static String DIRECTORY_TEMPLATES_DYNAMIC_CODE = "dynamicCode";
   public static String DIRECTORY_TEMPLATES_OPTIONS = "options";
   //public static String DIRECTORY_TEMPLATES_BLOCKS = "blocks";
+  public static String DIRECTORY_TEMPLATES_CONSOLIDATION = "consolidation";
 
   public static String TEMPLATE_DROP_TABLE = "dropTable.txt";
   public static String TEMPLATE_DROP_SEQUENCE = "dropSequence.txt";
@@ -1216,6 +1217,8 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATE_ALTER_TABLE_ADD_CHECK = "alterTableAddCheck.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_CHECK = "alterTableDropCheck.txt";
   public static String TEMPLATE_DROP_PACKAGE_AND_BODY = "dropPackageAndBody.txt";
+  public static String TEMPLATE_DROP_SEQUENCE_CONSOLIDATION = "dropSequence.txt";
+  public static String TEMPLATE_DROP_TRIGGER_CONSOLIDATION = "dropTrigger.txt";
 
 
 

@@ -22,6 +22,10 @@ public class MPDROracleGenerateSQLFK extends MPDRGenerateSQLFK {
         return generateSQLCode ;
     }
 
+    public String generateSQLFKWithDeleteCascadeOption(MPDRFK mpdrfk) {
+        String generateSQLCode = super.generateSQLFKWithDeleteCascadeOption(mpdrfk);
+        return generateSQLCode ;
+    }
     @Override
     public MPDRGenerateSQL getMPDRGenerateSQL() {
         return mpdrOracleGenerateSQL;

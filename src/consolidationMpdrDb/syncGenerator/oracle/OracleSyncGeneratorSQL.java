@@ -9,6 +9,9 @@ import mpdr.tapis.MPDRPackage;
 import mpdr.tapis.MPDRTrigger;
 import preferences.Preferences;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class OracleSyncGeneratorSQL {
 
@@ -102,14 +105,13 @@ public class OracleSyncGeneratorSQL {
         generateSQLCodeSync.append(syncFkToAdd());
 
         //Suppression et ajout des séquences, triggers et packages
-        delimiter = Preferences.SYSTEM_LINE_SEPARATOR + "/" + Preferences.SYSTEM_LINE_SEPARATOR;
         generateSQLCodeSync.append(syncSequenceToDrop());
         generateSQLCodeSync.append(syncSequenceNotInTableToDrop());
-        delimiter = delimiter();
         generateSQLCodeSync.append(syncSequenceToCreate());
-        delimiter = Preferences.SYSTEM_LINE_SEPARATOR + "/" + Preferences.SYSTEM_LINE_SEPARATOR;
         generateSQLCodeSync.append(syncTriggerToDrop());
         generateSQLCodeSync.append(syncTriggerNotInTableToDrop());
+        //On redéfinit le délimiteur car ensuite, les instructions sont en PL/SQL
+        delimiter = Preferences.SYSTEM_LINE_SEPARATOR + "/" + Preferences.SYSTEM_LINE_SEPARATOR;
         generateSQLCodeSync.append(syncPackageToDrop());
         generateSQLCodeSync.append(syncPackageNotInTableToDrop());
         generateSQLCodeSync.append(syncTriggerToCreateOrReplace());
@@ -339,7 +341,7 @@ public class OracleSyncGeneratorSQL {
     private String syncSequenceToDrop() {
         StringBuilder code = new StringBuilder();
         for (MPDRSequence dbSequenceToDrop : oracleComparatorDb.getDbSequencesToDrop()) {
-            code.append(mpdrOracleGenerateSQLSequence.generateSQLDropSequence(dbSequenceToDrop));
+            code.append(mpdrOracleGenerateSQLSequence.generateSQLDropSequenceConsolidation(dbSequenceToDrop));
             code.append(delimiter);
         }
         return code.toString();
@@ -357,7 +359,7 @@ public class OracleSyncGeneratorSQL {
     private String syncTriggerToDrop() {
         StringBuilder code = new StringBuilder();
         for (MPDRTrigger dbTriggerToDrop : oracleComparatorDb.getDbTriggersToDrop()) {
-            code.append(mpdrOracleGenerateSQLTrigger.generateSQLDropTrigger(dbTriggerToDrop));
+            code.append(mpdrOracleGenerateSQLTrigger.generateSQLDropTriggerConsolidation(dbTriggerToDrop));
             code.append(delimiter);
         }
         return code.toString();
@@ -435,6 +437,5 @@ public class OracleSyncGeneratorSQL {
         }
         return code.toString();
     }
-
 
 }

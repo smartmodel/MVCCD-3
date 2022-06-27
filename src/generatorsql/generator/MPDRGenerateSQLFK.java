@@ -31,7 +31,7 @@ public abstract class MPDRGenerateSQLFK {
 
     //Ajouté par Vincent
     public String generateSQLFkToDropConsolidation(MPDRFK mpdrfk){
-        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_FK,
                 getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
@@ -43,7 +43,7 @@ public abstract class MPDRGenerateSQLFK {
     }
 
     public String generateSQLFKWithDeleteCascadeOption(MPDRFK mpdrfk) {
-        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterDB(),
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATES_ALTER_TABLE_ADD_FK_WITH_DELETE_CASCADE,
                 getMPDRGenerateSQL().mpdrModel);
         generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
