@@ -143,7 +143,19 @@ public class MLDRTransformColumns {
             }
         }
 
-       // Contrainte de Check de type de donnée
+        // Séquence de clé primaire pour les tables TI dotée d'une colonne de PK indépendante
+        if (PreferencesManager.instance().preferences().getMCDTOMLDR_MODE().equals(Preferences.MCDTOMLDR_MODE_TI)) {
+            boolean c1 = mldrColumn.isColumnPKTI();
+            boolean c2 = mpdrModel.getMpdrDbPK() == MPDRDBPK.SEQUENCE;
+            if (c1 && c2 )  {
+                // Création de la séquence de PK
+                MLDRTransformToSequence mldrTransformToSequence = new MLDRTransformToSequence(
+                        mldrTransform, mldrColumn, mpdrModel, mpdrColumn);
+                MPDRSequence mpdrSequence = mldrTransformToSequence.createOrModifySeq(MPDRSequenceRole.PK);
+            }
+        }
+
+        // Contrainte de Check de type de donnée
         if (mldrColumn.isBusiness()) {
             createCheckForDatatype(mldrColumn, mpdrColumn);
         }

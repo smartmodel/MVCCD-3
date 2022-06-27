@@ -177,7 +177,6 @@ public abstract class DialogEditor extends JDialog implements WindowListener, Fo
 
     @Override
     public void windowOpened(WindowEvent windowEvent) {
-        System.out.println("Ouvert");
             // Les données ont peut-être été ajustées par les méthodes changeXXX de l'éditeur
             // Changement avant que l'utilisateur ne fase quoi que ce soit
         if (! mode.equals(DialogEditor.NEW)) {

@@ -35,7 +35,7 @@ BEGIN
 	{-COLUMNS_TYPE_CHECK-}
 END;
 
-PROCEDURE {columns_PEA}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+PROCEDURE {PEA_columns}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
 BEGIN
 	NULL;
 	--{-COLUMNS_PEA-}

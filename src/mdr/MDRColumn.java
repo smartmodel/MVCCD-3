@@ -202,7 +202,9 @@ public abstract class MDRColumn extends MDRElement implements
         }
         if (this instanceof MPDRColumn){
             MPDRColumn mpdrColumn = (MPDRColumn) this;
-            return mpdrColumn.getMLDRColumnSource().isColumnPKTI();
+            if (mpdrColumn.getMLDRColumnSource() != null) {
+                return mpdrColumn.getMLDRColumnSource().isColumnPKTI();
+            }
         }
         return false;
     }
@@ -215,7 +217,9 @@ public abstract class MDRColumn extends MDRElement implements
         }
         if (this instanceof MPDRColumn){
             MPDRColumn mpdrColumn = (MPDRColumn) this;
-            return mpdrColumn.getMLDRColumnSource().isColumnSimPK();
+            if (mpdrColumn.getMLDRColumnSource() != null) {
+                return mpdrColumn.getMLDRColumnSource().isColumnSimPK();
+            }
         }
         return false;
     }

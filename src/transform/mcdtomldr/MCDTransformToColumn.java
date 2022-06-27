@@ -6,10 +6,7 @@ import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import main.MVCCDManager;
-import mcd.MCDAttribute;
-import mcd.MCDEntity;
-import mcd.MCDEntityNature;
-import mcd.MCDRelEnd;
+import mcd.*;
 import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.MDRElementNames;
 import mdr.MDRFKNature;
@@ -335,6 +332,14 @@ public class MCDTransformToColumn {
             //String roleParent = mcdRelEndParent.getNameNoFreeOrNameRelation();
             //orderBuild.getRoleShortNameParent().setValue(roleParent);
             orderBuild.getRoleShortNameParent().setValue(mcdRelEndParent);
+            // Graphe ou liste non orienté ( pas de nom de rôle !
+            // Il fautr donner un nom artificiel à chacune des 2 colonnes
+            if (mcdRelEndParent instanceof MCDAssEnd) {
+                MCDAssEnd mcdAssEndParent = (MCDAssEnd) mcdRelEndParent;
+                if (mcdAssEndParent.isPartOfListOrGraph()){
+                    orderBuild.getRoleShortNameParent().setValue(indiceFK.toString());
+                }
+            }
             if (StringUtils.isNotEmpty(orderBuild.getRoleShortNameParent().getValue())) {
                 orderBuild.getRoleSep().setValue();
             } else {

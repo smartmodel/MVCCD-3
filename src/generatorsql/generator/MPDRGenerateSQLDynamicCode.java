@@ -32,33 +32,37 @@ public abstract class MPDRGenerateSQLDynamicCode {
     public String generateSQLCodeDynamic(IMPDRWithDynamicCode impdrWithDynamicCode,
                                          String generateSQLCode){
         this.impdrWithDynamicCode = impdrWithDynamicCode ;
-        String codeInitial = generateSQLCode;
+        String codeInitial = "";
         MPDRDB mpdrDB = getMPDRGenerateSQL().mpdrModel.getDb();
 
-        for (MPDRGenerateSQLDynamicCodeType mpdrGenerateSQLDynamicCodeType : MPDRGenerateSQLDynamicCodeType.getAllForDB(mpdrDB)){
-            if (MPDRGenerateSQLUtil.find(generateSQLCode, mpdrGenerateSQLDynamicCodeType.getKey())){
-                //String sqlCodeDynamic = loadTemplate(impdrWithDynamicCode, mpdrDynamicCodeType);
-                if (StringUtils.isNotEmpty(mpdrGenerateSQLDynamicCodeType.getTemplateFileName())) {
-                    String key = mpdrGenerateSQLDynamicCodeType.getKey();
-                    String templateSQLCode = template(mpdrGenerateSQLDynamicCodeType);
-                    String tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, key);
-                    templateSQLCode = MPDRGenerateSQLUtil.integreTabsApplicable(templateSQLCode,tabsApplicable);
+        //TODO-0 Prévoir un appel récursif
+        while (! generateSQLCode.equals(codeInitial)) {
+            codeInitial = generateSQLCode;
+            for (MPDRGenerateSQLDynamicCodeType mpdrGenerateSQLDynamicCodeType : MPDRGenerateSQLDynamicCodeType.getAllForDB(mpdrDB)) {
+                if (MPDRGenerateSQLUtil.find(generateSQLCode, mpdrGenerateSQLDynamicCodeType.getKey())) {
+                    //String sqlCodeDynamic = loadTemplate(impdrWithDynamicCode, mpdrDynamicCodeType);
+                    if (StringUtils.isNotEmpty(mpdrGenerateSQLDynamicCodeType.getTemplateFileName())) {
+                        String key = mpdrGenerateSQLDynamicCodeType.getKey();
+                        String templateSQLCode = template(mpdrGenerateSQLDynamicCodeType);
+                        String tabsApplicable = MPDRGenerateSQLUtil.tabsApplicable(generateSQLCode, key);
+                        templateSQLCode = MPDRGenerateSQLUtil.integreTabsApplicable(templateSQLCode, tabsApplicable);
 
-                    String sqlCodeDynamic = generateFromTemplate(impdrWithDynamicCode, mpdrGenerateSQLDynamicCodeType, templateSQLCode, tabsApplicable);
-                    String beforeKey = "";
-                    String afterKey = "";
-                    if (StringUtils.isEmpty(sqlCodeDynamic)) {
-                        // Suppression du saut de ligne et des tabs
-                        beforeKey = System.lineSeparator() + tabsApplicable;
+                        String sqlCodeDynamic = generateFromTemplate(impdrWithDynamicCode, mpdrGenerateSQLDynamicCodeType, templateSQLCode, tabsApplicable);
+                        String beforeKey = "";
+                        String afterKey = "";
+                        if (StringUtils.isEmpty(sqlCodeDynamic)) {
+                            // Suppression du saut de ligne et des tabs
+                            beforeKey = System.lineSeparator() + tabsApplicable;
+                        }
+
+                        // Appel récursif - Traitement du code dynamique inclu
+                        // Cet appel n'est pas correct car il dépend de la position dans la boucle
+                        //sqlCodeDynamic = getMPDRGenerateSQL().getMpdrGenerateSQLCodeDynamic().generateSQLCodeDynamic(impdrWithDynamicCode, sqlCodeDynamic);
+
+                        // Inclusion du code généré
+                        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, key, sqlCodeDynamic, beforeKey, afterKey);
                     }
-
-                    // Appel récursif - Traitement du code dynamique inclu
-                    // Cet appel n'est pas correct car il dépend de la position dans la boucle
-                    //sqlCodeDynamic = getMPDRGenerateSQL().getMpdrGenerateSQLCodeDynamic().generateSQLCodeDynamic(impdrWithDynamicCode, sqlCodeDynamic);
-
-                    // Inclusion du code généré
-                    generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, key, sqlCodeDynamic, beforeKey, afterKey);
-               }
+                }
             }
         }
 
@@ -89,21 +93,22 @@ public abstract class MPDRGenerateSQLDynamicCode {
                                           String tabsApplicable){
         if (    (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_INS) ||
                 (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_UPD) ||
-                (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_DEL) ||
-                (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_SPEC)     )
+                (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_DEL)     )
 
         {
-            return templateSQLCode;
+            return generateJnalCallProcedure(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
         }
-        if  (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_BODY){
-            return generateJnalBody(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
+        if  ( (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_SPEC)  ||
+                (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.INS_JN_BODY)    )  {
+            return generateJnalProcedure(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
         }
         if (    (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.TRIGGER_NEW_TO_RECORD) ||
                 (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.TRIGGER_OLD_TO_RECORD) ||
                 (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.TRIGGER_RECORD_TO_NEW)    ) {
             return generateTriggerCopyInOrToRecord(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
         }
-        if (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.TABLE_DEP_JOIN_PARENT){
+        if (    (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.TABLE_DEP_JOIN_PARENT)  ||
+                (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.TABLE_DEP_JOIN_PARENT_WITHOUT_TAPI)){
             return generateTableDepJoinParent(impdrWithDynamicCode, templateSQLCode, tabsApplicable);
         }
         if (mpdrGenerateSQLDynamicCodeType == MPDRGenerateSQLDynamicCodeType.NODML){
@@ -189,11 +194,20 @@ public abstract class MPDRGenerateSQLDynamicCode {
         String generateSQLCode = "";
         MPDRTable tableAccueil = impdrWithDynamicCode.getMPDRTableAccueil();
 
-         if (tableAccueil.isKindDependant()){
+        boolean c1 = tableAccueil.isKindDependant();
+        boolean c2 = tableAccueil.hasColumnSimPK();
+        if (c1 || c2){
              generateSQLCode = templateSQLCode;
+             MPDRColumn columnPK = null;
+             if (c1) {
+                 columnPK =  tableAccueil.getMPDRColumnPKProper();
+             }
+             if (c2){
+                 columnPK =  tableAccueil.getMPDRColumnSimPK();
+             }
              generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_COLUMN_PK_NAME_WORD,
-                        tableAccueil.getMPDRColumnPKProper().getName());
-         }
+                        columnPK.getName());
+        }
 
         return generateSQLCode;
     }
@@ -252,7 +266,16 @@ public abstract class MPDRGenerateSQLDynamicCode {
         String generateSQLCode = "";
         MPDRTable tableAccueil = impdrWithDynamicCode.getMPDRTableAccueil();
 
-            ArrayList<MDRColumn> mdrColumns = tableAccueil.getMPDRPK().getMDRColumns();
+        boolean c1 = tableAccueil.isKindDependant(); // Transformation DT
+        boolean c2 = tableAccueil.hasColumnSimPK();  // Transformation TI
+
+        ArrayList<MDRColumn> mdrColumns = new ArrayList<MDRColumn>(); // vide par défaut
+        if (c1){
+            mdrColumns = tableAccueil.getMPDRPK().getMDRColumns();
+        }
+        if (c2){
+            mdrColumns = tableAccueil.getMDRColumnsSimPK();
+        }
             for (MDRColumn mdrColumn : mdrColumns){
                 if (mdrColumn.isFk())  {
                     if (StringUtils.isNotEmpty(generateSQLCode)){
@@ -318,9 +341,7 @@ public abstract class MPDRGenerateSQLDynamicCode {
     }
 
 
-    private String generateJnalBody(IMPDRWithDynamicCode impdrWithDynamicCode, String templateSQLCode, String tabsApplicable) {
-        // tester si la source (MLDRTable) de la table d'accueil (MPDRTable) est dotée d'une table de journalisation
-
+    private String generateJnalProcedure(IMPDRWithDynamicCode impdrWithDynamicCode, String templateSQLCode, String tabsApplicable) {
         String generateSQLCode = "";
         MPDRTable tableAccueil = impdrWithDynamicCode.getMPDRTableAccueil();
 
@@ -328,6 +349,16 @@ public abstract class MPDRGenerateSQLDynamicCode {
             generateSQLCode += templateSQLCode;
             generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
                     Preferences.MPDR_TABLE_JNAL_NAME_WORD, tableAccueil.getMPDRTableJnal().getName());
+        }
+        return generateSQLCode;
+    }
+
+    private String generateJnalCallProcedure(IMPDRWithDynamicCode impdrWithDynamicCode, String templateSQLCode, String tabsApplicable) {
+        String generateSQLCode = "";
+        MPDRTable tableAccueil = impdrWithDynamicCode.getMPDRTableAccueil();
+
+        if (tableAccueil.getMPDRTableJnal() != null) {
+            generateSQLCode += templateSQLCode;
         }
         return generateSQLCode;
     }
