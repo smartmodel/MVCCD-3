@@ -7,7 +7,7 @@ import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.UMLPackage;
 import window.editor.diagrammer.services.DiagrammerService;
 
-public class UMLPackageDeleteAction extends DeleteActions implements Serializable {
+public class UMLPackageDeleteAction extends CommonDeleteActions implements Serializable {
 
   private UMLPackage shape;
 

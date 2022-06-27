@@ -2,30 +2,18 @@ package main.window.menu;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.print.Book;
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.PrinterResolution;
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -33,37 +21,43 @@ import javax.swing.JOptionPane;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.Plot;
+import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.plot.PlotState;
+import org.jfree.svg.SVGGraphics2D;
+import org.jfree.svg.SVGUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.Project;
 import repository.editingTreat.ProjectEditingTreat;
 import utilities.window.DialogMessage;
-import window.editor.diagrammer.drawpanel.DrawPanelComponent;
+import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.services.DiagrammerService;
 
 public class WinMenuContent implements ActionListener {
 
-  private MVCCDWindow mvccdWindow;
-  private JMenuBar menuBar;
-  private JMenu fichier;
-  private JMenu project;
-  private JMenu edit;
+  private final MVCCDWindow mvccdWindow;
+  private final JMenuBar menuBar;
+  private final JMenu fichier;
+  private final JMenu project;
+  private final JMenu edit;
   private JMenu profile;
-  private JMenu help;
+  private final JMenu help;
 
-  private JMenuItem imprimer;
-  private JMenuItem exporter;
+  private final JMenuItem exportPNG;
+  private final JMenuItem exportSVG;
 
-  private JMenuItem projectNew;
-  private JMenuItem projectEdit;
-  private JMenuItem projectOpen;
+  private final JMenuItem projectNew;
+  private final JMenuItem projectEdit;
+  private final JMenuItem projectOpen;
   private JMenu projectOpenRecents;
   private JMenuItem[] projectOpenRecentsItems;
 
 
-  private JMenuItem projectClose;
-  private JMenuItem projectSave;
-  private JMenuItem projectSaveAs;
+  private final JMenuItem projectClose;
+  private final JMenuItem projectSave;
+  private final JMenuItem projectSaveAs;
     /*
     private JMenu projectPreferences;
     private JMenuItem projectPreferencesDeveloper;
@@ -93,12 +87,12 @@ public class WinMenuContent implements ActionListener {
     help = new JMenu("Aide");
     menuBar.add(help);
 
-    imprimer = new JMenuItem("Imprimer");
-    imprimer.addActionListener(this);
-    fichier.add(imprimer);
-    exporter = new JMenuItem("Exporter");
-    exporter.addActionListener(this);
-    fichier.add(exporter);
+    exportPNG = new JMenuItem("Exporter au format PNG");
+    exportPNG.addActionListener(this);
+    fichier.add(exportPNG);
+    exportSVG = new JMenuItem("Exporter au format SVG");
+    exportSVG.addActionListener(this);
+    fichier.add(exportSVG);
 
     projectNew = new JMenuItem("Nouveau");
     projectNew.addActionListener(this);
@@ -166,21 +160,31 @@ public class WinMenuContent implements ActionListener {
     String messageExceptionTarget = "";
     try {
       Object source = e.getSource();
-      if (source == imprimer) {
-        // messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.print.exception");
+      if (source == exportSVG) {
+        DrawPanel drawPanel = DiagrammerService.getDrawPanel();
         // Déselectionne toutes les formes
-        DiagrammerService.getDrawPanel().deselectAllShapes();
-        printComponentBasique(mvccdWindow.getDiagrammer().getContent().getPanelDraw());
-      }
-      if (source == exporter) {
-        //messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.export.exception");
-        // Déselectionne toutes les formes
-        DiagrammerService.getDrawPanel().deselectAllShapes();
+        drawPanel.deselectAllShapes();
+
         // Ouvre une boîte de dialogue pour que l'utilisateur choisisse l'emplacement de sauvegarde et le nom du fichier
         JFileChooser fileChooser = new JFileChooser();
+
         int returnVal = fileChooser.showSaveDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-          exportComponentOptimized(mvccdWindow.getDiagrammer().getContent().getPanelDraw(),
+          exportToSVG(drawPanel,
+              fileChooser.getSelectedFile().toString());
+        }
+      }
+      if (source == exportPNG) {
+        DrawPanel drawPanel = DiagrammerService.getDrawPanel();
+        // Déselectionne toutes les formes
+        drawPanel.deselectAllShapes();
+
+        // Ouvre une boîte de dialogue pour que l'utilisateur choisisse l'emplacement de sauvegarde et le nom du fichier
+        JFileChooser fileChooser = new JFileChooser();
+
+        int returnVal = fileChooser.showSaveDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+          exportToPNG(drawPanel,
               fileChooser.getSelectedFile().toString());
         }
       }
@@ -233,163 +237,93 @@ public class WinMenuContent implements ActionListener {
     }
   }
 
-
-  /**
-   * Exporte un composant au format JPG & PNG en prenant soin de dessiner le plus petit rectangle
-   * autour afin d'avoir le moins de fond blanc possible dans l'image exportée
-   * <p>
-   * Code trouvé sur un post StackOverFlow et adapté selon les besoins métiers ->
-   * https://stackoverflow.com/questions/17690275/exporting-a-jpanel-to-an-image
-   *
-   * @param component -> Le composant à imprimer
-   * @param fileName  -> Le chemin complet + nom du fichier à enregistrer
-   */
-  public void exportComponentOptimized(Component component, String fileName) {
-    // On redessine le plus petit rectangle possible autour des entités en gardant une bordure de 2 pixels
-    Rectangle rectangle = DiagrammerService.getDrawPanel()
-        .getContentBounds(DiagrammerService.getDrawPanel().getShapes(), 10);
-    BufferedImage image;
+  public void exportToSVG(DrawPanel panel, String fileName) {
+    // On va récupérer le rectangle autour des formes graphiques dans le diagramme en gardant une bordure de 10 pixels
+    Rectangle rectangle = panel.getContentBounds(panel.getShapes(), 10);
 
     // Si notre diagramme n'est pas vide de formes ...
-    if (rectangle.getWidth() > 0) {
-      // Pour choper le plus petit rectangle autour des objets à imprimer
-      final DrawPanelComponent drawPanelComponent = mvccdWindow.getDiagrammer().getContent()
-          .getPanelDraw();
-      drawPanelComponent.getViewport().setLocation(
-          new Point(-rectangle.x, -rectangle.y));
-      drawPanelComponent.getViewport().revalidate();
+    if (panel.getWidth() > 0) {
+      panel.setSize((int) (rectangle.width + rectangle.getMinX() * 2),
+          (int) (rectangle.height + rectangle.getMinY()));
+    }
 
-      image = new BufferedImage((int) rectangle.getWidth(), (int) rectangle.getHeight(),
+    // Si notre diagramme est vide de formes ...
+    else {
+      panel.setSize(panel.getWidth(), panel.getHeight());
+    }
+    // Désactive temporairement la grille de dessin du Diagrammer
+    Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
+    applicationPref.setDIAGRAMMER_SHOW_GRID(false);
+    // Resize technique des ClassShapes afin que le texte ne soit pas rogné par les bordures
+    panel.resizeShapesBeforeExport(panel.getClassShapes());
+
+    SVGGraphics2D svgGraphics2D = new SVGGraphics2D(panel.getWidth(), panel.getHeight());
+
+    JFreeChart chart = new JFreeChart(new Plot() {
+      @Override
+      public String getPlotType() {
+        return "Image";
+      }
+
+      @Override
+      public void draw(Graphics2D graphics2D, Rectangle2D rectangle2D, Point2D point2D,
+          PlotState plotState, PlotRenderingInfo plotRenderingInfo) {
+        panel.printAll(graphics2D);
+      }
+    });
+    try {
+      chart.draw(svgGraphics2D,
+          new Rectangle(panel.getWidth(), panel.getHeight()));
+      File file = new File(fileName.trim() + ".svg");
+      SVGUtils.writeToSVG(file, svgGraphics2D.getSVGElement());
+    } catch (IOException exp) {
+      exp.printStackTrace();
+    } finally {
+      panel.resizeShapesAfterExport(panel.getClassShapes());
+      applicationPref.setDIAGRAMMER_SHOW_GRID(true);
+    }
+  }
+
+  public void exportToPNG(DrawPanel panel, String fileName) {
+    // On va récupérer le rectangle autour des formes graphiques dans le diagramme en gardant une bordure de 10 pixels
+    Rectangle rectangle = panel.getContentBounds(panel.getShapes(), 10);
+    BufferedImage bufferedImage;
+
+    // Si notre diagramme n'est pas vide de formes ...
+    if (panel.getWidth() > 0) {
+      panel.setSize((int) (rectangle.width + rectangle.getMinX() * 2),
+          (int) (rectangle.height + rectangle.getMinY()));
+
+      bufferedImage = new BufferedImage(panel.getWidth(),
+          panel.getHeight(),
           BufferedImage.TYPE_4BYTE_ABGR_PRE);
     }
     // Si notre diagramme est vide de formes ...
     else {
-      image = new BufferedImage(component.getWidth(), component.getHeight(),
+      bufferedImage = new BufferedImage(panel.getWidth(), panel.getHeight(),
           BufferedImage.TYPE_4BYTE_ABGR_PRE);
     }
-    Graphics2D g = image.createGraphics();
+    Graphics2D graphics2D = bufferedImage.createGraphics();
+    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
     // Désactive temporairement la grille de dessin du Diagrammer
-    PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
+    Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
+    applicationPref.setDIAGRAMMER_SHOW_GRID(false);
+    // Resize technique des ClassShapes afin que le texte ne soit pas rogné par les bordures
+    panel.resizeShapesBeforeExport(panel.getClassShapes());
 
-    component.printAll(g);
-    g.dispose();
+    panel.printAll(graphics2D);
+    graphics2D.dispose();
     try {
       File file = new File(fileName.trim() + ".png");
-      ImageIO.write(image, "png", file);
-
-
-      // CODE POUR APERCU AVANT IMPRESSION
-        // Créer une boîte de dialogue
-        JDialog d = new JDialog(mvccdWindow, "Boite de dialogue d'aperçu");
-
-        BufferedImage myPicture = ImageIO.read(file);
-        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-
-        // Ajouter l'étiquette à la boîte de dialogue
-        d.add(picLabel);
-        // Définir la taille de la boîte de dialogue
-        d.setSize(new Dimension(image.getWidth(), image.getHeight()));
-        // Centrer au milieu de l'écran
-        d.setLocationRelativeTo(null);
-        // Définir la visibilité de la boîte de dialogue
-        d.setVisible(true);
-      //
-
+      ImageIO.write(bufferedImage, "png", file);
     } catch (IOException exp) {
       exp.printStackTrace();
     } finally {
-      PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(true);
-    }
-  }
-
-  /**
-   * Lance une boîte de dialogue pour l'impression d'un composant et l'imprime selon les paramètres
-   * choisis par l'utilisateur. La grille de dessin est temporairement désactivée le temps de
-   * l'impression et est réactivée ensuite.
-   * <p>
-   * Code trouvé sur un post StackOverFlow et adapté selon les besoins métiers ->
-   * https://stackoverflow.com/questions/750310/how-can-i-print-a-single-jpanels-contents
-   *
-   * @param component -> Le composant à imprimer
-   */
-  public void printComponentBasique(Component component) {
-    PrinterJob pj = PrinterJob.getPrinterJob();
-    pj.setJobName(" Print Component ");
-
-    PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
-    aset.add(new PrinterResolution(300, 300, PrinterResolution.DPI));
-
-    pj.setPrintable((pg, pf, pageNum) -> {
-      if (pageNum > 0) {
-        return Printable.NO_SUCH_PAGE;
-      }
-
-      Graphics2D g2 = (Graphics2D) pg;
-      g2.translate(pf.getImageableX(), pf.getImageableY());
-      // Désactive temporairement la grille de dessin du Diagrammer
-      PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
-      component.paint(g2);
-      return Printable.PAGE_EXISTS;
-    });
-    if (!pj.printDialog()) {
-      return;
-    }
-
-    try {
-      pj.print(aset);
-    } catch (PrinterException ex) {
-      // handle exception
-    } finally {
-      PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(true);
-    }
-  }
-
-  /**
-   * Lance une boîte de dialogue pour l'impression d'un composant et s'occupe de formater le rendu
-   * de celui-ci. Le composant est mis en mode landscape au format A4, la grille de dessin est
-   * temporairement désactivée le temps de l'impression et est réactivée ensuite.
-   * <p>
-   * Code trouvé sur un post StackOverFlow et adapté selon les besoins métiers ->
-   * https://stackoverflow.com/questions/54055481/jpanel-not-being-printed-in-landscape-mode-by-default-when-i-call-the-print-meth
-   *
-   * @param component -> Le composant à imprimer
-   */
-  public void printComponentLandscapeMode(Component component) {
-    PrinterJob pj = PrinterJob.getPrinterJob();
-    pj.setJobName(" Print Component ");
-
-    PageFormat pf = pj.defaultPage();
-    pf = pj.defaultPage();
-    Paper paper = pf.getPaper();
-    paper.setSize(8.5 * 72, 13 * 72);
-    paper.setImageableArea(0.5 * 72, 0.0 * 72, 8 * 72, 14 * 72);
-    pf.setPaper(paper);
-    pf.setOrientation(PageFormat.LANDSCAPE);
-    Book book = new Book();//java.awt.print.Book
-    book.append(((pg, pf1, pageNum) -> {
-      if (pageNum > 0) {
-        return Printable.NO_SUCH_PAGE;
-      }
-      Graphics2D g2 = (Graphics2D) pg;
-      // Désactive temporairement la grille de dessin du Diagrammer
-      PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(false);
-      g2.translate(pf1.getImageableX() + pf1.getImageableWidth() / 2 - component.getWidth() / 2,
-          pf1.getImageableY() + pf1.getImageableHeight() / 2 - component.getHeight() / 2);
-      component.print(g2);
-      return Printable.PAGE_EXISTS;
-    }), pf);
-    pj.setPageable(book);
-    if (pj.printDialog() == false) {
-      return;
-    }
-
-    try {
-      pj.print();
-    } catch (PrinterException ex) {
-      // handle exception
-    } finally {
-      PreferencesManager.instance().getApplicationPref().setDIAGRAMMER_SHOW_GRID(true);
+      panel.resizeShapesAfterExport(panel.getClassShapes());
+      applicationPref.setDIAGRAMMER_SHOW_GRID(true);
     }
   }
 

@@ -1,5 +1,7 @@
 package window.editor.diagrammer.elements.shapes;
 
+import static preferences.Preferences.DIAGRAMMER_MPDRTRIGGER_DEFAULT_BACKGROUND_COLOR;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -13,7 +15,6 @@ import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 
 public class MPDRTriggerShape extends ClassShape implements UMLPackageIntegrableShapes {
 
-  private final Color COLOR = Color.decode("#F09396");
   private UMLPackage parentUMLPackage = null;
 
   public MPDRTriggerShape(MDRTable mdrTable) {
@@ -22,7 +23,7 @@ public class MPDRTriggerShape extends ClassShape implements UMLPackageIntegrable
 
   @Override
   protected void defineBackgroundColor() {
-    this.setBackground(null);
+    this.setBackground(DIAGRAMMER_MPDRTRIGGER_DEFAULT_BACKGROUND_COLOR);
     this.setOpaque(false);
   }
 
@@ -52,7 +53,7 @@ public class MPDRTriggerShape extends ClassShape implements UMLPackageIntegrable
     Graphics2D graphics = (Graphics2D) g;
     graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-    graphics.setColor(COLOR);
+    graphics.setColor(super.getBackground());
 
     graphics.fillRect(0, 0, width - 1, height - 1);
     graphics.setColor(Color.WHITE);

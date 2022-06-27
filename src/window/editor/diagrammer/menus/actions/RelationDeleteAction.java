@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.swing.Icon;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
-public class RelationDeleteAction extends DeleteActions implements Serializable {
+public class RelationDeleteAction extends CommonDeleteActions implements Serializable {
 
   private final RelationShape shape;
   private static final long serialVersionUID = 1000;

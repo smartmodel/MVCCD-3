@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import project.ProjectElement;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.MDTableShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.UMLPackage;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
@@ -70,14 +71,19 @@ public abstract class Diagram extends ProjectElement {
 
   public List<UMLPackage> getUMLPackagesList() {
     return getShapes().stream()
-        .filter(e -> e instanceof UMLPackage )
+        .filter(e -> e instanceof UMLPackage)
         .map(md -> (UMLPackage) md)
-        .filter(e-> e.getName().endsWith("TAPIs"))
+        .filter(e -> e.getName().endsWith("TAPIs"))
         .collect(Collectors.toList());
   }
 
   public List<ClassShape> getClassShapes() {
     return shapes.stream().filter(shape -> shape instanceof ClassShape).map(s -> (ClassShape) s)
+        .collect(Collectors.toList());
+  }
+
+  public List<SquaredShape> getSquaredShapes() {
+    return shapes.stream().filter(shape -> shape instanceof SquaredShape).map(s -> (SquaredShape) s)
         .collect(Collectors.toList());
   }
 

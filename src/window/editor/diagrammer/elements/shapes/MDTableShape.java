@@ -1,5 +1,7 @@
 package window.editor.diagrammer.elements.shapes;
 
+import static preferences.Preferences.DIAGRAMMER_MDTABLE_DEFAULT_BACKGROUND_COLOR;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -16,8 +18,6 @@ import window.editor.diagrammer.listeners.MDTableShapeListener;
 public class MDTableShape extends ClassShape implements Serializable {
 
   private final String name;
-  private final Color COLOR = Color.decode("#A0F0CF");
-
 
   public MDTableShape(MDRTable mdrTable) {
     super(mdrTable);
@@ -34,7 +34,7 @@ public class MDTableShape extends ClassShape implements Serializable {
     Graphics2D graphics = (Graphics2D) g;
     graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-    graphics.setColor(COLOR);
+    graphics.setColor(super.getBackground());
 
     graphics.fillRoundRect(0, 0, width, height, 20, 20);
 
@@ -110,7 +110,7 @@ public class MDTableShape extends ClassShape implements Serializable {
 
   @Override
   protected void defineBackgroundColor() {
-    this.setBackground(COLOR);
+    this.setBackground(DIAGRAMMER_MDTABLE_DEFAULT_BACKGROUND_COLOR);
   }
 
   @Override

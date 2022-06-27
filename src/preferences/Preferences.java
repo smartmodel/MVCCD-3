@@ -57,11 +57,25 @@ public class Preferences extends MVCCDElement {
   public static final int DIAGRAMMER_DEFAULT_NOTE_WIDTH = 100;
   public static final int DIAGRAMMER_DEFAULT_NOTE_HEIGHT = 70;
   public static final int DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN = 7;
+
+  public static final Color DIAGRAMMER_MDTABLE_DEFAULT_BACKGROUND_COLOR = Color.decode("#A0F0CF");
+
+  public static final Color DIAGRAMMER_MPDRPROCEDURECONTAINER_DEFAULT_BACKGROUND_COLOR = Color.decode(
+      "#F0E29F");
+
+  public static final Color DIAGRAMMER_UMLPACKAGE_DEFAULT_BACKGROUND_COLOR = Color.decode(
+      "#BFF0F0");
+
+  public static final Color DIAGRAMMER_MPDRSEQUENCE_DEFAULT_BACKGROUND_COLOR = Color.decode(
+      "#B4C0ED");
+  public static final Color DIAGRAMMER_MPDRTRIGGER_DEFAULT_BACKGROUND_COLOR = Color.decode(
+      "#F09396");
   public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
   public static final Color DIAGRAMMER_NOTE_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
   public static final Font DIAGRAMMER_CLASS_NAME_FONT = new Font("Arial", Font.BOLD, 13);
   public static final Font DIAGRAMMER_CLASS_FONT = new Font("Arial", Font.PLAIN, 13);
-  public static final Font DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT = new Font("Arial", Font.ITALIC + Font.BOLD, 13);
+  public static final Font DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT = new Font("Arial",
+      Font.ITALIC + Font.BOLD, 13);
   public static final int DIAGRAMMER_CLASS_PADDING = 10;
   public static final String DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT = "Entité";
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT = "Association";

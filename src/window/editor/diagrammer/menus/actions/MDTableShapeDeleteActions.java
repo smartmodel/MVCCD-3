@@ -7,20 +7,18 @@ import javax.swing.JOptionPane;
 import main.MVCCDManager;
 import window.editor.diagrammer.elements.shapes.MDTableShape;
 
-public class MDTableShapeDeleteAction extends DeleteActions implements Serializable {
+public class MDTableShapeDeleteActions extends CommonDeleteActions implements Serializable {
 
   private MDTableShape shape;
 
-  public MDTableShapeDeleteAction(String name, Icon icon, MDTableShape shape) {
+  public MDTableShapeDeleteActions(String name, Icon icon, MDTableShape shape) {
     super(name, icon);
     this.shape = shape;
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    if (e.getActionCommand().equals("Supprimer graphiquement")) {
-      super.deleteGraphically(shape);
-    } else if (e.getActionCommand().equals("Supprimer objet")) {
+    if (e.getActionCommand().equals("Supprimer objet")) {
       this.deleteObject();
     } else if (e.getActionCommand().equals("Supprimer objet et clones")) {
       int result = JOptionPane.showConfirmDialog(MVCCDManager.instance().getMvccdWindow(),

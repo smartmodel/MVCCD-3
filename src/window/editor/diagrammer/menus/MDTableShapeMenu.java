@@ -5,30 +5,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import main.MVCCDElement;
 import md.MDElement;
 import window.editor.diagrammer.elements.shapes.MDTableShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.menus.actions.MDTableShapeDeleteAction;
+import window.editor.diagrammer.menus.actions.MDTableShapeDeleteActions;
 
-public class MDTableShapeMenu extends JPopupMenu implements Serializable {
+public class MDTableShapeMenu extends CommonMenu implements Serializable {
 
   private final MDTableShape shape;
-  private final JMenuItem delete;
   private final JMenuItem deleteObject;
   private final JMenuItem deleteObjectAndClones;
 
 
   public MDTableShapeMenu(MDTableShape shape) {
-    super();
+    super(shape);
     this.shape = shape;
-    this.delete = new JMenuItem(
-        new MDTableShapeDeleteAction("Supprimer graphiquement", null, shape));
     this.deleteObject = new JMenuItem(
-        new MDTableShapeDeleteAction("Supprimer objet", null, shape));
+        new MDTableShapeDeleteActions("Supprimer objet", null, shape));
     this.deleteObjectAndClones = new JMenuItem(
-        new MDTableShapeDeleteAction("Supprimer objet et clones", null, shape));
+        new MDTableShapeDeleteActions("Supprimer objet et clones", null, shape));
 
     this.searchInOtherDiagrams();
   }
@@ -40,30 +36,25 @@ public class MDTableShapeMenu extends JPopupMenu implements Serializable {
 
     // Si le nombre d'enfants dans le noeud diagramme est <= 1, on affiche le menu de suppression avec la suppression graphique et objet
     if (diagramElements.size() <= 1) {
-      addAllDeletes(this.delete, this.deleteObject);
+      this.add(this.deleteObject);
     }
     // Sinon, on va vérifier si la shape sur laquelle l'user clique, existe dans d'autres diagrammes du même niveau d'abstraction
     else {
-      int containsSameShapeInOtherDiagrams = 0;
+      int numberOfSameShapeInOtherDiagrams = 0;
 
       for (MVCCDElement diagram : diagramElements) {
         List<ClassShape> shapes = ((Diagram) diagram).getClassShapes();
 
         if (shapes.contains(shape)) {
-          containsSameShapeInOtherDiagrams++;
+          numberOfSameShapeInOtherDiagrams++;
         }
       }
 
-      if (containsSameShapeInOtherDiagrams == 1) {
-        addAllDeletes(this.delete, this.deleteObject);
+      if (numberOfSameShapeInOtherDiagrams == 1) {
+        this.add(this.deleteObject);
       } else {
-        addAllDeletes(this.delete, this.deleteObjectAndClones);
+        this.add(this.deleteObjectAndClones);
       }
     }
-  }
-
-  private void addAllDeletes(JMenuItem delete, JMenuItem deleteObject) {
-    this.add(delete);
-    this.add(deleteObject);
   }
 }

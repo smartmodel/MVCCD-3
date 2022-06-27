@@ -1,5 +1,7 @@
 package window.editor.diagrammer.elements.shapes;
 
+import static preferences.Preferences.DIAGRAMMER_MPDRSEQUENCE_DEFAULT_BACKGROUND_COLOR;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,7 +16,6 @@ import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 
 public class MPDRSequenceShape extends ClassShape implements UMLPackageIntegrableShapes {
 
-  private final Color COLOR = Color.decode("#B4C0ED");
   private UMLPackage parentUMLPackage = null;
 
   public MPDRSequenceShape(MDRTable mdrTable) {
@@ -23,7 +24,7 @@ public class MPDRSequenceShape extends ClassShape implements UMLPackageIntegrabl
 
   @Override
   protected void defineBackgroundColor() {
-    this.setBackground(null);
+    this.setBackground(DIAGRAMMER_MPDRSEQUENCE_DEFAULT_BACKGROUND_COLOR);
     this.setOpaque(false);
   }
 
@@ -97,7 +98,7 @@ public class MPDRSequenceShape extends ClassShape implements UMLPackageIntegrabl
     Graphics2D graphics = (Graphics2D) g;
     graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-    graphics.setColor(COLOR);
+    graphics.setColor(super.getBackground());
 
     GeneralPath gp = new GeneralPath();
     gp.moveTo(points[0][0], points[0][1]);

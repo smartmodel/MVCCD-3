@@ -1,5 +1,7 @@
 package window.editor.diagrammer.elements.shapes;
 
+import static preferences.Preferences.DIAGRAMMER_MPDRPROCEDURECONTAINER_DEFAULT_BACKGROUND_COLOR;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -15,7 +17,6 @@ import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 public class MPDRProcedureContainerShape extends ClassShape implements
     UMLPackageIntegrableShapes {
 
-  private final Color COLOR = Color.decode("#F0E29F");
   private UMLPackage parentUMLPackage = null;
 
   public MPDRProcedureContainerShape(MDRTable mdrTable) {
@@ -24,7 +25,7 @@ public class MPDRProcedureContainerShape extends ClassShape implements
 
   @Override
   protected void defineBackgroundColor() {
-    this.setBackground(null);
+    this.setBackground(DIAGRAMMER_MPDRPROCEDURECONTAINER_DEFAULT_BACKGROUND_COLOR);
     this.setOpaque(false);
   }
 
@@ -133,7 +134,7 @@ public class MPDRProcedureContainerShape extends ClassShape implements
     Graphics2D graphics = (Graphics2D) g;
     graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-    graphics.setColor(COLOR);
+    graphics.setColor(super.getBackground());
 
     graphics.fillRect(0, (int) (width * 0.10), width, height);
     graphics.fillRoundRect(0, 0, width, height, 40, 40);

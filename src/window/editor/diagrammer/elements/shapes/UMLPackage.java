@@ -1,5 +1,7 @@
 package window.editor.diagrammer.elements.shapes;
 
+import static preferences.Preferences.DIAGRAMMER_UMLPACKAGE_DEFAULT_BACKGROUND_COLOR;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,8 +20,6 @@ import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
 
 public class UMLPackage extends SquaredShape {
-
-  private final Color COLOR = Color.decode("#BFF0F0");
 
   private final List<UMLPackageIntegrableShapes> tapisElements;
   private final String parentTableName;
@@ -49,7 +49,7 @@ public class UMLPackage extends SquaredShape {
     graphics.setStroke(new BasicStroke(3));
     graphics.setColor(Color.white);
     graphics.fillRect(0, heightBigRectangle, width, height - heightBigRectangle);
-    graphics.setColor(COLOR);
+    graphics.setColor(super.getBackground());
     graphics.drawRect(0, heightBigRectangle, width, height - heightBigRectangle);
 
     graphics.fillRect(0, 0, width / 2, height / 6);
@@ -63,7 +63,7 @@ public class UMLPackage extends SquaredShape {
 
   @Override
   protected void defineBackgroundColor() {
-    this.setBackground(null);
+    this.setBackground(DIAGRAMMER_UMLPACKAGE_DEFAULT_BACKGROUND_COLOR);
     this.setOpaque(false);
   }
 
