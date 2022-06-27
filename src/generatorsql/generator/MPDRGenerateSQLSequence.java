@@ -21,6 +21,18 @@ public abstract class MPDRGenerateSQLSequence {
 
     }
 
+    public String generateSQLCreateSequence(MPDRSequence mpdrSequence) {
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateDB(),
+                Preferences.TEMPLATE_CREATE_SEQUENCE,
+                getMPDRGenerateSQL().mpdrModel);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_SEQUENCE_NAME_WORD, mpdrSequence.getName());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_MIN_VALUE_WORD, mpdrSequence.getMinValue().toString());
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_INCREMENT_WORD, mpdrSequence.getIncrement().toString());
+
+        return generateSQLCode;
+    }
+
     //Ajouté par Vincent pour les séquences qui ne sont pas liées à une table
     public String generateSQLDropSequence(String sequenceName){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
@@ -41,19 +53,6 @@ public abstract class MPDRGenerateSQLSequence {
         return generateSQLCode;
 
     }
-
-    public String generateSQLCreateSequence(MPDRSequence mpdrSequence) {
-        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirCreateDB(),
-                Preferences.TEMPLATE_CREATE_SEQUENCE,
-                getMPDRGenerateSQL().mpdrModel);
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
-                Preferences.MPDR_SEQUENCE_NAME_WORD, mpdrSequence.getName());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_MIN_VALUE_WORD, mpdrSequence.getMinValue().toString());
-        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MPDR_INCREMENT_WORD, mpdrSequence.getIncrement().toString());
-
-        return generateSQLCode;
-    }
-
 
     public abstract MPDRGenerateSQL getMPDRGenerateSQL() ;
 }

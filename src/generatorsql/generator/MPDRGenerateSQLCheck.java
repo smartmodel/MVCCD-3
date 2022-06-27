@@ -32,7 +32,7 @@ public abstract class MPDRGenerateSQLCheck {
 
         return generateSQLCode;
     }
-
+    //Ajouté par Vincent
     public String generateSQLDropCheck(MPDRCheck mpdrCheck){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_CHECK,

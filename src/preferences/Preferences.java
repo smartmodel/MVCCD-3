@@ -1158,7 +1158,6 @@ public class Preferences extends MVCCDElement {
   //Mécanismes de consolidation - FETCHER
   public static String FETCHER_ORACLE_TABLE_NAME = "TABLE_NAME";
   public static String FETCHER_ORACLE_MPDR_NAME = "MPDR_DB_MODEL_ORACLE";
-  public static String FETCHER_ORACLE_TYPE_TABLE = "TABLE";
   public static String FETCHER_ORACLE_COLUMN_NAME = "COLUMN_NAME";
   public static String FETCHER_ORACLE_TYPE_NAME = "TYPE_NAME";
   public static String FETCHER_ORACLE_NULLABLE = "NULLABLE";
@@ -1179,7 +1178,6 @@ public class Preferences extends MVCCDElement {
   public static String FETCHER_ORACLE_REQUETE_CONSTRAINT_NAME_NOT_LIKE ="CONSTRAINT_NAME NOT LIKE";
   public static String FETCHER_ORACLE_SYS_ =" 'SYS_%'";
   public static String FETCHER_ORACLE_TRIGGER_BODY = "TRIGGER_BODY";
-
   public static String FETCHER_ORACLE_SEARCH_CONDITION_VC = "SEARCH_CONDITION_VC";
   public static String FETCHER_ORACLE_REQUETE_SQL_USER_SEQUENCES = "SELECT * FROM USER_SEQUENCES";
   public static String FETCHER_ORACLE_SEQUENCE_NAME = "SEQUENCE_NAME";
@@ -1197,8 +1195,7 @@ public class Preferences extends MVCCDElement {
   public static String FETCHER_ORACLE_NAME = "NAME";
   public static String FETCHER_ORACLE_TABLE = "TABLE";
 
-
-  public static String SQL_MARKER_SEPARATOR_ARGUMENTS_END = ";";
+  //Templates de consolidation
   public static String TEMPLATE_ALTER_TABLE_CREATE_UNIQUE = "alterTableAddUnique.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_UNIQUE = "alterTableDropUnique.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_COLUMN = "alterTableDropColumn.txt";
@@ -1210,7 +1207,6 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_DEFAULT = "alterTableModifyColumnDropDefault.txt";
   public static String TEMPLATE_ALTER_TABLE_ADD_PK = "alterTableAddPk.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_PK_CASCADE = "alterTableDropPkCascade.txt";
-  //public static String TEMPLATE_ALTER_TABLE_ADD_FK = "alterTableAddFk.txt"; //déjà existant
   public static String TEMPLATE_ALTER_TABLE_DROP_FK = "alterTableDropFk.txt";
   public static String TEMPLATES_ALTER_TABLE_ADD_FK_WITH_DELETE_CASCADE = "alterTableAddFkWithDeleteCascade.txt";
   public static String TEMPLATE_DROP_TABLE_CONSOLIDATION = "dropTableConsolidation.txt";

@@ -1,21 +1,17 @@
 package generatorsql.viewer;
 
-import consolidationMpdrDb.comparator.oracle.OracleComparatorDb;
-import consolidationMpdrDb.fetcher.oracle.DbFetcherOracle;
 import connections.ConConnection;
 import connections.ConConnector;
 import connections.ConDBMode;
 import connections.services.ConnectionsService;
 import console.ViewLogsManager;
 import console.WarningLevel;
-import consolidationMpdrDb.syncGenerator.oracle.OracleSyncGeneratorSQL;
 import exceptions.CodeApplException;
 import exceptions.service.ExceptionService;
 import generatorsql.MPDRGenerateSQLUtil;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
-import mpdr.oracle.MPDROracleModel;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;

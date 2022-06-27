@@ -56,7 +56,7 @@ public class WaitingSyncViewer extends JFrame {
                 ((GridBagLayout)buttonBar.getLayout()).columnWidths = new int[] {80};
 
                 //---- cancelButton ----
-                cancelButton.setText("Cancel");
+                cancelButton.setText("Annuler");
                 buttonBar.add(cancelButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.NONE,
                     new Insets(0, 0, 0, 0), 0, 0));

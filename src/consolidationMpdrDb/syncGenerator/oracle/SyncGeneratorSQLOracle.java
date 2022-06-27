@@ -1,6 +1,7 @@
 package consolidationMpdrDb.syncGenerator.oracle;
 
 import consolidationMpdrDb.comparator.oracle.OracleComparatorDb;
+import consolidationMpdrDb.syncGenerator.SyncGeneratorSQL;
 import generatorsql.generator.oracle.*;
 import mpdr.*;
 import mpdr.interfaces.IMPDRModelRequirePackage;
@@ -9,11 +10,8 @@ import mpdr.tapis.MPDRPackage;
 import mpdr.tapis.MPDRTrigger;
 import preferences.Preferences;
 
-import java.util.ArrayList;
-import java.util.List;
 
-
-public class OracleSyncGeneratorSQL {
+public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
 
 
     private MPDROracleGenerateSQL mpdrOracleGenerateSQL;
@@ -29,7 +27,7 @@ public class OracleSyncGeneratorSQL {
     private OracleComparatorDb oracleComparatorDb;
     private String delimiter = delimiter();
 
-    public OracleSyncGeneratorSQL(MPDRModel mpdrModel, OracleComparatorDb oracleComparatorDb) {
+    public SyncGeneratorSQLOracle(MPDRModel mpdrModel, OracleComparatorDb oracleComparatorDb) {
         this.mpdrOracleGenerateSQL = new MPDROracleGenerateSQL(mpdrModel);
         this.oracleComparatorDb = oracleComparatorDb;
         init();
@@ -71,8 +69,8 @@ public class OracleSyncGeneratorSQL {
             - contraintes fk de la table
             - contraintes fk qui pointe sur la table
             - triggers
-
-            - package NON
+            -----------------------------
+            - packages NON
             - séquences NON
          */
         generateSQLCodeSync.append(syncTablesToDrop());
@@ -110,7 +108,7 @@ public class OracleSyncGeneratorSQL {
         generateSQLCodeSync.append(syncSequenceToCreate());
         generateSQLCodeSync.append(syncTriggerToDrop());
         generateSQLCodeSync.append(syncTriggerNotInTableToDrop());
-        //On redéfinit le délimiteur car ensuite, les instructions sont en PL/SQL
+        //On redéfinit manuellement le délimiteur car ensuite, les instructions sont en bloc PL/SQL
         delimiter = Preferences.SYSTEM_LINE_SEPARATOR + "/" + Preferences.SYSTEM_LINE_SEPARATOR;
         generateSQLCodeSync.append(syncPackageToDrop());
         generateSQLCodeSync.append(syncPackageNotInTableToDrop());

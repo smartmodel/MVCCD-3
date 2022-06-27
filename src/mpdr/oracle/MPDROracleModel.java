@@ -3,7 +3,7 @@ package mpdr.oracle;
 import connections.ConConnection;
 import connections.services.ConnectionsService;
 import consolidationMpdrDb.comparator.oracle.OracleComparatorDb;
-import consolidationMpdrDb.syncGenerator.oracle.OracleSyncGeneratorSQL;
+import consolidationMpdrDb.syncGenerator.oracle.SyncGeneratorSQLOracle;
 import datatypes.MPDRDatatype;
 import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.oracle.MPDROracleGenerateSQL;
@@ -55,12 +55,12 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
 
     public String treatSync(MVCCDWindow owner) throws SQLException {
         ConConnection conConnection = ConnectionsService.getConConnectionByLienProg(this.getConnectionLienProg());
-        OracleSyncGeneratorSQL oracleSyncGeneratorSQL = new OracleSyncGeneratorSQL(
+        SyncGeneratorSQLOracle syncGeneratorSQLOracle = new SyncGeneratorSQLOracle(
                 this,new OracleComparatorDb(
                         this, conConnection, ConnectionsService.actionTestIConConnectionOrConnector(
                                 owner,true, conConnection)));
 
-        return oracleSyncGeneratorSQL.syncOrderByTable();
+        return syncGeneratorSQLOracle.syncOrderByTable();
     }
 
     @Override

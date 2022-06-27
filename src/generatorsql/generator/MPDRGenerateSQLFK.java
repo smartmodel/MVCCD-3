@@ -41,7 +41,7 @@ public abstract class MPDRGenerateSQLFK {
 
         return generateSQLCode;
     }
-
+    //Ajouté par Vincent
     public String generateSQLFKWithDeleteCascadeOption(MPDRFK mpdrfk) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATES_ALTER_TABLE_ADD_FK_WITH_DELETE_CASCADE,

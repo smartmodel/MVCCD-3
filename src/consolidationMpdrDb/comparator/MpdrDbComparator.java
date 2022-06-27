@@ -1,4 +1,4 @@
 package consolidationMpdrDb.comparator;
 
-public class MpdrDbComparator {
+public abstract class MpdrDbComparator {
 }

@@ -21,7 +21,7 @@ public abstract class MPDRGenerateSQLPK {
         return generateSQLCode;
     }
 
-    //Partie ajoutée par Vincent
+    //Ajouté par Vincent
     public String generateSQLAddPKConsolidation(MPDRPK mpdrPk) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_ADD_PK,
@@ -33,7 +33,7 @@ public abstract class MPDRGenerateSQLPK {
 
         return generateSQLCode;
     }
-
+    //Ajouté par Vincent
     public String generateSQLDropPKConsolidation(MPDRPK mpdrPk) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_PK_CASCADE,

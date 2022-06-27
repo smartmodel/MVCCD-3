@@ -606,6 +606,9 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
+    //Elle permet de ne pas supprimer les contraintes qui sont déjà supprimées implicitement lors du drop column cascade
+    // Utilisation d'Iterator car sinon on ne peut pas supprimer un objet
+    // d'une liste sur laquelle on boucle (currentmodificationexception)
     private void removeConstraintFromDropColumn() {
         List<String> listNameColumnToDrop = new ArrayList<>();
         List<String> listSplitElement = new ArrayList<>();

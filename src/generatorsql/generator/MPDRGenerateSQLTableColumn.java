@@ -105,7 +105,7 @@ public abstract class MPDRGenerateSQLTableColumn {
         return generateSQLCode;
     }
 
-    // AJOUT DES METHODES PAR VINCENT
+    //Ajouté par Vincent
     public String generateSQLDropColumn(MPDRColumn mpdrColumn) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_COLUMN,
@@ -116,6 +116,7 @@ public abstract class MPDRGenerateSQLTableColumn {
         return generateSQLCode;
     }
 
+    //Ajouté par Vincent
     public String generateSQLModifyColumn(MPDRColumn mpdrColumn) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN,
@@ -131,6 +132,7 @@ public abstract class MPDRGenerateSQLTableColumn {
         return generateSQLCode;
     }
 
+    //Ajouté par Vincent
     public String generateSQLModifyColumnAddNotNul(MPDRColumn mpdrColumn){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_NN,
@@ -146,6 +148,7 @@ public abstract class MPDRGenerateSQLTableColumn {
         return generateSQLCode;
     }
 
+    //Ajouté par Vincent
     public String generateSQLModifyColumnDropNotNul(MPDRColumn mpdrColumn){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_NN,
@@ -161,6 +164,7 @@ public abstract class MPDRGenerateSQLTableColumn {
         return generateSQLCode;
     }
 
+    //Ajouté par Vincent
     public String generateSQLModifyColumnAddOrModifyDefault(MPDRColumn mpdrColumn){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_DEFAULT,
@@ -179,6 +183,7 @@ public abstract class MPDRGenerateSQLTableColumn {
         return generateSQLCode;
     }
 
+    //Ajouté par Vincent
     public String generateSQLModifyColumnDropDefault(MPDRColumn mpdrColumn){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_DEFAULT,

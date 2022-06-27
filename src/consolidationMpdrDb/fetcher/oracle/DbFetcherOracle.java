@@ -53,7 +53,7 @@ public class DbFetcherOracle extends DbFetcher {
 
 
     private void fetchTables() throws SQLException {
-        String[] types = {Preferences.FETCHER_ORACLE_TYPE_TABLE};
+        String[] types = {Preferences.FETCHER_ORACLE_TABLE};
         try (ResultSet rsTables = databaseMetaData.getTables(databaseName, schemaDB, "%", types)) {
             while (rsTables.next()) {
                 MPDROracleTable dbTable = MVCCDElementFactory.instance()

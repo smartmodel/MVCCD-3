@@ -18,11 +18,11 @@ public class ComparaisonViewer extends JFrame {
     }
 
     private void tree_SGBDRMouseClicked(MouseEvent e) {
-        // TODO add your code here
+        //
     }
 
     private void tree_MPDRMouseClicked(MouseEvent e) {
-        // TODO add your code here
+        //
     }
 
     private void initComponents() {
