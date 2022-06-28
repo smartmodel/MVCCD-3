@@ -12,12 +12,12 @@ public class MPDROracleGenerateSQLPackage extends MPDRGenerateSQLPackage {
         this.mpdrOracleGenerateSQL = mpdrOracleGenerateSQL;
     }
 
-    public String generateSQLDropPackageAndBody(MPDRPackage mpdrPackage) {
-        String generateSQLCode = super.generateSQLDropPackageAndBody(mpdrPackage);
+    public String generateSQLConsolidationDropPackageAndBody(MPDRPackage mpdrPackage) {
+        String generateSQLCode = super.generateSQLConsolidationDropPackageAndBody(mpdrPackage);
         return generateSQLCode;
     }
-    public String generateSQLDropPackageAndBody(String packageName) {
-        String generateSQLCode = super.generateSQLDropPackageAndBody(packageName);
+    public String generateSQLConsolidationDropPackageAndBody(String packageName) {
+        String generateSQLCode = super.generateSQLConsolidationDropPackageAndBody(packageName);
         return generateSQLCode;
     }
 

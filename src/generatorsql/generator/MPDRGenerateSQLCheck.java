@@ -1,7 +1,6 @@
 package generatorsql.generator;
 
 import generatorsql.MPDRGenerateSQLUtil;
-import generatorsql.generator.oracle.MPDROracleGenerateSQL;
 import mpdr.MPDRCheck;
 import preferences.Preferences;
 
@@ -22,7 +21,7 @@ public abstract class MPDRGenerateSQLCheck {
     }
 
     //Ajouté par Vincent
-    public String generateSQLAddCheck(MPDRCheck mpdrCheck){
+    public String generateSQLConsolidationAddCheck(MPDRCheck mpdrCheck){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_ADD_CHECK,
                 getMPDRGenerateSQL().mpdrModel);
@@ -33,7 +32,7 @@ public abstract class MPDRGenerateSQLCheck {
         return generateSQLCode;
     }
     //Ajouté par Vincent
-    public String generateSQLDropCheck(MPDRCheck mpdrCheck){
+    public String generateSQLConsolidationDropCheck(MPDRCheck mpdrCheck){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_CHECK,
                 getMPDRGenerateSQL().mpdrModel);

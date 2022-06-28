@@ -19,13 +19,13 @@ public class MPDROracleGenerateSQLPK extends MPDRGenerateSQLPK {
         return generateSQLCode;
     }
 
-    public String generateSQLAddPKConsolidation(MPDRPK mpdrPk) {
-        String generateSQLCode = super.generateSQLAddPKConsolidation(mpdrPk);
+    public String generateSQLConsolidationAddPK(MPDRPK mpdrPk) {
+        String generateSQLCode = super.generateSQLConsolidationAddPK(mpdrPk);
         return generateSQLCode;
     }
 
-    public String generateSQLDropPKConsolidation(MPDRPK mpdrPk) {
-        String generateSQLCode = super.generateSQLDropPKConsolidation(mpdrPk);
+    public String generateSQLConsolidationDropPK(MPDRPK mpdrPk) {
+        String generateSQLCode = super.generateSQLConsolidationDropPK(mpdrPk);
         return generateSQLCode;
     }
 

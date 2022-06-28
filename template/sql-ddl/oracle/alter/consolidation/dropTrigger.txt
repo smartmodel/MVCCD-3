@@ -1,1 +1,1 @@
-DROP trigger {triggerName}
+DROP TRIGGER {triggerName}

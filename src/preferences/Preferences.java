@@ -1209,7 +1209,7 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATE_ALTER_TABLE_DROP_PK_CASCADE = "alterTableDropPkCascade.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_FK = "alterTableDropFk.txt";
   public static String TEMPLATES_ALTER_TABLE_ADD_FK_WITH_DELETE_CASCADE = "alterTableAddFkWithDeleteCascade.txt";
-  public static String TEMPLATE_DROP_TABLE_CONSOLIDATION = "dropTableConsolidation.txt";
+  public static String TEMPLATE_DROP_TABLE_CONSOLIDATION = "dropTableCascade.txt";
   public static String TEMPLATE_ALTER_TABLE_ADD_CHECK = "alterTableAddCheck.txt";
   public static String TEMPLATE_ALTER_TABLE_DROP_CHECK = "alterTableDropCheck.txt";
   public static String TEMPLATE_DROP_PACKAGE_AND_BODY = "dropPackageAndBody.txt";

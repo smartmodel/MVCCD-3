@@ -3,7 +3,6 @@ package generatorsql.generator;
 import generatorsql.MPDRGenerateSQLUtil;
 import mpdr.MPDRPK;
 import mpdr.MPDRTable;
-import mpdr.oracle.MPDROraclePK;
 import preferences.Preferences;
 
 public abstract class MPDRGenerateSQLPK {
@@ -22,7 +21,7 @@ public abstract class MPDRGenerateSQLPK {
     }
 
     //Ajouté par Vincent
-    public String generateSQLAddPKConsolidation(MPDRPK mpdrPk) {
+    public String generateSQLConsolidationAddPK(MPDRPK mpdrPk) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_ADD_PK,
                 getMPDRGenerateSQL().mpdrModel);
@@ -34,7 +33,7 @@ public abstract class MPDRGenerateSQLPK {
         return generateSQLCode;
     }
     //Ajouté par Vincent
-    public String generateSQLDropPKConsolidation(MPDRPK mpdrPk) {
+    public String generateSQLConsolidationDropPK(MPDRPK mpdrPk) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_PK_CASCADE,
                 getMPDRGenerateSQL().mpdrModel);

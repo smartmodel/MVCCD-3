@@ -18,14 +18,14 @@ public class MPDROracleGenerateSQLCheck extends MPDRGenerateSQLCheck {
         return generateSQLCode;
     }
 
-    public String generateSQLAddCheck(MPDRCheck mpdrCheck){
-        String generateSQLCode = super.generateSQLAddCheck(mpdrCheck);
+    public String generateSQLConsolidationAddCheck(MPDRCheck mpdrCheck){
+        String generateSQLCode = super.generateSQLConsolidationAddCheck(mpdrCheck);
 
         return generateSQLCode;
     }
 
-    public String generateSQLDropCheck(MPDRCheck mpdrCheck){
-        String generateSQLCode = super.generateSQLDropCheck(mpdrCheck);
+    public String generateSQLConsolidationDropCheck(MPDRCheck mpdrCheck){
+        String generateSQLCode = super.generateSQLConsolidationDropCheck(mpdrCheck);
 
         return generateSQLCode;
     }

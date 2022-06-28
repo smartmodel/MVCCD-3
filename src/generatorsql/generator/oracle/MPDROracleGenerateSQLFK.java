@@ -17,13 +17,13 @@ public class MPDROracleGenerateSQLFK extends MPDRGenerateSQLFK {
         String generateSQLCode = super.generateSQLFK(mpdrfk);
         return generateSQLCode ;}
 
-    public String generateSQLFkToDropConsolidation(MPDRFK mpdrfk){
-        String generateSQLCode = super.generateSQLFkToDropConsolidation(mpdrfk);
+    public String generateSQLConsolidationFkToDrop(MPDRFK mpdrfk){
+        String generateSQLCode = super.generateSQLConsolidationFkToDrop(mpdrfk);
         return generateSQLCode ;
     }
 
-    public String generateSQLFKWithDeleteCascadeOption(MPDRFK mpdrfk) {
-        String generateSQLCode = super.generateSQLFKWithDeleteCascadeOption(mpdrfk);
+    public String generateSQLConsolidationAddFKWithDeleteCascadeOption(MPDRFK mpdrfk) {
+        String generateSQLCode = super.generateSQLConsolidationAddFKWithDeleteCascadeOption(mpdrfk);
         return generateSQLCode ;
     }
     @Override

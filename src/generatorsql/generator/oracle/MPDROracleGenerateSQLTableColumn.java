@@ -20,38 +20,38 @@ public class MPDROracleGenerateSQLTableColumn extends MPDRGenerateSQLTableColumn
         return generateSQLCode;
     }
 
-    public String generateSQLDropColumn(MPDRColumn mpdrColumn) {
-        String generateSQLCode = super.generateSQLDropColumn(mpdrColumn);
+    public String generateSQLConsolidationDropColumn(MPDRColumn mpdrColumn) {
+        String generateSQLCode = super.generateSQLConsolidationDropColumn(mpdrColumn);
         return generateSQLCode;
     }
 
-    public String generateSQLAddColumn(MPDRColumn mpdrColumn) {
-        String generateSQLCode = super.generateSQLAddColumn(mpdrColumn);
+    public String generateSQLConsolidationAddColumn(MPDRColumn mpdrColumn) {
+        String generateSQLCode = super.generateSQLConsolidationAddColumn(mpdrColumn);
         return generateSQLCode;
     }
 
-    public String generateSQLModifyColumn(MPDRColumn mpdrColumn) {
-        String generateSQLCode = super.generateSQLModifyColumn(mpdrColumn);
+    public String generateSQLConsolidationModifyColumn(MPDRColumn mpdrColumn) {
+        String generateSQLCode = super.generateSQLConsolidationModifyColumn(mpdrColumn);
         return generateSQLCode;
     }
 
-    public String generateSQLModifyColumnAddNotNul(MPDRColumn mpdrColumn){
-        String generateSQLCode = super.generateSQLModifyColumnAddNotNul(mpdrColumn);
+    public String generateSQLConsolidationModifyColumnAddNotNul(MPDRColumn mpdrColumn){
+        String generateSQLCode = super.generateSQLConsolidationModifyColumnAddNotNul(mpdrColumn);
         return generateSQLCode;
     }
 
-    public String generateSQLModifyColumnDropNotNul(MPDRColumn mpdrColumn){
-        String generateSQLCode = super.generateSQLModifyColumnDropNotNul(mpdrColumn);
+    public String generateSQLConsolidationModifyColumnDropNotNul(MPDRColumn mpdrColumn){
+        String generateSQLCode = super.generateSQLConsolidationModifyColumnDropNotNul(mpdrColumn);
         return generateSQLCode;
     }
 
-    public String generateSQLModifyColumnAddOrModifyDefault(MPDRColumn mpdrColumn){
-        String generateSQLCode = super.generateSQLModifyColumnAddOrModifyDefault(mpdrColumn);
+    public String generateSQLConsolidationModifyColumnAddOrModifyDefault(MPDRColumn mpdrColumn){
+        String generateSQLCode = super.generateSQLConsolidationModifyColumnAddOrModifyDefault(mpdrColumn);
         return generateSQLCode;
     }
 
-    public String generateSQLModifyColumnDropDefault(MPDRColumn mpdrColumn){
-        String generateSQLCode = super.generateSQLModifyColumnDropDefault(mpdrColumn);
+    public String generateSQLConsolidationModifyColumnDropDefault(MPDRColumn mpdrColumn){
+        String generateSQLCode = super.generateSQLConsolidationModifyColumnDropDefault(mpdrColumn);
         return generateSQLCode;
     }
 

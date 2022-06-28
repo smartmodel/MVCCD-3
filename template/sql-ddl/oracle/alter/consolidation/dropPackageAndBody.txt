@@ -1,1 +1,1 @@
-drop package {packageName};
+DROP PACKAGE {packageName}

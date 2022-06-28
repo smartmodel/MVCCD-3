@@ -20,7 +20,7 @@ public abstract class MPDRGenerateSQLUnique {
     }
 
     //Ajouté par Vincent
-    public String generateSQLCreateUniqueConsolidation(MPDRUnique mpdrUnique) {
+    public String generateSQLConsolidationAddUnique(MPDRUnique mpdrUnique) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_CREATE_UNIQUE,
                 getMPDRGenerateSQL().mpdrModel);
@@ -32,7 +32,7 @@ public abstract class MPDRGenerateSQLUnique {
     }
 
     //Ajouté par Vincent
-    public String generateSQLDropUniqueConsolidation(MPDRUnique mpdrUnique) {
+    public String generateSQLConsolidationDropUnique(MPDRUnique mpdrUnique) {
         //getTemplateDirAlterDB permet de savoir qu'il doit aller chercher le fichier txt dans le dossier Alter
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_UNIQUE,

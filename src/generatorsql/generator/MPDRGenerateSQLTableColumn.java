@@ -67,7 +67,7 @@ public abstract class MPDRGenerateSQLTableColumn {
         return generateSQLCode;
     }
 
-    public String generateSQLAddColumn(MPDRColumn mpdrColumn) {
+    public String generateSQLConsolidationAddColumn(MPDRColumn mpdrColumn) {
         //L'option identity n'est pas générée lors d'un ajout de colonne
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_ADD_COLUMN,
@@ -106,7 +106,7 @@ public abstract class MPDRGenerateSQLTableColumn {
     }
 
     //Ajouté par Vincent
-    public String generateSQLDropColumn(MPDRColumn mpdrColumn) {
+    public String generateSQLConsolidationDropColumn(MPDRColumn mpdrColumn) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_DROP_COLUMN,
                 getMPDRGenerateSQL().mpdrModel);
@@ -117,7 +117,7 @@ public abstract class MPDRGenerateSQLTableColumn {
     }
 
     //Ajouté par Vincent
-    public String generateSQLModifyColumn(MPDRColumn mpdrColumn) {
+    public String generateSQLConsolidationModifyColumn(MPDRColumn mpdrColumn) {
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN,
                 getMPDRGenerateSQL().mpdrModel);
@@ -133,7 +133,7 @@ public abstract class MPDRGenerateSQLTableColumn {
     }
 
     //Ajouté par Vincent
-    public String generateSQLModifyColumnAddNotNul(MPDRColumn mpdrColumn){
+    public String generateSQLConsolidationModifyColumnAddNotNul(MPDRColumn mpdrColumn){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_NN,
                 getMPDRGenerateSQL().mpdrModel) ;
@@ -149,7 +149,7 @@ public abstract class MPDRGenerateSQLTableColumn {
     }
 
     //Ajouté par Vincent
-    public String generateSQLModifyColumnDropNotNul(MPDRColumn mpdrColumn){
+    public String generateSQLConsolidationModifyColumnDropNotNul(MPDRColumn mpdrColumn){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_NN,
                 getMPDRGenerateSQL().mpdrModel);
@@ -165,7 +165,7 @@ public abstract class MPDRGenerateSQLTableColumn {
     }
 
     //Ajouté par Vincent
-    public String generateSQLModifyColumnAddOrModifyDefault(MPDRColumn mpdrColumn){
+    public String generateSQLConsolidationModifyColumnAddOrModifyDefault(MPDRColumn mpdrColumn){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_DEFAULT,
                 getMPDRGenerateSQL().mpdrModel);
@@ -184,7 +184,7 @@ public abstract class MPDRGenerateSQLTableColumn {
     }
 
     //Ajouté par Vincent
-    public String generateSQLModifyColumnDropDefault(MPDRColumn mpdrColumn){
+    public String generateSQLConsolidationModifyColumnDropDefault(MPDRColumn mpdrColumn){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_DEFAULT,
                 getMPDRGenerateSQL().mpdrModel);

@@ -80,7 +80,7 @@ public abstract class MPDRGenerateSQLTrigger {
     }
 
     //Ajouté par Vincent pour simplifié l'instruction DROP dans le consolidateur
-    public String generateSQLDropTriggerConsolidation(MPDRTrigger mpdrTrigger){
+    public String generateSQLConsolidationDropTrigger(MPDRTrigger mpdrTrigger){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_DROP_TRIGGER_CONSOLIDATION,
                 getMPDRGenerateSQL().mpdrModel);
@@ -90,7 +90,7 @@ public abstract class MPDRGenerateSQLTrigger {
     }
 
     //Ajouté par Vincent pour les triggers qui ne sont pas liés à une table
-    public String generateSQLDropTrigger(String dbTriggerNotInTable){
+    public String generateSQLConsolidationDropTrigger(String dbTriggerNotInTable){
         String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_DROP_TRIGGER_CONSOLIDATION,
                 getMPDRGenerateSQL().mpdrModel);

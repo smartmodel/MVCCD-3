@@ -138,7 +138,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
     private String syncTablesToDrop() {
         StringBuilder code = new StringBuilder();
         for (MPDRTable mpdrTableToDrop : oracleComparatorDb.getDbTablesToDrop()) {
-            code.append(mpdrOracleGenerateSQLTable.generateSQLDropTableConsolidation(mpdrTableToDrop));
+            code.append(mpdrOracleGenerateSQLTable.generateSQLConsolidationDropTable(mpdrTableToDrop));
             code.append(delimiter);
         }
         return code.toString();
@@ -148,7 +148,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRColumn dbColumnToDrop : oracleComparatorDb.getDbColumnsToDrop()) {
             if (dbColumnToDrop.getMPDRTableAccueil().getName().equals(tableToModify.getName().toUpperCase())) {
-                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLDropColumn(dbColumnToDrop));
+                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLConsolidationDropColumn(dbColumnToDrop));
                 code.append(delimiter);
             }
         }
@@ -159,7 +159,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRColumn mpdrColumnToAdd : oracleComparatorDb.getMpdrColumnsToAdd()) {
             if (mpdrColumnToAdd.getMPDRTableAccueil().getName().equalsIgnoreCase(tableToModify.getName())) {
-                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLAddColumn(mpdrColumnToAdd));
+                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLConsolidationAddColumn(mpdrColumnToAdd));
                 code.append(delimiter);
             }
         }
@@ -170,7 +170,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRColumn mpdrColumnToModify : oracleComparatorDb.getMpdrColumnsToModify()) {
             if (mpdrColumnToModify.getMPDRTableAccueil().getName().equalsIgnoreCase(tableToModify.getName())) {
-                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumn(mpdrColumnToModify));
+                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLConsolidationModifyColumn(mpdrColumnToModify));
                 code.append(delimiter);
             }
         }
@@ -181,7 +181,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRColumn mpdrColumnAddNN : oracleComparatorDb.getMpdrColumnsToModifyAddNotNull()) {
             if (mpdrColumnAddNN.getMPDRTableAccueil().getName().equalsIgnoreCase(tableToModify.getName())) {
-                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumnAddNotNul(mpdrColumnAddNN));
+                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLConsolidationModifyColumnAddNotNul(mpdrColumnAddNN));
                 code.append(delimiter());
             }
         }
@@ -192,7 +192,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRColumn mpdrColumnDropNN : oracleComparatorDb.getMpdrColumnsToModifyDropNotNull()) {
             if (mpdrColumnDropNN.getMPDRTableAccueil().getName().equalsIgnoreCase(tableToModify.getName())) {
-                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumnDropNotNul(mpdrColumnDropNN));
+                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLConsolidationModifyColumnDropNotNul(mpdrColumnDropNN));
                 code.append(delimiter());
             }
         }
@@ -203,7 +203,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRColumn mpdrColumnAddOrModifDefault : oracleComparatorDb.getMpdrColumnsToModifyAddOrModifyDefault()) {
             if (mpdrColumnAddOrModifDefault.getMPDRTableAccueil().getName().equalsIgnoreCase(tableToModify.getName())) {
-                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumnAddOrModifyDefault(mpdrColumnAddOrModifDefault));
+                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLConsolidationModifyColumnAddOrModifyDefault(mpdrColumnAddOrModifDefault));
                 code.append(delimiter());
             }
         }
@@ -214,7 +214,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRColumn mpdrColumDropDefault : oracleComparatorDb.getMpdrColumnsToModifyDropDefault()) {
             if (mpdrColumDropDefault.getMPDRTableAccueil().getName().equalsIgnoreCase(tableToModify.getName())) {
-                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLModifyColumnDropDefault(mpdrColumDropDefault));
+                code.append(mpdrOracleGenerateSQLTableColumn.generateSQLConsolidationModifyColumnDropDefault(mpdrColumDropDefault));
                 code.append(delimiter());
             }
         }
@@ -225,7 +225,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRPK mpdrPkToAdd : oracleComparatorDb.getMpdrPksToAdd()) {
             if (mpdrPkToAdd.getMDRTableAccueil().getName().equalsIgnoreCase(tableToModify.getName())) {
-                code.append(mpdrOracleGenerateSQLPK.generateSQLAddPKConsolidation(mpdrPkToAdd));
+                code.append(mpdrOracleGenerateSQLPK.generateSQLConsolidationAddPK(mpdrPkToAdd));
                 code.append(delimiter());
             }
         }
@@ -236,7 +236,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRPK dbPkToDrop : oracleComparatorDb.getDbPksToDrop()) {
             if (dbPkToDrop.getMDRTableAccueil().getName().equals(tableToModify.getName().toUpperCase())) {
-                code.append(mpdrOracleGenerateSQLPK.generateSQLDropPKConsolidation(dbPkToDrop));
+                code.append(mpdrOracleGenerateSQLPK.generateSQLConsolidationDropPK(dbPkToDrop));
                 code.append(delimiter());
             }
         }
@@ -247,7 +247,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRUnique mpdrUniqueToAdd : oracleComparatorDb.getMpdrUniquesToAdd()) {
             if (mpdrUniqueToAdd.getMDRTableAccueil().getName().equalsIgnoreCase(tableToModify.getName())) {
-                code.append(mpdrOracleGenerateSQLUnique.generateSQLCreateUniqueConsolidation(mpdrUniqueToAdd));
+                code.append(mpdrOracleGenerateSQLUnique.generateSQLConsolidationAddUnique(mpdrUniqueToAdd));
                 code.append(delimiter());
             }
         }
@@ -258,7 +258,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRUnique dbUniqueToDrop : oracleComparatorDb.getDbUniquesToDrop()) {
             if (dbUniqueToDrop.getMDRTableAccueil().getName().equals(tableToModify.getName().toUpperCase())) {
-                code.append(mpdrOracleGenerateSQLUnique.generateSQLDropUniqueConsolidation(dbUniqueToDrop));
+                code.append(mpdrOracleGenerateSQLUnique.generateSQLConsolidationDropUnique(dbUniqueToDrop));
                 code.append(delimiter());
             }
         }
@@ -269,7 +269,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRCheck mpdrCheckToAdd : oracleComparatorDb.getMpdrChecksToAdd()) {
             if (mpdrCheckToAdd.getMDRTableAccueil().getName().equalsIgnoreCase(tableToModify.getName())) {
-                code.append(mpdrOracleGenerateSQLCheck.generateSQLAddCheck(mpdrCheckToAdd));
+                code.append(mpdrOracleGenerateSQLCheck.generateSQLConsolidationAddCheck(mpdrCheckToAdd));
                 code.append(delimiter());
             }
         }
@@ -280,7 +280,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRCheck dbCheckToDrop : oracleComparatorDb.getDbChecksToDrop()) {
             if (dbCheckToDrop.getMDRTableAccueil().getName().equals(tableToModify.getName().toUpperCase())) {
-                code.append(mpdrOracleGenerateSQLCheck.generateSQLDropCheck(dbCheckToDrop));
+                code.append(mpdrOracleGenerateSQLCheck.generateSQLConsolidationDropCheck(dbCheckToDrop));
                 code.append(delimiter());
             }
         }
@@ -300,7 +300,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRFK dbFkToDrop : oracleComparatorDb.getDbFksToDrop()) {
             if (dbFkToDrop.getMDRTableAccueil().getName().equals(tableToModify.getName().toUpperCase())) {
-                code.append(mpdrOracleGenerateSQLFK.generateSQLFkToDropConsolidation(dbFkToDrop));
+                code.append(mpdrOracleGenerateSQLFK.generateSQLConsolidationFkToDrop(dbFkToDrop));
                 code.append(delimiter());
             }
         }
@@ -310,7 +310,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
     private String syncFKAddDeleteCascade() {
         StringBuilder code = new StringBuilder();
         for (MPDRFK mpdrfk : oracleComparatorDb.getMpdrFksToAddDeleteCascade()) {
-            code.append(mpdrOracleGenerateSQLFK.generateSQLFKWithDeleteCascadeOption(mpdrfk));
+            code.append(mpdrOracleGenerateSQLFK.generateSQLConsolidationAddFKWithDeleteCascadeOption(mpdrfk));
             code.append(delimiter);
         }
         return code.toString();
@@ -320,7 +320,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         StringBuilder code = new StringBuilder();
         for (MPDRFK dbFkToDrop : oracleComparatorDb.getDbFksToDropDeleteCascade()) {
             if (dbFkToDrop.getMDRTableAccueil().getName().equals(tableToModify.getName().toUpperCase())) {
-                code.append(mpdrOracleGenerateSQLFK.generateSQLFkToDropConsolidation(dbFkToDrop));
+                code.append(mpdrOracleGenerateSQLFK.generateSQLConsolidationFkToDrop(dbFkToDrop));
                 code.append(delimiter());
             }
         }
@@ -339,7 +339,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
     private String syncSequenceToDrop() {
         StringBuilder code = new StringBuilder();
         for (MPDRSequence dbSequenceToDrop : oracleComparatorDb.getDbSequencesToDrop()) {
-            code.append(mpdrOracleGenerateSQLSequence.generateSQLDropSequenceConsolidation(dbSequenceToDrop));
+            code.append(mpdrOracleGenerateSQLSequence.generateSQLConsolidationDropSequence(dbSequenceToDrop));
             code.append(delimiter);
         }
         return code.toString();
@@ -348,7 +348,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
     private String syncSequenceNotInTableToDrop() {
         StringBuilder code = new StringBuilder();
         for (String sequenceNotInTable : oracleComparatorDb.getDbFetcherOracle().getDbSequencesNotInTable()) {
-            code.append(mpdrOracleGenerateSQLSequence.generateSQLDropSequence(sequenceNotInTable));
+            code.append(mpdrOracleGenerateSQLSequence.generateSQLConsolidationDropSequence(sequenceNotInTable));
             code.append(delimiter);
         }
         return code.toString();
@@ -357,7 +357,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
     private String syncTriggerToDrop() {
         StringBuilder code = new StringBuilder();
         for (MPDRTrigger dbTriggerToDrop : oracleComparatorDb.getDbTriggersToDrop()) {
-            code.append(mpdrOracleGenerateSQLTrigger.generateSQLDropTriggerConsolidation(dbTriggerToDrop));
+            code.append(mpdrOracleGenerateSQLTrigger.generateSQLConsolidationDropTrigger(dbTriggerToDrop));
             code.append(delimiter);
         }
         return code.toString();
@@ -366,7 +366,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
     private String syncTriggerNotInTableToDrop() {
         StringBuilder code = new StringBuilder();
         for (String triggerNotInTable : oracleComparatorDb.getDbFetcherOracle().getDbTriggersNotInTable()) {
-            code.append(mpdrOracleGenerateSQLTrigger.generateSQLDropTrigger(triggerNotInTable));
+            code.append(mpdrOracleGenerateSQLTrigger.generateSQLConsolidationDropTrigger(triggerNotInTable));
             code.append(delimiter);
         }
         return code.toString();
@@ -384,7 +384,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
     private String syncPackageToDrop() {
         StringBuilder code = new StringBuilder();
         for (MPDRPackage dbPackageToDrop : oracleComparatorDb.getDbPackagesToDrop()) {
-            code.append(mpdrOracleGenerateSQLPackage.generateSQLDropPackageAndBody(dbPackageToDrop));
+            code.append(mpdrOracleGenerateSQLPackage.generateSQLConsolidationDropPackageAndBody(dbPackageToDrop));
             code.append(delimiter);
         }
         return code.toString();
@@ -393,7 +393,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
     private String syncPackageNotInTableToDrop() {
         StringBuilder code = new StringBuilder();
         for (String packageNotInTable : oracleComparatorDb.getDbFetcherOracle().getDbPackagesNotInTable()) {
-            code.append(mpdrOracleGenerateSQLPackage.generateSQLDropPackageAndBody(packageNotInTable));
+            code.append(mpdrOracleGenerateSQLPackage.generateSQLConsolidationDropPackageAndBody(packageNotInTable));
             code.append(delimiter);
         }
         return code.toString();

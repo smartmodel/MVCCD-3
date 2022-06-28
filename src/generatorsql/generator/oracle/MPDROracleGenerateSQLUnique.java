@@ -1,10 +1,8 @@
 package generatorsql.generator.oracle;
 
-import generatorsql.MPDRGenerateSQLUtil;
 import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.MPDRGenerateSQLUnique;
 import mpdr.MPDRUnique;
-import preferences.Preferences;
 
 public class MPDROracleGenerateSQLUnique extends MPDRGenerateSQLUnique {
 
@@ -20,13 +18,13 @@ public class MPDROracleGenerateSQLUnique extends MPDRGenerateSQLUnique {
         return generateSQLCode;
     }
 
-    public String generateSQLCreateUniqueConsolidation(MPDRUnique mpdrUnique) {
-        String generateSQLCode =  super.generateSQLCreateUniqueConsolidation(mpdrUnique);
+    public String generateSQLConsolidationAddUnique(MPDRUnique mpdrUnique) {
+        String generateSQLCode =  super.generateSQLConsolidationAddUnique(mpdrUnique);
         return generateSQLCode;
     }
 
-    public String generateSQLDropUniqueConsolidation(MPDRUnique mpdrUnique) {
-        String generateSQLCode =  super.generateSQLDropUniqueConsolidation(mpdrUnique);
+    public String generateSQLConsolidationDropUnique(MPDRUnique mpdrUnique) {
+        String generateSQLCode =  super.generateSQLConsolidationDropUnique(mpdrUnique);
         return generateSQLCode;
     }
 

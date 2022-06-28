@@ -16,8 +16,8 @@ public class MPDROracleGenerateSQLTable extends MPDRGenerateSQLTable {
         return generateSQLCode ;
     }
 
-    public String generateSQLDropTableConsolidation(MPDRTable mpdrTable){
-        String generateSQLCode = super.generateSQLDropTableConsolidation(mpdrTable);
+    public String generateSQLConsolidationDropTable(MPDRTable mpdrTable){
+        String generateSQLCode = super.generateSQLConsolidationDropTable(mpdrTable);
         return generateSQLCode;
     }
 

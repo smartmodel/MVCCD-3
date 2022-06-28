@@ -25,7 +25,7 @@ public abstract class MPDRGenerateSQLPackage {
     }
 
     //Ajouté par Vincent pour supprimer les package et leur body
-    public String generateSQLDropPackageAndBody(MPDRPackage mpdrPackage) {
+    public String generateSQLConsolidationDropPackageAndBody(MPDRPackage mpdrPackage) {
         String generateSQLCode = MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_DROP_PACKAGE_AND_BODY,
                 getMPDRGenerateSQL().mpdrModel);
@@ -35,7 +35,7 @@ public abstract class MPDRGenerateSQLPackage {
     }
 
     //Ajouté par Vincent pour supprimer les packages et leur body
-    public String generateSQLDropPackageAndBody(String packageName) {
+    public String generateSQLConsolidationDropPackageAndBody(String packageName) {
         String generateSQLCode = MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
                 Preferences.TEMPLATE_DROP_PACKAGE_AND_BODY,
                 getMPDRGenerateSQL().mpdrModel);
