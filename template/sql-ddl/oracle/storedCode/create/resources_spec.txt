@@ -1,15 +1,28 @@
-CREATE OR REPLACE PACKAGE resources IS
+CREATE OR REPLACE PACKAGE {packageResourcesName} IS
 
     PROCEDURE raise_column_error (pi_table_name IN VARCHAR2,
         pi_column_name IN VARCHAR2,
         pi_no_error IN PLS_INTEGER,
         pi_mess_error IN VARCHAR2);
 
-PROCEDURE check_normalized_string(pi_table_name IN VARCHAR2,
-    pi_column_name IN VARCHAR2,
-    pi_value IN VARCHAR2,
-    pi_no_error IN VARCHAR2,
-    pi_mess_error IN VARCHAR2) ;
+    PROCEDURE check_normalized_string(pi_table_name IN VARCHAR2,
+        pi_column_name IN VARCHAR2,
+        pi_value IN VARCHAR2,
+        pi_no_error IN VARCHAR2,
+        pi_mess_error IN VARCHAR2) ;
+
+
+    PROCEDURE check_token(pi_table_name IN VARCHAR2,
+        pi_column_name IN VARCHAR2,
+        pi_value IN VARCHAR2,
+        pi_no_error IN VARCHAR2,
+        pi_mess_error IN VARCHAR2)  ;
+
+    PROCEDURE check_word(pi_table_name IN VARCHAR2,
+        pi_column_name IN VARCHAR2,
+        pi_value IN VARCHAR2,
+        pi_no_error IN VARCHAR2,
+        pi_mess_error IN VARCHAR2);
 
     co_marker_noerr CONSTANT VARCHAR2(1) := '#';
 

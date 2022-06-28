@@ -10,7 +10,7 @@ BEGIN
     {packageName}.{autogen_columns}(vl_newrec);
     {packageName}.{checktype_columns}({vl_newrec});
     {packageName}.{uppercase_columns}(vl_newrec);
-    {packageName}.{column_PEA}({vl_newrec});
+    {packageName}.{PEA_columns}({vl_newrec});
     {-INS_JN_INS-}
     {-TRIGGER_RECORD_TO_NEW-}
 END;

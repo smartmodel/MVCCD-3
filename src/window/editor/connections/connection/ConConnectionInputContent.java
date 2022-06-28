@@ -222,7 +222,7 @@ public abstract class ConConnectionInputContent extends PanelInputContent implem
         fieldSaveUserPW.addFocusListener(this);
         fieldSaveUserPW.addItemListener(this);
         //TODO-1 Renoncement dans un premier pour simplifier le développement
-        fieldSaveUserPW.setEnabled(false);
+        fieldSaveUserPW.setEnabled(true);
 
 
         labelConfExecScript = new JLabel("Conf. exéc. : ");

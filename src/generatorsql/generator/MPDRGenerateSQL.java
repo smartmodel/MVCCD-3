@@ -6,12 +6,10 @@ import messages.MessagesBuilder;
 import mpdr.*;
 import mpdr.interfaces.IMPDRModelRequirePackage;
 import mpdr.interfaces.IMPDRTableRequirePackage;
-import mpdr.tapis.MPDRFunction;
-import mpdr.tapis.MPDRPackage;
-import mpdr.tapis.MPDRTrigger;
-import mpdr.tapis.MPDRView;
+import mpdr.tapis.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;
@@ -291,6 +289,24 @@ public abstract class MPDRGenerateSQL {
                             generateSQLCode += getMpdrGenerateSQLPackage().generateSQLDropPackage(mpdrPackage);
                             generateSQLCode += delimiter();
                         }
+                    }
+                }
+            }
+            // Paquetage de ressources
+
+            if (mpdrModel instanceof IMPDRModelRequirePackage) {
+                if (PreferencesManager.instance().preferences().getMPDRORACLE_TAPIS()) {
+                    if (command == CREATE) {
+                        generateSQLCode += getMpdrGenerateSQLPackage().generateSQLCreatePackage(((IMPDRModelRequirePackage) mpdrModel).getMPDRPackageByType(MPDRPackageType.RESOURCES_SPEC));
+                        generateSQLCode += delimiter();
+                        generateSQLCode += getMpdrGenerateSQLPackage().generateSQLCreatePackage(((IMPDRModelRequirePackage) mpdrModel).getMPDRPackageByType(MPDRPackageType.RESOURCES_BODY));
+                        generateSQLCode += delimiter();
+                    }
+                    if (command == DROP) {
+                        generateSQLCode += getMpdrGenerateSQLPackage().generateSQLDropPackage(((IMPDRModelRequirePackage) mpdrModel).getMPDRPackageByType(MPDRPackageType.RESOURCES_SPEC));
+                        generateSQLCode += delimiter();
+                        generateSQLCode += getMpdrGenerateSQLPackage().generateSQLDropPackage(((IMPDRModelRequirePackage) mpdrModel).getMPDRPackageByType(MPDRPackageType.RESOURCES_BODY));
+                        generateSQLCode += delimiter();
                     }
                 }
             }

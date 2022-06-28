@@ -1,1 +1,1 @@
-AND ({columnName} = :NEW.{columnName})
+AND ({columnName} = {pio_crtrec}.{columnName})

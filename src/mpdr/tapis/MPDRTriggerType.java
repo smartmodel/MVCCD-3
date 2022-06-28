@@ -5,6 +5,8 @@ import mpdr.MPDRDB;
 import java.util.ArrayList;
 
 public enum MPDRTriggerType {
+    BIR_PKDEPSIM("BIRSIM", "birPKDEP.txt", MPDRTriggerUsage.WITHOUTTAPIS, MPDRTriggerScope.TABLE,
+            new MPDRDB[]{MPDRDB.ORACLE, MPDRDB.POSTGRESQL}),
     BIR_PKDEP("BIR", "birPKDEP.txt", MPDRTriggerUsage.WITHOUTTAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE, MPDRDB.POSTGRESQL}),
     BIR_PKIND("BIR", "birPKIND.txt", MPDRTriggerUsage.WITHOUTTAPIS, MPDRTriggerScope.TABLE,

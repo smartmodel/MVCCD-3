@@ -21,7 +21,7 @@ public enum MPDRGenerateSQLObjectInCode {
     AUTOGEN_COLUMNS_UPD("autogen_columns_upd", null, null, null),
     UPPERCASE_COLUMNS("uppercase_columns", null, null, null),
     CHECKTYPE_COLUMNS("checktype_columns", null, null, null),
-    COLUMN_PEA("column_PEA", null, null, null),
+    PEA_COLUMNS("PEA_columns", null, null, null),
     FROZEN_COLUMNS("frozen_columns", null, null, null),
     TREE_OR_LIST_LOOP("tree_or_list_loop", null, null, null),
     TREE_OR_LIST_ONLYONE("tree_or_list_onlyone", null, null, null),

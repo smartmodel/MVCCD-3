@@ -244,4 +244,14 @@ public class MCDAssEnd extends MCDRelEnd  implements  IMCDParameter, IMCDSourceM
     }
 
 
+    public boolean isPartOfListOrGraph() {
+        if (getMcdAssociation().getOriented() != null) {
+            return !getMcdAssociation().getOriented();
+        } else {
+            return false;
+        }
+    }
+
+
+
 }

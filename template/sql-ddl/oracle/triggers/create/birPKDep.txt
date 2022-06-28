@@ -6,6 +6,6 @@ CREATE OR REPLACE TRIGGER {triggerName}
             INTO :NEW.{columnPKName}
             FROM {tableName}
             WHERE (1=1)
-            {-TABLE_DEP_JOIN_PARENT-};
+            {-TABLE_DEP_JOIN_PARENT_WITHOUT_TAPI-};
         END IF;
     END;
