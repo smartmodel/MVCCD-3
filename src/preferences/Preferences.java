@@ -1172,12 +1172,8 @@ public class Preferences extends MVCCDElement {
   public static String FETCHER_ORACLE_CONSTRAINT_TYPE_FK = "R";
   public static String FETCHER_ORACLE_CONSTRAINT_NAME = "CONSTRAINT_NAME";
   public static String FETCHER_ORACLE_REQUETE_SQL_USER_CONS_COLUMNS = "SELECT * FROM USER_CONS_COLUMNS WHERE TABLE_NAME = ?";
-  public static String FETCHER_ORACLE_POSITION = "POSITION";
   public static String FETCHER_ORACLE_AND = " AND ";
   public static String FETCHER_ORACLE_REQUETE_SEARCH_CONDITION_VC = "SEARCH_CONDITION_VC NOT LIKE '%IS NOT NULL%'";
-  public static String FETCHER_ORACLE_REQUETE_CONSTRAINT_NAME_NOT_LIKE ="CONSTRAINT_NAME NOT LIKE";
-  public static String FETCHER_ORACLE_SYS_ =" 'SYS_%'";
-  public static String FETCHER_ORACLE_TRIGGER_BODY = "TRIGGER_BODY";
   public static String FETCHER_ORACLE_SEARCH_CONDITION_VC = "SEARCH_CONDITION_VC";
   public static String FETCHER_ORACLE_REQUETE_SQL_USER_SEQUENCES = "SELECT * FROM USER_SEQUENCES";
   public static String FETCHER_ORACLE_SEQUENCE_NAME = "SEQUENCE_NAME";
@@ -1194,6 +1190,10 @@ public class Preferences extends MVCCDElement {
   public static String FETCHER_ORACLE_REFERENCED_NAME = "REFERENCED_NAME";
   public static String FETCHER_ORACLE_NAME = "NAME";
   public static String FETCHER_ORACLE_TABLE = "TABLE";
+  public static String FETCHER_ORACLE_REQUETE_CONSTRAINT_NAME_NOT_LIKE ="CONSTRAINT_NAME NOT LIKE";
+  public static String FETCHER_ORACLE_SYS_ =" 'SYS_%'";
+  public static String FETCHER_ORACLE_TRIGGER_BODY = "TRIGGER_BODY";
+  public static String FETCHER_ORACLE_POSITION = "POSITION";
 
   //Templates de consolidation
   public static String TEMPLATE_ALTER_TABLE_CREATE_UNIQUE = "alterTableAddUnique.txt";

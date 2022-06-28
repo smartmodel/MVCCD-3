@@ -5,21 +5,25 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 			name: "this"
+			"title": "Synchronisation de la base de données - En cours de chargement"
+			"defaultCloseOperation": 2
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "dialogPane"
 				"border": new javax.swing.border.EmptyBorder( 12, 12, 12, 12 )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-					"$columnSpecs": "96, 239"
-					"$rowSpecs": "75"
+					"$columnSpecs": "61, 441"
+					"$rowSpecs": "120"
 					"$hGap": 5
 					"$vGap": 5
 					"$alignLeft": true
 					"$alignTop": true
 				} ) {
-					name: "contentPanel"
+					name: "contentPanelForImage"
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label1"
-						"text": "En attente de synchronisation"
+						"text": "Synchronisation en cours de traitement"
+						"font": new java.awt.Font( "Segoe UI", 1, 12 )
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/main/doc-files/synchronisation-des-donnees_60x60.png" )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 					} )
@@ -36,7 +40,7 @@ new FormModel {
 					"border": new javax.swing.border.EmptyBorder( 12, 0, 0, 0 )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "cancelButton"
-						"text": "Cancel"
+						"text": "Annuler"
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridy": 0
 						"vAlign": 0
@@ -50,7 +54,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 400, 180 )
+			"size": new java.awt.Dimension( 585, 180 )
 		} )
 	}
 }

@@ -127,7 +127,7 @@ new FormModel {
 					"border": new javax.swing.border.EmptyBorder( 12, 0, 0, 0 )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "textInformation"
-						"text": "*Information : Les packages et déclencheurs ne sont pas regénérés"
+						"text": "*Information : les packages et les déclencheurs sont tous regénérés"
 						"font": new com.jformdesigner.model.SwingDerivedFont( null, 2, 0, false )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 					add( new FormComponent( "javax.swing.JButton" ) {

@@ -5,6 +5,7 @@
 package consolidationMpdrDb.viewer;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -16,15 +17,21 @@ public class WaitingSyncViewer extends JFrame {
         initComponents();
     }
 
+    private void thisMouseClicked(MouseEvent e) {
+        // TODO add your code here
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         dialogPane = new JPanel();
-        contentPanel = new JPanel();
+        contentPanelForImage = new JPanel();
         label1 = new JLabel();
         buttonBar = new JPanel();
         cancelButton = new JButton();
 
         //======== this ========
+        setTitle("Synchronisation de la base de donn\u00e9es - En cours de chargement");
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
@@ -33,21 +40,23 @@ public class WaitingSyncViewer extends JFrame {
             dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
             dialogPane.setLayout(new BorderLayout());
 
-            //======== contentPanel ========
+            //======== contentPanelForImage ========
             {
-                contentPanel.setLayout(new GridBagLayout());
-                ((GridBagLayout)contentPanel.getLayout()).columnWidths = new int[] {101, 239, 0};
-                ((GridBagLayout)contentPanel.getLayout()).rowHeights = new int[] {75, 0};
-                ((GridBagLayout)contentPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
-                ((GridBagLayout)contentPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+                contentPanelForImage.setLayout(new GridBagLayout());
+                ((GridBagLayout)contentPanelForImage.getLayout()).columnWidths = new int[] {66, 441, 0};
+                ((GridBagLayout)contentPanelForImage.getLayout()).rowHeights = new int[] {120, 0};
+                ((GridBagLayout)contentPanelForImage.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)contentPanelForImage.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
                 //---- label1 ----
-                label1.setText("En attente de synchronisation");
-                contentPanel.add(label1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                label1.setText("Synchronisation en cours de traitement");
+                label1.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                label1.setIcon(new ImageIcon(getClass().getResource("/main/doc-files/synchronisation-des-donnees_60x60.png")));
+                contentPanelForImage.add(label1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            dialogPane.add(contentPanel, BorderLayout.CENTER);
+            dialogPane.add(contentPanelForImage, BorderLayout.CENTER);
 
             //======== buttonBar ========
             {
@@ -72,7 +81,7 @@ public class WaitingSyncViewer extends JFrame {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     private JPanel dialogPane;
-    private JPanel contentPanel;
+    private JPanel contentPanelForImage;
     private JLabel label1;
     private JPanel buttonBar;
     private JButton cancelButton;

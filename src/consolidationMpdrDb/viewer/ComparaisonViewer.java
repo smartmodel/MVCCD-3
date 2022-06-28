@@ -176,7 +176,7 @@ public class ComparaisonViewer extends JFrame {
                 ((GridBagLayout)buttonBar.getLayout()).columnWeights = new double[] {1.0, 0.0, 0.0};
 
                 //---- textInformation ----
-                textInformation.setText("*Information : Les packages et d\u00e9clencheurs ne sont pas reg\u00e9n\u00e9r\u00e9s");
+                textInformation.setText("*Information : les packages et les d\u00e9clencheurs sont tous reg\u00e9n\u00e9r\u00e9s");
                 textInformation.setFont(textInformation.getFont().deriveFont(textInformation.getFont().getStyle() | Font.ITALIC));
                 buttonBar.add(textInformation, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
