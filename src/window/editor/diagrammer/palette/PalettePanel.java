@@ -25,8 +25,8 @@ public class PalettePanel extends JToolBar implements Serializable {
     // Création des boutons
     PaletteButton buttonEntity = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT, PaletteButtonType.SHAPE_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_entity.png"));
     PaletteButton buttonLink = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ENTITE_ASSOCIATIVE, PaletteButtonType.LINK_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_association_class.png"));
-    PaletteButton buttonRelation = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT, PaletteButtonType.RELATION_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_association.png"));
-    PaletteButton buttonReflexiveRelation = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT, PaletteButtonType.RELATION_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_association.png"));
+    PaletteButton buttonReflexiveRelation = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT, PaletteButtonType.RELATION_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_association.png"));
+    PaletteButton buttonRelation = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT, PaletteButtonType.RELATION_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_association.png"));
     PaletteButton buttonGeneralization = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT, PaletteButtonType.RELATION_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_generalization.png"));
     PaletteButton buttonComposition = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT, PaletteButtonType.RELATION_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_composition.png"));
     PaletteButton buttonNaturalIdentifier = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_NATURAL_IDENTIFIER_BUTTON_TEXT, PaletteButtonType.RELATION_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_natural_identifier.png"));
@@ -34,14 +34,14 @@ public class PalettePanel extends JToolBar implements Serializable {
     PaletteButton buttonAnchor = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ANCHOR_BUTTON, PaletteButtonType.RELATION_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_anchor.png"));
 
     this.addButton(buttonEntity);
-    this.addButton(buttonNote);
     this.addButton(buttonLink);
-    this.addButton(buttonAnchor);
     this.addButton(buttonRelation);
-    this.addButton(buttonReflexiveRelation);
-    this.addButton(buttonGeneralization);
     this.addButton(buttonComposition);
     this.addButton(buttonNaturalIdentifier);
+    this.addButton(buttonReflexiveRelation);
+    this.addButton(buttonGeneralization);
+    this.addButton(buttonNote);
+    this.addButton(buttonAnchor);
 
   }
 

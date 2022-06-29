@@ -2,6 +2,16 @@ package window.editor.preferences.application;
 
 import connections.ConDBMode;
 import console.WarningLevel;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.io.Serial;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
 import main.MVCCDElement;
 import messages.MessagesBuilder;
 import preferences.Preferences;
@@ -14,12 +24,10 @@ import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.SComboBox;
 import utilities.window.scomponents.services.SComboBoxService;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import java.awt.*;
-import java.awt.event.ItemEvent;
-
 public class PrefApplicationInputContent extends PanelInputContent {
+
+  @Serial
+  private static final long serialVersionUID = -226137854170886311L;
   //private JPanel panel = new JPanel();
 
   private SCheckBox debug = new SCheckBox(this);
@@ -41,6 +49,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
   private SCheckBox fieldRepMCDModelsMany = new SCheckBox(this);
   private SCheckBox fieldRepMCDPackagesAuthorizeds = new SCheckBox(this);
   private SCheckBox fieldShowGrid = new SCheckBox(this);
+  private SCheckBox fieldDiagrammerUMLNotation = new SCheckBox(this);
 
   private SComboBox fieldConDBMode = new SComboBox(this);
 
@@ -59,89 +68,91 @@ public class PrefApplicationInputContent extends PanelInputContent {
   @Override
   public void createContentCustom() {
 
-    debug.setSubPanel(debugSubPanel);
-    debug.setRootSubPanel(true);
-    debug.addItemListener(this);
-    debug.addFocusListener(this);
-    debugPrintMVCCDElement.addItemListener(this);
-    debugPrintMVCCDElement.addFocusListener(this);
-    debugBackgroundPanel.addItemListener(this);
-    debugBackgroundPanel.addFocusListener(this);
-    debugJTableShowHidden.addItemListener(this);
-    debugJTableShowHidden.addFocusListener(this);
-    debugJTreeInspectObject.addItemListener(this);
-    debugJTreeInspectObject.addFocusListener(this);
-    debugEditorDatasChanged.addItemListener(this);
-    debugEditorDatasChanged.addFocusListener(this);
+    this.debug.setSubPanel(this.debugSubPanel);
+    this.debug.setRootSubPanel(true);
+    this.debug.addItemListener(this);
+    this.debug.addFocusListener(this);
+    this.debugPrintMVCCDElement.addItemListener(this);
+    this.debugPrintMVCCDElement.addFocusListener(this);
+    this.debugBackgroundPanel.addItemListener(this);
+    this.debugBackgroundPanel.addFocusListener(this);
+    this.debugJTableShowHidden.addItemListener(this);
+    this.debugJTableShowHidden.addFocusListener(this);
+    this.debugJTreeInspectObject.addItemListener(this);
+    this.debugJTreeInspectObject.addFocusListener(this);
+    this.debugEditorDatasChanged.addItemListener(this);
+    this.debugEditorDatasChanged.addFocusListener(this);
 
-    debugTDPrint.addItemListener(this);
-    debugTDPrint.addFocusListener(this);
-    debugTDPrint.setSubPanel(debugTDPrintSubPanel);
-    debugTDUniquePrint.addItemListener(this);
-    debugTDUniquePrint.addFocusListener(this);
+    this.debugTDPrint.addItemListener(this);
+    this.debugTDPrint.addFocusListener(this);
+    this.debugTDPrint.setSubPanel(this.debugTDPrintSubPanel);
+    this.debugTDUniquePrint.addItemListener(this);
+    this.debugTDUniquePrint.addFocusListener(this);
 
-    fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DEVELOPMENT));
-    fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DEBUG));
-    fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DETAILS));
-    fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_INFO));
-    fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_WARNING));
-    fieldWarningLevel.addItemListener(this);
-    fieldWarningLevel.addFocusListener(this);
+    this.fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DEVELOPMENT));
+    this.fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DEBUG));
+    this.fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DETAILS));
+    this.fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_INFO));
+    this.fieldWarningLevel.addItem(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_WARNING));
+    this.fieldWarningLevel.addItemListener(this);
+    this.fieldWarningLevel.addFocusListener(this);
 
-    fieldRepMCDModelsMany.addItemListener(this);
-    fieldRepMCDModelsMany.addFocusListener(this);
-    fieldRepMCDPackagesAuthorizeds.addItemListener(this);
-    fieldRepMCDPackagesAuthorizeds.addFocusListener(this);
+    this.fieldRepMCDModelsMany.addItemListener(this);
+    this.fieldRepMCDModelsMany.addFocusListener(this);
+    this.fieldRepMCDPackagesAuthorizeds.addItemListener(this);
+    this.fieldRepMCDPackagesAuthorizeds.addFocusListener(this);
 
+    this.fieldConDBMode.addItem(ConDBMode.CONNECTION.getText());
+    this.fieldConDBMode.addItem(ConDBMode.CONNECTOR.getText());
+    this.fieldConDBMode.addItemListener(this);
+    this.fieldConDBMode.addFocusListener(this);
 
-    fieldConDBMode.addItem(ConDBMode.CONNECTION.getText());
-    fieldConDBMode.addItem(ConDBMode.CONNECTOR.getText());
-    fieldConDBMode.addItemListener(this);
-    fieldConDBMode.addFocusListener(this);
+    this.fieldShowGrid.addItemListener(this);
+    this.fieldShowGrid.addFocusListener(this);
 
+    this.fieldDiagrammerUMLNotation.addItemListener(this);
+    this.fieldDiagrammerUMLNotation.addFocusListener(this);
 
-    fieldShowGrid.addItemListener(this);
-    fieldShowGrid.addFocusListener(this);
+    this.fieldInsteadofXML.addItemListener(this);
+    this.fieldInsteadofXML.addFocusListener(this);
 
-    fieldInsteadofXML.addItemListener(this);
-    fieldInsteadofXML.addFocusListener(this);
+    super.getSComponents().add(this.debug);
+    super.getSComponents().add(this.debugPrintMVCCDElement);
+    super.getSComponents().add(this.debugBackgroundPanel);
+    super.getSComponents().add(this.debugJTableShowHidden);
+    super.getSComponents().add(this.debugJTreeInspectObject);
+    super.getSComponents().add(this.debugEditorDatasChanged);
+    super.getSComponents().add(this.debugTDPrint);
+    super.getSComponents().add(this.debugTDUniquePrint);
+    super.getSComponents().add(this.fieldWarningLevel);
+    super.getSComponents().add(this.fieldShowGrid);
+    super.getSComponents().add(this.fieldDiagrammerUMLNotation);
+    super.getSComponents().add(this.fieldRepMCDModelsMany);
+    super.getSComponents().add(this.fieldRepMCDPackagesAuthorizeds);
+    super.getSComponents().add(this.fieldConDBMode);
+    super.getSComponents().add(this.fieldInsteadofXML);
 
-    super.getSComponents().add(debug);
-    super.getSComponents().add(debugPrintMVCCDElement);
-    super.getSComponents().add(debugBackgroundPanel);
-    super.getSComponents().add(debugJTableShowHidden);
-    super.getSComponents().add(debugJTreeInspectObject);
-    super.getSComponents().add(debugEditorDatasChanged);
-    super.getSComponents().add(debugTDPrint);
-    super.getSComponents().add(debugTDUniquePrint);
-    super.getSComponents().add(fieldWarningLevel);
-    super.getSComponents().add(fieldShowGrid);
-    super.getSComponents().add(fieldRepMCDModelsMany);
-    super.getSComponents().add(fieldRepMCDPackagesAuthorizeds);
-    super.getSComponents().add(fieldConDBMode);
-    super.getSComponents().add(fieldInsteadofXML);
-
-    panelInputContentCustom.setLayout(new GridBagLayout());
+    this.panelInputContentCustom.setLayout(new GridBagLayout());
     GridBagConstraints gbc = new GridBagConstraints();
     //gbc.anchor = GridBagConstraints.BELOW_BASELINE;
     gbc.insets = new Insets(10, 10, 0, 0);
 
-    panelInputContentCustom.setAlignmentX(LEFT_ALIGNMENT);
-    panelInputContentCustom.setAlignmentY(TOP_ALIGNMENT);
+    this.panelInputContentCustom.setAlignmentX(LEFT_ALIGNMENT);
+    this.panelInputContentCustom.setAlignmentY(TOP_ALIGNMENT);
 
     gbc.gridx = 0;
     gbc.gridy = 0;
     gbc.gridwidth = 1;
     gbc.gridheight = 1;
-    panelInputContentCustom.add(new JLabel("Debug"));
+    this.panelInputContentCustom.add(new JLabel("Debug"));
     gbc.gridx++;
-    panelInputContentCustom.add(debug, gbc);
+    this.panelInputContentCustom.add(this.debug, gbc);
     gbc.gridx++;
-    panelInputContentCustom.add(debugSubPanel, gbc);
+    this.panelInputContentCustom.add(this.debugSubPanel, gbc);
 
-    debugSubPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-    debugSubPanel.setAlignmentX(LEFT_ALIGNMENT);
-    debugSubPanel.setLayout(new GridBagLayout());
+    this.debugSubPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+    this.debugSubPanel.setAlignmentX(LEFT_ALIGNMENT);
+    this.debugSubPanel.setLayout(new GridBagLayout());
 
     GridBagConstraints gbcDebug = new GridBagConstraints();
     gbcDebug.gridx = 0;
@@ -151,45 +162,45 @@ public class PrefApplicationInputContent extends PanelInputContent {
     gbcDebug.anchor = GridBagConstraints.WEST;
     gbcDebug.insets = new Insets(5, 5, 5, 5);
 
-    debugSubPanel.add(new JLabel("MVCCD Element"), gbcDebug);
+    this.debugSubPanel.add(new JLabel("MVCCD Element"), gbcDebug);
     gbcDebug.gridx++;
-    debugSubPanel.add(debugPrintMVCCDElement, gbcDebug);
+    this.debugSubPanel.add(this.debugPrintMVCCDElement, gbcDebug);
 
     gbcDebug.gridy++;
     gbcDebug.gridx = 0;
-    debugSubPanel.add(new JLabel("Background Panel"), gbcDebug);
+    this.debugSubPanel.add(new JLabel("Background Panel"), gbcDebug);
     gbcDebug.gridx++;
-    debugSubPanel.add(debugBackgroundPanel, gbcDebug);
+    this.debugSubPanel.add(this.debugBackgroundPanel, gbcDebug);
 
     gbcDebug.gridy++;
     gbcDebug.gridx = 0;
-    debugSubPanel.add(new JLabel("Id et Order dans JTable"), gbcDebug);
+    this.debugSubPanel.add(new JLabel("Id et Order dans JTable"), gbcDebug);
     gbcDebug.gridx++;
-    debugSubPanel.add(debugJTableShowHidden, gbcDebug);
+    this.debugSubPanel.add(this.debugJTableShowHidden, gbcDebug);
 
     gbcDebug.gridy++;
     gbcDebug.gridx = 0;
-    debugSubPanel.add(new JLabel("Inspecteur objet dans JTree"), gbcDebug);
+    this.debugSubPanel.add(new JLabel("Inspecteur objet dans JTree"), gbcDebug);
     gbcDebug.gridx++;
-    debugSubPanel.add(debugJTreeInspectObject, gbcDebug);
+    this.debugSubPanel.add(this.debugJTreeInspectObject, gbcDebug);
 
     gbcDebug.gridy++;
     gbcDebug.gridx = 0;
-    debugSubPanel.add(new JLabel("SComposant chgt valeur"), gbcDebug);
+    this.debugSubPanel.add(new JLabel("SComposant chgt valeur"), gbcDebug);
     gbcDebug.gridx++;
-    debugSubPanel.add(debugEditorDatasChanged, gbcDebug);
+    this.debugSubPanel.add(this.debugEditorDatasChanged, gbcDebug);
 
     gbcDebug.gridy++;
     gbcDebug.gridx = 0;
-    debugSubPanel.add(new JLabel("Table décision"), gbcDebug);
+    this.debugSubPanel.add(new JLabel("Table décision"), gbcDebug);
     gbcDebug.gridx++;
-    debugSubPanel.add(debugTDPrint, gbcDebug);
+    this.debugSubPanel.add(this.debugTDPrint, gbcDebug);
     gbcDebug.gridx++;
-    debugSubPanel.add(debugTDPrintSubPanel, gbcDebug);
+    this.debugSubPanel.add(this.debugTDPrintSubPanel, gbcDebug);
 
-    debugTDPrintSubPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-    debugTDPrintSubPanel.setAlignmentX(LEFT_ALIGNMENT);
-    debugTDPrintSubPanel.setLayout(new GridBagLayout());
+    this.debugTDPrintSubPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+    this.debugTDPrintSubPanel.setAlignmentX(LEFT_ALIGNMENT);
+    this.debugTDPrintSubPanel.setLayout(new GridBagLayout());
 
     GridBagConstraints gbcDebugTDInput = new GridBagConstraints();
     gbcDebugTDInput.gridx = 0;
@@ -199,47 +210,53 @@ public class PrefApplicationInputContent extends PanelInputContent {
     gbcDebugTDInput.anchor = GridBagConstraints.WEST;
     gbcDebugTDInput.insets = new Insets(5, 5, 5, 5);
 
-    debugTDPrintSubPanel.add(new JLabel("Unicité"), gbcDebugTDInput);
+    this.debugTDPrintSubPanel.add(new JLabel("Unicité"), gbcDebugTDInput);
     gbcDebugTDInput.gridx++;
-    debugTDPrintSubPanel.add(debugTDUniquePrint, gbcDebugTDInput);
+    this.debugTDPrintSubPanel.add(this.debugTDUniquePrint, gbcDebugTDInput);
 
     gbc.gridy++;
     gbc.gridx = 0;
-    panelInputContentCustom.add(new JLabel("Modèles multiples autorisés"), gbc);
+    this.panelInputContentCustom.add(new JLabel("Modèles multiples autorisés"), gbc);
     gbc.gridx++;
-    panelInputContentCustom.add(fieldRepMCDModelsMany, gbc);
+    this.panelInputContentCustom.add(this.fieldRepMCDModelsMany, gbc);
 
     gbc.gridy++;
     gbc.gridx = 0;
-    panelInputContentCustom.add(new JLabel("Paquetages autorisés"), gbc);
+    this.panelInputContentCustom.add(new JLabel("Paquetages autorisés"), gbc);
     gbc.gridx++;
-    panelInputContentCustom.add(fieldRepMCDPackagesAuthorizeds, gbc);
+    this.panelInputContentCustom.add(this.fieldRepMCDPackagesAuthorizeds, gbc);
 
     gbc.gridy++;
     gbc.gridx = 0;
-    panelInputContentCustom.add(new JLabel("Afficher la grille"), gbc);
+    this.panelInputContentCustom.add(new JLabel("Afficher la grille"), gbc);
     gbc.gridx++;
-    panelInputContentCustom.add(fieldShowGrid, gbc);
+    this.panelInputContentCustom.add(this.fieldShowGrid, gbc);
 
     gbc.gridy++;
     gbc.gridx = 0;
-    panelInputContentCustom.add(new JLabel("Sauvegarde Sérialisée"), gbc);
+    this.panelInputContentCustom.add(new JLabel("Notation UML du diagrammeur"), gbc);
     gbc.gridx++;
-    panelInputContentCustom.add(fieldInsteadofXML, gbc);
-    gbc.gridx++;
-    panelInputContentCustom.add(new JLabel("Vrai : sérialisation  - Faux : XML"), gbc);
+    this.panelInputContentCustom.add(this.fieldDiagrammerUMLNotation, gbc);
 
     gbc.gridy++;
     gbc.gridx = 0;
-    panelInputContentCustom.add(new JLabel("Niveau de messages console"), gbc);
+    this.panelInputContentCustom.add(new JLabel("Sauvegarde Sérialisée"), gbc);
     gbc.gridx++;
-    panelInputContentCustom.add(fieldWarningLevel, gbc);
+    this.panelInputContentCustom.add(this.fieldInsteadofXML, gbc);
+    gbc.gridx++;
+    this.panelInputContentCustom.add(new JLabel("Vrai : sérialisation  - Faux : XML"), gbc);
 
     gbc.gridy++;
     gbc.gridx = 0;
-    panelInputContentCustom.add(new JLabel("Mode de connexion base de données"), gbc);
+    this.panelInputContentCustom.add(new JLabel("Niveau de messages console"), gbc);
     gbc.gridx++;
-    panelInputContentCustom.add(fieldConDBMode, gbc);
+    this.panelInputContentCustom.add(this.fieldWarningLevel, gbc);
+
+    gbc.gridy++;
+    gbc.gridx = 0;
+    this.panelInputContentCustom.add(new JLabel("Mode de connexion base de données"), gbc);
+    gbc.gridx++;
+    this.panelInputContentCustom.add(this.fieldConDBMode, gbc);
   }
 
   @Override
@@ -261,20 +278,21 @@ public class PrefApplicationInputContent extends PanelInputContent {
   public void loadDatas(MVCCDElement mvccdElement) {
     Preferences preferences = PreferencesManager.instance().getApplicationPref();
     Preferences preferencesDefault = PreferencesManager.instance().getDefaultPref();
-    debug.setSelected(preferences.isDEBUG());
-    debugPrintMVCCDElement.setSelected(preferences.isDEBUG_PRINT_MVCCDELEMENT());
-    debugBackgroundPanel.setSelected(preferences.isDEBUG_BACKGROUND_PANEL());
-    debugJTableShowHidden.setSelected(preferences.isDEBUG_SHOW_TABLE_COL_HIDDEN());
-    debugJTreeInspectObject.setSelected(preferences.getDEBUG_INSPECT_OBJECT_IN_TREE());
-    debugEditorDatasChanged.setSelected(preferences.getDEBUG_EDITOR_DATAS_CHANGED());
-    debugTDPrint.setSelected(preferences.getDEBUG_TD_PRINT());
-    debugTDUniquePrint.setSelected(preferences.getDEBUG_TD_UNICITY_PRINT());
-    fieldRepMCDModelsMany.setSelected(preferences.getREPOSITORY_MCD_MODELS_MANY());
-    SComboBoxService.selectByText(fieldWarningLevel, preferences.getWARNING_LEVEL().getText());
-    fieldRepMCDPackagesAuthorizeds.setSelected(preferences.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
-    fieldInsteadofXML.setSelected(preferences.isPERSISTENCE_SERIALISATION_INSTEADOF_XML());
-    fieldShowGrid.setSelected(preferences.isDIAGRAMMER_SHOW_GRID());
-    SComboBoxService.selectByText(fieldConDBMode, preferences.getCON_DB_MODE().getText());
+    this.debug.setSelected(preferences.isDEBUG());
+    this.debugPrintMVCCDElement.setSelected(preferences.isDEBUG_PRINT_MVCCDELEMENT());
+    this.debugBackgroundPanel.setSelected(preferences.isDEBUG_BACKGROUND_PANEL());
+    this.debugJTableShowHidden.setSelected(preferences.isDEBUG_SHOW_TABLE_COL_HIDDEN());
+    this.debugJTreeInspectObject.setSelected(preferences.getDEBUG_INSPECT_OBJECT_IN_TREE());
+    this.debugEditorDatasChanged.setSelected(preferences.getDEBUG_EDITOR_DATAS_CHANGED());
+    this.debugTDPrint.setSelected(preferences.getDEBUG_TD_PRINT());
+    this.debugTDUniquePrint.setSelected(preferences.getDEBUG_TD_UNICITY_PRINT());
+    this.fieldRepMCDModelsMany.setSelected(preferences.getREPOSITORY_MCD_MODELS_MANY());
+    SComboBoxService.selectByText(this.fieldWarningLevel, preferences.getWARNING_LEVEL().getText());
+    this.fieldRepMCDPackagesAuthorizeds.setSelected(preferences.getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS());
+    this.fieldInsteadofXML.setSelected(preferences.isPERSISTENCE_SERIALISATION_INSTEADOF_XML());
+    this.fieldShowGrid.setSelected(preferences.isDIAGRAMMER_SHOW_GRID());
+    this.fieldDiagrammerUMLNotation.setSelected(preferences.isDIAGRAMMER_UML_NOTATION());
+    SComboBoxService.selectByText(this.fieldConDBMode, preferences.getCON_DB_MODE().getText());
   }
 
   @Override
@@ -287,34 +305,34 @@ public class PrefApplicationInputContent extends PanelInputContent {
     boolean restart = false;
     boolean reloadProject = false;
     Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
-    if (debug.checkIfUpdated()) {
-      applicationPref.setDEBUG(debug.isSelected());
+    if (this.debug.checkIfUpdated()) {
+      applicationPref.setDEBUG(this.debug.isSelected());
     }
-    if (debugPrintMVCCDElement.checkIfUpdated()) {
-      applicationPref.setDEBUG_PRINT_MVCCDELEMENT(debugPrintMVCCDElement.isSelected());
+    if (this.debugPrintMVCCDElement.checkIfUpdated()) {
+      applicationPref.setDEBUG_PRINT_MVCCDELEMENT(this.debugPrintMVCCDElement.isSelected());
     }
-    if (debugBackgroundPanel.checkIfUpdated()) {
-      applicationPref.setDEBUG_BACKGROUND_PANEL(debugBackgroundPanel.isSelected());
+    if (this.debugBackgroundPanel.checkIfUpdated()) {
+      applicationPref.setDEBUG_BACKGROUND_PANEL(this.debugBackgroundPanel.isSelected());
       restart = true;
     }
-    if (debugJTableShowHidden.checkIfUpdated()) {
-      applicationPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(debugJTableShowHidden.isSelected());
+    if (this.debugJTableShowHidden.checkIfUpdated()) {
+      applicationPref.setDEBUG_SHOW_TABLE_COL_HIDDEN(this.debugJTableShowHidden.isSelected());
     }
-    if (debugJTreeInspectObject.checkIfUpdated()) {
-      applicationPref.setDEBUG_INSPECT_OBJECT_IN_TREE(debugJTreeInspectObject.isSelected());
+    if (this.debugJTreeInspectObject.checkIfUpdated()) {
+      applicationPref.setDEBUG_INSPECT_OBJECT_IN_TREE(this.debugJTreeInspectObject.isSelected());
     }
-    if (debugEditorDatasChanged.checkIfUpdated()) {
-      applicationPref.setDEBUG_EDITOR_DATAS_CHANGED(debugEditorDatasChanged.isSelected());
+    if (this.debugEditorDatasChanged.checkIfUpdated()) {
+      applicationPref.setDEBUG_EDITOR_DATAS_CHANGED(this.debugEditorDatasChanged.isSelected());
     }
-    if (debugTDPrint.checkIfUpdated()) {
-      applicationPref.setDEBUG_TD_PRINT(debugTDPrint.isSelected());
+    if (this.debugTDPrint.checkIfUpdated()) {
+      applicationPref.setDEBUG_TD_PRINT(this.debugTDPrint.isSelected());
     }
-    if (debugTDUniquePrint.checkIfUpdated()) {
-      applicationPref.setDEBUG_TD_UNICITY_PRINT(debugTDUniquePrint.isSelected());
+    if (this.debugTDUniquePrint.checkIfUpdated()) {
+      applicationPref.setDEBUG_TD_UNICITY_PRINT(this.debugTDUniquePrint.isSelected());
     }
 
-    if (fieldWarningLevel.checkIfUpdated()) {
-      String text = (String) fieldWarningLevel.getSelectedItem();
+    if (this.fieldWarningLevel.checkIfUpdated()) {
+      String text = (String) this.fieldWarningLevel.getSelectedItem();
       if (text.equals(MessagesBuilder.getMessagesProperty(Preferences.WARNING_LEVEL_DEBUG))) {
         applicationPref.setWARNING_LEVEL(WarningLevel.DEBUG_MODE);
       }
@@ -329,16 +347,20 @@ public class PrefApplicationInputContent extends PanelInputContent {
       }
     }
 
-    if (fieldInsteadofXML.checkIfUpdated()) {
-      applicationPref.setPERSISTENCE_SERIALISATION_INSTEADOF_XML(fieldInsteadofXML.isSelected());
+    if (this.fieldInsteadofXML.checkIfUpdated()) {
+      applicationPref.setPERSISTENCE_SERIALISATION_INSTEADOF_XML(this.fieldInsteadofXML.isSelected());
     }
 
-    if (fieldShowGrid.checkIfUpdated()) {
-      applicationPref.setDIAGRAMMER_SHOW_GRID(fieldShowGrid.isSelected());
+    if (this.fieldShowGrid.checkIfUpdated()) {
+      applicationPref.setDIAGRAMMER_SHOW_GRID(this.fieldShowGrid.isSelected());
     }
 
-    if (fieldConDBMode.checkIfUpdated()) {
-      String text = (String) fieldConDBMode.getSelectedItem();
+    if (this.fieldDiagrammerUMLNotation.checkIfUpdated()) {
+      applicationPref.setDIAGRAMMER_UML_NOTATION(this.fieldDiagrammerUMLNotation.isSelected());
+    }
+
+    if (this.fieldConDBMode.checkIfUpdated()) {
+      String text = (String) this.fieldConDBMode.getSelectedItem();
       if (text.equals(ConDBMode.CONNECTION.getText())) {
         applicationPref.setCON_DB_MODE(ConDBMode.CONNECTION);
       }
@@ -347,17 +369,16 @@ public class PrefApplicationInputContent extends PanelInputContent {
       }
     }
 
-
     // Copie dans les préférences de pojet
     if (PreferencesManager.instance().getProjectPref() != null) {
       PreferencesManager.instance().copyApplicationPref(Project.EXISTING);
     }
 
-    if (fieldRepMCDModelsMany.checkIfUpdated()) {
-      applicationPref.setREPOSITORY_MCD_MODELS_MANY(fieldRepMCDModelsMany.isSelected());
+    if (this.fieldRepMCDModelsMany.checkIfUpdated()) {
+      applicationPref.setREPOSITORY_MCD_MODELS_MANY(this.fieldRepMCDModelsMany.isSelected());
     }
-    if (fieldRepMCDPackagesAuthorizeds.checkIfUpdated()) {
-      applicationPref.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(fieldRepMCDPackagesAuthorizeds.isSelected());
+    if (this.fieldRepMCDPackagesAuthorizeds.checkIfUpdated()) {
+      applicationPref.setREPOSITORY_MCD_PACKAGES_AUTHORIZEDS(this.fieldRepMCDPackagesAuthorizeds.isSelected());
       if (!restart) {
         reloadProject = true;
       }
@@ -376,7 +397,7 @@ public class PrefApplicationInputContent extends PanelInputContent {
       message = message + MessagesBuilder.getMessagesProperty("preferences.application.saved.reload.project");
     }
 
-    new DialogMessage().showOk(getEditor(), message);
+    new DialogMessage().showOk(this.getEditor(), message);
   }
 
   @Override
@@ -385,4 +406,3 @@ public class PrefApplicationInputContent extends PanelInputContent {
   }
 
 }
-

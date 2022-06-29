@@ -44,6 +44,7 @@ public class Preferences extends MVCCDElement {
   public static final String CON_IDDB_NAME_SERVICE_NAME = "con.iddb.name.service.name";
   public static final String CON_IDDB_NAME_SID_ORACLE_MARKER = ":";
   public static final String CON_IDDB_NAME_SERVICE_NAME_ORACLE_MARKER = "/";
+
   public static final String DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME = "DrawPanelContainer";
   public static final String DIAGRAMMER_DRAW_PANEL_NAME = "DrawPanel";
   public static final String DIAGRAMMER_PALETTE_PANEL_NAME = "PalettePanel";
@@ -62,6 +63,7 @@ public class Preferences extends MVCCDElement {
   public static final int DIAGRAMMER_CLASS_PADDING = 10;
   public static final int DIAGRAMMER_NOTE_PADDING = 15;
   public static final int DIAGRAMMER_LABEL_PADDING = 5;
+  public static final int DIAGRAMMER_RELATION_CLICK_AREA = 5;
   public static final int DIAGRAMMER_RELATION_DIAMOND_WIDTH = 8;
   public static final int DIAGRAMMER_RELATION_DIAMOND_HEIGHT = 13;
   public static final int DIAGRAMMER_GENERALIZATION_WIDTH = 8;
@@ -78,13 +80,12 @@ public class Preferences extends MVCCDElement {
   public static final String DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT = "Entité";
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT = "Association";
   public static final String DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT = "Généralisation";
-  public static final String DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT = "Composition";
-  public static final String DIAGRAMMER_PALETTE_NATURAL_IDENTIFIER_BUTTON_TEXT = "Identifiant naturel";
+  public static final String DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT = "Association de composition";
+  public static final String DIAGRAMMER_PALETTE_NATURAL_IDENTIFIER_BUTTON_TEXT = "Association identifiante naturelle";
   public static final String DIAGRAMMER_PALETTE_NOTE_BUTTON_TEXT = "Note";
   public static final String DIAGRAMMER_PALETTE_ANCHOR_BUTTON = "Ancre";
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT = "Association réflexive";
   public static final String DIAGRAMMER_PALETTE_ENTITE_ASSOCIATIVE = "Entité associative";
-  public static final int DIAGRAMMER_RELATION_CLICK_AREA = 5;
   public static final String DIAGRAMMER_ENTITY_STEREOTYPE_TEXT = "<<Entity>>";
   public static final String DIAGRAMMER_ENTITY_ORDERED_TEXT = "{ordered}";
   public static final String DIAGRAMMER_MCD_ENTITY_XML_TAG = "mcdEntityShape";
@@ -98,6 +99,11 @@ public class Preferences extends MVCCDElement {
   public static final String DIAGRAMMER_LABEL_XML_TAG = "labelShape";
   public static final String DIAGRAMMER_LABELS_XML_TAG_NAME = "labelShapes";
   public static final String DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME = "anchorPoints";
+
+  public static final String DIAGRAMMER_MENU_OPEN_MODELING_ASSISTANT_TEXT = "Ouvrir l'assistant de modélisation";
+  public static final String DIAGRAMMER_MENU_ADD_ANCHOR_POINT_TEXT = "Ajouter un point d'ancrage";
+  public static final String DIAGRAMMER_MENU_DELETE_TEXT = "Supprimer";
+
   //Toutes les préférences statics sont des préférences développeurs, qui ne doivent pas être sauvegardées dans les fichiers.
   private static final long serialVersionUID = 1000;
   public static String APPLICATION_NAME = "MVCCD";
@@ -1216,6 +1222,7 @@ public class Preferences extends MVCCDElement {
   private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
 
   private Boolean DIAGRAMMER_SHOW_GRID = null;
+  private Boolean DIAGRAMMER_UML_NOTATION = false; // TODO changer en null
 
   public Preferences(MVCCDElement parent, String name) {
     super(parent, name);
@@ -2442,12 +2449,10 @@ public class Preferences extends MVCCDElement {
     this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
   }
 
-  //
   public Boolean isDIAGRAMMER_SHOW_GRID() {
     if (this.DIAGRAMMER_SHOW_GRID == null) {
       this.DIAGRAMMER_SHOW_GRID = true;
     }
-
     return this.DIAGRAMMER_SHOW_GRID;
   }
 
@@ -2455,4 +2460,17 @@ public class Preferences extends MVCCDElement {
     this.DIAGRAMMER_SHOW_GRID = showGrid;
     DiagrammerService.getDrawPanel().repaint();
   }
+
+  public Boolean isDIAGRAMMER_UML_NOTATION() {
+    if (this.DIAGRAMMER_UML_NOTATION == null) {
+      this.DIAGRAMMER_UML_NOTATION = true;
+    }
+    return this.DIAGRAMMER_UML_NOTATION;
+  }
+
+  public void setDIAGRAMMER_UML_NOTATION(boolean umlNotation) {
+    this.DIAGRAMMER_UML_NOTATION = umlNotation;
+    DiagrammerService.getDrawPanel().repaint();
+  }
+
 }

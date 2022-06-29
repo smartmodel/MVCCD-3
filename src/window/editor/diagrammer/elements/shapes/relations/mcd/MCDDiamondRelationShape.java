@@ -27,11 +27,6 @@ public abstract class MCDDiamondRelationShape extends RelationShape {
     graphics2D.setStroke(new BasicStroke(1));
   }
 
-  @Override
-  public void doDraw(Graphics2D graphics2D) {
-    this.drawDiamond(graphics2D);
-  }
-
   protected void drawDiamond(Graphics2D graphics2D) {
     final RelationAnchorPointShape previousPoint = this.anchorPoints.get(this.getLastPoint().getIndex() - 1);
     final RelationAnchorPointShape lastPoint = this.getLastPoint();

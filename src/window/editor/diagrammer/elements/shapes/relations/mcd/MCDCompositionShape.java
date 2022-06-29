@@ -1,6 +1,7 @@
 package window.editor.diagrammer.elements.shapes.relations.mcd;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.io.Serializable;
 import mcd.MCDAssociation;
 import md.MDElement;
@@ -18,6 +19,11 @@ public class MCDCompositionShape extends MCDDiamondRelationShape implements Seri
   public MCDCompositionShape(MDElement relatedRepositoryComposition, MCDEntityShape source, MCDEntityShape destination) {
     this(source, destination);
     this.relatedRepositoryElement = relatedRepositoryComposition;
+  }
+
+  @Override
+  public void doDraw(Graphics2D graphics2D) {
+    this.drawDiamond(graphics2D);
   }
 
   @Override

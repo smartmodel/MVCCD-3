@@ -86,6 +86,18 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   }
 
+  /***
+   * Retourne l'index du point d'ancrage situé au milieu de l'association. Si l'association n'a que 2 points, le premier point d'ancrage est retourné.
+   * @return Index du point d'ancrage situé au milieu de l'association.
+   */
+  public int getIndexOfMiddleAnchorPoint() {
+    int index = 0;
+    if (this.anchorPoints.size() > 2) {
+      index = this.anchorPoints.size() / 2;
+    }
+    return index;
+  }
+
   public void repaintLabels() {
     this.labels.forEach(LabelShape::repaint);
   }
