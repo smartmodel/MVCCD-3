@@ -57,4 +57,20 @@ public class UIUtils {
   public static Font getCardinalityFont() {
     return new Font(Preferences.DIAGRAMMER_DEFAULT_FONT_FAMILY, Font.PLAIN, (int) getFontSize());
   }
+
+  public static double getCompositionDiamondWidth() {
+    return Preferences.DIAGRAMMER_COMPOSITION_DIAMOND_WIDTH * DiagrammerService.getDrawPanel().getZoomFactor();
+  }
+
+  public static double getCompositionDiamondHeight() {
+    return Preferences.DIAGRAMMER_COMPOSITION_DIAMOND_HEIGHT * DiagrammerService.getDrawPanel().getZoomFactor();
+  }
+
+  public static double getGeneralizationArrowWidth() {
+    return Preferences.DIAGRAMMER_GENERALIZATION_WIDTH * DiagrammerService.getDrawPanel().getZoomFactor();
+  }
+
+  public static double getGeneralizationArrowHeight() {
+    return Preferences.DIAGRAMMER_GENERALIZATION_HEIGHT * DiagrammerService.getDrawPanel().getZoomFactor();
+  }
 }

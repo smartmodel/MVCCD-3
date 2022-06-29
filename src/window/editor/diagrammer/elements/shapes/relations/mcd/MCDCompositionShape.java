@@ -9,6 +9,7 @@ import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.utils.UIUtils;
 
 public class MCDCompositionShape extends RelationShape implements Serializable {
 
@@ -50,8 +51,8 @@ public class MCDCompositionShape extends RelationShape implements Serializable {
     final RelationAnchorPointShape lastPoint = this.getLastPoint();
 
     final int NUMBER_OF_POINTS = 4;
-    final int DIAMOND_WIDTH = 8;
-    final int DIAMOND_HEIGHT = 13;
+    final int DIAMOND_WIDTH = (int) UIUtils.getCompositionDiamondWidth();
+    final int DIAMOND_HEIGHT = (int) UIUtils.getCompositionDiamondHeight();
 
     final int dx = lastPoint.x - previousPoint.x, dy = lastPoint.y - previousPoint.y;
     final double D = Math.sqrt(dx * dx + dy * dy);

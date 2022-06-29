@@ -62,6 +62,10 @@ public class Preferences extends MVCCDElement {
   public static final int DIAGRAMMER_CLASS_PADDING = 10;
   public static final int DIAGRAMMER_NOTE_PADDING = 15;
   public static final int DIAGRAMMER_LABEL_PADDING = 5;
+  public static final int DIAGRAMMER_COMPOSITION_DIAMOND_WIDTH = 8;
+  public static final int DIAGRAMMER_COMPOSITION_DIAMOND_HEIGHT = 13;
+  public static final int DIAGRAMMER_GENERALIZATION_WIDTH = 8;
+  public static final int DIAGRAMMER_GENERALIZATION_HEIGHT = 13;
   public static final int DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN = 7;
   public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
   public static final Color DIAGRAMMER_NOTE_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
