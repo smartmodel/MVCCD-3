@@ -53,7 +53,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     }
   }
 
-  public RelationShape(ClassShape source, IShape destination, boolean isReflexive) {
+  public RelationShape(SquaredShape source, IShape destination, boolean isReflexive) {
     this();
     this.source = source;
     this.destination = destination;
@@ -64,7 +64,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.setFocusable(true);
   }
 
-  public RelationShape(int id, ClassShape source, IShape destination, boolean isReflexive) {
+  public RelationShape(int id, SquaredShape source, IShape destination, boolean isReflexive) {
     this.source = source;
     this.destination = destination;
     this.isReflexive = isReflexive;
@@ -75,15 +75,13 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.setFocusable(true);
   }
 
-  public RelationShape(int id, MDElement relatedRepositoryElement, ClassShape source, IShape destination, boolean isReflexive) {
+  public RelationShape(int id, MDElement relatedRepositoryElement, SquaredShape source, IShape destination, boolean isReflexive) {
     this.id = id;
     this.source = source;
     this.destination = destination;
     this.isReflexive = isReflexive;
     this.relatedRepositoryElement = relatedRepositoryElement;
-
     this.createAnchorPoints(isReflexive);
-
     this.setFocusable(true);
 
   }

@@ -6,6 +6,7 @@ import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAnchorShape;
 import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.mcd.MCDCompositionShape;
 import window.editor.diagrammer.elements.shapes.relations.mcd.MCDGeneralizationShape;
@@ -61,6 +62,13 @@ public final class RelationCreator {
           // Entité associative
           System.out.println("entité associative créée");
           relation = new MCDLinkShape((MCDEntityShape) RelationCreator.source, (RelationShape) RelationCreator.destination);
+          break;
+        case Preferences.DIAGRAMMER_PALETTE_ANCHOR_BUTTON:
+          if (destination instanceof RelationShape) {
+            relation = new MCDAnchorShape(source, (RelationShape) destination);
+          } else {
+            relation = new MCDAnchorShape(source, (SquaredShape) destination);
+          }
       }
 
       // Ajoute l'élément au diagramme courant et au diagrammeur

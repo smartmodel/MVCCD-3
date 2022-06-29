@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.io.Serializable;
 import javax.swing.SwingUtilities;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.NoteShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.palette.PaletteButtonType;
 import window.editor.diagrammer.palette.PalettePanel;
@@ -57,8 +58,8 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
     if (RelationCreator.isCreating) {
       Point converted = SwingUtilities.convertPoint(this.shape, e.getPoint(), DiagrammerService.getDrawPanel());
       Component componentFound = DiagrammerService.getDrawPanel().findComponentAt(converted);
-      // Vérifie que le composant sur lequel le clic est relaché n'est pas la zone de dessin
 
+      // Vérifie que le composant sur lequel le clic est relaché n'est pas la zone de dessin
       if (componentFound != DiagrammerService.getDrawPanel()) {
         IShape shapeReleasedOn = (IShape) componentFound;
         if (shapeReleasedOn != null) {
@@ -102,7 +103,11 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
       // Un bouton de la palette est sélectionné
       // Création d'une relation
       if (PalettePanel.activeButton.getType() == PaletteButtonType.RELATION_CREATION) {
+        DiagrammerService.getDrawPanel().repaint();
         if (RelationCreator.source == null) {
+          Point converted = SwingUtilities.convertPoint(this.shape, e.getPoint(), DiagrammerService.getDrawPanel());
+          Component componentFound = DiagrammerService.getDrawPanel().findComponentAt(converted);
+          System.out.println(componentFound instanceof NoteShape);
           RelationCreator.setSource(this.shape);
         }
       }

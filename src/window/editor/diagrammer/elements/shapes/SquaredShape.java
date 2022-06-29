@@ -109,8 +109,8 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
 
   @Override
   public void drag(int differenceX, int differenceY) {
-
     this.setLocationDifference(differenceX, differenceY);
+    this.repaint();
   }
 
   @Override

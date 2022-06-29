@@ -76,6 +76,7 @@ public class Preferences extends MVCCDElement {
   public static final String DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT = "Généralisation";
   public static final String DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT = "Composition";
   public static final String DIAGRAMMER_PALETTE_NOTE_BUTTON_TEXT = "Note";
+  public static final String DIAGRAMMER_PALETTE_ANCHOR_BUTTON = "Ancre";
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT = "Association réflexive";
   public static final String DIAGRAMMER_PALETTE_ENTITE_ASSOCIATIVE = "Entité associative";
   public static final int DIAGRAMMER_RELATION_CLICK_AREA = 5;
@@ -85,6 +86,7 @@ public class Preferences extends MVCCDElement {
   public static final String DIAGRAMMER_MCD_ASSOCIATION_XML_TAG = "mcdAssociationShape";
   public static final String DIAGRAMMER_MCD_GENERALIZATION_XML_TAG = "mcdGeneralizationShape";
   public static final String DIAGRAMMER_MCD_LINK_XML_TAG = "mcdLinkShape";
+  public static final String DIAGRAMMER_MCD_ANCHOR_XML_TAG = "mcdAnchorShape";
   public static final String DIAGRAMMER_MCD_COMPOSITION_XML_TAG = "mcdCompositionShape";
   public static final String DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG = "anchorPoint";
   public static final String DIAGRAMMER_LABEL_XML_TAG = "labelShape";

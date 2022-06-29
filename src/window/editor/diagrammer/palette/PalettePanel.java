@@ -30,9 +30,11 @@ public class PalettePanel extends JToolBar implements Serializable {
     PaletteButton buttonGeneralization = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT, PaletteButtonType.RELATION_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_generalization.png"));
     PaletteButton buttonComposition = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT, PaletteButtonType.RELATION_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_composition.png"));
     PaletteButton buttonNote = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_NOTE_BUTTON_TEXT, PaletteButtonType.SHAPE_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_note.png"));
+    PaletteButton buttonAnchor = new PaletteButton(Preferences.DIAGRAMMER_PALETTE_ANCHOR_BUTTON, PaletteButtonType.RELATION_CREATION, new ImageIcon("ressources/icons-diagrammer/palette/icon_anchor.png"));
 
     this.addButton(buttonEntity);
     this.addButton(buttonNote);
+    this.addButton(buttonAnchor);
     this.addButton(buttonLink);
     this.addButton(buttonRelation);
     this.addButton(buttonReflexiveRelation);
