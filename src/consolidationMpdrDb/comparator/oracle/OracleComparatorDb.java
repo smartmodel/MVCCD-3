@@ -19,6 +19,7 @@ import java.util.List;
 public class OracleComparatorDb extends MpdrDbComparator {
 
     private List<MPDRTable> mpdrTablesSameName = new ArrayList<>();
+    private List<MPDRTable> mpdrTablesModify = new ArrayList<>();
     private List<MPDRTable> mpdrTablesToCreate = new ArrayList<>();
     private List<MPDRTable> dbTablesToDrop = new ArrayList<>();
     private List<MPDRColumn> mpdrColumnsToAdd = new ArrayList<>();
@@ -47,6 +48,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     private List<MPDRIndex> mpdrIndexsToCreate = new ArrayList<>();
     private List<String> listFKNameRemove = new ArrayList<>();
     private List<MPDRIndex> dbIndexsToDrop = new ArrayList<>();
+    private List<String> identicalPackagesName = new ArrayList<>(); //pour savoir s'il existe ou doit être créé
 
     private MPDROracleModel mpdrModel;
     private MPDROracleModel dbModelOracle;
@@ -61,6 +63,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
 
     public void compare() {
         compareTables();
+        NotRegeneratedPackageInUnmodifyTable();
     }
 
     private void compareTables() {
@@ -68,6 +71,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         compareTablesToCreate();
         compareTablesToDrop();
         compareSequencesInTableToDrop();
+        tablesModify();
         comparePackageInTableToDrop();
     }
 
@@ -564,14 +568,23 @@ public class OracleComparatorDb extends MpdrDbComparator {
 
     private void comparePackages(MPDROracleBoxPackages mpdrOracleBoxPackages, MPDROracleBoxPackages
             dbOracleBoxPackages) {
-        comparePackagesToCreateOrReplace(mpdrOracleBoxPackages);
+        comparePackagesToCreateOrReplace(mpdrOracleBoxPackages, dbOracleBoxPackages);
         comparePackagesToDrop(mpdrOracleBoxPackages, dbOracleBoxPackages);
     }
 
-    private void comparePackagesToCreateOrReplace(MPDROracleBoxPackages mpdrOracleBoxPackages) {
+    private void comparePackagesToCreateOrReplace(MPDROracleBoxPackages mpdrOracleBoxPackages, MPDROracleBoxPackages dbOracleBoxPackages) {
         if (mpdrOracleBoxPackages != null) {
             for (MPDRPackage mpdrPackage : mpdrOracleBoxPackages.getAllPackages()) {
                 mpdrPackagesToCreateOrReplace.add(mpdrPackage);
+            }
+        }
+        if (mpdrOracleBoxPackages != null && dbOracleBoxPackages != null) {
+            for (MPDRPackage dbPackage : dbOracleBoxPackages.getAllPackages()) {
+                for (MPDRPackage mpdrPackage : mpdrOracleBoxPackages.getAllPackages()) {
+                    if (mpdrPackage.getName().toUpperCase().equals(dbPackage.getName())) {
+
+                    }
+                }
             }
         }
     }
@@ -595,6 +608,11 @@ public class OracleComparatorDb extends MpdrDbComparator {
             for (MPDRPackage differentPackage : differentPackages) {
                 if (!samePackages.contains(differentPackage)) {
                     dbPackagesToDrop.add(differentPackage);
+                }
+            }
+            for (MPDRPackage samePackage : samePackages) {
+                if(!identicalPackagesName.contains(samePackage.getName())){
+                    identicalPackagesName.add(samePackage.getName());
                 }
             }
         }
@@ -671,6 +689,51 @@ public class OracleComparatorDb extends MpdrDbComparator {
             //Si c'est la table parent qui est supprimée
             if (getDbTablesToDrop().contains(dbIndex.getParent().getParent().getName())){
                 iterator.remove();
+            }
+        }
+    }
+
+    private void compareIndex(MPDRTable mpdrTable, MPDRTable dbTable) {
+        compareIndexToAdd(mpdrTable, dbTable);
+        compareIndexToDrop(mpdrTable, dbTable);
+    }
+
+    //Attention, le logiciel ne crée des index que sur les fk alors qu'implicitement Oracle en crée sur les uniques et pk également
+    private void compareIndexToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
+        List<String> mpdrIndexNameList = new ArrayList();
+        for (MPDRIndex mpdrIndex : mpdrTable.getMPDRIndexes()) {
+            mpdrIndexNameList.add(mpdrIndex.getName().toUpperCase());
+        }
+
+        for (MPDRIndex dbIndex : dbTable.getMPDRIndexes()) {
+            if (!mpdrIndexNameList.contains(dbIndex.getName())) {
+                dbIndexsToDrop.add(dbIndex);
+            }
+        }
+        removeIndexImpliciteFromListToDrop(dbTable);
+    }
+
+    private void removeIndexImpliciteFromListToDrop(MPDRTable dbTable){
+        for (MPDRIndex dbIndex : dbTable.getMPDRIndexes()) {
+            if(dbIndex.getName().equals(dbTable.getMPDRPK().getName())){
+                dbIndexsToDrop.remove(dbIndex);
+            }
+            for (MPDRUnique dbUnique : dbTable.getMPDRUniques()) {
+                if(dbIndex.getName().equals(dbUnique.getName())){
+                    dbIndexsToDrop.remove(dbIndex);
+                }
+            }
+        }
+    }
+
+    private void compareIndexToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
+        List<String> dbIndexNameList = new ArrayList<>();
+        for (MPDRIndex dbIndex : dbTable.getMPDRIndexes()) {
+            dbIndexNameList.add(dbIndex.getName());
+        }
+        for (MPDRIndex mpdrIndex : mpdrTable.getMPDRIndexes()) {
+            if (!dbIndexNameList.contains(mpdrIndex.getName())) {
+                mpdrIndexsToCreate.add(mpdrIndex);
             }
         }
     }
@@ -800,48 +863,110 @@ public class OracleComparatorDb extends MpdrDbComparator {
         return dbIndexsToDrop;
     }
 
-    private void compareIndex(MPDRTable mpdrTable, MPDRTable dbTable) {
-        compareIndexToAdd(mpdrTable, dbTable);
-        compareIndexToDrop(mpdrTable, dbTable);
-    }
 
-    //Attention, le logiciel ne crée des index que sur les fk alors qu'implicitement Oracle en crée sur les uniques et pk également
-    private void compareIndexToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
-        List<String> mpdrIndexNameList = new ArrayList();
-        for (MPDRIndex mpdrIndex : mpdrTable.getMPDRIndexes()) {
-            mpdrIndexNameList.add(mpdrIndex.getName().toUpperCase());
-        }
-
-        for (MPDRIndex dbIndex : dbTable.getMPDRIndexes()) {
-            if (!mpdrIndexNameList.contains(dbIndex.getName())) {
-                dbIndexsToDrop.add(dbIndex);
+    public void tablesModify(){
+        for (MPDRColumn mpdrColumn : mpdrColumnsToAdd) {
+            if(!mpdrTablesModify.contains(mpdrColumn.getMPDRTableAccueil())){
+                mpdrTablesModify.add(mpdrColumn.getMPDRTableAccueil());
             }
         }
-        removeIndexImpliciteFromListToDrop(dbTable);
+        for (MPDRColumn dbColumn : dbColumnsToDrop) {
+            if(!mpdrTablesModify.contains(dbColumn.getMPDRTableAccueil())){
+                mpdrTablesModify.add(dbColumn.getMPDRTableAccueil());
+            }
+        }
+        for (MPDRColumn mpdrColumn : mpdrColumnsToModify) {
+            if(!mpdrTablesModify.contains(mpdrColumn.getMPDRTableAccueil())){
+                mpdrTablesModify.add(mpdrColumn.getMPDRTableAccueil());
+            }
+        }
+        for (MPDRColumn mpdrColumn : mpdrColumnsToModifyAddNotNull) {
+            if (!mpdrTablesModify.contains(mpdrColumn.getMPDRTableAccueil())) {
+                mpdrTablesModify.add(mpdrColumn.getMPDRTableAccueil());
+            }
+        }
+        for (MPDRColumn mpdrColumn : mpdrColumnsToModifyDropNotNull) {
+            if (!mpdrTablesModify.contains(mpdrColumn.getMPDRTableAccueil())) {
+                mpdrTablesModify.add(mpdrColumn.getMPDRTableAccueil());
+            }
+        }
+        for (MPDRColumn mpdrColumn : mpdrColumnsToModifyAddOrModifyDefault) {
+            if (!mpdrTablesModify.contains(mpdrColumn.getMPDRTableAccueil())) {
+                mpdrTablesModify.add(mpdrColumn.getMPDRTableAccueil());
+            }
+        }
+        for (MPDRColumn mpdrColumn : mpdrColumnsToModifyDropDefault) {
+            if (!mpdrTablesModify.contains(mpdrColumn.getMPDRTableAccueil())) {
+                mpdrTablesModify.add(mpdrColumn.getMPDRTableAccueil());
+            }
+        }
+        for (MPDRUnique mpdrUnique : mpdrUniquesToAdd) {
+            if (!mpdrTablesModify.contains(mpdrUnique.getParent().getParent())) {
+                mpdrTablesModify.add((MPDRTable) mpdrUnique.getParent().getParent());
+            }
+        }
+        for (MPDRUnique dbUnique : dbUniquesToDrop) {
+            if (!mpdrTablesModify.contains(dbUnique.getParent().getParent())) {
+                mpdrTablesModify.add((MPDRTable) dbUnique.getParent().getParent());
+            }
+        }
+        for (MPDRCheck mpdrCheck : mpdrChecksToAdd) {
+            if (!mpdrTablesModify.contains(mpdrCheck.getParent().getParent())) {
+                mpdrTablesModify.add((MPDRTable) mpdrCheck.getParent().getParent());
+            }
+        }
+        for (MPDRCheck dbCheck : dbChecksToDrop) {
+            if (!mpdrTablesModify.contains(dbCheck.getParent().getParent())) {
+                mpdrTablesModify.add((MPDRTable) dbCheck.getParent().getParent());
+            }
+        }
+        for (MPDRPK mpdrPk : mpdrPksToAdd) {
+            if (!mpdrTablesModify.contains(mpdrPk.getParent().getParent())) {
+                mpdrTablesModify.add((MPDRTable) mpdrPk.getParent().getParent());
+            }
+        }
+        for (MPDRPK dbPk : dbPksToDrop) {
+            if (!mpdrTablesModify.contains(dbPk.getParent().getParent())) {
+                mpdrTablesModify.add((MPDRTable) dbPk.getParent().getParent());
+            }
+        }
+        for (MPDRFK mpdrFk : mpdrFksToAdd) {
+            if (!mpdrTablesModify.contains(mpdrFk.getParent().getParent())) {
+                mpdrTablesModify.add((MPDRTable) mpdrFk.getParent().getParent());
+            }
+        }
+        for (MPDRFK dbFk : dbFksToDrop) {
+            if (!mpdrTablesModify.contains(dbFk.getParent().getParent())) {
+                mpdrTablesModify.add((MPDRTable) dbFk.getParent().getParent());
+            }
+        }
+        for (MPDRFK mpdrFk : mpdrFksToAddDeleteCascade) {
+            if (!mpdrTablesModify.contains(mpdrFk.getParent().getParent())) {
+                mpdrTablesModify.add((MPDRTable) mpdrFk.getParent().getParent());
+            }
+        }
+        for (MPDRFK dbFk : dbFksToDropDeleteCascade) {
+            if (!mpdrTablesModify.contains(dbFk.getParent().getParent())) {
+                mpdrTablesModify.add((MPDRTable) dbFk.getParent().getParent());
+            }
+        }
     }
 
-    private void removeIndexImpliciteFromListToDrop(MPDRTable dbTable){
-        for (MPDRIndex dbIndex : dbTable.getMPDRIndexes()) {
-            if(dbIndex.getName().equals(dbTable.getMPDRPK().getName())){
-                dbIndexsToDrop.remove(dbIndex);
-            }
-            for (MPDRUnique dbUnique : dbTable.getMPDRUniques()) {
-                if(dbIndex.getName().equals(dbUnique.getName())){
-                    dbIndexsToDrop.remove(dbIndex);
+    private void NotRegeneratedPackageInUnmodifyTable(){
+        for (Iterator<MPDRPackage> iterator = mpdrPackagesToCreateOrReplace.iterator(); iterator.hasNext();) {
+            MPDRPackage mpdrPackage = iterator.next();
+            if(!mpdrTablesModify.contains(mpdrPackage.getMPDRTableAccueil())){
+                if(identicalPackagesName.contains(mpdrPackage.getName()))
+                iterator.remove();
+                for (String identPackName : identicalPackagesName) {
+                    String bodyName = identPackName+"_BODY";
+                    if(bodyName.equals(mpdrPackage.getName())){
+                        iterator.remove();
+                    }
                 }
             }
-            }
-        }
-
-    private void compareIndexToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
-        List<String> dbIndexNameList = new ArrayList<>();
-        for (MPDRIndex dbIndex : dbTable.getMPDRIndexes()) {
-            dbIndexNameList.add(dbIndex.getName());
-        }
-        for (MPDRIndex mpdrIndex : mpdrTable.getMPDRIndexes()) {
-            if (!dbIndexNameList.contains(mpdrIndex.getName())) {
-                mpdrIndexsToCreate.add(mpdrIndex);
-            }
         }
     }
+
+
 }

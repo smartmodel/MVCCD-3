@@ -99,6 +99,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
             generateSQLCodeSync.append(syncPkToAdd(mpdrTableToModifiy));
             generateSQLCodeSync.append(syncUniqueToAdd(mpdrTableToModifiy));
             generateSQLCodeSync.append(syncCheckToAdd(mpdrTableToModifiy));
+
         }//Fin de boucle des tables identiques
 
         //Ajout des contraintes de clés étrangères
@@ -428,7 +429,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
 
     private String syncPackageToCreateForNewTable() {
         StringBuilder code = new StringBuilder();
-        if (oracleComparatorDb.getMpdrModel() instanceof IMPDRModelRequirePackage) {
+        //if (oracleComparatorDb.getMpdrModel() instanceof IMPDRModelRequirePackage) {
             for (MPDRTable mpdrTable : oracleComparatorDb.getMpdrTablesToCreate()) {
                 if (((IMPDRTableRequirePackage) mpdrTable).getMPDRPackages() != null) {
                     for (MPDRPackage mpdrPackage : ((IMPDRTableRequirePackage) mpdrTable).getMPDRPackages()) {
@@ -437,7 +438,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
                     }
                 }
             }
-        }
+        //}
         return code.toString();
     }
 
