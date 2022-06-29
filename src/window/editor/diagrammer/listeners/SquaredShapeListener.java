@@ -112,6 +112,7 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
         }
       }
     }
+    DiagrammerService.getDrawPanel().repaint();
   }
 
   @Override
