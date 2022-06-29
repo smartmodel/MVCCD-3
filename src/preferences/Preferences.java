@@ -62,8 +62,8 @@ public class Preferences extends MVCCDElement {
   public static final int DIAGRAMMER_CLASS_PADDING = 10;
   public static final int DIAGRAMMER_NOTE_PADDING = 15;
   public static final int DIAGRAMMER_LABEL_PADDING = 5;
-  public static final int DIAGRAMMER_COMPOSITION_DIAMOND_WIDTH = 8;
-  public static final int DIAGRAMMER_COMPOSITION_DIAMOND_HEIGHT = 13;
+  public static final int DIAGRAMMER_RELATION_DIAMOND_WIDTH = 8;
+  public static final int DIAGRAMMER_RELATION_DIAMOND_HEIGHT = 13;
   public static final int DIAGRAMMER_GENERALIZATION_WIDTH = 8;
   public static final int DIAGRAMMER_GENERALIZATION_HEIGHT = 13;
   public static final int DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN = 7;
@@ -79,6 +79,7 @@ public class Preferences extends MVCCDElement {
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT = "Association";
   public static final String DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT = "Généralisation";
   public static final String DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT = "Composition";
+  public static final String DIAGRAMMER_PALETTE_NATURAL_IDENTIFIER_BUTTON_TEXT = "Identifiant naturel";
   public static final String DIAGRAMMER_PALETTE_NOTE_BUTTON_TEXT = "Note";
   public static final String DIAGRAMMER_PALETTE_ANCHOR_BUTTON = "Ancre";
   public static final String DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT = "Association réflexive";
@@ -92,6 +93,7 @@ public class Preferences extends MVCCDElement {
   public static final String DIAGRAMMER_MCD_LINK_XML_TAG = "mcdLinkShape";
   public static final String DIAGRAMMER_MCD_ANCHOR_XML_TAG = "mcdAnchorShape";
   public static final String DIAGRAMMER_MCD_COMPOSITION_XML_TAG = "mcdCompositionShape";
+  public static final String DIAGRAMMER_MCD_NATURAL_IDENTIFIER_XML_TAG = "mcdNaturalIdentifierShape";
   public static final String DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG = "anchorPoint";
   public static final String DIAGRAMMER_LABEL_XML_TAG = "labelShape";
   public static final String DIAGRAMMER_LABELS_XML_TAG_NAME = "labelShapes";

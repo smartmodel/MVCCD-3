@@ -59,11 +59,11 @@ public class UIUtils {
   }
 
   public static double getCompositionDiamondWidth() {
-    return Preferences.DIAGRAMMER_COMPOSITION_DIAMOND_WIDTH * DiagrammerService.getDrawPanel().getZoomFactor();
+    return Preferences.DIAGRAMMER_RELATION_DIAMOND_WIDTH * DiagrammerService.getDrawPanel().getZoomFactor();
   }
 
   public static double getCompositionDiamondHeight() {
-    return Preferences.DIAGRAMMER_COMPOSITION_DIAMOND_HEIGHT * DiagrammerService.getDrawPanel().getZoomFactor();
+    return Preferences.DIAGRAMMER_RELATION_DIAMOND_HEIGHT * DiagrammerService.getDrawPanel().getZoomFactor();
   }
 
   public static double getGeneralizationArrowWidth() {
