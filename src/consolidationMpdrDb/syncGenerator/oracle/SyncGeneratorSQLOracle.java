@@ -105,7 +105,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         generateSQLCodeSync.append(syncFKAddDeleteCascade());
         generateSQLCodeSync.append(syncFkToAdd());
 
-        //Suppression et ajout des séquences, triggers et packages
+        //Suppression et ajout des séquences, index , triggers et packages
         generateSQLCodeSync.append(syncSequenceToDrop());
         generateSQLCodeSync.append(syncSequenceNotInTableToDrop());
         generateSQLCodeSync.append(syncSequenceToCreate());

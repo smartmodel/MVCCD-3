@@ -3,9 +3,7 @@ package consolidationMpdrDb.comparator.oracle;
 import connections.ConConnection;
 import consolidationMpdrDb.comparator.MpdrDbComparator;
 import consolidationMpdrDb.fetcher.oracle.DbFetcherOracle;
-import constraints.Constraint;
 import mpdr.*;
-import mpdr.oracle.MPDROracleFK;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.tapis.*;
 import mpdr.tapis.oracle.MPDROracleBoxPackages;
@@ -39,7 +37,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     private List<MPDRFK> mpdrFksToAdd = new ArrayList<>();
     private List<MPDRFK> dbFksToDrop = new ArrayList<>();
     private List<MPDRFK> mpdrFksToAddDeleteCascade = new ArrayList<>();
-    private List<MPDRFK> dbFksToDropDeleteCascade = new ArrayList<>(); //A supprimer ?
+    private List<MPDRFK> dbFksToDropDeleteCascade = new ArrayList<>();
     private List<MPDRSequence> mpdrSequencesToCreate = new ArrayList<>();
     private List<MPDRSequence> dbSequencesToDrop = new ArrayList<>();
     private List<MPDRTrigger> mpdrTriggersToCreateOrReplace = new ArrayList<>();
@@ -47,6 +45,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
     private List<MPDRPackage> mpdrPackagesToCreateOrReplace = new ArrayList<>();
     private List<MPDRPackage> dbPackagesToDrop = new ArrayList<>();
     private List<MPDRIndex> mpdrIndexsToCreate = new ArrayList<>();
+    private List<String> listFKNameRemove = new ArrayList<>();
     private List<MPDRIndex> dbIndexsToDrop = new ArrayList<>();
 
     private MPDROracleModel mpdrModel;
@@ -420,6 +419,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
             if (!splitFkName.contains(shortName)) {
                 for (MPDRFK dbFk : dbTable.getMPDRFKs()) {
                     dbFksToDrop.remove(dbFk);
+                    listFKNameRemove.add(dbFk.getName());
                 }
             }
         }
@@ -659,12 +659,17 @@ public class OracleComparatorDb extends MpdrDbComparator {
             for (String splitElement : listSplitElement) {
                 if (listNameColumnToDrop.contains(splitElement)) {
                     iterator.remove();
+                    listFKNameRemove.add(dbFk.getName());
                 }
             }
         }
         for (Iterator<MPDRIndex> iterator = dbIndexsToDrop.iterator(); iterator.hasNext();) {
             MPDRIndex dbIndex = iterator.next();
-            if(listNameColumnToDrop.contains(dbIndex.getName())){
+            if(listFKNameRemove.contains(dbIndex.getName())){
+                iterator.remove();
+            }
+            //Si c'est la table parent qui est supprimée
+            if (getDbTablesToDrop().contains(dbIndex.getParent().getParent().getName())){
                 iterator.remove();
             }
         }
