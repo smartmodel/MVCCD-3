@@ -67,6 +67,7 @@ public class DbFetcherOracle extends DbFetcher {
                 fetchUnique(dbTable);
                 fetchCheck(dbTable);
                 fetchFk(dbTable);
+                fetchIndex(dbTable);
             }
         }
     }
@@ -187,7 +188,7 @@ public class DbFetcherOracle extends DbFetcher {
             if (!dbTable.getMPDRFKs().contains(rsCursorFks.getString((Preferences.FETCHER_ORACLE_CONSTRAINT_NAME)))) {
                 dbFK = MVCCDElementFactory.instance().createMPDROracleFK(dbTable.getMDRContConstraints(), null);
                 dbFK.setName(rsCursorFks.getString(Preferences.FETCHER_ORACLE_CONSTRAINT_NAME));
-                if (rsCursorFks.getString("DELETE_RULE").equals("CASCADE")) {
+                if (rsCursorFks.getString(Preferences.FETCHER_ORACLE_DELETE_RULE).equals(Preferences.FETCHER_ORACLE_CASCADE)) {
                     dbFK.setDeleteCascade(true);
                 }
             }
@@ -215,6 +216,32 @@ public class DbFetcherOracle extends DbFetcher {
         }
         pStmtFks.close();
         rsCursorFks.close();
+    }
+
+    private void fetchIndex(MPDROracleTable dbTable) throws SQLException {
+        MPDRIndex dbIndex = null;
+        String requeteSQL = Preferences.FETCHER_ORACLE_REQUETE_SQL_USER_IND_COLUMNS;
+        PreparedStatement pStmtIndex = connection.prepareStatement(requeteSQL);
+        ResultSet rsCursorIndex = pStmtIndex.executeQuery();
+        while (rsCursorIndex.next()){
+            String indexName = rsCursorIndex.getString(Preferences.FETCHER_ORACLE_INDEX_NAME);
+            String tableName = rsCursorIndex.getString(Preferences.FETCHER_ORACLE_TABLE_NAME);
+            String columnName = rsCursorIndex.getString(Preferences.FETCHER_ORACLE_COLUMN_NAME);
+            if(dbTable.getName().equals(tableName)) {
+                //Si le nom de l'index n'existe pas, on en crée un
+                if (!dbTable.getMPDRIndexes().contains(indexName)) {
+                    dbIndex = MVCCDElementFactory.instance().createMPDROracleIndex(dbTable.getMDRContConstraints(), null);
+                    dbIndex.setName(indexName);
+                }
+                for (MPDRColumn dbColumn : dbTable.getMPDRColumns()) {
+                    if (dbColumn.getName().equals(columnName)) {
+                        MPDRParameter mpdrParameter = MVCCDElementFactory.instance().createMPDROracleParameter((IMPDROracleElement) dbIndex, (MLDRParameter) null);
+                        mpdrParameter.setTargetId(dbColumn.getId());
+                        mpdrParameter.setName(dbColumn.getName());
+                    }
+                }
+            }
+        }
     }
 
     private void fetchSequences(List<MPDRTable> dbTables) throws SQLException {
@@ -304,7 +331,7 @@ public class DbFetcherOracle extends DbFetcher {
             String triggerName = triggersSequencesMap.get(seqName);
             if(seqName.equals(sequenceName)){
                 String tabName= triggersMap.get(triggerName); //K=triggerName, V=tableName
-                if(tabName.equals(dbTable.getName())){
+                if(dbTable.getName().equals(tabName)){
                     return dbTable;
                 }
             }
@@ -377,7 +404,4 @@ public class DbFetcherOracle extends DbFetcher {
         return triggersNotInTable;
     }
 
-    private void fetchIndex() {
-        // A développer ultérieurement
-    }
 }

@@ -1194,6 +1194,10 @@ public class Preferences extends MVCCDElement {
   public static String FETCHER_ORACLE_SYS_ =" 'SYS_%'";
   public static String FETCHER_ORACLE_TRIGGER_BODY = "TRIGGER_BODY";
   public static String FETCHER_ORACLE_POSITION = "POSITION";
+  public static String FETCHER_ORACLE_REQUETE_SQL_USER_IND_COLUMNS = "SELECT * FROM USER_IND_COLUMNS";
+  public static String FETCHER_ORACLE_INDEX_NAME = "INDEX_NAME";
+  public static String FETCHER_ORACLE_DELETE_RULE = "DELETE_RULE";
+  public static String FETCHER_ORACLE_CASCADE = "CASCADE";
 
   //Templates de consolidation
   public static String TEMPLATE_ALTER_TABLE_CREATE_UNIQUE = "alterTableAddUnique.txt";

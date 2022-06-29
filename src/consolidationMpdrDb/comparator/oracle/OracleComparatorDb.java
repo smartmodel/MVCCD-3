@@ -3,7 +3,9 @@ package consolidationMpdrDb.comparator.oracle;
 import connections.ConConnection;
 import consolidationMpdrDb.comparator.MpdrDbComparator;
 import consolidationMpdrDb.fetcher.oracle.DbFetcherOracle;
+import constraints.Constraint;
 import mpdr.*;
+import mpdr.oracle.MPDROracleFK;
 import mpdr.oracle.MPDROracleModel;
 import mpdr.tapis.*;
 import mpdr.tapis.oracle.MPDROracleBoxPackages;
@@ -44,6 +46,8 @@ public class OracleComparatorDb extends MpdrDbComparator {
     private List<MPDRTrigger> dbTriggersToDrop = new ArrayList<>();
     private List<MPDRPackage> mpdrPackagesToCreateOrReplace = new ArrayList<>();
     private List<MPDRPackage> dbPackagesToDrop = new ArrayList<>();
+    private List<MPDRIndex> mpdrIndexsToCreate = new ArrayList<>();
+    private List<MPDRIndex> dbIndexsToDrop = new ArrayList<>();
 
     private MPDROracleModel mpdrModel;
     private MPDROracleModel dbModelOracle;
@@ -79,6 +83,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
                 compareCheck(mpdrTable, dbTable);
                 compareFk(mpdrTable, dbTable);
                 compareFkOptionDeleteCascadeToAddOrDrop(mpdrTable, dbTable);
+                compareIndex(mpdrTable, dbTable);
                 removeConstraintFromDropColumn();
                 compareTriggers(mpdrTable.getMPDRBoxTriggers(), dbTable.getMPDRBoxTriggers());
                 comparePackages((MPDROracleBoxPackages) mpdrTable.getMPDRContTAPIs().getMPDRBoxPackages(), (MPDROracleBoxPackages) dbTable.getMPDRContTAPIs().getMPDRBoxPackages());
@@ -606,7 +611,7 @@ public class OracleComparatorDb extends MpdrDbComparator {
         }
     }
 
-    //Elle permet de ne pas supprimer les contraintes qui sont déjà supprimées implicitement lors du drop column cascade
+    //Elle permet de ne pas supprimer les contraintes et index qui sont déjà supprimés implicitement lors du drop column cascade
     // Utilisation d'Iterator car sinon on ne peut pas supprimer un objet
     // d'une liste sur laquelle on boucle (currentmodificationexception)
     private void removeConstraintFromDropColumn() {
@@ -655,6 +660,12 @@ public class OracleComparatorDb extends MpdrDbComparator {
                 if (listNameColumnToDrop.contains(splitElement)) {
                     iterator.remove();
                 }
+            }
+        }
+        for (Iterator<MPDRIndex> iterator = dbIndexsToDrop.iterator(); iterator.hasNext();) {
+            MPDRIndex dbIndex = iterator.next();
+            if(listNameColumnToDrop.contains(dbIndex.getName())){
+                iterator.remove();
             }
         }
     }
@@ -774,5 +785,58 @@ public class OracleComparatorDb extends MpdrDbComparator {
 
     public List<MPDRFK> getDbFksToDropDeleteCascade() {
         return dbFksToDropDeleteCascade;
+    }
+
+    public List<MPDRIndex> getMpdrIndexsToCreate() {
+        return mpdrIndexsToCreate;
+    }
+
+    public List<MPDRIndex> getDbIndexsToDrop() {
+        return dbIndexsToDrop;
+    }
+
+    private void compareIndex(MPDRTable mpdrTable, MPDRTable dbTable) {
+        compareIndexToAdd(mpdrTable, dbTable);
+        compareIndexToDrop(mpdrTable, dbTable);
+    }
+
+    //Attention, le logiciel ne crée des index que sur les fk alors qu'implicitement Oracle en crée sur les uniques et pk également
+    private void compareIndexToDrop(MPDRTable mpdrTable, MPDRTable dbTable) {
+        List<String> mpdrIndexNameList = new ArrayList();
+        for (MPDRIndex mpdrIndex : mpdrTable.getMPDRIndexes()) {
+            mpdrIndexNameList.add(mpdrIndex.getName().toUpperCase());
+        }
+
+        for (MPDRIndex dbIndex : dbTable.getMPDRIndexes()) {
+            if (!mpdrIndexNameList.contains(dbIndex.getName())) {
+                dbIndexsToDrop.add(dbIndex);
+            }
+        }
+        removeIndexImpliciteFromListToDrop(dbTable);
+    }
+
+    private void removeIndexImpliciteFromListToDrop(MPDRTable dbTable){
+        for (MPDRIndex dbIndex : dbTable.getMPDRIndexes()) {
+            if(dbIndex.getName().equals(dbTable.getMPDRPK().getName())){
+                dbIndexsToDrop.remove(dbIndex);
+            }
+            for (MPDRUnique dbUnique : dbTable.getMPDRUniques()) {
+                if(dbIndex.getName().equals(dbUnique.getName())){
+                    dbIndexsToDrop.remove(dbIndex);
+                }
+            }
+            }
+        }
+
+    private void compareIndexToAdd(MPDRTable mpdrTable, MPDRTable dbTable) {
+        List<String> dbIndexNameList = new ArrayList<>();
+        for (MPDRIndex dbIndex : dbTable.getMPDRIndexes()) {
+            dbIndexNameList.add(dbIndex.getName());
+        }
+        for (MPDRIndex mpdrIndex : mpdrTable.getMPDRIndexes()) {
+            if (!dbIndexNameList.contains(mpdrIndex.getName())) {
+                mpdrIndexsToCreate.add(mpdrIndex);
+            }
+        }
     }
 }

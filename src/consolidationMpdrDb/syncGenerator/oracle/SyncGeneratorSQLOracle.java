@@ -21,6 +21,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
     private MPDROracleGenerateSQLUnique mpdrOracleGenerateSQLUnique;
     private MPDROracleGenerateSQLCheck mpdrOracleGenerateSQLCheck;
     private MPDROracleGenerateSQLFK mpdrOracleGenerateSQLFK;
+    private MPDROracleGenerateSQLIndex mpdrOracleGenerateSQLIndex;
     private MPDROracleGenerateSQLSequence mpdrOracleGenerateSQLSequence;
     private MPDROracleGenerateSQLTrigger mpdrOracleGenerateSQLTrigger;
     private MPDROracleGenerateSQLPackage mpdrOracleGenerateSQLPackage;
@@ -40,6 +41,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         this.mpdrOracleGenerateSQLUnique = new MPDROracleGenerateSQLUnique(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLCheck = new MPDROracleGenerateSQLCheck(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLFK = new MPDROracleGenerateSQLFK(mpdrOracleGenerateSQL);
+        this.mpdrOracleGenerateSQLIndex = new MPDROracleGenerateSQLIndex(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLSequence = new MPDROracleGenerateSQLSequence(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLTrigger = new MPDROracleGenerateSQLTrigger(mpdrOracleGenerateSQL);
         this.mpdrOracleGenerateSQLPackage = new MPDROracleGenerateSQLPackage(mpdrOracleGenerateSQL);
@@ -67,7 +69,8 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
                 - contraintes not nul
             - contraintes uniques, check et pk
             - contraintes fk de la table
-            - contraintes fk qui pointe sur la table
+            - contraintes fk qui pointent sur la table
+            - indexes
             - triggers
             -----------------------------
             - packages NON
@@ -106,12 +109,14 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         generateSQLCodeSync.append(syncSequenceToDrop());
         generateSQLCodeSync.append(syncSequenceNotInTableToDrop());
         generateSQLCodeSync.append(syncSequenceToCreate());
+        generateSQLCodeSync.append(syncIndexToDrop());
+        generateSQLCodeSync.append(syncIndexToCreate());
         generateSQLCodeSync.append(syncTriggerToDrop());
         generateSQLCodeSync.append(syncTriggerNotInTableToDrop());
-        //On redéfinit manuellement le délimiteur car ensuite, les instructions sont en bloc PL/SQL
-        delimiter = Preferences.SYSTEM_LINE_SEPARATOR + "/" + Preferences.SYSTEM_LINE_SEPARATOR;
         generateSQLCodeSync.append(syncPackageToDrop());
         generateSQLCodeSync.append(syncPackageNotInTableToDrop());
+        //On redéfinit manuellement le délimiteur car ensuite, les instructions sont en bloc PL/SQL
+        delimiter = Preferences.SYSTEM_LINE_SEPARATOR + "/" + Preferences.SYSTEM_LINE_SEPARATOR;
         generateSQLCodeSync.append(syncTriggerToCreateOrReplace());
         generateSQLCodeSync.append(syncTriggerToCreateForNewTable());
         generateSQLCodeSync.append(syncPackageToCreateOrReplace());
@@ -436,4 +441,21 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         return code.toString();
     }
 
+    private String syncIndexToCreate() {
+        StringBuilder code = new StringBuilder();
+        for (MPDRIndex mpdrIndexToCreate : oracleComparatorDb.getMpdrIndexsToCreate()) {
+            code.append(mpdrOracleGenerateSQLIndex.generateSQLCreateIndex(mpdrIndexToCreate));
+            code.append(delimiter);
+        }
+        return code.toString();
+    }
+
+    private String syncIndexToDrop() {
+        StringBuilder code = new StringBuilder();
+        for (MPDRIndex dbIndexToDrop : oracleComparatorDb.getDbIndexsToDrop()) {
+            code.append(mpdrOracleGenerateSQLIndex.generateSQLConsolidationDropIndex(dbIndexToDrop));
+            code.append(delimiter);
+        }
+        return code.toString();
+    }
 }
