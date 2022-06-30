@@ -8,7 +8,6 @@ import m.interfaces.IMRelation;
 import mpdr.MPDRRelFKEnd;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
-import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
 import window.editor.diagrammer.services.DiagrammerService;
 
@@ -36,7 +35,7 @@ public class MPDRelationShape extends RelationShape {
   @Override
   public void createLabelsAfterRelationShapeEdit() {
     if (!this.getRelatedRepositoryElement().getName().isEmpty()) {
-      LabelShape labelShape;
+
       if (this.anchorPoints.size() <= 2) {
         RelationAnchorPointShape anchorPoint = this.anchorPoints.get(0);
         Point relationCenter = this.getCenter();
@@ -44,17 +43,17 @@ public class MPDRelationShape extends RelationShape {
         int distanceInXFromAnchorPoint = (int) (relationCenter.x - anchorPoint.x * 1.1);
         int distanceInYFromAnchorPoint = (relationCenter.y - anchorPoint.y);
 
-        labelShape = this.createOrUpdateLabel(anchorPoint, getRelatedRepositoryElement().getName(),
+        this.createOrUpdateLabel(anchorPoint, getRelatedRepositoryElement().getName(),
             LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
 
       } else {
         int middleIndex = anchorPoints.size() / 2;
 
-        labelShape = createOrUpdateLabel(anchorPoints.get(middleIndex),
+        createOrUpdateLabel(anchorPoints.get(middleIndex),
             getRelatedRepositoryElement().getName(),
             LabelType.ASSOCIATION_NAME, 0, 0);
       }
-      super.getLabels().add(labelShape);
+
     } else {
       deleteLabel(LabelType.ASSOCIATION_NAME);
     }
@@ -65,10 +64,9 @@ public class MPDRelationShape extends RelationShape {
 
       this.setSource(
           DiagrammerService.getDrawPanel().getMDTableShapeByName(b.getmElement().getName()));
-      LabelShape labelShape = createOrUpdateLabel(getFirstPoint(), b.getMultiMaxStd().getText(),
+      createOrUpdateLabel(getFirstPoint(), b.getMultiMaxStd().getText(),
           LabelType.SOURCE_CARDINALITY, 0, 0);
 
-      super.getLabels().add(labelShape);
     } else {
       deleteLabel(LabelType.SOURCE_CARDINALITY);
     }
@@ -79,10 +77,7 @@ public class MPDRelationShape extends RelationShape {
 
       this.setDestination(
           DiagrammerService.getDrawPanel().getMDTableShapeByName(a.getmElement().getName()));
-      LabelShape labelShape = createOrUpdateLabel(getLastPoint(), a.getMultiMaxStd().getText(),
-          LabelType.DESTINATION_CARDINALITY, 0, 0);
 
-      super.getLabels().add(labelShape);
     } else {
       deleteLabel(LabelType.DESTINATION_CARDINALITY);
     }

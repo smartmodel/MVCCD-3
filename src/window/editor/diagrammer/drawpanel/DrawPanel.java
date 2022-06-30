@@ -11,6 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +28,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.interfaces.UMLPackageIntegrableShapes;
 import window.editor.diagrammer.elements.shapes.MDTableShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
@@ -87,11 +89,17 @@ public class DrawPanel extends JLayeredPane implements Serializable {
 
     // Pour afficher le label du diagramme ouvert en haut à gauche du diagramme
     if (MVCCDManager.instance().getCurrentDiagram() != null) {
-      Diagram currentDiagram = MVCCDManager.instance().getCurrentDiagram();
-      MVCCDElement typeModele = currentDiagram.getParent().getParent();
-      graphics2D.drawString(typeModele + " " + currentDiagram.getName(), 0, 10);
+      this.drawDiagramLabel(graphics2D);
     }
 
+  }
+
+  public void drawDiagramLabel(Graphics2D graphics2D) {
+    Diagram currentDiagram = MVCCDManager.instance().getCurrentDiagram();
+    MVCCDElement abstractionLevel = currentDiagram.getParent().getParent();
+    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    graphics2D.drawString(abstractionLevel + " " + currentDiagram.getName(), 0, 10);
   }
 
   public MCDEntityShape getMcdEntityShapeById(int id) {
@@ -351,17 +359,19 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   }
 
   public void resizeShapesBeforeExport(Collection<ClassShape> elements) {
-    elements.forEach(e ->
-    {
-      e.setSize((e.getBounds().width + 7), e.getBounds().height);
-    });
+    elements.stream()
+        .filter(e -> !(e instanceof UMLPackageIntegrableShapes))
+        .forEach(e ->
+            e.setSize((e.getBounds().width + 7), e.getBounds().height)
+        );
   }
 
   public void resizeShapesAfterExport(Collection<ClassShape> elements) {
-    elements.forEach(e ->
-    {
-      e.setSize((e.getBounds().width - 7), e.getBounds().height);
-    });
+    elements.stream()
+        .filter(e -> !(e instanceof UMLPackageIntegrableShapes))
+        .forEach(e ->
+            e.setSize((e.getBounds().width - 7), e.getBounds().height)
+        );
   }
 
   public Rectangle getContentBounds(Collection<IShape> elements, int borderWidth) {

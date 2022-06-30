@@ -24,6 +24,6 @@ public class MCDEntityShapeDeleteActions extends CommonDeleteActions implements 
 
   private void deleteObject() {
     super.deleteGraphically(shape);
-    super.deleteObject(shape);
+    shape.getEntity().delete();
   }
 }

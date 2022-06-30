@@ -143,10 +143,10 @@ public class DropTargetListener extends DropTargetAdapter {
   public void checkDependencyLinkTAPIStoTable(DefaultMutableTreeNode fatherNode, UMLPackage shape) {
     // On contrôle si la table parent du TAPIs est présente dans le diagramme
     boolean tablePresent = currentDiagram.getMDTableShapeList()
-        .stream().anyMatch(e -> e.getEntity().getName().equals(fatherNode.toString()));
+        .stream().anyMatch(e -> e.getTable().getName().equals(fatherNode.toString()));
     if (tablePresent) {
       ClassShape tableSource = currentDiagram.getMDTableShapeList()
-          .stream().filter(e -> e.getEntity().getName().equals(fatherNode.toString())).findFirst()
+          .stream().filter(e -> e.getTable().getName().equals(fatherNode.toString())).findFirst()
           .orElseThrow(RuntimeException::new);
 
       DependencyLinkShape tapisAssociationShape = new DependencyLinkShape(shape, tableSource,
@@ -220,15 +220,15 @@ public class DropTargetListener extends DropTargetAdapter {
               List<MDTableShape> mdTableShapes = currentDiagram.getMDTableShapeList();
 
               if (mdTableShapes.stream()
-                  .anyMatch(e -> e.getEntity().getName().equals(nodeControleNom))) {
+                  .anyMatch(e -> e.getTable().getName().equals(nodeControleNom))) {
 
                 MDTableShape table1 = mdTableShapes.stream()
-                    .filter(e -> e.getEntity().getName().equals(node.toString()))
+                    .filter(e -> e.getTable().getName().equals(node.toString()))
                     .findFirst()
                     .orElseThrow(RuntimeException::new);
 
                 MDTableShape table2 = mdTableShapes.stream()
-                    .filter(e -> e.getEntity().getName().equals(nodeControleNom))
+                    .filter(e -> e.getTable().getName().equals(nodeControleNom))
                     .findFirst()
                     .orElseThrow(RuntimeException::new);
 

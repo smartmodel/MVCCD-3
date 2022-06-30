@@ -61,7 +61,6 @@ public class DependencyLinkShape extends RelationShape implements IShape, Serial
             LabelType.ASSOCIATION_NAME, 0, 0);
       }
       DiagrammerService.getDrawPanel().add(labelShape);
-      super.getLabels().add(labelShape);
     } else {
       deleteLabel(LabelType.ASSOCIATION_NAME);
     }

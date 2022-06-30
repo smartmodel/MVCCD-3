@@ -9,7 +9,6 @@ import window.editor.diagrammer.menus.actions.ModifyColorActions;
 public abstract class CommonMenu extends JPopupMenu {
 
   private final JMenuItem deleteGraphically;
-
   private final JMenuItem color;
   private final JMenuItem colorAll;
 

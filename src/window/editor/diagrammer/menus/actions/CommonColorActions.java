@@ -17,21 +17,27 @@ public abstract class CommonColorActions extends AbstractAction {
   }
 
   protected void modifyColorOfAllSameObjects(SquaredShape shape) {
+    Color currentColor = shape.getBackground();
     Color newColor = JColorChooser.showDialog(null, "Sélectionner une couleur",
-        shape.getBackground());
+        currentColor);
 
-    instanceMVCCDManager.getCurrentDiagram()
-        .getSquaredShapes()
-        .stream()
-        .filter(e -> e.getClass().equals(shape.getClass()))
-        .forEach(
-            ele -> ele.setBackground(newColor)
-        );
+    if (newColor != null && newColor != currentColor) {
+      instanceMVCCDManager.getCurrentDiagram()
+          .getSquaredShapes()
+          .stream()
+          .filter(e -> e.getClass().equals(shape.getClass()))
+          .forEach(
+              ele -> ele.setBackground(newColor)
+          );
+    }
   }
 
   protected void modifyColorOfThisObject(SquaredShape shape) {
+    Color currentColor = shape.getBackground();
     Color newColor = JColorChooser.showDialog(null, "Sélectionner une couleur",
-        shape.getBackground());
-    shape.setBackground(newColor);
+        currentColor);
+    if (newColor != null && newColor != currentColor) {
+      shape.setBackground(newColor);
+    }
   }
 }

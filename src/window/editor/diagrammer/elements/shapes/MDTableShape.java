@@ -129,7 +129,7 @@ public class MDTableShape extends ClassShape implements Serializable {
 
   }
 
-  public MDRTable getEntity() {
+  public MDRTable getTable() {
     return (MDRTable) this.getRelatedRepositoryElement();
   }
 
@@ -160,8 +160,8 @@ public class MDTableShape extends ClassShape implements Serializable {
         e -> zoneOperations.addElement(e)
     );
 
-    mpdrTable.getMPDRUniquesString().forEach(
-        e -> zoneOperations.addElement(e)
+    mpdrTable.getMPDRIndexesString().forEach(e ->
+        zoneOperations.addElement(e)
     );
 
     mpdrTable.getMPDRChecksString().forEach(
@@ -222,4 +222,5 @@ public class MDTableShape extends ClassShape implements Serializable {
   public int getID() {
     return super.getId();
   }
+
 }

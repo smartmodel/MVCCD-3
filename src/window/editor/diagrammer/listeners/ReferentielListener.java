@@ -13,7 +13,9 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import main.MVCCDManager;
+import main.window.diagram.WinDiagram;
 import main.window.repository.WinRepositoryPopupMenu;
+import project.Project;
 import project.ProjectElement;
 import window.editor.diagrammer.services.DiagrammerService;
 
@@ -21,6 +23,10 @@ public class ReferentielListener extends MouseAdapter implements TreeSelectionLi
     TreeExpansionListener {
 
   private DefaultMutableTreeNode node;
+  private MVCCDManager mvccdManager;
+  private Project project;
+  private WinDiagram winDiagram;
+
 
   public void valueChanged(TreeSelectionEvent evt) {
     if (evt.getNewLeadSelectionPath() != null) {
@@ -47,9 +53,10 @@ public class ReferentielListener extends MouseAdapter implements TreeSelectionLi
     if (node.getUserObject() instanceof ProjectElement) {
       lastProjectElement = (ProjectElement) node.getUserObject();
     }
-    if (MVCCDManager.instance().getProject() != null) {
-      MVCCDManager.instance().getProject().setLastWinRepositoryProjectElement(lastProjectElement);
-      MVCCDManager.instance().getProject().setLastWinRepositoryExpand(expandCollapse);
+
+    if (project != null) {
+      project.setLastWinRepositoryProjectElement(lastProjectElement);
+      project.setLastWinRepositoryExpand(expandCollapse);
     }
   }
 
@@ -75,14 +82,15 @@ public class ReferentielListener extends MouseAdapter implements TreeSelectionLi
           Diagram diagramClicked = (Diagram) clickedNode.getUserObject();
 
           // On supprime la palette d'éléments spécifique au MCD si un autre type de modèle est ouvert
+
           if (!(clickedNode.getUserObject() instanceof MCDDiagram)) {
-            MVCCDManager.instance().getWinDiagram().getContent().removePalette();
+            winDiagram.getContent().removePalette();
 
           } else {
-            MVCCDManager.instance().getWinDiagram().getContent().addPalette();
+            winDiagram.getContent().addPalette();
           }
 
-          MVCCDManager.instance().setCurrentDiagram(diagramClicked);
+          mvccdManager.setCurrentDiagram(diagramClicked);
         }
       }
     }
@@ -96,6 +104,10 @@ public class ReferentielListener extends MouseAdapter implements TreeSelectionLi
 
     // Pour récupérer le noeud sur lequel l'utilisateur a cliqué (utile pour les tables du MPDR)
     this.node = (DefaultMutableTreeNode) c.getLastSelectedPathComponent();
+
+    this.mvccdManager = MVCCDManager.instance();
+    this.project = mvccdManager.getProject();
+    this.winDiagram = mvccdManager.getWinDiagram();
   }
 
   private void myPopupEvent(MouseEvent e) {

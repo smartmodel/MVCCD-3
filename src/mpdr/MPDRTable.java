@@ -108,7 +108,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     return MPDRTableService.getIMPDRParameterByMLDRParameterSource(this, imldrParameter);
   }
 
-  public ArrayList<MPDRColumnAudit> getMPDRColumnsAudit() {
+  public List<MPDRColumnAudit> getMPDRColumnsAudit() {
     return MPDRColumnsService.getDRColumnsAudit(this);
   }
 
@@ -128,11 +128,11 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     return MPDRTableService.getMPDRFKByMLDRFKSource(this, mldrFk);
   }
 
-  public ArrayList<MPDRColumn> getMPDRColumns() {
+  public List<MPDRColumn> getMPDRColumns() {
     return MPDRColumnsService.to(getMDRColumns());
   }
 
-  public ArrayList<MPDRColumn> getMPDRColumnsSortDefault() {
+  public List<MPDRColumn> getMPDRColumnsSortDefault() {
     return MPDRColumnsService.to(getMDRColumnsSortDefault());
   }
 
@@ -220,7 +220,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     return (MPDRConstraintCustomAudit) getMDRConstraintCustomAudit();
   }
 
-  public ArrayList<MPDRFK> getMPDRFKs() {
+  public List<MPDRFK> getMPDRFKs() {
     return MPDRConstraintService.getMPDRFKs(getMDRConstraints());
   }
 
@@ -237,7 +237,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         collect(Collectors.toList());
   }
 
-  public ArrayList<MPDRUnique> getMPDRUniques() {
+  public List<MPDRUnique> getMPDRUniques() {
     return MPDRConstraintService.getMPDRUniques(getMDRConstraints());
   }
 
@@ -255,8 +255,20 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
         .collect(Collectors.toList());
   }
 
-  public ArrayList<MPDRIndex> getMPDRIndexes() {
+  public List<MPDRIndex> getMPDRIndexes() {
     return MPDRConstraintService.getMPDRIndexes(getMDRConstraints());
+  }
+
+  public List<String> getMPDRIndexesString() {
+    return this.getMPDRIndexes().stream()
+        .map(
+            e -> e.getStereotypesInLine() + " " + e.getName() + "(" +
+                (e.getMDRColumns().stream()
+                    .map(ee -> ee.toString().toLowerCase())
+                    .collect(Collectors.joining(","))
+                ) + ")"
+        )
+        .collect(Collectors.toList());
   }
 
   public MPDRModel getMPDRModelParent() {
@@ -271,6 +283,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     return null;
   }
 
+  @Override
   public String getShortName() {
     if (getMLDRTableSource() != null) {
       return getMLDRTableSource().getShortName();
@@ -285,8 +298,8 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
   }
 
 
-  public ArrayList<IMPDRConstraint> getIMPDRConstraints() {
-    ArrayList<IMPDRConstraint> resultat = new ArrayList<IMPDRConstraint>();
+  public List<IMPDRConstraint> getIMPDRConstraints() {
+    ArrayList<IMPDRConstraint> resultat = new ArrayList<>();
     for (MDRConstraint mdrConstraint : getMDRContConstraints().getMDRConstraints()) {
       if (mdrConstraint instanceof IMPDRConstraint) {
         resultat.add((IMPDRConstraint) mdrConstraint);
@@ -303,7 +316,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     return getMPDRContTAPIs().getMPDRBoxTriggers();
   }
 
-  public ArrayList<MPDRTrigger> getMPDRTriggers() {
+  public List<MPDRTrigger> getMPDRTriggers() {
     if (getMPDRBoxTriggers() != null) {
       return getMPDRBoxTriggers().getAllTriggers();
     }
@@ -324,7 +337,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
   }
 
 
-  public ArrayList<MPDRFunction> getMPDRFunctions() {
+  public List<MPDRFunction> getMPDRFunctions() {
     if (getMPDRBoxProceduresOrFunctions() != null) {
       return getMPDRBoxProceduresOrFunctions().getAllFunctions();
     }
@@ -338,7 +351,7 @@ public abstract class MPDRTable extends MDRTable implements IMPDRElement, IMPDRE
     return getMPDRContTAPIs().getMPDRViewByType(type);
   }
 
-  public ArrayList<MPDRView> getMPDRViews() {
+  public List<MPDRView> getMPDRViews() {
     return getMPDRContTAPIs().getMPDRAllViews();
   }
 

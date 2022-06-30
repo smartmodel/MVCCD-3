@@ -42,6 +42,10 @@ public abstract class CommonDeleteActions extends AbstractAction {
       }
     });
 
+    if (shape instanceof UMLPackage) {
+      ((UMLPackage) shape).getTapisElements().forEach(e -> drawPanel.deleteShape((IShape) e));
+    }
+
     List<IShape> allShapes = drawPanel.getShapes();
     Diagram currentDiagram = instanceMVCCDManager.getCurrentDiagram();
     List<IShape> shapeListCurrentDiagram = currentDiagram.getShapes();
@@ -60,17 +64,14 @@ public abstract class CommonDeleteActions extends AbstractAction {
         drawPanel.deleteShape(e);
         shapeListCurrentDiagram.remove(e);
 
-        ((UMLPackage) e).getTapisElements().forEach(
-            ee -> {
-              drawPanel.deleteShape((IShape) ee);
-              shapeListCurrentDiagram.remove(ee);
-            }
-        );
+        ((UMLPackage) e).getTapisElements().forEach(ee -> {
+          drawPanel.deleteShape((IShape) ee);
+          shapeListCurrentDiagram.remove(ee);
+        });
       }
     });
 
-    instanceMVCCDManager.removeMVCCDElementInRepository(
-        shape.getRelatedRepositoryElement(),
+    instanceMVCCDManager.removeMVCCDElementInRepository(shape.getRelatedRepositoryElement(),
         shape.getRelatedRepositoryElement().getParent());
   }
 
