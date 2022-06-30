@@ -28,7 +28,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
-import window.editor.diagrammer.elements.interfaces.UMLPackageIntegrableShapes;
 import window.editor.diagrammer.elements.shapes.MDTableShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
@@ -371,22 +370,6 @@ public class DrawPanel extends JLayeredPane implements Serializable {
           (int) this.getPreferredSize().getHeight() + adjustedY));
       this.changeViewPosition(adjustedX, adjustedY);
     }
-  }
-
-  public void resizeShapesBeforeExport(Collection<ClassShape> elements) {
-    elements.stream()
-        .filter(e -> !(e instanceof UMLPackageIntegrableShapes))
-        .forEach(e ->
-            e.setSize((e.getBounds().width + 7), e.getBounds().height)
-        );
-  }
-
-  public void resizeShapesAfterExport(Collection<ClassShape> elements) {
-    elements.stream()
-        .filter(e -> !(e instanceof UMLPackageIntegrableShapes))
-        .forEach(e ->
-            e.setSize((e.getBounds().width - 7), e.getBounds().height)
-        );
   }
 
   public Rectangle getContentBounds(Collection<IShape> elements, int borderWidth) {

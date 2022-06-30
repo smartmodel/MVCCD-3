@@ -81,6 +81,8 @@ public class MPDRelationShape extends RelationShape implements IShape, Serializa
       this.setDestination(
           DiagrammerService.getDrawPanel().getMDTableShapeByName(a.getmElement().getName()));
 
+      createOrUpdateLabel(getLastPoint(), a.getMultiMaxStd().getText(),
+          LabelType.DESTINATION_CARDINALITY, 0, 0);
     } else {
       deleteLabel(LabelType.DESTINATION_CARDINALITY);
     }

@@ -238,6 +238,10 @@ public class WinMenuContent implements ActionListener {
   }
 
   public void exportToSVG(DrawPanel panel, String fileName) {
+    // ZOOM par défaut
+    int userZoom = (int) panel.getZoomFactor();
+    panel.zoom(10);
+
     // On va récupérer le rectangle autour des formes graphiques dans le diagramme en gardant une bordure de 10 pixels
     Rectangle rectangle = panel.getContentBounds(panel.getShapes(), 10);
 
@@ -254,8 +258,6 @@ public class WinMenuContent implements ActionListener {
     // Désactive temporairement la grille de dessin du Diagrammer
     Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
     applicationPref.setDIAGRAMMER_SHOW_GRID(false);
-    // Resize technique des ClassShapes afin que le texte ne soit pas rogné par les bordures
-    panel.resizeShapesBeforeExport(panel.getClassShapes());
 
     SVGGraphics2D svgGraphics2D = new SVGGraphics2D(panel.getWidth(), panel.getHeight());
 
@@ -279,12 +281,16 @@ public class WinMenuContent implements ActionListener {
     } catch (IOException exp) {
       exp.printStackTrace();
     } finally {
-      panel.resizeShapesAfterExport(panel.getClassShapes());
+      panel.zoom(userZoom);
       applicationPref.setDIAGRAMMER_SHOW_GRID(true);
     }
   }
 
   public void exportToPNG(DrawPanel panel, String fileName) {
+    // ZOOM par défaut
+    int userZoom = (int) panel.getZoomFactor();
+    panel.zoom(10);
+
     // On va récupérer le rectangle autour des formes graphiques dans le diagramme en gardant une bordure de 10 pixels
     Rectangle rectangle = panel.getContentBounds(panel.getShapes(), 10);
     BufferedImage bufferedImage;
@@ -311,8 +317,6 @@ public class WinMenuContent implements ActionListener {
     // Désactive temporairement la grille de dessin du Diagrammer
     Preferences applicationPref = PreferencesManager.instance().getApplicationPref();
     applicationPref.setDIAGRAMMER_SHOW_GRID(false);
-    // Resize technique des ClassShapes afin que le texte ne soit pas rogné par les bordures
-    panel.resizeShapesBeforeExport(panel.getClassShapes());
 
     panel.printAll(graphics2D);
     graphics2D.dispose();
@@ -322,7 +326,7 @@ public class WinMenuContent implements ActionListener {
     } catch (IOException exp) {
       exp.printStackTrace();
     } finally {
-      panel.resizeShapesAfterExport(panel.getClassShapes());
+      panel.zoom(userZoom);
       applicationPref.setDIAGRAMMER_SHOW_GRID(true);
     }
   }
