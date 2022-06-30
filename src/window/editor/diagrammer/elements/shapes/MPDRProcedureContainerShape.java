@@ -62,6 +62,10 @@ public class MPDRProcedureContainerShape extends ClassShape implements
       );
     }
 
+    if (this.zoneProprietes.isEmpty()) {
+      this.zoneProprietes.addElement("TAPIs non générés (préférences)");
+    }
+
     this.updateSizeAndMinimumSize();
   }
 
@@ -91,20 +95,15 @@ public class MPDRProcedureContainerShape extends ClassShape implements
     int y = this.getZoneMinHeight(this.zoneEnTete.getElements())
         + Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
 
-    if (!this.zoneProprietes.getElements().isEmpty()) {
-      for (int i = 0; i < this.zoneProprietes.getElements().size(); i++) {
-        if (i == 1) {
-          this.setNameFont(graphics2D);
-        } else {
-          graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
-        }
-        int x = this.getCenterTextPositionX(this.zoneProprietes.getElements().get(i), graphics2D);
-        graphics2D.drawString(this.zoneProprietes.getElements().get(i), x, y);
-        y += graphics2D.getFontMetrics().getHeight();
+    for (int i = 0; i < this.zoneProprietes.getElements().size(); i++) {
+      if (i == 1) {
+        this.setNameFont(graphics2D);
+      } else {
+        graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
       }
-    } else {
-      graphics2D.drawString("TAPIs non générés (préférences)",
-          this.getCenterTextPositionX("TAPIs non générés (préférences)", graphics2D), y);
+      int x = this.getCenterTextPositionX(this.zoneProprietes.getElements().get(i), graphics2D);
+      graphics2D.drawString(this.zoneProprietes.getElements().get(i), x, y);
+      y += graphics2D.getFontMetrics().getHeight();
     }
   }
 
