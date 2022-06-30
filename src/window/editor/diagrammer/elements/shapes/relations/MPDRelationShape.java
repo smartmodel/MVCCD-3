@@ -4,18 +4,19 @@ import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Line2D;
+import java.io.Serializable;
 import m.interfaces.IMRelation;
 import mpdr.MPDRRelFKEnd;
+import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
-import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
 import window.editor.diagrammer.services.DiagrammerService;
 
-public class MPDRelationShape extends RelationShape {
+public class MPDRelationShape extends RelationShape implements IShape, Serializable {
 
 
   public MPDRelationShape(SquaredShape source, SquaredShape destination, IMRelation relation) {
-    super((ClassShape) source, destination, relation, false);
+    super(source, destination, relation, false);
     createLabelsAfterRelationShapeEdit();
   }
 
@@ -34,7 +35,7 @@ public class MPDRelationShape extends RelationShape {
 
   @Override
   public void createLabelsAfterRelationShapeEdit() {
-    if (!this.getRelatedRepositoryElement().getName().isEmpty()) {
+    if (!relation.getName().isEmpty()) {
 
       if (this.anchorPoints.size() <= 2) {
         RelationAnchorPointShape anchorPoint = this.anchorPoints.get(0);
@@ -43,14 +44,14 @@ public class MPDRelationShape extends RelationShape {
         int distanceInXFromAnchorPoint = (int) (relationCenter.x - anchorPoint.x * 1.1);
         int distanceInYFromAnchorPoint = (relationCenter.y - anchorPoint.y);
 
-        this.createOrUpdateLabel(anchorPoint, getRelatedRepositoryElement().getName(),
+        this.createOrUpdateLabel(anchorPoint, relation.getName(),
             LabelType.ASSOCIATION_NAME, distanceInXFromAnchorPoint, distanceInYFromAnchorPoint);
 
       } else {
         int middleIndex = anchorPoints.size() / 2;
 
         createOrUpdateLabel(anchorPoints.get(middleIndex),
-            getRelatedRepositoryElement().getName(),
+            relation.getName(),
             LabelType.ASSOCIATION_NAME, 0, 0);
       }
 
@@ -59,8 +60,9 @@ public class MPDRelationShape extends RelationShape {
     }
 
     // Cardinalité Source
-    if (!this.getRelatedRepositoryElement().getB().getImRelation().getName().isEmpty()) {
-      MPDRRelFKEnd b = (MPDRRelFKEnd) this.getRelatedRepositoryElement().getB();
+    if (!relation.getB().getImRelation().getName()
+        .isEmpty()) {
+      MPDRRelFKEnd b = (MPDRRelFKEnd) relation.getB();
 
       this.setSource(
           DiagrammerService.getDrawPanel().getMDTableShapeByName(b.getmElement().getName()));
@@ -72,8 +74,9 @@ public class MPDRelationShape extends RelationShape {
     }
 
     // Cardinalité Destination
-    if (!this.getRelatedRepositoryElement().getA().getImRelation().getName().isEmpty()) {
-      MPDRRelFKEnd a = (MPDRRelFKEnd) this.getRelatedRepositoryElement().getA();
+    if (!relation.getA().getImRelation().getName()
+        .isEmpty()) {
+      MPDRRelFKEnd a = (MPDRRelFKEnd) relation.getA();
 
       this.setDestination(
           DiagrammerService.getDrawPanel().getMDTableShapeByName(a.getmElement().getName()));

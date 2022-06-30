@@ -1,19 +1,21 @@
 package window.editor.diagrammer.elements.shapes.relations.labels;
 
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.Serializable;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.JPanel;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.GeometryUtils;
+import window.editor.diagrammer.utils.GridUtils;
+import window.editor.diagrammer.utils.ShapeUtils;
+import window.editor.diagrammer.utils.UIUtils;
 
 public class LabelShape extends JPanel implements Serializable {
 
@@ -135,7 +137,7 @@ public class LabelShape extends JPanel implements Serializable {
 
     SquaredShape nearestSquaredShape = this.relationShape.getNearestSquaredShape(this.pointAncrage);
 
-    if (GeometryUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestClassShape.getBounds())) {
+    if (ShapeUtils.pointIsOnLeftSideOfBounds(this.pointAncrage, nearestSquaredShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté gauche de la ClassShape
       if (this.isRole) {
         x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
@@ -144,7 +146,8 @@ public class LabelShape extends JPanel implements Serializable {
         x = this.pointAncrage.x - this.getWidth() - this.MARGIN;
         y = this.pointAncrage.y - this.getHeight() - this.MARGIN;
       }
-    } else if (ShapeUtils.pointIsOnRightSideOfBounds(this.pointAncrage, nearestSquaredShape.getBounds())) {
+    } else if (ShapeUtils.pointIsOnRightSideOfBounds(this.pointAncrage,
+        nearestSquaredShape.getBounds())) {
       // Le point d'ancrage est situé sur le côté droit de la ClassShape
       if (this.isRole) {
         x = this.pointAncrage.x + this.MARGIN;

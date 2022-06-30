@@ -3,7 +3,6 @@ package window.editor.diagrammer.elements.shapes.relations.mcd;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.io.Serial;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
@@ -12,7 +11,6 @@ import window.editor.diagrammer.utils.UIUtils;
 
 public abstract class MCDDiamondRelationShape extends RelationShape {
 
-  @Serial
   private static final long serialVersionUID = 2142680627104283937L;
 
   public MCDDiamondRelationShape() {

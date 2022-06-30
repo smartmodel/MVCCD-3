@@ -22,6 +22,7 @@ import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.UMLPackage;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
@@ -58,24 +59,23 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.source = source;
     this.destination = destination;
     this.isReflexive = isReflexive;
-    this.relatedRepositoryElement = relatedRepositoryElement;
-
     this.createAnchorPoints(isReflexive);
 
     this.setFocusable(true);
   }
 
-
-  public RelationShape(SquaredShape source, IShape destination, boolean isReflexive) {
-    this();
+  public RelationShape(int id, MDElement relatedRepositoryElement, SquaredShape source,
+      IShape destination, boolean isReflexive) {
+    this.id = id;
     this.source = source;
     this.destination = destination;
     this.isReflexive = isReflexive;
-
-    this.createAnchorPoint(isReflexive);
-
+    this.relatedRepositoryElement = relatedRepositoryElement;
+    this.createAnchorPoints(isReflexive);
     this.setFocusable(true);
+
   }
+
 
   public RelationShape(SquaredShape source, IShape destination, IMRelation relation,
       boolean isReflexive) {
@@ -85,8 +85,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.isReflexive = isReflexive;
     this.relation = relation;
 
-    this.createAnchorPoint(isReflexive);
-
+    this.createAnchorPoints(isReflexive);
     this.setFocusable(true);
   }
 
@@ -97,7 +96,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.isReflexive = isReflexive;
     this.id = id;
 
-    this.createAnchorPoint(isReflexive);
+    this.createAnchorPoints(isReflexive);
 
     this.setFocusable(true);
   }
@@ -109,7 +108,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.isReflexive = isReflexive;
     this.relatedRepositoryElement = relatedRepositoryElement;
 
-    this.createAnchorPoint(isReflexive);
+    this.createAnchorPoints(isReflexive);
 
     this.setFocusable(true);
 
@@ -407,15 +406,25 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     return this.isReflexive;
   }
 
-  private void createAnchorPoint(boolean isReflexive) {
+  private void createAnchorPoints(boolean isReflexive) {
     final int MARGIN = 50;
 
     if (isReflexive) {
-      RelationAnchorPointShape p1 = new RelationAnchorPointShape((int) this.source.getBounds().getMaxX() - MARGIN, (int) this.source.getBounds().getMinY(), 0);
-      RelationAnchorPointShape p2 = new RelationAnchorPointShape((int) this.source.getBounds().getMaxX() - MARGIN, (int) this.source.getBounds().getMinY() - MARGIN, 1);
-      RelationAnchorPointShape p3 = new RelationAnchorPointShape((int) this.source.getBounds().getMaxX() + MARGIN, (int) this.source.getBounds().getMinY() - MARGIN, 2);
-      RelationAnchorPointShape p4 = new RelationAnchorPointShape((int) this.source.getBounds().getMaxX() + MARGIN, (int) this.source.getBounds().getMinY() + MARGIN, 3);
-      RelationAnchorPointShape p5 = new RelationAnchorPointShape((int) this.source.getBounds().getMaxX(), (int) this.source.getBounds().getMinY() + MARGIN, 4);
+      RelationAnchorPointShape p1 = new RelationAnchorPointShape(
+          (int) this.source.getBounds().getMaxX() - MARGIN, (int) this.source.getBounds().getMinY(),
+          0);
+      RelationAnchorPointShape p2 = new RelationAnchorPointShape(
+          (int) this.source.getBounds().getMaxX() - MARGIN,
+          (int) this.source.getBounds().getMinY() - MARGIN, 1);
+      RelationAnchorPointShape p3 = new RelationAnchorPointShape(
+          (int) this.source.getBounds().getMaxX() + MARGIN,
+          (int) this.source.getBounds().getMinY() - MARGIN, 2);
+      RelationAnchorPointShape p4 = new RelationAnchorPointShape(
+          (int) this.source.getBounds().getMaxX() + MARGIN,
+          (int) this.source.getBounds().getMinY() + MARGIN, 3);
+      RelationAnchorPointShape p5 = new RelationAnchorPointShape(
+          (int) this.source.getBounds().getMaxX(), (int) this.source.getBounds().getMinY() + MARGIN,
+          4);
 
       this.addAnchorPoint(p1, p1.getIndex());
       this.addAnchorPoint(p2, p2.getIndex());
@@ -643,10 +652,6 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   public boolean isLastPoint(RelationAnchorPointShape anchorPoint) {
     return anchorPoint == this.getLastPoint();
-  }
-
-  public MDElement getRelatedRepositoryElement() {
-    return this.relatedRepositoryElement;
   }
 
   public abstract String getXmlTagName();

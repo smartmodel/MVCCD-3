@@ -8,9 +8,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
 import javax.swing.SwingUtilities;
+import preferences.Preferences;
+import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.interfaces.UMLPackageIntegrableShapes;
 import window.editor.diagrammer.elements.shapes.NoteShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.UMLPackage;
 import window.editor.diagrammer.palette.PaletteButtonType;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
@@ -57,7 +61,8 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
     this.shape.setFocused(false);
 
     if (RelationCreator.isCreating) {
-      Point converted = SwingUtilities.convertPoint(this.shape, e.getPoint(), DiagrammerService.getDrawPanel());
+      Point converted = SwingUtilities.convertPoint(this.shape, e.getPoint(),
+          DiagrammerService.getDrawPanel());
       Component componentFound = DiagrammerService.getDrawPanel().findComponentAt(converted);
 
       // Vérifie que le composant sur lequel le clic est relaché n'est pas la zone de dessin
@@ -108,7 +113,8 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
       if (PalettePanel.activeButton.getType() == PaletteButtonType.RELATION_CREATION) {
         DiagrammerService.getDrawPanel().repaint();
         if (RelationCreator.source == null) {
-          Point converted = SwingUtilities.convertPoint(this.shape, e.getPoint(), DiagrammerService.getDrawPanel());
+          Point converted = SwingUtilities.convertPoint(this.shape, e.getPoint(),
+              DiagrammerService.getDrawPanel());
           Component componentFound = DiagrammerService.getDrawPanel().findComponentAt(converted);
           System.out.println(componentFound instanceof NoteShape);
           RelationCreator.setSource(this.shape);
@@ -154,14 +160,18 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
       int newY;
       int newWidth;
       int newHeight;
-      int differenceX = GridUtils.alignToGrid(mouseClick.x - this.startPoint.x, DiagrammerService.getDrawPanel().getGridSize());
-      int differenceY = GridUtils.alignToGrid(mouseClick.y - this.startPoint.y, DiagrammerService.getDrawPanel().getGridSize());
+      int differenceX = GridUtils.alignToGrid(mouseClick.x - this.startPoint.x,
+          DiagrammerService.getDrawPanel().getGridSize());
+      int differenceY = GridUtils.alignToGrid(mouseClick.y - this.startPoint.y,
+          DiagrammerService.getDrawPanel().getGridSize());
       switch (this.cursor) {
         case Cursor.N_RESIZE_CURSOR: {
           newX = GridUtils.alignToGrid(x, DiagrammerService.getDrawPanel().getGridSize());
-          newY = GridUtils.alignToGrid(y + differenceY, DiagrammerService.getDrawPanel().getGridSize());
+          newY = GridUtils.alignToGrid(y + differenceY,
+              DiagrammerService.getDrawPanel().getGridSize());
           newWidth = GridUtils.alignToGrid(width, DiagrammerService.getDrawPanel().getGridSize());
-          newHeight = GridUtils.alignToGrid(height - differenceY, DiagrammerService.getDrawPanel().getGridSize());
+          newHeight = GridUtils.alignToGrid(height - differenceY,
+              DiagrammerService.getDrawPanel().getGridSize());
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
           // On vérifie que la nouvelle hauteur est plus grande ou égale à la taille minimale du composant
           if (newBounds.height >= this.shape.getMinimumSize().height) {
@@ -173,7 +183,8 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
           newX = x;
           newY = y;
           newWidth = width;
-          newHeight = GridUtils.alignToGrid(height + differenceY, DiagrammerService.getDrawPanel().getGridSize());
+          newHeight = GridUtils.alignToGrid(height + differenceY,
+              DiagrammerService.getDrawPanel().getGridSize());
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
           // On vérifie que la nouvelle hauteur est plus grande ou égale à la taille minimale du composant
           if (newBounds.height >= this.shape.getMinimumSize().height) {
@@ -184,9 +195,11 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
           break;
         }
         case Cursor.W_RESIZE_CURSOR: {
-          newX = GridUtils.alignToGrid(x + differenceX, DiagrammerService.getDrawPanel().getGridSize());
+          newX = GridUtils.alignToGrid(x + differenceX,
+              DiagrammerService.getDrawPanel().getGridSize());
           newY = y;
-          newWidth = GridUtils.alignToGrid(width - differenceX, DiagrammerService.getDrawPanel().getGridSize());
+          newWidth = GridUtils.alignToGrid(width - differenceX,
+              DiagrammerService.getDrawPanel().getGridSize());
           newHeight = height;
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
           // On vérifie que la nouvelle largeur est plus grande ou égale à la taille minimale du composant
@@ -198,7 +211,8 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
         case Cursor.E_RESIZE_CURSOR: {
           newX = x;
           newY = y;
-          newWidth = GridUtils.alignToGrid(width + differenceX, DiagrammerService.getDrawPanel().getGridSize());
+          newWidth = GridUtils.alignToGrid(width + differenceX,
+              DiagrammerService.getDrawPanel().getGridSize());
           newHeight = height;
           Rectangle newBounds = new Rectangle(newX, newY, newWidth, newHeight);
           // On vérifie que la nouvelle largeur est plus grande ou égale à la taille minimale du composant

@@ -1236,6 +1236,8 @@ public class Preferences extends MVCCDElement {
 
   private Boolean DIAGRAMMER_SHOW_GRID = null;
 
+  private Boolean DIAGRAMMER_UML_NOTATION = false; // TODO changer en null
+
   public Preferences(MVCCDElement parent, String name) {
     super(parent, name);
   }
@@ -1244,7 +1246,8 @@ public class Preferences extends MVCCDElement {
     return this.PERSISTENCE_SERIALISATION_INSTEADOF_XML;
   }
 
-  public void setPERSISTENCE_SERIALISATION_INSTEADOF_XML(Boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML) {
+  public void setPERSISTENCE_SERIALISATION_INSTEADOF_XML(
+      Boolean PERSISTENCE_SERIALISATION_INSTEADOF_XML) {
     this.PERSISTENCE_SERIALISATION_INSTEADOF_XML = PERSISTENCE_SERIALISATION_INSTEADOF_XML;
   }
 

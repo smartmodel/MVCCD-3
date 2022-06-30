@@ -1,11 +1,11 @@
 package window.editor.diagrammer.elements.shapes;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import md.MDElement;

@@ -1,17 +1,21 @@
 package window.editor.diagrammer.elements.shapes.classes;
 
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
 import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
-import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.GeometryUtils;
-
-import java.awt.*;
-import java.io.Serializable;
-import java.util.List;
+import window.editor.diagrammer.utils.UIUtils;
 
 public abstract class ClassShape extends SquaredShape implements Serializable {
 
@@ -69,14 +73,12 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
   }
 
   protected void drawZoneEnTete(Graphics2D graphics2D) {
-    int y = Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    int y = (int) UIUtils.getClassPadding() + graphics2D.getFontMetrics().getAscent();
     for (int i = 0; i < this.zoneEnTete.getElements().size(); i++) {
       graphics2D.setFont(UIUtils.getShapeFont());
       // Nom de la classe
       if (i == 1) {
         this.setNameFont(graphics2D);
-      } else {
-        graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
       }
       int x = this.getCenterTextPositionX(this.zoneEnTete.getElements().get(i), graphics2D);
       graphics2D.drawString(this.zoneEnTete.getElements().get(i), x, y);
@@ -93,15 +95,15 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     this.drawZoneProprietesBorder(graphics2D);
   }
 
-  private int getCenterTextPositionX(String element, Graphics2D graphics2D) {
+  protected int getCenterTextPositionX(String element, Graphics2D graphics2D) {
     return this.getWidth() / 2 - graphics2D.getFontMetrics().stringWidth(element) / 2;
   }
 
-  private int getZoneMinHeight(List<String> elements) {
+  protected int getZoneMinHeight(List<String> elements) {
     FontMetrics fontMetrics = this.getFontMetrics(UIUtils.getShapeFont());
     double minHeight = UIUtils.getClassPadding() * 2;
     minHeight += fontMetrics.getHeight() * elements.size();
-    return minHeight;
+    return (int) minHeight;
   }
 
   private void drawZoneEnTeteBorder(Graphics2D graphics2D) {
@@ -114,18 +116,18 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     if (this.zoneOperations.getElements().isEmpty() && this.zoneServices.getElements().isEmpty()) {
       height = this.getHeight() - this.getZoneMinHeight(this.zoneEnTete.getElements());
     } else {
-      height = UIUtils.getClassPadding() * 2
-          + this.zoneProprietes.getElements().size() * graphics2D.getFontMetrics().getHeight();
+      height = (int) (UIUtils.getClassPadding() * 2
+          + this.zoneProprietes.getElements().size() * graphics2D.getFontMetrics().getHeight());
     }
     graphics2D.drawRect(0, this.getZoneMinHeight(this.zoneEnTete.getElements()),
-        this.getWidth() - 1, (int) (height - 1));
+        this.getWidth() - 1, (height - 1));
   }
 
-  private void drawElements(Graphics2D graphics2D, List<String> elements, int y, Font font) {
+  protected void drawElements(Graphics2D graphics2D, List<String> elements, int y, Font font) {
     graphics2D.setFont(font);
     double x = UIUtils.getClassPadding();
     for (String element : elements) {
-      graphics2D.drawString(element, x, y);
+      graphics2D.drawString(element, (int) x, y);
       y += graphics2D.getFontMetrics().getHeight();
     }
   }
@@ -161,7 +163,8 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     Graphics2D graphics2D = (Graphics2D) g;
-    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     this.drawZoneEnTete(graphics2D);
     this.drawZoneProprietes(graphics2D);
   }
@@ -176,7 +179,8 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
 
   protected void updateSizeAndMinimumSize() {
     Dimension minimumSize = this.calculateMinimumSize();
-    if (minimumSize.width >= UIUtils.getClassShapeDefaultSize().width && minimumSize.height >= UIUtils.getClassShapeDefaultSize().height) {
+    if (minimumSize.width >= UIUtils.getClassShapeDefaultSize().width
+        && minimumSize.height >= UIUtils.getClassShapeDefaultSize().height) {
       this.setMinimumSize(minimumSize);
       this.setSize(minimumSize);
     }
@@ -190,6 +194,7 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
 
   protected abstract void setNameFont(Graphics2D graphics2D);
 
+  @Override
   public MDElement getRelatedRepositoryElement() {
 
     return this.relatedRepositoryElement;

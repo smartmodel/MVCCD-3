@@ -17,7 +17,7 @@ import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointSha
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.UMLPackageListener;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.GeometryUtils;
+import window.editor.diagrammer.utils.ShapeUtils;
 
 public class UMLPackage extends SquaredShape {
 
@@ -79,6 +79,11 @@ public class UMLPackage extends SquaredShape {
   }
 
   @Override
+  protected void defineSizeAtDefaultZoom() {
+
+  }
+
+  @Override
   public String getName() {
     return name;
   }
@@ -102,7 +107,7 @@ public class UMLPackage extends SquaredShape {
     for (RelationShape relation : DiagrammerService.getDrawPanel()
         .getRelationShapesBySquaredShape(this)) {
 
-      RelationAnchorPointShape nearestPointAncrage = GeometryUtils.getNearestPointAncrage(this,
+      RelationAnchorPointShape nearestPointAncrage = ShapeUtils.getNearestPointAncrage(this,
           relation);
       nearestPointAncrage.setLocationDifference(differenceX, differenceY);
 

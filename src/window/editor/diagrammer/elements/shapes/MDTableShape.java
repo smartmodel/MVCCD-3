@@ -3,7 +3,6 @@ package window.editor.diagrammer.elements.shapes;
 import static preferences.Preferences.DIAGRAMMER_MDTABLE_DEFAULT_BACKGROUND_COLOR;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -11,9 +10,9 @@ import java.io.Serializable;
 import java.util.Objects;
 import mdr.MDRTable;
 import mpdr.MPDRTable;
-import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.MDTableShapeListener;
+import window.editor.diagrammer.utils.UIUtils;
 
 public class MDTableShape extends ClassShape implements Serializable {
 
@@ -30,15 +29,13 @@ public class MDTableShape extends ClassShape implements Serializable {
   protected void paintComponent(Graphics g) {
     int width = getWidth();
     int height = getHeight();
-
     Graphics2D graphics = (Graphics2D) g;
+
     graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
     graphics.setColor(super.getBackground());
-
     graphics.fillRoundRect(0, 0, width, height, 20, 20);
-
     graphics.setColor(Color.black);
+
     this.drawZoneEnTete(graphics);
     this.drawZoneProprietes(graphics);
     this.drawZoneOperations(graphics);
@@ -46,12 +43,12 @@ public class MDTableShape extends ClassShape implements Serializable {
 
   @Override
   protected void drawZoneEnTete(Graphics2D graphics2D) {
-    int y = getYSize(graphics2D);
+    int y = (int) UIUtils.getClassPadding() + graphics2D.getFontMetrics().getAscent();
     for (int i = 0; i < this.zoneEnTete.getElements().size(); i++) {
+      graphics2D.setFont(UIUtils.getShapeFont());
+      // Nom de la classe
       if (i == 1) {
         this.setNameFont(graphics2D);
-      } else {
-        graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
       }
       int x = this.getCenterTextPositionX(this.zoneEnTete.getElements().get(i), graphics2D);
       graphics2D.drawString(this.zoneEnTete.getElements().get(i), x, y);
@@ -60,32 +57,30 @@ public class MDTableShape extends ClassShape implements Serializable {
   }
 
   private int getYSize(Graphics2D graphics2D) {
-    return Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    return (int) (UIUtils.getClassPadding() + graphics2D.getFontMetrics().getHeight());
   }
 
   @Override
   protected void drawZoneProprietes(Graphics2D graphics2D) {
+    this.setZoneProprietesContent();
     int y =
         this.getZoneMinHeight(this.zoneEnTete.getElements()) + getYSize(graphics2D);
-    this.drawElements(graphics2D, this.zoneProprietes.getElements(), y);
+    this.drawElements(graphics2D, this.zoneProprietes.getElements(), y, UIUtils.getShapeFont());
   }
 
   private void drawZoneOperations(Graphics2D graphics2D) {
     this.setZoneOperationsContent();
     int y = this.getZoneMinHeight(this.zoneProprietes.getElements()) + this.getZoneMinHeight(
         this.zoneEnTete.getElements()) + getYSize(graphics2D);
-    this.drawElements(graphics2D, this.zoneOperations.getElements(), y);
+    this.drawElements(graphics2D, this.zoneOperations.getElements(), y, UIUtils.getShapeFont());
     this.drawBorders(graphics2D);
   }
 
-
-  @Override
   protected void initUI() {
     this.setZoneEnTeteContent();
     this.setZoneProprietesContent();
     this.setZoneOperationsContent();
-    this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH,
-        Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT));
+    this.setMinimumSize(UIUtils.getClassShapeDefaultSize());
     this.setSize(this.getMinimumSize());
   }
 
