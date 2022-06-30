@@ -22,7 +22,7 @@ public class MDTableShape extends ClassShape implements Serializable {
     super(mdrTable);
     this.name = mdrTable.getName();
     this.addListeners();
-    this.updateSizeAndMinimumSize();
+    this.initUI();
   }
 
   @Override
@@ -80,9 +80,9 @@ public class MDTableShape extends ClassShape implements Serializable {
     this.setZoneEnTeteContent();
     this.setZoneProprietesContent();
     this.setZoneOperationsContent();
-    this.setMinimumSize(UIUtils.getClassShapeDefaultSize());
-    this.setSize(this.getMinimumSize());
+    this.updateSizeAndMinimumSize();
   }
+
 
   private void drawBorders(Graphics2D graphics2D) {
     graphics2D.drawRoundRect(0, 0, this.getWidth() - 1, this.getHeight() - 1, 20, 20);

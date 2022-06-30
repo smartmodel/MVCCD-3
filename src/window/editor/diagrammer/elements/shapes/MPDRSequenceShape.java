@@ -13,6 +13,7 @@ import mpdr.MPDRTable;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.UMLPackageIntegrableShapes;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.utils.UIUtils;
 
 public class MPDRSequenceShape extends ClassShape implements UMLPackageIntegrableShapes {
 
@@ -118,13 +119,12 @@ public class MPDRSequenceShape extends ClassShape implements UMLPackageIntegrabl
 
   @Override
   protected void drawZoneEnTete(Graphics2D graphics2D) {
-    this.setZoneEnTeteContent();
-    int y = Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    int y = (int) UIUtils.getClassPadding() + graphics2D.getFontMetrics().getAscent();
     for (int i = 0; i < this.zoneEnTete.getElements().size(); i++) {
+      graphics2D.setFont(UIUtils.getShapeFont());
+      // Nom de la classe
       if (i == 1) {
         this.setNameFont(graphics2D);
-      } else {
-        graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
       }
       int x = this.getCenterTextPositionX(this.zoneEnTete.getElements().get(i), graphics2D);
       graphics2D.drawString(this.zoneEnTete.getElements().get(i), x, y);
@@ -139,8 +139,8 @@ public class MPDRSequenceShape extends ClassShape implements UMLPackageIntegrabl
   @Override
   protected void drawZoneProprietes(Graphics2D graphics2D) {
     this.setZoneProprietesContent();
-    int y = this.getZoneMinHeight(this.zoneEnTete.getElements())
-        + Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    int y =
+        this.getZoneMinHeight(this.zoneEnTete.getElements()) + getYSize(graphics2D);
 
     for (int i = 0; i < this.zoneProprietes.getElements().size(); i++) {
       if (i == 1) {
@@ -152,6 +152,10 @@ public class MPDRSequenceShape extends ClassShape implements UMLPackageIntegrabl
       graphics2D.drawString(this.zoneProprietes.getElements().get(i), x, y);
       y += graphics2D.getFontMetrics().getHeight();
     }
+  }
+
+  private int getYSize(Graphics2D graphics2D) {
+    return (int) (UIUtils.getClassPadding() + graphics2D.getFontMetrics().getHeight());
   }
 
   @Override

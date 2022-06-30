@@ -27,7 +27,7 @@ public abstract class CommonColorActions extends AbstractAction {
           .stream()
           .filter(e -> e.getClass().equals(shape.getClass()))
           .forEach(
-              ele -> ele.setBackground(newColor)
+              e -> e.setBackground(newColor)
           );
     }
   }

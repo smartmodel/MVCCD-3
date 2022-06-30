@@ -12,9 +12,11 @@ import java.util.Objects;
 import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
+import window.editor.diagrammer.utils.ShapeUtils;
 import window.editor.diagrammer.utils.UIUtils;
 
 public abstract class ClassShape extends SquaredShape implements Serializable {
@@ -58,8 +60,24 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     this.repaint();
   }
 
-  private void initUI() {
+  @Override
+  public void drag(int differenceX, int differenceY) {
+    super.drag(differenceX, differenceY);
+    for (RelationShape relation : DiagrammerService.getDrawPanel()
+        .getRelationShapesByClassShape(this)) {
+      if (relation.isReflexive()) {
+        for (RelationAnchorPointShape pointAncrage : relation.getAnchorPoints()) {
+          pointAncrage.setLocationDifference(differenceX, differenceY);
+        }
+      } else {
+        RelationAnchorPointShape nearestPointAncrage = ShapeUtils.getNearestPointAncrage(this,
+            relation);
+        nearestPointAncrage.setLocationDifference(differenceX, differenceY);
+      }
+    }
+  }
 
+  private void initUI() {
     // Lorsque la ClassShape est créée, seule la zone d'en-tête est affichée
     this.setZoneEnTeteContent();
     this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH,
@@ -134,8 +152,10 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
 
   protected Dimension calculateMinimumSize() {
     FontMetrics fontMetrics = this.getFontMetrics(UIUtils.getShapeFont());
-    int height = this.getZoneMinHeight(this.zoneEnTete.getElements()) + this.getZoneMinHeight(
-        this.zoneProprietes.getElements());
+    final int height = this.getZoneMinHeight(this.zoneEnTete.getElements())
+        + this.getZoneMinHeight(this.zoneProprietes.getElements())
+        + (!this.zoneOperations.getElements().isEmpty() ? this.getZoneMinHeight(
+        this.zoneOperations.getElements()) : 0);
     String longestProperty = this.getLongestProperty();
     double width = UIUtils.getClassShapeDefaultSize().width;
     if (longestProperty != null) {

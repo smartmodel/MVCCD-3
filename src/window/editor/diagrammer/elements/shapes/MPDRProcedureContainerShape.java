@@ -92,8 +92,7 @@ public class MPDRProcedureContainerShape extends ClassShape implements
   @Override
   protected void drawZoneProprietes(Graphics2D graphics2D) {
     this.setZoneProprietesContent();
-    int y = this.getZoneMinHeight(this.zoneEnTete.getElements())
-        + Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    int y = this.getZoneMinHeight(this.zoneEnTete.getElements()) + getYSize(graphics2D);
 
     for (int i = 0; i < this.zoneProprietes.getElements().size(); i++) {
       if (i == 1) {
@@ -106,6 +105,11 @@ public class MPDRProcedureContainerShape extends ClassShape implements
       y += graphics2D.getFontMetrics().getHeight();
     }
 
+  }
+
+
+  private int getYSize(Graphics2D graphics2D) {
+    return (int) (UIUtils.getClassPadding() + graphics2D.getFontMetrics().getHeight());
   }
 
   @Override
