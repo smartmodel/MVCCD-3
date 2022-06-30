@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.geom.Line2D;
 import m.interfaces.IMRelation;
 import mpdr.MPDRRelFKEnd;
+import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
@@ -59,11 +60,12 @@ public class MPDRelationShape extends RelationShape {
     }
 
     // Cardinalité Source
+    DrawPanel drawPanel = DiagrammerService.getDrawPanel();
     if (!this.getRelatedRepositoryElement().getB().getImRelation().getName().isEmpty()) {
       MPDRRelFKEnd b = (MPDRRelFKEnd) this.getRelatedRepositoryElement().getB();
 
       this.setSource(
-          DiagrammerService.getDrawPanel().getMDTableShapeByName(b.getmElement().getName()));
+          drawPanel.getMDTableShapeByName(b.getmElement().getName()));
       createOrUpdateLabel(getFirstPoint(), b.getMultiMaxStd().getText(),
           LabelType.SOURCE_CARDINALITY, 0, 0);
 
@@ -76,7 +78,7 @@ public class MPDRelationShape extends RelationShape {
       MPDRRelFKEnd a = (MPDRRelFKEnd) this.getRelatedRepositoryElement().getA();
 
       this.setDestination(
-          DiagrammerService.getDrawPanel().getMDTableShapeByName(a.getmElement().getName()));
+          drawPanel.getMDTableShapeByName(a.getmElement().getName()));
       createOrUpdateLabel(getLastPoint(), a.getMultiMaxStd().getText(),
           LabelType.DESTINATION_CARDINALITY, 0, 0);
     } else {
