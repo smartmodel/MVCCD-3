@@ -12,6 +12,7 @@ import mpdr.tapis.MPDRContTAPIs;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.UMLPackageIntegrableShapes;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.utils.UIUtils;
 
 public class MPDRTriggerShape extends ClassShape implements UMLPackageIntegrableShapes {
 
@@ -95,12 +96,11 @@ public class MPDRTriggerShape extends ClassShape implements UMLPackageIntegrable
   @Override
   protected void drawZoneEnTete(Graphics2D graphics2D) {
     this.setZoneEnTeteContent();
-    int y = Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    int y = (int) UIUtils.getClassPadding() + graphics2D.getFontMetrics().getAscent();
     for (int i = 0; i < this.zoneEnTete.getElements().size(); i++) {
+      graphics2D.setFont(UIUtils.getShapeFont());
       if (i == 1) {
         this.setNameFont(graphics2D);
-      } else {
-        graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
       }
       int x = this.getCenterTextPositionX(this.zoneEnTete.getElements().get(i), graphics2D);
       graphics2D.drawString(this.zoneEnTete.getElements().get(i), x + 5, y);

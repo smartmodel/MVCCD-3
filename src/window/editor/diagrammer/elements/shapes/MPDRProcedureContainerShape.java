@@ -13,6 +13,7 @@ import mpdr.tapis.MPDRContTAPIs;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.UMLPackageIntegrableShapes;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.utils.UIUtils;
 
 public class MPDRProcedureContainerShape extends ClassShape implements
     UMLPackageIntegrableShapes {
@@ -62,18 +63,21 @@ public class MPDRProcedureContainerShape extends ClassShape implements
       );
     }
 
+    if (this.zoneProprietes.isEmpty()) {
+      this.zoneProprietes.addElement("TAPIs non générés (préférences)");
+    }
+
     this.updateSizeAndMinimumSize();
   }
 
   @Override
   protected void drawZoneEnTete(Graphics2D graphics2D) {
     this.setZoneEnTeteContent();
-    int y = Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
+    int y = (int) UIUtils.getClassPadding() + graphics2D.getFontMetrics().getAscent();
     for (int i = 0; i < this.zoneEnTete.getElements().size(); i++) {
+      graphics2D.setFont(UIUtils.getShapeFont());
       if (i == 1) {
         this.setNameFont(graphics2D);
-      } else {
-        graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
       }
       int x = this.getCenterTextPositionX(this.zoneEnTete.getElements().get(i), graphics2D);
       graphics2D.drawString(this.zoneEnTete.getElements().get(i), x, y);
@@ -91,21 +95,17 @@ public class MPDRProcedureContainerShape extends ClassShape implements
     int y = this.getZoneMinHeight(this.zoneEnTete.getElements())
         + Preferences.DIAGRAMMER_CLASS_PADDING + graphics2D.getFontMetrics().getHeight();
 
-    if (!this.zoneProprietes.getElements().isEmpty()) {
-      for (int i = 0; i < this.zoneProprietes.getElements().size(); i++) {
-        if (i == 1) {
-          this.setNameFont(graphics2D);
-        } else {
-          graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
-        }
-        int x = this.getCenterTextPositionX(this.zoneProprietes.getElements().get(i), graphics2D);
-        graphics2D.drawString(this.zoneProprietes.getElements().get(i), x, y);
-        y += graphics2D.getFontMetrics().getHeight();
+    for (int i = 0; i < this.zoneProprietes.getElements().size(); i++) {
+      if (i == 1) {
+        this.setNameFont(graphics2D);
+      } else {
+        graphics2D.setFont(Preferences.DIAGRAMMER_CLASS_FONT);
       }
-    } else {
-      graphics2D.drawString("TAPIs non générés (préférences)",
-          this.getCenterTextPositionX("TAPIs non générés (préférences)", graphics2D), y);
+      int x = this.getCenterTextPositionX(this.zoneProprietes.getElements().get(i), graphics2D);
+      graphics2D.drawString(this.zoneProprietes.getElements().get(i), x, y);
+      y += graphics2D.getFontMetrics().getHeight();
     }
+
   }
 
   @Override
