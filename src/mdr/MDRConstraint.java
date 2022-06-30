@@ -1,14 +1,12 @@
 package mdr;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.stream.Collectors;
 import main.MVCCDElement;
 import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRConstraintService;
-import org.apache.commons.lang.StringUtils;
 import project.ProjectElement;
-import stereotypes.StereotypeService;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public abstract class MDRConstraint extends MDROperation{
 
@@ -39,6 +37,12 @@ public abstract class MDRConstraint extends MDROperation{
         return resultat;
     }
 
+  public String getMDRColumnsString() {
+    return this.getMDRColumns().stream()
+        .map(e -> e.toString().toLowerCase())
+        .collect(Collectors.joining(","));
+  }
+
     public ArrayList<MDRColumn> getMDRColumnsSortDefault(){
         ArrayList<MDRColumn> resultat = getMDRColumns();
         Collections.sort(resultat, MDRColumn::compareToDefault) ;
@@ -67,6 +71,29 @@ public abstract class MDRConstraint extends MDROperation{
     //TODO-0 A retirer en ayant les icones
     public String toString(){
 
+        /*
+        if (StringUtils.isNotEmpty(getName())){
+            return StereotypeService.getUMLName(getDefaultStereotype()) + " " + getName();
+        } else {
+            return "Nom à affecter" ;
+        }
+
+         */
+
+        /*
+        try {
+            return StereotypeService.getUMLName(getDefaultStereotype()) + " " + getName();
+        } catch (Exception e){
+            if (getName() != null){
+                return "Err. stéréo " + getName() ;
+            }
+            return "Nom (et nature à affecter)";
+        }
+        */
+
+
+
+        /*
         String resultat = "";
         if (getDefaultStereotype() != null ){
             if (StringUtils.isNotEmpty(StereotypeService.getUMLName(getDefaultStereotype()))){
@@ -98,5 +125,6 @@ public abstract class MDRConstraint extends MDROperation{
 
          */
         //return getName();
+      return null;
     }
 }

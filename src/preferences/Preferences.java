@@ -69,6 +69,19 @@ public class Preferences extends MVCCDElement {
   public static final int DIAGRAMMER_GENERALIZATION_WIDTH = 8;
   public static final int DIAGRAMMER_GENERALIZATION_HEIGHT = 13;
   public static final int DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN = 7;
+
+  public static final Color DIAGRAMMER_MDTABLE_DEFAULT_BACKGROUND_COLOR = Color.decode("#A0F0CF");
+
+  public static final Color DIAGRAMMER_MPDRPROCEDURECONTAINER_DEFAULT_BACKGROUND_COLOR = Color.decode(
+      "#F0E29F");
+
+  public static final Color DIAGRAMMER_UMLPACKAGE_DEFAULT_BACKGROUND_COLOR = Color.decode(
+      "#BFF0F0");
+
+  public static final Color DIAGRAMMER_MPDRSEQUENCE_DEFAULT_BACKGROUND_COLOR = Color.decode(
+      "#B4C0ED");
+  public static final Color DIAGRAMMER_MPDRTRIGGER_DEFAULT_BACKGROUND_COLOR = Color.decode(
+      "#F09396");
   public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
   public static final Color DIAGRAMMER_NOTE_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
   public static final Font DIAGRAMMER_CLASS_NAME_FONT = new Font("Arial", Font.BOLD, 13);
@@ -1222,7 +1235,6 @@ public class Preferences extends MVCCDElement {
   private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
 
   private Boolean DIAGRAMMER_SHOW_GRID = null;
-  private Boolean DIAGRAMMER_UML_NOTATION = false; // TODO changer en null
 
   public Preferences(MVCCDElement parent, String name) {
     super(parent, name);
@@ -2449,10 +2461,12 @@ public class Preferences extends MVCCDElement {
     this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
   }
 
+  //
   public Boolean isDIAGRAMMER_SHOW_GRID() {
     if (this.DIAGRAMMER_SHOW_GRID == null) {
       this.DIAGRAMMER_SHOW_GRID = true;
     }
+
     return this.DIAGRAMMER_SHOW_GRID;
   }
 

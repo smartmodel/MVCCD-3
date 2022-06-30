@@ -1,23 +1,21 @@
 package mpdr;
 
-import java.io.Serial;
-import mdr.MDRContDiagrams;
+import mcd.interfaces.IMPathOnlyRepositoryTree;
 import project.ProjectElement;
 
-public class MPDRContDiagrams extends MDRContDiagrams {
+public class MPDRContDiagrams extends MPDRElement implements IMPathOnlyRepositoryTree {
 
-  @Serial
-  private static final long serialVersionUID = -1528721623584797182L;
+    private static final long serialVersionUID = 1000;
 
-  public MPDRContDiagrams(ProjectElement parent, int id) {
-    super(parent, id);
-  }
+    public MPDRContDiagrams(ProjectElement parent, int id) {
+        super(parent, id);
+    }
 
-  public MPDRContDiagrams(ProjectElement parent, String name) {
-    super(parent, name);
-  }
+    public MPDRContDiagrams(ProjectElement parent, String name) {
+        super(parent, name);
+    }
 
-  public MPDRContDiagrams(ProjectElement parent) {
-    super(parent);
-  }
+    public MPDRContDiagrams(ProjectElement parent) {
+        super(parent);
+    }
 }

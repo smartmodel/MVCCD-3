@@ -1519,7 +1519,7 @@ public class ProjectSaverXml {
 
     // Vérifie si la forme a bien un objet du référentiel lié
     if (shape.getRelatedRepositoryElement() != null) {
-      shapeElement.setAttribute(Preferences.ATTRIBUTE_REPOSITORY_ASSOCIATION_ID, shape.getRelatedRepositoryElement().getIdProjectElementAsString());
+      shapeElement.setAttribute(Preferences.ATTRIBUTE_REPOSITORY_ASSOCIATION_ID, shape.getRelatedRepositoryElement().getName());
     }
 
     // Ajoute les points d'ancrage

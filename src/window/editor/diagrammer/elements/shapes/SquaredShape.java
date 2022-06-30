@@ -1,10 +1,12 @@
 package window.editor.diagrammer.elements.shapes;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
-import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import md.MDElement;
 import window.editor.diagrammer.elements.interfaces.IResizable;
@@ -28,6 +30,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   public SquaredShape(int id) {
     this();
     this.id = id;
+    this.addListeners();
   }
 
   public SquaredShape() {
@@ -37,8 +40,11 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
     this.initUI();
   }
 
+
   protected abstract void defineBackgroundColor();
+
   protected abstract void defineMinimumSize();
+
   protected abstract void defineSize();
 
   private void initUI() {
@@ -61,6 +67,8 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   @Override
   protected void paintComponent(Graphics graphics) {
     super.paintComponent(graphics);
+    this.setBorder(
+        BorderFactory.createLineBorder(Color.BLACK, 0));
     this.doDraw(graphics);
   }
 
@@ -109,7 +117,9 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
 
   @Override
   public void drag(int differenceX, int differenceY) {
-    this.setLocationDifference(differenceX, differenceY);
+    Rectangle bounds = this.getBounds();
+    bounds.translate(differenceX, differenceY);
+    this.setBounds(bounds);
     this.repaint();
   }
 

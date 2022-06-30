@@ -12,6 +12,15 @@ import preferences.Preferences;
 
 public class PalettePanel extends JToolBar implements Serializable {
 
+  private static PalettePanel instance;
+
+  public static synchronized PalettePanel instance() {
+    if (instance == null) {
+      instance = new PalettePanel();
+    }
+    return instance;
+  }
+
   private static final long serialVersionUID = 1000;
   public static PaletteButton activeButton;
   private List<PaletteButton> buttons = new ArrayList<>();

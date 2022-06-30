@@ -34,17 +34,18 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
     super.mouseClicked(e);
     this.shape.setFocused(true);
     DiagrammerService.getDrawPanel().deselectAllOtherShape(this.shape);
-    this.moveComponentToFront();
+    this.moveComponentToFront(e);
   }
 
   @Override
   public void mousePressed(MouseEvent mouseEvent) {
     this.shape.setFocused(true);
     DiagrammerService.getDrawPanel().deselectAllOtherShape(this.shape);
-    this.moveComponentToFront();
+    this.moveComponentToFront(mouseEvent);
     ResizableBorder resizableBorder = new ResizableBorder();
     this.cursor = resizableBorder.getCursor(mouseEvent);
     this.startPoint = mouseEvent.getPoint();
+    this.shape.repaint();
   }
 
   @Override
@@ -60,6 +61,7 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
       Component componentFound = DiagrammerService.getDrawPanel().findComponentAt(converted);
 
       // Vérifie que le composant sur lequel le clic est relaché n'est pas la zone de dessin
+      System.out.println(componentFound);
       if (componentFound != DiagrammerService.getDrawPanel()) {
         IShape shapeReleasedOn = (IShape) componentFound;
         if (shapeReleasedOn != null) {
@@ -68,6 +70,7 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
           RelationCreator.resetSourceAndDestination();
         }
       } else {
+        System.out.println("Clic lâché au dessus de la zone de dessin.");
         RelationCreator.resetSourceAndDestination();
       }
     }
@@ -118,6 +121,7 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
   @Override
   public void mouseMoved(MouseEvent e) {
     ResizableBorder resizableBorder = new ResizableBorder();
+
     if (resizableBorder.isOneRectangleHovered(e)) {
       // Redimensionnement en cours
       this.shape.setBorder(resizableBorder);
@@ -212,12 +216,54 @@ public class SquaredShapeListener extends MouseAdapter implements Serializable {
   }
 
   private void handleDrag(Point mouseClick) {
-    int differenceX = mouseClick.x - this.startPoint.x;
-    int differenceY = mouseClick.y - this.startPoint.y;
+    int differenceX = GridUtils.alignToGrid(mouseClick.x - this.startPoint.x,
+        DiagrammerService.getDrawPanel().getGridSize());
+    int differenceY = GridUtils.alignToGrid(mouseClick.y - this.startPoint.y,
+        DiagrammerService.getDrawPanel().getGridSize());
+
+    if (shape instanceof UMLPackageIntegrableShapes) {
+      // Pour ne pas laisser les composants se déplacer hors du UMLPackage
+      if ((
+          (shape.getBounds().getMaxX() > ((UMLPackageIntegrableShapes) shape).getParentUMLPackage()
+              .getBounds().getMaxX())
+              ||
+              (shape.getBounds().getMaxY()
+                  > ((UMLPackageIntegrableShapes) shape).getParentUMLPackage()
+                  .getBounds().getMaxY())
+              ||
+              (shape.getBounds().getMinX()
+                  < ((UMLPackageIntegrableShapes) shape).getParentUMLPackage()
+                  .getBounds().getMinX())
+              ||
+              (shape.getBounds().getMinY()
+                  < ((UMLPackageIntegrableShapes) shape).getParentUMLPackage()
+                  .getBounds().getMinY())
+      )) {
+        return;
+      }
+    }
+
     this.shape.drag(differenceX, differenceY);
+
+    if (shape instanceof UMLPackage) {
+      // Pour que les composants suivent le déplacement du UMLPackage
+      ((UMLPackage) shape).getTapisElements().forEach(e ->
+          {
+            int diffX = GridUtils.alignToGrid(mouseClick.x - this.startPoint.x,
+                DiagrammerService.getDrawPanel().getGridSize());
+            int diffY = GridUtils.alignToGrid(mouseClick.y - this.startPoint.y,
+                DiagrammerService.getDrawPanel().getGridSize());
+
+            ((SquaredShape) e).drag(diffX, diffY);
+          }
+      );
+    }
   }
 
-  private void moveComponentToFront() {
-    DiagrammerService.getDrawPanel().moveToFront(this.shape);
+  private void moveComponentToFront(MouseEvent event) {
+    SquaredShape shape = (SquaredShape) event.getSource();
+    DrawPanel drawPanel = (DrawPanel) SwingUtilities.getAncestorNamed(
+        Preferences.DIAGRAMMER_DRAW_PANEL_NAME, shape);
+    drawPanel.moveToFront(shape);
   }
 }

@@ -1,13 +1,15 @@
 package main.window.repository;
 
-import preferences.PreferencesManager;
-import utilities.window.PanelContent;
-
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeSelectionModel;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
+import preferences.PreferencesManager;
+import utilities.window.PanelContent;
+import window.editor.diagrammer.listeners.DropTargetListener;
+import window.editor.diagrammer.listeners.ReferentielListener;
+import window.editor.diagrammer.services.DiagrammerService;
 
 /**
  * La classe crée l'arbre de représentation du référentiel.
@@ -28,6 +30,10 @@ public class WinRepositoryContent extends PanelContent implements ActionListener
         tree.getSelectionModel().setSelectionMode
                 (TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setShowsRootHandles(true);
+        tree.setDragEnabled(true);
+        ReferentielListener referentielListener = new ReferentielListener();
+        tree.addMouseListener(referentielListener);
+        new DropTargetListener(DiagrammerService.getDrawPanel(), referentielListener);
 
         // Place l'arbre dans son ancêtre PanelBorder
         super.addContent(tree);

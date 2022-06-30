@@ -41,7 +41,6 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   private static final long serialVersionUID = 1000;
   private final Point origin;
   private List<IShape> shapes;
-  private boolean isManualScrolling = false;
   private int gridSize = Preferences.DIAGRAMMER_DEFAULT_GRID_SIZE;
 
   public DrawPanel() {
@@ -49,10 +48,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     this.origin = new Point();
     this.initUI();
     this.addListeners();
-  }
-
-  public double getZoomFactor() {
-    return this.gridSize / (double) Preferences.DIAGRAMMER_DEFAULT_GRID_SIZE;
+    this.repaint();
   }
 
   public int getGridSize() {
@@ -85,6 +81,20 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     if (RelationCreator.isCreating) {
       this.showRelationProjectionLine(graphics2D);
     }
+
+    // Pour afficher le label du diagramme ouvert en haut à gauche du diagramme
+    if (MVCCDManager.instance().getCurrentDiagram() != null) {
+      this.drawDiagramLabel(graphics2D);
+    }
+
+  }
+
+  public void drawDiagramLabel(Graphics2D graphics2D) {
+    Diagram currentDiagram = MVCCDManager.instance().getCurrentDiagram();
+    MVCCDElement abstractionLevel = currentDiagram.getParent().getParent();
+    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    graphics2D.drawString(abstractionLevel + " " + currentDiagram.getName(), 0, 10);
   }
 
   public MCDEntityShape getMcdEntityShapeById(int id) {
@@ -92,6 +102,17 @@ public class DrawPanel extends JLayeredPane implements Serializable {
       if (shape instanceof MCDEntityShape) {
         if (shape.getId() == id) {
           return (MCDEntityShape) shape;
+        }
+      }
+    }
+    return null;
+  }
+
+  public MDTableShape getMDTableShapeByName(String name) {
+    for (ClassShape shape : this.getClassShapes()) {
+      if (shape instanceof MDTableShape) {
+        if (shape.getName().equals(name)) {
+          return (MDTableShape) shape;
         }
       }
     }
@@ -139,6 +160,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     if (element != null) {
       this.add((JComponent) element);
       this.shapes.add(element);
+      this.repaint();
     } else {
       DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.add.null.element"));
     }
@@ -149,7 +171,10 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     for (IShape shape : shapes) {
       this.add((JComponent) shape);
     }
-    ViewLogsManager.printMessage(shapes.size() + " formes ont été ajoutées à la zone de dessin.", WarningLevel.INFO);
+    this.revalidate();
+    this.repaint();
+    ViewLogsManager.printMessage(shapes.size() + " formes ont été ajoutées à la zone de dessin.",
+        WarningLevel.INFO);
   }
 
   private void addListeners() {
@@ -172,18 +197,22 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   public void deleteShape(IShape shape) {
     this.remove((JComponent) shape);
     this.shapes.remove(shape);
+    this.revalidate();
+    this.repaint();
   }
 
   public void unloadAllShapes() {
     this.removeAll();
     this.shapes.clear();
     this.revalidate();
+    this.repaint();
   }
 
   public void drawRelations(Graphics2D graphics2D) {
     graphics2D.setColor(Color.BLACK);
     for (RelationShape relationShape : this.getRelationShapes()) {
       relationShape.draw(graphics2D);
+
     }
   }
 
@@ -199,8 +228,15 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     }
   }
 
+  public void repaintElements() {
+    for (IShape shape : getShapes()) {
+      shape.repaint();
+    }
+  }
+
   /**
    * Zoom les éléments du modèle.
+   *
    * @param fromFactor facteur de zoom initial
    * @param toFactor facteur de zoom final
    */
@@ -210,6 +246,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
         element.zoom(fromFactor, toFactor);
       }
     }
+    this.repaint();
   }
 
   public void moveOrigin(int differenceX, int differenceY) {
@@ -302,6 +339,22 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     }
   }
 
+  public void resizeShapesBeforeExport(Collection<ClassShape> elements) {
+    elements.stream()
+        .filter(e -> !(e instanceof UMLPackageIntegrableShapes))
+        .forEach(e ->
+            e.setSize((e.getBounds().width + 7), e.getBounds().height)
+        );
+  }
+
+  public void resizeShapesAfterExport(Collection<ClassShape> elements) {
+    elements.stream()
+        .filter(e -> !(e instanceof UMLPackageIntegrableShapes))
+        .forEach(e ->
+            e.setSize((e.getBounds().width - 7), e.getBounds().height)
+        );
+  }
+
   public Rectangle getContentBounds(Collection<IShape> elements, int borderWidth) {
     if (elements.size() == 0) {
       return new Rectangle(0, 0, 0, 0);
@@ -336,6 +389,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
   public void updatePanelAndScrollbars() {
     this.insertWhiteSpaceInUpperLeftCorner();
     //this.removeUnnecessaryWhitespaceAroundDiagram();
+    this.repaint();
   }
 
   private void insertWhiteSpaceInUpperLeftCorner() {
@@ -384,10 +438,14 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     }
   }
 
-  public void drag(int differenceX, int differenceY) {
-    for (IShape shape : this.shapes) {
-      shape.drag(differenceX, differenceY);
+  public void scroll(int differenceX, int differenceY) {
+    for (IShape element : this.getShapes()) {
+      element.setLocationDifference(differenceX, differenceY);
     }
+/*
+    DrawPanelComponent parent = (DrawPanelComponent) this.getParent().getParent();
+    parent.getHorizontalScrollBar().setValue(parent.getHorizontalScrollBar().getValue() + differenceX);
+*/
   }
 
   public void endScroll() {
@@ -423,6 +481,16 @@ public class DrawPanel extends JLayeredPane implements Serializable {
       }
     }
     return classShapes;
+  }
+
+  public List<RelationShape> getRelationShapesBySquaredShape(SquaredShape shape) {
+    List<RelationShape> relations = new ArrayList<>();
+    for (RelationShape relation : this.getRelationShapes()) {
+      if (relation.getSource() == shape || relation.getDestination() == shape) {
+        relations.add(relation);
+      }
+    }
+    return relations;
   }
 
   public List<RelationShape> getRelationShapesByClassShape(ClassShape shape) {

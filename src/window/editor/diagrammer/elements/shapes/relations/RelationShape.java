@@ -58,30 +58,59 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.source = source;
     this.destination = destination;
     this.isReflexive = isReflexive;
+    this.relatedRepositoryElement = relatedRepositoryElement;
 
     this.createAnchorPoints(isReflexive);
 
     this.setFocusable(true);
   }
 
-  public RelationShape(int id, SquaredShape source, IShape destination, boolean isReflexive) {
+
+  public RelationShape(SquaredShape source, IShape destination, boolean isReflexive) {
+    this();
+    this.source = source;
+    this.destination = destination;
+    this.isReflexive = isReflexive;
+
+    this.createAnchorPoint(isReflexive);
+
+    this.setFocusable(true);
+  }
+
+  public RelationShape(SquaredShape source, IShape destination, IMRelation relation,
+      boolean isReflexive) {
+    this();
+    this.source = source;
+    this.destination = destination;
+    this.isReflexive = isReflexive;
+    this.relation = relation;
+
+    this.createAnchorPoint(isReflexive);
+
+    this.setFocusable(true);
+  }
+
+
+  public RelationShape(int id, SquaredShape source, SquaredShape destination, boolean isReflexive) {
     this.source = source;
     this.destination = destination;
     this.isReflexive = isReflexive;
     this.id = id;
 
-    this.createAnchorPoints(isReflexive);
+    this.createAnchorPoint(isReflexive);
 
     this.setFocusable(true);
   }
 
-  public RelationShape(int id, MDElement relatedRepositoryElement, SquaredShape source, IShape destination, boolean isReflexive) {
+  public RelationShape(int id, MDElement relatedRepositoryElement, ClassShape source, IShape destination, boolean isReflexive) {
     this.id = id;
     this.source = source;
     this.destination = destination;
     this.isReflexive = isReflexive;
     this.relatedRepositoryElement = relatedRepositoryElement;
-    this.createAnchorPoints(isReflexive);
+
+    this.createAnchorPoint(isReflexive);
+
     this.setFocusable(true);
 
   }
@@ -162,12 +191,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   public void zoom(int fromFactor, int toFactor) {
     // Zoom les points d'ancrage qui composent la relation
     for (RelationAnchorPointShape anchorPointShape : this.anchorPoints) {
-      anchorPointShape.zoom(fromFactor, toFactor, this);
-    }
-
-    // Zoom les labels associsé
-    for (LabelShape label : this.labels) {
-      label.zoom(fromFactor, toFactor);
+      anchorPointShape.zoom(fromFactor, toFactor);
     }
   }
 
@@ -383,7 +407,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     return this.isReflexive;
   }
 
-  private void createAnchorPoints(boolean isReflexive) {
+  private void createAnchorPoint(boolean isReflexive) {
     final int MARGIN = 50;
 
     if (isReflexive) {
@@ -501,7 +525,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   public void generateAnchorPointWhenDestinationIsRelationShape() {
     this.anchorPoints.clear();
-    System.out.println("link");
+
     this.anchorPoints.add(new RelationAnchorPointShape(this.source.getX(), this.source.getY(), 0));
     RelationAnchorPointShape anchorPointOnDestinationRelation = new RelationAnchorPointShape(this.destination.getCenter().x, this.destination.getCenter().y, 1);
     this.anchorPoints.add(anchorPointOnDestinationRelation);
@@ -510,6 +534,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
 
   /**
    * Génère les points d'ancrage lorsque l'association est créée entre deux SquaredShape
+   *
    * @return Une liste contenant les points d'ancrage de l'association
    */
   public void generateAnchorPoints() {
@@ -527,6 +552,27 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
       x = (int) (sourceBounds.getMinX() + ((destBounds.getMaxX() - sourceBounds.getMinX()) / 2));
       this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMinY(), 0));
       this.anchorPoints.add(new RelationAnchorPointShape(x, (int) destBounds.getMaxY(), 1));
+    } else if (sourcePosition == Position.TOP_CENTER) {
+      if(this.source instanceof UMLPackage) {
+        x = (int) sourceBounds.getCenterX();
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMaxY(), 0));
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) destBounds.getMinY(), 1));
+      }else {
+        x = sourceBounds.x;
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMaxY(), 0));
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) destBounds.getMinY(), 1));
+      }
+    } else if (sourcePosition == Position.BOTTOM_CENTER) {
+      if(this.source instanceof UMLPackage) {
+        x = (int) sourceBounds.getCenterX();
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMinY(), 0));
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) destBounds.getMaxY(), 1));
+      }else {
+        x = sourceBounds.x;
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMinY(), 0));
+        this.anchorPoints.add(new RelationAnchorPointShape(x, (int) destBounds.getMaxY(), 1));
+      }
+
     } else if (sourcePosition == Position.BOTTOM_CENTER_LEFT) {
       x = (int) (sourceBounds.getMaxX() - ((sourceBounds.getMaxX() - destBounds.getMinX()) / 2));
       this.anchorPoints.add(new RelationAnchorPointShape(x, (int) sourceBounds.getMinY(), 0));
@@ -599,7 +645,19 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     return anchorPoint == this.getLastPoint();
   }
 
+  public MDElement getRelatedRepositoryElement() {
+    return this.relatedRepositoryElement;
+  }
+
   public abstract String getXmlTagName();
+
+  public void setSource(ClassShape source) {
+    this.source = source;
+  }
+
+  public void setDestination(SquaredShape destination) {
+    this.destination = destination;
+  }
 
   public List<LabelShape> getLabels() {
     return this.labels;

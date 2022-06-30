@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Line2D;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -28,14 +27,17 @@ import window.editor.diagrammer.menus.AnchorPointMenu;
 import window.editor.diagrammer.menus.RelationShapeMenu;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
+import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.RelationCreator;
-import window.editor.diagrammer.utils.ShapeUtils;
 
-public class DrawPanelListener extends MouseAdapter implements Serializable, KeyListener {
+public class DrawPanelListener extends MouseAdapter implements KeyListener, Serializable {
 
   private static final long serialVersionUID = 1000;
   private final Cursor CURSOR_ENTITY_ICON;
+  private boolean ctrlKeyPressed = false;
+  private boolean mouseWheelPressed = false;
+  private boolean spaceBarPressed = false;
   private Point origin;
   private int tempNewX = 0;
   private int tempNewAlignedX = 0;
@@ -141,6 +143,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
       }
     }
 
+    this.origin = e.getPoint();
   }
 
   @Override
@@ -169,67 +172,56 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
 
   }
 
-  private void dragDiagram(MouseEvent e) {
-    DiagrammerService.getDrawPanel().setManualScrolling(true);
-
-    int differenceX = e.getPoint().x - this.origin.x;
-    int differenceY = e.getPoint().y - this.origin.y;
-
-    this.origin = e.getPoint();
-    this.tempNewX += differenceX;
-    this.tempNewY += differenceY;
-
-    boolean xNeedsRealignment = this.tempNewX == GridUtils.alignToGrid(this.tempNewX + differenceX, DiagrammerService.getDrawPanel().getGridSize());
-    boolean yNeedsRealignement = this.tempNewY == GridUtils.alignToGrid(this.tempNewY + differenceY, DiagrammerService.getDrawPanel().getGridSize());
-
-    if (xNeedsRealignment && yNeedsRealignement) {
-      DiagrammerService.getDrawPanel().drag(this.tempNewX, this.tempNewY);
-      this.tempNewX = 0;
-      this.tempNewY = 0;
-    }
-
-    if (xNeedsRealignment && !yNeedsRealignement) {
-      DiagrammerService.getDrawPanel().drag(this.tempNewX, 0);
-      this.tempNewX = 0;
-    }
-
-    if (!xNeedsRealignment && yNeedsRealignement) {
-      DiagrammerService.getDrawPanel().drag(0, this.tempNewY);
-      this.tempNewY = 0;
+  public void selectAnchorPointsToMove(RelationAnchorPointShape anchorPoint) {
+    this.anchorPointsToMove.clear();
+    if (anchorPoint == this.focusedRelation.getFirstPoint()) {
+      // Premier point
+      this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() + 1));
+    } else if (anchorPoint == this.focusedRelation.getLastPoint()) {
+      // Dernier point
+      this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() - 1));
+    } else {
+      // Tout autre point entre l'indice 1 et n-1
+      this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() - 1));
+      this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() + 1));
     }
   }
 
-  public void selectAnchorPointsToMove() {
-/*    this.anchorPointsToMove.clear();
-    for (RelationAnchorPointShape anchorPoint : this.anchorPointsClicked) {
-      if (anchorPoint == this.focusedRelation.getFirstPoint()) {
-        // Premier point
-        this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() + 1));
-      } else if (anchorPoint == this.focusedRelation.getLastPoint()) {
-        // Dernier point
-        this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() - 1));
-      } else {
-        // Tout autre point entre l'indice 1 et n-1
-        this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() - 1));
-        this.anchorPointsToMove.add(this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() + 1));
-      }
-    }*/
+  @Override
+  public void keyTyped(KeyEvent e) {
   }
 
-  private void updateCursor(MouseEvent event) {
-    if (this.isScrollAllowed(event)) {
+  @Override
+  public void keyPressed(KeyEvent e) {
+    this.ctrlKeyPressed = e.isControlDown();
+    this.spaceBarPressed = (e.getKeyCode() == KeyEvent.VK_SPACE);
+    this.updateCursor();
+  }
+
+  @Override
+  public void keyReleased(KeyEvent e) {
+    this.ctrlKeyPressed = e.isControlDown();
+    if (this.spaceBarPressed && (e.getKeyCode() == KeyEvent.VK_SPACE)) {
+      this.spaceBarPressed = false;
+    }
+    this.updateCursor();
+    DiagrammerService.getDrawPanel().endScroll();
+  }
+
+  private void updateCursor() {
+    if (this.isScrollAllowed()) {
       DiagrammerService.getDrawPanel().setCursor(new Cursor(Cursor.HAND_CURSOR));
     } else {
       DiagrammerService.getDrawPanel().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
   }
 
-  private boolean isZoomAllowed(MouseEvent event) {
-    return event.isControlDown();
+  private boolean isZoomAllowed() {
+    return this.ctrlKeyPressed;
   }
 
-  private boolean isScrollAllowed(MouseEvent event) {
-    return event.isShiftDown();
+  private boolean isScrollAllowed() {
+    return this.spaceBarPressed || this.mouseWheelPressed;
   }
 
   private void createNoteShape(MouseEvent event) {
@@ -240,6 +232,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
 
     MVCCDManager.instance().getCurrentDiagram().addShape(shape);
     DiagrammerService.getDrawPanel().addShape(shape);
+    DiagrammerService.getDrawPanel().repaint();
   }
 
   private void createEntityShape(MouseEvent event) {
@@ -264,15 +257,16 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
     }
   }
 
-  private void checkAnchorPointsClicked(MouseEvent event) {
+  private RelationAnchorPointShape getAnchorPointClicked(MouseEvent event) {
     for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapes()) {
       for (RelationAnchorPointShape anchorPoint : relation.getAnchorPoints()) {
         if (anchorPoint.contains(event.getPoint())) {
-          this.anchorPointsClicked.add(anchorPoint);
+          this.selectAnchorPointsToMove(anchorPoint);
+          return anchorPoint;
         }
       }
     }
-    this.selectAnchorPointsToMove();
+    return null;
   }
 
   private void checkForClickedRelation(MouseEvent event) {
@@ -329,6 +323,7 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
 
   /***
    * Cette méthode gère le déplacement du premier ou dernier point d'ancrage d'une relation
+   * @param newPoint Nouveau point aux coordonnées x et y
    */
 /*  private void dragFirstAnchorPoint(int differenceX, int differenceY) {
 
@@ -350,6 +345,13 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
     } else if (this.focusedRelation.getDestination() instanceof SquaredShape) {
       dragAllowed = ShapeUtils.pointIsAroundShape(newPoint, (ClassShape) this.focusedRelation.getDestination());
     }
+
+      if (this.anchorPointClicked.y == anchorPointToMove.y) {
+        newPosition.y = newPoint.y;
+      }
+
+      boolean dragAllowed = this.checkIfAnchorPointCanBeDragged(anchorPointToMove, newPosition);
+
     if (dragAllowed) {
       this.anchorPointsClicked.drag(differenceX, differenceY);
     }
