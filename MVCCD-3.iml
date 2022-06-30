@@ -12,5 +12,6 @@
     <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.io:2.4" level="project" />
     <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.lang:2.6" level="project" />
     <orderEntry type="library" name="antlr-4.9.3-complete" level="project" />
+    <orderEntry type="library" name="flatlaf-2.0" level="project" />
   </component>
 </module>

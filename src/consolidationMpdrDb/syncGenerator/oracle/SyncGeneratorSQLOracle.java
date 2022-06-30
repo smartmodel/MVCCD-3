@@ -51,7 +51,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
     }
 
     public String delimiter() {
-        return Preferences.SYSTEM_LINE_SEPARATOR + getDelimiterInstructions() + Preferences.SYSTEM_LINE_SEPARATOR;
+        return /*Preferences.SYSTEM_LINE_SEPARATOR + */ getDelimiterInstructions() + Preferences.SYSTEM_LINE_SEPARATOR;
     }
 
     public String getDelimiterInstructions() {
@@ -60,9 +60,11 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
 
     public String syncOrderByTable() {
 
-        StringBuilder generateSQLCodeSync = new StringBuilder();
-        generateSQLCodeSync.append(" ");
+        StringBuilder generateSQLCodeSync = new StringBuilder("");
 
+        generateSQLCodeSync.append(syncIndexToDrop());
+        generateSQLCodeSync.append(syncTriggerToDrop());
+        generateSQLCodeSync.append(syncTriggerNotInTableToDrop());
         /*Suppression des tables en cascade efface :
             - tables
             - colonnes
@@ -110,10 +112,7 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         generateSQLCodeSync.append(syncSequenceToDrop());
         generateSQLCodeSync.append(syncSequenceNotInTableToDrop());
         generateSQLCodeSync.append(syncSequenceToCreate());
-        generateSQLCodeSync.append(syncIndexToDrop());
         generateSQLCodeSync.append(syncIndexToCreate());
-        generateSQLCodeSync.append(syncTriggerToDrop());
-        generateSQLCodeSync.append(syncTriggerNotInTableToDrop());
         generateSQLCodeSync.append(syncPackageToDrop());
         generateSQLCodeSync.append(syncPackageNotInTableToDrop());
         //On redéfinit manuellement le délimiteur car ensuite, les instructions sont en bloc PL/SQL
@@ -124,8 +123,9 @@ public class SyncGeneratorSQLOracle extends SyncGeneratorSQL {
         generateSQLCodeSync.append(syncPackageToCreateForNewTable());
 
         //S'il n'y a rien à générer, affichage d'un message d'information à l'utilisateur
-        if (generateSQLCodeSync.toString().equals(" ")) {
-            generateSQLCodeSync.append("La structure du SGBD-R est conforme au modèle");
+        if (generateSQLCodeSync.toString().equals("")) {
+            generateSQLCodeSync.append("La structure du SGBD-R est conforme au modèle\n");
+            generateSQLCodeSync.append("Aucun changement n'a été détecté");
         }
 
         return generateSQLCodeSync.toString();
