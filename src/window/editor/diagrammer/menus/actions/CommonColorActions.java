@@ -25,7 +25,7 @@ public abstract class CommonColorActions extends AbstractAction {
       instanceMVCCDManager.getCurrentDiagram()
           .getSquaredShapes()
           .stream()
-          .filter(e -> e.getClass().equals(shape.getClass()))
+          .filter(e -> e.getClass() == shape.getClass())
           .forEach(
               e -> e.setBackground(newColor)
           );
