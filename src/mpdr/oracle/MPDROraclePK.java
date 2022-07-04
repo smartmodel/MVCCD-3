@@ -20,7 +20,14 @@ public class MPDROraclePK extends MPDRPK implements IMPDROracleElement {
         super(parent, mldrElementSource, id);
     }
 
-
+    //TODO VINCENT
+    /*
+    public MPDROraclePK(String columnName, String pkName){
+        super();
+        this.setParent(columnName);
+        this.setName(pkName);
+    }
+*/
     public MPDRParameter createParameter(MLDRParameter  mldrParameter) {
         MPDRParameter mpdrParameter = MVCCDElementFactory.instance().createMPDROracleParameter(this, mldrParameter);
         return mpdrParameter;

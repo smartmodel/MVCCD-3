@@ -52,6 +52,15 @@ public abstract class MPDRGenerateSQLIndex {
         return generateSQLCode;
     }
 
+    public String generateSQLConsolidationDropIndex(MPDRIndex mpdrIndex) {
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
+                Preferences.TEMPLATE_DROP_INDEX,
+                getMPDRGenerateSQL().mpdrModel);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_INDEX_NAME_WORD, mpdrIndex.getName());
+        return generateSQLCode;
+    }
+
     protected abstract MPDRGenerateSQLIndexColumn getMPDRGenerateSQLIndexColumn();
 
     public abstract MPDRGenerateSQL getMPDRGenerateSQL() ;

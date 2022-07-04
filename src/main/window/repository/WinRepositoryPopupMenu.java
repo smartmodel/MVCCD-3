@@ -7,6 +7,7 @@ import connections.ConnectionsDB;
 import console.ConsoleManager;
 import console.LogsManager;
 import console.ViewLogsManager;
+import consolidationMpdrDb.viewer.WaitingSyncViewer;
 import constraints.Constraint;
 import constraints.ConstraintService;
 import constraints.ConstraintsManager;
@@ -436,6 +437,28 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         });
       }
 
+            //TODO VINCENT
+            if (node.getUserObject() instanceof MPDRModel) {
+                JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(
+                        "menu.generate.sql.from.mpdr.and.sgbdr"));
+                addItem(this, menuItem);
+                menuItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        try {
+                            WaitingSyncViewer waitingSyncViewer = new WaitingSyncViewer();
+                            new MPDRModelEditingTreat().treatSyncMpdrDb(mvccdWindow, mvccdElement, waitingSyncViewer);
+                            waitingSyncViewer.setVisible(false);
+                        } catch (Exception e){
+                            exceptionUnhandled(e, mvccdElement, "repository.menu.exception.consolidation.sql");
+                        }
+                    }
+                });
+            }
+
+            if (node.getUserObject() instanceof MPDRTable) {
+                treatGenericRead(this, new MDRTableEditingTreat());
+            }
       if (this.node.getUserObject() instanceof MPDRTable) {
         this.treatGenericRead(this, new MDRTableEditingTreat());
       }

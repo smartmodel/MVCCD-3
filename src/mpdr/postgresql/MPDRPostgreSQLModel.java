@@ -1,9 +1,11 @@
 package mpdr.postgresql;
 
 import datatypes.MPDRDatatype;
+import exceptions.CodeApplException;
 import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.postgresql.MPDRPostgreSQLGenerateSQL;
 import main.MVCCDElementFactory;
+import main.MVCCDWindow;
 import mdr.MDRCaseFormat;
 import mdr.services.MDRModelService;
 import mldr.MLDRColumn;
@@ -15,6 +17,8 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDRPostgreSQLDatatype;
+
+import java.sql.SQLException;
 
 public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLElement {
 
@@ -46,6 +50,16 @@ public class MPDRPostgreSQLModel extends MPDRModel implements IMPDRPostgreSQLEle
     public String treatGenerate() {
         MPDRGenerateSQL mpdrGenerateSQL = new MPDRPostgreSQLGenerateSQL(this);
         return mpdrGenerateSQL.generate();
+    }
+
+    @Override
+    public String treatSync(MVCCDWindow owner) throws SQLException {
+        return null;
+    }
+
+    //TODO VINCENT
+    public String treatSync(){
+        throw new CodeApplException("La synchronisation SQL pour " + this.getDb().getText() + " n'est pas encore développée");
     }
 
     @Override

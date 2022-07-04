@@ -469,6 +469,11 @@ public abstract class MPDRGenerateSQL {
                 Preferences.DIRECTORY_TEMPLATES_DYNAMIC_CODE;
     }
 
+    public String getTemplateDirAlterConsolidationDB(){
+        return getTemplateDirAlterDB() + Preferences.SYSTEM_FILE_SEPARATOR +
+                Preferences.DIRECTORY_TEMPLATES_CONSOLIDATION;
+    }
+
     /*
     public String getTemplateDirBlocksDB() {
         return getTemplateDirBaseDB() + Preferences.SYSTEM_FILE_SEPARATOR +

@@ -24,6 +24,12 @@ public class MPDROracleGenerateSQLIndex extends MPDRGenerateSQLIndex {
         return new MPDROracleGenerateSQLIndexColumn(mpdrOracleGenerateSQL);
     }
 
+    public String generateSQLConsolidationDropIndex(MPDRIndex mpdrIndex) {
+        String generateSQLCode = super.generateSQLConsolidationDropIndex(mpdrIndex);
+
+        return generateSQLCode;
+    }
+
     @Override
     public MPDRGenerateSQL getMPDRGenerateSQL() {
         return mpdrOracleGenerateSQL;

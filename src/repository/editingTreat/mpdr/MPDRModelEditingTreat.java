@@ -2,8 +2,10 @@ package repository.editingTreat.mpdr;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
+import consolidationMpdrDb.viewer.WaitingSyncViewer;
 import generatorsql.viewer.SQLViewer;
 import main.MVCCDElement;
+import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import mpdr.MPDRModel;
 import repository.editingTreat.EditingTreat;
@@ -59,4 +61,31 @@ public class MPDRModelEditingTreat extends EditingTreat {
         }
         return ok ;
    }
+
+   //Ajouté par Vincent
+    public boolean treatSyncMpdrDb(MVCCDWindow owner, MVCCDElement mvccdElement, WaitingSyncViewer waitingSyncViewer) {
+        MPDRModel mpdrModel = (MPDRModel) mvccdElement;
+
+        boolean ok = true;
+        String syncSQLCode = "";
+        try {
+            String message = MessagesBuilder.getMessagesProperty("consolidation.sql.mpdrtosql.start",
+                    new String[]{mpdrModel.getNamePath()});
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+
+            syncSQLCode = mpdrModel.treatSync(owner);
+            waitingSyncViewer.setVisible(false);
+
+        } catch (Exception e){
+            ViewLogsManager.catchException(e, owner, "consolidation.sql.mpdrtosql.error");
+            ok = false ;
+        }
+        TreatmentService.treatmentFinish(owner, mvccdElement, ok,
+                getPropertyTheElement(), "consolidation.sql.mpdrtosql.ok", "consolidation.sql.mpdrtosql.abort") ;
+        if (ok) {
+            SQLViewer fen = new SQLViewer(mpdrModel, syncSQLCode);
+            fen.setVisible(true);
+        }
+        return ok ;
+    }
 }

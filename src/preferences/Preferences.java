@@ -256,6 +256,7 @@ public class Preferences extends MVCCDElement {
   public static String DIRECTORY_TEMPLATES_DYNAMIC_CODE = "dynamicCode";
   public static String DIRECTORY_TEMPLATES_OPTIONS = "options";
   //public static String DIRECTORY_TEMPLATES_BLOCKS = "blocks";
+  public static String DIRECTORY_TEMPLATES_CONSOLIDATION = "consolidation";
 
   public static String TEMPLATE_DROP_TABLE = "dropTable.txt";
   public static String TEMPLATE_DROP_SEQUENCE = "dropSequence.txt";
@@ -1233,6 +1234,73 @@ public class Preferences extends MVCCDElement {
   private String MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT;
   private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
   private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
+
+  //Mécanismes de consolidation - FETCHER
+  public static String FETCHER_ORACLE_TABLE_NAME = "TABLE_NAME";
+  public static String FETCHER_ORACLE_MPDR_NAME = "MPDR_DB_MODEL_ORACLE";
+  public static String FETCHER_ORACLE_COLUMN_NAME = "COLUMN_NAME";
+  public static String FETCHER_ORACLE_TYPE_NAME = "TYPE_NAME";
+  public static String FETCHER_ORACLE_NULLABLE = "NULLABLE";
+  public static String FETCHER_ORACLE_COLUMN_SIZE = "COLUMN_SIZE";
+  public static String FETCHER_ORACLE_DECIMAL_DIGITS = "DECIMAL_DIGITS";
+  public static String FETCHER_ORACLE_COLUMN_DEF = "COLUMN_DEF";
+  public static String FETCHER_ORACLE_ORDINAL_POSITION = "ORDINAL_POSITION";
+  public static String FETCHER_ORACLE_PK_NAME = "PK_NAME";
+  public static String FETCHER_ORACLE_REQUETE_SQL_USER_CONSTRAINTS = "SELECT * FROM USER_CONSTRAINTS WHERE CONSTRAINT_TYPE = ? AND TABLE_NAME = ?";
+  public static String FETCHER_ORACLE_CONSTRAINT_TYPE_UNIQUE = "U";
+  public static String FETCHER_ORACLE_CONSTRAINT_TYPE_CHECK = "C";
+  public static String FETCHER_ORACLE_CONSTRAINT_TYPE_FK = "R";
+  public static String FETCHER_ORACLE_CONSTRAINT_NAME = "CONSTRAINT_NAME";
+  public static String FETCHER_ORACLE_REQUETE_SQL_USER_CONS_COLUMNS = "SELECT * FROM USER_CONS_COLUMNS WHERE TABLE_NAME = ?";
+  public static String FETCHER_ORACLE_AND = " AND ";
+  public static String FETCHER_ORACLE_REQUETE_SEARCH_CONDITION_VC = "SEARCH_CONDITION_VC NOT LIKE '%IS NOT NULL%'";
+  public static String FETCHER_ORACLE_SEARCH_CONDITION_VC = "SEARCH_CONDITION_VC";
+  public static String FETCHER_ORACLE_REQUETE_SQL_USER_SEQUENCES = "SELECT * FROM USER_SEQUENCES";
+  public static String FETCHER_ORACLE_SEQUENCE_NAME = "SEQUENCE_NAME";
+  public static String FETCHER_ORACLE_MIN_VALUE = "MIN_VALUE";
+  public static String FETCHER_ORACLE_INCREMENT_BY = "INCREMENT_BY";
+  public static String FETCHER_ORACLE_REQUETE_SQL_USER_PROCEDURES = "SELECT DISTINCT(OBJECT_NAME) FROM USER_PROCEDURES WHERE OBJECT_TYPE= ? ";
+  public static String FETCHER_ORACLE_PACKAGE = "PACKAGE";
+  public static String FETCHER_ORACLE_OBJECT_NAME = "OBJECT_NAME";
+  public static String FETCHER_ORACLE_REQUETE_SQL_USER_TRIGGERS = "SELECT TRIGGER_NAME, TABLE_NAME, TRIGGER_BODY FROM USER_TRIGGERS";
+  public static String FETCHER_ORACLE_TRIGGER_NAME = "TRIGGER_NAME";
+  public static String FETCHER_ORACLE_USER_DEPENDENCIES = "SELECT * FROM USER_DEPENDENCIES WHERE REFERENCED_TYPE=? and TYPE=?";
+  public static String FETCHER_ORACLE_SEQUENCE = "SEQUENCE";
+  public static String FETCHER_ORACLE_TRIGGER = "TRIGGER";
+  public static String FETCHER_ORACLE_REFERENCED_NAME = "REFERENCED_NAME";
+  public static String FETCHER_ORACLE_NAME = "NAME";
+  public static String FETCHER_ORACLE_TABLE = "TABLE";
+  public static String FETCHER_ORACLE_REQUETE_CONSTRAINT_NAME_NOT_LIKE ="CONSTRAINT_NAME NOT LIKE";
+  public static String FETCHER_ORACLE_SYS_ =" 'SYS_%'";
+  public static String FETCHER_ORACLE_TRIGGER_BODY = "TRIGGER_BODY";
+  public static String FETCHER_ORACLE_POSITION = "POSITION";
+  public static String FETCHER_ORACLE_REQUETE_SQL_USER_IND_COLUMNS = "SELECT * FROM USER_IND_COLUMNS";
+  public static String FETCHER_ORACLE_INDEX_NAME = "INDEX_NAME";
+  public static String FETCHER_ORACLE_DELETE_RULE = "DELETE_RULE";
+  public static String FETCHER_ORACLE_CASCADE = "CASCADE";
+
+  //Templates de consolidation
+  public static String TEMPLATE_ALTER_TABLE_CREATE_UNIQUE = "alterTableAddUnique.txt";
+  public static String TEMPLATE_ALTER_TABLE_DROP_UNIQUE = "alterTableDropUnique.txt";
+  public static String TEMPLATE_ALTER_TABLE_DROP_COLUMN = "alterTableDropColumn.txt";
+  public static String TEMPLATE_ALTER_TABLE_ADD_COLUMN = "alterTableAddColumn.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN = "alterTableModifyColumn.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_NN = "alterTableModifyColumnAddNN.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_NN = "alterTableModifyColumnDropNN.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_ADD_DEFAULT = "alterTableModifyColumnAddDefault.txt";
+  public static String TEMPLATE_ALTER_TABLE_MODIFY_COLUMN_DROP_DEFAULT = "alterTableModifyColumnDropDefault.txt";
+  public static String TEMPLATE_ALTER_TABLE_ADD_PK = "alterTableAddPk.txt";
+  public static String TEMPLATE_ALTER_TABLE_DROP_PK_CASCADE = "alterTableDropPkCascade.txt";
+  public static String TEMPLATE_ALTER_TABLE_DROP_FK = "alterTableDropFk.txt";
+  public static String TEMPLATES_ALTER_TABLE_ADD_FK_WITH_DELETE_CASCADE = "alterTableAddFkWithDeleteCascade.txt";
+  public static String TEMPLATE_DROP_TABLE_CONSOLIDATION = "dropTableCascade.txt";
+  public static String TEMPLATE_ALTER_TABLE_ADD_CHECK = "alterTableAddCheck.txt";
+  public static String TEMPLATE_ALTER_TABLE_DROP_CHECK = "alterTableDropCheck.txt";
+  public static String TEMPLATE_DROP_PACKAGE_AND_BODY = "dropPackageAndBody.txt";
+  public static String TEMPLATE_DROP_SEQUENCE_CONSOLIDATION = "dropSequence.txt";
+  public static String TEMPLATE_DROP_TRIGGER_CONSOLIDATION = "dropTrigger.txt";
+
+
 
   private Boolean DIAGRAMMER_SHOW_GRID = null;
 

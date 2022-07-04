@@ -35,6 +35,14 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IM
         super(parent, mldrElementSource, id);
     }
 
+    //TODO VINCENT
+/*
+    public MPDROracleTable(String name){
+        super();
+        this.setName(name);
+    }
+*/
+
     @Override
     public MPDRColumn createColumn(MLDRColumn mldrColumn) {
         MPDROracleColumn newColumn = MVCCDElementFactory.instance().createMPDROracleColumn(

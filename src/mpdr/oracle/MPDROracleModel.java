@@ -1,11 +1,16 @@
 package mpdr.oracle;
 
+import connections.ConConnection;
+import connections.services.ConnectionsService;
+import consolidationMpdrDb.comparator.oracle.OracleComparatorDb;
+import consolidationMpdrDb.syncGenerator.oracle.SyncGeneratorSQLOracle;
 import datatypes.MPDRDatatype;
 import exceptions.CodeApplException;
 import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.oracle.MPDROracleGenerateSQL;
 import main.MVCCDElement;
 import main.MVCCDElementFactory;
+import main.MVCCDWindow;
 import mdr.MDRCaseFormat;
 import mdr.services.MDRModelService;
 import mldr.MLDRColumn;
@@ -25,6 +30,8 @@ import preferences.PreferencesManager;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDROracleDatatype;
 
+import java.sql.SQLException;
+
 import java.util.ArrayList;
 
 public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IMPDRModelRequirePackage {
@@ -36,6 +43,7 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
     public MPDROracleModel(ProjectElement parent, String name) {
         super(parent, name, MPDRDB.ORACLE);
     }
+
     @Override
     public MPDROracleTable createTable(MLDRTable mldrTable){
         MPDROracleTable newTable = MVCCDElementFactory.instance().createMPDROracleTable(
@@ -53,6 +61,16 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
     public String treatGenerate() {
         MPDRGenerateSQL mpdrGenerateSQL = new MPDROracleGenerateSQL(this);
         return mpdrGenerateSQL.generate();
+    }
+
+    public String treatSync(MVCCDWindow owner) throws SQLException {
+        ConConnection conConnection = ConnectionsService.getConConnectionByLienProg(this.getConnectionLienProg());
+        SyncGeneratorSQLOracle syncGeneratorSQLOracle = new SyncGeneratorSQLOracle(
+                this,new OracleComparatorDb(
+                        this, conConnection, ConnectionsService.actionTestIConConnectionOrConnector(
+                                owner,true, conConnection)));
+
+        return syncGeneratorSQLOracle.syncOrderByTable();
     }
 
     @Override

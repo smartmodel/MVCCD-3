@@ -22,6 +22,17 @@ public class MPDROracleColumn extends MPDRColumn implements IMPDROracleElement {
         super(parent, mldrElementSource, id);
     }
 
+    //TODO VINCENT
+    /*
+    public MPDROracleColumn(String name, String dataType, Integer size, boolean isMandatory, String initValue){
+        super();
+        this.setName(name);
+        this.setDatatypeConstraintLienProg(dataType);
+        this.setSize(size);
+        this.setMandatory(isMandatory);
+        this.setInitValue(initValue);
+    }
+*/
 
     public MPDRSequence createMPDRSequence(MLDRColumn mldrColumn) {
         MPDROracleSequence newSequence = MVCCDElementFactory.instance().createMPDROracleSequence(

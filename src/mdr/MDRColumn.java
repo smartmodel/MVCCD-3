@@ -42,7 +42,8 @@ public abstract class MDRColumn extends MDRElement implements
     private String initValue = null;
     private String derivedValue = null;
 
-    //private boolean pk = false;
+    //Utilisé pour une colonne provenant de la database
+    private boolean pk = false;
     //private boolean fk = false;
 
     public static final String CLASSSHORTNAMEUI = "Colonne";
@@ -357,4 +358,18 @@ public abstract class MDRColumn extends MDRElement implements
 
     public abstract boolean isPKForEntityIndependant() ;
 
+    //utilisé pour une colonne provenant de la database
+    public boolean getMandatory(){
+        return this.mandatory;
+    }
+
+    //utilisé pour une colonne provenant de la database
+    public void setPk(boolean pk) {
+        this.pk = pk;
+    }
+
+    //utilisé pour une colonne provenant de la database
+    public boolean getIsPk(){
+        return pk;
+    }
 }

@@ -18,6 +18,16 @@ public class MPDROracleGenerateSQLUnique extends MPDRGenerateSQLUnique {
         return generateSQLCode;
     }
 
+    public String generateSQLConsolidationAddUnique(MPDRUnique mpdrUnique) {
+        String generateSQLCode =  super.generateSQLConsolidationAddUnique(mpdrUnique);
+        return generateSQLCode;
+    }
+
+    public String generateSQLConsolidationDropUnique(MPDRUnique mpdrUnique) {
+        String generateSQLCode =  super.generateSQLConsolidationDropUnique(mpdrUnique);
+        return generateSQLCode;
+    }
+
     @Override
     public MPDRGenerateSQL getMPDRGenerateSQL() {
         return mpdrOracleGenerateSQL;

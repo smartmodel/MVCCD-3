@@ -165,4 +165,8 @@ public abstract class ProjectElement extends MVCCDElement {
     public DefaultMutableTreeNode getNode(){
         return ProjectService.getNodeById(this.id);
     }
+
+    public int getId() {
+        return id;
+    }
 }

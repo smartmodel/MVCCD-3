@@ -33,6 +33,26 @@ public abstract class MPDRGenerateSQLSequence {
         return generateSQLCode;
     }
 
+    //Ajouté par Vincent pour les séquences qui ne sont pas liées à une table
+    public String generateSQLConsolidationDropSequence(String sequenceName){
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
+                Preferences.TEMPLATE_DROP_SEQUENCE_CONSOLIDATION,
+                getMPDRGenerateSQL().mpdrModel);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_SEQUENCE_NAME_WORD, sequenceName);
+        return generateSQLCode;
+
+    }
+    //Ajouté par Vincent pour la suppression des séquence depuis le mécanisme de consolidation
+    public String generateSQLConsolidationDropSequence(MPDRSequence mpdrSequence){
+        String generateSQLCode =  MPDRGenerateSQLUtil.template(getMPDRGenerateSQL().getTemplateDirAlterConsolidationDB(),
+                Preferences.TEMPLATE_DROP_SEQUENCE_CONSOLIDATION,
+                getMPDRGenerateSQL().mpdrModel);
+        generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                Preferences.MPDR_SEQUENCE_NAME_WORD, mpdrSequence.getName());
+        return generateSQLCode;
+
+    }
 
     public abstract MPDRGenerateSQL getMPDRGenerateSQL() ;
 }
