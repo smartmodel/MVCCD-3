@@ -8,6 +8,7 @@ import mdr.MDRColumn;
 import mldr.MLDRColumn;
 import mpdr.MPDRColumn;
 import mpdr.MPDRTable;
+import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import utilities.window.scomponents.SCheckBox;
 import utilities.window.scomponents.STextField;
@@ -44,6 +45,14 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
 
     private JLabel labelReferencePK; // pour les colonnes FK
     private STextField fieldReferencePK ;
+
+    private JLabel labelColumnPKTI ;
+    private SCheckBox fieldColumnPKTI ;
+    private JLabel labelColumnSimPK ;
+    private SCheckBox  fieldColumnSimPK ;
+
+    private JLabel labelStereotypes; 
+    private STextField fieldStereotypes;
 
 
     public MDRColumnInputContent(MDRColumnInput MDRColumnInput)     {
@@ -102,6 +111,19 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
         fieldReferencePK.setPreferredSize((new Dimension(400, Preferences.EDITOR_FIELD_HEIGHT)));
         fieldReferencePK.setToolTipText("Référence de colonne PK pour une colonne FK");
 
+        labelColumnPKTI = new JLabel("PK pour TI : ");
+        fieldColumnPKTI = new SCheckBox(this, labelColumnPKTI);
+        fieldColumnPKTI.setToolTipText("Colonne de PK de substitution pour la transformation en tables indépendantes");
+        
+        labelColumnSimPK = new JLabel("Simulation de PK pour TI : ");
+        fieldColumnSimPK = new SCheckBox(this, labelColumnSimPK);
+        fieldColumnSimPK.setToolTipText("Simulation de colonne de PK pour la transformation en tables indépendantes");
+
+        labelStereotypes = new JLabel("Stéréotype : ");
+        fieldStereotypes = new STextField(this, labelStereotypes);
+        fieldStereotypes.setPreferredSize((new Dimension(400, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldStereotypes.setToolTipText("Ensemble des stéréotypes applicables");
+
 
         super.getSComponents().add(fieldDatatypeName);
         super.getSComponents().add(fieldDatatypeConstraint);
@@ -113,6 +135,9 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
         super.getSComponents().add(fieldInitValue);
         super.getSComponents().add(fieldDerivedValue);
         super.getSComponents().add(fieldReferencePK);
+        super.getSComponents().add(fieldColumnPKTI);
+        super.getSComponents().add(fieldColumnSimPK);
+        super.getSComponents().add(fieldStereotypes);
 
         createPanelMaster();
     }
@@ -158,6 +183,17 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
 
         gbc.gridx = 0;
         gbc.gridy++;
+        panelInputContentCustom.add(labelColumnPKTI, gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldColumnPKTI, gbc);
+
+        gbc.gridx++;
+        panelInputContentCustom.add(labelColumnSimPK, gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldColumnSimPK, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
         panelInputContentCustom.add(labelInitValue, gbc);
         gbc.gridx++;
         gbc.gridwidth = 5;
@@ -174,6 +210,12 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
         panelInputContentCustom.add(labelReferencePK, gbc);
         gbc.gridx++;
         panelInputContentCustom.add(fieldReferencePK, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(labelStereotypes, gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldStereotypes, gbc);
 
         this.add(panelInputContentCustom);
     }
@@ -229,6 +271,7 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
                 MPDRColumn mpdrColumn = (MPDRColumn) mdrColumn;
                 MPDRTable mpdrTable = mpdrColumn.getMPDRTableAccueil();
                 datatypeName = MDDatatypeService.convertMPDRLienProgToName(mpdrTable.getMPDRModelParent().getDb(), mdrColumn.getDatatypeLienProg());
+
             }
         }
         fieldDatatypeName.setText(datatypeName);
@@ -278,6 +321,16 @@ public class MDRColumnInputContent extends PanelInputContentIdMDR {
             referencePK = mdrColumn.getMDRColumnPK().getName();
         }
         fieldReferencePK.setText((referencePK));
+
+        fieldColumnPKTI.setSelected(mdrColumn.isColumnPKTI());
+
+        fieldColumnSimPK.setSelected(mdrColumn.isColumnSimPK());
+
+        String stereotypes = "";
+        if (StringUtils.isNotEmpty(mdrColumn.getStereotypesInLine())){
+            stereotypes = mdrColumn.getStereotypesInLine();
+        }
+        fieldStereotypes.setText((stereotypes));
 
     }
 

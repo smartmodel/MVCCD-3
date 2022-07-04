@@ -7,12 +7,12 @@ import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDEntity;
 import repository.editingTreat.mcd.MCDEntityEditingTreat;
-import window.editor.diagrammer.elements.shapes.classes.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 
 public class MCDEntityShapeEditAction extends AbstractAction implements Serializable {
 
-  private final MCDEntityShape shape;
   private static final long serialVersionUID = 1000;
+  private final MCDEntityShape shape;
 
   public MCDEntityShapeEditAction(String name, Icon icon, MCDEntityShape shape) {
     super(name, icon);
@@ -29,7 +29,7 @@ public class MCDEntityShapeEditAction extends AbstractAction implements Serializ
     }
 
     // Affiche les diverses informations de l'entité
-    shape.refreshInformations();
+    this.shape.refreshInformations();
   }
 
   private void edit() {

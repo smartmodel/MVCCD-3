@@ -67,6 +67,17 @@ public class MPDRContTAPIs extends MDRElement {
         return null;
     }
 
+
+
+    public MPDRTableJnal getMPDRTableJnal() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MPDRTableJnal){
+                return (MPDRTableJnal) mvccdElement ;
+            }
+        }
+        return null ;
+    }
+
     public MPDRTable getMPDRTableAccueil (){
         return (MPDRTable) getParent();
     }

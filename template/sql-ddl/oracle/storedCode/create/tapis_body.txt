@@ -1,11 +1,11 @@
 CREATE OR REPLACE PACKAGE BODY {packageName} IS
 
-PROCEDURE {autogen_column}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+PROCEDURE {autogen_columns}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
 BEGIN
     NULL;
 END;
 
-PROCEDURE {autogen_column_ins}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+PROCEDURE {autogen_columns_ins}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
 BEGIN
     NULL;
     {-COLUMN_PK_IND-}
@@ -16,32 +16,32 @@ BEGIN
     {-COLUMN_LIEN_PROG-}
 END;
 
-PROCEDURE {autogen_column_upd}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+PROCEDURE {autogen_columns_upd}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
 BEGIN
     NULL;
     {-COLUMNS_AUDIT_MO-}
 END;
 
 
-PROCEDURE {uppercase_column}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+PROCEDURE {uppercase_columns}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
 BEGIN
     NULL;
     {-COLUMNS_UPPERCASE-}
 END;
 
-PROCEDURE {checktype_column}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+PROCEDURE {checktype_columns}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
 BEGIN
 	NULL;
-	--{-COLUMNS_TYPE_CHECK-}
+	{-COLUMNS_TYPE_CHECK-}
 END;
 
-PROCEDURE {column_PEA}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
+PROCEDURE {PEA_columns}({pio_crtrec} IN OUT {tableName}%ROWTYPE) IS
 BEGIN
 	NULL;
 	--{-COLUMNS_PEA-}
 END;
 
-PROCEDURE {frozen_column}(	{pio_newrec} IN OUT {tableName}%ROWTYPE,
+PROCEDURE {frozen_columns}(	{pio_newrec} IN OUT {tableName}%ROWTYPE,
     {pio_oldrec} IN OUT {tableName}%ROWTYPE) IS
     BEGIN
 	    NULL;
@@ -63,7 +63,7 @@ PROCEDURE {tree_or_list_onlyone} IS
 	    --{-BLOCK_TREE_OR_LIST_ONLYONE_AFTER_STATEMENT-}
     END;
 
---{-INS_JN_BODY-}
+{-INS_JN_BODY-}
 
 BEGIN
 	NULL;

@@ -123,6 +123,10 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
             preferences.setMPDRPOSTGRESQL_VIEW_NAME_FORMAT(fieldViewNameFormat.getText());
         }
 
+        if (fieldTableJnalNameFormat.checkIfUpdated()){
+            preferences.setMPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT(fieldTableJnalNameFormat.getText());
+        }
+
         if (fieldCheckColumnDatatypeNameFormat.checkIfUpdated()){
             preferences.setMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT(fieldCheckColumnDatatypeNameFormat.getText());
         }
@@ -185,6 +189,7 @@ public class PrefMPDRPostgreSQLInputContent extends PrefMPDRInputContent {
         fieldTriggerTableNameFormat.setText(preferences.getMPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT());
         fieldTriggerViewNameFormat.setText(preferences.getMPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT());
         fieldViewNameFormat.setText(preferences.getMPDRPOSTGRESQL_VIEW_NAME_FORMAT());
+        fieldTableJnalNameFormat.setText(preferences.getMPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT());
         fieldCheckColumnDatatypeNameFormat.setText(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT());
         fieldCheckColumnDatatypeMax30NameFormat.setText(preferences.getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT());
     }

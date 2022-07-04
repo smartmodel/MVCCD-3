@@ -1,3 +1,8 @@
-{-COLUMN_TYPE_CHECK_WORD-}
-{-COLUMN_TYPE_CHECK_TOKEN-}
-{-COLUMN_TYPE_CHECK_NORMALIZED-}
+IF {pio_crtrec}.{columnName} IS NOT NULL THEN
+    {packageResourcesName}.{procedureResourcesCheckDatatypeWord} (
+    '{tableName}',
+    '{columnName}',
+    {pio_crtrec}.{columnName},
+    '{noError}',
+    '{messError}' ) ;
+ END IF ;

@@ -6,10 +6,8 @@ import exceptions.orderbuildnaming.OrderBuildNameException;
 import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import main.MVCCDManager;
-import mcd.MCDAttribute;
-import mcd.MCDEntity;
-import mcd.MCDEntityNature;
-import mcd.MCDRelEnd;
+import mcd.*;
+import mcd.interfaces.IMCDSourceMLDRTable;
 import mdr.MDRElementNames;
 import mdr.MDRFKNature;
 import mdr.MDRNamingLength;
@@ -29,13 +27,9 @@ import java.util.ArrayList;
 public class MCDTransformToColumn {
 
     private MCDTransform mcdTransform ;
-    private MCDEntity mcdEntity ;
-    private MLDRTable mldrTable ;
 
     public MCDTransformToColumn(MCDTransform mcdTransform) {
         this.mcdTransform = mcdTransform;
-        this.mcdEntity = mcdEntity;
-        this.mldrTable = mldrTable;
     }
 
     public void createOrModifyFromAttributes(MCDEntity mcdEntity, MLDRTable mldrTable) {
@@ -47,7 +41,7 @@ public class MCDTransformToColumn {
 
     public void createOrModifyFromAttribute(MCDAttribute mcdAttribute, MLDRTable mldrTable) {
 
-        MLDRColumn mldrColumn = mldrTable.getMLDRColumnByMCDElementSource(mcdAttribute);
+        MLDRColumn mldrColumn = mldrTable.getMLDRColumnByMCDElementSource(mcdAttribute );
 
         if (mldrColumn == null) {
             mldrColumn = mldrTable.createColumn(mcdAttribute);
@@ -197,11 +191,11 @@ public class MCDTransformToColumn {
     }
 
 
-    public void modifyColumnPK(MCDEntity mcdEntity, MLDRColumn mldrColumnPK) {
+    public void modifyColumnPK(IMCDSourceMLDRTable imcdSourceMLDRTable, MLDRColumn mldrColumnPK, boolean columnPKTI) {
 
         // Nom
         MLDRModel mldrModel = (MLDRModel) mldrColumnPK.getMDRTableAccueil().getMDRModelParent();
-        MCDTransformService.names(mldrColumnPK, buildNameColumnPK(mcdEntity), mldrModel);
+        MCDTransformService.names(mldrColumnPK, buildNameColumnPK(imcdSourceMLDRTable, columnPKTI), mldrModel);
 
         // Obligation de valeur
         // MDRColumn.isMandatory() Déduit dynamiquement par MDRColumn.isPk()
@@ -263,7 +257,7 @@ public class MCDTransformToColumn {
         return names;
     }
 
-    private static  MDRElementNames buildNameColumnPK(MCDEntity mcdEntity){
+    private static  MDRElementNames buildNameColumnPK(IMCDSourceMLDRTable imcdSourceMLDRTable, boolean columnPKTI){
         Preferences preferences = PreferencesManager.instance().preferences();
 
         MDRElementNames names = new MDRElementNames();
@@ -275,7 +269,14 @@ public class MCDTransformToColumn {
             orderBuild.setTargetNaming(MDROrderBuildTargets.PK);
             //orderBuild.setNamingFormat(preferences.getMLDR_PREF_NAMING_FORMAT());
 
-            orderBuild.getAttrName().setValue(mcdEntity);
+
+            if ( imcdSourceMLDRTable instanceof MCDEntity) {
+                orderBuild.getAttrName().setValue((MCDEntity) imcdSourceMLDRTable);
+            }
+            if (columnPKTI){
+                orderBuild.getAttrName().setValue(PreferencesManager.instance().preferences().getMCD_AID_IND_COLUMN_NAME());
+            }
+
 
             String name;
 
@@ -287,7 +288,7 @@ public class MCDTransformToColumn {
                     message = e.getMessage();
                 } else {
                     message = MessagesBuilder.getMessagesProperty("mdrcolumn.build.name.pk.error",
-                            new String[]{mcdEntity.getName()});
+                            new String[]{imcdSourceMLDRTable.getNamePath()});
                 }
                 throw new CodeApplException(message, e);
             }
@@ -331,6 +332,14 @@ public class MCDTransformToColumn {
             //String roleParent = mcdRelEndParent.getNameNoFreeOrNameRelation();
             //orderBuild.getRoleShortNameParent().setValue(roleParent);
             orderBuild.getRoleShortNameParent().setValue(mcdRelEndParent);
+            // Graphe ou liste non orienté ( pas de nom de rôle !
+            // Il fautr donner un nom artificiel à chacune des 2 colonnes
+            if (mcdRelEndParent instanceof MCDAssEnd) {
+                MCDAssEnd mcdAssEndParent = (MCDAssEnd) mcdRelEndParent;
+                if (mcdAssEndParent.isPartOfListOrGraph()){
+                    orderBuild.getRoleShortNameParent().setValue(indiceFK.toString());
+                }
+            }
             if (StringUtils.isNotEmpty(orderBuild.getRoleShortNameParent().getValue())) {
                 orderBuild.getRoleSep().setValue();
             } else {

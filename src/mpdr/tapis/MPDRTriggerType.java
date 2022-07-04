@@ -5,6 +5,8 @@ import mpdr.MPDRDB;
 import java.util.ArrayList;
 
 public enum MPDRTriggerType {
+    BIR_PKDEPSIM("BIRSIM", "birPKDEP.txt", MPDRTriggerUsage.WITHOUTTAPIS, MPDRTriggerScope.TABLE,
+            new MPDRDB[]{MPDRDB.ORACLE, MPDRDB.POSTGRESQL}),
     BIR_PKDEP("BIR", "birPKDEP.txt", MPDRTriggerUsage.WITHOUTTAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE, MPDRDB.POSTGRESQL}),
     BIR_PKIND("BIR", "birPKIND.txt", MPDRTriggerUsage.WITHOUTTAPIS, MPDRTriggerScope.TABLE,
@@ -12,13 +14,13 @@ public enum MPDRTriggerType {
     BIR("BIR", "bir.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),
     IOIR("IOIR", "ioir.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.VIEW,
-            new MPDRDB[]{MPDRDB.ORACLE})/*,
+            new MPDRDB[]{MPDRDB.ORACLE}),
     BUR("BUR", "bur.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
-            new MPDRDB[]{MPDRDB.ORACLE}),
+            new MPDRDB[]{MPDRDB.ORACLE}), /*
     BIU("BIU", "biu.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
-            new MPDRDB[]{MPDRDB.ORACLE}),
+            new MPDRDB[]{MPDRDB.ORACLE}),*/
     BDR("BDR", "bdr.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
-            new MPDRDB[]{MPDRDB.ORACLE}),
+            new MPDRDB[]{MPDRDB.ORACLE})/*,
     AIUD("AIUD",  "aiud.txt", MPDRTriggerUsage.TAPIS, MPDRTriggerScope.TABLE,
             new MPDRDB[]{MPDRDB.ORACLE}),
     IOINS_ASSNNNONORIENTD("IOINS", "ioins_AssNNNonOriented.txt", MPDRTriggerUsage.TAPIS,  MPDRTriggerScope.VIEW,

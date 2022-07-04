@@ -1,5 +1,6 @@
 package mpdr.services;
 
+import exceptions.CodeApplException;
 import main.MVCCDElement;
 import mdr.MDRElement;
 import mldr.MLDRTable;
@@ -96,5 +97,33 @@ public class MPDRModelService {
         return null;
     }
 
+/*
+    public static MPDRModel getMPDRModelParent(IMPDRElement impdrElement) {
+        Trace.println(((MVCCDElement) impdrElement).getName());
+        if (impdrElement instanceof MPDRModel){
+            return (MPDRModel) impdrElement;
+        } else {
+            MVCCDElement mvccdElementParent = ((MVCCDElement) impdrElement).getParent();
+            if (mvccdElementParent instanceof IMPDRElement){
+                return getMPDRModelParent((IMPDRElement) mvccdElementParent);
+            } else {
+                throw new CodeApplException("Le modèle (MPDR) d'accueil n'est pas trouvé");
+            }
+        }
+    }
 
+ */
+
+    public static MPDRModel getMPDRModelParent(MVCCDElement mvccdElement) {
+        if (mvccdElement instanceof MPDRModel){
+            return (MPDRModel) mvccdElement;
+        } else {
+            MVCCDElement mvccdElementParent = mvccdElement.getParent();
+            if (mvccdElementParent != null){
+                return getMPDRModelParent(mvccdElementParent);
+            } else {
+                throw new CodeApplException("Le modèle (MPDR) d'accueil n'est pas trouvé");
+            }
+        }
+    }
 }

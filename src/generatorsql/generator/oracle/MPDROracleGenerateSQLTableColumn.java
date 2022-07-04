@@ -4,6 +4,7 @@ import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.MPDRGenerateSQLTableColumn;
 import mpdr.MPDRColumn;
 import mpdr.MPDRDBPK;
+import mpdr.interfaces.IMPDRColumn;
 import preferences.PreferencesManager;
 
 public class MPDROracleGenerateSQLTableColumn extends MPDRGenerateSQLTableColumn {
@@ -67,13 +68,13 @@ public class MPDROracleGenerateSQLTableColumn extends MPDRGenerateSQLTableColumn
     }
 
     @Override
-    protected String generateDatatypeSizeScale(MPDRColumn mpdrColumn) {
+    protected String generateDatatypeSizeScale(IMPDRColumn impdrColumn) {
         String sizeScale = "";
-        if (mpdrColumn.getSize() != null) {
-            if (mpdrColumn.getScale() != null) {
-                sizeScale = "(" + mpdrColumn.getSize().toString() + ", " + mpdrColumn.getScale().toString() + ")";
+        if (impdrColumn.getSize() != null) {
+            if (impdrColumn.getScale() != null) {
+                sizeScale = "(" + impdrColumn.getSize().toString() + ", " + impdrColumn.getScale().toString() + ")";
             } else {
-                sizeScale = "(" + mpdrColumn.getSize().toString() + ")";
+                sizeScale = "(" + impdrColumn.getSize().toString() + ")";
             }
         }
         return sizeScale;

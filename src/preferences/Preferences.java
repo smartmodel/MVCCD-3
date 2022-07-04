@@ -2,6 +2,10 @@ package preferences;
 
 import connections.ConDBMode;
 import console.WarningLevel;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Point;
 import m.MUMLExtensionNaming;
 import main.MVCCDElement;
 import mdr.MDRCaseFormat;
@@ -9,17 +13,75 @@ import mdr.MDRNamingLength;
 import mpdr.MPDRDBPK;
 import window.editor.diagrammer.services.DiagrammerService;
 
-import java.awt.*;
-
 /**
  * Regroupe l'ensemble des préférences développeur (les attributs statics de la classe), des préférences d'application (les attributs qui suivent ensuite) et des préférences de projet (les attributs plus bas dans la classe). Cette classe est instanciée plusieurs fois depuis MVCCDManager. Lorsqu'une préférence doit être utilisée, il est plus simple d'utiliser la méthode statique
  * Preferences.preferences() qui se charge de retourner les bonnes préférences à utiliser en fonction du contexte de l'utilisateur (celles du projet, du profile, de l'appliation, etc.). Lorsque des préférences doivent être chargé spécifiquement pour le projet (préférences de projet) ou pour l'application (préférences d'application), il est conseillé d'utiliser
  * PreferencesManager.instance().getProjectPref(). L'utilisation de MVCCDManager.instance().getProject().getPreferences() n'est pas à privilégier. Elle est utile surtout dans le cas spécifique où le projet existe mais n'est pas encore créé dans le référentiel.
- *
  * @author PAS
  */
 public class Preferences extends MVCCDElement {
 
+  public static final int CON_NAME_LENGTH = 40;
+  public static final int CON_HOSTNAME_LENGTH = 100;
+  public static final int CON_DBNAME_LENGTH = 40;
+  public static final int CON_PORT_MIN = 0;
+  public static final int CON_PORT_MAX = 6553;
+  public static final int CON_PORT_DEFAULT_ORACLE = 1521;
+  public static final int CON_PORT_DEFAULT_MYSQL = 3306;
+  public static final int CON_PORT_DEFAULT_POSTGRESQL = 5432;
+  public static final String CON_HOSTNAME_WORD = "hostName";
+  public static final String CON_PORT_WORD = "port";
+  public static final String CON_DBNAME_WORD = "dbName";
+  public static final String CON_DBNAME_ID_MARKER = "dbNameId";  // : pour SID et / ServiceName par exemple :Oracle
+  public static final String CON_URL_TEMPLATE_ORACLE = "jdbc:oracle:thin:@{" + CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD + "}{" + CON_DBNAME_ID_MARKER + "}{" + CON_DBNAME_WORD + "}";
+  public static final String CON_URL_TEMPLATE_MYSQL = "jdbc:mysql://{" + CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD + "}/{" + CON_DBNAME_WORD + "}";
+  public static final String CON_URL_TEMPLATE_POSTGRESQL = "jdbc:postgresql://{" + CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD + "}/{" + CON_DBNAME_WORD + "}";
+  public static final String CON_FOR_NAME_ORACLE = "oracle.jdbc.driver.OracleDriver";
+  public static final String CON_FOR_NAME_MYSQL = "com.mysql.jdbc.Driver";
+  public static final String CON_FOR_NAME_POSTGRESQL = "org.postgresql.Driver";
+  public static final String CON_IDDB_NAME_STD = "con.iddb.name.std";
+  public static final String CON_IDDB_NAME_SID = "con.iddb.name.sid";
+  public static final String CON_IDDB_NAME_SERVICE_NAME = "con.iddb.name.service.name";
+  public static final String CON_IDDB_NAME_SID_ORACLE_MARKER = ":";
+  public static final String CON_IDDB_NAME_SERVICE_NAME_ORACLE_MARKER = "/";
+  public static final String DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME = "DrawPanelContainer";
+  public static final String DIAGRAMMER_DRAW_PANEL_NAME = "DrawPanel";
+  public static final String DIAGRAMMER_PALETTE_PANEL_NAME = "PalettePanel";
+  public static final int DIAGRAMMER_MINIMUM_ALLOWED_ZOOM = 4;
+  public static final int DIAGRAMMER_MAXIMUM_ALLOWED_ZOOM = 25;
+  public static final int DIAGRAMMER_DEFAULT_GRID_SIZE = 10;
+  public static final int DIAGRAMMER_DEFAULT_ENTITY_POSITION_X = 60;
+  public static final int DIAGRAMMER_DEFAULT_ENTITY_POSITION_Y = 60;
+  public static final int DIAGRAMMER_DEFAULT_CLASS_WIDTH = 200;
+  public static final int DIAGRAMMER_DEFAULT_CLASS_HEIGHT = 100;
+  public static final int DIAGRAMMER_DEFAULT_NOTE_WIDTH = 100;
+  public static final int DIAGRAMMER_DEFAULT_NOTE_HEIGHT = 70;
+  public static final int DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN = 7;
+  public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
+  public static final Color DIAGRAMMER_NOTE_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
+  public static final Font DIAGRAMMER_CLASS_NAME_FONT = new Font("Arial", Font.BOLD, 13);
+  public static final Font DIAGRAMMER_CLASS_FONT = new Font("Arial", Font.PLAIN, 13);
+  public static final Font DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT = new Font("Arial", Font.ITALIC + Font.BOLD, 13);
+  public static final int DIAGRAMMER_CLASS_PADDING = 10;
+  public static final String DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT = "Entité";
+  public static final String DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT = "Association";
+  public static final String DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT = "Généralisation";
+  public static final String DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT = "Composition";
+  public static final String DIAGRAMMER_PALETTE_NOTE_BUTTON_TEXT = "Note";
+  public static final String DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT = "Association réflexive";
+  public static final String DIAGRAMMER_PALETTE_ENTITE_ASSOCIATIVE = "Entité associative";
+  public static final int DIAGRAMMER_RELATION_CLICK_AREA = 5;
+  public static final String DIAGRAMMER_ENTITY_STEREOTYPE_TEXT = "<<Entity>>";
+  public static final String DIAGRAMMER_ENTITY_ORDERED_TEXT = "{ordered}";
+  public static final String DIAGRAMMER_MCD_ENTITY_XML_TAG = "mcdEntityShape";
+  public static final String DIAGRAMMER_MCD_ASSOCIATION_XML_TAG = "mcdAssociationShape";
+  public static final String DIAGRAMMER_MCD_GENERALIZATION_XML_TAG = "mcdGeneralizationShape";
+  public static final String DIAGRAMMER_MCD_LINK_XML_TAG = "mcdLinkShape";
+  public static final String DIAGRAMMER_MCD_COMPOSITION_XML_TAG = "mcdCompositionShape";
+  public static final String DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG = "anchorPoint";
+  public static final String DIAGRAMMER_LABEL_XML_TAG = "labelShape";
+  public static final String DIAGRAMMER_LABELS_XML_TAG_NAME = "labelShapes";
+  public static final String DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME = "anchorPoints";
   //Toutes les préférences statics sont des préférences développeurs, qui ne doivent pas être sauvegardées dans les fichiers.
   private static final long serialVersionUID = 1000;
   public static String APPLICATION_NAME = "MVCCD";
@@ -34,7 +96,7 @@ public class Preferences extends MVCCDElement {
   public static String REPOSITORY_PREFERENCES_APPLICATION_NAME = "PréférencesApplication";  //Project
   public static String REPOSITORY_MCD_MODELS_NAME = "MCD";
   public static String REPOSITORY_MCD_PACKAGE_NAME = "Paquetage";
-  public static String REPOSITORY_MCD_DIAGRAMS_NAME = "Diagrammes";
+  public static String REPOSITORY_DIAGRAMS_NAME = "Diagrammes";
   public static String REPOSITORY_MCD_ENTITIES_NAME = "Entités";
   public static String REPOSITORY_MCD_RELATIONS_NAME = "Relations";
   public static String REPOSITORY_MCD_RELATIONS_ENDS_NAME = "Extrémités de relations";
@@ -52,89 +114,23 @@ public class Preferences extends MVCCDElement {
   public static String REPOSITORY_MPDR_MODEL_ORACLE_NAME = "MPDR_Oracle";
   public static String REPOSITORY_MPDR_MODEL_MYSQL_NAME = "MPDR_MySQL";
   public static String REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME = "MPDR_PostgreSQL";
-
-  public static String FETCHER_ORACLE_DBTABLE_NAME = "TABLE_NAME";
-
   public static String CON_DB_MODE_CONNECTION = "con.db.mode.connection";
   public static String CON_DB_MODE_CONNECTOR = "con.db.mode.connector";
-
   public static String CON_DIRECTORY_DRIVERS = "drivers";
   public static String CON_DIRECTORY_ORACLE = "oracle";
   public static String CON_DIRECTORY_MYSQL = "mysql";
   public static String CON_DIRECTORY_POSTGRESQL = "postgresql";
-
-  public static final int CON_NAME_LENGTH = 40 ;
-  public static final int CON_HOSTNAME_LENGTH = 100 ;
-  public static final int CON_DBNAME_LENGTH = 40 ;
-  public static final int CON_PORT_MIN = 0 ;
-  public static final int CON_PORT_MAX = 6553 ;
-  public static final int CON_PORT_DEFAULT_ORACLE = 1521 ;
-  public static final int CON_PORT_DEFAULT_MYSQL = 3306 ;
-  public static final int CON_PORT_DEFAULT_POSTGRESQL = 5432 ;
-  public static final String CON_HOSTNAME_WORD = "hostName";
-  public static final String CON_PORT_WORD = "port";
-  public static final String CON_DBNAME_WORD = "dbName";
-  public static final String CON_DBNAME_ID_MARKER = "dbNameId";  // : pour SID et / ServiceName par exemple :Oracle
-
-  public static final String CON_URL_TEMPLATE_ORACLE = "jdbc:oracle:thin:@{"+ CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD +"}{"+CON_DBNAME_ID_MARKER+"}{"+ CON_DBNAME_WORD + "}" ;
-  public static final String CON_URL_TEMPLATE_MYSQL = "jdbc:mysql://{"+ CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD +"}/{"+ CON_DBNAME_WORD + "}" ;
-  public static final String CON_URL_TEMPLATE_POSTGRESQL = "jdbc:postgresql://{"+ CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD +"}/{"+ CON_DBNAME_WORD + "}" ;
-
-  public static final String CON_FOR_NAME_ORACLE = "oracle.jdbc.driver.OracleDriver";
-  public static final String CON_FOR_NAME_MYSQL = "com.mysql.jdbc.Driver";
-  public static final String CON_FOR_NAME_POSTGRESQL = "org.postgresql.Driver";
-
-  public static final String CON_IDDB_NAME_STD = "con.iddb.name.std";
-  public static final String CON_IDDB_NAME_SID = "con.iddb.name.sid";
-  public static final String CON_IDDB_NAME_SERVICE_NAME = "con.iddb.name.service.name";
-
-  public static final String CON_IDDB_NAME_SID_ORACLE_MARKER = ":";
-  public static final String CON_IDDB_NAME_SERVICE_NAME_ORACLE_MARKER = "/";
-
-  public static final String DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME = "DrawPanelContainer";
-  public static final String DIAGRAMMER_DRAW_PANEL_NAME = "DrawPanel";
-  public static final String DIAGRAMMER_PALETTE_PANEL_NAME = "PalettePanel";
-  public static final int DIAGRAMMER_MINIMUM_ALLOWED_ZOOM = 4;
-  public static final int DIAGRAMMER_MAXIMUM_ALLOWED_ZOOM = 25;
-  public static final int DIAGRAMMER_DEFAULT_GRID_SIZE = 10;
-  public static final int DIAGRAMMER_DEFAULT_ENTITY_POSITION_X = 60;
-  public static final int DIAGRAMMER_DEFAULT_ENTITY_POSITION_Y = 60;
-  public static final int DIAGRAMMER_DEFAULT_CLASS_WIDTH = 200;
-  public static final int DIAGRAMMER_DEFAULT_CLASS_HEIGHT = 100;
-  public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
-  public static final Font DIAGRAMMER_CLASS_NAME_FONT = new Font("Arial", Font.BOLD, 13);
-  public static final Font DIAGRAMMER_CLASS_FONT = new Font("Arial", Font.PLAIN, 13);
-  public static final Font DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT = new Font("Arial", Font.ITALIC + Font.BOLD, 13);
-  public static final int DIAGRAMMER_CLASS_PADDING = 10;
-  public static final String DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT = "Entité";
-  public static final String DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT = "Association";
-  public static final String DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT = "Généralisation";
-  public static final String DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT = "Composition";
-  public static final String DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT = "Association réflexive";
-  public static final int DIAGRAMMER_RELATION_CLICK_AREA = 5;
-  public static final String DIAGRAMMER_ENTITY_STEREOTYPE_TEXT = "<<Entity>>";
-  public static final String DIAGRAMMER_ENTITY_ORDERED_TEXT = "{ordered}";
-  public static final String DIAGRAMMER_MCD_ENTITY_XML_TAG = "mcdEntityShape";
-  public static final String DIAGRAMMER_MCD_ASSOCIATION_XML_TAG = "mcdAssociationShape";
-  public static final String DIAGRAMMER_MCD_GENERALIZATION_XML_TAG = "mcdGeneralizationShape";
-  public static final String DIAGRAMMER_MCD_COMPOSITION_XML_TAG = "mcdCompositionShape";
-  public static final String DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG = "anchorPoint";
-  public static final String DIAGRAMMER_LABEL_XML_TAG = "labelShape";
-  public static final String DIAGRAMMER_LABELS_XML_TAG_NAME = "labelShapes";
-  public static final String DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME = "anchorPoints";
-
   public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
   public static String REGEXPR_FIRSTCAR = "[a-zA-Z]{1,1}";
   public static String REGEXPR_LASTCAR = "([a-zA-Z]{1,1})$"; // pas de chiffre (indiçage) et _ (séparateur) en fin de nom
   public static String REGEXPR_NOFREE = "[a-zA-Z0-9_]*" + REGEXPR_LASTCAR;
-  public static String REGEXPR_FREE = "([ ]{0,1}[a-zA-Z0-9_àâäçéèêëòöùûü]+)*";
   public static String NAME_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_NOFREE;
+  public static String REGEXPR_FREE = "([ ]{0,1}[a-zA-Z0-9_àâäçéèêëòöùûü]+)*";
   public static String NAME_FREE_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_FREE;
   public static String CON_HOSTNAME_REGEXPR = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"; //Provient de  : https://stackoverflow.com/questions/106179/regular-expression-to-match-dns-hostname-or-ip-address
   public static String CON_DBNAME_REGEXPR = "^[0-9a-zA-Z$_]+$"; //Provient de  : https://stackoverflow.com/questions/6731833/database-name-regex-restriction
   public static String REGEXPR_1_99 = "[1-9]{1}[0-9]{0,1}";
   public static String NAME_NOTMODEL_REGEXPR = "[a-zA-Z0-9_]*";
-
 
   public static String MULTI_MERISE_N = "n";
   public static String MULTI_OCL_SP = "\\.\\.";
@@ -210,7 +206,6 @@ public class Preferences extends MVCCDElement {
   public static String FILE_SQL_DDL_EXTENSION = "sql";
   public static String FILE_SQL_DML_EXTENSION = "sql";
 
-
   public static String DIRECTORY_PROFILE_NAME = "profiles";
   public static String DIRECTORY_RESSOURCES_NAME = "ressources";
   public static String DIRECTORY_TEMPLATES_NAME = "template";
@@ -246,11 +241,10 @@ public class Preferences extends MVCCDElement {
   public static String TEMPLATE_CREATE_INDEX = "createIndex.txt";
   public static String TEMPLATE_CREATE_INDEX_COLUMNS = "createIndexColumns.txt";
   public static String TEMPLATE_OPTION_COLUMN_IDENTITY = "columnIdentity.txt";
-  public static String TEMPLATE_OPTION_COLUMN_NOTNULL =  "columnNotNull.txt";
-  public static String TEMPLATE_OPTION_COLUMN_DEFAULTVALUE =  "columnDefaultValue.txt";
+  public static String TEMPLATE_OPTION_COLUMN_NOTNULL = "columnNotNull.txt";
+  public static String TEMPLATE_OPTION_COLUMN_DEFAULTVALUE = "columnDefaultValue.txt";
 
   //public static String TEMPLATE_BLOCK_NODML =  "nodml.txt";
-
 
   public static String TEMPLATES_ALTER_TABLE_FK = "alterTableFK.txt";
 
@@ -269,54 +263,54 @@ public class Preferences extends MVCCDElement {
   public static String LOGGING_FILE_NAME_FORMAT_ERROR_NULL = "Le format de nommage du fichier de log est inexistant";
   public static String DIRECTORY_LOGGING_NAME = "logs";
 
-    // Path de nommage au niveau des objets  (Modèle.paquetatge.entité....
-    public static String PATH_NAMING_SEPARATOR = ".";
-    // Séparation entre conteneur de modèle et nommage d'association qui contient déjà des séparateurs "."
-    public static String PATH_NAMING_RELATION_SEPARATOR = "!";
+  // Path de nommage au niveau des objets  (Modèle.paquetatge.entité....
+  public static String PATH_NAMING_SEPARATOR = ".";
+  // Séparation entre conteneur de modèle et nommage d'association qui contient déjà des séparateurs "."
+  public static String PATH_NAMING_RELATION_SEPARATOR = "!";
 
-    public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
-    public static Integer MVCCD_WINDOW_WIDTH = 1200;
-    public static Integer MVCCD_WINDOW_HEIGHT = 900; // Limité à 900 pour l'utilisation portable
-    public static Integer NAMING_WINDOW_WIDTH = 1200;
-    public static Integer NAMING_WINDOW_HEIGHT = 900; // Limité à 900 pour l'utilisation portable
+  public static Integer PANEL_BUTTONS_MESSAGES_HEIGHT = 50;
+  public static Integer MVCCD_WINDOW_WIDTH = 1200;
+  public static Integer MVCCD_WINDOW_HEIGHT = 900; // Limité à 900 pour l'utilisation portable
+  public static Integer NAMING_WINDOW_WIDTH = 1200;
+  public static Integer NAMING_WINDOW_HEIGHT = 900; // Limité à 900 pour l'utilisation portable
 
-    public static Integer PROJECT_WINDOW_WIDTH = 800;
-    public static Integer PROJECT_WINDOW_HEIGHT = 400;
-    public static Integer MODEL_WINDOW_WIDTH = 800;
-    public static Integer MODEL_WINDOW_HEIGHT = 600;
-    public static Integer ENTITY_WINDOW_WIDTH = 800;
-    public static Integer ENTITY_WINDOW_HEIGHT = 600;
-    public static Integer ATTRIBUTE_WINDOW_WIDTH = 800;
-    public static Integer ATTRIBUTE_WINDOW_HEIGHT = 600;
-    public static Integer ASSOCIATION_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
-    public static Integer ASSOCIATION_WINDOW_HEIGHT = 600;
-    public static Integer UNICITY_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
-    public static Integer UNIQUE_WINDOW_HEIGHT = 600;
-    public static Integer PARAMETER_WINDOW_WIDTH = 400;
-    public static Integer PARAMETER_WINDOW_HEIGHT = 300;
-    public static Integer ANCHOR_WINDOW_WIDTH = 800;
-    public static Integer ANCHOR_WINDOW_HEIGHT = 600;
-    public static Integer GENSPEC_WINDOW_WIDTH = 800;
-    public static Integer GENSPEC_WINDOW_HEIGHT = 600;
-    public static Integer LINK_WINDOW_WIDTH = 800;
-    public static Integer LINK_WINDOW_HEIGHT = 600;
-    public static Integer HELP_WINDOW_WIDTH = 600;
-    public static Integer HELP_WINDOW_HEIGHT = 300;
-    public static Integer PREFERENCES_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
-    public static Integer PREFERENCES_WINDOW_HEIGHT = 600;
-    public static Integer MCDDATATYPE_WINDOW_WIDTH = 800;
-    public static Integer MCDDATATYPE_WINDOW_HEIGHT = 600;
-    public static Integer CON_CONNECTION_WINDOW_WIDTH = 1000;
-    public static Integer CON_CONNECTION_WINDOW_HEIGHT = 800;
-    public static Integer CON_CONNECTOR_WINDOW_WIDTH = 1000;
-    public static Integer CON_CONNECTOR_WINDOW_HEIGHT = 600;
-   public static Integer GENERATOR_SQL_WINDOW_WIDTH = 1000;
+  public static Integer PROJECT_WINDOW_WIDTH = 800;
+  public static Integer PROJECT_WINDOW_HEIGHT = 400;
+  public static Integer MODEL_WINDOW_WIDTH = 800;
+  public static Integer MODEL_WINDOW_HEIGHT = 600;
+  public static Integer ENTITY_WINDOW_WIDTH = 800;
+  public static Integer ENTITY_WINDOW_HEIGHT = 600;
+  public static Integer ATTRIBUTE_WINDOW_WIDTH = 800;
+  public static Integer ATTRIBUTE_WINDOW_HEIGHT = 600;
+  public static Integer ASSOCIATION_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
+  public static Integer ASSOCIATION_WINDOW_HEIGHT = 600;
+  public static Integer UNICITY_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
+  public static Integer UNIQUE_WINDOW_HEIGHT = 600;
+  public static Integer PARAMETER_WINDOW_WIDTH = 400;
+  public static Integer PARAMETER_WINDOW_HEIGHT = 300;
+  public static Integer ANCHOR_WINDOW_WIDTH = 800;
+  public static Integer ANCHOR_WINDOW_HEIGHT = 600;
+  public static Integer GENSPEC_WINDOW_WIDTH = 800;
+  public static Integer GENSPEC_WINDOW_HEIGHT = 600;
+  public static Integer LINK_WINDOW_WIDTH = 800;
+  public static Integer LINK_WINDOW_HEIGHT = 600;
+  public static Integer HELP_WINDOW_WIDTH = 600;
+  public static Integer HELP_WINDOW_HEIGHT = 300;
+  public static Integer PREFERENCES_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
+  public static Integer PREFERENCES_WINDOW_HEIGHT = 600;
+  public static Integer MCDDATATYPE_WINDOW_WIDTH = 800;
+  public static Integer MCDDATATYPE_WINDOW_HEIGHT = 600;
+  public static Integer CON_CONNECTION_WINDOW_WIDTH = 1000;
+  public static Integer CON_CONNECTION_WINDOW_HEIGHT = 800;
+  public static Integer CON_CONNECTOR_WINDOW_WIDTH = 1000;
+  public static Integer CON_CONNECTOR_WINDOW_HEIGHT = 600;
+  public static Integer GENERATOR_SQL_WINDOW_WIDTH = 1000;
   public static Integer GENERATOR_SQL_WINDOW_HEIGHT = 1000;
   public static Integer TEXTEDITOR_WINDOW_WIDTH = 600;
   public static Integer TEXTEDITOR_SQL_WINDOW_HEIGHT = 600;
 
   public static Integer MDRTABLE_WINDOW_WIDTH = 900; // Limité à 900 pour l'utilisation portable
-    public static Integer MDRTABLE_WINDOW_HEIGHT = 600;
+  public static Integer MDRTABLE_WINDOW_HEIGHT = 600;
 
   public static Integer EDITOR_FIELD_HEIGHT = 20;
   public static Integer EDITOR_TABLE_ROW_HEIGHT = 20;
@@ -334,8 +328,8 @@ public class Preferences extends MVCCDElement {
 
   public static String STEREOTYPE_SEPARATOR = "-";
 
-    public static String STEREOTYPE_ENTITY_NAME = "Entity";
-    public static String STEREOTYPE_ENTITY_LIENPROG = "Entity";
+  public static String STEREOTYPE_ENTITY_NAME = "Entity";
+  public static String STEREOTYPE_ENTITY_LIENPROG = "Entity";
   public static String STEREOTYPE_TABLE_NAME = "Table";
   public static String STEREOTYPE_TABLE_LIENPROG = "Table";
   public static String STEREOTYPE_VIEW_NAME = "View";
@@ -349,20 +343,20 @@ public class Preferences extends MVCCDElement {
   public static String STEREOTYPE_PACKAGES_NAME = "Paquetages";
   public static String STEREOTYPE_PACKAGES_LIENPROG = "Paquetages";
   public static String STEREOTYPE_ORACLE_NAME = "Oracle";
-    public static String STEREOTYPE_ORACLE_LIENPROG = "Oracle";
-    public static String STEREOTYPE_MYSQL_NAME = "MySQL";
-    public static String STEREOTYPE_MYSQL_LIENPROG = "MySQL";
-    public static String STEREOTYPE_POSTGRESQL_NAME = "PostgreSQL";
-    public static String STEREOTYPE_POSTGRESQL_LIENPROG = "PostgreSQL";
+  public static String STEREOTYPE_ORACLE_LIENPROG = "Oracle";
+  public static String STEREOTYPE_MYSQL_NAME = "MySQL";
+  public static String STEREOTYPE_MYSQL_LIENPROG = "MySQL";
+  public static String STEREOTYPE_POSTGRESQL_NAME = "PostgreSQL";
+  public static String STEREOTYPE_POSTGRESQL_LIENPROG = "PostgreSQL";
 
-    public static String STEREOTYPE_AID_NAME = "AID";
-    public static String STEREOTYPE_AID_LIENPROG = "AID";
-    public static String STEREOTYPE_M_NAME = "M";
-    public static String STEREOTYPE_M_LIENPROG = "M";
-    public static String STEREOTYPE_L_NAME = "L";
-    public static String STEREOTYPE_L_LIENPROG = "L";
-    public static String STEREOTYPE_LP_NAME = "LP";
-    public static String STEREOTYPE_LP_LIENPROG = "LP";
+  public static String STEREOTYPE_AID_NAME = "AID";
+  public static String STEREOTYPE_AID_LIENPROG = "AID";
+  public static String STEREOTYPE_M_NAME = "M";
+  public static String STEREOTYPE_M_LIENPROG = "M";
+  public static String STEREOTYPE_L_NAME = "L";
+  public static String STEREOTYPE_L_LIENPROG = "L";
+  public static String STEREOTYPE_LP_NAME = "LP";
+  public static String STEREOTYPE_LP_LIENPROG = "LP";
 
   public static String STEREOTYPE_CID_NAME = "CID";
   public static String STEREOTYPE_CID_LIENPROG = "CID";
@@ -378,44 +372,68 @@ public class Preferences extends MVCCDElement {
   public static String STEREOTYPE_U_NAME = "U";
   public static String STEREOTYPE_U_LIENPROG = "U";
 
-    public static String STEREOTYPE_PK_NAME = "PK";
-    public static String STEREOTYPE_PK_LIENPROG = "PK";
+  public static String STEREOTYPE_PK_NAME = "PK";
+  public static String STEREOTYPE_PK_LIENPROG = "PK";
 
-    public static int STEREOTYPE_FK_MAX = 20;
-    public static String STEREOTYPE_FK_NAME = "FK";
-    public static String STEREOTYPE_FK_LIENPROG = "FK";
+  public static int STEREOTYPE_FK_MAX = 20;
+  public static String STEREOTYPE_FK_NAME = "FK";
+  public static String STEREOTYPE_FK_LIENPROG = "FK";
 
-    public static int STEREOTYPE_PFK_MAX = 20;  // Même indiçage que FK !
-    public static String STEREOTYPE_PFK_NAME = "PFK";
-    public static String STEREOTYPE_PFK_LIENPROG = "PFK";
+  public static int STEREOTYPE_PFK_MAX = 20;  // Même indiçage que FK !
+  public static String STEREOTYPE_PFK_NAME = "PFK";
+  public static String STEREOTYPE_PFK_LIENPROG = "PFK";
 
-
-    public static String STEREOTYPE_CHECK_NAME = "CHK";
-    public static String STEREOTYPE_CHECK_LIENPROG = "CHK";
-    public static String STEREOTYPE_INDEX_NAME = "IDX";
-    public static String STEREOTYPE_INDEX_LIENPROG = "IDX";
+  public static String STEREOTYPE_CHECK_NAME = "CHK";
+  public static String STEREOTYPE_CHECK_LIENPROG = "CHK";
+  public static String STEREOTYPE_INDEX_NAME = "IDX";
+  public static String STEREOTYPE_INDEX_LIENPROG = "IDX";
 
   public static String STEREOTYPE_SPECIALIZED_NAME = "SPEC";
   public static String STEREOTYPE_SPECIALIZED_LIENPROG = "SPEC";
+  public static String STEREOTYPE_JNAL_NAME = "JNAL";
+  public static String STEREOTYPE_JNAL_LIENPROG = "JNAL";
+  public static String STEREOTYPE_AUDIT_NAME = "AUD";
+  public static String STEREOTYPE_AUDIT_LIENPROG = "AUD";
+  public static String STEREOTYPE_AUDIT_AJUSER_LIENPROG = "AAU";
+  public static String STEREOTYPE_AUDIT_AJUSER_NAME = "AAU";
+  public static String STEREOTYPE_AUDIT_AJDATE_LIENPROG = "AAI";
+  public static String STEREOTYPE_AUDIT_AJDATE_NAME = "AAI";
+  public static String STEREOTYPE_AUDIT_MOUSER_LIENPROG = "AMU";
+  public static String STEREOTYPE_AUDIT_MOUSER_NAME = "AMU";
+  public static String STEREOTYPE_AUDIT_MODATE_LIENPROG = "AMI";
+  public static String STEREOTYPE_AUDIT_MODATE_NAME = "AMI";
+  public static String STEREOTYPE_JNAL_DATETIME_LIENPROG = "JNDT";
+  public static String STEREOTYPE_JNAL_DATETIME_NAME = "JNDT";
+  public static String STEREOTYPE_JNAL_OPERATION_LIENPROG = "JNOP";
+  public static String STEREOTYPE_JNAL_OPERATION_NAME = "JNOP";
+  public static String STEREOTYPE_JNAL_USER_LIENPROG = "JNUS";
+  public static String STEREOTYPE_JNAL_USER_NAME = "JNUS";
+  public static String STEREOTYPE_JNAL_SESSION_LIENPROG = "JNSE";
+  public static String STEREOTYPE_JNAL_SESSION_NAME = "JNSE";
+  public static String STEREOTYPE_JNAL_APPL_LIENPROG = "JNAP";
+  public static String STEREOTYPE_JNAL_APPL_NAME = "JNAP";
+  public static String STEREOTYPE_JNAL_NOTES_LIENPROG = "JNNO";
+  public static String STEREOTYPE_JNAL_NOTES_NAME = "JNNO";
 
+  public static String STEREOTYPE_TI_SIM_PK_LIENPROG = "SIMPK";
+  public static String STEREOTYPE_TI_SIM_PK_NAME = "SIMPK";
 
   public static String CONSTRAINT_ORDERED_NAME = "ordered";
-    public static String CONSTRAINT_ORDERED_LIENPROG = "ordered";
-    public static String CONSTRAINT_FROZEN_NAME = "frozen";
-    public static String CONSTRAINT_FROZEN_LIENPROG = "frozen";
-    public static String CONSTRAINT_DELETECASCADE_NAME = "deletecascade";
-    public static String CONSTRAINT_DELETECASCADE_LIENPROG = "deletecascade";
-    public static String CONSTRAINT_ORIENTED_NAME = "oriented";
-    public static String CONSTRAINT_ORIENTED_LIENPROG = "oriented";
-    public static String CONSTRAINT_NONORIENTED_NAME = "nonoriented";
-    public static String CONSTRAINT_NONORIENTED_LIENPROG = "nonoriented";
+  public static String CONSTRAINT_ORDERED_LIENPROG = "ordered";
+  public static String CONSTRAINT_FROZEN_NAME = "frozen";
+  public static String CONSTRAINT_FROZEN_LIENPROG = "frozen";
+  public static String CONSTRAINT_DELETECASCADE_NAME = "deletecascade";
+  public static String CONSTRAINT_DELETECASCADE_LIENPROG = "deletecascade";
+  public static String CONSTRAINT_ORIENTED_NAME = "oriented";
+  public static String CONSTRAINT_ORIENTED_LIENPROG = "oriented";
+  public static String CONSTRAINT_NONORIENTED_NAME = "nonoriented";
+  public static String CONSTRAINT_NONORIENTED_LIENPROG = "nonoriented";
 
   public static String CONSTRAINT_ABSOLUTE_NAME = "absolute";
   public static String CONSTRAINT_ABSOLUTE_LIENPROG = "absolute";
 
-
-    public static String MCDDATATYPE_ROOT_NAME = "MCD";
-    public static String MCDDATATYPE_ROOT_LIENPROG = "MCD";
+  public static String MCDDATATYPE_ROOT_NAME = "MCD";
+  public static String MCDDATATYPE_ROOT_LIENPROG = "MCD";
 
   public static String MCDDATATYPE_BOOLEAN_NAME = "boolean";
   public static String MCDDATATYPE_BOOLEAN_LIENPROG = "boolean";
@@ -533,9 +551,8 @@ public class Preferences extends MVCCDElement {
   public static String MCDDATATYPE_NUMBER_SIZE_PRECISION = "mcddatatype.number.size.precision";
   public static String MCDDATATYPE_NUMBER_SIZE_INTEGER_PORTION_ONLY = "mcddatatype.number.size.integer.portion.only";
 
-
-    public static String MCD_NAMING_NAME="mcd.naming.name";
-    public static String MCD_NAMING_SHORT_NAME="mcd.naming.short.name";
+  public static String MCD_NAMING_NAME = "mcd.naming.name";
+  public static String MCD_NAMING_SHORT_NAME = "mcd.naming.short.name";
 
   public static String MCD_NAMING_ASSOCIATION_SEPARATOR = " ... ";
   public static String MCD_NAMING_ASSOCIATION_ARROW_RIGHT = " -> ";
@@ -548,18 +565,18 @@ public class Preferences extends MVCCDElement {
   public static String MCD_NAMING_LINK_ELEMENT = " |--[] ";
   public static String MCD_NAMING_LINK_ASSOCIATION = " []--| ";
 
-    public static String DIRECTORY_IMAGE_ICONE_RELATION = "images" + SYSTEM_FILE_SEPARATOR + "icones" + SYSTEM_FILE_SEPARATOR + "relations";
-    public static String ICONE_RELATION_GENERALIZATION_LEFT_LG = "GeneralizationLeft.png";
-    public static String ICONE_RELATION_GENERALIZATION_RIGHT_LG = "GeneralizationRight.png";
-    public static String ICONE_RELATION_ASS_NONID_LG = "AssNonId.png";
-    public static String ICONE_RELATION_ASS_ID_COMP_LEFT_LG = "AssIdCompLeft.png";
-    public static String ICONE_RELATION_ASS_ID_COMP_RIGHT_LG = "AssIdCompRight.png";
-    public static String ICONE_RELATION_ASS_ID_COMP_STEREO_LG = "AssIdCompStereo.png";
-    public static String ICONE_RELATION_ASS_ID_NAT_LEFT_LG = "AssIdNatLeft.png";
-    public static String ICONE_RELATION_ASS_ID_NAT_RIGHT_LG = "AssIdNatRight.png";
-    public static String ICONE_RELATION_ASS_ID_NAT_STEREO_LG = "AssIdNatStereo.png";
-    public static String ICONE_RELATION_LINK_LEFT_LG = "LinkLeft.png";
-    public static String ICONE_RELATION_LINK_RIGHT_LG = "LinkRight.png";
+  public static String DIRECTORY_IMAGE_ICONE_RELATION = "images" + SYSTEM_FILE_SEPARATOR + "icones" + SYSTEM_FILE_SEPARATOR + "relations";
+  public static String ICONE_RELATION_GENERALIZATION_LEFT_LG = "GeneralizationLeft.png";
+  public static String ICONE_RELATION_GENERALIZATION_RIGHT_LG = "GeneralizationRight.png";
+  public static String ICONE_RELATION_ASS_NONID_LG = "AssNonId.png";
+  public static String ICONE_RELATION_ASS_ID_COMP_LEFT_LG = "AssIdCompLeft.png";
+  public static String ICONE_RELATION_ASS_ID_COMP_RIGHT_LG = "AssIdCompRight.png";
+  public static String ICONE_RELATION_ASS_ID_COMP_STEREO_LG = "AssIdCompStereo.png";
+  public static String ICONE_RELATION_ASS_ID_NAT_LEFT_LG = "AssIdNatLeft.png";
+  public static String ICONE_RELATION_ASS_ID_NAT_RIGHT_LG = "AssIdNatRight.png";
+  public static String ICONE_RELATION_ASS_ID_NAT_STEREO_LG = "AssIdNatStereo.png";
+  public static String ICONE_RELATION_LINK_LEFT_LG = "LinkLeft.png";
+  public static String ICONE_RELATION_LINK_RIGHT_LG = "LinkRight.png";
 
   public static String GENERAL_RELATION_NOTATION_UML = "uml";
   public static String GENERAL_RELATION_NOTATION_STEREOTYPES = "stereotypes";
@@ -618,8 +635,6 @@ public class Preferences extends MVCCDElement {
   public static String MDR_CONSTRAINT_CUSTOM_AUDIT = "mdr.unique.nature.unique";
   public static String MDR_CONSTRAINT_CUSTOM_JNAL = "mdr.unique.nature.unique";
 
-
-
   public static String DB_ORACLE = "db.oracle";
   public static String DB_MYSQL = "db.mysql";
   public static String DB_POSTGRESQL = "db.postgresql";
@@ -673,11 +688,16 @@ public class Preferences extends MVCCDElement {
   public static String MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
   public static String MPDRORACLE_PACKAGE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typePackageMarker}";
   public static String MPDRORACLE_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
+  public static String MPDRORACLE_TABLEJNAL_NAME_FORMAT_DEFAULT = "{tableShortName}{_JN}";
   public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
   public static String MPDRORACLE_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
   public static String MPDRORACLE_EMPTY_SCHEMA = "empty_schema";
   public static String MPDRORACLE_RECORD_NEW = ":NEW";
   public static String MPDRORACLE_RECORD_OLD = ":OLD";
+  public static Integer MPDRORACLE_USER_NAME_SIZE = 30;
+  public static Integer MPDRORACLE_SESSION_NAME_SIZE = 100;
+  public static Integer MPDRORACLE_APPL_NAME_SIZE = 200;
+  public static Integer MPDRORACLE_NOTES_SIZE = 2000;
 
   public static String MPDRMySQLDATATYPE_ROOT_NAME = "MPDR-MySQL";
   public static String MPDRMySQLDATATYPE_ROOT_LIENPROG = "MPDR-MySQL";
@@ -714,10 +734,10 @@ public class Preferences extends MVCCDElement {
   public static String MPDRMYSQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
   public static String MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
   public static String MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
+  public static String MPDRMYSQL_TABLEJNAL_NAME_FORMAT_DEFAULT = "{tableShortName}{_JN}";
   public static String MPDRMYSQL_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
   public static String MPDRMYSQL_RECORD_NEW = "NEW";
   public static String MPDRMYSQL_RECORD_OLD = "OLD";
-
 
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_NAME = "MPDR-PostgreSQL";
   public static String MPDRPOSTGRESQLDATATYPE_ROOT_LIENPROG = "MPDR-PostgreSQL";
@@ -751,12 +771,12 @@ public class Preferences extends MVCCDElement {
   public static String MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeTriggerMarker}";
   public static String MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT = "{viewName}{tableSep}{typeTriggerMarker}";
   public static String MPDRPOSTGRESQL_VIEW_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{typeViewMarker}";
+  public static String MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT_DEFAULT = "{tableShortName}{_JN}";
   public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mpdrColumnName}{_DTY}";
   public static String MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT = "{tableShortName}{tableSep}{mcdAttrShortName}{_DTY}";
   public static String MPDRPOSTGRESQL_EMPTY_SCHEMA = "empty_schema";
   public static String MPDRPOSTGRESQL_RECORD_NEW = "NEW";
   public static String MPDRPOSTGRESQL_RECORD_OLD = "OLD";
-
 
   public static String MDR_TABLE_NATURE_IND = "mdr.table.nature.ind";
   public static String MDR_TABLE_NATURE_DEP = "mdr.table.nature.dep";
@@ -765,7 +785,6 @@ public class Preferences extends MVCCDElement {
   public static String MDR_TABLE_NATURE_NAIRE = "mdr.table.nature.naire";
   public static String MDR_TABLE_NATURE_NAIREDEP = "mdr.table.nature.nairedep";
   public static String MDR_TABLE_NATURE_SPEC = "mdr.table.nature.spec";
-  
 
   public static String MDR_NAMING_LENGTH_30 = "mdr.naming.length.30";
   public static String MDR_NAMING_LENGTH_60 = "mdr.naming.length.60";
@@ -778,16 +797,16 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_NAMING_FORMAT_LIKEDB = "mpdr.naming.format.likedb"; //Idem
 
   public static String MDR_NAMING_TABLE = "mdr.table";
-    public static String MDR_NAMING_TABLE_NN = "mdr.table.nn";
-    public static String MDR_NAMING_TABLE_NN_INDICE = "mdr.table.nn.indice";
-    public static String MDR_NAMING_COLUMN_ATTR = "mdr.column.attr";
-    public static String MDR_NAMING_COLUMN_PK = "mdr.column.pk";
-    public static String MDR_NAMING_COLUMN_FK = "mdr.column.fk";
-    public static String MDR_NAMING_PK = "mdr.pk";
-    public static String MDR_NAMING_PK_NN = "mdr.pk.nn";
-    public static String MDR_NAMING_PK_NN_INDICE = "mdr.pk.nn.indice";
-    public static String MDR_NAMING_FK = "mdr.fk";
-    public static String MDR_NAMING_UNIQUE = "mdr.unique";
+  public static String MDR_NAMING_TABLE_NN = "mdr.table.nn";
+  public static String MDR_NAMING_TABLE_NN_INDICE = "mdr.table.nn.indice";
+  public static String MDR_NAMING_COLUMN_ATTR = "mdr.column.attr";
+  public static String MDR_NAMING_COLUMN_PK = "mdr.column.pk";
+  public static String MDR_NAMING_COLUMN_FK = "mdr.column.fk";
+  public static String MDR_NAMING_PK = "mdr.pk";
+  public static String MDR_NAMING_PK_NN = "mdr.pk.nn";
+  public static String MDR_NAMING_PK_NN_INDICE = "mdr.pk.nn.indice";
+  public static String MDR_NAMING_FK = "mdr.fk";
+  public static String MDR_NAMING_UNIQUE = "mdr.unique";
   public static String MPDR_NAMING_SEQUENCE_PK = "mpdr.sequence.pk";
   public static String MPDR_NAMING_CHECK_COLUMNDATATYPE = "mpdr.check.datatype";
   public static String MPDR_NAMING_CHECK_COLUMNDATATYPE_MAX30 = "mpdr.check.datatype.max30";
@@ -796,6 +815,9 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_NAMING_FUNCTION = "mpdr.function";
   public static String MPDR_NAMING_PACKAGE = "mpdr.package";
   public static String MPDR_NAMING_VIEW = "mpdr.view";
+  public static String MPDR_NAMING_TABLEJNAL = "mpdr.table.jnal";
+
+  public static int MPDR_JNAL_OPERATION_NAME_LENGTH = 3;
 
   public static String MDR_PATH_WORD = "path";
   public static String MDR_PATH_SEP_WORD = "pathSep";
@@ -821,31 +843,48 @@ public class Preferences extends MVCCDElement {
   public static String MDR_PK_COLUMNS_WORD = "pkColumns";
   public static String MDR_UNIQUE_NAME_WORD = "uniqueName";
   public static String MDR_UNIQUE_COLUMNS_WORD = "uniqueColumns";
-  public static String MDR_COLUMN_NAME_WORD =  "columnName";
-  public static String MDR_COLUMN_PK_NAME_WORD =  "columnPKName";
-  public static String MDR_COLUMN_FK_NAME_WORD =  "columnFKName";
-  public static String MDR_COLUMN_DATATYPE_WORD =  "columnDataType";
-  public static String MDR_DEFAULT_VALUE_WORD =  "defaultValue";
+  public static String MDR_COLUMN_NAME_WORD = "columnName";
+  public static String MDR_COLUMN_VALUE_WORD = "columnValue";
+  public static String MDR_COLUMN_PK_NAME_WORD = "columnPKName";
+  public static String MDR_COLUMN_FK_NAME_WORD = "columnFKName";
+  public static String MDR_COLUMN_DATATYPE_WORD = "columnDataType";
+  public static String MDR_DEFAULT_VALUE_WORD = "defaultValue";
   public static String MPDR_SEQUENCE_NAME_WORD = "sequenceName";
   public static String MPDR_MIN_VALUE_WORD = "minValue";
   public static String MPDR_INCREMENT_WORD = "increment";
   public static String MPDR_TRIGGER_NAME_WORD = "triggerName";
   public static String MPDR_PACKAGE_NAME_WORD = "packageName";
+  public static String MPDR_PACKAGE_RESOURCES_NAME_WORD = "packageResourcesName";
+  public static String MPDR_PROCEDURE_RESOURCES_CHECK_DATATYPE_WORD = "procedureResourcesCheckDatatypeWord";
   public static String MPDR_FUNCTION_NAME_WORD = "functionName";
   public static String MPDR_PROCEDURE_NAME_WORD = "procedureName";
   public static String MPDR_COLUMN_NAME_WORD = "mpdrColumnName";
+  public static String MDR_CONSTRAINT_DATATYPE_NAME_WORD = "constraintDatatypeName";
   public static String MCD_ATTRIBUTE_NAME_WORD = "mcdAttrName";
   public static String MCD_ATTRIBUTE_SHORT_NAME_WORD = "mcdAttrShortName";
-  public static String MDR_CHECK_NAME_WORD =  "checkName";
-  public static String MDR_CHECK_EXPRESSION_WORD =  "checkExpression";
+  public static String MDR_CHECK_NAME_WORD = "checkName";
+  public static String MDR_CHECK_EXPRESSION_WORD = "checkExpression";
   public static String MPDR_COLUMN_AUDIT_AJUSER_NAME_WORD = "auditAjUserName";
   public static String MPDR_COLUMN_AUDIT_AJDATE_NAME_WORD = "auditAjDateName";
   public static String MPDR_COLUMN_AUDIT_MOUSER_NAME_WORD = "auditMoUserName";
   public static String MPDR_COLUMN_AUDIT_MODATE_NAME_WORD = "auditMoDateName";
-  public static String MDR_COLUMN_LIEN_PROG_NAME_WORD =  "columnTargetLienProgName";
+  public static String MPDR_TABLE_JNAL_NAME_WORD = "tableJnalName";
+  public static String MPDR_COLUMN_JNAL_DATETIME_NAME_WORD = "jnDatetimeName";
+  public static String MPDR_COLUMN_JNAL_OPERATION_NAME_WORD = "jnOperationName";
+  public static String MPDR_COLUMN_JNAL_USER_NAME_WORD = "jnUserName";
+  public static String MPDR_COLUMN_SESSION_USER_NAME_WORD = "jnSessionName";
+  public static String MPDR_COLUMN_JNAL_APPL_NAME_WORD = "jnApplicationName";
+  public static String MPDR_COLUMN_JNAL_NOTES_NAME_WORD = "jnNotesName";
 
-  public static String MPDR_INDEX_NAME_WORD =  "indexName";
-  public static String MPDR_VIEW_NAME_WORD =  "viewName";
+  public static String MDR_COLUMN_LIEN_PROG_NAME_WORD = "columnTargetLienProgName";
+  public static String MPDR_INTEGRITY_NO_ERROR = "noError";
+  public static String MPDR_INTEGRITY_MESS_ERROR = "messError";
+  public static String MPDR_CHECK_NORMALIZED_STRING = "check_normalized_string";
+  public static String MPDR_CHECK_TOKEN = "check_token";
+  public static String MPDR_CHECK_WORD = "check_word";
+
+  public static String MPDR_INDEX_NAME_WORD = "indexName";
+  public static String MPDR_VIEW_NAME_WORD = "viewName";
 
   public static String MPDR_CHECK_PARAM_EXPRESSION_NAME = "expr";  // Le nom du paramètre qui contient l'expression'
 
@@ -865,11 +904,17 @@ public class Preferences extends MVCCDElement {
   public static String MPDR_STOREDCODE_SCOPE_VIEW = "mpdr.storedcode.scope.view";
   public static String MPDR_STOREDCODE_SCOPE_MPDR = "mpdr.storedcode.scope.mpdr";
 
+  public static String MPDR_COLUMN_AUDIT_AJUSER_NAME = "ajuser";
+  public static String MPDR_COLUMN_AUDIT_AJDATE_NAME = "ajdate";
+  public static String MPDR_COLUMN_AUDIT_MOUSER_NAME = "mouser";
+  public static String MPDR_COLUMN_AUDIT_MODATE_NAME = "modate";
 
-  public static String MPDR_COLUMN_AUDIT_AJUSER_NAME = "mpdr.column.audit.ajuser.name";
-  public static String MPDR_COLUMN_AUDIT_AJDATE_NAME = "mpdr.column.audit.ajdate.name";
-  public static String MPDR_COLUMN_AUDIT_MOUSER_NAME = "mpdr.column.audit.mouser.name";
-  public static String MPDR_COLUMN_AUDIT_MODATE_NAME = "mpdr.column.audit.modate.name";
+  public static String MPDR_COLUMN_JNAL_DATETIME_NAME = "jn_datetime";
+  public static String MPDR_COLUMN_JNAL_OPERATION_NAME = "jn_operation";
+  public static String MPDR_COLUMN_JNAL_USER_NAME = "jn_user";
+  public static String MPDR_COLUMN_JNAL_SESSION_NAME = "jn_session";
+  public static String MPDR_COLUMN_JNAL_APPL_NAME = "jn_application";
+  public static String MPDR_COLUMN_JNAL_NOTES_NAME = "jn_notes";
 
   public static String MDR_COL_NAME_WORD = "colName";
   public static String MDR_COL_NAME_ONE_ANCESTOR_WORD = "colNameOneAncestor";
@@ -913,6 +958,7 @@ public class Preferences extends MVCCDElement {
   public static Integer MARKER_VIEW_LENGTH = 8;
   public static Integer MARKER_PACKAGE_LENGTH = 10;
   public static Integer MARKER_CHECK_LENGTH = 4;
+  public static Integer MDR_MARKER_CUSTOM_TABLEJNAL_NAME_LENGTH = 3;
   public static Integer MDR_SEPARATOR_NAMING_LENGTH = 1;
 
   public static String MARKER_PACKAGE_BODY = "_BODY";
@@ -921,56 +967,55 @@ public class Preferences extends MVCCDElement {
   public static String MDR_WORDS_END = "}";
   public static String MPDR_MARKER_DYNAMIC_CODE = "-";
   public static String MDR_WORDS_PATTERN = "\\{[a-zA-Z_]+\\}";
-    public static String MDR_TABLE_NAME_FORMAT_DEFAULT = "{tableName}";
-    public static String MDR_TABLE_NN_NAME_FORMAT_DEFAULT = "{ATableShortName}{tableSep}{assShortName}{roleA}{roleSep}{roleB}{tableSep}{BTableShortName}";
-    public static String MDR_TABLE_NN_NAME_INDICE_FORMAT_DEFAULT = "{ATableShortName}{tableSep}{BTableShortName}{indTableNN}";
-    public static String MDR_COLUMN_PK_NAME_FORMAT_DEFAULT = "{mcdAttrName}";
-    public static String MDR_COLUMN_ATTR_NAME_FORMAT_DEFAULT = "{colDerived}{peaShortName}{peaSep}{mcdAttrName}";
-    public static String MDR_COLUMN_ATTR_SHORT_NAME_FORMAT_DEFAULT = "{colDerived}{peaShortName}{peaSep}{mcdAttrShortName}";
-    public static String MDR_COLUMN_DERIVED_MARKER_DEFAULT = "DER_";
-    public static String MDR_COLUMN_FK_NAME_FORMAT_DEFAULT = "{parentTableShortName}{tableSep}{parentRoleShortName}{roleSep}{colName}";
-    public static String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT_DEFAULT = "{colNameOneAncestor}{indColFK}";
-    public static String MDR_PK_NAME_FORMAT_DEFAULT = "{PK_}{tableShortName}";
-    public static String MDR_PK_NN_NAME_FORMAT_DEFAULT = "{PK_}{ATableShortName}{tableSep}{assShortName}{roleA}{roleSep}{roleB}{tableSep}{BTableShortName}";
-    public static String MDR_PK_NN_NAME_INDICE_FORMAT_DEFAULT = "{PK_}{ATableShortName}{tableSep}{BTableShortName}{indTableNN}";
+  public static String MDR_TABLE_NAME_FORMAT_DEFAULT = "{tableName}";
+  public static String MDR_TABLE_NN_NAME_FORMAT_DEFAULT = "{ATableShortName}{tableSep}{assShortName}{roleA}{roleSep}{roleB}{tableSep}{BTableShortName}";
+  public static String MDR_TABLE_NN_NAME_INDICE_FORMAT_DEFAULT = "{ATableShortName}{tableSep}{BTableShortName}{indTableNN}";
+  public static String MDR_COLUMN_PK_NAME_FORMAT_DEFAULT = "{mcdAttrName}";
+  public static String MDR_COLUMN_ATTR_NAME_FORMAT_DEFAULT = "{colDerived}{peaShortName}{peaSep}{mcdAttrName}";
+  public static String MDR_COLUMN_ATTR_SHORT_NAME_FORMAT_DEFAULT = "{colDerived}{peaShortName}{peaSep}{mcdAttrShortName}";
+  public static String MDR_COLUMN_DERIVED_MARKER_DEFAULT = "DER_";
+  public static String MDR_COLUMN_FK_NAME_FORMAT_DEFAULT = "{parentTableShortName}{tableSep}{parentRoleShortName}{roleSep}{colName}";
+  public static String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT_DEFAULT = "{colNameOneAncestor}{indColFK}";
+  public static String MDR_PK_NAME_FORMAT_DEFAULT = "{PK_}{tableShortName}";
+  public static String MDR_PK_NN_NAME_FORMAT_DEFAULT = "{PK_}{ATableShortName}{tableSep}{assShortName}{roleA}{roleSep}{roleB}{tableSep}{BTableShortName}";
+  public static String MDR_PK_NN_NAME_INDICE_FORMAT_DEFAULT = "{PK_}{ATableShortName}{tableSep}{BTableShortName}{indTableNN}";
 
-    public static String MDR_INDICE_REGEXPR = "([0-9]+)$";
-    public static Integer MDR_INDICE_TABLENN_LENGTH = 1 ;
-    public static Integer MDR_INDICE_COL_FK_LENGTH = 1 ;
-    public static Integer MDR_INDICE_CONST_FK_LENGTH = 2 ;
-    public static String MDR_FK_NAME_FORMAT_DEFAULT = "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}{tableSep}{parentRoleShortName}";
-    public static String MDR_FK_NAME_WITHOUT_ROLE_FORMAT_DEFAULT = "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}";
-    public static String MDR_UNIQUE_NAME_FORMAT_DEFAULT = "{uniqueNature}{uniqueNatSep}{tableShortName}{tableSep}{uniqueName}";
-    public static String MDR_UNIQUE_NAME_MAX30_FORMAT_DEFAULT = "{uniqueNature}{uniqueNatSep}{tableShortName}{tableSep}{uniqueShortName}";
-    public static String MDR_ROLE_GENERALIZE_MARKER_DEFAULT = "gs";
-    public static String MDR_SEPARATOR = "_" ;
-    public static String MDR_PATH_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
-    public static String MDR_PEA_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
-    public static String MDR_TABLE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
-    public static String MDR_ROLE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
-    public static String MDR_FKIND_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
-    public static String MDR_UNIQUE_NATURE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
+  public static String MDR_INDICE_REGEXPR = "([0-9]+)$";
+  public static Integer MDR_INDICE_TABLENN_LENGTH = 1;
+  public static Integer MDR_INDICE_COL_FK_LENGTH = 1;
+  public static Integer MDR_INDICE_CONST_FK_LENGTH = 2;
+  public static String MDR_FK_NAME_FORMAT_DEFAULT = "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}{tableSep}{parentRoleShortName}";
+  public static String MDR_FK_NAME_WITHOUT_ROLE_FORMAT_DEFAULT = "{FK}{indConstFK}{fkIndSep}{childTableShortName}{tableSep}{parentTableShortName}";
+  public static String MDR_UNIQUE_NAME_FORMAT_DEFAULT = "{uniqueNature}{uniqueNatSep}{tableShortName}{tableSep}{uniqueName}";
+  public static String MDR_UNIQUE_NAME_MAX30_FORMAT_DEFAULT = "{uniqueNature}{uniqueNatSep}{tableShortName}{tableSep}{uniqueShortName}";
+  public static String MDR_ROLE_GENERALIZE_MARKER_DEFAULT = "gs";
+  public static String MDR_SEPARATOR = "_";
+  public static String MDR_PATH_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
+  public static String MDR_PEA_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
+  public static String MDR_TABLE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
+  public static String MDR_ROLE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
+  public static String MDR_FKIND_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
+  public static String MDR_UNIQUE_NATURE_SEP_FORMAT_DEFAULT = MDR_SEPARATOR;
 
-    public static String MDR_CONSTRAINT_CUSTOM_SPECIALIZED_NAME= "mdr.constraint.custom.specialized.name";
+  public static String MDR_CONSTRAINT_CUSTOM_SPECIALIZED_NAME = "mdr.constraint.custom.specialized.name";
 
   public static Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DEFAULT = true;
-
 
   //A priori pas judicieux
   //public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_FK = "mdr.pref.column.fk.one.diff.indice.fk";
   public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_1 = "mdr.pref.column.fk.one.diff.indice.start.1";
   public static String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF_INDICE_START_2 = "mdr.pref.column.fk.one.diff.indice.start.2";
 
-    public static String MDR_PREF_COLUMN_PFK_STEREOTYPE_BOTH = "mdr.pref.column.pfk.stereotype.both";
-    public static String MDR_PREF_COLUMN_PFK_STEREOTYPE_SEPARATE = "mdr.pref.column.pfk.stereotype.separate";
+  public static String MDR_PREF_COLUMN_PFK_STEREOTYPE_BOTH = "mdr.pref.column.pfk.stereotype.both";
+  public static String MDR_PREF_COLUMN_PFK_STEREOTYPE_SEPARATE = "mdr.pref.column.pfk.stereotype.separate";
 
-    public static Boolean MDR_PREF_COLUMN_NID_DEFAULT = true;
+  public static Boolean MDR_PREF_COLUMN_NID_DEFAULT = true;
 
-    public static String WARNING_LEVEL_DEVELOPMENT= "warning.level.development";
-    public static String WARNING_LEVEL_DEBUG = "warning.level.debug";
-    public static String WARNING_LEVEL_DETAILS = "warning.level.details";
-    public static String WARNING_LEVEL_INFO = "warning.level.info";
-    public static String WARNING_LEVEL_WARNING = "warning.level.warning";
+  public static String WARNING_LEVEL_DEVELOPMENT = "warning.level.development";
+  public static String WARNING_LEVEL_DEBUG = "warning.level.debug";
+  public static String WARNING_LEVEL_DETAILS = "warning.level.details";
+  public static String WARNING_LEVEL_INFO = "warning.level.info";
+  public static String WARNING_LEVEL_WARNING = "warning.level.warning";
 
   /*
     public static String RESULTAT_EXCEPTION_STACKTRACE = "resultat.exception.stacktrace";
@@ -1001,13 +1046,13 @@ public class Preferences extends MVCCDElement {
   public static String NODE_DIAGRAM = "diagramme";
   public static String NODE_DIAGRAMS = "diagrammes";
 
-/*
- * Préférences de l'application
- * ATTENTION: pour chaque nouvelle préférence créée, il est nécessaire d'ajouter la préférence dans :
- *  - la classe PreferencesOfApplicationSaverXml: de sorte à ce que la nouvelle préférence soit persisté lors des prochaines sauvegardes des préférences d'application dans le fichier XML.
- *  - la classe PreferencesOfApplicationLeaderXml: de sorte à ce que la nouvelle préférence soit chargée lors des prochains chargements de sauvegardes.
- *  - le schéma SchemaApplicationPref.xsd: de sorte à ce que les futurs sauvegardes soient valides selon le schéma XSD.
- */
+  /*
+   * Préférences de l'application
+   * ATTENTION: pour chaque nouvelle préférence créée, il est nécessaire d'ajouter la préférence dans :
+   *  - la classe PreferencesOfApplicationSaverXml: de sorte à ce que la nouvelle préférence soit persisté lors des prochaines sauvegardes des préférences d'application dans le fichier XML.
+   *  - la classe PreferencesOfApplicationLeaderXml: de sorte à ce que la nouvelle préférence soit chargée lors des prochains chargements de sauvegardes.
+   *  - le schéma SchemaApplicationPref.xsd: de sorte à ce que les futurs sauvegardes soient valides selon le schéma XSD.
+   */
   private Boolean DEBUG = false;
   private Boolean DEBUG_BACKGROUND_PANEL = false;
   private Boolean DEBUG_PRINT_MVCCDELEMENT = false;
@@ -1027,33 +1072,32 @@ public class Preferences extends MVCCDElement {
 
   //private PreferencesDisplay GENERAL_PREFERENCES_DISPLAY = PreferencesDisplay.REPOSITORY;
 
-    // Préférences de projet (modifications User/Custom)
-    // Général
-    private String GENERAL_RELATION_NOTATION ;
-    private MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
-    private MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
-    private MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
-    private MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
+  // Préférences de projet (modifications User/Custom)
+  // Général
+  private String GENERAL_RELATION_NOTATION;
+  private MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
+  private MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
+  private MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
+  private MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
 
+  //private String PROJET_VERSION;  //Directement comme propriété de projet
 
-    //private String PROJET_VERSION;  //Directement comme propriété de projet
-
-    // MCD
-    private Boolean MCD_JOURNALIZATION = false;
-    private Boolean MCD_JOURNALIZATION_EXCEPTION = true;
-    private Boolean MCD_AUDIT = false;
-    private Boolean MCD_AUDIT_EXCEPTION = true;
-    private String MCDDATATYPE_NUMBER_SIZE_MODE = null;
-    private String MCD_AID_DATATYPE_LIENPROG = null;
-    private String MCD_AID_IND_COLUMN_NAME = null;
-    private String MCD_AID_DEP_COLUMN_NAME = null;
-    private Boolean MCD_AID_WITH_DEP = true;
-    private Integer MCD_AID_SIZEDEFAULT = MCDDOMAIN_AID_SIZEDEFAULT;
-    //TODO-0 --> Est devenue une préférence de portée générale
-    // Par exemple PATH_NAMING et renommer aussi les 2 constantes MCD_NAMING_NAME et MCD_NAMING_SHORT_NAME
-    private String MCD_TREE_NAMING_ASSOCIATION = null;
-    private String MCD_MODE_NAMING_LONG_NAME = null;
-    private String MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = null;
+  // MCD
+  private Boolean MCD_JOURNALIZATION = false;
+  private Boolean MCD_JOURNALIZATION_EXCEPTION = true;
+  private Boolean MCD_AUDIT = false;
+  private Boolean MCD_AUDIT_EXCEPTION = true;
+  private String MCDDATATYPE_NUMBER_SIZE_MODE = null;
+  private String MCD_AID_DATATYPE_LIENPROG = null;
+  private String MCD_AID_IND_COLUMN_NAME = null;
+  private String MCD_AID_DEP_COLUMN_NAME = null;
+  private Boolean MCD_AID_WITH_DEP = true;
+  private Integer MCD_AID_SIZEDEFAULT = MCDDOMAIN_AID_SIZEDEFAULT;
+  //TODO-0 --> Est devenue une préférence de portée générale
+  // Par exemple PATH_NAMING et renommer aussi les 2 constantes MCD_NAMING_NAME et MCD_NAMING_SHORT_NAME
+  private String MCD_TREE_NAMING_ASSOCIATION = null;
+  private String MCD_MODE_NAMING_LONG_NAME = null;
+  private String MCD_MODE_NAMING_ATTRIBUTE_SHORT_NAME = null;
 
   // Éditeur
   private Dimension PREFERENCES_WINDOW_SIZE_CUSTOM = null;
@@ -1071,37 +1115,36 @@ public class Preferences extends MVCCDElement {
   // MLDRToMPDR
   private String MLDRTOMPDR_DB = null;
 
-    // MDR Format
-    private String MDR_TABLE_NAME_FORMAT = null;
-    private String MDR_TABLE_NN_NAME_FORMAT = null ;
-    private String MDR_TABLE_NN_NAME_INDICE_FORMAT = null;
-    private String MDR_COLUMN_ATTR_NAME_FORMAT = null;
-    private String MDR_COLUMN_ATTR_SHORT_NAME_FORMAT = null;
-    private String MDR_COLUMN_DERIVED_MARKER = null;
-    private String MDR_PK_NAME_FORMAT = null;
-    private String MDR_PK_NN_NAME_FORMAT = null;
-    private String MDR_PK_NN_NAME_INDICE_FORMAT = null;
-    private String MDR_COLUMN_PK_NAME_FORMAT = null;
-    private String MDR_COLUMN_FK_NAME_FORMAT = null;
-    private String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT = null;
-    private String MDR_FK_NAME_FORMAT = null;
-    private String MDR_FK_NAME_WITHOUT_ROLE_FORMAT = null;
-    private String MDR_UNIQUE_NAME_FORMAT = null;
-    private String MDR_UNIQUE_NAME_MAX30_FORMAT = null;
-    private String MDR_ROLE_GENERALIZE_MARKER = null;
-    private String MDR_PATH_SEP_FORMAT = null;
-    private String MDR_PEA_SEP_FORMAT = null;
-    private String MDR_TABLE_SEP_FORMAT = null;
-    private String MDR_ROLE_SEP_FORMAT = null ;
-    private String MDR_FKIND_SEP_FORMAT = null ;
-    private String MDR_UNIQUE_NATURE_SEP_FORMAT = null ;
+  // MDR Format
+  private String MDR_TABLE_NAME_FORMAT = null;
+  private String MDR_TABLE_NN_NAME_FORMAT = null;
+  private String MDR_TABLE_NN_NAME_INDICE_FORMAT = null;
+  private String MDR_COLUMN_ATTR_NAME_FORMAT = null;
+  private String MDR_COLUMN_ATTR_SHORT_NAME_FORMAT = null;
+  private String MDR_COLUMN_DERIVED_MARKER = null;
+  private String MDR_PK_NAME_FORMAT = null;
+  private String MDR_PK_NN_NAME_FORMAT = null;
+  private String MDR_PK_NN_NAME_INDICE_FORMAT = null;
+  private String MDR_COLUMN_PK_NAME_FORMAT = null;
+  private String MDR_COLUMN_FK_NAME_FORMAT = null;
+  private String MDR_COLUMN_FK_NAME_ONE_ANCESTOR_FORMAT = null;
+  private String MDR_FK_NAME_FORMAT = null;
+  private String MDR_FK_NAME_WITHOUT_ROLE_FORMAT = null;
+  private String MDR_UNIQUE_NAME_FORMAT = null;
+  private String MDR_UNIQUE_NAME_MAX30_FORMAT = null;
+  private String MDR_ROLE_GENERALIZE_MARKER = null;
+  private String MDR_PATH_SEP_FORMAT = null;
+  private String MDR_PEA_SEP_FORMAT = null;
+  private String MDR_TABLE_SEP_FORMAT = null;
+  private String MDR_ROLE_SEP_FORMAT = null;
+  private String MDR_FKIND_SEP_FORMAT = null;
+  private String MDR_UNIQUE_NATURE_SEP_FORMAT = null;
 
-    // MDR Préférences
-    private Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR = null ;
-    private String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = null;
-    private String MDR_PREF_COLUMN_PFK_STEREOTYPE = null;
-    private Boolean MDR_PREF_COLUMN_NID = true;
-
+  // MDR Préférences
+  private Boolean MDR_PREF_COLUMN_FK_ONE_ANCESTOR = null;
+  private String MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = null;
+  private String MDR_PREF_COLUMN_PFK_STEREOTYPE = null;
+  private Boolean MDR_PREF_COLUMN_NID = true;
 
   // MLDR Préférences
   private MDRNamingLength MLDR_PREF_NAMING_LENGTH = null;
@@ -1121,9 +1164,9 @@ public class Preferences extends MVCCDElement {
   private String MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT;
   private String MPDRORACLE_PACKAGE_NAME_FORMAT;
   private String MPDRORACLE_VIEW_NAME_FORMAT;
+  private String MPDRORACLE_TABLEJNAL_NAME_FORMAT;
   private String MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
   private String MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
-
 
   // MPDR MySQL Préférences
   private MDRNamingLength MPDRMYSQL_PREF_NAMING_LENGTH = null;
@@ -1137,6 +1180,7 @@ public class Preferences extends MVCCDElement {
   private String MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT;
   private String MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT;
   private String MPDRMYSQL_VIEW_NAME_FORMAT;
+  private String MPDRMYSQL_TABLEJNAL_NAME_FORMAT;
   private String MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
   private String MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
 
@@ -1152,6 +1196,7 @@ public class Preferences extends MVCCDElement {
   private String MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT;
   private String MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT;
   private String MPDRPOSTGRESQL_VIEW_NAME_FORMAT;
+  private String MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT;
   private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
   private String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
 
@@ -1342,7 +1387,7 @@ public class Preferences extends MVCCDElement {
     if (this.CON_DB_MODE == null) {
       this.CON_DB_MODE = ConDBMode.CONNECTION;
     }
-    return CON_DB_MODE;
+    return this.CON_DB_MODE;
   }
 
   public void setCON_DB_MODE(ConDBMode CON_DB_MODE) {
@@ -1376,56 +1421,57 @@ public class Preferences extends MVCCDElement {
     this.GENERAL_RELATION_NOTATION = GENERAL_RELATION_NOTATION;
   }
 
-    public MUMLExtensionNaming getGENERAL_M_UML_STEREOTYPE_NAMING_INLINE() {
-        if (GENERAL_M_UML_STEREOTYPE_NAMING_INLINE == null){
-            GENERAL_M_UML_STEREOTYPE_NAMING_INLINE = MUMLExtensionNaming.ONELINE_MANYMARKER;
-        }
-        return GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
+  public MUMLExtensionNaming getGENERAL_M_UML_STEREOTYPE_NAMING_INLINE() {
+    if (this.GENERAL_M_UML_STEREOTYPE_NAMING_INLINE == null) {
+      this.GENERAL_M_UML_STEREOTYPE_NAMING_INLINE = MUMLExtensionNaming.ONELINE_MANYMARKER;
     }
+    return this.GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
+  }
 
-    public void setGENERAL_M_UML_STEREOTYPE_NAMING_INLINE(MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INLINE) {
-        this.GENERAL_M_UML_STEREOTYPE_NAMING_INLINE = GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
-    }
+  public void setGENERAL_M_UML_STEREOTYPE_NAMING_INLINE(MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INLINE) {
+    this.GENERAL_M_UML_STEREOTYPE_NAMING_INLINE = GENERAL_M_UML_STEREOTYPE_NAMING_INLINE;
+  }
 
-    public MUMLExtensionNaming getGENERAL_M_UML_STEREOTYPE_NAMING_INBOX() {
-        if (GENERAL_M_UML_STEREOTYPE_NAMING_INBOX == null){
-            GENERAL_M_UML_STEREOTYPE_NAMING_INBOX = MUMLExtensionNaming.MANYLINE;
-        }
-        return GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
+  public MUMLExtensionNaming getGENERAL_M_UML_STEREOTYPE_NAMING_INBOX() {
+    if (this.GENERAL_M_UML_STEREOTYPE_NAMING_INBOX == null) {
+      this.GENERAL_M_UML_STEREOTYPE_NAMING_INBOX = MUMLExtensionNaming.MANYLINE;
     }
+    return this.GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
+  }
 
-    public void setGENERAL_M_UML_STEREOTYPE_NAMING_INBOX(MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INBOX) {
-        this.GENERAL_M_UML_STEREOTYPE_NAMING_INBOX = GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
-    }
+  public void setGENERAL_M_UML_STEREOTYPE_NAMING_INBOX(MUMLExtensionNaming GENERAL_M_UML_STEREOTYPE_NAMING_INBOX) {
+    this.GENERAL_M_UML_STEREOTYPE_NAMING_INBOX = GENERAL_M_UML_STEREOTYPE_NAMING_INBOX;
+  }
 
-    public MUMLExtensionNaming getGENERAL_M_UML_CONSTRAINT_NAMING_INLINE() {
-        if (GENERAL_M_UML_CONSTRAINT_NAMING_INLINE == null){
-            GENERAL_M_UML_CONSTRAINT_NAMING_INLINE = MUMLExtensionNaming.ONELINE_MANYMARKER;
-        }
-        return GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
+  public MUMLExtensionNaming getGENERAL_M_UML_CONSTRAINT_NAMING_INLINE() {
+    if (this.GENERAL_M_UML_CONSTRAINT_NAMING_INLINE == null) {
+      this.GENERAL_M_UML_CONSTRAINT_NAMING_INLINE = MUMLExtensionNaming.ONELINE_MANYMARKER;
     }
+    return this.GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
+  }
 
-    public void setGENERAL_M_UML_CONSTRAINT_NAMING_INLINE(MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INLINE) {
-        this.GENERAL_M_UML_CONSTRAINT_NAMING_INLINE = GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
-    }
+  public void setGENERAL_M_UML_CONSTRAINT_NAMING_INLINE(MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INLINE) {
+    this.GENERAL_M_UML_CONSTRAINT_NAMING_INLINE = GENERAL_M_UML_CONSTRAINT_NAMING_INLINE;
+  }
 
-    public MUMLExtensionNaming getGENERAL_M_UML_CONSTRAINT_NAMING_INBOX() {
-        if (GENERAL_M_UML_CONSTRAINT_NAMING_INBOX == null){
-            GENERAL_M_UML_CONSTRAINT_NAMING_INBOX = MUMLExtensionNaming.MANYLINE;
-        }
-        return GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
+  public MUMLExtensionNaming getGENERAL_M_UML_CONSTRAINT_NAMING_INBOX() {
+    if (this.GENERAL_M_UML_CONSTRAINT_NAMING_INBOX == null) {
+      this.GENERAL_M_UML_CONSTRAINT_NAMING_INBOX = MUMLExtensionNaming.MANYLINE;
     }
+    return this.GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
+  }
 
-    public void setGENERAL_M_UML_CONSTRAINT_NAMING_INBOX(MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INBOX) {
-        this.GENERAL_M_UML_CONSTRAINT_NAMING_INBOX = GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
-    }
+  public void setGENERAL_M_UML_CONSTRAINT_NAMING_INBOX(MUMLExtensionNaming GENERAL_M_UML_CONSTRAINT_NAMING_INBOX) {
+    this.GENERAL_M_UML_CONSTRAINT_NAMING_INBOX = GENERAL_M_UML_CONSTRAINT_NAMING_INBOX;
+  }
 
-    public Boolean getMCD_JOURNALIZATION() {
-        return MCD_JOURNALIZATION;
-    }
-    public void setMCD_JOURNALIZATION(Boolean MCD_JOURNALIZATION) {
-        this.MCD_JOURNALIZATION = MCD_JOURNALIZATION;
-    }
+  public Boolean getMCD_JOURNALIZATION() {
+    return this.MCD_JOURNALIZATION;
+  }
+
+  public void setMCD_JOURNALIZATION(Boolean MCD_JOURNALIZATION) {
+    this.MCD_JOURNALIZATION = MCD_JOURNALIZATION;
+  }
 
   public Boolean getMCD_JOURNALIZATION_EXCEPTION() {
     return this.MCD_JOURNALIZATION_EXCEPTION;
@@ -1714,34 +1760,34 @@ public class Preferences extends MVCCDElement {
     this.MDR_PK_NAME_FORMAT = MDR_PK_NAME_FORMAT;
   }
 
-    public String getMDR_PK_NN_NAME_FORMAT() {
-        if (MDR_PK_NN_NAME_FORMAT == null){
-            MDR_PK_NN_NAME_FORMAT = MDR_PK_NN_NAME_FORMAT_DEFAULT;
-        }
-        return MDR_PK_NN_NAME_FORMAT;
+  public String getMDR_PK_NN_NAME_FORMAT() {
+    if (this.MDR_PK_NN_NAME_FORMAT == null) {
+      this.MDR_PK_NN_NAME_FORMAT = MDR_PK_NN_NAME_FORMAT_DEFAULT;
     }
+    return this.MDR_PK_NN_NAME_FORMAT;
+  }
 
-    public void setMDR_PK_NN_NAME_FORMAT(String MDR_PK_NN_NAME_FORMAT) {
-        this.MDR_PK_NN_NAME_FORMAT = MDR_PK_NN_NAME_FORMAT;
-    }
+  public void setMDR_PK_NN_NAME_FORMAT(String MDR_PK_NN_NAME_FORMAT) {
+    this.MDR_PK_NN_NAME_FORMAT = MDR_PK_NN_NAME_FORMAT;
+  }
 
-    public String getMDR_PK_NN_NAME_INDICE_FORMAT() {
-        if (MDR_PK_NN_NAME_INDICE_FORMAT == null){
-            MDR_PK_NN_NAME_INDICE_FORMAT = MDR_PK_NN_NAME_INDICE_FORMAT_DEFAULT;
-        }
-        return MDR_PK_NN_NAME_INDICE_FORMAT;
+  public String getMDR_PK_NN_NAME_INDICE_FORMAT() {
+    if (this.MDR_PK_NN_NAME_INDICE_FORMAT == null) {
+      this.MDR_PK_NN_NAME_INDICE_FORMAT = MDR_PK_NN_NAME_INDICE_FORMAT_DEFAULT;
     }
+    return this.MDR_PK_NN_NAME_INDICE_FORMAT;
+  }
 
-    public void setMDR_PK_NN_NAME_INDICE_FORMAT(String MDR_PK_NN_NAME_INDICE_FORMAT) {
-        this.MDR_PK_NN_NAME_INDICE_FORMAT = MDR_PK_NN_NAME_INDICE_FORMAT;
-    }
+  public void setMDR_PK_NN_NAME_INDICE_FORMAT(String MDR_PK_NN_NAME_INDICE_FORMAT) {
+    this.MDR_PK_NN_NAME_INDICE_FORMAT = MDR_PK_NN_NAME_INDICE_FORMAT;
+  }
 
   public String getMDR_COLUMN_FK_NAME_FORMAT() {
-        if (MDR_COLUMN_FK_NAME_FORMAT == null){
-            MDR_COLUMN_FK_NAME_FORMAT = MDR_COLUMN_FK_NAME_FORMAT_DEFAULT;
-        }
-        return MDR_COLUMN_FK_NAME_FORMAT;
+    if (this.MDR_COLUMN_FK_NAME_FORMAT == null) {
+      this.MDR_COLUMN_FK_NAME_FORMAT = MDR_COLUMN_FK_NAME_FORMAT_DEFAULT;
     }
+    return this.MDR_COLUMN_FK_NAME_FORMAT;
+  }
 
   public void setMDR_COLUMN_FK_NAME_FORMAT(String MDR_COLUMN_FK_NAME_FORMAT) {
     this.MDR_COLUMN_FK_NAME_FORMAT = MDR_COLUMN_FK_NAME_FORMAT;
@@ -1916,34 +1962,34 @@ public class Preferences extends MVCCDElement {
     this.MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF = MDR_PREF_COLUMN_FK_ONE_ANCESTOR_DIFF;
   }
 
-    public String getMDR_PREF_COLUMN_PFK_STEREOTYPE() {
-        if (MDR_PREF_COLUMN_PFK_STEREOTYPE == null){
-            MDR_PREF_COLUMN_PFK_STEREOTYPE = MDR_PREF_COLUMN_PFK_STEREOTYPE_BOTH;
-        }
-        return MDR_PREF_COLUMN_PFK_STEREOTYPE;
+  public String getMDR_PREF_COLUMN_PFK_STEREOTYPE() {
+    if (this.MDR_PREF_COLUMN_PFK_STEREOTYPE == null) {
+      this.MDR_PREF_COLUMN_PFK_STEREOTYPE = MDR_PREF_COLUMN_PFK_STEREOTYPE_BOTH;
     }
+    return this.MDR_PREF_COLUMN_PFK_STEREOTYPE;
+  }
 
-    public void setMDR_PREF_COLUMN_PFK_STEREOTYPE(String MDR_PREF_COLUMN_PFK_STEREOTYPE) {
-        this.MDR_PREF_COLUMN_PFK_STEREOTYPE = MDR_PREF_COLUMN_PFK_STEREOTYPE;
-    }
+  public void setMDR_PREF_COLUMN_PFK_STEREOTYPE(String MDR_PREF_COLUMN_PFK_STEREOTYPE) {
+    this.MDR_PREF_COLUMN_PFK_STEREOTYPE = MDR_PREF_COLUMN_PFK_STEREOTYPE;
+  }
 
-    public Boolean getMDR_PREF_COLUMN_NID() {
-        if (MDR_PREF_COLUMN_NID == null){
-            MDR_PREF_COLUMN_NID = MDR_PREF_COLUMN_NID_DEFAULT;
-        }
-        return MDR_PREF_COLUMN_NID;
+  public Boolean getMDR_PREF_COLUMN_NID() {
+    if (this.MDR_PREF_COLUMN_NID == null) {
+      this.MDR_PREF_COLUMN_NID = MDR_PREF_COLUMN_NID_DEFAULT;
     }
+    return this.MDR_PREF_COLUMN_NID;
+  }
 
-    public void setMDR_PREF_COLUMN_NID(Boolean MDR_PREF_COLUMN_NID) {
-        this.MDR_PREF_COLUMN_NID = MDR_PREF_COLUMN_NID;
-    }
+  public void setMDR_PREF_COLUMN_NID(Boolean MDR_PREF_COLUMN_NID) {
+    this.MDR_PREF_COLUMN_NID = MDR_PREF_COLUMN_NID;
+  }
 
-    public MDRNamingLength getMLDR_PREF_NAMING_LENGTH() {
-        if (MLDR_PREF_NAMING_LENGTH == null){
-            MLDR_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
-        }
-        return MLDR_PREF_NAMING_LENGTH;
+  public MDRNamingLength getMLDR_PREF_NAMING_LENGTH() {
+    if (this.MLDR_PREF_NAMING_LENGTH == null) {
+      this.MLDR_PREF_NAMING_LENGTH = MDRNamingLength.LENGTH30;
     }
+    return this.MLDR_PREF_NAMING_LENGTH;
+  }
 
   public void setMLDR_PREF_NAMING_LENGTH(MDRNamingLength MLDR_PREF_NAMING_LENGTH) {
     this.MLDR_PREF_NAMING_LENGTH = MLDR_PREF_NAMING_LENGTH;
@@ -1964,7 +2010,7 @@ public class Preferences extends MVCCDElement {
     if (this.MLDR_PREF_RESERDWORDS_FORMAT == null) {
       this.MLDR_PREF_RESERDWORDS_FORMAT = MDRCaseFormat.NOTHING;
     }
-    return MLDR_PREF_RESERDWORDS_FORMAT;
+    return this.MLDR_PREF_RESERDWORDS_FORMAT;
   }
 
   public void setMLDR_PREF_RESERDWORDS_FORMAT(MDRCaseFormat MLDR_PREF_RESERDWORDS_FORMAT) {
@@ -1998,7 +2044,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRORACLE_PREF_RESERDWORDS_FORMAT == null) {
       this.MPDRORACLE_PREF_RESERDWORDS_FORMAT = MDRCaseFormat.LIKEBD;
     }
-    return MPDRORACLE_PREF_RESERDWORDS_FORMAT;
+    return this.MPDRORACLE_PREF_RESERDWORDS_FORMAT;
   }
 
   public void setMPDRORACLE_PREF_RESERDWORDS_FORMAT(MDRCaseFormat MPDRORACLE_PREF_RESERDWORDS_FORMAT) {
@@ -2009,19 +2055,18 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRORACLE_PREF_OBJECTSINCODE_FORMAT == null) {
       this.MPDRORACLE_PREF_OBJECTSINCODE_FORMAT = MDRCaseFormat.LIKEBD;
     }
-    return MPDRORACLE_PREF_OBJECTSINCODE_FORMAT;
+    return this.MPDRORACLE_PREF_OBJECTSINCODE_FORMAT;
   }
 
   public void setMPDRORACLE_PREF_OBJECTSINCODE_FORMAT(MDRCaseFormat MPDRORACLE_PREF_OBJECTSINCODE_FORMAT) {
     this.MPDRORACLE_PREF_OBJECTSINCODE_FORMAT = MPDRORACLE_PREF_OBJECTSINCODE_FORMAT;
   }
 
-  
   public String getMPDRORACLE_DELIMITER_INSTRUCTIONS() {
     if (this.MPDRORACLE_DELIMITER_INSTRUCTIONS == null) {
       this.MPDRORACLE_DELIMITER_INSTRUCTIONS = MPDRORACLE_DELIMITER_INSTRUCTIONS_DEFAULT;
     }
-    return MPDRORACLE_DELIMITER_INSTRUCTIONS;
+    return this.MPDRORACLE_DELIMITER_INSTRUCTIONS;
   }
 
   public void setMPDRORACLE_DELIMITER_INSTRUCTIONS(String MPDRORACLE_DELIMITER_INSTRUCTIONS) {
@@ -2032,7 +2077,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRORACLE_PK_GENERATE == null) {
       this.MPDRORACLE_PK_GENERATE = MPDRORACLE_PK_GENERATE_DEFAULT;
     }
-    return MPDRORACLE_PK_GENERATE;
+    return this.MPDRORACLE_PK_GENERATE;
   }
 
   public void setMPDRORACLE_PK_GENERATE(MPDRDBPK MPDRORACLE_PK_GENERATE) {
@@ -2043,7 +2088,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRORACLE_TAPIS == null) {
       this.MPDRORACLE_TAPIS = false;
     }
-    return MPDRORACLE_TAPIS;
+    return this.MPDRORACLE_TAPIS;
   }
 
   public void setMPDRORACLE_TAPIS(Boolean MPDRORACLE_TAPIS) {
@@ -2054,7 +2099,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRORACLE_SEQPK_NAME_FORMAT == null) {
       this.MPDRORACLE_SEQPK_NAME_FORMAT = MPDRORACLE_SEQPK_NAME_FORMAT_DEFAULT;
     }
-    return MPDRORACLE_SEQPK_NAME_FORMAT;
+    return this.MPDRORACLE_SEQPK_NAME_FORMAT;
   }
 
   public void setMPDRORACLE_SEQPK_NAME_FORMAT(String MPDRORACLE_SEQPK_NAME_FORMAT) {
@@ -2065,7 +2110,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT == null) {
       this.MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT = MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT_DEFAULT;
     }
-    return MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT;
+    return this.MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT;
   }
 
   public void setMPDRORACLE_TRIGGER_TABLE_NAME_FORMAT(String MPDRORACLE_TRIGGER_TABLE_NAME_FORMAT) {
@@ -2076,20 +2121,18 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT == null) {
       this.MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT = MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT_DEFAULT;
     }
-    return MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT;
+    return this.MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT;
   }
 
   public void setMPDRORACLE_TRIGGER_VIEW_NAME_FORMAT(String MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT) {
     this.MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT = MPDRORACLE_TRIGGER_VIEW_NAME_FORMAT;
   }
 
-  
-  
   public String getMPDRORACLE_PACKAGE_NAME_FORMAT() {
     if (this.MPDRORACLE_PACKAGE_NAME_FORMAT == null) {
       this.MPDRORACLE_PACKAGE_NAME_FORMAT = MPDRORACLE_PACKAGE_NAME_FORMAT_DEFAULT;
     }
-    return MPDRORACLE_PACKAGE_NAME_FORMAT;
+    return this.MPDRORACLE_PACKAGE_NAME_FORMAT;
   }
 
   public void setMPDRORACLE_PACKAGE_NAME_FORMAT(String MPDRORACLE_PACKAGE_NAME_FORMAT) {
@@ -2100,18 +2143,29 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRORACLE_VIEW_NAME_FORMAT == null) {
       this.MPDRORACLE_VIEW_NAME_FORMAT = MPDRORACLE_VIEW_NAME_FORMAT_DEFAULT;
     }
-    return MPDRORACLE_VIEW_NAME_FORMAT;
+    return this.MPDRORACLE_VIEW_NAME_FORMAT;
   }
 
   public void setMPDRORACLE_VIEW_NAME_FORMAT(String MPDRORACLE_VIEW_NAME_FORMAT) {
     this.MPDRORACLE_VIEW_NAME_FORMAT = MPDRORACLE_VIEW_NAME_FORMAT;
   }
 
+  public String getMPDRORACLE_TABLEJNAL_NAME_FORMAT() {
+    if (this.MPDRORACLE_TABLEJNAL_NAME_FORMAT == null) {
+      this.MPDRORACLE_TABLEJNAL_NAME_FORMAT = MPDRORACLE_TABLEJNAL_NAME_FORMAT_DEFAULT;
+    }
+    return this.MPDRORACLE_TABLEJNAL_NAME_FORMAT;
+  }
+
+  public void setMPDRORACLE_TABLEJNAL_NAME_FORMAT(String MPDRORACLE_TABLEJNAL_NAME_FORMAT) {
+    this.MPDRORACLE_TABLEJNAL_NAME_FORMAT = MPDRORACLE_TABLEJNAL_NAME_FORMAT;
+  }
+
   public String getMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT() {
     if (this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT == null) {
       this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRORACLE_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT;
     }
-    return MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+    return this.MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT;
   }
 
   public void setMPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT(String MPDRORACLE_CHECK_COLUMNDATATYPE_NAME_FORMAT) {
@@ -2122,7 +2176,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT == null) {
       this.MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRORACLE_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT;
     }
-    return MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
+    return this.MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
   }
 
   public void setMPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT(String MPDRORACLE_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT) {
@@ -2152,23 +2206,22 @@ public class Preferences extends MVCCDElement {
     this.MPDRMYSQL_PREF_NAMING_FORMAT = MPDRMYSQL_PREF_NAMING_FORMAT;
   }
 
-
   public MDRCaseFormat getMPDRMYSQL_PREF_RESERDWORDS_FORMAT() {
     if (this.MPDRMYSQL_PREF_RESERDWORDS_FORMAT == null) {
       this.MPDRMYSQL_PREF_RESERDWORDS_FORMAT = MDRCaseFormat.NOTHING;
     }
-    return MPDRMYSQL_PREF_RESERDWORDS_FORMAT;
+    return this.MPDRMYSQL_PREF_RESERDWORDS_FORMAT;
   }
 
   public void setMPDRMYSQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat MPDRMYSQL_PREF_RESERDWORDS_FORMAT) {
     this.MPDRMYSQL_PREF_RESERDWORDS_FORMAT = MPDRMYSQL_PREF_RESERDWORDS_FORMAT;
   }
-  
+
   public MDRCaseFormat getMPDRMYSQL_PREF_OBJECTSINCODE_FORMAT() {
     if (this.MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT == null) {
       this.MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT = MDRCaseFormat.NOTHING;
     }
-    return MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT;
+    return this.MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT;
   }
 
   public void setMPDRMYSQL_PREF_OBJECTSINCODE_FORMAT(MDRCaseFormat MPDRMYSQL_PREF_OBJECTSINCODE_FORMAT) {
@@ -2179,7 +2232,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRMYSQL_DELIMITER_INSTRUCTIONS == null) {
       this.MPDRMYSQL_DELIMITER_INSTRUCTIONS = MPDRMYSQL_DELIMITER_INSTRUCTIONS_DEFAULT;
     }
-    return MPDRMYSQL_DELIMITER_INSTRUCTIONS;
+    return this.MPDRMYSQL_DELIMITER_INSTRUCTIONS;
   }
 
   public void setMPDRMYSQL_DELIMITER_INSTRUCTIONS(String MPDRMYSQL_DELIMITER_INSTRUCTIONS) {
@@ -2190,7 +2243,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRMYSQL_PK_GENERATE == null) {
       this.MPDRMYSQL_PK_GENERATE = MPDRMYSQL_PK_GENERATE_DEFAULT;
     }
-    return MPDRMYSQL_PK_GENERATE;
+    return this.MPDRMYSQL_PK_GENERATE;
   }
 
   public void setMPDRMYSQL_PK_GENERATE(MPDRDBPK MPDRMYSQL_PK_GENERATE) {
@@ -2201,7 +2254,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRMYSQL_TAPIS == null) {
       this.MPDRMYSQL_TAPIS = false;
     }
-    return MPDRMYSQL_TAPIS;
+    return this.MPDRMYSQL_TAPIS;
   }
 
   public void setMPDRMYSQL_TAPIS(Boolean MPDRMYSQL_TAPIS) {
@@ -2212,7 +2265,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRMYSQL_SEQPK_NAME_FORMAT == null) {
       this.MPDRMYSQL_SEQPK_NAME_FORMAT = MPDRMYSQL_SEQPK_NAME_FORMAT_DEFAULT;
     }
-    return MPDRMYSQL_SEQPK_NAME_FORMAT;
+    return this.MPDRMYSQL_SEQPK_NAME_FORMAT;
   }
 
   public void setMPDRMYSQL_SEQPK_NAME_FORMAT(String MPDRMYSQL_SEQPK_NAME_FORMAT) {
@@ -2223,41 +2276,51 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT == null) {
       this.MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT = MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT;
     }
-    return MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT;
+    return this.MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT;
   }
 
   public void setMPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT(String MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT) {
     this.MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT = MPDRMYSQL_TRIGGER_TABLE_NAME_FORMAT;
   }
 
-
   public String getMPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT() {
     if (this.MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT == null) {
       this.MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT = MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT;
     }
-    return MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT;
+    return this.MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT;
   }
 
   public void setMPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT(String MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT) {
     this.MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT = MPDRMYSQL_TRIGGER_VIEW_NAME_FORMAT;
   }
-  
+
   public String getMPDRMYSQL_VIEW_NAME_FORMAT() {
     if (this.MPDRMYSQL_VIEW_NAME_FORMAT == null) {
       this.MPDRMYSQL_VIEW_NAME_FORMAT = MPDRMYSQL_VIEW_NAME_FORMAT_DEFAULT;
     }
-    return MPDRMYSQL_VIEW_NAME_FORMAT;
+    return this.MPDRMYSQL_VIEW_NAME_FORMAT;
   }
 
   public void setMPDRMYSQL_VIEW_NAME_FORMAT(String MPDRMYSQL_VIEW_NAME_FORMAT) {
     this.MPDRMYSQL_VIEW_NAME_FORMAT = MPDRMYSQL_VIEW_NAME_FORMAT;
   }
 
+  public String getMPDRMYSQL_TABLEJNAL_NAME_FORMAT() {
+    if (this.MPDRMYSQL_TABLEJNAL_NAME_FORMAT == null) {
+      this.MPDRMYSQL_TABLEJNAL_NAME_FORMAT = MPDRMYSQL_TABLEJNAL_NAME_FORMAT_DEFAULT;
+    }
+    return this.MPDRMYSQL_TABLEJNAL_NAME_FORMAT;
+  }
+
+  public void setMPDRMYSQL_TABLEJNAL_NAME_FORMAT(String MPDRMYSQL_TABLEJNAL_NAME_FORMAT) {
+    this.MPDRMYSQL_TABLEJNAL_NAME_FORMAT = MPDRMYSQL_TABLEJNAL_NAME_FORMAT;
+  }
+
   public String getMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT() {
     if (this.MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT == null) {
       this.MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRMYSQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT;
     }
-    return MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+    return this.MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
   }
 
   public void setMPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT(String MPDRMYSQL_CHECK_COLUMNDATATYPE_NAME_FORMAT) {
@@ -2265,10 +2328,10 @@ public class Preferences extends MVCCDElement {
   }
 
   public String getMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT() {
-    if (this. MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT == null) {
-      this. MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRMYSQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT;
+    if (this.MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT == null) {
+      this.MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRMYSQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT;
     }
-    return MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
+    return this.MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
   }
 
   public void setMPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT(String MPDRMYSQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT) {
@@ -2276,7 +2339,6 @@ public class Preferences extends MVCCDElement {
   }
 
   // PostgreSQL
-
 
   public MDRNamingLength getMPDRPOSTGRESQL_PREF_NAMING_LENGTH() {
     if (this.MPDRPOSTGRESQL_PREF_NAMING_LENGTH == null) {
@@ -2304,7 +2366,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT == null) {
       this.MPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT = MDRCaseFormat.LIKEBD;
     }
-    return MPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT;
+    return this.MPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT;
   }
 
   public void setMPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT(MDRCaseFormat MPDRPOSTGRESQL_PREF_RESERDWORDS_FORMAT) {
@@ -2315,7 +2377,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT == null) {
       this.MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT = MDRCaseFormat.LIKEBD;
     }
-    return MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT;
+    return this.MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT;
   }
 
   public void setMPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT(MDRCaseFormat MPDRPOSTGRESQL_PREF_OBJECTSINCODE_FORMAT) {
@@ -2326,7 +2388,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS == null) {
       this.MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS = MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS_DEFAULT;
     }
-    return MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS;
+    return this.MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS;
   }
 
   public void setMPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS(String MPDRPOSTGRESQL_DELIMITER_INSTRUCTIONS) {
@@ -2337,7 +2399,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRPOSTGRESQL_PK_GENERATE == null) {
       this.MPDRPOSTGRESQL_PK_GENERATE = MPDRPOSTGRESQL_PK_GENERATE_DEFAULT;
     }
-    return MPDRPOSTGRESQL_PK_GENERATE;
+    return this.MPDRPOSTGRESQL_PK_GENERATE;
   }
 
   public void setMPDRPOSTGRESQL_PK_GENERATE(MPDRDBPK MPDRPOSTGRESQL_PK_GENERATE) {
@@ -2348,7 +2410,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRPOSTGRESQL_TAPIS == null) {
       this.MPDRPOSTGRESQL_TAPIS = false;
     }
-    return MPDRPOSTGRESQL_TAPIS;
+    return this.MPDRPOSTGRESQL_TAPIS;
   }
 
   public void setMPDRPOSTGRESQL_TAPIS(Boolean MPDRPOSTGRESQL_TAPIS) {
@@ -2359,7 +2421,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRPOSTGRESQL_SEQPK_NAME_FORMAT == null) {
       this.MPDRPOSTGRESQL_SEQPK_NAME_FORMAT = MPDRPOSTGRESQL_SEQPK_NAME_FORMAT_DEFAULT;
     }
-    return MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
+    return this.MPDRPOSTGRESQL_SEQPK_NAME_FORMAT;
   }
 
   public void setMPDRPOSTGRESQL_SEQPK_NAME_FORMAT(String MPDRPOSTGRESQL_SEQPK_NAME_FORMAT) {
@@ -2370,7 +2432,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT == null) {
       this.MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT = MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT_DEFAULT;
     }
-    return MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT;
+    return this.MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT;
   }
 
   public void setMPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT(String MPDRPOSTGRESQL_TRIGGER_TABLE_NAME_FORMAT) {
@@ -2381,7 +2443,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT == null) {
       this.MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT = MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT_DEFAULT;
     }
-    return MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT;
+    return this.MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT;
   }
 
   public void setMPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT(String MPDRPOSTGRESQL_TRIGGER_VIEW_NAME_FORMAT) {
@@ -2391,18 +2453,30 @@ public class Preferences extends MVCCDElement {
   public String getMPDRPOSTGRESQL_VIEW_NAME_FORMAT() {
     if (this.MPDRPOSTGRESQL_VIEW_NAME_FORMAT == null) {
       this.MPDRPOSTGRESQL_VIEW_NAME_FORMAT = MPDRPOSTGRESQL_VIEW_NAME_FORMAT_DEFAULT;
-    }return MPDRPOSTGRESQL_VIEW_NAME_FORMAT;
+    }
+    return this.MPDRPOSTGRESQL_VIEW_NAME_FORMAT;
   }
 
   public void setMPDRPOSTGRESQL_VIEW_NAME_FORMAT(String MPDRPOSTGRESQL_VIEW_NAME_FORMAT) {
     this.MPDRPOSTGRESQL_VIEW_NAME_FORMAT = MPDRPOSTGRESQL_VIEW_NAME_FORMAT;
   }
 
+  public String getMPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT() {
+    if (this.MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT == null) {
+      this.MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT = MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT_DEFAULT;
+    }
+    return this.MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT;
+  }
+
+  public void setMPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT(String MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT) {
+    this.MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT = MPDRPOSTGRESQL_TABLEJNAL_NAME_FORMAT;
+  }
+
   public String getMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT() {
     if (this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT == null) {
       this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT = MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_NAME_FORMAT_DEFAULT;
     }
-    return MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
+    return this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT;
   }
 
   public void setMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT(String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_NAME_FORMAT) {
@@ -2413,7 +2487,7 @@ public class Preferences extends MVCCDElement {
     if (this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT == null) {
       this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT = MPDRPOSTGRESQL_CHECK_COLUMN_DATATYPE_MAX30_NAME_FORMAT_DEFAULT;
     }
-    return MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
+    return this.MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT;
   }
 
   public void setMPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT(String MPDRPOSTGRESQL_CHECK_COLUMNDATATYPE_MAX30_NAME_FORMAT) {
@@ -2422,7 +2496,7 @@ public class Preferences extends MVCCDElement {
 
   //
   public Boolean isDIAGRAMMER_SHOW_GRID() {
-    if (this.DIAGRAMMER_SHOW_GRID == null){
+    if (this.DIAGRAMMER_SHOW_GRID == null) {
       this.DIAGRAMMER_SHOW_GRID = true;
     }
 

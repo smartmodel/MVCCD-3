@@ -2,6 +2,8 @@ package mdr;
 
 import constraints.Constraint;
 import constraints.ConstraintService;
+import constraints.Constraints;
+import constraints.ConstraintsManager;
 import m.MRelEndMultiPart;
 import m.interfaces.IMUMLExtensionNamingInLine;
 import mcd.MCDAttribute;
@@ -11,6 +13,8 @@ import mdr.interfaces.IMDRElementWithIteration;
 import mdr.interfaces.IMDRParameter;
 import mdr.services.MDRColumnsService;
 import mldr.MLDRColumn;
+import mpdr.MPDRColumn;
+import mpdr.tapis.MPDRColumnAudit;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
@@ -108,6 +112,11 @@ public abstract class MDRColumn extends MDRElement implements
         return datatypeConstraintLienProg;
     }
 
+    public Constraint getDatatypeConstraint() {
+        Constraints constraints = ConstraintsManager.instance().constraints();
+        return constraints.getConstraintByLienProg(MDRColumn.class.getName(), getDatatypeConstraintLienProg());
+    }
+
     public void setDatatypeConstraintLienProg(String datatypeConstraintLienProg) {
         this.datatypeConstraintLienProg = datatypeConstraintLienProg;
     }
@@ -187,16 +196,48 @@ public abstract class MDRColumn extends MDRElement implements
     }
 
 
+    public boolean isColumnPKTI() {
+        if (this instanceof MLDRColumn ){
+            MLDRColumn mldrColumn = (MLDRColumn) this;
+            return mldrColumn.isColumnPKTI();
+        }
+        if (this instanceof MPDRColumn){
+            MPDRColumn mpdrColumn = (MPDRColumn) this;
+            if (mpdrColumn.getMLDRColumnSource() != null) {
+                return mpdrColumn.getMLDRColumnSource().isColumnPKTI();
+            }
+        }
+        return false;
+    }
+
+
+    public boolean isColumnSimPK() {
+        if (this instanceof MLDRColumn ){
+            MLDRColumn mldrColumn = (MLDRColumn) this;
+            return mldrColumn.isColumnSimPK();
+        }
+        if (this instanceof MPDRColumn){
+            MPDRColumn mpdrColumn = (MPDRColumn) this;
+            if (mpdrColumn.getMLDRColumnSource() != null) {
+                return mpdrColumn.getMLDRColumnSource().isColumnSimPK();
+            }
+        }
+        return false;
+    }
+
+
     protected boolean isAudit() {
-        return this instanceof MDRColumnAudit;
+       return this instanceof MPDRColumnAudit;
     }
 
     public boolean isNotBusiness() {
         boolean c1 = isPk() ;
         boolean c2 = isFk() ;
         boolean c3 = isAudit() ;
+        boolean c4 = isColumnPKTI() ;
+        boolean c5 = isColumnSimPK() ;
 
-        return isPk() || isFk() || isAudit();
+        return isPk() || isFk() || isAudit() || isColumnPKTI() || isColumnSimPK();
     }
 
     public boolean isBusiness() {
@@ -282,6 +323,10 @@ public abstract class MDRColumn extends MDRElement implements
                 if (preferences.getMDR_PREF_COLUMN_NID()) {
                     resultat.add(mcdNID.getDefaultStereotype());
                 }
+            }
+            if (isColumnSimPK()){
+                resultat.add(stereotypes.getStereotypeByLienProg(MDRColumn.class.getName(),
+                        preferences.STEREOTYPE_TI_SIM_PK_LIENPROG));
             }
         }
 

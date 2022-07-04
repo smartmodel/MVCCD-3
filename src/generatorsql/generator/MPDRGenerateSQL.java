@@ -6,12 +6,10 @@ import messages.MessagesBuilder;
 import mpdr.*;
 import mpdr.interfaces.IMPDRModelRequirePackage;
 import mpdr.interfaces.IMPDRTableRequirePackage;
-import mpdr.tapis.MPDRFunction;
-import mpdr.tapis.MPDRPackage;
-import mpdr.tapis.MPDRTrigger;
-import mpdr.tapis.MPDRView;
+import mpdr.tapis.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import utilities.UtilDivers;
 
 import java.util.ArrayList;
@@ -43,7 +41,11 @@ public abstract class MPDRGenerateSQL {
         } else if (mpdrModel.getDropBeforeCreate() == MPDRDropBefore.OBJECTSCREATED){
             message = MessagesBuilder.getMessagesProperty("generate.sql.drop.tables");
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
-            generateSQLCode += generateSQLDropTables();
+            generateSQLCode += generateSQLCommandTables(DROP);
+
+            message = MessagesBuilder.getMessagesProperty("generate.sql.drop.tables.jnal");
+            ViewLogsManager.printMessage(message, WarningLevel.INFO);
+            generateSQLCode += generateSQLCommandTablesJnal(DROP);
 
             message = MessagesBuilder.getMessagesProperty("generate.sql.drop.sequences");
             ViewLogsManager.printMessage(message, WarningLevel.INFO);
@@ -73,6 +75,10 @@ public abstract class MPDRGenerateSQL {
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.tables");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
         generateSQLCode += generateSQLCommandTables(CREATE);
+
+        message = MessagesBuilder.getMessagesProperty("generate.sql.create.tables.jnal");
+        ViewLogsManager.printMessage(message, WarningLevel.INFO);
+        generateSQLCode += generateSQLCommandTablesJnal(CREATE);
 
         message = MessagesBuilder.getMessagesProperty("generate.sql.create.sequences");
         ViewLogsManager.printMessage(message, WarningLevel.INFO);
@@ -123,6 +129,7 @@ public abstract class MPDRGenerateSQL {
 
     }
 
+    /*
     private String generateSQLDropTables(){
 
         String generateSQLCode = "";
@@ -132,6 +139,20 @@ public abstract class MPDRGenerateSQL {
         }
         return generateSQLCode;
     }
+
+    private String generateSQLDropTablesJnal(){
+
+        String generateSQLCode = "";
+        for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
+            if (mpdrTable.getMPDRTableJnal() != null) {
+                generateSQLCode += getMpdrGenerateSQLTable().generateSQLDropTable(mpdrTable.getMPDRTableJnal());
+                generateSQLCode += delimiter();
+            }
+        }
+        return generateSQLCode;
+    }
+
+     */
 
     private String generateSQLCommandTables(int command) {
 
@@ -147,6 +168,26 @@ public abstract class MPDRGenerateSQL {
 
                 }
             }
+
+        return generateSQLCode;
+    }
+
+
+    private String generateSQLCommandTablesJnal(int command) {
+
+        String generateSQLCode = "";
+        for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
+            if (mpdrTable.getMPDRTableJnal() != null) {
+                if (command == CREATE) {
+                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLCreateTable(mpdrTable.getMPDRTableJnal());
+                    generateSQLCode += delimiter();
+                }
+                if (command == DROP) {
+                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLDropTable(mpdrTable.getMPDRTableJnal());
+                    generateSQLCode += delimiter();
+                }
+            }
+        }
 
         return generateSQLCode;
     }
@@ -248,6 +289,24 @@ public abstract class MPDRGenerateSQL {
                             generateSQLCode += getMpdrGenerateSQLPackage().generateSQLDropPackage(mpdrPackage);
                             generateSQLCode += delimiter();
                         }
+                    }
+                }
+            }
+            // Paquetage de ressources
+
+            if (mpdrModel instanceof IMPDRModelRequirePackage) {
+                if (PreferencesManager.instance().preferences().getMPDRORACLE_TAPIS()) {
+                    if (command == CREATE) {
+                        generateSQLCode += getMpdrGenerateSQLPackage().generateSQLCreatePackage(((IMPDRModelRequirePackage) mpdrModel).getMPDRPackageByType(MPDRPackageType.RESOURCES_SPEC));
+                        generateSQLCode += delimiter();
+                        generateSQLCode += getMpdrGenerateSQLPackage().generateSQLCreatePackage(((IMPDRModelRequirePackage) mpdrModel).getMPDRPackageByType(MPDRPackageType.RESOURCES_BODY));
+                        generateSQLCode += delimiter();
+                    }
+                    if (command == DROP) {
+                        generateSQLCode += getMpdrGenerateSQLPackage().generateSQLDropPackage(((IMPDRModelRequirePackage) mpdrModel).getMPDRPackageByType(MPDRPackageType.RESOURCES_SPEC));
+                        generateSQLCode += delimiter();
+                        generateSQLCode += getMpdrGenerateSQLPackage().generateSQLDropPackage(((IMPDRModelRequirePackage) mpdrModel).getMPDRPackageByType(MPDRPackageType.RESOURCES_BODY));
+                        generateSQLCode += delimiter();
                     }
                 }
             }

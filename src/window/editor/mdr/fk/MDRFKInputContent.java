@@ -22,6 +22,9 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
     private JLabel labelPK ;
     private JTextField fieldPK ;
 
+    private JLabel labelNature ;
+    private JTextField fieldNature ;
+
     private JLabel labelDeleteCascade ;
     private JCheckBox fieldDeleteCascade ;
 
@@ -56,6 +59,11 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
         fieldPK = new JTextField();
         fieldPK.setPreferredSize(new Dimension(100, Preferences.EDITOR_FIELD_HEIGHT));
         fieldPK.setEnabled(false);
+
+        labelNature = new JLabel("Table de référence (Nature)");
+        fieldNature = new JTextField();
+        fieldNature.setPreferredSize(new Dimension(100, Preferences.EDITOR_FIELD_HEIGHT));
+        fieldNature.setEnabled(false);
 
 
         labelDeleteCascade = new JLabel("{deleteCascade}");
@@ -99,6 +107,12 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
         panelInputContentCustom.add(labelPK, gbc);
         gbc.gridx++;
         panelInputContentCustom.add(fieldPK, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelInputContentCustom.add(labelNature, gbc);
+        gbc.gridx++;
+        panelInputContentCustom.add(fieldNature, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
@@ -268,6 +282,7 @@ public class MDRFKInputContent extends PanelInputContentTableBasicIdMDR {
         MDRFK mdrFK = (MDRFK) mvccdElementCrt;
         super.loadDatas(mdrFK);
         fieldPK.setText(mdrFK.getMdrPK().getName());
+        fieldNature.setText(mdrFK.getNature().getText());
         fieldDeleteCascade.setSelected(mdrFK.isDeleteCascade());
         loadRelationFK(mdrFK.getMDRRelationFK());
     }

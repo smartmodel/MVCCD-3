@@ -5,24 +5,34 @@ import connections.services.ConnectionsService;
 import consolidationMpdrDb.comparator.oracle.OracleComparatorDb;
 import consolidationMpdrDb.syncGenerator.oracle.SyncGeneratorSQLOracle;
 import datatypes.MPDRDatatype;
+import exceptions.CodeApplException;
 import generatorsql.generator.MPDRGenerateSQL;
 import generatorsql.generator.oracle.MPDROracleGenerateSQL;
+import main.MVCCDElement;
 import main.MVCCDElementFactory;
 import main.MVCCDWindow;
 import mdr.MDRCaseFormat;
 import mdr.services.MDRModelService;
 import mldr.MLDRColumn;
+import mldr.MLDRModel;
 import mldr.MLDRTable;
 import mpdr.MPDRDB;
 import mpdr.MPDRModel;
 import mpdr.interfaces.IMPDRModelRequirePackage;
 import mpdr.oracle.interfaces.IMPDROracleElement;
+import mpdr.tapis.MPDRBoxPackages;
+import mpdr.tapis.MPDRPackage;
+import mpdr.tapis.MPDRPackageType;
+import mpdr.tapis.oracle.MPDROracleBoxPackages;
+import mpdr.tapis.oracle.MPDROraclePackage;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.ProjectElement;
 import transform.mldrtompdr.MLDRTransformToMPDROracleDatatype;
 
 import java.sql.SQLException;
+
+import java.util.ArrayList;
 
 public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IMPDRModelRequirePackage {
 
@@ -121,6 +131,48 @@ public class MPDROracleModel extends MPDRModel implements IMPDROracleElement, IM
         this.packageNameFormat = packageNameFormat;
     }
 
+    @Override
+    public MPDRBoxPackages getMPDRBoxPackages() {
+        for (MVCCDElement mvccdElement : getChilds()){
+            if (mvccdElement instanceof MPDRBoxPackages){
+                return (MPDRBoxPackages) mvccdElement ;
+            }
+        }
+        return null ;
+    }
+
+    @Override
+    public MPDRBoxPackages createBoxPackages(IMPDRModelRequirePackage mpdrModel, MLDRModel mldrModel) {
+        MPDRBoxPackages mpdrBoxPackages = MVCCDElementFactory.instance().createMPDROracleBoxPackages(
+                mpdrModel, mldrModel);
+        return mpdrBoxPackages;
+    }
+
+
+    @Override
+    public MPDRPackage getMPDRPackageByType(MPDRPackageType type) {
+        return getMPDRBoxPackages().getMPDRPackageByType(type);
+    }
+
+    @Override
+    public MPDRPackage createPackage(MPDRPackageType type, MLDRModel mldrModel) {
+        MPDROracleBoxPackages mpdrOracleBoxPackages = (MPDROracleBoxPackages) getMPDRBoxPackages();
+        if (mpdrOracleBoxPackages != null){
+            MPDROraclePackage mpdrOraclePackage = MVCCDElementFactory.instance().createMPDROraclePackage(
+                    mpdrOracleBoxPackages, mldrModel);
+            return mpdrOraclePackage;
+        } else {
+            throw new CodeApplException("La boîte Paqetages doit exister avant de créer un paquetage");
+        }
+
+    }
+
+    public ArrayList<MPDRPackage> getMPDRPackages(){
+        if ( getMPDRBoxPackages() != null) {
+            return getMPDRBoxPackages().getAllPackages();
+        }
+        return null;
+    }
 
     @Override
     public String getWordRecordNew() {

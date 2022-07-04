@@ -61,9 +61,16 @@ public class MLDRTransformToBoxTriggersTable {
                 }
             }
         }
+
         if (mldrTable.isKindDependant()){
             if (MPDRTriggerType.BIR_PKDEP.applicableForMPDRDB(mpdrModel.getDb())){
                 mpdrTriggers.add(mldrTransformToTrigger.createOrModifyTrigger(MPDRTriggerType.BIR_PKDEP));
+            }
+        }
+
+        if (mldrTable.hasColumnSimPK()){
+            if (MPDRTriggerType.BIR_PKDEPSIM.applicableForMPDRDB(mpdrModel.getDb())){
+                mpdrTriggers.add(mldrTransformToTrigger.createOrModifyTrigger(MPDRTriggerType.BIR_PKDEPSIM));
             }
         }
 

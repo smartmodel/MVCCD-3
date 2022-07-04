@@ -7,9 +7,7 @@ import mpdr.MPDRSequence;
 import mpdr.mysql.MPDRMySQLTable;
 import mpdr.oracle.MPDROracleTable;
 import mpdr.postgresql.MPDRPostgreSQLTable;
-import mpdr.tapis.MPDRBoxPackages;
-import mpdr.tapis.MPDRBoxProceduresOrFunctions;
-import mpdr.tapis.MPDRBoxTriggers;
+import mpdr.tapis.*;
 import preferences.Preferences;
 
 public class StereotypesCreateDefault {
@@ -147,6 +145,11 @@ public class StereotypesCreateDefault {
                 MDRColumn.class.getName());
 
         createStereotype(
+                Preferences.STEREOTYPE_TI_SIM_PK_NAME,
+                Preferences.STEREOTYPE_TI_SIM_PK_LIENPROG,
+                MDRColumn.class.getName());
+
+        createStereotype(
                 Preferences.STEREOTYPE_PK_NAME,
                 Preferences.STEREOTYPE_PK_LIENPROG,
                 MDRConstraint.class.getName());
@@ -170,6 +173,17 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_SPECIALIZED_NAME,
                 Preferences.STEREOTYPE_SPECIALIZED_LIENPROG,
                 MDRConstraintCustomSpecialized.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_JNAL_NAME,
+                Preferences.STEREOTYPE_JNAL_LIENPROG,
+                MDRConstraintCustomJnal.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_AUDIT_NAME,
+                Preferences.STEREOTYPE_AUDIT_LIENPROG,
+                MDRConstraintCustomAudit.class.getName());
+
 
         createStereotypesMDRFK();
         createStereotypesMDRPFK();
@@ -265,6 +279,57 @@ public class StereotypesCreateDefault {
                 Preferences.STEREOTYPE_INDEX_NAME,
                 Preferences.STEREOTYPE_INDEX_LIENPROG,
                 MPDRIndex.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_AUDIT_AJUSER_NAME,
+                Preferences.STEREOTYPE_AUDIT_AJUSER_LIENPROG,
+                MPDRColumnAudit.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_AUDIT_AJDATE_NAME,
+                Preferences.STEREOTYPE_AUDIT_AJDATE_LIENPROG,
+                MPDRColumnAudit.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_AUDIT_MOUSER_NAME,
+                Preferences.STEREOTYPE_AUDIT_MOUSER_LIENPROG,
+                MPDRColumnAudit.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_AUDIT_MODATE_NAME,
+                Preferences.STEREOTYPE_AUDIT_MODATE_LIENPROG,
+                MPDRColumnAudit.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_JNAL_DATETIME_NAME,
+                Preferences.STEREOTYPE_JNAL_DATETIME_LIENPROG,
+                MPDRColumnJnal.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_JNAL_OPERATION_NAME,
+                Preferences.STEREOTYPE_JNAL_OPERATION_LIENPROG,
+                MPDRColumnJnal.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_JNAL_USER_NAME,
+                Preferences.STEREOTYPE_JNAL_USER_LIENPROG,
+                MPDRColumnJnal.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_JNAL_SESSION_NAME,
+                Preferences.STEREOTYPE_JNAL_SESSION_LIENPROG,
+                MPDRColumnJnal.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_JNAL_APPL_NAME,
+                Preferences.STEREOTYPE_JNAL_APPL_LIENPROG,
+                MPDRColumnJnal.class.getName());
+
+        createStereotype(
+                Preferences.STEREOTYPE_JNAL_NOTES_NAME,
+                Preferences.STEREOTYPE_JNAL_NOTES_LIENPROG,
+                MPDRColumnJnal.class.getName());
+
     }
 
     private void createMPDROracle() {

@@ -52,6 +52,15 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IM
     }
 
     @Override
+    public MPDRColumnAudit createColumnAudit(MLDRConstraintCustomAudit mldrConstraintCustomAudit,
+                                             Stereotype stereotype) {
+        MPDROracleColumnAudit newColumn = MVCCDElementFactory.instance().createMPDROracleColumnAudit(
+                getMDRContColumns(), mldrConstraintCustomAudit, stereotype);
+
+        return newColumn;
+    }
+
+    @Override
     public MPDRPK createPK(MLDRPK mldrPK) {
         MPDROraclePK newPK = MVCCDElementFactory.instance().createMPDROraclePK(
                 getMDRContConstraints(), mldrPK);
@@ -85,6 +94,20 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IM
                 getMDRContConstraints(), mldrSpecialized);
         return newSpecialized;
     }
+
+    @Override
+    public IMPDRConstraint createJnal(MLDRConstraintCustomJnal mldrJournal) {
+        MPDROracleConstraintCustomJnal newJnal = MVCCDElementFactory.instance().createMPDROracleConstraintCustomJnal(
+                getMDRContConstraints(), mldrJournal);
+        return newJnal;
+    }
+
+    @Override
+    public IMPDRConstraint createAudit(MLDRConstraintCustomAudit mldrAudit) {
+        MPDROracleConstraintCustomAudit newAudit = MVCCDElementFactory.instance().createMPDROracleConstraintCustomAudit(
+                getMDRContConstraints(), mldrAudit);
+        return newAudit;
+   }
 
     @Override
     public  MPDRCheckSpecific createCheckSpecific(IMLDRSourceMPDRCConstraintSpecifc imldrSourceMPDRCConstraintSpecifc) {
@@ -172,6 +195,13 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IM
     }
 
     @Override
+    public MPDRTableJnal createTableJnal(MLDRConstraintCustomJnal mldrConstraintCustomJnal) {
+        MPDRTableJnal newTableJnal = MVCCDElementFactory.instance().createMPDROracleTableJnal(
+                getMPDRContTAPIs(), mldrConstraintCustomJnal);
+        return newTableJnal;
+    }
+
+    @Override
     public MPDRBoxPackages getMPDRBoxPackages() {
         return getMPDRContTAPIs().getMPDRBoxPackages();
     }
@@ -198,7 +228,7 @@ public class MPDROracleTable extends MPDRTable implements IMPDROracleElement, IM
                     mpdrOracleBoxPackages, mldrTable);
             return mpdrOraclePackage;
         } else {
-            throw new CodeApplException("La boîte Procédures/Functions doit exister avant de créer un trigger");
+            throw new CodeApplException("La boîte Paqetages doit exister avant de créer un paquetage");
         }
 
     }

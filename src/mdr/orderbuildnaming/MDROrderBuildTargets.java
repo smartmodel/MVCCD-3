@@ -28,7 +28,8 @@ public enum MDROrderBuildTargets {
     TRIGGERVIEW(Preferences.MPDR_NAMING_TRIGGER_VIEW, "mpdr.of.trigger.table"),
     FUNCTION(Preferences.MPDR_NAMING_FUNCTION, "mpdr.of.function.table"),
     PACKAGE(Preferences.MPDR_NAMING_PACKAGE, "mpdr.of.package.table"),
-    VIEW(Preferences.MPDR_NAMING_VIEW, "mpdr.of.view.constraint");
+    VIEW(Preferences.MPDR_NAMING_VIEW, "mpdr.of.view.constraint"),
+    TABLEJNAL(Preferences.MPDR_NAMING_TABLEJNAL, "mpdr.of.table.jnal");
 
     private final String name;
     private final String propertyOfTarget;

@@ -6,10 +6,8 @@ import main.MVCCDElement;
 import main.MVCCDElementConvert;
 import main.MVCCDManager;
 import mcd.*;
-import mdr.MDRColumn;
-import mdr.MDRElementNames;
-import mdr.MDRFKNature;
-import mdr.MDRNamingLength;
+import mcd.interfaces.IMCDSourceMLDRTable;
+import mdr.*;
 import mdr.orderbuildnaming.MDROrderBuildNaming;
 import mdr.orderbuildnaming.MDROrderBuildTargets;
 import mdr.services.IMDRParameterService;
@@ -60,16 +58,36 @@ public class MCDTransformToPK {
             // Création des PFK
             MCDTransformToFK mcdTransformToFK = new MCDTransformToFK(mcdTransform);
             MLDRFK mldrFK = mcdTransformToFK.createOrModifyFromRelEndSource(mldrModel, mcdRelEndSource, mldrTable, MDRFKNature.IDCOMP);
+            if ( PreferencesManager.instance().preferences().getMCDTOMLDR_MODE().equals(Preferences.MCDTOMLDR_MODE_TI)) {
+                // La FK n'est plus de composition mais naturelle
+                mldrFK.setNature(MDRFKNature.IDNATURAL);
+            }
             mdrColumnPKs.addAll(mldrFK.getMDRColumns());
+
         }
 
         MLDRPK mldrPK = createOrModifyPKEntityBase(mcdEntity, mldrTable) ;
 
         if ( (mcdEntity.getNature() == MCDEntityNature.DEP)  ||
                 (mcdEntity.getNature() == MCDEntityNature.ENTASSDEP) ||
-                (mcdEntity.getNature() == MCDEntityNature.ENTASSDEP ))  {
-            MDRColumn mdrColumnPKProper = createOrModifyColumnPKProper(mcdEntity, mldrTable);
-            mdrColumnPKs.add(mdrColumnPKProper);
+                (mcdEntity.getNature() == MCDEntityNature.NAIREDEP ))  {
+            MLDRColumn mldrColumnPKProper = createOrModifyColumnPKProper(mcdEntity, mldrTable);
+            mdrColumnPKs.add(mldrColumnPKProper);
+            if ( PreferencesManager.instance().preferences().getMCDTOMLDR_MODE().equals(Preferences.MCDTOMLDR_MODE_TI)) {
+                // La colonne servira à simuler la dépendance entre table pour la PK qui aurait été générée
+                mldrColumnPKProper.setColumnSimPK(true);
+            }
+        }
+
+        if ( PreferencesManager.instance().preferences().getMCDTOMLDR_MODE().equals(Preferences.MCDTOMLDR_MODE_TI)) {
+            // Création de la contrainte de simulation de PK
+            MCDTransformAdhocUnique mcdTransformAdhocUnique = new MCDTransformAdhocUnique(mcdTransform);
+            mcdTransformAdhocUnique.createOrModify(mldrModel, mcdEntity,  mdrColumnPKs, mldrTable, MDRUniqueNature.SIMPK);
+
+            // Création de la colonne PK de table indépendante (simulant une dépendance)
+            MDRColumn mdrColumnPKForSimulation = createOrModifyColumnPKForSimulation(mcdEntity, mldrTable);
+            mdrColumnPKs.clear();
+            mdrColumnPKs.add(mdrColumnPKForSimulation);
         }
 
         MCDTransformService.adjustParameters(mcdTransform, mldrPK,
@@ -88,10 +106,26 @@ public class MCDTransformToPK {
 
         // Reprise des colonnes de PFK !
         for (MLDRFK mldrFK : mldrPFKs){
+            if ( PreferencesManager.instance().preferences().getMCDTOMLDR_MODE().equals(Preferences.MCDTOMLDR_MODE_TI)) {
+                // La FK n'est plus de composition mais naturelle
+                mldrFK.setNature(MDRFKNature.IDNATURAL);
+            }
             mdrColumnPKs.addAll(mldrFK.getMDRColumns());
         }
 
         MLDRPK mldrPK = createOrModifyPKAssNN(mcdAssNN,mldrTable);
+
+        if ( PreferencesManager.instance().preferences().getMCDTOMLDR_MODE().equals(Preferences.MCDTOMLDR_MODE_TI)) {
+            // Création de la contrainte de simulation de PK
+            MCDTransformAdhocUnique mcdTransformAdhocUnique = new MCDTransformAdhocUnique(mcdTransform);
+            mcdTransformAdhocUnique.createOrModify(mldrModel, mcdAssNN,  mdrColumnPKs, mldrTable, MDRUniqueNature.SIMPK);
+
+            // Création de la colonne PK de table indépendante (simulant une dépendance)
+            MDRColumn mdrColumnPKForSimulation = createOrModifyColumnPKForSimulation(mcdAssNN, mldrTable);
+            mdrColumnPKs.clear();
+            mdrColumnPKs.add(mdrColumnPKForSimulation);
+
+        }
 
         MCDTransformService.adjustParameters(mcdTransform, mldrPK,
                 IMDRParameterService.to(mdrColumnPKs));
@@ -138,8 +172,8 @@ public class MCDTransformToPK {
         // Crée ou modifie Colonne PK (num ou numDep)
         MCDAttribute mcdAttributeAID = mcdEntity.getMCDAttributeAID();
 
-        MLDRColumn mldrColumnPKWithAID = mldrTable.getMLDRColumnByMCDElementSource(mcdAttributeAID);
-        MLDRColumn mldrColumnPKWithoutAID = mldrTable.getMLDRColumnByMCDElementSource(mcdEntity);
+        MLDRColumn mldrColumnPKWithAID = mldrTable.getMLDRColumnByMCDElementSource(mcdAttributeAID );
+        MLDRColumn mldrColumnPKWithoutAID = mldrTable.getMLDRColumnByMCDElementSource(mcdEntity, false);
         MLDRColumn mldrColumnPK;
         if ((mcdAttributeAID == null)){
             if (mldrColumnPKWithoutAID == null){
@@ -156,10 +190,28 @@ public class MCDTransformToPK {
             // Déjà tracé lors de la transformation de la colonne
         }
         MCDTransformToColumn mcdTransformToColumn = new MCDTransformToColumn(mcdTransform);
-        mcdTransformToColumn.modifyColumnPK(mcdEntity, mldrColumnPK);
+        mcdTransformToColumn.modifyColumnPK(mcdEntity, mldrColumnPK, false);
 
 
         return mldrColumnPK;
+    }
+    public MLDRColumn createOrModifyColumnPKForSimulation(IMCDSourceMLDRTable imcdSourceMLDRTable, MLDRTable mldrTable) {
+
+        // Crée ou modifie Colonne PK pour une table indépendant de simulation (Transformation TI)
+        MLDRColumn mldrColumnPK = mldrTable.getMLDRColumnByMCDElementSource(imcdSourceMLDRTable, true);;
+        if (mldrColumnPK == null){
+            mldrColumnPK = mldrTable.createColumnPK(imcdSourceMLDRTable);
+            MVCCDManager.instance().addNewMVCCDElementInRepository(mldrColumnPK);
+        }
+        mldrColumnPK.setIteration(mcdTransform.getIteration());
+
+        MCDTransformToColumn mcdTransformToColumn = new MCDTransformToColumn(mcdTransform);
+        mcdTransformToColumn.modifyColumnPK(imcdSourceMLDRTable, mldrColumnPK, true);
+
+        // Marquage de la colonne comme spécifique à la transformation en tables indépendantes
+        mldrColumnPK.setColumnPKTI(true);
+
+       return mldrColumnPK;
     }
 
 

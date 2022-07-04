@@ -59,7 +59,23 @@ public abstract class MDRTable extends MDRTableOrView {
         if (resultat.size() == 1){
             return resultat.get(0) ;
         }
-        throw new CodeApplException("La table  " + this.getNamePath() + "retourne : " + resultat.size() + " ConstraintCustomSpcialized.");
+        throw new CodeApplException("La table  " + this.getNamePath() + "retourne : " + resultat.size() + " ConstraintCustomSpecialized.");
+    }
+
+    public MDRConstraintCustomAudit getMDRConstraintCustomAudit(){
+        ArrayList<MDRConstraintCustomAudit> resultat = new ArrayList<MDRConstraintCustomAudit>();
+        for (MDRConstraint mdrConstraint : getMDRConstraints()){
+            if (mdrConstraint instanceof MDRConstraintCustomAudit){
+                resultat.add ((MDRConstraintCustomAudit) mdrConstraint);
+            }
+        }
+        if (resultat.size() == 0){
+            return null ;
+        }
+        if (resultat.size() == 1){
+            return resultat.get(0) ;
+        }
+        throw new CodeApplException("La table  " + this.getNamePath() + "retourne : " + resultat.size() + " ConstraintCustomAudit.");
     }
 
 
@@ -268,4 +284,16 @@ public abstract class MDRTable extends MDRTableOrView {
         return resultat;
     }
 
+    public boolean hasColumnSimPK() {
+        return MDRTableService.hasColumnSimPK(this);
+    }
+
+
+    public MDRColumn getMDRColumnSimPK() {
+        return MDRTableService.getColumnSimPK(this);
+    }
+
+    public ArrayList<MDRColumn> getMDRColumnsSimPK() {
+        return MDRTableService.getMDRColumnsSimPFK(this);
+    }
 }

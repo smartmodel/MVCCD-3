@@ -1,0 +1,19 @@
+CREATE OR REPLACE TRIGGER {triggerName}
+BEFORE UPDATE ON {tableName} FOR EACH ROW
+DECLARE
+    {vl_newrec} {tableName}%ROWTYPE;
+    {vl_oldrec} {tableName}%ROWTYPE;
+
+BEGIN
+    {-NODML-}
+    {-TRIGGER_NEW_TO_RECORD-}
+    {-TRIGGER_OLD_TO_RECORD-}
+    {packageName}.{autogen_columns_upd}(vl_newrec);
+    {packageName}.{autogen_columns}(vl_newrec);
+    {packageName}.{checktype_columns}({vl_newrec});
+    {packageName}.{uppercase_columns}(vl_newrec);
+    {packageName}.{PEA_columns}({vl_newrec});
+    {packageName}.{frozen_columns}({vl_newrec}, {vl_oldrec});
+    {-INS_JN_UPD-}
+    {-TRIGGER_RECORD_TO_NEW-}
+END;

@@ -13,8 +13,6 @@ public class MLDRContColumns extends MDRContColumns implements IMLDRElement {
         super(parent, name);
     }
 
-
-
     public MCDElement getMcdElementSource() {
         return null;
     }

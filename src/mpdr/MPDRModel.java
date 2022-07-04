@@ -38,6 +38,7 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
     private String triggerTableNameFormat;
     private String triggerViewNameFormat;
     private String viewNameFormat;
+    private String tableJnalNameFormat;
     private String checkColumnDatatypeNameFormat;
     private String checkColumnDatatypeMax30NameFormat;
 
@@ -204,6 +205,14 @@ public abstract class MPDRModel extends MDRModel  implements IMPDRElement {
 
     public void setViewNameFormat(String viewNameFormat) {
         this.viewNameFormat = viewNameFormat;
+    }
+
+    public String getTableJnalNameFormat() {
+        return tableJnalNameFormat;
+    }
+
+    public void setTableJnalNameFormat(String tableJnalNameFormat) {
+        this.tableJnalNameFormat = tableJnalNameFormat;
     }
 
     public String getCheckColumnDatatypeNameFormat() {

@@ -23,6 +23,7 @@ public class MDROrderWordAttrName extends MDROrderWord{
             if (    (mcdEntityNature == MCDEntityNature.DEP) ||
                     (mcdEntityNature == MCDEntityNature.ENTASSDEP) ||
                     (mcdEntityNature == MCDEntityNature.NAIREDEP) ) {
+                /*
                 if (PreferencesManager.instance().preferences().getMCDTOMLDR_MODE().equals(
                         Preferences.MCDTOMLDR_MODE_DT)) {
                     value = PreferencesManager.instance().preferences().getMCD_AID_DEP_COLUMN_NAME();
@@ -31,6 +32,10 @@ public class MDROrderWordAttrName extends MDROrderWord{
                         Preferences.MCDTOMLDR_MODE_TI)) {
                     value = PreferencesManager.instance().preferences().getMCD_AID_IND_COLUMN_NAME();
                 }
+
+                 */
+                value = PreferencesManager.instance().preferences().getMCD_AID_DEP_COLUMN_NAME();
+
             }
 
         super.setValue(value);

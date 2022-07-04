@@ -4,10 +4,10 @@ import java.awt.Point;
 import java.io.Serializable;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import window.editor.diagrammer.elements.shapes.relations.MCDAssociationShape;
-import window.editor.diagrammer.elements.shapes.relations.MCDCompositionShape;
-import window.editor.diagrammer.elements.shapes.relations.MCDGeneralizationShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAssociationShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDCompositionShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDGeneralizationShape;
 import window.editor.diagrammer.menus.actions.MCDAssociationEditAction;
 import window.editor.diagrammer.menus.actions.MCDCompositionEditAction;
 import window.editor.diagrammer.menus.actions.MCDGeneralizationEditAction;
@@ -22,16 +22,17 @@ public class RelationShapeMenu extends JPopupMenu implements Serializable {
     super();
     JMenuItem edit = null;
     if (shape instanceof MCDAssociationShape) {
-      edit = new JMenuItem(new MCDAssociationEditAction("Ouvrir l'assistant de modélisation", null, (MCDAssociationShape) shape));
+      this.add(new JMenuItem(new MCDAssociationEditAction("Ouvrir l'assistant de modélisation", null, (MCDAssociationShape) shape)));
     } else if (shape instanceof MCDGeneralizationShape) {
-      edit = new JMenuItem(new MCDGeneralizationEditAction("Ouvrir l'assistant de modélisation", null, (MCDGeneralizationShape) shape));
+      this.add(new JMenuItem(new MCDGeneralizationEditAction("Ouvrir l'assistant de modélisation", null, (MCDGeneralizationShape) shape)));
     } else if (shape instanceof MCDCompositionShape) {
       edit = this.add(new JMenuItem(new MCDCompositionEditAction("Ouvrir l'assistant de modélisation", null, (MCDCompositionShape) shape)));
     }
-    this.add(edit);
+
     // Ajout d'un point d'ancrage sur la relation
     JMenuItem addPointAncrage = new JMenuItem(new RelationAddPointAncrageAction("Ajouter un point d'ancrage", null, shape, new Point(x, y)));
     this.add(addPointAncrage);
+
     // Suppression d'une relation
     JMenuItem delete = new JMenuItem(new RelationDeleteAction("Supprimer", null, shape));
     this.add(delete);

@@ -1,38 +1,56 @@
-CREATE OR REPLACE PACKAGE BODY {packageName} IS
+CREATE OR REPLACE PACKAGE BODY {packageResourcesName} IS
 
-PROCEDURE {check_normalized_string}({pi_table_name}' IN VARCHAR2
-    ,{pi_column_name} IN VARCHAR2
-    ,{pi_value} IN VARCHAR2
-    ,{pi_no_error} IN VARCHAR2
-    ,{pi_mess_error IN VARCHAR2) IS
-BEGIN
-    IF (INSTR( {pi_value} , CHR(9)) > 0) OR
-        (INSTR( {pi_value} , CHR(10)) > 0) OR
-        (INSTR( {pi_value}, CHR(13)) > 0) THEN
-            {raise_column_error}({pi_table_name}, {pi_column_name}, {pi_no_error}, {pi_mess_error} );
-            MPDROracleConstraintError.instance().instrError(getParent(), aCol, MPDRConstraintError.DATATYPE_NORMALIZEDSTRING,
-                                                                                                new String[] {datatype});
-    END IF;
 
-END;
+PROCEDURE raise_column_error (pi_table_name IN VARCHAR2,
+    pi_column_name IN VARCHAR2,
+    pi_no_error IN PLS_INTEGER,
+    pi_mess_error IN VARCHAR2) IS
 
-PROCEDURE {check_token}({pi_value} IN VARCHAR2) IS
-BEGIN
-END;
+    BEGIN
+        raise_application_error(-20001, 'Erreur MVC-CD sur la colonne : ' + pi_table_name  + '.' + pi_column_name +
+        ' - ' + + co_marker_noerr + pi_no_error + co_marker_noerr +pi_mess_error);
+    END;
 
-PROCEDURE {check_word}({pi_value} IN VARCHAR2) IS
-BEGIN
-END;
 
-PROCEDURE {raise_column_error} ({pi_table_name}' IN VARCHAR2
-    ,{pi_column_name} IN VARCHAR2
-    ,{pi_no_error} IN VARCHAR2
-    ,{pi_mess_error} IN VARCHAR2) IS
-BEGIN
-    raise_application_error(-20001, 'Erreur MVC-CD: ' + {co_marker_noerr} + {pi_no_error} + {co_marker_noerr}
-    + ' Table: ' + ({pi_table_name}  + ' Colonne: ' + {pi_column_name} +
-    + ' ' +{pi_mess_error});
-END;
+PROCEDURE check_normalized_string(pi_table_name IN VARCHAR2,
+    pi_column_name IN VARCHAR2,
+    pi_value IN VARCHAR2,
+    pi_no_error IN VARCHAR2,
+    pi_mess_error IN VARCHAR2)  IS
+
+    BEGIN
+        IF (INSTR( pi_value , CHR(9)) > 0) OR
+            (INSTR( pi_value , CHR(10)) > 0) OR
+            (INSTR( pi_value, CHR(13)) > 0) THEN
+            raise_column_error(pi_table_name, pi_column_name, pi_no_error, pi_mess_error);
+        END IF;
+    END;
+
+
+
+PROCEDURE check_token(pi_table_name IN VARCHAR2,
+    pi_column_name IN VARCHAR2,
+    pi_value IN VARCHAR2,
+    pi_no_error IN VARCHAR2,
+    pi_mess_error IN VARCHAR2)  IS
+
+    BEGIN
+        IF (INSTR( pi_value , '  ') > 0)  THEN
+            raise_column_error(pi_table_name, pi_column_name, pi_no_error, pi_mess_error);
+        END IF;
+    END;
+
+PROCEDURE check_word(pi_table_name IN VARCHAR2,
+    pi_column_name IN VARCHAR2,
+    pi_value IN VARCHAR2,
+    pi_no_error IN VARCHAR2,
+    pi_mess_error IN VARCHAR2)  IS
+
+    BEGIN
+        IF (INSTR( pi_value , ' ') > 0)  THEN
+            raise_column_error(pi_table_name, pi_column_name, pi_no_error, pi_mess_error);
+        END IF;
+    END;
 
 BEGIN
 	NULL;

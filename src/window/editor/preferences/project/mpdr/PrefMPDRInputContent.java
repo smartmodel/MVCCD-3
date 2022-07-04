@@ -51,6 +51,8 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
     protected STextField fieldPackageNameFormat;
     protected JLabel labelViewNameFormat ;
     protected STextField fieldViewNameFormat;
+    protected JLabel labelTableJnalNameFormat ;
+    protected STextField fieldTableJnalNameFormat;
     protected JLabel labelCheckColumnDatatypeNameFormat ;
     protected STextField fieldCheckColumnDatatypeNameFormat;
     protected JLabel labelCheckColumnDatatypeMax30NameFormat ;
@@ -165,6 +167,14 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         fieldViewNameFormat.getDocument().addDocumentListener(this);
         fieldViewNameFormat.addFocusListener(this);
 
+        labelTableJnalNameFormat = new JLabel("Table de journalisation");
+        fieldTableJnalNameFormat = new STextField(this, labelTableJnalNameFormat);
+        fieldTableJnalNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
+        fieldTableJnalNameFormat.setToolTipText("Format de nommage des table de journalisation");
+        //TODO-1 Prévoir un formattage/contrôle minimal
+        fieldTableJnalNameFormat.getDocument().addDocumentListener(this);
+        fieldTableJnalNameFormat.addFocusListener(this);
+
         labelCheckColumnDatatypeNameFormat = new JLabel("Check des types de colonnes");
         fieldCheckColumnDatatypeNameFormat = new STextField(this, labelCheckColumnDatatypeNameFormat);
         fieldCheckColumnDatatypeNameFormat.setPreferredSize((new Dimension(300, Preferences.EDITOR_FIELD_HEIGHT)));
@@ -192,6 +202,7 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         super.getSComponents().add(fieldTriggerViewNameFormat);
         super.getSComponents().add(fieldPackageNameFormat);
         super.getSComponents().add(fieldViewNameFormat);
+        super.getSComponents().add(fieldTableJnalNameFormat);
         super.getSComponents().add(fieldCheckColumnDatatypeNameFormat);
         super.getSComponents().add(fieldCheckColumnDatatypeMax30NameFormat);
 
@@ -302,6 +313,12 @@ public abstract class PrefMPDRInputContent extends PanelInputContent {
         panelFormatNames.add(labelViewNameFormat, gbcA);
         gbcA.gridx++ ;
         panelFormatNames.add(fieldViewNameFormat, gbcA);
+
+        gbcA.gridx = 0;
+        gbcA.gridy++;
+        panelFormatNames.add(labelTableJnalNameFormat, gbcA);
+        gbcA.gridx++ ;
+        panelFormatNames.add(fieldTableJnalNameFormat, gbcA);
 
         gbcA.gridx = 0;
         gbcA.gridy++;

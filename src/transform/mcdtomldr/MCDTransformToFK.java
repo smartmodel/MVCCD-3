@@ -115,6 +115,13 @@ public class MCDTransformToFK {
         transform.mcdtomldr.services.MCDTransformService.names(mldrFK, namesFK, mldrModel);
 
         // Nature
+        // Simulation de PK
+        if ( PreferencesManager.instance().preferences().getMCDTOMLDR_MODE() == Preferences.MCDTOMLDR_MODE_TI) {
+          if (fkNature == MDRFKNature.IDCOMP) {
+              fkNature = MDRFKNature.IDNATURAL;
+          }
+        }
+
         if (mldrFK.getNature() != null) {
             if (mldrFK.getNature() != fkNature){
                 mldrFK.setNature(fkNature);
