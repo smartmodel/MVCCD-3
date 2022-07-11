@@ -68,7 +68,8 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
   }
 
   protected void drawZoneEnTete(Graphics2D graphics2D) {
-    int y = (int) UIUtils.getClassPadding() + graphics2D.getFontMetrics().getAscent();
+    FontMetrics fontMetrics = graphics2D.getFontMetrics(UIUtils.getShapeFont());
+    int y = (int) UIUtils.getClassPadding() + fontMetrics.getHeight();
     for (int i = 0; i < this.zoneEnTete.getElements().size(); i++) {
       graphics2D.setFont(UIUtils.getShapeFont());
       // Nom de la classe
