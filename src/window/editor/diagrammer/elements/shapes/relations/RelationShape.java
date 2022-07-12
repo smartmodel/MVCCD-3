@@ -25,6 +25,7 @@ import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDLinkShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.Position;
 import window.editor.diagrammer.utils.ShapeUtils;
@@ -505,7 +506,8 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     this.anchorPoints.add(new RelationAnchorPointShape(this.source.getX(), this.source.getY(), 0));
     RelationAnchorPointShape anchorPointOnDestinationRelation = new RelationAnchorPointShape(this.destination.getCenter().x, this.destination.getCenter().y, 1);
     this.anchorPoints.add(anchorPointOnDestinationRelation);
-    ((RelationShape) this.destination).addAnchorPoint(anchorPointOnDestinationRelation);
+
+    //((RelationShape) this.destination).addAnchorPoint(anchorPointOnDestinationRelation);
   }
 
   /**
