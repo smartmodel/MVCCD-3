@@ -184,7 +184,6 @@ public final class ShapeUtils {
 
         for (LinkShape shape : linkShapes) {
             RelationAnchorPointShape relatedAnchorPoint = shape.getLastPoint();
-            System.out.println(ShapeUtils.getDistanceBetweenLineAndPoint(segment, relatedAnchorPoint));
 
             if (ShapeUtils.pointIsOnSegment(relatedAnchorPoint, segment)) {
                 anchorPointsToMove.add(relatedAnchorPoint);
@@ -195,21 +194,37 @@ public final class ShapeUtils {
 
     }
 
-    public static List<RelationAnchorPointShape> getAnchorPointsToMove(RelationShape relationShape, RelationAnchorPointShape anchorPointDragged) {
+    public static List<RelationAnchorPointShape> getRelationSegmentContainingLinkAnchorPoint(RelationAnchorPointShape linkAnchorPoint) {
+        List<RelationAnchorPointShape> anchorPoints = new ArrayList<>();
+
+        for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapesWithoutLinks()) {
+            List<RelationAnchorPointShape> points = relation.getAnchorPoints();
+            for (int i = 0; i < points.size() - 1; i++) {
+                Line2D segment = new Line2D.Double(points.get(i).getX(), points.get(i).getY(), points.get(i + 1).getX(), points.get(i + 1).getY());
+                if (getDistanceBetweenLineAndPoint(segment, linkAnchorPoint) == 0.0) {
+                    anchorPoints.add(points.get(i));
+                    anchorPoints.add(points.get(i + 1));
+                }
+            }
+        }
+        return anchorPoints;
+    }
+
+    public static List<RelationAnchorPointShape> getNeighborsAnchorPoints(RelationShape relationShape, RelationAnchorPointShape anchorPoint) {
         List<RelationAnchorPointShape> anchorPointsToMove = new ArrayList<>();
 
-        if (anchorPointDragged == relationShape.getFirstPoint()) {
+        if (anchorPoint == relationShape.getFirstPoint()) {
             // Premier point
-            RelationAnchorPointShape nextPoint = relationShape.getAnchorPoints().get(anchorPointDragged.getIndex() + 1);
+            RelationAnchorPointShape nextPoint = relationShape.getAnchorPoints().get(anchorPoint.getIndex() + 1);
             anchorPointsToMove.add(nextPoint);
-        } else if (anchorPointDragged == relationShape.getLastPoint()) {
-            RelationAnchorPointShape previousPoint = relationShape.getAnchorPoints().get(anchorPointDragged.getIndex() - 1);
+        } else if (anchorPoint == relationShape.getLastPoint()) {
+            RelationAnchorPointShape previousPoint = relationShape.getAnchorPoints().get(anchorPoint.getIndex() - 1);
             // Dernier point
             anchorPointsToMove.add(previousPoint);
         } else {
             // Point d'indice n dans une relation ayant au moins 3 points d'ancrage
-            RelationAnchorPointShape nextPoint = relationShape.getAnchorPoints().get(anchorPointDragged.getIndex() + 1);
-            RelationAnchorPointShape previousPoint = relationShape.getAnchorPoints().get(anchorPointDragged.getIndex() - 1);
+            RelationAnchorPointShape nextPoint = relationShape.getAnchorPoints().get(anchorPoint.getIndex() + 1);
+            RelationAnchorPointShape previousPoint = relationShape.getAnchorPoints().get(anchorPoint.getIndex() - 1);
             anchorPointsToMove.add(nextPoint);
             anchorPointsToMove.add(previousPoint);
         }

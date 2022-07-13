@@ -126,7 +126,6 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
         if (this.anchorPointClicked != null && this.focusedRelation != null) {
             int differenceX = e.getX() - this.anchorPointClicked.x;
             int differenceY = e.getY() - this.anchorPointClicked.y;
-            System.out.println(differenceX);
             this.dragAnchorPointSelected(e, differenceX, differenceY);
 
         } else {
@@ -288,50 +287,68 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
         boolean dragAllowed = this.checkIfAnchorPointCanBeDragged(this.anchorPointClicked, newPoint);
 
         if (dragAllowed) {
-/*        List<RelationAnchorPointShape> anchorPointsToMove = new ArrayList<>();
 
-        if (this.anchorPointClicked == focusedRelation.getFirstPoint()){
-          System.out.println("Premier");
-          // Premier point
-          anchorPointsToMove.addAll(ShapeUtils.getLinkedShapesAnchorPointsToMove(this.anchorPointClicked, focusedRelation.getAnchorPoints().get(this.anchorPointClicked.getIndex() + 1)));
-        } else if (this.anchorPointClicked == focusedRelation.getLastPoint()){
-          System.out.println("Dernier");
-          // Dernier point
-          anchorPointsToMove.addAll(ShapeUtils.getLinkedShapesAnchorPointsToMove(focusedRelation.getAnchorPoints().get(this.anchorPointClicked.getIndex() - 1), this.anchorPointClicked));
-        } else {
-          RelationAnchorPointShape previousPoint = focusedRelation.getAnchorPoints().get(this.anchorPointClicked.getIndex() - 1);
-          RelationAnchorPointShape nextPoint = focusedRelation.getAnchorPoints().get(this.anchorPointClicked.getIndex() + 1);
-
-          anchorPointsToMove.addAll(ShapeUtils.getLinkedShapesAnchorPointsToMove(previousPoint, this.anchorPointClicked));
-          anchorPointsToMove.addAll(ShapeUtils.getLinkedShapesAnchorPointsToMove(this.anchorPointClicked, nextPoint));
-        }
-
-
-        // Déplace les points qui doivent être déplacés
-        for (RelationAnchorPointShape p : anchorPointsToMove){
-          int differenceX = e.getX() - this.anchorPointClicked.x;
-          int differenceY = e.getY() - this.anchorPointClicked.y;
-          Point tempNewPoint = new Point(GridUtils.alignToGrid(p.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(p.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
-          //Point tempNewPoint = new Point(p.x + differenceX, p.y + differenceY);
-          p.move(tempNewPoint.x, tempNewPoint.y);
-        }*/
-            List<RelationAnchorPointShape> anchorPointsToMove = ShapeUtils.getAnchorPointsToMove(this.focusedRelation, this.anchorPointClicked);
-
-            // Déplace les points d'ancrage voisins
-            for (RelationAnchorPointShape pointToMove : anchorPointsToMove) {
+            if (this.anchorPointClicked == this.focusedRelation.getFirstPoint()) {
+                // On déplace le premier point de l'association ainsi que le deuxième
+                RelationAnchorPointShape pointToMove = this.focusedRelation.getAnchorPoints().get(1);
                 Point newPointCalculated = new Point(GridUtils.alignToGrid(pointToMove.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(pointToMove.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
-                if (this.checkIfAnchorPointCanBeDragged(pointToMove, newPointCalculated)) {
-                    Line2D segment = new Line2D.Double(this.anchorPointClicked.x, this.anchorPointClicked.y, pointToMove.x, pointToMove.y);
-                    if (ShapeUtils.isHorizontal(segment)) {
-                        pointToMove.move(pointToMove.x, newPointCalculated.y);
-                    } else if (ShapeUtils.isVertical(segment)) {
-                        pointToMove.move(newPointCalculated.x, pointToMove.y);
-                    } else {
-                        pointToMove.move(newPointCalculated.x, newPointCalculated.y);
+                Line2D segment = new Line2D.Double(this.anchorPointClicked.x, this.anchorPointClicked.y, pointToMove.x, pointToMove.y);
+                if (ShapeUtils.isHorizontal(segment)) {
+                    pointToMove.move(pointToMove.x, newPointCalculated.y);
+                } else if (ShapeUtils.isVertical(segment)) {
+                    pointToMove.move(newPointCalculated.x, pointToMove.y);
+                }
+            } else if (this.anchorPointClicked == this.focusedRelation.getLastPoint()) {
+                RelationAnchorPointShape pointToMove = this.focusedRelation.getAnchorPoints().get(this.anchorPointClicked.getIndex() - 1);
+                Point newPointCalculated = new Point(GridUtils.alignToGrid(pointToMove.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(pointToMove.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
+                Line2D segment = new Line2D.Double(this.anchorPointClicked.x, this.anchorPointClicked.y, pointToMove.x, pointToMove.y);
+                if (ShapeUtils.isHorizontal(segment)) {
+                    pointToMove.move(pointToMove.x, newPointCalculated.y);
+                } else if (ShapeUtils.isVertical(segment)) {
+                    pointToMove.move(newPointCalculated.x, pointToMove.y);
+                }
+            } else {
+                RelationAnchorPointShape p1 = this.focusedRelation.getAnchorPoints().get(this.anchorPointClicked.getIndex() - 1);
+                RelationAnchorPointShape p2 = this.focusedRelation.getAnchorPoints().get(this.anchorPointClicked.getIndex() - 1);
+
+                Point firstNewPointCalculated = new Point(GridUtils.alignToGrid(p1.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(p1.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
+                Point secondNewPointCalculated = new Point(GridUtils.alignToGrid(p2.x + differenceX, DiagrammerService.getDrawPanel().getGridSize()), GridUtils.alignToGrid(p2.y + differenceY, DiagrammerService.getDrawPanel().getGridSize()));
+
+                Line2D s1 = new Line2D.Double(this.anchorPointClicked.x, this.anchorPointClicked.y, p1.x, p1.y);
+                Line2D s2 = new Line2D.Double(this.anchorPointClicked.x, this.anchorPointClicked.y, p2.x, p2.y);
+
+                if ((ShapeUtils.isVertical(s1) || ShapeUtils.isHorizontal(s1)) && ((ShapeUtils.isVertical(s2) || ShapeUtils.isHorizontal(s2)))) {
+                    if (this.checkIfAnchorPointCanBeDragged(p1, firstNewPointCalculated)) {
+                        p1.move(firstNewPointCalculated.x, firstNewPointCalculated.y);
+                    }
+
+                    if (this.checkIfAnchorPointCanBeDragged(p2, secondNewPointCalculated)) {
+                        p2.move(secondNewPointCalculated.x, secondNewPointCalculated.y);
                     }
                 }
+
             }
+
             this.anchorPointClicked.move(newPoint.x, newPoint.y);
+
+            List<RelationAnchorPointShape> floatingPoints = DiagrammerService.getDrawPanel().getFloatingLinkAnchorPoints();
+
+            for (RelationAnchorPointShape floatingPoint : floatingPoints) {
+                // Construit le segment
+                // Line2D segment = new Line2D.Double(segmentAnchorPoints.get(0).x, segmentAnchorPoints.get(0).y, segmentAnchorPoints.get(1).x, segmentAnchorPoints.get(1).y);
+                RelationShape destination = (RelationShape) floatingPoint.getParent().getDestination();
+                Line2D segment = destination.getNearestSegment(floatingPoint);
+                // Vérifie si le segment fait partie de la relation de destination
+                Point nearestPoint = ShapeUtils.getNearestPointOnLine(segment.getX1(), segment.getY1(), segment.getX2(), segment.getY2(), floatingPoint.x, floatingPoint.y, true, null);
+
+                floatingPoint.move(nearestPoint.x, nearestPoint.y);
+
+
+            }
+
+
+            // Déplace le point d'ancrage cliqué
+
 
         }
 
@@ -396,24 +413,20 @@ public class DrawPanelListener extends MouseAdapter implements Serializable, Key
 
         if (anchorPoint == this.focusedRelation.getFirstPoint()) {
             // Premier point d'ancrage
-            RelationAnchorPointShape nextPoint = this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() + 1);
-            Line2D segment = new Line2D.Double(anchorPoint.x, anchorPoint.y, nextPoint.x, nextPoint.y);
-            dragAllowed = ShapeUtils.pointIsAroundShape(newPosition, this.focusedRelation.getSource()) && (ShapeUtils.isHorizontal(segment) || ShapeUtils.isVertical(segment));
+            dragAllowed = ShapeUtils.pointIsAroundShape(newPosition, this.focusedRelation.getSource());
         } else if (anchorPoint == this.focusedRelation.getLastPoint()) {
             // Dernier point d'ancrage
-            RelationAnchorPointShape previousPoint = this.focusedRelation.getAnchorPoints().get(anchorPoint.getIndex() - 1);
-            Line2D segment = new Line2D.Double(anchorPoint.x, anchorPoint.y, previousPoint.x, previousPoint.y);
             if (this.focusedRelation.getDestination() instanceof SquaredShape) {
                 // La destination est une SquaredShape
-                dragAllowed = ShapeUtils.pointIsAroundShape(newPosition, (ClassShape) this.focusedRelation.getDestination()) && (ShapeUtils.isVertical(segment) || ShapeUtils.isHorizontal(segment));
+                dragAllowed = ShapeUtils.pointIsAroundShape(newPosition, (ClassShape) this.focusedRelation.getDestination());
             } else {
                 // La destination est une RelationShape
-                dragAllowed = ShapeUtils.pointIsOnRelation(newPosition, (RelationShape) this.focusedRelation.getDestination()) && (ShapeUtils.isVertical(segment) || ShapeUtils.isHorizontal(segment));
+                dragAllowed = ShapeUtils.pointIsOnRelation(newPosition, (RelationShape) this.focusedRelation.getDestination());
             }
         } else {
-            // Tout point qui n'est pas le premier ni le dernier peut être déplacé
             dragAllowed = true;
         }
+
         return dragAllowed;
     }
 
