@@ -71,9 +71,7 @@ public class Preferences extends MVCCDElement {
     public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
     public static final Color DIAGRAMMER_NOTE_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
     public static final Font DIAGRAMMER_CLASS_NAME_FONT = new Font("Arial", Font.BOLD, 13);
-
     public static final String DIAGRAMMER_DEFAULT_FONT_FAMILY = "Arial";
-
     public static final Font DIAGRAMMER_CLASS_FONT = new Font("Arial", Font.PLAIN, 13);
     public static final Font DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT = new Font("Arial", Font.ITALIC + Font.BOLD, 13);
     public static final String DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT = "Entité";
@@ -83,6 +81,8 @@ public class Preferences extends MVCCDElement {
     public static final String DIAGRAMMER_PALETTE_NATURAL_IDENTIFIER_BUTTON_TEXT = "Association identifiante naturelle";
     public static final String DIAGRAMMER_PALETTE_NOTE_BUTTON_TEXT = "Note";
     public static final String DIAGRAMMER_PALETTE_ANCHOR_BUTTON = "Ancre";
+    public static final String DIAGRAMMER_CID_STEREOTYPE = "<<CID>>";
+    public static final String DIAGRAMMER_NID_STEREOTYPE = "<<NID>>";
     public static final String DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT = "Association réflexive";
     public static final String DIAGRAMMER_PALETTE_ENTITE_ASSOCIATIVE = "Entité associative";
     public static final String DIAGRAMMER_ENTITY_STEREOTYPE_TEXT = "<<Entity>>";
@@ -98,7 +98,6 @@ public class Preferences extends MVCCDElement {
     public static final String DIAGRAMMER_LABEL_XML_TAG = "labelShape";
     public static final String DIAGRAMMER_LABELS_XML_TAG_NAME = "labelShapes";
     public static final String DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME = "anchorPoints";
-
     public static final String DIAGRAMMER_MENU_OPEN_MODELING_ASSISTANT_TEXT = "Ouvrir l'assistant de modélisation";
     public static final String DIAGRAMMER_MENU_ADD_ANCHOR_POINT_TEXT = "Ajouter un point d'ancrage";
     public static final String DIAGRAMMER_MENU_DELETE_TEXT = "Supprimer";
