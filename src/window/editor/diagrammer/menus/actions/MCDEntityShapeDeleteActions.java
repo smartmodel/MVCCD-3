@@ -1,9 +1,10 @@
 package window.editor.diagrammer.menus.actions;
 
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
-import javax.swing.Icon;
-import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 
 public class MCDEntityShapeDeleteActions extends CommonDeleteActions implements Serializable {
 
@@ -17,7 +18,7 @@ public class MCDEntityShapeDeleteActions extends CommonDeleteActions implements 
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    if (e.getActionCommand().equals("Supprimer objet")) {
+    if (e.getActionCommand().equals("Supprimer l'objet et sa représentation graphique")) {
       this.deleteObject();
     }
   }

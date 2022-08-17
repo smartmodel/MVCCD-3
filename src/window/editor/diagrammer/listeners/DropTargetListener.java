@@ -3,16 +3,6 @@ package window.editor.diagrammer.listeners;
 import console.ViewLogsManager;
 import diagram.Diagram;
 import diagram.mpdr.MPDRDiagram;
-import java.awt.Component;
-import java.awt.Point;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetAdapter;
-import java.awt.dnd.DropTargetDropEvent;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import javax.swing.JLayeredPane;
-import javax.swing.tree.DefaultMutableTreeNode;
 import m.MElement;
 import main.MVCCDManager;
 import mdr.MDRRelationFK;
@@ -20,17 +10,22 @@ import mdr.MDRTable;
 import mpdr.MPDRRelFKEnd;
 import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.elements.interfaces.IShape;
-import window.editor.diagrammer.elements.shapes.MDTableShape;
-import window.editor.diagrammer.elements.shapes.MPDRProcedureContainerShape;
-import window.editor.diagrammer.elements.shapes.MPDRSequenceShape;
-import window.editor.diagrammer.elements.shapes.MPDRTriggerShape;
-import window.editor.diagrammer.elements.shapes.SquaredShape;
-import window.editor.diagrammer.elements.shapes.UMLPackage;
+import window.editor.diagrammer.elements.shapes.*;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.DependencyLinkShape;
 import window.editor.diagrammer.elements.shapes.relations.MPDRelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDropEvent;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DropTargetListener extends DropTargetAdapter {
 
@@ -82,16 +77,16 @@ public class DropTargetListener extends DropTargetAdapter {
 
   }
 
-  public void paintTAPIs(DropTargetDropEvent event, DefaultMutableTreeNode fatherNode,
-      Point mouseClick) {
+  private void paintTAPIs(DropTargetDropEvent event, DefaultMutableTreeNode fatherNode,
+                          Point mouseClick) {
     UMLPackage shape = new UMLPackage(
-        fatherNode.toString() + " TAPIs",
-        fatherNode.toString(),
-        List.of(
-            new MPDRTriggerShape((MDRTable) fatherNode.getUserObject()),
-            new MPDRProcedureContainerShape((MDRTable) fatherNode.getUserObject()),
-            new MPDRSequenceShape((MDRTable) fatherNode.getUserObject())
-        )
+            fatherNode.toString() + " TAPIs",
+            fatherNode.toString(),
+            List.of(
+                    new MPDRTriggerShape((MDRTable) fatherNode.getUserObject()),
+                    new MPDRProcedureContainerShape((MDRTable) fatherNode.getUserObject()),
+                    new MPDRSequenceShape((MDRTable) fatherNode.getUserObject())
+            )
     );
 
     // On contrôle que la shape ne soit pas déjà dans le diagramme et on l'ajoute au diagramme si tel n'est pas le cas
@@ -140,23 +135,23 @@ public class DropTargetListener extends DropTargetAdapter {
     drawPanel.addShape(e);
   }
 
-  public void checkDependencyLinkTAPIStoTable(DefaultMutableTreeNode fatherNode, UMLPackage shape) {
+  private void checkDependencyLinkTAPIStoTable(DefaultMutableTreeNode fatherNode, UMLPackage shape) {
     // On contrôle si la table parent du TAPIs est présente dans le diagramme
     boolean tablePresent = currentDiagram.getMDTableShapeList()
-        .stream().anyMatch(e -> e.getTable().getName().equals(fatherNode.toString()));
+            .stream().anyMatch(e -> e.getTable().getName().equals(fatherNode.toString()));
     if (tablePresent) {
       ClassShape tableSource = currentDiagram.getMDTableShapeList()
-          .stream().filter(e -> e.getTable().getName().equals(fatherNode.toString())).findFirst()
-          .orElseThrow(RuntimeException::new);
+              .stream().filter(e -> e.getTable().getName().equals(fatherNode.toString())).findFirst()
+              .orElseThrow(RuntimeException::new);
 
       DependencyLinkShape tapisAssociationShape = new DependencyLinkShape(shape, tableSource,
-          "<<specific-to>>");
+              "<<specific-to>>");
       addShapToDiagram(tapisAssociationShape);
     }
   }
 
-  public void paintTable(MDRTable mdrTable, DefaultMutableTreeNode node, DropTargetDropEvent event,
-      DefaultMutableTreeNode nodeAllTables, Point mouseClick) {
+  private void paintTable(MDRTable mdrTable, DefaultMutableTreeNode node, DropTargetDropEvent event,
+                          DefaultMutableTreeNode nodeAllTables, Point mouseClick) {
     MDTableShape shape = new MDTableShape(mdrTable);
     DefaultMutableTreeNode nodeRelationExtremite = (DefaultMutableTreeNode) node.getChildAt(2);
 
@@ -181,24 +176,24 @@ public class DropTargetListener extends DropTargetAdapter {
     }
   }
 
-  public void checkDependencyLinkTableToTAPIS(MDRTable mdrTable, MDTableShape shape) {
+  private void checkDependencyLinkTableToTAPIS(MDRTable mdrTable, MDTableShape shape) {
     UMLPackage umlPackage = currentDiagram.getUMLPackagesList().stream()
-        .filter(e -> e.getParentTableName().equals(mdrTable.getName()))
-        .findFirst()
-        .orElseThrow(RuntimeException::new);
+            .filter(e -> e.getParentTableName().equals(mdrTable.getName()))
+            .findFirst()
+            .orElseThrow(RuntimeException::new);
 
     DependencyLinkShape tapisAssociationShape = new DependencyLinkShape(umlPackage,
-        shape, "<<specific-to>>");
+            shape, "<<specific-to>>");
     addShapToDiagram(tapisAssociationShape);
   }
 
 
-  public void paintTableLink(DefaultMutableTreeNode nodeRelationExtremite,
-      DefaultMutableTreeNode nodeAllTables, DefaultMutableTreeNode node) {
+  private void paintTableLink(DefaultMutableTreeNode nodeRelationExtremite,
+                              DefaultMutableTreeNode nodeAllTables, DefaultMutableTreeNode node) {
 
     for (int i = 0; i < nodeRelationExtremite.getChildCount(); i++) {
       DefaultMutableTreeNode referentielNode = (DefaultMutableTreeNode) nodeRelationExtremite.getChildAt(
-          i);
+              i);
       MPDRRelFKEnd userObjectNode = (MPDRRelFKEnd) referentielNode.getUserObject();
       MDRRelationFK mdrRelationFK = userObjectNode.getMDRRelationFK();
 

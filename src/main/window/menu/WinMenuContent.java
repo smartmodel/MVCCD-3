@@ -2,22 +2,6 @@ package main.window.menu;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
@@ -34,6 +18,17 @@ import repository.editingTreat.ProjectEditingTreat;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.services.DiagrammerService;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class WinMenuContent implements ActionListener {
 
@@ -160,7 +155,7 @@ public class WinMenuContent implements ActionListener {
     String messageExceptionTarget = "";
     try {
       Object source = e.getSource();
-      if (source == exportSVG) {
+      if (source == exportSVG || source == exportPNG) {
         DrawPanel drawPanel = DiagrammerService.getDrawPanel();
         // Déselectionne toutes les formes
         drawPanel.deselectAllShapes();
@@ -170,22 +165,14 @@ public class WinMenuContent implements ActionListener {
 
         int returnVal = fileChooser.showSaveDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-          exportToSVG(drawPanel,
-              fileChooser.getSelectedFile().toString());
-        }
-      }
-      if (source == exportPNG) {
-        DrawPanel drawPanel = DiagrammerService.getDrawPanel();
-        // Déselectionne toutes les formes
-        drawPanel.deselectAllShapes();
+          if (source == exportSVG) {
+            exportToSVG(drawPanel,
+                    fileChooser.getSelectedFile().toString());
+          } else {
+            exportToPNG(drawPanel,
+                    fileChooser.getSelectedFile().toString());
+          }
 
-        // Ouvre une boîte de dialogue pour que l'utilisateur choisisse l'emplacement de sauvegarde et le nom du fichier
-        JFileChooser fileChooser = new JFileChooser();
-
-        int returnVal = fileChooser.showSaveDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-          exportToPNG(drawPanel,
-              fileChooser.getSelectedFile().toString());
         }
       }
       if (source == projectNew) {

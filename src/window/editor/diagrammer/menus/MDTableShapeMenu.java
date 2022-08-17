@@ -1,14 +1,15 @@
 package window.editor.diagrammer.menus;
 
 import diagram.Diagram;
-import java.io.Serializable;
-import java.util.List;
-import javax.swing.JMenuItem;
 import main.MVCCDElement;
 import md.MDElement;
 import window.editor.diagrammer.elements.shapes.MDTableShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.menus.actions.MDTableShapeDeleteActions;
+
+import javax.swing.*;
+import java.io.Serializable;
+import java.util.List;
 
 public class MDTableShapeMenu extends CommonMenu implements Serializable {
 
@@ -21,9 +22,9 @@ public class MDTableShapeMenu extends CommonMenu implements Serializable {
     super(shape);
     this.shape = shape;
     this.deleteObject = new JMenuItem(
-        new MDTableShapeDeleteActions("Supprimer objet", null, shape));
+            new MDTableShapeDeleteActions("Supprimer l'objet et sa représentation graphique", null, shape));
     this.deleteObjectAndClones = new JMenuItem(
-        new MDTableShapeDeleteActions("Supprimer objet et clones", null, shape));
+            new MDTableShapeDeleteActions("Supprimer l'objet et ses représentations graphiques", null, shape));
 
     this.searchInOtherDiagrams();
   }

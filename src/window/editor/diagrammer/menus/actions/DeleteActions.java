@@ -1,8 +1,9 @@
 package window.editor.diagrammer.menus.actions;
 
-import java.awt.event.ActionEvent;
-import javax.swing.Icon;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class DeleteActions extends CommonDeleteActions {
 
@@ -16,7 +17,7 @@ public class DeleteActions extends CommonDeleteActions {
 
   @Override
   public void actionPerformed(ActionEvent actionEvent) {
-    if (actionEvent.getActionCommand().equals("Supprimer graphiquement")) {
+    if (actionEvent.getActionCommand().equals("Supprimer la représentation graphique")) {
       super.deleteGraphically(shape);
     }
   }
