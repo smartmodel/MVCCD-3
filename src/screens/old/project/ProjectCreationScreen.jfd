@@ -1,0 +1,120 @@
+JFDML JFormDesigner: "7.0.7.0.1134" Java: "11.0.15" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"title": "Création d'un projet"
+			"minimumSize": new java.awt.Dimension( 500, 320 )
+			"resizable": false
+			"background": new java.awt.Color( 242, 242, 242, 255 )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "dialogPane"
+				"border": new javax.swing.border.EmptyBorder( 5, 5, 5, 5 )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
+				} ) {
+					name: "informationsPanel"
+					"minimumSize": new java.awt.Dimension( 260, 40 )
+					"preferredSize": new java.awt.Dimension( 260, 60 )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "title"
+						"text": "Création d'un projet"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 5, false )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "description"
+						"text": "Trouver une description pour indiquer en quoi consiste l'écran."
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "First"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+					"rows": 0
+					"columns": 2
+					"vgap": 10
+				} ) {
+					name: "fields"
+					"preferredSize": new java.awt.Dimension( 294, 0 )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "projectNameLabel"
+						"text": "Nom :"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/screens/icons/informations.png" )
+						"toolTipText": "ydfdfsdf"
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "projectNameInput"
+						"minimumSize": new java.awt.Dimension( 49, 40 )
+						"preferredSize": new java.awt.Dimension( 49, 40 )
+						auxiliary() {
+							"JavaCodeGenerator.postCreateCode": "this.projectNameInput.setInputVerifier(new ProjectNameFieldValidator());"
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "profilLabel"
+						"text": "Profil"
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "profilSelect"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "multipleMCDModelsLabel"
+						"text": "Multiples modèles MCD"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "multipleMCDModelsCheckbox"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "multiplePackagesLabel"
+						"text": "Multiples paquetages autorisés"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "multiplePackagesCheckbox"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "0:1.0, 80, 80, 0"
+					"$rowSpecs": "0"
+					"$hGap": 5
+					"$vGap": 5
+				} ) {
+					name: "buttons"
+					"border": new javax.swing.border.EmptyBorder( 12, 0, 0, 0 )
+					"preferredSize": new java.awt.Dimension( 218, 62 )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "cancelButton"
+						"text": "Annuler"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 2
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "createProjectButton"
+						"text": "Créer le projet"
+						"foreground": sfield java.awt.Color white
+						"background": new java.awt.Color( 0, 138, 201, 255 )
+						"preferredSize": new java.awt.Dimension( 108, 30 )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "createProject", true ) )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "createProject", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 3
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Last"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 690, 150 )
+			"size": new java.awt.Dimension( 400, 300 )
+		} )
+		add( new FormNonVisual( "screens.jformdesigner.validators.ProjectNameFieldValidator" ) {
+			name: "projectNameFieldValidator"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 30, 390 )
+		} )
+	}
+}
