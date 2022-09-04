@@ -13,7 +13,7 @@ import java.awt.*;
 
 // Project est une classe particulière qui n'étend pas EditingTreat!
 //TODO-1 A voir si l'extension est pertinente
-public class ProjectEditingTreat  extends EditingTreat {
+public class ProjectEditingTreat extends EditingTreat {
 
     public static Project treatNew(Window owner) {
         ProjectEditor fen = new ProjectEditor(owner, null, DialogEditor.NEW, new ProjectEditingTreat());
@@ -30,10 +30,9 @@ public class ProjectEditingTreat  extends EditingTreat {
 
     public static void treatUpdate(Window owner) {
 
-        ProjectEditor fen = new ProjectEditor(owner, MVCCDManager.instance().getProject(),
-                DialogEditor.UPDATE, new ProjectEditingTreat());
+        ProjectEditor fen = new ProjectEditor(owner, MVCCDManager.instance().getProject(), DialogEditor.UPDATE, new ProjectEditingTreat());
         fen.setVisible(true);
-        return ;
+        return;
     }
 
 

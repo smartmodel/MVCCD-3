@@ -12,55 +12,56 @@ import java.io.File;
 
 public class MVCCDFactory {
 
-  private static MVCCDFactory instance;
+    private static MVCCDFactory instance;
 
-  MVCCDElementProfileEntry profileEntry;  // L'entrée du profil doit être mémorisée
+    MVCCDElementProfileEntry profileEntry;  // L'entrée du profil doit être mémorisée
 
-  public static synchronized MVCCDFactory instance() {
-    if (instance == null) {
-      instance = new MVCCDFactory();
-    }
-    return instance;
-  }
-
-  public Project createProject(String name) {
-    Project project = MVCCDElementFactory.instance().createProject(name);
-    return project;
-  }
-
-  public Profile createProfile(String profileFileName) {
-
-    Profile profile = new Profile(profileEntry, profileFileName);
-    return profile;
-  }
-
-  public MVCCDElementRepositoryRoot createRepositoryRoot() {
-    MVCCDElementRepositoryRoot repositoryRoot = new MVCCDElementRepositoryRoot();
-    MVCCDElementRepositoryGlobal repositoryGlobal = new MVCCDElementRepositoryGlobal(repositoryRoot);
-    MVCCDElementApplicationPreferences applicationPref = new MVCCDElementApplicationPreferences(repositoryGlobal);
-    MVCCDElementApplicationMDDatatypes applicationMDDatatype = new MVCCDElementApplicationMDDatatypes(repositoryGlobal);
-    MVCCDElementApplicationConnections applicationConnexions = createRepositoryApplicationConnections(repositoryGlobal);
-    profileEntry = new MVCCDElementProfileEntry(repositoryRoot);
-    return repositoryRoot;
-  }
-
-  public MVCCDElementApplicationConnections createRepositoryApplicationConnections(MVCCDElementRepositoryGlobal repositoryGlobal) {
-    MVCCDElementApplicationConnections applicationConnexions = new MVCCDElementApplicationConnections(repositoryGlobal);
-
-    try {
-      // Chargement des connexions depuis application.pref
-      DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-      File applicationPrefsFilePath = new File(Preferences.FILE_APPLICATION_PREF_NAME);
-      Document document = builder.parse(applicationPrefsFilePath);
-
-      PreferencesOfApplicationLoaderXml.loadConnections(document, applicationConnexions);
-
-    } catch (Exception e) {
-      e.printStackTrace();
+    public static synchronized MVCCDFactory instance() {
+        if (instance == null) {
+            instance = new MVCCDFactory();
+        }
+        return instance;
     }
 
+    public Project createProject(String name) {
+        Project project = MVCCDElementFactory.instance().createProject(name);
+        System.out.println("Project créé !");
+        return project;
+    }
 
-    //#MAJ 2022-03-03 Persistance XML des connexions
+    public Profile createProfile(String profileFileName) {
+
+        Profile profile = new Profile(this.profileEntry, profileFileName);
+        return profile;
+    }
+
+    public MVCCDElementRepositoryRoot createRepositoryRoot() {
+        MVCCDElementRepositoryRoot repositoryRoot = new MVCCDElementRepositoryRoot();
+        MVCCDElementRepositoryGlobal repositoryGlobal = new MVCCDElementRepositoryGlobal(repositoryRoot);
+        MVCCDElementApplicationPreferences applicationPref = new MVCCDElementApplicationPreferences(repositoryGlobal);
+        MVCCDElementApplicationMDDatatypes applicationMDDatatype = new MVCCDElementApplicationMDDatatypes(repositoryGlobal);
+        MVCCDElementApplicationConnections applicationConnexions = this.createRepositoryApplicationConnections(repositoryGlobal);
+      this.profileEntry = new MVCCDElementProfileEntry(repositoryRoot);
+        return repositoryRoot;
+    }
+
+    public MVCCDElementApplicationConnections createRepositoryApplicationConnections(MVCCDElementRepositoryGlobal repositoryGlobal) {
+        MVCCDElementApplicationConnections applicationConnexions = new MVCCDElementApplicationConnections(repositoryGlobal);
+
+        try {
+            // Chargement des connexions depuis application.pref
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            File applicationPrefsFilePath = new File(Preferences.FILE_APPLICATION_PREF_NAME);
+            Document document = builder.parse(applicationPrefsFilePath);
+
+            PreferencesOfApplicationLoaderXml.loadConnections(document, applicationConnexions);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        //#MAJ 2022-03-03 Persistance XML des connexions
     /*
     ConnectionsOracle applicationConnexionsOracle = new ConnectionsOracle(applicationConnexions);
     ConnectionsMySQL applicationConnexionsMySQL = new ConnectionsMySQL(applicationConnexions);
@@ -118,7 +119,7 @@ public class MVCCDFactory {
 
      */
 
-    return applicationConnexions;
-  }
+        return applicationConnexions;
+    }
 
 }

@@ -27,7 +27,6 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.*;
 import repository.Repository;
-import screens.project.ProjectCreationScreen;
 import stereotypes.StereotypesManager;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
@@ -102,8 +101,9 @@ public class MVCCDManager {
         // Chargement des contraintes
         ConstraintsManager.instance();
 
-        ProjectCreationScreen p = new ProjectCreationScreen();
-        p.setVisible(true);
+        //ProjectCreationScreen p = new ProjectCreationScreen();
+        //p.setVisible(true);
+
 
         //Chargement des préférences de l'application
         String message = null;

@@ -1,0 +1,139 @@
+JFDML JFormDesigner: "8.0.0.0.163" Java: "11.0.15" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class javax.swing.BoxLayout ) {
+			"axis": 1
+		} ) {
+			name: "this"
+			"title": "Création d'un projet"
+			"minimumSize": new java.awt.Dimension( 525, 0 )
+			"background": new java.awt.Color( 242, 242, 242, 255 )
+			"$locationPolicy": 1
+			"resizable": false
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+				"axis": 1
+			} ) {
+				name: "panel4"
+				"border": new javax.swing.border.EmptyBorder( 10, 10, 10, 10 )
+				"alignmentY": 4.5f
+				"preferredSize": new java.awt.Dimension( 374, 370 )
+				"minimumSize": new java.awt.Dimension( 400, 370 )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+					"columns": 1
+					"rows": 2
+				} ) {
+					name: "informationsPanel"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label5"
+						"text": "Création d'un projet"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 8, false )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label6"
+						"text": "Description de la page."
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+					"columns": 2
+					"rows": 0
+					"vgap": 10
+				} ) {
+					name: "fieldsPanel"
+					"minimumSize": new java.awt.Dimension( 354, 140 )
+					"preferredSize": new java.awt.Dimension( 354, 105 )
+					"requestFocusEnabled": false
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "nameLabel"
+						"text": "Nom :"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 65536, 0, false )
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/screens/icons/informations.png" )
+						"iconTextGap": 5
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "nameTextField"
+						auxiliary() {
+							"JavaCodeGenerator.variableGetter": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "profilLabel"
+						"text": "Profil :"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 65536, 0, false )
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "profilCombobox"
+						auxiliary() {
+							"JavaCodeGenerator.variableGetter": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "multiplesMCDModelsLabel"
+						"text": "Multiples modèles MCD :"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 65536, 0, false )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "multiplesMCDModelsCheckbox"
+						auxiliary() {
+							"JavaCodeGenerator.variableGetter": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "multiplesPackagesLabel"
+						"text": "Multiples paquetages autorisés :"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 65536, 0, false )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "multiplesPackagesCheckbox"
+						auxiliary() {
+							"JavaCodeGenerator.variableGetter": true
+						}
+					} )
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+					name: "vSpacer2"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+					name: "errorsPanel"
+					"preferredSize": new java.awt.Dimension( 500, 60 )
+					"background": new java.awt.Color( 255, 255, 255, 255 )
+					"minimumSize": new java.awt.Dimension( 500, 200 )
+					"maximumSize": new java.awt.Dimension( 500, 200 )
+					auxiliary() {
+						"JavaCodeGenerator.variableGetter": true
+					}
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+					name: "vSpacer3"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
+					"alignment": 2
+				} ) {
+					name: "buttonsPanel"
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button1"
+						"text": "Annuler"
+						auxiliary() {
+							"JavaCodeGenerator.variableGetter": true
+						}
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "createProjectButton"
+						"text": "Créer le projet"
+						"background": new java.awt.Color( 51, 153, 255, 255 )
+						"foreground": new java.awt.Color( 255, 255, 255, 255 )
+						"minimumSize": new java.awt.Dimension( 108, 30 )
+						"preferredSize": new java.awt.Dimension( 108, 30 )
+						auxiliary() {
+							"JavaCodeGenerator.variableGetter": true
+						}
+					} )
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 380, 145 )
+			"size": new java.awt.Dimension( 400, 390 )
+		} )
+	}
+}

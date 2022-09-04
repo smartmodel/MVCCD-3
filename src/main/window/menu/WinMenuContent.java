@@ -6,8 +6,9 @@ import main.MVCCDManager;
 import main.MVCCDWindow;
 import messages.MessagesBuilder;
 import preferences.Preferences;
-import project.Project;
 import repository.editingTreat.ProjectEditingTreat;
+import screens.project.ProjectCreationScreen;
+import screens.project.ProjectCreationScreenController;
 import utilities.window.DialogMessage;
 
 import javax.swing.*;
@@ -48,57 +49,57 @@ public class WinMenuContent implements ActionListener {
         this.mvccdWindow = mvccdWindow;
         this.menuBar = menuBar;
 
-        project = new JMenu("Projet");
-        menuBar.add(project);
-        edit = new JMenu("Edition");
-        menuBar.add(edit);
+        this.project = new JMenu("Projet");
+        menuBar.add(this.project);
+        this.edit = new JMenu("Edition");
+        menuBar.add(this.edit);
         /*
         profile = new JMenu("Profil");
         menuBar.add(profile);
         */
 
-        help = new JMenu("Aide");
-        menuBar.add(help);
+        this.help = new JMenu("Aide");
+        menuBar.add(this.help);
 
-        projectNew = new JMenuItem("Nouveau");
-        projectNew.addActionListener(this);
-        project.add(projectNew);
-        projectEdit = new JMenuItem("Propriétés");
-        projectEdit.addActionListener(this);
-        projectEdit.setEnabled(false);
-        project.add(projectEdit);
-        projectOpen = new JMenuItem("Ouvrir...");
-        projectOpen.addActionListener(this);
-        project.add(projectOpen);
-        projectOpenRecents = new JMenu("Ouvrir récents");
-        projectOpenRecents.addActionListener(this);
-        project.add(projectOpenRecents);
+        this.projectNew = new JMenuItem("Nouveau");
+        this.projectNew.addActionListener(this);
+        this.project.add(this.projectNew);
+        this.projectEdit = new JMenuItem("Propriétés");
+        this.projectEdit.addActionListener(this);
+        this.projectEdit.setEnabled(false);
+        this.project.add(this.projectEdit);
+        this.projectOpen = new JMenuItem("Ouvrir...");
+        this.projectOpen.addActionListener(this);
+        this.project.add(this.projectOpen);
+        this.projectOpenRecents = new JMenu("Ouvrir récents");
+        this.projectOpenRecents.addActionListener(this);
+        this.project.add(this.projectOpenRecents);
 
-        projectOpenRecentsItems = new JMenuItem[Preferences.FILES_RECENTS_AUTHORIZED];
-        for (int i=1 ; i<= Preferences.FILES_RECENTS_AUTHORIZED; i++){
-            projectOpenRecentsItems[i-1] = new JMenuItem();
-            projectOpenRecentsItems[i-1].addActionListener(this);
-            projectOpenRecentsItems[i-1].setVisible(false);
-            projectOpenRecents.add(projectOpenRecentsItems[i-1]);
+        this.projectOpenRecentsItems = new JMenuItem[Preferences.FILES_RECENTS_AUTHORIZED];
+        for (int i = 1; i <= Preferences.FILES_RECENTS_AUTHORIZED; i++) {
+            this.projectOpenRecentsItems[i - 1] = new JMenuItem();
+            this.projectOpenRecentsItems[i - 1].addActionListener(this);
+            this.projectOpenRecentsItems[i - 1].setVisible(false);
+            this.projectOpenRecents.add(this.projectOpenRecentsItems[i - 1]);
         }
 
 
-        projectClose = new JMenuItem("Fermer");
-        projectClose.addActionListener(this);
-        projectClose.setEnabled(true);
-        project.add(projectClose);
+        this.projectClose = new JMenuItem("Fermer");
+        this.projectClose.addActionListener(this);
+        this.projectClose.setEnabled(true);
+        this.project.add(this.projectClose);
 
-        project.addSeparator();
-        projectSave = new JMenuItem("Sauver");
-        projectSave.addActionListener(this);
-        projectSave.setEnabled(false);
-        project.add(projectSave);
-        projectSaveAs = new JMenuItem("Sauver comme copie");
-        projectSaveAs.addActionListener(this);
-        projectSaveAs.setEnabled(false);
-        project.add(projectSaveAs);
+        this.project.addSeparator();
+        this.projectSave = new JMenuItem("Sauver");
+        this.projectSave.addActionListener(this);
+        this.projectSave.setEnabled(false);
+        this.project.add(this.projectSave);
+        this.projectSaveAs = new JMenuItem("Sauver comme copie");
+        this.projectSaveAs.addActionListener(this);
+        this.projectSaveAs.setEnabled(false);
+        this.project.add(this.projectSaveAs);
 
-        project.addSeparator();
+        this.project.addSeparator();
 
         /*
         projectPreferences = new JMenu("Préférences");
@@ -127,64 +128,67 @@ public class WinMenuContent implements ActionListener {
         String messageExceptionTarget = "";
         try {
             Object source = e.getSource();
-            if (source == projectNew) {
+            if (source == this.projectNew) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.new.exception");
-                newProject();
+                this.newProject();
             }
-            if (source == projectEdit) {
+            if (source == this.projectEdit) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.edit.exception");
-                ProjectEditingTreat.treatUpdate(mvccdWindow);
+                ProjectEditingTreat.treatUpdate(this.mvccdWindow);
             }
-            if (source == projectOpen) {
+            if (source == this.projectOpen) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.open.exception");
-                openProject();
-             }
+                this.openProject();
+            }
             for (int i = 0; i < Preferences.FILES_RECENTS_AUTHORIZED; i++) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.recent.open.exception");
-                if (source == projectOpenRecentsItems[i]) {
-                    openProjectRecent(projectOpenRecentsItems[i].getText());
+                if (source == this.projectOpenRecentsItems[i]) {
+                    this.openProjectRecent(this.projectOpenRecentsItems[i].getText());
                 }
             }
 
-            if (source == projectClose) {
+            if (source == this.projectClose) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.close.exception");
                 boolean confirmClose = true;
                 if (MVCCDManager.instance().isDatasProjectChanged()) {
                     String message = MessagesBuilder.getMessagesProperty("project.close.change.not.saved");
-                    confirmClose = DialogMessage.showConfirmYesNo_No(mvccdWindow, message) == JOptionPane.YES_OPTION;
+                    confirmClose = DialogMessage.showConfirmYesNo_No(this.mvccdWindow, message) == JOptionPane.YES_OPTION;
                 }
                 if (confirmClose) {
                     MVCCDManager.instance().closeProject();
                 }
             }
 
-            if (source == projectSave) {
+            if (source == this.projectSave) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.save.exception");
                 MVCCDManager.instance().saveProject();
             }
-            if (source == projectSaveAs) {
+            if (source == this.projectSaveAs) {
                 messageExceptionTarget = MessagesBuilder.getMessagesProperty("project.save.as.exception");
                 MVCCDManager.instance().saveAsProject(false);
             }
 
-        } catch(Exception exception){
-            String messageException = MessagesBuilder.getMessagesProperty("bar.menu.exception",
-                    messageExceptionTarget);
+        } catch (Exception exception) {
+            String messageException = MessagesBuilder.getMessagesProperty("bar.menu.exception", messageExceptionTarget);
             ViewLogsManager.catchException(exception, messageException);
         }
     }
 
     private void newProject() {
         if (MVCCDManager.instance().getProject() == null) {
-            Project project = ProjectEditingTreat.treatNew(mvccdWindow);
-            if (project != null){
+            //Project project = ProjectEditingTreat.treatNew(mvccdWindow);
+            ProjectCreationScreen projectCreationView = new ProjectCreationScreen();
+            ProjectCreationScreenController projectCreationScreenController = new ProjectCreationScreenController(projectCreationView);
+            projectCreationScreenController.init();
+
+            if (this.project != null) {
                 // Quittance de création d'un nouveau projet
-                String message = MessagesBuilder.getMessagesProperty ("project.new", project.getName());
+                String message = MessagesBuilder.getMessagesProperty("project.new", this.project.getName());
                 ViewLogsManager.printMessage(message, WarningLevel.INFO);
             }
         } else {
-            String message = MessagesBuilder.getMessagesProperty ("project.new.not.close");
-            DialogMessage.showOk(mvccdWindow,message);
+            String message = MessagesBuilder.getMessagesProperty("project.new.not.close");
+            DialogMessage.showOk(this.mvccdWindow, message);
         }
     }
 
@@ -192,8 +196,8 @@ public class WinMenuContent implements ActionListener {
         if (MVCCDManager.instance().getProject() == null) {
             MVCCDManager.instance().openProject();
         } else {
-            String message = MessagesBuilder.getMessagesProperty ("project.open.not.close");
-            DialogMessage.showOk(mvccdWindow,message);
+            String message = MessagesBuilder.getMessagesProperty("project.open.not.close");
+            DialogMessage.showOk(this.mvccdWindow, message);
         }
     }
 
@@ -201,38 +205,40 @@ public class WinMenuContent implements ActionListener {
         if (MVCCDManager.instance().getProject() == null) {
             MVCCDManager.instance().openProjectRecent(fileName);
         } else {
-            String message = MessagesBuilder.getMessagesProperty ("project.open.not.close");
-            DialogMessage.showOk(mvccdWindow,message);
+            String message = MessagesBuilder.getMessagesProperty("project.open.not.close");
+            DialogMessage.showOk(this.mvccdWindow, message);
         }
 
     }
 
     public void activateProjectOpenRecentsItem(int i, String text) {
-        projectOpenRecentsItems[i].setText(text);
-        projectOpenRecentsItems[i].setVisible(true);
+        this.projectOpenRecentsItems[i].setText(text);
+        this.projectOpenRecentsItems[i].setVisible(true);
 
-        projectOpenRecents.setEnabled(true);
+        this.projectOpenRecents.setEnabled(true);
     }
 
     public void desActivateProjectOpenRecentsItems() {
         for (int i = 0; i < Preferences.FILES_RECENTS_AUTHORIZED; i++) {
-            projectOpenRecentsItems[i].setVisible(false);
+            this.projectOpenRecentsItems[i].setVisible(false);
         }
-        projectOpenRecents.setEnabled(false);
+        this.projectOpenRecents.setEnabled(false);
     }
 
     public JMenuItem getProjectEdit() {
-        return projectEdit;
+        return this.projectEdit;
     }
 
     public JMenuItem getProjectSaveAs() {
-        return projectSaveAs;
+        return this.projectSaveAs;
 
-    }public JMenuItem getProjectSave() {
-        return projectSave;
+    }
+
+    public JMenuItem getProjectSave() {
+        return this.projectSave;
     }
 
     public JMenuItem getProjectClose() {
-        return projectClose;
+        return this.projectClose;
     }
 }

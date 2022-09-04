@@ -1,221 +1,193 @@
+/*
+ * Created by JFormDesigner on Mon Sep 05 00:31:11 CEST 2022
+ */
+
 package screens.project;
 
-import messages.MessagesBuilder;
-import preferences.Preferences;
-import profile.ProfileManager;
-import screens.IScreen;
-import screens.fields.ScreenTextField;
-import screens.panels.ErrorsPanel;
-import screens.panels.InputError;
-import screens.project.actions.buttons.ProjectCreationButtonsAction;
-import screens.project.listeners.inputs.ProjectNameInputChangeListener;
-import screens.project.validators.ProjectScreenInputsValidator;
-
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.ArrayList;
 
-
-public class ProjectCreationScreen extends JFrame implements IScreen {
-    private JPanel dialogPane;
+/**
+ * @author Christophe Francillon
+ */
+public class ProjectCreationScreen extends JFrame {
+    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+    private JPanel panel4;
     private JPanel informationsPanel;
-    private JLabel title;
-    private JLabel description;
-    private JPanel fields;
-    private JLabel projectNameLabel;
-    private ScreenTextField projectNameInput;
+    private JLabel label5;
+    private JLabel label6;
+    private JPanel fieldsPanel;
+    private JLabel nameLabel;
+    private JTextField nameTextField;
     private JLabel profilLabel;
-    private JComboBox<String> profilSelect;
-    private JLabel multipleMCDModelsLabel;
-    private JCheckBox multipleMCDModelsCheckbox;
-    private JLabel multiplePackagesLabel;
-    private JCheckBox multiplePackagesCheckbox;
-    private JPanel buttons;
-    private JButton cancelButton;
+    private JComboBox profilCombobox;
+    private JLabel multiplesMCDModelsLabel;
+    private JCheckBox multiplesMCDModelsCheckbox;
+    private JLabel multiplesPackagesLabel;
+    private JCheckBox multiplesPackagesCheckbox;
+    private JPanel vSpacer2;
+    private JPanel errorsPanel;
+    private JPanel vSpacer3;
+    private JPanel buttonsPanel;
+    private JButton button1;
     private JButton createProjectButton;
-
-    private ErrorsPanel errorsPanel;
-
-    private ProjectScreenInputsValidator fieldsValidator;
-
     public ProjectCreationScreen() {
         this.initComponents();
-        this.initButtonsActions();
-        this.pack();
     }
 
-    @Override
-    public void initUI() {
-        this.setTitle(MessagesBuilder.getMessagesProperty("ux.screen.project.creation.title"));
-        this.setMinimumSize(new Dimension(450, 150));
-        this.setResizable(false);
-        this.setBackground(new Color(242, 242, 242));
+    public JTextField getNameTextField() {
+        return this.nameTextField;
     }
 
-    @Override
-    public void initComponents() {
-
-        this.initUI();
-        this.initDialogPanel();
-        this.initInformationsPanel();
-        this.initFieldsPanel();
-        this.initButtonsPanel();
-        this.initFieldsValidator();
-        this.initFieldsListeners();
-        this.fillProfilesComboBox();
-        this.initErrorsPanel();
+    public JComboBox getProfilCombobox() {
+        return this.profilCombobox;
     }
 
-    @Override
-    public void initButtonsActions() {
-        this.createProjectButton.addActionListener(new ProjectCreationButtonsAction(this));
+    public JCheckBox getMultiplesMCDModelsCheckbox() {
+        return this.multiplesMCDModelsCheckbox;
     }
 
-    @Override
-    public void initFieldsValidator() {
+    public JCheckBox getMultiplesPackagesCheckbox() {
+        return this.multiplesPackagesCheckbox;
     }
 
-    private void initDialogPanel() {
-        this.dialogPane = new JPanel();
-        this.dialogPane.setLayout(new BorderLayout());
-        this.getContentPane().add(this.dialogPane, BorderLayout.CENTER);
-
-        // On crée le padding
-        Border padding = BorderFactory.createEmptyBorder(Preferences.UI_SCREEN_PADDING, Preferences.UI_SCREEN_PADDING, Preferences.UI_SCREEN_PADDING, Preferences.UI_SCREEN_PADDING);
-        this.dialogPane.setBorder(padding);
+    public JPanel getErrorsPanel() {
+        return this.errorsPanel;
     }
 
-    private void initErrorsPanel() {
-        this.errorsPanel = new ErrorsPanel();
-        this.getContentPane().add(this.errorsPanel, BorderLayout.SOUTH);
-        this.errorsPanel.addError(new InputError("Mince, ça marche pas !"));
-        this.errorsPanel.addError(new InputError("Mince, ça marche pas !"));
-        this.errorsPanel.addError(new InputError("Mince, ça marche pas !"));
-        this.errorsPanel.addError(new InputError("Mince, ça marche pas !"));
+    public JButton getButton1() {
+        return this.button1;
     }
 
-    private void initButtonsPanel() {
-        this.buttons = new JPanel();
-        this.cancelButton = new JButton();
+    public JButton getCreateProjectButton() {
+        return this.createProjectButton;
+    }
+
+    private void initComponents() {
+        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+        this.panel4 = new JPanel();
+        this.informationsPanel = new JPanel();
+        this.label5 = new JLabel();
+        this.label6 = new JLabel();
+        this.fieldsPanel = new JPanel();
+        this.nameLabel = new JLabel();
+        this.nameTextField = new JTextField();
+        this.profilLabel = new JLabel();
+        this.profilCombobox = new JComboBox();
+        this.multiplesMCDModelsLabel = new JLabel();
+        this.multiplesMCDModelsCheckbox = new JCheckBox();
+        this.multiplesPackagesLabel = new JLabel();
+        this.multiplesPackagesCheckbox = new JCheckBox();
+        this.vSpacer2 = new JPanel(null);
+        this.errorsPanel = new JPanel();
+        this.vSpacer3 = new JPanel(null);
+        this.buttonsPanel = new JPanel();
+        this.button1 = new JButton();
         this.createProjectButton = new JButton();
 
-        this.buttons.setBorder(new EmptyBorder(12, 0, 0, 0));
-        this.buttons.setLayout(new GridBagLayout());
-        ((GridBagLayout) this.buttons.getLayout()).columnWidths = new int[]{0, 85, 85, 0};
-        ((GridBagLayout) this.buttons.getLayout()).columnWeights = new double[]{1.0, 0.0, 0.0, 0.0};
+        //======== this ========
+        this.setTitle("Cr\u00e9ation d'un projet");
+        this.setMinimumSize(new Dimension(525, 0));
+        this.setBackground(new Color(242, 242, 242));
+        this.setResizable(false);
+        var contentPane = this.getContentPane();
+        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 
-        // Bouton "Annuler
-        this.cancelButton.setText("Annuler");
-        this.buttons.add(this.cancelButton, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
+        //======== panel4 ========
+        {
+            this.panel4.setBorder(new EmptyBorder(10, 10, 10, 10));
+            this.panel4.setAlignmentY(4.5F);
+            this.panel4.setPreferredSize(new Dimension(374, 370));
+            this.panel4.setMinimumSize(new Dimension(400, 370));
+            this.panel4.setLayout(new BoxLayout(this.panel4, BoxLayout.Y_AXIS));
 
-        // Bouton "Créer le projet"
-        this.createProjectButton.setText("Cr\u00e9er le projet");
-        this.createProjectButton.setForeground(Color.white);
-        this.createProjectButton.setBackground(new Color(0, 138, 201));
-        this.createProjectButton.setPreferredSize(new Dimension(108, 30));
+            //======== informationsPanel ========
+            {
+                this.informationsPanel.setLayout(new GridLayout(2, 1));
 
-        // Ajout des boutons au panneau
-        this.buttons.add(this.createProjectButton, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-        this.dialogPane.add(this.buttons, BorderLayout.PAGE_END);
+                //---- label5 ----
+                this.label5.setText("Cr\u00e9ation d'un projet");
+                this.label5.setFont(this.label5.getFont().deriveFont(this.label5.getFont().getStyle() | Font.BOLD, this.label5.getFont().getSize() + 8f));
+                this.informationsPanel.add(this.label5);
 
-    }
+                //---- label6 ----
+                this.label6.setText("Description de la page.");
+                this.informationsPanel.add(this.label6);
+            }
+            this.panel4.add(this.informationsPanel);
 
-    private void initFieldsPanel() {
-        this.fields = new JPanel();
-        this.fields.setLayout(new GridLayout(0, 2, 0, 10));
+            //======== fieldsPanel ========
+            {
+                this.fieldsPanel.setMinimumSize(new Dimension(354, 140));
+                this.fieldsPanel.setPreferredSize(new Dimension(354, 105));
+                this.fieldsPanel.setRequestFocusEnabled(false);
+                this.fieldsPanel.setLayout(new GridLayout(0, 2, 0, 10));
 
-        // Création des composants
-        this.projectNameLabel = new JLabel();
-        this.projectNameInput = new ScreenTextField();
-        this.projectNameInput.setValidator(new ProjectScreenInputsValidator(this.projectNameInput));
+                //---- nameLabel ----
+                this.nameLabel.setText("Nom :");
+                this.nameLabel.setFont(this.nameLabel.getFont().deriveFont(this.nameLabel.getFont().getStyle() & ~Font.BOLD));
+                this.nameLabel.setIcon(new ImageIcon(this.getClass().getResource("/screens/icons/informations.png")));
+                this.nameLabel.setIconTextGap(5);
+                this.fieldsPanel.add(this.nameLabel);
+                this.fieldsPanel.add(this.nameTextField);
 
-        this.profilLabel = new JLabel();
-        this.profilSelect = new JComboBox<>();
-        this.multipleMCDModelsLabel = new JLabel();
-        this.multipleMCDModelsCheckbox = new JCheckBox();
-        this.multiplePackagesLabel = new JLabel();
-        this.multiplePackagesCheckbox = new JCheckBox();
+                //---- profilLabel ----
+                this.profilLabel.setText("Profil :");
+                this.profilLabel.setFont(this.profilLabel.getFont().deriveFont(this.profilLabel.getFont().getStyle() & ~Font.BOLD));
+                this.fieldsPanel.add(this.profilLabel);
+                this.fieldsPanel.add(this.profilCombobox);
 
-        // Label "Nom du projet"
-        this.projectNameLabel.setText(MessagesBuilder.getMessagesProperty("ux.screen.project.creation.name.label"));
-        this.projectNameLabel.setIcon(new ImageIcon(this.getClass().getResource(Preferences.UI_ICON_INFORMATIONS_PATH)));
-        this.projectNameLabel.setToolTipText(MessagesBuilder.getMessagesProperty("ux.screen.project.creation.name.label.tooltip.text"));
+                //---- multiplesMCDModelsLabel ----
+                this.multiplesMCDModelsLabel.setText("Multiples mod\u00e8les MCD :");
+                this.multiplesMCDModelsLabel.setFont(this.multiplesMCDModelsLabel.getFont().deriveFont(this.multiplesMCDModelsLabel.getFont().getStyle() & ~Font.BOLD));
+                this.fieldsPanel.add(this.multiplesMCDModelsLabel);
+                this.fieldsPanel.add(this.multiplesMCDModelsCheckbox);
 
+                //---- multiplesPackagesLabel ----
+                this.multiplesPackagesLabel.setText("Multiples paquetages autoris\u00e9s :");
+                this.multiplesPackagesLabel.setFont(this.multiplesPackagesLabel.getFont().deriveFont(this.multiplesPackagesLabel.getFont().getStyle() & ~Font.BOLD));
+                this.fieldsPanel.add(this.multiplesPackagesLabel);
+                this.fieldsPanel.add(this.multiplesPackagesCheckbox);
+            }
+            this.panel4.add(this.fieldsPanel);
+            this.panel4.add(this.vSpacer2);
 
-        // Label "Profil"
-        this.profilLabel.setText(MessagesBuilder.getMessagesProperty("ux.screen.project.creation.profil.label"));
-        this.profilLabel.setIcon(new ImageIcon(this.getClass().getResource(Preferences.UI_ICON_INFORMATIONS_PATH)));
-        this.profilLabel.setToolTipText(MessagesBuilder.getMessagesProperty("ux.screen.project.creation.profil.label.tooltip.text"));
+            //======== errorsPanel ========
+            {
+                this.errorsPanel.setPreferredSize(new Dimension(500, 60));
+                this.errorsPanel.setBackground(Color.white);
+                this.errorsPanel.setMinimumSize(new Dimension(500, 200));
+                this.errorsPanel.setMaximumSize(new Dimension(500, 200));
+                this.errorsPanel.setLayout(new FlowLayout());
+            }
+            this.panel4.add(this.errorsPanel);
+            this.panel4.add(this.vSpacer3);
 
-        // Label "Multiples modèles MCD"
-        this.multipleMCDModelsLabel.setText(MessagesBuilder.getMessagesProperty("ux.screen.project.creation.multiples.mcd.models.label"));
+            //======== buttonsPanel ========
+            {
+                this.buttonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-        // Label "Multiples packages autorisés"
-        this.multiplePackagesLabel.setText(MessagesBuilder.getMessagesProperty("ux.screen.project.creation.mutliples.packages.allowed.label"));
+                //---- button1 ----
+                this.button1.setText("Annuler");
+                this.button1.setBorderPainted(false);
+                this.buttonsPanel.add(this.button1);
 
-        // Ajout des champs au panneau
-        this.fields.add(this.projectNameLabel);
-        this.fields.add(this.projectNameInput);
-        this.fields.add(this.profilLabel);
-        this.fields.add(this.profilSelect);
-        this.fields.add(this.multipleMCDModelsLabel);
-        this.fields.add(this.multipleMCDModelsCheckbox);
-        this.fields.add(this.multiplePackagesLabel);
-        this.fields.add(this.multiplePackagesCheckbox);
-
-        this.dialogPane.add(this.fields, BorderLayout.CENTER);
-    }
-
-    private void initInformationsPanel() {
-        // Création des composants
-        this.informationsPanel = new JPanel();
-        this.title = new JLabel();
-        this.description = new JLabel();
-
-        this.informationsPanel.setMinimumSize(new Dimension(260, 40));
-        this.informationsPanel.setPreferredSize(new Dimension(260, 60));
-        this.informationsPanel.setLayout(new BoxLayout(this.informationsPanel, BoxLayout.Y_AXIS));
-
-        // Titre de la fenêtre
-        this.title.setText(MessagesBuilder.getMessagesProperty("ux.screen.project.creation.title"));
-        this.title.setFont(this.title.getFont().deriveFont(this.title.getFont().getStyle() | Font.BOLD, this.title.getFont().getSize() + 5f));
-        this.informationsPanel.add(this.title);
-
-        // Description de la fenêtre
-        this.description.setText(MessagesBuilder.getMessagesProperty("ux.screen.project.creation.description"));
-
-        this.informationsPanel.add(this.description);
-        this.dialogPane.add(this.informationsPanel, BorderLayout.PAGE_START);
-    }
-
-    public JTextField getProjectNameInput() {
-        return this.projectNameInput;
-    }
-
-    public void initFieldsListeners() {
-        this.projectNameInput.getDocument().addDocumentListener(new ProjectNameInputChangeListener(this));
-    }
-
-    public ProjectScreenInputsValidator getFieldsValidator() {
-        return this.fieldsValidator;
-    }
-
-    public void fillProfilesComboBox() {
-        ArrayList<String> filesProfile = ProfileManager.instance().filesProfile();
-        this.profilSelect.addItem(Preferences.UI_COMBO_BOX_PLACEHOLDER);
-        for (String fileProfile : filesProfile) {
-            this.profilSelect.addItem(fileProfile);
+                //---- createProjectButton ----
+                this.createProjectButton.setText("Cr\u00e9er le projet");
+                this.createProjectButton.setBackground(new Color(51, 153, 255));
+                this.createProjectButton.setForeground(Color.white);
+                this.createProjectButton.setMinimumSize(new Dimension(108, 30));
+                this.createProjectButton.setPreferredSize(new Dimension(108, 30));
+                this.createProjectButton.setBorderPainted(false);
+                this.buttonsPanel.add(this.createProjectButton);
+            }
+            this.panel4.add(this.buttonsPanel);
         }
+        contentPane.add(this.panel4);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
-
-    public void revalidateProjectNameField() {
-        if (this.projectNameInput.getValidator().isValid()) {
-            this.projectNameInput.putClientProperty("JComponent.outline", "Color.grey");
-
-        } else {
-            this.projectNameInput.putClientProperty("JComponent.outline", "error");
-        }
-    }
+    // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
