@@ -10,7 +10,7 @@
     <orderEntry type="library" name="com.oracle.ojdbc:ojdbc8:19.3.0.0" level="project" />
     <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.io:2.4" level="project" />
     <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.lang:2.6" level="project" />
-    <orderEntry type="library" exported="" name="flatlaf-2.3" level="project" />
     <orderEntry type="library" name="flatlaf-intellij-themes-2.4" level="project" />
+    <orderEntry type="library" name="flatlaf-2.4" level="project" />
   </component>
 </module>

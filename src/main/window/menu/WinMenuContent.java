@@ -9,6 +9,7 @@ import preferences.Preferences;
 import repository.editingTreat.ProjectEditingTreat;
 import screens.project.ProjectCreationScreen;
 import screens.project.ProjectCreationScreenController;
+import screens.project.ProjectCreationScreenModel;
 import utilities.window.DialogMessage;
 
 import javax.swing.*;
@@ -178,7 +179,9 @@ public class WinMenuContent implements ActionListener {
         if (MVCCDManager.instance().getProject() == null) {
             //Project project = ProjectEditingTreat.treatNew(mvccdWindow);
             ProjectCreationScreen projectCreationView = new ProjectCreationScreen();
-            ProjectCreationScreenController projectCreationScreenController = new ProjectCreationScreenController(projectCreationView);
+            ProjectCreationScreenModel projectCreationScreenModel = new ProjectCreationScreenModel();
+
+            ProjectCreationScreenController projectCreationScreenController = new ProjectCreationScreenController(projectCreationView, projectCreationScreenModel);
             projectCreationScreenController.init();
 
             if (this.project != null) {

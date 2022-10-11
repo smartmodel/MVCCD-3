@@ -5,12 +5,11 @@ import java.awt.Graphics;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JToolBar;
+import javax.swing.*;
+
 import preferences.Preferences;
 
-public class PalettePanel extends JToolBar implements Serializable {
+public class PalettePanel extends JPanel implements Serializable {
 
   private static final long serialVersionUID = 1000;
   public static PaletteButton activeButton;

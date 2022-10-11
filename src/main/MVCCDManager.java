@@ -1,6 +1,8 @@
 package main;
 
+import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.intellijthemes.FlatArcIJTheme;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlIJTheme;
 import connections.ConElement;
 import connections.services.ConnectionsService;
 import console.ConsoleManager;
@@ -27,6 +29,7 @@ import preferences.Preferences;
 import preferences.PreferencesManager;
 import project.*;
 import repository.Repository;
+import screens.application.MainScreen;
 import stereotypes.StereotypesManager;
 import utilities.files.UtilFiles;
 import utilities.window.DialogMessage;
@@ -76,6 +79,7 @@ public class MVCCDManager {
     private void initializeFlatLaf() {
         try {
             UIManager.setLookAndFeel(new FlatArcIJTheme());
+            //IntelliJTheme.setup(MVCCDManager.instance().getClass().getResourceAsStream("/themes/arcdatamodeler_theme.json"));
         } catch (Exception ex) {
             System.err.println("Impossible d'initialiser la librairie FlatLaf");
         }
@@ -165,7 +169,7 @@ public class MVCCDManager {
     /**
      * Créé le référentiel et l'affiche à l'écran d'accueil.
      */
-    private void startRepository() throws ParserConfigurationException, IOException, SAXException {
+    public void startRepository() throws ParserConfigurationException, IOException, SAXException {
         // Création de l'élément root du référentiel
         this.rootMVCCDElement = MVCCDFactory.instance().createRepositoryRoot();
         // Création des types de données
@@ -197,8 +201,10 @@ public class MVCCDManager {
      * <img src="doc-files/UI_homeScreen.jpg" alt="Fenêtre de l'écran d'accueil">
      */
     public void startMVCCDWindow() {
+        MainScreen mainScreen = new MainScreen();
+        mainScreen.setVisible(true);
         this.mvccdWindow = new MVCCDWindow();
-        this.mvccdWindow.setVisible(true);
+        //this.mvccdWindow.setVisible(true);
         this.mvccdWindow.getPanelBLResizer().resizerContentPanels();
     }
 

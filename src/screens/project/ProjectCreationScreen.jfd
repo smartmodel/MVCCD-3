@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.0.0.0.163" Java: "11.0.15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.7.0.1134" Java: "11.0.15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -15,7 +15,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
 				"axis": 1
 			} ) {
-				name: "panel4"
+				name: "content"
 				"border": new javax.swing.border.EmptyBorder( 10, 10, 10, 10 )
 				"alignmentY": 4.5f
 				"preferredSize": new java.awt.Dimension( 374, 370 )
@@ -26,14 +26,17 @@ new FormModel {
 				} ) {
 					name: "informationsPanel"
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label5"
+						name: "title"
 						"text": "Création d'un projet"
 						"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 8, false )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label6"
+						name: "description"
 						"text": "Description de la page."
 					} )
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+					name: "verticalSpacerInformations"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
 					"columns": 2
@@ -92,27 +95,29 @@ new FormModel {
 					} )
 				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
-					name: "vSpacer2"
+					name: "verticalSpacerErrors"
 				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
+					"alignment": 3
+				} ) {
 					name: "errorsPanel"
-					"preferredSize": new java.awt.Dimension( 500, 60 )
+					"preferredSize": new java.awt.Dimension( 525, 75 )
 					"background": new java.awt.Color( 255, 255, 255, 255 )
-					"minimumSize": new java.awt.Dimension( 500, 200 )
-					"maximumSize": new java.awt.Dimension( 500, 200 )
+					"minimumSize": new java.awt.Dimension( 525, 200 )
+					"maximumSize": new java.awt.Dimension( 525, 200 )
 					auxiliary() {
 						"JavaCodeGenerator.variableGetter": true
 					}
 				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
-					name: "vSpacer3"
+					name: "verticalSpacerButtons"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
 					"alignment": 2
 				} ) {
 					name: "buttonsPanel"
 					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "button1"
+						name: "cancelButton"
 						"text": "Annuler"
 						auxiliary() {
 							"JavaCodeGenerator.variableGetter": true
@@ -121,10 +126,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "createProjectButton"
 						"text": "Créer le projet"
-						"background": new java.awt.Color( 51, 153, 255, 255 )
-						"foreground": new java.awt.Color( 255, 255, 255, 255 )
-						"minimumSize": new java.awt.Dimension( 108, 30 )
-						"preferredSize": new java.awt.Dimension( 108, 30 )
+						"background": new java.awt.Color( 146, 218, 245, 255 )
 						auxiliary() {
 							"JavaCodeGenerator.variableGetter": true
 						}
@@ -132,7 +134,7 @@ new FormModel {
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 380, 145 )
+			"location": new java.awt.Point( 155, 105 )
 			"size": new java.awt.Dimension( 400, 390 )
 		} )
 	}
