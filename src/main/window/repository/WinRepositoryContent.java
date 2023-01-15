@@ -22,21 +22,20 @@ public class WinRepositoryContent extends PanelContent implements ActionListener
         super(winRepository);
 
         // Création de l'arbre de représentation du référentiel
-        tree = new WinRepositoryTree(null); //Remarque: l'arbre est créé vide. Le contenu est créé par les méthodes MVCCDManager.startRepository() puis MVCCDManager.openLastProject().
-        colorBackground();
-        tree.setEditable(false);
-        tree.getSelectionModel().setSelectionMode
-                (TreeSelectionModel.SINGLE_TREE_SELECTION);
-        tree.setShowsRootHandles(true);
+        this.tree = new WinRepositoryTree(null); //Remarque: l'arbre est créé vide. Le contenu est créé par les méthodes MVCCDManager.startRepository() puis MVCCDManager.openLastProject().
+        this.colorBackground();
+        this.tree.setEditable(false);
+        this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        this.tree.setShowsRootHandles(true);
 
         // Place l'arbre dans son ancêtre PanelBorder
-        super.addContent(tree);
+        super.addContent(this.tree);
     }
 
     private void colorBackground() {
         if (PreferencesManager.instance().preferences().isDEBUG()) {
             if (PreferencesManager.instance().preferences().isDEBUG_BACKGROUND_PANEL()) {
-                tree.setBackground(Color.RED);
+                this.tree.setBackground(Color.RED);
             }
         }
     }
@@ -46,11 +45,14 @@ public class WinRepositoryContent extends PanelContent implements ActionListener
 
     }
 
+
     public WinRepositoryTree getTree() {
-        return tree;
+        return this.tree;
     }
 
     public void reload(DefaultMutableTreeNode node) {
-        tree.getTreeModel().reload(node);
+        this.tree.getTreeModel().reload(node);
     }
+
+
 }

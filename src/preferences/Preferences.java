@@ -109,6 +109,9 @@ public class Preferences extends MVCCDElement {
     public static String APPLICATION_VERSION = "3.0.19"; //Format: x.y.z (x, y et z devait être des chiffres ou des nombres)
     public static Integer JPANEL_HGAP = 5;
     public static Integer JPANEL_VGAP = 5;
+
+    public static String REPOSITORY_ICONS_BASE_PATH = "ressources/icons-referentiel/svg/";
+
     public static Integer PANEL_REPOSITORY_WIDTH = 200;
     public static String REPOSITORY_PROFILE_NAME = "Profile";
     public static String REPOSITORY_PREFERENCES_PROFILE_NAME = "Préférences de profil";
@@ -1044,6 +1047,7 @@ public class Preferences extends MVCCDElement {
     public static String RESULTAT_NO_FATAL = "resultat.error.no.fatal";
     public static String RESULTAT_INFO = "resultat.info";
   */
+
 
     public static String ATTRIBUTE_IS_ACTIVE = "is_active";
     public static String ATTRIBUTE_REPOSITORY_ENTITY_ID = "repository_entity_id";

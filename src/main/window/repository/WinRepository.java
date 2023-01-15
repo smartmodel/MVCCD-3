@@ -11,15 +11,15 @@ public class WinRepository extends PanelBorderLayout {
 
     private WinRepositoryContent content;
 
-    public WinRepository(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer){
+    public WinRepository(String borderLayoutPosition, PanelBorderLayoutResizer panelBLResizer) {
         super();
         super.setBorderLayoutPosition(borderLayoutPosition);
         super.setPanelBLResizer(panelBLResizer);
-        startLayout();
-
-        content = new WinRepositoryContent(this);
-        super.setPanelContent(content);
-
+        this.startLayout();
+        this.content = new WinRepositoryContent(this);
+        super.setPanelContent(this.content);
+        this.content.getTree().setCellRenderer(new RepositoryTreeCellRenderer());
     }
+
 
 }
