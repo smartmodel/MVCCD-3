@@ -45,6 +45,11 @@ public abstract class MPDRGenerateSQLPackage {
         if (mpdrPackage.getType().getMpdrStoredCodeScope() == MPDRStoredCodeScope.TABLE) {
             // Pour les paquetages attachés à une table
             generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode, Preferences.MDR_TABLE_NAME_WORD, mpdrPackage.getMPDRTableAccueil().getName());
+        } else {
+            // Paquetage de ressources
+            generateSQLCode = getMPDRGenerateSQL().replaceKeyValueWithSpecific(generateSQLCode,
+                    Preferences.MPDR_PACKAGE_RESOURCES_NAME_WORD,
+                    MPDRPackageType.RESOURCES_SPEC.getMarker());
         }
         return generateSQLCode;
     }

@@ -295,4 +295,16 @@ public abstract class MDRTable extends MDRTableOrView {
         .collect(Collectors.toList());
   }
 
+    public boolean hasColumnSimPK() {
+        return MDRTableService.hasColumnSimPK(this);
+    }
+
+
+    public MDRColumn getMDRColumnSimPK() {
+        return MDRTableService.getColumnSimPK(this);
+    }
+
+    public ArrayList<MDRColumn> getMDRColumnsSimPK() {
+        return MDRTableService.getMDRColumnsSimPFK(this);
+    }
 }

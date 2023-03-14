@@ -2,8 +2,11 @@ package mdr.services;
 
 import exceptions.CodeApplException;
 import mdr.MDRColumn;
+import mdr.MDRFK;
 import mdr.MDRTable;
 import mdr.MDRTableNature;
+
+import java.util.ArrayList;
 
 public class MDRTableService {
 
@@ -51,4 +54,28 @@ public class MDRTableService {
         }
     }
 
+    public static boolean hasColumnSimPK(MDRTable mdrTable) {
+        return getColumnSimPK(mdrTable) != null ;
+    }
+
+    public static MDRColumn getColumnSimPK(MDRTable mdrTable) {
+        for (MDRColumn mdrColumn : mdrTable.getMDRColumns()){
+            if (mdrColumn.isColumnSimPK() ) {
+                return mdrColumn;
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<MDRColumn> getMDRColumnsSimPFK(MDRTable mdrTable) {
+        ArrayList<MDRColumn> resultat = new ArrayList<MDRColumn>();
+        // IMPORTANT
+        // Une entité ne peut avoir un mixte entre association composition et naturelle
+        for (MDRFK mdrFK : mdrTable.getMDRFKs()){
+            if (mdrFK.isIdNatural()){
+                resultat.addAll(mdrFK.getMDRColumns());
+            }
+        }
+        return resultat ;
+    }
 }

@@ -8,11 +8,11 @@ BEGIN
     {-NODML-}
     {-TRIGGER_NEW_TO_RECORD-}
     {-TRIGGER_OLD_TO_RECORD-}
-    {packageName}.{autogen_columns_ins}(vl_newrec);
+    {packageName}.{autogen_columns_upd}(vl_newrec);
     {packageName}.{autogen_columns}(vl_newrec);
     {packageName}.{checktype_columns}({vl_newrec});
     {packageName}.{uppercase_columns}(vl_newrec);
-    {packageName}.{column_PEA}({vl_newrec});
+    {packageName}.{PEA_columns}({vl_newrec});
     {packageName}.{frozen_columns}({vl_newrec}, {vl_oldrec});
     {-INS_JN_UPD-}
     {-TRIGGER_RECORD_TO_NEW-}
