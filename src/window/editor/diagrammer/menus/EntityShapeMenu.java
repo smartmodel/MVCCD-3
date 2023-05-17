@@ -1,11 +1,18 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle gère le menu affiché lors d'un clic droit sur une entité MCD
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
+
 package window.editor.diagrammer.menus;
 
-import java.io.Serializable;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.menus.actions.MCDEntityShapeDeleteAction;
 import window.editor.diagrammer.menus.actions.MCDEntityShapeEditAction;
+
+import javax.swing.*;
+import java.io.Serializable;
 
 public class EntityShapeMenu extends JPopupMenu implements Serializable {
 

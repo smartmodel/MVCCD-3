@@ -1,9 +1,12 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle gère le menu affiché lors du clic droit sur une relation
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
+
 package window.editor.diagrammer.menus;
 
-import java.awt.Point;
-import java.io.Serializable;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAssociationShape;
 import window.editor.diagrammer.elements.shapes.relations.mcd.MCDCompositionShape;
@@ -12,6 +15,10 @@ import window.editor.diagrammer.menus.actions.MCDAssociationEditAction;
 import window.editor.diagrammer.menus.actions.MCDGeneralizationEditAction;
 import window.editor.diagrammer.menus.actions.RelationAddPointAncrageAction;
 import window.editor.diagrammer.menus.actions.RelationDeleteAction;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.Serializable;
 
 public class RelationShapeMenu extends JPopupMenu implements Serializable {
 

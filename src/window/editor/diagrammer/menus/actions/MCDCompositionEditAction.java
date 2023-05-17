@@ -1,10 +1,17 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle gère l'action d'éditer une composition MCD
+ * via le menu contextuel affiché lors d'un clic droit.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
 package window.editor.diagrammer.menus.actions;
 
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDCompositionShape;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
-import window.editor.diagrammer.elements.shapes.relations.mcd.MCDCompositionShape;
 
 public class MCDCompositionEditAction extends AbstractAction implements Serializable {
 

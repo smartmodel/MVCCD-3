@@ -1,10 +1,19 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle gère les mouvements des labels ainsi que les autres événements
+ * Par exemple : drag
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
+
 package window.editor.diagrammer.listeners;
 
-import java.awt.Point;
+import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
+
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
-import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
 
 public class LabelShapeListener extends MouseAdapter implements Serializable {
 

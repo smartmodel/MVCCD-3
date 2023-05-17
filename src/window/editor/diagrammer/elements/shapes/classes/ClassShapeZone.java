@@ -1,6 +1,13 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle représente une zone d'une classe UML.
+ * Par exemple, une zone pour le nom de la classe, les attributs, une zone pour les méthodes
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
 package window.editor.diagrammer.elements.shapes.classes;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,14 +1,21 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle représente l'objet graphique d'un point d'ancrage présent
+ * dans les relations, associations, link, etc.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
+
 package window.editor.diagrammer.elements.shapes.relations;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.io.Serializable;
 import main.MVCCDManager;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
+
+import java.awt.*;
+import java.io.Serializable;
 
 public class RelationAnchorPointShape extends Point implements IShape, Serializable {
 

@@ -1,13 +1,20 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle gère l'action d'éditer une généralisation MCD
+ * via le menu contextuel affiché lors d'un clic droit.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
 package window.editor.diagrammer.menus.actions;
 
-import java.awt.event.ActionEvent;
-import java.io.Serializable;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
 import main.MVCCDManager;
 import mcd.MCDGeneralization;
 import repository.editingTreat.mcd.MCDGeneralizationEditingTreat;
 import window.editor.diagrammer.elements.shapes.relations.mcd.MCDGeneralizationShape;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.io.Serializable;
 
 public class MCDGeneralizationEditAction extends AbstractAction implements Serializable {
 

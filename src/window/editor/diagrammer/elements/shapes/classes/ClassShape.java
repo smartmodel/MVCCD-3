@@ -1,3 +1,10 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle représente l'objet graphique d'une classe UML dont les objets
+ * des différents niveaux d'abstraction héritent, tels que l'entité MCD, la table MLD-R et la table MPD-R par exemple.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
 package window.editor.diagrammer.elements.shapes.classes;
 
 import md.MDElement;

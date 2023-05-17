@@ -1,14 +1,19 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle représente la palette d'outils du diagrammeur.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
+
 package window.editor.diagrammer.palette;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import preferences.Preferences;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JToolBar;
-import preferences.Preferences;
 
 public class PalettePanel extends JToolBar implements Serializable {
 

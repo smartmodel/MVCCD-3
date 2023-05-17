@@ -1,15 +1,21 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle contient des méthodes liées à l'aspect géométrique d'ArcDataModeler,
+ * comme calculer la distance entre deux points d'ancrage, calculer la distance entre une relation et un point d'ancrage, etc.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
 package window.editor.diagrammer.utils;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import javax.swing.SwingUtilities;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 
 public final class GeometryUtils {
 

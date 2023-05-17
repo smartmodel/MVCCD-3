@@ -1,18 +1,22 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle représente l'objet graphique d'une forme carrée dans ArcDataModeler.
+ * Par exemple : les classes UML, les entités, les tables, les packages, les triggers et procédures, etc.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
+
 package window.editor.diagrammer.elements.shapes;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.io.Serializable;
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 import window.editor.diagrammer.elements.interfaces.IResizable;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.IDManager;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.Serializable;
 
 public abstract class SquaredShape extends JPanel implements IShape, IResizable, Serializable {
 
@@ -34,7 +38,9 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   }
 
   protected abstract void defineBackgroundColor();
+
   protected abstract void defineMinimumSize();
+
   protected abstract void defineSize();
 
   private void initUI() {

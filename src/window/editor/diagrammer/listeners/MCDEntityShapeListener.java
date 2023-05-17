@@ -1,16 +1,25 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle gère les mouvements des entités MCD.
+ * Par exemple : affichage du menu contextuel lié à l'entité
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
+
 package window.editor.diagrammer.listeners;
 
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.Serializable;
-import javax.swing.SwingUtilities;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.menus.EntityShapeMenu;
 import window.editor.diagrammer.palette.PaletteButtonType;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.RelationCreator;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.Serializable;
 
 public class MCDEntityShapeListener extends MouseAdapter implements Serializable {
 

@@ -1,12 +1,12 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle représente un label contenant par exemple les cardinalités
+ * d'une association, les rôles, etc.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
 package window.editor.diagrammer.elements.shapes.relations.labels;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.io.Serializable;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
@@ -14,6 +14,10 @@ import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.LabelShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.Serializable;
 
 public class LabelShape extends JLabel implements Serializable {
 

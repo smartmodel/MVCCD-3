@@ -1,20 +1,13 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle gère les mouvements de la zone de dessin du diagrammeur ainsi que les autres événements
+ * Par exemple : drag d'une association, clic droit, etc.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
+
 package window.editor.diagrammer.listeners;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.geom.Line2D;
-import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
 import main.MVCCDManager;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.NoteShape;
@@ -30,6 +23,15 @@ import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.RelationCreator;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.Line2D;
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 public class DrawPanelListener extends MouseAdapter implements KeyListener, Serializable {
 

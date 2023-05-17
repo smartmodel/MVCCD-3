@@ -1,9 +1,16 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle représente le composant qui contient la zone de dessin d'ArcDataModeler.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
 package window.editor.diagrammer.drawpanel;
 
-import java.awt.Dimension;
-import java.io.Serializable;
-import javax.swing.JScrollPane;
 import preferences.Preferences;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Cette classe représente le composant du diagrammer. Le DrawPanelComponent est un JScrollPane dont la vue est un DrawPanel (la zone de dessin).

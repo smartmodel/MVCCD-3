@@ -1,11 +1,18 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle gère l'action d'ajouter un point d'ancrage d'une relation
+ * via le menu contextuel affiché lors d'un clic droit.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
 package window.editor.diagrammer.menus.actions;
 
-import java.awt.Point;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
-import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 
 public class RelationAddPointAncrageAction extends AbstractAction implements Serializable {
 

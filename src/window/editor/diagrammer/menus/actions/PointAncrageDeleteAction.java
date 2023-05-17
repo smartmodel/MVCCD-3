@@ -1,12 +1,19 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle permet de supprimer un point d'ancrage d'une relation
+ * via le menu contextuel affiché lors d'un clic droit.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
 package window.editor.diagrammer.menus.actions;
 
-import java.awt.event.ActionEvent;
-import java.io.Serializable;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.io.Serializable;
 
 public class PointAncrageDeleteAction extends AbstractAction implements Serializable {
 

@@ -1,12 +1,16 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle gère la bordure redimensionnable d'une forme dans ArcDataModeler.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
 package window.editor.diagrammer.utils;
 
+import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
 public final class ResizableBorder implements Border, Serializable {
 

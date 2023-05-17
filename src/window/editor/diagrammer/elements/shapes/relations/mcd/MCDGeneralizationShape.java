@@ -1,3 +1,10 @@
+/***
+ * Cette classe peut être utilisée en l'état actuel. Elle représente l'objet graphique d'une généralisation MCD.
+ * Auteur : Melvyn Vogelsang
+ * Dernière mise à jour : 17.05.2023
+ */
+
+
 package window.editor.diagrammer.elements.shapes.relations.mcd;
 
 import mcd.MCDGeneralization;
