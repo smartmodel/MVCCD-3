@@ -2,17 +2,24 @@ package generatorsql.generator;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
+import java.util.ArrayList;
+import java.util.List;
 import messages.MessagesBuilder;
-import mpdr.*;
+import mpdr.MPDRColumn;
+import mpdr.MPDRDropBefore;
+import mpdr.MPDRFK;
+import mpdr.MPDRIndex;
+import mpdr.MPDRModel;
+import mpdr.MPDRSequence;
+import mpdr.MPDRTable;
 import mpdr.interfaces.IMPDRModelRequirePackage;
+import mpdr.interfaces.IMPDRTable;
 import mpdr.interfaces.IMPDRTableRequirePackage;
 import mpdr.tapis.*;
 import org.apache.commons.lang.StringUtils;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.UtilDivers;
-
-import java.util.ArrayList;
 
 public abstract class MPDRGenerateSQL {
 
@@ -159,11 +166,13 @@ public abstract class MPDRGenerateSQL {
         String generateSQLCode = "";
             for (MPDRTable mpdrTable : mpdrModel.getMPDRTables()) {
                 if (command == CREATE) {
-                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLCreateTable(mpdrTable);
+                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLCreateTable(
+                        (IMPDRTable) mpdrTable);
                     generateSQLCode += delimiter();
                 }
                 if (command == DROP) {
-                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLDropTable(mpdrTable);
+                    generateSQLCode += getMpdrGenerateSQLTable().generateSQLDropTable(
+                        (IMPDRTable) mpdrTable);
                     generateSQLCode += delimiter();
 
                 }
@@ -319,7 +328,7 @@ public abstract class MPDRGenerateSQL {
         ArrayList<MPDRTable> mpdrTables = mpdrModel.getMPDRTables();
 
         for (MPDRTable mpdrTable : mpdrTables) {
-            ArrayList<MPDRFK> mpdrFks = mpdrTable.getMPDRFKs();
+            List<MPDRFK> mpdrFks = mpdrTable.getMPDRFKs();
             for (MPDRFK mpdrFk : mpdrFks) {
                 if (command == ALTER) {
                     generateSQLCode += getMpdrGenerateSQLFK().generateSQLFK(mpdrFk);
@@ -335,7 +344,7 @@ public abstract class MPDRGenerateSQL {
         ArrayList<MPDRTable> mpdrTables = mpdrModel.getMPDRTables();
 
         for (MPDRTable mpdrTable : mpdrTables) {
-            ArrayList<MPDRIndex> mpdrIndexes = mpdrTable.getMPDRIndexes();
+            List<MPDRIndex> mpdrIndexes = mpdrTable.getMPDRIndexes();
             for (MPDRIndex mpdrIndex : mpdrIndexes) {
                 if (command == CREATE) {
                     generateSQLCode += getMpdrGenerateSQLIndex().generateSQLCreateIndex(mpdrIndex);
@@ -353,10 +362,10 @@ public abstract class MPDRGenerateSQL {
 
     public String generateSQLCommandViews(int command) {
         String generateSQLCode = "";
-        ArrayList<MPDRTable> mpdrTables = mpdrModel.getMPDRTables();
+        List<MPDRTable> mpdrTables = mpdrModel.getMPDRTables();
 
         for (MPDRTable mpdrTable : mpdrTables) {
-            ArrayList<MPDRView> mpdrViews = mpdrTable.getMPDRViews();
+            List<MPDRView> mpdrViews = mpdrTable.getMPDRViews();
             for (MPDRView mpdrView : mpdrViews) {
                 if (command == CREATE) {
                     generateSQLCode += getMpdrGenerateSQLView().generateSQLCreateView(mpdrView);

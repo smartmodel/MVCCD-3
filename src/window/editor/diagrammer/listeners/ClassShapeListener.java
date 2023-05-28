@@ -12,7 +12,7 @@ import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.GeometryUtils;
+import window.editor.diagrammer.utils.ShapeUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -75,7 +75,6 @@ public class ClassShapeListener extends MouseAdapter implements Serializable {
   @Override
   public void mouseMoved(MouseEvent e) {
     super.mouseMoved(e);
-
   }
 
   private void checkForHoveredRelation(MouseEvent e) {
@@ -86,7 +85,7 @@ public class ClassShapeListener extends MouseAdapter implements Serializable {
     for (RelationShape relationShape : DiagrammerService.getDrawPanel().getRelationShapes()) {
       boolean oneSegmentIsHovered = false;
       for (Line2D segment : relationShape.getSegments()) {
-        if (GeometryUtils.getDistanceBetweenLineAndPoint(segment, converted) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
+        if (ShapeUtils.getDistanceBetweenLineAndPoint(segment, converted) <= Preferences.DIAGRAMMER_RELATION_CLICK_AREA) {
           oneSegmentIsHovered = true;
         }
       }

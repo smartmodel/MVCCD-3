@@ -8,14 +8,69 @@
 package window.editor.diagrammer.elements.shapes;
 
 import preferences.Preferences;
+import window.editor.diagrammer.listeners.NoteShapeListener;
+import window.editor.diagrammer.utils.UIUtils;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
 
 public class NoteShape extends SquaredShape implements Serializable {
 
     private static final long serialVersionUID = -8239597996393623834L;
-    private final int MARGIN = 20;
+    private JTextArea textArea;
+
+    public NoteShape(int id) {
+        super(id);
+        this.initTextArea();
+    }
+
+    public NoteShape() {
+        super();
+        this.initTextArea();
+    }
+
+    private Dimension getTextAreaMaximumSize() {
+        int maxWidth = (int) (this.getWidth() - (2 * UIUtils.getNotePadding()));
+        int maxHeight = (int) (this.getHeight() - (2 * UIUtils.getNotePadding()));
+        return new Dimension(maxWidth, maxHeight);
+    }
+
+    private void updateTextArea() {
+        // Set la taille maximale de la zone de texte
+        this.textArea.setMaximumSize(this.getTextAreaMaximumSize());
+        this.textArea.setBounds((int) UIUtils.getNotePadding(), (int) UIUtils.getNotePadding(), this.getTextAreaMaximumSize().width, this.getTextAreaMaximumSize().height);
+        this.textArea.setFont(UIUtils.getShapeFont());
+    }
+
+    private void initTextArea() {
+        this.textArea = new JTextArea();
+
+        // Pour la transparence
+        this.textArea.setOpaque(false);
+        this.textArea.setFont(UIUtils.getShapeFont());
+
+        // Set la taille maximale de la zone de texte
+        this.textArea.setMaximumSize(this.getTextAreaMaximumSize());
+
+        // Autorise le retour à la ligne de la zone de texte lorsque celle-ci atteint la largeur de la note - 2 * le padding
+        this.textArea.setLineWrap(true);
+        this.textArea.setWrapStyleWord(true);
+
+        this.textArea.setBounds((int) UIUtils.getNotePadding(), (int) UIUtils.getNotePadding(), this.getTextAreaMaximumSize().width, this.getTextAreaMaximumSize().height);
+
+        // Ajoute les listeners
+        // TODO -> A activer lorsque la stratégie d'édition d'une note sera définie
+        //this.addListener();
+
+        // Ajoute la zone de texte à la note
+        this.add(this.textArea);
+    }
+
+    private void addListener() {
+        NoteShapeListener listener = new NoteShapeListener(this);
+        this.textArea.addKeyListener(listener);
+    }
 
     @Override
     protected void defineBackgroundColor() {
@@ -25,12 +80,17 @@ public class NoteShape extends SquaredShape implements Serializable {
 
     @Override
     protected void defineMinimumSize() {
-        this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_NOTE_WIDTH, Preferences.DIAGRAMMER_DEFAULT_NOTE_HEIGHT));
+        this.setMinimumSize(UIUtils.getNoteDefaultSize());
     }
 
     @Override
     protected void defineSize() {
-        this.setSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_NOTE_WIDTH, Preferences.DIAGRAMMER_DEFAULT_NOTE_HEIGHT));
+        this.setSize(UIUtils.getNoteDefaultSize());
+    }
+
+    @Override
+    protected void defineSizeAtDefaultZoom() {
+        this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_NOTE_WIDTH, Preferences.DIAGRAMMER_DEFAULT_NOTE_HEIGHT));
     }
 
     @Override
@@ -39,12 +99,18 @@ public class NoteShape extends SquaredShape implements Serializable {
         this.drawCorner(graphics);
     }
 
+    @Override
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+        this.updateTextArea();
+    }
+
     private void drawBase(Graphics graphics) {
         // Dessine la forme
         Polygon shape = new Polygon();
         Point p1 = new Point(0, 0);
-        Point p2 = new Point(this.getWidth() - this.MARGIN, 0);
-        Point p3 = new Point(this.getWidth(), this.MARGIN);
+        Point p2 = new Point(this.getWidth() - (int) UIUtils.getNoteCornerSize(), 0);
+        Point p3 = new Point(this.getWidth(), (int) UIUtils.getNoteCornerSize());
         Point p4 = new Point(this.getWidth(), this.getHeight());
         Point p5 = new Point(0, this.getHeight());
 
@@ -71,9 +137,9 @@ public class NoteShape extends SquaredShape implements Serializable {
     private void drawCorner(Graphics graphics) {
         // Dessine le petit triangle situé en haut à droite qui représente le pli
         Polygon triangle = new Polygon();
-        Point p1 = new Point(this.getWidth() - this.MARGIN, 0);
-        Point p2 = new Point(this.getWidth(), this.MARGIN);
-        Point p3 = new Point(this.getWidth() - this.MARGIN, this.MARGIN);
+        Point p1 = new Point(this.getWidth() - (int) UIUtils.getNoteCornerSize(), 0);
+        Point p2 = new Point(this.getWidth(), (int) UIUtils.getNoteCornerSize());
+        Point p3 = new Point(this.getWidth() - (int) UIUtils.getNoteCornerSize(), (int) UIUtils.getNoteCornerSize());
         triangle.addPoint(p1.x, p1.y);
         triangle.addPoint(p2.x, p2.y);
         triangle.addPoint(p3.x, p3.y);
@@ -85,8 +151,7 @@ public class NoteShape extends SquaredShape implements Serializable {
         graphics.drawPolygon(triangle);
     }
 
-    private void drawCornerFakeBorder(Graphics graphics) {
-        graphics.setColor(Color.BLACK);
-        graphics.drawLine(this.getWidth() - this.MARGIN, 0, this.getWidth(), this.MARGIN);
+    public JTextArea getTextArea() {
+        return this.textArea;
     }
 }

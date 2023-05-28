@@ -1,22 +1,21 @@
-/***
- * Cette classe peut être utilisée en l'état actuel. Elle représente l'objet graphique d'une forme carrée dans ArcDataModeler.
- * Par exemple : les classes UML, les entités, les tables, les packages, les triggers et procédures, etc.
- * Auteur : Melvyn Vogelsang
- * Dernière mise à jour : 17.05.2023
- */
-
-
 package window.editor.diagrammer.elements.shapes;
 
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.io.Serializable;
+import java.util.List;
+import javax.swing.JPanel;
+import md.MDElement;
 import window.editor.diagrammer.elements.interfaces.IResizable;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
+import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.SquaredShapeListener;
+import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GridUtils;
 import window.editor.diagrammer.utils.IDManager;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.Serializable;
+import window.editor.diagrammer.utils.ShapeUtils;
 
 public abstract class SquaredShape extends JPanel implements IShape, IResizable, Serializable {
 
@@ -24,10 +23,12 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   protected int id;
   protected boolean isFocused = false;
   protected boolean isResizing = false;
+  protected MDElement relatedRepositoryElement;
 
   public SquaredShape(int id) {
     this();
     this.id = id;
+    this.addListeners();
   }
 
   public SquaredShape() {
@@ -36,6 +37,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
     this.addListeners();
     this.initUI();
   }
+
 
   protected abstract void defineBackgroundColor();
 
@@ -47,7 +49,10 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
     this.defineMinimumSize();
     this.defineBackgroundColor();
     this.defineSize();
+    this.defineSizeAtDefaultZoom();
   }
+
+  protected abstract void defineSizeAtDefaultZoom();
 
   private void addListeners() {
     SquaredShapeListener listener = new SquaredShapeListener(this);
@@ -60,13 +65,27 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   @Override
   protected void paintComponent(Graphics graphics) {
     super.paintComponent(graphics);
-    this.setBorder(BorderFactory.createLineBorder(Color.BLACK, this.isFocused || this.isResizing ? 0 : 0));
     this.doDraw(graphics);
   }
 
   @Override
   public void resize(Rectangle newBounds) {
     this.setBounds(newBounds.x, newBounds.y, newBounds.width, newBounds.height);
+  }
+
+  @Override
+  public void setLocationDifference(int differenceX, int differenceY) {
+    this.setLocation(this.getX() + differenceX, this.getY() + differenceY);
+
+    // S'il s'agit d'une scroll manuel de l'utilisateur, on déplace les points d'ancrage attachés à la forme
+    if (!DiagrammerService.getDrawPanel().isManualScrolling()) {
+      List<RelationShape> linkedRelations = DiagrammerService.getDrawPanel().getRelationShapesBySquaredShape(this);
+      for (RelationShape relation : linkedRelations) {
+        RelationAnchorPointShape nearestPointAncrage = ShapeUtils.getNearestPointAncrage(this, relation);
+        nearestPointAncrage.drag(nearestPointAncrage.x + differenceX, nearestPointAncrage.y + differenceY);
+      }
+    }
+
   }
 
   @Override
@@ -82,22 +101,19 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   @Override
   public void zoom(int fromFactor, int toFactor) {
 
-    int newXPosition = this.getBounds().x * toFactor / fromFactor;
-    int newYPosition = this.getBounds().y * toFactor / fromFactor;
-    int newWidth = this.getBounds().width * toFactor / fromFactor;
-    int newHeight = this.getBounds().height * toFactor / fromFactor;
+    int newXPosition = GridUtils.alignToGrid((double) this.getX() * toFactor / fromFactor, toFactor);
+    int newYPosition = GridUtils.alignToGrid((double) this.getY() * toFactor / fromFactor, toFactor);
+    int newWidth = GridUtils.alignToGrid((double) this.getBounds().width * toFactor / fromFactor, toFactor);
+    int newHeight = GridUtils.alignToGrid((double) this.getBounds().height * toFactor / fromFactor, toFactor);
 
-    // Set la nouvelle position, la nouvelle taille de l'élément et met à jour la nouvelle taille minimale de l'élément
-    this.setSize(GridUtils.alignToGrid(newWidth, toFactor), GridUtils.alignToGrid(newHeight, toFactor));
-    this.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
-    this.setLocation(GridUtils.alignToGrid(newXPosition, toFactor), GridUtils.alignToGrid(newYPosition, toFactor));
+    this.setSize(newWidth, newHeight);
+    this.setLocation(newXPosition, newYPosition);
+
   }
 
   @Override
   public void drag(int differenceX, int differenceY) {
-    Rectangle bounds = this.getBounds();
-    bounds.translate(differenceX, differenceY);
-    this.setBounds(bounds);
+    this.setLocationDifference(differenceX, differenceY);
     this.repaint();
   }
 
@@ -113,6 +129,11 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   }
 
   @Override
+  public MDElement getRelatedRepositoryElement() {
+    return this.relatedRepositoryElement;
+  }
+
+  @Override
   public String toString() {
     return "SquaredShape{" + "id=" + this.id + '}';
   }
@@ -120,4 +141,5 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   public void setResizing(boolean resizing) {
     this.isResizing = resizing;
   }
+
 }

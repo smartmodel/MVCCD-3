@@ -1,17 +1,16 @@
-/***
- * Cette classe peut être utilisée en l'état actuel. Elle gère l'action d'éditer une composition MCD
- * via le menu contextuel affiché lors d'un clic droit.
- * Auteur : Melvyn Vogelsang
- * Dernière mise à jour : 17.05.2023
- */
-
 package window.editor.diagrammer.menus.actions;
 
-import window.editor.diagrammer.elements.shapes.relations.mcd.MCDCompositionShape;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import main.MVCCDManager;
+import mcd.MCDAssociation;
+import mcd.MCDAssociationNature;
+import mcd.MCDEntity;
+import repository.editingTreat.mcd.MCDAssociationEditingTreat;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.MCDCompositionShape;
 
 public class MCDCompositionEditAction extends AbstractAction implements Serializable {
 
@@ -33,11 +32,22 @@ public class MCDCompositionEditAction extends AbstractAction implements Serializ
   }
 
   private void edit() {
-
   }
 
   private void create() {
+    MVCCDManager manager = MVCCDManager.instance();
 
+    MCDEntityShape entityShapeSource = (MCDEntityShape) this.shape.getSource();
+    MCDEntityShape entityShapeDestination = (MCDEntityShape) this.shape.getDestination();
+
+    MCDEntity entitySource = entityShapeSource.getEntity();
+    MCDEntity entityDestination = entityShapeDestination.getEntity();
+
+    MCDAssociationEditingTreat mcdAssociationEditingTreat = new MCDAssociationEditingTreat();
+    MCDAssociation association = mcdAssociationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations(), entitySource, entityDestination, MCDAssociationNature.IDCOMP, false);
+
+    this.shape.setMCDComposition(association);
+    this.shape.createLabelsAfterRelationShapeEdit();
   }
 
 }

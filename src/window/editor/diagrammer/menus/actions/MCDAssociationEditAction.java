@@ -37,7 +37,6 @@ public class MCDAssociationEditAction extends AbstractAction implements Serializ
     } else {
       this.create();
     }
-    this.shape.repaint();
   }
 
   private void edit() {

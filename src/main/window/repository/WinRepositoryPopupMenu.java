@@ -17,7 +17,6 @@ import diagram.mcd.MCDDiagram;
 import exceptions.service.ExceptionService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Serial;
 import javax.swing.JMenuItem;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -157,7 +156,6 @@ import utilities.window.scomponents.SPopupMenu;
 
 public class WinRepositoryPopupMenu extends SPopupMenu {
 
-  @Serial
   private static final long serialVersionUID = 2650445726860322512L;
   private DefaultMutableTreeNode node;
   private DefaultTreeModel treeModel;
@@ -177,7 +175,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
     try {
       Preferences preferences = PreferencesManager.instance().preferences();
       // Effacement des anciens contenus qui ne devraient plus subsister si aucune erreur ne survient
-      String message = MessagesBuilder.getMessagesProperty("file.add.text", LogsManager.getlogFilePath());
+      String message = MessagesBuilder.getMessagesProperty("file.add.text",
+          LogsManager.getlogFilePath());
       ConsoleManager consoleManager = MVCCDManager.instance().getConsoleManager();
       consoleManager.clearMessages();
       if (PreferencesManager.instance().getApplicationPref().isDEBUG()) {
@@ -247,7 +246,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
           this.packageNew(this, "menu.new.package");
         }
         this.treatGenericCompliantMCD(this, new MCDModelEditingTreat());
-        this.treatGenericTransformMCD(this, new MCDModelEditingTreat(), "menu.transform.mcd.to.mldr");
+        this.treatGenericTransformMCD(this, new MCDModelEditingTreat(),
+            "menu.transform.mcd.to.mldr");
       }
 
       if (this.node.getUserObject() instanceof MCDPackage) {
@@ -260,11 +260,13 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       }
 
       if (this.node.getUserObject() instanceof MCDContDiagrams) {
-        this.treatGenericNew(this, new MCDDiagramEditingTreat(), MessagesBuilder.getMessagesProperty("menu.new.diagram"));
+        this.treatGenericNew(this, new MCDDiagramEditingTreat(),
+            MessagesBuilder.getMessagesProperty("menu.new.diagram"));
       }
 
       if (this.node.getUserObject() instanceof MPDRContDiagrams) {
-        this.treatGenericNew(this, new MPDRDiagramEditingTreat(), MessagesBuilder.getMessagesProperty("menu.new.diagram"));
+        this.treatGenericNew(this, new MPDRDiagramEditingTreat(),
+            MessagesBuilder.getMessagesProperty("menu.new.diagram"));
       }
 
       if (this.node.getUserObject() instanceof MCDDiagram) {
@@ -278,7 +280,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       if (this.node.getUserObject() instanceof MCDEntity) {
         this.treatGeneric(this, new MCDEntityEditingTreat());
         //Contrôle de complétude
-        this.treatGenericRead(this, new MCDEntCompliantEditingTreat(), MessagesBuilder.getMessagesProperty("menu.compliant"));
+        this.treatGenericRead(this, new MCDEntCompliantEditingTreat(),
+            MessagesBuilder.getMessagesProperty("menu.compliant"));
       }
 
       if (this.node.getUserObject() instanceof MCDContAttributes) {
@@ -306,13 +309,16 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         this.treatRelations(this);
       }
 
-      if ((this.node.getUserObject() instanceof MCDUnique) && (!(this.node.getUserObject() instanceof MCDNID))) {
-        this.treatGenericNew(this, new MCDUniqueParameterEditingTreat(), MessagesBuilder.getMessagesProperty("menu.new.operation.parameter"));
+      if ((this.node.getUserObject() instanceof MCDUnique)
+          && (!(this.node.getUserObject() instanceof MCDNID))) {
+        this.treatGenericNew(this, new MCDUniqueParameterEditingTreat(),
+            MessagesBuilder.getMessagesProperty("menu.new.operation.parameter"));
         this.treatGeneric(this, new MCDUniqueEditingTreat());
       }
 
       if (this.node.getUserObject() instanceof MCDNID) {
-        this.treatGenericNew(this, new MCDNIDParameterEditingTreat(), MessagesBuilder.getMessagesProperty("menu.new.operation.parameter"));
+        this.treatGenericNew(this, new MCDNIDParameterEditingTreat(),
+            MessagesBuilder.getMessagesProperty("menu.new.operation.parameter"));
         this.treatGeneric(this, new MCDNIDEditingTreat());
       }
 
@@ -360,15 +366,18 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       if (this.node.getUserObject() instanceof MLDRModel) {
         this.treatGeneric(this, new MLDRModelEditingTreat());
 
-        JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.transform.mldr.to.mpdr"));
+        JMenuItem menuItem = new JMenuItem(
+            MessagesBuilder.getMessagesProperty("menu.transform.mldr.to.mpdr"));
         this.addItem(this, menuItem);
         menuItem.addActionListener(new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent actionEvent) {
             try {
-              (new MLDRModelEditingTreat()).treatTransform(WinRepositoryPopupMenu.this.mvccdWindow, WinRepositoryPopupMenu.this.mvccdElement);
+              (new MLDRModelEditingTreat()).treatTransform(WinRepositoryPopupMenu.this.mvccdWindow,
+                  WinRepositoryPopupMenu.this.mvccdElement);
             } catch (Exception e) {
-              WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.transform");
+              WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+                  WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.transform");
             }
           }
         });
@@ -409,15 +418,19 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       if (this.node.getUserObject() instanceof MPDRModel) {
         this.treatGeneric(this, new MPDRModelEditingTreat());
 
-        JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.generate.sql.from.mpdr"));
+        JMenuItem menuItem = new JMenuItem(
+            MessagesBuilder.getMessagesProperty("menu.generate.sql.from.mpdr"));
         this.addItem(this, menuItem);
         menuItem.addActionListener(new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent actionEvent) {
             try {
-              (new MPDRModelEditingTreat()).treatGenerate(WinRepositoryPopupMenu.this.mvccdWindow, WinRepositoryPopupMenu.this.mvccdElement);
+              (new MPDRModelEditingTreat()).treatGenerate(WinRepositoryPopupMenu.this.mvccdWindow,
+                  WinRepositoryPopupMenu.this.mvccdElement);
             } catch (Exception e) {
-              WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.generate.sql");
+              WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+                  WinRepositoryPopupMenu.this.mvccdElement,
+                  "repository.menu.exception.generate.sql");
             }
           }
         });
@@ -496,34 +509,45 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         try {
-          String message = "Classe : " + WinRepositoryPopupMenu.this.mvccdElement.getClass().getName();
+          String message =
+              "Classe : " + WinRepositoryPopupMenu.this.mvccdElement.getClass().getName();
           if (WinRepositoryPopupMenu.this.mvccdElement instanceof ProjectElement) {
             ProjectElement projectElement = (ProjectElement) WinRepositoryPopupMenu.this.mvccdElement;
-            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id : " + projectElement.getIdProjectElement();
+            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id : "
+                + projectElement.getIdProjectElement();
           }
-          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Ordre dans la fraterie : " + WinRepositoryPopupMenu.this.mvccdElement.getOrder();
+          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Ordre dans la fraterie : "
+              + WinRepositoryPopupMenu.this.mvccdElement.getOrder();
           if (WinRepositoryPopupMenu.this.mvccdElement instanceof IMDRElementWithIteration) {
             IMDRElementWithIteration mdrElement = (IMDRElementWithIteration) WinRepositoryPopupMenu.this.mvccdElement;
-            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Itération : " + mdrElement.getIteration();
+            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Itération : "
+                + mdrElement.getIteration();
           }
           if (WinRepositoryPopupMenu.this.mvccdElement instanceof MDRRelationFK) {
             MDRRelationFK mdrRelationFK = (MDRRelationFK) WinRepositoryPopupMenu.this.mvccdElement;
-            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - nom : " + mdrRelationFK.getMDRFK().getName();
-            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - id : " + mdrRelationFK.getMDRFK().getIdProjectElement();
+            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - nom : "
+                + mdrRelationFK.getMDRFK().getName();
+            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte FK - id : "
+                + mdrRelationFK.getMDRFK().getIdProjectElement();
           }
           if (WinRepositoryPopupMenu.this.mvccdElement instanceof MDRRelFKEnd) {
             MDRRelFKEnd mdrRelFKEnd = (MDRRelFKEnd) WinRepositoryPopupMenu.this.mvccdElement;
-            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Rôle : " + mdrRelFKEnd.getRoleText();
+            message =
+                message + Preferences.SYSTEM_LINE_SEPARATOR + "Rôle : " + mdrRelFKEnd.getRoleText();
           }
           if (WinRepositoryPopupMenu.this.mvccdElement instanceof IMUMLExtensionNamingInLine) {
             IMUMLExtensionNamingInLine imumlExtensionNamingInLine = (IMUMLExtensionNamingInLine) WinRepositoryPopupMenu.this.mvccdElement;
-            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Stéréo InLine : " + imumlExtensionNamingInLine.getStereotypesInLine();
-            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contr. InLine : " + imumlExtensionNamingInLine.getConstraintsInLine();
+            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Stéréo InLine : "
+                + imumlExtensionNamingInLine.getStereotypesInLine();
+            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contr. InLine : "
+                + imumlExtensionNamingInLine.getConstraintsInLine();
           }
           if (WinRepositoryPopupMenu.this.mvccdElement instanceof IMUMLExtensionNamingInBox) {
             IMUMLExtensionNamingInBox imumlExtensionNamingInBox = (IMUMLExtensionNamingInBox) WinRepositoryPopupMenu.this.mvccdElement;
-            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Stéréo InBox : " + imumlExtensionNamingInBox.getStereotypesInBox();
-            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contr. InBox : " + imumlExtensionNamingInBox.getConstraintsInBox();
+            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Stéréo InBox : "
+                + imumlExtensionNamingInBox.getStereotypesInBox();
+            message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contr. InBox : "
+                + imumlExtensionNamingInBox.getConstraintsInBox();
           }
           message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Childs : ";
           int i = 0;
@@ -537,7 +561,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
           new DialogMessage().showOk(WinRepositoryPopupMenu.this.mvccdWindow, message);
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.inspector");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.inspector");
         }
       }
     });
@@ -553,13 +578,18 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
           IMLDRElementWithSource imldrElementWithSource = (IMLDRElementWithSource) WinRepositoryPopupMenu.this.mvccdElement;
           MCDElement mcdElementSource = imldrElementWithSource.getMcdElementSource();
           String message = "Classe : " + mcdElementSource.getClass().getName();
-          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mcdElementSource.getNameSourcePath();
-          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mcdElementSource.getIdProjectElement();
+          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : "
+              + mcdElementSource.getNameSourcePath();
+          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : "
+              + mcdElementSource.getIdProjectElement();
 
-          new DialogMessage().showOk(WinRepositoryPopupMenu.this.mvccdWindow, message, "Source de niveau conceptuel de l'objet : " + WinRepositoryPopupMenu.this.mvccdElement.getName());
+          new DialogMessage().showOk(WinRepositoryPopupMenu.this.mvccdWindow, message,
+              "Source de niveau conceptuel de l'objet : "
+                  + WinRepositoryPopupMenu.this.mvccdElement.getName());
 
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.source.mcd");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.source.mcd");
         }
       }
     });
@@ -576,11 +606,16 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
           IMPDRElementWithSource impdrElementWithSource = (IMPDRElementWithSource) WinRepositoryPopupMenu.this.mvccdElement;
           IMLDRElement mldrElementSource = impdrElementWithSource.getMldrElementSource();
           String message = "Classe : " + mldrElementSource.getClass().getName();
-          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mldrElementSource.getName();
-          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mldrElementSource.getIdProjectElement();
-          new DialogMessage().showOk(WinRepositoryPopupMenu.this.mvccdWindow, message, "Source de niveau logique de l'objet : " + WinRepositoryPopupMenu.this.mvccdElement.getName());
+          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : "
+              + mldrElementSource.getName();
+          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : "
+              + mldrElementSource.getIdProjectElement();
+          new DialogMessage().showOk(WinRepositoryPopupMenu.this.mvccdWindow, message,
+              "Source de niveau logique de l'objet : "
+                  + WinRepositoryPopupMenu.this.mvccdElement.getName());
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.source.mldr");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.source.mldr");
         }
       }
     });
@@ -596,11 +631,16 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
           ITapisElementWithSource iTapisElementWithSource = (ITapisElementWithSource) WinRepositoryPopupMenu.this.mvccdElement;
           IMPDRElement mpdrElementSource = iTapisElementWithSource.getMpdrElementSource();
           String message = "Classe : " + mpdrElementSource.getClass().getName();
-          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : " + mpdrElementSource.getNameTreePath();
-          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : " + mpdrElementSource.getIdProjectElement();
-          new DialogMessage().showOk(WinRepositoryPopupMenu.this.mvccdWindow, message, "Source de niveau physique de l'objet : " + WinRepositoryPopupMenu.this.mvccdElement.getName());
+          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Nom     : "
+              + mpdrElementSource.getNameTreePath();
+          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Id     : "
+              + mpdrElementSource.getIdProjectElement();
+          new DialogMessage().showOk(WinRepositoryPopupMenu.this.mvccdWindow, message,
+              "Source de niveau physique de l'objet : "
+                  + WinRepositoryPopupMenu.this.mvccdElement.getName());
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.source.mpdr");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.source.mpdr");
         }
       }
     });
@@ -615,19 +655,26 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         try {
           MPDRColumnJnal mpdrColumnJnal = (MPDRColumnJnal) WinRepositoryPopupMenu.this.mvccdElement;
           MPDRDB mpdrdb = mpdrColumnJnal.getMPDRTableToJournalize().getMPDRModelParent().getDb();
-          MPDRDatatype mpdrDatatype = MDDatatypeService.getMPDRDatatypeByLienProg(mpdrdb, mpdrColumnJnal.getDatatypeLienProg());
+          MPDRDatatype mpdrDatatype = MDDatatypeService.getMPDRDatatypeByLienProg(mpdrdb,
+              mpdrColumnJnal.getDatatypeLienProg());
           Integer size = mpdrColumnJnal.getSize();
-          Constraint constraint = ConstraintsManager.instance().constraints().getConstraintByLienProg(MDRColumn.class.getName(), mpdrColumnJnal.getDatatypeConstraintLienProg());
+          Constraint constraint = ConstraintsManager.instance().constraints()
+              .getConstraintByLienProg(MDRColumn.class.getName(),
+                  mpdrColumnJnal.getDatatypeConstraintLienProg());
           String message = "Nom : " + mpdrColumnJnal.getName();
-          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Datatype     : " + mpdrColumnJnal.getDatatypeLienProg();
+          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Datatype     : "
+              + mpdrColumnJnal.getDatatypeLienProg();
           if (size != null) {
             message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Taille     : " + size;
           }
-          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte     : " + ConstraintService.getUMLName(constraint);
+          message = message + Preferences.SYSTEM_LINE_SEPARATOR + "Contrainte     : "
+              + ConstraintService.getUMLName(constraint);
 
-          new DialogMessage().showOk(WinRepositoryPopupMenu.this.mvccdWindow, message, "Lecture : " + WinRepositoryPopupMenu.this.mvccdElement.getName());
+          new DialogMessage().showOk(WinRepositoryPopupMenu.this.mvccdWindow, message,
+              "Lecture : " + WinRepositoryPopupMenu.this.mvccdElement.getName());
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.source.mldr");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.source.mldr");
         }
       }
     });
@@ -641,9 +688,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         try {
-          MCDNIDService.confirmCreateNID1FromAttribute(WinRepositoryPopupMenu.this.mvccdWindow, (MCDAttribute) WinRepositoryPopupMenu.this.node.getUserObject());
+          MCDNIDService.confirmCreateNID1FromAttribute(WinRepositoryPopupMenu.this.mvccdWindow,
+              (MCDAttribute) WinRepositoryPopupMenu.this.node.getUserObject());
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.attribute.nid1");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.attribute.nid1");
         }
       }
     });
@@ -662,74 +711,99 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
     if (DefaultMutableTreeNodeService.isObjectDescendantOf(this.node, new Profile(null, null))) {
       //if (nodeParent.getUserObject() instanceof Profile) {
-      this.treatGenericRead(preferencesEdit, new PrefGeneralEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.general"));
+      this.treatGenericRead(preferencesEdit, new PrefGeneralEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.general"));
 
-      this.treatGenericRead(preferencesEdit, new PrefMCDEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mcd"));
+      this.treatGenericRead(preferencesEdit, new PrefMCDEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mcd"));
 
-      this.treatGenericRead(preferencesEdit, new PrefMDREditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mdr"));
+      this.treatGenericRead(preferencesEdit, new PrefMDREditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mdr"));
 
-      this.treatGenericRead(preferencesEdit, new PrefMDRFormatEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mdr.format"));
+      this.treatGenericRead(preferencesEdit, new PrefMDRFormatEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mdr.format"));
 
-      this.treatGenericRead(preferencesEdit, new PrefMLDREditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mldr"));
+      this.treatGenericRead(preferencesEdit, new PrefMLDREditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mldr"));
 
-      this.treatGenericRead(preferencesEdit, new PrefMCDToMLDREditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mcd.to.mldr"));
+      this.treatGenericRead(preferencesEdit, new PrefMCDToMLDREditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mcd.to.mldr"));
 
       // Sous-menu MPDR
-      SMenu preferencesEditMPDR = new SMenu(MessagesBuilder.getMessagesProperty("menu.preferences"));
+      SMenu preferencesEditMPDR = new SMenu(
+          MessagesBuilder.getMessagesProperty("menu.preferences"));
       this.addItem(preferencesEditMPDR, preferencesEditMPDR);
 
-      this.treatGenericRead(preferencesEdit, new PrefMPDROracleEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.oracle"));
+      this.treatGenericRead(preferencesEdit, new PrefMPDROracleEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.oracle"));
 
-      this.treatGenericRead(preferencesEditMPDR, new PrefMPDRMySQLEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.mysql"));
+      this.treatGenericRead(preferencesEditMPDR, new PrefMPDRMySQLEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.mysql"));
 
-      this.treatGenericRead(preferencesEditMPDR, new PrefMPDRPostgreSQLEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.postgresql"));
+      this.treatGenericRead(preferencesEditMPDR, new PrefMPDRPostgreSQLEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.postgresql"));
 
       // Fin Sous-menu MPDR
 
-      this.treatGenericRead(preferencesEdit, new PrefMLDRToMPDREditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mldr.to.mpdr"));
+      this.treatGenericRead(preferencesEdit, new PrefMLDRToMPDREditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mldr.to.mpdr"));
     }
 
     if (DefaultMutableTreeNodeService.isObjectDescendantOf(this.node, new Project(null))) {
       //if (nodeParent.getUserObject() instanceof Project) {
-      this.treatGenericUpdate(preferencesEdit, new PrefGeneralEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.general"));
+      this.treatGenericUpdate(preferencesEdit, new PrefGeneralEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.general"));
 
-      this.treatGenericUpdate(preferencesEdit, new PrefMCDEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mcd"));
+      this.treatGenericUpdate(preferencesEdit, new PrefMCDEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mcd"));
 
-      this.treatGenericUpdate(preferencesEdit, new PrefMDREditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mdr"));
+      this.treatGenericUpdate(preferencesEdit, new PrefMDREditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mdr"));
 
-      this.treatGenericUpdate(preferencesEdit, new PrefMDRFormatEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mdr.format"));
+      this.treatGenericUpdate(preferencesEdit, new PrefMDRFormatEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mdr.format"));
 
-      this.treatGenericUpdate(preferencesEdit, new PrefMLDREditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mldr"));
+      this.treatGenericUpdate(preferencesEdit, new PrefMLDREditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mldr"));
 
-      this.treatGenericUpdate(preferencesEdit, new PrefMCDToMLDREditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mcd.to.mldr"));
+      this.treatGenericUpdate(preferencesEdit, new PrefMCDToMLDREditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mcd.to.mldr"));
 
       // Sous-menu MPDR
-      SMenu preferencesEditMPDR = new SMenu(MessagesBuilder.getMessagesProperty("menu.preferences.mpdr"));
+      SMenu preferencesEditMPDR = new SMenu(
+          MessagesBuilder.getMessagesProperty("menu.preferences.mpdr"));
       this.addItem(preferencesEdit, preferencesEditMPDR);
 
-      this.treatGenericUpdate(preferencesEditMPDR, new PrefMPDROracleEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.oracle"));
+      this.treatGenericUpdate(preferencesEditMPDR, new PrefMPDROracleEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.oracle"));
 
-      this.treatGenericUpdate(preferencesEditMPDR, new PrefMPDRMySQLEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.mysql"));
+      this.treatGenericUpdate(preferencesEditMPDR, new PrefMPDRMySQLEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.mysql"));
 
-      this.treatGenericUpdate(preferencesEditMPDR, new PrefMPDRPostgreSQLEditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.postgresql"));
+      this.treatGenericUpdate(preferencesEditMPDR, new PrefMPDRPostgreSQLEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mpdr.postgresql"));
 
       // Fin Sous-menu MPDR
 
-      this.treatGenericUpdate(preferencesEdit, new PrefMLDRToMPDREditingTreat(), MessagesBuilder.getMessagesProperty("menu.preferences.mldr.to.mpdr"));
+      this.treatGenericUpdate(preferencesEdit, new PrefMLDRToMPDREditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.preferences.mldr.to.mpdr"));
 
-      JMenuItem preferencesExportProfil = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.export.profil.preferences"));
+      JMenuItem preferencesExportProfil = new JMenuItem(
+          MessagesBuilder.getMessagesProperty("menu.export.profil.preferences"));
       this.addItem(menu, preferencesExportProfil);
       preferencesExportProfil.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
           try {
-            if (PreferencesManager.instance().preferences().isPERSISTENCE_SERIALISATION_INSTEADOF_XML()) {
+            if (PreferencesManager.instance().preferences()
+                .isPERSISTENCE_SERIALISATION_INSTEADOF_XML()) {
               PreferencesManager.instance().createProfile(); //Persistance avec sérialisation
             } else {
               new ProfileSaverXml().createFileProfileXML(); //Ajout de Giorgio
             }
           } catch (Exception e) {
-            WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.export.pref");
+            WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+                WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.export.pref");
           }
         }
       });
@@ -747,7 +821,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
           // Pas d'extension de la classe EditingTreat
           ProjectEditingTreat.treatUpdate(WinRepositoryPopupMenu.this.mvccdWindow);
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.update");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.update");
         }
       }
     });
@@ -767,32 +842,40 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
 
   private void treatMCDModels(ISMenu menu) {
     if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_MODELS_MANY()) {
-      this.treatGenericNew(menu, new MCDModelEditingTreat(), MessagesBuilder.getMessagesProperty("menu.new.model"));
+      this.treatGenericNew(menu, new MCDModelEditingTreat(),
+          MessagesBuilder.getMessagesProperty("menu.new.model"));
     } else {
       if (PreferencesManager.instance().preferences().getREPOSITORY_MCD_PACKAGES_AUTHORIZEDS()) {
         this.packageNew(menu, "menu.new.package");
       }
       this.treatGenericCompliantMCD(menu, new MCDContModelsEditingTreat());
-      this.treatGenericTransformMCD(menu, new MCDContModelsEditingTreat(), "menu.transform.mcd.to.mldr");
+      this.treatGenericTransformMCD(menu, new MCDContModelsEditingTreat(),
+          "menu.transform.mcd.to.mldr");
     }
   }
 
   private void treatRelations(ISMenu menu) {
-    this.treatGenericNew(this, new MCDAssociationEditingTreat(), MessagesBuilder.getMessagesProperty("menu.new.association"));
-    this.treatGenericNew(this, new MCDGeneralizationEditingTreat(), MessagesBuilder.getMessagesProperty("menu.new.generalization"));
-    this.treatGenericNew(this, new MCDLinkEditingTreat(), MessagesBuilder.getMessagesProperty("menu.new.link"));
+    this.treatGenericNew(this, new MCDAssociationEditingTreat(),
+        MessagesBuilder.getMessagesProperty("menu.new.association"));
+    this.treatGenericNew(this, new MCDGeneralizationEditingTreat(),
+        MessagesBuilder.getMessagesProperty("menu.new.generalization"));
+    this.treatGenericNew(this, new MCDLinkEditingTreat(),
+        MessagesBuilder.getMessagesProperty("menu.new.link"));
     this.treatGenericDeleteChilds(this, new MCDRelationsEditingTreat());
   }
 
   private void treatConstraints(ISMenu menu) {
-    this.treatGenericNew(this, new MCDNIDEditingTreat(), MessagesBuilder.getMessagesProperty("menu.new.constraint.nid"));
-    this.treatGenericNew(this, new MCDUniqueEditingTreat(), MessagesBuilder.getMessagesProperty("menu.new.constraint.unique"));
+    this.treatGenericNew(this, new MCDNIDEditingTreat(),
+        MessagesBuilder.getMessagesProperty("menu.new.constraint.nid"));
+    this.treatGenericNew(this, new MCDUniqueEditingTreat(),
+        MessagesBuilder.getMessagesProperty("menu.new.constraint.unique"));
     this.treatGenericRead(this, new MCDConstraintsEditingTreat());
 
   }
 
   private void packageNew(ISMenu menu, String propertyMessage) {
-    this.treatGenericNew(menu, new MCDPackageEditingTreat(), MessagesBuilder.getMessagesProperty(propertyMessage));
+    this.treatGenericNew(menu, new MCDPackageEditingTreat(),
+        MessagesBuilder.getMessagesProperty(propertyMessage));
   }
 
   private void treatGeneric(ISMenu menu, EditingTreat editingTreat) {
@@ -817,9 +900,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         try {
-          editingTreat.treatNew(WinRepositoryPopupMenu.this.mvccdWindow, WinRepositoryPopupMenu.this.mvccdElement);
+          editingTreat.treatNew(WinRepositoryPopupMenu.this.mvccdWindow,
+              WinRepositoryPopupMenu.this.mvccdElement);
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.new");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.new");
         }
       }
     });
@@ -837,7 +922,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         try {
-          editingTreat.treatRead(WinRepositoryPopupMenu.this.mvccdWindow, WinRepositoryPopupMenu.this.mvccdElement);
+          editingTreat.treatRead(WinRepositoryPopupMenu.this.mvccdWindow,
+              WinRepositoryPopupMenu.this.mvccdElement);
         } catch (Exception e) {
           String propertyMessage;
           if (editingTreat instanceof MCDEntCompliantEditingTreat) {
@@ -845,7 +931,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
           } else {
             propertyMessage = "repository.menu.exception.read";
           }
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, propertyMessage);
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, propertyMessage);
         }
       }
     });
@@ -863,9 +950,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         try {
-          editingTreat.treatUpdate(WinRepositoryPopupMenu.this.mvccdWindow, WinRepositoryPopupMenu.this.mvccdElement);
+          editingTreat.treatUpdate(WinRepositoryPopupMenu.this.mvccdWindow,
+              WinRepositoryPopupMenu.this.mvccdElement);
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.update");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.update");
         }
       }
     });
@@ -883,9 +972,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         try {
-          editingTreat.treatDelete(WinRepositoryPopupMenu.this.mvccdWindow, WinRepositoryPopupMenu.this.mvccdElement);
+          editingTreat.treatDelete(WinRepositoryPopupMenu.this.mvccdWindow,
+              WinRepositoryPopupMenu.this.mvccdElement);
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.delete");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.delete");
         }
       }
     });
@@ -903,9 +994,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         try {
-          editingTreat.treatDeleteChilds(WinRepositoryPopupMenu.this.mvccdWindow, WinRepositoryPopupMenu.this.mvccdElement);
+          editingTreat.treatDeleteChilds(WinRepositoryPopupMenu.this.mvccdWindow,
+              WinRepositoryPopupMenu.this.mvccdElement);
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.delete.childs");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.delete.childs");
         }
       }
     });
@@ -918,15 +1011,18 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         try {
-          boolean ok = editingTreat.treatCompletness(WinRepositoryPopupMenu.this.mvccdWindow, WinRepositoryPopupMenu.this.mvccdElement, true);
+          boolean ok = editingTreat.treatCompletness(WinRepositoryPopupMenu.this.mvccdWindow,
+              WinRepositoryPopupMenu.this.mvccdElement, true);
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.completness");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.completness");
         }
       }
     });
   }
 
-  private void treatGenericCompliantMCD(ISMenu menu, MCDCompliantEditingTreat mcdCompliantEditingTreat) {
+  private void treatGenericCompliantMCD(ISMenu menu,
+      MCDCompliantEditingTreat mcdCompliantEditingTreat) {
 
     JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty("menu.compliant"));
     this.addItem(menu, menuItem);
@@ -935,24 +1031,29 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         try {
-          mcdCompliantEditingTreat.treatCompliant(WinRepositoryPopupMenu.this.mvccdWindow, (IMCDCompliant) WinRepositoryPopupMenu.this.mvccdElement);
+          mcdCompliantEditingTreat.treatCompliant(WinRepositoryPopupMenu.this.mvccdWindow,
+              (IMCDCompliant) WinRepositoryPopupMenu.this.mvccdElement);
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.compliant");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.compliant");
         }
       }
     });
   }
 
-  private void treatGenericTransformMCD(ISMenu menu, MCDTransformEditingTreat mcdTransformEditingTreat, String propertyTextMenu) {
+  private void treatGenericTransformMCD(ISMenu menu,
+      MCDTransformEditingTreat mcdTransformEditingTreat, String propertyTextMenu) {
     JMenuItem menuItem = new JMenuItem(MessagesBuilder.getMessagesProperty(propertyTextMenu));
     this.addItem(menu, menuItem);
     menuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         try {
-          mcdTransformEditingTreat.treatTransform(WinRepositoryPopupMenu.this.mvccdWindow, (IMCDModel) WinRepositoryPopupMenu.this.mvccdElement);
+          mcdTransformEditingTreat.treatTransform(WinRepositoryPopupMenu.this.mvccdWindow,
+              (IMCDModel) WinRepositoryPopupMenu.this.mvccdElement);
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.transform");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.transform");
         }
       }
     });
@@ -972,7 +1073,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
           String pathNaming = preferences.getMCD_TREE_NAMING_ASSOCIATION();
 
           // Appel du formulaire
-          (new NamingEditingTreat()).treatNaming(WinRepositoryPopupMenu.this.mvccdWindow, WinRepositoryPopupMenu.this.mvccdElement);
+          (new NamingEditingTreat()).treatNaming(WinRepositoryPopupMenu.this.mvccdWindow,
+              WinRepositoryPopupMenu.this.mvccdElement);
 
           //Remise en l'état initial de la préférence
           if (!preferences.getMCD_TREE_NAMING_ASSOCIATION().equals(pathNaming)) {
@@ -980,7 +1082,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
           }
 
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.naming");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.naming");
         }
       }
     });
@@ -996,9 +1099,11 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
         try {
           String classpath = System.getProperty("java.class.path");
           String[] classpathEntries = classpath.split(System.getProperty("path.separator"));
-          DialogMessage.showOk(WinRepositoryPopupMenu.this.mvccdWindow, classpath, "Liste des CLASSPATH");
+          DialogMessage.showOk(WinRepositoryPopupMenu.this.mvccdWindow, classpath,
+              "Liste des CLASSPATH");
         } catch (Exception e) {
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.classpath");
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, "repository.menu.exception.classpath");
         }
       }
     });
@@ -1014,11 +1119,13 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       public void actionPerformed(ActionEvent actionEvent) {
         try {
           MDRRelationFK mdrRelationFK = (MDRRelationFK) WinRepositoryPopupMenu.this.mvccdElement;
-          new MDRFKEditingTreat().treatRead(WinRepositoryPopupMenu.this.mvccdWindow, mdrRelationFK.getMDRFK());
+          new MDRFKEditingTreat().treatRead(WinRepositoryPopupMenu.this.mvccdWindow,
+              mdrRelationFK.getMDRFK());
         } catch (Exception e) {
           String propertyMessage;
           propertyMessage = "repository.menu.exception.read";
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, propertyMessage);
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, propertyMessage);
         }
       }
     });
@@ -1033,11 +1140,13 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       public void actionPerformed(ActionEvent actionEvent) {
         try {
           MDRRelFKEnd mdrRelFKEnd = (MDRRelFKEnd) WinRepositoryPopupMenu.this.mvccdElement;
-          new MDRFKEditingTreat().treatRead(WinRepositoryPopupMenu.this.mvccdWindow, mdrRelFKEnd.getMDRRelationFK().getMDRFK());
+          new MDRFKEditingTreat().treatRead(WinRepositoryPopupMenu.this.mvccdWindow,
+              mdrRelFKEnd.getMDRRelationFK().getMDRFK());
         } catch (Exception e) {
           String propertyMessage;
           propertyMessage = "repository.menu.exception.read";
-          WinRepositoryPopupMenu.this.exceptionUnhandled(e, WinRepositoryPopupMenu.this.mvccdElement, propertyMessage);
+          WinRepositoryPopupMenu.this.exceptionUnhandled(e,
+              WinRepositoryPopupMenu.this.mvccdElement, propertyMessage);
         }
       }
     });
@@ -1048,7 +1157,8 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
     if (this.node.getUserObject() instanceof ConConnection) {
       ConConnection conConnection = (ConConnection) this.node.getUserObject();
       this.treatGeneric(this, conConnection.getConConnectionEditingTreat());
-      if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
+      if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE()
+          == ConDBMode.CONNECTOR) {
         // Nouveau connecteur
         this.treatGenericNew(this, conConnection.getConConnectorEditingTreat());
       }
@@ -1061,18 +1171,21 @@ public class WinRepositoryPopupMenu extends SPopupMenu {
       ConConnector conConnector = (ConConnector) this.node.getUserObject();
       ConConnectorEditingTreat conConnectorEditingTreat = conConnector.getConConnectorEditingTreat();
       this.treatGenericRead(this, conConnectorEditingTreat);
-      if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
+      if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE()
+          == ConDBMode.CONNECTOR) {
         this.treatGenericUpdate(this, conConnectorEditingTreat);
       }
       this.treatGenericDelete(this, conConnectorEditingTreat);
-      if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE() == ConDBMode.CONNECTOR) {
+      if (PreferencesManager.instance().getApplicationPref().getCON_DB_MODE()
+          == ConDBMode.CONNECTOR) {
         this.treatGenericCompletness(this, conConnectorEditingTreat);
       }
     }
   }
 
   private void exceptionUnhandled(Exception e, MVCCDElement mvccdElement, String propertyAction) {
-    ExceptionService.exceptionUnhandled(e, this.mvccdWindow, mvccdElement, "repository.menu.exception", propertyAction);
+    ExceptionService.exceptionUnhandled(e, this.mvccdWindow, mvccdElement,
+        "repository.menu.exception", propertyAction);
   }
 
   private void addItem(ISMenu menu, JMenuItem menuItem) {

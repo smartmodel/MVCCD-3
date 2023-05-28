@@ -28,15 +28,15 @@ public class LabelShapeListener extends MouseAdapter implements Serializable {
 
   @Override
   public void mouseDragged(MouseEvent e) {
-    final LabelShape shape = (LabelShape) e.getSource();
+    LabelShape shape = (LabelShape) e.getSource();
 
-    final int differenceX = e.getPoint().x - this.origin.x;
-    final int differenceY = e.getPoint().y - this.origin.y;
+    int differenceX = e.getPoint().x - this.origin.x;
+    int differenceY = e.getPoint().y - this.origin.y;
 
     shape.setDistanceInXFromPointAncrage(shape.getDistanceInXFromPointAncrage() + differenceX);
     shape.setDistanceInYFromPointAncrage(shape.getDistanceInYFromPointAncrage() + differenceY);
 
-    shape.repaint();
+    shape.setBounds(shape.getX() + differenceX, shape.getY() + differenceY, shape.getWidth(), shape.getHeight());
   }
 
 }

@@ -1,9 +1,3 @@
-/***
- * Cette classe peut être utilisée en l'état actuel. Elle gère la création d'une relation selon le bouton cliqué dans la palette.
- * Auteur : Melvyn Vogelsang
- * Dernière mise à jour : 17.05.2023
- */
-
 package window.editor.diagrammer.utils;
 
 import main.MVCCDManager;
@@ -12,10 +6,7 @@ import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
-import window.editor.diagrammer.elements.shapes.relations.mcd.MCDAssociationShape;
-import window.editor.diagrammer.elements.shapes.relations.mcd.MCDCompositionShape;
-import window.editor.diagrammer.elements.shapes.relations.mcd.MCDGeneralizationShape;
-import window.editor.diagrammer.elements.shapes.relations.mcd.MCDLinkShape;
+import window.editor.diagrammer.elements.shapes.relations.mcd.*;
 import window.editor.diagrammer.palette.PalettePanel;
 import window.editor.diagrammer.services.DiagrammerService;
 
@@ -45,28 +36,35 @@ public final class RelationCreator {
             switch (PalettePanel.activeButton.getText()) {
                 case Preferences.DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT:
                     // Généralisation
-                    System.out.println("généralization créée");
                     relation = new MCDGeneralizationShape((MCDEntityShape) RelationCreator.source, (MCDEntityShape) RelationCreator.destination);
                     break;
                 case Preferences.DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT:
                     // Association
-                    System.out.println("associatio créée");
                     relation = new MCDAssociationShape((MCDEntityShape) RelationCreator.source, (MCDEntityShape) RelationCreator.destination, false);
                     break;
                 case Preferences.DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT:
                     // Composition
-                    System.out.println("composition créée");
                     relation = new MCDCompositionShape((MCDEntityShape) RelationCreator.source, (MCDEntityShape) RelationCreator.destination);
+                    break;
+                case Preferences.DIAGRAMMER_PALETTE_NATURAL_IDENTIFIER_BUTTON_TEXT:
+                    // Identifiant naturel
+                    relation = new MCDNaturalIdentifierShape(source, destination, false);
                     break;
                 case Preferences.DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT:
                     // Réflexive
-                    System.out.println("réflexive créée");
                     relation = new MCDAssociationShape((MCDEntityShape) RelationCreator.source, (MCDEntityShape) RelationCreator.destination, true);
                     break;
                 case Preferences.DIAGRAMMER_PALETTE_ENTITE_ASSOCIATIVE:
                     // Entité associative
-                    System.out.println("entité associative créée");
+                    System.out.println(destination.getClass().getName());
                     relation = new MCDLinkShape((MCDEntityShape) RelationCreator.source, (RelationShape) RelationCreator.destination);
+                    break;
+                case Preferences.DIAGRAMMER_PALETTE_ANCHOR_BUTTON:
+                    if (destination instanceof RelationShape) {
+                        relation = new MCDAnchorShape(source, (RelationShape) destination);
+                    } else {
+                        relation = new MCDAnchorShape(source, (SquaredShape) destination);
+                    }
             }
 
             // Ajoute l'élément au diagramme courant et au diagrammeur

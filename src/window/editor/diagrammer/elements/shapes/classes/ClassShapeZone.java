@@ -31,4 +31,5 @@ public class ClassShapeZone extends Rectangle {
   public void setElements(List<String> elements) {
     this.elements = elements;
   }
+
 }

@@ -1,37 +1,26 @@
-/***
- * Cette classe peut être utilisée en l'état actuel. Elle gère la bordure redimensionnable d'une forme dans ArcDataModeler.
- * Auteur : Melvyn Vogelsang
- * Dernière mise à jour : 17.05.2023
- */
-
 package window.editor.diagrammer.utils;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 public final class ResizableBorder implements Border, Serializable {
 
   private static final long serialVersionUID = 1000;
-  private boolean isVisible = false;
-
   private final int DISTANCE = 8;
   int[] locations = {SwingConstants.NORTH, SwingConstants.SOUTH, SwingConstants.WEST, SwingConstants.EAST};
   int[] cursors = {Cursor.N_RESIZE_CURSOR, Cursor.S_RESIZE_CURSOR, Cursor.W_RESIZE_CURSOR, Cursor.E_RESIZE_CURSOR};
+  private boolean isVisible = false;
 
   @Override
   public void paintBorder(Component component, Graphics g, int x, int y, int w, int h) {
-    if (this.isVisible) {
-      for (int location : this.locations) {
-        Rectangle rect = this.getRectangle(x, y, w, h, location);
-        g.setColor(Color.WHITE);
-        g.fillRect(rect.x, rect.y, rect.width - 1, rect.height - 1);
-        g.setColor(Color.BLACK);
-        g.drawRect(rect.x, rect.y, rect.width - 1, rect.height - 1);
-      }
-    }
+
   }
 
   @Override
@@ -47,7 +36,7 @@ public final class ResizableBorder implements Border, Serializable {
   private Rectangle getRectangle(int x, int y, int width, int height, int location) {
     switch (location) {
       case SwingConstants.NORTH:
-        return new Rectangle(x , y, width, this.DISTANCE);
+        return new Rectangle(x, y, width, this.DISTANCE);
       case SwingConstants.SOUTH:
         return new Rectangle(x, y + height - this.DISTANCE, width, this.DISTANCE);
       case SwingConstants.WEST:
@@ -59,7 +48,7 @@ public final class ResizableBorder implements Border, Serializable {
     }
   }
 
-  public boolean isOneRectangleHovered(MouseEvent e){
+  public boolean isOneRectangleHovered(MouseEvent e) {
     Component component = e.getComponent();
     final int width = component.getWidth();
     final int height = component.getHeight();

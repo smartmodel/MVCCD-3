@@ -8,14 +8,18 @@
 package window.editor.diagrammer.elements.shapes.relations.mcd;
 
 import mcd.MCDAssociation;
+import mcd.MCDAssociationNature;
 import preferences.Preferences;
+import preferences.PreferencesManager;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
 import window.editor.diagrammer.services.DiagrammerService;
+import window.editor.diagrammer.utils.UIUtils;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
 
@@ -47,6 +51,23 @@ public class MCDAssociationShape extends RelationShape implements Serializable {
 
     @Override
     public void doDraw(Graphics2D graphics2D) {
+        MCDAssociation relatedAssociation = this.getMCDAssociation();
+        boolean isUMLNotation = PreferencesManager.instance().getApplicationPref().isDIAGRAMMER_UML_NOTATION();
+
+        if (relatedAssociation != null) {
+            if (relatedAssociation.getNature() == MCDAssociationNature.IDCOMP) {
+                // Association identifiante
+                if (isUMLNotation) {
+                    this.drawDiamond(graphics2D, Color.BLACK, Color.BLACK);
+                } else {
+                    // Ajouter le label abec <<CID>>
+                }
+
+            } else if (relatedAssociation.getNature() == MCDAssociationNature.IDNATURAL) {
+                // Association identifiante naturelle
+                this.drawDiamond(graphics2D, Color.WHITE, Color.BLACK);
+            }
+        }
     }
 
     @Override
@@ -68,7 +89,7 @@ public class MCDAssociationShape extends RelationShape implements Serializable {
                 int middleIndex = this.anchorPoints.size() / 2;
                 labelShape = this.createOrUpdateLabel(this.anchorPoints.get(middleIndex), association.getName(), LabelType.ASSOCIATION_NAME, 0, 0);
             }
-            DiagrammerService.getDrawPanel().add(labelShape);
+            DiagrammerService.getDrawPanel().add(labelShape, JLayeredPane.DRAG_LAYER);
         } else {
             this.deleteLabel(LabelType.ASSOCIATION_NAME);
         }
@@ -76,7 +97,7 @@ public class MCDAssociationShape extends RelationShape implements Serializable {
         // Rôle source
         if (!association.getFrom().getName().isEmpty()) {
             LabelShape labelShape = this.createOrUpdateLabel(this.getFirstPoint(), association.getFrom().getName(), LabelType.SOURCE_ROLE, 0, 0);
-            DiagrammerService.getDrawPanel().add(labelShape);
+            DiagrammerService.getDrawPanel().add(labelShape, JLayeredPane.DRAG_LAYER);
         } else {
             this.deleteLabel(LabelType.SOURCE_ROLE);
         }
@@ -84,7 +105,7 @@ public class MCDAssociationShape extends RelationShape implements Serializable {
         // Rôle destination
         if (!association.getTo().getName().isEmpty()) {
             LabelShape labelShape = this.createOrUpdateLabel(this.getLastPoint(), association.getTo().getName(), LabelType.DESTINATION_ROLE, 0, 0);
-            DiagrammerService.getDrawPanel().add(labelShape);
+            DiagrammerService.getDrawPanel().add(labelShape, JLayeredPane.DRAG_LAYER);
         } else {
             this.deleteLabel(LabelType.DESTINATION_ROLE);
         }
@@ -92,7 +113,7 @@ public class MCDAssociationShape extends RelationShape implements Serializable {
         // Cardinalités source
         if (!association.getFrom().getMultiStr().isEmpty()) {
             LabelShape labelShape = this.createOrUpdateLabel(this.getFirstPoint(), association.getFrom().getMultiStr(), LabelType.SOURCE_CARDINALITY, 0, 0);
-            DiagrammerService.getDrawPanel().add(labelShape);
+            DiagrammerService.getDrawPanel().add(labelShape, JLayeredPane.DRAG_LAYER);
         } else {
             this.deleteLabel(LabelType.SOURCE_CARDINALITY);
         }
@@ -100,7 +121,7 @@ public class MCDAssociationShape extends RelationShape implements Serializable {
         // Cardinalités destination
         if (!association.getTo().getMultiStr().isEmpty()) {
             LabelShape labelShape = this.createOrUpdateLabel(this.getLastPoint(), association.getTo().getMultiStr(), LabelType.DESTINATION_CARDINALITY, 0, 0);
-            DiagrammerService.getDrawPanel().add(labelShape);
+            DiagrammerService.getDrawPanel().add(labelShape, JLayeredPane.DRAG_LAYER);
         } else {
             this.deleteLabel(LabelType.DESTINATION_CARDINALITY);
         }
@@ -120,6 +141,47 @@ public class MCDAssociationShape extends RelationShape implements Serializable {
 
     public void setMCDAssociation(MCDAssociation association) {
         this.relatedRepositoryElement = association;
+    }
+
+    protected void drawDiamond(Graphics2D graphics2D, Color diamondBackgroundColor, Color diamondBorderColor) {
+        RelationAnchorPointShape previousPoint = this.anchorPoints.get(this.getLastPoint().getIndex() - 1);
+        RelationAnchorPointShape lastPoint = this.getLastPoint();
+
+        int NUMBER_OF_POINTS = 4;
+        int DIAMOND_WIDTH = (int) UIUtils.getCompositionDiamondWidth();
+        int DIAMOND_HEIGHT = (int) UIUtils.getCompositionDiamondHeight();
+
+        int dx = lastPoint.x - previousPoint.x, dy = lastPoint.y - previousPoint.y;
+        double D = Math.sqrt(dx * dx + dy * dy);
+
+        double xm = D - DIAMOND_HEIGHT;
+        double xn = xm;
+        double ym = DIAMOND_WIDTH;
+        double yn = -DIAMOND_WIDTH, x;
+
+        double sin = dy / D;
+        double cos = dx / D;
+
+        x = xm * cos - ym * sin + previousPoint.x;
+        ym = xm * sin + ym * cos + previousPoint.y;
+        xm = x;
+        x = xn * cos - yn * sin + previousPoint.x;
+        yn = xn * sin + yn * cos + previousPoint.y;
+        xn = x;
+
+        double xq = (DIAMOND_HEIGHT * 2 / D) * previousPoint.x + ((D - DIAMOND_HEIGHT * 2) / D) * lastPoint.x;
+        double yq = (DIAMOND_HEIGHT * 2 / D) * previousPoint.y + ((D - DIAMOND_HEIGHT * 2) / D) * lastPoint.y;
+
+        int[] xpoints = {lastPoint.x, (int) xm, (int) xq, (int) xn};
+        int[] ypoints = {lastPoint.y, (int) ym, (int) yq, (int) yn};
+
+        // Dessine le diamant
+        graphics2D.setColor(diamondBackgroundColor);
+        graphics2D.fillPolygon(xpoints, ypoints, NUMBER_OF_POINTS);
+
+        // Dessine la bordure autour du diamant
+        graphics2D.setColor(diamondBorderColor);
+        graphics2D.drawPolygon(xpoints, ypoints, NUMBER_OF_POINTS);
     }
 
 }

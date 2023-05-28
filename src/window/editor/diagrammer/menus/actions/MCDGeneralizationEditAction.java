@@ -8,6 +8,7 @@
 package window.editor.diagrammer.menus.actions;
 
 import main.MVCCDManager;
+import mcd.MCDEntity;
 import mcd.MCDGeneralization;
 import repository.editingTreat.mcd.MCDGeneralizationEditingTreat;
 import window.editor.diagrammer.elements.shapes.relations.mcd.MCDGeneralizationShape;
@@ -44,7 +45,11 @@ public class MCDGeneralizationEditAction extends AbstractAction implements Seria
   private void create() {
     MVCCDManager manager = MVCCDManager.instance();
     MCDGeneralizationEditingTreat mcdGeneralizationEditingTreat = new MCDGeneralizationEditingTreat();
-    MCDGeneralization generalization = mcdGeneralizationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations());
+
+    MCDEntity source = (MCDEntity) this.shape.getSource().getRelatedRepositoryElement();
+    MCDEntity destination = (MCDEntity) this.shape.getDestination().getRelatedRepositoryElement();
+
+    MCDGeneralization generalization = mcdGeneralizationEditingTreat.treatNew(manager.getMvccdWindow(), manager.getProject().getMCDContModels().getRelations(), source, destination, false);
 
     this.shape.setGeneralization(generalization);
   }

@@ -1,6 +1,7 @@
 package main.window.repository;
 
 import diagram.Diagram;
+import diagram.mpdr.MPDRDiagram;
 import main.MVCCDManager;
 import project.Project;
 import project.ProjectElement;
@@ -23,6 +24,7 @@ public class WinRepositoryTree extends JTree {
 
     private DefaultTreeModel treeModel;
 
+
     public WinRepositoryTree(DefaultTreeModel treeModel) {
         this.setModel(treeModel);
         this.treeModel = treeModel;
@@ -32,19 +34,22 @@ public class WinRepositoryTree extends JTree {
 
         // add MouseListener to tree
         MouseAdapter ma = new MouseAdapter() {
-            public void mouseClicked(MouseEvent e){
+            @Override
+            public void mouseClicked(MouseEvent e) {
                 JTree tree = (JTree) e.getSource();
                 TreePath path = tree.getPathForLocation(e.getX(), e.getY());
 
                 tree.setSelectionPath(path);
 
-                if (path == null) return;
+                if (path == null) {
+                    return;
+                }
 
-                DefaultMutableTreeNode clickedNode = (DefaultMutableTreeNode)path.getLastPathComponent();
+                DefaultMutableTreeNode clickedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
 
-                if (clickedNode != null){
-                    if (clickedNode.getUserObject() instanceof Diagram){
-                        if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e) && !e.isConsumed()){
+                if (clickedNode != null) {
+                    if (clickedNode.getUserObject() instanceof Diagram) {
+                        if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e) && !e.isConsumed()) {
                             e.consume();
                             DiagrammerService.getDrawPanel().unloadAllShapes();
                             Diagram diagramClicked = (Diagram) clickedNode.getUserObject();
@@ -54,30 +59,38 @@ public class WinRepositoryTree extends JTree {
                 }
             }
 
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    this.myPopupEvent(e);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    this.myPopupEvent(e);
+                }
+            }
+
             private void myPopupEvent(MouseEvent e) {
                 int x = e.getX();
                 int y = e.getY();
-                JTree tree = (JTree)e.getSource();
+                JTree tree = (JTree) e.getSource();
                 TreePath path = tree.getPathForLocation(x, y);
-                if (path == null)
+                if (path == null) {
                     return;
+                }
 
                 tree.setSelectionPath(path);
 
-                DefaultMutableTreeNode clickedNode =
-                        (DefaultMutableTreeNode)path.getLastPathComponent();
+                DefaultMutableTreeNode clickedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
 
-                if(clickedNode != null){
+                if (clickedNode != null) {
 
-                    WinRepositoryPopupMenu popup = new WinRepositoryPopupMenu (clickedNode);
+                    WinRepositoryPopupMenu popup = new WinRepositoryPopupMenu(clickedNode);
                     popup.show(tree, x, y);
                 }
-            }
-            public void mousePressed(MouseEvent e) {
-                if (e.isPopupTrigger()) myPopupEvent(e);
-            }
-            public void mouseReleased(MouseEvent e) {
-                if (e.isPopupTrigger()) myPopupEvent(e);
             }
         };
         this.addMouseListener(ma);
@@ -86,11 +99,9 @@ public class WinRepositoryTree extends JTree {
         TreeSelectionListener ts = new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent evt) {
-                if (evt.getNewLeadSelectionPath() != null)
-                {
+                if (evt.getNewLeadSelectionPath() != null) {
                     // récupérer le noeud sélectionné
-                    DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-                            evt.getNewLeadSelectionPath().getLastPathComponent();
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) evt.getNewLeadSelectionPath().getLastPathComponent();
                 }
             }
         };
@@ -99,22 +110,22 @@ public class WinRepositoryTree extends JTree {
         TreeExpansionListener te = new TreeExpansionListener() {
             @Override
             public void treeExpanded(TreeExpansionEvent evt) {
-                memorizeLastNodeUsed(evt, true);
+                this.memorizeLastNodeUsed(evt, true);
             }
 
             @Override
             public void treeCollapsed(TreeExpansionEvent evt) {
-                memorizeLastNodeUsed(evt, false);
+                this.memorizeLastNodeUsed(evt, false);
             }
 
-            private void memorizeLastNodeUsed(TreeExpansionEvent evt, boolean expandCollapse){
+            private void memorizeLastNodeUsed(TreeExpansionEvent evt, boolean expandCollapse) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) evt.getPath().getLastPathComponent();
 
                 ProjectElement lastProjectElement = null;
-                if (node.getUserObject() instanceof ProjectElement){
+                if (node.getUserObject() instanceof ProjectElement) {
                     lastProjectElement = (ProjectElement) node.getUserObject();
                 }
-                if ( MVCCDManager.instance().getProject() != null) {
+                if (MVCCDManager.instance().getProject() != null) {
                     MVCCDManager.instance().getProject().setLastWinRepositoryProjectElement(lastProjectElement);
                     MVCCDManager.instance().getProject().setLastWinRepositoryExpand(expandCollapse);
                 }
@@ -123,45 +134,42 @@ public class WinRepositoryTree extends JTree {
         this.addTreeExpansionListener(te);
 
     }
+
     public DefaultMutableTreeNode addObject(Object child) {
         DefaultMutableTreeNode parentNode = null;
         TreePath parentPath = this.getSelectionPath();
 
         if (parentPath == null) {
             //There is no selection. Default to the root node.
-            parentNode = (DefaultMutableTreeNode) treeModel.getRoot(); //rootNode;
+            parentNode = (DefaultMutableTreeNode) this.treeModel.getRoot(); //rootNode;
         } else {
-            parentNode = (DefaultMutableTreeNode)
-                    (parentPath.getLastPathComponent());
+            parentNode = (DefaultMutableTreeNode) (parentPath.getLastPathComponent());
         }
 
-        return addObject(parentNode, child, true);
+        return this.addObject(parentNode, child, true);
     }
 
-    public DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent,
-                                            Object child,
-                                            boolean shouldBeVisible) {
-        DefaultMutableTreeNode childNode =
-                new DefaultMutableTreeNode(child);
+    public DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent, Object child, boolean shouldBeVisible) {
+        DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
 
-        treeModel.insertNodeInto(childNode, parent,
-                parent.getChildCount());
+        this.treeModel.insertNodeInto(childNode, parent, parent.getChildCount());
         //Make sure the user can see the lovely new node.
         if (shouldBeVisible) {
             this.scrollPathToVisible(new TreePath(childNode.getPath()));
         }
 
-        //treeModel.reload(parent);
         return childNode;
     }
 
-    public void changeModel(DefaultTreeModel treeModel){
-       this.setModel(treeModel);
-       this.treeModel = treeModel;
+
+    public void changeModel(DefaultTreeModel treeModel) {
+        this.setModel(treeModel);
+        this.treeModel = treeModel;
+        this.updateIcons();
     }
 
     public DefaultTreeModel getTreeModel() {
-        return treeModel;
+        return this.treeModel;
     }
 
     public void showLastPath(Project project) {
@@ -179,5 +187,11 @@ public class WinRepositoryTree extends JTree {
                 }
             }
         }
+    }
+
+    public void updateIcons() {
+        // Récupérer tous les noeuds du référentiel
+        int rowCount = this.getRowCount();
+
     }
 }

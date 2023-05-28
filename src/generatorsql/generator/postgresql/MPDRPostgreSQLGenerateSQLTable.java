@@ -1,7 +1,13 @@
 package generatorsql.generator.postgresql;
 
-import generatorsql.generator.*;
+import generatorsql.generator.MPDRGenerateSQL;
+import generatorsql.generator.MPDRGenerateSQLCheck;
+import generatorsql.generator.MPDRGenerateSQLPK;
+import generatorsql.generator.MPDRGenerateSQLTable;
+import generatorsql.generator.MPDRGenerateSQLTableColumn;
+import generatorsql.generator.MPDRGenerateSQLUnique;
 import mpdr.MPDRTable;
+import mpdr.interfaces.IMPDRTable;
 
 public class MPDRPostgreSQLGenerateSQLTable extends MPDRGenerateSQLTable {
 
@@ -12,7 +18,7 @@ public class MPDRPostgreSQLGenerateSQLTable extends MPDRGenerateSQLTable {
     }
 
     public String generateSQLCreateTable(MPDRTable mpdrTable) {
-        String generateSQLCode = super.generateSQLCreateTable(mpdrTable);
+        String generateSQLCode = super.generateSQLCreateTable((IMPDRTable) mpdrTable);
         return generateSQLCode ;
     }
 

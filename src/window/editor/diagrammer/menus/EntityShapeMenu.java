@@ -1,31 +1,25 @@
-/***
- * Cette classe peut être utilisée en l'état actuel. Elle gère le menu affiché lors d'un clic droit sur une entité MCD
- * Auteur : Melvyn Vogelsang
- * Dernière mise à jour : 17.05.2023
- */
-
-
 package window.editor.diagrammer.menus;
 
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
-import window.editor.diagrammer.menus.actions.MCDEntityShapeDeleteAction;
+import window.editor.diagrammer.menus.actions.MCDEntityShapeDeleteActions;
 import window.editor.diagrammer.menus.actions.MCDEntityShapeEditAction;
 
 import javax.swing.*;
 import java.io.Serializable;
 
-public class EntityShapeMenu extends JPopupMenu implements Serializable {
+public class EntityShapeMenu extends CommonMenu implements Serializable {
 
   private static final long serialVersionUID = 1000;
 
   public EntityShapeMenu(MCDEntityShape shape) {
-    super();
+    super(shape);
+    JMenuItem deleteObject = new JMenuItem(
+            new MCDEntityShapeDeleteActions("Supprimer l'objet et sa représentation graphique", null, shape));
 
-    JMenuItem edit = new JMenuItem(new MCDEntityShapeEditAction("Ouvrir l'assistant de modélisation", null, shape));
+    JMenuItem edit = new JMenuItem(
+        new MCDEntityShapeEditAction("Ouvrir l'assistant de modélisation", null, shape));
+
+    this.add(deleteObject);
     this.add(edit);
-
-    JMenuItem delete = new JMenuItem(new MCDEntityShapeDeleteAction("Supprimer l'entité", null, shape));
-    this.add(delete);
-
   }
 }
