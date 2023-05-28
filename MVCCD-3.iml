@@ -13,5 +13,6 @@
     <orderEntry type="library" name="org.apache.directory.studio:org.apache.commons.lang:2.6" level="project" />
     <orderEntry type="library" name="flatlaf-2.2" level="project" />
     <orderEntry type="library" name="flatlaf-2.3" level="project" />
+    <orderEntry type="library" name="flatlaf-3.1.1" level="project" />
   </component>
 </module>
