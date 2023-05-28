@@ -23,6 +23,7 @@ import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
 import window.editor.diagrammer.utils.GeometryUtils;
+import window.editor.diagrammer.utils.UIUtils;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -115,11 +116,11 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     this.drawZoneProprietesBorder(graphics2D);
   }
 
-  private int getCenterTextPositionX(String element, Graphics2D graphics2D) {
+  public int getCenterTextPositionX(String element, Graphics2D graphics2D) {
     return this.getWidth() / 2 - graphics2D.getFontMetrics().stringWidth(element) / 2;
   }
 
-  private int getZoneMinHeight(List<String> elements) {
+  public int getZoneMinHeight(List<String> elements) {
     FontMetrics fontMetrics = this.getFontMetrics(UIUtils.getShapeFont());
     double minHeight = UIUtils.getClassPadding() * 2;
     minHeight += fontMetrics.getHeight() * elements.size();
@@ -141,7 +142,7 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     graphics2D.drawRect(0, this.getZoneMinHeight(this.zoneEnTete.getElements()), this.getWidth() - 1, (int) (height - 1));
   }
 
-  private void drawElements(Graphics2D graphics2D, List<String> elements, int y, Font font) {
+  public void drawElements(Graphics2D graphics2D, List<String> elements, int y, Font font) {
     graphics2D.setFont(font);
     double x = UIUtils.getClassPadding();
     for (String element : elements) {
@@ -176,14 +177,7 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     this.setMinimumSize(UIUtils.getClassShapeDefaultSize());
   }
 
-  @Override
-  protected void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    Graphics2D graphics2D = (Graphics2D) g;
-    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    this.drawZoneEnTete(graphics2D);
-    this.drawZoneProprietes(graphics2D);
-  }
+
 
   public void updateRelations() {
     for (RelationShape relation : DiagrammerService.getDrawPanel().getRelationShapes()) {

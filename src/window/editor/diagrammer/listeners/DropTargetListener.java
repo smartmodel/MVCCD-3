@@ -2,9 +2,11 @@ package window.editor.diagrammer.listeners;
 
 import console.ViewLogsManager;
 import diagram.Diagram;
+import diagram.mcd.MCDDiagram;
 import diagram.mpdr.MPDRDiagram;
 import m.MElement;
 import main.MVCCDManager;
+import mcd.MCDEntity;
 import mdr.MDRRelationFK;
 import mdr.MDRTable;
 import mpdr.MPDRRelFKEnd;
@@ -12,6 +14,7 @@ import window.editor.diagrammer.drawpanel.DrawPanel;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.*;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
+import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.DependencyLinkShape;
 import window.editor.diagrammer.elements.shapes.relations.MPDRelationShape;
 import window.editor.diagrammer.services.DiagrammerService;
@@ -69,6 +72,12 @@ public class DropTargetListener extends DropTargetAdapter {
 
         this.panel.revalidate();
         event.dropComplete(true);
+      } else if (currentDiagram instanceof MCDDiagram){
+        System.out.println(node.getUserObject().getClass());
+        if (node.getUserObject() instanceof MCDEntity){
+          MCDEntityShape entityShape = new MCDEntityShape((MCDEntity) node.getUserObject());
+          addShapeToDiagram(mouseClick, entityShape);
+        }
       }
     } catch (Exception e) {
       ViewLogsManager.catchException(e,

@@ -79,6 +79,11 @@ public class UMLPackage extends SquaredShape {
   }
 
   @Override
+  protected void defineSizeAtDefaultZoom() {
+
+  }
+
+  @Override
   public String getName() {
     return name;
   }

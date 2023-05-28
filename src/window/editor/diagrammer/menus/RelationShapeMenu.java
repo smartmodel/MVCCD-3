@@ -22,6 +22,7 @@ public class RelationShapeMenu extends JPopupMenu implements Serializable {
 
   public RelationShapeMenu(RelationShape shape, int x, int y) {
     super();
+    JMenuItem edit = null;
     if (shape instanceof MCDAssociationShape) {
       edit = new JMenuItem(new MCDAssociationEditAction("Ouvrir l'assistant de modélisation", null,
           (MCDAssociationShape) shape));

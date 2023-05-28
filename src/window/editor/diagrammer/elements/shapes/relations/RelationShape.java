@@ -2,6 +2,7 @@ package window.editor.diagrammer.elements.shapes.relations;
 
 import m.interfaces.IMRelation;
 import main.MVCCDManager;
+import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
@@ -34,7 +35,7 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
   protected SquaredShape source;
   protected IShape destination;
   protected IMRelation relation;
-  protected IMRelation relatedRepositoryElement;
+  protected MDElement relatedRepositoryElement;
   protected boolean isReflexive;
   protected List<LabelShape> labels = new ArrayList<>();
 
@@ -120,6 +121,11 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
     }
 
     @Override
+    public MDElement getRelatedRepositoryElement() {
+        return relatedRepositoryElement;
+    }
+
+    @Override
     public int getId() {
         return this.id;
     }
@@ -189,10 +195,6 @@ public abstract class RelationShape extends JComponent implements IShape, Serial
         DiagrammerService.getDrawPanel().repaint();
     }
 
-    @Override
-    public MDElement getRelatedRepositoryElement() {
-        return this.relatedRepositoryElement;
-    }
 
     @Override
     public void setSize(int width, int height) {

@@ -144,140 +144,38 @@ public class Preferences extends MVCCDElement {
   public static String CON_DBNAME_REGEXPR = "^[0-9a-zA-Z$_]+$"; //Provient de  : https://stackoverflow.com/questions/6731833/database-name-regex-restriction
   public static String REGEXPR_1_99 = "[1-9]{1}[0-9]{0,1}";
   public static String NAME_NOTMODEL_REGEXPR = "[a-zA-Z0-9_]*";
-    public static final int CON_NAME_LENGTH = 40;
-    public static final int CON_HOSTNAME_LENGTH = 100;
-    public static final int CON_DBNAME_LENGTH = 40;
-    public static final int CON_PORT_MIN = 0;
-    public static final int CON_PORT_MAX = 6553;
-    public static final int CON_PORT_DEFAULT_ORACLE = 1521;
-    public static final int CON_PORT_DEFAULT_MYSQL = 3306;
-    public static final int CON_PORT_DEFAULT_POSTGRESQL = 5432;
-    public static final String CON_HOSTNAME_WORD = "hostName";
-    public static final String CON_PORT_WORD = "port";
-    public static final String CON_DBNAME_WORD = "dbName";
-    public static final String CON_DBNAME_ID_MARKER = "dbNameId";  // : pour SID et / ServiceName par exemple :Oracle
-    public static final String CON_URL_TEMPLATE_ORACLE = "jdbc:oracle:thin:@{" + CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD + "}{" + CON_DBNAME_ID_MARKER + "}{" + CON_DBNAME_WORD + "}";
-    public static final String CON_URL_TEMPLATE_MYSQL = "jdbc:mysql://{" + CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD + "}/{" + CON_DBNAME_WORD + "}";
-    public static final String CON_URL_TEMPLATE_POSTGRESQL = "jdbc:postgresql://{" + CON_HOSTNAME_WORD + "}:{" + CON_PORT_WORD + "}/{" + CON_DBNAME_WORD + "}";
-    public static final String CON_FOR_NAME_ORACLE = "oracle.jdbc.driver.OracleDriver";
-    public static final String CON_FOR_NAME_MYSQL = "com.mysql.jdbc.Driver";
-    public static final String CON_FOR_NAME_POSTGRESQL = "org.postgresql.Driver";
-    public static final String CON_IDDB_NAME_STD = "con.iddb.name.std";
-    public static final String CON_IDDB_NAME_SID = "con.iddb.name.sid";
-    public static final String CON_IDDB_NAME_SERVICE_NAME = "con.iddb.name.service.name";
-    public static final String CON_IDDB_NAME_SID_ORACLE_MARKER = ":";
-    public static final String CON_IDDB_NAME_SERVICE_NAME_ORACLE_MARKER = "/";
 
-    public static final String DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME = "DrawPanelContainer";
-    public static final String DIAGRAMMER_DRAW_PANEL_NAME = "DrawPanel";
-    public static final String DIAGRAMMER_PALETTE_PANEL_NAME = "PalettePanel";
-    public static final int DIAGRAMMER_MINIMUM_ALLOWED_ZOOM = 4;
-    public static final int DIAGRAMMER_MAXIMUM_ALLOWED_ZOOM = 25;
+
     public static final int DIAGRAMMER_DEFAULT_ANCHOR_POINT_SIZE = 10;
-    public static final int DIAGRAMMER_DEFAULT_GRID_SIZE = 10;
     public static final int DIAGRAMMER_ELEMENTS_DEFAULT_FONT_SIZE = 13;
-    public static final int DIAGRAMMER_DEFAULT_ENTITY_POSITION_X = 60;
-    public static final int DIAGRAMMER_DEFAULT_ENTITY_POSITION_Y = 60;
-    public static final int DIAGRAMMER_DEFAULT_CLASS_WIDTH = 200;
-    public static final int DIAGRAMMER_DEFAULT_CLASS_HEIGHT = 100;
-    public static final int DIAGRAMMER_DEFAULT_NOTE_WIDTH = 100;
-    public static final int DIAGRAMMER_DEFAULT_NOTE_HEIGHT = 70;
+
+
     public static final int DIAGRAMMER_DEFAULT_NOTE_CORNER_SIZE = 20;
-    public static final int DIAGRAMMER_CLASS_PADDING = 10;
     public static final int DIAGRAMMER_NOTE_PADDING = 15;
     public static final int DIAGRAMMER_LABEL_PADDING = 5;
-    public static final int DIAGRAMMER_RELATION_CLICK_AREA = 15;
     public static final int DIAGRAMMER_RELATION_DIAMOND_WIDTH = 8;
     public static final int DIAGRAMMER_RELATION_DIAMOND_HEIGHT = 13;
     public static final int DIAGRAMMER_GENERALIZATION_WIDTH = 8;
     public static final int DIAGRAMMER_GENERALIZATION_HEIGHT = 13;
-    public static final int DIAGRAMMER_SHAPE_HOVERED_AREA_MARGIN = 7;
-    public static final Color DIAGRAMMER_ENTITY_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
-    public static final Color DIAGRAMMER_NOTE_DEFAULT_BACKGROUND_COLOR = new Color(125, 200, 243);
-    public static final Font DIAGRAMMER_CLASS_NAME_FONT = new Font("Arial", Font.BOLD, 13);
+
     public static final String DIAGRAMMER_DEFAULT_FONT_FAMILY = "Arial";
-    public static final Font DIAGRAMMER_CLASS_FONT = new Font("Arial", Font.PLAIN, 13);
-    public static final Font DIAGRAMMER_ABSTRACT_CLASS_NAME_FONT = new Font("Arial", Font.ITALIC + Font.BOLD, 13);
-    public static final String DIAGRAMMER_PALETTE_ENTITE_BUTTON_TEXT = "Entité";
-    public static final String DIAGRAMMER_PALETTE_ASSOCIATION_BUTTON_TEXT = "Association";
-    public static final String DIAGRAMMER_PALETTE_GENERALIZATION_BUTTON_TEXT = "Généralisation";
-    public static final String DIAGRAMMER_PALETTE_COMPOSITION_BUTTON_TEXT = "Association de composition";
+
     public static final String DIAGRAMMER_PALETTE_NATURAL_IDENTIFIER_BUTTON_TEXT = "Association identifiante naturelle";
-    public static final String DIAGRAMMER_PALETTE_NOTE_BUTTON_TEXT = "Note";
     public static final String DIAGRAMMER_PALETTE_ANCHOR_BUTTON = "Ancre";
     public static final String DIAGRAMMER_CID_STEREOTYPE = "<<CID>>";
     public static final String DIAGRAMMER_NID_STEREOTYPE = "<<NID>>";
-    public static final String DIAGRAMMER_PALETTE_ASSOCIATION_REFLEXIVE_BUTTON_TEXT = "Association réflexive";
-    public static final String DIAGRAMMER_PALETTE_ENTITE_ASSOCIATIVE = "Entité associative";
-    public static final String DIAGRAMMER_ENTITY_STEREOTYPE_TEXT = "<<Entity>>";
-    public static final String DIAGRAMMER_ENTITY_ORDERED_TEXT = "{ordered}";
-    public static final String DIAGRAMMER_MCD_ENTITY_XML_TAG = "mcdEntityShape";
-    public static final String DIAGRAMMER_MCD_ASSOCIATION_XML_TAG = "mcdAssociationShape";
-    public static final String DIAGRAMMER_MCD_GENERALIZATION_XML_TAG = "mcdGeneralizationShape";
-    public static final String DIAGRAMMER_MCD_LINK_XML_TAG = "mcdLinkShape";
+
     public static final String DIAGRAMMER_MCD_ANCHOR_XML_TAG = "mcdAnchorShape";
-    public static final String DIAGRAMMER_MCD_COMPOSITION_XML_TAG = "mcdCompositionShape";
     public static final String DIAGRAMMER_MCD_NATURAL_IDENTIFIER_XML_TAG = "mcdNaturalIdentifierShape";
-    public static final String DIAGRAMMER_RELATION_ANCHOR_POINT_XML_TAG = "anchorPoint";
-    public static final String DIAGRAMMER_LABEL_XML_TAG = "labelShape";
-    public static final String DIAGRAMMER_LABELS_XML_TAG_NAME = "labelShapes";
-    public static final String DIAGRAMMER_ANCHOR_POINTS_XML_TAG_NAME = "anchorPoints";
     public static final String DIAGRAMMER_MENU_OPEN_MODELING_ASSISTANT_TEXT = "Ouvrir l'assistant de modélisation";
     public static final String DIAGRAMMER_MENU_ADD_ANCHOR_POINT_TEXT = "Ajouter un point d'ancrage";
     public static final String DIAGRAMMER_MENU_DELETE_TEXT = "Supprimer";
 
     //Toutes les préférences statics sont des préférences développeurs, qui ne doivent pas être sauvegardées dans les fichiers.
-    private static final long serialVersionUID = 1000;
-    public static String APPLICATION_NAME = "MVCCD";
-    public static String LANGUAGE = "fr";
-    public static String APPLICATION_VERSION = "3.0.19"; //Format: x.y.z (x, y et z devait être des chiffres ou des nombres)
-    public static Integer JPANEL_HGAP = 5;
-    public static Integer JPANEL_VGAP = 5;
 
     public static String REPOSITORY_ICONS_BASE_PATH = "ressources/icons-referentiel/svg/";
 
-    public static Integer PANEL_REPOSITORY_WIDTH = 200;
-    public static String REPOSITORY_PROFILE_NAME = "Profile";
-    public static String REPOSITORY_PREFERENCES_PROFILE_NAME = "Préférences de profil";
-    public static String REPOSITORY_PREFERENCES_NAME = "Préférences de projet";  //Project
-    public static String REPOSITORY_PREFERENCES_APPLICATION_NAME = "PréférencesApplication";  //Project
-    public static String REPOSITORY_MCD_MODELS_NAME = "MCD";
-    public static String REPOSITORY_MCD_PACKAGE_NAME = "Paquetage";
-    public static String REPOSITORY_DIAGRAMS_NAME = "Diagrammes";
-    public static String REPOSITORY_MCD_ENTITIES_NAME = "Entités";
-    public static String REPOSITORY_MCD_RELATIONS_NAME = "Relations";
-    public static String REPOSITORY_MCD_RELATIONS_ENDS_NAME = "Extrémités de relations";
-    public static String REPOSITORY_MCD_ATTRIBUTES_NAME = "Attributs";
-    public static String REPOSITORY_MCD_CONSTRAINTS_NAME = "Contraintes";
-    public static String REPOSITORY_MDR_TABLES_NAME = "Tables";
-    public static String REPOSITORY_MDR_RELATIONS_NAME = "Relations";
-    public static String REPOSITORY_MDR_TAPIS_NAME = "TAPIs";
-    public static String REPOSITORY_MDR_SEQUENCES_NAME = "Séquences";
-    public static String REPOSITORY_MDR_COLUMNS_NAME = "Colonnes";
-    public static String REPOSITORY_MDR_CONSTRAINTS_NAME = "Contraintes";
-    public static String REPOSITORY_MDR_RELENDS_NAME = "Extrémités de relations";
-    public static String REPOSITORY_MLDR_MODEL_DT_NAME = "MLDR_DT";
-    public static String REPOSITORY_MLDR_MODEL_TI_NAME = "MLDR_TI";
-    public static String REPOSITORY_MPDR_MODEL_ORACLE_NAME = "MPDR_Oracle";
-    public static String REPOSITORY_MPDR_MODEL_MYSQL_NAME = "MPDR_MySQL";
-    public static String REPOSITORY_MPDR_MODEL_POSTGRESQL_NAME = "MPDR_PostgreSQL";
-    public static String CON_DB_MODE_CONNECTION = "con.db.mode.connection";
-    public static String CON_DB_MODE_CONNECTOR = "con.db.mode.connector";
-    public static String CON_DIRECTORY_DRIVERS = "drivers";
-    public static String CON_DIRECTORY_ORACLE = "oracle";
-    public static String CON_DIRECTORY_MYSQL = "mysql";
-    public static String CON_DIRECTORY_POSTGRESQL = "postgresql";
-    public static Color BACKGROUND_PANEL = Color.LIGHT_GRAY;
-    public static String REGEXPR_FIRSTCAR = "[a-zA-Z]{1,1}";
-    public static String REGEXPR_LASTCAR = "([a-zA-Z]{1,1})$"; // pas de chiffre (indiçage) et _ (séparateur) en fin de nom
-    public static String REGEXPR_NOFREE = "[a-zA-Z0-9_]*" + REGEXPR_LASTCAR;
-    public static String NAME_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_NOFREE;
-    public static String REGEXPR_FREE = "([ ]{0,1}[a-zA-Z0-9_àâäçéèêëòöùûü]+)*";
-    public static String NAME_FREE_REGEXPR = REGEXPR_FIRSTCAR + REGEXPR_FREE;
-    public static String CON_HOSTNAME_REGEXPR = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"; //Provient de  : https://stackoverflow.com/questions/106179/regular-expression-to-match-dns-hostname-or-ip-address
-    public static String CON_DBNAME_REGEXPR = "^[0-9a-zA-Z$_]+$"; //Provient de  : https://stackoverflow.com/questions/6731833/database-name-regex-restriction
-    public static String REGEXPR_1_99 = "[1-9]{1}[0-9]{0,1}";
-    public static String NAME_NOTMODEL_REGEXPR = "[a-zA-Z0-9_]*";
+
 
     public static String MULTI_MERISE_N = "n";
     public static String MULTI_OCL_SP = "\\.\\.";

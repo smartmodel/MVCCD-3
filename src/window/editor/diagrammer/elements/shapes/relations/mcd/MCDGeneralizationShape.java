@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.Serializable;
 import mcd.MCDGeneralization;
+import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationAnchorPointShape;
@@ -89,4 +90,6 @@ public class MCDGeneralizationShape extends RelationShape implements Serializabl
   public void setGeneralization(MCDGeneralization generalization) {
     this.relatedRepositoryElement = generalization;
   }
+
+
 }

@@ -16,9 +16,10 @@ public class MPDRelationShape extends RelationShape {
 
 
   public MPDRelationShape(SquaredShape source, SquaredShape destination, IMRelation relation) {
-    super((ClassShape) source, destination, relation, false);
+    //super((ClassShape) source, destination, relation, false);
     createLabelsAfterRelationShapeEdit();
   }
+
 
   @Override
   public void defineLineAspect(Graphics2D graphics2D) {
@@ -35,6 +36,7 @@ public class MPDRelationShape extends RelationShape {
 
   @Override
   public void createLabelsAfterRelationShapeEdit() {
+    /**
     if (!this.getRelatedRepositoryElement().getName().isEmpty()) {
 
       if (this.anchorPoints.size() <= 2) {
@@ -86,6 +88,7 @@ public class MPDRelationShape extends RelationShape {
     }
 
     super.addLabelsInDiagrammeur();
+     **/
   }
 
   @Override

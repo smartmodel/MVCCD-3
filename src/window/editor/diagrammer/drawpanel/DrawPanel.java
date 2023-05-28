@@ -376,24 +376,7 @@ public class DrawPanel extends JLayeredPane implements Serializable {
     }
     return new Rectangle(minx, miny, maxx - minx, maxy - miny);
   }
-    public Rectangle getContentBounds(Collection<IShape> elements, int borderWidth) {
-        if (elements.size() == 0) {
-            return new Rectangle(0, 0, 0, 0);
-        }
-        int minx = Integer.MAX_VALUE;
-        int miny = Integer.MAX_VALUE;
-        int maxx = 0;
-        int maxy = 0;
-        for (IShape element : elements) {
-            if (element instanceof ClassShape) {
-                minx = Math.min(minx, element.getBounds().x - borderWidth);
-                miny = Math.min(miny, element.getBounds().y - borderWidth);
-                maxx = Math.max(maxx, element.getBounds().x + element.getBounds().width + borderWidth);
-                maxy = Math.max(maxy, element.getBounds().y + element.getBounds().height + borderWidth);
-            }
-        }
-        return new Rectangle(minx, miny, maxx - minx, maxy - miny);
-    }
+
 
   public Dimension getViewableDiagrampanelSize() {
     final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(

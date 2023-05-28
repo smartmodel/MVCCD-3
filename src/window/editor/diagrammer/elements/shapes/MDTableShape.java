@@ -14,6 +14,7 @@ import mpdr.MPDRTable;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.listeners.MDTableShapeListener;
+import window.editor.diagrammer.utils.UIUtils;
 
 public class MDTableShape extends ClassShape implements Serializable {
 
@@ -67,27 +68,17 @@ public class MDTableShape extends ClassShape implements Serializable {
   protected void drawZoneProprietes(Graphics2D graphics2D) {
     int y =
         this.getZoneMinHeight(this.zoneEnTete.getElements()) + getYSize(graphics2D);
-    this.drawElements(graphics2D, this.zoneProprietes.getElements(), y);
+    this.drawElements(graphics2D, this.zoneProprietes.getElements(), y, UIUtils.getShapeFont());
   }
 
   private void drawZoneOperations(Graphics2D graphics2D) {
     this.setZoneOperationsContent();
     int y = this.getZoneMinHeight(this.zoneProprietes.getElements()) + this.getZoneMinHeight(
         this.zoneEnTete.getElements()) + getYSize(graphics2D);
-    this.drawElements(graphics2D, this.zoneOperations.getElements(), y);
+    this.drawElements(graphics2D, this.zoneOperations.getElements(), y, UIUtils.getShapeFont());
     this.drawBorders(graphics2D);
   }
 
-
-  @Override
-  protected void initUI() {
-    this.setZoneEnTeteContent();
-    this.setZoneProprietesContent();
-    this.setZoneOperationsContent();
-    this.setMinimumSize(new Dimension(Preferences.DIAGRAMMER_DEFAULT_CLASS_WIDTH,
-        Preferences.DIAGRAMMER_DEFAULT_CLASS_HEIGHT));
-    this.setSize(this.getMinimumSize());
-  }
 
   private void drawBorders(Graphics2D graphics2D) {
     graphics2D.drawRoundRect(0, 0, this.getWidth() - 1, this.getHeight() - 1, 20, 20);
