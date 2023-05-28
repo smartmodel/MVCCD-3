@@ -49,6 +49,7 @@ public class MVCCDWindow extends JFrame implements WindowListener {
 
     this.setTitle(Preferences.APPLICATION_NAME + " " + Preferences.APPLICATION_VERSION);
     this.setSize(Preferences.MVCCD_WINDOW_WIDTH, Preferences.MVCCD_WINDOW_HEIGHT);
+    this.setLocationRelativeTo(null);
     this.getContentPane().add(this.panel);
     this.menuBar = new JMenuBar();
     this.setJMenuBar(this.menuBar);

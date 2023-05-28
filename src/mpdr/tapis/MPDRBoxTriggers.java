@@ -4,6 +4,7 @@ import constraints.Constraint;
 import constraints.ConstraintService;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
+import java.util.ArrayList;
 import m.interfaces.IMClass;
 import main.MVCCDElement;
 import md.MDElement;
@@ -22,131 +23,130 @@ import stereotypes.StereotypeService;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
 
-import java.util.ArrayList;
+public abstract class MPDRBoxTriggers extends MDRElement implements IMPDRElement,
+    IMPDRElementWithSource,
+    IMDRElementWithIteration, IMClass, IMDRElementNamingPreferences {
 
-public abstract class MPDRBoxTriggers extends MDRElement implements IMPDRElement, IMPDRElementWithSource,
-        IMDRElementWithIteration, IMClass, IMDRElementNamingPreferences {
+  private static final long serialVersionUID = 1000;
+  private Integer iteration = null; // Si un objet est créé directement et non par transformation
 
-    private  static final long serialVersionUID = 1000;
-    private Integer iteration = null; // Si un objet est créé directement et non par transformation
+  private IMLDRElement mldrElementSource;
 
-    private IMLDRElement mldrElementSource;
+  public MPDRBoxTriggers(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
+    super(parent, name);
+    this.mldrElementSource = mldrElementSource;
+  }
 
-    public MPDRBoxTriggers(ProjectElement parent, String name, IMLDRElement mldrElementSource) {
-        super(parent,name);
-        this.mldrElementSource = mldrElementSource;
+  public MPDRBoxTriggers(ProjectElement parent, IMLDRElement mldrElementSource) {
+    super(parent);
+    this.mldrElementSource = mldrElementSource;
+  }
+
+  public MPDRBoxTriggers(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
+    super(parent, id);
+    this.mldrElementSource = mldrElementSource;
+  }
+
+
+  @Override
+  public IMLDRElement getMldrElementSource() {
+    return mldrElementSource;
+  }
+
+  @Override
+  public void setMldrElementSource(IMLDRElement imldrElementSource) {
+    this.mldrElementSource = mldrElementSource;
+  }
+
+  @Override
+  public Integer getIteration() {
+    return iteration;
+  }
+
+  @Override
+  public void setIteration(Integer iteration) {
+    this.iteration = iteration;
+  }
+
+  @Override
+  public MDElement getMdElementSource() {
+    return (MDElement) getMldrElementSource();
+  }
+
+
+  @Override
+  public ArrayList<Stereotype> getStereotypes() {
+    // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
+    ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
+
+    Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
+    Preferences preferences = PreferencesManager.instance().preferences();
+
+    resultat.add(stereotypes.getStereotypeByLienProg(MPDRBoxTriggers.class.getName(),
+        preferences.STEREOTYPE_TRIGGERS_LIENPROG));
+
+    return resultat;
+  }
+
+  @Override
+  public ArrayList<Constraint> getConstraints() {
+    ArrayList<Constraint> resultat = new ArrayList<Constraint>();
+
+    Constraints constraints = ConstraintsManager.instance().constraints();
+    Preferences preferences = PreferencesManager.instance().preferences();
+
+    return resultat;
+  }
+
+  @Override
+  public String getStereotypesInBox() {
+    return StereotypeService.getUMLNamingInBox(getStereotypes());
+  }
+
+  @Override
+  public String getStereotypesInLine() {
+    return StereotypeService.getUMLNamingInLine(getStereotypes());
+  }
+
+  @Override
+  public String getConstraintsInBox() {
+    return ConstraintService.getUMLNamingInBox(getConstraints());
+  }
+
+  @Override
+  public String getConstraintsInLine() {
+    return ConstraintService.getUMLNamingInLine(getConstraints());
+  }
+
+  public ArrayList<MPDRTrigger> getAllTriggers() {
+    ArrayList<MPDRTrigger> resultat = new ArrayList<MPDRTrigger>();
+    for (MVCCDElement mvccdElement : getChilds()) {
+      if (mvccdElement instanceof MPDRTrigger) {
+        resultat.add((MPDRTrigger) mvccdElement);
+      }
     }
+    return resultat;
+  }
 
-    public MPDRBoxTriggers(ProjectElement parent, IMLDRElement mldrElementSource) {
-        super(parent);
-        this.mldrElementSource = mldrElementSource;
+  public MPDRTrigger getMPDRTriggerByType(MPDRTriggerType type) {
+    for (MPDRTrigger mpdrTrigger : getAllTriggers()) {
+      if (mpdrTrigger.getType() == type) {
+        return mpdrTrigger;
+      }
     }
+    return null;
+  }
 
-    public MPDRBoxTriggers(ProjectElement parent, IMLDRElement mldrElementSource, int id) {
-        super(parent, id);
-        this.mldrElementSource = mldrElementSource;
-    }
+  public MPDRContTAPIs getMPDRContTAPIs() {
+    return (MPDRContTAPIs) getParent();
+  }
 
+  public MPDRTable getMPDRTableAccueil() {
+    return getMPDRContTAPIs().getMPDRTableAccueil();
+  }
 
-    @Override
-    public IMLDRElement getMldrElementSource() {
-        return mldrElementSource;
-    }
-
-    @Override
-    public void setMldrElementSource(IMLDRElement imldrElementSource) {
-        this.mldrElementSource = mldrElementSource;
-    }
-
-    @Override
-    public Integer getIteration() {
-        return iteration;
-    }
-
-    @Override
-    public void setIteration(Integer iteration) {
-        this.iteration = iteration ;
-    }
-
-    @Override
-    public MDElement getMdElementSource() {
-        return (MDElement) getMldrElementSource();
-    }
-
-
-    @Override
-    public ArrayList<Stereotype> getStereotypes() {
-        // Les stéréotypes doivent être ajoutés en respectant l'ordre d'affichage
-        ArrayList<Stereotype> resultat = new ArrayList<Stereotype>();
-
-        Stereotypes stereotypes = StereotypesManager.instance().stereotypes();
-        Preferences preferences = PreferencesManager.instance().preferences();
-
-        resultat.add(stereotypes.getStereotypeByLienProg(MPDRBoxTriggers.class.getName(),
-                preferences.STEREOTYPE_TRIGGERS_LIENPROG));
-
-        return resultat;
-    }
-
-    @Override
-    public ArrayList<Constraint> getConstraints() {
-        ArrayList<Constraint> resultat = new ArrayList<Constraint>();
-
-        Constraints constraints = ConstraintsManager.instance().constraints();
-        Preferences preferences = PreferencesManager.instance().preferences();
-
-
-        return resultat;
-    }
-    @Override
-    public String getStereotypesInBox() {
-        return StereotypeService.getUMLNamingInBox(getStereotypes());
-    }
-
-    @Override
-    public String getStereotypesInLine() {
-        return StereotypeService.getUMLNamingInLine(getStereotypes());
-    }
-
-    @Override
-    public String getConstraintsInBox() {
-        return ConstraintService.getUMLNamingInBox(getConstraints());
-    }
-
-    @Override
-    public String getConstraintsInLine() {
-        return ConstraintService.getUMLNamingInLine(getConstraints());
-    }
-
-    public ArrayList<MPDRTrigger> getAllTriggers(){
-        ArrayList<MPDRTrigger> resultat = new ArrayList<MPDRTrigger>();
-            for ( MVCCDElement mvccdElement : getChilds()){
-                if (mvccdElement instanceof MPDRTrigger){
-                    resultat.add((MPDRTrigger) mvccdElement);
-            }
-        }
-            return resultat;
-    }
-
-    public MPDRTrigger getMPDRTriggerByType(MPDRTriggerType type){
-        for (MPDRTrigger mpdrTrigger : getAllTriggers()){
-            if (mpdrTrigger.getType() == type){
-                return mpdrTrigger;
-            }
-        }
-        return null;
-    }
-
-    public MPDRContTAPIs getMPDRContTAPIs (){
-        return (MPDRContTAPIs) getParent();
-    }
-
-    public MPDRTable getMPDRTableAccueil (){
-        return getMPDRContTAPIs().getMPDRTableAccueil();
-    }
-
-    //TODO-0 A retirer en ayant les icones
-    public String toString(){
-        return "Triggers - " + super.toString();
-    }
+  //TODO-0 A retirer en ayant les icones
+  public String toString() {
+    return "Triggers - " + super.toString();
+  }
 }

@@ -2,10 +2,11 @@ package window.editor.diagrammer.elements.shapes.relations;
 
 import m.interfaces.IMRelation;
 import main.MVCCDManager;
-import md.MDElement;
 import preferences.Preferences;
 import window.editor.diagrammer.elements.interfaces.IShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.SquaredShape;
+import window.editor.diagrammer.elements.shapes.UMLPackage;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelShape;
 import window.editor.diagrammer.elements.shapes.relations.labels.LabelType;
@@ -26,16 +27,16 @@ import java.util.stream.Collectors;
 
 public abstract class RelationShape extends JComponent implements IShape, Serializable {
 
-    private static final long serialVersionUID = 1000;
-    protected int id;
-    protected List<RelationAnchorPointShape> anchorPoints = new LinkedList<>();
-    protected boolean isFocused = false;
-    protected SquaredShape source;
-    protected IShape destination;
-    protected IMRelation relation;
-    protected MDElement relatedRepositoryElement;
-    protected boolean isReflexive;
-    protected List<LabelShape> labels = new ArrayList<>();
+  private static final long serialVersionUID = 1000;
+  protected int id;
+  protected List<RelationAnchorPointShape> anchorPoints = new LinkedList<>();
+  protected boolean isFocused = false;
+  protected SquaredShape source;
+  protected IShape destination;
+  protected IMRelation relation;
+  protected IMRelation relatedRepositoryElement;
+  protected boolean isReflexive;
+  protected List<LabelShape> labels = new ArrayList<>();
 
     public RelationShape(int id) {
         this.id = id;

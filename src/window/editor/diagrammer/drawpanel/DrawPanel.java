@@ -2,12 +2,34 @@ package window.editor.diagrammer.drawpanel;
 
 import console.ViewLogsManager;
 import console.WarningLevel;
+import diagram.Diagram;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
+import main.MVCCDElement;
 import main.MVCCDManager;
 import messages.MessagesBuilder;
 import preferences.Preferences;
 import preferences.PreferencesManager;
 import utilities.window.DialogMessage;
 import window.editor.diagrammer.elements.interfaces.IShape;
+import window.editor.diagrammer.elements.interfaces.UMLPackageIntegrableShapes;
+import window.editor.diagrammer.elements.shapes.MDTableShape;
 import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.classes.ClassShape;
 import window.editor.diagrammer.elements.shapes.classes.mcd.MCDEntityShape;
@@ -30,7 +52,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Représente la zone de dessin du diagrammeur. C'est sur ce composant que la grille sera dessinée et que les éléments graphiques sont ajoutés (entités, relations, ...)
+ * Représente la zone de dessin du diagrammeur. C'est sur ce composant que la grille sera dessinée
+ * et que les éléments graphiques sont ajoutés (entités, relations, ...)
  */
 public class DrawPanel extends JLayeredPane implements Serializable {
 
@@ -77,11 +100,25 @@ public class DrawPanel extends JLayeredPane implements Serializable {
         }
         this.drawRelations(graphics2D);
 
-        // Si on crée une association, une ligne de projection est reliée de l'entité source au curseur de la souris
-        if (RelationCreator.isCreating) {
-            this.showRelationProjectionLine(graphics2D);
-        }
+    // Si on crée une association, une ligne de projection est reliée de l'entité source au curseur de la souris
+    if (RelationCreator.isCreating) {
+      this.showRelationProjectionLine(graphics2D);
     }
+
+    // Pour afficher le label du diagramme ouvert en haut à gauche du diagramme
+    if (MVCCDManager.instance().getCurrentDiagram() != null) {
+      this.drawDiagramLabel(graphics2D);
+    }
+
+  }
+
+  public void drawDiagramLabel(Graphics2D graphics2D) {
+    Diagram currentDiagram = MVCCDManager.instance().getCurrentDiagram();
+    MVCCDElement abstractionLevel = currentDiagram.getParent().getParent();
+    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    graphics2D.drawString(abstractionLevel + " " + currentDiagram.getName(), 0, 10);
+  }
 
     public MCDEntityShape getMcdEntityShapeById(int id) {
         for (ClassShape shape : this.getClassShapes()) {
@@ -131,22 +168,27 @@ public class DrawPanel extends JLayeredPane implements Serializable {
         this.repaint();
     }
 
-    public void addShape(IShape element) {
-        if (element != null) {
-            this.add((JComponent) element);
-            this.shapes.add(element);
-        } else {
-            DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(), MessagesBuilder.getMessagesProperty("diagrammer.error.add.null.element"));
-        }
+  public void addShape(IShape element) {
+    if (element != null) {
+      this.add((JComponent) element);
+      this.shapes.add(element);
+      this.repaint();
+    } else {
+      DialogMessage.showError(MVCCDManager.instance().getMvccdWindow(),
+          MessagesBuilder.getMessagesProperty("diagrammer.error.add.null.element"));
     }
+  }
 
-    public void loadShapes(List<IShape> shapes) {
-        this.shapes.addAll(shapes);
-        for (IShape shape : shapes) {
-            this.add((JComponent) shape);
-        }
-        ViewLogsManager.printMessage(shapes.size() + " formes ont été ajoutées à la zone de dessin.", WarningLevel.INFO);
+  public void loadShapes(List<IShape> shapes) {
+    this.shapes.addAll(shapes);
+    for (IShape shape : shapes) {
+      this.add((JComponent) shape);
     }
+    this.revalidate();
+    this.repaint();
+    ViewLogsManager.printMessage(shapes.size() + " formes ont été ajoutées à la zone de dessin.",
+        WarningLevel.INFO);
+  }
 
     private void addListeners() {
         DrawPanelListener listener = new DrawPanelListener();
@@ -300,6 +342,40 @@ public class DrawPanel extends JLayeredPane implements Serializable {
         }
     }
 
+  public void resizeShapesBeforeExport(Collection<ClassShape> elements) {
+    elements.stream()
+        .filter(e -> !(e instanceof UMLPackageIntegrableShapes))
+        .forEach(e ->
+            e.setSize((e.getBounds().width + 7), e.getBounds().height)
+        );
+  }
+
+  public void resizeShapesAfterExport(Collection<ClassShape> elements) {
+    elements.stream()
+        .filter(e -> !(e instanceof UMLPackageIntegrableShapes))
+        .forEach(e ->
+            e.setSize((e.getBounds().width - 7), e.getBounds().height)
+        );
+  }
+
+  public Rectangle getContentBounds(Collection<IShape> elements, int borderWidth) {
+    if (elements.size() == 0) {
+      return new Rectangle(0, 0, 0, 0);
+    }
+    int minx = Integer.MAX_VALUE;
+    int miny = Integer.MAX_VALUE;
+    int maxx = 0;
+    int maxy = 0;
+    for (IShape element : elements) {
+      if (element != null) {
+        minx = Math.min(minx, element.getBounds().x - borderWidth);
+        miny = Math.min(miny, element.getBounds().y - borderWidth);
+        maxx = Math.max(maxx, element.getBounds().x + element.getBounds().width + borderWidth);
+        maxy = Math.max(maxy, element.getBounds().y + element.getBounds().height + borderWidth);
+      }
+    }
+    return new Rectangle(minx, miny, maxx - minx, maxy - miny);
+  }
     public Rectangle getContentBounds(Collection<IShape> elements, int borderWidth) {
         if (elements.size() == 0) {
             return new Rectangle(0, 0, 0, 0);
@@ -319,17 +395,20 @@ public class DrawPanel extends JLayeredPane implements Serializable {
         return new Rectangle(minx, miny, maxx - minx, maxy - miny);
     }
 
-    public Dimension getViewableDiagrampanelSize() {
-        final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
-        return parent.getVisibleRect().getSize();
-    }
+  public Dimension getViewableDiagrampanelSize() {
+    final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(
+        Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
+    return parent.getVisibleRect().getSize();
+  }
 
-    public void changeViewPosition(int deltaX, int deltaY) {
-        final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
-        final Point viewportPosition = parent.getViewport().getViewPosition();
-        parent.getViewport().setViewSize(this.getPreferredSize());
-        parent.getViewport().setViewPosition(new Point(viewportPosition.x + deltaX, viewportPosition.y + deltaY));
-    }
+  public void changeViewPosition(int deltaX, int deltaY) {
+    final DrawPanelComponent parent = (DrawPanelComponent) SwingUtilities.getAncestorNamed(
+        Preferences.DIAGRAMMER_DRAW_PANEL_CONTAINER_NAME, this);
+    final Point viewportPosition = parent.getViewport().getViewPosition();
+    parent.getViewport().setViewSize(this.getPreferredSize());
+    parent.getViewport()
+        .setViewPosition(new Point(viewportPosition.x + deltaX, viewportPosition.y + deltaY));
+  }
 
     public void updatePanelAndScrollbars() {
         this.insertWhiteSpaceInUpperLeftCorner();

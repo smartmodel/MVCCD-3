@@ -1,6 +1,14 @@
 package window.editor.diagrammer.elements.shapes.classes;
 
 import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -14,7 +22,11 @@ import window.editor.diagrammer.elements.shapes.SquaredShape;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
 import window.editor.diagrammer.listeners.ClassShapeListener;
 import window.editor.diagrammer.services.DiagrammerService;
-import window.editor.diagrammer.utils.UIUtils;
+import window.editor.diagrammer.utils.GeometryUtils;
+
+import java.awt.*;
+import java.io.Serializable;
+import java.util.List;
 
 public abstract class ClassShape extends SquaredShape implements Serializable {
 
@@ -23,6 +35,7 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
   protected ClassShapeZone zoneProprietes = new ClassShapeZone();
   protected ClassShapeZone zoneOperations = new ClassShapeZone();
   protected ClassShapeZone zoneServices = new ClassShapeZone();
+  protected MDElement relatedRepositoryElement;
 
   public ClassShape(int id) {
     super(id);
@@ -50,10 +63,22 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
     this.initUI();
   }
 
-  public void refreshInformations() {
-    this.setZoneEnTeteContent();
-    this.setZoneProprietesContent();
+  @Override
+  protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    Graphics2D graphics2D = (Graphics2D) g;
+    graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    this.drawZoneEnTete(graphics2D);
+    this.drawZoneProprietes(graphics2D);
   }
+
+  public void refreshInformations() {
+    setZoneEnTeteContent();
+    setZoneProprietesContent();
+    repaint();
+  }
+
 
   private void initUI() {
     // Lorsque la ClassShape est créée, seule la zone d'en-tête est affichée
@@ -184,5 +209,32 @@ public abstract class ClassShape extends SquaredShape implements Serializable {
 
   protected abstract void setNameFont(Graphics2D graphics2D);
 
+  public MDElement getRelatedRepositoryElement() {
+
+    return relatedRepositoryElement;
+  }
+
   public abstract String getXmlTagName();
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ClassShape that = (ClassShape) o;
+    return Objects.equals(zoneEnTete, that.zoneEnTete) && Objects.equals(
+        zoneProprietes, that.zoneProprietes) && Objects.equals(zoneOperations,
+        that.zoneOperations) && Objects.equals(zoneServices, that.zoneServices)
+        && Objects.equals(getRelatedRepositoryElement(),
+        that.getRelatedRepositoryElement());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(zoneEnTete, zoneProprietes, zoneOperations, zoneServices,
+        getRelatedRepositoryElement());
+  }
 }

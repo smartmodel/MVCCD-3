@@ -28,6 +28,7 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
   public SquaredShape(int id) {
     this();
     this.id = id;
+    this.addListeners();
   }
 
   public SquaredShape() {
@@ -37,8 +38,11 @@ public abstract class SquaredShape extends JPanel implements IShape, IResizable,
     this.initUI();
   }
 
+
   protected abstract void defineBackgroundColor();
+
   protected abstract void defineMinimumSize();
+
   protected abstract void defineSize();
 
   private void initUI() {

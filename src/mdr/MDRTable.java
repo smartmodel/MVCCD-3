@@ -4,6 +4,9 @@ import constraints.Constraint;
 import constraints.Constraints;
 import constraints.ConstraintsManager;
 import exceptions.CodeApplException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import main.MVCCDElement;
 import mdr.services.MDRTableService;
 import mpdr.MPDRCheck;
@@ -13,8 +16,6 @@ import project.ProjectElement;
 import stereotypes.Stereotype;
 import stereotypes.Stereotypes;
 import stereotypes.StereotypesManager;
-
-import java.util.ArrayList;
 
 public abstract class MDRTable extends MDRTableOrView {
 
@@ -283,6 +284,16 @@ public abstract class MDRTable extends MDRTableOrView {
         }
         return resultat;
     }
+
+  public List<String> getMPDRChecksString() {
+    return this.getMPDRChecks().stream()
+        .map(
+            e -> e.getStereotypesInLine() + " " + e.getName() + "(" +
+                (e.getMldrElementSource().getName())
+                + ")"
+        )
+        .collect(Collectors.toList());
+  }
 
     public boolean hasColumnSimPK() {
         return MDRTableService.hasColumnSimPK(this);

@@ -2,12 +2,10 @@ package window.editor.diagrammer.menus.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
-import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import window.editor.diagrammer.elements.shapes.relations.RelationShape;
-import window.editor.diagrammer.services.DiagrammerService;
 
-public class RelationDeleteAction extends AbstractAction implements Serializable {
+public class RelationDeleteAction extends CommonDeleteActions implements Serializable {
 
   private final RelationShape shape;
   private static final long serialVersionUID = 1000;
@@ -19,11 +17,8 @@ public class RelationDeleteAction extends AbstractAction implements Serializable
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    this.delete();
+    super.deleteRelation(this.shape);
   }
 
-  private void delete() {
-    this.shape.deleteLabels();
-    DiagrammerService.getDrawPanel().deleteShape(this.shape);
-  }
+
 }
